@@ -16,6 +16,7 @@ time:              # OPTIONAL. See @references/parts/order.md
 from: the-guard-finds-the-board-the-way-the-scan-does
 needs:
   - collect-defaults-to-the-boards-enclosing-repo
+commit: 7f739fa 91dd75b
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
      vision importance (priority), and complexity/blast-radius. Add your own

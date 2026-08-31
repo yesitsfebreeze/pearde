@@ -19,6 +19,7 @@ footprint:
   - prds/the-board-runs-itself/transitions-are-commands/probe/verify.sh
   - prds/the-board-runs-itself/specced-is-a-command/probe/verify.sh
   - prds/memos/two-holes-the-flag-probe-found.md
+commit: c1156d3
 ---
 
 # the-line-tells-the-truth — the progress line says who acted and what is done, and every discovered command refuses a flag it does not know

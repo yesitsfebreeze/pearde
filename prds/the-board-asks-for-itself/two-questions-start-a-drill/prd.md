@@ -23,6 +23,7 @@ footprint:
   - resources/questions.py
   - resources/board/plan.py
   - resources/board/transitions.py
+commit: e43aa1a 07f0e0f
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
      vision importance (priority), and complexity/blast-radius. Add your own

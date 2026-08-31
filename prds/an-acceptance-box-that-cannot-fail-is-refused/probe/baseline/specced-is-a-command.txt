@@ -1,0 +1,97 @@
+  ok   the example board has a workflow and an atomic
+specced — refusals
+  ok   big/second is analyzing (forced)
+  ok   commit the change → exit 1
+  ok   …naming file and line
+  ok   …nothing written
+  ok   commit message → exit 1
+  ok   git commit → exit 1
+  ok   a box checking commit: passes the gate
+  ok   no specs/ → exit 1 naming specs/
+  ok   the weird set → exit 1
+  ok   complexity 0 outside 1-100, line 2
+  ok   acceptance holds no box, at its heading
+  ok   verify holds no sh block, at its heading
+  ok   workflow naming nothing, at its line
+  ok   workflow naming an atomic
+  ok   complexity not an integer
+  ok   …one line per refusal, six
+  ok   …nothing written
+  ok   a done PRD → exit 1 naming the state
+  ok   --blast huge → exit 1
+  ok   --workflow nope → exit 1
+  ok   no such PRD → exit 1
+  ok   no PRD named → exit 1
+  ok   no persona → exit 1 naming --as
+  ok   …still nothing written
+specced — check and success
+  ok   --check exits 0 and prints the sum
+  ok   …writes nothing
+  ok   big/second with 8 and 12 → exit 0
+  ok   …one progress line
+  ok   …▸ big/second: analyzing → specced
+  ok   …as engineer last
+  ok   …ready/blocked/workers terms
+  ok   state: specced
+  ok   complexity: 20
+  ok   blast-radius: mid
+  ok   workflow: set from --workflow
+  ok   claim: cleared
+  ok   the title and body untouched
+  ok   the transitions log gained one row
+  ok   scan agrees: specced big/second w20
+  ok   specced again → exit 1 naming the state
+  ok   next (still open) → exit 1 naming open
+  ok   …and next is still open
+  ok   the smell → exit 0, specced
+  ok   …warns on stderr, names the smell
+  ok   a pre-ticked box → exit 0 with a warning
+  ok   no footprint → warned, the PRD's own stands
+  ok   …as designer on the line
+  ok   --check runs on a specced PRD (the memo)
+  ok   --workflow none is refused outright
+refine
+  ok   a done parent → exit 1 naming the state
+  ok   no ## Split → exit 1
+  ok   an empty table → exit 1
+  ok   needs naming no sibling → exit 1
+  ok   a child that is no directory name → exit 1
+  ok   a child named twice → exit 1
+  ok   …nothing written by any refusal
+  ok   three rows → exit 0
+  ok   three directories
+  ok   one line per child, then the progress line
+  ok   ▸ next: refine → open
+  ok   child: open, origin and priority inherited
+  ok   child: no repo or workflow when the parent has none
+  ok   child: needs as given
+  ok   child with no needs carries no needs:
+  ok   child: the title
+  ok   child: the contract is the first paragraph
+  ok   child: no template placeholder left
+  ok   parent: open, claim cleared, body kept
+  ok   parent: ## Children with the three rows
+  ok   parent: needs: building kept
+  ok   the transitions log gained the parent's row
+  ok   scan: parent gated on all three
+  ok   scan: children open, three needs one,two
+  ok   workflows.py check stays silent
+  ok   the same table again → exit 1
+  ok   …naming the three existing children
+  ok   …tree unchanged
+  ok   a second split: the new row lands
+  ok   …the old row is refused by name, exit 1
+  ok   …the old child is untouched
+  ok   …## Children gained one row, one header
+  ok   …an already-open parent prints no transition
+  ok   a question PRD can be split
+  ok   child inherits origin, from, repo, workflow
+surface
+  ok   COMMANDS exposes specced and refine
+  ok   no command → usage, exit 2
+find: /Users/feb/dev/infra/pearde/prds: No such file or directory
+  ok   no fixture prd.md under the real board
+  ok   the example board is untouched
+  ok   stdlib only
+
+verify: 90/90 checks pass

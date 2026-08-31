@@ -1,0 +1,27 @@
+pearde doctor — /Users/feb/dev/infra/pearde
+
+  skills      ok      14 well-formed · pearde-doctor pearde-drill pearde-graph pearde-knowledge pearde-master pearde-memo pearde-persona-ask pearde-persona-create pearde-persona pearde-report pearde-scout pearde-view pearde-workflow pearde 
+                      installed where your agent looks — @references/install.md, then: bash /Users/feb/dev/infra/pearde/resources/install.sh --apply <skills-dir>
+  plugins     ok      4 suggested · all installed on this machine
+  index       ok      118 files · 31 keywords · every anchor resolves
+  statusline  ok      ~/dev/infra/pearde main ↑18
+                      ▸pearde 49/53 93% · +7d · open 2 3% · ▸vault
+                      wire it where your setup runs a command for one — @references/install.md
+  guard       ok      wired in /Users/feb/dev/infra/pearde/.claude/settings.json · MAX_THINKING_TOKENS=8000 · skill tree guarded
+  board       ok      /Users/feb/dev/infra/pearde/.pearde/prds · 74 PRDs · language English
+  vision      ok      1 terminal · 0 on · 11 off · longest chain 0
+  origin      broken  7 derived in flight vs 4 requested — the board is working on itself
+                      fix: put the split to the user: continue, defer the derived tree, or drop it
+  memos       ok      17 memos · frontmatter checks out
+  workflows   ok      5 workflows · 13 atomics · the library checks out
+  briefs      ok      5 blocks in references/parts/workers.md · every placeholder named
+  questions   ok      no PRD carries a round — nothing is waiting on you
+  view        off     not running — the board reads and plans without it
+                      fix: python3 /Users/feb/dev/infra/pearde/resources/board/serve.py ensure /Users/feb/dev/infra/pearde/.pearde
+  plan        off     no plan on record — the view has no bars until there is one
+                      fix: python3 /Users/feb/dev/infra/pearde/resources/board/plan.py plan /Users/feb/dev/infra/pearde/.pearde
+  harnesses   off     36 harnesses · not run — this row costs tens of seconds
+                      fix: harnesses: on in /Users/feb/dev/infra/pearde/.pearde/settings.md, or one run: bash /Users/feb/dev/infra/pearde/resources/doctor.sh --harnesses /Users/feb/dev/infra/pearde
+  jstests     off     not run — opt in: bash /Users/feb/dev/infra/pearde/resources/doctor.sh --harnesses /Users/feb/dev/infra/pearde
+
+pearde: something is installed and not working — the fixes are above.

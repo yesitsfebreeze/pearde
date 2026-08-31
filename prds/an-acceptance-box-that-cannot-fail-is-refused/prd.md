@@ -1,17 +1,17 @@
 ---
-state: open        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
+state: done        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: derived  # requested = the user asked | derived = the board found it
 from: every-document-names-the-path-the-board-is-on/apply-the-prds-rename-table
 priority: 68        # higher first
-complexity: 0      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
-blast-radius:      # analyst, at spec time — high|mid|low. What breaks if this is wrong
+complexity: 24      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
+blast-radius: mid
 repo:              # the sub-repo the code lands in; delete if n/a
 # workflow:        # OPTIONAL — how this kind of job is done: a slug in
 #                  #   .pearde/workflows/. @references/workflow.md.
 #                  #   Absent = the brief alone, as before workflows
 time:              # OPTIONAL. See @references/parts/order.md
   est:             # the weight, only when complexity is absent. Not a duration
-  actual:          # a record. Nothing reads it
+  actual: 0.17h
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),

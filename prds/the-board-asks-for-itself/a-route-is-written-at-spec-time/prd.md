@@ -1,9 +1,9 @@
 ---
-state: open        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
+state: done        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: requested  # requested = the user asked | derived = the board found it
 # from:            # derived only — the PRD whose work surfaced this one
 priority: 60        # higher first
-complexity: 0      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
+complexity: 31      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
 blast-radius:      # analyst, at spec time — high|mid|low. What breaks if this is wrong
 repo: pearde
 # workflow:        # OPTIONAL — how this kind of job is done: a slug in
@@ -11,7 +11,7 @@ repo: pearde
 #                  #   Absent = the brief alone, as before workflows
 time:              # OPTIONAL. See @references/parts/order.md
   est:             # the weight, only when complexity is absent. Not a duration
-  actual:          # a record. Nothing reads it
+  actual: 0.1h
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
 footprint:
   - references/parts/workers.md
@@ -136,3 +136,24 @@ The files ride the PRD's commit at collect, as edited workflow files do —
 <!-- `## Failure` — implementer-only, after a FAILED attempt: what broke, what
      was tried. `retry` moves this into the body as history and reopens the
      PRD. -->
+
+## Report
+
+spec01: exit 0
+/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/tmp.Vwy0N67yND/.pearde/workflows/probe-atomic.md
+spec01 ok
+
+spec02: exit 0
+== case: fresh route drafts workflow + new atomic, existing step gets no block ==
+▸ fixture-prd: analyzing → specced · done 0/1 · 0% · open 0/1 · 0% · ready 1 · blocked 0 @3 workers · as probe
+== case: --workflow none without --route is refused ==
+== case: --route naming a slug already in the library is refused ==
+== case: a route that fails workflow check writes nothing, PRD stays analyzing ==
+== case: --dry with --route writes nothing ==
+ALL PROBE CASES PASSED
+spec02 ok
+warn: spec01.md:13: the verify block names no path under the footprint — the whole-workspace smell
+warn: spec01.md:13: the verify block names no path under the footprint — the whole-workspace smell
+
+spec03: exit 0
+spec03 ok

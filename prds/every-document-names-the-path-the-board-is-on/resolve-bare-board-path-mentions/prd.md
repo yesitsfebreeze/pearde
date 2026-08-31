@@ -15,6 +15,7 @@ time:              # OPTIONAL. See @references/parts/order.md
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
 needs:
   - apply-the-prds-rename-table
+commit: 0321d5d af86629
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
      vision importance (priority), and complexity/blast-radius. Add your own

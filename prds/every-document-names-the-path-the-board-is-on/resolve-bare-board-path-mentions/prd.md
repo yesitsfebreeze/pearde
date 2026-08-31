@@ -1,9 +1,9 @@
 ---
-state: specced        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
+state: open        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: requested  # requested = the user asked | derived = the board found it
 # from:            # derived only — the PRD whose work surfaced this one
-priority: 66        # higher first
-complexity: 4      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
+priority: 75        # higher first
+complexity: 0      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
 blast-radius:      # analyst, at spec time — high|mid|low. What breaks if this is wrong
 repo:              # the sub-repo the code lands in; delete if n/a
 # workflow:        # OPTIONAL — how this kind of job is done: a slug in
@@ -13,6 +13,8 @@ time:              # OPTIONAL. See @references/parts/order.md
   est:             # the weight, only when complexity is absent. Not a duration
   actual:          # a record. Nothing reads it
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
+needs:
+  - apply-the-prds-rename-table
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
      vision importance (priority), and complexity/blast-radius. Add your own
@@ -33,16 +35,9 @@ time:              # OPTIONAL. See @references/parts/order.md
      would change only how loudly the board notices, it is a memo, not a PRD.
      See @references/parts/derived.md. -->
 
-# a-quoted-walk-is-data
+# resolve-bare-board-path-mentions — every remaining bare `prds/` mention (no table match) across the scoped files is read and rewritten to `.pearde/` or `.pearde/prds/` as its context actually means, verified against the code it describes where the meaning isn't obvious from the sentence alone
 
-<The request, for an analyst who knows the codebase but not this conversation:
-
-- what exists when the PRD is done, and why it matters
-- constraints and non-goals — what must NOT change
-- pointers: relevant files, docs, prior PRDs
-
-One contract per PRD. "And also…" is a second PRD — write it separately, or
-let the analyst split it via refine.>
+every remaining bare `prds/` mention (no table match) across the scoped files is read and rewritten to `.pearde/` or `.pearde/prds/` as its context actually means, verified against the code it describes where the meaning isn't obvious from the sentence alone
 
 <!-- Three more headings exist, and none of them is a slot to copy down. Each
      is a claim about the state of this PRD, so an empty copy of it is a false

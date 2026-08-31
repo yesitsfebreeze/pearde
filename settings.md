@@ -2,7 +2,7 @@
 name: pearde
 language: English
 workers: 1
-pipeline: 1
+pipeline: 3
 weight-default: 20
 gantt-day: 8h
 ---

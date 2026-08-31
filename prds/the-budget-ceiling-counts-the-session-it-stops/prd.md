@@ -1,9 +1,9 @@
 ---
-state: specced        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
+state: open        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: requested  # requested = the user asked | derived = the board found it
 # from:            # derived only — the PRD whose work surfaced this one
-priority: 66        # higher first
-complexity: 4      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
+priority: 90        # higher first
+complexity: 0      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
 blast-radius:      # analyst, at spec time — high|mid|low. What breaks if this is wrong
 repo:              # the sub-repo the code lands in; delete if n/a
 # workflow:        # OPTIONAL — how this kind of job is done: a slug in
@@ -33,7 +33,7 @@ time:              # OPTIONAL. See @references/parts/order.md
      would change only how loudly the board notices, it is a memo, not a PRD.
      See @references/parts/derived.md. -->
 
-# a-quoted-walk-is-data
+# the budget ceiling counts the session it stops
 
 <The request, for an analyst who knows the codebase but not this conversation:
 

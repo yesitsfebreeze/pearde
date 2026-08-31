@@ -132,3 +132,6 @@ Pointers: `resources/board/plan.py` for the authoritative constants
 <!-- `## Failure` — implementer-only, after a FAILED attempt: what broke, what
      was tried. `retry` moves this into the body as history and reopens the
      PRD. -->
+
+| `apply-the-prds-rename-table` | the specific-rule table (plus `.claims/`, `report.md`, `view.user.css/js`, `prds/knowledge` and the `prds/<name>/` pattern) is applied mechanically across the 80 scoped files, and `agents/`→`references/agents/`, `references/skills/` registration is fixed in `references/files.md`, `index.md`, `references/parts/workers.md | — |
+| `resolve-bare-board-path-mentions` | every remaining bare `prds/` mention (no table match) across the scoped files is read and rewritten to `.pearde/` or `.pearde/prds/` as its context actually means, verified against the code it describes where the meaning isn't obvious from the sentence alone | apply-the-prds-rename-table |

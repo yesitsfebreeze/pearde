@@ -16,7 +16,7 @@ footprint:
   - references/parts/statusline.md
   - resources/statusline.sh
   - README.md
-commit: c1156d3
+commit: 61d29b3
 actual: 0.28h
 ---
 

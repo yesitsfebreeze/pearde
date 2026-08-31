@@ -3,7 +3,7 @@
 # the end. Fixtures are built in a temp dir at run time and removed at exit;
 # nothing under prds/ is written.
 set -u
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../../.." && pwd)"
 PROBE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # the module under test: resources/board/brief.py, where spec01 moved it;
 # BRIEF_PY names another copy
@@ -18,7 +18,9 @@ not() { if printf '%s' "$2" | grep -qF -- "$3"; then bad "$1 — present: $3"; e
 eq()  { if [ "$2" = "$3" ]; then ok "$1"; else bad "$1 — got: $2 · want: $3"; fi; }
 
 python3 "$ROOT/resources/board/plan.py" example "$D/ex" >/dev/null || { echo "no example board"; exit 1; }
-B="$D/ex/prds"
+B="$D/ex/.pearde"
+mkdir -p "$B/.state"   # `example` writes no .state/ — state-dir-belongs-to-the-board
+PRDS="$B/prds"
 run() { python3 "$BRIEF" "$@" --board "$B" 2>"$D/err"; RC=$?; ERR=$(cat "$D/err"); }
 
 echo "── the source: workers.md"
@@ -43,10 +45,10 @@ sed -n "5,$((4+N))p" "$D/out" > "$D/got"
 if diff -q "$D/want" "$D/got" >/dev/null; then ok "the role section is the analyst block with the placeholders filled"; else bad "the role section drifted from workers.md:"; diff "$D/want" "$D/got" | sed 's/^/       /'; fi
 for t in '<prd>' '<repo>' '<language>' '<probe>' '<board>' '<id>'; do not "no unfilled $t" "$OUT" "$t"; done
 has "probe path is in the brief" "$OUT" 'Probe code lives at `prds/big/second/probe/`'
-has "the fixture clause" "$OUT" 'never under `prds/`'
+has "the fixture clause" "$OUT" 'Build every fixture in a directory'
 has "the box clause" "$OUT" 'backtick-quoted'
 has "the language is named" "$OUT" 'Write in `English`'
-has "the every-worker block is last" "$(tail -3 "$D/out")" 'never write outside `prds/big/second/`'
+has "the every-worker block ends the brief" "$(tail -4 "$D/out")" 'fifteen lines back, whatever the report holds'
 
 echo "── the skips"
 run building; eq "building exits 1" "$RC" 1; has "building is held" "$ERR" "held"; has "the claim is quoted" "$ERR" 'claim: worker-building'
@@ -73,34 +75,34 @@ $B\` prints it"
 has "first atomic inlined" "$OUT" "### 1 — find-the-line"
 has "second atomic inlined" "$OUT" "### 2 — change-the-line"
 eq "one block per distinct slug" "$(grep -c '^Follow the workflow' "$D/out")" 1
-has "the implementer brief follows" "$OUT" 'Read `prds/building/prd.md` and every file in `specs/`'
+has "the implementer brief follows" "$OUT" 'Read `.pearde/prds/building/prd.md` and every file in `specs/`'
 # a spec naming the same slug adds no second block; a PRD with none and a spec with one gets one
 sed -i.bak '1a\
-workflow: fix-a-line' "$B/building/specs/spec01.md"
+workflow: fix-a-line' "$PRDS/building/specs/spec01.md"
 run building --force >"$D/out"; eq "PRD and spec same slug — still one block" "$(grep -c '^Follow the workflow' "$D/out")" 1
-sed -i.bak '/^workflow:/d' "$B/building/prd.md"
+sed -i.bak '/^workflow:/d' "$PRDS/building/prd.md"
 run building --force >"$D/out"; eq "slug on the spec only — one block" "$(grep -c '^Follow the workflow' "$D/out")" 1
 has "header shows the spec's slug" "$(sed -n 1p "$D/out")" "· wf fix-a-line ·"
 run building --force --role analyst >"$D/out"; eq "an analyst reads no spec slug" "$(grep -c '^Follow the workflow' "$D/out")" 0
 has "analyst header says wf none" "$(sed -n 1p "$D/out")" "· wf none ·"
 # a slug that names nothing is a skip; forced, the header marks it
 sed -i.bak '1a\
-workflow: nope' "$B/big/second/prd.md"
+workflow: nope' "$PRDS/big/second/prd.md"
 run big/second; eq "dangling slug exits 1" "$RC" 1; has "dangling slug is the workflow skip" "$ERR" "workflow"
 run big/second --force >"$D/out"; eq "dangling slug forced exits 0" "$RC" 0
 has "dangling slug marked on the header" "$(sed -n 1p "$D/out")" "· wf nope? ·"
 eq "dangling slug prints no block" "$(grep -c '^Follow the workflow' "$D/out")" 0
-sed -i.bak '/^workflow: nope/d' "$B/big/second/prd.md"
+sed -i.bak '/^workflow: nope/d' "$PRDS/big/second/prd.md"
 
 echo "── the placeholders' sources"
 sed -i.bak 's/^language: English/language: Deutsch/' "$B/settings.md"
 run big/second >"$D/out"; has "language from settings.md" "$(cat "$D/out")" 'Write in `Deutsch`'
 sed -i.bak 's/^language: Deutsch/language: English/' "$B/settings.md"
 mkdir -p "$D/ex/sub/.git"; sed -i.bak '1a\
-repo: sub' "$B/big/second/prd.md"
+repo: sub' "$PRDS/big/second/prd.md"
 run big/second >"$D/out"; has "repo: that is a directory is the repo" "$(sed -n 1p "$D/out")" "· repo $D/ex/sub"
 has "the repo is in the brief" "$(cat "$D/out")" "Attempt the implementation in \`$D/ex/sub\`"
-sed -i.bak '/^repo: sub/d' "$B/big/second/prd.md"
+sed -i.bak '/^repo: sub/d' "$PRDS/big/second/prd.md"
 run big/second >"$D/out"; has "repo: pearde (a name) falls back to the board's" "$(sed -n 1p "$D/out")" "· repo $D/ex"
 run big/second --role implementer >"$D/out"; has "--role overrides the state" "$(sed -n 1p "$D/out")" "· implementer ·"
 run big/second --role foo; eq "--role foo exits 1" "$RC" 1

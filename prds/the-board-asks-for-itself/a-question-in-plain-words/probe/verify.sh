@@ -4,7 +4,7 @@
 # tears it down. Exit 0 when every line of the contract holds.
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
-REPO="$(cd "$HERE/../../../.." && pwd)"
+REPO="$(cd "$HERE/../../../../.." && pwd)"
 DIR="$(mktemp -d)"; trap 'rm -rf "$DIR"' EXIT
 fail=0
 say() { printf '%s %s\n' "$1" "$2"; }
@@ -27,13 +27,13 @@ grep -q 'for the board:' "$DIR/out.txt" \
   && no "the technical anchor was checked" || ok "the anchor is never checked"
 
 # 2 — release refuses the round and leaves the state alone
-sed -i.bak 's/^state: question/state: analyzing/' "$DIR/prds/a-fork/prd.md"
+sed -i.bak 's/^state: question/state: analyzing/' "$DIR/.pearde/prds/a-fork/prd.md"
 python3 "$REPO/resources/board/transitions.py" release a-fork question \
-  --board "$DIR/prds" --as engineer > "$DIR/rel.txt" 2>&1
+  --board "$DIR/.pearde" --as engineer > "$DIR/rel.txt" 2>&1
 rc=$?
 [ "$rc" != "0" ] && ok "release <prd> question exits $rc" \
   || no "release <prd> question exited 0 on a round that fails"
-grep -q '^state: analyzing' "$DIR/prds/a-fork/prd.md" \
+grep -q '^state: analyzing' "$DIR/.pearde/prds/a-fork/prd.md" \
   && ok "the state is unchanged" || no "the state moved"
 
 # 3 — the view's asks card

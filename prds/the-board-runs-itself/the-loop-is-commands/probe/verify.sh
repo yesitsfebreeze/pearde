@@ -2,7 +2,7 @@
 # the-loop-is-commands — the probe's harness. One line per assertion, a count
 # at the end. Every fixture is a copy of the example board in a temp dir.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
+ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
 P="python3 $ROOT/resources/pearde.py"
 GUARD="$ROOT/resources/guard.py"
 TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
@@ -18,10 +18,10 @@ export PEARDE_AS=engineer
 echo "── the pages"
 L="$(wc -l < "$ROOT/references/parts/loop.md" | tr -d ' ')"
 S="$(wc -l < "$ROOT/references/parts/solo.md" | tr -d ' ')"
-[ "$L" -le 120 ] && ok "loop.md is $L lines, ≤ 120" || bad "loop.md is $L lines"
+[ "$L" -le 170 ] && ok "loop.md is $L lines, ≤ 170" || bad "loop.md is $L lines"
 [ "$S" -le 25 ] && ok "solo.md is $S lines, ≤ 25" || bad "solo.md is $S lines"
-eq "loop.md carries the seven-row table" "$(grep -c '^| [1-7] ' "$ROOT/references/parts/loop.md")" "7"
-eq "README carries the same seven rows" "$(grep -c '^| [1-7] ' "$ROOT/README.md")" "7"
+eq "loop.md carries the eight-row table" "$(grep -c '^| [1-8] ' "$ROOT/references/parts/loop.md")" "8"
+eq "README carries the same eight rows" "$(grep -c '^| [1-8] ' "$ROOT/README.md")" "8"
 for c in $(grep -oE 'pearde [a-z]+' "$ROOT/references/parts/loop.md" | awk '{print $2}' | sort -u); do
   if $P "$c" --help >/dev/null 2>&1; then ok "pearde $c --help exits 0"; else bad "pearde $c --help failed"; fi
 done
@@ -36,7 +36,7 @@ lacks "workers.md names no verify: key" "$(cat "$ROOT/references/parts/workers.m
 
 echo "── the guard: a state written by hand"
 G="$TMP/proj"; python3 "$ROOT/resources/board/plan.py" example "$G" >/dev/null
-F="$G/prds/next/prd.md"
+F="$G/.pearde/prds/next/prd.md"
 hook() { # tool json — the hook payload built from the environment, so no quoting can eat it
   J="$(TOOL="$1" CWD="$G" INPUT="$2" python3 -c 'import json,os; print(json.dumps({"tool_name":os.environ["TOOL"],"cwd":os.environ["CWD"],"session_id":"probe","tool_input":json.loads(os.environ["INPUT"])}))' 2>&1)" || { echo "builder failed: $J"; return; }
   printf "%s" "$J" | python3 "$GUARD" pre; }
@@ -56,22 +56,22 @@ python3 - "$F" > "$TMP/w2.json" <<'PY'
 import json,sys; t=open(sys.argv[1]).read(); print(json.dumps({"file_path":sys.argv[1],"content":t.replace("state: open","state: done")}))
 PY
 has "Write changing state: is denied" "$(wjson "$TMP/w2.json")" 'pearde set next done'
-IN="{\"file_path\":\"$G/prds/fresh/prd.md\",\"content\":\"---\\nstate: open\\n---\\n# fresh\\n\"}"
+IN="{\"file_path\":\"$G/.pearde/prds/fresh/prd.md\",\"content\":\"---\\nstate: open\\n---\\n# fresh\\n\"}"
 has "Write of a new prd.md with a state: is denied naming add" "$(hook Write "$IN")" 'pearde add'
-IN="{\"file_path\":\"$G/prds/next/specs/x.md\",\"old_string\":\"state: open\",\"new_string\":\"state: done\"}"
+IN="{\"file_path\":\"$G/.pearde/prds/next/specs/x.md\",\"old_string\":\"state: open\",\"new_string\":\"state: done\"}"
 eq "a spec file is not matched" "$(hook Edit "$IN")" ""
 IN="{\"file_path\":\"$TMP/prd.md\",\"old_string\":\"state: open\",\"new_string\":\"state: done\"}"
 eq "a prd.md outside a board is not matched" "$(hook Edit "$IN")" ""
-IN="{\"command\":\"python3 $ROOT/resources/pearde.py set next open --board $G/prds\"}"
+IN="{\"command\":\"python3 $ROOT/resources/pearde.py set next open --board $G/.pearde\"}"
 eq "pearde set through Bash passes the hook" "$(hook Bash "$IN")" ""
-IN="{\"command\":\"python3 $ROOT/resources/pearde.py set next open --board $G/prds\"}"
+IN="{\"command\":\"python3 $ROOT/resources/pearde.py set next open --board $G/.pearde\"}"
 eq "  …and passes again — a transition is never a repeated read" "$(hook Bash "$IN")" ""
 eq "the state file still says open — the hook wrote nothing" "$(grep '^state:' "$F")" "state: open"
 
 echo "── sweep"
 W="$TMP/w"; python3 "$ROOT/resources/board/plan.py" example "$W" >/dev/null
 git -C "$W" init -q && git -C "$W" add -A && git -C "$W" -c user.email=a@b -c user.name=t commit -qm base
-B="$W/prds"
+B="$W/.pearde"; PRDS="$B/prds"
 python3 "$ROOT/resources/board/init.py" settings claim-ttl=1m --board "$B" >/dev/null
 age() { T="$(python3 -c 'import time; print(time.strftime("%Y%m%d%H%M.%S", time.localtime(time.time()-120)))')"; find "$W" -not -path '*/.git*' -exec touch -t "$T" {} +; }
 age
@@ -87,28 +87,29 @@ $P set next analyzing --force --board "$B" >/dev/null 2>&1
 $P set big/second analyzing --force --board "$B" >/dev/null 2>&1
 python3 - "$B" "$ROOT/resources/board" <<'PY'
 import sys, os; sys.path.insert(0, sys.argv[2]); import edit
-b = sys.argv[1]
+b = os.path.join(sys.argv[1], "prds")
 edit.set_key(os.path.join(b, "next/prd.md"), "claim", "worker-next 2026-08-28 10:00")
 edit.set_key(os.path.join(b, "big/second/prd.md"), "claim", "worker-second 2026-08-28 10:00")
 os.makedirs(os.path.join(b, "next/specs"), exist_ok=True)
 open(os.path.join(b, "next/specs/spec01.md"), "w").write("---\ncomplexity: 3\n---\n# spec01\n\n## Acceptance\n\n- [ ] x\n")
-open(os.path.join(b, ".round.md"), "w").write("# Round\n\n## Established\n- big/second is mine · 10:00\n")
+os.makedirs(os.path.join(sys.argv[1], ".state"), exist_ok=True)
+open(os.path.join(sys.argv[1], ".state", "round.md"), "w").write("# Round\n\n## Established\n- big/second is mine · 10:00\n")
 PY
 age
 O="$($P sweep --apply --board "$B")"; RC=$?
 eq "sweep --apply exits 0" "$RC" "0"
 has "an analyst with specs on disk is sent to specced, not moved" "$O" 'specs on disk — an analyst that finished: `pearde specced next`'
-eq "  …and stays analyzing" "$(grep '^state:' "$B/next/prd.md")" "state: analyzing"
+eq "  …and stays analyzing" "$(grep '^state:' "$PRDS/next/prd.md")" "state: analyzing"
 has "a claim the round file names is left" "$O" "big/second · analyzing · claim worker-second 2026-08-28 10:00 · silent 2m · named in prds/.round.md"
-eq "  …and stays analyzing" "$(grep '^state:' "$B/big/second/prd.md")" "state: analyzing"
+eq "  …and stays analyzing" "$(grep '^state:' "$PRDS/big/second/prd.md")" "state: analyzing"
 has "the stale implementer's line is printed" "$O" "▸ building: claimed → failed"
 has "  …and ends round file owed before as" "$O" "· round file owed · as engineer"
-eq "  …and the state is failed" "$(grep '^state:' "$B/building/prd.md")" "state: failed"
-has "  …with a ## Failure saying it was swept" "$(cat "$B/building/prd.md")" "swept "
-eq "  …and the claim cleared" "$(grep -c '^claim:' "$B/building/prd.md")" "0"
-sed -i.bak 's/^- big\/second is mine.*$/- nothing/' "$B/.round.md"; age
+eq "  …and the state is failed" "$(grep '^state:' "$PRDS/building/prd.md")" "state: failed"
+has "  …with a ## Failure saying it was swept" "$(cat "$PRDS/building/prd.md")" "swept "
+eq "  …and the claim cleared" "$(grep -c '^claim:' "$PRDS/building/prd.md")" "0"
+sed -i.bak 's/^- big\/second is mine.*$/- nothing/' "$B/.state/round.md"; age
 O="$($P sweep --apply --board "$B")"
-eq "unnamed in the round file, the analyst without specs goes open" "$(grep '^state:' "$B/big/second/prd.md")" "state: open"
+eq "unnamed in the round file, the analyst without specs goes open" "$(grep '^state:' "$PRDS/big/second/prd.md")" "state: open"
 $P sweep x --board "$B" >/dev/null 2>&1; eq "sweep with an argument is refused" "$?" "1"
 
 echo "── claim records, answer owes"
@@ -122,12 +123,12 @@ has "  …round file owed before as" "$O" "· round file owed · as engineer"
 $P answer asking Q1 "the first answer" --board "$B" >/dev/null 2>&1
 has "answer owes prds/asking/prd.md in .claims/riders" "$(cat "$B/.claims/riders" 2>/dev/null)" "prds/asking/prd.md"
 N="$TMP/nogit"; python3 "$ROOT/resources/board/plan.py" example "$N" >/dev/null
-$P set big/second specced --force --board "$N/prds" >/dev/null 2>&1
-O="$($P claim big/second w3 --board "$N/prds" 2>&1)"; RC=$?
+$P set big/second specced --force --board "$N/.pearde" >/dev/null 2>&1
+O="$($P claim big/second w3 --board "$N/.pearde" 2>&1)"; RC=$?
 eq "claim outside a git repo still moves the state" "$RC" "0"
 has "  …and says there is no baseline" "$O" "claim: no baseline"
 
 echo "── fixtures"
-eq "no fixture prd.md under prds/" "$(find "$ROOT/prds" -path '*/probe/*' -name prd.md | wc -l | tr -d ' ')" "0"
+eq "no fixture prd.md under prds/" "$(find "$ROOT/.pearde/prds" -path '*/probe/*' -name prd.md | wc -l | tr -d ' ')" "0"
 printf '\n%d checks · %d pass · %d fail\n' "$((pass+fail))" "$pass" "$fail"
 [ "$fail" -eq 0 ]

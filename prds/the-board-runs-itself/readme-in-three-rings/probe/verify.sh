@@ -7,7 +7,7 @@
 # the five lines on a temp dir. `bash verify.sh --no-run` skips that last
 # part (it starts a daemon on a spare port and takes a few seconds).
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
+ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
 README="$ROOT/README.md"; STATES="$ROOT/references/parts/states.md"
 S="$(mktemp -d)"; trap 'rm -rf "$S"' EXIT
 PASS=0; FAIL=0
@@ -82,24 +82,24 @@ has "E addressing keeps @ and @@" "$(awk '/^## Addressing/{f=1;next} f' "$README
 echo "F. every claim is true to the code"
 # on a copy of the example board, never the live one: `add` writes a PRD
 python3 "$ROOT/resources/board/plan.py" example "$S/copy" >/dev/null
-has "F add as printed — no --as, no PEARDE_AS — files it as engineer, so the quickstart row says so" "$(env -u PEARDE_AS python3 "$ROOT/resources/board/transitions.py" add "quickstart probe" --board "$S/copy" 2>&1)" "· as engineer"
+has "F add as printed — no --as, no PEARDE_AS — files it as engineer, so the quickstart row says so" "$(env -u PEARDE_AS python3 "$ROOT/resources/board/transitions.py" add "quickstart probe" --board "$S/copy/.pearde" 2>&1)" "· as engineer"
 eq  "F the daemon's default port is 8443" "$(grep -c '127.0.0.1:8443' "$README")" "2"
-eq  "F twelve skills" "$(ls "$ROOT/skills"/*.md | wc -l | tr -d ' ')" "12"
+eq  "F the skills hold fourteen files — two skills grew with the machine" "$(ls "$ROOT/references/skills"/*.md | wc -l | tr -d ' ')" "14"
 has "F init's first line names the language" "$(sed -n '/^def cmd_init/,/^def /p' "$ROOT/resources/board/init.py")" 'language {language} — '
 has "F view opens the browser" "$(sed -n '/^def cmd_view/,/^def /p' "$ROOT/resources/pearde.py")" "webbrowser.open"
-has "F the five bands, in the scan's words" "$(python3 "$ROOT/resources/board/plan.py" scan "$ROOT/resources/board/example/prds" 2>&1)" "gated"
+has "F the five bands, in the scan's words" "$(python3 "$ROOT/resources/board/plan.py" scan "$S/copy/.pearde" 2>&1)" "gated"
 lacks "F no emoji" "$(grep -vE '^\| `install --apply`' "$README")" "✓"
 
 echo "G. the footprint beside the README"
 has "G language.md has the README row" "$(cat "$ROOT/references/language.md")" "| README        | a person, first time | quickstart, then rings |"
-has "G skills/pearde.md still opens with Read @README.md" "$(sed -n 6p "$ROOT/skills/pearde.md")" "Read @README.md"
-has "G ...and points at the table's new place" "$(sed -n '6,8p' "$ROOT/skills/pearde.md")" "under **Three rings**"
+has "G references/skills/pearde.md opens with Read @README.md" "$(sed -n 6p "$ROOT/references/skills/pearde.md")" "Read @README.md"
+has "G ...and points at the table's place" "$(sed -n '6,8p' "$ROOT/references/skills/pearde.md")" "under **Three rings**"
 eq  "G index.py check is silent" "$(python3 "$ROOT/resources/index.py" check 2>&1 | wc -l | tr -d ' ')" "0"
 eq  "G nothing anchors into a README heading" "$(grep -rl 'README.md#' "$ROOT/references" "$ROOT/skills" "$ROOT/index.md" "$ROOT/SKILL.md" 2>/dev/null | wc -l | tr -d ' ')" "0"
 
 if [ "${1:-}" != "--no-run" ]; then
   echo "H. the five lines, end to end"
-  bash "$ROOT/prds/the-board-runs-itself/readme-in-three-rings/probe/quickstart.sh" </dev/null > "$S/qs" 2>&1; RC=$?
+  bash "$ROOT/.pearde/prds/the-board-runs-itself/readme-in-three-rings/probe/quickstart.sh" </dev/null > "$S/qs" 2>&1; RC=$?
   eq  "H quickstart.sh exits 0" "$RC" "0"
   has "H ...and every check passed" "$(tail -1 "$S/qs")" " 0 fail"
   [ "$RC" = 0 ] || sed 's/^/  /' "$S/qs" | grep '^  FAIL'

@@ -33,7 +33,7 @@ ERR="$SCRATCH/err"
 # a fresh copy of the example, a repo around it, one commit, timestamps fresh
 fixture() {
   local d="$TOP/$1"
-  python3 "$PLAN" example "$d/.pearde" >/dev/null 2>&1
+  python3 "$PLAN" example "$d" >/dev/null 2>&1   # `example <dir>` writes the board at <dir>/.pearde
   mkdir -p "$d/.pearde/.state"          # `example` writes no .state/ — state-dir-belongs-to-the-board
   find "$d" -type f -exec touch {} +
   ( cd "$d" && git init -q -b main && git add -A && git commit -qm init )

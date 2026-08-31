@@ -4,7 +4,7 @@
 # back. Never under prds/. Needs the daemon for the served half and
 # playwright-core (NODE_PATH) for the page half; each says so when absent.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
+ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
 PLAN="$ROOT/resources/board/plan.py"
 SERVE="$ROOT/resources/board/serve.py"
 PAGE="$(cd "$(dirname "$0")" && pwd)/page.js"
@@ -24,8 +24,11 @@ has()   { if printf '%s' "$2" | grep -qE -- "$3"; then ok "$1"; else bad "$1" "n
 lacks() { if printf '%s' "$2" | grep -qE -- "$3"; then bad "$1" "found /$3/"; else ok "$1"; fi; }
 
 python3 "$PLAN" example "$D/b" >/dev/null
-B="$D/b/prds"
+B="$D/b/.pearde"
+PRDS="$B/prds"
+mkdir -p "$B/.state"   # `example` writes no .state/ — state-dir-belongs-to-the-board
 ( cd "$D/b" && git init -q . )
+printf 'name: example\n' | sed -i '' -e '/^gantt-day: 8h$/r /dev/stdin' "$B/settings.md"
 printf 'claim-ttl: 1m\n' | sed -i '' -e '/^gantt-day: 8h$/r /dev/stdin' "$B/settings.md"
 python3 "$PLAN" plan "$B" >/dev/null 2>&1      # .plan.json — the payload schedules off it
 OLD="$(date -v-2M +%Y%m%d%H%M 2>/dev/null || date -d '2 minutes ago' +%Y%m%d%H%M)"
@@ -91,19 +94,21 @@ mkdir -p "$D/b/src" && touch "$D/b/src/app.py"
 lacks "scan: touching a footprint path in the repo flips building to held" "$(python3 "$PLAN" scan "$B")" "silent"
 back
 has   "scan: setting it back flips it to silent again" "$(python3 "$PLAN" scan "$B")" "building .*silent"
-touch "$B/building/specs/spec01.md"
+touch "$PRDS/building/specs/spec01.md"
 lacks "scan: touching a file under the PRD dir flips it to held" "$(python3 "$PLAN" scan "$B")" "silent"
 back
 # a fresh-mtime copy with the default ttl: not one silent word, nothing added
 python3 "$PLAN" example "$D/c" >/dev/null; find "$D/c" -type f -exec touch {} +
-lacks "scan: a fresh copy at the default ttl prints no silent word" "$(python3 "$PLAN" scan "$D/c/prds")" "silent"
-lacks "scan: nor a claim-ttl line of any kind" "$(python3 "$PLAN" scan "$D/c/prds")" "claim-ttl"
+lacks "scan: a fresh copy at the default ttl prints no silent word" "$(python3 "$PLAN" scan "$D/c/.pearde")" "silent"
+lacks "scan: nor a claim-ttl line of any kind" "$(python3 "$PLAN" scan "$D/c/.pearde")" "claim-ttl"
 
 # ── serve.py: the two routes, live ───────────────────────────────────────
 if ! curl -s "http://127.0.0.1:$PORT/status" >/dev/null 2>&1; then
   echo "  skip  no daemon on :$PORT — the served half was not run"
 else
   # the copy declares `name: example`; the daemon keys it by that when free
+  python3 "$SERVE" forget example >/dev/null 2>&1   # earlier sections registered boards named example
+  python3 "$SERVE" forget "$B" >/dev/null 2>&1      # and any stale key by path
   python3 "$SERVE" ensure "$B" >/dev/null 2>&1
   NAME="$(curl -s "http://127.0.0.1:$PORT/status" | python3 -c "import json,sys;print([b['name'] for b in json.load(sys.stdin)['boards'] if b['path']=='$B'][0])")"
   check "serve: the fixture registered under its own name" "$NAME" "example"
@@ -111,7 +116,7 @@ else
   # it); the endpoint stays gone, and the probe asserts the removal
   check "/round is gone — 404, not a route to a file nothing reads" "$(curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:$PORT/round?board=$NAME")" "404"
   check "GET /report: absent file is null" "$(curl -s "http://127.0.0.1:$PORT/report?board=$NAME" | python3 -c 'import json,sys;print(json.load(sys.stdin)["text"])')" "None"
-  check "/round stays gone with a .round.md on disk" "$(printf '# Round — probing\n' > "$B/.round.md"; curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:$PORT/round?board=$NAME")" "404"
+  check "/round stays gone with a .round.md on disk" "$(printf '# Round — probing\n' > "$B/.state/round.md"; curl -s -o /dev/null -w '%{http_code}' "http://127.0.0.1:$PORT/round?board=$NAME")" "404"
   printf '# Where the example stands\n\n*today*\n\nOne worker is **building**.\n\n## In work\n\n- `building` — half done\n' > "$B/report.md"
   check "GET /report: the file, read on the call" "$(curl -s "http://127.0.0.1:$PORT/report?board=$NAME" | python3 -c 'import json,sys;print(json.load(sys.stdin)["text"].splitlines()[0])')" "# Where the example stands"
   back
@@ -119,7 +124,7 @@ else
     echo "  skip  no playwright-core on NODE_PATH — the page half was not run"
   else
     sleep 1.2   # the daemon settles the two writes above before the page opens
-    J="$(node "$PAGE" "http://127.0.0.1:$PORT/board/$NAME" "$B/.round.md" 2>&1)"
+    J="$(node "$PAGE" "http://127.0.0.1:$PORT/board/$NAME" "$B/.state/round.md" 2>&1)"
     printf '%s' "$J" | python3 -c 'import json,sys;json.load(sys.stdin)' 2>/dev/null \
       || { echo "  FAIL  page.js did not return JSON:"; printf '%s\n' "$J" | head -5; }
     jq_() { printf '%s' "$J" | python3 -c "import json,sys;d=json.load(sys.stdin);print($1)"; }

@@ -4,7 +4,7 @@
 # a parked child holds its parent; a container is collect's, never claim's.
 # Every fixture is a copy of the example board under mktemp -d, removed at exit.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
+ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
 SRC="$ROOT/resources/board"; PLAN="$SRC/plan.py"; TR="$SRC/transitions.py"
 BRIEF="$SRC/brief.py"
 PASS=0; FAIL=0
@@ -15,6 +15,7 @@ lacks() { if printf '%s\n' "$2" | grep -F -- "$3" >/dev/null; then bad "$1 — h
 eq()    { if [ "$2" = "$3" ]; then ok "$1"; else bad "$1 — want [$3] got [$2]"; fi; }
 TMP=$(mktemp -d); trap 'rm -rf "$TMP"' EXIT
 export PEARDE_AS=engineer
+PRDS_OF() { echo "$1/prds"; }
 
 fixture() {   # a fresh copy of the example board, its own git repo; echoes the board path
   local d; d=$(mktemp -d "$TMP/fx.XXXXXX")
@@ -22,7 +23,7 @@ fixture() {   # a fresh copy of the example board, its own git repo; echoes the 
   find "$d" -type f -exec touch {} +
   (cd "$d/b" && git init -q . && git add -A \
      && git -c user.email=p@p -c user.name=p commit -qm init)
-  echo "$d/b/prds"
+  echo "$d/b/.pearde"
 }
 section() {   # $1 scan text, $2 heading word → that section's rows
   printf '%s\n' "$1" | awk -v h="^$2 " '$0 ~ h {f=1; next} /^$/ {f=0} f'
@@ -78,7 +79,7 @@ lacks "no unclaimed on the untouched copy" "$S0" "unclaimed:"
 eq  "ready ⇒ claim accepts, gated ⇒ the shown reason" "$(gate_check "$B0" | tail -1)" "ready-ok 1 ready-bad 0 gated-ok 2 gated-bad 0"
 
 echo "# big/second parked — the parent is held"
-B1=$(fixture); sed -i.bak 's/^state: open$/state: later/' "$B1/big/second/prd.md"; rm -f "$B1/big/second/prd.md.bak"
+B1=$(fixture); sed -i.bak 's/^state: open$/state: later/' "$B1/prds/big/second/prd.md"; rm -f "$B1/prds/big/second/prd.md.bak"
 (cd "$B1" && git -c user.email=p@p -c user.name=p commit -qam park)
 S1=$(python3 "$PLAN" scan "$B1" 2>/dev/null)
 has "parked line names the child" "$S1" "parked: big/second"
@@ -88,7 +89,7 @@ ERR=$(python3 "$TR" claim big w --board "$B1" 2>&1 >/dev/null); RC=$?
 eq  "claim big w exits 1" "$RC" 1
 has "claim refuses with the same reason" "$ERR" "leaf: big held by big/second (parked)"
 eq  "the refusal wrote nothing" "$(cd "$B1" && git status --short)" ""
-eq  "big stays open" "$(state_of "$B1/big")" open
+eq  "big stays open" "$(state_of "$B1/prds/big")" open
 eq  "ready ⇒ claim accepts, gated ⇒ the shown reason" "$(gate_check "$B1" | tail -1)" "ready-ok 0 ready-bad 0 gated-ok 2 gated-bad 0"
 P1=$(python3 "$PLAN" plan "$B1" 2>/dev/null)
 lacks "plan's ready set holds no held PRD" "$(printf '%s\n' "$P1" | awk '/^ready now/{f=1;next} /^$/{f=0} f')" "big ["
@@ -97,7 +98,7 @@ has "plan names the hold" "$P1" "leaf: big held by big/second (parked)"
 has "brief skips it under the leaf word" "$(python3 "$BRIEF" big --board "$B1" 2>&1)" "skipped big — leaf — leaf: big held by big/second (parked)"
 
 echo "# big/second done, big has nothing of its own — a container"
-B2=$(fixture); sed -i.bak 's/^state: open$/state: done/' "$B2/big/second/prd.md"; rm -f "$B2/big/second/prd.md.bak"
+B2=$(fixture); sed -i.bak 's/^state: open$/state: done/' "$B2/prds/big/second/prd.md"; rm -f "$B2/prds/big/second/prd.md.bak"
 (cd "$B2" && git -c user.email=p@p -c user.name=p commit -qam land)
 S2=$(python3 "$PLAN" scan "$B2" 2>/dev/null)
 has "big is listed to collect" "$(section "$S2" collect)" "big · p62"
@@ -107,27 +108,27 @@ lacks "big is not gated" "$(section "$S2" gated)" "big"
 ERR=$(python3 "$TR" claim big w --board "$B2" 2>&1 >/dev/null); RC=$?
 eq  "claim big w exits 1" "$RC" 1
 has "claim refuses: container" "$ERR" "container: every child done — pearde collect closes it"
-eq  "big stays open — not the analyzing trap" "$(state_of "$B2/big")" open
+eq  "big stays open — not the analyzing trap" "$(state_of "$B2/prds/big")" open
 eq  "the refusal wrote nothing" "$(cd "$B2" && git status --short)" ""
 has "compute_plan holds the container in its collect list" "$(cd "$SRC" && python3 -c "import plan; print(','.join(plan.compute_plan('$B2')['collect']))")" "big"
 has "plan lists big to collect off that one list" "$(python3 "$PLAN" plan "$B2" 2>/dev/null)" "✓ big [open]"
 has "brief skips it under the collect word" "$(python3 "$BRIEF" big --board "$B2" 2>&1)" "skipped big — collect — container: every child done — pearde collect closes it"
 
 echo "# children all done, but a spec of its own — not a container"
-B3=$(fixture); sed -i.bak 's/^state: open$/state: done/' "$B3/big/second/prd.md"; rm -f "$B3/big/second/prd.md.bak"
-mkdir -p "$B3/big/specs"
-printf -- '---\ncomplexity: 3\nfootprint:\n  - src/big.py\n---\n\n# spec01 — the parent'"'"'s own unit\n\n## Acceptance\n\n- [ ] src/big.py exists\n\n## Verify and Proof\n\n```sh\ntest -f src/big.py\n```\n' > "$B3/big/specs/spec01.md"
+B3=$(fixture); sed -i.bak 's/^state: open$/state: done/' "$B3/prds/big/second/prd.md"; rm -f "$B3/prds/big/second/prd.md.bak"
+mkdir -p "$B3/prds/big/specs"
+printf -- '---\ncomplexity: 3\nfootprint:\n  - src/big.py\n---\n\n# spec01 — the parent'"'"'s own unit\n\n## Acceptance\n\n- [ ] src/big.py exists\n\n## Verify and Proof\n\n```sh\ntest -f src/big.py\n```\n' > "$B3/prds/big/specs/spec01.md"
 (cd "$B3" && git add -A && git -c user.email=p@p -c user.name=p commit -qam spec)
 S3=$(python3 "$PLAN" scan "$B3" 2>/dev/null)
 has "big is ready" "$(section "$S3" ready)" "big · p62"
 lacks "big is not to collect" "$(section "$S3" collect)" "big ·"
 OUT=$(python3 "$TR" claim big w --board "$B3" 2>&1); RC=$?
 eq  "claim big w exits 0" "$RC" 0
-eq  "big moved open → analyzing" "$(state_of "$B3/big")" analyzing
+eq  "big moved open → analyzing" "$(state_of "$B3/prds/big")" analyzing
 
 echo "# children all done, but an open box in prd.md — not a container either"
-B4=$(fixture); sed -i.bak 's/^state: open$/state: done/' "$B4/big/second/prd.md"; rm -f "$B4/big/second/prd.md.bak"
-printf '\n## Acceptance\n\n- [ ] the tree reads as one\n' >> "$B4/big/prd.md"
+B4=$(fixture); sed -i.bak 's/^state: open$/state: done/' "$B4/prds/big/second/prd.md"; rm -f "$B4/prds/big/second/prd.md.bak"
+printf '\n## Acceptance\n\n- [ ] the tree reads as one\n' >> "$B4/prds/big/prd.md"
 (cd "$B4" && git -c user.email=p@p -c user.name=p commit -qam box)
 S4=$(python3 "$PLAN" scan "$B4" 2>/dev/null)
 has "big is ready" "$(section "$S4" ready)" "big · p62"
@@ -135,15 +136,15 @@ lacks "big is not to collect" "$(section "$S4" collect)" "big ·"
 eq  "gate_claim accepts it" "$(gate_check "$B4" | tail -1)" "ready-ok 1 ready-bad 0 gated-ok 1 gated-bad 0"
 
 echo "# parked child AND a spec of its own — the parked child still wins"
-B5=$(fixture); sed -i.bak 's/^state: open$/state: later/' "$B5/big/second/prd.md"; rm -f "$B5/big/second/prd.md.bak"
-mkdir -p "$B5/big/specs"; cp "$B3/big/specs/spec01.md" "$B5/big/specs/"
+B5=$(fixture); sed -i.bak 's/^state: open$/state: later/' "$B5/prds/big/second/prd.md"; rm -f "$B5/prds/big/second/prd.md.bak"
+mkdir -p "$B5/prds/big/specs"; cp "$B3/prds/big/specs/spec01.md" "$B5/prds/big/specs/"
 (cd "$B5" && git add -A && git -c user.email=p@p -c user.name=p commit -qam both)
 S5=$(python3 "$PLAN" scan "$B5" 2>/dev/null)
 has "big is gated on the parked child" "$(section "$S5" gated)" "leaf: big held by big/second (parked)"
 lacks "big is not ready" "$(section "$S5" ready)" "big"
 
 echo "# an open PRD carrying a stale claim — unclaimed, never ready"
-B6=$(fixture); sed -i.bak 's/^state: open$/state: open\nclaim: worker-gone 2026-08-28 10:00/' "$B6/big/second/prd.md"; rm -f "$B6/big/second/prd.md.bak"
+B6=$(fixture); sed -i.bak 's/^state: open$/state: open\nclaim: worker-gone 2026-08-28 10:00/' "$B6/prds/big/second/prd.md"; rm -f "$B6/prds/big/second/prd.md.bak"
 (cd "$B6" && git -c user.email=p@p -c user.name=p commit -qam stale)
 S6=$(python3 "$PLAN" scan "$B6" 2>/dev/null)
 lacks "big/second is not ready" "$(section "$S6" ready)" "big/second"
@@ -155,7 +156,7 @@ has "with the unclaimed prefix" "$ERR" "unclaimed: big/second carries"
 echo "# the prose says it once each"
 has "states.md: claim runs plan.dispatchable" "$(cat "$ROOT/references/parts/states.md")" '`claim` runs `plan.dispatchable`'
 has "states.md: a parked child holds its parent" "$(cat "$ROOT/references/parts/states.md")" "A parked child holds its parent"
-has "board.md: container is collect's" "$(cat "$ROOT/references/parts/board.md")" "is a container — \`collect\` closes it, \`claim\` refuses"
+has "states.md: container is collect's — the rule moved there with the gate table" "$(cat "$ROOT/references/parts/states.md")" "\`collect\` closes and \`claim\` refuses"
 has "order.md: every child done, parked holds" "$(cat "$ROOT/references/parts/order.md")" "every child \`done\` — a parked
    child holds its parent"
 

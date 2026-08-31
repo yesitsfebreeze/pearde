@@ -4,7 +4,7 @@
 # it there and leave it. Never writes under prds/ — a dir holding prd.md
 # anywhere under the board is a PRD.
 set -u
-REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
 if [ $# -ge 1 ]; then TMP="$1"; mkdir -p "$TMP"; else
   TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT; fi
 
@@ -55,27 +55,27 @@ prd () { # <boarddir> <name> <workflow-value-line-or-empty>
 }
 
 # --- the master, and its members -------------------------------------------
-mkdir -p "$TMP/master/prds" "$TMP/solo/prds" "$TMP/ownlib/prds"
-wf "$TMP/master/prds/workflows" mw          # only the MASTER holds `mw`
-wf "$TMP/ownlib/prds/workflows" ownroute    # only the MEMBER holds `ownroute`
+mkdir -p "$TMP/master/.pearde" "$TMP/solo/.pearde" "$TMP/ownlib/.pearde"
+wf "$TMP/master/.pearde/workflows" mw          # only the MASTER holds `mw`
+wf "$TMP/ownlib/.pearde/workflows" ownroute    # only the MEMBER holds `ownroute`
 
-cat > "$TMP/master/prds/settings.md" <<SM
+cat > "$TMP/master/.pearde/settings.md" <<SM
 ---
 members:
-  - solo: ../../solo/prds
-  - ownlib: ../../ownlib/prds
-  - gone: ../../gone/prds
+  - solo: ../../solo/.pearde
+  - ownlib: ../../ownlib/.pearde
+  - gone: ../../gone/.pearde
 ---
 
 # fixture master
 SM
 
-prd "$TMP/master/prds" "$TMP/solo/prds/broken"    'workflow: no-such-route'
-prd "$TMP/master/prds" "$TMP/solo/prds/b-master"  'workflow: mw'
-prd "$TMP/master/prds" "$TMP/ownlib/prds/b-own"   'workflow: ownroute'
-mkdir -p "$TMP/master/prds/listed"
+prd "$TMP/master/.pearde" "$TMP/solo/.pearde/broken"    'workflow: no-such-route'
+prd "$TMP/master/.pearde" "$TMP/solo/.pearde/b-master"  'workflow: mw'
+prd "$TMP/master/.pearde" "$TMP/ownlib/.pearde/b-own"   'workflow: ownroute'
+mkdir -p "$TMP/master/.pearde/listed"
 printf -- '---\nstate: specced\npriority: 10\nworkflow:\n  - one-route\n  - two-route\n---\n\n# listed\n' \
-  > "$TMP/master/prds/listed/prd.md"
+  > "$TMP/master/.pearde/listed/prd.md"
 
 run () { # <label> <board>
   out="$(python3 "$REPO/resources/workflows.py" check "$2" 2>&1)"; rc=$?
@@ -86,10 +86,10 @@ run () { # <label> <board>
 
 echo "fixture at $TMP"
 echo
-run "the master   ($TMP/master/prds)"  "$TMP/master/prds"
-run "member solo  ($TMP/solo/prds)"    "$TMP/solo/prds"
-run "member ownlib($TMP/ownlib/prds)"  "$TMP/ownlib/prds"
+run "the master   ($TMP/master/.pearde)"  "$TMP/master/.pearde"
+run "member solo  ($TMP/solo/.pearde)"    "$TMP/solo/.pearde"
+run "member ownlib($TMP/ownlib/.pearde)"  "$TMP/ownlib/.pearde"
 echo
 echo "--- scan on the master (plan.py), for comparison"
-python3 "$REPO/resources/board/plan.py" scan "$TMP/master/prds" 2>&1 \
+python3 "$REPO/resources/board/plan.py" scan "$TMP/master/.pearde" 2>&1 \
   | grep -E "broken|b-master|b-own|listed|MISSING|gone" | sed 's/^/    /'

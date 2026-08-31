@@ -10,7 +10,7 @@
 # Prints each command's output under a `$ ` line, so a reader can compare it
 # with the README, then one count. Exit 1 on any failed check.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
+ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
 TOP="$(mktemp -d)"
 COPY="$TOP/pearde"; SKILLS="$TOP/skills"; PROJ="$TOP/proj"
 REG="$ROOT/resources/board/state/serve.json"
@@ -44,8 +44,8 @@ ALIAS="$(printf '%s\n' "$OUT" | sed -n "s/^ *alias pearde='\(.*\)'$/\1/p")"
 has "1 install prints the alias" "$OUT" "alias pearde='python3 "
 EXPORT="$(printf '%s\n' "$OUT" | sed -n 's/^ *\(export PEARDE_AS=engineer\)$/\1/p')"
 eq  "1 install prints the export, bare" "$EXPORT" "export PEARDE_AS=engineer"
-eq  "1 the skills dir holds twelve folders" "$(find "$SKILLS" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')" "12"
-eq  "1 each folder holds the five links" "$(find "$SKILLS" -mindepth 2 -maxdepth 2 -type l | wc -l | tr -d ' ')" "60"
+eq  "1 the skills dir holds fourteen folders — two skills grew (knowledge, graph)" "$(find "$SKILLS" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')" "14"
+eq  "1 each folder holds the five links" "$(find "$SKILLS" -mindepth 2 -maxdepth 2 -type l | wc -l | tr -d ' ')" "70"
 pearde() { $ALIAS "$@"; }
 eval "$EXPORT"          # the second pasted line — who is working, as the README says
 
@@ -61,9 +61,9 @@ has "2 the daemon watches" "$OUT" "watching · http://127.0.0.1:$SPARE/board/exa
 has "2 doctor closes green" "$OUT" "pearde: every part this repo owns checks out."
 has "2 closes with the URL" "$OUT" "http://127.0.0.1:$SPARE/board/example"
 has "2 closes with add" "$OUT" 'pearde add "<title>"'
-eq  "2 settings.md exists" "$( [ -f prds/settings.md ] && echo yes )" "yes"
-eq  "2 vision.md exists" "$( [ -f prds/vision.md ] && echo yes )" "yes"
-eq  "2 six PRDs on disk" "$(find prds -mindepth 2 -maxdepth 2 -name prd.md | wc -l | tr -d ' ')" "6"
+eq  "2 settings.md exists" "$( [ -f .pearde/settings.md ] && echo yes )" "yes"
+eq  "2 vision.md exists" "$( [ -f .pearde/vision.md ] && echo yes )" "yes"
+eq  "2 six PRDs on disk" "$(find .pearde/prds -mindepth 2 -maxdepth 2 -name prd.md | wc -l | tr -d ' ')" "6"
 
 # ── 3. add ───────────────────────────────────────────────────────────────────
 OUT="$(pearde add "Ship the quickstart" 2>&1)"; RC=$?
@@ -72,8 +72,8 @@ eq  "3 add exits 0" "$RC" "0"
 has "3 the progress line names the PRD" "$OUT" "ship-the-quickstart"
 has "3 ...and its state" "$OUT" "open"
 eq  "3 ...as engineer, from the export — no --as on the line" "$([[ "$OUT" == *" · as engineer" ]]; echo $?)" "0"
-eq  "3 prd.md exists" "$( [ -f prds/ship-the-quickstart/prd.md ] && echo yes )" "yes"
-eq  "3 state: open" "$(awk -F'[: #]+' '/^state:/{print $2; exit}' prds/ship-the-quickstart/prd.md)" "open"
+eq  "3 prd.md exists" "$( [ -f .pearde/prds/ship-the-quickstart/prd.md ] && echo yes )" "yes"
+eq  "3 state: open" "$(awk -F'[: #]+' '/^state:/{print $2; exit}' .pearde/prds/ship-the-quickstart/prd.md)" "open"
 
 # ── 4. scan ──────────────────────────────────────────────────────────────────
 OUT="$(pearde 2>&1)"; RC=$?

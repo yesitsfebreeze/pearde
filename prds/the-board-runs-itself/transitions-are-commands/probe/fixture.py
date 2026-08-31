@@ -13,8 +13,9 @@ def w(path, text):
 
 
 def build(root):
-    b = os.path.join(root, "prds")
-    w(f"{b}/settings.md", """
+    board = os.path.join(root, ".pearde")
+    b = os.path.join(board, "prds")
+    w(f"{board}/settings.md", """
 ---
 name: example
 language: English
@@ -129,13 +130,13 @@ Small or large?
 2. **large** — 24px
 3. **auto** — the viewer's choice
 
-### Q3: Which name?
+### Q3: Which name for the command?
 
-`go` or `run`?
+The word typed to run it is go or start — which?
 
-1. **go** — `go` (recommended)
-2. **run** — `run`
-3. **start** — `start`
+1. **go** — the command is called go (recommended)
+2. **run** — the command is called run
+3. **start** — the command is called start
 """)
     w(f"{b}/next/prd.md", """
 ---
@@ -309,9 +310,9 @@ Left or right?
 3. **stay** — stay
 """)
     # the daemon's burn-down, one row a day — a command never touches it
-    w(f"{b}/.history.jsonl", '{"d": "2026-08-27", "done": 1, "hdone": 10.0, '
+    w(f"{board}/.state/history.jsonl", '{"d": "2026-08-27", "done": 1, "hdone": 10.0, '
       '"hleft": 60.0, "left": 9, "states": {"open": 2}}\n')
-    w(f"{b}/workflows/two-steps.md", """
+    w(f"{board}/workflows/two-steps.md", """
 ---
 workflow: two-steps
 subject: a two step route
@@ -333,7 +334,7 @@ runs: 0
 | 2 | `leap` | go | `→ 1` |
 """)
     for slug in ("look", "leap"):
-        w(f"{b}/workflows/{slug}.md", f"""
+        w(f"{board}/workflows/{slug}.md", f"""
 ---
 atomic: {slug}
 subject: {slug} once

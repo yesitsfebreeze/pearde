@@ -6,7 +6,7 @@
 # Every fixture is a board built in a fresh `mktemp -d` and removed at exit —
 # a `prd.md` left anywhere under `prds/` becomes a real PRD the scan picks up.
 set -u
-ROOT=$(cd "$(dirname "$0")/../../.." && pwd)
+ROOT=$(cd "$(dirname "$0")/../../../.." && pwd)
 PLAN="$ROOT/resources/board/plan.py"
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
@@ -20,17 +20,17 @@ hasnt(){ if grep -qF -- "$3" "$2"; then no "$1 — unwanted [$3]"; else ok; fi; 
 board() {                      # a fresh board; echoes its prds dir.
   # `B=$(board)` runs this in a subshell, so a counter kept here would never
   # reach the caller and every fixture would land on ONE board.
-  local d; d=$(mktemp -d "$TMP/board.XXXXXX"); mkdir -p "$d/prds"
-  echo "$d/prds"
+  local d; d=$(mktemp -d "$TMP/board.XXXXXX"); mkdir -p "$d/.pearde/prds"
+  echo "$d/.pearde"
 }
 prd() {                        # prd <board> <name> <frontmatter-lines...>
-  local b=$1 name=$2; shift 2
+  local b="$1/prds" name=$2; shift 2
   mkdir -p "$b/$name"
   { echo "---"; printf '%s\n' "$@"; echo "---"; echo; echo "# $name"; } \
     > "$b/$name/prd.md"
 }
 spec() {                       # spec <board> <prd> <file> <frontmatter-lines...>
-  local b=$1 name=$2 f=$3; shift 3
+  local b="$1/prds" name=$2 f=$3; shift 3
   mkdir -p "$b/$name/specs"
   { echo "---"; printf '%s\n' "$@"; echo "---"; echo; echo "# $f"; } \
     > "$b/$name/specs/$f"
@@ -219,7 +219,7 @@ hasnt "…and is not reported"                "$ERR" "is not a number"
 # passes every other check in this section, both comment cases included. That
 # is what the `^` alternative in `(^|\s+)` is holding open, and without the
 # line below nothing on this board would notice it going.
-python3 - "$PLAN" "$B/c/prd.md" >"$TMP/repo.txt" 2>&1 <<'REPO'
+python3 - "$PLAN" "$B/prds/c/prd.md" >"$TMP/repo.txt" 2>&1 <<'REPO'
 import importlib.util, sys
 sp = importlib.util.spec_from_file_location("planlib", sys.argv[1])
 m = importlib.util.module_from_spec(sp); sp.loader.exec_module(m)
@@ -228,7 +228,7 @@ REPO
 has   "…and the # survives into the value"  "$TMP/repo.txt" "repo=a#b"
 
 echo "── 11. the real board is unmoved ──"
-run "$ROOT/prds" scan
+run "$ROOT/.pearde" scan
 check "the repo's own board scans"       "$RC" 0
 hasnt "the repo's own board reports nothing bad" "$ERR" "is not a number"
 

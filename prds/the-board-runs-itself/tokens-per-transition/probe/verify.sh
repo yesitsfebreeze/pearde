@@ -5,7 +5,7 @@
 # (`PEARDE_GUARD_STATE`), never resources/board/state/.
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
-ROOT="$(cd "$HERE/../../../.." && pwd)"
+ROOT="$(cd "$HERE/../../../../.." && pwd)"
 R="$ROOT/resources"
 D="$(mktemp -d)"; trap 'rm -rf "$D"' EXIT
 pass=0; fail=0
@@ -16,7 +16,9 @@ has()  { if grep -q -- "$3" <<<"$2"; then ok "$1"; else bad "$1" "no /$3/ in: $(
 
 python3 "$R/board/plan.py" example "$D/ex" >/dev/null
 find "$D/ex" -type f -exec touch {} +
-B="$D/ex/prds"
+B="$D/ex/.pearde"
+PRDS="$B/prds"
+mkdir -p "$B/.state"   # `example` writes no .state/ — state-dir-belongs-to-the-board
 export PEARDE_GUARD_STATE="$D/guard" PEARDE_AS=probe
 T="$D/transcript.jsonl"
 # three assistant lines, two of them one streamed message (same id) — 500 + 300
@@ -31,10 +33,10 @@ hook() {  # tool file -> the guard's stdout
     | python3 "$R/guard.py" pre
 }
 blk() { python3 -c 'import json,os,sys; d=json.load(open(sys.argv[1])); b=d["boards"][os.path.realpath(sys.argv[2])]; print(b.get(sys.argv[3]))' "$D/guard/s1.json" "$B" "$1"; }
-row() { [ -f "$B/.transitions.jsonl" ] && sed -n "${1}p" "$B/.transitions.jsonl" | python3 -c 'import json,sys; s=sys.stdin.read(); print(json.loads(s).get(sys.argv[1]) if s.strip() else "")' "$2"; }
+row() { [ -f "$B/.state/transitions.jsonl" ] && sed -n "${1}p" "$B/.state/transitions.jsonl" | python3 -c 'import json,sys; s=sys.stdin.read(); print(json.loads(s).get(sys.argv[1]) if s.strip() else "")' "$2"; }
 
 echo "## the guard counts"
-files=$(ls "$B"/*/prd.md | head -5)
+files=$(ls "$PRDS"/*/prd.md | head -5)
 for f in $files; do hook Read "$f" >/dev/null; hook Read "$f" >/dev/null; done
 chk "ten reads → calls 10" "$(blk calls)" "10"
 chk "ten reads → reads 10" "$(blk reads)" "10"
@@ -46,7 +48,7 @@ chk "transcript path kept" "$(python3 -c 'import json,sys;print(json.load(open(s
 
 echo "## the transition hands it over"
 python3 "$R/board/transitions.py" set next specced --force --board "$B" >/dev/null 2>"$D/err" || bad "set --force ran" "$(cat "$D/err")"
-chk "one row" "$(wc -l < "$B/.transitions.jsonl" | tr -d ' ')" "1"
+chk "one row" "$(wc -l < "$B/.state/transitions.jsonl" | tr -d ' ')" "1"
 chk "row 1 calls 10" "$(row 1 calls)" "10"
 chk "row 1 reads 10" "$(row 1 reads)" "10"
 chk "row 1 refused 0" "$(row 1 refused)" "0"
@@ -54,16 +56,16 @@ chk "row 1 tokens 800 — a streamed message counted once" "$(row 1 tokens)" "80
 chk "row keeps t/prd/from/to" "$(row 1 to)" "specced"
 chk "mark moved" "$(blk mark | tr -d ' ')" "{'calls':10,'reads':10,'bash':0,'edits':0,'refused':0,'tokens':800}"
 chk "transitions 1" "$(blk transitions)" "1"
-[ ! -f "$B/.history.jsonl" ] && ok ".history.jsonl untouched" || bad ".history.jsonl untouched" "written"
+[ ! -f "$B/.state/history.jsonl" ] && ok ".history.jsonl untouched" || bad ".history.jsonl untouched" "written"
 
 echo "## a refusal counts, a bash call counts, the window is the delta"
 first=$(echo "$files" | head -1)
 out=$(hook Read "$first")
 has "third read refused" "$out" '"deny"'
 chk "refused 1" "$(blk refused)" "1"
-hook Bash "cat $B/settings.md" >/dev/null
+hook Bash "cat $PRDS/settings.md" >/dev/null
 chk "bash 1" "$(blk bash)" "1"
-hook Edit "$B/next/prd.md" >/dev/null
+hook Edit "$PRDS/next/prd.md" >/dev/null
 chk "edits 1" "$(blk edits)" "1"
 chk "calls 13" "$(blk calls)" "13"
 printf '%s\n' '{"type":"assistant","message":{"id":"m3","usage":{"output_tokens":150}}}' >> "$T"
@@ -79,7 +81,7 @@ st2=$(PEARDE_GUARD_STATE="$D/none" python3 "$R/board/plan.py" status "$B")
 has "no state dir → no guard" "$st2" '^this session: no guard$'
 
 echo "## no guard records nothing"
-rm -f "$B/.transitions.jsonl"
+rm -f "$B/.state/transitions.jsonl"
 PEARDE_GUARD_STATE="$D/none" python3 "$R/board/transitions.py" set next specced --force --board "$B" >/dev/null 2>&1
 chk "row calls null" "$(row 1 calls)" "None"
 chk "row tokens null" "$(row 1 tokens)" "None"
@@ -88,7 +90,7 @@ chk "unreadable transcript → tokens null" "$( rm -f "$T"; PEARDE_GUARD_STATE="
 
 echo "## the payload carries the series"
 python3 "$R/board/plan.py" gantt "$B" >/dev/null 2>&1
-html="$B/.view.html"
+html="$B/.state/view.html"
 pay() { python3 - "$html" "$1" <<'PY'
 import json,re,sys
 h=open(sys.argv[1],encoding="utf-8").read()
@@ -127,7 +129,7 @@ fi
 echo "## nothing leaked"
 [ -d "$R/board/state/guard" ] && n1=$(ls "$R/board/state/guard" | wc -l | tr -d ' ') || n1=0
 chk "no session file written under resources/board/state" "$n1" "$n0"
-chk "no fixture prd.md under the real board" "$(find "$ROOT/prds" -path '*/probe/*' -name prd.md | wc -l | tr -d ' ')" "0"
+chk "no fixture prd.md under the real board" "$(find "$ROOT/.pearde/prds" -path '*/probe/*' -name prd.md | wc -l | tr -d ' ')" "0"
 
 echo
 echo "$((pass+fail)) checks · $pass pass · $fail fail"

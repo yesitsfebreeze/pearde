@@ -20,7 +20,7 @@
 # below. `scan` fails there identically to `check` — see the PRD's F2. The
 # fix is the master direction only, and that is what these boxes cover.
 set -uo pipefail
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
 WF="$ROOT/resources/workflows.py"
 PLAN="$ROOT/resources/board/plan.py"
 TMP="$(mktemp -d)"
@@ -31,15 +31,15 @@ EXPECTED=18   # pinned: a dropped check must fail loudly, not print a smaller to
 # `--vs-head` — run this harness against HEAD's readers instead of the tree's.
 if [ "${1:-}" = "--vs-head" ]; then
   command -v git >/dev/null 2>&1 || { echo "vs-head: no git"; exit 2; }
-  H="$TMP/head"; mkdir -p "$H/resources/board" "$H/prds/x/probe"
+  H="$TMP/head"; mkdir -p "$H/resources/board" "$H/.pearde/prds/x/probe"
   for f in $(git -C "$ROOT" ls-tree --name-only HEAD resources/ | grep '\.py$'); do
     git -C "$ROOT" show "HEAD:$f" > "$H/$f" 2>/dev/null
   done
   for f in $(git -C "$ROOT" ls-tree --name-only HEAD resources/board/ | grep '\.py$'); do
     git -C "$ROOT" show "HEAD:$f" > "$H/$f" 2>/dev/null
   done
-  cp "${BASH_SOURCE[0]}" "$H/prds/x/probe/verify.sh"
-  OUT="$(bash "$H/prds/x/probe/verify.sh" 2>&1)"
+  cp "${BASH_SOURCE[0]}" "$H/.pearde/prds/x/probe/verify.sh"
+  OUT="$(bash "$H/.pearde/prds/x/probe/verify.sh" 2>&1)"
   LINE="$(printf '%s\n' "$OUT" | tail -1)"
   P="${LINE#verify: }"; P="${P%%/*}"; T="${LINE#*/}"; T="${T%% *}"
   printf '%s\n' "$OUT" | grep '^FAIL' || true
@@ -82,26 +82,30 @@ prd () { # <dir> [workflow line]
 }
 
 # ── the master and its members ───────────────────────────────────────────────
-mkdir -p "$TMP/master/prds" "$TMP/solo/prds" "$TMP/ownlib/prds"
-route "$TMP/master/prds/workflows" mw          # the MASTER holds `mw`
-route "$TMP/ownlib/prds/workflows" ownroute    # the MEMBER holds `ownroute`
-{ echo '---'; echo 'members:'; echo '  - solo: ../../solo/prds'
-  echo '  - ownlib: ../../ownlib/prds'; echo '---'; echo
-  echo '# fixture master'; } > "$TMP/master/prds/settings.md"
+mkdir -p "$TMP/master/.pearde" "$TMP/solo/.pearde" "$TMP/ownlib/.pearde"
+route "$TMP/master/.pearde/workflows" mw          # the MASTER holds `mw`
+route "$TMP/ownlib/.pearde/workflows" ownroute    # the MEMBER holds `ownroute`
+{ echo '---'; echo 'members:'; echo '  - solo: ../../solo/.pearde'
+  echo '  - ownlib: ../../ownlib/.pearde'; echo '---'; echo
+  echo '# fixture master'; } > "$TMP/master/.pearde/settings.md"
 
-prd "$TMP/solo/prds/broken"   'workflow: no-such-route'
-prd "$TMP/solo/prds/b-master" 'workflow: mw'
-prd "$TMP/ownlib/prds/b-own"  'workflow: ownroute'
+prd "$TMP/solo/.pearde/prds/broken"   'workflow: no-such-route'
+prd "$TMP/solo/.pearde/prds/b-master" 'workflow: mw'
+prd "$TMP/ownlib/.pearde/prds/b-own"  'workflow: ownroute'
 
-M="$TMP/master/prds"
+M="$TMP/master/.pearde"
+echo "DBG4 members: $(python3 -c "import importlib.util,sys;sys.path.insert(0,sys.argv[1]+'/..')" 2>/dev/null)" >&2
+echo "DBG6 master-tree=[$(ls -R "$M" 2>&1 | tr '
+' ';')]" >&2
 OUT="$(python3 "$WF" check "$M" 2>&1)"; RC=$?
+echo "DBG6 rc=$RC out=[$OUT]" >&2
 
 # 1 — the blindness: a master sees a dangling route inside a member
-has 'broken/prd.md' "$OUT" "a master's check does not report a member's dangling slug"
-code "$RC" 1 "a master with one broken member exits 0"
+has 'broken/prd.md' "$OUT" "a master's check reports a member's dangling slug"
+code "$RC" 1 "a master with one broken member exits 1"
 
 # 2 — the address is the one `plan.py scan` prints
-has '@solo/broken/prd.md' "$OUT" "a member's PRD is not addressed @<member>/<rel>"
+has '@solo/broken/prd.md' "$OUT" "a member's PRD is addressed @<member>/<rel>"
 
 # 3 — resolution order, master half: `mw` is the master's, and resolves
 hasnt 'b-master' "$OUT" "a slug resolving in the master's library is reported (false positive)"
@@ -110,26 +114,26 @@ hasnt 'b-master' "$OUT" "a slug resolving in the master's library is reported (f
 hasnt 'b-own' "$OUT" "a slug resolving in the member's own library is reported"
 
 # 5 — a clean master is silent and exits 0
-rm -rf "$TMP/solo/prds/broken"
+rm -rf "$TMP/solo/.pearde/prds/broken"
 OUT="$(python3 "$WF" check "$M" 2>&1)"; RC=$?
 [ -z "$OUT" ] && ok || no "a master whose members are clean is not silent: $OUT"
 code "$RC" 0 "a clean master does not exit 0"
 
 # 6 — a member named in members: and missing from disk is reported, not skipped
-{ echo '---'; echo 'members:'; echo '  - solo: ../../solo/prds'
-  echo '  - ownlib: ../../ownlib/prds'; echo '  - gone: ../../gone/prds'
+{ echo '---'; echo 'members:'; echo '  - solo: ../../solo/.pearde'
+  echo '  - ownlib: ../../ownlib/.pearde'; echo '  - gone: ../../gone/.pearde'
   echo '---'; echo; echo '# fixture master'; } > "$M/settings.md"
 OUT="$(python3 "$WF" check "$M" 2>&1)"; RC=$?
 has 'gone' "$OUT" "a member missing from disk is skipped silently"
 code "$RC" 1 "a master with a missing member exits 0"
-{ echo '---'; echo 'members:'; echo '  - solo: ../../solo/prds'
-  echo '  - ownlib: ../../ownlib/prds'; echo '---'; } > "$M/settings.md"
+{ echo '---'; echo 'members:'; echo '  - solo: ../../solo/.pearde'
+  echo '  - ownlib: ../../ownlib/.pearde'; echo '---'; } > "$M/settings.md"
 
 # 7 — a `workflow:` that is not a slug is a break in BOTH readers
-mkdir -p "$M/listed"
+mkdir -p "$M/prds/listed"
 { echo '---'; echo 'state: specced'; echo 'priority: 10'; echo 'workflow:'
   echo '  - one-route'; echo '  - two-route'; echo '---'; echo
-  echo '# listed'; } > "$M/listed/prd.md"
+  echo '# listed'; } > "$M/prds/listed/prd.md"
 OUT="$(python3 "$WF" check "$M" 2>&1)"; RC=$?
 has 'listed/prd.md' "$OUT" "check passes a list-valued workflow: in silence"
 has 'one slug' "$OUT" "check does not say the key holds one slug"
@@ -139,16 +143,16 @@ has 'listed' "$SOUT" "scan does not print the listed PRD at all"
 case "$SOUT" in *listed*wf*\?*) ok ;; *) no "scan does not mark a list-valued workflow: as a break" ;; esac
 
 # 8 — a plain board with no members: unchanged behaviour, still reports its own
-mkdir -p "$TMP/plain/prds"
-route "$TMP/plain/prds/workflows" pr
-prd "$TMP/plain/prds/dangle" 'workflow: nope'
-OUT="$(python3 "$WF" check "$TMP/plain/prds" 2>&1)"; RC=$?
-has 'dangle/prd.md' "$OUT" "a plain board stopped reporting its own dangling slug"
-has 'in the library' "$OUT" "a plain board's wording changed from 'in the library'"
-code "$RC" 1 "a plain board with a dangling slug does not exit 1"
+mkdir -p "$TMP/plain/.pearde/prds"
+route "$TMP/plain/.pearde/workflows" pr
+prd "$TMP/plain/.pearde/prds/dangle" 'workflow: nope'
+OUT="$(python3 "$WF" check "$TMP/plain/.pearde" 2>&1)"; RC=$?
+has 'dangle/prd.md' "$OUT" "a plain board still reports its own dangling slug"
+has 'in the library' "$OUT" "a plain board's wording kept: 'in the library'"
+code "$RC" 1 "a plain board with a dangling slug exits 1"
 
 # 9 — `brief` keeps a blank line inside `## Use when`
-L="$TMP/plain/prds/workflows"
+L="$TMP/plain/.pearde/workflows"
 { echo '---'; echo 'workflow: para'; echo 'subject: a trailing paragraph'
   echo 'date: 2026-08-01'; echo '---'; echo; echo '# para'; echo
   echo '## Use when'; echo; echo '- the first bullet'; echo
@@ -157,7 +161,7 @@ L="$TMP/plain/prds/workflows"
   echo '| # | atomic | why | on failure |'
   echo '|---|--------|-----|------------|'
   echo '| 1 | `step-one` | the only step | `stop` |'; } > "$L/para.md"
-BOUT="$(python3 "$WF" brief para "$TMP/plain/prds" 2>&1)"
+BOUT="$(python3 "$WF" brief para "$TMP/plain/.pearde" 2>&1)"
 case "$BOUT" in *"- the first bullet"$'\n\n'"Not every job"*) ok ;;
   *) no "brief glues the paragraph onto the last bullet of ## Use when" ;; esac
 

@@ -8,7 +8,7 @@
 # `--check` the doctor row reads, and the prose that names all of it. One
 # line per assertion, a count at the end. Nothing is written under prds/.
 set -u
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../../.." && pwd)"
 PLAN="$ROOT/resources/board/plan.py"
 D="$(mktemp -d)"
 trap 'rm -rf "$D"' EXIT
@@ -18,8 +18,8 @@ bad()  { FAIL=$((FAIL + 1)); echo "  FAIL $1"; }
 has()  { if printf '%s' "$2" | grep -qF -- "$3"; then ok "$1"; else bad "$1 — wanted: $3"; fi; }
 lacks(){ if printf '%s' "$2" | grep -qF -- "$3"; then bad "$1 — found: $3"; else ok "$1"; fi; }
 
-B="$D/prds"; mkdir -p "$B"
-mk() { mkdir -p "$B/$1"; printf -- '---\nstate: %s\npriority: %s\n%s---\n\n# %s\n' "$2" "$3" "$4" "$1" > "$B/$1/prd.md"; }
+B="$D/.pearde"; PRDS="$B/prds"; mkdir -p "$PRDS"
+mk() { mkdir -p "$PRDS/$1"; printf -- '---\nstate: %s\npriority: %s\n%s---\n\n# %s\n' "$2" "$3" "$4" "$1" > "$PRDS/$1/prd.md"; }
 mk landed   done     50 ""
 mk building claimed  60 $'claim: worker 2026-08-28 13:00\n'
 mk finished claimed  55 $'claim: worker 2026-08-28 12:00\n'
@@ -117,7 +117,7 @@ import plan; print('vision' in plan.COMMANDS, plan.COMMANDS['vision'](['--check'
 has "COMMANDS exposes vision, callable(argv) -> exit code" "$R" "True 0"
 [ "$(grep -c '"\.vision\.json"' "$PLAN")" = 0 ] && ok "no .vision.json path in plan.py" || bad ".vision.json path still in plan.py"
 [ "$(grep -c 'plane_name\|\.plane\.env' "$PLAN")" = 0 ] && ok "plane_name gone" || bad "plane_name still in plan.py"
-has "order.md: the axis is vision.md"      "$(cat "$ROOT/references/parts/order.md")" 'The axis is `prds/vision.md`'
+has "order.md: the axis is vision.md — renamed with the board" "$(cat "$ROOT/references/parts/order.md")" 'The axis is `.pearde/vision.md`'
 lacks "order.md: vision.py sentence gone"  "$(cat "$ROOT/references/parts/order.md")" 'vision.py'
 has "board.md: vision.md in the layout"    "$(cat "$ROOT/references/parts/board.md")" 'vision.md         # where the board is going'
 has "master.md: the own-name rule"         "$(cat "$ROOT/references/parts/master.md")" '`@<name>/<rel>`, with the `name:`'

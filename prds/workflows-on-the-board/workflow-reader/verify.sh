@@ -10,12 +10,14 @@
 # step order. The fixture is built in a temp dir and removed on exit — the
 # real library is never touched.
 set -uo pipefail
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
 WF="$ROOT/resources/workflows.py"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
-B="$TMP/prds"; L="$B/workflows"
-mkdir -p "$L" "$B/a-prd"
+B="$TMP/.pearde"
+PRDS="$B/prds"
+L="$B/workflows"
+mkdir -p "$L" "$PRDS/a-prd"
 printf -- '---\nlanguage: English\n---\n' > "$B/settings.md"
 
 PASS=0; FAIL=0
@@ -219,7 +221,7 @@ mk_workflow dangling-step '| 1 | `no-such-atomic` | a clause | `stop` |'
 mk_workflow bad-onfailure '| 1 | `read-the-contract` | a clause | `→ 2` |'
 
 # ── the board half ───────────────────────────────────────────────────────────
-cat > "$B/a-prd/prd.md" <<'EOF'
+cat > "$PRDS/a-prd/prd.md" <<'EOF'
 ---
 state: backlog
 origin: requested
@@ -233,8 +235,8 @@ EOF
 # A `workflow:` naming an atomic is the same failure with the file present:
 # a route was asked for and a single step was found. Once from a `prd.md`,
 # once from a spec — @resources/workflows.py reads both halves of the board.
-mkdir -p "$B/routed-to-atomic/specs"
-cat > "$B/routed-to-atomic/prd.md" <<'EOF'
+mkdir -p "$PRDS/routed-to-atomic/specs"
+cat > "$PRDS/routed-to-atomic/prd.md" <<'EOF'
 ---
 state: backlog
 origin: requested
@@ -244,7 +246,7 @@ workflow: read-the-contract
 
 # routed-to-atomic — a prd.md routed to an atomic instead of a workflow
 EOF
-cat > "$B/routed-to-atomic/specs/spec01.md" <<'EOF'
+cat > "$PRDS/routed-to-atomic/specs/spec01.md" <<'EOF'
 ---
 complexity: 3
 workflow: reproduce-the-failure
@@ -290,7 +292,7 @@ for clean in read-the-contract reproduce-the-failure fix-a-reported-break; do
 done
 
 # ── the clean library alone is silent ────────────────────────────────────────
-C="$TMP/clean/prds"; mkdir -p "$C/workflows"
+C="$TMP/clean/.pearde"; mkdir -p "$C/workflows"
 printf -- '---\nlanguage: English\n---\n' > "$C/settings.md"
 for f in read-the-contract reproduce-the-failure fix-a-reported-break; do
   cp "$L/$f.md" "$C/workflows/"
@@ -328,7 +330,7 @@ python3 "$WF" show read-the-contract "$C" | diff -q - "$C/workflows/read-the-con
   && ok || no "show does not print the file verbatim"
 
 # ── an external library gets the whole check ─────────────────────────────────
-E="$TMP/ext/prds"; mkdir -p "$E" "$TMP/ext/shared"
+E="$TMP/ext/.pearde"; mkdir -p "$E" "$TMP/ext/shared"
 printf -- '---\nlanguage: English\nworkflows: ../shared\n---\n' > "$E/settings.md"
 cp "$L/bad-runs.md" "$TMP/ext/shared/"
 EO="$(python3 "$WF" check "$E")"

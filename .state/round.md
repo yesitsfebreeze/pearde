@@ -1,163 +1,199 @@
-# round — the previous round's owed list is cleared, and the collect is the wall
+# round — fast mode: fan out wide, verify once at the end
 
-## Established
+## The user's instruction
 
-- `scan` at open: 63 PRDs, done 41 · open 17 · superseded 2 · specced 2 ·
-  blocked 1; progress done 34/53 · 67%; workers=1, pipeline=3.
-  `sweep --as engineer`: `no claim silent past claim-ttl 30m`.
-- **`sweep` and every board command refuse without a persona.** This shell is
-  `nu`, so `export PEARDE_AS=engineer` does not apply — pass `--as engineer`
-  on every line. Do not spend a turn rediscovering this.
-- Two repos, one board, unchanged from last round: `/Users/feb/dev/infra/pearde/.pearde`
-  is the BOARD repo and holds the PRD tree; `/Users/feb/dev/infra/pearde` is
-  the OUTER repo and holds every footprint path — `references/`, `resources/`,
-  `README.md`, `index.md`.
+> use the pearde board to finish everything as fast as possible, skip some
+> checks and rather verify all at the end once
 
-## The previous round's owed list — 1, 2, 3 and 6 are cleared
+`workers 1 → 6`, `pipeline 3 → 8`, wide parallel dispatch, and **one
+verification pass at the end**. Per-step checks are deliberately skipped in
+flight. This file survives compaction; the window does not.
 
-**1 · The ~48-file rename diff is reviewed and it is sound.** `git diff --numstat`
-over the outer repo: every one of the 48 files has equal insertions and
-deletions — a 1-for-1 line replacement, 207/207. The only line in the whole
-diff that is not a path rename is one prose rewrap in `references/parts/workers.md`
-(`repo, installed` → `in this repo, installed`). Every path is inside
-spec01's `footprint:` (`references/`, `resources/`, `README.md`, `index.md`).
-**There is no wrong footprint and nothing to name under
-@references/parts/commits.md's out-of-footprint rule.** The parent PRD carries
-no `footprint:` of its own; it does not need one — `collect` unions the specs'.
+## Standing hazards — read before touching anything
 
-**2 · The board side is committed.** Three commits in the BOARD repo:
+- **Every board command needs `--as engineer`** (this shell is `nu`, so
+  `PEARDE_AS` does not apply). `settings` is the exception: it refuses `--as`.
+- **`brief` needs `--force` on every dispatch** — `brief-does-not-refuse-the-claim-it-was-just-handed`.
+  `--force` also disarms the leaf/needs/footprint/workflow gates, so a forced
+  brief is not a checked one.
+- Two repos: `/Users/feb/dev/infra/pearde` is the CODE repo,
+  `/Users/feb/dev/infra/pearde/.pearde` is the BOARD repo, nested, its own git.
+- **The round file is the orchestrator's.** A worker overwrote it once, when
+  the guard left it the only writable path in the tree. Every brief and every
+  resume now says not to read or write it. Its copy is at the session
+  scratchpad as `worker-clobber.md`.
+- Briefs live at `scratchpad/briefs/<name>.md` = `pearde brief --force` output
+  plus an appended two-repo correction and the Verify-block warning. Workers
+  are handed the path, not the text.
 
-- **`c1156d3`** `nothing-left-open/the-line-tells-the-truth — blocked: …` —
-  the PRD folder whole, `memos/two-holes-the-flag-probe-found.md`, and the
-  five `workflows/*.md`, plus `prds/every-probe-harness-is-re-aimed-at-the-pearde-layout/`
-  as the named unblocker it filed.
-- **`5f8c387`** `… — record` — `commit: c1156d3` alone, the one key that
-  cannot name the commit it is in.
-- **`76df2d4`** `every-document-names-the-path-the-board-is-on — the refine
-  split, and the board state that had been riding` — the refine's two-row
-  table and `resolve-bare-board-path-mentions/`, `a-quoted-walk-is-data`'s
-  `analyzing → specced` from an earlier round, `pipeline: 1 → 3`, and the
-  seven finding PRDs that had never been committed.
+## `context-budget` is `off`, and it had to be
 
-The board repo is now clean but for `.state/` and the in-flight PRD folder.
+The 100k default applies to **each worker's own window**, not the round's.
+Three freshly dispatched analysts were refused every tool call — Read, Write,
+Edit, even `cat` — at 102k, 80k and 72k, before making a single edit. The
+guard's `ESCAPE` (`guard.py:56`) then leaves the round file writable and its
+deny text (`:524`) tells the refused party to write it, which is exactly how
+the round got destroyed. `the-budget-ceiling-counts-the-session-it-stops`
+(p90) is this, and its contract now carries the evidence.
 
-**3 · `pearde workflow check` — root cause found, and the four atomic edits
-are verified.** It was never the edits. **`resources/plan.py find_board`
-resolves the board to `.pearde/`; `resources/memos.py find_board` — which
-`workflows.py` and everything else delegating to it uses — still resolves it
-to `<x>/prds`.** Two definitions of the word *board* in one tool, the second
-a directory inside the first. Every library helper then joins its name one
-level too deep: `.pearde/prds/workflows`, `.pearde/prds/memos`,
-`.pearde/prds/knowledge`, none of which exist.
+**Restore a real value at the end of the round.**
 
-Measured: `pearde memo list .pearde` prints nothing over 16 memos on disk;
-`pearde memo check .pearde` prints nothing **because it opened no file**, and
-`doctor`'s memos row runs it, so doctor reports memos ok while blind;
-`pearde workflow list .pearde` prints nothing over 18 atomics.
+## Landed this round
 
-**The workaround, and the verification it bought.** Calling
-`workflows.check('/Users/feb/dev/infra/pearde/.pearde')` in-process — the
-board directory, not the `prds/` child — is **silent**. All 18 atomics parse.
-The four edited files carry their bumps: `read-the-contract` runs 45,
-`capture-the-harness-baseline` runs 45, `attempt-the-build` runs 25, all
-`updated: 2026-08-31`; `re-run-the-harnesses` runs 45; `probe-then-spec` runs
-25, `kind: workflow`. **The edits committed in `c1156d3` are verified. This
-owed item is closed, not carried.**
+| PRD | commits |
+|---|---|
+| `every-document-names-…/apply-the-prds-rename-table` | code `aea6dae` (BY HAND), board `eded6ef` + `f2c3b1a` |
+| `the-vault-ignores-the-paths-the-board-writes` | board `11ff754`, code `c6b1c2b`, record `1b3e103` |
+| `the-sweep-leaves-nothing-unregistered` | board `9634078`, code `a61732a`, record `ada989b` |
 
-**6 · Three findings filed, all `origin: derived`:**
+**`collect` now reaches the code repo** — the in-flight fix to `repo_of`
+landed mid-round, and the last two collects wrote both repos with no hand
+commit. The first one had to be hand-committed; that is why `aea6dae` exists.
 
-- `one-definition-of-the-board-not-two` (p88) — the above.
-- `an-analyst-workflow-does-not-survive-into-specced` (p60) — the refused
-  fifth workflow edit's real cause. No flag works around it.
-- `brief-does-not-refuse-the-claim-it-was-just-handed` (p45) — `brief` refuses
-  the `claimed` state `claim` just wrote, so @references/parts/loop.md steps 4
-  and 5 cannot be run as documented without `--force` on every dispatch.
+## Two tool breakages I repaired mid-round — do not revert
 
-Derived against requested, counting open + analyzing + specced + claimed:
-**4 to 18.** @references/parts/derived.md's tripwire is nowhere near.
+1. **`brief.py:204`** called `collectlib.repo_of(prd, board_root)` after the
+   in-flight collect fix changed the signature to `(prd, board, board_root)`.
+   `pearde brief` raised TypeError **and wrote empty brief files**, so six
+   analysts were dispatched with nothing. Patched; all six were regenerated
+   and every affected worker was told to discard what it inferred.
+2. **`memos.py board_prds`** (`:117`). The in-flight `one-definition` fix
+   corrected `find_board` to `.pearde` but left this walking the board root,
+   so every PRD came back named `prds/<name>` while memos write `<name>`.
+   The checker went from *silently blind* to **21 false failures**, including
+   one for a PRD that plainly exists — and it gates `collect`, so it blocked
+   a finished PRD. Patched to walk `board/prds`. Now silent, exit 0.
 
-## Dispatched, and what came back
+**The lesson, and it is the shape of `one-definition-of-the-board-not-two`:**
+fixing `find_board` alone flips a helper from blind to wrong, not to correct.
+Every helper that joins a name onto the old board root needs its arithmetic
+checked too.
 
-| worker | PRD | verdict | move made |
-|---|---|---|---|
-| impl-1 | `every-document-names-the-path-the-board-is-on/apply-the-prds-rename-table` | **DONE** | none yet — the collect is refused, below |
+## Four Verify blocks that could not fail
 
-`brief` again needed `--force`, as filed. The brief was hand-corrected with
-the two-repo root note before dispatch; without it the worker resolves every
-footprint path against the board.
+`collect` reads a Verify block's LAST exit code. Found this round, all four
+would have reported green with boxes red:
 
-impl-1 reports spec01 5/5 boxes ticked with quoted output. In-scope `prds/`
-lines 221 → 76; 45 unconverted tokens, 36 bare `prds/` (the sibling PRD's job)
-and 9 named exceptions. It fixed six table-rule matches pass one missed for
-want of a trailing slash — `references/archive.md` 65, 70, 82, 96 and
-`references/obsidian.md` 78. `git diff --stat` now 49 files, 211/211.
-`py_compile` 9/9, `bash -n` 2/2, zero `.pearde/.pearde` or `prds/prds`.
+- `apply-the-prds-rename-table` — ended on a `grep` that exits 1 when clean, so
+  it failed on being *correct*.
+- `the-vault-…` — ended on a command that always exited 0.
+- `the-sweep-…` — ended on `test -f <memo> && echo`; every other box could be
+  false and it still passed.
+- `a-quoted-walk-is-data` — ended in `| head -1`. Exits 0 unconditionally.
 
-## The wall — `collect --dry` is refused, and it is the Verify block
+Every brief now carries the warning. **This is worth its own PRD or a check in
+`specced`** — an acceptance box that cannot fail is not a check.
 
-```
-collect: every-document-names-the-path-the-board-is-on/apply-the-prds-rename-table:
-  spec01 exit 1 — nothing written
-spec01: exit 1
-     164
-references/archive.md is on disk with no row in references/files.md
-```
+## Analyst-ticked boxes are not evidence
 
-Two things are wrong and neither is the rename:
+`the-vault-…`'s analyst pre-ticked 4 of 5 boxes; on independent re-run by the
+implementer **all four were false**. Every implementer brief now says a box
+you did not personally re-run is not a box you may leave ticked. `specced`
+warns about this (`N of M boxes already ticked before an implementer ran
+them`) — the warning is right and should be believed.
 
-1. **The Verify block asserts a failure the Acceptance box explicitly
-   permits.** Box 2 says `index.py check` should print *only* the
-   pre-existing `references/archive.md` line. `index.py check` **exits 1**
-   when it prints that line, the block's last-command exit is what `collect`
-   reads, so the spec fails on exactly the condition it was written to allow.
-   The block's `echo "exit $?"` records the code and then discards it.
-2. **The grep count printed 164 where impl-1 reported 152.** Not
-   reconciled — the round hit its ceiling here. It is a count, not a
-   correctness claim, and box 1 reads "far below the measured-before count",
-   so 164 does not by itself fail anything. Establish which is right before
-   editing anything.
+## Premises that were wrong, found by the workers
 
-The PRD is left **`claimed`**, `claim: impl-1 2026-08-31 17:20`. The work is
-on disk and the boxes are ticked; only the transition is owed.
+- `example-writes-a-board-on-the-pearde-layout` — `init` is already fixed. The
+  offender is `cmd_example` (`plan.py:2390`, copytree at `:2415`), plus the
+  same bug in `viewtest.js:45-56`.
+- `an-analyst-workflow-does-not-survive-into-specced` — **nothing in the repo
+  parses `## Scores`.** `workflow` has one source, `specs.py:248`, the CLI
+  flag. `refine` inherits it (`specs.py:343`); `specced` never could.
+- `the-vault-…` — `resources/board/state/` is NOT dead; `guard.py` still
+  defaults its cache there. Also found a *third* ignore list at
+  `resources/board/.obsidian/app.json`, all four entries dead.
+- `every-probe-harness-…` — two independent breakages, not one: 33 of 38 probe
+  shells miscount `..` by exactly one segment, AND 19 pass `--board <d>/prds`,
+  which `find_board` now refuses.
 
-## Dirty and uncommitted at stop
+## In flight — 12 workers
 
-- **outer repo** — 49 files under `references/`, `resources/`, `README.md`,
-  `index.md`. All of it is the rename, reviewed above, inside the footprint.
-  Nothing else. **This is the whole of what the collect must commit.**
-- **board repo** — `.state/*` only, plus
-  `prds/every-document-names-the-path-the-board-is-on/apply-the-prds-rename-table/`,
-  which is the in-flight PRD's own folder.
+Analysts: `every-probe-harness-…` (an-10, unblocks the board's only blocked
+PRD), `the-budget-ceiling-…` (an-11), `one-definition-…` (an-12),
+`state-dir-…` (an-13), `example-…` (an-14), `brief-does-not-refuse-…` (an-15),
+`collect-…/collect-defaults-to-the-boards-enclosing-repo` (an-9),
+`…/resolve-bare-board-path-mentions` (an-7), `the-doctor-checks-…` (an-2),
+`the-board-asks-for-itself/a-route-is-written-at-spec-time` (an-8).
 
-## Owed, in order
+`the-graph-lands-inside-the-board` is **specced** but its implementer claim was
+refused on a footprint clash with the vault PRD — that has since collected, so
+it is claimable now.
 
-1. **Settle the Verify block, then collect.** The honest assertion is that
-   `index.py check` prints nothing naming `agents/` or `skills/` — not that it
-   exits 0. Either the spec's block ends on a command whose exit reflects the
-   box, or `index.py check`'s exit code is the defect and gets its own PRD.
-   Decide which; do not paper over it by deleting the check.
-2. **Find out whether `collect` can commit the outer repo at all.** `collect`
-   resolves its repo the way `plan.py repo_root()` does — up from the board,
-   stopping at `.pearde/.git`. Every path it must commit is in the *outer*
-   repo. This is exactly
-   `collect-commits-the-code-repo-not-the-board-repo-twice` (p88, open), and
-   this collect is the first one that actually needs it. If `collect` cannot
-   reach the outer repo, the choice is to land that PRD first or to commit
-   the 49 files by hand and write `commit:` in by hand, as `c1156d3` was.
-3. **File impl-1's two out-of-scope findings** (it did not file them; the
-   report holds them): `resources/doctor.sh:69` still globs `skills/*.md`
-   after the move, so `doctor` reports `skills broken` on a healthy install;
-   and `resources/board/knowledge/**` plus `obsidian/**` still name
-   `prds/knowledge/` in 43 live Dataview/Obsidian queries against a vault now
-   at `.pearde/wiki/`. Both `origin: derived`.
-4. `every-probe-harness-is-re-aimed-at-the-pearde-layout` (p85) — closes
-   `the-line-tells-the-truth`'s 7 boxes with no further code change.
-5. `one-definition-of-the-board-not-two` (p88) and
-   `collect-commits-the-code-repo-not-the-board-repo-twice` (p88) — until
-   both land, every checker on this board can report clean by seeing nothing
-   and every collect commits into the wrong repo.
-6. `pearde report`, then park `pearde view wait`.
+`nothing-left-open/a-quoted-walk-is-data` is **blocked**, `needs:
+every-probe-harness-is-re-aimed-at-the-pearde-layout` (written in by hand —
+`release blocked` correctly refuses without a `needs:`). 2 of 5 boxes closed;
+the other three need three OTHER PRDs' probes fixed, which its brief forbids.
+
+## Owed
+
+1. Land the ten analysts; dispatch implementers on what specs out.
+2. `every-probe-harness-…` unblocks both `a-quoted-walk-is-data` and
+   `nothing-left-open/the-line-tells-the-truth` (24/31 boxes).
+3. Claim `the-graph-lands-inside-the-board` for an implementer — clash cleared.
+4. **The single end-of-round verification pass**: `index.py check`,
+   `memos.py check`, `workflow check`, `doctor.sh`, both repos' `git status`,
+   every collected PRD's boxes.
+5. **Restore `context-budget`.**
+6. File the derived PRDs the workers reported but did not file: `guard status`
+   exits 2 where probes expect 0/1; the always-green Verify block class.
+7. `pearde report`, then park `pearde view wait`.
 
 ## Asked
 
 Nothing is out to the user. No `question` PRD on the board.
+
+## Queued on footprint, ready the moment the holder collects
+
+- `example-writes-a-board-on-the-pearde-layout` — **specced**, 6/6 pre-ticked.
+  Blocked by `state-dir-belongs-to-the-board` (impl-6) on `resources/board/plan.py`.
+- `every-document-names-…/resolve-bare-board-path-mentions` — **specced**,
+  3/3 pre-ticked, 25 bare tokens across 14 files. Blocked by
+  `the-board-asks-for-itself/a-route-is-written-at-spec-time` (impl-9).
+
+Both refusals are the footprint gate working. Claim them as soon as the
+holder is `done`; do not force past it.
+
+## A concurrency risk to check at collect
+
+The `resolve-bare-board-path-mentions` analyst reports **`resources/guard.py`
+was under concurrent edit by another worker** while it was fixing it, and
+says its own fix there may need reapplying at collect time. `guard.py` is
+touched by several PRDs this round. **Before collecting that PRD, diff
+`resources/guard.py` and confirm all intended edits are present** — a lost
+edit here is silent.
+
+Six workers are writing to a shared tree with no locking beyond the footprint
+gate, and the gate only covers `claimed` PRDs, not analysts probing in
+`analyzing`. That is the structural hole this round exposed.
+
+## Session restart two — rate limit, resumed
+
+Three implementers died on a shared session rate limit (resets 21:20): graph,
+probe-harness, and the bare-path implementer. The bare-path one had already
+finished its report before dying — **collected after the restart**
+(`0321d5d`/`af86629`), 20 tokens over 14 files, one of which its own first
+scanner had hidden by substring-matching `"ls"` inside "elsewhere". Graph and
+probe-harness were resumed via SendMessage and are finishing.
+
+`the-knowledge-loop-runs-in-the-round` (7/7 pre-ticked) was claimed by a new
+implementer, since the pearde agent types are unavailable in this session and
+a general-purpose agent stands in.
+
+## Standing counts as of now
+
+done 43/53 · 84%. 3 workers live: graph (3/4 boxes), probe-harness (13/19),
+knowledge-loop (just dispatched). `an-18` is analyzing the view-row PRD.
+
+## The end of round is now in sight — the owed list, unchanged
+
+1. Land these last workers; collect each.
+2. `every-probe-harness-…` unblocks the two `nothing-left-open` children; then
+   `nothing-left-open` itself.
+3. **The single end-of-round verification pass** (owed before anything is
+   declared finished): `index.py check`, `memos.py check`, `workflow check`,
+   `doctor.sh` (now exits 0), both repos' `git status`, every collected
+   PRD's boxes reconciled against disk.
+4. **Restore `context-budget`** — the guard fix is committed; this is the
+   test of it. Note it binds this session immediately, so do it last.
+5. `pearde report`, then park `pearde view wait`.

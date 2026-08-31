@@ -178,7 +178,7 @@ def main(argv):
 
     # 4. check before the commit
     wf = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                      "..", "..", "..", "..", "resources", "workflows.py")
+                      "..", "..", "..", "..", "..", "resources", "workflows.py")
     r = subprocess.run([sys.executable, os.path.normpath(wf), "check", a.board],
                        capture_output=True, text=True)
     out = (r.stdout + r.stderr).strip()

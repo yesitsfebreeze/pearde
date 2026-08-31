@@ -10,7 +10,7 @@
 # One line per assertion, a count at the end.
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
-ROOT="$(cd "$HERE/../../../.." && pwd)"
+ROOT="$(cd "$HERE/../../../../.." && pwd)"
 COLLECT="$ROOT/resources/board/collect.py"
 PASS=0; FAIL=0
 export PEARDE_PORT=1          # nothing listens there — the daemon is "down"
@@ -30,9 +30,9 @@ trap 'rm -rf "$TOP" "$W"' EXIT
 # $D is a repo; $D/prds is the board; `finished` is claimed with footprint
 # `src`, its one box ticked. `src/view.js` is HEAD's file.
 fixture() {
-  D="$TOP/$1"; mkdir -p "$D/src" "$D/prds/finished/specs"
+  D="$TOP/$1"; mkdir -p "$D/src" "$D/.pearde/prds/finished/specs" "$D/.pearde/.state"
   ( cd "$D" && git init -q -b main )
-  cat > "$D/prds/settings.md" <<'EOF'
+  cat > "$D/.pearde/settings.md" <<'EOF'
 ---
 name: fixture
 language: English
@@ -40,7 +40,7 @@ workers: 1
 pipeline: 1
 ---
 EOF
-  cat > "$D/prds/finished/prd.md" <<'EOF'
+  cat > "$D/.pearde/prds/finished/prd.md" <<'EOF'
 ---
 state: claimed
 origin: requested
@@ -54,7 +54,7 @@ footprint:
 
 # finished — the report view repaints
 EOF
-  cat > "$D/prds/finished/specs/spec01.md" <<'EOF'
+  cat > "$D/.pearde/prds/finished/specs/spec01.md" <<'EOF'
 ---
 complexity: 5
 footprint:
@@ -105,9 +105,9 @@ i = [n for n, l in enumerate(L) if 'view === "plan"' in l][0]
 L[i + 1:i + 1] = ['  else if (view === "report") drawReport();\n']
 open(p, "w").write("".join(L))
 EOF
-  sed -i '' 's/- \[ \] `src/- [x] `src/' "$D/prds/finished/specs/spec01.md"
+  sed -i '' 's/- \[ \] `src/- [x] `src/' "$D/.pearde/prds/finished/specs/spec01.md"
 }
-run()    { ( cd "$D" && PEARDE_AS=engineer python3 "$COLLECT" --board "$D/prds" "$@" ) 2>&1; }
+run()    { ( cd "$D" && PEARDE_AS=engineer python3 "$COLLECT" --board "$D/.pearde" "$@" ) 2>&1; }
 snap()   { run --snapshot finished > /dev/null; }
 head_at(){ ( cd "$D" && git show HEAD:src/view.js | grep -n -F -- "$1" | cut -d: -f1 ); }
 work_at(){ grep -n -F -- "$1" "$D/src/view.js" | cut -d: -f1; }
@@ -118,7 +118,7 @@ HAVE_NODE=; command -v node > /dev/null && HAVE_NODE=1
 echo "A. the old staging misplaces the line"
 fixture a; foreign_above; snap; work
 ( cd "$D" && git diff HEAD -U0 --no-color -- src/view.js ) > "$W/all.diff"
-python3 - "$W" "$D/prds/.claims/finished/diff" <<'EOF'
+python3 - "$W" "$D/.pearde/.claims/finished/diff" <<'EOF'
 import re, sys
 w, basefile = sys.argv[1], sys.argv[2]
 def hunks(d):
@@ -179,7 +179,7 @@ eq  "C the file stays dirty by the two foreign hunks" "$( cd "$D" && git diff --
 # ── D. the offset check refuses a shifted blob, and the index is put back ────
 echo "D. the check, on its own and end to end"
 fixture d; foreign_above; snap; work
-OUT="$( cd "$D" && python3 - "$COLLECT" "$D/prds" <<'EOF'
+OUT="$( cd "$D" && python3 - "$COLLECT" "$D/.pearde" <<'EOF'
 import importlib.util, os, sys
 spec = importlib.util.spec_from_file_location("collect", sys.argv[1])
 c = importlib.util.module_from_spec(spec); spec.loader.exec_module(c)
@@ -209,7 +209,7 @@ has "D a blob of the wrong length is refused on its length" "$OUT" "the staged b
 has "D a foreign hunk whose + lines are not in the file is a refusal" "$OUT" "mismatch: line 4 of the working file is not what its hunk says"
 # end to end: a rebuild that misplaces is refused before the commit
 N0="$( cd "$D" && git rev-list --count HEAD )"
-OUT="$( cd "$D" && PEARDE_AS=engineer python3 - "$COLLECT" "$D/prds" <<'EOF' 2>&1
+OUT="$( cd "$D" && PEARDE_AS=engineer python3 - "$COLLECT" "$D/.pearde" <<'EOF' 2>&1
 import importlib.util, sys
 spec = importlib.util.spec_from_file_location("collect", sys.argv[1])
 c = importlib.util.module_from_spec(spec); spec.loader.exec_module(c)
@@ -227,7 +227,7 @@ has "D the refusal names the hunk and both lines" "$OUT" "src/view.js: hunk @@ +
 has "D nothing committed" "$OUT" "nothing committed, nothing staged"
 eq  "D no commit landed" "$( cd "$D" && git rev-list --count HEAD )" "$N0"
 eq  "D the index is HEAD again" "$( cd "$D" && git diff --cached --stat | wc -l | tr -d ' ' )" "0"
-eq  "D the PRD is still claimed" "$(grep -m1 '^state:' "$D/prds/finished/prd.md")" "state: claimed"
+eq  "D the PRD is still claimed" "$(grep -m1 '^state:' "$D/.pearde/prds/finished/prd.md")" "state: claimed"
 
 # ── E. a blob that does not parse is refused ────────────────────────────────
 echo "E. the parse check"
@@ -237,7 +237,7 @@ printf 'def a():\n    return 1\n\nX = 1\nG = 0\nY = 2\n' > "$D/src/tool.py"
 sed -i '' '4s/.*/S = """/' "$D/src/tool.py"        # theirs: a string opened at line 4
 snap
 sed -i '' '6s/.*/"""/' "$D/src/tool.py"           # ours: closed at line 6 — one untouched line between, two hunks
-sed -i '' 's/- \[ \] `src/- [x] `src/' "$D/prds/finished/specs/spec01.md"
+sed -i '' 's/- \[ \] `src/- [x] `src/' "$D/.pearde/prds/finished/specs/spec01.md"
 python3 -m py_compile "$D/src/tool.py" 2> /dev/null; RC=$?
 eq  "E the working tree parses" "$RC" "0"
 OUT="$(run finished)"; RC=$?
@@ -259,7 +259,7 @@ eq  "F nothing staged" "$( cd "$D" && git diff --cached --stat | wc -l | tr -d '
 echo "G. a kept deletion"
 fixture g; foreign_above; snap
 sed -i '' '/if (r.ok) cb(r);/d' "$D/src/view.js"    # ours: -10,1 +13,0 — the callback's body goes
-sed -i '' 's/- \[ \] `src/- [x] `src/' "$D/prds/finished/specs/spec01.md"
+sed -i '' 's/- \[ \] `src/- [x] `src/' "$D/.pearde/prds/finished/specs/spec01.md"
 OUT="$(run finished)"; RC=$?
 eq  "G exit 0" "$RC" "0"
 lacks "G the callback's line is gone from HEAD" "$( cd "$D" && git show HEAD:src/view.js )" 'if (r.ok) cb(r);'

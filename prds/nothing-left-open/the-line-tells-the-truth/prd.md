@@ -1,5 +1,5 @@
 ---
-state: blocked
+state: claimed
 origin: requested
 priority: 70
 complexity: 21
@@ -20,6 +20,7 @@ footprint:
   - prds/the-board-runs-itself/specced-is-a-command/probe/verify.sh
   - prds/memos/two-holes-the-flag-probe-found.md
 commit: c1156d3
+claim: impl-19 2026-08-31 22:02
 ---
 
 # the-line-tells-the-truth — the progress line says who acted and what is done, and every discovered command refuses a flag it does not know

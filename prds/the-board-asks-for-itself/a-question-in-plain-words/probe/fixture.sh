@@ -3,9 +3,9 @@
 # time — never under prds/, where a dir holding prd.md is a PRD — and runs the
 # checker over it. Usage: bash fixture.sh [dir]
 set -u
-REPO="$(cd "$(dirname "$0")/../../../.." && pwd)"
+REPO="$(cd "$(dirname "$0")/../../../../.." && pwd)"
 DIR="${1:-$(mktemp -d)}"
-B="$DIR/prds"
+B="$DIR/.pearde/prds"
 mkdir -p "$B/a-fork" "$B/the-page-shows-the-round"
 
 # a second PRD, so its name is "a PRD slug of this board"

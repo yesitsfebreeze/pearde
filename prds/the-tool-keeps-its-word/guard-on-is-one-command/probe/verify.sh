@@ -6,7 +6,7 @@
 # daemon port is dead (PEARDE_PORT=1) so nothing registers. This repo's own
 # .claude/settings.json is never read for a write and never written.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
+ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
 P="python3 $ROOT/resources/pearde.py"
 G="python3 $ROOT/resources/guard.py"
 T="$(mktemp -d)"
@@ -25,7 +25,7 @@ eq()  { [ "$2" = "$3" ] && ok || bad "$1 — got '$2', want '$3'"; }
 has() { printf '%s' "$2" | grep -qF -- "$3" && ok || bad "$1 — missing '$3'"; }
 not() { printf '%s' "$2" | grep -qF -- "$3" && bad "$1 — has '$3'" || ok; }
 jq_() { python3 -c 'import json,sys; d=json.load(open(sys.argv[1])); print(eval(sys.argv[2]))' "$1" "$2" 2>&1; }
-repo() { local d="$T/$1"; mkdir -p "$d"; cp -R "$ROOT/resources/board/example/prds" "$d/prds"; ( cd "$d" && git init -q . ); echo "$d"; }
+repo() { local d="$T/$1"; mkdir -p "$d"; mkdir -p "$d/.pearde"; cp -R "$ROOT/resources/board/example/prds" "$d/.pearde/prds"; ( cd "$d" && git init -q . ); echo "$d"; }
 guardrow() { bash "$ROOT/resources/doctor.sh" "$1" 2>/dev/null | grep -E '^  guard ' ; }
 
 # ── A. a repo with no .claude/ ───────────────────────────────────────────────
@@ -131,7 +131,7 @@ eq  "C not JSON: still untouched" "$(cksum < "$SC")" "$SUM"
 # ── D. the repo argument: default is the board above the cwd ────────────────
 echo "── D. no <repo>: the board above the cwd, or a refusal"
 D="$(repo d)"; SD="$(cd "$D" && pwd -P)/.claude/settings.json"   # os.getcwd() is the real path
-IN="$(find "$D/prds" -mindepth 1 -maxdepth 1 -type d | head -1)"
+IN="$(find "$D/.pearde/prds" -mindepth 1 -maxdepth 1 -type d | head -1)"
 OUT="$(cd "$IN" && $P guard on 2>&1)"; RC=$?
 eq  "D from inside the board: exits 0" "$RC" 0
 has "D ...writes the repo's file" "$OUT" "guard on: $SD"

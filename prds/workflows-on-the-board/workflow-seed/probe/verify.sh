@@ -8,9 +8,9 @@
 # would become a real PRD, and a probe at the repo root would redden the map
 # check for every later PRD.
 set -u
-cd "$(dirname "$0")/../../../.." || exit 2
+cd "$(dirname "$0")/../../../../.." || exit 2
 ROOT=$PWD
-BOARD=$ROOT/prds
+BOARD=$ROOT/.pearde
 WF=$ROOT/resources/workflows.py
 LIB=$BOARD/workflows
 
@@ -263,10 +263,10 @@ t "parts/workflows.md still carries the settled reading" "1" "$SETTLED"
 echo
 echo "── the check can fail: negative controls, all in a temp dir ─────────────"
 
-mkdir -p "$D/prds/workflows"
-cp "$LIB"/*.md "$D/prds/workflows/"
+mkdir -p "$D/.pearde/workflows"
+cp "$LIB"/*.md "$D/.pearde/workflows/"
 ok "a copy of the library in a temp board is also clean" \
-   python3 "$WF" check "$D/prds"
+   python3 "$WF" check "$D/.pearde"
 
 # A control that substitutes on a value the library happens to hold stops
 # biting the moment that value moves: the first collect turned every
@@ -278,20 +278,20 @@ ok "a copy of the library in a temp board is also clean" \
 # instead of passing quietly.
 VICTIM=$(printf '%s\n' "$ATOMS" | head -1)
 VW=$(printf '%s\n' "$WFS" | head -1)
-BADF=$D/prds/workflows/$VICTIM.md
+BADF=$D/.pearde/workflows/$VICTIM.md
 
 # a runs value that is not an integer >= 0
-sed -i.bak 's/^runs:.*$/runs: -1/' "$BADF" && rm -f "$D/prds/workflows/"*.bak
+sed -i.bak 's/^runs:.*$/runs: -1/' "$BADF" && rm -f "$D/.pearde/workflows/"*.bak
 t "the runs fixture really differs from the library file it was copied from" \
   "differs" "$(cmp -s "$BADF" "$LIB/$VICTIM.md" && echo same || echo differs)"
-no "check rejects runs: -1" python3 "$WF" check "$D/prds"
-OUT=$(python3 "$WF" check "$D/prds" 2>&1)
+no "check rejects runs: -1" python3 "$WF" check "$D/.pearde"
+OUT=$(python3 "$WF" check "$D/.pearde" 2>&1)
 t "and says which file and which key" "yes" \
   "$(printf '%s' "$OUT" | grep -q "$VICTIM.md: runs" && echo yes || echo no)"
 # Restored by copying the pristine file back, never by a reverse substitution
 # on a value — the reverse sed hard-coded runs: 0 the same way.
 cp "$LIB/$VICTIM.md" "$BADF"
-ok "restored from the library, and clean again" python3 "$WF" check "$D/prds"
+ok "restored from the library, and clean again" python3 "$WF" check "$D/.pearde"
 
 # a step naming a file that is not there — the cell to corrupt is read out of
 # the workflow, so renaming an atomic cannot make this control vacuous
@@ -299,27 +299,27 @@ CELL=$(awk '/^## Steps/{on=1;next} /^## /{on=0} on' "$LIB/$VW.md" \
        | sed -n 's/^|[^|]*|[[:space:]]*`\([a-z0-9-]*\)`.*/\1/p' | head -1)
 t "a step cell was found in $VW to corrupt" "yes" \
   "$([ -n "$CELL" ] && echo yes || echo no)"
-sed -i.bak "s/\`$CELL\`/\`$CELL-no-such-file\`/" "$D/prds/workflows/$VW.md" && rm -f "$D/prds/workflows/"*.bak
+sed -i.bak "s/\`$CELL\`/\`$CELL-no-such-file\`/" "$D/.pearde/workflows/$VW.md" && rm -f "$D/.pearde/workflows/"*.bak
 t "the dangling-step fixture really differs from the library file" "differs" \
-  "$(cmp -s "$D/prds/workflows/$VW.md" "$LIB/$VW.md" && echo same || echo differs)"
-no "check rejects a step naming no file in the library" python3 "$WF" check "$D/prds"
-cp "$LIB/$VW.md" "$D/prds/workflows/$VW.md"
+  "$(cmp -s "$D/.pearde/workflows/$VW.md" "$LIB/$VW.md" && echo same || echo differs)"
+no "check rejects a step naming no file in the library" python3 "$WF" check "$D/.pearde"
+cp "$LIB/$VW.md" "$D/.pearde/workflows/$VW.md"
 ok "restored from the library, and clean again after the dangling step" \
-   python3 "$WF" check "$D/prds"
+   python3 "$WF" check "$D/.pearde"
 
 # a step naming an atomic as a route — the slug comes from the atomic census
-mkdir -p "$D/prds/naming-an-atomic"
+mkdir -p "$D/.pearde/prds/naming-an-atomic"
 printf -- '---\nstate: open\nworkflow: %s\n---\n\n# fixture\n' "$VICTIM" \
-  > "$D/prds/naming-an-atomic/prd.md"
-no "check rejects a PRD routed to an atomic" python3 "$WF" check "$D/prds"
-OUT=$(python3 "$WF" check "$D/prds" 2>&1)
+  > "$D/.pearde/prds/naming-an-atomic/prd.md"
+no "check rejects a PRD routed to an atomic" python3 "$WF" check "$D/.pearde"
+OUT=$(python3 "$WF" check "$D/.pearde" 2>&1)
 t "and says a route was asked for and a single step was found" "yes" \
   "$(printf '%s' "$OUT" | grep -q 'a route was asked for' && echo yes || echo no)"
 
 # a PRD routed to a real workflow resolves
 printf -- '---\nstate: open\nworkflow: %s\n---\n\n# fixture\n' "$VW" \
-  > "$D/prds/naming-an-atomic/prd.md"
-ok "a PRD routed to a real workflow in this library resolves" python3 "$WF" check "$D/prds"
+  > "$D/.pearde/prds/naming-an-atomic/prd.md"
+ok "a PRD routed to a real workflow in this library resolves" python3 "$WF" check "$D/.pearde"
 
 echo
 echo "── nothing this PRD wrote leaks onto the board or the repo root ─────────"

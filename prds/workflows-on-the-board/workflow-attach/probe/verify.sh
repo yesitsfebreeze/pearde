@@ -12,7 +12,7 @@
 #   bash prds/workflows-on-the-board/workflow-attach/probe/verify.sh
 set -u
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../../.." && pwd)"
 PLAN="$ROOT/resources/board/plan.py"
 WF="$ROOT/resources/workflows.py"
 TMP="$(mktemp -d)"
@@ -29,7 +29,8 @@ lacks() {
 }
 
 # ── a board with a library ───────────────────────────────────────────────────
-B="$TMP/solo/prds"
+B="$TMP/solo/.pearde"
+PRDS="$B/prds"; mkdir -p "$PRDS"
 mkdir -p "$B/workflows"
 cat > "$B/settings.md" <<'EOF'
 ---
@@ -88,11 +89,11 @@ runs: 0
 EOF
 
 prd() { # dir  extra-frontmatter
-  mkdir -p "$B/$1"
+  mkdir -p "$PRDS/$1"
   { printf -- '---\nstate: open\norigin: requested\npriority: 10\n'
     [ -n "${2:-}" ] && printf '%s\n' "$2"
     printf -- '---\n\n# %s — a probe PRD\n\nBody.\n' "$1"
-  } > "$B/$1/prd.md"
+  } > "$PRDS/$1/prd.md"
 }
 
 prd resolves  "workflow: fix-a-reported-break"
@@ -133,8 +134,8 @@ lacks "plan does not mark a PRD with no key" \
       "$(printf '%s\n' "$PLANOUT" | grep ' bare ')"     "wf "
 
 # ── a spec's own workflow: ───────────────────────────────────────────────────
-mkdir -p "$B/resolves/specs"
-cat > "$B/resolves/specs/spec01.md" <<'EOF'
+mkdir -p "$PRDS/resolves/specs"
+cat > "$PRDS/resolves/specs/spec01.md" <<'EOF'
 ---
 complexity: 10
 workflow: no-such-route-either
@@ -157,10 +158,10 @@ have "a spec's dangling workflow is reported too" "$CHK2" "resolves/specs/spec01
 SCAN2="$(python3 "$PLAN" scan "$B" 2>&1)"
 have "a spec's workflow does not change the PRD's mark" \
      "$(printf '%s\n' "$SCAN2" | grep ' resolves ')" "wf fix-a-reported-break"
-rm -rf "$B/resolves/specs"
+rm -rf "$PRDS/resolves/specs"
 
 # ── a master board: the member resolves against its own library first ────────
-M="$TMP/master/prds"
+M="$TMP/master/.pearde"
 mkdir -p "$M"
 cat > "$M/settings.md" <<EOF
 ---
@@ -198,7 +199,7 @@ runs: 0
 | 1 | reproduce-the-failure | the fallback needs a step | stop       |
 EOF
 # the member names a route only the MASTER holds: the fallback must find it
-python3 - "$B/dangling/prd.md" <<'PY'
+python3 - "$PRDS/dangling/prd.md" <<'PY'
 import sys
 p = sys.argv[1]
 s = open(p, encoding="utf-8").read().replace("workflow: no-such-route",
@@ -225,7 +226,8 @@ doc "the spec template carries the key"       references/templates/spec.md '# wo
 doc "workers.md carries the block"            references/parts/workers.md  '> Follow the workflow `<slug>`'
 doc "workers.md names the brief command"      references/parts/workers.md  'workflows.py brief <slug>'
 doc "workers.md forbids editing the library"  references/parts/workers.md  'Never edit the workflow files'
-doc "the analyst reports the workflow"        references/parts/workers.md  '`workflow: none fit`'
+doc "the analyst reports the workflow — or drafts a route" references/parts/workers.md  'Name the
+'
 doc "drill.md attaches on the tree it writes" references/drill.md          'write `workflow: <slug>` on that child'
 doc "parts/workflows.md has the attach rows"  references/parts/workflows.md '## Attached'
 doc "parts/workflows.md names the scan mark"  references/parts/workflows.md 'marks the line `wf <slug>?`'
@@ -236,7 +238,7 @@ doc "contract.md says who may write a spec" references/parts/contract.md 'the-or
 # it was agreed as. Four needles above prove the block is present, and none of
 # them would notice a word changed in the middle of it. This compares them.
 blk() { awk '/^> Follow the workflow/ {on=1} on { if ($0 !~ /^>/) exit; print }' "$1"; }
-BLK_PRD="$(blk "$ROOT/prds/workflows-on-the-board/workflow-attach/prd.md")"
+BLK_PRD="$(blk "$ROOT/.pearde/prds/workflows-on-the-board/workflow-attach/prd.md")"
 BLK_WRK="$(blk "$ROOT/references/parts/workers.md")"
 if [ -z "$BLK_PRD" ] || [ -z "$BLK_WRK" ]; then
   bad "the block is extractable from both files — prd.md $(printf '%s' "$BLK_PRD" | wc -l) lines, workers.md $(printf '%s' "$BLK_WRK" | wc -l) lines"
@@ -256,13 +258,13 @@ nodoc() { # name file needle — the file must NOT carry it any more
 }
 # The three dispatch skips left loop.md for `pearde claim`'s gate: each is
 # asserted as behaviour — a fixture PRD, and `transitions.gate_claim` refusing it.
-G="$TMP/gate/prds"; mkdir -p "$G"; cp "$B/settings.md" "$G/"; cp -R "$B/workflows" "$G/"
+G="$TMP/gate/.pearde"; mkdir -p "$G"; cp "$B/settings.md" "$G/"; cp -R "$B/workflows" "$G/"
 gprd() { # dir state extra-frontmatter
-  mkdir -p "$G/$1"
+  mkdir -p "$G/prds/$1"
   { printf -- '---\nstate: %s\norigin: requested\npriority: 10\n' "$2"
     [ -n "${3:-}" ] && printf '%s\n' "$3"
     printf -- '---\n\n# %s — a probe PRD\n\nBody.\n' "$1"
-  } > "$G/$1/prd.md"
+  } > "$G/prds/$1/prd.md"
 }
 gprd dangling specced "workflow: no-such-route"
 gprd waits    specced $'needs:\n  - pending'

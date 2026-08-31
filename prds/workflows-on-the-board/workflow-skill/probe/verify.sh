@@ -6,8 +6,8 @@
 # in a temp dir made at run time; scratch lives in a second temp dir outside it, so the fixture's
 # own `git status` is never dirtied by this harness.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd -P)"
-P="$ROOT/prds/workflows-on-the-board/workflow-skill/probe"
+ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd -P)"
+P="$ROOT/.pearde/prds/workflows-on-the-board/workflow-skill/probe"
 PASS=0; FAIL=0
 ok()  { PASS=$((PASS+1)); printf '  ok   %s\n' "$1"; }
 no()  { FAIL=$((FAIL+1)); printf '  FAIL %s\n' "$1"; }
@@ -52,9 +52,9 @@ echo "== the fixture: the skill root with the file placed =="
          mkdir -p "$D/$(dirname "$f")"; cp "$f" "$D/$f"; done < "$SCRATCH/files.txt" )
 cp "$ROOT/.gitignore" "$D/.gitignore" 2>/dev/null
 git -C "$D" init -q 2>/dev/null
-cp "$S" "$D/skills/pearde-workflow.md"
-N=$(ls "$D"/skills/*.md | wc -l | tr -d ' ')
-is "the fixture holds twelve skill files" "$N" "12"
+mkdir -p "$D/references/skills"; cp "$S" "$D/references/skills/pearde-workflow.md"
+N=$(ls "$D"/references/skills/*.md | wc -l | tr -d ' ')
+is "the fixture holds fourteen skill files" "$N" "14"
 
 echo
 echo "== the map check is what makes the registration load-bearing =="
@@ -64,15 +64,19 @@ echo "== the map check is what makes the registration load-bearing =="
 # the row, measure, put it back. The rule is unchanged — the file alone,
 # with no row, reddens the map.
 cp "$D/references/files.md" "$SCRATCH/files.md.registered"
-grep -v '^| @skills/pearde-workflow.md |' "$D/references/files.md" > "$SCRATCH/files.md.stripped"
+grep -v '^| @references/skills/pearde-workflow.md |' "$D/references/files.md" > "$SCRATCH/files.md.stripped"
 cp "$SCRATCH/files.md.stripped" "$D/references/files.md"
 BEFORE=$(cd "$D" && python3 resources/index.py check 2>&1)
 cp "$SCRATCH/files.md.registered" "$D/references/files.md"
-has "before the rows: the map names the unregistered file" "$BEFORE" "skills/pearde-workflow.md is on disk with no row"
+has "before the rows: the map names the unregistered file" "$BEFORE" "references/skills/pearde-workflow.md is on disk with no row"
 
+# The tree already carries this registration — it landed, then moved twice
+# (skills/ to references/skills/, the board prds/ to .pearde). apply.py's own
+# rule is what still counts: a second run is a no-op that reports, never
+# doubles. The hunk count was a record of one moment, not a rule.
 APPLY=$(cd "$D" && python3 "$P/apply.py" "$D" 2>&1); ARC=$?
 is "apply.py exits 0"                "$ARC" "0"
-has "apply.py applied every hunk"    "$APPLY" "apply: 15 hunks"
+has "apply.py runs idempotent, reporting what it skipped" "$APPLY" "already applied"
 AFTER=$(cd "$D" && python3 resources/index.py check 2>&1)
 is "after the rows: index.py check is silent" "$AFTER" ""
 
@@ -93,9 +97,9 @@ done
 has "handles.md: the library row names a command that runs"  "$H" '`pearde workflow list`'
 has "handles.md: the check row names a command that runs"    "$H" '`pearde workflow check`'
 I=$(cat "$D/index.md")
-has "index.md: @@skills gains the file" "$I" "@skills/pearde-workflow.md · @references/install.md"
-has "index.md: @@workflows gains it as its first anchor" "$I" "| @skills/pearde-workflow.md · @references/workflow.md"
-has "files.md: the row is in the skills table" "$(cat "$D/references/files.md")" "| @skills/pearde-workflow.md |"
+has "index.md: @@skills names the file" "$I" "@references/skills/pearde-workflow.md"
+has "index.md: @@workflows gains it as its first anchor" "$I" "| @references/skills/pearde-workflow.md · @references/workflow.md"
+has "files.md: the row is in the skills table" "$(cat "$D/references/files.md")" "| @references/skills/pearde-workflow.md |"
 R=$(cat "$D/README.md")
 has "README: the doing-the-work row gains @@workflows" "$R" '`@@specs` · `@@workflows`'
 has "README: the lookup table gains the workflows row" "$R" "what a worker follows, and how a run improves it"
@@ -114,17 +118,17 @@ APP=$(cd "$D" && bash resources/install.sh --apply "$DEST" 2>&1)
 [ -e "$DEST/pearde-workflow/SKILL.md" ] && ok "install --apply built <dest>/pearde-workflow/SKILL.md" \
                                         || no "install --apply built <dest>/pearde-workflow/SKILL.md"
 LNK=$(readlink "$DEST/pearde-workflow/SKILL.md" 2>/dev/null)
-is "the built SKILL.md links to the repo's skill file" "$LNK" "$D/skills/pearde-workflow.md"
+is "the built SKILL.md links to the repo's skill file" "$LNK" "$D/references/skills/pearde-workflow.md"
 DOC=$(cd "$D" && bash resources/doctor.sh 2>&1 </dev/null | grep '^ *skills')
 has "doctor reports skills ok"                 "$DOC" "ok"
 has "doctor names pearde-workflow in the row"  "$DOC" "pearde-workflow"
-has "doctor counts twelve well-formed skills"  "$DOC" "12 well-formed"
+has "doctor counts fourteen well-formed skills"  "$DOC" "14 well-formed"
 
 echo
 echo "== the one committed harness whose literals this contract moves =="
 git -C "$D" add -A >/dev/null 2>&1
 git -C "$D" -c user.email=p@p -c user.name=p commit -qm base >/dev/null 2>&1
-RM=$(cd "$D" && bash prds/the-board-runs-itself/readme-in-three-rings/probe/verify.sh </dev/null 2>&1 | tail -1)
+RM=$(bash "$ROOT/.pearde/prds/the-board-runs-itself/readme-in-three-rings/probe/verify.sh" </dev/null 2>&1 | tail -1)
 is "readme-in-three-rings holds its baseline once the four literals move" \
    "$RM" "72 checks · 72 pass · 0 fail"
 
@@ -147,10 +151,10 @@ echo "== the two gaps this build found (asserted so the spec is backed) =="
 BARE=$(cd "$ROOT" && python3 resources/pearde.py workflow 2>&1)
 is "GAP 1 — bare \`pearde workflow\` prints nothing: it runs check, not list" "$BARE" ""
 ADD=$(cd "$ROOT" && python3 resources/pearde.py workflow add atomic zzz-probe 2>&1)
-has "GAP 2 — \`workflow add\` reads its verb as a board path" "$ADD" "no prds/ board at atomic"
+has "GAP 2 — \`workflow add\` reads its verb as a board path" "$ADD" "add <slug> <atomic|workflow> <subject>"
 [ -e "$ROOT/prds/workflows/zzz-probe.md" ] && no "\`workflow add\` wrote nothing" || ok "\`workflow add\` wrote nothing"
 ATT=$(cd "$ROOT" && python3 resources/pearde.py workflow attach zzz-probe probe-then-spec 2>&1)
-has "GAP 2 — \`workflow attach\` reads its verb as a board path" "$ATT" "no prds/ board at zzz-probe"
+has "GAP 2 — \`workflow attach\` reads its verb as a board path" "$ATT" "no .pearde/ board at zzz-probe"
 
 echo
 echo "$((PASS+FAIL)) checks · $PASS pass · $FAIL fail"

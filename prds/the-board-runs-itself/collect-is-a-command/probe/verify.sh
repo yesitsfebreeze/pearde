@@ -7,7 +7,7 @@
 # count at the end.
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
-ROOT="$(cd "$HERE/../../../.." && pwd)"
+ROOT="$(cd "$HERE/../../../../.." && pwd)"
 COLLECT="$ROOT/resources/board/collect.py"
 PASS=0; FAIL=0
 export PEARDE_PORT=1          # nothing listens there — the daemon is "down"
@@ -30,9 +30,9 @@ trap 'rm -rf "$TOP"' EXIT
 # `building` is claimed at 1/2; `landed` is done.
 fixture() {
   D="$TOP/$1"; mkdir -p "$D"; ( cd "$D" && git init -q -b main )
-  mkdir -p "$D/src" "$D/other" "$D/prds/finished/specs" "$D/prds/building/specs" "$D/prds/landed"
+  mkdir -p "$D/src" "$D/other" "$D/.pearde/prds/finished/specs" "$D/.pearde/prds/building/specs" "$D/.pearde/prds/landed" "$D/.pearde/.state"
   echo 'grep -q hello src/lib.txt' > "$D/verify.sh"
-  cat > "$D/prds/settings.md" <<EOF
+  cat > "$D/.pearde/settings.md" <<EOF
 ---
 name: fixture
 language: English
@@ -41,7 +41,7 @@ pipeline: 1
 ${2:-}
 ---
 EOF
-  cat > "$D/prds/finished/prd.md" <<'EOF'
+  cat > "$D/.pearde/prds/finished/prd.md" <<'EOF'
 ---
 state: claimed
 origin: requested
@@ -58,7 +58,7 @@ footprint:
 
 Body. No box here.
 EOF
-  cat > "$D/prds/finished/specs/spec01.md" <<'EOF'
+  cat > "$D/.pearde/prds/finished/specs/spec01.md" <<'EOF'
 ---
 complexity: 5
 footprint:
@@ -77,7 +77,7 @@ footprint:
 bash verify.sh
 ```
 EOF
-  cat > "$D/prds/building/prd.md" <<'EOF'
+  cat > "$D/.pearde/prds/building/prd.md" <<'EOF'
 ---
 state: claimed
 origin: requested
@@ -90,7 +90,7 @@ footprint:
 
 # building — half done
 EOF
-  cat > "$D/prds/building/specs/spec01.md" <<'EOF'
+  cat > "$D/.pearde/prds/building/specs/spec01.md" <<'EOF'
 ---
 complexity: 5
 footprint:
@@ -110,7 +110,7 @@ footprint:
 true
 ```
 EOF
-  cat > "$D/prds/landed/prd.md" <<'EOF'
+  cat > "$D/.pearde/prds/landed/prd.md" <<'EOF'
 ---
 state: done
 origin: requested
@@ -127,12 +127,12 @@ EOF
 # the worker's run: the code, and the box ticked
 work() {
   echo hello > "$D/src/lib.txt"
-  sed -i '' 's/- \[ \] `src/- [x] `src/' "$D/prds/finished/specs/spec01.md"
+  sed -i '' 's/- \[ \] `src/- [x] `src/' "$D/.pearde/prds/finished/specs/spec01.md"
 }
-run() { ( cd "$D" && PEARDE_AS=engineer python3 "$COLLECT" --board "$D/prds" "$@" ) 2>&1; }
+run() { ( cd "$D" && PEARDE_AS=engineer python3 "$COLLECT" --board "$D/.pearde" "$@" ) 2>&1; }
 ncommits() { ( cd "$D" && git rev-list --count HEAD ); }
 paths()    { ( cd "$D" && git show --name-only --format= "${1:-HEAD~1}" | sort | tr '\n' ' ' ); }   # HEAD~1: the code commit; HEAD is `<prd> — record`
-fm()       { grep -m1 "^$2:" "$D/prds/$1/prd.md" | sed "s/^$2: *//"; }
+fm()       { grep -m1 "^$2:" "$D/.pearde/prds/$1/prd.md" | sed "s/^$2: *//"; }
 
 # ── A. collect finished ───────────────────────────────────────────────────────
 echo "A. collect finished"
@@ -140,7 +140,7 @@ fixture a
 OUT="$(run finished)"; RC=$?
 eq  "A exit 0" "$RC" "0"
 eq  "A two commits on top of the fixture — the code, then the record" "$(ncommits)" "3"
-eq  "A commit paths equal the footprint union plus the record" "$(paths)" "prds/finished/prd.md prds/finished/specs/spec01.md src/lib.txt "
+eq  "A commit paths equal the footprint union plus the record" "$(paths)" ".pearde/prds/finished/prd.md .pearde/prds/finished/specs/spec01.md src/lib.txt "
 SHA="$( cd "$D" && git rev-parse --short HEAD~1 )"
 eq  "A prd.md carries commit: <sha>" "$(fm finished commit)" "$SHA"
 has "A prd.md carries actual: <n>h" "$(fm finished actual)" "h"
@@ -150,9 +150,9 @@ eq  "A the progress line printed once" "$(printf '%s\n' "$OUT" | grep -c '^▸ f
 has "A the line carries the persona last" "$(printf '%s\n' "$OUT" | grep '^▸')" "· as engineer"
 has "A the line says the round file is owed" "$OUT" "round file owed"
 has "A the daemon being down is said, not fatal" "$OUT" "daemon down"
-eq  "A transition row appended" "$(grep -c '"to": "done"' "$D/prds/.transitions.jsonl")" "1"
+eq  "A transition row appended" "$(grep -c '"to": "done"' "$D/.pearde/.state/transitions.jsonl")" "1"
 MSG="$( cd "$D" && git log -1 --format=%B HEAD~1 )"
-WANT="$(printf 'finished — the lib says hello, and one call closes it\n\nspec01: the lib says hello\n\nprd: prds/finished\n')"
+WANT="$(printf 'finished — the lib says hello, and one call closes it\n\nspec01: the lib says hello\n\nprd: .pearde/prds/finished\n')"
 eq  "A git log -1 --format=%B matches commits.md line for line" "$MSG" "$WANT"
 eq  "A building left alone" "$(fm building state)" "claimed"
 # a second collect on the same PRD is refused — it is done
@@ -169,14 +169,14 @@ eq  "B exit 1" "$RC" "1"
 has "B the output printed" "$OUT" "boom"
 has "B the exit named" "$OUT" "spec01: exit 1"
 eq  "B git log unchanged" "$(ncommits)" "1"
-eq  "B prd.md unchanged" "$( cd "$D" && git diff --stat -- prds/finished/prd.md )" ""
+eq  "B prd.md unchanged" "$( cd "$D" && git diff --stat -- .pearde/prds/finished/prd.md )" ""
 has "B nothing written, said" "$OUT" "nothing written"
 OUT="$(run finished --fail)"; RC=$?
 eq  "B --fail exits 1" "$RC" "1"
 eq  "B --fail sets failed" "$(fm finished state)" "failed"
 eq  "B --fail clears the claim" "$(fm finished claim)" ""
-has "B --fail writes ## Failure" "$(cat "$D/prds/finished/prd.md")" "## Failure"
-has "B ## Failure holds the output" "$(sed -n '/^## Failure/,$p' "$D/prds/finished/prd.md")" "boom"
+has "B --fail writes ## Failure" "$(cat "$D/.pearde/prds/finished/prd.md")" "## Failure"
+has "B ## Failure holds the output" "$(sed -n '/^## Failure/,$p' "$D/.pearde/prds/finished/prd.md")" "boom"
 eq  "B --fail commits nothing" "$(ncommits)" "1"
 has "B --fail prints the line" "$OUT" "▸ finished: claimed → failed"
 
@@ -219,9 +219,9 @@ OUT="$(run finished --dry)"; RC=$?
 eq  "E exit 0" "$RC" "0"
 eq  "E no commit" "$(ncommits)" "1"
 eq  "E prd.md unchanged" "$(fm finished state)" "claimed"
-has "E prints what 3 would add" "$OUT" "would add: prds/finished/specs/spec01.md, src/lib.txt"
+has "E prints what 3 would add" "$OUT" "would add: .pearde/prds/finished/specs/spec01.md, src/lib.txt"
 has "E prints what 4 would say" "$OUT" "spec01: the lib says hello"
-eq  "E .transitions.jsonl not written" "$(test -f "$D/prds/.transitions.jsonl" && echo yes || echo no)" "no"
+eq  "E .transitions.jsonl not written" "$(test -f "$D/.pearde/.state/transitions.jsonl" && echo yes || echo no)" "no"
 
 # ── F. --trust ───────────────────────────────────────────────────────────────
 echo "F. --trust"
@@ -258,33 +258,33 @@ eq  "H done" "$(fm finished state)" "done"
 echo "I. riders"
 fixture i
 run finished > /dev/null
-eq  "I the record is not owed — it is in its own commit" "$(cat "$D/prds/.claims/riders" 2>/dev/null | grep -c 'prds/finished/prd.md')" "0"
-sed -i '' 's/- \[ \] two/- [x] two/' "$D/prds/building/specs/spec01.md"
+eq  "I the record is not owed — it is in its own commit" "$(cat "$D/.pearde/.claims/riders" 2>/dev/null | grep -c '.pearde/prds/finished/prd.md')" "0"
+sed -i '' 's/- \[ \] two/- [x] two/' "$D/.pearde/prds/building/specs/spec01.md"
 OUT="$(run building)"; RC=$?
 eq  "I the next collect is not stopped by the last one's record" "$RC" "0"
-lacks "I finished's record is not on building's commit" "$(paths)" "prds/finished/prd.md"
+lacks "I finished's record is not on building's commit" "$(paths)" ".pearde/prds/finished/prd.md"
 lacks "I nothing rides on the line" "$(printf '%s\n' "$OUT" | grep '^▸')" "rides "
-eq  "I building's own record is not owed either" "$(cat "$D/prds/.claims/riders" 2>/dev/null | grep -c 'prds/building/prd.md')" "0"
+eq  "I building's own record is not owed either" "$(cat "$D/.pearde/.claims/riders" 2>/dev/null | grep -c '.pearde/prds/building/prd.md')" "0"
 fixture i2
-sed -i '' 's/^commit: 0000000/commit: 1111111/' "$D/prds/landed/prd.md"    # somebody's edit, no baseline
+sed -i '' 's/^commit: 0000000/commit: 1111111/' "$D/.pearde/prds/landed/prd.md"    # somebody's edit, no baseline
 OUT="$(run finished)"; RC=$?
 eq  "I2 exit 0" "$RC" "0"
-lacks "I2 a foreign dirty prd.md is inherited without a baseline" "$(paths)" "prds/landed/prd.md"
+lacks "I2 a foreign dirty prd.md is inherited without a baseline" "$(paths)" ".pearde/prds/landed/prd.md"
 
 # ── J. the finished condition ────────────────────────────────────────────────
 echo "J. open boxes"
 fixture j
-printf '\n* [ ] a box in the body\n' >> "$D/prds/finished/prd.md"
+printf '\n* [ ] a box in the body\n' >> "$D/.pearde/prds/finished/prd.md"
 OUT="$(run finished)"; RC=$?
 eq  "J exit 1" "$RC" "1"
-has "J names the file" "$OUT" "prds/finished/prd.md"
+has "J names the file" "$OUT" ".pearde/prds/finished/prd.md"
 has "J names the box" "$OUT" "* [ ] a box in the body"
 eq  "J no commit" "$(ncommits)" "1"
 fixture j2
-sed -i '' 's/- \[x\] `src/- [ ] `src/' "$D/prds/finished/specs/spec01.md"
+sed -i '' 's/- \[x\] `src/- [ ] `src/' "$D/.pearde/prds/finished/specs/spec01.md"
 OUT="$(run finished)"; RC=$?
 eq  "J2 an open spec box exits 1" "$RC" "1"
-has "J2 names the spec" "$OUT" "prds/finished/specs/spec01.md"
+has "J2 names the spec" "$OUT" ".pearde/prds/finished/specs/spec01.md"
 OUT="$(run building)"; RC=$?
 eq  "J3 building (1/2) exits 1" "$RC" "1"
 OUT="$(run landed)"; RC=$?
@@ -295,12 +295,12 @@ eq  "J5 no such PRD exits 1" "$RC" "1"
 # ── K. --also ────────────────────────────────────────────────────────────────
 echo "K. --also"
 fixture k
-mkdir -p "$D/prds/workflows"; echo 'atomic: x' > "$D/prds/workflows/x.md"
-OUT="$(run finished --also "$D/prds/workflows/x.md")"; RC=$?
+mkdir -p "$D/.pearde/prds/workflows"; echo 'atomic: x' > "$D/.pearde/prds/workflows/x.md"
+OUT="$(run finished --also "$D/.pearde/prds/workflows/x.md")"; RC=$?
 eq  "K --also without --also-note is usage" "$RC" "2"
-OUT="$(run finished --also "$D/prds/workflows/x.md" --also-note "the fixture taught nothing")"; RC=$?
+OUT="$(run finished --also "$D/.pearde/prds/workflows/x.md" --also-note "the fixture taught nothing")"; RC=$?
 eq  "K exit 0" "$RC" "0"
-has "K the file is on the commit" "$(paths)" "prds/workflows/x.md"
+has "K the file is on the commit" "$(paths)" ".pearde/prds/workflows/x.md"
 has "K named in the message" "$( cd "$D" && git log -1 --format=%B HEAD~1 )" "workflow: implement-a-spec — the fixture taught nothing"
 
 # ── L. flags ─────────────────────────────────────────────────────────────────
@@ -322,7 +322,7 @@ printf 'one\ntwo\nthree\nfour\nfive\nsix\nseven\neight\nnine\nten\n' > "$D/src/b
 sed -i '' 's/^two$/two-theirs/' "$D/src/big.txt"
 OUT="$(run --snapshot finished)"; RC=$?
 eq  "N --snapshot exits 0" "$RC" "0"
-eq  "N the diff recorded" "$(grep -c '^+two-theirs' "$D/prds/.claims/finished/diff")" "1"
+eq  "N the diff recorded" "$(grep -c '^+two-theirs' "$D/.pearde/.claims/finished/diff")" "1"
 # the worker's run, and its edit on the same file, far from theirs
 work
 sed -i '' 's/^nine$/nine-ours/' "$D/src/big.txt"
@@ -370,13 +370,13 @@ echo "P. gate baseline"
 NOWORK=1 fixture p 'gate: echo known-red; false'
 run --snapshot finished > /dev/null
 work
-eq  "P the gate recorded" "$(head -1 "$D/prds/.claims/finished/gate")" "exit 1"
+eq  "P the gate recorded" "$(head -1 "$D/.pearde/.claims/finished/gate")" "exit 1"
 OUT="$(run finished)"; RC=$?
 eq  "P a red gate whose every line is in the baseline is green" "$RC" "0"
 has "P said" "$OUT" "known"
 fixture p2 'gate: echo known-red; echo NEW-red; false'
-mkdir -p "$D/prds/.claims/finished"; : > "$D/prds/.claims/finished/diff"; : > "$D/prds/.claims/finished/untracked"
-printf 'exit 1\nknown-red\n' > "$D/prds/.claims/finished/gate"
+mkdir -p "$D/.pearde/.claims/finished"; : > "$D/.pearde/.claims/finished/diff"; : > "$D/.pearde/.claims/finished/untracked"
+printf 'exit 1\nknown-red\n' > "$D/.pearde/.claims/finished/gate"
 OUT="$(run finished)"; RC=$?
 eq  "P2 a new line is red" "$RC" "1"
 has "P2 printed" "$OUT" "NEW-red"
@@ -408,17 +408,17 @@ REG_BEFORE="$( [ -f "$REG" ] && cksum < "$REG" )"
 SPARE="$(python3 -c 'import socket; s=socket.socket(); s.bind(("127.0.0.1",0)); print(s.getsockname()[1]); s.close()')"
 export PEARDE_PORT="$SPARE"
 trap 'PEARDE_PORT="$SPARE" python3 "$SRV/board/serve.py" stop >/dev/null 2>&1; rm -rf "$TOP"' EXIT
-ENS="$( cd "$D" && python3 "$SRV/board/serve.py" ensure "$D/prds" 2>&1 )"; RC=$?
+ENS="$( cd "$D" && python3 "$SRV/board/serve.py" ensure "$D/.pearde" 2>&1 )"; RC=$?
 eq  "R the daemon came up on the spare port and registered the fixture" "$RC" "0"
 has "R ...under the board's declared name" "$ENS" "registered fixture"
 OUT="$(run finished)"; RC=$?
 eq  "R exit 0" "$RC" "0"
 has "R the line says report posted" "$(printf '%s\n' "$OUT" | grep '^▸')" "report posted"
 lacks "R ...and not daemon down" "$OUT" "daemon down"
-has "R ## Report is in prd.md" "$(cat "$D/prds/finished/prd.md")" "## Report"
-has "R ## Report holds the verify's exit" "$(sed -n '/^## Report/,$p' "$D/prds/finished/prd.md")" "spec01: exit 0"
+has "R ## Report is in prd.md" "$(cat "$D/.pearde/prds/finished/prd.md")" "## Report"
+has "R ## Report holds the verify's exit" "$(sed -n '/^## Report/,$p' "$D/.pearde/prds/finished/prd.md")" "spec01: exit 0"
 eq  "R done" "$(fm finished state)" "done"
-has "R the daemon knows the fixture" "$(python3 "$SRV/board/serve.py" status 2>&1)" "$D/prds"
+has "R the daemon knows the fixture" "$(python3 "$SRV/board/serve.py" status 2>&1)" "$D/.pearde"
 PEARDE_PORT="$SPARE" python3 "$SRV/board/serve.py" stop >/dev/null 2>&1
 export PEARDE_PORT=1
 eq  "R the real registry is untouched" "$( [ -f "$REG" ] && cksum < "$REG" )" "$REG_BEFORE"
@@ -429,12 +429,12 @@ echo "S. snapshot"
 NOWORK=1 fixture s
 echo stray > "$D/stray.txt"
 run --snapshot finished > /dev/null
-eq  "S the record is at, diff, gate, untracked" "$(ls "$D/prds/.claims/finished" | tr '\n' ' ')" "at diff gate untracked "
+eq  "S the record is at, diff, gate, untracked" "$(ls "$D/.pearde/.claims/finished" | tr '\n' ' ')" "at diff gate untracked "
 work
 OUT="$(run finished --dry)"; RC=$?
 eq  "S --dry after the snapshot exits 0" "$RC" "0"
 has "S --dry lists the inherited path" "$(printf '%s\n' "$OUT" | grep -A1 'inherited, not added')" "stray.txt"
-eq  "S --dry writes nothing to prd.md" "$( cd "$D" && git status --porcelain -- prds/finished/prd.md )" ""
+eq  "S --dry writes nothing to prd.md" "$( cd "$D" && git status --porcelain -- .pearde/prds/finished/prd.md )" ""
 eq  "S --dry commits nothing" "$(ncommits)" "1"
 
 # ── M. COMMANDS ──────────────────────────────────────────────────────────────
@@ -443,7 +443,7 @@ eq "M the module exposes COMMANDS['collect']" "$( cd "$ROOT/resources/board" && 
 
 # ── Z. every commit the harness made ─────────────────────────────────────────
 echo "Z. .claims never committed"
-eq  "Z no path under prds/.claims/ on any commit above" "$(for d in "$TOP"/*/; do [ -d "$d/.git" ] && ( cd "$d" && git log --name-only --format= ); done | grep -c 'prds/.claims/')" "0"
+eq  "Z no path under .pearde/.claims/ on any commit above" "$(for d in "$TOP"/*/; do [ -d "$d/.git" ] && ( cd "$d" && git log --name-only --format= ); done | grep -c '.pearde/.claims/')" "0"
 
 echo
 echo "$((PASS+FAIL)) checks · $PASS pass · $FAIL fail"

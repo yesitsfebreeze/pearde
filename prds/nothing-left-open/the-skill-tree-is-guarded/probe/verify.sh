@@ -2,7 +2,7 @@
 # the-skill-tree-is-guarded — a round on another board cannot write the skill
 # through the install. Every call is hook JSON on stdin; PEARDE_GUARD_STATE
 # points at a temp dir, so nothing under resources/board/state/ is touched.
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd -P)"
+ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd -P)"
 GUARD="$ROOT/resources/guard.py"
 D="$(mktemp -d)"; S="$(mktemp -d)"           # fixtures; scratch, outside them
 trap 'rm -rf "$D" "$S"' EXIT
@@ -13,17 +13,17 @@ has() { case "$2" in *"$3"*) ok "$1" 0 ;; *) ok "$1" 1 "missing: $3" ;; esac; }
 lacks() { case "$2" in *"$3"*) ok "$1" 1 "found: $3" ;; *) ok "$1" 0 ;; esac; }
 
 # a project with its own board — the example's prds/, not the example root
-mkdir -p "$D/proj"; cp -R "$ROOT/resources/board/example/prds" "$D/proj/prds"
+mkdir -p "$D/proj/.pearde"; cp -R "$ROOT/resources/board/example/prds" "$D/proj/.pearde/prds"
 # an install: the five links of references/install.md, built here
 mkdir -p "$D/skills/pearde"
-ln -s "$ROOT/skills/pearde.md" "$D/skills/pearde/SKILL.md"
+ln -s "$ROOT/references/skills/pearde.md" "$D/skills/pearde/SKILL.md"
 ln -s "$ROOT/README.md"        "$D/skills/pearde/README.md"
 ln -s "$ROOT/index.md"         "$D/skills/pearde/index.md"
 ln -s "$ROOT/references"       "$D/skills/pearde/references"
 ln -s "$ROOT/resources"        "$D/skills/pearde/resources"
 mkdir -p "$D/nowhere"
 LINK="$D/skills/pearde/README.md"
-MEMO="prds/memos/the-install-is-live-symlinks.md"
+MEMO=".pearde/memos/the-install-is-live-symlinks.md"
 SESS="skilltree$$"                            # a session id no other harness uses
 
 hook() { # tool cwd file [session] → guard's stdout
@@ -43,7 +43,7 @@ has  "A1 an Edit through the link from another board is denied" "$out" '"permiss
 has  "A2 the deny names the real path the link resolves to" "$out" "$ROOT/README.md"
 has  "A3 the deny names the path as given, resolving" "$out" "$LINK resolves to"
 has  "A4 the deny names the memo" "$out" "$MEMO"
-has  "A5 the deny names the session's board" "$out" "$D/proj/prds"
+has  "A5 the deny names the session's board" "$out" "$D/proj/.pearde"
 has  "A6 way out one: file a PRD on the skill's own board" "$out" 'file a PRD on the skill'
 reason=$(printf '%s' "$out" | python3 -c 'import json,sys;print(json.load(sys.stdin)["hookSpecificOutput"]["permissionDecisionReason"])')
 has  "A7 way out one is a command, run from the skill root" "$reason" "\`pearde add \"<title>\"\` from $ROOT)"
@@ -60,7 +60,7 @@ lacks "A13 a real path is named once, not 'resolves to' itself" "$out" 'resolves
 out=$(hook Edit "$D/proj" "$D/skills/pearde/resources/guard.py")
 has  "A14 resources/ through the link is skill tree" "$out" "$ROOT/resources/guard.py"
 out=$(hook Edit "$D/proj" "$D/skills/pearde/SKILL.md")
-has  "A15 skills/ through the SKILL.md link is skill tree" "$out" "$ROOT/skills/pearde.md"
+has  "A15 skills/ through the SKILL.md link is skill tree" "$out" "$ROOT/references/skills/pearde.md"
 out=$(hook Edit "$(cd "$D/proj" && pwd -P)" "$LINK")
 has  "A16 the cwd given as its real path (/private/var on darwin) is still another board" "$out" '"permissionDecision": "deny"'
 n=$(python3 -c "import json;d=json.load(open('$S/state/$SESS.json'))['boards'];print(sum(b['refused'] for b in d.values()))")
@@ -68,23 +68,23 @@ n=$(python3 -c "import json;d=json.load(open('$S/state/$SESS.json'))['boards'];p
 [ ! -e "$ROOT/resources/board/state/guard/$SESS.json" ]; ok "A18 nothing written under resources/board/state/ — PEARDE_GUARD_STATE moved it" $?
 
 echo "— what passes"
-out=$(hook Edit "$D/proj" "$D/proj/prds/asking/specs/spec01.md")
+out=$(hook Edit "$D/proj" "$D/proj/.pearde/prds/asking/specs/spec01.md")
 [ -z "$out" ]; ok "P1 an Edit under the project's own prds/ passes" $?
-out=$(hook Write "$D/proj" "$D/proj/prds/asking/specs/spec09.md")
+out=$(hook Write "$D/proj" "$D/proj/.pearde/prds/asking/specs/spec09.md")
 [ -z "$out" ]; ok "P2 a Write under the project's own prds/ passes" $?
 out=$(hook Edit "$ROOT" "$LINK")
 [ -z "$out" ]; ok "P3 the same Edit from a working directory in this repo passes" $?
-out=$(hook Edit "$ROOT/prds/memos" "$LINK")
+out=$(hook Edit "$ROOT/.pearde/prds/memos" "$LINK")
 [ -z "$out" ]; ok "P4 a working directory inside this repo's board passes" $?
 out=$(hook Edit "$D/nowhere" "$LINK")
 [ -z "$out" ]; ok "P5 no board in scope passes — the guard refuses only a round provably another board's" $?
 out=$(hook Edit "$D/nowhere" "$ROOT/references/parts/guard.md")
 [ -z "$out" ]; ok "P6 no board in scope, the real path by name, passes" $?
-out=$(hook Write "$D/proj" "$ROOT/prds/memos/from-elsewhere.md")
+out=$(hook Write "$D/proj" "$ROOT/.pearde/prds/memos/from-elsewhere.md")
 [ -z "$out" ]; ok "P7 a write under this repo's own prds/ from another board passes — filing here is the way in" $?
 out=$(hook Read "$D/proj" "$LINK")
 [ -z "$out" ]; ok "P8 a Read through the link is not this rule's business" $?
-out=$(hook Edit "$D/proj" "$D/proj/prds/asking/prd.md")
+out=$(hook Edit "$D/proj" "$D/proj/.pearde/prds/asking/prd.md")
 [ -z "$out" ]; ok "P9 a body edit of the project's prd.md still passes (state_by_hand untouched)" $?
 out=$(hook Bash "$D/proj" "echo x > $LINK")
 lacks "B1 the Bash hook does not match a shell write through the link — the caveat guard.md states" "$out" '"deny"'

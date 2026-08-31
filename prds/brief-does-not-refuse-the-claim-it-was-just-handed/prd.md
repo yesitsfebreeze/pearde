@@ -1,7 +1,7 @@
 ---
 state: done        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: derived  # requested = the user asked | derived = the board found it
-# from:            # derived only — the PRD whose work surfaced this one
+from: every-document-names-the-path-the-board-is-on/apply-the-prds-rename-table
 priority: 45        # higher first
 complexity: 14      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
 blast-radius:      # analyst, at spec time — high|mid|low. What breaks if this is wrong

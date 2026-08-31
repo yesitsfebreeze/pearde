@@ -12,7 +12,8 @@
 # Usage: bash check.sh
 set -euo pipefail
 
-BOARD_PY=/Users/feb/dev/infra/pearde/resources/board
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+BOARD_PY="$ROOT/resources/board"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 

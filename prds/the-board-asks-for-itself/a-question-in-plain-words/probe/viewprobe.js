@@ -9,7 +9,7 @@
 const fs = require("fs");
 const path = require("path");
 const src = fs.readFileSync(
-  path.join(__dirname, "../../../../resources/board/view.js"), "utf8");
+  path.join(__dirname, "../../../../../resources/board/view.js"), "utf8");
 
 function grab(name) {
   const at = src.indexOf("function " + name + "(");

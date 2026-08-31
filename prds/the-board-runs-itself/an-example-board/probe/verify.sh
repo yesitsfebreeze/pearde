@@ -15,7 +15,7 @@
 #   NODE_PATH=<dir holding playwright-core> bash …/verify.sh   (runs viewtest too)
 set -u
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../../.." && pwd)"
 PLAN="$ROOT/resources/board/plan.py"
 EX="$ROOT/resources/board/example"
 D="$(mktemp -d)"
@@ -31,9 +31,9 @@ lacks() { case "$2" in *"$3"*) bad "$1 — '$3' present in:"; printf '%s\n' "$2"
 # ── the copy ─────────────────────────────────────────────────────────────────
 OUT="$(python3 "$PLAN" example "$D/copy" 2>&1)"; rc=$?
 [ $rc -eq 0 ] && ok "example <dir> exits 0" || bad "example <dir> exits 0 (got $rc): $OUT"
-have "it prints the board path" "$OUT" "example: $D/copy/prds"
-[ -f "$D/copy/prds/settings.md" ] && ok "settings.md is in the copy" || bad "settings.md is in the copy"
-[ -f "$D/copy/README.md" ] && ok "README.md is in the copy" || bad "README.md is in the copy"
+have "it prints the board path" "$OUT" "example: $D/copy/.pearde"
+[ -f "$D/copy/.pearde/settings.md" ] && ok "settings.md is in the copy" || bad "settings.md is in the copy"
+[ -f "$D/copy/.pearde/README.md" ] && ok "README.md is in the copy" || bad "README.md is in the copy"
 OUT="$(python3 "$PLAN" example "$D/copy" 2>&1)"; rc=$?
 [ $rc -ne 0 ] && ok "a non-empty dir is refused" || bad "a non-empty dir is refused (exited 0)"
 have "and the refusal says so" "$OUT" "is not empty"
@@ -67,16 +67,16 @@ have "and it is big/second"                   "$SCAN" "open      · big/second"
 have "gated has at least one"                 "$SCAN" "gated — 2"
 have "next is gated on building"              "$SCAN" "· next · p58 · w12 · needs building"
 have "the parent weighs zero"                 "$SCAN" "· big · p62 · w0"
-lacks "no fixture leaks .round.md"            "$SCAN" "round: $D/copy/prds/.round.md
+lacks "no fixture leaks .round.md"            "$SCAN" "round: $D/copy/.pearde/.round.md
 "
-WF="$(python3 "$ROOT/resources/workflows.py" check "$D/copy/prds" 2>&1)"
+WF="$(python3 "$ROOT/resources/workflows.py" check "$D/copy/.pearde" 2>&1)"
 [ -z "$WF" ] && ok "workflows.py check is silent on the copy" || bad "workflows.py check is silent on the copy: $WF"
-BR="$(python3 "$ROOT/resources/workflows.py" brief fix-a-line "$D/copy/prds" 2>&1)"
+BR="$(python3 "$ROOT/resources/workflows.py" brief fix-a-line "$D/copy/.pearde" 2>&1)"
 have "brief inlines the first atomic"  "$BR" "find-the-line"
 have "brief inlines the second atomic" "$BR" "change-the-line"
-MM="$(python3 "$ROOT/resources/memos.py" check "$D/copy/prds" 2>&1)"
+MM="$(python3 "$ROOT/resources/memos.py" check "$D/copy/.pearde" 2>&1)"
 [ -z "$MM" ] && ok "memos.py check is silent on the copy" || bad "memos.py check is silent on the copy: $MM"
-QL="$(python3 "$ROOT/resources/questions.py" list "$D/copy/prds" 2>&1)"
+QL="$(python3 "$ROOT/resources/questions.py" list "$D/copy/.pearde" 2>&1)"
 have "questions.py lists asking in question" "$QL" "question"
 
 # ── the manifest reads a directory row, both directions ──────────────────────

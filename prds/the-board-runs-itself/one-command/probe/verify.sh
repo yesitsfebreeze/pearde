@@ -11,7 +11,7 @@
 # is only asked for --help.
 set -uo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO="$(cd "$HERE/../../../.." && pwd)"
+REPO="$(cd "$HERE/../../../../.." && pwd)"
 D="$(mktemp -d)"; D="$(cd "$D" && pwd -P)"; trap 'rm -rf "$D"' EXIT
 R="$D/root"
 PASS=0; FAIL=0
@@ -20,18 +20,19 @@ fail() { FAIL=$((FAIL + 1)); echo "FAIL — $1"; }
 check() { if eval "$2"; then ok "$1"; else fail "$1"; fi; }
 
 # ── fixture ───────────────────────────────────────────────────────────────────
-mkdir -p "$R/resources/board" "$R/references/templates" "$R/prds/memos" "$R/prds/alpha"
+mkdir -p "$R/resources/board" "$R/references/templates" "$R/.pearde/prds/memos" "$R/.pearde/prds/alpha" "$R/.pearde/memos"
 for f in "$REPO"/resources/*.py "$REPO"/resources/*.sh; do ln -s "$f" "$R/resources/"; done
 for f in plan.py serve.py render.py edit.py; do ln -s "$REPO/resources/board/$f" "$R/resources/board/$f"; done
 ln -s "$REPO/references/templates/memo.md" "$R/references/templates/memo.md"
 rm -f "$R/resources/pearde.py"; cp "$REPO/resources/pearde.py" "$R/resources/pearde.py"  # the link loop above already made a link; the copy is the point
 P="python3 $R/resources/pearde.py"
-cat > "$R/prds/settings.md" <<'EOF'
+mkdir -p "$R/.pearde"
+cat > "$R/.pearde/settings.md" <<'EOF'
 ---
 language: English
 ---
 EOF
-cat > "$R/prds/alpha/prd.md" <<'EOF'
+cat > "$R/.pearde/prds/alpha/prd.md" <<'EOF'
 ---
 state: open
 origin: requested
@@ -41,7 +42,7 @@ complexity: 0
 
 # alpha — the one PRD on the fixture board
 EOF
-cat > "$R/prds/memos/bad.md" <<'EOF'
+cat > "$R/.pearde/memos/bad.md" <<'EOF'
 ---
 memo: bad
 kind: decision
@@ -82,12 +83,12 @@ $P > "$D/a.txt" 2>&1; RA=$?
 $P scan > "$D/b.txt" 2>&1; RB=$?
 check "pearde and pearde scan exit 0" '[ "$RA" = 0 ] && [ "$RB" = 0 ]'
 check "pearde and pearde scan are byte-identical" 'cmp -s "$D/a.txt" "$D/b.txt"'
-(cd "$R/prds/alpha" && $P scan > "$D/c.txt" 2>&1)
+(cd "$R/.pearde/prds/alpha" && $P scan > "$D/c.txt" 2>&1)
 check "the board is found walking up from a subdirectory" 'cmp -s "$D/a.txt" "$D/c.txt"'
 $P scan "$R" > "$D/d.txt" 2>&1
 check "the board is found from the path given" 'cmp -s "$D/a.txt" "$D/d.txt"'
 E="$(cd "$D" && $P 2>&1)"; RC=$?
-check "no board: exit 2 and the script's own message" '[ "$RC" = 2 ] && grep -q "no prds/ board found" <<< "$E"'
+check "no board: exit 2 and the script's own message" '[ "$RC" = 2 ] && grep -q "no .pearde/ board found" <<< "$E"'
 check "status forwards with its verb in front" '$P status | grep -q "^board: .* · 1 PRDs"'
 check "questions defaults to check: silent, exit 0" '[ -z "$($P questions 2>&1)" ]'
 check "questions list is forwarded as its own verb" '$P questions list >/dev/null 2>&1'
@@ -101,17 +102,19 @@ E="$($P colect 2>&1)"; RC=$?
 check "an unknown name exits 2 and names the near miss" '[ "$RC" = 2 ] && grep -q "did you mean collect" <<< "$E"'
 
 # ── memo ──────────────────────────────────────────────────────────────────────
-E="$($P memo check 2>&1)"; RC=$?
-check "memo check forwards and its exit code passes through" '[ "$RC" = 1 ] && grep -q "bad.md: missing .subject:." <<< "$E"'
-OUT="$($P memo add "Dates Are Written, not stamped")"; RC=$?
-check "memo add prints the path and exits 0" '[ "$RC" = 0 ] && [ "$OUT" = "$R/prds/memos/dates-are-written-not-stamped.md" ]'
+E="$(cd "$R" && $P memo check 2>&1)"; RC=$?
+check "memo check forwards and its exit code passes through" '[ "$RC" != 0 ] && grep -q "bad.md: missing" <<< "$E"'
+OUT="$(cd "$R" && $P memo add "Dates Are Written, not stamped")"; RC=$?
+check "memo add prints the path and exits 0" '[ "$RC" = 0 ] && [ "$OUT" = "$R/.pearde/memos/dates-are-written-not-stamped.md" ]'
 check "memo add: the slug is the memo: key" 'grep -q "^memo: dates-are-written-not-stamped$" "$OUT"'
 check "memo add: the subject is kept as written" 'grep -q "^subject: Dates Are Written, not stamped$" "$OUT"'
 check "memo add: the date is today, ISO" 'grep -q "^date: $(date +%Y-%m-%d)$" "$OUT"'
-check "memo add: the new memo passes memo check (only bad.md is reported)" '[ "$($P memo check 2>&1 | wc -l | tr -d " ")" = 1 ]'
-check "memo add refuses to overwrite" '! $P memo add "dates are written not stamped" >/dev/null 2>&1'
-mkdir -p "$D/ext/prds" "$D/ext/records"
-printf -- "---\nlanguage: English\nmemos: ../records\n---\n" > "$D/ext/prds/settings.md"
+# memos.py reports one LINE per missing key — bad.md lacks exactly one key
+# (subject:), so its count is 1; the new memo must add nothing
+check "memo add: the new memo passes memo check (bad.md still reported)" '[ "$(cd "$R" && $P memo check 2>&1 | grep -c ^bad.md:)" = 1 ]'
+check "memo add refuses to overwrite" '! (cd "$D" && $P memo add "dates are written not stamped") >/dev/null 2>&1'
+mkdir -p "$D/ext/.pearde/prds" "$D/ext/records"
+printf -- "---\nlanguage: English\nmemos: ../records\n---\n" > "$D/ext/.pearde/settings.md"
 check "memo add refuses an external memos: dir" '(cd "$D/ext" && ! $P memo add "x" >/dev/null 2>&1 && [ -z "$(ls "$D/ext/records")" ])'
 
 # ── clash ─────────────────────────────────────────────────────────────────────

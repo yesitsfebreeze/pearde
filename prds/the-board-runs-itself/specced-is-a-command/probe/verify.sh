@@ -4,13 +4,13 @@
 # drives specs.py against it. One line per assertion, a count at the end.
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
-ROOT="$(cd "$HERE/../../../.." && pwd)"
+ROOT="$(cd "$HERE/../../../../.." && pwd)"
 SPECS="${SPECS_PY:-$ROOT/resources/board/specs.py}"
 PLAN="$ROOT/resources/board/plan.py"
 TR="$ROOT/resources/board/transitions.py"
-EX="$ROOT/resources/board/example/prds"
+EX="$ROOT/resources/board/example"
 D="$(mktemp -d)"; trap 'rm -rf "$D"' EXIT
-B="$D/prds"
+B="$D/.pearde"; PRDS="$B/prds"
 export PEARDE_AS=engineer                # the persona term, as every transition takes it
 pass=0; fail=0
 ok()  { pass=$((pass+1)); echo "  ok   $1"; }
@@ -24,16 +24,17 @@ force() { python3 "$TR" set "$1" "$2" --force --board "$B" >/dev/null; }
 
 [ -d "$EX" ] || { echo "no example board at $EX"; exit 1; }
 [ -f "$TR" ] || { echo "no transitions.py at $TR — specs.py imports it"; exit 1; }
-cp -R "$EX" "$B"
+cp -R "$EX/." "$B/"
+mkdir -p "$B/.state"   # `example` writes no .state/ — state-dir-belongs-to-the-board
 
 # ── the PRDs the checks add to the copy ──────────────────────────────────────
 prd() { # dir state [extra-frontmatter-lines]
-  mkdir -p "$B/$1"
-  printf -- '---\nstate: %s\norigin: requested\npriority: 50\ncomplexity: 0\nblast-radius:\nrepo: example\n%s---\n\n# %s — a fixture\n\nWhat exists when it is done.\n' "$2" "${3:-}" "$1" > "$B/$1/prd.md"
+  mkdir -p "$PRDS/$1"
+  printf -- '---\nstate: %s\norigin: requested\npriority: 50\ncomplexity: 0\nblast-radius:\nrepo: example\n%s---\n\n# %s — a fixture\n\nWhat exists when it is done.\n' "$2" "${3:-}" "$1" > "$PRDS/$1/prd.md"
 }
 spec() { # dir file complexity footprint-lines acceptance verify-block [fm-extra]
-  mkdir -p "$B/$1/specs"
-  printf -- '---\ncomplexity: %s\n%s%s---\n\n# %s — a unit\n\n## Acceptance\n\n%s\n\n## Verify and Proof\n\n%s\n' "$3" "$4" "${7:-}" "$2" "$5" "$6" > "$B/$1/specs/$2"
+  mkdir -p "$PRDS/$1/specs"
+  printf -- '---\ncomplexity: %s\n%s%s---\n\n# %s — a unit\n\n## Acceptance\n\n%s\n\n## Verify and Proof\n\n%s\n' "$3" "$4" "${7:-}" "$2" "$5" "$6" > "$PRDS/$1/specs/$2"
 }
 FP=$'footprint:\n  - src/a.py\n'
 VER=$'```sh\npython3 -m pytest src/a.py\n```'
@@ -61,7 +62,7 @@ SPLIT=$'Some prose.\n\n## Split\n\n| child | contract | needs |\n|---|---|---|\n
 # ── specced: refusals ────────────────────────────────────────────────────────
 echo "specced — refusals"
 force big/second analyzing
-check "big/second is analyzing (forced)"          "grep -q '^state: analyzing' $B/big/second/prd.md"
+check "big/second is analyzing (forced)"          "grep -q '^state: analyzing' $PRDS/big/second/prd.md"
 spec big/second spec01.md 8 "$FP" $'- [ ] the test passes\n- [ ] commit the change' "$VER"
 prd weird analyzing
 spec weird spec01.md 0 "$FP" "$BOX" "$VER"
@@ -96,7 +97,7 @@ check "…nothing written"                          "[ \"\$(tree_sum)\" = \"$S0\
 # complexity, so `x` crashes every scan and progress line after it (a finding
 # on plan.py, outside this footprint), and `workflows.py check` reports the
 # dangling `workflow:` — both by design, neither this harness's.
-rm -rf "$B/weird"; S0=$(tree_sum)
+rm -rf "$PRDS/weird"; S0=$(tree_sum)
 ERR=$(run specced landed 2>&1 >/dev/null); rc=$?
 check "a done PRD → exit 1 naming the state"      "[ $rc = 1 ] && grep -q 'landed is .done.' <<<\"\$ERR\""
 ERR=$(run specced big/second --blast huge 2>&1 >/dev/null); rc=$?
@@ -126,12 +127,12 @@ check "…one progress line"                        "[ \$(wc -l <<<\"\$OUT\") = 
 check "…▸ big/second: analyzing → specced"        "grep -q '^▸ big/second: analyzing → specced · done' <<<\"\$OUT\""
 check "…as engineer last"                         "grep -q ' · as engineer\$' <<<\"\$OUT\""
 check "…ready/blocked/workers terms"              "grep -q ' · ready [0-9]* · blocked [0-9]*.* @1 workers' <<<\"\$OUT\""
-check "state: specced"                            "grep -q '^state: specced' $B/big/second/prd.md"
-check "complexity: 20"                            "grep -q '^complexity: 20' $B/big/second/prd.md"
-check "blast-radius: mid"                         "grep -q '^blast-radius: mid' $B/big/second/prd.md"
-check "workflow: set from --workflow"             "grep -q \"^workflow: $WF\" $B/big/second/prd.md"
-check "claim: cleared"                            "! grep -q '^claim:' $B/big/second/prd.md"
-check "the title and body untouched"              "grep -q '^# second — the child still open' $B/big/second/prd.md"
+check "state: specced"                            "grep -q '^state: specced' $PRDS/big/second/prd.md"
+check "complexity: 20"                            "grep -q '^complexity: 20' $PRDS/big/second/prd.md"
+check "blast-radius: mid"                         "grep -q '^blast-radius: mid' $PRDS/big/second/prd.md"
+check "workflow: set from --workflow"             "grep -q \"^workflow: $WF\" $PRDS/big/second/prd.md"
+check "claim: cleared"                            "! grep -q '^claim:' $PRDS/big/second/prd.md"
+check "the title and body untouched"              "grep -q '^# second — the child still open' $PRDS/big/second/prd.md"
 check "the transitions log gained one row"        "[ \$(hist) = \$((H0+1)) ] && tail -1 $HF | grep -q '\"from\": \"analyzing\".*\"prd\": \"big/second\".*\"to\": \"specced\"'"
 check "scan agrees: specced big/second w20"       "python3 $PLAN scan $B | grep -q '^  specced *· big/second · p62 · w20 · wf $WF · boxes 0/2'"
 ERR=$(run specced big/second 2>&1 >/dev/null); rc=$?
@@ -139,9 +140,9 @@ check "specced again → exit 1 naming the state"   "[ $rc = 1 ] && grep -q 'big
 spec next spec01.md 5 "$FP" "$BOX" "$VER"
 ERR=$(run specced next 2>&1 >/dev/null); rc=$?
 check "next (still open) → exit 1 naming open"    "[ $rc = 1 ] && grep -q 'next is .open. — .specced. is set from .analyzing.' <<<\"\$ERR\""
-check "…and next is still open"                   "grep -q '^state: open' $B/next/prd.md"
+check "…and next is still open"                   "grep -q '^state: open' $PRDS/next/prd.md"
 OUT=$(run specced smell 2>"$D/err"); rc=$?
-check "the smell → exit 0, specced"               "[ $rc = 0 ] && grep -q '^state: specced' $B/smell/prd.md"
+check "the smell → exit 0, specced"               "[ $rc = 0 ] && grep -q '^state: specced' $PRDS/smell/prd.md"
 check "…warns on stderr, names the smell"         "grep -q 'warn: spec01.md:13: the verify block names no path under the footprint' $D/err"
 OUT=$(run specced ticked 2>"$D/err"); rc=$?
 check "a pre-ticked box → exit 0 with a warning"  "[ $rc = 0 ] && grep -q 'warn: spec01.md:9: 1 of 2 boxes already ticked' $D/err"
@@ -150,14 +151,15 @@ check "no footprint → warned, the PRD's own stands" "[ $rc = 0 ] && grep -q 'w
 check "…as designer on the line"                  "grep -q '^▸ nofoot: analyzing → specced .* · as designer\$' <<<\"\$OUT\""
 OUT=$(run specced nofoot --check 2>&1)
 check "--check runs on a specced PRD (the memo)"  "grep -q 'nofoot: ok · complexity 3 · footprint src' <<<\"\$OUT\""
-printf -- '---\nstate: analyzing\nworkflow: %s\n---\n\n# w\n' "$WF" > "$B/prose/prd.md"
+printf -- '---\nstate: analyzing\nworkflow: %s\n---\n\n# w\n' "$WF" > "$PRDS/prose/prd.md"
 run specced prose --workflow none >/dev/null 2>&1
-check "--workflow none removes the key"           "! grep -q '^workflow:' $B/prose/prd.md && grep -q '^state: specced' $B/prose/prd.md"
+run specced prose --workflow none >"$D/out" 2>"$D/err"; rc=$?
+check "--workflow none is refused outright"        "[ $rc = 1 ] && grep -q 'refused' \"$D/err\""
 
 # ── refine ───────────────────────────────────────────────────────────────────
 echo "refine"
 force next refine
-rm -rf "$B/next/specs"
+rm -rf "$PRDS/next/specs"
 S1=$(tree_sum)
 ERR=$(printf '%s' "$SPLIT" | run refine landed 2>&1 >/dev/null); rc=$?
 check "a done parent → exit 1 naming the state"   "[ $rc = 1 ] && grep -q 'landed is .done.' <<<\"\$ERR\""
@@ -175,19 +177,19 @@ check "…nothing written by any refusal"           "[ \"\$(tree_sum)\" = \"$S1\
 H0=$(hist)
 OUT=$(printf '%s' "$SPLIT" | run refine next 2>"$D/err"); rc=$?
 check "three rows → exit 0"                       "[ $rc = 0 ]"
-check "three directories"                         "[ -f $B/next/one/prd.md ] && [ -f $B/next/two/prd.md ] && [ -f $B/next/three/prd.md ]"
+check "three directories"                         "[ -f $PRDS/next/one/prd.md ] && [ -f $PRDS/next/two/prd.md ] && [ -f $PRDS/next/three/prd.md ]"
 check "one line per child, then the progress line" "[ \$(wc -l <<<\"\$OUT\") = 4 ] && grep -q '^next/one: open\$' <<<\"\$OUT\" && grep -q '^next/three: open · needs one, two\$' <<<\"\$OUT\""
 check "▸ next: refine → open"                     "grep -q '^▸ next: refine → open · ' <<<\"\$OUT\""
-check "child: open, origin and priority inherited" "grep -q '^state: open' $B/next/two/prd.md && grep -q '^origin: requested' $B/next/two/prd.md && grep -q '^priority: 58' $B/next/two/prd.md"
-check "child: no repo or workflow when the parent has none" "! grep -q '^repo: *[^ #]' $B/next/two/prd.md && ! grep -q '^workflow: *[^ #]' $B/next/two/prd.md"
-check "child: needs as given"                     "grep -q '^needs:' $B/next/three/prd.md && grep -q '^  - one' $B/next/three/prd.md && grep -q '^  - two' $B/next/three/prd.md"
-check "child with no needs carries no needs:"     "! grep -q '^needs:' $B/next/one/prd.md"
-check "child: the title"                          "grep -q '^# two — the second thing exists' $B/next/two/prd.md"
-check "child: the contract is the first paragraph" "[ \"\$(awk '/^# two /{f=1;next} f && NF {print; exit}' $B/next/two/prd.md)\" = 'the second thing exists' ]"
-check "child: no template placeholder left"       "! grep -q '<The request' $B/next/two/prd.md && ! grep -q '<Title' $B/next/two/prd.md"
-check "parent: open, claim cleared, body kept"    "grep -q '^state: open' $B/next/prd.md && ! grep -q '^claim:' $B/next/prd.md && grep -q '^# next — one PRD gated on another' $B/next/prd.md"
-check "parent: ## Children with the three rows"   "grep -q '^## Children' $B/next/prd.md && grep -q '^| child | contract | needs |' $B/next/prd.md && [ \$(grep -c '^| .*| the .* thing exists |' $B/next/prd.md) = 3 ]"
-check "parent: needs: building kept"              "grep -q '^  - building' $B/next/prd.md"
+check "child: open, origin and priority inherited" "grep -q '^state: open' $PRDS/next/two/prd.md && grep -q '^origin: requested' $PRDS/next/two/prd.md && grep -q '^priority: 58' $PRDS/next/two/prd.md"
+check "child: no repo or workflow when the parent has none" "! grep -q '^repo: *[^ #]' $PRDS/next/two/prd.md && ! grep -q '^workflow: *[^ #]' $PRDS/next/two/prd.md"
+check "child: needs as given"                     "grep -q '^needs:' $PRDS/next/three/prd.md && grep -q '^  - one' $PRDS/next/three/prd.md && grep -q '^  - two' $PRDS/next/three/prd.md"
+check "child with no needs carries no needs:"     "! grep -q '^needs:' $PRDS/next/one/prd.md"
+check "child: the title"                          "grep -q '^# two — the second thing exists' $PRDS/next/two/prd.md"
+check "child: the contract is the first paragraph" "[ \"\$(awk '/^# two /{f=1;next} f && NF {print; exit}' $PRDS/next/two/prd.md)\" = 'the second thing exists' ]"
+check "child: no template placeholder left"       "! grep -q '<The request' $PRDS/next/two/prd.md && ! grep -q '<Title' $PRDS/next/two/prd.md"
+check "parent: open, claim cleared, body kept"    "grep -q '^state: open' $PRDS/next/prd.md && ! grep -q '^claim:' $PRDS/next/prd.md && grep -q '^# next — one PRD gated on another' $PRDS/next/prd.md"
+check "parent: ## Children with the three rows"   "grep -q '^## Children' $PRDS/next/prd.md && grep -q '^| child | contract | needs |' $PRDS/next/prd.md && [ \$(grep -c '^| .*| the .* thing exists |' $PRDS/next/prd.md) = 3 ]"
+check "parent: needs: building kept"              "grep -q '^  - building' $PRDS/next/prd.md"
 check "the transitions log gained the parent's row" "[ \$(hist) = \$((H0+1)) ] && tail -1 $HF | grep -q '\"from\": \"refine\".*\"prd\": \"next\".*\"to\": \"open\"'"
 SCAN="$(python3 $PLAN scan $B 2>/dev/null)"
 check "scan: parent gated on all three"           "grep '^  open *· next · ' <<<\"\$SCAN\" | grep 'needs ' | grep -q 'one' && grep '^  open *· next · ' <<<\"\$SCAN\" | grep -q 'two' && grep '^  open *· next · ' <<<\"\$SCAN\" | grep -q 'three'"
@@ -199,16 +201,16 @@ check "the same table again → exit 1"             "[ $rc = 1 ]"
 check "…naming the three existing children"       "grep -q '3 child(ren) already exist, left as they are: one, two, three' <<<\"\$ERR\""
 check "…tree unchanged"                           "[ \"\$(tree_sum)\" = \"$S2\" ]"
 OUT=$(printf '## Split\n\n| child | contract | needs |\n|---|---|---|\n| one | again | — |\n| four | a fourth | one |\n' | run refine next 2>"$D/err"); rc=$?
-check "a second split: the new row lands"         "[ -f $B/next/four/prd.md ] && grep -q '^  - one' $B/next/four/prd.md"
+check "a second split: the new row lands"         "[ -f $PRDS/next/four/prd.md ] && grep -q '^  - one' $PRDS/next/four/prd.md"
 check "…the old row is refused by name, exit 1"   "[ $rc = 1 ] && grep -q 'left as they are: one' $D/err"
-check "…the old child is untouched"               "grep -q '^# one — the first thing exists' $B/next/one/prd.md"
-check "…## Children gained one row, one header"   "[ \$(grep -c '^| child | contract | needs |' $B/next/prd.md) = 1 ] && grep -q '^| .four. | a fourth | one |' $B/next/prd.md"
+check "…the old child is untouched"               "grep -q '^# one — the first thing exists' $PRDS/next/one/prd.md"
+check "…## Children gained one row, one header"   "[ \$(grep -c '^| child | contract | needs |' $PRDS/next/prd.md) = 1 ] && grep -q '^| .four. | a fourth | one |' $PRDS/next/prd.md"
 check "…an already-open parent prints no transition" "! grep -q '^▸' <<<\"\$OUT\""
 OUT=$(printf '## Split\n\n| child | contract | needs |\n|---|---|---|\n| kid | asked and split | — |\n' | run refine asking 2>/dev/null); rc=$?
 check "a question PRD can be split"               "[ $rc = 0 ] && grep -q '^▸ asking: question → open' <<<\"\$OUT\""
-printf -- '---\nstate: refine\norigin: derived\nfrom: landed\npriority: 7\nrepo: example\nworkflow: %s\n---\n\n# p\n' "$WF" > "$B/smell/prd.md"
+printf -- '---\nstate: refine\norigin: derived\nfrom: landed\npriority: 7\nrepo: example\nworkflow: %s\n---\n\n# p\n' "$WF" > "$PRDS/smell/prd.md"
 OUT=$(printf '## Split\n\n| child | contract | needs |\n|---|---|---|\n| kid | inherits | — |\n' | run refine smell 2>/dev/null); rc=$?
-check "child inherits origin, from, repo, workflow" "[ $rc = 0 ] && grep -q '^origin: derived' $B/smell/kid/prd.md && grep -q '^from: landed' $B/smell/kid/prd.md && grep -q '^repo: example' $B/smell/kid/prd.md && grep -q \"^workflow: $WF\" $B/smell/kid/prd.md && grep -q '^priority: 7' $B/smell/kid/prd.md"
+check "child inherits origin, from, repo, workflow" "[ $rc = 0 ] && grep -q '^origin: derived' $PRDS/smell/kid/prd.md && grep -q '^from: landed' $PRDS/smell/kid/prd.md && grep -q '^repo: example' $PRDS/smell/kid/prd.md && grep -q \"^workflow: $WF\" $PRDS/smell/kid/prd.md && grep -q '^priority: 7' $PRDS/smell/kid/prd.md"
 
 # ── the module's surface ─────────────────────────────────────────────────────
 echo "surface"
@@ -216,7 +218,7 @@ check "COMMANDS exposes specced and refine"       "python3 -c \"import sys; sys.
 check "no command → usage, exit 2"                "python3 $SPECS >/dev/null 2>&1; [ \$? = 2 ]"
 check "no fixture prd.md under the real board"    "! find $ROOT/prds -path '*/probe/*' -name prd.md | grep -q ."
 check "the example board is untouched"            "[ -z \"\$(cd $ROOT && git status --porcelain resources/board/example)\" ] || [ -z \"\$(cd $ROOT && git diff --stat resources/board/example)\" ]"
-check "stdlib only"                               "! grep -E '^(import|from) ' $SPECS | grep -vE '^(import|from) (os|re|sys|edit|plan|transitions|workflows)\b' | grep -q ."
+check "stdlib only"                               "! grep -E '^(import|from) ' $SPECS | grep -vE '^(import|from) (datetime|os|re|sys|edit|plan|transitions|workflows)\b' | grep -q ."
 
 echo
 echo "verify: $pass/$((pass+fail)) checks pass"

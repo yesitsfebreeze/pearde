@@ -58,15 +58,15 @@ sub("references/parts/handles.md", MEMO_ROW, WF_ROWS)
 
 # 3 — index.md: `@@skills` gains the file; `@@workflows` gains it first.
 sub("index.md",
-    "@skills/pearde-persona-create.md · @skills/pearde-scout.md · "
+    "@references/skills/pearde-persona-create.md · @references/skills/pearde-scout.md · "
     "@references/install.md |",
-    "@skills/pearde-persona-create.md · @skills/pearde-scout.md · "
-    "@skills/pearde-workflow.md · @references/install.md |")
+    "@references/skills/pearde-persona-create.md · @references/skills/pearde-scout.md · "
+    "@references/skills/pearde-workflow.md · @references/install.md |")
 sub("index.md",
     "| `@@workflows` | how a kind of job is done, and improved on every run "
     "| @references/workflow.md ·",
     "| `@@workflows` | how a kind of job is done, and improved on every run "
-    "| @skills/pearde-workflow.md · @references/workflow.md ·")
+    "| @references/skills/pearde-workflow.md · @references/workflow.md ·")
 
 # 4 — references/files.md: the row in the skills table. Appended after the
 #     last row so the `@resources/board/transitions.py` reorder this tree
@@ -112,20 +112,10 @@ sub("references/system.md",
 #     lookup row change both numbers. The rule each asserts does not move;
 #     only the number it compares against does. This is outside the PRD's
 #     own folder, so spec01 carries it as its own acceptance box.
-sub('prds/the-board-runs-itself/readme-in-three-rings/probe/verify.sh',
-    'eq  "E the one-question table has its ten rows" "$(printf \'%s\\n\' "$RINGS" | grep -c \'^| what\\|^| which\\|^| who \\|^| putting\')" "10"',
-    'eq  "E the one-question table has its eleven rows" "$(printf \'%s\\n\' "$RINGS" | grep -c \'^| what\\|^| which\\|^| who \\|^| putting\')" "11"')
-sub('prds/the-board-runs-itself/readme-in-three-rings/probe/verify.sh',
-    'eq  "F eleven skills" "$(ls "$ROOT/skills"/*.md | wc -l | tr -d \' \')" "11"',
-    'eq  "F twelve skills" "$(ls "$ROOT/skills"/*.md | wc -l | tr -d \' \')" "12"')
-sub('prds/the-board-runs-itself/readme-in-three-rings/probe/quickstart.sh',
-    'eq  "1 the skills dir holds eleven folders" "$(find "$SKILLS" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d \' \')" "11"',
-    'eq  "1 the skills dir holds twelve folders" "$(find "$SKILLS" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d \' \')" "12"')
-sub('prds/the-board-runs-itself/readme-in-three-rings/probe/quickstart.sh',
-    'eq  "1 each folder holds the five links" "$(find "$SKILLS" -mindepth 2 -maxdepth 2 -type l | wc -l | tr -d \' \')" "55"',
-    'eq  "1 each folder holds the five links" "$(find "$SKILLS" -mindepth 2 -maxdepth 2 -type l | wc -l | tr -d \' \')" "60"')
-
-if FAIL:
-    print("\n".join("  ! " + f for f in FAIL), file=sys.stderr)
-    sys.exit(1)
-print("apply: 15 hunks")
+# 4 — the PRD probes' literals (skill counts, table rows) were updated in
+# place as later PRDs moved them again — skills/ became references/skills/
+# (twelve became fourteen), and the board prds/ became .pearde/prds/. Those
+# four hunks anchored on files the fixture does not carry (.pearde/ is
+# gitignored) and on anchors rewritten twice since; replaying them here is
+# rewriting history, so the trailer is gone. The idempotent no-op above is
+# the part of this tool that still runs against the tree as it stands.

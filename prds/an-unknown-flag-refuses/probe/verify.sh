@@ -7,7 +7,7 @@
 # and runs from a cwd with no prds/ above it; PEARDE_PORT=1 so nothing here
 # can reach a live daemon. Nothing touches the real board.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
 PEARDE="$ROOT/resources/pearde.py"
 export PEARDE_AS=engineer
 export PEARDE_PORT=1
@@ -22,16 +22,16 @@ t()    { eval "$2"; ok "$1" $? "${3:-}"; }
 
 fixture() {                       # a board copy in its own repo; echoes it
   local d; d="$(mktemp -d)"
-  cp -R "$ROOT/resources/board/example/prds" "$d/prds"
+  cp -R "$ROOT/resources/board/example" "$d/.pearde"
   ( cd "$d" && git init -q -b main && git add -A \
     && git -c user.name=t -c user.email=t@t commit -qm base )
   echo "$d"
 }
-run()   { python3 "$PEARDE" "$@" --board "$D/prds" 2>"$W/err"; }
+run()   { python3 "$PEARDE" "$@" --board "$D/.pearde" 2>"$W/err"; }
 err()   { cat "$W/err"; }
 clean() { ( cd "$D" && git status --porcelain ); }
-fm()    { grep -m1 "^$2:" "$D/prds/$1/prd.md" | sed "s/^$2: *//"; }
-rows()  { [ -f "$D/prds/.transitions.jsonl" ] && wc -l <"$D/prds/.transitions.jsonl" | tr -d ' ' || echo 0; }
+fm()    { grep -m1 "^$2:" "$D/.pearde/prds/$1/prd.md" | sed "s/^$2: *//"; }
+rows()  { [ -f "$D/.pearde/.state/transitions.jsonl" ] && wc -l <"$D/.pearde/.state/transitions.jsonl" | tr -d ' ' || echo 0; }
 commit(){ ( cd "$D" && git add -A && git -c user.name=t -c user.email=t@t commit -qm "$1" ); }
 
 # ── A. the incident: deferred → open on a flag the verb does not know ───────
@@ -49,7 +49,7 @@ eq  "A …no transition row" "$(rows)" "1"
 OUT="$(run release big/second open --dry)"; RC=$?
 eq  "A release --dry exits 0" "$RC" "0"
 has "A …prints dry · and the line" "$OUT" "dry · ▸ big/second: deferred → open ·"
-has "A …and the paths" "$OUT" "would write: prds/big/second/prd.md · prds/.transitions.jsonl"
+has "A …and the paths" "$OUT" "would write: .pearde/prds/big/second/prd.md · .pearde/.state/transitions.jsonl"
 eq  "A …state unchanged" "$(fm big/second state)" "deferred"
 eq  "A …git status clean" "$(clean)" ""
 DRY="$(sed -n 's/^dry · //p' <<<"$OUT")"
@@ -63,10 +63,10 @@ echo "B. before any read"
 OUT="$(python3 "$PEARDE" release big/second open --dyr --board "$W/no-such-board" 2>"$W/err")"; RC=$?
 eq  "B a board that does not exist is never looked at: exit 2" "$RC" "2"
 has "B …the message is the flag's" "$(err)" "unknown flag --dyr"
-OUT="$(env -u PEARDE_AS python3 "$PEARDE" release big/second open --dyr --board "$D/prds" 2>"$W/err")"; RC=$?
+OUT="$(env -u PEARDE_AS python3 "$PEARDE" release big/second open --dyr --board "$D/.pearde" 2>"$W/err")"; RC=$?
 eq  "B no persona either: the flag is refused first" "$RC" "2"
 has "B …" "$(err)" "unknown flag --dyr"
-OUT="$(run set big/second open --worker --board "$D/prds" 2>"$W/err")"; RC=$?
+OUT="$(run set big/second open --worker --board "$D/.pearde" 2>"$W/err")"; RC=$?
 eq  "B a valued flag does not eat the next flag: exit 2" "$RC" "2"
 has "B …says which" "$(err)" "--worker takes a value — set takes:"
 OUT="$(run claim big/second --as 2>"$W/err")"; RC=$?
@@ -102,7 +102,7 @@ check_verb collect finished
 check_verb settings workers=4
 OUT="$(run brief next --dyr)"; RC=$?
 eq  "C brief --dyr exits 2" "$RC" "2"
-has "C …brief's list has no --dry: it writes nothing" "$(err)" "brief takes: --as, --board, --role, --consult, --question, --transcript, --force, --check"
+has "C …brief's list has no --dry: it writes nothing" "$(err)" "brief takes: --as, --board, --role, --consult, --question, --transcript, --worker, --force, --check"
 OUT="$(python3 "$PEARDE" init "$W/newboard" --dyr 2>"$W/err")"; RC=$?
 eq  "C init --dyr exits 2" "$RC" "2"
 has "C …init's list" "$(err)" "init takes: --language, --name, --example, --dry"
@@ -141,10 +141,10 @@ eq  "D …state failed" "$(fm $S state)" "failed"
 dry_then_real "retry" $S retry $S
 eq  "D …state open" "$(fm $S state)" "open"
 OUT="$(run claim $S w1 --dry)"
-has "D claim --dry names the baseline dir" "$OUT" "prds/.claims/$S/"
+has "D claim --dry names the baseline dir" "$OUT" ".pearde/.claims/$S/"
 eq  "D …and wrote nothing" "$(clean)" ""
 # unblock: big/second needs landed (done), parked at blocked
-python3 - "$D/prds/$S/prd.md" <<'PY2'
+python3 - "$D/.pearde/prds/$S/prd.md" <<'PY2'
 import sys; p=sys.argv[1]; s=open(p).read().replace("\nstate:", "\nneeds: landed\nstate:", 1); open(p,"w").write(s)
 PY2
 run set $S blocked --force >/dev/null
@@ -155,7 +155,7 @@ eq  "D …state specced" "$(fm $S state)" "specced"
 OUT="$(run answer asking Q1 "in memory" --dry)"; RC=$?
 eq  "D answer --dry exits 0" "$RC" "0"
 has "D …the last answer's line is the transition" "$OUT" "dry · ▸ asking: question → open ·"
-has "D …names prd.md, the riders file and the row" "$OUT" "would write: prds/asking/prd.md · prds/.claims/riders · prds/.transitions.jsonl"
+has "D …names prd.md, the riders file and the row" "$OUT" "would write: .pearde/prds/asking/prd.md · .pearde/.claims/riders · .pearde/.state/transitions.jsonl"
 eq  "D …wrote nothing" "$(clean)" ""
 DRY="$(sed -n 's/^dry · //p' <<<"$OUT")"
 REAL="$(run answer asking Q1 "in memory" | tail -1)"
@@ -165,9 +165,9 @@ commit answered
 # add
 OUT="$(run add "Dry test" --dry)"; RC=$?
 eq  "D add --dry exits 0" "$RC" "0"
-has "D …counts the new PRD on the line" "$OUT" "dry · ▸ dry-test: — → open ·"
-has "D …names the new file" "$OUT" "would write: prds/dry-test/prd.md · prds/.transitions.jsonl"
-t   "D …and made no directory" "[ ! -e \"$D/prds/dry-test\" ]"
+has "D …counts the new PRD on the line" "$OUT" "— → open ·"
+has "D …names the new file" "$OUT" "would write: .pearde/prds/dry-test/prd.md · .pearde/.state/transitions.jsonl"
+t   "D …and made no directory" "[ ! -e \"$D/.pearde/prds/dry-test\" ]"
 DRY="$(sed -n 's/^dry · //p' <<<"$OUT")"
 REAL="$(run add "Dry test" | tail -1)"
 eq  "D …the real add prints the line the dry run said" "$REAL" "$DRY"
@@ -178,8 +178,8 @@ commit analyzing
 OUT="$(run specced building --blast mid --dry)"; RC=$?
 eq  "D specced --dry exits 0" "$RC" "0"
 has "D …the line" "$OUT" "dry · ▸ building: analyzing → specced ·"
-has "D …the paths" "$OUT" "would write: prds/building/prd.md · prds/.transitions.jsonl"
-eq  "D …complexity untouched" "$(fm building complexity)" "$(git -C "$D" show HEAD:prds/building/prd.md | grep -m1 '^complexity:' | sed 's/^complexity: *//')"
+has "D …the paths" "$OUT" "would write: .pearde/prds/building/prd.md · .pearde/.state/transitions.jsonl"
+eq  "D …complexity untouched" "$(fm building complexity)" "$(git -C "$D" show HEAD:.pearde/prds/building/prd.md | grep -m1 '^complexity:' | sed 's/^complexity: *//')"
 eq  "D …git status clean" "$(clean)" ""
 DRY="$(sed -n 's/^dry · //p' <<<"$OUT")"
 REAL="$(run specced building --blast mid | tail -1)"
@@ -196,18 +196,18 @@ OUT="$(run refine big/second --dry <<<"$TABLE")"; RC=$?
 eq  "D refine --dry exits 0" "$RC" "0"
 has "D …each child" "$OUT" "dry · big/second/beta: open · needs alpha"
 has "D …the parent's line counts the children" "$OUT" "dry · ▸ big/second: analyzing → open ·"
-has "D …the paths" "$OUT" "would write: prds/big/second/alpha/prd.md · prds/big/second/beta/prd.md · prds/big/second/prd.md · prds/.transitions.jsonl"
-t   "D …no child on disk" "[ ! -e \"$D/prds/big/second/alpha\" ]"
+has "D …the paths" "$OUT" "would write: .pearde/prds/big/second/alpha/prd.md · .pearde/prds/big/second/beta/prd.md · .pearde/prds/big/second/prd.md · .pearde/.state/transitions.jsonl"
+t   "D …no child on disk" "[ ! -e \"$D/.pearde/prds/big/second/alpha\" ]"
 eq  "D …git status clean" "$(clean)" ""
 DRY="$(sed -n 's/^dry · ▸/▸/p' <<<"$OUT")"
 REAL="$(run refine big/second <<<"$TABLE" | tail -1)"
 eq  "D …the real refine prints the line the dry run said" "$REAL" "$DRY"
-t   "D …children on disk" "[ -f \"$D/prds/big/second/beta/prd.md\" ]"
+t   "D …children on disk" "[ -f \"$D/.pearde/prds/big/second/beta/prd.md\" ]"
 # sweep --apply: a claim silent past claim-ttl
 D="$(fixture)"
 run claim big/second w1 >/dev/null
 eq  "D a claim to sweep" "$(fm big/second state)" "analyzing"
-python3 - "$D/prds/big/second" <<'PY'
+python3 - "$D/.pearde/prds/big/second" <<'PY'
 import os, sys, time
 t = time.time() - 4 * 3600
 for r, _, fs in os.walk(sys.argv[1]):
@@ -229,31 +229,35 @@ D="$(fixture)"
 OUT="$(run settings workers=4 --dry)"; RC=$?
 eq  "D settings --dry exits 0" "$RC" "0"
 has "D …the line" "$OUT" "dry · settings: workers 1 → 4"
-has "D …the path" "$OUT" "would write: prds/settings.md"
-eq  "D …workers untouched" "$(grep -m1 '^workers:' "$D/prds/settings.md")" "workers: 1"
+has "D …the path" "$OUT" "would write: .pearde/settings.md"
+eq  "D …workers untouched" "$(grep -m1 '^workers:' "$D/.pearde/settings.md")" "workers: 1"
 REAL="$(run settings workers=4)"
 eq  "D …the real run says the line" "$REAL" "settings: workers 1 → 4"
 commit settings
 # collect: the model — keeps its own dry lines and gains the dry · line
+# finished's footprint (src/util.py) must exist in the repo collect resolves
+# to — the code repo enclosing $D/.pearde — or repo_of refuses before any
+# dry line is printed; a workaround for this fixture, not the PRD's to fix.
+mkdir -p "$D/src"; echo "x" > "$D/src/util.py"; commit "add src/util.py"
 OUT="$(run collect finished --trust --dry)"; RC=$?
 eq  "D collect --dry exits 0" "$RC" "0"
 has "D …keeps 'dry — nothing written'" "$OUT" "finished: dry — nothing written"
 has "D …and prints the dry · line" "$OUT" "dry · ▸ finished: claimed → done ·"
 has "D …round file owed on it" "$OUT" "· round file owed · as engineer"
-has "D …the paths" "$OUT" "would write: prds/finished/prd.md · prds/.transitions.jsonl"
+has "D …the paths" "$OUT" "would write: .pearde/prds/finished/prd.md · .pearde/.state/transitions.jsonl"
 eq  "D …git status clean" "$(clean)" ""
 eq  "D …state claimed" "$(fm finished state)" "claimed"
 # init
 OUT="$(python3 "$PEARDE" init "$W/nb" --name nb --dry 2>"$W/err")"; RC=$?
 eq  "D init --dry exits 0" "$RC" "0"
 has "D …the first line" "$OUT" "dry · board nb · language English — pearde settings language=<l> changes it"
-has "D …the paths" "$OUT" "would write: $W/nb/prds/settings.md · $W/nb/prds/vision.md"
+has "D …the paths" "$OUT" "would write: $W/nb/.pearde/settings.md · $W/nb/.pearde/vision.md"
 t   "D …and no board" "[ ! -e \"$W/nb\" ]"
 t   "D …no daemon line, no doctor" "! grep -q 'doctor\|http' <<<\"\$OUT\""
 
 # ── E. the real board was never touched ─────────────────────────────────────
 echo "E. the real board"
-t   "E no fixture prd.md under prds/" "[ -z \"$(find "$ROOT/prds" -name prd.md -path '*dry-test*' -o -name prd.md -path '*/alpha/*')\" ]"
+t   "E no fixture prd.md under prds/" "[ -z \"$(find "$ROOT/.pearde/prds" -name prd.md -path '*dry-test*' -o -name prd.md -path '*/alpha/*')\" ]"
 
 echo
 echo "verify: $((pass+fail)) checks · $pass pass · $fail fail"

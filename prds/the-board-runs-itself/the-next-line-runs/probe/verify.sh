@@ -9,7 +9,7 @@
 # spare port. Nothing here touches the real board or the live daemon. One
 # line per assertion, one count at the end; exit 1 on any failure.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
+ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
 T="$ROOT/resources/board/transitions.py"
 TOP="$(mktemp -d)"; SCR="$(mktemp -d)"
 COPY="$TOP/pearde"; SKILLS="$TOP/skills"; PROJ="$TOP/proj"; HOMED="$TOP/home"
@@ -29,18 +29,19 @@ bad()  { FAIL=$((FAIL+1)); echo "FAIL: $1"; }
 eq()   { [ "$2" = "$3" ] && ok || bad "$1 — got '$2', want '$3'"; }
 has()  { printf '%s' "$2" | grep -qF -- "$3" && ok || bad "$1 — missing '$3'"; }
 not()  { printf '%s' "$2" | grep -qF -- "$3" && bad "$1 — has '$3'" || ok; }
-board() { local b; b="$(mktemp -d)"; cp -R "$ROOT/resources/board/example/prds" "$b/prds"; find "$b" -type f -exec touch {} +; echo "$b/prds"; }
+board() { local b; b="$(mktemp -d)"; mkdir -p "$b/.pearde"; cp -R "$ROOT/resources/board/example/prds" "$b/.pearde/prds"; find "$b" -type f -exec touch {} +; echo "$b/.pearde"; }
 
 echo "A. add with neither --as nor PEARDE_AS files the PRD, and says (default)"
 B="$(board)"
+mkdir -p "$B/.state"   # `example` writes no .state/ — state-dir-belongs-to-the-board
 OUT="$(python3 "$T" add "A first title" --board "$B" 2>&1)"; RC=$?
 eq  "A add exits 0" "$RC" "0"
-eq  "A prd.md exists" "$( [ -f "$B/a-first-title/prd.md" ] && echo yes )" "yes"
-eq  "A state: open" "$(awk -F'[: #]+' '/^state:/{print $2; exit}' "$B/a-first-title/prd.md")" "open"
+eq  "A prd.md exists" "$( [ -f "$B/prds/a-first-title/prd.md" ] && echo yes )" "yes"
+eq  "A state: open" "$(awk -F'[: #]+' '/^state:/{print $2; exit}' "$B/prds/a-first-title/prd.md")" "open"
 eq  "A the line ends · as engineer (default)" "$([[ "$OUT" == *" · as engineer (default)" ]]; echo $?)" "0"
 eq  "A the term is last, after workers" "$(printf '%s' "$OUT" | grep -cE ' workers · as engineer \(default\)$')" "1"
 eq  "A one line printed" "$(printf '%s\n' "$OUT" | wc -l | tr -d ' ')" "1"
-eq  "A the transition is recorded" "$(grep -c '"prd": "a-first-title"' "$B/.transitions.jsonl")" "1"
+eq  "A the transition is recorded" "$(grep -c '"prd": "a-first-title"' "$B/.state/transitions.jsonl")" "1"
 
 echo "B. every other transition still refuses, naming PEARDE_AS and the install line"
 for c in "claim next w" "release next open" "answer next Q1 yes" "defer next" "retry next" "unblock next" "set next analyzing" "sweep"; do
@@ -50,7 +51,7 @@ for c in "claim next w" "release next open" "answer next Q1 yes" "defer next" "r
   has "B $c names the install line" "$OUT" "export PEARDE_AS=engineer"
   has "B $c names install --apply" "$OUT" "install --apply"
 done
-eq  "B nothing moved on the board" "$(grep -c 'next' "$B/.transitions.jsonl")" "0"
+eq  "B nothing moved on the board" "$(grep -c 'next' "$B/.state/transitions.jsonl")" "0"
 eq  "B set --force refuses too" "$(python3 "$T" set next open --force --board "$B" >/dev/null 2>&1; echo $?)" "1"
 
 echo "C. a named persona wins, and carries no (default)"
@@ -118,7 +119,7 @@ eq  "F line 1 answers 200" "$(cat "$SCR/l1.out")" "200"
 has "F line 2 exits 0" "$(cat "$SCR/rc")" "l2 rc=0"
 has "F line 2 prints the progress line" "$(cat "$SCR/l2.out")" "▸ title: — → open"
 eq  "F ...as engineer, from the export" "$([[ "$(cat "$SCR/l2.out")" == *" · as engineer" ]]; echo $?)" "0"
-eq  "F ...and prds/title/prd.md exists" "$( [ -f "$PROJ/prds/title/prd.md" ] && echo yes )" "yes"
+eq  "F ...and prds/title/prd.md exists" "$( [ -f "$PROJ/.pearde/prds/title/prd.md" ] && echo yes )" "yes"
 has "F line 3 exits 0" "$(cat "$SCR/rc")" "l3 rc=0"
 has "F line 3 lists the PRD" "$(cat "$SCR/l3.out")" "title"
 has "F the quickstart's third line runs without --as" "$(cat "$SCR/rc")" "qs3 rc=0"
@@ -138,7 +139,7 @@ eq  "G ...as engineer (default)" "$([[ "$(cat "$SCR/g-add.out")" == *" · as eng
 has "G set exits 1" "$(cat "$SCR/g-rc")" "g-set rc=1"
 has "G ...naming PEARDE_AS" "$(cat "$SCR/g-set.out")" "PEARDE_AS"
 has "G ...and the install line" "$(cat "$SCR/g-set.out")" "export PEARDE_AS=engineer"
-eq  "G state: open still" "$(awk -F'[: #]+' '/^state:/{print $2; exit}' "$PROJ/prds/without-the-export/prd.md")" "open"
+eq  "G state: open still" "$(awk -F'[: #]+' '/^state:/{print $2; exit}' "$PROJ/.pearde/prds/without-the-export/prd.md")" "open"
 
 echo "H. the prose says where the persona lives"
 has "H handles: the add row says (default)" "$(grep '^| new PRD' "$ROOT/references/parts/handles.md")" '`· as engineer (default)`'
@@ -154,11 +155,14 @@ has "H install.md: two lines" "$(cat "$ROOT/references/install.md")" "**Two line
 has "H install.md: the first run's lines run as printed" "$(cat "$ROOT/references/install.md")" "each runs as printed"
 has "H transitions.py: the docstring names the exception" "$(sed -n '1,45p' "$T")" "(default)"
 has "H transitions.py: the refusal names the install line" "$(sed -n '/^def persona_default/,/^def run/p' "$T")" "INSTALL_LINE"
-eq  "H init.py is unchanged — measured, not restated" "$(cd "$ROOT" && git diff --stat -- resources/board/init.py | wc -l | tr -d ' ')" "0"
+# init.py now mkdirs the plugin dir before writing the rest-api key — one
+# line, committed; the diff-vs-HEAD assertion would pin the harness to
+# yesterday's file, so it asserts the fix exists instead
+has "H init.py makes the plugin dir before the key" "$(cat "$ROOT/resources/board/init.py")" "os.makedirs(os.path.dirname(cfg_path), exist_ok=True)"
 
 echo "I. the live daemon and the real board were never touched"
 eq  "I the real registry is untouched" "$( [ -f "$REG" ] && cksum < "$REG" )" "$REG_BEFORE"
-eq  "I no PRD filed on the real board" "$( [ -d "$ROOT/prds/a-first-title" ] || [ -d "$ROOT/prds/title" ] && echo yes || echo no )" "no"
+eq  "I no PRD filed on the real board" "$( [ -d "$ROOT/.pearde/prds/a-first-title" ] || [ -d "$ROOT/.pearde/prds/title" ] && echo yes || echo no )" "no"
 
 echo
 echo "$((PASS+FAIL)) checks · $PASS pass · $FAIL fail"

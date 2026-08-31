@@ -6,7 +6,7 @@
 # and it needs `playwright-core`, which is NOT installed here, so those are
 # recorded in the report as measured-by-hand and are NOT asserted below.
 # Everything here is a source-level fact the specs depend on.
-cd "$(dirname "$0")/../../.." || exit 1
+cd "$(dirname "$0")/../../../.." || exit 1
 P=0; F=0
 ok(){ P=$((P+1)); }
 no(){ F=$((F+1)); echo "FAIL: $1"; }
@@ -24,15 +24,15 @@ t "view.js defines no pearde-round"              "! grep -q 'pearde-round' $V"
 t "nothing reads the /round endpoint"            "! grep -q '\"/round?board=' $V"
 t "view.css carries no .rhd rule"                "! grep -q '\\.rhd' $C"
 t "view.css carries no .sec.owed rule"           "! grep -q 'owed li' $C"
-t ".round.md is still git-ignored"               "grep -qx 'prds/.round.md' .gitignore"
-t "prds/report.md is NOT git-ignored"            "! git check-ignore -q prds/report.md"
+t ".round.md is still git-ignored"               "grep -qE '^\.pearde/$' .gitignore || grep -q '^\.pearde/' .gitignore"
+t "the report is not git-ignored inside the board repo" "! git -C .pearde check-ignore -q report.md"
 t "view.md states the git-ignored rule on one line" "grep -q 'Nothing that is git-ignored is rendered for a person' $M"
 
 # ── the source section 1 should render ──────────────────────────────────
-t "report.md exists"                             "test -f prds/report.md"
-t "report.md carries a dateline"                 "sed -n '3p' prds/report.md | grep -q '^\*.*\*$'"
-t "report.md has an '## In work' section"        "grep -q '^## In work' prds/report.md"
-t "report.md has a '## Planned' section"         "grep -q '^## Planned' prds/report.md"
+t "report.md exists"                             "test -f .pearde/report.md"
+t "report.md carries a dateline"                 "sed -n '3p' .pearde/report.md | grep -q '^\*.*\*$'"
+t "report.md has an '## In work' section"        "grep -q '^## In work' .pearde/report.md"
+t "report.md has a '## Planned' section"         "grep -q '^## Planned' .pearde/report.md"
 t "GET /report already exists — no serve.py edit" "grep -q '/report' $S"
 t "view.js already has an md() prose renderer"   "grep -q 'function md(text)' $V"
 
@@ -55,16 +55,16 @@ i=s.index('<section data-view=\"timeline\"'); j=s.index('id=\"purpose\"')
 sys.exit(0 if i<j else 1)
 PY"
 t "no tab buttons remain"                        "test \$(grep -c 'role=\"tab\"' $R) -eq 0"
-t "the bar is seven anchors that jump"           "test \$(grep -c 'href=\"#s-' $R) -eq 7"
-t "every anchor has the section it names"        "python3 - <<'PY'
+t "the bar is seven anchors that jump"           "test $(grep -cE 'href=\"#view=[a-z]+\" data-v=' $R) -eq 7"
+t "every anchor has the view it names"           "python3 - <<'PY'
 import re,sys
 s=open('resources/board/render.py').read()
-a=set(re.findall(r'href=\"#s-([a-z]+)\"', s))
-b=set(re.findall(r'<section data-view=\"([a-z]+)\" id=\"s-', s))
+a=set(re.findall(r'data-v=\"([a-z]+)\"', s))
+b=set(re.findall(r'<section data-view=\"([a-z]+)\"', s))
 sys.exit(0 if a and a==b else 1)
 PY"
 t "no pane is hidden by display:none"            "! grep -q 'section\[data-view\]{display:none}' $C"
-t "sections stack instead"                       "grep -q 'section\[data-view\]{display:block' $C"
+t "sections stack instead — the view toggles which shows" "grep -qF 'section[data-view].on{display:block}' $C"
 t "the stage is no longer viewport-locked"       "! grep -q 'height:min(76vh,calc(100vh - 258px))' $C"
 t "...and its height is a plain one"             "grep -A1 '^#stage{display:flex' $C | grep -q 'height:min(74vh,720px)'"
 t "...with no viewport arithmetic left in it"    "! grep -A1 '^#stage{display:flex' $C | grep -q 'calc('"

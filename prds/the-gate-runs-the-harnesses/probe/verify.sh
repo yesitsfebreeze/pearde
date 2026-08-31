@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # the-gate-runs-the-harnesses — the probe's harness.
 #
-# Run from anywhere:  bash prds/the-gate-runs-the-harnesses/probe/verify.sh
+# Run from anywhere:  bash .pearde/prds/the-gate-runs-the-harnesses/probe/verify.sh
 #
 # Every fixture is built in a directory made at run time and removed on exit.
 # Nothing it writes lands under prds/ — a fixture prd.md there would become a
 # real PRD and move the board's counts.
 set -u
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
 DOC="$ROOT/resources/doctor.sh"
 DOCMD="$ROOT/references/parts/doctor.md"
 
@@ -26,12 +26,12 @@ took() { python3 -c "print(f'{$2-$1:.2f}')"; }
 # ── a fixture board, and harnesses to hang off it ────────────────────────────
 python3 "$ROOT/resources/board/plan.py" example "$D/ex" >/dev/null 2>&1 \
   || { echo "no example board"; exit 2; }
-B="$D/ex/prds"
+B="$D/ex/.pearde"
 MARK="$D/ran"
 
 # green() <name> <pinned 0|1> — a harness that passes, with or without the pin
 green() {
-  mkdir -p "$B/$1/probe"
+  mkdir -p "$B/prds/$1/probe"
   {
     echo '#!/usr/bin/env bash'
     echo "echo '  ok   a check that passed'"
@@ -39,11 +39,11 @@ green() {
     echo "echo '$1' >> \"$MARK\""
     [ "$2" = 1 ] && echo 'PASS=2; FAIL=0; [ "$((PASS+FAIL))" = 2 ] || exit 1'
     echo 'exit 0'
-  } > "$B/$1/probe/verify.sh"
+  } > "$B/prds/$1/probe/verify.sh"
 }
 # red() <name> — a harness that prints a FAIL line and exits non-zero
 red() {
-  mkdir -p "$B/$1/probe"
+  mkdir -p "$B/prds/$1/probe"
   {
     echo '#!/usr/bin/env bash'
     echo "echo '  ok   a check named with a bad word in it'"
@@ -51,7 +51,7 @@ red() {
     echo "echo '$1' >> \"$MARK\""
     echo 'PASS=1; FAIL=1; [ "$((PASS+FAIL))" = 2 ] || exit 1'
     echo 'exit 1'
-  } > "$B/$1/probe/verify.sh"
+  } > "$B/prds/$1/probe/verify.sh"
 }
 setkey() { # setkey <value|->  — write or drop `harnesses:` in the fixture settings
   grep -v '^harnesses:' "$B/settings.md" > "$D/s"; mv "$D/s" "$B/settings.md"
@@ -119,7 +119,7 @@ green unpinned 0
 doc "$D/ex"
 has "D three ran, two are green"          "$(hrow)" "2 of 3 green"
 has "D ...the third is counted unpinned"  "$(hrow)" "1 unpinned"
-has "D ...and named"                      "$(hrow)" "unpinned · prds/unpinned/probe/verify.sh"
+has "D ...and named"                      "$(hrow)" "unpinned · .pearde/prds/unpinned/probe/verify.sh"
 has "D ...with what an unpinned total hides" "$(hrow)" "a dropped check reads as success"
 has "D ...and the idiom that pins it"     "$(hrow)" 'PASS+FAIL'
 eq  "D ...it still ran"                   "$(grep -c unpinned "$MARK" | tr -d ' ')" "1"
@@ -131,7 +131,7 @@ echo "── E. a harness that fails ──────────────�
 red broken-one
 doc "$D/ex"
 has "E the row is broken"                 "$(hrow)" "harnesses   broken"
-has "E ...it names the harness"           "$(hrow)" "prds/broken-one/probe/verify.sh — exit 1"
+has "E ...it names the harness"           "$(hrow)" ".pearde/prds/broken-one/probe/verify.sh — exit 1"
 has "E ...and its first FAIL line"        "$(hrow)" "FAIL the assertion this harness exists for"
 not "E ...not a passing check whose name holds a bad word" "$(hrow)" "a check named with a bad word"
 has "E ...and the count of failures"      "$(hrow)" "1 failed"
@@ -139,7 +139,7 @@ eq  "E doctor exits 1"                    "$RC" "1"
 has "E ...and says so on the last line"   "$OUT" "something is installed and not working"
 eq  "E every harness still ran"           "$(cat "$MARK" | wc -l | tr -d ' ')" "4"
 
-rm -rf "$B/broken-one"
+rm -rf "$B/prds/broken-one"
 doc "$D/ex"
 has "E restored: the row is ok again"     "$(hrow)" "harnesses   ok"
 eq  "E ...and the exit code is back"      "$RC" "$RC_BASE"
@@ -148,16 +148,16 @@ echo
 echo "── F. a board with no harness ───────────────────────────────────────────"
 
 python3 "$ROOT/resources/board/plan.py" example "$D/bare" >/dev/null 2>&1
-printf 'harnesses: on\n' >> "$D/bare/prds/settings.md"
+printf 'harnesses: on\n' >> "$D/bare/.pearde/settings.md"
 doc --harnesses "$D/bare"
 has "F off, with no verify.sh under the board" "$(hrow)" "harnesses   off"
-has "F ...and says the board has none"         "$(hrow)" "no verify.sh under $D/bare/prds"
+has "F ...and says the board has none"         "$(hrow)" "no verify.sh under $D/bare/.pearde"
 
 echo
 echo "── G. a harness that runs doctor does not run doctor forever ────────────"
 
-mkdir -p "$B/calls-doctor/probe"
-cat > "$B/calls-doctor/probe/verify.sh" <<INNER
+mkdir -p "$B/prds/calls-doctor/probe"
+cat > "$B/prds/calls-doctor/probe/verify.sh" <<INNER
 #!/usr/bin/env bash
 bash "$DOC" "$D/ex" 2>&1 | grep '^  harnesses ' > "$D/inner"
 echo 'calls-doctor' >> "$MARK"
@@ -171,7 +171,7 @@ has "G the inner doctor did not run harnesses"  "$(cat "$D/inner" 2>/dev/null)" 
 has "G ...and the row is off, not broken"       "$(cat "$D/inner" 2>/dev/null)" "harnesses   off"
 E=$(PEARDE_HARNESSES=1 bash "$DOC" --harnesses "$D/ex" 2>&1 | grep '^  harnesses ')
 has "G the flag does not override the guard"    "$E" "not run inside a harness"
-rm -rf "$B/calls-doctor"
+rm -rf "$B/prds/calls-doctor"
 
 echo
 echo "── H. no ledger: the expected count is nowhere but the harness ──────────"
@@ -201,7 +201,7 @@ git -C "$ROOT" show HEAD:resources/doctor.sh > "$D/base/resources/doctor.sh" 2>/
 # the key is on here, the comparison would time a full sweep against a doctor
 # that has no such row, so it falls back to the fixture.
 T="$ROOT"
-grep -qE '^[[:space:]]*harnesses:[[:space:]]*(on|yes|true)' "$ROOT/prds/settings.md" \
+grep -qE '^[[:space:]]*harnesses:[[:space:]]*(on|yes|true)' "$ROOT/.pearde/settings.md" \
   && { setkey -; T="$D/ex"; }
 if [ -s "$D/base/resources/doctor.sh" ]; then
   t0=$(now); $FRESH bash "$D/base/resources/doctor.sh" "$T" >/dev/null 2>&1; t1=$(now)
@@ -234,19 +234,20 @@ hase "I ...and the row carries its own wall-clock" "$(hrow)" '· [0-9]+s'
 echo
 echo "── J. the census this board's harnesses give ────────────────────────────"
 
-HL=$(find "$ROOT/prds" -name verify.sh | sort)
+HL=$(find "$ROOT/.pearde/prds" -name verify.sh | sort)
 HN=$(printf '%s\n' "$HL" | grep -c .)
 PIN=0; NOPIN=0; NONZERO=0
 for h in $HL; do
   if grep -qE '\$\(\([[:space:]]*[Pp][Aa][Ss][Ss][[:space:]]*\+[[:space:]]*[Ff][Aa][Ii][Ll][[:space:]]*\)\)[^=]*(=|-eq)[[:space:]]*"?[0-9]+' "$h"
   then PIN=$((PIN+1)); else NOPIN=$((NOPIN+1)); fi
-  tail -3 "$h" | grep -qE '^\[ .*(FAIL|fail).* \]|exit 1' && NONZERO=$((NONZERO+1))
+  tail -3 "$h" | grep -qE '^\[ .*(FAIL|fail).* \]|exit 1|exit "\$fail"|exit \$\(\( fail != 0 \)\)' \
+    && NONZERO=$((NONZERO+1))
 done
 printf '  note census — %s harnesses · %s pin a denominator · %s do not · %s end on a check that sets the exit code\n' \
        "$HN" "$PIN" "$NOPIN" "$NONZERO"
 eq "J every harness on this board ends on a test that carries its exit code" "$NONZERO" "$HN"
 eq "J the census enumerates the tree, not a list this harness holds" \
-   "$(printf '%s\n' "$HL" | grep -c "^$ROOT/prds/")" "$HN"
+   "$(printf '%s\n' "$HL" | grep -c "^$ROOT/.pearde/prds/")" "$HN"
 
 echo
 echo "── K. the page says what the row means ──────────────────────────────────"
@@ -263,9 +264,9 @@ echo
 echo "── L. nothing of this probe reached the real board ──────────────────────"
 
 eq "L no fixture prd.md under the real prds/" \
-   "$(find "$ROOT/prds" -path '*/the-gate-runs-the-harnesses/probe/*' -name prd.md | wc -l | tr -d ' ')" "0"
+   "$(find "$ROOT/.pearde/prds" -path '*/the-gate-runs-the-harnesses/probe/*' -name prd.md | wc -l | tr -d ' ')" "0"
 eq "L the real board's transitions log is untouched by this run" \
-   "$(find "$ROOT/prds" -newer "$MARK" -name '.transitions.jsonl' | wc -l | tr -d ' ')" "0"
+   "$(find "$ROOT/.pearde" -newer "$MARK" -name 'transitions.jsonl' | wc -l | tr -d ' ')" "0"
 eq "L index.py check is silent" \
    "$(python3 "$ROOT/resources/index.py" check 2>&1 | wc -l | tr -d ' ')" "0"
 

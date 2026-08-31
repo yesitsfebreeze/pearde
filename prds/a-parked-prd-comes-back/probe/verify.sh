@@ -3,12 +3,12 @@
 # transition names that way out. Runs on a copy of the example board under
 # mktemp; never the real board. One line per assertion, a count at the end.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../.." && pwd)"
+ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
 D="$(mktemp -d)"; SCR="$(mktemp -d)"; trap 'rm -rf "$D" "$SCR"' EXIT
 export PEARDE_AS=engineer PEARDE_PORT=1
 python3 "$ROOT/resources/board/plan.py" example "$D" >/dev/null
 find "$D" -type f -exec touch {} +
-B="$D/prds"; P="$B/big/second/prd.md"; J="$B/.transitions.jsonl"
+B="$D/.pearde"; P="$B/prds/big/second/prd.md"; J="$B/.state/transitions.jsonl"
 pass=0; fail=0
 ok()  { pass=$((pass+1)); echo "  ok   $1"; }
 bad() { fail=$((fail+1)); echo "  FAIL $1"; [ -n "${2:-}" ] && echo "       ▸ $2"; }
@@ -67,11 +67,11 @@ echo "F. a parked container is collect's"
 C=big   # two children, no specs, no open box: every child done makes it a container
 t set big/second done --force
 echo "       container under test: $C"
-t set "$C" later --force;                  eq "the container parks" "$(sed -n 's/^state: //p' "$B/$C/prd.md")" "later"
+t set "$C" later --force;                  eq "the container parks" "$(sed -n 's/^state: //p' "$B/prds/$C/prd.md")" "later"
 t release "$C" open;                       eq "release <container> open exits 1" "$(rc)" 1
 has "…pointing at collect" err "pearde collect closes it"
 has "…with the one predicate's words" err "container: every child done"
-eq "…and writes nothing" "$(sed -n 's/^state: //p' "$B/$C/prd.md")" "later"
+eq "…and writes nothing" "$(sed -n 's/^state: //p' "$B/prds/$C/prd.md")" "later"
 
 echo "G. a parked state that names a person goes through answer's gate"
 t set big/second hitl --force
@@ -82,7 +82,7 @@ echo "H. prose"
 has_file() { if grep -qF -- "$3" "$ROOT/$2"; then ok "$1"; else bad "$1"; fi; }
 has_file "states.md: the parked paragraph names the way back" references/parts/states.md 'release <prd> open'
 has_file "handles.md: the defer row names its inverse" references/parts/handles.md 'release <prd> open'
-eq "no fixture prd.md under this PRD's probe" "$(find "$ROOT/prds/a-parked-prd-comes-back/probe" -name prd.md | wc -l | tr -d ' ')" 0
+eq "no fixture prd.md under this PRD's probe" "$(find "$ROOT/.pearde/prds/a-parked-prd-comes-back/probe" -name prd.md | wc -l | tr -d ' ')" 0
 
 echo "$((pass+fail)) checks · $pass pass · $fail fail"
 [ "$fail" -eq 0 ]

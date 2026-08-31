@@ -20,7 +20,7 @@
 set -u
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT="$(cd "$HERE/../../../.." && pwd)"
+ROOT="$(cd "$HERE/../../../../.." && pwd)"
 WF="$ROOT/resources/workflows.py"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
@@ -35,7 +35,8 @@ eq()   { if [ "$2" = "$3" ]; then ok "$1"; else bad "$1 — expected '$3', got '
 TODAY="$(date +%Y-%m-%d)"
 
 # ── a library at runs: 0 ─────────────────────────────────────────────────────
-B="$TMP/board/prds"
+B="$TMP/board/.pearde"
+PRDS="$B/prds"; mkdir -p "$PRDS"
 mkdir -p "$B/workflows"
 cat > "$B/settings.md" <<'EOF'
 ---
@@ -242,7 +243,7 @@ eq "list totals four runs over four files" "$(printf '%s\n' "$LIST1" | awk '{s+=
 have "list prints runs beside the slug" "$LIST1" "write-the-check"
 
 # ── rule 4 has teeth: a format-breaking edit is refused, not repaired ────────
-D="$TMP/broken/prds"; mkdir -p "$D"; cp -R "$B/settings.md" "$D/"; cp -R "$B/workflows" "$D/"
+D="$TMP/broken/.pearde"; mkdir -p "$D"; cp -R "$B/settings.md" "$D/"; cp -R "$B/workflows" "$D/"
 # a run proposes a step row whose atomic nobody wrote — the shape rule 4 catches
 python3 - "$D/workflows/fix-a-reported-break.md" <<'PY'
 import sys
@@ -256,7 +257,7 @@ have "a format-breaking edit is caught before the commit" "$CHECKB" "names \`tid
 if [ -n "$CHECKB" ]; then ok "check exits loud on it"; else bad "check exits silent on a broken library"; fi
 
 # `updated: <today>` on a file dated today is the same day, not an earlier one
-E="$TMP/sameday/prds"; mkdir -p "$E/workflows"; cp "$B/settings.md" "$E/"
+E="$TMP/sameday/.pearde"; mkdir -p "$E/workflows"; cp "$B/settings.md" "$E/"
 sed -e "s/^date: .*/date: $TODAY/" -e "s/^runs: .*/runs: 1/" \
     -e "/^runs:/a\\
 updated: $TODAY
@@ -374,8 +375,8 @@ agree() { # name needle file file...
 agree "two files count runs the same way" \
       'on the workflow and every atomic that ran' \
       references/parts/workers.md references/parts/workflows.md
-agree "two files send the refusal to the round file" \
-      'prds/.round.md' \
+agree "two files send the refusal to the round file — renamed with the board" \
+      '.pearde/.state/round.md' \
       references/parts/workflows.md references/parts/round.md
 agree "two files say an edit is refused, not repaired" \
       'refused, not repaired' \

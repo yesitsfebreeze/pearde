@@ -1,10 +1,11 @@
 ---
 name: pearde
 language: English
-workers: 1
-pipeline: 3
+workers: 6
+pipeline: 8
 weight-default: 20
 gantt-day: 8h
+context-budget: off
 ---
 
 # The pearde board

@@ -67,6 +67,9 @@ since the move is suspect: part of the work is saying which PRDs were
 collected with a footprint that never reached a commit, and listing them for
 a person to re-commit. The nine boards' `done` PRDs are the search space.
 
+| `collect-defaults-to-the-boards-enclosing-repo` | repo_of()` defaults to the repo enclosing a nested `.pearde` board (not the board's own repo), refuses loudly when a footprint matches no repo, and is unchanged when the board is not its own repo — each proven by fixture | — |
+| `list-the-collects-the-repo-bug-orphaned` | every already-`done` PRD on this machine's boards whose footprint never reached a commit under the old bug is found and listed for a person to re-commit | collect-defaults-to-the-boards-enclosing-repo |
+
 ## Acceptance sketch, for the analyst
 
 - a PRD with no `repo:`, a board at `.pearde/`, and a footprint in the code

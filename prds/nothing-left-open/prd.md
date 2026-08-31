@@ -1,10 +1,12 @@
 ---
-state: open
+state: done
 origin: requested
 priority: 68
 complexity: 0
 blast-radius:
 repo: pearde
+actual: 0.44h
+commit: 61d29b3
 ---
 
 # nothing-left-open — the last things this session's runs turned up, closed

@@ -1,9 +1,9 @@
 ---
-state: open        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
+state: done        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: requested  # requested = the user asked | derived = the board found it
 # from:            # derived only — the PRD whose work surfaced this one
 priority: 75        # higher first
-complexity: 0      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
+complexity: 10      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
 blast-radius:      # analyst, at spec time — high|mid|low. What breaks if this is wrong
 repo:              # the sub-repo the code lands in; delete if n/a
 # workflow:        # OPTIONAL — how this kind of job is done: a slug in
@@ -11,7 +11,7 @@ repo:              # the sub-repo the code lands in; delete if n/a
 #                  #   Absent = the brief alone, as before workflows
 time:              # OPTIONAL. See @references/parts/order.md
   est:             # the weight, only when complexity is absent. Not a duration
-  actual:          # a record. Nothing reads it
+  actual: 0.24h
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
 needs:
   - apply-the-prds-rename-table
@@ -66,3 +66,21 @@ every remaining bare `prds/` mention (no table match) across the scoped files is
 <!-- `## Failure` — implementer-only, after a FAILED attempt: what broke, what
      was tried. `retry` moves this into the body as history and reopens the
      PRD. -->
+
+## Report
+
+spec01: exit 0
+allowed  references/parts/guard.md:15  (WALKS ls-pattern)
+allowed  references/parts/workers.md:87  (<prds/> placeholder)
+allowed  references/parts/workers.md:334  (<prds/> placeholder)
+allowed  resources/guard.py:72  (WALKS ls-pattern)
+allowed  resources/guard.py:77  (WALKS regex literal)
+bare tokens: 0 | documented exceptions: 5
+board-dir ok  references/settings.md: 3 x 'relative to `.pearde/`.'
+board-dir ok  references/parts/master.md: 1 x "against the master's `.pearde/`."
+board-dir ok  references/parts/doctor.md: 1 x 'pointing outside `.pearde/` is'
+board-dir ok  references/parts/doctor.md: 1 x 'returns under `.pearde/`, and nothing else'
+forbidden tokens (.pearde/.pearde, prds/prds): 0
+py_compile: ok
+gate: index + memos green
+verify: clean

@@ -1,9 +1,9 @@
 ---
-state: open        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
+state: done        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: requested  # requested = the user asked | derived = the board found it
 # from:            # derived only — the PRD whose work surfaced this one
 priority: 85        # higher first
-complexity: 0      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
+complexity: 18      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
 blast-radius:      # analyst, at spec time — high|mid|low. What breaks if this is wrong
 repo:              # the sub-repo the code lands in; delete if n/a
 # workflow:        # OPTIONAL — how this kind of job is done: a slug in
@@ -11,7 +11,7 @@ repo:              # the sub-repo the code lands in; delete if n/a
 #                  #   Absent = the brief alone, as before workflows
 time:              # OPTIONAL. See @references/parts/order.md
   est:             # the weight, only when complexity is absent. Not a duration
-  actual:          # a record. Nothing reads it
+  actual: 0.11h
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
@@ -35,14 +35,85 @@ time:              # OPTIONAL. See @references/parts/order.md
 
 # state dir belongs to the board
 
-<The request, for an analyst who knows the codebase but not this conversation:
+When this is done, one rule holds everywhere: state that belongs to a board is
+written under that board's `.state/`, and state that belongs to the machine is
+written once, outside any board, through a name that says so. Today neither
+half of that is true. `resources/board/plan.py:61` declares
+`STATE_DIR = ".state"` and `state_dir(board)` (lines 65-69) joins the board root
+with it — but line 1296 rebinds the same module global to
+`os.path.join(os.path.dirname(os.path.abspath(__file__)), "state")`, the code
+repo's own `resources/board/state`. `state_dir()` reads that global at call
+time, so after import it returns the code-repo path for every board it is ever
+handed. Importing the module and calling it proves the point: `state_dir(<any
+tmp dir>)` returns `/Users/feb/dev/infra/pearde/resources/board/state` and
+creates nothing under the board. This matters because it silently merges every
+board's plan into one file — a per-project tool quietly turned global.
 
-- what exists when the PRD is done, and why it matters
-- constraints and non-goals — what must NOT change
-- pointers: relevant files, docs, prior PRDs
+The measured evidence is a divergence you can read off disk. `load_map` and
+`save_map` (plan.py:987 and 995) are the only users of `state_dir()`, so the
+schedule lands in the wrong repo: `resources/board/state/plan.json` currently
+holds the test fixture's PRD names (`asking`, `big`, `big/second`, `building`,
+`finished`, `next`) and was written most recently, while
+`.pearde/.state/plan.json` still holds the real board's PRDs and is hours older.
+The constants bound *before* the rebinding escaped it and are correct:
+`ROUND_FILE` (plan.py:640), `HISTORY_FILE` (1144) and `TRANSITIONS_FILE` (1166)
+are all relative `.state/...` paths, joined against the board at each use, which
+is why `.pearde/.state/` really does hold `history.jsonl`, `transitions.jsonl`,
+`round.md` and `view.html` today. `resources/board/init.py:138-142` already
+carries a comment naming this reassignment and working around it by hardcoding
+the literal `".state"` at line 143 — the workaround is the bug report.
 
-One contract per PRD. "And also…" is a second PRD — write it separately, or
-let the analyst split it via refine.>
+The second location is deliberate and mostly correct. `resources/guard.py:37-38`
+defaults `STATE` to `ROOT/board/state/guard` with a `PEARDE_GUARD_STATE`
+override; `git show HEAD:resources/guard.py` returns the same lines, so this is
+the committed default and not a rename left behind. `resources/board/plan.py:1195`
+duplicates that default as `GUARD_DIR` and only reads from it (`guard_sessions`,
+1204-1208), as does `resources/board/transitions.py:482`.
+`resources/board/serve.py:115-117` points `APP_DIR` at the same directory for
+`serve.json`, `serve.log` and `run-<name>.log`, and `cmd_calibrate`
+(plan.py:1373-1374) writes `calibration.json` there. Every one of those is
+genuinely machine-scoped: the guard cache is per session, the serve registry
+lists every board the daemon serves, and plan.py's own comment at 1290-1294
+states the calibration constant is "one constant per machine, not per board".
+`resources/board/state/` is gitignored and `git ls-files` returns nothing for
+it, so nothing here is a tracked-file move.
+
+The non-goals are therefore sharp. `calibration.json`, `serve.json`,
+`serve.log`, `run-*.log` and the `guard/` session cache must NOT move into any
+board — a board-scoped calibration would refit per project and a board-scoped
+registry could not name its siblings. `PEARDE_GUARD_STATE` must keep working
+exactly as it does, because `resources/doctor.sh:260-263` sets it to a
+`mktemp -d` so the guard probe does not litter the repo it is checking. Do not
+change what `.state/round.md` contains or who writes it; do not rename the
+`.state` files; do not un-ignore either directory. The one thing that must move
+is `plan.json` — back under the board, where `state_dir()`'s own docstring
+already says every writer goes. Whether the machine-scoped corner should also
+leave the code repo is a separate contract, not this one.
+
+Pointers: `resources/board/plan.py` (lines 55-69, 640, 987-995, 1144, 1166,
+1190-1208, 1290-1300, 1373-1384), `resources/guard.py` (35-45, 217-219, 627,
+653), `resources/board/serve.py` (108-117, 386, 1053-1055, 1134),
+`resources/board/render.py:40`, `resources/board/transitions.py` (70, 414-425,
+482, 798), `resources/board/init.py` (63, 118, 138-143), `resources/doctor.sh`
+(255-263), and the repo `.gitignore`. Two locations, six files writing state,
+eight distinct writing call sites between them.
+
+## Acceptance sketch, for the analyst
+
+- `resources/board/plan.py` binds the name `STATE_DIR` exactly once, and the
+  machine-scoped directory used by `CALIB_PATH`, `GUARD_DIR` and `serve.json`
+  is reached through a differently named constant.
+- Importing `resources/board/plan.py` and calling `state_dir(d)` for a fresh
+  temporary directory `d` returns a path under `d` and creates it there.
+- `pearde plan` on a board writes that board's `plan.json` under its own
+  `.state/`, and running it on two different boards leaves two separate
+  `plan.json` files with no shared content.
+- `resources/board/init.py:143` no longer needs its literal `".state"`
+  workaround: it can name the planner's constant and the comment at 138-142
+  goes with the fix.
+- `calibration.json`, `serve.json`, `serve.log` and `guard/` are still written
+  to the same machine-scoped directory as before, `PEARDE_GUARD_STATE` still
+  redirects the guard, and `resources/doctor.sh` still reports the guard row ok.
 
 <!-- Three more headings exist, and none of them is a slot to copy down. Each
      is a claim about the state of this PRD, so an empty copy of it is a false
@@ -71,3 +142,14 @@ let the analyst split it via refine.>
 <!-- `## Failure` — implementer-only, after a FAILED attempt: what broke, what
      was tried. `retry` moves this into the body as history and reopens the
      PRD. -->
+
+## Report
+
+spec01: exit 0
+61:STATE_DIR = ".state"
+state_dir/MACHINE_DIR OK
+STATE_DIR joins are board files only: ['history.jsonl', 'round.md', 'transitions.jsonl']
+serve.json/serve.log machine-scoped OK
+machine dir still gitignored
+PEARDE_GUARD_STATE still overrides both
+verify-ok

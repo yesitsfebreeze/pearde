@@ -37,14 +37,14 @@ what was found.
 
 ## Acceptance
 
-- [ ] On a copy of the example board, `python3 resources/board/transitions.py set building open --force --as engineer --board <copy>/prds` exits 0, prints `▸ building: claimed → open · forced · done`, and `grep -c '^claim: ' <copy>/prds/building/prd.md` is 0
-- [ ] `python3 resources/board/brief.py building --board <copy>/prds --as engineer` no longer prints `held`
-- [ ] `set building open --force --dry --as engineer --board <copy>/prds` exits 0 and leaves `claim:` in place
-- [ ] `set building claimed --force …` on a `claimed` PRD exits 1 and leaves `claim:` in place
-- [ ] `set building analyzing --force …` keeps `claim:` — a claim-carrying target
-- [ ] `set building deferred --force …` and `set building shelved --force …` each leave no `claim:`
-- [ ] `grep -c '^status: decided' prds/memos/two-holes-the-flag-probe-found.md` is 1 and `grep -c '^Open\.' prds/memos/two-holes-the-flag-probe-found.md` is 0
-- [ ] `python3 resources/memos.py check prds` prints nothing about `two-holes-the-flag-probe-found`
+- [x] On a copy of the example board, `python3 resources/board/transitions.py set building open --force --as engineer --board <copy>/prds` exits 0, prints `▸ building: claimed → open · forced · done`, and `grep -c '^claim: ' <copy>/prds/building/prd.md` is 0
+- [x] `python3 resources/board/brief.py building --board <copy>/prds --as engineer` no longer prints `held`
+- [x] `set building open --force --dry --as engineer --board <copy>/prds` exits 0 and leaves `claim:` in place
+- [x] `set building claimed --force …` on a `claimed` PRD exits 1 and leaves `claim:` in place
+- [x] `set building analyzing --force …` keeps `claim:` — a claim-carrying target
+- [x] `set building deferred --force …` and `set building shelved --force …` each leave no `claim:`
+- [x] `grep -c '^status: decided' prds/memos/two-holes-the-flag-probe-found.md` is 1 and `grep -c '^Open\.' prds/memos/two-holes-the-flag-probe-found.md` is 0
+- [x] `python3 resources/memos.py check prds` prints nothing about `two-holes-the-flag-probe-found`
 
 ## Verify and Proof
 

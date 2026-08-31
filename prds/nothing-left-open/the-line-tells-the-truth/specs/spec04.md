@@ -48,14 +48,14 @@ was and said here so nobody reads it as an omission.
 
 ## Acceptance
 
-- [ ] `python3 resources/pearde.py vision --bogus --board <copy>/prds` exits 2 and stderr is `pearde vision: unknown flag --bogus — vision takes: --board, --json, --next, --check`
-- [ ] `python3 resources/pearde.py example --bogus` exits 2 and stderr is `pearde example: unknown flag --bogus — example takes: no flags`
-- [ ] `python3 resources/pearde.py vision --help` prints `takes: --board, --json, --next, --check`; `pearde example --help` prints `takes: no flags`
-- [ ] `pearde vision --check --board <copy>/prds` and `pearde vision <copy>/prds --check` print the line `python3 resources/board/plan.py vision --check <copy>/prds` prints
-- [ ] `pearde vision --board` with no value exits 2 saying `--board takes a value`
-- [ ] `pearde example <empty-dir>` still copies the board, exit 0
-- [ ] `pearde set --bogus x open --board <copy>/prds` still exits 2 with `set takes: --as, --board, --worker, --force, --dry` — the class moved, the list did not
-- [ ] `python3 -c` importing `transitions` and `plan` from `resources/board` shows `transitions.Flags is plan.Flags`
+- [x] `python3 resources/pearde.py vision --bogus --board <copy>/prds` exits 2 and stderr is `pearde vision: unknown flag --bogus — vision takes: --board, --json, --next, --check`
+- [x] `python3 resources/pearde.py example --bogus` exits 2 and stderr is `pearde example: unknown flag --bogus — example takes: no flags`
+- [x] `python3 resources/pearde.py vision --help` prints `takes: --board, --json, --next, --check`; `pearde example --help` prints `takes: no flags`
+- [x] `pearde vision --check --board <copy>/prds` and `pearde vision <copy>/prds --check` print the line `python3 resources/board/plan.py vision --check <copy>/prds` prints
+- [x] `pearde vision --board` with no value exits 2 saying `--board takes a value`
+- [x] `pearde example <empty-dir>` still copies the board, exit 0
+- [x] `pearde set --bogus x open --board <copy>/prds` still exits 2 with `set takes: --as, --board, --worker, --force, --dry` — the class moved, the list did not
+- [x] `python3 -c` importing `transitions` and `plan` from `resources/board` shows `transitions.Flags is plan.Flags`
 - [ ] `bash prds/an-unknown-flag-refuses/probe/verify.sh` prints `196 checks · 196 pass · 0 fail`
 
 ## Verify and Proof

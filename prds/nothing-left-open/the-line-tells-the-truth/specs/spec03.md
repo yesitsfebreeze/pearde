@@ -49,10 +49,10 @@ that is not the rename is somebody else's and is named, not taken.
 
 ## Acceptance
 
-- [ ] `python3 resources/board/plan.py scan <copy>/prds` prints a line opening `progress: done ` and no line holding `asked`
-- [ ] `set next claimed --force --as engineer --board <copy>/prds` prints `▸ next: open → claimed · forced · done <rd>/<rn> · <rp>% · …`
+- [x] `python3 resources/board/plan.py scan <copy>/prds` prints a line opening `progress: done ` and no line holding `asked`
+- [x] `set next claimed --force --as engineer --board <copy>/prds` prints `▸ next: open → claimed · forced · done <rd>/<rn> · <rp>% · …`
 - [ ] From the copy's root, `echo '{}' | bash resources/statusline.sh` renders `▸pearde <rd>/<rn>` with the same `<rd>/<rn>` scan printed
-- [ ] `grep -rl -E '"asked"|<ad>|asked [0-9]+/[0-9]+' resources references README.md` prints nothing
+- [x] `grep -rl -E '"asked"|<ad>|asked [0-9]+/[0-9]+' resources references README.md` prints nothing
 - [ ] `bash prds/the-board-runs-itself/specced-is-a-command/probe/verify.sh` prints `90/90 checks pass`
 - [ ] `bash prds/the-board-runs-itself/transitions-are-commands/probe/verify.sh` passes `the line opens with the transition`
 - [ ] `git diff HEAD -- README.md references/parts/progress.md references/parts/statusline.md resources/statusline.sh` holds only hunks spelling `asked`→`done` or `<ad>/<an>/<ap>`→`<rd>/<rn>/<rp>`

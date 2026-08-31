@@ -8,7 +8,7 @@
 # assertion, a count at the end. Every command carries `--board <copy>`.
 set -u
 HERE="$(cd "$(dirname "$0")" && pwd)"
-ROOT="$(cd "$HERE/../../../.." && pwd)"
+ROOT="$(cd "$HERE/../../../../.." && pwd)"
 PLAN="$ROOT/resources/board/plan.py"
 COLLECT="$ROOT/resources/board/collect.py"
 TRANS="$ROOT/resources/board/transitions.py"
@@ -33,16 +33,17 @@ ERR="$SCRATCH/err"
 # a fresh copy of the example, a repo around it, one commit, timestamps fresh
 fixture() {
   local d="$TOP/$1"
-  python3 "$PLAN" example "$d" >/dev/null 2>&1
+  python3 "$PLAN" example "$d/.pearde" >/dev/null 2>&1
+  mkdir -p "$d/.pearde/.state"          # `example` writes no .state/ — state-dir-belongs-to-the-board
   find "$d" -type f -exec touch {} +
   ( cd "$d" && git init -q -b main && git add -A && git commit -qm init )
   echo "$d"
 }
-tree_sum() { ( cd "$1" && git status --porcelain && cat prds/.transitions.jsonl 2>/dev/null ) | md5 -q; }
+tree_sum() { ( cd "$1" && git status --porcelain && cat .pearde/.state/transitions.jsonl 2>/dev/null ) | md5 -q; }
 
 # ── A. collect refuses without a persona ─────────────────────────────────────
 echo "A. collect refuses without a persona"
-D="$(fixture a)"; B="$D/prds"
+D="$(fixture a)"; B="$D/.pearde"
 S0="$(tree_sum "$D")"
 OUT="$(python3 "$COLLECT" finished --board "$B" 2>"$ERR")"; RC=$?
 eq   "A1 collect finished, no --as, no PEARDE_AS → exit 1"   "$RC" "1"
@@ -64,42 +65,42 @@ OUT="$(python3 "$COLLECT" finished --board "$B" --as engineer --trust 2>"$ERR")"
 eq   "A12 --as engineer lands"                                "$RC" "0"
 has  "A13 …▸ finished: claimed → done"                        "$OUT" "▸ finished: claimed → done"
 has  "A14 …as engineer last"                                  "$(tail -1 <<<"$OUT")" "· as engineer"
-eq   "A15 state: done"                                        "$(grep -c '^state: done' "$B/finished/prd.md")" "1"
+eq   "A15 state: done"                                        "$(grep -c '^state: done' "$B/prds/finished/prd.md")" "1"
 
 # ── B. set --force clears a claim the target cannot carry ────────────────────
 echo "B. set --force clears a claim the target cannot carry"
-D="$(fixture b)"; B="$D/prds"
-eq   "B1 building starts claimed with a claim"                "$(grep -c '^claim: ' "$B/building/prd.md")" "1"
+D="$(fixture b)"; B="$D/.pearde"
+eq   "B1 building starts claimed with a claim"                "$(grep -c '^claim: ' "$B/prds/building/prd.md")" "1"
 OUT="$(python3 "$BRIEF" building --board "$B" --as engineer 2>&1)"; RC=$?
 has  "B2 brief says held before"                              "$OUT" "held"
 S0="$(tree_sum "$D")"
 OUT="$(python3 "$TRANS" set building open --force --dry --as engineer --board "$B" 2>"$ERR")"; RC=$?
 eq   "B3 --dry --force exits 0"                               "$RC" "0"
 eq   "B4 …writes nothing"                                     "$(tree_sum "$D")" "$S0"
-eq   "B5 …claim still there"                                  "$(grep -c '^claim: ' "$B/building/prd.md")" "1"
+eq   "B5 …claim still there"                                  "$(grep -c '^claim: ' "$B/prds/building/prd.md")" "1"
 OUT="$(python3 "$TRANS" set building claimed --force --as engineer --board "$B" 2>"$ERR")"; RC=$?
 eq   "B6 forcing the state it is in is refused"               "$RC" "1"
-eq   "B7 …claim intact"                                       "$(grep -c '^claim: ' "$B/building/prd.md")" "1"
+eq   "B7 …claim intact"                                       "$(grep -c '^claim: ' "$B/prds/building/prd.md")" "1"
 OUT="$(python3 "$TRANS" set building analyzing --force --as engineer --board "$B" 2>"$ERR")"; RC=$?
 eq   "B8 forced into analyzing — a claim-carrying state — exit 0" "$RC" "0"
-eq   "B8b …the claim is kept"                                  "$(grep -c '^claim: ' "$B/building/prd.md")" "1"
+eq   "B8b …the claim is kept"                                  "$(grep -c '^claim: ' "$B/prds/building/prd.md")" "1"
 OUT="$(python3 "$TRANS" set building open --force --as engineer --board "$B" 2>"$ERR")"; RC=$?
 eq   "B9 set building open --force exits 0"                   "$RC" "0"
 has  "B10 …the line says forced"                              "$OUT" "▸ building: analyzing → open · forced"
-eq   "B11 …no claim: left"                                    "$(grep -c '^claim: ' "$B/building/prd.md")" "0"
-eq   "B12 …state: open"                                       "$(grep -c '^state: open' "$B/building/prd.md")" "1"
+eq   "B11 …no claim: left"                                    "$(grep -c '^claim: ' "$B/prds/building/prd.md")" "0"
+eq   "B12 …state: open"                                       "$(grep -c '^state: open' "$B/prds/building/prd.md")" "1"
 OUT="$(python3 "$BRIEF" building --board "$B" --as engineer 2>&1)"; RC=$?
 lacks "B13 brief no longer says held"                         "$OUT" "held"
 OUT="$(python3 "$TRANS" set building deferred --force --as engineer --board "$B" 2>"$ERR")"; RC=$?
 eq   "B14 forced to deferred — exit 0"                        "$RC" "0"
-eq   "B15 …no claim:"                                         "$(grep -c '^claim: ' "$B/building/prd.md")" "0"
+eq   "B15 …no claim:"                                         "$(grep -c '^claim: ' "$B/prds/building/prd.md")" "0"
 OUT="$(python3 "$TRANS" set building shelved --force --as engineer --board "$B" 2>"$ERR")"; RC=$?
 eq   "B16 forced to a parked word of the user's own — exit 0" "$RC" "0"
-eq   "B17 …no claim:"                                         "$(grep -c '^claim: ' "$B/building/prd.md")" "0"
+eq   "B17 …no claim:"                                         "$(grep -c '^claim: ' "$B/prds/building/prd.md")" "0"
 
 # ── C. the first term of the line is done ────────────────────────────────────
 echo "C. the first term of the line is done"
-D="$(fixture c)"; B="$D/prds"
+D="$(fixture c)"; B="$D/.pearde"
 OUT="$(python3 "$PLAN" scan "$B" 2>&1)"
 has  "C1 scan: progress: done"                                "$OUT" "progress: done "
 lacks "C2 …never asked"                                       "$OUT" "asked"
@@ -116,7 +117,7 @@ eq   "C7 no reader of the old key is left in resources/ references/ README.md" \
 
 # ── D. vision and example declare their flags ────────────────────────────────
 echo "D. vision and example declare their flags"
-D="$(fixture d)"; B="$D/prds"
+D="$(fixture d)"; B="$D/.pearde"
 OUT="$(python3 "$PEARDE" vision --bogus --board "$B" 2>"$ERR")"; RC=$?
 eq   "D1 pearde vision --bogus → exit 2"                      "$RC" "2"
 has  "D2 …names the flag and the list"                        "$(cat "$ERR")" "pearde vision: unknown flag --bogus — vision takes: --board, --json, --next, --check"
@@ -140,7 +141,7 @@ OUT="$(python3 "$PEARDE" example 2>"$ERR")"; RC=$?
 eq   "D12 example with no dir → usage, exit 2"                "$RC" "2"
 OUT="$(python3 "$PEARDE" example "$TOP/e" 2>"$ERR")"; RC=$?
 eq   "D13 example <dir> still copies"                         "$RC" "0"
-eq   "D14 …a board is there"                                  "$(test -f "$TOP/e/prds/settings.md" && echo yes)" "yes"
+eq   "D14 …a board is there"                                  "$(test -f "$TOP/e/settings.md" && echo yes)" "yes"
 OUT="$(python3 "$PEARDE" set --bogus x open --board "$B" 2>"$ERR")"; RC=$?
 eq   "D15 a transition's own refusal is unchanged (Flags moved, not changed)" "$RC" "2"
 has  "D16 …set takes: --as, --board, --worker, --force, --dry" "$(cat "$ERR")" "set takes: --as, --board, --worker, --force, --dry"
@@ -150,7 +151,7 @@ has  "D16 …set takes: --as, --board, --worker, --force, --dry" "$(cat "$ERR")"
 # outside the footprint must not ride the landing, must still be staged
 # afterwards, and a sibling's next plain commit must not revert the landing.
 echo "E. collect commits through a private index"
-D="$(fixture e)"; B="$D/prds"
+D="$(fixture e)"; B="$D/.pearde"
 echo "other" > "$D/other.txt"; ( cd "$D" && git add other.txt && git commit -qm other )
 echo "sibling line" >> "$D/README.md"; ( cd "$D" && git add README.md )
 echo "unstaged elsewhere" >> "$D/other.txt"
@@ -160,16 +161,16 @@ OUT="$(cd "$D" && python3 "$COLLECT" finished --as engineer --trust --board "$B"
 eq   "E2 collect finished lands, exit 0"                    "$RC" "0"
 eq   "E3 …two commits on top: the landing, the record"      "$(cd "$D" && git rev-list --count "$H0"..HEAD)" "2"
 lacks "E4 the landing does not carry README.md"             "$(cd "$D" && git show --name-only --format= HEAD~1)" "README.md"
-has  "E5 …it carries the PRD's record"                      "$(cd "$D" && git show --name-only --format= HEAD~1)" "prds/finished/prd.md"
+has  "E5 …it carries the PRD's record"                      "$(cd "$D" && git show --name-only --format= HEAD~1)" ".pearde/prds/finished/prd.md"
 lacks "E6 the record commit carries nothing foreign"        "$(cd "$D" && git show --name-only --format= HEAD)" "README.md"
 eq   "E7 the sibling's hunk is still staged after collect"  "$(cd "$D" && git diff --cached --name-only)" "README.md"
-eq   "E8 the PRD folder reads clean in the shared index"    "$(cd "$D" && git status --porcelain -- prds/finished)" ""
+eq   "E8 the PRD folder reads clean in the shared index"    "$(cd "$D" && git status --porcelain -- .pearde/prds/finished)" ""
 eq   "E9 the unstaged foreign edit is untouched"            "$(cd "$D" && git status --porcelain -- other.txt)" " M other.txt"
-has  "E10 state: done in HEAD"                              "$(cd "$D" && git show HEAD:prds/finished/prd.md)" "state: done"
+has  "E10 state: done in HEAD"                              "$(cd "$D" && git show HEAD:.pearde/prds/finished/prd.md)" "state: done"
 has  "E11 the line carries commit and record"               "$OUT" "· record "
 ( cd "$D" && git commit -q -m sibling )
 eq   "E12 the sibling's next plain commit carries only its file" "$(cd "$D" && git show --name-only --format= HEAD)" "README.md"
-has  "E13 …and does not revert the landing"                 "$(cd "$D" && git show HEAD:prds/finished/prd.md)" "state: done"
+has  "E13 …and does not revert the landing"                 "$(cd "$D" && git show HEAD:.pearde/prds/finished/prd.md)" "state: done"
 eq   "E14 no scratch index is left behind"                  "$(ls -d /tmp/pearde-index-* "${TMPDIR:-/tmp}"/pearde-index-* 2>/dev/null | wc -l | tr -d ' ')" "0"
 # HEAD moved between read-tree and update-ref: refused, nothing written
 D="$(fixture e2)"
@@ -196,8 +197,8 @@ eq   "E17 …mine.txt is not in HEAD"                         "$(cd "$D" && git 
 
 # ── F. the collect harnesses stop only the daemon they started ───────────────
 echo "F. the collect harnesses stop only the daemon they started"
-KEEPS="$ROOT/prds/the-tool-keeps-its-word/collect-keeps-its-word/probe/verify.sh"
-ISA="$ROOT/prds/the-board-runs-itself/collect-is-a-command/probe/verify.sh"
+KEEPS="$ROOT/.pearde/prds/the-tool-keeps-its-word/collect-keeps-its-word/probe/verify.sh"
+ISA="$ROOT/.pearde/prds/the-board-runs-itself/collect-is-a-command/probe/verify.sh"
 for h in "$KEEPS" "$ISA"; do
   n="$(basename "$(dirname "$(dirname "$h")")")"
   eq "F1 $n: every serve.py stop names its port inline" "$(grep -c 'serve\.py" stop' "$h")" "$(grep -c 'PEARDE_PORT="\$SPARE" python3 "\$SRV/board/serve\.py" stop' "$h")"
@@ -209,7 +210,7 @@ SRV="$SCRATCH/sentinel/resources"; mkdir -p "$SRV/board"
 cp "$ROOT"/resources/*.py "$SRV/"; cp "$ROOT"/resources/board/*.py "$ROOT"/resources/board/*.css "$ROOT"/resources/board/*.js "$SRV/board/"
 SENT="$(python3 -c 'import socket; s=socket.socket(); s.bind(("127.0.0.1",0)); print(s.getsockname()[1]); s.close()')"
 D="$(fixture f)"
-( cd "$D" && PEARDE_PORT="$SENT" python3 "$SRV/board/serve.py" ensure "$D/prds" >/dev/null 2>&1 )
+( cd "$D" && PEARDE_PORT="$SENT" python3 "$SRV/board/serve.py" ensure "$D/.pearde" >/dev/null 2>&1 )
 has  "F3 the sentinel daemon is up on its port"             "$(PEARDE_PORT="$SENT" python3 "$SRV/board/serve.py" status 2>&1)" "serve: up"
 ( env -u PEARDE_PORT PEARDE_AS=engineer bash "$ISA" </dev/null >"$SCRATCH/isa.out" 2>&1 )
 has  "F4 collect-is-a-command ran its daemon section"       "$(cat "$SCRATCH/isa.out")" "R the daemon came up on the spare port"
@@ -219,16 +220,16 @@ export PEARDE_PORT=1
 
 # ── G. statusline.sh weights by complexity, the weight scan uses ─────────────
 echo "G. statusline.sh weights by complexity"
-D="$(fixture g)"; B="$D/prds"
+D="$(fixture g)"; B="$D/.pearde"
 sl() { ( cd "$1" && echo '{}' | bash "$STATUS" 2>/dev/null | sed 's/\x1b\[[0-9;]*m//g' | sed -n 's/^▸pearde \([0-9]*\/[0-9]* [0-9]*%\).*/\1/p' ); }
-sc() { python3 "$PLAN" scan "$1/prds" 2>/dev/null | sed -n 's/^progress: done \([0-9]*\/[0-9]*\) · \([0-9]*\)%.*/\1 \2%/p'; }
+sc() { python3 "$PLAN" scan "$1/.pearde" 2>/dev/null | sed -n 's/^progress: done \([0-9]*\/[0-9]*\) · \([0-9]*\)%.*/\1 \2%/p'; }
 eq   "G1 the example: statusline and scan agree"           "$(sl "$D")" "$(sc "$D")"
-sed -i '' 's/^complexity: .*/complexity: 40/' "$B/landed/prd.md"
+sed -i '' 's/^complexity: .*/complexity: 40/' "$B/prds/landed/prd.md"
 eq   "G2 a done PRD re-weighted: both move, still agree"   "$(sl "$D")" "$(sc "$D")"
-sed -i '' 's/^complexity: .*/est: 3h/' "$B/next/prd.md"
+sed -i '' 's/^complexity: .*/est: 3h/' "$B/prds/next/prd.md"
 eq   "G3 est as the fallback of an unscored PRD: agree"    "$(sl "$D")" "$(sc "$D")"
-for f in "$B"/*/prd.md "$B"/*/*/prd.md; do [ -f "$f" ] && sed -i '' '/^complexity: /d;/^est: /d' "$f"; done
-rm -rf "$B"/*/specs
+for f in "$B"/prds/*/prd.md "$B"/prds/*/*/prd.md; do [ -f "$f" ] && sed -i '' '/^complexity: /d;/^est: /d' "$f"; done
+rm -rf "$B"/prds/*/specs
 python3 - "$B/settings.md" <<'PY'
 import sys; p=sys.argv[1]; t=open(p).read().replace("language: English", "language: English\nweight-default: 10", 1); open(p,"w").write(t)
 PY

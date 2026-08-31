@@ -2,8 +2,8 @@
 atomic: capture-the-harness-baseline
 subject: record what every committed harness prints before the tree is touched
 date: 2026-08-28
-updated: 2026-08-29
-runs: 44
+updated: 2026-08-31
+runs: 45
 ---
 
 # capture-the-harness-baseline — the numbers as they were before you
@@ -47,3 +47,4 @@ runs: 44
 | `no matches found` or `No such file or directory` from the listing | a glob names a depth this board has no harness at | list with `find prds -name verify.sh` — it prints what exists and exits 0 |
 | the listing is empty on a board that has harnesses | the shell aborted the whole command on the first empty glob | same |
 | `doctor` at step 4 differs from step 2 only on the `statusline` row | that row carries the tree's dirty-file count, which every live session moves | compare doctor's rows without `statusline`; the count is nobody's finding |
+| **every** harness you baseline is red, and the failing lines share one cause outside your footprint | a layout or path migration landed between spec-writing and dispatch; the harness set is measuring the migration, not your unit | record the shared cause once instead of per-harness, verify your own contract items by hand on a fixture, and report the sweep that repairs the set as its own PRD — do not repair a subset, a half-swept harness set is worse evidence than a uniformly red one |

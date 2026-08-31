@@ -1,12 +1,13 @@
 ---
-state: analyzing
+state: blocked
 origin: requested
-claim: analyst-the-line-tells-the-truth 2026-08-29 17:42
 priority: 70
-complexity: 0
+complexity: 21
 blast-radius: high
 repo: pearde
 workflow: probe-then-spec
+needs:
+  - every-probe-harness-is-re-aimed-at-the-pearde-layout
 footprint:
   - resources/board/collect.py
   - resources/board/transitions.py

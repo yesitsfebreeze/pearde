@@ -2,8 +2,8 @@
 atomic: attempt-the-build
 subject: build the contract until it works or hits something undefined
 date: 2026-08-28
-updated: 2026-08-29
-runs: 24
+updated: 2026-08-31
+runs: 25
 ---
 
 # attempt-the-build — the attempt is the analysis
@@ -58,3 +58,4 @@ runs: 24
 | a `lacks` needle for a PRD name fails on a `scan` band that does not list it | another row's `after <name>` or `needs <name>` bit carries the name | match the row token `· <name> ·`, never the bare name |
 | a `--dry` run refuses on a gate the real run passes | the dry branch re-ran a gate that reads the file the real run writes first — `answer`'s gate saw the question still open because the answer is never on disk in a dry run | compute the gate's input on the scan dict in memory (the answer appended to `prd["body"]`, the state moved on `prd["fm"]`) and print the line off that dict; never re-enter `transition()` for a dry run of a two-step write |
 | every assertion in a harness passes, or every one fails, regardless of the command's output | the helper is `ok "<label>" "<expr>"` with the expr evaluated inside `ok`, so `$2`/`$3` in the expr name `ok`'s own arguments, not the caller's values | evaluate the test in the caller (`eq() { [ "$2" = "$3" ]; ok "$1" $? "…"; }`) and hand `ok` only a label and an exit code |
+| the brief says the probe's code is uncommitted, and `git status --short` is clean | a sibling session committed the whole tree, your hunks with it | `git log -1 -- <footprint path>` and read the file itself before concluding anything is missing; if the behaviour is present, the work stands — record the commit that took it, and read every spec's "what already stands" against the **file**, never against a diff |

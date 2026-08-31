@@ -43,11 +43,11 @@ variable exported; the rule each asserts did not move.
 
 ## Acceptance
 
-- [ ] On a copy of the example board, `env -u PEARDE_AS python3 resources/board/collect.py finished --board <copy>/prds` exits 1, stderr holds `collect: refused — persona: \`--as <id>\` on the line, or PEARDE_AS in the environment` and `export PEARDE_AS=engineer`, and `git status --porcelain` in the copy is unchanged
-- [ ] `env -u PEARDE_AS python3 resources/board/collect.py --snapshot building --board <copy>/prds` exits 1 with the same refusal
-- [ ] `PEARDE_AS=skeptic python3 resources/board/collect.py finished --board <copy>/prds --dry --trust` prints a line ending `· as skeptic` — the environment is read
-- [ ] `python3 resources/board/collect.py --bogus finished --board <copy>/prds` still exits 2 naming `unknown flag --bogus`
-- [ ] `grep -c 'persona: ' resources/board/collect.py` is 0 — the refusal text is imported from `transitions.py`, never copied
+- [x] On a copy of the example board, `env -u PEARDE_AS python3 resources/board/collect.py finished --board <copy>/prds` exits 1, stderr holds `collect: refused — persona: \`--as <id>\` on the line, or PEARDE_AS in the environment` and `export PEARDE_AS=engineer`, and `git status --porcelain` in the copy is unchanged
+- [x] `env -u PEARDE_AS python3 resources/board/collect.py --snapshot building --board <copy>/prds` exits 1 with the same refusal
+- [x] `PEARDE_AS=skeptic python3 resources/board/collect.py finished --board <copy>/prds --dry --trust` prints a line ending `· as skeptic` — the environment is read
+- [x] `python3 resources/board/collect.py --bogus finished --board <copy>/prds` still exits 2 naming `unknown flag --bogus`
+- [x] `grep -c 'persona: ' resources/board/collect.py` is 0 — the refusal text is imported from `transitions.py`, never copied
 - [ ] `bash prds/the-tool-keeps-its-word/collect-keeps-its-word/probe/verify.sh` prints `101 checks · 101 pass · 0 fail` with `PEARDE_AS` unset in the caller's shell
 - [ ] `bash prds/the-board-runs-itself/collect-is-a-command/probe/verify.sh` prints `133 checks · 133 pass · 0 fail` with `PEARDE_AS` unset in the caller's shell, and its `L --as sets the persona term` line still passes
 

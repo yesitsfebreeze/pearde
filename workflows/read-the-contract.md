@@ -2,8 +2,8 @@
 atomic: read-the-contract
 subject: read the PRD, its answers and everything it cites, before the first edit
 date: 2026-08-28
-updated: 2026-08-28
-runs: 44
+updated: 2026-08-31
+runs: 45
 ---
 
 # read-the-contract — the whole contract in the window before anything moves
@@ -36,3 +36,5 @@ runs: 44
 |------|-------|----|
 | the coordinator reports the PRD body changed while you were building | the contract moved; the build stands on the old text | re-run this step on the new text, keep the build, name both reads in the report |
 | `git status --short` lists paths the brief did not | the tree is live; other sessions wrote since the brief | record what you see now — that list, not the brief's, tells your hunks from theirs |
+| a `footprint:` path is absent under the `repo:` root | the board is a `.pearde/` inside a code repo, and the footprint spans both | resolve each entry against the board root and the checkout above it, take whichever holds it, and record `git status --short` **in both** — one root's clean tree says nothing about the other's |
+| a `footprint:` path does not exist and no sibling is writing it | a layout change moved the file after the specs were written | `find <board> -name '<basename>'`; if exactly one match, take it as the same file, do the contracted work there, and name both spellings in the report — a missing footprint path is a stale spelling far more often than a file to create |

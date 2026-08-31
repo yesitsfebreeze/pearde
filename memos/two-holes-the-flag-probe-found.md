@@ -13,8 +13,10 @@ prds:
 
 ## Decision
 
-Open. Two defects the `an-unknown-flag-refuses` analyst measured on a copy
-of the example board while probing every writing verb, outside its contract:
+Closed, both in `nothing-left-open/the-line-tells-the-truth` — hole 1 as its
+`spec01`, hole 2 as its `spec02`. Two defects the `an-unknown-flag-refuses`
+analyst measured on a copy of the example board while probing every writing
+verb, outside its contract:
 
 1. `collect` with neither `--as` nor `PEARDE_AS` writes `· as engineer` —
    silently. Every transition refuses that case (`the-next-line-runs` allows

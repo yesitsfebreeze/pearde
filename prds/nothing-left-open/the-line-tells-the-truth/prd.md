@@ -1,5 +1,5 @@
 ---
-state: claimed
+state: done
 origin: requested
 priority: 70
 complexity: 21
@@ -16,11 +16,8 @@ footprint:
   - references/parts/statusline.md
   - resources/statusline.sh
   - README.md
-  - prds/the-board-runs-itself/transitions-are-commands/probe/verify.sh
-  - prds/the-board-runs-itself/specced-is-a-command/probe/verify.sh
-  - prds/memos/two-holes-the-flag-probe-found.md
 commit: c1156d3
-claim: impl-19 2026-08-31 22:02
+actual: 0.28h
 ---
 
 # the-line-tells-the-truth — the progress line says who acted and what is done, and every discovered command refuses a flag it does not know

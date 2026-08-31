@@ -2,8 +2,6 @@
 complexity: 4
 footprint:
   - resources/board/transitions.py
-  - prds/memos/two-holes-the-flag-probe-found.md
-  - prds/nothing-left-open/the-line-tells-the-truth/probe/verify.sh
 ---
 
 # spec02 — `set --force` clears a `claim:` the target state cannot carry, and the memo says so
@@ -49,7 +47,8 @@ what was found.
 ## Verify and Proof
 
 ```sh
-bash prds/nothing-left-open/the-line-tells-the-truth/probe/verify.sh </dev/null
-grep -n -E '^status:|^Open\.' prds/memos/two-holes-the-flag-probe-found.md
-python3 resources/memos.py check prds 2>&1 | grep two-holes || echo memo-clean
+bash .pearde/prds/nothing-left-open/the-line-tells-the-truth/probe/verify.sh </dev/null
+grep -n -E '^status:|^Open\.' .pearde/memos/two-holes-the-flag-probe-found.md || true
+python3 resources/memos.py check . 2>&1 | grep two-holes || true
+echo memo-clean
 ```

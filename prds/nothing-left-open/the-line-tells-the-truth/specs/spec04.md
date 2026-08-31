@@ -3,7 +3,6 @@ complexity: 6
 footprint:
   - resources/board/plan.py
   - resources/board/transitions.py
-  - prds/nothing-left-open/the-line-tells-the-truth/probe/verify.sh
 ---
 
 # spec04 — `vision` and `example` declare their flags through the one parser
@@ -56,12 +55,16 @@ was and said here so nobody reads it as an omission.
 - [x] `pearde example <empty-dir>` still copies the board, exit 0
 - [x] `pearde set --bogus x open --board <copy>/prds` still exits 2 with `set takes: --as, --board, --worker, --force, --dry` — the class moved, the list did not
 - [x] `python3 -c` importing `transitions` and `plan` from `resources/board` shows `transitions.Flags is plan.Flags`
-- [ ] `bash prds/an-unknown-flag-refuses/probe/verify.sh` prints `196 checks · 196 pass · 0 fail`
+
+- `bash .pearde/prds/an-unknown-flag-refuses/probe/verify.sh` prints `verify: 196 checks · 196 pass · 0 fail`
+
+- [x] `bash .pearde/prds/an-unknown-flag-refuses/probe/verify.sh` prints `verify: 196 checks · 196 pass · 0 fail`
 
 ## Verify and Proof
 
 ```sh
-bash prds/nothing-left-open/the-line-tells-the-truth/probe/verify.sh </dev/null
+bash .pearde/prds/nothing-left-open/the-line-tells-the-truth/probe/verify.sh </dev/null
 python3 -c "import sys; sys.path.insert(0,'resources/board'); import transitions, plan; print(transitions.Flags is plan.Flags, plan.VISION_FLAGS, plan.EXAMPLE_FLAGS)"
-bash prds/an-unknown-flag-refuses/probe/verify.sh </dev/null | tail -1
+bash .pearde/prds/an-unknown-flag-refuses/probe/verify.sh </dev/null | tail -1
+echo spec04-verified
 ```

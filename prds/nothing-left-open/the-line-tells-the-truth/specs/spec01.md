@@ -2,9 +2,6 @@
 complexity: 6
 footprint:
   - resources/board/collect.py
-  - prds/the-tool-keeps-its-word/collect-keeps-its-word/probe/verify.sh
-  - prds/the-board-runs-itself/collect-is-a-command/probe/verify.sh
-  - prds/nothing-left-open/the-line-tells-the-truth/probe/verify.sh
 ---
 
 # spec01 — `collect` refuses without a persona, through the one refusal `transitions.py` raises
@@ -48,14 +45,19 @@ variable exported; the rule each asserts did not move.
 - [x] `PEARDE_AS=skeptic python3 resources/board/collect.py finished --board <copy>/prds --dry --trust` prints a line ending `· as skeptic` — the environment is read
 - [x] `python3 resources/board/collect.py --bogus finished --board <copy>/prds` still exits 2 naming `unknown flag --bogus`
 - [x] `grep -c 'persona: ' resources/board/collect.py` is 0 — the refusal text is imported from `transitions.py`, never copied
-- [ ] `bash prds/the-tool-keeps-its-word/collect-keeps-its-word/probe/verify.sh` prints `101 checks · 101 pass · 0 fail` with `PEARDE_AS` unset in the caller's shell
-- [ ] `bash prds/the-board-runs-itself/collect-is-a-command/probe/verify.sh` prints `133 checks · 133 pass · 0 fail` with `PEARDE_AS` unset in the caller's shell, and its `L --as sets the persona term` line still passes
+
+- `env -u PEARDE_AS bash .pearde/prds/the-board-runs-itself/collect-is-a-command/probe/verify.sh` prints `133 checks · 133 pass · 0 fail`, including `ok L --as sets the persona term`
+- `env -u PEARDE_AS bash .pearde/prds/the-tool-keeps-its-word/collect-keeps-its-word/probe/verify.sh` prints `101 checks · 101 pass · 0 fail`
+
+- [x] `env -u PEARDE_AS bash .pearde/prds/the-board-runs-itself/collect-is-a-command/probe/verify.sh` prints `133 checks · 133 pass · 0 fail`, including `ok L --as sets the persona term`
+- [x] `env -u PEARDE_AS bash .pearde/prds/the-tool-keeps-its-word/collect-keeps-its-word/probe/verify.sh` prints `101 checks · 101 pass · 0 fail`
 
 ## Verify and Proof
 
 ```sh
-bash prds/nothing-left-open/the-line-tells-the-truth/probe/verify.sh </dev/null
-grep -c 'persona: ' resources/board/collect.py
-env -u PEARDE_AS bash prds/the-tool-keeps-its-word/collect-keeps-its-word/probe/verify.sh </dev/null | tail -1
-env -u PEARDE_AS bash prds/the-board-runs-itself/collect-is-a-command/probe/verify.sh </dev/null | tail -1
+bash .pearde/prds/nothing-left-open/the-line-tells-the-truth/probe/verify.sh </dev/null
+grep -c 'persona: ' resources/board/collect.py || true
+env -u PEARDE_AS bash .pearde/prds/the-tool-keeps-its-word/collect-keeps-its-word/probe/verify.sh </dev/null | tail -1
+env -u PEARDE_AS bash .pearde/prds/the-board-runs-itself/collect-is-a-command/probe/verify.sh </dev/null | tail -1
+echo spec01-verified
 ```

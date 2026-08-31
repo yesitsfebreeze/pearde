@@ -34,7 +34,10 @@ ERR="$SCRATCH/err"
 fixture() {
   local d="$TOP/$1"
   python3 "$PLAN" example "$d" >/dev/null 2>&1   # `example <dir>` writes the board at <dir>/.pearde
-  mkdir -p "$d/.pearde/.state"          # `example` writes no .state/ — state-dir-belongs-to-the-board
+  mkdir -p "$d/.pearde/.state" "$d/src" # `example` writes no .state/ — state-dir-belongs-to-the-board;
+  printf 'def helper(): return 1\n' > "$d/src/util.py"  # the example's `finished` PRD carries footprint src/util.py —
+                                        # collect refuses a footprint its repo does not hold
+                                        # (collect-commits-the-code-repo-not-the-board-repo-twice)
   find "$d" -type f -exec touch {} +
   ( cd "$d" && git init -q -b main && git add -A && git commit -qm init )
   echo "$d"
@@ -141,7 +144,7 @@ OUT="$(python3 "$PEARDE" example 2>"$ERR")"; RC=$?
 eq   "D12 example with no dir → usage, exit 2"                "$RC" "2"
 OUT="$(python3 "$PEARDE" example "$TOP/e" 2>"$ERR")"; RC=$?
 eq   "D13 example <dir> still copies"                         "$RC" "0"
-eq   "D14 …a board is there"                                  "$(test -f "$TOP/e/settings.md" && echo yes)" "yes"
+eq   "D14 …a board is there"                                  "$(test -f "$TOP/e/.pearde/settings.md" && echo yes)" "yes"
 OUT="$(python3 "$PEARDE" set --bogus x open --board "$B" 2>"$ERR")"; RC=$?
 eq   "D15 a transition's own refusal is unchanged (Flags moved, not changed)" "$RC" "2"
 has  "D16 …set takes: --as, --board, --worker, --force, --dry" "$(cat "$ERR")" "set takes: --as, --board, --worker, --force, --dry"

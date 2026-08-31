@@ -63,6 +63,35 @@ last round's owed point 4 with its owed point 5 folded in (the guard's stale
    through the push and the worktree.
 2. **"we also need to restart the page daemon."** Done, above.
 
+## after the push — two things the user asked for
+
+**The Obsidian plugins are fetched at install, not vendored.** Commit
+`f40aca1` on `main`. The 4.9M of third-party bundles left the history;
+`install.sh --apply` now downloads `main.js`, `manifest.json` and `styles.css`
+per plugin from the GitHub release at a pinned version — dataview 0.5.68,
+obsidian-local-rest-api 5.1.0 — into `resources/board/obsidian/plugins/`, which
+`.gitignore` holds out. The vault's own settings (`data.json`, the `.obsidian`
+presets) stay tracked, because those are ours. Report mode says `ok`, `stale`
+(the manifest's version is read back) or `missing`; a failed fetch is a `!`
+line and a non-zero exit. Tested end to end: bundles moved aside, `--apply`
+re-fetched both.
+
+`init.py` no longer copies a plugin directory with no bundle in it — it returns
+the missing names and prints the install line, because a vault without dataview
+renders no view and never said why. `write_obsidian` returns
+`(installed, missing, key)` now; its one caller is updated.
+
+**Obsidian cannot show `.pearde/`, and this is not configurable.** It skips
+every path whose name starts with a `.` before any setting is read, and
+`userIgnoreFilters` only adds ignores. So a vault opened at the repo root saw
+none of the board. `init.py` grew `write_board_link()`: a relative symlink
+`board -> .pearde` beside it, under a name the vault will show, appended to the
+parent `.gitignore` as `/board` with the other machine-local names. It is made
+in this repo already. **Not yet confirmed in Obsidian** — the user should
+reopen the vault at `/Users/feb/dev/infra/pearde` and look for `board/`. If
+Obsidian will not walk the symlink, the fallback is renaming the board
+directory itself, and that is a second relayout — ask before starting it.
+
 ## owed
 
 1. **Run the loop.** The standing instruction from two rounds ago — create the
@@ -98,12 +127,13 @@ last round's owed point 4 with its owed point 5 folded in (the guard's stale
    still unread. It lives in `the-sweep-leaves-nothing-unregistered`, whose
    body carries the path to the output file.
 
-5. **4.9M of vendored Obsidian plugin bundles are now in `main`** —
-   `resources/board/obsidian/plugins/dataview/main.js` (1.2M) and
-   `obsidian-local-rest-api/main.js` (3.6M). Deliberate as far as this round
-   can tell: the vault template opens with nothing to install. Nobody has been
-   asked whether that is the trade they want, and a clone pays it forever.
-   Worth a memo or a submodule, not a silent decision.
+5. **Confirm `board/` shows up in Obsidian**, above. It is the only part of
+   the two follow-ups that is unverified.
+
+6. **`pearde index` is loud about `@skills/…` and `@agents/…`** — nine rows in
+   `references/files.md` and one in `references/knowledge.md`. Pre-existing,
+   owed point 2's PRD, not from these commits; checked after editing
+   `files.md` so the difference is known.
 
 ## still true, and easy to forget
 

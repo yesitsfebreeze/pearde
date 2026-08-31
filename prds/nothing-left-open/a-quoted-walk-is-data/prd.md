@@ -14,6 +14,7 @@ time:              # OPTIONAL. See @references/parts/order.md
   actual: 0.05h
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
 needs: every-probe-harness-is-re-aimed-at-the-pearde-layout
+commit: 21d0dfd
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
      vision importance (priority), and complexity/blast-radius. Add your own

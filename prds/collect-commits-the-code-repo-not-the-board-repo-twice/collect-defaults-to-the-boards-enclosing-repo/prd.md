@@ -14,6 +14,7 @@ time:              # OPTIONAL. See @references/parts/order.md
   actual: 0.09h
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
 from: the-guard-finds-the-board-the-way-the-scan-does
+commit: 55bff9c 0849795
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
      vision importance (priority), and complexity/blast-radius. Add your own

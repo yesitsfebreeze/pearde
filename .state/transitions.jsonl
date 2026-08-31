@@ -34,3 +34,30 @@
 {"calls": null, "from": null, "prd": "the-other-boards-move-once-and-the-script-goes", "reads": null, "refused": null, "t": "2026-08-31T15:27:56", "to": "open", "tokens": null}
 {"calls": null, "from": null, "prd": "the-sweep-leaves-nothing-unregistered", "reads": null, "refused": null, "t": "2026-08-31T15:27:56", "to": "open", "tokens": null}
 {"calls": null, "from": null, "prd": "prds/the-guard-finds-the-board-the-way-the-scan-does", "reads": null, "refused": null, "t": "2026-08-31T15:51:04", "to": "open", "tokens": null}
+{"calls": null, "from": "analyzing", "prd": "nothing-left-open/the-line-tells-the-truth", "reads": null, "refused": null, "t": "2026-08-31T16:13:17", "to": "specced", "tokens": null}
+{"calls": null, "from": "open", "prd": "init-writes-a-board-on-the-pearde-layout", "reads": null, "refused": null, "t": "2026-08-31T16:14:45", "to": "analyzing", "tokens": null}
+{"calls": null, "from": "open", "prd": "every-document-names-the-path-the-board-is-on", "reads": null, "refused": null, "t": "2026-08-31T16:14:48", "to": "analyzing", "tokens": null}
+{"calls": null, "from": "open", "prd": "the-guard-finds-the-board-the-way-the-scan-does", "reads": null, "refused": null, "t": "2026-08-31T16:14:48", "to": "analyzing", "tokens": null}
+{"calls": null, "from": "analyzing", "prd": "every-document-names-the-path-the-board-is-on", "reads": null, "refused": null, "t": "2026-08-31T16:21:33", "to": "open", "tokens": null}
+{"calls": null, "from": "analyzing", "prd": "nothing-left-open/a-quoted-walk-is-data", "reads": null, "refused": null, "t": "2026-08-31T16:21:43", "to": "specced", "tokens": null}
+{"calls": null, "from": "open", "prd": "every-document-names-the-path-the-board-is-on/apply-the-prds-rename-table", "reads": null, "refused": null, "t": "2026-08-31T16:21:49", "to": "analyzing", "tokens": null}
+{"calls": 4, "from": "analyzing", "prd": "every-document-names-the-path-the-board-is-on/apply-the-prds-rename-table", "reads": 0, "refused": 0, "t": "2026-08-31T16:22:05", "to": "open", "tokens": 22370}
+{"calls": 15, "from": "analyzing", "prd": "init-writes-a-board-on-the-pearde-layout", "reads": 0, "refused": 0, "t": "2026-08-31T16:22:52", "to": "specced", "tokens": 2337}
+{"calls": 7, "from": null, "prd": "prds/state-dir-belongs-to-the-board", "reads": 0, "refused": 0, "t": "2026-08-31T16:23:12", "to": "open", "tokens": 1069}
+{"calls": 2, "from": null, "prd": "prds/example-writes-a-board-on-the-pearde-layout", "reads": 0, "refused": 1, "t": "2026-08-31T16:23:18", "to": "open", "tokens": 691}
+{"calls": 1, "from": "specced", "prd": "init-writes-a-board-on-the-pearde-layout", "reads": 0, "refused": 0, "t": "2026-08-31T16:23:25", "to": "claimed", "tokens": 392}
+{"calls": 8, "from": null, "prd": "prds/the-budget-ceiling-counts-the-session-it-stops", "reads": 1, "refused": 4, "t": "2026-08-31T16:24:33", "to": "open", "tokens": 2361}
+{"calls": 8, "from": "analyzing", "prd": "the-guard-finds-the-board-the-way-the-scan-does", "reads": 0, "refused": 0, "t": "2026-08-31T16:25:58", "to": "specced", "tokens": 5032}
+{"calls": 4, "from": "specced", "prd": "the-guard-finds-the-board-the-way-the-scan-does", "reads": 0, "refused": 0, "t": "2026-08-31T16:36:20", "to": "claimed", "tokens": 1008}
+{"from": "claimed", "prd": "the-guard-finds-the-board-the-way-the-scan-does", "t": "2026-08-31 16:41", "to": "done"}
+{"calls": 79, "from": null, "prd": "prds/collect-commits-the-code-repo-not-the-board-repo-twice", "reads": 3, "refused": 1, "t": "2026-08-31T16:43:28", "to": "open", "tokens": 14374}
+{"from": "claimed", "prd": "init-writes-a-board-on-the-pearde-layout", "t": "2026-08-31 16:44", "to": "done"}
+{"calls": 15, "from": "specced", "prd": "nothing-left-open/the-line-tells-the-truth", "reads": 0, "refused": 0, "t": "2026-08-31T16:46:25", "to": "claimed", "tokens": 3551}
+{"calls": 1, "from": "open", "prd": "every-document-names-the-path-the-board-is-on/apply-the-prds-rename-table", "reads": 0, "refused": 0, "t": "2026-08-31T16:46:25", "to": "analyzing", "tokens": 0}
+{"calls": 118, "from": "analyzing", "prd": "every-document-names-the-path-the-board-is-on/apply-the-prds-rename-table", "reads": 8, "refused": 0, "t": "2026-08-31T17:00:32", "to": "specced", "tokens": 12580}
+{"calls": 4, "from": null, "prd": "prds/every-probe-harness-is-re-aimed-at-the-pearde-layout", "reads": 0, "refused": 0, "t": "2026-08-31T17:00:58", "to": "open", "tokens": 1644}
+{"calls": 2, "from": "claimed", "prd": "nothing-left-open/the-line-tells-the-truth", "reads": 0, "refused": 0, "t": "2026-08-31T17:01:05", "to": "blocked", "tokens": 315}
+{"calls": 14, "from": "specced", "prd": "every-document-names-the-path-the-board-is-on/apply-the-prds-rename-table", "reads": 0, "refused": 0, "t": "2026-08-31T17:20:06", "to": "claimed", "tokens": 4088}
+{"calls": 13, "from": null, "prd": "prds/brief-does-not-refuse-the-claim-it-was-just-handed", "reads": 3, "refused": 0, "t": "2026-08-31T17:20:57", "to": "open", "tokens": 4368}
+{"calls": 1, "from": null, "prd": "prds/an-analyst-workflow-does-not-survive-into-specced", "reads": 0, "refused": 0, "t": "2026-08-31T17:21:06", "to": "open", "tokens": 0}
+{"calls": 17, "from": null, "prd": "prds/one-definition-of-the-board-not-two", "reads": 0, "refused": 0, "t": "2026-08-31T17:22:03", "to": "open", "tokens": 3377}

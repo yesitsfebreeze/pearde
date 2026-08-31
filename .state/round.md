@@ -1,143 +1,163 @@
-# round
+# round — the previous round's owed list is cleared, and the collect is the wall
 
-**Everything last round owed as point 1 is done: committed and pushed, both
-halves.** `main` carries the source tree at `3114ee8`; the board carries its own
-history on the orphan branch `pearde` at `c624a16`, checked out as `.pearde/`
-through a worktree. Working tree clean on both.
+## Established
 
-## how to resume
+- `scan` at open: 63 PRDs, done 41 · open 17 · superseded 2 · specced 2 ·
+  blocked 1; progress done 34/53 · 67%; workers=1, pipeline=3.
+  `sweep --as engineer`: `no claim silent past claim-ttl 30m`.
+- **`sweep` and every board command refuse without a persona.** This shell is
+  `nu`, so `export PEARDE_AS=engineer` does not apply — pass `--as engineer`
+  on every line. Do not spend a turn rediscovering this.
+- Two repos, one board, unchanged from last round: `/Users/feb/dev/infra/pearde/.pearde`
+  is the BOARD repo and holds the PRD tree; `/Users/feb/dev/infra/pearde` is
+  the OUTER repo and holds every footprint path — `references/`, `resources/`,
+  `README.md`, `index.md`.
 
-Read this file, then `python3 resources/pearde.py scan`. 56 PRDs, 13 open,
-9 ready, nothing blocking, no question open. The page daemon is up and
-watching this board — `pearde view status` says so.
+## The previous round's owed list — 1, 2, 3 and 6 are cleared
 
-## done this round
+**1 · The ~48-file rename diff is reviewed and it is sound.** `git diff --numstat`
+over the outer repo: every one of the 48 files has equal insertions and
+deletions — a 1-for-1 line replacement, 207/207. The only line in the whole
+diff that is not a path rename is one prose rewrap in `references/parts/workers.md`
+(`repo, installed` → `in this repo, installed`). Every path is inside
+spec01's `footprint:` (`references/`, `resources/`, `README.md`, `index.md`).
+**There is no wrong footprint and nothing to name under
+@references/parts/commits.md's out-of-footprint rule.** The parent PRD carries
+no `footprint:` of its own; it does not need one — `collect` unions the specs'.
 
-**Pushed, in three commits on `main`** (remote is
-`https://github.com/yesitsfebreeze/pearde.git`; the history commits straight to
-`main`, so the `merge PR N:` subjects are local merges, not a PR flow):
+**2 · The board side is committed.** Three commits in the BOARD repo:
 
-    7b88100  the board moves to .pearde/, and the knowledge layer lands
-    3b829fd  skills/ and agents/ move under references/
-    3114ee8  the board leaves the index — .pearde/ is ignored
+- **`c1156d3`** `nothing-left-open/the-line-tells-the-truth — blocked: …` —
+  the PRD folder whole, `memos/two-holes-the-flag-probe-found.md`, and the
+  five `workflows/*.md`, plus `prds/every-probe-harness-is-re-aimed-at-the-pearde-layout/`
+  as the named unblocker it filed.
+- **`5f8c387`** `… — record` — `commit: c1156d3` alone, the one key that
+  cannot name the commit it is in.
+- **`76df2d4`** `every-document-names-the-path-the-board-is-on — the refine
+  split, and the board state that had been riding` — the refine's two-row
+  table and `resolve-bare-board-path-mentions/`, `a-quoted-walk-is-data`'s
+  `analyzing → specced` from an earlier round, `pipeline: 1 → 3`, and the
+  seven finding PRDs that had never been committed.
 
-The last one carried 245 `prds/*` deletions out of the index plus two session
-artifacts that were gone from disk and never mentioned last round: `TODO.md`
-and `improvements-report.md` — the second added in the previous commit and
-deleted by another session. They are of the kind `/report*.md` and
-`/handover.md` now ignore, so they went with the board.
+The board repo is now clean but for `.state/` and the in-flight PRD folder.
 
-**The orphan worktree stands.** `git worktree add --orphan -b pearde .pearde`
-(git 2.55, so the modern form worked), board copied back in, first commit
-pushed with `-u`. Both gates the plan named pass:
+**3 · `pearde workflow check` — root cause found, and the four atomic edits
+are verified.** It was never the edits. **`resources/plan.py find_board`
+resolves the board to `.pearde/`; `resources/memos.py find_board` — which
+`workflows.py` and everything else delegating to it uses — still resolves it
+to `<x>/prds`.** Two definitions of the word *board* in one tool, the second
+a directory inside the first. Every library helper then joins its name one
+level too deep: `.pearde/prds/workflows`, `.pearde/prds/memos`,
+`.pearde/prds/knowledge`, none of which exist.
 
-- `scan` from the repo root finds the board — 55 PRDs at the time, 56 now.
-- `git status -sb` on `main` is `## main...origin/main` and nothing else.
+Measured: `pearde memo list .pearde` prints nothing over 16 memos on disk;
+`pearde memo check .pearde` prints nothing **because it opened no file**, and
+`doctor`'s memos row runs it, so doctor reports memos ok while blind;
+`pearde workflow list .pearde` prints nothing over 18 atomics.
 
-`git worktree list` shows the two, and the temporary copy at
-`../pearde-board-tmp` is deleted.
+**The workaround, and the verification it bought.** Calling
+`workflows.check('/Users/feb/dev/infra/pearde/.pearde')` in-process — the
+board directory, not the `prds/` child — is **silent**. All 18 atomics parse.
+The four edited files carry their bumps: `read-the-contract` runs 45,
+`capture-the-harness-baseline` runs 45, `attempt-the-build` runs 25, all
+`updated: 2026-08-31`; `re-run-the-harnesses` runs 45; `probe-then-spec` runs
+25, `kind: workflow`. **The edits committed in `c1156d3` are verified. This
+owed item is closed, not carried.**
 
-**What the board branch ignores**, decided against the disk rather than from
-last round's note: `.claims/`, `.state/plan.json`, `.state/view.html`,
-`graphify/`, `wiki/graphs/` and `wiki/board/`. Last round's note said the whole
-of `wiki/` was regenerable; it is not — `wiki/sources/`, `wiki/conclusions/`,
-`wiki/pending/`, `Dashboard.md` and `WORKFLOW.md` are the knowledge base and
-are tracked. Only `wiki/board/` (a mirror of the PRDs) and `wiki/graphs/` are
-written by a tool. `.state/round.md`, `history.jsonl` and `transitions.jsonl`
-are tracked — the board's own record, which nothing rebuilds.
+**6 · Three findings filed, all `origin: derived`:**
 
-**The page daemon was restarted, on the user's word mid-round.** It was up on
-the old registrations and did not know this board at all — every entry pointed
-at some other repo's `prds/`. `view stop` then `view --no-open` registered
-`pearde · /Users/feb/dev/infra/pearde/.pearde`. It was stopped again for the
-worktree move and started after it. The other eight boards re-register on their
-own next sync.
+- `one-definition-of-the-board-not-two` (p88) — the above.
+- `an-analyst-workflow-does-not-survive-into-specced` (p60) — the refused
+  fifth workflow edit's real cause. No flag works around it.
+- `brief-does-not-refuse-the-claim-it-was-just-handed` (p45) — `brief` refuses
+  the `claimed` state `claim` just wrote, so @references/parts/loop.md steps 4
+  and 5 cannot be run as documented without `--force` on every dispatch.
 
-**One PRD added** — `the-guard-finds-the-board-the-way-the-scan-does`, p72,
-last round's owed point 4 with its owed point 5 folded in (the guard's stale
-`prds/.round.md` message belongs to the same file, not to the docs sweep).
+Derived against requested, counting open + analyzing + specced + claimed:
+**4 to 18.** @references/parts/derived.md's tripwire is nowhere near.
 
-## the user's instructions this round
+## Dispatched, and what came back
 
-1. **"resume the round."** Read as: the owed list, first point first. Done
-   through the push and the worktree.
-2. **"we also need to restart the page daemon."** Done, above.
+| worker | PRD | verdict | move made |
+|---|---|---|---|
+| impl-1 | `every-document-names-the-path-the-board-is-on/apply-the-prds-rename-table` | **DONE** | none yet — the collect is refused, below |
 
-## after the push — two things the user asked for
+`brief` again needed `--force`, as filed. The brief was hand-corrected with
+the two-repo root note before dispatch; without it the worker resolves every
+footprint path against the board.
 
-**The Obsidian plugins are fetched at install, not vendored.** Commit
-`f40aca1` on `main`. The 4.9M of third-party bundles left the history;
-`install.sh --apply` now downloads `main.js`, `manifest.json` and `styles.css`
-per plugin from the GitHub release at a pinned version — dataview 0.5.68,
-obsidian-local-rest-api 5.1.0 — into `resources/board/obsidian/plugins/`, which
-`.gitignore` holds out. The vault's own settings (`data.json`, the `.obsidian`
-presets) stay tracked, because those are ours. Report mode says `ok`, `stale`
-(the manifest's version is read back) or `missing`; a failed fetch is a `!`
-line and a non-zero exit. Tested end to end: bundles moved aside, `--apply`
-re-fetched both.
+impl-1 reports spec01 5/5 boxes ticked with quoted output. In-scope `prds/`
+lines 221 → 76; 45 unconverted tokens, 36 bare `prds/` (the sibling PRD's job)
+and 9 named exceptions. It fixed six table-rule matches pass one missed for
+want of a trailing slash — `references/archive.md` 65, 70, 82, 96 and
+`references/obsidian.md` 78. `git diff --stat` now 49 files, 211/211.
+`py_compile` 9/9, `bash -n` 2/2, zero `.pearde/.pearde` or `prds/prds`.
 
-`init.py` no longer copies a plugin directory with no bundle in it — it returns
-the missing names and prints the install line, because a vault without dataview
-renders no view and never said why. `write_obsidian` returns
-`(installed, missing, key)` now; its one caller is updated.
+## The wall — `collect --dry` is refused, and it is the Verify block
 
-**Obsidian cannot show `.pearde/`, and this is not configurable.** It skips
-every path whose name starts with a `.` before any setting is read, and
-`userIgnoreFilters` only adds ignores. So a vault opened at the repo root saw
-none of the board. `init.py` grew `write_board_link()`: a relative symlink
-`board -> .pearde` beside it, under a name the vault will show, appended to the
-parent `.gitignore` as `/board` with the other machine-local names. It is made
-in this repo already. **Not yet confirmed in Obsidian** — the user should
-reopen the vault at `/Users/feb/dev/infra/pearde` and look for `board/`. If
-Obsidian will not walk the symlink, the fallback is renaming the board
-directory itself, and that is a second relayout — ask before starting it.
+```
+collect: every-document-names-the-path-the-board-is-on/apply-the-prds-rename-table:
+  spec01 exit 1 — nothing written
+spec01: exit 1
+     164
+references/archive.md is on disk with no row in references/files.md
+```
 
-## owed
+Two things are wrong and neither is the rename:
 
-1. **Run the loop.** The standing instruction from two rounds ago — create the
-   PRDs, then use subagents — is now unblocked in full. Nine are ready:
+1. **The Verify block asserts a failure the Acceptance box explicitly
+   permits.** Box 2 says `index.py check` should print *only* the
+   pre-existing `references/archive.md` line. `index.py check` **exits 1**
+   when it prints that line, the block's last-command exit is what `collect`
+   reads, so the spec fails on exactly the condition it was written to allow.
+   The block's `echo "exit $?"` records the code and then discards it.
+2. **The grep count printed 164 where impl-1 reported 152.** Not
+   reconciled — the round hit its ceiling here. It is a count, not a
+   correctness claim, and box 1 reads "far below the measured-before count",
+   so 164 does not by itself fail anything. Establish which is right before
+   editing anything.
 
-       p80  init-writes-a-board-on-the-pearde-layout
-       p75  every-document-names-the-path-the-board-is-on
-       p72  the-guard-finds-the-board-the-way-the-scan-does
-       p70  the-doctor-checks-the-path-a-board-is-on
-       p65  the-vault-ignores-the-paths-the-board-writes
-       p60  the-board-asks-for-itself/a-route-is-written-at-spec-time
-       p60  the-graph-lands-inside-the-board
-       p40  the-sweep-leaves-nothing-unregistered
-       p0   the-knowledge-loop-runs-in-the-round
+The PRD is left **`claimed`**, `claim: impl-1 2026-08-31 17:20`. The work is
+on disk and the boxes are ticked; only the transition is owed.
 
-   The orchestrator dispatches `pearde-analyst` and `pearde-implementer` at
-   loop steps 4 and 5 with `pearde brief <prd>` as the whole prompt — never by
-   hand. Two are already `analyzing` and one of those has been silent since
-   2026-08-29; `sweep` has not run this session.
+## Dirty and uncommitted at stop
 
-2. **The manifest still names the old paths.** `references/files.md`'s
-   `agents/` section and its two `@agents/...` rows, `index.md`'s `@@workers`
-   row, `references/parts/workers.md` in prose, and nothing registering
-   `references/skills/`. `pearde index` is loud until
-   `every-document-names-the-path-the-board-is-on` runs. Expected, named in
-   that PRD's body, not a regression.
+- **outer repo** — 49 files under `references/`, `resources/`, `README.md`,
+  `index.md`. All of it is the rename, reviewed above, inside the footprint.
+  Nothing else. **This is the whole of what the collect must commit.**
+- **board repo** — `.state/*` only, plus
+  `prds/every-document-names-the-path-the-board-is-on/apply-the-prds-rename-table/`,
+  which is the in-flight PRD's own folder.
 
-3. **Sweep for more relayout misses.** Two `os.path.join(board, ...)` calls
-   that should have been `prds_dir(board)` have been found in two different
-   files (`init.py`, then `transitions.py` `add()`). Assume a third.
+## Owed, in order
 
-4. **The workflow finding on `.history.jsonl` vs `.transitions.jsonl`** is
-   still unread. It lives in `the-sweep-leaves-nothing-unregistered`, whose
-   body carries the path to the output file.
+1. **Settle the Verify block, then collect.** The honest assertion is that
+   `index.py check` prints nothing naming `agents/` or `skills/` — not that it
+   exits 0. Either the spec's block ends on a command whose exit reflects the
+   box, or `index.py check`'s exit code is the defect and gets its own PRD.
+   Decide which; do not paper over it by deleting the check.
+2. **Find out whether `collect` can commit the outer repo at all.** `collect`
+   resolves its repo the way `plan.py repo_root()` does — up from the board,
+   stopping at `.pearde/.git`. Every path it must commit is in the *outer*
+   repo. This is exactly
+   `collect-commits-the-code-repo-not-the-board-repo-twice` (p88, open), and
+   this collect is the first one that actually needs it. If `collect` cannot
+   reach the outer repo, the choice is to land that PRD first or to commit
+   the 49 files by hand and write `commit:` in by hand, as `c1156d3` was.
+3. **File impl-1's two out-of-scope findings** (it did not file them; the
+   report holds them): `resources/doctor.sh:69` still globs `skills/*.md`
+   after the move, so `doctor` reports `skills broken` on a healthy install;
+   and `resources/board/knowledge/**` plus `obsidian/**` still name
+   `prds/knowledge/` in 43 live Dataview/Obsidian queries against a vault now
+   at `.pearde/wiki/`. Both `origin: derived`.
+4. `every-probe-harness-is-re-aimed-at-the-pearde-layout` (p85) — closes
+   `the-line-tells-the-truth`'s 7 boxes with no further code change.
+5. `one-definition-of-the-board-not-two` (p88) and
+   `collect-commits-the-code-repo-not-the-board-repo-twice` (p88) — until
+   both land, every checker on this board can report clean by seeing nothing
+   and every collect commits into the wrong repo.
+6. `pearde report`, then park `pearde view wait`.
 
-5. **Confirm `board/` shows up in Obsidian**, above. It is the only part of
-   the two follow-ups that is unverified.
+## Asked
 
-6. **`pearde index` is loud about `@skills/…` and `@agents/…`** — nine rows in
-   `references/files.md` and one in `references/knowledge.md`. Pre-existing,
-   owed point 2's PRD, not from these commits; checked after editing
-   `files.md` so the difference is known.
-
-## still true, and easy to forget
-
-Several sessions write this board. Check whether a file is already changed
-before assuming an edit is yours — two of last round's directory moves had
-already been made elsewhere. One git identity, one writer per file, never
-amend a HEAD that is not yours.
+Nothing is out to the user. No `question` PRD on the board.

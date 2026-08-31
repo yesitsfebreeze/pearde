@@ -20,6 +20,7 @@ footprint:
   - references/drill.md
   - resources/board/specs.py
   - resources/workflows.py
+commit: cdfd4a6 eef2dba
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
      vision importance (priority), and complexity/blast-radius. Add your own

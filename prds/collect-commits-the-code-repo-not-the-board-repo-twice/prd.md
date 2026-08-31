@@ -1,5 +1,5 @@
 ---
-state: open        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
+state: done        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: derived     # requested = the user asked | derived = the board found it
 from: the-guard-finds-the-board-the-way-the-scan-does
 # from-was:            # derived only — the PRD whose work surfaced this one
@@ -12,8 +12,9 @@ repo:              # the sub-repo the code lands in; delete if n/a
 #                  #   Absent = the brief alone, as before workflows
 time:              # OPTIONAL. See @references/parts/order.md
   est:             # the weight, only when complexity is absent. Not a duration
-  actual:          # a record. Nothing reads it
+  actual: 0.31h
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
+commit: 7f739fa
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
      vision importance (priority), and complexity/blast-radius. Add your own

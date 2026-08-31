@@ -1,0 +1,7 @@
+{"d": "2026-08-25", "done": 1, "hdone": 12.0, "hleft": 22.0, "left": 1, "states": {"claimed": 1, "done": 1}}
+{"d": "2026-08-26", "done": 3, "hdone": 79.0, "hleft": 0.0, "left": 0, "states": {"done": 3}}
+{"d": "2026-08-27", "done": 3, "hdone": 79.0, "hleft": 0.0, "left": 1, "states": {"done": 3, "open": 1}}
+{"d": "2026-08-28", "done": 23, "hdone": 627.0, "hleft": 13.0, "left": 6, "states": {"analyzing": 2, "claimed": 1, "deferred": 1, "done": 23, "open": 3, "superseded": 2}}
+{"d": "2026-08-29", "done": 37, "hdone": 851.0, "hleft": 32.0, "left": 7, "states": {"analyzing": 2, "claimed": 1, "done": 37, "open": 4, "superseded": 2}}
+{"d": "2026-08-30", "done": 39, "hdone": 909.0, "hleft": 0.0, "left": 6, "states": {"analyzing": 2, "done": 39, "open": 4, "superseded": 2}}
+{"d": "2026-08-31", "done": 39, "hdone": 909.0, "hleft": 0.0, "left": 14, "states": {"analyzing": 2, "done": 39, "open": 12, "superseded": 2}}

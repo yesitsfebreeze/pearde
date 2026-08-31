@@ -1,0 +1,35 @@
+{"from": null, "prd": "x", "t": "2026-08-28T22:52:37", "to": "open"}
+{"calls": null, "from": "specced", "prd": "workflows-on-the-board/workflow-skill", "reads": null, "refused": null, "t": "2026-08-29T07:36:46", "to": "claimed", "tokens": null}
+{"calls": null, "from": null, "prd": "the-board-asks-for-itself", "reads": null, "refused": null, "t": "2026-08-29T07:49:51", "to": "open", "tokens": null}
+{"calls": null, "from": null, "prd": "the-board-asks-for-itself/a-question-in-plain-words", "reads": null, "refused": null, "t": "2026-08-29T07:49:51", "to": "open", "tokens": null}
+{"calls": null, "from": null, "prd": "the-board-asks-for-itself/two-questions-start-a-drill", "reads": null, "refused": null, "t": "2026-08-29T07:49:51", "to": "open", "tokens": null}
+{"calls": null, "from": null, "prd": "the-board-asks-for-itself/a-route-is-written-at-spec-time", "reads": null, "refused": null, "t": "2026-08-29T07:49:51", "to": "open", "tokens": null}
+{"calls": null, "from": "open", "prd": "workflows-on-the-board", "reads": null, "refused": null, "t": "2026-08-29T07:55:57", "to": "analyzing", "tokens": null}
+{"calls": null, "from": "analyzing", "prd": "workflows-on-the-board", "reads": null, "refused": null, "t": "2026-08-29T07:58:06", "to": "open", "tokens": null}
+{"calls": null, "from": "open", "prd": "one-page-that-says-whats-up", "reads": null, "refused": null, "t": "2026-08-29T07:59:43", "to": "analyzing", "tokens": null}
+{"calls": 180, "from": "analyzing", "prd": "one-page-that-says-whats-up", "reads": 0, "refused": 180, "t": "2026-08-29T08:33:18", "to": "specced", "tokens": null}
+{"calls": 0, "from": "specced", "prd": "one-page-that-says-whats-up", "reads": 0, "refused": 0, "t": "2026-08-29T08:33:22", "to": "claimed", "tokens": null}
+{"from": "open", "prd": "workflows-on-the-board", "t": "2026-08-29 09:27", "to": "done"}
+{"from": "open", "prd": "the-tool-keeps-its-word", "t": "2026-08-29 09:28", "to": "done"}
+{"calls": 57, "from": "open", "prd": "the-board-asks-for-itself/a-question-in-plain-words", "reads": 0, "refused": 57, "t": "2026-08-29T10:43:00", "to": "analyzing", "tokens": null}
+{"calls": 0, "from": "analyzing", "prd": "the-board-asks-for-itself/a-question-in-plain-words", "reads": 0, "refused": 0, "t": "2026-08-29T10:43:31", "to": "open", "tokens": null}
+{"calls": 0, "from": "open", "prd": "the-board-asks-for-itself/a-question-in-plain-words", "reads": 0, "refused": 0, "t": "2026-08-29T10:43:31", "to": "analyzing", "tokens": null}
+{"calls": 11, "from": "deferred", "prd": "check-crosses-member-boundaries", "reads": 0, "refused": 11, "t": "2026-08-29T11:09:13", "to": "open", "tokens": null}
+{"calls": 2, "from": "analyzing", "prd": "the-board-asks-for-itself/a-question-in-plain-words", "reads": 0, "refused": 2, "t": "2026-08-29T11:13:49", "to": "specced", "tokens": null}
+{"calls": null, "from": "open", "prd": "check-crosses-member-boundaries", "reads": null, "refused": null, "t": "2026-08-29T17:24:09", "to": "analyzing", "tokens": null}
+{"calls": null, "from": "specced", "prd": "the-board-asks-for-itself/a-question-in-plain-words", "reads": null, "refused": null, "t": "2026-08-29T17:24:36", "to": "claimed", "tokens": null}
+{"calls": 63, "from": "analyzing", "prd": "nothing-left-open/the-skill-tree-is-guarded", "reads": 2, "refused": 3, "t": "2026-08-29T17:57:20", "to": "specced", "tokens": 457596}
+{"calls": 25, "from": "specced", "prd": "nothing-left-open/the-skill-tree-is-guarded", "reads": 0, "refused": 2, "t": "2026-08-29T18:00:27", "to": "claimed", "tokens": 2836}
+{"from": "claimed", "prd": "nothing-left-open/the-skill-tree-is-guarded", "t": "2026-08-29 18:06", "to": "done"}
+{"calls": 78, "from": null, "prd": "nothing-left-open/a-quoted-walk-is-data", "reads": 0, "refused": 3, "t": "2026-08-29T19:11:25", "to": "open", "tokens": 36977}
+{"calls": 2, "from": "open", "prd": "nothing-left-open/a-quoted-walk-is-data", "reads": 0, "refused": 0, "t": "2026-08-29T19:11:39", "to": "analyzing", "tokens": 566}
+{"calls": 92, "from": "analyzing", "prd": "check-crosses-member-boundaries", "reads": 0, "refused": 1, "t": "2026-08-29T20:48:49", "to": "specced", "tokens": 472682}
+{"calls": 0, "from": "specced", "prd": "check-crosses-member-boundaries", "reads": 0, "refused": 0, "t": "2026-08-29T20:48:49", "to": "claimed", "tokens": 0}
+{"calls": 167, "from": null, "prd": "the-knowledge-loop-runs-in-the-round", "reads": 4, "refused": 0, "t": "2026-08-31T13:26:57", "to": "open", "tokens": 46513}
+{"calls": null, "from": null, "prd": "init-writes-a-board-on-the-pearde-layout", "reads": null, "refused": null, "t": "2026-08-31T15:27:55", "to": "open", "tokens": null}
+{"calls": null, "from": null, "prd": "every-document-names-the-path-the-board-is-on", "reads": null, "refused": null, "t": "2026-08-31T15:27:55", "to": "open", "tokens": null}
+{"calls": null, "from": null, "prd": "the-doctor-checks-the-path-a-board-is-on", "reads": null, "refused": null, "t": "2026-08-31T15:27:56", "to": "open", "tokens": null}
+{"calls": null, "from": null, "prd": "the-vault-ignores-the-paths-the-board-writes", "reads": null, "refused": null, "t": "2026-08-31T15:27:56", "to": "open", "tokens": null}
+{"calls": null, "from": null, "prd": "the-graph-lands-inside-the-board", "reads": null, "refused": null, "t": "2026-08-31T15:27:56", "to": "open", "tokens": null}
+{"calls": null, "from": null, "prd": "the-other-boards-move-once-and-the-script-goes", "reads": null, "refused": null, "t": "2026-08-31T15:27:56", "to": "open", "tokens": null}
+{"calls": null, "from": null, "prd": "the-sweep-leaves-nothing-unregistered", "reads": null, "refused": null, "t": "2026-08-31T15:27:56", "to": "open", "tokens": null}

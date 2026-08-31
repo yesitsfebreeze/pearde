@@ -1,0 +1,19 @@
+# The board's own branch. Everything here is the plan; what a tool can
+# rebuild from it does not belong in the history.
+
+.DS_Store
+
+# live worker state — a claim is true only while the worker holds it
+.claims/
+
+# rebuilt by `pearde scan` and `pearde view`
+.state/plan.json
+.state/view.html
+
+# graphify's engine and its output — rebuilt by `pearde graph`
+graphify/
+wiki/graphs/
+wiki/board/
+
+# kept: .state/round.md, .state/history.jsonl, .state/transitions.jsonl —
+# the board's own record of what happened, which nothing regenerates.

@@ -33,3 +33,4 @@
 {"calls": null, "from": null, "prd": "the-graph-lands-inside-the-board", "reads": null, "refused": null, "t": "2026-08-31T15:27:56", "to": "open", "tokens": null}
 {"calls": null, "from": null, "prd": "the-other-boards-move-once-and-the-script-goes", "reads": null, "refused": null, "t": "2026-08-31T15:27:56", "to": "open", "tokens": null}
 {"calls": null, "from": null, "prd": "the-sweep-leaves-nothing-unregistered", "reads": null, "refused": null, "t": "2026-08-31T15:27:56", "to": "open", "tokens": null}
+{"calls": null, "from": null, "prd": "prds/the-guard-finds-the-board-the-way-the-scan-does", "reads": null, "refused": null, "t": "2026-08-31T15:51:04", "to": "open", "tokens": null}

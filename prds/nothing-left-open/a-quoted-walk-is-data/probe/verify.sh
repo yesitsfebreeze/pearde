@@ -3,7 +3,10 @@
 # not a walk carried as data. Runs against the repo's guard.py with the
 # guard's state in a scratch dir; writes nothing under resources/board/state/.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
+# the code repo — the nearest ancestor holding resources/guard.py, so the
+# board's depth under it never matters
+ROOT="$(cd "$(dirname "$0")" && pwd)"
+while [ ! -f "$ROOT/resources/guard.py" ] && [ "$ROOT" != "/" ]; do ROOT="$(dirname "$ROOT")"; done
 GUARD="$ROOT/resources/guard.py"
 D="$(mktemp -d)"; export PEARDE_GUARD_STATE="$D/state"
 pass=0; fail=0
@@ -12,7 +15,7 @@ has() { case "$2" in *"$3"*) ok "$1" 0 ;; *) ok "$1" 1 "missing: $3" ;; esac; }
 lacks() { case "$2" in *"$3"*) ok "$1" 1 "found: $3" ;; *) ok "$1" 0 ;; esac; }
 
 # a project with a board, so the walk rule is in scope
-mkdir -p "$D/proj/prds/one"; printf -- '---\nstate: open\n---\n# one\n' > "$D/proj/prds/one/prd.md"
+mkdir -p "$D/proj/.pearde/prds/one"; printf -- '---\nstate: open\n---\n# one\n' > "$D/proj/.pearde/prds/one/prd.md"
 # the command goes in as JSON via python, so quotes and newlines survive
 bash_hook() { # command → guard's stdout
   python3 - "$D/proj" "$1" <<'PY' | python3 "$GUARD" pre 2>&1

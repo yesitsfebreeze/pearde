@@ -129,6 +129,16 @@ def check():
         if not covered(path, dir_rows):
             problems.append(f"{path} is on disk with no row in {manifest}")
     for path in sorted(listed - dir_rows - disk):
+        # An install is symlinks: `references/` and `resources/` are links
+        # into the source repo, and os.walk does not descend a linked dir,
+        # so membership in `disk` alone convicted every installed file. A
+        # top-level file outside the linked set (`.gitignore`) is absent
+        # from an install by design — there the check judges the wiring,
+        # and the source repo remains the authority on the manifest.
+        if os.path.exists(os.path.join(ROOT, path)):
+            continue
+        if os.path.islink(os.path.join(ROOT, "references")):
+            continue
         problems.append(f"{manifest} lists @{path} — not on disk")
     for path in sorted(dir_rows):
         if not os.path.isdir(os.path.join(ROOT, path)):

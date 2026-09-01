@@ -235,6 +235,34 @@ const file = served ? arg : path.resolve(arg);
   if (wide0) await page.setViewportSize(wide0);
   await page.waitForTimeout(300);
 
+  // N opens the new-PRD modal, and the modal carries its editor toolbar
+  await page.keyboard.press("n");
+  await page.waitForTimeout(250);
+  const modal = await page.evaluate(() => ({
+    open: !!document.querySelector("#newbox.on"),
+    tools: !!document.querySelector("#newbox #ntools #mdbold"),
+  }));
+  checks.push(["N opens the new-PRD modal with its editor toolbar",
+               modal.open && modal.tools,
+               modal.open && modal.tools ? ""
+                 : modal.open ? "toolbar missing" : "did not open"]);
+  await page.keyboard.press("Escape");
+  await page.waitForTimeout(150);
+
+  // the theme switch: pin, and the root wears the stamp; a full cycle
+  // releases it back to the system
+  const t0 = await page.evaluate(() => document.documentElement.dataset.theme || "");
+  await page.click("#themetog").catch(() => {});
+  await page.waitForTimeout(150);
+  const t1 = await page.evaluate(() => document.documentElement.dataset.theme || "");
+  await page.click("#themetog").catch(() => {});
+  await page.click("#themetog").catch(() => {});
+  await page.waitForTimeout(150);
+  const t3 = await page.evaluate(() => document.documentElement.dataset.theme || "");
+  checks.push(["the theme switch pins a theme and a cycle releases it",
+               t0 === "" && (t1 === "light" || t1 === "dark") && t3 === "",
+               `${t0 || "system"} → ${t1 || "system"} → ${t3 || "system"}`]);
+
   for (const v of ["timeline", "board", "asks", "list", "analytics", "memos", "report"]) {
     const before = errors.length;
     await page.click(`#views a[data-v="${v}"]`).catch(e => errors.push(`${v}: ${e.message}`));
@@ -272,9 +300,20 @@ const file = served ? arg : path.resolve(arg);
           // a card showing an empty question block answers nothing
           emptyRounds: cards.filter(c =>
             c.querySelector(".qq") && !c.querySelector(".qq .opt")).length,
-          // every rendered round must offer a recommendation to take
-          recWithoutButton: cards.filter(c =>
-            c.querySelector(".qq .rec") && c.querySelector(".act.rec")?.hidden).length,
+          // a parsed round answers per question — the card's bulk
+          // textarea/submit must be gone, one submit per question only
+          bulkOnParsed: cards.filter(c => c.querySelector(".qq") &&
+            c.querySelector(".foot") &&
+            getComputedStyle(c.querySelector(".foot")).display !== "none").length,
+          // every question carries its own reopen (revealed once answered)
+          roundsMissingReopen: [...document.querySelectorAll("#asks .qq")]
+            .filter(q => !q.querySelector(".qreopen")).length,
+          // a card that is not askable says so rather than dumping the body
+          dumps: cards.filter(c => c.querySelector(".q") &&
+            !c.querySelector(".qq") && !c.querySelector(".qbad") &&
+            !/could not read|nothing yet|through the service/
+              .test(c.querySelector(".q").textContent) &&
+            !c.querySelector(".flag.blocked")).length,
           // every question answers on its own, and one already written back
           // is not in the inbox at all — it is in the answered panel
           roundsMissingSend: [...document.querySelectorAll("#asks .qq")].filter(q =>
@@ -296,8 +335,12 @@ const file = served ? arg : path.resolve(arg);
                    `${a.broken} of ${a.n}`]);
       checks.push(["no card renders a round with no options", a.emptyRounds === 0,
                    `${a.withPicks} of ${a.n} cards carry picks`]);
-      checks.push(["a recommended round offers the one-click take",
-                   a.recWithoutButton === 0, ""]);
+      checks.push(["a parsed round has no bulk submit",
+                   a.bulkOnParsed === 0, `${a.bulkOnParsed} cards`]);
+      checks.push(["every question carries its own reopen",
+                   a.roundsMissingReopen === 0, ""]);
+      checks.push(["an unaskable card says so instead of dumping the body",
+                   a.dumps === 0, `${a.dumps} cards`]);
       checks.push(["every open question has its own submit",
                    a.roundsMissingSend === 0, ""]);
       checks.push(["an answered question has left the inbox",
@@ -308,6 +351,31 @@ const file = served ? arg : path.resolve(arg);
                    a.panelUnsorted === 0, `${a.panelUnsorted} out of order`]);
     }
   }
+
+  // The plan's scale is fitted to the plot's width and to how much plan is
+  // left. A window resized while the plan is hidden fits to a plot of no
+  // width — every bar in a 120px band at the left of the frame, the minimap
+  // still spanning the whole track because it never reads the scale. So:
+  // hide the plan, resize, come back, and the world the scroller is told
+  // about must still be wider than the frame it is read in.
+  await page.click('#views a[data-v="board"]').catch(() => {});
+  await page.waitForTimeout(120);
+  await page.setViewportSize({ width: 1100, height: 900 });
+  await page.waitForTimeout(300);
+  await page.click('#views a[data-v="timeline"]').catch(() => {});
+  await page.waitForTimeout(400);
+  const fit = await page.evaluate(() => {
+    const plot = document.getElementById("plot");
+    const sel = document.getElementById("zsel");
+    return { w: plot.clientWidth,
+             spacer: parseFloat(document.getElementById("spacer").style.width) || 0,
+             view: sel ? sel.value : "" };
+  });
+  checks.push(["a resize behind the plan does not squash the plot",
+               fit.view !== "default" || fit.spacer > fit.w + 1,
+               `${fit.view} · spacer ${Math.round(fit.spacer)} vs plot ${fit.w}`]);
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.waitForTimeout(300);
 
   // --snap <dir> writes each view's DOM; --check <dir> compares against it.
   // A port is provable when every view's markup is unchanged.
@@ -357,6 +425,71 @@ const file = served ? arg : path.resolve(arg);
     }
     if (mode === "--snap") console.log(`  snapshots written to ${dir}`);
   }
+
+  // The whole track is the floor: there is nothing before the first landed
+  // bar and nothing after the vision, so zooming out past that buys empty
+  // ground with the plan's own size. Held down, the − button must land on
+  // the same scale "fit all" does and stop there.
+  await page.click('#views a[data-v="timeline"]').catch(() => {});
+  await page.waitForTimeout(200);
+  for (let i = 0; i < 25; i++) await page.click("#zo").catch(() => {});
+  await page.waitForTimeout(500);
+  const out = await page.evaluate(() => ({
+    plot: document.getElementById("plot").clientWidth,
+    spacer: Math.round(parseFloat(document.getElementById("spacer").style.width) || 0),
+  }));
+  await page.click("#cv").catch(() => {});
+  await page.keyboard.press("f");
+  await page.waitForTimeout(500);
+  const all = await page.evaluate(() =>
+    Math.round(parseFloat(document.getElementById("spacer").style.width) || 0));
+  checks.push(["zooming out stops at the whole track",
+               out.spacer > 0 && Math.abs(out.spacer - all) <= 2 &&
+               out.spacer >= out.plot,
+               `−25 → ${out.spacer}, fit all → ${all}, plot ${out.plot}`]);
+
+  // "fit all" is both axes: a plan that fits across and runs off the bottom
+  // is not fitted. After f the world the scroller is told about must be no
+  // taller than the plot, so every row is on the screen at once.
+  const down = await page.evaluate(() => ({
+    world: Math.round(parseFloat(document.getElementById("spacer").style.height) || 0),
+    plot: document.getElementById("plot").clientHeight,
+  }));
+  checks.push(["fit all puts every row on the screen",
+               down.world > 0 && down.world <= down.plot + 2,
+               `world ${down.world}, plot ${down.plot}`]);
+
+  // The boot fit: the page is opened once, at the width it keeps. The focus
+  // panel is 272px of the plot and the markup paints it open, so a board
+  // opened with the panel shut used to fit the gantt narrow and then slide,
+  // and the reader watched the plan zoom out on every load. Sampled per
+  // frame from before the module runs: the plot's width and the world the
+  // scroller is told about may each land on one value, not walk to it.
+  await page.addInitScript(() => {
+    try { localStorage.setItem("pearde.land", "0"); } catch (e) {}
+    window.__boot = [];
+    const tick = () => {
+      const p = document.getElementById("plot"), sp = document.getElementById("spacer");
+      if (p) window.__boot.push([p.clientWidth,
+                                 Math.round(parseFloat(sp && sp.style.width) || 0)]);
+      if (performance.now() < 1500) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  });
+  await page.reload({ waitUntil: "load" });
+  await page.waitForTimeout(1700);
+  const walk = await page.evaluate(() => {
+    // a fit that has not happened yet is 0, not a step
+    const seen = (window.__boot || []).filter(s => s[1] > 0);
+    const distinct = seen.filter((s, i) => !i || s[0] !== seen[i - 1][0] ||
+                                                 s[1] !== seen[i - 1][1]);
+    return { frames: seen.length, steps: distinct.length,
+             first: distinct[0], last: distinct[distinct.length - 1] };
+  });
+  checks.push(["the plan does not animate its way to width on load",
+               walk.frames > 0 && walk.steps <= 2,
+               `${walk.steps} step(s) over ${walk.frames} frames` +
+               (walk.first ? ` · ${walk.first.join("/")} → ${(walk.last || []).join("/")}` : "")]);
 
   await browser.close();
   let bad = 0;

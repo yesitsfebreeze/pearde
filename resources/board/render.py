@@ -402,6 +402,10 @@ TEMPLATE = r"""<!doctype html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>__TITLE__ — plan</title>
 <link rel="icon" href="data:,">
+<script>/* a chosen theme paints before the first frame, not after it */
+try{var _t=localStorage.getItem("pearde-theme");
+if(_t==="light"||_t==="dark")document.documentElement.dataset.theme=_t;
+}catch(e){}</script>
 <style>
 __CSS__</style>
 </head>
@@ -434,6 +438,7 @@ __CSS__</style>
         stroke-width="1.5"/><path d="M7.8 7.8 11 11" stroke="currentColor"
         stroke-width="1.5" stroke-linecap="round"/></svg
       ><span>Search</span><kbd>⌘K</kbd></button>
+    <button id="themetog" title="theme — following the system">◐</button>
     <button id="newprd" class="primary" title="write a PRD (N)">＋ PRD</button>
   </div>
 </header>
@@ -564,12 +569,26 @@ __CSS__</style>
 <div id="newbox"><div class="card2">
   <h3>a new PRD</h3>
   <input type="text" id="ntitle" placeholder="title — what exists when this is done">
-  <textarea id="nbody" placeholder="the request, for someone who knows the codebase but not this conversation"></textarea>
-  <div style="display:flex;gap:6px;align-items:center">
-    <input type="number" id="nprio" placeholder="priority" style="width:110px;margin:0">
-    <input type="text" id="nparent" placeholder="parent (optional)" style="margin:0">
-    <button id="ncreate" class="primary">write it</button>
+  <div id="ntools">
+    <button id="mdbold" title="bold — ⌘B"><b>B</b></button>
+    <button id="mdcode" title="code">`</button>
+    <button id="mdhead" title="heading">H</button>
+    <button id="mdlist" title="list">•</button>
+    <button id="mdbox" title="checkbox">☐</button>
+    <div class="seg" id="npseg">
+      <button id="npedit" class="on">edit</button>
+      <button id="npshow">preview</button>
+    </div>
+  </div>
+  <div id="nsplit">
+    <textarea id="nbody" placeholder="the request, for someone who knows the codebase but not this conversation"></textarea>
+    <div id="npreview"></div>
+  </div>
+  <div id="nfoot">
+    <input type="number" id="nprio" placeholder="priority">
+    <input type="text" id="nparent" placeholder="parent (optional)">
     <button id="ncancel">cancel</button>
+    <button id="ncreate" class="primary">write it</button>
   </div>
 </div></div>
 <div id="tip"></div>

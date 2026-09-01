@@ -87,6 +87,43 @@ def append_section(path, heading, text):
         body += f"\n\n{mark}\n\n{block}\n"
     write_atomic(path, body.rstrip("\n") + "\n")
 
+def retract_answer(path, qid):
+    """Remove one question's answer from `## Answers` — the `**Qn**` line and
+    the continuation lines under it, up to the next answer, blank-separated
+    block or heading. Reopening a question is this plus `state: question`;
+    every reader that counts answers (`plan`, `questions.py`) sees the
+    question back on the frontier because the file says so, not the page.
+    A section left empty loses its heading too — an empty `## Answers` reads
+    as answered when it is not."""
+    body = open(path, encoding="utf-8").read()
+    mark = "## Answers"
+    i = body.find(mark)
+    if i < 0:
+        return False
+    j = body.find("\n## ", i + 1)
+    head, mid, tail = ((body[:i], body[i:j], body[j:]) if j > 0
+                       else (body[:i], body[i:], ""))
+    line_re = re.compile(r"^\s*\*\*\s*" + re.escape(qid) + r"\s*\*\*",
+                         re.I)
+    any_re = re.compile(r"^\s*\*\*\s*Q?\d+[a-z]?\s*\*\*", re.I)
+    lines, keep, dropping, dropped = mid.splitlines(keepends=True), [], False, False
+    for line in lines:
+        if line_re.match(line):
+            dropping = dropped = True
+            continue
+        if dropping and (any_re.match(line) or not line.strip()
+                         or line.lstrip().startswith("#")):
+            dropping = False
+        if not dropping:
+            keep.append(line)
+    if not dropped:
+        return False
+    left = "".join(keep)
+    if not left.replace(mark, "").strip():
+        left = ""                      # nothing under the heading: drop both
+    write_atomic(path, (head + left + tail).rstrip("\n") + "\n")
+    return True
+
 def set_title(path, title):
     """The `# ` line is the PRD's title — sync reads it, not the directory
     name. Rewrite the first one; a PRD without a heading gets one."""

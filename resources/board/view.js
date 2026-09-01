@@ -1,4 +1,4 @@
-import { LitElement, html, css } from "lit";
+import { LitElement, html, css, render as litRender } from "lit";
 "use strict";
 /* ═══════════════════════════════════════════════════════════════════════════
    The page has one datum — the enriched payload — and five readings of it,
@@ -194,6 +194,41 @@ bind(matchMedia("(prefers-color-scheme: dark)"), "change", () => {
   readTokens(); inkCache.clear(); draw(); drawMini(); drawAll();
 });
 
+/* ── the theme switch ─────────────────────────────────────────────────────
+   Three states, like the OS: follow the system, or pin light or dark. A pin
+   is a data-theme stamp on the root — the stylesheet already speaks it —
+   persisted under one key and re-stamped by a head script before the first
+   paint, so a pinned page never flashes the other theme. The first click
+   pins the opposite of whatever is showing, because a person reaching for
+   this button wants the page to flip, not a hidden state to advance. */
+const THEME_KEY = "pearde-theme";
+const themeGet = () => {
+  try { const t = localStorage.getItem(THEME_KEY);
+        return t === "light" || t === "dark" ? t : ""; }
+  catch (e) { return ""; }
+};
+const themeGlyph = t => {
+  const b = $("themetog"); if (!b) return;
+  b.textContent = t === "light" ? "☀︎" : t === "dark" ? "☾" : "◐";
+  b.title = "theme — " + (t ? "pinned " + t : "following the system");
+};
+function themeSet(t) {
+  try { t ? localStorage.setItem(THEME_KEY, t)
+          : localStorage.removeItem(THEME_KEY); } catch (e) {}
+  if (t) document.documentElement.dataset.theme = t;
+  else delete document.documentElement.dataset.theme;
+  themeGlyph(t);
+  readTokens(); inkCache.clear(); draw(); drawMini(); drawAll();
+}
+themeGlyph(themeGet());
+if ($("themetog")) $("themetog").onclick = () => {
+  const cur = themeGet();
+  const sysDark = matchMedia("(prefers-color-scheme: dark)").matches;
+  themeSet(cur === "" ? (sysDark ? "light" : "dark")
+         : cur === (sysDark ? "light" : "dark") ? (sysDark ? "dark" : "light")
+         : "");
+};
+
 const a = DATA.anchor.split("-").map(Number);
 const anchor = new Date(a[0], a[1] - 1, a[2]);
 const nowDay = () => (Date.now() - anchor.getTime()) / MS;
@@ -345,6 +380,22 @@ let selected = null, filter = "", critOnly = false, readyOnly = false;
 // the panel is a preference, not a view — it outlives the reload
 let landOpen = true;
 try { landOpen = localStorage.getItem("pearde.land") !== "0"; } catch (e) {}
+/* and the preference has to be on the element before anything measures the
+   plot. The panel is 272px of the plot's width, the markup paints it open,
+   and the plan is fitted to whatever width the plot has when the fit is made
+   — so a page opened with the panel shut used to fit the gantt to a plot that
+   was about to get 272px wider, and then slide from one to the other while
+   the reader watched. Stamped here, with the transition suppressed for the
+   one frame it takes to land: the boot state is a state, not a move. The
+   toggle keeps its slide, which is the same class arriving as a gesture. */
+{
+  const el = $("land");
+  if (el && !landOpen) {
+    el.style.transition = "none";
+    el.classList.add("off");
+    requestAnimationFrame(() => { el.style.transition = ""; });
+  }
+}
 let collectOnly = false;
 let stateSel = new Set();          // set by clicking the legend
 let hover = -1;                    // row index under the pointer
@@ -407,6 +458,7 @@ const pressure = t =>
    makes a big chart unreadable, so the order is stable: group, then pressure,
    then earliest start, then how much the task unblocks. */
 let rows = [];
+let rowIx = new Map();
 function build() {
   if (groupBy === "tree") return buildTree();
   rows = [];
@@ -543,6 +595,10 @@ function cmpNode(p, q) {
 
 /* what every build ends with: the counts above the chart, and the geometry */
 function finish(closed) {
+  // where each task sits, for anything drawing between rows rather than in
+  // one — rebuilt with the list, never per frame
+  rowIx = new Map();
+  rows.forEach((r, i) => { if (r.kind === "task") rowIx.set(r.t, i); });
   const hidden = tasks.length - tasks.filter(matches).length;
   $("inview").innerHTML = tasks.length + " scheduled" +
     (hidden ? lnk(`${hidden} filtered out`, {clear:1}, "clear every filter",
@@ -855,8 +911,7 @@ function draw() {
   const first = Math.max(0, Math.floor((sy - PAD) / ROW));
   const last = Math.min(rows.length - 1,
                         Math.ceil((sy + H - HEAD - PAD) / ROW));
-  const kin = selected
-    ? new Set([selected, ...selected.deps, ...selected.feeds]) : null;
+  const kin = kinOf();
   const barH = Math.max(3, ROW * 0.54);
 
   /* 1 — the field: washes, then grid */
@@ -894,6 +949,7 @@ function draw() {
   /* 3 — the work itself */
   ctx.save();
   ctx.beginPath(); ctx.rect(LEFT, HEAD, W - LEFT, H - HEAD); ctx.clip();
+  web(rowY, W, H, kin, 0);
   for (let i = first; i <= last; i++) {
     const r = rows[i], y = rowY(i);
     if (!r || y + ROW < HEAD) continue;
@@ -926,7 +982,7 @@ function draw() {
              part:t.held && t.boxes && t.boxes[1] ? t.part : undefined});
   }
   if (!LEFT) labels(first, last, rowY, kin);
-  if (selected) arrows(rowY);
+  if (kin) web(rowY, W, H, kin, 1);
   ctx.restore();
 
   /* 4 — now and the vision, over the field, under the chrome */
@@ -1162,33 +1218,115 @@ function tag(label, atX, align) {
   return [x0, x0 + w];
 }
 
-/* arrows for the selected row only — never the whole web. The web is what
-   makes a dependency graph unreadable. One row's kin is a fact you can hold. */
-function arrows(rowY) {
-  const at = new Map();
-  rows.forEach((r, i) => { if (r.kind === "task") at.set(r.t, i); });
-  const arrow = (from, to) => {
-    if (!at.has(from) || !at.has(to)) return;
-    const both = from.critical && to.critical;
-    const c = both ? T.crit : T.link;
-    const x1 = x(M.u1(from)), y1 = rowY(at.get(from)) + ROW / 2,
-          x2 = x(M.u0(to)), y2 = rowY(at.get(to)) + ROW / 2;
-    const mx = Math.max(x1 + 10, x2 - 12);
+/* ── the web ──────────────────────────────────────────────────────────────
+   Every dependency, all the time: one curve from the end of what must finish
+   to the start of what waits on it. Drawn at a wash, under the bars, in a
+   single path — so the plan reads first and the shape of the web reads
+   behind it.
+
+   The old rule was the selected row's neighbours or nothing, on the grounds
+   that the whole web is what makes a dependency graph unreadable. That is
+   true of a web drawn at full strength; it is not true of one drawn as a
+   ground. A reader who cannot see any link until they click has to click
+   every row in turn to learn what the board is shaped like, which is the
+   same as not knowing.
+
+   A selection lights its whole trail rather than one hop: everything it
+   waits on, all the way back, and everything waiting on it, all the way
+   forward. That is the question a bar is clicked to ask — not "who touches
+   this" but "where does this go" — and the lit trail is drawn over the bars,
+   because a trail that was asked for is the subject, not the ground.        */
+function trailOf(t) {
+  const seen = new Set([t]);
+  // back along `deps` and forward along `feeds`, each direction on its own:
+  // stepping from one into the other is how a trail becomes the whole graph
+  const walk = (n, dir) => {
+    for (const k of n[dir]) if (!seen.has(k)) { seen.add(k); walk(k, dir); }
+  };
+  walk(t, "deps"); walk(t, "feeds");
+  return seen;
+}
+/* the trail is a property of the selection, not of the frame */
+let kinSel = null, kinSet = null;
+function kinOf() {
+  if (!selected) { kinSel = kinSet = null; return null; }
+  if (selected !== kinSel) { kinSel = selected; kinSet = trailOf(selected); }
+  return kinSet;
+}
+
+function web(rowY, W, H, kin, lit) {
+  /* the two ends, or null when the link cannot be on the screen: both rows
+     above it, both below, or the whole run off one side. A link with one end
+     off-screen still crosses the frame, so only both-sides culls. */
+  const ends = (from, to) => {
+    const i = rowIx.get(from), j = rowIx.get(to);
+    if (i === undefined || j === undefined) return null;
+    const y1 = rowY(i) + ROW / 2, y2 = rowY(j) + ROW / 2;
+    if (Math.max(y1, y2) < HEAD - 4 || Math.min(y1, y2) > H + 4) return null;
+    const x1 = x(M.u1(from)), x2 = x(M.u0(to));
+    if (Math.max(x1, x2) < LEFT - 80 || Math.min(x1, x2) > W + 80) return null;
+    return [x1, y1, x2, y2];
+  };
+  /* A link leaves the bar it comes from along the axis, holds that line for
+     a third of the run, curves once across the middle third, and arrives on
+     the same line into the bar it feeds. The straight thirds are what make a
+     link readable where it matters — at its two ends, against the bars — and
+     the single curve between them carries the whole row change. The run is
+     signed, so a link that has to go backwards takes its third to the LEFT
+     and says by the loop that costs it what a corner would not. The two
+     handles meet at the middle of the curved third, which puts a horizontal
+     tangent at each join: the straight and the curve are one line, not two
+     drawn end to end. */
+  const curve = ([x1, y1, x2, y2]) => {
+    const k = (x2 - x1) * 0.33;
+    const ax = x1 + k, bx = x2 - k, h = (bx - ax) / 2;
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(ax, y1);
+    ctx.bezierCurveTo(ax + h, y1, bx - h, y2, bx, y2);
+    ctx.lineTo(x2, y2);
+  };
+  const on = (from, to) => kin && kin.has(from) && kin.has(to);
+
+  if (!lit) {
+    // one path, one stroke: the ground costs the same whether it is ten
+    // links or a thousand
     ctx.save();
-    ctx.strokeStyle = c; ctx.lineWidth = 1.4; ctx.lineJoin = "round";
-    if (x2 < x1) ctx.setLineDash([3, 3]);
+    ctx.strokeStyle = T.link;
+    ctx.lineWidth = 1;
+    // a selection pushes the rest of the web further back rather than
+    // hiding it — the plan keeps its shape while one trail is being read
+    ctx.globalAlpha = kin ? 0.14 : 0.32;
     ctx.beginPath();
-    ctx.moveTo(x1, y1); ctx.lineTo(mx, y1); ctx.lineTo(mx, y2);
-    ctx.lineTo(x2 - 4, y2); ctx.stroke();
+    let n = 0;
+    for (const t of tasks) for (const d of t.deps) {
+      if (on(d, t)) continue;                 // the trail is drawn lit, later
+      const e = ends(d, t);
+      if (e) { curve(e); n++; }
+    }
+    if (n) ctx.stroke();
+    ctx.restore();
+    return;
+  }
+
+  for (const t of tasks) for (const d of t.deps) {
+    if (!on(d, t)) continue;
+    const e = ends(d, t);
+    if (!e) continue;
+    const [x1, y1, x2, y2] = e;
+    const c = d.critical && t.critical ? T.crit : T.ink3;
+    ctx.save();
+    ctx.strokeStyle = c; ctx.lineWidth = 1.5; ctx.lineJoin = "round";
+    if (x2 < x1) ctx.setLineDash([3, 3]);     // a link that runs backwards
+    ctx.beginPath();
+    curve([x1, y1, x2 - 5, y2]);
+    ctx.stroke();
     ctx.setLineDash([]);
-    ctx.beginPath();
-    ctx.moveTo(x2 - 4, y2); ctx.lineTo(x2 - 9, y2 - 3.2);
-    ctx.lineTo(x2 - 9, y2 + 3.2); ctx.closePath();
+    ctx.beginPath();                          // arriving, so the head is flat
+    ctx.moveTo(x2 - 1, y2); ctx.lineTo(x2 - 7, y2 - 3.2);
+    ctx.lineTo(x2 - 7, y2 + 3.2); ctx.closePath();
     ctx.fillStyle = c; ctx.fill();
     ctx.restore();
-  };
-  for (const d of selected.deps) arrow(d, selected);
-  for (const f of selected.feeds) arrow(selected, f);
+  }
 }
 
 /* ── the overview strip: the whole plan, always ─────────────────────────── */
@@ -1563,10 +1701,22 @@ let zoomAnim = 0;
    the scale becomes `next`. The spacer is widened before the scroller is
    moved — a scrollLeft written against the old width is silently clamped, and
    an anchor that has been clamped is not an anchor. */
+/* The widest the plot goes is the whole track — the first landed bar to the
+   vision, edge to edge. There is nothing before the one and nothing after the
+   other, so every pixel of a wider scale is empty ground bought by making the
+   plan smaller, and a reader who zooms out past the track has to zoom back in
+   to find their own board. `fit` is therefore not one framing among several:
+   it is the floor, and the − button, the wheel and the presets all stop
+   there. `M.min` is left as the answer for a plot with no width, where the
+   fit is not a number. */
+function floorPPU() {
+  const w = plot.clientWidth - LEFT - 16;
+  return w > 0 ? w / span() : M.min;
+}
 function setZoomAt(next, u, at) {
   const tag = presetTag || "custom";
   if (tag !== viewTag) { viewTag = tag; paintViewSel(); }
-  ppu = Math.min(M.max, Math.max(M.min, next));
+  ppu = Math.min(M.max, Math.max(floorPPU(), next));
   spacer.style.width = Math.max(plot.clientWidth,
     LEFT + span() * ppu + 24) + "px";
   scroll.scrollLeft = (u - M.lo) * ppu - at;
@@ -1585,7 +1735,7 @@ function setZoom(next, keepPx) {
 function glide(target, keepPx, tag, anchorU) {
   presetTag = tag || null;
   cancelAnimationFrame(zoomAnim);
-  target = Math.min(M.max, Math.max(M.min, target));
+  target = Math.min(M.max, Math.max(floorPPU(), target));
   const to = v => anchorU === undefined ? setZoom(v, keepPx)
                                         : setZoomAt(v, anchorU, keepPx || 0);
   if (reduced) { to(target); presetTag = null; return; }
@@ -1775,9 +1925,15 @@ function setNames(next) {
   colAnim = requestAnimationFrame(step);
 }
 
+/* "fit all" means all of it, on both axes: the whole track across, and every
+   row down. The vertical half is the rail at its short end, where `fitRows`
+   scales the pitch to the plot and floors it at ROW_MIN — unlike the default,
+   which stops shrinking at read size rather than smear the rows. Asked for
+   fit all, a reader has said they want the board, not the type size. */
 function fitAll() {
   scroll.scrollLeft = 0;
   scroll.scrollTop = 0;
+  setRows(100);
   glide((plot.clientWidth - LEFT - 16) / span(), 0, "fit");
   place();
 }
@@ -1796,11 +1952,13 @@ function fitAll() {
    true for every frame of the animation rather than only the last one. */
 function fitDefault(snap) {
   const now = nowU(), to = Math.max(visU(), now + 1e-6);
-  /* a board that is mostly landed shows its gantt in the bars behind the
-     frontier, not in the stub ahead of it — when the frontier sits past the
-     middle of the track the default frames the whole track; while the plan
-     still leads, it frames the question: now at the left edge, vision right */
-  const from = (now - M.lo) / (to - M.lo) > 0.5 ? M.lo : now;
+  /* DECISION: the default frames the question, always — now at the left
+     edge, the vision at the right, whatever is left to do scaled to fit.
+     It used to switch to the whole track once a board was mostly landed;
+     that opened a finished-looking wall of history where the person came
+     to see what is next. The landed bars are one pan-left away, and the
+     whole track is what "fit" (f) is for. */
+  const from = now;
   const w = Math.max(120, plot.clientWidth - LEFT - 16);
   /* vertically: all of it, as best it fits — but a fit that lands under read
      size is not a fit, it is a smear. Below a readable row the rows stop
@@ -1809,11 +1967,37 @@ function fitDefault(snap) {
   setRows(onScreen < ROW_READ ? 0 : 100);
   scroll.scrollTop = 0;
   const target = w / (to - from);
+  fitTo = [w, to - from];
   if (snap) {
     presetTag = "default";
     setZoomAt(target, from, 0);
     presetTag = null;
   } else glide(target, 0, "default", from);
+}
+
+/* The default is a fit, and a fit outlives neither the window it was measured
+   in nor the plan it was measured against: a tab switch, a panel slide and a
+   refresh that lands weight all move one of the two inputs, and a scale left
+   over from the old pair is what puts the whole board in the left tenth of the
+   frame while the minimap — which reads lo/hi, never `ppu` — still looks right.
+   So both inputs are remembered where the fit is made, and every path that can
+   move either asks here rather than deciding for itself whether to re-fit.
+
+   A hidden plot has no width, and a fit to no width is the squish itself —
+   that one returns and waits for the observer, which fires the moment the
+   section is shown. */
+let fitTo = null;
+function refit() {
+  if (viewTag !== "default") return;
+  if (!plot.clientWidth) return;
+  const w = Math.max(120, plot.clientWidth - LEFT - 16);
+  const now = nowU(), d = Math.max(visU(), now + 1e-6) - now;
+  if (fitTo && Math.abs(w - fitTo[0]) < 0.5 &&
+      Math.abs(d - fitTo[1]) < 1e-6) return;
+  // a re-fit is a change of scale, not a trip back to the top of the board
+  const y = scroll.scrollTop;
+  fitDefault(1);
+  scroll.scrollTop = y;
 }
 
 /* One door for the dropdown, the keys and the mode switch: a framing is
@@ -2140,7 +2324,7 @@ bind(window, "resize", () => {
   rt = setTimeout(() => {
     fitFrame(); resize(); retree(); place(); movePill();
     // the default is a fit, and a fit to the old window is not one
-    if (viewTag === "default") fitDefault(1);
+    refit();
   }, 60);
 });
 /* focus slides rather than appears, so the plot's width changes over a couple
@@ -2152,7 +2336,7 @@ let roQ = false;
 new ResizeObserver(() => {
   if (roQ) return;
   roQ = true;
-  requestAnimationFrame(() => { roQ = false; resize(); place(); });
+  requestAnimationFrame(() => { roQ = false; resize(); refit(); place(); });
 }).observe(plot);
 
 /* the canvas is focusable, and the selection moves by key — a chart nobody
@@ -2194,6 +2378,7 @@ bind(window, "keydown", e => {
   }
   if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") {
     if (e.key === "Escape") {
+      if (e.target.closest("#newbox")) $("newbox").classList.remove("on");
       if (e.target.id === "q") { $("q").value = ""; filter = ""; build(); }
       if (e.target.id === "lq") { $("lq").value = ""; listQ = ""; drawList(); }
       e.target.blur();
@@ -2220,7 +2405,8 @@ bind(window, "keydown", e => {
   else if (e.key === "+" || e.key === "=") glide(ppu * 1.4);
   else if (e.key === "-") glide(ppu / 1.4);
   else if (e.key === "Escape") {
-    if (picksOpen) closePicks();
+    if ($("newbox").classList.contains("on")) $("newbox").classList.remove("on");
+    else if (picksOpen) closePicks();
     else if ($("drawer").classList.contains("open")) closeDrawer();
     else if (stateOpen) setStatePanel(false);
     else if (anyFilter()) go({clear:1});
@@ -2490,21 +2676,13 @@ function questionsHTML(qs, prefix) {
       "</label>" +
       '<div class="qfoot"><button class="act qsend" data-qi="' + i +
       '">answer ' + esc(q.id) + '</button>' +
-      '<span class="qdone">answered</span></div></div>';
+      '<span class="qdone">answered</span>' +
+      '<button class="act qreopen" data-qi="' + i + '">reopen ' +
+      esc(q.id) + '</button></div></div>';
   }).join("");
 }
 
-/* Check the recommended option on every question that has one. The radios
-   render pre-checked, so this only matters after a reader has changed some —
-   and it is the one click that says "the analyst was right". */
-function takeRecommended(root) {
-  for (const qq of root.querySelectorAll(".qq")) {
-    const rec = qq.querySelector(".opt .rec");
-    if (rec) rec.closest(".opt").querySelector("input").checked = true;
-  }
-}
-
-function wireQuestions(root, qs, send, retire) {
+function wireQuestions(root, qs, send, retire, reopen) {
   // typing an own answer is picking it — nobody types a sentence they do not
   // mean, and forcing the radio first loses the first keystroke
   for (const ta of root.querySelectorAll(".qq .opt.own textarea"))
@@ -2533,6 +2711,19 @@ function wireQuestions(root, qs, send, retire) {
       if (retire) retire(el);
     };
   });
+  // the other half of "per question": an answered one can come back. The
+  // write removes its `**Qn**` line from ## Answers and parks the PRD on
+  // the user again — the file is the record, the page only reads it.
+  if (reopen)
+    root.querySelectorAll(".qq .qreopen").forEach(btn => {
+      btn.onclick = async () => {
+        const el = btn.closest(".qq");
+        btn.disabled = true;
+        const ok = await reopen(qs[+btn.dataset.qi], el);
+        btn.disabled = false;
+        if (ok) markOpen(el);
+      };
+    });
 }
 
 /* Which questions are already answered is on disk, not in this page: an
@@ -2554,7 +2745,13 @@ function markAnsweredFrom(root, qs, answers) {
 function markAnswered(el) {
   el.classList.add("answered");
   for (const inp of el.querySelectorAll("input, textarea, button"))
-    inp.disabled = true;
+    if (!inp.classList.contains("qreopen")) inp.disabled = true;
+}
+
+function markOpen(el) {
+  el.classList.remove("answered");
+  for (const inp of el.querySelectorAll("input, textarea, button"))
+    inp.disabled = false;
 }
 
 function answerText(el, q) {
@@ -2564,20 +2761,6 @@ function answerText(el, q) {
     return el.querySelector(".opt.own textarea").value.trim();
   const o = q.opts[+pick.value];
   return (o.label && o.text !== o.label ? o.label + " — " : "") + o.text;
-}
-
-function collectAnswers(root, qs) {
-  // `**Q1** — <the decision>` per drill.md; a question left unpicked is left
-  // unanswered — the orchestrator re-asks what remains, it never guesses
-  const out = [];
-  root.querySelectorAll(".qq").forEach((el, i) => {
-    const q = qs[i];
-    if (el.classList.contains("answered")) return;   // already written
-    const text = answerText(el, q);
-    if (!text) return;
-    out.push(answerLine(q.id, text));
-  });
-  return out.join("\n\n");
 }
 
 const prdCache = new Map();
@@ -2688,18 +2871,26 @@ function drawBody() {
     const qs = section(d.body, "Questions");
     dQs = parseQuestions(qs);
     if (t.state === "question" || qs)
-      h += '<div class="ask"><h5>' +
+      h += '<div class="ask" id="dask"><h5>' +
         (t.state === "question" ? "waiting on you" : "questions") + "</h5>" +
-        (dQs ? questionsHTML(dQs, "dq")
-             : (qs ? "<pre>" + esc(stripAnchor(qs)) + "</pre>" : "") +
-               '<textarea class="say" id="dsay" placeholder="the answer — ' +
-               'numbered to match"></textarea>') +
-        '<div class="row2">' +
-        '<button id="danswer">answer &amp; reopen</button>' +
-        (dQs && dQs.some(x => x.opts.some(o => o.rec))
-          ? '<button id="drec">take the recommended</button>' : "") +
-        '<span class="hint">writes ## Answers, reopens once the round is ' +
-        'answered</span></div></div>';
+        (dQs
+          // a round in the format: every question carries its own answer and
+          // reopen — there is no bulk submit, one click settles one question
+          ? questionsHTML(dQs, "dq") +
+            '<div class="row2"><span class="hint">each question answers on ' +
+            "its own · the last answer reopens the PRD</span></div>"
+          : (qs ? '<div class="qbad">not written as answerable questions — ' +
+                  "no fork ending in a question mark with prepared answers" +
+                  "</div><pre>" + esc(stripAnchor(qs)) + "</pre>" : "") +
+            '<textarea class="say" id="dsay" placeholder="the answer, in ' +
+            'your words"></textarea>' +
+            '<div class="row2">' +
+            '<button id="danswer">answer &amp; reopen</button>' +
+            (qs ? '<button id="dsendback">send back — rewrite as questions' +
+                  "</button>" : "") +
+            '<span class="hint">writes ## Answers and reopens the PRD' +
+            "</span></div>") +
+        "</div>";
     const ans = section(d.body, "Answers");
     if (ans && t.state !== "question")
       h += "<h4>answers</h4><pre class=sec>" + esc(ans) + "</pre>";
@@ -2739,20 +2930,18 @@ function drawBody() {
     navigator.clipboard && navigator.clipboard.writeText(copy.dataset.p);
     $("dmsg").textContent = "path copied";
   };
-  const ansBtn = $("danswer");
-  if (ansBtn) {
-    const askEl = ansBtn.closest(".ask");
-    if (dQs) {
-      markAnsweredFrom(askEl, dQs, section(d.body, "Answers"));
-      wireQuestions(askEl, dQs, (text, isLast) =>
-        answerOne(dTask.rel, text, isLast()));
-    }
-    const send = () => answer(dTask.rel,
-      dQs ? collectAnswers(askEl, dQs) : $("dsay").value);
-    ansBtn.onclick = send;
-    const recBtn = $("drec");
-    if (recBtn) recBtn.onclick = () => { takeRecommended(askEl); send(); };
+  const askEl = $("dask");
+  if (askEl && dQs) {
+    markAnsweredFrom(askEl, dQs, section(d.body, "Answers"));
+    wireQuestions(askEl, dQs, (text, isLast) =>
+        answerOne(dTask.rel, text, isLast()),
+      null,
+      q => reopenOne(dTask.rel, q.id, dTask.state));
   }
+  const ansBtn = $("danswer");
+  if (ansBtn) ansBtn.onclick = () => answer(dTask.rel, $("dsay").value);
+  const sbBtn = $("dsendback");
+  if (sbBtn) sbBtn.onclick = () => sendBack(dTask.rel);
   const noteBtn = $("dnoteadd");
   if (noteBtn) noteBtn.onclick = async () => {
     const txt = $("dnote").value.trim();
@@ -2789,6 +2978,39 @@ async function answerOne(rel, text, last) {
     refresh();
   }
   return true;
+}
+
+/* The reverse write, also one question at a time: the answer's `**Qn**` line
+   leaves ## Answers and the PRD parks on the user again — except a blocked
+   PRD, whose state is the wall, not the round. */
+async function reopenOne(rel, qid, state) {
+  const body = {retract: qid};
+  if (state !== "blocked") body.fm = {state: "question"};
+  const out = await save(rel, body);
+  toast(out.error ? "Not reopened — " + out.error
+                  : "Reopened " + qid + " — it is waiting on you again",
+        !!out.error);
+  if (out.error) return false;
+  prdCache.delete(rel);
+  answersLoaded = null;                 // one less in the answered panel
+  const row = allByRel.get(rel);
+  if (row && state !== "blocked") row.state = "question";
+  refresh();
+  return true;
+}
+
+/* A round that cannot be answered is not answered — it goes back to be
+   rewritten. The reply lands under ## Answers and the PRD reopens; the
+   orchestrator reads it as "the question was wrong" and owes a new round in
+   the format. */
+async function sendBack(rel, blocked) {
+  return answer(rel, "**round** *(sent back " + stamp() + ")* — " + (blocked
+    ? "blocked without a stated wall. Write what is in the way and what " +
+      "would clear it, as numbered questions with three prepared answers, " +
+      "the recommended one first."
+    : "not answerable as written. Restate as numbered questions: a fork " +
+      "ending in a question mark, three prepared answers, the recommended " +
+      "one first."));
 }
 
 /* the one write the board is waiting for */
@@ -3146,13 +3368,13 @@ async function drawAsks() {
       '<div class="q skel">reading the PRD…</div>' +
       (SERVED ? '<div class="foot"><textarea placeholder="' +
         (blocked ? "what unblocks it — this goes in as the answer"
-                 : "the answer — numbered to match") + '"></textarea>' +
+                 : "the answer, in your words") + '"></textarea>' +
       '<div class="row2"><button class="act send primary">answer &amp; reopen' +
-      '</button>' + '<button class="act rec" hidden>take the ' +
-        'recommended</button>' + (blocked
+      '</button>' + (blocked
         ? '<button class="act reopen">just reopen</button>' : "") +
-      '<span class="hint">writes ## Answers · reopens once the round is ' +
-      'answered</span>' +
+      '<button class="act sendback" hidden>send back — rewrite as ' +
+      "questions</button>" +
+      '<span class="hint">writes ## Answers and reopens the PRD</span>' +
       "</div></div>"
         : '<div class="foot"><span class="hint">read-only — open this board ' +
           "through the service to answer here</span></div>") + "</div>";
@@ -3168,12 +3390,13 @@ async function drawAsks() {
         "read and answer it here";
       return;
     }
-    let cardQs = null;                    // parsed round, once the PRD loads
+    // fire serves the fallback foot only — a round that parses answers one
+    // question at a time through its own buttons, never in one submit
     const fire = async only => {
       send.disabled = true;
       const out = only === "reopen"
         ? await save(rel, {fm: {state: "open"}})
-        : await answer(rel, cardQs ? collectAnswers(card, cardQs) : box.value);
+        : await answer(rel, box.value);
       send.disabled = false;
       if (out && out.error) { if (only === "reopen") toast(out.error, true); return; }
       if (only === "reopen") { toast("Reopened"); prdCache.delete(rel);
@@ -3202,7 +3425,7 @@ async function drawAsks() {
       const q = card.querySelector(".q");
       const qtxt = section(d.body, "Questions") ||
         (blocked ? sectionLike(d.body, "Blocked") : "");
-      cardQs = parseQuestions(qtxt);
+      const cardQs = parseQuestions(qtxt);
       q.classList.remove("skel");
       if (cardQs) {
         q.style.display = "none";
@@ -3224,18 +3447,50 @@ async function drawAsks() {
           }
           return ok;
         }, el => retireQuestion(holder, el));
-        if (box) box.style.display = "none";
-        // every question the analyst recommended an answer to, in one click
-        const rec = card.querySelector(".act.rec");
-        if (rec && cardQs.some(x => x.opts.some(o => o.rec))) {
-          rec.hidden = false;
-          rec.onclick = () => { takeRecommended(holder); fire(); };
-        }
+        // the round carries its own submits — the card's one textarea and
+        // its one button would be a second way to answer, and the bulk
+        // submit is exactly what "per question" took out
+        const foot = card.querySelector(".foot");
+        if (foot) foot.style.display = "none";
         return;
       }
       const txt = qtxt || sectionLike(d.body, "Blocked") ||
         section(d.body, "Notes") || (d.body || "").slice(0, 700);
       q.textContent = txt || "(the PRD says nothing yet)";
+      // long text must not trap the page's scroll — it opens on a click
+      q.onclick = () => q.classList.toggle("open");
+      // a card the user cannot act on is not an ask. A question round that
+      // does not parse, a parked PRD that never asked, a blocked PRD whose
+      // card is the PRD body instead of the wall — each says so, and offers
+      // the reply that sends it back to be written as one
+      const badWhy = blocked
+        ? (qtxt ? "" :
+           "blocked without saying what is in the way — the text below is " +
+           "the PRD itself, not the wall; send it back to have it stated")
+        : (qtxt
+           ? "not written as answerable questions — no fork ending in a " +
+             "question mark with prepared answers; answer in your own " +
+             "words, or send it back"
+           : "parked on you without saying what it is asking — send it " +
+             "back, or answer in your own words");
+      if (badWhy) {
+        const bad = document.createElement("div");
+        bad.className = "qbad";
+        bad.textContent = badWhy;
+        q.before(bad);
+        const sb = card.querySelector(".act.sendback");
+        if (sb) {
+          sb.hidden = false;
+          sb.onclick = async () => {
+            sb.disabled = true;
+            const out = await sendBack(rel, blocked);
+            sb.disabled = false;
+            if (out && out.error) return;
+            card.classList.add("gone");
+            setTimeout(() => drawAsks(), reduced ? 0 : 280);
+          };
+        }
+      }
     }).catch(err => {
       // say which PRD and why — a bare "could not read" hides the cause
       console.error("asks: " + rel + " — " + (err && err.message || err));
@@ -3315,17 +3570,34 @@ async function drawAnswered(fresh) {
   const as = answersLoaded;
   el.innerHTML = '<div class="ahd">answered<span class="n">' + as.length +
     "</span></div>" + (as.length
-      ? as.map(a => '<button class="adone" data-go="' +
+      ? as.map(a => '<div class="adone" data-go="' +
           esc(JSON.stringify({prd: a.rel})) + '"><div class="am"><span ' +
-          'class="qid">' + esc(a.id) + '</span><span class="when">' +
+          'class="qid">' + esc(a.id) + '</span>' +
+          '<button class="areopen" data-rel="' + esc(a.rel) +
+          '" data-qid="' + esc(a.id) + '" title="take this answer back — ' +
+          'the question returns to the inbox">reopen</button>' +
+          '<span class="when">' +
           esc(a.date || "undated") + "</span></div>" +
           (a.question ? '<div class="aq">' + esc(plain(a.question)) +
             "</div>" : "") +
           '<div class="at">' + esc(plain(a.text)) + "</div>" +
           '<div class="ap">' + esc(a.prd || a.rel) +
-          (a.board ? " · " + esc(a.board) : "") + "</div></button>").join("")
+          (a.board ? " · " + esc(a.board) : "") + "</div></div>").join("")
       : '<div class="ablank">nothing answered yet — a question moves here ' +
         "the moment it is written back</div>");
+  // an answer can be taken back from where it is read: the write removes its
+  // line from ## Answers, and the question is an ask again
+  el.querySelectorAll(".areopen").forEach(btn => {
+    btn.onclick = async e => {
+      e.stopPropagation();
+      btn.disabled = true;
+      const row = allByRel.get(btn.dataset.rel);
+      const ok = await reopenOne(btn.dataset.rel, btn.dataset.qid,
+                                 row && row.state);
+      btn.disabled = false;
+      if (ok) drawAsks();
+    };
+  });
 }
 
 /* ── list ──────────────────────────────────────────────────────────────── */
@@ -3437,7 +3709,9 @@ class PeardeMemos extends LitElement {
     if (!ms.length)
       return html`<div class="blank">no memos yet — a decision gets one when
         there is a decision</div>`;
-    return ms.map(m => html`<div class="memo">
+    return ms.map(m => html`<div class="memo"
+      @click=${e => { if (e.target.closest("button")) return;
+                      e.currentTarget.classList.toggle("open"); }}>
       <h3>${m.subject || m.slug}</h3>
       <div class="f"><b>${m.slug}</b> · ${m.kind || ""} · ${m.status || ""} ·
         ${m.date || ""}${m.prds && m.prds.length ? html` · governs ${
@@ -3868,19 +4142,36 @@ const inline = s => {
    rewritten whole by `pearde report`, and a swap redraws the open view. */
 function md(text) {
   const out = [];
-  let para = [], list = null;
+  let para = [], list = null, fence = null;
   const flush = () => {
     if (para.length) { out.push(html`<p>${inline(para.join(" "))}</p>`); para = []; }
-    if (list) { out.push(html`<ul>${list.map(l => html`<li>${inline(l)}</li>`)}</ul>`); list = null; }
+    if (list) { out.push(html`<ul>${list.map(l => l.box === null
+      ? html`<li>${inline(l.s)}</li>`
+      : html`<li class="chk"><span class="box">${l.box ? "☑" : "☐"}</span> ${inline(l.s)}</li>`)}</ul>`);
+      list = null; }
   };
   for (const raw of (text || "").split("\n")) {
+    if (fence) {                       // inside ``` … ``` nothing is markdown
+      if (/^\s*```/.test(raw)) {
+        out.push(html`<pre><code>${fence.join("\n")}</code></pre>`);
+        fence = null;
+      } else fence.push(raw);
+      continue;
+    }
+    if (/^\s*```/.test(raw)) { flush(); fence = []; continue; }
     const h = /^(#{1,3})\s+(.+?)\s*$/.exec(raw), li = /^\s*[-*]\s+(.+)$/.exec(raw);
     if (h) { flush(); out.push(h[1].length === 1 ? html`<h2>${inline(h[2])}</h2>`
                                : html`<h3>${inline(h[2])}</h3>`); }
-    else if (li) { if (para.length) flush(); (list = list || []).push(li[1]); }
+    else if (li) {
+      if (para.length) flush();
+      const c = /^\[([ xX])\]\s+(.*)$/.exec(li[1]);
+      (list = list || []).push(c ? {box: c[1] !== " ", s: c[2]}
+                                 : {box: null, s: li[1]});
+    }
     else if (!raw.trim()) flush();
     else { if (list) flush(); para.push(raw.trim()); }
   }
+  if (fence) out.push(html`<pre><code>${fence.join("\n")}</code></pre>`);
   flush();
   return out;
 }
@@ -4124,7 +4415,8 @@ function costLine(rows, guard) {
 }
 
 /* ── writing a PRD from the view ───────────────────────────────────────── */
-$("newprd").onclick = () => { $("newbox").classList.add("on"); $("ntitle").focus(); };
+$("newprd").onclick = () => { $("newbox").classList.add("on");
+  nMode(false); nPreviewDraw(); $("ntitle").focus(); };
 // the searchbar in the titlebar is the same door ⌘K is — a person who never
 // learns the shortcut still gets the palette, and one who does sees it named
 $("ksopen").onclick = () => ksShow();
@@ -4152,6 +4444,59 @@ $("ncreate").onclick = async () => {
     if (t) openDrawer(t);
   } catch (e) { toast("not written — " + e.message, true); }
 };
+
+/* ── the body editor: five marks, one renderer ────────────────────────────
+   The toolbar writes markdown into #nbody; the pane beside it (or behind
+   the edit/preview seg on a narrow card) renders it with md() — the same
+   function the report view reads through, so the preview can never drift
+   from the page's own idea of markdown. */
+function nPreviewDraw() {
+  litRender(html`<article class="prose">${md($("nbody").value)}</article>`,
+            $("npreview"));
+}
+function nMode(show) {                       // narrow card: which pane shows
+  $("newbox").classList.toggle("preview", show);
+  $("npedit").classList.toggle("on", !show);
+  $("npshow").classList.toggle("on", show);
+  if (show) nPreviewDraw();
+}
+const nWrap = (pre, post) => {               // wrap the selection, keep it
+  const ta = $("nbody"), s = ta.selectionStart, e = ta.selectionEnd;
+  ta.setRangeText(pre + ta.value.slice(s, e) + post, s, e);
+  ta.setSelectionRange(s + pre.length, e + pre.length);
+  ta.focus(); nPreviewDraw();
+};
+const nLines = mark => {                     // prefix each selected line — or
+  const ta = $("nbody");                     // strip it, so the button toggles
+  const s0 = ta.value.lastIndexOf("\n", ta.selectionStart - 1) + 1;
+  const done = ta.value.slice(s0, ta.selectionEnd).split("\n")
+    .map(l => l.startsWith(mark) ? l.slice(mark.length) : mark + l).join("\n");
+  ta.setRangeText(done, s0, ta.selectionEnd, "select");
+  ta.focus(); nPreviewDraw();
+};
+for (const [id, f] of [["mdbold", () => nWrap("**", "**")],
+                       ["mdcode", () => nWrap("`", "`")],
+                       ["mdhead", () => nLines("## ")],
+                       ["mdlist", () => nLines("- ")],
+                       ["mdbox",  () => nLines("- [ ] ")]])
+  bind($(id), "click", f);
+// a toolbar press must not steal the caret it is about to write at
+bind($("ntools"), "mousedown", e => {
+  if (e.target.closest("button")) e.preventDefault();
+});
+bind($("npedit"), "click", () => nMode(false));
+bind($("npshow"), "click", () => nMode(true));
+bind($("nbody"), "input", nPreviewDraw);
+bind($("nbody"), "keydown", e => {
+  if ((e.metaKey || e.ctrlKey) && (e.key === "b" || e.key === "B")) {
+    e.preventDefault(); nWrap("**", "**");
+  } else if (e.key === "Tab") {              // two spaces, not a focus hop
+    e.preventDefault();
+    e.target.setRangeText("  ", e.target.selectionStart,
+                          e.target.selectionEnd, "end");
+    nPreviewDraw();
+  }
+});
 
 /* ═══ live, in place ══════════════════════════════════════════════════════
    The board is files, and files change under us — an agent claims a PRD, a
@@ -4187,6 +4532,7 @@ function apply(payload) {
   lastWin = null;
   build();
   scroll.scrollLeft = sx; scroll.scrollTop = sy;
+  refit();                 // a swap that moves the vision moves the fit with it
   retree();
   drawHeader(); drawLegend(); drawSide();
   memosLoaded = null;

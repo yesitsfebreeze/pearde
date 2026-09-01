@@ -45,7 +45,8 @@ sentence of what they get** — never how it is built:
 - Each answer is a complete decision — picking it settles the question with no
   further words.
 - The three are genuinely different outcomes, not three phrasings of one.
-- Mark one `(recommended)`.
+- The best one goes **first**, marked `(recommended)` — the reader meets your
+  call before the alternatives, and the view pre-selects answer 1.
 - Writing them is your work. The user's job is one keypress, or their own
   sentence when all three are wrong.
 
@@ -133,9 +134,10 @@ to ask.
 
 `python3 @resources/questions.py check [board]` is that paragraph as a
 mechanism, and `doctor`'s `questions` row runs it. It reports a heading with
-nothing under it, a question that asks nothing or carries no recommended
-answer, an answer to nothing, and a parked PRD that never asked. An answered
-round is history and is left alone.
+nothing under it, a question that asks nothing, one with no prepared answers
+to pick from, one with more or fewer than three, one whose recommended answer
+is not first or missing, an answer to nothing, and a parked PRD that never
+asked. An answered round is history and is left alone.
 
 ## The board's own frontier
 

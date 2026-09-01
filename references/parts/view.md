@@ -24,7 +24,7 @@ on a folded one opens it.
 | 2 | **timeline**  | what is in front of us — see below                                |
 | 3 | **board**     | what is where — kanban by state; drag a card to write `state:`    |
 | 4 | **analytics** | how this is going — where the work and weight sit, the est/actual records, the machine-wide hours-per-weight fit, weight left over time, and what a transition costs: calls per transition over the last thirty, refusals per session, both off the guard's count (@references/parts/guard.md). Calls are the proxy for tokens, named as such; no guard state at all reads `no guard`, never zero |
-| 5 | **asks**      | what is waiting on *you* — every `question` and `blocked` PRD, and beside them the answered panel. A round in `@references/drill.md`'s format renders as picks: the fork, its three prepared answers as buttons (recommended pre-selected), and an own-answer box per question. An answered question leaves the cards at once and appears in the panel, newest first |
+| 5 | **asks**      | what is waiting on *you* — every `question` and `blocked` PRD, packed in a masonry wall, and beside them the answered panel. A round in `@references/drill.md`'s format renders as picks: the fork, its three prepared answers (the first is the recommendation, pre-selected), an own-answer box, and its own submit — per question, never one submit for the round. A round not in the format says so and offers "send back — rewrite as questions". An answered question leaves the cards at once and appears in the panel, newest first, where its `reopen` takes the answer back |
 | 6 | **list**      | all of it — sortable, filterable, one row per PRD                 |
 | 7 | **memos**     | what the board decided — `.pearde/memos/`, rendered                  |
 | 8 | **report**    | the same file in full, folded — section 1 is its opening. ⌘7 |
@@ -219,11 +219,13 @@ person.
 
 - title, `state`, `priority`, the body, and a note appended to `## Notes`.
 - On a `question` PRD, the round itself — each fork with its three prepared
-  answers as radio picks (the recommended one pre-selected) and an own-answer
-  box. "answer & reopen" writes the
-  picks under `## Answers` (`**Q1** — <text>`) and sets it `open`. A
-  `## Questions` section not in @references/drill.md's format falls back to
-  raw text and a free textarea.
+  answers as radio picks (the first is the recommendation, pre-selected), an
+  own-answer box, and its own `answer Qn` button, which writes that pick under
+  `## Answers` (`**Q1** — <text>`). There is no round-level submit. A
+  `## Questions` section not in @references/drill.md's format is flagged as
+  not answerable and falls back to raw text, a free textarea, and a "send
+  back — rewrite as questions" button that replies so under `## Answers` and
+  reopens the PRD.
 - A `blocked` PRD's wall renders the same way when it is written as a round.
   The heading is matched by prefix, so `## Blocked on a human with a browser`
   is the same section as `## Blocked`.
@@ -237,12 +239,15 @@ person.
   decision>`. The id opens the line and the decision follows the dash, as
   before; the stamp is what the answered panel orders by. A line written
   before the stamp existed still reads — it sorts under the dated ones.
-- **"take the recommended"** picks the analyst's recommendation on every
-  question that carries one and sends in the same click. It appears only when
-  the round recommends something.
-- The **asks** view is that same round for every waiting PRD at once (⌘⏎
-  sends). It renders exactly what the inspector renders — the same picks, the
-  same prose, the same buttons — because both build from the same parse.
+- **Each answered question carries its own `reopen`** — in the round where it
+  stands, and on its row in the answered panel. Reopening removes its
+  `**Qn**` line from `## Answers` and parks the PRD on the user again, so
+  every reader agrees off the file.
+- The **asks** view is that same round for every waiting PRD at once. It
+  renders exactly what the inspector renders — the same picks, the same
+  prose, the same per-question buttons — because both build from the same
+  parse. A `blocked` PRD with no `## Blocked` section and no round is flagged
+  the same way, not dumped as PRD body.
 - **The answered panel** is the right half of that view: every question the
   board has settled, newest answer first, each row the question, the decision
   and the PRD it belongs to — click one to open that PRD. It is read over

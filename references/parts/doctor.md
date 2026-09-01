@@ -50,7 +50,8 @@ never reads `off` — the map is either right or wrong.
   round's format. It reports four shapes, and every one of them is silent from
   the outside — a board with a broken round and a board with nothing to ask
   look identical: a `## Questions` or `## Answers` heading with nothing under
-  it; a question that asks nothing, or that carries no recommended answer; an
+  it; a question that asks nothing, has no prepared answers to pick from, does
+  not carry three, or whose recommended answer is missing or not first; an
   `## Answers` section with no `## Questions` above it, which is an answer to
   a question nobody wrote down; and a PRD parked on the user — `state:
   question`, or any parked state or `mode:` naming a human — that never says

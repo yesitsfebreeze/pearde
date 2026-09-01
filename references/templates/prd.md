@@ -55,7 +55,8 @@ let the analyst split it via refine.>
 <!-- `## Questions` — analyst-only, when blocked on the user: one round in the
      format of drill.md — `### Q1: <title>`, the fork in two sentences ending
      in "?", then exactly three prepared answers, each a complete decision,
-     one `(recommended)`. Only real forks the user must settle (naming, scope,
+     the best one first and marked `(recommended)`. Only real forks the user
+     must settle (naming, scope,
      cost) — never facts a worker could look up, never the PRD restated. A PRD
      parked on the user with no such round never says what it is asking.
      Written in plain words for the person who asked, never for the board — no

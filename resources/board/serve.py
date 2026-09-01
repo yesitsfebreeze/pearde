@@ -87,7 +87,7 @@ HTTP API, all JSON, all 127.0.0.1-only:
   POST /sync     {"board": name}   force a pass now
   POST /new      {"board","title","body"?,"parent"?,"priority"?,"est"?}
                                    write a new PRD
-  POST /edit     {"board","prd","title"?,"fm"?,"body"?,"append"?}
+  POST /edit     {"board","prd","title"?,"fm"?,"body"?,"append"?,"retract"?}
                                    write one PRD — what the detail pane saves
   POST /report   {"board","prd","text"}   a worker's report → `## Report`
   POST /run      {"board","prd","adapter"?}
@@ -1242,6 +1242,11 @@ class Handler(BaseHTTPRequestHandler):
                 editlib.append_section(path_md, body.get("heading", "Notes"),
                                        str(body["append"]))
                 wrote.append("append")
+            if body.get("retract"):
+                # reopening one question: its `**Qn**` line leaves
+                # `## Answers`, so every counter sees it back on the frontier
+                if editlib.retract_answer(path_md, str(body["retract"])):
+                    wrote.append("retract")
             if body.get("title"):
                 editlib.set_title(path_md, str(body["title"])[:250])
                 wrote.append("title")

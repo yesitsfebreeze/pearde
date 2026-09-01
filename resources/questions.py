@@ -19,10 +19,12 @@ ever writing down what it was asking; and one carried a whole sentence in
 `needs:`, which `plan` resolves to nothing and reports nowhere. Every one of
 them reads, from the outside, exactly like a board that is waiting on you.
 
-The two rules that judge a written question are the two the format is for: it
-asks something, and it comes with an answer you can pick. Option *count* is
-deliberately not checked — a yes/no fork with a recommendation is a good
-question, and a checker that demanded three would have failed six real ones.
+The rules that judge a written question are the ones the format is for: it
+asks something, it comes with prepared answers to pick from — three of them,
+genuinely different — and the recommended answer is the first. A round that
+is a block of text with nothing to pick is not waiting on the user; it is
+waiting on its author. Closed PRDs are history and are not graded, so the
+old yes/no forks on settled boards stay green.
 
 Python 3 stdlib only.
 """
@@ -258,26 +260,29 @@ def bare(text, vocab):
 
 
 def split_question(q):
-    """(fork, [answer, …]) for one question of a round. The head line is
-    dropped — it is the index, not the question."""
+    """(fork, [answer, …], rec) for one question of a round — `rec` is the
+    1-based number of the answer marked `(recommended)`, 0 when none is. The
+    head line is dropped — it is the index, not the question."""
     body = q.strip()
     if body.startswith("#"):
         body = body.split("\n", 1)[1] if "\n" in body else ""
     at = ANSWER_RE.search(body)
     fork = (body[:at.start()] if at else body).strip()
-    answers = []
+    answers, rec = [], 0
     if at:
         for part in re.split(r"^(?=\d+[.)]\s)", body[at.start():], flags=re.M):
             m = ANSWER_RE.match(part.strip())
             if m:
+                if not rec and REC_MARK_RE.search(m.group(2)):
+                    rec = len(answers) + 1
                 answers.append(REC_MARK_RE.sub(" ", m.group(2)).strip())
-    return fork, answers
+    return fork, answers, rec
 
 
 def plain(rel, n, q, slugs=()):
     """Every plain-words problem in one question, one string each."""
     bad = []
-    fork, answers = split_question(q)
+    fork, answers, _rec = split_question(q)
     where = [("the fork", fork, FORK_WORDS)]
     where += [(f"answer {i}", a, ANSWER_WORDS)
               for i, a in enumerate(answers, start=1)]
@@ -364,10 +369,26 @@ def check(board):
                 if "?" not in q:
                     bad.append(f"{rel}: {label(q, n)} asks nothing — a fork "
                                "ends in `?` or it is a note, not a question")
-                if not REC_RE.search(q):
-                    bad.append(f"{rel}: {label(q, n)} carries no recommended "
-                               "answer — the round hands over a fork with no "
-                               "way to pick")
+                fork, answers, rec = split_question(q)
+                if not answers:
+                    bad.append(f"{rel}: {label(q, n)} carries no prepared "
+                               "answers — a block of text with nothing to "
+                               "pick is waiting on its author, not the user")
+                else:
+                    if len(answers) != 3:
+                        bad.append(f"{rel}: {label(q, n)} carries "
+                                   f"{len(answers)} prepared answer"
+                                   f"{'' if len(answers) == 1 else 's'}, not "
+                                   "three — three genuinely different "
+                                   "outcomes, or the fork is not ready")
+                    if not rec and not REC_RE.search(q):
+                        bad.append(f"{rel}: {label(q, n)} carries no "
+                                   "recommended answer — the round hands over "
+                                   "a fork with no way to pick")
+                    elif rec > 1:
+                        bad.append(f"{rel}: {label(q, n)} recommends answer "
+                                   f"{rec} — the recommended answer goes "
+                                   "first, best first is the order")
                 bad.extend(plain(rel, n, q, slugs))
 
         # A CLOSED PRD'S RECORDED ANSWER IS HISTORY AND IS LEFT ALONE. The
@@ -398,6 +419,18 @@ def check(board):
         #
         # `state:` is still read as a state, because it is one: a PRD parked
         # in `question` while closed really is a contradiction.
+        # `blocked` is also the board waiting on a person, and it owes the
+        # same courtesy: either a round to answer or a `## Blocked` section
+        # stating the wall. Without both, the asks view has nothing to show
+        # but the PRD body — a dump the reader cannot act on.
+        if state.lower() == "blocked" and not closed \
+                and not any(t.strip() for _h, t in qs) \
+                and not re.search(r"^##\s+Blocked", body, re.M):
+            bad.append(f"{rel}: state `blocked` with no `## Blocked` section "
+                       "and no `## Questions` — the wall is nowhere written, "
+                       "and the person asked to clear it is shown the PRD "
+                       "body instead")
+
         waiting_state = state.lower() in WAITING
         waiting = waiting_state or (mode.lower() in WAITING and not closed)
         said = f"state `{state}`" if waiting_state else f"mode `{mode}`"

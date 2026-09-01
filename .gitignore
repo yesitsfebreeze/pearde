@@ -25,3 +25,8 @@ resources/board/obsidian/plugins/*/styles.css
 # machine-local per board — regenerable
 .pearde/.state/
 .pearde/wiki/
+
+# playwright-core for the js tests, fetched on demand — doctor prints the line
+resources/board/node_modules/
+resources/board/package.json
+resources/board/package-lock.json

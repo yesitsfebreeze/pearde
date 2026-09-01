@@ -93,7 +93,25 @@ COMMENT_RE = re.compile(r"<!--.*?-->", re.S)
 def parse(path):
     """(frontmatter, body). Mirrors @resources/board/plan.py's dialect: a
     `---` fence, one `key: value` per line, `- item` for lists. Commented-out
-    markdown is dropped from the body before anything reads it."""
+    markdown is dropped from the body before anything reads it.
+
+    Serves off plan.py's parse cache when that module is importable (it is
+    for every caller that reaches here through the board scripts, and the
+    cache is loaded and warm for `scan`'s drill count): the second walk over
+    the board then pays no open and no parse a second time. The comment
+    strip still happens here, on the cached body — that part of the dialect
+    is this reader's own. Anywhere `plan` is not on the path, the read below
+    is the whole story, as before."""
+    try:
+        import plan as planlib     # resources/board/plan.py, when reachable
+    except ImportError:
+        planlib = None
+    if planlib is not None:
+        try:
+            fm, _title, body = planlib.parse_prd(path)
+            return fm, COMMENT_RE.sub("", body)
+        except (OSError, UnicodeDecodeError):
+            pass                   # unreadable through the cache: read below
     text = open(path, encoding="utf-8", errors="replace").read()
     lines = text.splitlines()
     fm, start = {}, 0
@@ -321,6 +339,7 @@ def check(board):
         ans = sections(body, A_RE)
         state = str(fm.get("state", "")).strip()
         mode = str(fm.get("mode", "")).strip()
+        closed = state.lower() in CLOSED
 
         for head, text in qs:
             if not text.strip():
@@ -329,6 +348,16 @@ def check(board):
                 continue
             if re.search(r"\banswered\b", head, re.I):
                 continue              # `## Questions (round 1, answered)`
+            # A CLOSED PRD'S ROUND IS HISTORY AND IS NOT GRADED. The same
+            # rule as the `## Answers` branch below, arrived at twice: on
+            # 2026-08-29 this check was red only on `done` nodes, and the
+            # correction that fixed it guarded only the two shapes it could
+            # see. Every shape added since fired on the same history — 89
+            # rounds red, all closed — so the guard moves up here, over the
+            # whole grading pass. An empty heading is still reported at any
+            # state: that is a formatting defect, not a record.
+            if closed:
+                continue
             for n, q in enumerate(questions_in(text), start=1):
                 if not is_question(q) or settled(q):
                     continue
@@ -351,7 +380,6 @@ def check(board):
         #
         # An OPEN node with the same shape is still reported: there the
         # missing round is a live gap, not a record.
-        closed = state.lower() in CLOSED
         for head, text in ans:
             if not text.strip():
                 bad.append(f"{rel}: `{head}` with nothing under it — "

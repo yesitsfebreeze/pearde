@@ -2,8 +2,8 @@
 atomic: attempt-the-build
 subject: build the contract until it works or hits something undefined
 date: 2026-08-28
-updated: 2026-09-01
-runs: 30
+updated: 2026-09-02
+runs: 32
 ---
 
 # attempt-the-build — the attempt is the analysis
@@ -32,9 +32,10 @@ runs: 30
 ## Done when
 
 - `bash prds/<prd>/probe/verify.sh` prints a count, and the count is quoted.
-- `git status --short` shows no `?? prds/<slug>/` you did not make — a hand-walked sweep over the board is refused by the guard in a wired repo, and the untracked list answers the same question.
-- `git status --short` shows the probe under the PRD folder and nothing at the
-  repo root.
+- `ls <board>/prds` against the pre-run listing shows no `prds/<slug>/` you did not make — a hand-walked sweep over the board is refused by the guard in a wired repo, and the listing answers the same question. `git status --short` is silent here where the board is gitignored.
+- the probe is under `<board>/prds/<prd>/probe/` and nothing this run wrote
+  is at the repo root — check with `ls`, not `git status`, where the board
+  is gitignored.
 
 ## Fails when
 
@@ -53,7 +54,7 @@ runs: 30
 | `?? prds/<slug>/` appears mid-run and its `prd.md` is the untouched template | a harness in another PRD's probe calls a transition with no `--board` from a cwd inside the repo, and your edit turned its refusal into a write on the real board | before the first edit, grep every harness for the command with no `--board`; run those from a cwd with no `prds/` above; remove the untracked template PRD, name the row it left in `.transitions.jsonl`, and hand the harness's owner the `--board` line |
 | a `sed -n 's/^\(a\|b\)$/\1/p'` extractor captures nothing, or captures `0`, on **darwin** | BSD sed has no `\|` alternation in a basic regex; GNU sed does | `grep -E '^(a|b)'` then `sed 's/^  //'` — portable on both |
 | a fixture board made by `cp -R resources/board/example <d>/prds` shows `prds/prds`, and doctor resolves to a board one level too deep | `example` is a repo root, not a board — it holds `prds/` and a README | copy `resources/board/example/prds` to `<d>/prds`; doctor from `<d>` hides the nesting, a command run from inside the board does not |
-| an assertion on a path printed by a Python command fails on **darwin** with `/private/var/…` against `/var/…` | `os.getcwd()` returns the real path; `mktemp -d` and bash's `$PWD` keep the symlink | compare against `$(cd "$D" && pwd -P)` — portable on both |
+| an assertion on a path printed by a Python command fails on **darwin** with `/private/var/…` against `/var/…` | `os.getcwd()` returns the real path; `mktemp -d` and bash's `$PWD` keep the symlink | compare against `$(cd "$D" && pwd -P)` — portable on both. **This is an equality hazard only. A `grep -F` needle is unaffected: `/private/var/X` contains `/var/X` as a substring, so a `mktemp`-spelled needle matches a realpath-spelled hit and "repairing" it adds a false claim to the file. Measure before you widen a needle on this ground.** |
 | `ModuleNotFoundError: No module named 'memos'` from a copied `collect.py` or `plan.py` | the board scripts import from `resources/` beside `board/`, and the copy took `resources/board/*.py` alone | copy `resources/*.py` into `<scratch>/resources/` and `resources/board/*.py` into `<scratch>/resources/board/` — the layout, not just the files |
 | a `lacks` needle for a PRD name fails on a `scan` band that does not list it | another row's `after <name>` or `needs <name>` bit carries the name | match the row token `· <name> ·`, never the bare name |
 | a `--dry` run refuses on a gate the real run passes | the dry branch re-ran a gate that reads the file the real run writes first — `answer`'s gate saw the question still open because the answer is never on disk in a dry run | compute the gate's input on the scan dict in memory (the answer appended to `prd["body"]`, the state moved on `prd["fm"]`) and print the line off that dict; never re-enter `transition()` for a dry run of a two-step write |

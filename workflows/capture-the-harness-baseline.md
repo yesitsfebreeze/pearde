@@ -2,8 +2,8 @@
 atomic: capture-the-harness-baseline
 subject: record what every committed harness prints before the tree is touched
 date: 2026-08-28
-updated: 2026-09-01
-runs: 50
+updated: 2026-09-02
+runs: 52
 ---
 
 # capture-the-harness-baseline — the numbers as they were before you
@@ -38,11 +38,14 @@ runs: 50
 - **Resuming a killed run, or taking a second pass at a footprint another
   worker already built:** if the earlier build is **uncommitted**, the
   pre-edit tree is still on disk and the baseline is recoverable — do not
-  inherit it. `git clone --no-hardlinks <repo> <scratch>/prefix` gives the
-  tree at `HEAD` without the build; write any harness that lives in a
-  sibling worktree in at the depth its `ROOT` resolves from
-  (`git -C <board> show HEAD:<path>`), and run it there. Quote that count
-  as yours. Only when the earlier build was **committed** is there no
+  inherit it. `git clone --no-hardlinks` recovers the pre-edit tree
+  only where the harnesses are tracked. Where the board is gitignored (a
+  `.pearde/` inside a code repo, the common layout), copy the working tree
+  to scratch instead and restore only your own footprint files from `HEAD`
+  there (`git show HEAD:<path> > <copy>/<path>`) — that reverts your build
+  and keeps every neighbour's. Then run a control copy with nothing
+  reverted: a harness that reads the repo's own git history fails in any
+  copy, and only the control tells that apart from a regression. Only when the earlier build was **committed** is there no
   pre-edit baseline: then record the tree as it stands, cite the earlier
   worker's numbers, and say in the report that the baseline is inherited. A
   number honestly labelled inherited is worth something; a number that

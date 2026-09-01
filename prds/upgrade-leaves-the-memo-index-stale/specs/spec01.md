@@ -63,32 +63,43 @@ Nothing to build. Run it, tick the boxes, and read the two notes below.
 
 ## Acceptance
 
-- [ ] `upgrade` on a board that holds a memo and no index writes
+- [x] `upgrade` on a board that holds a memo and no index writes
       `memos/README.md`, and `memos.py check` on that board then exits `0`
       saying nothing — where before the upgrade it exits `1` saying
       "the kind index is stale".
-- [ ] The page `upgrade` writes is byte-identical to the example board's own
+- [x] The page `upgrade` writes is byte-identical to the example board's own
       `resources/board/example/memos/README.md`, and to the page a fresh
       `init --example` board carries.
-- [ ] `doctor` on the upgraded board exits `0`, closes on "every part this repo
+- [x] `doctor` on the upgraded board exits `0`, closes on "every part this repo
       owns checks out.", and its `memos` and `knowledge` rows both read `ok`.
-- [ ] No doctor row reads `broken` on either board, and every row's verdict
+- [x] No doctor row reads `broken` on either board, and every row's verdict
       except `vision` matches between the upgraded board and a fresh one — the
       row reader having read all 18 rows, not zero.
-- [ ] A second `upgrade` prints `already current` and leaves the page's bytes
+- [x] A second `upgrade` prints `already current` and leaves the page's bytes
       unchanged; an `upgrade` of a board with no memo prints
       `no memo on this board — nothing to index`, writes no page, and doctor
       calls that board green.
-- [ ] Taking the `index_memos(board, "upgrade")` call back out of a copy of
+- [x] Taking the `index_memos(board, "upgrade")` call back out of a copy of
       `init.py` makes `memos.py check` exit `1` again and doctor's `memos` row
       read `broken` — the boxes above are checks that can fail — and the copy
       is restored, proved with `cmp`.
-- [ ] A `memos.py index` that fails is said rather than swallowed, and the line
+- [x] A `memos.py index` that fails is said rather than swallowed, and the line
       begins `upgrade: could not regenerate memos/README.md`, never `init:`.
-- [ ] No fixture path from the run appears in this machine's Obsidian vault
-      list, and the live daemon's `resources/board/state/serve.json` is
-      byte-identical before and after.
-- [ ] The four harnesses this footprint touches stay at their baseline counts:
+- [x] No fixture path from the run appears in this machine's Obsidian vault
+      list, and none reached the live daemon's board list. The registry
+      *file* cannot carry this obligation and the box no longer claims it
+      does: `save_entry` returns early on an ephemeral path
+      (`serve.py:385,402` — `EPHEMERAL` covers `/var/folders/`, where every
+      fixture here lives) and `entry_path` is board-local, so no run of this
+      probe can move `.pearde/.state/serve.json`. Its mtime is `Sep 1
+      13:22:54` through five probe runs *and* through a stray registration
+      made during implementation — the exact failure this box exists to
+      catch, which a byte-identity check read `ok` straight through. The
+      probe now asks the daemon instead, and that predicate has been seen
+      red: `0` clean, `1` after an `init` without `PEARDE_PORT=1` reached
+      `127.0.0.1:8443`, `0` after `serve.py forget`. It stands down to `skip`
+      when the daemon is down, because down is not the same answer as clean.
+- [x] The four harnesses this footprint touches stay at their baseline counts:
       `init-seeds-a-board-doctor-calls-green` 41/41, `guard-on-is-one-command`
       78/78, `readme-in-three-rings` 74/74, `the-next-line-runs` 96/96 — and
       `python3 resources/index.py check` prints nothing and exits `0`.

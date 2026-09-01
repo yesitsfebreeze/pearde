@@ -1,5 +1,5 @@
 ---
-state: specced
+state: done
 origin: derived
 from: seven-closed-probes-drifted-red/init-seeds-a-board-doctor-calls-green
 priority: 0
@@ -10,6 +10,7 @@ needs:
 footprint:
   - resources/board/init.py
 workflow: probe-then-spec
+actual: 0.81h
 ---
 
 # upgrade-leaves-the-memo-index-stale — `init` now regenerates the memo kind-index and `upgrade` still does not, so an upgraded board fails the check a fresh one passes
@@ -64,3 +65,64 @@ declined to do it. This file is where that decision goes so it is not lost.
   115 lines and exit 1, which reddens `doctor`'s `index` row, the gate, and the
   `readme-in-three-rings` harness all at once. Whether the map should ignore it
   is a real question and belongs to whoever owns that drop.
+
+## Report
+
+spec01: exit 0
+764:    indexed = index_memos(board, "upgrade")
+resources/board/init.py compiles
+A. the old shape is red before anything touches it
+  ok    A the copy landed a memo
+  ok    A ...and no index beside it
+  ok    A memo check exits 1 on it
+  ok    A ...calling the kind index stale
+  ok    A doctor's memos row reads broken
+B. upgrade regenerates the index
+  ok    B upgrade exits 0
+  ok    B ...and says it regenerated the page
+  ok    B memos/README.md is on the board
+  ok    B memo check exits 0
+  ok    B ...and says nothing
+  ok    B the page is the generated one, not a copied one
+  ok    B ...and byte-identical to the example board's own page
+C. an upgraded board is as healthy as a fresh one
+  ok    C doctor exits 0 on the upgraded board
+  ok    C ...and closes green
+  ok    C the memos row reads ok
+  ok    C the knowledge row reads ok
+  ok    C the fresh board's init regenerated its index too
+  ok    C the row reader read the whole report — 18 rows, not zero
+  ok    C no row reads broken on either board
+  ok    C every other row's verdict matches the fresh board's
+  ok    C ...and the two boards' index pages are the same bytes
+D. a second upgrade is additive — it rewrites nothing
+  ok    D upgrade exits 0 again
+  ok    D ...and the row says the index is already current
+  ok    D ...and the page is the same bytes
+E. a board with no memo gets no page written over nothing
+  ok    E upgrade exits 0
+  ok    E ...and says there is nothing to index
+  ok    E memos/ holds no generated index
+  ok    E doctor calls the empty board green
+F. the check can fail — take the call back out and the red returns
+  ok    F the mutation reached the copy
+  ok    F an upgrade without the call leaves memo check failing
+  ok    F ...and doctor's memos row broken
+  ok    F ...and the copy is restored
+G. a failing index is said, and names upgrade rather than init
+  ok    G the failing-index mutation reached the copy
+  ok    G the failure is said, not swallowed
+  ok    G ...naming what memos.py reported
+  ok    G ...and it does not name the wrong command
+  ok    G ...and the copy is restored
+H. nothing of this machine's was written to
+  ok    H no fixture of this run reached the live daemon's board list
+  ok    H no fixture of this run reached Obsidian's vault list
+  ok    H ...and the vault list is byte-identical, so no session wrote it
+
+40 checks · 40 pass · 0 fail · 0 skip
+41 checks · 41 pass · 0 fail · 0 skip
+78 checks · 78 pass · 0 fail
+74 checks · 74 pass · 0 fail
+96 checks · 96 pass · 0 fail
+index ok

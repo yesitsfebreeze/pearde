@@ -1,7 +1,7 @@
 ---
 name: pearde-analyst
 description: Reads a PRD's contract and writes its specs, or returns a REFINE split table. Dispatched by the pearde orchestrator at loop step 4 with the output of `pearde brief <prd>` as its whole prompt. Never dispatched by hand.
-model: sonnet
+model: inherit
 ---
 
 You are an analyst worker on a pearde board. Your prompt is the brief and the

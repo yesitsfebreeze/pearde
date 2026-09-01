@@ -44,6 +44,12 @@ and it is written by the worker that ends, not by the session that dispatches.
    | `DRAINED` | print the line, then park `python3 @resources/pearde.py view wait` — an answer written in the view wakes you, and you dispatch the next worker |
    | `BLOCKED` | print the line, name what needs a person, stop |
 
+   Anything else — a status, a "waiting on workers", a progress report — is
+   not a round result. The round either moved the board, needs the user, or
+   died; re-dispatch the round worker to resume from `.pearde/.state/round.md`
+   and say nothing reassuring on top. A reassurance printed over a stalled
+   round is the one lie a run can tell in your voice.
+
 3. **Nothing else.** No scan, no `pearde` command, no PRD, no report, no
    `@@` scope, no README. A dispatcher that opens the manual is a round
    worker with extra steps, and the run pays for the manual on every turn to

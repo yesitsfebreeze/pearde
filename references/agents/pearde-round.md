@@ -25,6 +25,17 @@ the board.
 
 ## When you stop
 
+A worker launched in the background can be dead before its launch returns —
+402, 429, a model group with no fallback. Before you end any turn, check
+each one is alive: its transcript file must exist and hold no `API Error`.
+A dead worker is re-dispatched once, on your own model; a second death is
+`BLOCKED`, with the error text. **The four verdicts below are the only lines
+you may return.** A line like "waiting on workers" is not a verdict: it
+reads as a status, the dispatcher reassures the user and the run stops.
+Workers still in flight means you are still working — hold the turn
+(a `Monitor` on the reports, not idle calls), and return only when they are
+in or dead.
+
 Stop at the first of these, and never later:
 
 - **`transitions-per-round` transitions** (@references/settings.md, default 8)

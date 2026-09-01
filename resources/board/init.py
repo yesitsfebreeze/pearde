@@ -346,7 +346,7 @@ def write_knowledge(d):
     return planted
 
 
-def index_memos(board):
+def index_memos(board, verb="init"):
     """Regenerate `memos/README.md`, the index by kind, after a copy.
 
     `--example` copies the example board through
@@ -372,6 +372,13 @@ def index_memos(board):
     holds memos and no index is one doctor calls broken on the next line, so
     a bare `return None` there is `init` exiting 0 having quietly not done
     the thing it was asked for. Nothing on the happy path changes.
+
+    `verb` names the command in that failure line. Both `init` and `upgrade`
+    run this step — a board brought forward by `upgrade` was made before this
+    function existed, so its index is exactly as stale as a copied one's, and
+    bringing a board forward has to leave it as healthy as making one fresh.
+    A message hard-coded to say `init:` would name the wrong command on the
+    half of the callers that are not `init`.
     """
     d = os.path.join(board, "memos")
     if not os.path.isdir(d):
@@ -385,7 +392,7 @@ def index_memos(board):
     if out.returncode != 0 or not written:
         why = (out.stderr.strip().splitlines() or written
                or ["no output"])[-1]
-        print(f"init: could not regenerate memos/README.md, the memo index "
+        print(f"{verb}: could not regenerate memos/README.md, the memo index "
               f"by kind — {why} · the board holds memos and no index, which "
               "doctor reads as stale; run `memo index` once that is fixed")
         return None
@@ -743,6 +750,24 @@ def cmd_upgrade(argv):
         os.makedirs(os.path.join(board, folder), exist_ok=True)
     planted = write_knowledge(d)
     print(f"  wiki      {'planted ' + ', '.join(planted) if planted else 'already seeded'}")
+    # The memo kind-index, the same regeneration `init` does after its copy.
+    # A board made before `index_memos` existed carries whatever index it had
+    # — none at all, on every `--example` board older than that step — and
+    # `memo check` calls that stale, which doctor's `memos` row reports as
+    # broken. `upgrade`'s whole job is to bring a board current, so it does
+    # here what `init` does there. Read the page before and after rather than
+    # asking `index_memos`: the row then says which of the two happened, the
+    # way `wiki` and `register` already do.
+    memos_page = os.path.join(board, "memos", "README.md")
+    before = (open(memos_page, "rb").read()
+              if os.path.isfile(memos_page) else None)
+    indexed = index_memos(board, "upgrade")
+    if indexed:
+        after = open(memos_page, "rb").read()
+        print(f"  memos     {'already current' if after == before else 'regenerated'} "
+              f"{indexed}, the index by kind")
+    else:
+        print("  memos     no memo on this board — nothing to index")
     plugins, missing, _ = write_obsidian(d)
     repaired = repair_plugin_ids(os.path.join(board, ".obsidian"))
     vault_line = ", ".join(plugins) if plugins else "already there"

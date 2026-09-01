@@ -635,6 +635,14 @@ def cmd_board(store, args):
             or slug in prd["text"])
     flat = {name.split("/")[-1]: f"wiki/board/{name}"
             for name in prds_found}
+    # A memo's wikilinks are not all knowledge: they also point at other memos
+    # and at headings. Only a link that resolves to a note under sources/ or
+    # conclusions/ belongs under ## Knowledge — the rest are decisions, and
+    # already listed as such. Built once, not per PRD.
+    kb_names = {}
+    for note in load_notes(store, ("sources", "conclusions")):
+        kb_names[note.path.stem] = note.path.stem
+        kb_names[note.title.strip().lower()] = note.path.stem
     written, removed = [], []
     for name, prd in prds_found.items():
         name_parts = (name, name.split("/")[-1])
@@ -697,10 +705,11 @@ def cmd_board(store, args):
             lines += [f"- [[{slug}]] — {memos[slug]['subject']}"
                       for slug in memo_hits_by_prd[name]] + [""]
         # the knowledge under the decisions: conclusions the citing memos stand on
-        conclusions = sorted({link
+        conclusions = sorted({kb
                               for slug in memo_hits_by_prd[name]
                               for link in WIKILINK_RE.findall(memos[slug]["text"])
-                              if link.strip() and not link.strip().startswith("#")})
+                              if (kb := kb_names.get(link.strip())
+                                  or kb_names.get(link.strip().lower()))})
         if conclusions:
             lines += ["## Knowledge", ""]
             lines += [f"- [[{c}]]" for c in conclusions] + [""]

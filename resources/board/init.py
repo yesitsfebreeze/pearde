@@ -63,6 +63,18 @@ DEFAULTS = (("language", "English"), ("workers", "3"), ("pipeline", "3"),
 # written at `.pearde/.obsidian/` and never shared.
 IGNORED = (".pearde/.state/", ".pearde/wiki/", ".obsidian/")
 
+# A board is often its own git repo — the plan on its own branch, pushed. The
+# names below are written into *that* repo's `.gitignore`, not the parent's.
+# Two of them hold the same live credential — the REST key mirror, and the
+# plugin `data.json` inside `.obsidian/` that it mirrors — and a board repo
+# that tracks `wiki/` or the vault commits it, to a remote if it has one. The
+# other two are machine-local rebuild output that only makes noise in a diff.
+# Everything else under `wiki/` — the notes, the dashboard, the indexes — is
+# the plan and belongs in the history.
+BOARD_IGNORED = ("wiki/.obsidian-api-key", "wiki/.graphify/",
+                 "wiki/Dashboard.report.md", ".obsidian/")
+BOARD_HEADER = "# machine-local, and two of them hold the same credential"
+
 # The Obsidian requirement: dataview (the live views) and local-rest-api
 # (the port a tool reads the vault through). The preset at
 # resources/board/obsidian/ carries the settings; the plugin bundles are not
@@ -78,12 +90,15 @@ OBSIDIAN_PRESET = os.path.join(HERE, "obsidian")
 WAIT_TICK, WAIT_TICKS = 0.5, 1200
 OBSIDIAN_PLUGINS = ("dataview", "obsidian-local-rest-api")
 
-# Not the same thing as resources/board/knowledge/, and not copied from
-# here: that folder is the knowledge-layer's *content* seed (Dashboard.md,
-# WORKFLOW.md, empty indexes) for .pearde/wiki/, the vault this preset's
-# .obsidian/ points at. No step in this file reads it — knowledge.py's
-# Store builds .pearde/wiki/ directly on first use instead. See
-# references/files.md's `resources/board/knowledge/` entry.
+# The knowledge layer's *content* seed — Dashboard.md, WORKFLOW.md, the
+# indexes, the empty scaffolds — for `.pearde/wiki/`, the folder the preset
+# above points its vault at. `write_knowledge` plants it; `init` and
+# `upgrade` both call that. Not the same thing as resources/board/obsidian/:
+# that is app configuration, this is vault content. Every path inside these
+# files is vault-relative — the vault roots at `.pearde/`, so a KB query
+# reads `wiki/conclusions`, never `conclusions`.
+KNOWLEDGE_PRESET = os.path.join(HERE, "knowledge")
+KNOWLEDGE_PY = os.path.join(HERE, "..", "knowledge.py")
 
 KEY_RE = re.compile(r"^[a-z][a-z0-9-]*$")
 
@@ -97,6 +112,7 @@ FLAGS = {
     "init":     trlib.Flags(("language", "name"), ("example",) + trlib.DRY),
     "settings": trlib.Flags(("board",), trlib.DRY),
     "vault":    trlib.Flags((), ("wait", "open") + trlib.DRY),
+    "upgrade":  trlib.Flags((), trlib.DRY),
 }
 
 
@@ -291,6 +307,77 @@ def write_obsidian(d):
     return plugins, missing, key
 
 
+def write_knowledge(d):
+    """The knowledge layer's content, seeded into `<dir>/.pearde/wiki/`.
+
+    `knowledge.py`'s Store makes the directories on first use but writes no
+    Dashboard and no WORKFLOW — a board that never had them opens in Obsidian
+    with no views at all, which is what a fresh vault looked like before this
+    step existed. Copies every file of the preset that is not already there;
+    a file a person edited is never replaced. Returns the vault-relative
+    names it planted."""
+    wiki = os.path.join(d, ".pearde", "wiki")
+    planted = []
+    if not os.path.isdir(KNOWLEDGE_PRESET):
+        return planted
+    for src_dir, _dirs, files in os.walk(KNOWLEDGE_PRESET):
+        rel = os.path.relpath(src_dir, KNOWLEDGE_PRESET)
+        dst_dir = wiki if rel == "." else os.path.join(wiki, rel)
+        os.makedirs(dst_dir, exist_ok=True)
+        for name in sorted(files):
+            if name == ".DS_Store":
+                continue
+            dst = os.path.join(dst_dir, name)
+            if os.path.exists(dst):
+                continue
+            shutil.copyfile(os.path.join(src_dir, name), dst)
+            planted.append(os.path.relpath(dst, wiki))
+    # the two the Store makes but the preset carries no file for
+    for name in ("sources", "conclusions", "pending", "graphs"):
+        os.makedirs(os.path.join(wiki, name), exist_ok=True)
+    return planted
+
+
+def repair_plugin_ids(dest):
+    """Obsidian enables a community plugin by its manifest id, and a list
+    holding a name that is not one enables nothing and reports nothing. An
+    early preset spelled the REST plugin `local-rest-api`; its id is
+    `obsidian-local-rest-api`, so every vault seeded from it came up with the
+    port closed. Rewrites only the ids this repo ships — a plugin someone
+    else added is left exactly where it is. Returns what it changed."""
+    path = os.path.join(dest, "community-plugins.json")
+    if not os.path.isfile(path):
+        return []
+    try:
+        have = json.load(open(path, encoding="utf-8"))
+    except (OSError, ValueError):
+        return []
+    if not isinstance(have, list):
+        return []
+    fixed, changed = [], []
+    for entry in have:
+        if entry in OBSIDIAN_PLUGINS or not isinstance(entry, str):
+            fixed.append(entry)
+            continue
+        match = next((p for p in OBSIDIAN_PLUGINS if p.endswith("-" + entry)
+                      or entry.endswith("-" + p)), None)
+        if match and match not in have:
+            fixed.append(match)
+            changed.append(f"{entry} -> {match}")
+        elif match:
+            changed.append(f"dropped duplicate {entry}")
+        else:
+            fixed.append(entry)
+    for plugin in OBSIDIAN_PLUGINS:
+        if plugin not in fixed and os.path.isdir(
+                os.path.join(dest, "plugins", plugin)):
+            fixed.append(plugin)
+            changed.append(f"enabled {plugin}")
+    if changed:
+        editlib.write_atomic(path, json_text(fixed))
+    return changed
+
+
 def write_gitignore(d):
     """Step 4: the machine-local names, appended to `<dir>/.gitignore` — the
     board's parent, where `.pearde/…` is the right spelling — when they are not
@@ -306,6 +393,34 @@ def write_gitignore(d):
     if text:
         text += "\n"
     text += "# machine-local per board — regenerable\n"
+    text += "".join(n + "\n" for n in add)
+    editlib.write_atomic(path, text)
+    return add
+
+
+def write_board_gitignore(board):
+    """The board's own repo, when it is one. Returns the names it added.
+
+    Separate from `write_gitignore`, which writes the *parent* repo's file
+    with `.pearde/…`-prefixed names. A board on its own branch never sees
+    that file — git does not descend into a nested work tree — so the key
+    it holds gets committed and, if the branch has a remote, published."""
+    if not os.path.isdir(os.path.join(board, ".git")) and not in_git(board):
+        return []
+    path = os.path.join(board, ".gitignore")
+    text = open(path, encoding="utf-8").read() if os.path.isfile(path) else ""
+    have = {l.strip() for l in text.splitlines()}
+    add = [n for n in BOARD_IGNORED if n not in have]
+    if not add:
+        return []
+    if text and not text.endswith("\n"):
+        text += "\n"
+    # the header is written once and then found — a later run adding one more
+    # name must not stack a second copy of it under the first
+    if BOARD_HEADER not in text:
+        if text:
+            text += "\n"
+        text += BOARD_HEADER + "\n"
     text += "".join(n + "\n" for n in add)
     editlib.write_atomic(path, text)
     return add
@@ -376,6 +491,11 @@ def cmd_init(argv):
             added = write_gitignore(d)
             if added:
                 print(f"init: .gitignore += {' '.join(added)}")
+        planted = write_knowledge(d)
+        if planted:
+            print(f"init: knowledge layer at .pearde/wiki/ — "
+                  f"{', '.join(planted)} · Dashboard.md is the vault's "
+                  "front page, WORKFLOW.md its configuration")
         plugins, missing, _ = write_obsidian(d)
         if plugins:
             print(f"init: obsidian vault at .pearde/ (its own root, so every "
@@ -499,6 +619,82 @@ def cmd_vault(argv):
     return 0
 
 
+# ── upgrade ───────────────────────────────────────────────────────────────────
+
+def cmd_upgrade(argv):
+    """[<dir>] — bring an existing board up to the layout this repo is on.
+
+    `init` writes a board and then, on every later run, deliberately writes
+    nothing: a board that already has `settings.md` skips the vault, the
+    gitignore and the knowledge seed entirely. That is right for `init` and
+    wrong for a board made before a part of the layout existed — the boards
+    on this machine had no `wiki/` content, no Dashboard, no generated PRD
+    notes, and in one case a vault whose REST plugin id could never load.
+
+    Every step is idempotent and additive. Nothing already on disk is
+    replaced: a file a person edited, a plugin they installed, a settings key
+    they changed all survive. The one thing rewritten is a community-plugins
+    id that names no plugin, because that value is not an edit, it is a
+    typo that silently disables the port.
+    """
+    args = trlib.Args(argv, FLAGS["upgrade"], "upgrade")
+    if len(args.pos) > 1:
+        raise Refused("upgrade [<dir>]")
+    d = os.path.abspath(args.pos[0] if args.pos else os.getcwd())
+    board = os.path.join(d, ".pearde")
+    if not os.path.isfile(os.path.join(board, "settings.md")):
+        raise Refused(f"no board at {board} — pearde init {d} writes one")
+    name = planlib.board_name(board)
+    if args.dry:
+        print(f"dry · upgrade {name} — would seed wiki/ content, the vault, "
+              "the gitignore names, the register, and regenerate wiki/board/")
+        return 0
+    print(f"upgrade {name} · {board}")
+    for folder in (planlib.PRDS_DIR, "memos", "wiki", "workflows",
+                   planlib.STATE_DIR):
+        os.makedirs(os.path.join(board, folder), exist_ok=True)
+    planted = write_knowledge(d)
+    print(f"  wiki      {'planted ' + ', '.join(planted) if planted else 'already seeded'}")
+    plugins, missing, _ = write_obsidian(d)
+    repaired = repair_plugin_ids(os.path.join(board, ".obsidian"))
+    vault_line = ", ".join(plugins) if plugins else "already there"
+    if repaired:
+        vault_line += " · repaired " + "; ".join(repaired)
+    if missing:
+        vault_line += (f" · no bundle for {', '.join(missing)} — "
+                       "pearde install --apply <skills-dir> fetches them")
+    print(f"  vault     {vault_line}")
+    if in_git(d):
+        added = write_gitignore(d)
+        print(f"  gitignore {'+= ' + ' '.join(added) if added else 'already names them'}")
+    board_added = write_board_gitignore(board)
+    if board_added:
+        print(f"  board-git += {' '.join(board_added)} — the board is its own "
+              "repo and was tracking its REST key")
+    state, _vid = register_vault(board)
+    if state is None:
+        print("  register  Obsidian has no config on this machine")
+    elif state == "added" and obsidian_running():
+        print("  register  added — but Obsidian is running and rewrites its "
+              "vault list from memory on quit, which erases this. "
+              "pearde vault --wait --open, then quit it")
+    else:
+        print(f"  register  {'added' if state == 'added' else 'already registered'}")
+    for verb in ("board", "relink"):
+        out = subprocess.run(
+            [sys.executable, os.path.abspath(KNOWLEDGE_PY),
+             "--root", os.path.join(board, "wiki"), verb],
+            capture_output=True, text=True)
+        line = (out.stdout.strip().splitlines() or
+                out.stderr.strip().splitlines() or ["no output"])[0]
+        print(f"  {verb:<9} {line}")
+    if repaired and obsidian_running():
+        print("  note      Obsidian reads community-plugins.json at launch — "
+              "restart it, or enable the plugin in its settings, for the "
+              "repaired id to take")
+    return 0
+
+
 # ── the surface ───────────────────────────────────────────────────────────────
 
 def _command(name, fn):
@@ -519,6 +715,7 @@ def _command(name, fn):
 
 COMMANDS = {"init": _command("init", cmd_init),
             "settings": _command("settings", cmd_settings),
+            "upgrade": _command("upgrade", cmd_upgrade),
             "vault": _command("vault", cmd_vault)}
 
 

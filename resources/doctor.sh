@@ -506,16 +506,16 @@ if [ -n "$BOARD" ]; then
 fi
 
 # ── knowledge: the research layer, whole in one folder ───────────────────────
-# prds/knowledge/ is not a PRD folder and holds no state — the scan walks past
+# .pearde/wiki/ is not a PRD folder and holds no state — the scan walks past
 # it like memos/. What can be wrong is the layer itself: frontmatter the tools
 # cannot read, wikilinks pointing at nothing, a graph left behind by writes.
 # knowledge.py doctor is the one reader; `off` means the board never researches.
-if [ -n "$BOARD" ] && [ -d "$BOARD/knowledge" ]; then
+if [ -n "$BOARD" ] && [ -d "$BOARD/wiki" ]; then
   if ! command -v python3 >/dev/null 2>&1; then
-    row knowledge broken "prds/knowledge/ present, no python3 to read it"
+    row knowledge broken ".pearde/wiki/ present, no python3 to read it"
     fix "install python3 — knowledge.py is the only reader of the format"
   else
-    KPROB=$(python3 "$DIR/knowledge.py" --root "$BOARD/knowledge" doctor 2>&1)
+    KPROB=$(python3 "$DIR/knowledge.py" --root "$BOARD/wiki" doctor 2>&1)
     if [ $? -eq 0 ] && [ -z "$(echo "$KPROB" | grep '✗')" ]; then
       KN=$(printf '%s' "$KPROB" | sed -n 's/.*— \([0-9]*\) notes.*/\1/p')
       row knowledge ok "$KN note$([ "$KN" = 1 ] || echo s) on record · graph in sync · pending honest"

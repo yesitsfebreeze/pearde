@@ -84,6 +84,7 @@ FORWARD = {
     "guard":     ("guard.py", ["status"], ("on", "off", "status")),
     "doctor":    ("doctor.sh", [], ()),
     "install":   ("install.sh", [], ()),
+    "update":    ("update.sh", [], ()),
 }
 
 # Reserved: a name a later child delivers, answering `not yet — <child>`

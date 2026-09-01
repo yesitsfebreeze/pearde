@@ -22,3 +22,7 @@ resources/board/obsidian/plugins/*/styles.css
 /handover.md
 
 /board
+
+# machine-local per board — regenerable
+.pearde/.state/
+.pearde/wiki/

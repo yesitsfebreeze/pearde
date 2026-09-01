@@ -34,6 +34,7 @@ whose scope it changed. Nothing else points at it.
 | @references/files.md | this manifest — every tracked file, one row |
 | @references/language.md | how every document is written |
 | @references/install.md | what the system is, and how to install it for any agent |
+| @references/update.md | keeping an install current — what each `update` row means, and why `off` is never repaired unasked |
 | @references/settings.md | board knobs |
 | @references/memo.md | how a decision is recorded |
 | @references/workflow.md | how a job is done — the two file shapes, the steps grammar, the report section |
@@ -100,6 +101,7 @@ whose scope it changed. Nothing else points at it.
 |---|---|
 | @resources/pearde.py | the one command — a dispatcher over every script; discovers `COMMANDS` in `resources/board/*.py`; `help` from docstrings |
 | @resources/install.sh | build one skill folder of links per file in `skills/` |
+| @resources/update.sh | check every install on this machine and re-link the set — local, global, and the global that is not in force |
 | @resources/doctor.sh | install check + repair |
 | @resources/guard.py | the PreToolUse/PostToolUse hook that enforces the loop |
 | @resources/statusline.sh | continuous progress numbers |
@@ -144,6 +146,7 @@ command, and @references/install.md is the naming rule and the install.
 | @references/skills/pearde-report.md | the board written for a person, one rolling state | `@@report` |
 | @references/skills/pearde-master.md | one plan across several repositories | `@@master` |
 | @references/skills/pearde-doctor.md | a broken install against an absent one | `@@doctor` |
+| @references/skills/pearde-update.md | check every install and bring it current | `@@update` |
 | @references/skills/pearde-persona.md | who is working, and switching for the round | `@@personas` |
 | @references/skills/pearde-persona-ask.md | one problem, one colleague, nothing written | `@@consult` |
 | @references/skills/pearde-persona-create.md | composing one for a field the roster misses | `@@personas` |
@@ -152,28 +155,28 @@ command, and @references/install.md is the naming rule and the install.
 | @references/skills/pearde-graph.md | knowledge-graph rounds over any folder, Obsidian vault out | `@@graph` |
 | @references/skills/pearde-knowledge.md | the research layer — query, capture, conclude, link | `@@knowledge` |
 
-### `resources/board/knowledge/` — the layer's seed template, not yet wired to `init`
+### `resources/board/knowledge/` — the layer's content seed, planted by `init` and `upgrade`
 
 Not the same thing as @resources/board/obsidian/: that preset is the
 `.obsidian` app config (dataview + local-rest-api), copied by `init.py`'s
 `write_obsidian` into `<dir>/.obsidian` on every fresh board. This folder is
-the knowledge-layer's *content* seed — dashboard, workflow config, empty
-indexes — meant for a new board's `.pearde/wiki/`. As of this writing
-`init.py` never references `resources/board/knowledge/` at all: no
-`write_knowledge` step exists, and `resources/knowledge.py`'s `Store` reads
-and writes `.pearde/wiki/` directly without ever copying this preset into
-it. So today a fresh `.pearde/wiki/` starts from whatever `knowledge.py`
-creates on first use, not from this template — these files are a seed
-nothing plants. Keep them (a future `init` step is the obvious fix, not
-deletion), but don't read the row below as describing current `init`
-behavior.
+the knowledge-layer's *content* seed — dashboard, workflow config, the
+indexes — for a board's `.pearde/wiki/`. `init.py`'s `write_knowledge` plants
+it: `init` on a new board, and `upgrade` on one made before the step existed.
+`knowledge.py`'s `Store` makes the directories on first use but writes no
+Dashboard and no WORKFLOW, so without this a vault opens with no views at all.
+Every file is copied only when it is not already there — a file a person
+edited is never replaced.
+
+Every path inside these files is **vault-relative**, and the vault roots at
+`.pearde/`. So a query reads `wiki/conclusions`, never `conclusions` — in the
+`FROM` clauses and in the `dv.pages()` calls alike.
 
 | anchor | is |
 |---|---|
-| @resources/board/knowledge/ | template for a new board's `.pearde/wiki/` — dashboard, workflow, indexes, the empty pending/graphs/absorbed scaffolds; not currently copied by any command (see note above) |
+| @resources/board/knowledge/ | the seed for a board's `.pearde/wiki/` — dashboard, workflow, indexes, the empty pending/graphs/absorbed scaffolds; planted by `init.py`'s `write_knowledge` |
 | @resources/board/knowledge/Dashboard.md | the dashboard template — Dataview views, vault-relative |
 | @resources/board/knowledge/WORKFLOW.md | the configuration template — focus, rules, routing |
-| @resources/board/knowledge/_index.md | the conclusions index template |
 | @resources/board/knowledge/conclusions/_index.md | the conclusions index, under conclusions/ |
 | @resources/board/knowledge/sources/_index.md | the sources index template |
 | @resources/board/knowledge/sources/.absorbed/_index.md | the absorbed-sources marker |
@@ -183,8 +186,7 @@ behavior.
 
 One folder, gitignored, the layer's whole: notes, graph, wiki, and its own
 Obsidian vault. No rows — the folder is machine-local output of
-@resources/knowledge.py, the row above is its intended contract (see the
-note there — not yet how a fresh board actually gets it).
+@resources/knowledge.py, seeded from the row above by `init` or `upgrade`.
 
 ### `resources/scout/` — a self-contained tool
 

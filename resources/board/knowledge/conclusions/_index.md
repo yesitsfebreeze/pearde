@@ -30,7 +30,7 @@ LIMIT 25
 May need more research before trusting.
 
 ```dataviewjs
-const pages = dv.pages('"conclusions"')
+const pages = dv.pages('"wiki/conclusions"')
   .map(p => ({ p, n: (p.sources ?? []).length }))
   .where(x => x.n < 2)
   .sort(x => x.n, "asc");

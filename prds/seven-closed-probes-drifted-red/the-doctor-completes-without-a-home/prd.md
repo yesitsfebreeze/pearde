@@ -1,20 +1,21 @@
 ---
-state: open        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
+state: done        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: requested  # requested = the user asked | derived = the board found it
 # from:            # derived only — the PRD whose work surfaced this one
 priority: 0        # higher first
-complexity: 0      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
-blast-radius:      # analyst, at spec time — high|mid|low. What breaks if this is wrong
+complexity: 6      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
+blast-radius: mid
 repo:              # the sub-repo the code lands in; delete if n/a
 # workflow:        # OPTIONAL — how this kind of job is done: a slug in
 #                  #   .pearde/workflows/. @references/workflow.md.
 #                  #   Absent = the brief alone, as before workflows
 time:              # OPTIONAL. See @references/parts/order.md
   est:             # the weight, only when complexity is absent. Not a duration
-  actual:          # a record. Nothing reads it
+  actual: 1.39h
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
 needs:
   - the-fixtures-meet-the-tool
+workflow: probe-then-spec
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
      vision importance (priority), and complexity/blast-radius. Add your own
@@ -66,3 +67,42 @@ doctor.sh finishes every row when the shell holds no HOME — the vault row's re
 <!-- `## Failure` — implementer-only, after a FAILED attempt: what broke, what
      was tried. `retry` moves this into the body as history and reopens the
      PRD. -->
+
+## Report
+
+spec01: exit 0
+guarded
+builtin-first
+arm-broken
+  ok    no unguarded $HOME read anywhere in doctor.sh
+  ok    no unbound-variable line in doctor's report under a scrubbed env
+  ok    every row below vault still prints with no HOME (board vault view plan)
+  ok    the vault row reports rather than aborting — vault       broken  /tmp/pearde-nohome.KaFv7J/repo/.pearde/.obsidian is not in Obsidian's vault register — ▸vault opens the nearest registered ancestor instead
+  ok    no HOME reaches the same verdict as HOME=/Users/feb on one board — vault       broken  /tmp/pearde-nohome.KaFv7J/repo/.pearde/.obsidian is not in Obsidian's vault register — ▸vault opens the nearest registered ancestor instead (exit 1 both)
+  ok    HOME with a register naming the board still reads ok, registered
+  ok    HOME holding no Obsidian config still reads ok, nothing to register
+  ok    an unregistered board is still called broken — the guard did not mute the row
+  ok    XDG_CONFIG_HOME finds the register over a home that holds no macOS register
+  ok    with no usable python3 the scrubbed run still reaches the with-HOME verdict — a python3 stub that exits 1, a thin PATH with no python3, and no PATH exported
+  ok    the last-resort arm reports broken and claims only that the home could not be resolved
+  ok    the view-row harness reads green end to end — 6 checks · 6 pass · 0 fail
+12 checks · 12 pass · 0 fail · 0 skip
+probe harness complete
+  skip  the view-row harness is left to the sweep's own run of it — it binds 8477-8479 and this is a sweep; not asserted here
+12 checks · 11 pass · 0 fail · 1 skip
+probe harness complete
+  ok    the view block defines PBOARD before its elif reads it
+  ok    every variable the view row names is defined
+  ok    no unbound-variable line anywhere in doctor's report
+  ok    view ok when the service holds the spelling doctor walks
+  ok    view ok across a symlinked START — pwd -P bridges the spelling
+  ok    the ok line names the board, spelled /tmp/pearde-viewrow.1RVa7I · /status holds it
+6 checks · 6 pass · 0 fail
+probe harness complete
+index problems not naming the neighbour's drop: 0 · naming this footprint: 0
+  index       broken  115 problems
+  vault       ok      ./.pearde/.obsidian · registered with Obsidian — ▸vault opens this board
+index is the only broken row
+.pearde/prds/the-view-row-names-a-variable-that-exists/probe/verify.sh: line 28: 38502 Terminated: 15          python3 "$D/srv1.py"
+.pearde/prds/the-view-row-names-a-variable-that-exists/probe/verify.sh: line 28: 38721 Terminated: 15          python3 "$D/srv2.py"
+.pearde/prds/the-view-row-names-a-variable-that-exists/probe/verify.sh: line 28: 38945 Terminated: 15          python3 "$D/srv3.py"

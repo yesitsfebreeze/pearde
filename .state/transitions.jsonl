@@ -216,3 +216,14 @@
 {"from": "open", "prd": "the-round-is-handed-its-step-not-the-manual", "t": "2026-09-01 11:58", "to": "done"}
 {"calls": 259, "from": "analyzing", "prd": "seven-closed-probes-drifted-red/the-fixtures-meet-the-tool", "reads": 9, "refused": 3, "t": "2026-09-01T12:31:06", "to": "specced", "tokens": 352}
 {"calls": 10, "from": "specced", "prd": "seven-closed-probes-drifted-red/the-fixtures-meet-the-tool", "reads": 0, "refused": 0, "t": "2026-09-01T12:32:25", "to": "claimed", "tokens": 156}
+{"from": "claimed", "prd": "graph-probe-makes-harness-sweep-unaffordable", "t": "2026-09-01 12:57", "to": "done"}
+{"from": "claimed", "prd": "seven-closed-probes-drifted-red/the-fixtures-meet-the-tool", "t": "2026-09-01 12:59", "to": "done"}
+{"calls": 30, "from": "open", "prd": "seven-closed-probes-drifted-red/the-doctor-completes-without-a-home", "reads": 3, "refused": 0, "t": "2026-09-01T12:59:31", "to": "analyzing", "tokens": 605}
+{"calls": 78, "from": "analyzing", "prd": "seven-closed-probes-drifted-red/the-doctor-completes-without-a-home", "reads": 5, "refused": 0, "t": "2026-09-01T13:12:48", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "seven-closed-probes-drifted-red/the-doctor-completes-without-a-home", "reads": 0, "refused": 0, "t": "2026-09-01T13:12:53", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "seven-closed-probes-drifted-red/the-doctor-completes-without-a-home", "t": "2026-09-01 14:35", "to": "done"}
+{"calls": 408, "from": "open", "prd": "seven-closed-probes-drifted-red/init-seeds-a-board-doctor-calls-green", "reads": 26, "refused": 0, "t": "2026-09-01T14:35:51", "to": "analyzing", "tokens": 22436}
+{"calls": 91, "from": "analyzing", "prd": "seven-closed-probes-drifted-red/init-seeds-a-board-doctor-calls-green", "reads": 4, "refused": 1, "t": "2026-09-01T15:12:04", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "seven-closed-probes-drifted-red/init-seeds-a-board-doctor-calls-green", "reads": 0, "refused": 0, "t": "2026-09-01T15:12:09", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "seven-closed-probes-drifted-red/init-seeds-a-board-doctor-calls-green", "t": "2026-09-01 15:57", "to": "done"}
+{"from": "open", "prd": "seven-closed-probes-drifted-red", "t": "2026-09-01 15:59", "to": "done"}

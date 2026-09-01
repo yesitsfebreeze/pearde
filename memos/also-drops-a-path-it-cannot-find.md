@@ -4,6 +4,7 @@ kind: decision
 status: decided
 subject: collect --also resolves paths against the caller's cwd and silently drops one that lands in the wrong repo, while the commit message it writes still names the file
 date: 2026-09-01
+updated: 2026-09-01
 prds:
   - seven-closed-probes-drifted-red/the-doctor-completes-without-a-home
 ---
@@ -95,3 +96,38 @@ written rule or it is rediscovered every time.
 - It says nothing about `--also` paths that exist in the *wrong* repo — a file
   present at both `<repo>/x.md` and `<board>/x.md` would be committed, from the
   wrong root, with no warning at all. Nothing on this board has that shape yet.
+
+## The second half, found the same afternoon
+
+The same defect has a twin, and between them they dropped a `done` PRD's
+deliverable on the floor.
+
+**A spec's own `footprint:` is spelled the same way, and is not checked
+either.** `init-seeds-a-board-doctor-calls-green`'s spec02 named its whole
+footprint as `.pearde/prds/the-board-runs-itself/readme-in-three-rings/probe/quickstart.sh`
+— the code-repo spelling, written from the repo root where the analyst was
+working. `repo_of` resolved it into the code repo, where the board is a
+separate worktree and therefore ignored, so `plan.add` found nothing and said
+nothing. From the board root that path is `prds/the-board-runs-itself/…`. The
+PRD collected `done` at `74f8048` / `4735940` with its second spec's only
+deliverable still uncommitted. `collect.py:850` *does* refuse a footprint path
+that is under no repo — it just cannot see one that is under the *wrong* repo,
+because the board worktree sits inside the code repo's directory tree and the
+path exists on disk either way.
+
+**And the follow-up ride could not carry it.** `close_container()`
+(`collect.py:1227`) is a separate path from the ordinary collect and never
+reads `opts["also"]`, so `--also` on a container collect is accepted, printed
+in no plan, and silently ignored. The parent `seven-closed-probes-drifted-red`
+was the next thing to close, and it could not take the orphan with it.
+
+The file was committed directly by the orchestrator (`893d01c`), outside
+`collect`, because the alternative was a PRD reading `done` with its
+deliverable on the floor. That is a departure from **one writer, and the writer
+is `collect`**, and it is recorded here rather than hidden: the honest failure
+was already logged, and a second silent one on top of it would have been worse.
+
+So the rule above grows a third clause: **after a collect, `git status` the
+board as well as `git show --stat` the commits.** A clean `--also` list is not
+the same as a clean tree, and neither the flag nor the footprint key will tell
+you when a path went to the wrong repo.

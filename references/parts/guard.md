@@ -14,7 +14,7 @@ is the same three rules where ignoring them is not possible.
 |---|---|
 | a board walked by hand — `find … prd.md`, `grep -r state:`, `ls prds/*/prd.md` | step 1 is `plan.py scan`, and it already answers this. A walk carried as data — inside a heredoc body or a quoted string a script or an editor is given — is not a walk and passes; the string a walker itself or `sh -c` runs is |
 | a board-reading command run twice with nothing changed since | the output is byte-for-byte what you have; cite it from `.pearde/.state/round.md` |
-| a third read of the same file, unchanged since the first | what you needed from it belongs in the round file |
+| a third read of the same file, unchanged since the first | what you needed from it belongs in the round file. Counted **per window**, never per session: one session id and one transcript cover the orchestrator and every worker it dispatches, so the stamps are keyed by `agent_id` as well as by path. A second `pearde-round` worker opens empty and is never refused the first read of a file the first one read |
 | a third read of a **reference** file — this manual, through any install link | the manual does not move while a round runs. @references/parts/loop.md and @references/parts/round.md are exempt, because a compacted round has to be able to re-read the steps |
 | an `Edit` or `Write` that changes the `state:` line of a `prd.md` — or writes a new `prd.md` carrying one | `use pearde set <prd> <state>`: the command checks the gate of @references/parts/states.md, and a new PRD is `pearde add` or `pearde refine`. A body edit passes. @resources/board/transitions.py writes through @resources/board/edit.py, never through a tool call, so it is never matched — and a worker's shell passes every gate a command has, which is why "never run a transition" stays a sentence in the brief |
 | an `Edit` or `Write` whose `file_path` resolves — through any install link, or by name — to a file under this skill's own root, from a session whose board is not this repo's | the install is links into this working tree, per `.pearde/memos/the-install-is-live-symlinks.md`: the refusal names the real path the link resolves to, the memo, and the two ways out — file a PRD on the skill's own board, or hand the edit to a session working it. The same repo passes, a session with no board in scope passes, and a write under this repo's `.pearde/prds/` passes — that is how another board files a PRD here |
@@ -35,6 +35,27 @@ reader's check — it stamps and refuses repeated board reads — and a `>` or a
 `tee` into a skill file through a link goes through it unrefused. That is a
 gap, said here rather than papered over: no brief asks a round to write the
 skill from a shell, and a round that does is not stopped by this guard.
+
+## The ceiling, measured from the floor
+
+`context-budget` (@references/settings.md) is a budget on what a window
+**grew**, not on how large it is. A window opens already holding the system
+prompt, the tool schemas, `CLAUDE.md` and the skill: 50,229 tokens on this
+repo's `/pearde` session of 2026-09-01, before the round had read anything.
+Measured absolutely, half a 100k budget was gone on the first turn and the
+ceiling fired on a round that had run one scan — which is how a ceiling meant
+to stop a half-million-token window ended up stopping the work instead.
+`budget_floor` in the session file is the smallest window the session has been
+billed for, and the refusal is on `ctx - floor`.
+
+Two things it never does. It never measures a **worker**: the transcript the
+hook is handed is the dispatcher's, a worker's turns are not in it, and a call
+carrying `agent_id` is skipped rather than judged by somebody else's number —
+a round worker ends itself by `transitions-per-round`, per
+@references/parts/dispatch.md. And it never leaves a session with nowhere to
+go: at the ceiling, dispatching a worker and asking the user stay allowed
+alongside the round file and the steps, so the answer to the ceiling is a
+handover, not a stop.
 
 ## What it counts
 

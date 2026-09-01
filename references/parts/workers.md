@@ -6,12 +6,18 @@ Hand each worker the output of `pearde brief <prd>` — one command, nothing
 composed. `@` and `@@` resolve in @index.md.
 
 **Dispatch to the named type, never to a general one.** An analyst is
-`pearde-analyst`, an implementer is `pearde-implementer` — `references/agents/`
+`pearde-analyst`, an implementer is `pearde-implementer`, and the round
+itself is `pearde-round` — `references/agents/`
 in this repo, installed alongside the skills. The type carries the model: an analyst
 writes specs off a settled contract and runs on the cheaper one; an
 implementer writes the code and does not. A worker dispatched as
 `general-purpose` runs the orchestrator's own model on a job that never
 needed it, and the board has no way to tell afterwards.
+
+**The round is a worker too.** The session the user asked dispatches
+`pearde-round` and holds nothing else — @references/parts/dispatch.md. So the
+orchestrator these briefs speak of is itself a window that ends, and the rule
+below is the reason it stays small enough to be worth ending.
 
 **A report is a file. What comes back is one line.** Every brief ends by
 saying so: the worker writes `.pearde/prds/<prd>/report.md` and returns the verdict,

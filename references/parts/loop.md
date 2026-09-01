@@ -4,6 +4,10 @@ Eight steps, in order. Run until the board is drained, or everything left is
 blocked on the user. `once` = one round. `status` = step 1 plus the progress
 report, changing nothing.
 
+**You are a `pearde-round` worker, not the session that was asked** —
+@references/parts/dispatch.md dispatched you, reads your line back, says when
+to end. Ending is what this window is for.
+
 **Every step is one command and one decision.** The command checks its gate,
 writes the state, prints the progress line and refuses what
 @references/parts/states.md forbids. The decision is the right-hand column,
@@ -11,23 +15,17 @@ and it is the only thing the round thinks about. Three rules keep it there:
 
 - **Read the board with one call, and read it through the tool.** `pearde
   scan` is step 1 — the whole board on one page, box counts included. Walking
-  the tree by hand or opening a `prd.md` for its state is the same information
-  at a hundred times the tokens.
-- **Write down what the tool cannot know.** `.pearde/.state/round.md`, rewritten at
-  every transition — @references/parts/round.md. Context does not survive a
-  compaction; that file does. Every command's line ends `round file owed`
-  until it is rewritten.
+  the tree or opening a `prd.md` for its state is the same page, a hundred
+  times the tokens.
+- **Write down what the tool cannot know.** `.pearde/.state/round.md`,
+  rewritten at every transition — @references/parts/round.md. A window ends;
+  that file does not. Every command's line ends `round file owed` until it is.
 - **An established fact is cited, never re-established.** A count verified at
-  12:19 is in the round file with the time on it. Re-running the check buys
-  nothing and costs the check.
-- **The round has a ceiling.** `context-budget` in @references/settings.md,
-  100k by default. Context is billed on every turn, so a window that grew to
-  half a million is that much again on the next turn and the one after — the
-  board is on disk and the round file is what this session carries, so there
-  is nothing in a large window worth paying for twice. The guard notes the
-  crossing at 70% and refuses everything but the round file, the steps and
-  the board's own commands at the ceiling: write `.pearde/.state/round.md` whole, say
-  the round is at its budget, and let the next session resume from it.
+  12:19 is in the round file with the time on it; re-running it costs the run.
+- **The ceiling is a handover, never a stop.** A window is billed again on
+  every turn it survives, so `context-budget` (@references/settings.md) caps
+  what this one may grow. At it: write `.pearde/.state/round.md` whole and
+  hand back `MORE` — @references/parts/guard.md.
 
 Where @references/parts/guard.md is wired, none of this is advice: a
 hand-walked board, a board-reading command repeated over an unchanged board,
@@ -43,7 +41,7 @@ and the refusal names the command that answers instead.
 | 5 implement | the same two commands, dispatched as `pearde-implementer` | which persona the job wears |
 | 6 collect | read the returned line · apply or refuse `## Workflow` edits · `pearde collect <prd>` | whether to believe the report; whether an edit was the atomic's |
 | 7 knowledge | `python3 resources/knowledge.py query "<the frontier's open question>"` per PRD about to be drilled | whether the record already answers it — cite the note under `## Answers` and skip the question, or let the drill stand |
-| 8 drill, then stop | one drill round over the frontier · rewrite `.pearde/report.md` and `.pearde/.state/round.md` · `pearde view wait` | the forks and their three answers |
+| 8 drill, then hand back | one drill round over the frontier, written to `.pearde/.state/ask.md` · rewrite `.pearde/report.md` and `.pearde/.state/round.md` · return `ASK` / `DRAINED` / `BLOCKED` | the forks and their three answers |
 
 **1 · Scan.** The sections come out in the pressure order of
 @references/parts/order.md — drill, collect, waiting on you, in flight, ready,
@@ -78,10 +76,12 @@ puts depends on the count step 1 printed:
 While two or more of that round are not yet in `## Asked` nothing is
 dispatched: `pearde claim` refuses `asking N — drill first`, and putting them
 out is what reopens the board. One standing is not a gate — put it as today
-and keep working. Otherwise: put every
-`question` PRD and every parked PRD naming a human to the user as one round
-per @references/drill.md, each fork with its three prepared answers, through
-the ask-user-question mechanism where one exists. A `## Questions` with no
+and keep working. Otherwise: put every `question` PRD and every parked PRD
+naming a human as one round per @references/drill.md, three answers a fork.
+
+**You do not talk to the user; the dispatcher does** — put a round by writing
+it to `.pearde/.state/ask.md` and handing back `ASK`, then record what comes
+back with `pearde answer`. A `## Questions` with no
 three answers is not askable: write them or send the analyst back. What goes
 under `## Answers` is the decision in the user's words — a reply saying the
 question was wrong rewrites the round, and `pearde answer` records what was
@@ -166,5 +166,5 @@ them, and the round returns to step 1. Stop when the whole frontier is already
 out: report per-state counts, every `question` / `refine` / `failed` PRD with what it
 needs, the requested PRDs not `done` with their `complexity`, every `deferred`
 derived PRD by name; rewrite `.pearde/report.md` per `@@report` and
-`.pearde/.state/round.md`; then park `pearde view wait` so an answer written in the
-view wakes the round that acts on it.
+`.pearde/.state/round.md`; then hand back `DRAINED` or `BLOCKED` in one line.
+You never park: `pearde view wait` is the dispatcher's.

@@ -49,17 +49,25 @@ ROUND_FILE = os.path.join(".state", "round.md")
 # was 500k once. The orchestrator is meant to be slim — the board is on disk
 # and `.state/round.md` is what it carries — so the budget is a ceiling, not a
 # window. `context-budget` in .pearde/settings.md moves it; `off` removes it.
+#
+# It is measured from the session's own floor, never from zero. A window opens
+# already holding the system prompt, the tool schemas, the project's CLAUDE.md
+# and the skill — 50,229 tokens on the /pearde session of 2026-09-01, before
+# the round had done anything at all. Measured absolutely, half the budget was
+# spent on the first turn and the ceiling fired on a round that had read one
+# scan. `floor` is the smallest window this session has been billed for, and
+# the budget is what the round grew on top of it.
 BUDGET_DEFAULT = 100_000
 BUDGET_WARN = 0.70          # note once at 70%, once at 85%
 BUDGET_KEY = re.compile(r"^context-budget:[ \t]*(\S+)", re.M)
-# What stays allowed at the ceiling — everything the restart itself needs.
-ESCAPE = re.compile(r"\.round\.md$|/(loop|round)\.md$")
+# What stays allowed at the ceiling — everything the handover itself needs.
+ESCAPE = re.compile(r"\.round\.md$|/(loop|round|dispatch)\.md$")
 
 # The manual does not change mid-round, so a repeat read of one of its files
 # returns the bytes already in the window. These two are the exception:
 # @references/parts/round.md sends a compacted round back to the steps, and
 # that has to stay possible however often it happens.
-REREADABLE = {"loop.md", "round.md"}
+REREADABLE = {"loop.md", "round.md", "dispatch.md"}
 MANUAL = ("references" + os.sep, "skills" + os.sep)
 
 SCAN = "python3 %s/board/plan.py scan" % ROOT
@@ -493,6 +501,24 @@ def context_now(data):
     return 0
 
 
+def agent_of(data):
+    """Which window this call was made in: "" for the session that was asked,
+    the worker's own id for anything it dispatched. One session id and one
+    transcript path cover the orchestrator and every worker it sends out, so
+    this is the only thing that tells two windows apart — and the repeat-read
+    and repeat-command stamps are per window, not per session. A round worked
+    by successive `pearde-round` dispatches would otherwise have its second
+    round refused the first read of a file its first round had read: a fresh
+    window, refused for what it never saw."""
+    return str(data.get("agent_id") or data.get("agent_type") or "")
+
+
+def stamp_key(data, prefix, ident):
+    """A stamp key for `ident`, scoped to the window that asked."""
+    return prefix + hashlib.sha1(
+        (agent_of(data) + "\0" + ident).encode()).hexdigest()[:16]
+
+
 def dispatched(data):
     """True when this tool call belongs to a worker the orchestrator sent
     out, not the round's own turn. session_id and transcript_path are the
@@ -506,15 +532,23 @@ def dispatched(data):
 
 
 def budget(data, st, session, board, tool, inp):
-    """Refuse the round that outgrew its own ceiling. Everything the restart
-    needs stays open: the scan, the round file, and the two files that say
-    what a restart is.
+    """Refuse the window that outgrew its own ceiling. Everything the handover
+    needs stays open: the scan, the round file, and the files that say what a
+    handover is.
 
-    Dispatched-only: a worker's own window is not the round's ceiling, so a
-    session carrying `agent_id`/`agent_type` never reaches the cap check, the
-    70%/85% notes, or the ESCAPE bypass below — which is also what keeps a
-    worker from ever being told, by the ceiling's own deny text, to write
-    the round file that is not its own."""
+    Dispatched-only: a worker's window cannot be measured from here — the
+    transcript this hook is handed is the dispatcher's, and a worker's turns
+    are not in it — so a call carrying `agent_id`/`agent_type` never reaches
+    the cap check, the 70%/85% notes, or the ESCAPE bypass below. A round
+    worker ends itself by the count in @references/parts/dispatch.md, not by
+    this ceiling, and this is also what keeps a worker from being told, by the
+    ceiling's own deny text, to write a round file that is not its own.
+
+    Measured from the floor. `ctx` is the whole window, and a window opens
+    holding the system prompt, the tools, CLAUDE.md and the skill before the
+    round exists. `floor` is the smallest this session has been billed for;
+    `grew` is what the round put on top of it, and that is what the budget
+    is a budget for."""
     if dispatched(data):
         return
     cap = budget_of(board)
@@ -523,34 +557,44 @@ def budget(data, st, session, board, tool, inp):
     ctx = context_now(data)
     if not ctx:
         return
-    if ctx < cap:
-        band = 0.85 if ctx >= cap * 0.85 else (
-            BUDGET_WARN if ctx >= cap * BUDGET_WARN else 0)
+    floor = st.get("budget_floor")
+    if floor is None or ctx < floor:
+        st["budget_floor"] = floor = ctx
+        save(session, st)
+    grew = ctx - floor
+    if grew < cap:
+        band = 0.85 if grew >= cap * 0.85 else (
+            BUDGET_WARN if grew >= cap * BUDGET_WARN else 0)
         if band and st.get("budget_band", 0) < band:
             st["budget_band"] = band
             save(session, st)
-            note(f"Context {ctx // 1000}k of the {cap // 1000}k budget. Every "
+            note(f"This window has grown {grew // 1000}k over its "
+                 f"{floor // 1000}k floor, of the {cap // 1000}k budget. Every "
                  "turn from here re-reads all of it. Write .state/round.md now "
                  "— what is established, decided, asked and owed — so the "
-                 "restart at the ceiling costs one scan and not a re-derivation.")
+                 "handover at the ceiling costs one scan and not a "
+                 "re-derivation.")
         return
     path = str(inp.get("file_path") or "")
     if tool in ("Edit", "Write", "Read") and ESCAPE.search(path):
         return
     if tool == "Bash" and TOOLS.search(str(inp.get("command") or "")):
         return
-    if tool in ("TodoWrite", "AskUserQuestion"):
+    if tool in ("TodoWrite", "AskUserQuestion", "Agent", "Task"):
         return
-    deny(f"Context is {ctx // 1000}k, over the {cap // 1000}k budget — this "
-         "round has stopped being cheap to continue.\nEvery turn now bills "
-         f"{ctx // 1000}k of cache read for work the board already holds on "
-         "disk.\n\nEnd the round: write .state/round.md whole — established, "
-         "decided, asked, edits, owed — and say to the user that the round is "
-         "at its budget and the next one resumes from that file. A fresh "
-         f"session reads it, runs `{SCAN}`, and is where this one is for "
-         "one percent of the window.\n\nStill allowed: the round file, "
-         "references/parts/loop.md, references/parts/round.md, and the "
-         "board's own commands.")
+    deny(f"This window has grown {grew // 1000}k over its floor, past the "
+         f"{cap // 1000}k budget — it has stopped being cheap to continue.\n"
+         f"Every turn now bills {ctx // 1000}k of cache read for work the "
+         "board already holds on disk.\n\nHand the rest over rather than "
+         "stopping: write .state/round.md whole — established, decided, "
+         "asked, edits, owed — and dispatch `pearde-round` to carry on from "
+         "it (@references/parts/dispatch.md). That worker opens on a fresh "
+         "window, reads the round file, runs the scan and is where this one "
+         "is for one percent of the tokens. Only when you were asked for one "
+         "round and it is finished do you stop and say so.\n\nStill allowed: "
+         "the round file, references/parts/dispatch.md, "
+         "references/parts/loop.md, references/parts/round.md, dispatching a "
+         "worker, asking the user, and the board's own commands.")
 
 
 def pre(data):
@@ -587,7 +631,7 @@ def pre(data):
             ok()
         if not (touches_board(cmd, board) and reads_only(cmd)):
             ok()
-        key = "b" + hashlib.sha1(cmd.encode()).hexdigest()[:16]
+        key = stamp_key(data, "b", cmd)
         now = stamp(board)
         prev = st.get(key)
         if prev and prev.get("stamp") == now:
@@ -612,7 +656,7 @@ def pre(data):
             mtime = round(os.stat(path).st_mtime, 3)
         except OSError:
             ok()
-        key = "r" + hashlib.sha1(path.encode()).hexdigest()[:16]
+        key = stamp_key(data, "r", path)
         prev = st.get(key) or {}
         n = prev.get("n", 0)
         if n >= 2 and prev.get("mtime") == mtime:

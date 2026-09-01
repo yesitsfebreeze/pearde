@@ -74,7 +74,12 @@ stateDiagram-v2
 | 5 implement | the same two commands, dispatched as `pearde-implementer` | which persona the job wears |
 | 6 collect | read the returned line · apply or refuse `## Workflow` edits · `pearde collect <prd>` | whether to believe the report; whether an edit was the atomic's |
 | 7 knowledge | `python3 resources/knowledge.py query "<the frontier's open question>"` per PRD about to be drilled | whether the record already answers it — cite the note under `## Answers` and skip the question, or let the drill stand |
-| 8 drill, then stop | one drill round over the frontier · rewrite `.pearde/report.md` and `.pearde/.state/round.md` · `pearde view wait` | the forks and their three answers |
+| 8 drill, then hand back | one drill round over the frontier, written to `.pearde/.state/ask.md` · rewrite `.pearde/report.md` and `.pearde/.state/round.md` · return `ASK` / `DRAINED` / `BLOCKED` | the forks and their three answers |
+
+The round runs in a `pearde-round` worker, never in the session the user
+asked: that session dispatches, carries answers back, and holds one line per
+round — @references/parts/dispatch.md. A window is billed on every turn it
+survives, so the one that fills is the one that ends.
 
 The tool moves, the orchestrator chooses: every command checks its own gate
 and refuses what @references/parts/states.md forbids, and the right-hand
@@ -96,6 +101,7 @@ and each is one file:
 
 | the question in front of you | the one file |
 |---|---|
+| what the session that was asked does | @references/parts/dispatch.md |
 | what the round does next | @references/parts/loop.md |
 | what a compaction lost | `.pearde/.state/round.md`, then `scan`. @references/parts/round.md |
 | what to hand a worker, and who it works as | @references/parts/workers.md |

@@ -24,6 +24,7 @@ whose scope it changed. Nothing else points at it.
 | file | what it is |
 |------|------------|
 | @references/agents/pearde-analyst.md | the analyst worker type — model and return contract |
+| @references/agents/pearde-round.md | the round worker type — the window the loop runs in, and the four verdicts it hands back |
 | @references/agents/pearde-implementer.md | the implementer worker type — model and return contract |
 
 ## `references/` — read
@@ -50,7 +51,8 @@ whose scope it changed. Nothing else points at it.
 
 | anchor | is |
 |---|---|
-| @references/parts/loop.md | the seven steps, in order |
+| @references/parts/loop.md | the eight steps, in order |
+| @references/parts/dispatch.md | the dispatcher — the session that holds nothing and starts rounds |
 | @references/parts/board.md | the layout the scan walks |
 | @references/parts/round.md | `.pearde/.state/round.md` — what the session holds, across a compaction |
 | @references/parts/guard.md | the loop's rules as a hook that refuses the waste |

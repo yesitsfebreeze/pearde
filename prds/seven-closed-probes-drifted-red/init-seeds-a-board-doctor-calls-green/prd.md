@@ -16,6 +16,7 @@ time:              # OPTIONAL. See @references/parts/order.md
 needs:
   - the-doctor-completes-without-a-home
 workflow: probe-then-spec
+commit: 74f8048 4735940
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
      vision importance (priority), and complexity/blast-radius. Add your own

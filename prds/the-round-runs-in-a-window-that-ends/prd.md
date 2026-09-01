@@ -29,6 +29,7 @@ footprint:
   - .pearde/prds/the-board-runs-itself/readme-in-three-rings/probe/verify.sh
   - .pearde/prds/the-board-runs-itself/readme-in-three-rings/probe/quickstart.sh
   - .pearde/prds/workflows-on-the-board/workflow-skill/probe/verify.sh
+commit: c96f495 bbd707d
 ---
 
 # the round runs in a window that ends

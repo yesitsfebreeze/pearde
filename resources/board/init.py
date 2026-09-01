@@ -106,6 +106,7 @@ OBSIDIAN_PLUGINS = ("dataview", "obsidian-local-rest-api")
 # reads `wiki/conclusions`, never `conclusions`.
 KNOWLEDGE_PRESET = os.path.join(HERE, "knowledge")
 KNOWLEDGE_PY = os.path.join(HERE, "..", "knowledge.py")
+MEMOS_PY = os.path.join(RES, "memos.py")
 
 KEY_RE = re.compile(r"^[a-z][a-z0-9-]*$")
 
@@ -345,6 +346,79 @@ def write_knowledge(d):
     return planted
 
 
+def index_memos(board):
+    """Regenerate `memos/README.md`, the index by kind, after a copy.
+
+    `--example` copies the example board through
+    `shutil.ignore_patterns("README.md")`, and that pattern is matched in
+    every directory the walk enters, not only the top one. It is there to
+    drop the example board's own README — the page describing the example to
+    a reader — and it drops `memos/README.md` with it. The board that lands
+    therefore holds a memo and no index, which is exactly what `memo check`
+    calls stale and what doctor's `memos` row reports as broken on a board
+    one command old.
+
+    Teaching the copy to keep that one file is the wrong repair: the index is
+    generated, `memo add` rewrites it, and a copied one would be right only
+    until the first memo. Generating it after the copy is the same answer
+    `upgrade` gives for the knowledge graph — plant, then regenerate.
+
+    Runs only when the board holds a memo, so an empty board still lands with
+    an empty `memos/` and no generated page in it. Returns the relative path
+    written, or None.
+
+    When `memos.py index` cannot write the page — an unwritable board, a
+    memo it chokes on — the failure is *said*, not swallowed. A board that
+    holds memos and no index is one doctor calls broken on the next line, so
+    a bare `return None` there is `init` exiting 0 having quietly not done
+    the thing it was asked for. Nothing on the happy path changes.
+    """
+    d = os.path.join(board, "memos")
+    if not os.path.isdir(d):
+        return None
+    if not any(f.endswith(".md") and f != "README.md"
+               for f in os.listdir(d)):
+        return None
+    out = subprocess.run([sys.executable, os.path.abspath(MEMOS_PY),
+                          "index", board], capture_output=True, text=True)
+    written = out.stdout.strip().splitlines()
+    if out.returncode != 0 or not written:
+        why = (out.stderr.strip().splitlines() or written
+               or ["no output"])[-1]
+        print(f"init: could not regenerate memos/README.md, the memo index "
+              f"by kind — {why} · the board holds memos and no index, which "
+              "doctor reads as stale; run `memo index` once that is fixed")
+        return None
+    return os.path.relpath(written[-1], board)
+
+
+def plant_graph(board):
+    """`knowledge.py board`, then `relink` — the two verbs `upgrade` runs.
+
+    `write_knowledge` plants the layer's *files*; neither verb runs there, so
+    a board that has only been through `init` has notes and no
+    `.graphify/graph.json`, and `knowledge.py doctor` reports `graph.json
+    missing — run relink`, which doctor's `knowledge` row reports as broken.
+    `upgrade` has always ended on these two verbs; `init` did not, so the one
+    command a newcomer runs left the layer half-planted.
+
+    `board` writes the generated PRD and memo notes, `relink` builds the
+    graph over what is on disk — so the order is fixed, and both run after
+    `index_memos`, since `board` reads the memos it indexes. Returns one
+    `(verb, first line)` pair per verb, for the caller to print or drop.
+    """
+    lines = []
+    for verb in ("board", "relink"):
+        out = subprocess.run(
+            [sys.executable, os.path.abspath(KNOWLEDGE_PY),
+             "--root", os.path.join(board, "wiki"), verb],
+            capture_output=True, text=True)
+        line = (out.stdout.strip().splitlines() or
+                out.stderr.strip().splitlines() or ["no output"])[0]
+        lines.append((verb, line))
+    return lines
+
+
 def repair_plugin_ids(dest):
     """Obsidian enables a community plugin by its manifest id, and a list
     holding a name that is not one enables nothing and reports nothing. An
@@ -498,11 +572,18 @@ def cmd_init(argv):
             added = write_gitignore(d)
             if added:
                 print(f"init: .gitignore += {' '.join(added)}")
+        indexed = index_memos(board)
+        if indexed:
+            print(f"init: regenerated {indexed}, the memo index by kind — "
+                  "the copy carries the memos, `memo index` writes the page "
+                  "over them")
         planted = write_knowledge(d)
         if planted:
             print(f"init: knowledge layer at .pearde/wiki/ — "
                   f"{', '.join(planted)} · Dashboard.md is the vault's "
                   "front page, WORKFLOW.md its configuration")
+        for verb, line in plant_graph(board):
+            print(f"init: knowledge {verb} — {line}")
         plugins, missing, _ = write_obsidian(d)
         if plugins:
             print(f"init: obsidian vault at .pearde/ (its own root, so every "
@@ -687,13 +768,7 @@ def cmd_upgrade(argv):
               "pearde vault --wait --open, then quit it")
     else:
         print(f"  register  {'added' if state == 'added' else 'already registered'}")
-    for verb in ("board", "relink"):
-        out = subprocess.run(
-            [sys.executable, os.path.abspath(KNOWLEDGE_PY),
-             "--root", os.path.join(board, "wiki"), verb],
-            capture_output=True, text=True)
-        line = (out.stdout.strip().splitlines() or
-                out.stderr.strip().splitlines() or ["no output"])[0]
+    for verb, line in plant_graph(board):
         print(f"  {verb:<9} {line}")
     if repaired and obsidian_running():
         print("  note      Obsidian reads community-plugins.json at launch — "

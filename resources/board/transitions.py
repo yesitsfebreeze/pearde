@@ -472,7 +472,7 @@ def hand_over(board):
     when no guard counted: a session with the guard off records nothing.
     Whatever is wrong with the file is not this command's to refuse on."""
     out = {"calls": None, "reads": None, "refused": None, "tokens": None}
-    sessions = planlib.guard_sessions()
+    sessions = planlib.guard_sessions(board)
     if not sessions:
         return out
     sid, _, data = sessions[-1]
@@ -493,7 +493,7 @@ def hand_over(board):
     b["transitions"] = int(b.get("transitions", 0)) + 1
     b["since"] = datetime.datetime.now().timestamp()
     try:
-        path = os.path.join(planlib.GUARD_DIR, sid + ".json")
+        path = os.path.join(planlib.guard_dir(board), sid + ".json")
         with open(path, "w", encoding="utf-8") as f:
             json.dump(data, f)
     except OSError:

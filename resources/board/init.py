@@ -71,9 +71,16 @@ IGNORED = (".pearde/.state/", ".pearde/wiki/", ".obsidian/")
 # other two are machine-local rebuild output that only makes noise in a diff.
 # Everything else under `wiki/` — the notes, the dashboard, the indexes — is
 # the plan and belongs in the history.
+# The machine-local corner joins them: the board's registration with the
+# daemon, the daemon's log when this board started it, an adapter run's
+# output and the guard's per-session counters all live under `.state/` now
+# rather than in the install — the invariant
+# `every-artifact-lands-inside-the-board` — and none of them is plan.
 BOARD_IGNORED = ("wiki/.obsidian-api-key", "wiki/.graphify/",
-                 "wiki/Dashboard.report.md", ".obsidian/")
-BOARD_HEADER = "# machine-local, and two of them hold the same credential"
+                 "wiki/Dashboard.report.md", ".obsidian/",
+                 ".state/serve.json", ".state/serve.log", ".state/run-*.log",
+                 ".state/guard/", ".state/calibration.json")
+BOARD_HEADER = "# machine-local — two hold one credential, the rest rebuild"
 
 # The Obsidian requirement: dataview (the live views) and local-rest-api
 # (the port a tool reads the vault through). The preset at

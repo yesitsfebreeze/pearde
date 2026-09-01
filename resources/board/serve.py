@@ -5,7 +5,8 @@ every registered board and serving the view that reads and writes it.
     serve.py ensure [board]   start the daemon if none runs, register a board
                               (default: walk up from the cwd); safe to run on
                               every session start
-    serve.py run              the daemon, foreground — what `ensure` detaches
+    serve.py run [board…]     the daemon, foreground — what `ensure` detaches;
+                              the boards are what a hot reload hands forward
     serve.py status           the daemon and every board it watches
     serve.py wait  [board]    block until the board moves, then say what did
     serve.py forget <name>    stop watching one board
@@ -38,11 +39,19 @@ right: the master carries the merged plan, each member keeps its own.
 
 Everything is local. The board is the files; this serves them, and the edits
 the view makes go back into the same files through one set of writers
-(edit.py). The registry and log live in state/ beside this script
-(machine-local, gitignored): serve.json, serve.log. The log is a rolling
+(edit.py). Nothing is written outside a board: there is no machine-wide
+registry, because a board records its own registration in its own
+`<board>/.state/serve.json` and the daemon holds the union of them in memory
+only. `ensure` is safe on every session start, so a board re-announces itself
+whenever someone opens a session on it — that, and not a file, is what
+rebuilds the watch set after a daemon restart.
+
+The daemon's log is `<board>/.state/serve.log` of the board whose `ensure`
+started it, named to the child through PEARDE_SERVE_LOG. It is a rolling
 tail, not a record — the daemon keeps the last LOG_MAX_LINES of it and drops
 the 2xx request lines, so what survives is transitions, reload notices and
-tracebacks.
+tracebacks. An adapter's run log is `<board>/.state/run-<prd>.log`, in the
+board the run is on.
 
 HTTP API, all JSON, all 127.0.0.1-only:
 
@@ -125,9 +134,11 @@ import transitions as translib  # noqa: E402 — the one writer of `state:`
 
 PORT = int(os.environ.get("PEARDE_PORT", "8443"))
 DIR = os.path.dirname(os.path.abspath(__file__))
-APP_DIR = planlib.MACHINE_DIR
-REG_PATH = os.path.join(APP_DIR, "serve.json")
-LOG_PATH = os.path.join(APP_DIR, "serve.log")
+# The daemon's own log. `ensure` opens `<board>/.state/serve.log` of the board
+# it is registering and hands the path to the child in the environment; the
+# child trims that same file. Empty in a process that was not spawned that way
+# — a `serve.py run` in a terminal logs to the terminal, and trims nothing.
+LOG_PATH = os.environ.get("PEARDE_SERVE_LOG") or ""
 LOG_MAX_LINES = 2000   # the log is a rolling tail, not a record
 LOG_TRIM_S = 60.0      # how often the daemon trims its own log
 
@@ -144,6 +155,8 @@ def trim_log(path=None):
     traceback is the one thing this file exists to keep.
     """
     path = path or LOG_PATH
+    if not path:
+        return   # not spawned with a log — stdout is a terminal or a pipe
     try:
         with open(path, "r+", encoding="utf-8", errors="replace") as fh:
             lines = fh.readlines()
@@ -372,35 +385,37 @@ def digest(path):
 EPHEMERAL = ("/tmp/", "/private/tmp/", "/var/folders/", "/private/var/folders/")
 
 
-def load_registry():
-    """A board on an ephemeral filesystem registers but never persists — it
-    would be a dead entry after the next reboot, and the registry must not
-    accumulate those."""
-    try:
-        rows = json.load(open(REG_PATH, encoding="utf-8"))
-    except (OSError, ValueError):
-        return []
-    return [p for p in rows if not p.startswith(EPHEMERAL)]
+def entry_path(board):
+    """`<board>/.state/serve.json` — one board's own registration, and the
+    only file this daemon writes about the watch set."""
+    return os.path.join(planlib.state_dir(board), "serve.json")
 
 
-REGISTRY_LOADED = False   # only the daemon holds the whole list
+def save_entry(b):
+    """Record that this board is watched, in the board. No machine-wide list
+    exists to fall out of date: the file says one thing about one board, and
+    the daemon holds the union of them in memory.
 
-
-def save_registry():
-    """Persist the watch list, but only in a process that read it first.
-
-    `register()` saves as a side effect. Without the flag, importing this
-    module and calling it — an in-process test of the naming, say — writes the
-    registry from whatever partial set that process holds and drops every board
-    it did not register. The daemon sets the flag once it has loaded the file.
-    Every other process keeps the registry read-only by construction."""
-    if not REGISTRY_LOADED:
+    A board on an ephemeral filesystem is watched but never recorded — the
+    file would go with the directory, and a marker that outlives nothing is
+    not worth the write."""
+    if b.path.startswith(EPHEMERAL):
         return
-    os.makedirs(APP_DIR, exist_ok=True)
-    with BOARDS_LOCK:
-        paths = sorted(b.path for b in BOARDS.values()
-                       if not b.path.startswith(EPHEMERAL))
-    json.dump(paths, open(REG_PATH, "w", encoding="utf-8"), indent=1)
+    try:
+        with open(entry_path(b.path), "w", encoding="utf-8") as fh:
+            json.dump({"path": b.path, "name": b.name, "port": PORT,
+                       "at": datetime.datetime.now().isoformat(
+                           timespec="seconds")}, fh, indent=1)
+    except OSError:
+        pass   # a read-only board is still watchable; the marker is a note
+
+
+def drop_entry(b):
+    """`forget` — the board stops saying it is watched."""
+    try:
+        os.remove(entry_path(b.path))
+    except OSError:
+        pass
 
 
 def declared_name(path):
@@ -436,7 +451,7 @@ def register(path):
             b.name = f"{serve_name(path)}-{n}"
             n += 1
         BOARDS[b.name] = b
-    save_registry()
+    save_entry(b)
     return b, True
 
 
@@ -499,12 +514,16 @@ def mirror(b, force=False):
 def restart(stamp):
     """This view's own code moved — replace the process with itself.
 
-    Safe because nothing lives in memory that is not also on disk: the
-    registry is state/serve.json and `run` reloads it, the listening socket is
-    not inherited across exec so the port frees itself, and every client parked
-    on /wait reconnects on its own and finds the new BOOT. A file caught
-    half-written does not compile — say so once and keep serving the old code
-    rather than exec'ing into a daemon that cannot start."""
+    Safe because nothing that matters is lost across the exec. The watch set
+    is the one thing that lives only in memory — there is no machine-wide
+    registry to reload — so the daemon hands it to its successor on the
+    command line: `run <board>…`. A process passing its own state to itself
+    needs no file outside a board, and the set survives every hot reload. The
+    listening socket is not inherited across exec so the port frees itself,
+    and every client parked on /wait reconnects on its own and finds the new
+    BOOT. A file caught half-written does not compile — say so once and keep
+    serving the old code rather than exec'ing into a daemon that cannot
+    start."""
     global REFUSED
     time.sleep(SETTLE_S)              # an editor mid-save settles first
     if source_stamp() != stamp:
@@ -528,7 +547,8 @@ def restart(stamp):
     print("serve: source changed — reloading", flush=True)
     sys.stdout.flush()
     os.execv(sys.executable,
-             [sys.executable, os.path.abspath(__file__), "run"])
+             [sys.executable, os.path.abspath(__file__), "run"]
+             + sorted(b.path for b in boards()))
 
 
 def watch():
@@ -1328,9 +1348,10 @@ class Handler(BaseHTTPRequestHandler):
                     f"or fix the {adapter['id']} adapter's command"})
             argv[0] = resolved
 
-            os.makedirs(APP_DIR, exist_ok=True)
-            safe = re.sub(r"[^A-Za-z0-9_-]", "_", f"{b.name}-{rel}")
-            log = open(os.path.join(APP_DIR, f"run-{safe}.log"), "a")
+            # the run happens on this board, so its log lands in this board
+            safe = re.sub(r"[^A-Za-z0-9_-]", "_", rel)
+            log = open(os.path.join(planlib.state_dir(b.path),
+                                    f"run-{safe}.log"), "a")
             try:
                 # Windows resolves many CLI launchers (via shutil.which) to a
                 # .CMD shim — CreateProcess cannot launch that directly, only
@@ -1356,7 +1377,7 @@ class Handler(BaseHTTPRequestHandler):
                 b = BOARDS.pop(name or "", None)
             if not b:
                 return self.reply(404, {"error": "unknown board"})
-            save_registry()
+            drop_entry(b)
             return self.reply(200, {"forgot": name})
         if path == "/stop":
             self.reply(200, {"stopping": True})
@@ -1385,18 +1406,23 @@ def running():
         return None
 
 
-def cmd_run():
+def cmd_run(paths=()):
+    """`run [<board>…]` — the daemon. The paths are what a previous instance
+    of this process handed forward across a hot-reload exec, never a file: a
+    cold daemon starts watching nothing and boards arrive by `ensure`."""
     try:
         srv = ThreadingHTTPServer(("127.0.0.1", PORT), Handler)
     except OSError:
         print(f"serve: port {PORT} is taken — a daemon already runs "
               f"(or set PEARDE_PORT)", file=sys.stderr)
         return 1
-    global REGISTRY_LOADED
-    for p in load_registry():
+    # No boards at boot but the ones this process was handed: there is no
+    # machine-wide list to read, and a daemon that invented one would be
+    # writing outside every board. Boards arrive by `ensure`, which every
+    # session start runs — see the module docstring for the cost of that.
+    for p in paths:
         if os.path.isdir(p):
             register(p)
-    REGISTRY_LOADED = True   # from here the in-memory set IS the registry
     threading.Thread(target=watch, daemon=True).start()
     print(f"serve: watching on http://127.0.0.1:{PORT} — "
           f"{len(boards())} board(s)")
@@ -1408,22 +1434,26 @@ def cmd_run():
 
 
 def cmd_ensure(arg):
+    board = planlib.find_board(arg)  # dies with the usual message if none
     if not running():
-        os.makedirs(APP_DIR, exist_ok=True)
-        trim_log()       # a log left long by an older build starts bounded
-        log = open(LOG_PATH, "a")
+        # The daemon logs into the board that started it — one root, and the
+        # child is told which through the environment. It watches many boards
+        # and its log lives in one of them; nothing outside a `.pearde/`.
+        log_path = os.path.join(planlib.state_dir(board), "serve.log")
+        trim_log(log_path)   # a log left long by an older build starts bounded
+        log = open(log_path, "a")
         subprocess.Popen([sys.executable, os.path.abspath(__file__), "run"],
-                         stdout=log, stderr=log, start_new_session=True)
+                         stdout=log, stderr=log, start_new_session=True,
+                         env={**os.environ, "PEARDE_SERVE_LOG": log_path})
         for _ in range(50):
             if running():
                 break
             time.sleep(0.1)
         else:
-            print(f"serve: daemon did not come up — see {LOG_PATH}",
+            print(f"serve: daemon did not come up — see {log_path}",
                   file=sys.stderr)
             return 1
         print(f"serve: started on http://127.0.0.1:{PORT}")
-    board = planlib.find_board(arg)  # dies with the usual message if none
     out = call("/register", {"cwd": board})
     b = out["board"]
     print(f"serve: {'registered' if out['new'] else 'watching'} {b['name']} "
@@ -1559,7 +1589,7 @@ def main():
     args = sys.argv[1:]
     cmd = args[0] if args else "status"
     if cmd == "run":
-        return cmd_run()
+        return cmd_run([a for a in args[1:] if not a.startswith("-")])
     if cmd == "ensure":
         return cmd_ensure(args[1] if len(args) > 1 else None)
     if cmd == "status":

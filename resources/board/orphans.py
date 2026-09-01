@@ -20,8 +20,10 @@ Classes, per footprint path of a done PRD:
     nowhere        no commit on either branch, the file on disk — uncommitted
     absent         no commit, not on disk — a stale footprint spelling
 
-Boards: the ones named on the line, else every board in
-@resources/board/state/serve.json. A PRD's `repo:` key names its own code
+Boards: the ones named on the line, else the board the call is on and its
+members — there is no machine-wide list of boards to fall back to, and every
+path this tool touches is relative to a `.pearde/`. A PRD's `repo:` key names
+its own code
 repo and wins over the board's — collect's `repo_of()` honours it the same
 way. Exit 0 when the scan ran and no path is `branch-only`, 1 when any is.
 
@@ -42,7 +44,6 @@ sys.path.insert(0, HERE)
 import plan as planlib          # noqa: E402
 import transitions as translib  # noqa: E402
 
-SERVE = os.path.join(HERE, "state", "serve.json")
 FLAGS = planlib.Flags(("board",), ("json",))
 FLAGGED = ("branch-only", "nowhere", "absent")
 
@@ -204,18 +205,24 @@ def resolve(arg):
     return inner if os.path.isdir(inner) else p
 
 
-def boards_from(named):
-    """The boards to scan: the ones named, else serve.json's. A registered
-    path that is not a directory is dropped — a board can be registered and
-    gone. A named one that is not is a usage error, not a silent skip."""
+def boards_from(named, here=None):
+    """The boards to scan: the ones named, else `here` and the members it
+    merges. A member that is not a directory is dropped — a master can name a
+    board that has moved. A named one that is not is a usage error, not a
+    silent skip."""
     if named:
         return [resolve(b) for b in named]
-    try:
-        with open(SERVE, encoding="utf-8") as fh:
-            regd = json.load(fh)
-    except (OSError, ValueError):
+    if not here:
         return []
-    return [b for b in sorted(regd) if os.path.isdir(b)]
+    here = resolve(here)
+    out = [here] + [p for _, p in planlib.members(here)]
+    seen, keep = set(), []
+    for b in out:
+        b = os.path.abspath(b)
+        if b not in seen and os.path.isdir(b):
+            seen.add(b)
+            keep.append(b)
+    return keep
 
 
 def cmd_orphans(argv, board=None):
@@ -227,9 +234,12 @@ def cmd_orphans(argv, board=None):
     except translib.FlagRefused as e:
         print(f"orphans: {e}", file=sys.stderr)
         return 2
-    named = list(a.pos) + [x for x in (a.opt.get("board"), board) if x]
+    named = list(a.pos) + [x for x in (a.opt.get("board"),) if x]
+    # nothing named: the board this call is on. `find_board` dies with the
+    # usual message when the cwd is under none.
+    here = None if named else (board or planlib.find_board(None))
     rows = []
-    for b in boards_from(named):
+    for b in boards_from(named, here):
         if not os.path.isdir(b):
             print(f"orphans: no board at {b}", file=sys.stderr)
             return 2

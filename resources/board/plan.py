@@ -31,6 +31,7 @@ import json
 import math
 import os
 import re
+import shutil
 import subprocess
 import sys
 # win: a cp1252 console cannot encode the box/greek glyphs this prints,
@@ -72,12 +73,112 @@ def state_dir(board):
     return d
 
 
-# One constant per machine, not per board — the guard's session cache, the
-# calibration fit and the daemon's board registry all live under here.
-# Distinct from STATE_DIR, which is a board-relative name: a board is a
-# directory a person creates by hand, this is the tool's own install
-# location, and the two must never collide under one name.
-MACHINE_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "state")
+def guard_dir(board):
+    """`<board>/.state/guard` — the guard's session files for THIS board, one
+    per session. `PEARDE_GUARD_STATE` moves it for both writer and reader, so
+    a harness feeding hook JSON to a throwaway project writes nowhere real."""
+    return os.environ.get("PEARDE_GUARD_STATE") or os.path.join(
+        state_dir(board), "guard")
+
+
+# ── the install used to be a writable place; it is not any more ──────────────
+# `resources/board/state/` held the daemon's registry, its log, the
+# calibration fit and the guard's session cache — pearde-created, outside
+# every `.pearde/`. The invariant `every-artifact-lands-inside-the-board` now
+# covers it: there is one root, the board's `.pearde/`, and every path pearde
+# writes is relative to it. This name survives for one job — moving what an
+# older install left behind into the boards it belongs to, once.
+LEGACY_MACHINE_DIR = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "state")
+
+
+def migrate_legacy_state():
+    """Move `resources/board/state/` into the boards it was holding state
+    for, then delete it. Runs on import, costs one `isdir` after the first
+    time, and never raises — a command must not fail because an old install
+    left a file behind.
+
+    Destinations are read before they are written: `<board>/.state/` holds
+    live round files and the history and transitions journals, and anything
+    already there outranks anything the install kept. The daemon's own
+    `serve.log` and the adapters' `run-*.log` are rolling tails belonging to
+    no board and are dropped, not moved."""
+    d = LEGACY_MACHINE_DIR
+    if not os.path.isdir(d):
+        return []
+    moved = []
+    try:
+        with open(os.path.join(d, "serve.json"), encoding="utf-8") as fh:
+            boards = [b for b in json.load(fh) if os.path.isdir(b)]
+    except (OSError, ValueError, TypeError):
+        boards = []
+    calib = os.path.join(d, "calibration.json")
+    for b in boards:
+        try:
+            sd = state_dir(b)
+        except OSError:
+            continue
+        # the registry entry: one board's own row, in its own corner
+        entry = os.path.join(sd, "serve.json")
+        if not os.path.exists(entry):
+            try:
+                with open(entry, "w", encoding="utf-8") as fh:
+                    json.dump({"path": os.path.abspath(b)}, fh, indent=1)
+                moved.append(entry)
+            except OSError:
+                pass
+        # the fit was machine-wide and is now per board — copied, not moved,
+        # because every board that was in it has an equal claim on it, and
+        # `pearde calibrate` refits from that board's own record anyway
+        dst = os.path.join(sd, "calibration.json")
+        if os.path.isfile(calib) and not os.path.exists(dst):
+            try:
+                shutil.copy2(calib, dst)
+                moved.append(dst)
+            except OSError:
+                pass
+    # the guard's session files, split by the board each block counted on: a
+    # session that worked two boards becomes one file in each. Only the boards
+    # the registry named — a session file keeps a block under whatever path it
+    # was told, including spellings a board has since moved off, and a stale
+    # one that still resolves to a directory would seed a `.state/` corner
+    # nothing owns.
+    known = {os.path.abspath(b) for b in boards}
+    gd = os.path.join(d, "guard")
+    for n in sorted(os.listdir(gd)) if os.path.isdir(gd) else []:
+        if not n.endswith(".json"):
+            continue
+        try:
+            with open(os.path.join(gd, n), encoding="utf-8") as fh:
+                data = json.load(fh)
+            blocks = data.get("boards") or {}
+        except (OSError, ValueError, AttributeError):
+            continue
+        for bpath, block in blocks.items():
+            if os.path.abspath(bpath) not in known:
+                continue
+            dst = os.path.join(bpath, STATE_DIR, "guard", n)
+            if os.path.exists(dst):
+                continue
+            one = {k: v for k, v in data.items() if k != "boards"}
+            one["boards"] = {bpath: block}
+            try:
+                os.makedirs(os.path.dirname(dst), exist_ok=True)
+                with open(dst, "w", encoding="utf-8") as fh:
+                    json.dump(one, fh)
+                moved.append(dst)
+            except OSError:
+                pass
+    shutil.rmtree(d, ignore_errors=True)
+    return moved
+
+
+# On import, so every entry point carries it and none has to remember:
+# one `isdir` after the first run, and a failure is never fatal.
+try:
+    migrate_legacy_state()
+except Exception:  # noqa: BLE001 — a stale install must not break a command
+    pass
 
 
 def prds_dir(board):
@@ -1242,10 +1343,10 @@ def gantt_payload(board, prds, mp, settings):
             {p["state"] for p in prds.values()} - LIVE_STATES - {"done"}),
         "anchor": mp.get("planned_at") or datetime.date.today().isoformat(),
         "dayHours": day_h,
-        # the machine-wide fit from `calibrate` — weight to real hours at the
+        # this board's fit from `calibrate` — weight to real hours at the
         # display edge only; the schedule above never read it. `tune` is the
         # hand-set margin the view multiplies on top of the fit
-        "calib": read_calibration(),
+        "calib": read_calibration(board),
         "tune": TUNE,
         "workers": str(settings.get("workers", "3")),
         # the one sentence `prds/vision.md` says the board is for — the page
@@ -1307,25 +1408,26 @@ def read_transitions(board, last=30):
     return rows[-last:]
 
 
-# The guard's session files — resources/guard.py writes them, one per
-# session, and `PEARDE_GUARD_STATE` moves the directory for both. plan.py
+# The guard's session files — resources/guard.py writes them, one per session
+# under `<board>/.state/guard`, and `PEARDE_GUARD_STATE` moves the directory
+# for both. `guard_dir(board)` is defined beside `state_dir()` above. plan.py
 # only reads: the newest file is the live session, because the guard touches
 # its file on every tool call, and the call that runs `pearde status` is
-# the last one it saw.
-GUARD_DIR = os.environ.get("PEARDE_GUARD_STATE") or os.path.join(
-    MACHINE_DIR, "guard")
+# the last one it saw. Per board, so the newest file is the newest session
+# *on this board* — a session working another board is not this one.
 
 
-def guard_sessions():
+def guard_sessions(board):
     """[(session, mtime, data)] oldest first, or [] with no state dir or no
     file in it — `no guard`, never zero."""
     out = []
+    gd = guard_dir(board)
     try:
-        names = [n for n in os.listdir(GUARD_DIR) if n.endswith(".json")]
+        names = [n for n in os.listdir(gd) if n.endswith(".json")]
     except OSError:
         return out
     for n in names:
-        path = os.path.join(GUARD_DIR, n)
+        path = os.path.join(gd, n)
         try:
             out.append((n[:-5], os.stat(path).st_mtime,
                         json.load(open(path, encoding="utf-8"))))
@@ -1344,7 +1446,7 @@ def guard_block(board, data):
 def guard_view(board):
     """What the analytics draw: every session that counted on this board,
     oldest first, or None when the guard has left no file at all."""
-    sessions = guard_sessions()
+    sessions = guard_sessions(board)
     if not sessions:
         return None
     rows = []
@@ -1363,7 +1465,7 @@ def session_line(board):
     """`pearde status`'s one line on the cost of this session — the newest
     guard file's block for this board. `no guard` when there is no file;
     a session that has not counted here yet says so."""
-    sessions = guard_sessions()
+    sessions = guard_sessions(board)
     if not sessions:
         return "this session: no guard"
     b = guard_block(board, sessions[-1][2])
@@ -1407,14 +1509,21 @@ def write_history(board, prds=None):
 
 
 # ── calibration ───────────────────────────────────────────────────────────────
-# How many real hours a unit of weight costs THIS agent, fitted from every
-# done PRD that recorded an `actual:` on every board the service has ever
-# registered. The plan still schedules in weight — the constant only
-# translates at the display edge, so a bad fit can mislabel an axis but
-# never re-order the work. Lives under MACHINE_DIR, defined near state_dir()
-# above — same "one constant per machine" reasoning as the guard's cache.
+# How many real hours a unit of weight costs THIS agent on THIS board, fitted
+# from every done PRD of the board that recorded an `actual:`. The plan still
+# schedules in weight — the constant only translates at the display edge, so
+# a bad fit can mislabel an axis but never re-order the work.
+#
+# Per board, not per machine: the fit used to pool every board the daemon had
+# ever registered, which needed a machine-wide list of boards to read. There
+# is no such list any more — one root, the board's `.pearde/` — and a board's
+# own done PRDs are the more honest sample anyway. A board with no `actual:`
+# on record shows raw weight, which is what it did before any board was
+# calibrated.
 
-CALIB_PATH = os.path.join(MACHINE_DIR, "calibration.json")
+
+def calib_path(board):
+    return os.path.join(state_dir(board), "calibration.json")
 
 # The one hand-tunable knob. Hours shown = weight × fitted kw × TUNE.
 # The fit says how fast this machine has been; TUNE is the margin on top —
@@ -1431,29 +1540,27 @@ def fmt_w(w, calib):
     return f"{w:.1f}w"
 
 
-def read_calibration():
-    """The fitted constants, or None before `calibrate` has run."""
+def read_calibration(board):
+    """The fitted constants, or None before `calibrate` has run here."""
     try:
-        c = json.load(open(CALIB_PATH, encoding="utf-8"))
+        c = json.load(open(calib_path(board), encoding="utf-8"))
         return c if c.get("n") else None
     except (OSError, ValueError):
         return None
 
 
-def calib_rows():
-    """(board, rel, est_h, actual_h, weight) for every done PRD carrying an
-    `actual:`, across every registered board. est and actual are records the
-    plan never schedules by — which is exactly what makes them honest
+def calib_rows(board):
+    """(board, rel, est_h, actual_h, weight) for every done PRD of `board`
+    carrying an `actual:`, its members included. est and actual are records
+    the plan never schedules by — which is exactly what makes them honest
     calibration data: nobody gamed a number nothing was reading."""
-    try:
-        boards = json.load(open(os.path.join(MACHINE_DIR, "serve.json"),
-                                encoding="utf-8"))
-    except (OSError, ValueError):
-        boards = []
     rows = []
-    for b in boards:
-        if not os.path.isdir(b):
+    seen = set()
+    for b in [board] + [p for _, p in members(board)]:
+        b = os.path.abspath(b)
+        if b in seen or not os.path.isdir(b):
             continue
+        seen.add(b)
         name = os.path.basename(os.path.dirname(b)) or b
         for rel, p in sorted(_scan_one(b).items()):
             if p["state"] != "done":
@@ -1467,10 +1574,10 @@ def calib_rows():
 
 
 def cmd_calibrate(board):
-    rows = calib_rows()
+    rows = calib_rows(board)
     if not rows:
-        print("calibrate: no done PRD carries an `actual:` on any registered"
-              " board — nothing to fit.\n"
+        print("calibrate: no done PRD on this board carries an `actual:`"
+              " — nothing to fit.\n"
               "Record `actual:` on the DONE transition and run this again.")
         return
     for name, rel, e, a, w in rows:
@@ -1490,8 +1597,8 @@ def cmd_calibrate(board):
              "p20": pick(.2), "p80": pick(.8),
              "boards": sorted({r[0] for r in rows}),
              "fitted": datetime.date.today().isoformat()}
-    os.makedirs(MACHINE_DIR, exist_ok=True)
-    json.dump(calib, open(CALIB_PATH, "w", encoding="utf-8"), indent=1)
+    path = calib_path(board)
+    json.dump(calib, open(path, "w", encoding="utf-8"), indent=1)
     print(f"\nn={len(rows)} done PRDs across {len(calib['boards'])} board(s)")
     if ke:
         print(f"k est→actual    = {ke}  (agent is {round(1 / ke, 1)}× faster"
@@ -1501,7 +1608,7 @@ def cmd_calibrate(board):
               f" – P80 {calib['p80']}")
         print(f"hours shown     = weight × {kw} × {TUNE}"
               " (TUNE — the hand-set margin, hard-coded in plan.py)")
-    print(f"saved: {CALIB_PATH}")
+    print(f"saved: {path}")
     # re-render so the open page shows the new constant without waiting for
     # the next board edit
     cmd_gantt(board)
@@ -2399,7 +2506,7 @@ def cmd_plan(board, workers):
     prds, todo, parked = r["prds"], r["todo"], r["parked"]
     est, feet, needs, after = r["est"], r["feet"], r["needs"], r["after"]
     sched, unblocks = r["schedule"], r["unblocks"]
-    cal = read_calibration()
+    cal = read_calibration(board)
     fw = lambda w: fmt_w(w, cal)
     mem = [n for n, _ in members(board)]
     print(f"plan: {len(todo)} PRDs"

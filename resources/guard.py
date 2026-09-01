@@ -32,10 +32,14 @@ import time
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
 PEARDE = os.path.dirname(ROOT)          # the repo this guard ships in
-# One JSON file per session. `PEARDE_GUARD_STATE` moves the directory — a
-# harness feeding hook JSON to a temp project must never write here.
-STATE = os.environ.get("PEARDE_GUARD_STATE") or os.path.join(
-    ROOT, "board", "state", "guard")
+# One JSON file per session, in the board's own corner:
+# `<board>/.state/guard/<session>.json`. The install is not a place this tool
+# writes — the invariant `every-artifact-lands-inside-the-board` — so there is
+# no machine-wide cache and no path that is not relative to a `.pearde/`.
+# `PEARDE_GUARD_STATE` moves the directory for the writer here and the reader
+# in @resources/board/plan.py both: a harness feeding hook JSON to a temp
+# project must never write into a real board.
+GUARD_STATE_ENV = "PEARDE_GUARD_STATE"
 # Duplicated from @resources/board/plan.py's own BOARD_DIR/PRDS_DIR rather
 # than imported — same reason member_dirs() gives for reading settings.md by
 # hand: the guard imports nothing from the planner, so a broken planner
@@ -222,22 +226,30 @@ def stamp(board):
     return round(newest, 3)
 
 
-def state_path(session):
-    os.makedirs(STATE, exist_ok=True)
+def guard_state(board):
+    """`<board>/.state/guard`, or whatever `PEARDE_GUARD_STATE` names. The
+    same spelling @resources/board/plan.py `guard_dir()` reads back."""
+    return os.environ.get(GUARD_STATE_ENV) or os.path.join(
+        board, ".state", "guard")
+
+
+def state_path(session, board):
+    d = guard_state(board)
+    os.makedirs(d, exist_ok=True)
     safe = re.sub(r"[^A-Za-z0-9_-]", "", session or "nosession")[:64] or "x"
-    return os.path.join(STATE, safe + ".json")
+    return os.path.join(d, safe + ".json")
 
 
-def load(session):
+def load(session, board):
     try:
-        return json.load(open(state_path(session), encoding="utf-8"))
+        return json.load(open(state_path(session, board), encoding="utf-8"))
     except (OSError, ValueError):
         return {}
 
 
-def save(session, data):
+def save(session, board, data):
     try:
-        with open(state_path(session), "w", encoding="utf-8") as fh:
+        with open(state_path(session, board), "w", encoding="utf-8") as fh:
             json.dump(data, fh)
     except OSError:
         pass
@@ -283,14 +295,14 @@ def count(session, st, board, tool, data):
         b[KIND[tool]] += 1
     if data.get("transcript_path"):
         st["transcript"] = str(data["transcript_path"])
-    save(session, st)
+    save(session, board, st)
     _LIVE.update(session=session, st=st, board=board)
 
 
 def deny(reason):
     if _LIVE:
         block_of(_LIVE["st"], _LIVE["board"])["refused"] += 1
-        save(_LIVE["session"], _LIVE["st"])
+        save(_LIVE["session"], _LIVE["board"], _LIVE["st"])
     print(json.dumps({"hookSpecificOutput": {
         "hookEventName": "PreToolUse",
         "permissionDecision": "deny",
@@ -601,14 +613,14 @@ def budget(data, st, session, board, tool, inp):
     floor = st.get("budget_floor")
     if floor is None or ctx < floor:
         st["budget_floor"] = floor = ctx
-        save(session, st)
+        save(session, board, st)
     grew = ctx - floor
     if grew < cap:
         band = 0.85 if grew >= cap * 0.85 else (
             BUDGET_WARN if grew >= cap * BUDGET_WARN else 0)
         if band and st.get("budget_band", 0) < band:
             st["budget_band"] = band
-            save(session, st)
+            save(session, board, st)
             note(f"This window has grown {grew // 1000}k over its "
                  f"{floor // 1000}k floor, of the {cap // 1000}k budget. Every "
                  "turn from here re-reads all of it. Write .pearde/.state/round.md now "
@@ -650,7 +662,7 @@ def pre(data):
             str(inp.get("file_path") or "")))) or board
     if not board:
         ok()
-    st = load(session)
+    st = load(session, board)
     count(session, st, board, tool, data)
     budget(data, st, session, board, tool, inp)
     if tool in ("Edit", "Write"):
@@ -682,7 +694,7 @@ def pre(data):
                  "already have.\nCite it from .pearde/.state/round.md instead, or write "
                  "it there now if it is not in it.")
         st[key] = {"at": time.time(), "stamp": now}
-        save(session, st)
+        save(session, board, st)
         ok()
 
     if tool == "Read":
@@ -714,7 +726,7 @@ def pre(data):
                  "it since.\nWhat you needed from it belongs in .pearde/.state/round.md; "
                  f"board state comes from `{SCAN}`.")
         st[key] = {"n": n + 1, "at": time.time(), "mtime": mtime}
-        save(session, st)
+        save(session, board, st)
         if re.search(r"/specs/[^/]+\.md$", path) and n == 0:
             note("Acceptance boxes are counted for you — `boxes c/t` in "
                  f"`{SCAN}`. Read the spec for its contract, never to count.")
@@ -756,7 +768,8 @@ def check():
     if not board:
         print("guard: no board above " + os.getcwd())
         return
-    print(f"guard: {board}\n  stamp {stamp(board)}\n  state {STATE}\n"
+    print(f"guard: {board}\n  stamp {stamp(board)}\n"
+          f"  state {guard_state(board)}\n"
           f"  scan  {SCAN}")
 
 

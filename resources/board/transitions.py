@@ -635,6 +635,7 @@ def from_template(title, priority, body):
 
 
 def cmd_claim(board, args, persona):
+    """hold one PRD for one worker — what `scan` offers is what claim takes"""
     if len(args.pos) != 2:
         raise Refused("claim <prd> <worker>")
     prds = planlib.scan(board)

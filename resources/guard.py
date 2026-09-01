@@ -15,7 +15,7 @@ three things it refuses.
     a hand-walked board          → `plan.py scan` says it in one call
     the same board read twice    → nothing changed since; the answer is unchanged
     the manual read three times  → it has not moved; the round file is the note
-    a state moved, nothing written → `.state/round.md` is what survives a compaction
+    a state moved, nothing written → `.pearde/.state/round.md` survives a compaction
     a `state:` written by hand   → `pearde set` checks the gate; an editor checks nothing
     the skill written from another board → the install is links into this tree; file a PRD here
 
@@ -47,8 +47,9 @@ ROUND_FILE = os.path.join(".state", "round.md")
 # The context budget. A round costs its context on every turn: 1,000 turns at
 # 500k is half a billion cache-read tokens for a session whose unique content
 # was 500k once. The orchestrator is meant to be slim — the board is on disk
-# and `.state/round.md` is what it carries — so the budget is a ceiling, not a
-# window. `context-budget` in .pearde/settings.md moves it; `off` removes it.
+# and `.pearde/.state/round.md` is what it carries — so the budget is a
+# ceiling, not a window. `context-budget` in .pearde/settings.md moves it;
+# `off` removes it.
 #
 # It is measured from the session's own floor, never from zero. A window opens
 # already holding the system prompt, the tool schemas, the project's CLAUDE.md
@@ -443,6 +444,46 @@ def state_by_hand(tool, inp):
          "answer, specced, refine, collect, sweep.")
 
 
+# Every artifact this tool makes lands inside a board's `.pearde/` — the
+# invariant `every-artifact-lands-inside-the-board` on this repo's own board.
+# The commands hold to it on their own: every writer routes through
+# `plan.py state_dir(board)`, so a `.state/` corner is always `<board>/.state`.
+# A round writing the same file by hand does not: `.state/round.md` is how the
+# guard's own notes and half the manual spell it, and a relative path resolves
+# against the session's cwd — the repo root, one level above the board. That
+# is exactly how an untracked `<repo>/.state/round.md` appeared on 2026-09-01.
+# Named basenames only, never the bare `.state` component: a project may keep
+# a `.state/` of its own, and the guard refuses what it can prove.
+STATE_OWNED = re.compile(
+    r"^(round(\.[^/]+)?\.md|ask\.md|plan\.json|parse-cache\.json"
+    r"|history\.jsonl|transitions\.jsonl|view\.html)$")
+
+
+def board_artifact_astray(inp, board):
+    """`Edit|Write` of one of the board's own machine-local files into a
+    `.state/` that is not this board's — refused, naming the path it belongs
+    at. `board` is the nearest `.pearde/`; a write already inside it is this
+    rule's whole exemption."""
+    path = os.path.abspath(str(inp.get("file_path") or ""))
+    parts = path.split(os.sep)
+    if ".state" not in parts[:-1] or not STATE_OWNED.match(parts[-1]):
+        return
+    inside = os.path.join(os.path.realpath(board), "")
+    if os.path.realpath(path).startswith(inside):
+        return
+    tail = os.sep.join(parts[parts.index(".state"):])
+    want = os.path.join(board, tail)
+    deny(f"Every file this tool makes lands inside the board: {path} is "
+         f"outside {board}, and a `.state/` at the repo root is untracked "
+         "scratch nothing reads.\nWrite "
+         f"{want} instead — `.state/…` anywhere in the manual means "
+         f"`{board}/.state/…`, and a relative path resolves against this "
+         "session's working directory, one level above the board. If a "
+         "round file of your own is meant, name it "
+         f"{os.path.join(board, '.state', 'round.<what-you-are-on>.md')} so "
+         "it never overwrites another session's.")
+
+
 def touches_board(cmd, board):
     return ("prds" in cmd or "prd.md" in cmd
             or os.path.basename(os.path.dirname(board)) + "/prds" in cmd)
@@ -570,7 +611,7 @@ def budget(data, st, session, board, tool, inp):
             save(session, st)
             note(f"This window has grown {grew // 1000}k over its "
                  f"{floor // 1000}k floor, of the {cap // 1000}k budget. Every "
-                 "turn from here re-reads all of it. Write .state/round.md now "
+                 "turn from here re-reads all of it. Write .pearde/.state/round.md now "
                  "— what is established, decided, asked and owed — so the "
                  "handover at the ceiling costs one scan and not a "
                  "re-derivation.")
@@ -586,7 +627,7 @@ def budget(data, st, session, board, tool, inp):
          f"{cap // 1000}k budget — it has stopped being cheap to continue.\n"
          f"Every turn now bills {ctx // 1000}k of cache read for work the "
          "board already holds on disk.\n\nHand the rest over rather than "
-         "stopping: write .state/round.md whole — established, decided, "
+         "stopping: write .pearde/.state/round.md whole — established, decided, "
          "asked, edits, owed — and dispatch `pearde-round` to carry on from "
          "it (@references/parts/dispatch.md). That worker opens on a fresh "
          "window, reads the round file, runs the scan and is where this one "
@@ -614,6 +655,7 @@ def pre(data):
     budget(data, st, session, board, tool, inp)
     if tool in ("Edit", "Write"):
         another_boards_write(inp, data.get("cwd"))
+        board_artifact_astray(inp, board)
         state_by_hand(tool, inp)
         ok()
 
@@ -637,7 +679,7 @@ def pre(data):
         if prev and prev.get("stamp") == now:
             deny(f"You ran this at {clock(prev['at'])} and nothing on the board "
                  "has changed since — the output is byte-for-byte what you "
-                 "already have.\nCite it from .state/round.md instead, or write "
+                 "already have.\nCite it from .pearde/.state/round.md instead, or write "
                  "it there now if it is not in it.")
         st[key] = {"at": time.time(), "stamp": now}
         save(session, st)
@@ -664,12 +706,12 @@ def pre(data):
                 deny(f"Third read of this reference, unchanged since "
                      f"{clock(prev['at'])} — the manual does not move while a "
                      "round runs.\nWhat you needed from it belongs in "
-                     ".state/round.md. The steps themselves are the exception: "
+                     ".pearde/.state/round.md. The steps themselves are the exception: "
                      "references/parts/loop.md and references/parts/round.md "
                      "are always readable.")
             deny(f"Third read of this file, unchanged since {clock(prev['at'])}"
                  " — you have read it twice already and nothing has written to "
-                 "it since.\nWhat you needed from it belongs in .state/round.md; "
+                 "it since.\nWhat you needed from it belongs in .pearde/.state/round.md; "
                  f"board state comes from `{SCAN}`.")
         st[key] = {"n": n + 1, "at": time.time(), "mtime": mtime}
         save(session, st)

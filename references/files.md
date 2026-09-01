@@ -111,6 +111,8 @@ whose scope it changed. Nothing else points at it.
 | @resources/workflows.py | read + check the workflow library, and brief one — the only reader of that format |
 | @resources/index.py | read + check the map — the only reader of that format |
 | @resources/questions.py | read + check a PRD's question round — the only reader of that format |
+| @resources/invariants/ | one script per `kind: invariant` memo — what its `verify:` runs, named for its slug |
+| @resources/invariants/every-artifact-lands-inside-the-board.sh | the tool writes nowhere but a board: no `.state/` outside a `.pearde/`, a driven throwaway project that stays clean, and the guard that still refuses a round file written beside the board |
 | @resources/graph/graph.sh | graphify rounds — extract, update, query, path, explain, god-nodes, vault open |
 | @resources/knowledge.py | the research loop — query, enqueue, remember, conclude, relink, wiki, dashboard, doctor — over `.pearde/wiki/` |
 | @resources/board/serve.py | the live service |

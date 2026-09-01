@@ -65,16 +65,16 @@ stateDiagram-v2
 
 ## The round
 
-| step | command | the orchestrator decides |
-|---|---|---|
-| 1 scan | `pearde scan` · `pearde sweep` once per session · read `.pearde/.state/round.md` · `pearde init` when there is no board | nothing — read |
-| 2 answer | `pearde answer <prd> Q<n> "<text>"` per answer | what to put to the user, per @references/drill.md, and what they said |
-| 3 refine | `pearde refine <prd> < report` | whether the analyst's `## Split` table is usable; a drill when it is not |
-| 4 spec ahead | `pearde claim <prd> <worker>` · `pearde brief <prd> --worker <worker>` → dispatch as `pearde-analyst` | which persona the job wears |
-| 5 implement | the same two commands, dispatched as `pearde-implementer` | which persona the job wears |
-| 6 collect | read the returned line · apply or refuse `## Workflow` edits · `pearde collect <prd>` | whether to believe the report; whether an edit was the atomic's |
-| 7 knowledge | `python3 resources/knowledge.py query "<the frontier's open question>"` per PRD about to be drilled | whether the record already answers it — cite the note under `## Answers` and skip the question, or let the drill stand |
-| 8 drill, then hand back | one drill round over the frontier, written to `.pearde/.state/ask.md` · rewrite `.pearde/report.md` and `.pearde/.state/round.md` · return `ASK` / `DRAINED` / `BLOCKED` | the forks and their three answers |
+| step | the orchestrator decides |
+|---|---|
+| 1 scan | nothing — read |
+| 2 answer | what to put to the user, per @references/drill.md, and what they said |
+| 3 refine | whether the analyst's `## Split` table is usable; a drill when it is not |
+| 4 spec ahead | which persona the job wears |
+| 5 implement | which persona the job wears |
+| 6 collect | whether to believe the report; whether an edit was the atomic's |
+| 7 knowledge | whether the record already answers it — cite the note under `## Answers` and skip the question, or let the drill stand |
+| 8 drill, then hand back | the forks and their three answers |
 
 The round runs in a `pearde-round` worker, never in the session the user
 asked: that session dispatches, carries answers back, and holds one line per

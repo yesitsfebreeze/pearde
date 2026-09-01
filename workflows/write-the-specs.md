@@ -2,7 +2,7 @@
 atomic: write-the-specs
 subject: turn what the build stands up into implementable units
 date: 2026-08-28
-updated: 2026-08-28
+updated: 2026-09-01
 runs: 24
 ---
 
@@ -41,3 +41,4 @@ runs: 24
 | seen | means | do |
 |------|-------|----|
 | `over split-above: N > 40 — REFINE it` | the set is heavier than the board allows | weigh each spec against the siblings' spec files first; if the weight is honest at that scale the verdict is REFINE with a `## Split` table, never a lower number |
+| an implementer reports a box whose command prints a different number than the box asserts | the number was written from the build's memory rather than from running the command **as the box spells it** — a `grep -c` counts every matching line, and a word quoted in a comment beside the code counts too | run each box's own command line verbatim, from the repo root, and paste what it prints into the box. A count in a box is quoted output, never a recollection; when a literal appears in both prose and code, aim the box at the content instead of at the count |

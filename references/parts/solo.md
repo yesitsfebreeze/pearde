@@ -8,7 +8,7 @@ what changes in them.
 | step | by hand |
 |---|---|
 | 3 refine | the `## Split` table is yours to write, then `pearde refine <prd> < split` |
-| 4 spec ahead | after `pearde claim` and `pearde brief`, run the analyst's brief as a checklist, then `pearde specced <prd> --blast <x>` |
+| 4 spec ahead | after `pearde claim` and `pearde brief`, run the analyst's brief as a checklist, then `pearde collect <prd> --report <the report's path>` — or `pearde specced <prd> --blast <x>` by hand when there is no report |
 | 5 implement | the same two commands, then run the implementer's brief; tick each box as you close it |
 
 A `workflow:` on the PRD is a route you follow yourself, so you write the

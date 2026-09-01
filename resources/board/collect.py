@@ -58,7 +58,9 @@ commit it makes.
 
 Reads through plan.py, writes through edit.py. Python 3 stdlib only.
 """
+import contextlib
 import datetime
+import io
 import json
 import os
 import re
@@ -73,6 +75,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import plan as planlib  # noqa: E402 — beside this script
 import edit as editlib  # noqa: E402 — beside this script
 import transitions as translib  # noqa: E402 — the one printer of the line
+import specs as specslib  # noqa: E402 — SPECCED/REFINE reuse its own gates
 
 # collect writes done/failed transitions straight to the same log
 # transitions.py record() appends to — never to .history.jsonl, the
@@ -84,8 +87,13 @@ RIDERS_FILE = "riders"
 # command pearde.py discovers; an undeclared flag is refused with this list,
 # exit 2, before the board is read.
 FLAGS = translib.Flags(("as", "board", "also", "also-note", "widen",
-                        "snapshot"), ("dry", "fail", "trust"),
+                        "snapshot", "report"), ("dry", "fail", "trust"),
                        multi=("also", "widen"))
+# The verdict words a report is allowed to carry, and the transition each
+# one runs — @references/parts/loop.md step 6, @references/parts/workers.md
+# "On return". Anything else — missing, or a word not in this tuple — is
+# refused rather than guessed at.
+VERDICTS = ("SPECCED", "REFINE", "QUESTION", "DONE", "BLOCKED", "FAILED")
 HELD = ("analyzing", "claimed", "blocked")
 
 
@@ -106,7 +114,8 @@ def parse_args(argv):
             "also": a.opt.get("also", []), "widen": a.opt.get("widen", []),
             "also_note": a.opt.get("also-note", ""),
             "as": persona or translib.persona_default("collect"),
-            "board": a.opt.get("board"), "snapshot": a.opt.get("snapshot")}
+            "board": a.opt.get("board"), "snapshot": a.opt.get("snapshot"),
+            "report": a.opt.get("report")}
     for k in ("dry", "fail", "trust"):
         if k in a.flags:
             opts[k] = True
@@ -232,6 +241,95 @@ def parse_when(s):
 def fmt_hours(h):
     s = f"{h:.2f}".rstrip("0").rstrip(".")
     return (s or "0") + "h"
+
+
+# ── the worker's report ──────────────────────────────────────────────────────
+# `collect --report <path>` reads the verdict a report.md carries and runs
+# the transition @references/parts/workers.md maps it to — the same
+# `pearde specced` / `pearde refine` / `pearde release` a person would type,
+# called in-process through the COMMANDS every one of them already exports,
+# so every gate those commands check still runs unchanged. `collect` itself
+# is DONE's transition — no dispatch needed, the rest of `cmd_collect` is it.
+
+VERDICT_RE = re.compile(
+    r"(?im)^\s*#{0,3}\s*\*{0,2}verdict\*{0,2}\s*:?\s*\*{0,2}([A-Za-z]+)")
+
+
+def verdict_of(text):
+    """The word after the report's `Verdict` marker, read from its head only
+    — the first 40 lines — so a later, unrelated sentence using the word
+    is never mistaken for it. "" when no marker is there at all; the word
+    found, upper-cased, otherwise — even one `VERDICTS` does not hold, so
+    the caller can say which."""
+    head = "\n".join(text.splitlines()[:40])
+    m = VERDICT_RE.search(head)
+    return m.group(1).upper() if m else ""
+
+
+def scores_of(text):
+    """`(blast, workflow)` off the report's `## Scores` block — the values
+    `pearde specced --blast <x> --workflow <slug>` already takes by hand."""
+    sec = section(text, "Scores")
+    blast = re.search(r"(?im)^blast-radius:\s*(\S+)", sec)
+    workflow = re.search(r"(?im)^workflow:\s*(\S+)", sec)
+    return (blast.group(1).strip() if blast else None,
+            workflow.group(1).strip() if workflow else None)
+
+
+@contextlib.contextmanager
+def _stdin_as(text):
+    """`refine` and `specced --route -` read `sys.stdin.read()` — the report
+    text stands in for the pipe a shell call would use."""
+    old = sys.stdin
+    sys.stdin = io.StringIO(text)
+    try:
+        yield
+    finally:
+        sys.stdin = old
+
+
+def route_report(board, rel, report_path, opts, out=print):
+    """`--report <path>`: the verdict decides the transition, never a guess.
+    Returns the exit code the transition it ran returned."""
+    if not os.path.isfile(report_path):
+        raise Stop(f"{rel}: --report {report_path} — no such file")
+    text = open(report_path, encoding="utf-8").read()
+    word = verdict_of(text)
+    if not word:
+        raise Stop(f"{rel}: {report_path} names no `Verdict:` — nothing "
+                   f"written")
+    if word not in VERDICTS:
+        raise Stop(f"{rel}: {report_path} verdict `{word}` is not one of "
+                   + ", ".join(VERDICTS) + " — nothing written")
+    board_flag = ["--board", board]
+    persona_flag = ["--as", opts["as"]]
+    dry_flag = ["--dry"] if opts.get("dry") else []
+    tail = persona_flag + board_flag + dry_flag
+    if word == "DONE":
+        return collect_one(board, rel, opts, out=out)
+    if word == "SPECCED":
+        blast, workflow = scores_of(text)
+        argv = [rel] + tail
+        if blast:
+            argv += ["--blast", blast]
+        if workflow:
+            prds = planlib.scan(board)
+            lib = specslib.library(board, prds[rel])
+            argv += ["--workflow", workflow]
+            if lib.get(workflow, {}).get("kind") != "workflow":
+                argv += ["--route", "-"]
+        with _stdin_as(text):
+            return specslib.COMMANDS["specced"](argv)
+    if word == "REFINE":
+        with _stdin_as(text):
+            return specslib.COMMANDS["refine"]([rel] + tail)
+    if word == "QUESTION":
+        return translib.COMMANDS["release"]([rel, "question"] + tail)
+    if word == "BLOCKED":
+        return translib.COMMANDS["release"]([rel, "blocked"] + tail)
+    # FAILED, and — per loop.md — anything an implementer returns short of
+    # DONE/BLOCKED that still names a real verdict word
+    return translib.COMMANDS["release"]([rel, "failed"] + tail)
 
 
 # ── git ───────────────────────────────────────────────────────────────────────
@@ -1198,6 +1296,17 @@ def cmd_collect(argv, board=None):
             print(f"collect: {e}", file=sys.stderr)
             return 1
         return 0
+    if opts["report"]:
+        rels = opts["prds"]
+        if len(rels) != 1:
+            print("collect: --report <path> takes exactly one PRD",
+                 file=sys.stderr)
+            return 2
+        try:
+            return route_report(board, rels[0], opts["report"], opts)
+        except Stop as e:
+            print(f"collect: {e}", file=sys.stderr)
+            return 1
     rels = opts["prds"]
     if not rels:
         r = planlib.compute_plan(board, None, warn=False)

@@ -19,13 +19,24 @@ needed it, and the board has no way to tell afterwards.
 orchestrator these briefs speak of is itself a window that ends, and the rule
 below is the reason it stays small enough to be worth ending.
 
+**A launch is not a life.** An async dispatch reports success even when the
+worker dies on its first API call — 402, 429, a model group with no
+fallback. Before the turn ends, verify each worker is alive: its transcript
+under the harness tasks dir must grow, and must hold no `API Error`. One
+dead worker is re-dispatched once, on the orchestrator's own model — never
+on the fallback that just killed it. A second death is `BLOCKED`, with the
+error text. The same check re-runs before any return: a worker that stopped
+without a report is dead, not thinking.
+
 **A report is a file. What comes back is one line.** Every brief ends by
 saying so: the worker writes `.pearde/prds/<prd>/report.md` and returns the verdict,
 that path, and the numbers the next command takes — under fifteen lines. The
 orchestrator reads the file only where the line is not enough to move the
-PRD, and never to re-read what `pearde collect` already parses. A report
-returned whole is pinned in the orchestrator's window for the rest of the
-session, and every turn after it pays for it again.
+PRD, and never to re-read what `pearde collect` already parses — the
+verdict routing least of all: `pearde collect <prd> --report <the report's
+path>` does that lookup now. A report returned whole is pinned in the
+orchestrator's window for the rest of the session, and every turn after it
+pays for it again.
 
 Rules for every worker:
 
@@ -283,19 +294,19 @@ decides the state, and a `stopped` row does not.
 > a real box.
 <!-- /brief -->
 
-On return: SPECCED → `pearde specced <prd> --blast <x> --workflow <slug>`,
-the values off `## Scores`; a `## Route` under it rides along too —
-`--workflow <slug> --route -` with the report on stdin — when the slug is
-one the library did not already hold. The command reads the spec files,
-refuses what is not a spec naming file and line, sums the weight, and, with a
-route, writes the workflow and its new atomics and runs `workflow check`
-first, refusing the whole call with nothing written on red — and hand it to
-its implementer in the same round, never to a shelf.
-REFINE → `pearde refine <prd> < report` — the children exist from the
-`## Split` table and the parent is `open`. QUESTION → set the state, keep
-the report. The probe code stays in
-the tree either way; a PRD abandoned with probe code in it is named in the
-report, so the sweep reads it as pass one and not as damage.
+On return, hand the report itself to the tool: `pearde collect <prd> --report
+<the report's path>` reads the verdict word and runs the transition it maps
+to — `specced` with the `## Scores` values, a route draft on stdin when the
+slug is one the library did not hold, `refine` off the `## Split` table,
+`release` for QUESTION, BLOCKED and FAILED — every gate the command checks
+still running, a missing or unknown verdict refused with nothing written, a
+red verify still exit 1. The lookup is no longer yours and the file is no
+longer read for it; what stays prose is the judgment the tool cannot make:
+whether to believe the report at all, and whether a `## Workflow` edit was
+the atomic's fault or the code's. Believing it and it being wrong is the
+collect's gate to catch, not the line's. The probe code stays in the tree
+either way; a PRD abandoned with probe code in it is named in the report, so
+the sweep reads it as pass one and not as damage.
 
 **Implementer** — one per `specced` PRD dispatched:
 
@@ -312,14 +323,13 @@ report, so the sweep reads it as pass one and not as damage.
 > `## Failure` into `prd.md`.
 <!-- /brief -->
 
-On return:
-
-| report                                                                          | set                                    |
-|---------------------------------------------------------------------------------|----------------------------------------|
-| DONE, every box ticked, verify output shown                                      | `done`                                 |
-| DONE, open boxes waiting on something named, everything the worker owns proven   | `blocked` + `needs:`                   |
-| anything less                                                                    | `failed`, or answer a BLOCKED worker and let it finish |
-| any of the three, plus `## Workflow <slug>`                                      | the row's state, and the five actions above |
+On return, the same one call as the analyst's: `pearde collect <prd> --report
+<the report's path>`. DONE routes into collect's own seven steps, BLOCKED
+into `release blocked` — the `needs:` key is the gate's to refuse on — and
+anything less into `release failed`, `## Failure` written first by the worker
+or written by `--fail`. Every open box the tool re-checks on its own; the
+report's word is never taken for the verify. What stays the orchestrator's
+is the belief and the `## Workflow` rows, as above.
 
 Two unclosable boxes, caught at the gate rather than by eye: `pearde
 specced` refuses a box that asks the worker to commit — committing is not an

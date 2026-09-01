@@ -70,8 +70,10 @@ the tokens are never spent.
 - Hooks fire for subagents as well as the orchestrator, so an analyst that
   reads one spec three times in an unchanged tree gets the same refusal. That
   is intended, and it is why the limit is three rather than two.
-- The guard holds one JSON file per session under
-  `resources/board/state/guard/` — machine-local, like everything else there.
+- The guard holds one JSON file per session under `<board>/.state/guard/` —
+  machine-local and gitignored, in the board the session counted on. It lived
+  in the install until `every-artifact-lands-inside-the-board` closed that
+  exemption on 2026-09-01.
 - A false refusal is possible if the stamp is wrong (a board edited by a
   process that preserves mtimes). The stamp is one function; the round should
   say so rather than work around it.

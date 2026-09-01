@@ -14,6 +14,17 @@
 # the round worker's handover to the dispatcher — read once, then answered
 .state/ask.md
 
+# machine-local, and the whole of it regenerable: this board's registration
+# with the daemon, the daemon's rolling log when this board started it, an
+# adapter run's output, the guard's per-session counters and the fitted
+# weight→hours constant. They used to live in the install; the invariant
+# `every-artifact-lands-inside-the-board` moved them here.
+.state/serve.json
+.state/serve.log
+.state/run-*.log
+.state/guard/
+.state/calibration.json
+
 # graphify's engine and its output — rebuilt by `pearde graph`
 graphify/
 wiki/graphs/

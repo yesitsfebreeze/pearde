@@ -92,6 +92,39 @@ has "5 view prints the URL" "$URL" "http://127.0.0.1:$SPARE/board/example"
 CODE="$(python3 -c 'import sys,urllib.request; print(urllib.request.urlopen(sys.argv[1], timeout=5).status)' "$URL" 2>&1)"
 eq  "5 the page answers at the URL" "$CODE" "200"
 
+# ── 6. the same board, read by a machine with no Obsidian ────────────────────
+# The five lines above ran under this machine's own home, which happens to
+# hold an Obsidian register — so `2 doctor closes green` proves the board is
+# green *here*, and says nothing about the reader who has never installed
+# Obsidian. That reader is the quickstart's whole audience. So doctor is run
+# once more over the same fresh board under a home that holds no Obsidian
+# config at all: an empty directory, with XDG_CONFIG_HOME scrubbed so the
+# ambient one cannot leak the real register back in.
+#
+# What is asserted is that the vault row *answers* — `ok · Obsidian not
+# installed here` — rather than reporting a missing register as a fault, that
+# doctor still closes green, and that this is the only row that moved. The
+# last one is the check that catches a home-dependent row elsewhere in the
+# report: any other `ok|broken|off` verdict that differs between the two runs
+# fails here, whatever it is.
+NOOBS="$TOP/no-obsidian"; mkdir -p "$NOOBS"
+rows() { printf '%s\n' "$1" | sed -nE 's/^  ([a-z]+) +(ok|broken|off) .*/\1 \2/p'; }
+WITH="$(bash "$COPY/resources/doctor.sh" "$PROJ" 2>&1)"
+OUT="$(env -u XDG_CONFIG_HOME HOME="$NOOBS" bash "$COPY/resources/doctor.sh" "$PROJ" 2>&1)"; RC=$?
+show "HOME=<a home with no Obsidian config> pearde doctor" \
+     "$(printf '%s\n' "$OUT" | grep -E '^  (vault|memos|knowledge) |^pearde:')"
+eq  "6 doctor exits 0 under a home holding no Obsidian config" "$RC" "0"
+has "6 ...and closes green there too" "$OUT" "pearde: every part this repo owns checks out."
+# the verdict field, never a substring: `ok` is inside `broken`
+eq  "6 the vault row answers rather than faulting" \
+    "$(printf '%s\n' "$OUT" | sed -nE "s/^  vault +(ok|broken|off) .*/\\1/p")" "ok"
+has "6 ...naming the machine, not the board" \
+    "$(printf '%s\n' "$OUT" | grep -E '^  vault ')" "Obsidian not installed here"
+# tripwire: an extractor reading nothing would make the diff below unfailable
+eq  "6 the row reader read the whole report — 18 rows, not zero" "$(rows "$WITH" | wc -l | tr -d ' ')" "18"
+eq  "6 no row's verdict moves under the scrubbed home — same names, same ok|broken|off" \
+    "$(diff <(rows "$WITH") <(rows "$OUT") | grep -c '^[<>] ' || true)" "0"
+
 # ── the live daemon was never touched ────────────────────────────────────────
 python3 "$COPY/resources/board/serve.py" stop >/dev/null 2>&1
 eq  "the real registry is untouched" "$( [ -f "$REG" ] && cksum < "$REG" )" "$REG_BEFORE"

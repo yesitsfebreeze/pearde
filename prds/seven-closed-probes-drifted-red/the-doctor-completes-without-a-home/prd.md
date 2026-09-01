@@ -16,6 +16,7 @@ time:              # OPTIONAL. See @references/parts/order.md
 needs:
   - the-fixtures-meet-the-tool
 workflow: probe-then-spec
+commit: ca29535 5ebefc7
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
      vision importance (priority), and complexity/blast-radius. Add your own

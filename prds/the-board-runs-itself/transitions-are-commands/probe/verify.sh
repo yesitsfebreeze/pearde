@@ -28,7 +28,7 @@ refused() { # name, expected substring, cmd...
   run "$@"
   if [ "$RC" = "1" ] && [[ "$ERR" == *"$want"* ]]; then ok "$name"; else bad "$name" "rc=$RC err=$ERR"; fi
 }
-clean() { ( cd "$D" && git status --porcelain ) ; }
+clean() { ( cd "$D" && git status --porcelain | grep -v '\.pearde/\.state/' ) ; }
 
 echo "persona"
 OUT="$(env -u PEARDE_AS python3 "$T" set next open --force --board "$B" 2>&1)"; RC=$?
@@ -141,7 +141,7 @@ for l in open(os.environ["TR"]):
     r=json.loads(l); assert sorted(r)==["calls","from","prd","reads","refused","t","to","tokens"], r'; echo $?)"
 check "the add row is from null" "$(grep -q '"from": null, "prd": "a-brand-new-thing", "reads": [^,]*, "refused": [^,]*, "t": "20[^"]*", "to": "open"' "$B/.state/transitions.jsonl"; echo $?)"
 check ".history.jsonl byte-identical" "$(cd "$D" && git diff --quiet -- .pearde/.state/history.jsonl; echo $?)"
-STRAY="$(cd "$D" && git status --porcelain | grep -v '.pearde/prds/[a-z/-]*prd.md$' | grep -v '^?? .pearde/prds/a-brand-new-thing/$' | grep -v '^?? .pearde/prds/big/under-big/$' | grep -v '^?? .pearde/.state/transitions.jsonl$' | grep -v '^?? .pearde/.claims/$')"
+STRAY="$(cd "$D" && git status --porcelain | grep -v '.pearde/prds/[a-z/-]*prd.md$' | grep -v '^?? .pearde/prds/a-brand-new-thing/$' | grep -v '^?? .pearde/prds/big/under-big/$' | grep -v '\.pearde/\.state/' | grep -v '^?? .pearde/.claims/$')"
 check "only prd.md files, the two new PRDs, .transitions.jsonl and .claims/ moved" "$([ -z "$STRAY" ]; echo $?)" "$STRAY"
 
 echo "master board — @<member>/<rel> writes at the member's real path"

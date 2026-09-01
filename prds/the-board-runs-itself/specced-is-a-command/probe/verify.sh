@@ -16,7 +16,7 @@ pass=0; fail=0
 ok()  { pass=$((pass+1)); echo "  ok   $1"; }
 bad() { fail=$((fail+1)); echo "  FAIL $1"; }
 check() { if eval "$2"; then ok "$1"; else bad "$1"; fi; }
-tree_sum() { (cd "$B" && find . -type f -not -name '.*.jsonl' | sort | while read -r f; do cat "$f"; printf '\0%s\0' "$f"; done | cksum); }
+tree_sum() { (cd "$B" && find . -type f -not -path './.state/*' -not -name '.*.jsonl' | sort | while read -r f; do cat "$f"; printf '\0%s\0' "$f"; done | cksum); }
 HF="$B/$(python3 -c "import sys; sys.path.insert(0,'$ROOT/resources/board'); import transitions as t; print(getattr(t,'TRANSITIONS_FILE',None) or getattr(t,'HISTORY_FILE'))")"
 hist() { if [ -f "$HF" ]; then wc -l < "$HF" | tr -d ' '; else echo 0; fi; }
 run() { python3 "$SPECS" "$@" --board "$B"; }

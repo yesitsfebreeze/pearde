@@ -120,4 +120,5 @@ if warm > 40:
 print("parse-cache verify: pass")
 PYEOF
 RC=$?
-exit $RC
+fail=$RC
+exit $(( fail != 0 ))

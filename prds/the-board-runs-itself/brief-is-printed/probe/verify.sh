@@ -135,8 +135,11 @@ cp "$W" "$W.orig"
 awk 'BEGIN{n=0} /^<!-- \/brief -->$/{n++; if(n==3) next} {print}' "$W.orig" > "$W"
 CHK=$(python3 "$S/resources/board/brief.py" --check 2>&1)
 has "a removed closer: the unterminated block is named" "$CHK" "\`brief:analyst\` is not terminated before \`brief:implementer\` opens"
-has "and the swallowed text's \`<x>\` is an unnamed placeholder" "$CHK" "\`<x>\` in brief:analyst is not in the placeholder table"
-eq "two problems, no third" "$(printf '%s\n' "$CHK" | grep -c .)" 2
+# the lookup left workers.md (collect-reads-the-worker-s-report), so the
+# swallowed text no longer carries an unnamed `<x>` — one problem, and the
+# unnamed-placeholder path is covered below on a terminated block
+not "the swallowed text holds no unnamed placeholder" "$CHK" "not in the placeholder table"
+eq "one problem, no second" "$(printf '%s\n' "$CHK" | grep -c .)" 1
 sed 's/^<!-- brief:consultant -->$//' "$W.orig" > "$W"
 CHK=$(python3 "$S/resources/board/brief.py" --check 2>&1); has "a missing opener is reported" "$CHK" "no \`<!-- brief:consultant -->\`"
 has "and its stray closer" "$CHK" "with no block open"
@@ -163,7 +166,7 @@ DOC=$(bash "$S/resources/doctor.sh" "$D/ex" 2>&1)
 has "doctor: briefs ok" "$DOC" "briefs      ok      5 blocks in references/parts/workers.md · every placeholder named"
 awk 'BEGIN{n=0} /^<!-- \/brief -->$/{n++; if(n==3) next} {print}' "$W.orig" > "$W"
 DOC=$(bash "$S/resources/doctor.sh" "$D/ex" 2>&1)
-has "doctor: briefs broken when a closer is removed" "$DOC" "briefs      broken  5 blocks · 2 problems"
+has "doctor: briefs broken when a closer is removed" "$DOC" "briefs      broken  5 blocks · 1 problem"
 has "doctor: the problem lines follow" "$DOC" "\`brief:analyst\` is not terminated"
 has "doctor: the fix line" "$DOC" "fix: close every <!-- brief:<name> --> with <!-- /brief -->"
 cp "$W.orig" "$W"

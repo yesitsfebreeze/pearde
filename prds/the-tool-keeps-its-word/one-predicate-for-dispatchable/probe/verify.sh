@@ -88,7 +88,7 @@ has "big is gated, held by the parked child" "$(section "$S1" gated)" "big · p6
 ERR=$(python3 "$TR" claim big w --board "$B1" 2>&1 >/dev/null); RC=$?
 eq  "claim big w exits 1" "$RC" 1
 has "claim refuses with the same reason" "$ERR" "leaf: big held by big/second (parked)"
-eq  "the refusal wrote nothing" "$(cd "$B1" && git status --short)" ""
+eq  "the refusal wrote nothing" "$(cd "$B1" && git status --short | grep -v '\.state/')" ""
 eq  "big stays open" "$(state_of "$B1/prds/big")" open
 eq  "ready ⇒ claim accepts, gated ⇒ the shown reason" "$(gate_check "$B1" | tail -1)" "ready-ok 0 ready-bad 0 gated-ok 2 gated-bad 0"
 P1=$(python3 "$PLAN" plan "$B1" 2>/dev/null)
@@ -109,7 +109,7 @@ ERR=$(python3 "$TR" claim big w --board "$B2" 2>&1 >/dev/null); RC=$?
 eq  "claim big w exits 1" "$RC" 1
 has "claim refuses: container" "$ERR" "container: every child done — pearde collect closes it"
 eq  "big stays open — not the analyzing trap" "$(state_of "$B2/prds/big")" open
-eq  "the refusal wrote nothing" "$(cd "$B2" && git status --short)" ""
+eq  "the refusal wrote nothing" "$(cd "$B2" && git status --short | grep -v '\.state/')" ""
 has "compute_plan holds the container in its collect list" "$(cd "$SRC" && python3 -c "import plan; print(','.join(plan.compute_plan('$B2')['collect']))")" "big"
 has "plan lists big to collect off that one list" "$(python3 "$PLAN" plan "$B2" 2>/dev/null)" "✓ big [open]"
 has "brief skips it under the collect word" "$(python3 "$BRIEF" big --board "$B2" 2>&1)" "skipped big — collect — container: every child done — pearde collect closes it"

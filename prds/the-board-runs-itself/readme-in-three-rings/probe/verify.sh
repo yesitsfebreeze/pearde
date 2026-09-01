@@ -58,8 +58,8 @@ eq "C every arrow carries a pearde command" "$NOCMD" "0"
 lacks "C no prose beside the picture" "$(awk '/^## The nine states/{f=1;next} f&&/^## /{exit} f' "$README" | grep -vE '^```|^ |^stateDiagram|^$')" "."
 
 echo "D. the round is loop.md's seven rows"
-awk '/^\| step \| command/{f=1} f&&/^\| [1-7] /{print} f&&/^$/{f=0}' "$README" > "$S/readme-rows"
-awk '/^\| step \| command/{f=1} f&&/^\| [1-7] /{print} f&&/^$/{f=0}' "$ROOT/references/parts/loop.md" > "$S/loop-rows"
+awk '/^\| step \|/{f=1} f&&/^\| [1-7] /{print} f&&/^$/{f=0}' "$README" > "$S/readme-rows"
+awk '/^\| step \|/{f=1} f&&/^\| [1-7] /{print} f&&/^$/{f=0}' "$ROOT/references/parts/loop.md" > "$S/loop-rows"
 eq "D seven rows in the README" "$(wc -l < "$S/readme-rows" | tr -d ' ')" "7"
 eq "D the rows are loop.md's, byte for byte" "$(diff "$S/loop-rows" "$S/readme-rows" | wc -l | tr -d ' ')" "0"
 

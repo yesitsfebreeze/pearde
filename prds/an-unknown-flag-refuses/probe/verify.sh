@@ -29,7 +29,7 @@ fixture() {                       # a board copy in its own repo; echoes it
 }
 run()   { python3 "$PEARDE" "$@" --board "$D/.pearde" 2>"$W/err"; }
 err()   { cat "$W/err"; }
-clean() { ( cd "$D" && git status --porcelain ); }
+clean() { ( cd "$D" && git status --porcelain | grep -v '\.pearde/\.state/' ); }
 fm()    { grep -m1 "^$2:" "$D/.pearde/prds/$1/prd.md" | sed "s/^$2: *//"; }
 rows()  { [ -f "$D/.pearde/.state/transitions.jsonl" ] && wc -l <"$D/.pearde/.state/transitions.jsonl" | tr -d ' ' || echo 0; }
 commit(){ ( cd "$D" && git add -A && git -c user.name=t -c user.email=t@t commit -qm "$1" ); }

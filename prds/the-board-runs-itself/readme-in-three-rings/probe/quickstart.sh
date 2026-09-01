@@ -44,8 +44,8 @@ ALIAS="$(printf '%s\n' "$OUT" | sed -n "s/^ *alias pearde='\(.*\)'$/\1/p")"
 has "1 install prints the alias" "$OUT" "alias pearde='python3 "
 EXPORT="$(printf '%s\n' "$OUT" | sed -n 's/^ *\(export PEARDE_AS=engineer\)$/\1/p')"
 eq  "1 install prints the export, bare" "$EXPORT" "export PEARDE_AS=engineer"
-eq  "1 the skills dir holds fourteen folders — two skills grew (knowledge, graph)" "$(find "$SKILLS" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')" "14"
-eq  "1 each folder holds the five links" "$(find "$SKILLS" -mindepth 2 -maxdepth 2 -type l | wc -l | tr -d ' ')" "70"
+eq  "1 the skills dir holds fifteen folders — the set grew (knowledge, graph, update)" "$(find "$SKILLS" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ')" "15"
+eq  "1 each folder holds the five links" "$(find "$SKILLS" -mindepth 2 -maxdepth 2 -type l | wc -l | tr -d ' ')" "75"
 pearde() { $ALIAS "$@"; }
 eval "$EXPORT"          # the second pasted line — who is working, as the README says
 

@@ -54,7 +54,7 @@ cp "$ROOT/.gitignore" "$D/.gitignore" 2>/dev/null
 git -C "$D" init -q 2>/dev/null
 mkdir -p "$D/references/skills"; cp "$S" "$D/references/skills/pearde-workflow.md"
 N=$(ls "$D"/references/skills/*.md | wc -l | tr -d ' ')
-is "the fixture holds fourteen skill files" "$N" "14"
+is "the fixture holds fifteen skill files" "$N" "15"
 
 echo
 echo "== the map check is what makes the registration load-bearing =="
@@ -122,7 +122,7 @@ is "the built SKILL.md links to the repo's skill file" "$LNK" "$D/references/ski
 DOC=$(cd "$D" && bash resources/doctor.sh 2>&1 </dev/null | grep '^ *skills')
 has "doctor reports skills ok"                 "$DOC" "ok"
 has "doctor names pearde-workflow in the row"  "$DOC" "pearde-workflow"
-has "doctor counts fourteen well-formed skills"  "$DOC" "14 well-formed"
+has "doctor counts fifteen well-formed skills"  "$DOC" "15 well-formed"
 
 echo
 echo "== the one committed harness whose literals this contract moves =="
@@ -130,7 +130,7 @@ git -C "$D" add -A >/dev/null 2>&1
 git -C "$D" -c user.email=p@p -c user.name=p commit -qm base >/dev/null 2>&1
 RM=$(bash "$ROOT/.pearde/prds/the-board-runs-itself/readme-in-three-rings/probe/verify.sh" </dev/null 2>&1 | tail -1)
 is "readme-in-three-rings holds its baseline once the four literals move" \
-   "$RM" "72 checks · 72 pass · 0 fail"
+   "$RM" "74 checks · 74 pass · 0 fail"
 
 echo
 echo "== the command behind the handle already runs (read-only, real repo) =="

@@ -10,6 +10,9 @@
 .state/plan.json
 .state/view.html
 
+# the round worker's handover to the dispatcher — read once, then answered
+.state/ask.md
+
 # graphify's engine and its output — rebuilt by `pearde graph`
 graphify/
 wiki/graphs/

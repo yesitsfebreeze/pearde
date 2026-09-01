@@ -68,7 +68,8 @@ RINGS="$(awk '/^## Three rings/{f=1;next} f&&/^## /{exit} f' "$README")"
 has "E core" "$RINGS" "**Core**"; has "E advisors" "$RINGS" "**Advisors**"; has "E tools" "$RINGS" "**Tools**"
 has "E the one-question table moved under core" "$RINGS" "| what the round does next | @references/parts/loop.md |"
 has "E the scope table moved under core" "$RINGS" "| reading the board | "
-eq  "E the one-question table has its eleven rows" "$(printf '%s\n' "$RINGS" | grep -c '^| what\|^| which\|^| who \|^| putting')" "11"
+eq  "E the one-question table has its twelve rows" "$(printf '%s\n' "$RINGS" | grep -c '^| what\|^| which\|^| who \|^| putting')" "12"
+has "E the table opens on the dispatcher" "$RINGS" "| what the session that was asked does | @references/parts/dispatch.md |"
 for k in loop drill memos workflows personas consult report master doctor guard statusline scout install; do
   has "E the ring ends in @@$k" "$RINGS" "\`@@$k\`"
 done
@@ -84,7 +85,7 @@ echo "F. every claim is true to the code"
 python3 "$ROOT/resources/board/plan.py" example "$S/copy" >/dev/null
 has "F add as printed — no --as, no PEARDE_AS — files it as engineer, so the quickstart row says so" "$(env -u PEARDE_AS python3 "$ROOT/resources/board/transitions.py" add "quickstart probe" --board "$S/copy/.pearde" 2>&1)" "· as engineer"
 eq  "F the daemon's default port is 8443" "$(grep -c '127.0.0.1:8443' "$README")" "2"
-eq  "F the skills hold fourteen files — two skills grew with the machine" "$(ls "$ROOT/references/skills"/*.md | wc -l | tr -d ' ')" "14"
+eq  "F the skills hold fifteen files — the set grew with the machine" "$(ls "$ROOT/references/skills"/*.md | wc -l | tr -d ' ')" "15"
 has "F init's first line names the language" "$(sed -n '/^def cmd_init/,/^def /p' "$ROOT/resources/board/init.py")" 'language {language} — '
 has "F view opens the browser" "$(sed -n '/^def cmd_view/,/^def /p' "$ROOT/resources/pearde.py")" "webbrowser.open"
 has "F the five bands, in the scan's words" "$(python3 "$ROOT/resources/board/plan.py" scan "$S/copy/.pearde" 2>&1)" "gated"
@@ -92,8 +93,10 @@ lacks "F no emoji" "$(grep -vE '^\| `install --apply`' "$README")" "✓"
 
 echo "G. the footprint beside the README"
 has "G language.md has the README row" "$(cat "$ROOT/references/language.md")" "| README        | a person, first time | quickstart, then rings |"
-has "G references/skills/pearde.md opens with Read @README.md" "$(sed -n 6p "$ROOT/references/skills/pearde.md")" "Read @README.md"
-has "G ...and points at the table's place" "$(sed -n '6,8p' "$ROOT/references/skills/pearde.md")" "under **Three rings**"
+SKILL_BODY="$(cat "$ROOT/references/skills/pearde.md")"
+has "G references/skills/pearde.md sends the session to the dispatcher" "$SKILL_BODY" "Read @references/parts/dispatch.md"
+has "G ...says the round is not worked there" "$SKILL_BODY" "You are the dispatcher, not the round"
+has "G ...and names the worker it starts" "$SKILL_BODY" "Dispatch pearde-round"
 eq  "G index.py check is silent" "$(python3 "$ROOT/resources/index.py" check 2>&1 | wc -l | tr -d ' ')" "0"
 eq  "G nothing anchors into a README heading" "$(grep -rl 'README.md#' "$ROOT/references" "$ROOT/skills" "$ROOT/index.md" "$ROOT/SKILL.md" 2>/dev/null | wc -l | tr -d ' ')" "0"
 

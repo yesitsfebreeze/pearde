@@ -1,24 +1,16 @@
-# Round — board↔wiki↔obsidian integration + pearde-update
+# Round — the round is moved out of the session that was asked
 
 ## Established
-- Vault root is `.pearde/`; KB store root is `.pearde/wiki/` (not `knowledge/`).
-- Board→wiki is `knowledge.py board` (74 notes here). wiki→board is only loop step 7 `knowledge.py query`.
-- Global installs are live symlinks: `~/.claude/priv/skills` (in force, CLAUDE_CONFIG_DIR=/Users/feb/.claude/priv) and `~/.claude/skills` (not in force). No repo-local `.claude/skills` anywhere.
+- a `/pearde` session opens at a 50,229-token floor and ended at 200,725 with 66k of content in it — measured off `~/.claude/projects/-Users-feb-dev-infra-pearde/252b219d*.jsonl`, first and max assistant `usage` · 09:05
+- the transcript a hook is handed holds no sidechain turns, so a worker's window cannot be measured from the dispatcher's — same file, zero `isSidechain` entries · 09:10
+- read and command stamps were keyed by path alone, so a second round worker in one session would be refused a file the first had read — fixed by `stamp_key`, probe C1–C3 · 09:30
+- probe green: 26 checks · 26 pass · 0 fail; `the-loop-is-commands` 60/60; `doctor` closes green · 09:38
+- `readme-in-three-rings` keeps one pre-existing failure: a freshly-init'd board has no `graph.json`, so `knowledge.py doctor` exits 1 and doctor's `knowledge` row reads `broken`. Reproduced with this branch stashed — not this PRD's · 09:34
 
-## Fixed this round
-1. `resources/board/obsidian/community-plugins.json`: `local-rest-api` -> `obsidian-local-rest-api` (wrong id = REST port never opened). Live vault repaired too.
-2. `resources/doctor.sh`: knowledge row guarded/rooted at `$BOARD/knowledge` -> `$BOARD/wiki`. Row now prints.
-3. `knowledge.py cmd_board`: `## Knowledge` harvested every memo wikilink; now filtered against a once-built sources+conclusions index (`kb_names`).
-4. `resources/board/knowledge/_index.md` deleted (duplicate of conclusions/_index.md, stale `knowledge/` path). `conclusions/_index.md` dataviewjs `"conclusions"` -> `"wiki/conclusions"`.
-5. NEW `init.py`: `KNOWLEDGE_PRESET`, `write_knowledge()`, `repair_plugin_ids()`, `BOARD_IGNORED`, `write_board_gitignore()`, `cmd_upgrade` + COMMANDS["upgrade"]. `cmd_init` now calls write_knowledge.
-6. Ran `pearde upgrade` on all 8 boards — all now have wiki content + board notes.
+## Decided
+- the round runs in a `pearde-round` worker and the asked session only dispatches — it beat raising `context-budget`, which pays the same window again on every turn
+- the budget is measured from the window's own floor — it beat leaving it absolute, which spent half the budget before the round read anything
+- a worker keeps no ceiling of its own — it beat guessing one from the dispatcher's transcript, which is not its window
 
-## SECURITY (reported to user, done)
-- `.obsidian-api-key` was committed+pushed in TWO repos: `infra/pearde/.pearde` (c624a16, github/pearde) and `dotfiles` (bca38f0, github/.files). Both `git rm --cached`'d and rotated. History NOT rewritten — user's call, still pending their word.
-
-## Owed / next
-- **/pearde-update DONE** — `resources/update.sh` + FORWARD["update"] in pearde.py + `references/skills/pearde-update.md` + `references/update.md` + `@@update` in index.md + files.md rows. 15 skills, both global installs re-linked. `local` reads off (no `<repo>/.claude/skills` here) by design — update never creates an install unasked.
-- Also fixed: dotfiles board repo leaked its key too (bca38f0, github/.files) — untracked + rotated.
-- Nothing committed yet. 13+ uncommitted files in the pearde repo.
-- Nothing auto-runs `knowledge.py board`/`relink` on a state change (graph goes stale). PRD-shaped, not done.
-- Obsidian is RUNNING: repaired plugin id + vault registrations need an Obsidian restart / `pearde vault --wait --open`.
+## Owed
+- tell the user what changed, and that `.pearde/memos/` in this tree is another session's live work

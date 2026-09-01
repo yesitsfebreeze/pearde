@@ -180,3 +180,8 @@
 {"from": "claimed", "prd": "the-graph-lands-inside-the-board", "t": "2026-09-01 07:32", "to": "done"}
 {"from": "claimed", "prd": "the-view-row-names-a-variable-that-exists", "t": "2026-09-01 07:40", "to": "done"}
 {"from": "claimed", "prd": "the-other-boards-move-once-and-the-script-goes", "t": "2026-09-01 07:44", "to": "done"}
+{"calls": 82, "from": null, "prd": "the-round-runs-in-a-window-that-ends", "reads": 3, "refused": 0, "t": "2026-09-01T09:30:54", "to": "open", "tokens": 37484}
+{"calls": 50, "from": "open", "prd": "the-round-runs-in-a-window-that-ends", "reads": 0, "refused": 0, "t": "2026-09-01T09:37:12", "to": "analyzing", "tokens": 24411}
+{"calls": 1, "from": "analyzing", "prd": "the-round-runs-in-a-window-that-ends", "reads": 0, "refused": 0, "t": "2026-09-01T09:37:14", "to": "specced", "tokens": 123}
+{"calls": 1, "from": "specced", "prd": "the-round-runs-in-a-window-that-ends", "reads": 0, "refused": 0, "t": "2026-09-01T09:37:17", "to": "claimed", "tokens": 117}
+{"from": "claimed", "prd": "the-round-runs-in-a-window-that-ends", "t": "2026-09-01 09:38", "to": "done"}

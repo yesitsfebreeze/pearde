@@ -6,3 +6,4 @@
 {"d": "2026-08-30", "done": 39, "hdone": 909.0, "hleft": 0.0, "left": 6, "states": {"analyzing": 2, "done": 39, "open": 4, "superseded": 2}}
 {"d": "2026-08-31", "done": 56, "hdone": 1126.0, "hleft": 71.0, "left": 16, "states": {"analyzing": 1, "blocked": 2, "claimed": 2, "done": 56, "open": 11, "superseded": 2}}
 {"d": "2026-09-01", "done": 80, "hdone": 1429.0, "hleft": 6.0, "left": 3, "states": {"claimed": 1, "done": 80, "open": 2, "superseded": 2}}
+{"d": "2026-09-02", "done": 83, "hdone": 1447.0, "hleft": 0.0, "left": 5, "states": {"analyzing": 5, "done": 83, "superseded": 2}}

@@ -1,10 +1,10 @@
 ---
-state: analyzing        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
+state: specced        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: requested  # requested = the user asked | derived = the board found it
 # from:            # derived only — the PRD whose work surfaced this one
 priority: 20        # higher first
-complexity: 0      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
-blast-radius:      # analyst, at spec time — high|mid|low. What breaks if this is wrong
+complexity: 14      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
+blast-radius: mid
 repo:              # the sub-repo the code lands in; delete if n/a
 # workflow:        # OPTIONAL — how this kind of job is done: a slug in
 #                  #   .pearde/workflows/. @references/workflow.md.
@@ -13,7 +13,7 @@ time:              # OPTIONAL. See @references/parts/order.md
   est:             # the weight, only when complexity is absent. Not a duration
   actual:          # a record. Nothing reads it
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
-claim: analyst-four-stale-self-tests-are-re-aimed-at-the-code-that-moved 2026-09-01 23:54
+workflow: probe-then-spec
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
      vision importance (priority), and complexity/blast-radius. Add your own

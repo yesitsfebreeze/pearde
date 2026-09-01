@@ -1,15 +1,15 @@
 ---
-state: analyzing
+state: specced
 origin: derived
 from: seven-closed-probes-drifted-red/init-seeds-a-board-doctor-calls-green
 priority: 0
-complexity: 0
-blast-radius:
+complexity: 9
+blast-radius: low
 repo:
 needs:
 footprint:
   - resources/board/init.py
-claim: analyst-upgrade-leaves-the-memo-index-stale 2026-09-01 23:58
+workflow: probe-then-spec
 ---
 
 # upgrade-leaves-the-memo-index-stale — `init` now regenerates the memo kind-index and `upgrade` still does not, so an upgraded board fails the check a fresh one passes

@@ -237,3 +237,8 @@
 {"calls": 0, "from": "open", "prd": "the-brief-names-the-verdict-line-collect-requires", "reads": 0, "refused": 0, "t": "2026-09-01T23:54:55", "to": "analyzing", "tokens": 0}
 {"calls": 0, "from": "open", "prd": "four-stale-self-tests-are-re-aimed-at-the-code-that-moved", "reads": 0, "refused": 0, "t": "2026-09-01T23:54:55", "to": "analyzing", "tokens": 0}
 {"calls": 86, "from": "open", "prd": "upgrade-leaves-the-memo-index-stale", "reads": 4, "refused": 1, "t": "2026-09-01T23:58:23", "to": "analyzing", "tokens": 0}
+{"calls": 240, "from": "analyzing", "prd": "filing-refuses-a-file-it-does-not-hold", "reads": 4, "refused": 0, "t": "2026-09-02T00:09:49", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "analyzing", "prd": "four-stale-self-tests-are-re-aimed-at-the-code-that-moved", "reads": 0, "refused": 0, "t": "2026-09-02T00:09:53", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-brief-names-the-verdict-line-collect-requires", "reads": 0, "refused": 0, "t": "2026-09-02T00:09:53", "to": "specced", "tokens": 0}
+{"calls": 21, "from": "analyzing", "prd": "the-harness-sweep-is-capped-so-a-red-is-a-real-red", "reads": 0, "refused": 0, "t": "2026-09-02T00:18:50", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "upgrade-leaves-the-memo-index-stale", "reads": 0, "refused": 0, "t": "2026-09-02T00:18:50", "to": "specced", "tokens": 0}

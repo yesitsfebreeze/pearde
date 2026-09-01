@@ -141,3 +141,42 @@
 {"calls": 1, "from": "specced", "prd": "nothing-left-open/the-line-tells-the-truth", "reads": 0, "refused": 0, "t": "2026-08-31T22:02:09", "to": "claimed", "tokens": 169}
 {"calls": 0, "from": "specced", "prd": "nothing-left-open/a-quoted-walk-is-data", "reads": 0, "refused": 0, "t": "2026-08-31T22:02:09", "to": "claimed", "tokens": 0}
 {"from": "claimed", "prd": "nothing-left-open/a-quoted-walk-is-data", "t": "2026-08-31 22:05", "to": "done"}
+{"calls": 105, "from": "analyzing", "prd": "the-view-row-names-a-variable-that-exists", "reads": 8, "refused": 0, "t": "2026-08-31T22:06:36", "to": "open", "tokens": 3329}
+{"from": "claimed", "prd": "nothing-left-open/the-line-tells-the-truth", "t": "2026-08-31 22:18", "to": "done"}
+{"from": "open", "prd": "nothing-left-open", "t": "2026-08-31 22:20", "to": "done"}
+{"from": "open", "prd": "every-document-names-the-path-the-board-is-on", "t": "2026-08-31 22:20", "to": "done"}
+{"calls": 125, "from": "open", "prd": "the-board-asks-for-itself/two-questions-start-a-drill", "reads": 8, "refused": 0, "t": "2026-08-31T22:20:31", "to": "analyzing", "tokens": 7689}
+{"calls": 0, "from": "open", "prd": "the-other-boards-move-once-and-the-script-goes", "reads": 0, "refused": 0, "t": "2026-08-31T22:20:32", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-collect-and-brief-harnesses-are-carried-across-the-layou", "reads": 0, "refused": 0, "t": "2026-08-31T22:20:32", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "an-acceptance-box-that-cannot-fail-is-refused", "reads": 0, "refused": 0, "t": "2026-08-31T22:20:32", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "an-analyst-workflow-does-not-survive-into-specced", "reads": 0, "refused": 0, "t": "2026-08-31T22:20:32", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "collect-commits-only-the-prd-s-own-edits-not-the-footprint-s", "reads": 0, "refused": 0, "t": "2026-08-31T22:20:32", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-view-row-names-a-variable-that-exists", "reads": 0, "refused": 0, "t": "2026-08-31T22:20:32", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "collect-commits-the-code-repo-not-the-board-repo-twice/list-the-collects-the-repo-bug-orphaned", "reads": 0, "refused": 0, "t": "2026-08-31T22:20:33", "to": "analyzing", "tokens": 0}
+{"calls": 671, "from": "analyzing", "prd": "an-analyst-workflow-does-not-survive-into-specced", "reads": 56, "refused": 12, "t": "2026-08-31T22:31:04", "to": "specced", "tokens": 6003}
+{"calls": 12, "from": "specced", "prd": "an-analyst-workflow-does-not-survive-into-specced", "reads": 0, "refused": 0, "t": "2026-08-31T22:31:14", "to": "claimed", "tokens": 61}
+{"from": "claimed", "prd": "an-analyst-workflow-does-not-survive-into-specced", "t": "2026-08-31 22:33", "to": "done"}
+{"calls": 213, "from": "analyzing", "prd": "the-collect-and-brief-harnesses-are-carried-across-the-layou", "reads": 15, "refused": 6, "t": "2026-08-31T22:33:54", "to": "specced", "tokens": 1757}
+{"calls": 11, "from": "specced", "prd": "the-collect-and-brief-harnesses-are-carried-across-the-layou", "reads": 0, "refused": 0, "t": "2026-08-31T22:34:02", "to": "claimed", "tokens": 162}
+{"calls": 97, "from": "analyzing", "prd": "collect-commits-only-the-prd-s-own-edits-not-the-footprint-s", "reads": 1, "refused": 2, "t": "2026-08-31T22:36:20", "to": "specced", "tokens": 651}
+{"calls": 88, "from": "analyzing", "prd": "the-view-row-names-a-variable-that-exists", "reads": 1, "refused": 2, "t": "2026-08-31T22:38:15", "to": "specced", "tokens": 546}
+{"calls": 93, "from": "analyzing", "prd": "the-board-asks-for-itself/two-questions-start-a-drill", "reads": 3, "refused": 1, "t": "2026-08-31T22:40:20", "to": "specced", "tokens": 591}
+{"calls": 194, "from": "analyzing", "prd": "collect-commits-the-code-repo-not-the-board-repo-twice/list-the-collects-the-repo-bug-orphaned", "reads": 2, "refused": 3, "t": "2026-08-31T22:46:31", "to": "specced", "tokens": 799}
+{"calls": 188, "from": "analyzing", "prd": "the-other-boards-move-once-and-the-script-goes", "reads": 1, "refused": 0, "t": "2026-08-31T22:55:15", "to": "specced", "tokens": 514}
+{"calls": 44, "from": "specced", "prd": "collect-commits-the-code-repo-not-the-board-repo-twice/list-the-collects-the-repo-bug-orphaned", "reads": 0, "refused": 2, "t": "2026-09-01T00:27:38", "to": "claimed", "tokens": 19871}
+{"calls": 0, "from": "specced", "prd": "collect-commits-only-the-prd-s-own-edits-not-the-footprint-s", "reads": 0, "refused": 0, "t": "2026-09-01T00:27:38", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "the-board-asks-for-itself/two-questions-start-a-drill", "reads": 0, "refused": 0, "t": "2026-09-01T00:27:38", "to": "claimed", "tokens": 0}
+{"calls": 105, "from": "analyzing", "prd": "an-acceptance-box-that-cannot-fail-is-refused", "reads": 7, "refused": 1, "t": "2026-09-01T00:30:39", "to": "specced", "tokens": 14777}
+{"calls": 4, "from": "specced", "prd": "an-acceptance-box-that-cannot-fail-is-refused", "reads": 0, "refused": 0, "t": "2026-09-01T00:30:41", "to": "claimed", "tokens": 337}
+{"from": "claimed", "prd": "the-collect-and-brief-harnesses-are-carried-across-the-layou", "t": "2026-09-01 00:35", "to": "done"}
+{"from": "claimed", "prd": "an-acceptance-box-that-cannot-fail-is-refused", "t": "2026-09-01 00:40", "to": "done"}
+{"from": "claimed", "prd": "collect-commits-only-the-prd-s-own-edits-not-the-footprint-s", "t": "2026-09-01 00:40", "to": "done"}
+{"from": "claimed", "prd": "collect-commits-the-code-repo-not-the-board-repo-twice/list-the-collects-the-repo-bug-orphaned", "t": "2026-09-01 00:40", "to": "done"}
+{"from": "claimed", "prd": "the-board-asks-for-itself/two-questions-start-a-drill", "t": "2026-09-01 00:40", "to": "done"}
+{"from": "open", "prd": "collect-commits-the-code-repo-not-the-board-repo-twice", "t": "2026-09-01 00:40", "to": "done"}
+{"from": "open", "prd": "the-board-asks-for-itself", "t": "2026-09-01 00:40", "to": "done"}
+{"calls": 231, "from": "specced", "prd": "the-view-row-names-a-variable-that-exists", "reads": 9, "refused": 3, "t": "2026-09-01T00:41:04", "to": "claimed", "tokens": 8281}
+{"calls": 0, "from": "specced", "prd": "the-other-boards-move-once-and-the-script-goes", "reads": 0, "refused": 0, "t": "2026-09-01T00:41:04", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "the-graph-lands-inside-the-board", "t": "2026-09-01 07:32", "to": "done"}
+{"from": "claimed", "prd": "the-view-row-names-a-variable-that-exists", "t": "2026-09-01 07:40", "to": "done"}
+{"from": "claimed", "prd": "the-other-boards-move-once-and-the-script-goes", "t": "2026-09-01 07:44", "to": "done"}

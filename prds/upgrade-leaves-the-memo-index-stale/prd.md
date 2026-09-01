@@ -11,6 +11,7 @@ footprint:
   - resources/board/init.py
 workflow: probe-then-spec
 actual: 0.81h
+commit: 030b80d bc1c589
 ---
 
 # upgrade-leaves-the-memo-index-stale — `init` now regenerates the memo kind-index and `upgrade` still does not, so an upgraded board fails the check a fresh one passes

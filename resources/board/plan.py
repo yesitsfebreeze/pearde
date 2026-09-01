@@ -123,7 +123,92 @@ def strip_comment(v):
     return re.sub(r"(^|\s+)#.*$", "", v).strip().strip("\"'")
 
 
+# ── the parse cache ──────────────────────────────────────────────────────────
+# `scan` is step 1 of every round, the status line and the view daemon, and
+# each call re-read and re-parsed every prd.md and every spec's frontmatter.
+# The cache holds (fm, title, body) keyed on abspath + mtime_ns + size and is
+# persisted to <board>/.state/parse-cache.json by `scan` — machine-local,
+# git-ignored, never a source of truth: anything short of a clean current-
+# version file reads as an empty cache, and every call stats the file anyway,
+# so an edit made outside pearde (an editor, `git checkout`) is a miss and is
+# re-parsed on that call. Stdlib only.
+CACHE_VERSION = 1
+_PCACHE = {}          # abspath -> {"mtime": ns, "size": n, "fm", "title", "body"}
+_PCACHE_LOADED = False
+_PCACHE_DIRTY = False  # a miss since the last save: scan() rewrites the file
+
+
+def parse_cache_path(board):
+    return os.path.join(state_dir(board), "parse-cache.json")
+
+
+def parse_cache_load(board):
+    """Fill the module cache from disk. Never raises; anything short of a
+    clean current-version file means an empty cache and a cold parse."""
+    global _PCACHE, _PCACHE_LOADED
+    if _PCACHE_LOADED:
+        return
+    _PCACHE_LOADED = True
+    try:
+        with open(parse_cache_path(board), encoding="utf-8") as f:
+            data = json.load(f)
+    except (OSError, ValueError):
+        return
+    files = data.get("files") if isinstance(data, dict) else None
+    if isinstance(data, dict) and data.get("version") == CACHE_VERSION \
+            and isinstance(files, dict):
+        _PCACHE = files
+
+
+def parse_cache_save(board):
+    """Merge the run's parses back to disk, atomically. Never raises: a cache
+    that fails to save just costs the next call a cold parse. Entries whose
+    file no longer exists are dropped, so deleting a PRD shrinks the cache."""
+    try:
+        keep = {}
+        for apath, e in _PCACHE.items():
+            try:
+                st = os.stat(apath)
+            except OSError:
+                continue
+            if st.st_mtime_ns == e.get("mtime") and st.st_size == e.get("size"):
+                keep[apath] = e
+        path = parse_cache_path(board)
+        tmp = path + ".tmp"
+        with open(tmp, "w", encoding="utf-8") as f:
+            json.dump({"version": CACHE_VERSION, "files": keep}, f)
+        os.replace(tmp, path)
+    except OSError:
+        pass
+
+
 def parse_prd(path):
+    """(fm, title, body) for `path`, off the cache when its mtime+size still
+    match. The returned fm is a fresh dict with fresh lists, so a caller that
+    mutates it (`fm["state"] = …` in transitions/collect) cannot poison the
+    cache — every key is copied one level, which is all fm ever holds."""
+    try:
+        apath = os.path.abspath(path)
+        st = os.stat(apath)
+    except OSError:
+        return _parse_prd_uncached(path)
+    e = _PCACHE.get(apath)
+    if (e and e.get("mtime") == st.st_mtime_ns and e.get("size") == st.st_size):
+        return ({k: list(v) if isinstance(v, list) else v
+                 for k, v in e["fm"].items()},
+                e["title"], e["body"])
+    fm, title, body = _parse_prd_uncached(path)
+    try:
+        _PCACHE[apath] = {"mtime": st.st_mtime_ns, "size": st.st_size,
+                          "fm": fm, "title": title, "body": body}
+        global _PCACHE_DIRTY
+        _PCACHE_DIRTY = True
+    except OSError:
+        pass
+    return fm, title, body
+
+
+def _parse_prd_uncached(path):
     text = open(path, encoding="utf-8").read()
     lines = text.splitlines()
     fm, body_start = {}, 0
@@ -270,7 +355,13 @@ def _scan_one(board, prefix="", bname=None):
 
 def scan(board):
     """{rel: prd} for every dir holding prd.md — the board's own, and every
-    member board's when this is a master, addressed `@<member>/<rel>`."""
+    member board's when this is a master, addressed `@<member>/<rel>`.
+
+    Loads the parse cache from this board's `.state/` first (every prd.md and
+    spec on the board and its members is keyed by abspath, and every call
+    stats the file, so a member's edit is a miss whatever board holds the
+    cache) and saves the merged entries back after."""
+    parse_cache_load(board)
     prds = _scan_one(board)
     for name, path in members(board):
         if os.path.isdir(path):
@@ -279,6 +370,8 @@ def scan(board):
         p["children"] = [r for r in prds if os.path.dirname(r) == rel]
         parent = os.path.dirname(rel)
         p["parent"] = parent if parent in prds else None
+    if _PCACHE_DIRTY:
+        parse_cache_save(board)
     return prds
 
 
@@ -2017,6 +2110,44 @@ def workflow_marks(board, prds):
     return marks
 
 
+def pressure_bands(board, prds, r):
+    """(collect, yours, flight, ready, gated, why) — the pressure order's own
+    bands, over the live PRDs `compute_plan` returned in `r["order"]`. One
+    computation, read by `cmd_scan` for the sections it prints and by
+    `cmd_next` for the one it acts on — @references/parts/order.md.
+
+    Everything above `in flight` is something this round can act on now;
+    `in flight` is held by somebody else. A PRD in exactly one band, never
+    two."""
+    order = r["order"] if r else []
+    collect = list(r["collect"]) if r else []
+    needs = r["needs"] if r else {}
+    after = r["after"] if r else {}
+    rest = [x for x in order if x not in collect]
+    # `blocked` is a wall a person has to take down, not a free PRD. It holds
+    # its worker, so it is not in flight either — filing it under `ready` was
+    # the scan calling a PRD dispatchable that nothing can dispatch.
+    yours = [x for x in rest if prds[x]["state"] in ("question", "blocked",
+                                                     "refine", "failed")]
+    flight = [x for x in rest if prds[x]["state"] in ("analyzing", "claimed")
+              and x not in yours]
+    free = [x for x in rest if x not in flight and x not in yours]
+    # `dispatchable` is the one predicate `claim` reads: a PRD it refuses is
+    # never listed as ready. A container — children all done, nothing of its
+    # own — is already in `collect`: `compute_plan` put it there, the one list
+    # `scan`, `plan` and a bare `collect` read.
+    why = {x: dispatchable(prds[x], prds, board) for x in free}
+    for x in collect:   # a container's row says why it is here, in its own words
+        w = (dispatchable(prds[x], prds, board)
+             if prds[x]["state"] in ("open", "specced") else None)
+        if (w or "").startswith("container:"):
+            why[x] = w
+    ready = [x for x in free
+             if not why[x] and not needs.get(x) and not after.get(x)]
+    gated = [x for x in free if x not in ready]
+    return collect, yours, flight, ready, gated, why
+
+
 def cmd_scan(board):
     """The whole board as one page a round can hold — step 1, in one call.
 
@@ -2034,6 +2165,7 @@ def cmd_scan(board):
     needs = r["needs"] if r else {}
     after = r["after"] if r else {}
     est = r["est"] if r else {}
+    bands = pressure_bands(board, prds, r)
     wf = workflow_marks(board, prds)
     settings = board_settings(board)     # `claim-ttl`, for the silent word
     mem = [n for n, _ in members(board)]
@@ -2115,29 +2247,8 @@ def cmd_scan(board):
     # See @references/parts/order.md. Everything above `in flight` is something
     # this round can act on now; `in flight` is held by somebody else. A PRD
     # listed twice is a round that has to work out which line meant it.
-    collect = list(r["collect"]) if r else []
-    rest = [x for x in order if x not in collect]
-    # `blocked` is a wall a person has to take down, not a free PRD. It holds
-    # its worker, so it is not in flight either — filing it under `ready` was
-    # the scan calling a PRD dispatchable that nothing can dispatch.
-    yours = [x for x in rest if prds[x]["state"] in ("question", "blocked",
-                                                     "refine", "failed")]
-    flight = [x for x in rest if prds[x]["state"] in ("analyzing", "claimed")
-              and x not in yours]
-    free = [x for x in rest if x not in flight and x not in yours]
-    # `dispatchable` is the one predicate `claim` reads: a PRD it refuses is
-    # never listed as ready. A container — children all done, nothing of its
-    # own — is already in `collect`: `compute_plan` put it there, the one list
-    # `scan`, `plan` and a bare `collect` read.
-    why = {x: dispatchable(prds[x], prds, board) for x in free}
-    for x in collect:   # a container's row says why it is here, in its own words
-        w = (dispatchable(prds[x], prds, board)
-             if prds[x]["state"] in ("open", "specced") else None)
-        if (w or "").startswith("container:"):
-            why[x] = w
-    ready = [x for x in free
-             if not why[x] and not needs.get(x) and not after.get(x)]
-    gated = [x for x in free if x not in ready]
+    # `bands` is the one computation of it — `cmd_next` reads the same call.
+    collect, yours, flight, ready, gated, why = bands
     # The drill section, FIRST — above collect, the pressure order's own head:
     # the scan opens on the questions waiting on the user. A question already
     # out — the round file's `## Asked` carries it — is marked `out`, carried
@@ -2163,6 +2274,113 @@ def cmd_scan(board):
             print(line(x))
     rf = os.path.join(board, ROUND_FILE)
     print(f"\nround: {rf}" + ("" if os.path.isfile(rf) else "  (not written)"))
+
+
+def cmd_next(argv):
+    """the loop step the round is on — its decision and the exact command
+
+    One call after `scan`: which of the eight steps the board is on, the
+    decision that step asks the orchestrator to make, and the command to run
+    — @references/parts/loop.md, with the step selection read off the same
+    bands `cmd_scan` prints. Reads and never writes: no state moves, no round
+    file written, safe at any point. The round file's `## Owed` line, when
+    one is written, stands first — it is the round's own memory of what is
+    next, and it outranks nothing: the bands below it are the board's answer.
+    """
+    board = find_board(argv[0] if argv else None)
+    rf = os.path.join(board, ROUND_FILE)
+    if os.path.isfile(rf):
+        try:
+            lines = [l for l in "\n".join(_h2_sections(
+                open(rf, encoding="utf-8").read(), "Owed")).splitlines()
+                if l.strip()]
+        except OSError:
+            lines = []
+        if lines:
+            print("owed: " + lines[0].lstrip("- ").strip())
+    if not os.path.isfile(os.path.join(board, "settings.md")):
+        print("step 1 · scan — no .pearde/settings.md here: first run")
+        print("  decision: nothing — read; init says English on its first line")
+        print("  pearde init")
+        return
+    if is_master(board) and not str(board_settings(board).get("name", "")).strip():
+        print(f"step 1 · scan — master of {len(members(board))} with no name:")
+        print("  decision: ask the user and write it into settings.md")
+        return
+    prds = scan(board)
+    r = compute_plan(board, None, warn=False)
+    collect, yours, flight, ready, gated, why = \
+        pressure_bands(board, prds, r)
+    unput = [(rel, qid, title) for rel, qid, title, out
+             in drill_questions(board) if not out]
+    if unput:
+        gate = (" — one drill round to the user before any claim"
+                if len(unput) > 1 else
+                " — one standing is not a gate; put it and keep working")
+        print(f"step 2 · answer — asking {len(unput)}{gate}")
+        print("  decision: what to put to the user, and what they said")
+        for rel, qid, title in unput:
+            print(f"  {rel} · {qid} {title}")
+        print('  pearde answer <prd> Q<n> "<text>" per answer')
+        return
+    if collect:
+        print(f"step 6 · collect — {len(collect)} finished, waiting to be"
+              " closed")
+        print("  decision: whether to believe the report; whether an edit"
+              " was the atomic's")
+        more = f"  ({len(collect) - 1} more)" if len(collect) > 1 else ""
+        print(f"  pearde collect {collect[0]}" + more)
+        return
+    refine = [x for x in yours if prds[x]["state"] == "refine"]
+    if refine:
+        print(f"step 3 · refine — {len(refine)} came back REFINE")
+        print("  decision: whether the analyst's `## Split` table is usable;"
+              " a drill when it is not")
+        print(f"  pearde refine {refine[0]} < report")
+        return
+    failed = [x for x in yours if prds[x]["state"] == "failed"]
+    if failed:
+        print(f"step 6 · collect — {len(failed)} failed")
+        print("  decision: what a failed attempt needs — `## Failure` first")
+        print(f"  pearde release {failed[0]} failed")
+        return
+    if ready:
+        x = ready[0]
+        impl = prds[x]["state"] == "specced"
+        more = f" · {len(ready) - 1} more in order" if len(ready) > 1 else ""
+        print(f"step {5 if impl else 4} · "
+              f"{'implement' if impl else 'spec ahead'} — ready: {x}" + more)
+        print("  decision: which persona the job wears")
+        print(f"  pearde claim {x} <worker>")
+        print(f"  pearde brief {x} --worker <worker>"
+              f" → dispatch as pearde-{'implementer' if impl else 'analyst'}")
+        return
+    if gated:
+        x = gated[0]
+        w = why.get(x) or ""
+        print(f"gated — {x}: {w}")
+        if w.startswith("workflow:"):
+            print("  decision: the one refusal you clear yourself — fix the"
+                  " slug or remove the key, then claim in the same round")
+        else:
+            print("  decision: none — the gate clears as its own work lands")
+        return
+    if flight:
+        print(f"in flight — {len(flight)} held by workers · nothing to act on")
+        print("  next: a worker's line is step 6 — `pearde collect <prd>`")
+        return
+    if yours:
+        print("step 8 · drill, then hand back — everything left is blocked"
+              " on a person")
+        for x in yours:
+            print(f"  {x} · {prds[x]['state']}")
+        print('  step 7 first: python3 resources/knowledge.py query'
+              ' "<the frontier\'s question>"')
+        print("  drill round → .pearde/.state/ask.md; rewrite"
+              " .pearde/report.md and the round file; hand back ASK / BLOCKED")
+        return
+    print("step 8 · hand back — nothing left to dispatch or ask")
+    print("  rewrite .pearde/report.md and the round file; hand back DRAINED")
 
 
 def plan_frontier(r):
@@ -2507,6 +2725,7 @@ _vision_cli.flags = VISION_FLAGS      # what `pearde vision --help` prints
 cmd_example.flags = EXAMPLE_FLAGS
 COMMANDS = {"vision": _vision_cli}
 COMMANDS["example"] = cmd_example
+COMMANDS["next"] = cmd_next
 
 
 def main():
@@ -2536,12 +2755,14 @@ def main():
         cmd_calibrate(board)
     elif cmd == "status":
         cmd_status(board)
+    elif cmd == "next":
+        cmd_next(sys.argv[2:])
     elif cmd == "scan":
         cmd_scan(board)
     elif cmd == "vision":
         sys.exit(cmd_vision(board, flags))
     else:
-        die(f"unknown command '{cmd}' — scan | plan | reconcile | gantt"
+        die(f"unknown command '{cmd}' — scan | next | plan | reconcile | gantt"
             " | calibrate | members | status | vision | example")
 
 

@@ -17,6 +17,7 @@ each skill file says what it does with no board in scope.
 |------------------------------|-----------------------------------------------------------------------------------------------------------|---------|
 | report only, change nothing  | `status` — `@resources/board/plan.py scan` plus the progress line. Changes nothing, reads no file the scan already read | `pearde status` |
 | the board as one page        | `scan` — `@resources/board/plan.py scan`: counts, progress terms, collect, in flight, waiting on you, ready, gated. Loop step 1, run on its own | `pearde scan` |
+| which step the round is on   | `next` — `@resources/board/plan.py next`: the loop step, the decision it owes and the exact command, one call after `scan`. Reads and writes nothing | `pearde next` |
 | one round, then stop         | `once`                                                                                                   | — |
 | more implementers            | `workers=5` — written to `.pearde/settings.md`, persists                                                    | — |
 | deeper spec pipeline         | `pipeline=5` — written to `.pearde/settings.md`, persists                                                   | — |

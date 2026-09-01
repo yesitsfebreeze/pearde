@@ -1,5 +1,5 @@
 ---
-state: open        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
+state: done        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: requested  # requested = the user asked | derived = the board found it
 # from:            # derived only — the PRD whose work surfaced this one
 priority: 0        # higher first
@@ -11,8 +11,9 @@ repo:              # the sub-repo the code lands in; delete if n/a
 #                  #   Absent = the brief alone, as before workflows
 time:              # OPTIONAL. See @references/parts/order.md
   est:             # the weight, only when complexity is absent. Not a duration
-  actual:          # a record. Nothing reads it
+  actual: 2.63h
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
+commit: 74f8048
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
      vision importance (priority), and complexity/blast-radius. Add your own
@@ -76,3 +77,9 @@ let the analyst split it via refine.>
 | `the-doctor-completes-without-a-home` | doctor.sh finishes every row when the shell holds no HOME — the vault row's register read is guarded and nothing aborts — and the view-row probe reads green end to end | the-fixtures-meet-the-tool |
 | `the-page-and-the-report-agree` | the live report is rewritten into the four-part shape the reference, the template and the committed what's-up renderer all name, and one-page's two stage-height checks pin the retired-constraint rule the tree now carries | — |
 | `init-seeds-a-board-doctor-calls-green` | a fresh `init --example` board passes doctor: the memo kind-index is regenerated after the copy, the knowledge graph is planted the way upgrade does it, and quickstart proves it running doctor under a HOME that holds no Obsidian config | the-doctor-completes-without-a-home |
+
+## Report
+
+container: every child done — pearde collect closes it
+
+children: seven-closed-probes-drifted-red/the-doctor-completes-without-a-home, seven-closed-probes-drifted-red/init-seeds-a-board-doctor-calls-green, seven-closed-probes-drifted-red/the-fixtures-meet-the-tool, seven-closed-probes-drifted-red/the-page-and-the-report-agree

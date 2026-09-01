@@ -330,9 +330,49 @@ fi
 # root, on a repo that is a vault too — and the person sees a tree that is not
 # the board. That is the failure this row is here to name. No vault directory
 # at all is `off`, not broken: a board is a board without Obsidian.
+# The register lives under the user's home, and a shell can export no HOME
+# variable at all — `env -i`, a launchd job, a container, and every harness
+# that runs doctor under a scrubbed environment. Under `set -u` a bare $HOME
+# does not fail this row, it aborts the script: every row below here stops
+# printing. So the read is guarded — and a shell that exports no HOME almost
+# always still HAS a home: the uid resolves to one in the passwd database,
+# which is exactly how the `plugins` row above already reads it
+# (expanduser/getpwuid). Resolving it here too is what keeps one answer per
+# run: an unregistered board reads `broken` whether or not the caller
+# scrubbed the environment. Reading only the variable would let `env -i` turn
+# the very failure this row exists to name into `ok`.
+# The resolution is done with shell builtins FIRST, and no subprocess: bash
+# expands `~` out of the passwd database with no PATH and no interpreter, and
+# the environments this row exists for — `env -i`, launchd, a container — are
+# precisely the ones with a thin PATH where `python3` may be absent (on macOS
+# `/usr/bin/python3` is a stub that exits non-zero without the Command Line
+# Tools). Resolving through `python3` first turned a true `broken` into `ok`
+# on any such box. `unset HOME` inside the subshell is load-bearing, not
+# decorative: `~` follows HOME when HOME is set-but-empty, which is one of
+# the two cases that gets here. `python3`/getpwuid stays only as a second
+# fallback. If neither resolves a home, the arm below reports what it can
+# actually check — that the home could not be resolved — and reports it as
+# `broken`, because a row that could not perform its check has not passed it.
 if [ -n "$BOARD" ]; then
-  OBSCFG="$HOME/Library/Application Support/obsidian/obsidian.json"
-  [ -f "$OBSCFG" ] || OBSCFG="${XDG_CONFIG_HOME:-$HOME/.config}/obsidian/obsidian.json"
+  OBSHOME="${HOME:-}"
+  [ -z "$OBSHOME" ] && OBSHOME=$(unset HOME; echo ~)
+  # bash leaves `~` literal when it cannot resolve one; that is not a home
+  [ "$OBSHOME" = "~" ] && OBSHOME=""
+  if [ -z "$OBSHOME" ]; then
+    OBSHOME=$(python3 -c 'import os,pwd;print(pwd.getpwuid(os.getuid()).pw_dir)' 2>/dev/null || true)
+  fi
+  OBSCFG=""
+  if [ -n "${XDG_CONFIG_HOME:-}" ]; then
+    OBSCFG="$XDG_CONFIG_HOME/obsidian/obsidian.json"
+  fi
+  if [ -n "$OBSHOME" ]; then
+    OBSMAC="$OBSHOME/Library/Application Support/obsidian/obsidian.json"
+    if [ -f "$OBSMAC" ]; then
+      OBSCFG="$OBSMAC"
+    elif [ -z "$OBSCFG" ]; then
+      OBSCFG="$OBSHOME/.config/obsidian/obsidian.json"
+    fi
+  fi
   BABS=$(cd "$BOARD" 2>/dev/null && pwd -P)
   if [ ! -d "$BOARD/.obsidian" ]; then
     if [ -d "$(dirname "$BOARD")/.obsidian" ]; then
@@ -341,6 +381,9 @@ if [ -n "$BOARD" ]; then
       row vault off "no $BOARD/.obsidian — the status line's ▸vault stays hidden"
     fi
     fix "python3 $SKILL_ROOT/resources/pearde.py vault --wait --open $(dirname "$BOARD") — seeds $BOARD/.obsidian and registers it (quit Obsidian when it asks: the register is only writable while the app is closed)"
+  elif [ -z "$OBSCFG" ]; then
+    row vault broken "$BOARD/.obsidian · this shell's home directory could not be resolved, so the vault register cannot be read — this row did not run"
+    fix "export HOME=<your home> and re-run doctor — the register lives under it"
   elif [ ! -f "$OBSCFG" ]; then
     row vault ok "$BOARD/.obsidian · Obsidian not installed here, so nothing to register"
   elif grep -Fq "\"path\":\"$BABS\"" "$OBSCFG" 2>/dev/null \

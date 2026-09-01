@@ -40,6 +40,44 @@ app is running rather than writing something that will be erased. `init` calls
 the same writer, and says this when it finds Obsidian up. `doctor`'s `vault`
 row reads the register back and is `broken` when the entry is not there.
 
+The register lives under a home, and doctor runs in shells that export no
+`HOME` — `env -i`, a launchd job, a container, every harness that scrubs its
+environment on purpose. Under `set -u` an unguarded read there does not fail
+the row, it ends the report: every row below `vault` stops printing. So the
+read is guarded.
+
+A shell that exports no `HOME` still almost always **has** a home: the uid
+resolves to one in the passwd database, which is how the `plugins` row above
+already reads it. `vault` resolves it the same way, and that is what keeps
+one answer per run — a board absent from the register reads `broken` whether
+or not the caller scrubbed the environment. Reading the variable alone would
+let `env -i` turn this row's own failure into `ok`, and doctor would give two
+answers about one home inside a single report.
+
+The resolution is done with **shell builtins first, and no subprocess**: bash
+expands `~` out of the passwd database with no PATH and no interpreter. That
+order is the whole point. The shells this row exists for are precisely the
+thin-PATH ones, and `python3` is often absent from them — on macOS
+`/usr/bin/python3` is a stub that exits non-zero until the Command Line Tools
+are installed. Resolving through `python3` first is the same defect one layer
+down: it passes on a developer's full PATH and still turns a true `broken`
+into `ok` inside `env -i`, launchd or a container. `getpwuid` through
+`python3` stays only as a second fallback. Unsetting `HOME` inside that
+subshell is load-bearing: `~` follows `HOME` when `HOME` is set but empty,
+which is one of the two cases that gets there.
+
+Precedence is unchanged and does not depend on how the home was found: the
+macOS `Library/Application Support` register when that file exists, then
+`XDG_CONFIG_HOME`, then `~/.config`. Because the builtin resolves without a
+PATH, on any host whose uid has a passwd entry there is no longer a shell
+that reaches the last arm at all. When one does — a uid with no passwd entry
+— the row says only what it can check, that the home could not be resolved,
+and reports it `broken`: a row that could not perform its check has not
+passed it, the same answer doctor already gives elsewhere for an interpreter
+it cannot run (`index broken · no python3 to read it`). It never claims the
+uid **has** no home, and never claims Obsidian is absent — neither is
+something that shell can check.
+
 Two plugins are the requirement, their settings at `@resources/board/obsidian/`
 and their bundles fetched by `install.sh --apply` at pinned versions, and
 seeded by `@resources/board/init.py` into any new board's

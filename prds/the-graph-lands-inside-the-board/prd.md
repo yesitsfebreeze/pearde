@@ -1,5 +1,5 @@
 ---
-state: claimed        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
+state: done        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: requested  # requested = the user asked | derived = the board found it
 # from:            # derived only — the PRD whose work surfaced this one
 priority: 60        # higher first
@@ -11,9 +11,8 @@ repo:              # the sub-repo the code lands in; delete if n/a
 #                  #   Absent = the brief alone, as before workflows
 time:              # OPTIONAL. See @references/parts/order.md
   est:             # the weight, only when complexity is absent. Not a duration
-  actual:          # a record. Nothing reads it
+  actual: 13.02h
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
-claim: impl-4 2026-08-31 18:31
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
      vision importance (priority), and complexity/blast-radius. Add your own
@@ -112,3 +111,23 @@ Pointers: `resources/graph/graph.sh`, `references/graph.md`,
 <!-- `## Failure` — implementer-only, after a FAILED attempt: what broke, what
      was tried. `retry` moves this into the body as history and reopens the
      PRD. -->
+
+## Report
+
+spec01: exit 0
+[graphify] note: node 'references_parts_loop' was extracted twice from 'references/parts/loop.md' under different labels — keeping 'Loop part', dropping 'The loop — eight steps'.
+[graphify] note: node 'references_parts_contract' was extracted twice from 'references/parts/contract.md' under different labels — keeping 'Contract part', dropping 'Frontmatter contract'.
+[graphify] note: node 'references_parts_doctor' was extracted twice from 'references/parts/doctor.md' under different labels — keeping 'Install check', dropping 'Doctor part table'.
+[graphify] note: node 'references_parts_master' was extracted twice from 'references/parts/master.md' under different labels — keeping 'Master part', dropping 'Master boards'.
+[graphify] note: node 'references_parts_memos' was extracted twice from 'references/parts/memos.md' under different labels — keeping 'Memos part', dropping 'Memos — what was decided'.
+[graphify] note: node 'references_parts_view' was extracted twice from 'references/parts/view.md' under different labels — keeping 'The view', dropping 'View part'.
+[graphify] note: node 'references_parts_order' was extracted twice from 'references/parts/order.md' under different labels — keeping 'Order part', dropping 'Weight and order'.
+[graphify] note: node 'references_parts_derived' was extracted twice from 'references/parts/derived.md' under different labels — keeping 'Derived work', dropping 'Derived PRDs part'.
+[graphify] note: node 'references_parts_round' was extracted twice from 'references/parts/round.md' under different labels — keeping 'Round part', dropping 'The round file'.
+[graphify] note: node 'references_parts_solo' was extracted twice from 'references/parts/solo.md' under different labels — keeping 'Solo part', dropping 'Without parallel workers'.
+[graphify] note: node 'references_parts_commits' was extracted twice from 'references/parts/commits.md' under different labels — keeping 'Commits part', dropping 'Commits — one PRD, one commit'.
+[graphify] note: node 'references_language' was extracted twice from 'references/language.md' under different labels — keeping 'Language', dropping 'Language reference'.
+[graphify] note: node 'references_files' was extracted twice from 'references/files.md' under different labels — keeping 'Files manifest', dropping 'Files reference'.
+ok
+ALL PASS
+OK: probe exit 0, no root leak, no stale mentions, vault has 1381 notes

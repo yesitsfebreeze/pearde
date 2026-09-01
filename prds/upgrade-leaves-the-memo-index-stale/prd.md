@@ -1,5 +1,5 @@
 ---
-state: deferred
+state: analyzing
 origin: derived
 from: seven-closed-probes-drifted-red/init-seeds-a-board-doctor-calls-green
 priority: 0
@@ -9,6 +9,7 @@ repo:
 needs:
 footprint:
   - resources/board/init.py
+claim: analyst-upgrade-leaves-the-memo-index-stale 2026-09-01 23:58
 ---
 
 # upgrade-leaves-the-memo-index-stale — `init` now regenerates the memo kind-index and `upgrade` still does not, so an upgraded board fails the check a fresh one passes

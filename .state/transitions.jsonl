@@ -227,3 +227,13 @@
 {"calls": 1, "from": "specced", "prd": "seven-closed-probes-drifted-red/init-seeds-a-board-doctor-calls-green", "reads": 0, "refused": 0, "t": "2026-09-01T15:12:09", "to": "claimed", "tokens": 0}
 {"from": "claimed", "prd": "seven-closed-probes-drifted-red/init-seeds-a-board-doctor-calls-green", "t": "2026-09-01 15:57", "to": "done"}
 {"from": "open", "prd": "seven-closed-probes-drifted-red", "t": "2026-09-01 15:59", "to": "done"}
+{"calls": 138, "from": "deferred", "prd": "upgrade-leaves-the-memo-index-stale", "reads": 3, "refused": 1, "t": "2026-09-01T23:52:22", "to": "open", "tokens": 1719}
+{"calls": 5, "from": null, "prd": "filing-refuses-a-file-it-does-not-hold", "reads": 0, "refused": 0, "t": "2026-09-01T23:53:55", "to": "open", "tokens": 0}
+{"calls": 1, "from": null, "prd": "the-brief-names-the-verdict-line-collect-requires", "reads": 0, "refused": 0, "t": "2026-09-01T23:53:58", "to": "open", "tokens": 0}
+{"calls": 1, "from": null, "prd": "four-stale-self-tests-are-re-aimed-at-the-code-that-moved", "reads": 0, "refused": 0, "t": "2026-09-01T23:54:01", "to": "open", "tokens": 0}
+{"calls": 1, "from": null, "prd": "the-harness-sweep-is-capped-so-a-red-is-a-real-red", "reads": 0, "refused": 0, "t": "2026-09-01T23:54:04", "to": "open", "tokens": 0}
+{"calls": 4, "from": "open", "prd": "the-harness-sweep-is-capped-so-a-red-is-a-real-red", "reads": 0, "refused": 0, "t": "2026-09-01T23:54:55", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "filing-refuses-a-file-it-does-not-hold", "reads": 0, "refused": 0, "t": "2026-09-01T23:54:55", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-brief-names-the-verdict-line-collect-requires", "reads": 0, "refused": 0, "t": "2026-09-01T23:54:55", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "four-stale-self-tests-are-re-aimed-at-the-code-that-moved", "reads": 0, "refused": 0, "t": "2026-09-01T23:54:55", "to": "analyzing", "tokens": 0}
+{"calls": 86, "from": "open", "prd": "upgrade-leaves-the-memo-index-stale", "reads": 4, "refused": 1, "t": "2026-09-01T23:58:23", "to": "analyzing", "tokens": 0}

@@ -1,90 +1,67 @@
-# Where things stand
+# The board — where it stands
 
-**Everything you asked for is finished.** Sixty-four pieces of requested work,
-all done, nothing open, nothing waiting on you. Three things are parked by
-choice and described at the bottom; none of them blocks anything.
+*2026-09-01*
 
-## What finished today
+**Everything you asked for is finished — sixty-four of sixty-four pieces, with
+nothing open and nobody working on anything right now.** The health check is
+green again after one stale index was rebuilt today. But the board's own
+self-tests are not all green, and that is worth a minute of your time: five of
+them fail, and four of those five are tests pinned to code that has since moved
+on. The fifth was this page.
 
-Two pieces of work landed, and both took longer than they should have for the
-same reason, which is worth telling you about because it changed how the board
-now works.
+## Planned
 
-The first was a fault in the health check. Run it in a stripped-down shell —
-the kind a scheduled job or a container gives you — and it stopped dead
-partway through, silently, leaving twelve of its rows unprinted. The cause was
-one line reading the user's home directory without checking whether there was
-one. That part was diagnosed correctly on the first attempt and the fix was
-right.
+Three repairs that need no decision from you. They are small, and each is
+waiting only for the next piece of work that opens the same file.
 
-What took three attempts was proving it. The first report claimed the job was
-done against a test that could not fail: the person who wrote the code also
-wrote the test, and wrote it to check that a particular sentence was absent
-from a message they had themselves chosen not to write. It passed because
-nothing could have made it fail. We refused it. The second attempt rewrote the
-test properly, but fixed the underlying behaviour by calling out to Python —
-and in exactly the stripped-down environments this work exists to serve,
-Python often is not there. A reviewer broke it in ten minutes. The third
-attempt solved it with a shell builtin that needs nothing installed at all, and
-that one held up under everything we could throw at it.
+- **Re-aim four self-tests that no longer match the code** — each was written
+  to guard something real, then the thing it guarded was deliberately changed
+  and the test was never updated. They now fail for being out of date rather
+  than for finding anything, which is the worst state for a test to be in: it
+  cries wolf, and the next person learns to ignore it.
+- **Delete a duplicated half-sentence from the written instructions** handed to
+  everyone who takes on a piece of work. An edit some weeks ago replaced a line
+  and left the old one behind, so the instructions now repeat themselves
+  mid-thought.
+- **Close a note that records a problem already solved.** It is the only note
+  on file still marked as needing your decision, and the crash it describes was
+  fixed some time ago. Left as it is, it will send someone back to you with a
+  question that no longer exists.
 
-The second piece was setting up a new board so that the health check passes on
-it from the first minute. That one went more smoothly, partly because the
-lesson above was written down first: the person doing the work was told to
-attack the tests rather than re-run them, and found a real fault nobody had
-spotted — a failure during setup that was being swallowed, so the command
-reported success while leaving the board broken. That is now fixed and proven.
+## In work
 
-## What changed about how the work gets checked
+Nothing is being worked on right now. The last two pieces landed earlier today
+and the board has been idle since.
 
-Four rules came out of the above and are now on the record:
+## Undecided or failing
 
-- A test counts as evidence only if someone has watched it fail. Not "could
-  fail in principle" — actually seen red, with the failure quoted.
-- Work checked only by the person who wrote it is not checked. A second pass
-  that re-runs the first pass's own tests proves nothing.
-- A test that skips itself says "skipped", and a skip is never counted as a
-  pass. We found one quietly counting itself as a pass when it stood aside.
-- A check whose result depends on what else happens to be running is not
-  evidence. Several tests were fighting over the same network ports and going
-  green or red by luck.
+Five things need your answer. They are being put to you as a set, so you can
+settle them in one sitting.
 
-These are already paying for themselves — the second piece of work above found
-a genuine fault precisely because the person was held to them.
+- **Setting up versus upgrading** — creating a new board leaves it healthy;
+  bringing an existing one forward skips a step and leaves it failing a check a
+  new board passes. Fix it, leave it parked, or drop it?
+- **Filing work can quietly lose a file** — when work is filed away you can
+  name extra files to include, and any it cannot find are dropped without a
+  word while the record still claims they went in. This has happened twice, and
+  once it left a finished piece unfiled. Refuse to file at all in that case,
+  warn out loud, or leave it?
+- **The instructions omit something the filing tool demands** — a write-up that
+  follows the written instructions exactly gets refused, and it only works
+  today because whoever hands out the job remembers to add the missing bit
+  every time. Fix the instructions, loosen the tool, or leave the reminder?
+- **Four self-tests guard code that changed underneath them** — bring each back
+  in line with how things work now, retire the ones whose point has passed, or
+  leave them failing as a reminder?
+- **The self-test run is decided partly by luck** — all forty-eight tests are
+  launched at once and several compete for the same network ports, so four of
+  today's nine failures were collisions rather than faults. Run them a few at a
+  time so the result means something, have each stand aside when its port is
+  busy, or accept the noise?
 
-## Two rough edges in the tooling itself
+Set aside for now: the upgrade gap above, and two older items on where test
+code lives and how snapshots are folded together, both untouched.
 
-Both are recorded, neither is fixed, and you may want to know about them.
-
-The command that files finished work will accept a list of extra files to
-include, quietly ignore any it cannot find, and then write a commit message
-that names them anyway. That happened once today: a commit describes ten files
-it does not contain. The files were re-filed correctly straight afterwards, but
-a record that claims something the archive does not hold is the kind of thing
-worth fixing rather than remembering. A related version of the same fault left
-one finished file uncommitted; it was caught and filed by hand, with an
-explanation attached.
-
-Separately, one of the older test scripts prints a column of zeroes instead of
-its real counts, because of a formatting mistake. Three people worked around it
-today rather than fixing it, each spending time rediscovering that the zeroes
-mean nothing.
-
-## Parked, and why
-
-- **Setup versus upgrade.** Creating a new board now leaves it healthy;
-  bringing an *existing* board forward still misses one step and leaves it
-  failing the same check. It is a one-line fix and the proof around it is the
-  real work. Parked rather than started, because it is beyond what you asked
-  for and the choice to spend time on it is yours.
-- **Two older items** on where test code lives and how snapshots are folded
-  together, both untouched and both still parked from before.
-
-## One thing outside our control
-
-Another session working in the same checkout installed a browser-testing
-package this afternoon. Its files are not tracked, which makes one of the
-project's own consistency checks report 115 problems and turns three unrelated
-status lines red. None of it is caused by the work above, and it was verified
-line by line that none of the 115 complaints names any file this work touched.
-It will clear when that session finishes or the files are ignored deliberately.
+One thing outside our control: another session working in this same checkout
+has a half-finished browser-testing install, so the two browser tests cannot
+run. Nothing here depends on them.

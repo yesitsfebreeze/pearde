@@ -1,186 +1,135 @@
-# Round — the board is DRAINED: 64/64 requested done, 100%, nothing open
+# Round — the five answers became board state; five analysts are out
 
-Written by session `5ba5c4b5`, 2026-09-01. **The concurrency question was
-settled by the user: this was the only round worker. `pearde-eb` stood down;
-`pearde-19` is not to be waited on.**
+Written by session `f54db065`, 2026-09-02, resuming the previous round's
+`ASK`. **The user answered all five forks of `.pearde/.state/ask.md`, every
+answer was the recommended one, and this round turned all five into work on
+the board.** The board is no longer drained.
 
-`done 64/64 · 100% · derived 19/19 · open 0/86 · ready 0 · blocked 0`.
-Parked: `probe-code-lives-in-the-prd-folder`, `snapshots-fold-to-one-row`,
-`upgrade-leaves-the-memo-index-stale` (filed this round).
+`done 64/68 · 94% · derived 19/20 · open 1/90 · analyzing 4`. Four analysts
+dispatched; `upgrade-leaves-the-memo-index-stale` left `open` and unclaimed
+for the next window.
 
-## What landed
+## The five answers, and what each became
 
-| PRD | verdict | commits |
+| fork | the user said | landed as |
 |---|---|---|
-| `seven-closed-probes-drifted-red/the-doctor-completes-without-a-home` | done, 3rd pass | `ca29535` board / `5ebefc7` code, record `8b7468b` |
-| `seven-closed-probes-drifted-red/init-seeds-a-board-doctor-calls-green` | done | `74f8048` board / `4735940` code, record `308149b` |
-| `seven-closed-probes-drifted-red` (container) | done | record `752af7a` |
-| spec02's orphaned footprint file | committed by hand | `893d01c` |
+| Q1 | *Fix it — bringing a board forward should leave it exactly as healthy as creating one fresh.* | `release upgrade-leaves-the-memo-index-stale open`, then claimed — the parked PRD is back and out with an analyst |
+| Q2 | *Refuse to file at all rather than write a record naming a file it does not hold.* | new PRD `filing-refuses-a-file-it-does-not-hold` p30 |
+| Q3 | *Add it to the instructions, so following them produces something that is accepted.* | new PRD `the-brief-names-the-verdict-line-collect-requires` p30 |
+| Q4 | *Bring each one back in line with how things work now, so a failure means something again.* | new PRD `four-stale-self-tests-are-re-aimed-at-the-code-that-moved` p20 |
+| Q5 | *Run them a few at a time, so a failure is always a real one.* | new PRD `the-harness-sweep-is-capped-so-a-red-is-a-real-red` p40 |
 
-Seven memos on the board, `memo index` regenerated, `memo check` green.
-`probe-then-spec` at `runs: 30` with its five atomics at 50/50/30/50/27;
-four `## Fails when`/`## Done when` edits applied verbatim across two rounds;
-`workflow check` green.
+Each of the four new PRDs carries the previous round's verified mechanism in
+its body, with the line numbers and the 23:20/23:26 timestamps on it, plus the
+fork the user rejected written as an explicit non-goal. **The analysts do not
+need to re-establish any of it** — the bodies say so in as many words.
 
-## The two refusals, so nobody relitigates them
+Three folds were made deliberately at filing time, and the next round must not
+undo them:
 
-**`the-doctor-completes-without-a-home` took three implementer passes.**
-`doctor.sh:334` read `$HOME` bare under `set -u`, ending the script and
-stopping the twelve rows below `vault` from printing. The diagnosis was right
-on pass one; the *proof* took three.
+- The **duplicated half-sentence at `references/parts/workers.md:155-156`** is
+  folded into Q3's PRD, not filed separately — it is the same file and there
+  is no second reading to choose between. *(Confirmed live this round: it is
+  visible at lines 9-10 of every analyst brief `pearde brief` generates.)*
+- The **`init-seeds-a-board-doctor-calls-green` TOCTOU** (`probe/verify.sh:35`
+  binds port 0 and closes the socket before use) is in **Q5's** PRD, not Q4's.
+  It is a port race, not a stale check. Q4's body says so explicitly so it is
+  not fixed twice.
+- The **vacuous sibling checks** — *"the real registry is untouched"* in both
+  `collect-is-a-command` and `init-asks-nothing`, comparing empty to empty
+  against the vanished `resources/board/state/serve.json` — are in Q4's scope.
+  Re-aiming only the loud check leaves the harness green and blind.
 
-- Pass one wrote the code, the probe, the boxes and the proof block. Pass two
-  re-ran those four artefacts against each other and reported 8/8. **Box 3
-  asserted the ABSENCE of a sentence its own author had chosen not to write** —
-  it could not fail. Refused; boxes 3 and 5 unticked by the orchestrator.
-- Pass two replaced `OBSHOME="${HOME:-}"` with `getpwuid` **through `python3`**.
-  A skeptic falsified box 3 in ten minutes with a PATH edit: same fixture
-  board, no `python3`, with-HOME read `broken` and scrubbed read `ok`. The uid
-  resolved fine; the interpreter was absent — and `env -i`, launchd and
-  containers are exactly the thin-PATH cases, with macOS `/usr/bin/python3` a
-  stub that exits non-zero without the Command Line Tools. Refused again.
-- **Pass three closed it at the layer that removes the dependency:**
-  `OBSHOME=$(unset HOME; echo ~)`, a bash builtin reading the passwd database
-  under `set -u` with no PATH and no interpreter. The `unset HOME` is
-  load-bearing — `~` follows `HOME` when `HOME` is set-but-empty, one of the
-  two cases that triggers the fallback. `python3` demoted to second fallback;
-  the last-resort arm reports **`broken`**, never `ok`.
+`the-collect-and-brief-harnesses-are-carried-across-the-layout` is downstream
+arithmetic over `collect-is-a-command` and is named a non-goal in Q4's body:
+fix the sibling and it clears itself.
 
-The skeptic could not falsify it again: four PATH shapes (stub exiting 1, thin
-PATH, empty bin dir, no PATH at all) all MATCH `broken`/`broken`. `/bin/dash`
-returns a literal `~` and `/bin/zsh` empty, both caught by the
-`[ "$OBSHOME" = "~" ]` guard — **that guard is load-bearing, not decorative.**
+## The one constraint that is not ours to relax
 
-**`init-seeds-a-board-doctor-calls-green` was pre-ticked by its analyst** —
-`collect` warned `8 of 8` and `7 of 7` boxes already ticked before an
-implementer ran them. The implementer was dispatched told to **attack, not
-re-run**, citing the memo. It found a real defect the analyst missed:
-`index_memos` swallowed a failing `memos.py index`, so `init` exited 0 while
-the board landed `memos broken`. Fixed, new box, 5 probe checks, seen red under
-M5/M6/M7. It also re-derived the pre-fix quickstart count from a `git clone` at
-`5ebefc7` rather than inheriting it: `31 · 30 · 1 fail` → `37 · 37 · 0 fail`.
+Two of Q4's four stale checks pin **the view session's deliberate changes** —
+`render.py:459` (`eaa11a1`) and `view.css:508` (`4ce11ec`). Q4's body forbids
+editing either file to satisfy a check: the check moves to the code, never the
+reverse, and a change that looks necessary there is a QUESTION, not an edit.
+The view / ⌘K session owns those files. If an analyst comes back wanting to
+touch them, that is a fork for the user, not an override.
 
-## The rules that came out of it — all on the board as memos
+## Five claims out — resume, never replace
 
-- `one-author-is-not-an-accepted-spec.md` — **a box is ticked only against a
-  predicate that has been seen fail.** Seen red, quoted, not "could fail".
-- `a-check-decided-by-scheduling.md` — a harness binding a fixed port is not
-  evidence until it claims it or fails loudly, and **a stood-down check reports
-  `skip`, never a pass.**
-- `a-report-must-say-verdict.md` — `collect.py:254` demands the literal word
-  `Verdict:` in the first 40 lines; `workers.md` and `templates/` hold it zero
-  times. **Every dispatch must carry the requirement in its prompt** until the
-  templates are fixed.
-- `a-crashing-checker-reads-as-a-failing-check.md` — doctor renders a checker's
-  traceback as the board's own failure. Run a red row's checker directly.
-- `also-drops-a-path-it-cannot-find.md` — see below.
-- `a-probe-that-prints-no-count.md` — the container's `run-all.sh` uses
-  `printf "" "$out"` twice; every row reads `pass=0 fail=0`, every FAIL excerpt
-  is empty, and only the exit code carries information.
-- `a-container-cannot-reach-done.md`, and the rest, predate this round.
+| PRD | worker id |
+|---|---|
+| `the-harness-sweep-is-capped-so-a-red-is-a-real-red` | `analyst-the-harness-sweep-is-capped-so-a-red-is-a-real-red` |
+| `filing-refuses-a-file-it-does-not-hold` | `analyst-filing-refuses-a-file-it-does-not-hold` |
+| `the-brief-names-the-verdict-line-collect-requires` | `analyst-the-brief-names-the-verdict-line-collect-requires` |
+| `four-stale-self-tests-are-re-aimed-at-the-code-that-moved` | `analyst-four-stale-self-tests-are-re-aimed-at-the-code-that-moved` |
+| `upgrade-leaves-the-memo-index-stale` | `analyst-upgrade-leaves-the-memo-index-stale` |
 
-## Tooling traps a later round WILL hit
+Each analyst was fenced to its own files at dispatch, so the five do not
+collide: `resources/doctor.sh` + the port-racing harnesses (Q5),
+`resources/board/collect.py` (Q2), `references/parts/workers.md` (Q3), four
+stale harness checks (Q4), `resources/board/init.py` (Q1). Every one was told
+the mechanism is already established and is not to be re-derived, and was
+handed the fork the user rejected as an explicit non-goal.
 
-1. **`--also` resolves against the caller's cwd, not the board.** A board file
-   needs its `.pearde/` prefix (`--also .pearde/memos/foo.md`), even though
-   every other board command takes board-relative paths and `--widen` on the
-   same command resolves against the board root. A path it cannot find is
-   **silently dropped** and the commit message still names it: `ca29535` names
-   ten files it does not contain. They were re-filed on `74f8048`.
-2. **A spec's own `footprint:` has the same trap and is not checked either.**
-   spec02 spelled its path `.pearde/prds/...`; `repo_of` sent it to the code
-   repo where the board worktree is ignored, so it landed in neither commit and
-   the PRD went `done` with its deliverable on the floor. Committed by hand at
-   `893d01c` with the reason in the message.
-3. **`close_container()` (`collect.py:1227`) never reads `opts["also"]`** — a
-   container collect accepts `--also` and silently ignores it, so an orphan
-   cannot ride the parent.
-4. **After any collect: `git show --stat` the commits AND `git status` the
-   board.** A clean `--also` list is not a clean tree.
-5. **A worker killed by infrastructure is RESUMED, not replaced.** The init
-   analyst died on `API Error: Your computer went to sleep mid-response`; a
-   `SendMessage` to its agent id brought it back with 78 tool calls of context,
-   told to re-establish the tree and check the interrupted write landed whole.
-   Count API errors before and after a resume — do not just grep for the string,
-   the historical one stays in the transcript.
-6. **`brief` on a claimed PRD** takes `--worker <the claim's id>`.
-7. **SPECCED commits nothing** — riders cannot travel on it.
-8. **sonnet 402s, bare inherit 429s, opus works.** Pin `model: "opus"`.
-   Worker clocks run ~15 min fast; trust commits and `stat`.
+All five were confirmed alive after dispatch and again mid-run — transcripts
+growing, `API Error` count 0 on each. Their briefs are staged at
+`/private/tmp/claude-501/-Users-feb-dev-infra-pearde/f54db065-9498-4db2-b176-a7f14d5ea4b5/scratchpad/brief-<slug>.txt`;
+regenerate rather than reuse if that scratch is gone.
+
+This file names all four, so `sweep --apply` leaves them. A worker its
+infrastructure killed is **resumed**, not swept — it holds the context.
+`brief` on a claimed PRD takes `--worker <the claim's id>`, which is the row
+above.
+
+## Carried, uncommitted, and still owed
+
+`.pearde/report.md` and this file are modified in the board worktree and NOT
+committed — the previous round rewrote the report to contract
+(`references/report.md` + `templates/report.md`), taking
+`one-page-that-says-whats-up` from `26 pass · 5 fail` to `29 pass · 2 fail`.
+Both are tracked; `.state/ask.md` is ignored. **Carry them on the first
+collect that opens.**
+
+`memos/one-typo-crashes-every-round.md` is the only memo at `status: open` and
+is **stale, not undecided** — it describes a non-numeric `complexity` crashing
+`scan` board-wide, and that crash is fixed: `spec_data` is `plan.py:479` and
+reads `num(fm, "complexity", where) or dur(…)`; `num` at `:733` is documented
+*"Never raises"* and returns `0.0` after `bad_value()`. **It wants closing,
+not answering.** Close it on the next collect that opens the memo dir.
 
 ## Owed, none of it blocking
 
-- **`upgrade-leaves-the-memo-index-stale`** — filed `deferred` this round.
-  `cmd_upgrade` shares `plant_graph` with `cmd_init` but not `index_memos`, so
-  an upgraded board keeps a stale index and fails the check a fresh one passes.
-  One line closes the behaviour; the proof is the work. **Not `open` by
-  default** — @references/parts/derived.md. The user's call.
-- **`spec01` box 8 of the init PRD needs an existence anchor** — the skeptic
-  found all four of its checks pass over a directory `init` never touched
-  (`doctor` prints 16 rows over a real empty board and 7 over a boardless one,
-  so one line closes it). It is green for the right reason today and IS
-  falsifiable, so it was not a withhold — but it is the vacuous shape this
-  board has now refused twice. Take it in the next pass that opens that file.
-- **`memos.py index` could in principle print a path it did not write** and
-  `init` would claim success. Not reachable (`write_index` writes a `.tmp`,
-  `os.replace`s, then returns the path), but a one-line `os.path.exists` before
-  claiming would harden it.
-- **`ignore_patterns("README.md")` is directory-blind** — it ate
-  `memos/README.md` and will eat any future `README.md` at any depth.
-- **`resources/index.py` does not ignore an untracked `node_modules/`** — see
-  below. A real question for whoever owns that drop.
-- **`doctor.sh:743` analyst hunk adopted** — carried from four rounds back,
-  still unwritten and still unexplained. Establish what it was before writing.
-- **`doctor --harnesses` has no job cap** (`doctor.sh:722`) — 47 harnesses at
-  once. `the-gate-runs-the-harnesses` is green standalone at `57/57` and red
-  only inside the sweep, which is this and not a real failure.
+`a-probe-that-prints-no-count` (`run-all.sh` `printf "" "$out"` twice — every
+row reads `pass=0 fail=0`). `spec01` box 8 of the init PRD wants an existence
+anchor. `memos.py index` could print a path it did not write. graph-probe
+spec02 check A is a spelling-grep and its `prd.md` is still the unfilled
+template. The `18`-row doctor tripwire lives in two committed harnesses.
+`reportParts()` in view.js parses 3 of 4 parts. `doctor.sh --harnesses .`
+renders the board name `?` from a relative path.
 
-## A neighbour's red, not the board's
+## Settled — cite, do not re-establish
 
-A sibling session installed playwright at ~13:56. `resources/board/node_modules/`
-is untracked, so `index.py check` prints **115 lines and exits 1**, `doctor .`
-ends "something is installed and not working" on `index broken · 115 problems`,
-and the gate reads `57 · 55 pass · 2 fail`, both failures downstream of that one
-row. Verified line by line: lines NOT naming
-`node_modules/`/`package.json`/`package-lock.json` = **0**; lines naming
-`init.py`, `memos.py` or `knowledge.py` = **0**. It clears when that session
-finishes or the path is ignored deliberately.
+- `doctor` exits 0; `knowledge` was fixed last round by
+  `python3 resources/knowledge.py relink` (11 nodes, 14 edges). `graph.json`
+  is gitignored.
+- `doctor.sh:46` is verbatim `START="${1:-$PWD}"` under `set -uo pipefail`
+  (`:33`) — correct as recorded, low risk.
+- **Retired, do not carry forward**: the `ignore_patterns("README.md")`
+  consequence (already fixed — `index_memos()` at `init.py:349` regenerates
+  after the copy); the `doctor.sh:743` "analyst hunk adopted" claim (never
+  true — `:700-798` landed whole in `7809756`); the node_modules paragraph.
+- `.state/round.HANDOFF-collect1-will-fail.md` — the alarming name is stale
+  and the file says so. Ignore it.
 
-## Carry-over findings, unactioned
+## Sessions and traps
 
-The view-row harness (`prds/the-view-row-names-a-variable-that-exists/probe/verify.sh`)
-binds hard-coded ports 8477-8479 with no bind check and never initialises
-`SRVPID3`, so its `cleanup()` dies under `set -u` on an early exit and leaks two
-listeners machine-wide — both in `a-check-decided-by-scheduling.md`, both
-one-line fixes, to be folded into the next PRD that legitimately opens that
-file. It also leaks three `Terminated: 15` lines past its `6/6/0` summary.
-A harness four directories deep hard-codes its `..` chain — the doctor probe
-walks up to the directory holding `resources/doctor.sh` instead, worth
-generalising. graph-probe spec02 check A is a spelling-grep, not semantic, and
-graph-probe's `prd.md` is still the unfilled template. Narrow the fixtures
-`clean()` filter now that parse-cache is ignored. Sweep restarts the live view
-daemon. `doctor.sh --harnesses .` renders the board name `?` from relative
-paths. `reportParts()` in view.js parses 3 of 4 parts. One-page harness lives in
-a git-ignored probe dir. `START="${1:-$PWD}"` at doctor.sh:46 reads `$PWD` bare
-and survives only because bash sets it at startup. The `18`-row doctor tripwire
-now lives in two committed harnesses, so adding a doctor row reddens both.
-A thin-PATH fixture loop that symlinks `command -v` output leaves a
-self-referential `printf -> printf` — harmless for builtins, silently lossy if
-`echo` or `test` is ever added to such a list.
+`jstests` is `off` because *its* `playwright-core` is missing, not our doing.
+`pearde-eb` and `pearde-19` are stood down. The view / ⌘K session's files are
+not ours.
 
-**Settled and stale**: `.state/round.HANDOFF-collect1-will-fail.md` — its
-alarming name is stale and the file itself says so. Ignore it.
-
-## Sessions live on this tree
-
-- **the view / ⌘K search-palette session** — live and broad:
-  `resources/board/render.py`, `view.css`, `viewtest.js`, `edit.py`, `serve.py`,
-  `questions.py`, `references/drill.md`, `references/parts/doctor.md`,
-  `references/parts/view.md`, `references/templates/prd.md`, and the playwright
-  install. Notes at `.state/round.ck-search-palette.md` and
-  `.state/round.board-modal.md`. **None of those are ours.**
-- **memo/`.state`-move session** — finished; `6c1023f`, `e15dd0c` and the
-  `MACHINE_DIR` → `LEGACY_MACHINE_DIR` refactor are committed.
-- **`pearde-eb`** — stood down. Durable fact: **run collects serially**; census
-  reds during overlapping full-board sweeps are contention, not code.
-- **`pearde-19`** — its "land the collect" conclusion is superseded twice over.
+Traps that still hold: `--also` needs the `.pearde/` prefix **until Q2's PRD
+lands** — after which a bad path is refused outright, which is the point; a
+spec's own `footprint:` has the same trap and is still not checked; after any
+collect `git show --stat` the commits AND `git status` the board; SPECCED
+commits nothing; **sonnet 402s, bare inherit 429s, pin `model: "opus"`**;
+every board command needs a persona — `PEARDE_AS=engineer`, or `sweep`
+refuses.

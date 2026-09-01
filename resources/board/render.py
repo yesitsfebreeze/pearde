@@ -428,37 +428,39 @@ __CSS__</style>
     ><a href="#view=report" data-v="report">report</a>
   </nav>
   <div class="right">
+    <button id="ksopen" class="ksbar" title="search everything (⌘K)"
+      ><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"
+      ><circle cx="5" cy="5" r="3.6" fill="none" stroke="currentColor"
+        stroke-width="1.5"/><path d="M7.8 7.8 11 11" stroke="currentColor"
+        stroke-width="1.5" stroke-linecap="round"/></svg
+      ><span>Search</span><kbd>⌘K</kbd></button>
     <button id="newprd" class="primary" title="write a PRD (N)">＋ PRD</button>
   </div>
 </header>
-<pearde-now id="now" aria-label="what the board wants now"></pearde-now>
 <div class="seam" id="seam-toolbar"></div>
+<button id="statetab" class="edgetab tleft"
+  title="the board's state — the report, the purpose, what wants you (s)"
+  aria-controls="state" aria-expanded="false">
+  <span class="lbl">state</span><b class="tabn hot" id="staten" hidden></b>
+</button>
+<aside id="state" aria-label="the board's state">
+  <div class="shd">
+    <h2>the board</h2>
+    <button id="sclose" title="close (Esc)">✕</button>
+  </div>
+  <div class="sbody">
+    <pearde-now id="now" aria-label="what the board wants now"></pearde-now>
+    <pearde-whatsup id="whatsup" aria-label="what's up"></pearde-whatsup>
+    <div id="purpose"></div>
+    <button class="act" data-go='{"view":"report"}'>the report, in full</button>
+  </div>
+</aside>
 <section data-view="timeline" id="s-timeline" class="on">
-<pearde-whatsup id="whatsup" aria-label="what's up"></pearde-whatsup>
-<h2 class="sect">the plan</h2>
-<div id="purpose"></div>
-<div class="bar-controls" id="tcontrols">
-  <span class="seg">
-    <button id="mVision" data-m="vision">vision</button
-    ><button id="mDates" data-m="dates">dates</button>
-  </span>
-  <label class="lab" for="grp">group</label>
-  <select id="grp"></select>
-  <label class="lab" for="zsel">view</label>
-  <select id="zsel" title="how the plan is framed — default (d) is now at the left edge, the vision at the right, every row on the screen"></select>
-  <span class="seg">
-    <button id="zo" title="zoom out (−)">−</button>
-    <button id="zi" title="zoom in (+)">+</button>
-  </span>
-  <button id="namestog" title="task names: on the bars, or in a column of their own (t)">names</button>
-  <button id="ce" title="collapse every group or branch">collapse all</button>
-  <input type="search" id="q" placeholder="filter  /" autocomplete="off">
-  <button id="onlycrit" title="only the tasks that set the finish">critical</button>
-  <button id="onlyready" title="only what is dispatchable now">ready</button>
-  <button id="onlycollect" title="only finished work waiting to be closed">collect</button>
-  <button id="landtog" title="focus: what to collect, what to dispatch, what to land (L)">focus</button>
-</div>
-<span id="inview"></span>
+<button id="landtog" class="edgetab tright"
+  title="focus — what to collect, what to dispatch, what to land (l)"
+  aria-controls="land" aria-expanded="false">
+  <span class="lbl">focus</span><b class="tabn got" id="focusn" hidden></b>
+</button>
 <div id="stage">
   <div id="chart">
     <canvas id="mini" aria-hidden="true"></canvas>
@@ -490,11 +492,34 @@ __CSS__</style>
         </div>
         <div id="empty"></div>
       </div>
+      <div id="rowtools">
+        <select id="grp" title="group the rows"></select>
+        <button id="namestog" title="task names: on the bars, or in a column of their own (t)">names</button>
+        <button id="ce" title="collapse or expand every group or branch">fold</button>
+      </div>
+    </div>
+    <div id="tcontrols">
+      <span class="seg">
+        <button id="mVision" data-m="vision">vision</button
+        ><button id="mDates" data-m="dates">dates</button>
+      </span>
+      <select id="zsel" title="how the plan is framed — default (d) is now at the left edge, the vision at the right, every row on the screen"></select>
+      <span class="seg">
+        <button id="zo" title="zoom out (−)">−</button>
+        <button id="zi" title="zoom in (+)">+</button>
+      </span>
+      <span class="fsep"></span>
+      <input type="search" id="q" placeholder="filter  /" autocomplete="off">
+      <button id="onlycrit" title="only the tasks that set the finish">critical</button>
+      <button id="onlyready" title="only what is dispatchable now">ready</button>
+      <button id="onlycollect" title="only finished work waiting to be closed">collect</button>
+      <span class="fsep"></span>
+      <div id="legend"></div>
+      <span id="inview"></span>
     </div>
   </div>
   <pearde-frontier id="land" aria-label="waiting to land in main"></pearde-frontier>
 </div>
-<div id="legend"></div>
 <div id="note"></div>
 </section>
 <section data-view="board" id="s-board">

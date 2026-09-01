@@ -181,16 +181,18 @@ const file = served ? arg : path.resolve(arg);
         return !!t && !!t.querySelector("#legend *");
       })(),
       whatsup: !!document.querySelector("pearde-whatsup"),
-      whatsupAbovePlan: (() => {
-        const w = document.querySelector("pearde-whatsup");
-        const stage = document.querySelector('section[data-view="timeline"] #stage');
-        return !!w && !!stage && (w.compareDocumentPosition(stage) &
-                                  Node.DOCUMENT_POSITION_FOLLOWING) !== 0;
+      // the prose lives in the state panel now, behind the left edge tab —
+      // the plan keeps the viewport, the words keep their reading measure
+      statePanel: (() => {
+        const s = document.querySelector("#state");
+        return !!s && !!s.querySelector("pearde-whatsup") &&
+               !!s.querySelector("#purpose") && !!s.querySelector("#now") &&
+               !!document.querySelector("#statetab");
       })(),
       tcontrolsInside: !!document.querySelector(
         'section[data-view="timeline"] #tcontrols'),
-      purposeInside: !!document.querySelector(
-        'section[data-view="timeline"] #purpose'),
+      focusTab: !!document.querySelector(
+        'section[data-view="timeline"] #landtog'),
     };
   });
   const ORDER = ["timeline", "board", "analytics", "asks", "list", "memos",
@@ -205,11 +207,11 @@ const file = served ? arg : path.resolve(arg);
                page1.emptyHosts.length ? "empty frames: " + page1.emptyHosts.join(" ") : ""]);
   checks.push(["the timeline's legend drew",
                page1.timelineDrew, ""]);
-  checks.push(["the prose section is the first thing above the plan",
-               page1.whatsup && page1.whatsupAbovePlan, ""]);
-  checks.push(["the plan's toolbar is inside the plan's section",
+  checks.push(["the state panel holds the doors, the prose and the vision line",
+               page1.whatsup && page1.statePanel, ""]);
+  checks.push(["the plan's footer strip is inside the plan's section",
                page1.tcontrolsInside, ""]);
-  checks.push(["the vision line is too", page1.purposeInside, ""]);
+  checks.push(["the focus tab is too", page1.focusTab, ""]);
 
   // narrow: the page must not scroll sideways. Before this PRD it did —
   // `body.scrollWidth` 543 against a 390 client, the bar alone 449.

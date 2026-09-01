@@ -167,6 +167,29 @@ function inkOn(fill) {
    finished and waiting to be taken. It gets its own hue on the chart — the
    same green focus uses, so the bar and the row are one fact. */
 const colOf = t => t.collect && !HOT[t.state] ? T.ok : T[stTok(t.state)];
+
+/* the ink a task's NAME takes: the state's own color, so the titles carry
+   the same signal as the bars — floored for legibility: the graphite ramp's
+   light steps (open, refine, done) are fills, not text, and read as noise */
+function nameInk(t) {
+  const c = colOf(t);
+  const m = /rgba?\([^,]+,[^,]+,[^,]+,\s*([.\d]+)\s*\)/.exec(c);
+  return m && parseFloat(m[1]) < 0.45 ? T.ink2 : c;
+}
+
+/* BOARDHUE — board identity on a master board: a deterministic hue per
+   member name, hashed so it never shifts between loads or themes.
+   DECISION (owner-directed): this deliberately spends hue on a category,
+   overriding the graphite "only state gets color" rule — scoped to
+   member-board identity only: the first ~10% of a bar, the swatch by a
+   board group's label, and the board chip on kanban cards. */
+function boardHue(name) {
+  let h = 0;
+  for (let i = 0; i < name.length; i++)
+    h = (h * 31 + name.charCodeAt(i)) >>> 0;
+  return "hsl(" + (h % 360) + " 55% 45%)";
+}
+const onMaster = () => (DATA.boards || []).length > 0;
 bind(matchMedia("(prefers-color-scheme: dark)"), "change", () => {
   readTokens(); inkCache.clear(); draw(); drawMini(); drawAll();
 });
@@ -708,6 +731,15 @@ function drawBar(x0, w, y, h, c, o) {
     g.addColorStop(1, T.lo);
     ctx.fillStyle = g; ctx.fill();
   }
+  if (o.lead) {
+    // the member board's identity: a short cap on the bar's left end, the
+    // rest of the bar stays the state fill (see BOARDHUE for the decision)
+    const lw = Math.max(6, Math.min(22, w * 0.1));
+    ctx.save();
+    rr(x0, y, w, h, r); ctx.clip();
+    ctx.fillStyle = o.lead; ctx.fillRect(x0, y, lw, h);
+    ctx.restore();
+  }
   const part = o.part === undefined ? -1 : Math.max(0, Math.min(1, o.part));
   if (o.ring && part > 0.001) {
     // a ring is a wall, not work in flight — but a wall whose boxes are
@@ -744,8 +776,14 @@ function drawBar(x0, w, y, h, c, o) {
 function fitFrame() {
   const st = $("stage");
   if (!st.offsetParent) return;
-  st.style.height =
-    Math.max(280, Math.min(720, Math.round(innerHeight * 0.74))) + "px";
+  /* whatever the page holds under the stage — legend, note — measured too,
+     so the plan ends where the page does: at the viewport's bottom edge,
+     on a tall monitor as much as on a short one. Document coordinates, so
+     the height does not breathe while the page is scrolled. */
+  let below = 16, el = st.nextElementSibling;   // air under the last line
+  while (el && el.tagName !== "SECTION") { below += el.offsetHeight; el = el.nextElementSibling; }
+  const top = st.getBoundingClientRect().top + scrollY;
+  st.style.height = Math.max(280, Math.round(innerHeight - top - below)) + "px";
 }
 
 function resize() {
@@ -884,6 +922,7 @@ function draw() {
     }
     drawBar(x0, w, y + (ROW - barH) / 2, barH, colOf(t),
             {ring:stRing(t.state), crit:t.critical, dim:dim,
+             lead:onMaster() && t.board ? boardHue(t.board) : undefined,
              part:t.held && t.boxes && t.boxes[1] ? t.part : undefined});
   }
   if (!LEFT) labels(first, last, rowY, kin);
@@ -926,11 +965,22 @@ function draw() {
              x(d) + 4, 33, T.ink3, F.tick);
     }
   }
-  // the two tags that name the ends of the axis
-  if (mode !== "vision") tag("now · " + new Date().toLocaleDateString(undefined,
-      {weekday:"short", month:"short", day:"numeric"}), x(nowU()), "mid");
-  tag(mode === "vision" ? "vision · " + fmtW(CPM.length) + " of work in front"
+  // the two tags that name the ends of the axis. On a narrow plot the long
+  // labels would slide under the rowtools HUD, so they shed their suffix —
+  // and the now tag yields entirely rather than half-hide under the vision's.
+  const slim = plot.clientWidth < 560;
+  const vspan = tag(mode === "vision" ? "vision · " + fmtW(CPM.length) +
+        (slim ? "" : " of work in front")
       : "vision · " + fmtD(visU()), x(visU()), "end");
+  if (mode !== "vision") {
+    const nl = slim ? "now" : "now · " + new Date().toLocaleDateString(
+      undefined, {weekday:"short", month:"short", day:"numeric"});
+    ctx.font = F.tag;
+    const nw = ctx.measureText(nl).width + 16;
+    let nx = x(nowU()) - nw / 2;
+    nx = Math.max(LEFT + 4, Math.min(nx, plot.clientWidth - nw - 4));
+    if (nx + nw < vspan[0] - 4 || nx > vspan[1] + 4) tag(nl, x(nowU()), "mid");
+  }
   ctx.restore();
   line(LEFT, HEAD, W, HEAD, T.sep);
 
@@ -951,8 +1001,14 @@ function draw() {
       const meta = r.n + " · " + fmtW(r.sum) + (r.ncrit ? " · " + r.ncrit + "★" : "");
       ctx.font = F.meta;
       const mw = ctx.measureText(meta).width;
-      text(fit(r.label || r.key, LEFT - ind - 22 - mw, F.grp),
-           ind + 14, mid, T.ink, F.grp);
+      let gx = ind + 14;
+      if (groupBy === "board" && onMaster()) {   // the member's own hue
+        rr(gx, mid - 4, 8, 8, 3);
+        ctx.fillStyle = boardHue(r.key); ctx.fill();
+        gx += 13;
+      }
+      text(fit(r.label || r.key, LEFT - gx - 8 - mw, F.grp),
+           gx, mid, T.ink, F.grp);
       text(meta, LEFT - 12, mid, T.ink3, F.meta, true);
       continue;
     }
@@ -977,7 +1033,7 @@ function draw() {
     cx += 15;
     // finished work still open on the board: the mark that says "this one is
     // yours to close", and the only glyph on the column that asks for an act
-    if (t.collect) { text("✓", cx, mid, T.accent, F.small); cx += 12; }
+    if (t.collect) { text("✓", cx, mid, T.ok, F.small); cx += 12; }
     else if (t.critical) { text("★", cx, mid, T.ink, F.small); cx += 12; }
     // in flight, the boxes ARE the meta: how much of the contract stands.
     // The weight is already what is left of it, so printing both would
@@ -988,7 +1044,7 @@ function draw() {
     ctx.font = F.meta;
     const mw = ctx.measureText(meta).width;
     text(fit(t.name, LEFT - cx - mw - 20, F.cell), cx, mid,
-         sel ? T.ink : T.ink, F.cell);
+         sel ? T.ink : nameInk(t), F.cell);
     // silent is the one thing in this column that asks for a person
     text(meta, LEFT - 12, mid, t.silent != null ? T.warn : T.ink3, F.meta, true);
     ctx.restore();
@@ -1083,7 +1139,7 @@ function labels(first, last, rowY, kin) {
       rr(lx - 3, mid - lh / 2 + 1, w + 6, lh - 2, 2); ctx.fill();
       ctx.globalAlpha = dim ? 0.45 : 1;
     }
-    const ink = inside ? inkOn(fill) : T.ink;
+    const ink = inside ? inkOn(fill) : nameInk(t);
     text(nm, lx, mid, ink, font);
     text(meta, lx + wn, mid, inside ? ink : T.ink3, font);
     ctx.restore();
@@ -1103,6 +1159,7 @@ function tag(label, atX, align) {
   rr(x0, 4, w, 17, 8.5);
   ctx.fillStyle = T.accent; ctx.fill();
   text(label, x0 + 8, 13, T["accent-ink"], F.tag);
+  return [x0, x0 + w];
 }
 
 /* arrows for the selected row only — never the whole web. The web is what
@@ -1462,7 +1519,7 @@ function showTip(e, t) {
       '<div class="r"><span class="k">boxes</span> ' + t.boxes[0] + "/" +
         t.boxes[1] + " closed" + heldFor(t, true) + "</div>" : "") +
     (t.collect ?
-      '<div class="r"><span class="k">✓ collect</span> every box closed — ' +
+      '<div class="r"><span class="k got">✓ collect</span> every box closed — ' +
         "commit it and set done, and " + (t.downstream || "no") +
         " PRD(s) behind it move</div>" : "") +
     (t.deps.length ? '<div class="r"><span class="k">needs</span> ' +
@@ -1738,9 +1795,18 @@ function fitAll() {
    left edge, then glide the scale with that pixel held, so the anchor is
    true for every frame of the animation rather than only the last one. */
 function fitDefault(snap) {
-  const from = nowU(), to = Math.max(visU(), from + 1e-6);
+  const now = nowU(), to = Math.max(visU(), now + 1e-6);
+  /* a board that is mostly landed shows its gantt in the bars behind the
+     frontier, not in the stub ahead of it — when the frontier sits past the
+     middle of the track the default frames the whole track; while the plan
+     still leads, it frames the question: now at the left edge, vision right */
+  const from = (now - M.lo) / (to - M.lo) > 0.5 ? M.lo : now;
   const w = Math.max(120, plot.clientWidth - LEFT - 16);
-  setRows(100);                        // vertically: all of it, as best it fits
+  /* vertically: all of it, as best it fits — but a fit that lands under read
+     size is not a fit, it is a smear. Below a readable row the rows stop
+     shrinking and the plot scrolls instead. */
+  const onScreen = (plot.clientHeight - HEAD - PAD - 12) / Math.max(1, rows.length);
+  setRows(onScreen < ROW_READ ? 0 : 100);
   scroll.scrollTop = 0;
   const target = w / (to - from);
   if (snap) {
@@ -1941,6 +2007,7 @@ function drawSide() {
 
 function syncToggles() {
   $("landtog").classList.toggle("on", landOpen);
+  $("landtog").setAttribute("aria-expanded", String(landOpen));
   $("onlycrit").classList.toggle("on", critOnly);
   $("onlyready").classList.toggle("on", readyOnly);
   $("onlycollect").classList.toggle("on", collectOnly);
@@ -1978,6 +2045,26 @@ $("landtog").onclick = () => {
   syncToggles(); drawSide();   // the plot's width is now animating; the
                                // ResizeObserver draws every frame of it
 };
+
+/* ── the state panel — the board in words, behind the left edge tab ──────
+   Its mirror is the inspector: a fixed glass sheet, slid in when asked. It
+   holds what used to stand above the plan — the three doors, the report's
+   first paragraphs, the vision line — and its tab wears the waiting count,
+   so a shut panel still says when it is worth opening. A preference, like
+   focus: it outlives the reload. */
+let stateOpen = false;
+try { stateOpen = localStorage.getItem("pearde.state") === "1"; } catch (e) {}
+function setStatePanel(next) {
+  stateOpen = next;
+  try { localStorage.setItem("pearde.state", stateOpen ? "1" : "0"); }
+  catch (e) {}
+  $("state").classList.toggle("open", stateOpen);
+  $("statetab").classList.toggle("on", stateOpen);
+  $("statetab").setAttribute("aria-expanded", String(stateOpen));
+}
+$("statetab").onclick = () => setStatePanel(!stateOpen);
+$("sclose").onclick = () => setStatePanel(false);
+setStatePanel(stateOpen);
 /* ── the board switcher ───────────────────────────────────────────────────
    Every board the daemon watches, under the title of the one you are on. The
    list comes from /status at open time rather than from the payload: the
@@ -2098,6 +2185,13 @@ bind(window, "keydown", e => {
     if (b) { e.preventDefault(); b.click(); }
     return;
   }
+  // ⌘K / ctrl-K — search everything, from anywhere, even out of another
+  // input. Plain shift-K opens it too; lowercase k walks rows.
+  if ((e.metaKey || e.ctrlKey) && (e.key === "k" || e.key === "K")) {
+    e.preventDefault();
+    ksShow();
+    return;
+  }
   if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") {
     if (e.key === "Escape") {
       if (e.target.id === "q") { $("q").value = ""; filter = ""; build(); }
@@ -2109,6 +2203,7 @@ bind(window, "keydown", e => {
   if (e.key === "n" || e.key === "N") { e.preventDefault(); $("newprd").click(); }
   else if (e.key === "/") { e.preventDefault();
     (view === "list" ? $("lq") : $("q")).focus(); }
+  else if (e.key === "K") { e.preventDefault(); ksShow(); }
   else if (e.key === "ArrowDown" || e.key === "j") { e.preventDefault(); move(1); }
   else if (e.key === "ArrowUp" || e.key === "k") { e.preventDefault(); move(-1); }
   else if (e.key === "Enter" && selected) openDrawer(selected);
@@ -2119,6 +2214,7 @@ bind(window, "keydown", e => {
   else if (e.key === "c") $("onlycrit").click();
   else if (e.key === "r") $("onlyready").click();
   else if (e.key === "l") $("landtog").click();
+  else if (e.key === "s") $("statetab").click();
   else if (e.key === "t") $("namestog").click();
   else if (e.key === "x") $("onlycollect").click();
   else if (e.key === "+" || e.key === "=") glide(ppu * 1.4);
@@ -2126,6 +2222,7 @@ bind(window, "keydown", e => {
   else if (e.key === "Escape") {
     if (picksOpen) closePicks();
     else if ($("drawer").classList.contains("open")) closeDrawer();
+    else if (stateOpen) setStatePanel(false);
     else if (anyFilter()) go({clear:1});
     else { selected = null; draw(); }
   }
@@ -2221,6 +2318,12 @@ function drawHeader() {
   const badge = $("askbadge");
   badge.textContent = asks.length;
   badge.classList.toggle("on", asks.length > 0);
+  // the edge tabs wear the two counts that ask for a person: amber for the
+  // asks behind the state tab, green for finished work behind focus
+  const sn = $("staten");
+  if (sn) { sn.textContent = asks.length; sn.hidden = !asks.length; }
+  const fn = $("focusn");
+  if (fn) { fn.textContent = collect.length; fn.hidden = !collect.length; }
   movePill();
   drawNow(); drawWhatsup();
 }
@@ -2240,9 +2343,8 @@ function drawLegend() {
     '<span><i class="crit"></i>critical chain</span>' +
     "<span><b></b>now · vision</span>" +
     '<span class="keys">drag to pan · ctrl+wheel zoom · ' +
-    "<kbd>/</kbd> filter · <kbd>v</kbd> axis · <kbd>c</kbd> critical · " +
-    "<kbd>r</kbd> ready · <kbd>x</kbd> collect · <kbd>t</kbd> names · " +
-    "<kbd>f</kbd> fit · " +
+    "<kbd>/</kbd> filter · <kbd>v</kbd> axis · <kbd>t</kbd> names · " +
+    "<kbd>f</kbd> fit · <kbd>s</kbd> state · <kbd>l</kbd> focus · " +
     "<kbd>↑↓</kbd> select</span>";
 }
 
@@ -2924,7 +3026,8 @@ class PeardeBoard extends LitElement {
       @dragend=${e => e.currentTarget.classList.remove("drag")}
       ><div class="t">${t && t.critical ? html`<span class="star">★ </span>` : ""
       }${r.title || r.name}</div><div class="m">${
-        r.board ? html`<span class="chip">${r.board}</span>` : ""
+        r.board ? html`<span class="chip" style=${"box-shadow:inset 2.5px 0 0 "
+          + boardHue(r.board)}>${r.board}</span>` : ""
       }<span>p${r.prio}</span>${
         r.weight ? html`<span>${fmtW(r.weight)}</span>` : ""}${
         this.served && r.state === "open" && ADAPTERS.length === 1 ? html`<button class="start"
@@ -3364,6 +3467,237 @@ async function drawMemos() {
     : "none on record yet";
 }
 
+/* ── ⌘K — search everything ───────────────────────────────────────────────
+   One search over the board, listed best first. ⌘K (or ctrl-K, or shift-K)
+   opens the overlay from anywhere — including out of another input, which is
+   the whole point of a command palette; typing queries `/search` on the
+   daemon, which walks prds, specs, memos, wiki, workflows, the report and
+   the settings.
+
+   Three ways to match, one box: `re:<pat>` or `/<pat>` greps by regular
+   expression, anything else is a literal substring plus a fuzzy pass over
+   file names. The daemon ranks and the page renders in the order it gets —
+   there is no second opinion here about what a good hit is.
+
+   Enter jumps by the hit's kind: a prd or spec opens the inspector, a memo
+   opens the memos view on that decision, anything the vault also holds opens
+   in Obsidian, which is where those files are read. Light DOM, styled from
+   view.css.                                                                */
+let ksBuilt = false, ksHits = [], ksSel = 0, ksTimer = null, ksQ = "";
+
+function ksBuild() {
+  const d = document.createElement("div");
+  d.id = "ks";
+  d.hidden = true;
+  d.innerHTML = '<div class="ks-back"></div><div class="ks-box">' +
+    '<input id="ksq" type="text" spellcheck="false" ' +
+    'placeholder="search everything — or /regex for a grep">' +
+    '<div id="ks-kinds" class="ks-kinds"></div>' +
+    '<div class="ks-hint"><span id="ks-mode"></span>↑↓ move · Enter jump · ' +
+    'Esc close · <b>/pat</b> or <b>re:pat</b> greps · ' +
+    'a name matches fuzzily</div>' +
+    '<div id="ks-hits" class="ks-hits"></div></div>';
+  document.body.appendChild(d);
+  d.querySelector(".ks-back").onclick = ksClose;
+  const inp = $("ksq");
+  inp.oninput = () => { clearTimeout(ksTimer); ksTimer = setTimeout(ksRun, 180); };
+  inp.onkeydown = e => {
+    // ⌥←/→ steps the kind filter without leaving the box — the palette is
+    // driven from the keyboard, so its filter has to be too
+    if (e.altKey && (e.key === "ArrowLeft" || e.key === "ArrowRight")) {
+      e.preventDefault();
+      const found = [...$("ks-kinds").querySelectorAll(".ks-chip")]
+        .map(c => c.dataset.k);
+      if (found.length < 2) return;
+      const cur = ksKinds.size === 1 ? found.indexOf([...ksKinds][0]) : 0;
+      const nxt = found[(cur + (e.key === "ArrowRight" ? 1 : -1) +
+                         found.length) % found.length];
+      ksKinds.clear();
+      if (nxt) ksKinds.add(nxt);
+      ksKindsDraw();
+      ksRun();
+      return;
+    }
+    if (e.key === "Escape") { e.stopPropagation(); ksClose(); }
+    else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (ksSel < ksHits.length - 1) { ksSel++; ksDraw(); }
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (ksSel > 0) { ksSel--; ksDraw(); }
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      const h = ksHits[ksSel];
+      if (h) ksJump(h);
+    }
+  };
+  ksBuilt = true;
+}
+
+function ksShow() {
+  if (!SERVED) return toast("read-only — search needs the daemon", true);
+  if (!ksBuilt) ksBuild();
+  $("ks").hidden = false;
+  const inp = $("ksq");
+  // the last query and the kind filter both come back — reopening the
+  // palette resumes a search rather than starting one, and the text is
+  // selected so typing still replaces it in one keystroke
+  inp.value = ksQ;
+  inp.focus();
+  inp.select();
+  ksQ ? ksRun() : (ksHits = [], ksSel = 0, ksCounts = {}, ksDraw());
+}
+
+function ksClose() { $("ks").hidden = true; }
+
+let ksMode = "text", ksErr = "", ksTotal = 0, ksSeq = 0;
+/* Which kinds the reader wants. Empty means all of them — the filter is a
+   narrowing, so no chip lit is the same as every chip lit, and the row says
+   so rather than making someone select seven things to see everything.
+   Sent to the daemon, never applied here: the hit list is capped, so a kind
+   crowded out of the top 300 has to be filtered before the cap, not after. */
+const ksKinds = new Set();
+let ksCounts = {};
+// the order the chips sit in — the board's own hierarchy, not alphabetical
+const KIND_ORDER = ["prd", "spec", "memo", "workflow", "wiki", "report",
+                    "board"];
+
+async function ksRun() {
+  ksQ = $("ksq").value.trim();
+  if (ksQ.length < 2) {
+    ksHits = []; ksSel = 0; ksMode = "text"; ksErr = ""; return ksDraw();
+  }
+  // a slow board's answer must never land on top of a newer query's: each
+  // run carries a ticket and only the latest one is allowed to draw
+  const seq = ++ksSeq;
+  try {
+    const r = await fetch(API + "/search?board=" +
+      encodeURIComponent(BOARD_KEY) + "&q=" + encodeURIComponent(ksQ) +
+      (ksKinds.size ? "&kinds=" + [...ksKinds].join(",") : ""));
+    const out = await r.json();
+    if (seq !== ksSeq) return;
+    ksHits = out.hits || [];
+    ksMode = out.mode || "text";
+    ksErr = out.error || "";
+    ksTotal = out.total || ksHits.length;
+    // the counts cover every kind the query found, filter or no filter — so
+    // the chips keep saying what is there while one of them is holding the
+    // rest back, and turning a filter off is never a leap in the dark
+    ksCounts = out.counts || {};
+  } catch (e) {
+    if (seq !== ksSeq) return;
+    ksHits = []; ksErr = "the daemon did not answer";
+  }
+  ksSel = 0;
+  ksDraw();
+}
+
+/* The kind chips: one per kind this query found, each a count and a toggle.
+   Multi-select — chips are independent, so `workflow` + `memo` is two
+   clicks and no modifier. Only kinds with hits are drawn: a chip that can
+   only ever return nothing is a dead end, and the row is a map of what is
+   actually there. */
+function ksKindsDraw() {
+  const el = $("ks-kinds");
+  if (!el) return;
+  const found = KIND_ORDER.filter(k => ksCounts[k]);
+  for (const k of Object.keys(ksCounts))          // a kind the order missed
+    if (!found.includes(k)) found.push(k);
+  if (!found.length) { el.innerHTML = ""; return; }
+  el.innerHTML =
+    '<button class="ks-chip all' + (ksKinds.size ? "" : " on") +
+    '" data-k="">all<span>' + (ksTotal || 0) + "</span></button>" +
+    found.map(k => '<button class="ks-chip ' + k +
+      (ksKinds.has(k) ? " on" : "") + '" data-k="' + k + '">' + k +
+      "<span>" + ksCounts[k] + "</span></button>").join("");
+  for (const n of el.querySelectorAll(".ks-chip"))
+    n.onclick = () => {
+      const k = n.dataset.k;
+      if (!k) ksKinds.clear();                    // `all` is the way back
+      else ksKinds.has(k) ? ksKinds.delete(k) : ksKinds.add(k);
+      ksKindsDraw();                              // the row answers at once
+      ksRun();                                    // the list follows
+      $("ksq").focus();                           // typing goes on working
+    };
+}
+
+/* What the reader typed, lit inside the line it found. A regex query marks
+   what the same regex matches; a literal one marks the literal. A fuzzy hit
+   has no span to mark — the file's name is the match, not anything in the
+   body — so its text is left plain and the row says `name` instead of a
+   line number. */
+function ksMark(text) {
+  let rx;
+  try {
+    rx = ksMode === "regex"
+      ? new RegExp(ksQ.replace(/^re:/, "").replace(/^\/|\/$/g, ""), "ig")
+      : new RegExp(ksQ.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "ig");
+  } catch (e) { return esc(text); }
+  return esc(text).replace(rx, m => "<mark>" + m + "</mark>");
+}
+
+function ksDraw() {
+  const el = $("ks-hits");
+  const mode = $("ks-mode");
+  ksKindsDraw();
+  const filt = ksKinds.size ? " in " + [...ksKinds].join(" + ") : "";
+  if (mode) mode.innerHTML = ksErr
+    ? '<b class="ks-bad">' + esc(ksErr) + "</b> · "
+    : (ksHits.length
+        ? "<b>" + ksTotal + (ksTotal >= 300 ? "+" : "") + "</b> " +
+          (ksMode === "regex" ? "regex " : "") + "hits" + esc(filt) + " · "
+        : "");
+  el.innerHTML = ksHits.length ? ksHits.map((h, i) =>
+    '<div class="ks-hit' + (i === ksSel ? " on" : "") +
+    (h.fuzzy ? " fz" : "") + '" data-i="' + i + '">' +
+    '<span class="ks-kind ' + h.kind + '">' + h.kind + '</span>' +
+    '<span class="ks-where">' + esc(h.title || h.path) +
+    (h.fuzzy ? "" : ":" + h.line) + '</span>' +
+    '<span class="ks-text">' + (h.fuzzy ? esc(h.text) : ksMark(h.text)) +
+    "</span></div>"
+  ).join("") : '<div class="ks-none">' +
+    ($("ksq").value.trim().length < 2 ? "type to search"
+      : ksErr ? esc(ksErr)
+      // an empty list under a filter is the filter's doing, not the query's
+      : ksKinds.size
+        ? "no " + [...ksKinds].join(" or ") + " hits — " +
+          '<button class="ks-clear">search every kind</button>'
+        : "no hits") + "</div>";
+  for (const n of el.querySelectorAll(".ks-hit"))
+    n.onclick = () => ksJump(ksHits[+n.dataset.i]);
+  const clear = el.querySelector(".ks-clear");
+  if (clear) clear.onclick = () => {
+    ksKinds.clear(); ksRun(); $("ksq").focus();
+  };
+  const on = el.querySelector(".ks-hit.on");
+  if (on) on.scrollIntoView({block: "nearest"});
+}
+
+function ksJump(h) {
+  ksClose();
+  if (h.rel) return go({prd: h.rel});
+  if (h.kind === "memo") {
+    setView("memos");
+    const name = h.title || "";
+    setTimeout(() => {
+      for (const m of $("memos").querySelectorAll(".memo")) {
+        const t = m.querySelector("h3");
+        if (t && (t.textContent === name ||
+                  (name && name.includes(t.textContent)))) {
+          m.scrollIntoView({block: "start"});
+          m.classList.add("flash");
+          setTimeout(() => m.classList.remove("flash"), 1600);
+          break;
+        }
+      }
+    }, 60);
+    return;
+  }
+  if (h.uri) { window.open(h.uri, "_blank"); return; }
+  navigator.clipboard && navigator.clipboard.writeText(h.path);
+  toast("path copied — " + h.path);
+}
+
 /* ── the now strip: three doors under the title ───────────────────────────
    The top three bands of the pressure order (@references/parts/order.md),
    each a count and each a click into that set: to collect, waiting on you,
@@ -3581,8 +3915,8 @@ async function drawReport() {
    dot is a door into the set of PRDs it counts. State keeps the ink it has
    everywhere else in this page; the by-board bars use ink levels in a fixed
    order, never cycled.                                                     */
-function tile(k, v, s, dest, hot) {
-  return '<button class="tile' + (hot ? " hot" : "") + '" data-go="' +
+function tile(k, v, s, dest, cls) {
+  return '<button class="tile' + (cls ? " " + cls : "") + '" data-go="' +
     esc(JSON.stringify(dest)) + '"><div class="k">' + k + '</div><div class="v">' +
     v + '</div><div class="s">' + (s || "") + "</div></button>";
 }
@@ -3623,10 +3957,11 @@ function drawAnalytics() {
     tile("ready now", ready, "dispatchable this second",
          {view:"timeline", ready:1, mode:"vision"}) +
     tile("to collect", collectN, "finished — commit and close",
-         {view:"timeline", collect:1, mode:"vision"}, collectN > 0) +
+         {view:"timeline", collect:1, mode:"vision"},
+         collectN > 0 ? "got" : "") +
     tile("waiting on you", waiting + blocked,
          waiting + " question · " + blocked + " blocked", {view:"asks"},
-         waiting + blocked > 0);
+         waiting + blocked > 0 ? "hot" : "");
 
   // 1 — where the work sits
   const byState = [];
@@ -3790,6 +4125,9 @@ function costLine(rows, guard) {
 
 /* ── writing a PRD from the view ───────────────────────────────────────── */
 $("newprd").onclick = () => { $("newbox").classList.add("on"); $("ntitle").focus(); };
+// the searchbar in the titlebar is the same door ⌘K is — a person who never
+// learns the shortcut still gets the palette, and one who does sees it named
+$("ksopen").onclick = () => ksShow();
 $("ncancel").onclick = () => $("newbox").classList.remove("on");
 $("newbox").onclick = e => {
   if (e.target.id === "newbox") $("newbox").classList.remove("on");
@@ -3999,6 +4337,10 @@ syncToggles();
 drawLegend();
 drawSide();
 fitFrame();          // the legend has to exist before the frame can measure it
+// the toolbar and the legend settle after the first paint — remeasure once
+// they have, and again at load, so the frame fits the page as it is
+requestAnimationFrame(() => requestAnimationFrame(fitFrame));
+bind(window, "load", fitFrame);
 resize();
 setMode("vision");
 drawHeader();

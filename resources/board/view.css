@@ -204,6 +204,25 @@ body{background:var(--bg);color:var(--ink);
   text-transform:uppercase;font-weight:620;color:var(--ink3)}
 #picks .sep{height:.5px;background:var(--sep-2);margin:4px 8px}
 #titlebar .right{margin-left:auto;display:flex;gap:8px;align-items:center}
+/* the searchbar: a field-shaped button, because that is what it opens. Sunk
+   rather than raised — it is a place to put something, not an act — and the
+   shortcut rides on it so nobody has to be told twice. */
+#ksopen{display:flex;align-items:center;gap:6px;height:26px;padding:0 8px;
+  min-width:190px;border-radius:7px;border:.5px solid var(--sep);
+  background:var(--sunk);color:var(--ink3);cursor:pointer;
+  font:500 12px -apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  transition:background .15s var(--ease),color .15s var(--ease)}
+#ksopen:hover{background:var(--fill);color:var(--ink2)}
+#ksopen svg{flex:0 0 auto;opacity:.8}
+#ksopen span{flex:1 1 auto;text-align:left}
+#ksopen kbd{font:600 10.5px ui-monospace,SFMono-Regular,monospace;
+  color:var(--ink3);background:var(--content);border:.5px solid var(--sep-2);
+  border-radius:4px;padding:1px 4px}
+/* below the fold of a narrow window the label goes and the glass stays */
+@media (max-width:900px){
+  #ksopen{min-width:0}
+  #ksopen span,#ksopen kbd{display:none}
+}
 
 /* segmented control — the sliding pill is one transform, not six repaints */
 #views{position:relative;display:flex;background:var(--fill);
@@ -301,15 +320,75 @@ label.lab{color:var(--ink2);font-size:12px}
 #stats .sep{color:var(--ink4);pointer-events:none;padding:0 1px}
 #stats b{font-weight:620;color:var(--ink);font-variant-numeric:tabular-nums}
 #stats .crit b,#stats .crit{color:var(--crit)}
-#inview{margin-left:auto;color:var(--ink3);font-size:12px;
-  display:flex;gap:4px;align-items:baseline}
-#purpose{color:var(--ink2);font-size:12.5px;padding:0 2px 10px;
-  max-width:76ch;line-height:1.5}
+#inview{margin-left:8px;color:var(--ink3);font-size:11px;
+  display:flex;gap:4px;align-items:baseline;white-space:nowrap}
+#purpose{color:var(--ink2);font-size:12.5px;padding:0 0 12px;
+  line-height:1.5}
 
-/* the frontier — what to pick up, in order */
+/* ── the two edge tabs ────────────────────────────────────────────────────
+   The panels are not on the page; their handles are. A slim vertical tab on
+   each edge of the window — state on the left, focus on the right — and the
+   panel it names slides out from under it. The tab rides the panel's edge, so
+   the control is always where the thing it controls is, open or shut. A count
+   that wants a person rides the tab as a badge, in the page's own hues, so a
+   shut panel still says when it is worth opening. */
+.edgetab{position:fixed;top:50%;transform:translateY(-50%);z-index:35;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:12px 4px;border:.5px solid var(--glass-brd);background:var(--glass);
+  backdrop-filter:saturate(180%) blur(24px);
+  -webkit-backdrop-filter:saturate(180%) blur(24px);
+  box-shadow:var(--shadow);cursor:pointer;color:var(--ink2);
+  transition:left var(--dur) var(--ease),right var(--dur) var(--ease),
+    color var(--dur-fast) ease,background var(--dur-fast) ease}
+.edgetab:hover{color:var(--ink);background:var(--content)}
+.edgetab .lbl{writing-mode:vertical-rl;text-orientation:mixed;
+  font:590 10px -apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  letter-spacing:.14em;text-transform:uppercase}
+.edgetab.tleft{left:0;border-left:none;border-radius:0 var(--r-md) var(--r-md) 0}
+.edgetab.tleft .lbl{transform:rotate(180deg)}
+.edgetab.tright{right:0;border-right:none;
+  border-radius:var(--r-md) 0 0 var(--r-md)}
+/* open is still glass — the global `button.on` accent is for a mode that is
+   engaged, but an open panel already shows itself; a black pill on its edge
+   would be a second, louder statement of the same fact */
+button.edgetab.on{background:var(--glass);color:var(--ink);
+  border-color:var(--glass-brd);box-shadow:var(--shadow)}
+.edgetab .tabn{font:620 10px/15px -apple-system,system-ui,sans-serif;
+  min-width:15px;height:15px;padding:0 3px;border-radius:99px;color:#fff;
+  text-align:center;font-variant-numeric:tabular-nums;font-style:normal}
+.edgetab .tabn.hot{background:var(--warn)}
+.edgetab .tabn.got{background:var(--ok)}
+:root[data-theme="dark"] .edgetab .tabn,
+:root:where(:not([data-theme="light"])) .edgetab .tabn{color:#101013}
+/* open, the tab sits on the panel's edge rather than under its content */
+#statetab.on{left:calc(min(430px,88vw) + 12px)}
+#landtog.on{right:288px}
 
-.bar-controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;
-  padding:0 2px 10px}
+/* ── the state panel: the board in words, off the left edge ──────────────
+   What used to stand above the plan — the three doors, the report's first
+   paragraphs, the vision line — pushed the chart half a screen down for
+   prose most glances skip. It is a sheet now, the inspector's mirror: glass,
+   fixed, slid in from the left when asked and gone when not. The plan keeps
+   the viewport; the words keep their reading measure. */
+#state{position:fixed;top:12px;left:12px;bottom:12px;width:min(430px,88vw);
+  z-index:40;background:var(--glass);
+  backdrop-filter:saturate(180%) blur(30px);
+  -webkit-backdrop-filter:saturate(180%) blur(30px);
+  border:.5px solid var(--glass-brd);border-radius:14px;
+  box-shadow:var(--shadow-lg);display:flex;flex-direction:column;
+  transform:translateX(calc(-100% - 24px));opacity:0;pointer-events:none;
+  transition:transform var(--dur) var(--ease),opacity var(--dur) var(--ease)}
+#state.open{transform:none;opacity:1;pointer-events:auto}
+#state .shd{display:flex;gap:10px;align-items:center;padding:12px 14px 10px;
+  border-bottom:.5px solid var(--sep)}
+#state .shd h2{flex:1;font-size:14.5px;font-weight:610;letter-spacing:-.014em}
+#sclose{width:26px;height:26px;padding:0;display:flex;align-items:center;
+  justify-content:center;border-radius:99px;font-size:11px;color:var(--ink2)}
+#state .sbody{overflow:auto;padding:12px 14px 16px;flex:1}
+#state #now{padding:0 0 12px}
+/* two ids, so the panel's one-column grid outranks the wide-page two-column
+   rule — the panel is 430px whatever the window is */
+#state #whatsup .two{grid-template-columns:1fr}
 /* ── the row rail ─────────────────────────────────────────────────────────
    Row height belongs to the plot, so the control sits on the plot's own left
    edge and runs the axis it scales: up is a row at the size it is meant to be
@@ -419,12 +498,12 @@ details.fold>summary .n{font-size:11px;color:var(--ink4);font-weight:400;
    is a plain height — most of a fold, capped so a tall monitor does not get
    one enormous band, floored so a short one still gets a chart. JS writes the
    same number; this is the fallback for a page opened with no script.        */
-#stage{display:flex;align-items:stretch;
-  height:min(74vh,720px);min-height:280px}
+#stage{display:flex;align-items:stretch;margin-top:8px;
+  height:calc(100vh - 104px);min-height:280px}
 #chart{flex:1 1 auto;min-width:0;display:flex;flex-direction:column}
 #frame{position:relative;flex:1 1 auto;min-height:0;
-  border:.5px solid var(--sep);
-  border-radius:0 0 var(--r-lg) var(--r-lg);background:var(--content);
+  border:.5px solid var(--sep);border-bottom:none;
+  background:var(--content);
   overflow:hidden;box-shadow:var(--shadow)}
 /* the frontier is a column, not a rail above the gantt — the plot's height is
    a constant on the frame, not a function of how many chips the frontier has. */
@@ -529,10 +608,37 @@ details.fold>summary .n{font-size:11px;color:var(--ink4);font-weight:400;
 #land .feet b{font-weight:560;color:var(--ink2)}
 #land .feet .n{margin-left:auto;font-variant-numeric:tabular-nums}
 #land .feet .up{color:var(--warn)}
-@media (max-width:900px){#land{display:none}}
-#legend{display:flex;flex-wrap:wrap;gap:4px 10px;font-size:11.5px;
-  color:var(--ink2);padding:10px 0 0;align-items:center}
-#legend .lnk{display:flex;align-items:center;gap:6px;padding:2px 7px}
+@media (max-width:900px){#land{display:none}#landtog{display:none}}
+/* ── the chart's own footer ───────────────────────────────────────────────
+   Every control that acts on the plan sits on the plan's card: how the axis
+   counts (vision/dates), how it is framed (view, zoom), which rows show
+   (filter, the three chips, the legend — which was always a filter), and how
+   many are in view. One slim strip on the card's bottom edge, the way a Mac
+   window carries its status bar — not a bar of options above the work. Row
+   structure (group, names, fold) sits on the row header instead; row height
+   is the left rail; the panels are the edge tabs. */
+#tcontrols{display:flex;flex-wrap:wrap;gap:5px 8px;align-items:center;
+  padding:5px 10px;background:var(--content-2);
+  border:.5px solid var(--sep);border-radius:0 0 var(--r-lg) var(--r-lg);
+  box-shadow:var(--shadow);font-size:11.5px}
+#tcontrols .seg{padding:1.5px;border-radius:7px}
+#tcontrols .seg button{padding:2.5px 9px;min-height:19px;font-size:11.5px}
+#tcontrols select{min-height:22px;padding:2px 22px 2px 8px;font-size:11.5px;
+  background-position:calc(100% - 13px) 10px,calc(100% - 9px) 10px;
+  border-color:transparent;background-color:transparent;box-shadow:none}
+#tcontrols select:hover{background-color:var(--fill)}
+#tcontrols input[type=search]{min-height:22px;padding:2px 9px;width:120px;
+  font-size:11.5px;background:var(--sunk)}
+#tcontrols>button{background:none;border:.5px solid transparent;
+  box-shadow:none;color:var(--ink2);padding:2.5px 9px;min-height:22px;
+  font-size:11.5px}
+#tcontrols>button:hover{background:var(--hover);color:var(--ink);
+  border-color:transparent}
+#tcontrols>button.on{background:var(--accent);color:var(--accent-ink)}
+.fsep{width:.5px;height:16px;background:var(--sep);flex:none}
+#legend{display:flex;flex-wrap:wrap;gap:2px 6px;font-size:11px;
+  color:var(--ink2);align-items:center;margin-left:auto}
+#legend .lnk{display:flex;align-items:center;gap:5px;padding:2px 6px}
 #legend .lnk.on{background:var(--fill-2);color:var(--ink)}
 #legend i{display:inline-block;width:8px;height:8px;border-radius:3px;
   flex:none}
@@ -543,6 +649,30 @@ details.fold>summary .n{font-size:11px;color:var(--ink4);font-weight:400;
   border-radius:1px;flex:none}
 #legend .keys{color:var(--ink3)}
 #note{margin-top:10px;color:var(--ink3);font-size:11.5px;padding:0 2px}
+#note:empty{display:none}
+/* the hint line is the first thing the strip sheds — one row is the deal */
+@media (max-width:1700px){#legend .keys{display:none}}
+
+/* ── the row tools, on the rows ──────────────────────────────────────────
+   Group, names and fold act on the row axis, so they sit on the row header —
+   a small glass cluster at the plot's top-left, over the column they change,
+   beside the rail that scales it. */
+#rowtools{position:absolute;top:8px;left:32px;z-index:7;
+  display:flex;gap:2px;align-items:center;padding:2px 6px;
+  background:var(--glass);backdrop-filter:saturate(180%) blur(18px);
+  -webkit-backdrop-filter:saturate(180%) blur(18px);
+  border:.5px solid var(--glass-brd);border-radius:var(--r-sm);
+  box-shadow:0 1px 2px rgba(0,0,0,.06)}
+#rowtools select{min-height:20px;padding:1px 20px 1px 7px;font-size:11px;
+  border-color:transparent;background-color:transparent;box-shadow:none;
+  background-position:calc(100% - 12px) 9px,calc(100% - 8px) 9px}
+#rowtools select:hover{background-color:var(--fill)}
+#rowtools button{background:none;border:.5px solid transparent;
+  box-shadow:none;color:var(--ink2);padding:1px 8px;min-height:20px;
+  font-size:11px}
+#rowtools button:hover{background:var(--hover);color:var(--ink);
+  border-color:transparent}
+#rowtools button.on{background:var(--accent);color:var(--accent-ink)}
 kbd{font:10.5px ui-monospace,SFMono-Regular,monospace;background:var(--fill);
   border-radius:4px;padding:1.5px 5px;color:var(--ink2)}
 
@@ -702,6 +832,7 @@ kbd{font:10.5px ui-monospace,SFMono-Regular,monospace;background:var(--fill);
 .tile .v{font-size:26px;font-weight:620;letter-spacing:-.025em;
   font-variant-numeric:tabular-nums;line-height:1.18;margin:2px 0 1px}
 .tile.hot .v{color:var(--warn)}
+.tile.got .v{color:var(--ok)}
 .tile .s{font-size:11.5px;color:var(--ink2)}
 #charts{display:grid;gap:12px;
   grid-template-columns:repeat(auto-fit,minmax(360px,1fr))}
@@ -960,6 +1091,7 @@ kbd{font:10.5px ui-monospace,SFMono-Regular,monospace;background:var(--fill);
 #tip .r{color:var(--ink2)}
 #tip .k{color:var(--ink3)}
 #tip .warn{color:var(--warn)}
+#tip .got{color:var(--ok)}
 
 /* a seam is nothing until a board registers an element for it — no wrapper,
    no gap, no box on a page that extends nothing */
@@ -1030,3 +1162,73 @@ kbd{font:10.5px ui-monospace,SFMono-Regular,monospace;background:var(--fill);
 .qs .qnone{margin:0 14px 10px;padding:10px 12px;border-radius:8px;
   background:var(--content-2);border:.5px solid var(--sep-2);
   font-size:11.5px;line-height:1.5;color:var(--ink3)}
+
+/* ── K — search everything ────────────────────────────────────────────────
+   The overlay the K key opens: one input over a hit list, glass like the
+   drawer and the newbox. Every kind but the kind chip carries no hue — the
+   graphite rule holds here too. */
+#ks{position:fixed;inset:0;z-index:70}
+#ks .ks-back{position:absolute;inset:0;background:rgba(0,0,0,.28)}
+#ks .ks-box{position:relative;width:min(720px,92vw);margin:9vh auto 0;
+  background:var(--glass);backdrop-filter:blur(24px) saturate(1.4);
+  -webkit-backdrop-filter:blur(24px) saturate(1.4);
+  border:.5px solid var(--glass-brd);border-radius:12px;
+  box-shadow:var(--shadow-lg);overflow:hidden}
+#ksq{width:100%;box-sizing:border-box;border:0;outline:0;background:none;
+  color:var(--ink);font:500 15px -apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  padding:13px 16px;border-bottom:.5px solid var(--sep)}
+#ksq::placeholder{color:var(--ink3)}
+#ks .ks-hint{padding:6px 16px;font-size:10.5px;color:var(--ink3);
+  border-bottom:.5px solid var(--sep-2);background:var(--fill)}
+/* the kind filter: one chip per kind the query found, each a count and a
+   toggle. Multi-select, so they read as independent switches rather than a
+   segmented control — a lit chip is ink-on-fill, an unlit one is quiet. */
+#ks .ks-kinds{display:flex;flex-wrap:wrap;gap:5px;padding:8px 16px;
+  border-bottom:.5px solid var(--sep-2)}
+#ks .ks-kinds:empty{display:none}
+.ks-chip{display:inline-flex;align-items:baseline;gap:5px;
+  padding:3px 8px;border-radius:999px;cursor:pointer;
+  border:.5px solid var(--sep);background:var(--content-2);color:var(--ink2);
+  font:590 11px -apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  transition:background .15s var(--ease),color .15s var(--ease),
+             border-color .15s var(--ease)}
+.ks-chip:hover{background:var(--fill);color:var(--ink)}
+.ks-chip.on{background:var(--accent);border-color:var(--accent);
+  color:var(--accent-ink)}
+.ks-chip span{font:620 10px ui-monospace,SFMono-Regular,monospace;
+  color:var(--ink3)}
+.ks-chip.on span{color:var(--accent-ink);opacity:.7}
+/* `all` is the way back, not a kind — it reads as a state, not a switch */
+.ks-chip.all{background:none;border-color:transparent;color:var(--ink3)}
+.ks-chip.all.on{background:var(--fill-2);border-color:transparent;
+  color:var(--ink)}
+.ks-none .ks-clear{border:0;background:none;padding:0;cursor:pointer;
+  color:var(--ink);font:inherit;font-weight:620;text-decoration:underline;
+  text-underline-offset:2px}
+#ks .ks-hits{max-height:52vh;overflow-y:auto}
+.ks-hit{display:flex;gap:9px;align-items:baseline;padding:7px 16px;
+  cursor:pointer;font:500 12.5px -apple-system,BlinkMacSystemFont,system-ui,sans-serif}
+.ks-hit.on{background:var(--sel)}
+.ks-kind{flex:0 0 auto;font:620 9.5px ui-monospace,SFMono-Regular,monospace;
+  text-transform:uppercase;letter-spacing:.05em;color:var(--ink3);
+  background:var(--fill);border-radius:4px;padding:2px 5px;min-width:52px;
+  text-align:center}
+.ks-kind.prd,.ks-kind.spec{color:var(--ink2)}
+.ks-kind.memo{color:var(--ink)}
+.ks-kind.wiki,.ks-kind.workflow{color:var(--ink2)}
+.ks-where{flex:0 1 auto;font-weight:620;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;max-width:34%}
+.ks-text{flex:1 1 0;min-width:0;white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;color:var(--ink2);
+  font:500 12px ui-monospace,SFMono-Regular,monospace}
+.ks-hit mark{background:none;color:var(--ink);font-weight:720}
+/* a fuzzy hit matched the file's NAME, not this line — so the line is
+   context, not evidence, and reads a shade back */
+.ks-hit.fz .ks-text{color:var(--ink3);font-style:italic}
+.ks-hit.fz .ks-where::after{content:" · name";color:var(--ink3);
+  font-weight:500}
+#ks .ks-hint b{color:var(--ink2);font-weight:620}
+#ks .ks-hint .ks-bad{color:var(--danger)}
+.ks-none{padding:18px 16px;font-size:12.5px;color:var(--ink3)}
+/* the memo a search hit jumped to — one wash, then gone */
+.memo.flash{border-color:var(--ink2);box-shadow:0 0 0 3px var(--accent-wash)}

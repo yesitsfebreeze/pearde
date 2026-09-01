@@ -10,6 +10,7 @@ every registered board and serving the view that reads and writes it.
     serve.py wait  [board]    block until the board moves, then say what did
     serve.py forget <name>    stop watching one board
     serve.py stop             stop the daemon
+    serve.py selfcheck        assert the search ranker's own arithmetic
 
 Singleton by port bind: the daemon owns 127.0.0.1:8443 (PEARDE_PORT
 overrides), and a second `run` refuses to start because the bind fails. That
@@ -59,6 +60,18 @@ HTTP API, all JSON, all 127.0.0.1-only:
   GET  /memos?board=<name>         the board's decision records
   GET  /answers?board=<name>       every question the board has answered,
                                    newest first
+  GET  /search?board=<name>&q=<text>[&kinds=<a,b>]
+                                   one search over the whole board — prds,
+                                   specs, memos, wiki, workflows, the report,
+                                   the settings. `re:<pat>` or `/<pat>` greps
+                                   by regex; anything else is a literal
+                                   substring plus a fuzzy pass over names.
+                                   Ranked, best first; each hit carries the
+                                   jump its kind implies. `kinds` keeps only
+                                   those kinds — applied here and not in the
+                                   page, so a kind the cap dropped is still
+                                   reachable; `counts` always covers every
+                                   kind found, filter or no filter
   GET  /adapters                   configured launch targets: [{id, name}] —
                                    resources/board/adapters/*.json, see below
   POST /register {"cwd": path}     add the board found walking up from cwd
@@ -614,6 +627,107 @@ LIVE_JS = """<script>
 </script>"""
 
 
+# ── search: what a hit is worth ───────────────────────────────────────────
+# ⌘K lists every match in one column, so the ordering IS the feature: a
+# hundred true hits with the wanted one at rank 60 is a failed search. Three
+# things decide a score, in this order of weight: WHERE the match is (a
+# title beats a body line), WHAT it matched (a whole word beats a fragment
+# inside another word), and WHAT KIND of file holds it (a PRD someone wrote
+# beats a note graphify generated). Everything is one integer so the sort is
+# one key and the page never re-ranks.
+
+# what a file is worth before anything matched — hand-written work first,
+# generated notes last. A `board` hit is settings, the vision, graph output:
+# real, but not what anyone means by "search the board".
+KIND_RANK = {"prd": 60, "spec": 50, "memo": 55, "report": 40,
+             "workflow": 35, "wiki": 30, "board": 10}
+
+# Two tiers, and nothing crosses between them. A literal or regex match is a
+# fact about the file; a fuzzy match is a guess about what the reader meant.
+# So every literal hit — even one in a generated note — sorts above every
+# fuzzy one, and kind rank only ever orders within a tier.
+LITERAL = 1000
+
+
+def score_line(kind, low, at, needle, in_name, rx):
+    """One line's score. `low` is the line lowercased, `at` where the match
+    starts, `in_name` whether the file's own title or path also carries the
+    needle — a body hit in a file that is itself about the word outranks the
+    same body hit anywhere else."""
+    s = LITERAL + KIND_RANK.get(kind, 0)
+    if rx is not None:               # a regex says nothing about word shape
+        return s + 20
+    n = len(needle)
+    before = low[at - 1] if at else " "
+    after = low[at + n] if at + n < len(low) else " "
+    word = not before.isalnum() and not after.isalnum()
+    s += 40 if word else 10
+    if at == 0:
+        s += 10                      # the line opens with it
+    if in_name:
+        s += 45                      # the file is about this word
+    # a heading is the line a reader wants over the paragraph under it
+    if low.lstrip().startswith("#"):
+        s += 25
+    return s
+
+
+# A fuzzy hit is a guess about what someone meant; a literal one is a fact.
+# So every fuzzy score is squeezed into this band and every literal hit
+# starts above it — the fuzzy pass can reorder itself all it likes and can
+# never push a real match down the list.
+FUZZY_MAX = 99
+
+
+def fuzzy(needle, hay):
+    """Subsequence match, scored 0..FUZZY_MAX. Used only on a file's title and
+    path, never on its body: fuzzy over every line of a board is noise, fuzzy
+    over its names is how `bwiki` finds `board/wiki`.
+
+    Two things separate an abbreviation from a coincidence, and both are
+    required. TIGHTNESS: the matched letters must sit close together — `dspch`
+    inside `dispatch` is a word someone shortened, the same letters scattered
+    across a sentence are an accident, so a match spread wider than a few
+    times the needle is refused outright. WORD STARTS: initials of the words
+    score, letters buried mid-word barely do, which is what makes `bwiki`
+    prefer `board/wiki` over a name that merely contains those letters."""
+    if len(needle) < 3:
+        return 0                     # two letters match nearly anything
+    i, run, raw, first, last, starts = 0, 0, 0, None, 0, 0
+    for j, ch in enumerate(hay):
+        if i < len(needle) and ch == needle[i]:
+            if first is None:
+                first = j
+            last = j
+            at_word = j == 0 or not hay[j - 1].isalnum()
+            starts += at_word
+            raw += 1 + run + (3 if at_word else 0)
+            run += 1
+            i += 1
+        else:
+            run = 0
+    if i < len(needle):
+        return 0
+    # The letters have to be a compression of something, not a scatter across
+    # a paragraph-length name. Two shapes qualify and the span rule only
+    # applies to the first: letters packed close together (`dspch` inside
+    # `dispatch`), or letters that are the WORDS' OWN INITIALS, which by
+    # definition sit as far apart as the words do — refusing those on span
+    # would throw away the initialism, the one abbreviation everybody types.
+    span = last - first + 1
+    if (starts * 2 < len(needle)
+            and span > max(len(needle) * 4, len(needle) + 12)):
+        return 0
+    # perfect: every letter a word start and adjacent — 4 per letter
+    best = len(needle) * 4
+    q = min(1.0, raw / best)
+    # Two names that match equally well: the shorter one is the better guess,
+    # because more of it is the thing the reader typed. Worth a fifth of the
+    # band — enough to break a tie, never enough to beat a real quality gap.
+    brevity = 1.0 / (1.0 + len(hay) / 40.0)
+    return max(1, round(FUZZY_MAX * (q * 0.8 + brevity * 0.2)))
+
+
 def board_json(b):
     return {"name": b.name, "path": b.path, "seq": b.seq,
             "last_sync": b.last_sync, "last_error": b.last_error,
@@ -666,6 +780,33 @@ class Handler(BaseHTTPRequestHandler):
             self.base = self.PREFIX
             path = path[len(self.PREFIX):] or "/"
         return path, {k: v[0] for k, v in parse_qs(u.query).items()}
+
+    def vault_uri(self, board_path, rel):
+        """obsidian://open for one note of the board's vault — the vault roots
+        at the board (`.pearde/`), so a vault-relative path is what `file=`
+        takes. The id is looked up in Obsidian's own register by exact path,
+        the same lookup the status line does; a board never registered has no
+        id to name, and `None` sends the hit nowhere the page can go."""
+        cfg = os.path.expanduser("~/Library/Application Support/obsidian/"
+                                 "obsidian.json")
+        if not os.path.exists(cfg):
+            cfg = os.path.join(os.environ.get("XDG_CONFIG_HOME",
+                                              os.path.expanduser("~/.config")),
+                               "obsidian", "obsidian.json")
+        vid = None
+        try:
+            with open(cfg, encoding="utf-8") as fh:
+                for k, v in (json.load(fh).get("vaults") or {}).items():
+                    if v.get("path") == board_path.rstrip("/"):
+                        vid = k
+                        break
+        except (OSError, ValueError):
+            pass
+        if not vid:
+            return None
+        stem = rel[:-3] if rel.endswith(".md") else rel
+        from urllib.parse import quote
+        return f"obsidian://open?vault={vid}&file={quote(stem)}"
 
     def do_GET(self):
         path, q = self.q()
@@ -773,6 +914,142 @@ class Handler(BaseHTTPRequestHandler):
             out.sort(key=lambda m: (str(m["status"]), str(m["date"])),
                      reverse=True)
             return self.reply(200, {"memos": out})
+        if path == "/search":
+            # one search over everything the board is — prds and their specs,
+            # memos, wiki, workflows, the report and the settings — so ⌘K in
+            # the view can list where a word lives and jump to it. The jump is
+            # decided by the hit's kind: a prd or spec opens the inspector, a
+            # memo opens the memos view, anything else the vault also holds
+            # opens in Obsidian.
+            #
+            # Three ways to match, one box:
+            #   `re:<pat>` or `/<pat>`   a regular expression, case-insensitive
+            #                            — grep, for when the shape is known
+            #   anything else            literal substring per line, plus a
+            #                            fuzzy pass over titles and paths, so
+            #                            `bwiki` finds `board/wiki`
+            # Every hit carries a score and the list comes back sorted by it:
+            # a title match beats a body match, a whole word beats a fragment,
+            # a PRD beats a generated graph note, and a fuzzy name match sits
+            # below every literal one.
+            b = by_name(q.get("board"))
+            if not b:
+                return self.reply(404, {"error": "unknown board"})
+            raw = (q.get("q") or "").strip()
+            if len(raw) < 2:
+                return self.reply(200, {"hits": [], "mode": "none"})
+            mode, rx = "text", None
+            if raw.startswith("re:") or raw.startswith("/"):
+                pat = raw[3:] if raw.startswith("re:") else raw[1:].rstrip("/")
+                try:
+                    rx = re.compile(pat, re.I)
+                    mode = "regex"
+                except re.error as e:
+                    return self.reply(200, {"hits": [], "mode": "regex",
+                                            "error": f"bad pattern: {e}"})
+                if not pat:
+                    return self.reply(200, {"hits": [], "mode": "regex"})
+            needle = raw.lower()
+            prds = planlib.scan(b.path)
+            memos = {os.path.relpath(m["path"], b.path): m
+                     for m in memoslib.scan(b.path).values()
+                     if os.path.isabs(m.get("path") or "")
+                     and (m["path"] + os.sep).startswith(b.path + os.sep)}
+            SKIP = {"__pycache__", "graphs", "state"}
+            MAX_HITS, MAX_PER_FILE = 300, 12
+            hits = []
+            for root, dirs, files in os.walk(b.path):
+                dirs[:] = sorted(d for d in dirs
+                                 if not d.startswith(".") and d not in SKIP)
+                for f in sorted(files):
+                    if not f.endswith(".md") or f == "README.md":
+                        continue
+                    fp = os.path.join(root, f)
+                    rel = os.path.relpath(fp, b.path)
+                    parts = rel.split(os.sep)
+                    kind, title, jump = "board", f, None
+                    # anything the vault holds that has no view of its own —
+                    # settings, the vision, graphify's notes — opens in
+                    # Obsidian, the one place the file is readable whole
+                    uri = self.vault_uri(b.path, rel)
+                    if parts[0] == "prds":
+                        p = next((p for p in prds.values()
+                                  if fp.startswith(p["dir"] + os.sep)
+                                  or fp == os.path.join(p["dir"], "prd.md")),
+                                 None)
+                        if p:
+                            kind = ("spec" if "specs" in parts else "prd")
+                            title, jump = p["title"], p.get("rel")
+                    elif parts[0] == "memos":
+                        m = memos.get(rel)
+                        kind = "memo"
+                        title = (m.get("subject") or m.get("slug") or f) if m else f
+                    elif parts[0] in ("wiki", "workflows"):
+                        kind = "wiki" if parts[0] == "wiki" else "workflow"
+                    elif rel == "report.md":
+                        kind = "report"
+                    where = (title + " " + rel).lower()
+                    in_name = mode == "text" and needle in where
+                    n_file, first = 0, None
+                    try:
+                        with open(fp, encoding="utf-8", errors="replace") as fh:
+                            for ln, line in enumerate(fh, 1):
+                                # what a fuzzy hit shows as context: the first
+                                # line a person wrote. `---`, a frontmatter
+                                # key and a heading's own `#` are not it —
+                                # the title already says that much.
+                                t = line.strip()
+                                if (first is None and t and t != "---"
+                                        and not t.startswith("#")
+                                        and not re.match(r"^[\w-]+:", t)
+                                        and not t.startswith("`state:")):
+                                    first = t[:200]
+                                low = line.lower()
+                                at = (rx.search(line).start()
+                                      if rx and rx.search(line)
+                                      else (low.find(needle) if rx is None
+                                            else -1))
+                                if at < 0:
+                                    continue
+                                hits.append({
+                                    "kind": kind, "rel": jump, "title": title,
+                                    "path": rel, "line": ln,
+                                    "text": line.strip()[:200], "uri": uri,
+                                    "score": score_line(kind, low, at, needle,
+                                                        in_name, rx)})
+                                n_file += 1
+                                if n_file >= MAX_PER_FILE:
+                                    break
+                    except OSError:
+                        continue
+                    # nothing in the body, but the name is a fuzzy match: the
+                    # file itself is the hit, opened at its first line. This is
+                    # the half of ⌘K that finds a note by an abbreviation.
+                    if mode == "text" and not n_file:
+                        fz = fuzzy(needle, where)
+                        if fz > 0:
+                            hits.append({
+                                "kind": kind, "rel": jump, "title": title,
+                                "path": rel, "line": 1,
+                                "text": first or "", "uri": uri,
+                                "fuzzy": True,
+                                "score": fz + KIND_RANK.get(kind, 0)})
+            # The counts are taken over EVERY hit, before any kind filter and
+            # before the cap — they are what the filter chips offer, so they
+            # have to say what is findable, not what survived. Filtering here
+            # rather than in the page is the whole reason this is a parameter:
+            # `workflow` hits that the cap dropped behind 300 PRD hits would
+            # be unreachable if the page filtered a truncated list.
+            counts = {}
+            for h in hits:
+                counts[h["kind"]] = counts.get(h["kind"], 0) + 1
+            want = {k for k in (q.get("kinds") or "").split(",") if k}
+            if want:
+                hits = [h for h in hits if h["kind"] in want]
+            hits.sort(key=lambda h: (-h["score"], h["path"], h["line"]))
+            return self.reply(200, {"hits": hits[:MAX_HITS], "mode": mode,
+                                    "total": len(hits), "counts": counts,
+                                    "capped": len(hits) > MAX_HITS})
         if path == "/adapters":
             return self.reply(200, [{"id": a["id"], "name": a["name"]}
                                     for a in load_adapters()])
@@ -812,6 +1089,7 @@ class Handler(BaseHTTPRequestHandler):
                 return self.reply(200, {"seq": b.seq, "view": view_stamp(),
                                         "last_error": b.last_error})
         ROUTES = ("/", "/status", "/data", "/wait", "/prd", "/memos",
+                  "/search",
                   "/answers", "/view.js", "/view.css")
         want = None
         if path.startswith("/board/") or path.startswith("/timeline/"):
@@ -1221,6 +1499,62 @@ def cmd_stop():
     return 0
 
 
+def cmd_selfcheck():
+    """`serve.py selfcheck` — the search ranker's own arithmetic, asserted.
+
+    Ordering IS the feature of ⌘K: a hundred true hits with the wanted one at
+    rank 60 is a failed search. Two properties hold it up and neither is
+    visible by reading a score — that every literal match outranks every
+    fuzzy one whatever kinds they are, and that fuzzy refuses a scatter while
+    still taking an initialism. Both are one arithmetic slip away from
+    silently inverting, and nothing else in the tree would notice.
+    """
+    bad = []
+
+    def check(name, cond):
+        print(("  ok   " if cond else "  FAIL ") + name)
+        if not cond:
+            bad.append(name)
+
+    # the tiers cannot meet: the worst literal hit beats the best fuzzy one
+    worst_lit = LITERAL + min(KIND_RANK.values())
+    best_fz = FUZZY_MAX + max(KIND_RANK.values())
+    check(f"every literal hit outranks every fuzzy one "
+          f"({worst_lit} > {best_fz})", worst_lit > best_fz)
+
+    # a whole word beats a fragment of one, same file, same kind
+    word = score_line("prd", "the window closed", 4, "window", False, None)
+    frag = score_line("prd", "a windowless room", 2, "window", False, None)
+    check(f"a whole word beats a fragment ({word} > {frag})", word > frag)
+
+    # the fuzzy pass: what it must take, and what it must refuse
+    for needle, hay, want in (
+            ("bwiki", "board/wiki", True),                # a compression
+            ("abcdef", "alpha bravo charlie delta echo foxtrot", True),
+            ("wndw", "the round runs in a window that ends", True),
+            ("xyzq", "board/wiki", False),                # letters absent
+            ("ab", "a b", False),                         # too short to mean
+            ("abcdef", "xxaxx xxbxx xxcxx xxdxx xxexx xxfxx zzz", False)):
+        got = fuzzy(needle, hay) > 0
+        check(f"{needle!r} {'matches' if want else 'does not match'} "
+              f"{hay[:34]!r}", got == want)
+
+    # word starts beat buried letters; a shorter name breaks a tie
+    check("word-start letters beat buried ones",
+          fuzzy("bwiki", "board/wiki") > fuzzy("bwiki", "xbxwxixkxix"))
+    check("the shorter of two equal names wins",
+          fuzzy("abc", "alpha bravo charlie")
+          > fuzzy("abc", "alpha bravo charlie delta echo foxtrot golf"))
+    # and no fuzzy score can escape its band
+    check("no fuzzy score leaves the band",
+          all(0 <= fuzzy(n, h) <= FUZZY_MAX
+              for n, h in (("bwiki", "board/wiki"), ("a", "a"),
+                           ("abc", "abc"), ("zz", "zzzzzzzz"))))
+
+    print(f"selfcheck: {len(bad)} failed" if bad else "selfcheck: all passed")
+    return 1 if bad else 0
+
+
 def main():
     args = sys.argv[1:]
     cmd = args[0] if args else "status"
@@ -1232,6 +1566,8 @@ def main():
         return cmd_status()
     if cmd == "stop":
         return cmd_stop()
+    if cmd == "selfcheck":
+        return cmd_selfcheck()
     if cmd == "wait":
         rest = [a for a in args[1:] if not a.startswith("--")]
         return cmd_wait(rest[0] if rest else None,

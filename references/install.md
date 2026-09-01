@@ -179,8 +179,11 @@ board is listed at `/`.
 - `@resources/board/serve.py status` says what it watches;
   `@resources/board/serve.py stop` ends it. `@resources/doctor.sh` reports a
   board the service is not watching, and `--fix` registers it.
-- `resources/board/state/` holds the registry and the log — machine-local,
-  gitignored.
+- Nothing lands outside a board. Each board records its own registration in
+  `<board>/.state/serve.json`; the daemon holds the union in memory, logs to
+  the `.state/serve.log` of the board that started it, and knows no
+  machine-wide list. A daemon that is stopped and started watches nothing
+  until each board is `ensure`d again — which every session start does.
 - No service at all? `python3 @resources/board/plan.py gantt --open` writes
   the same render to `.pearde/.state/view.html` as one self-contained file.
 

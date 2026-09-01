@@ -78,7 +78,8 @@ late, lower it when it keeps beating the number. A bad fit can
 mislabel an axis; it can never re-order the work — precisely because `est`
 and `actual` stay out of the schedule, nobody ever had a reason to game them,
 which is what makes them honest calibration data. Refit as `actual:` records
-accumulate; the fit is dated and lives in `resources/board/state/`.
+accumulate; the fit is dated, is per board, and lives at
+`<board>/.state/calibration.json`.
 
 The weight of one PRD, first that answers:
 

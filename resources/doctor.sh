@@ -262,8 +262,8 @@ elif ! python3 -c 'import sys' 2>/dev/null; then
   fix "install python3, or drop the hooks block from $GSET"
 else
   # A throwaway state dir: without one this probe writes a session file into
-  # resources/board/state/guard/ on every doctor run, so the check that asks
-  # whether the guard is wired litters the repo it is checking.
+  # the board's own `.state/guard/` on every doctor run, so the check that
+  # asks whether the guard is wired litters the board it is checking.
   probe=$(echo '{"tool_name":"Bash","tool_input":{"command":"find prds -name prd.md"},"cwd":"'"$(dirname "$GSET")"'"}' \
           | PEARDE_GUARD_STATE="$(mktemp -d)" python3 "$DIR/guard.py" pre 2>/dev/null)
   if ! printf '%s' "$probe" | grep -q '"deny"'; then

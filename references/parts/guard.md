@@ -94,9 +94,10 @@ guard` when there is no session file at all. The analytics view draws the
 same numbers as two series, per @references/parts/view.md. Calls are the
 proxy for tokens, and the page says so.
 
-`PEARDE_GUARD_STATE` moves the state directory for the guard and its readers
-alike; a harness feeding hook JSON to a temp project sets it, and never
-writes under `resources/board/state/`.
+One JSON file per session, in the board it counted on:
+`<board>/.state/guard/<session>.json`. `PEARDE_GUARD_STATE` moves the
+directory for the guard and its readers alike; a harness feeding hook JSON to
+a temp project sets it, and so writes into no real board.
 
 **It refuses only what is provably redundant.** "Nothing changed" is the
 newest mtime of any `.md` under the board and its members — 7 ms on a
@@ -170,9 +171,9 @@ of them and a quarter of the ceiling that was being hit.
 ## Turning it off
 
 `pearde guard off`, or set `disableAllHooks` for a session that needs a free
-hand. The guard holds no state on the board — one JSON file per session
-under `resources/board/state/guard/`, which is machine-local like everything
-else in that directory.
+hand. The guard holds no *plan* on the board — one JSON file per session
+under `<board>/.state/guard/`, machine-local and gitignored like everything
+else that corner rebuilds.
 
 An orchestrator that hits a refusal it believes is wrong should say so in the
 round rather than working around it: a false refusal is a bug in the stamp,

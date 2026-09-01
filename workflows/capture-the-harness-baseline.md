@@ -3,7 +3,7 @@ atomic: capture-the-harness-baseline
 subject: record what every committed harness prints before the tree is touched
 date: 2026-08-28
 updated: 2026-09-01
-runs: 47
+runs: 50
 ---
 
 # capture-the-harness-baseline — the numbers as they were before you
@@ -35,14 +35,18 @@ runs: 47
 - Each harness that touches a footprint path has a recorded count, quoted.
 - The recording happened before any file *this run* writes — `git status
   --short` at this point lists nothing you added in this session.
-- **Resuming a killed run:** when the footprint already carries a previous
-  worker's build, there is no pre-edit baseline left to take and none can be
-  reconstructed. Record the tree **as it stands now** as your measurement,
-  name the earlier worker's recorded numbers as the only baseline that
-  exists, and cite them from their report rather than re-deriving them. Say
-  in the report that the baseline is inherited. A count compared against a
-  number nobody re-took is worth nothing; a number honestly labelled
-  inherited is worth something.
+- **Resuming a killed run, or taking a second pass at a footprint another
+  worker already built:** if the earlier build is **uncommitted**, the
+  pre-edit tree is still on disk and the baseline is recoverable — do not
+  inherit it. `git clone --no-hardlinks <repo> <scratch>/prefix` gives the
+  tree at `HEAD` without the build; write any harness that lives in a
+  sibling worktree in at the depth its `ROOT` resolves from
+  (`git -C <board> show HEAD:<path>`), and run it there. Quote that count
+  as yours. Only when the earlier build was **committed** is there no
+  pre-edit baseline: then record the tree as it stands, cite the earlier
+  worker's numbers, and say in the report that the baseline is inherited. A
+  number honestly labelled inherited is worth something; a number that
+  could have been re-taken and was not is worth less than it looks.
 - Any pre-existing failure is written down with the words "before the first
   edit" beside it.
 

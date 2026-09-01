@@ -3,7 +3,7 @@ atomic: attempt-the-build
 subject: build the contract until it works or hits something undefined
 date: 2026-08-28
 updated: 2026-09-01
-runs: 27
+runs: 30
 ---
 
 # attempt-the-build — the attempt is the analysis
@@ -61,3 +61,4 @@ runs: 27
 | the brief says the probe's code is uncommitted, and `git status --short` is clean | a sibling session committed the whole tree, your hunks with it | `git log -1 -- <footprint path>` and read the file itself before concluding anything is missing; if the behaviour is present, the work stands — record the commit that took it, and read every spec's "what already stands" against the **file**, never against a diff |
 | a box asks you to prove a check *can* fail, and the file to mutate is an uncommitted footprint file | the restore cannot be `git checkout` — the committed text is not the text you must return to, and a checkout would silently discard the build | `cp <file> <scratch>/<name>.bak` into a scratch dir **outside** the repo, mutate, run, `cp` back, and prove the restore with `cmp <scratch>/<name>.bak <file>`. Quote the failing count, the restored count, and the `cmp`. Make the mutation unreachable at run time (`if false; then … fi`) when the check reads text rather than behaviour — a reachable one measures the mutation instead of the check |
 | a line appended with `>>` to a harness lands concatenated onto its last line | the harness ends on its exit-carrying check with no trailing newline — the shape every harness on this board ends in | `printf '\n%s\n' '<line>' >> <file>`, or check with `[ -n "$(tail -c1 <file>)" ]` first. An anchored matcher (`^…`) will not see a concatenated offender, so a can-it-fail box run this way reads green on a check that did not fire |
+| your probe invokes another PRD's harness and its result is decided by that harness's own defect — a hard-coded port, a leaked process, a shared fixture | you are measuring the neighbour's file, and the box it backs is green or red by scheduling | do not edit that file. Make your own probe stand down when the condition holds (`PEARDE_HARNESSES` set, the port already bound) and say in the check's own text why, then report the neighbour's defect as a finding for the orchestrator to route. Demonstrate the box under the racing condition; never assert it |

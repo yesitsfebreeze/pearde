@@ -3,7 +3,7 @@ atomic: re-run-the-harnesses
 subject: re-run the recorded harnesses and account for every changed count
 date: 2026-08-28
 updated: 2026-09-01
-runs: 47
+runs: 50
 ---
 
 # re-run-the-harnesses — every number back, or explained
@@ -21,6 +21,11 @@ runs: 47
    fail. Name the file whose change actually moved it. A worker who only
    re-runs checks will take credit for a neighbour's landing every time,
    because a passing check looks identical whoever earned it.
+   Record HEAD before the first run and again at the flip. If HEAD moved,
+   diff against the commit you recorded (`git show <old-head>:<file>`), not
+   against `HEAD` — a sibling that committed the tree took your uncommitted
+   hunks with it, and `HEAD:<file>` then shows your own change as the baseline
+   and reads your flip as somebody else's.
 4. When a harness fails on a line you edited, read what it matches before you
    touch the harness. A matcher written against a markdown table row often
    matched that row's column padding, so re-aligning a table breaks it while
@@ -54,3 +59,4 @@ runs: 47
 | a harness has no `cd` and one line runs a transition with no `--board` | it acts on whatever board is above the caller's cwd — the real one, from the repo root | run it from the scratch dir, where `find_board` refuses and the line fails without writing; quote the count and name the line |
 | a state file in `resources/board/state/guard/` you were told not to write moves its mtime during the re-run | a harness in the set calls `doctor.sh` with no `PEARDE_GUARD_STATE`, and `doctor.sh`'s own guard probe carries no session | name the harness by `grep -c doctor.sh` and `grep -c PEARDE_GUARD_STATE`, compare the file's mtime to your start, remove it only if it did not exist before you, and report the writer's line |
 | doctor's `view` row is `off` after the run and `serve.py status` says not running | a harness in the set runs `serve.py stop` with no port and reaches the live daemon | name the harness line, do not restart it yourself — the coordinator owns the service |
+| a check backing an already-ticked box in your own spec goes red on the change the contract asked for | the check was written against the old behaviour in an environment the change makes reachable, not against the box's words | re-read the box's own sentence and re-aim the check at the shape that still meets it — never weaken it, and never special-case the new path to keep the old check green, which puts back the divergence the unit removes. Quote the red, the box's words, and the re-aimed check in the report |

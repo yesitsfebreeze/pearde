@@ -10,7 +10,12 @@
 ## Decisions
 
 - [the-dispatcher-holds-no-round](the-dispatcher-holds-no-round.md) — decided · 2026-09-01 — the round runs in a pearde-round worker whose window is thrown away, and the budget is measured from the window's own floor
+- [one-author-is-not-an-accepted-spec](one-author-is-not-an-accepted-spec.md) — decided · 2026-09-01 — a spec whose code, probe, acceptance boxes and proof block have one author is not accepted evidence; a box is ticked only against a check that has been seen fail
 - [invariants-are-testable-memos-and-the-kind-index-is-generated](invariants-are-testable-memos-and-the-kind-index-is-generated.md) — decided · 2026-09-01 — invariants are testable memos and the kind index is generated
+- [also-drops-a-path-it-cannot-find](also-drops-a-path-it-cannot-find.md) — decided · 2026-09-01 — collect --also resolves paths against the caller's cwd and silently drops one that lands in the wrong repo, while the commit message it writes still names the file
+- [a-report-must-say-verdict](a-report-must-say-verdict.md) — decided · 2026-09-01 — collect requires the literal word Verdict: in a report and nothing tells a worker to write it; the orchestrator adds the prefix rather than sending the worker back
+- [a-crashing-checker-reads-as-a-failing-check](a-crashing-checker-reads-as-a-failing-check.md) — decided · 2026-09-01 — doctor reports a checker's own traceback as the checked thing's failure, so a broken instrument and a real red are indistinguishable from the report
+- [a-check-decided-by-scheduling](a-check-decided-by-scheduling.md) — decided · 2026-09-01 — a harness whose verdict depends on what else is running is not evidence, and a check that stands down reports skip and is never counted as a pass
 - [the-round-has-a-context-ceiling](the-round-has-a-context-ceiling.md) — superseded · 2026-08-31 — a round is capped at 100k context and resumed from the round file, and workers are dispatched as typed agents
 - [the-board-keeps-two-journals](the-board-keeps-two-journals.md) — decided · 2026-08-31 — .history.jsonl and .transitions.jsonl are two different records, not one duplicated
 - [the-record-is-always-whole](the-record-is-always-whole.md) — decided · 2026-08-29 — collect must never stage a PRD's own folder by hunk, and the state it writes after staging must land in the same commit

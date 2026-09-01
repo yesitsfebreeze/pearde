@@ -185,3 +185,34 @@
 {"calls": 1, "from": "analyzing", "prd": "the-round-runs-in-a-window-that-ends", "reads": 0, "refused": 0, "t": "2026-09-01T09:37:14", "to": "specced", "tokens": 123}
 {"calls": 1, "from": "specced", "prd": "the-round-runs-in-a-window-that-ends", "reads": 0, "refused": 0, "t": "2026-09-01T09:37:17", "to": "claimed", "tokens": 117}
 {"from": "claimed", "prd": "the-round-runs-in-a-window-that-ends", "t": "2026-09-01 09:38", "to": "done"}
+{"calls": 19, "from": null, "prd": "the-round-is-handed-its-step-not-the-manual", "reads": 0, "refused": 1, "t": "2026-09-01T09:51:45", "to": "open", "tokens": 11008}
+{"calls": 1, "from": null, "prd": "pearde-next-prints-the-step-and-the-decision-it-owes", "reads": 0, "refused": 0, "t": "2026-09-01T09:51:54", "to": "open", "tokens": 3566}
+{"calls": 1, "from": null, "prd": "collect-reads-the-worker-s-report-and-routes-its-own-verdict", "reads": 0, "refused": 0, "t": "2026-09-01T09:52:04", "to": "open", "tokens": 805}
+{"calls": 1, "from": null, "prd": "scan-parses-the-board-once-and-caches-it-by-mtime", "reads": 0, "refused": 0, "t": "2026-09-01T09:52:15", "to": "open", "tokens": 811}
+{"calls": 7, "from": null, "prd": "graph-probe-makes-harness-sweep-unaffordable", "reads": 0, "refused": 0, "t": "2026-09-01T09:57:32", "to": "open", "tokens": 59645}
+{"calls": 10, "from": "open", "prd": "the-round-is-handed-its-step-not-the-manual/pearde-next-prints-the-step-and-the-decision-it-owes", "reads": 1, "refused": 0, "t": "2026-09-01T09:59:05", "to": "analyzing", "tokens": 328}
+{"calls": 0, "from": "open", "prd": "the-round-is-handed-its-step-not-the-manual/collect-reads-the-worker-s-report-and-routes-its-own-verdict", "reads": 0, "refused": 0, "t": "2026-09-01T09:59:05", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "scan-parses-the-board-once-and-caches-it-by-mtime", "reads": 0, "refused": 0, "t": "2026-09-01T09:59:05", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "graph-probe-makes-harness-sweep-unaffordable", "reads": 0, "refused": 0, "t": "2026-09-01T09:59:05", "to": "analyzing", "tokens": 0}
+{"calls": 19, "from": null, "prd": "seven-closed-probes-drifted-red", "reads": 0, "refused": 0, "t": "2026-09-01T10:00:35", "to": "open", "tokens": 11017}
+{"calls": 153, "from": "open", "prd": "seven-closed-probes-drifted-red", "reads": 20, "refused": 2, "t": "2026-09-01T10:09:55", "to": "analyzing", "tokens": 548}
+{"calls": 119, "from": "analyzing", "prd": "scan-parses-the-board-once-and-caches-it-by-mtime", "reads": 6, "refused": 0, "t": "2026-09-01T10:36:32", "to": "specced", "tokens": 253}
+{"calls": 30, "from": "analyzing", "prd": "the-round-is-handed-its-step-not-the-manual/pearde-next-prints-the-step-and-the-decision-it-owes", "reads": 1, "refused": 1, "t": "2026-09-01T10:37:36", "to": "specced", "tokens": 0}
+{"calls": 106, "from": "specced", "prd": "the-round-is-handed-its-step-not-the-manual/pearde-next-prints-the-step-and-the-decision-it-owes", "reads": 0, "refused": 0, "t": "2026-09-01T10:40:00", "to": "claimed", "tokens": 0}
+{"calls": 47, "from": "analyzing", "prd": "the-round-is-handed-its-step-not-the-manual/collect-reads-the-worker-s-report-and-routes-its-own-verdict", "reads": 9, "refused": 0, "t": "2026-09-01T10:40:52", "to": "specced", "tokens": 0}
+{"from": "claimed", "prd": "the-round-is-handed-its-step-not-the-manual/pearde-next-prints-the-step-and-the-decision-it-owes", "t": "2026-09-01 11:15", "to": "done"}
+{"calls": 956, "from": "specced", "prd": "the-round-is-handed-its-step-not-the-manual/collect-reads-the-worker-s-report-and-routes-its-own-verdict", "reads": 7, "refused": 1, "t": "2026-09-01T11:15:40", "to": "claimed", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "scan-parses-the-board-once-and-caches-it-by-mtime", "reads": 0, "refused": 0, "t": "2026-09-01T11:15:40", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "the-round-is-handed-its-step-not-the-manual/collect-reads-the-worker-s-report-and-routes-its-own-verdict", "t": "2026-09-01 11:25", "to": "done"}
+{"calls": 336, "from": "analyzing", "prd": "graph-probe-makes-harness-sweep-unaffordable", "reads": 8, "refused": 2, "t": "2026-09-01T11:26:01", "to": "specced", "tokens": 0}
+{"calls": 5, "from": "specced", "prd": "graph-probe-makes-harness-sweep-unaffordable", "reads": 0, "refused": 1, "t": "2026-09-01T11:26:07", "to": "claimed", "tokens": 0}
+{"calls": 59, "from": "analyzing", "prd": "seven-closed-probes-drifted-red", "reads": 2, "refused": 0, "t": "2026-09-01T11:28:43", "to": "open", "tokens": 0}
+{"calls": 3, "from": "open", "prd": "seven-closed-probes-drifted-red/the-fixtures-meet-the-tool", "reads": 0, "refused": 0, "t": "2026-09-01T11:28:49", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "seven-closed-probes-drifted-red/the-page-and-the-report-agree", "reads": 0, "refused": 0, "t": "2026-09-01T11:28:49", "to": "analyzing", "tokens": 0}
+{"from": "claimed", "prd": "scan-parses-the-board-once-and-caches-it-by-mtime", "t": "2026-09-01 11:29", "to": "done"}
+{"calls": 96, "from": "analyzing", "prd": "seven-closed-probes-drifted-red/the-page-and-the-report-agree", "reads": 18, "refused": 0, "t": "2026-09-01T11:33:07", "to": "specced", "tokens": 0}
+{"calls": 3, "from": "specced", "prd": "seven-closed-probes-drifted-red/the-page-and-the-report-agree", "reads": 0, "refused": 0, "t": "2026-09-01T11:33:24", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "seven-closed-probes-drifted-red/the-page-and-the-report-agree", "t": "2026-09-01 11:34", "to": "done"}
+{"from": "open", "prd": "the-round-is-handed-its-step-not-the-manual", "t": "2026-09-01 11:58", "to": "done"}
+{"calls": 259, "from": "analyzing", "prd": "seven-closed-probes-drifted-red/the-fixtures-meet-the-tool", "reads": 9, "refused": 3, "t": "2026-09-01T12:31:06", "to": "specced", "tokens": 352}
+{"calls": 10, "from": "specced", "prd": "seven-closed-probes-drifted-red/the-fixtures-meet-the-tool", "reads": 0, "refused": 0, "t": "2026-09-01T12:32:25", "to": "claimed", "tokens": 156}

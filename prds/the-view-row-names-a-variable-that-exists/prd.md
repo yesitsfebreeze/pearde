@@ -1,9 +1,9 @@
 ---
-state: analyzing        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
+state: done        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: derived  # requested = the user asked | derived = the board found it
 from: doctor-finds-the-guard-the-way-the-scan-does
 priority: 60        # higher first
-complexity: 0      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
+complexity: 3      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
 blast-radius:      # analyst, at spec time — high|mid|low. What breaks if this is wrong
 repo:              # the sub-repo the code lands in; delete if n/a
 # workflow:        # OPTIONAL — how this kind of job is done: a slug in
@@ -11,9 +11,8 @@ repo:              # the sub-repo the code lands in; delete if n/a
 #                  #   Absent = the brief alone, as before workflows
 time:              # OPTIONAL. See @references/parts/order.md
   est:             # the weight, only when complexity is absent. Not a duration
-  actual:          # a record. Nothing reads it
+  actual: 7h
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
-claim: an-18 2026-08-31 19:14
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
      vision importance (priority), and complexity/blast-radius. Add your own
@@ -72,3 +71,22 @@ let the analyst split it via refine.>
 <!-- `## Failure` — implementer-only, after a FAILED attempt: what broke, what
      was tried. `retry` moves this into the body as history and reopens the
      PRD. -->
+
+## Report
+
+spec01: exit 0
+0
+  view        off     not running — the board reads and plans without it
+590:  PBOARD=$(cd "$BOARD" 2>/dev/null && pwd -P)
+  ok    the view block defines PBOARD before its elif reads it
+  ok    every variable the view row names is defined
+  ok    no unbound-variable line anywhere in doctor's report
+  ok    view ok when the service holds the spelling doctor walks
+  ok    view ok across a symlinked START — pwd -P bridges the spelling
+  ok    the ok line names the board, spelled /tmp/pearde-viewrow.HAAoj5 · /status holds it
+6 checks · 6 pass · 0 fail
+probe harness complete
+verify done rc=0
+.pearde/prds/the-view-row-names-a-variable-that-exists/probe/verify.sh: line 28: 50431 Terminated: 15          python3 "$D/srv1.py"
+.pearde/prds/the-view-row-names-a-variable-that-exists/probe/verify.sh: line 28: 50648 Terminated: 15          python3 "$D/srv2.py"
+.pearde/prds/the-view-row-names-a-variable-that-exists/probe/verify.sh: line 28: 50867 Terminated: 15          python3 "$D/srv3.py"

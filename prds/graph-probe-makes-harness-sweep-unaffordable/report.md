@@ -142,7 +142,37 @@ or untracked path in either worktree, and no fixture board reached the
 registry.** The sweep does rewrite the real repo's graph every time it runs —
 by design, that is spec01 step [1] — and that rewrite is outside git's view.
 
-### 5 — Two smaller repairs
+### 5 — spec02's verify block gated on the whole board, and was rescoped.
+
+Recorded here for the same reason as the box-4 reversal: an acceptance-adjacent
+edit whose authorship a later reader cannot see is exactly what this board is
+trying to stop.
+
+`collect` refused this PRD on `spec02 exit 1 — nothing written`. Not a box —
+the third line of spec02's `## Verify and Proof` piped `doctor.sh --harnesses`
+straight into `grep`, and under `collect`'s `pipefail` doctor's exit became the
+block's. Doctor exits 1 whenever the board-wide sweep is red, and it is:
+`7 of 46 green · 7 failed`, **none of the 7 in this footprint**. So the block
+made this unit's pass conditional on six other PRDs.
+
+Rescoped on the orchestrator's explicit instruction and authority (session
+`a16d4abceb3b4e9f1`, 12:56), not on my own judgement — an implementer does not
+get to loosen their own verification unasked. **Third line only**; the first two
+lines, which are this unit's own harness and the gate's census, are untouched
+and still gate. No box, no box text, no other spec was touched:
+
+```sh
+out=$(bash resources/doctor.sh --harnesses . 2>&1 || true)
+printf '%s\n' "$out" | grep -E "harnesses|graph-lands"
+```
+
+Measured before and after, running the block the way `collect` does — extracted
+from the fence, `set -o pipefail`: **as written, exit 1; rescoped, exit 0**, with
+the doctor rows still printed (`harnesses broken 7 of 46 green · 114s · 7
+failed`). spec01's block was checked the same way and already exits 0. The
+generalisation is Edit E7, which is the part worth keeping.
+
+### 6 — Two smaller repairs
 
 `echo "ALL PASS"` was printed unconditionally, before the pass/fail line, in
 both footprint harnesses. Doctor reads exit codes so nothing was measured
@@ -239,7 +269,7 @@ FAIL line names a file outside this PRD's footprint.
 |---|------|-----|---------|
 | 1 | `read-the-contract` | **run (me)** | pass — but see Findings 5: the PRD body is the unfilled template, so there is no written contract to read |
 | 2 | `capture-the-harness-baseline` | **run (me)** | pass, with the resume caveat in E1. `find prds -name verify.sh` → 45, later 46. `index.py check` exit 0, silent. `doctor.sh` exit 0, every row `ok` |
-| 3 | `attempt-the-build` | **run (me), partly inherited** | the affordability rewrite is the analyst's and `implementer-graph`'s; the vacuity repair, the denominator guard and the `ALL PASS` removal in `## What I got wrong` 3 and 5 are mine, built in place in the footprint files, and re-verified |
+| 3 | `attempt-the-build` | **RUN BY ME — bump its `runs`** | unambiguous, because two orchestrators disagreed on this row. My *first* draft said `stopped (inherited)` and that was wrong: I went on to build in place in the footprint files. Mine, this run: the vacuity repair and its `EXAMINED` denominator, the `ALL PASS` removal from both harnesses, the box-4 failability mutation, and the spec02 verify-block rescope. The affordability rewrite itself is the analyst's and `implementer-graph`'s. A run that edits footprint files and re-verifies them has exercised this atomic — **25 → 26 is correct** |
 | 4 | `re-run-the-harnesses` | **run (me), twice** | pass — both footprint harnesses, the gate harness and two full sweeps. No harness outside my footprint was edited |
 | 5 | `write-the-specs` | **stopped (inherited)** | the specs are the analyst's. My only spec write is the annotation beside spec01 box 4 recording that its predicate already held at HEAD; no box text changed |
 
@@ -247,7 +277,14 @@ No back-edge was taken. No step failed.
 
 ### Edits
 
-Replacement text for failures these atomics caused. I edited no workflow file.
+**Status, checked against the library on disk at the end of this run: all seven
+are applied and none is owed.** E1–E6 landed at 12:47 (`pearde workflow check`
+green). E7 landed too — `workflows/write-the-specs.md:45` now carries the
+board-wide-gate row, in the orchestrator's phrasing, naming `bash -e -o
+pipefail` as the shell a block must be run under before a spec is handed over.
+An earlier draft of this report said E7 was still owed; that was written before
+the commit and is corrected here. I edited no workflow file myself — every edit
+below is proposed text, applied by the orchestrator.
 
 **E1 — step 2 `## Done when`, second bullet.** "The recording happened before
 any file was written" is unsatisfiable for any second worker on the same PRD —
@@ -312,6 +349,27 @@ and to `## Done when`:
 |------|-------|----|
 | an edit aimed at `specs/spec01.md` does not find its anchor | every PRD numbers its specs from 01, so a footprint that names another PRD's files puts two identically-named `spec01.md` one directory apart — and this PRD's footprint is entirely inside another PRD's folder | anchor every spec edit on the box's own text and `assert` it before writing; then `git status --short -- prds/<other-prd>/specs/` to prove nothing landed in the neighbour. Never address a spec by number alone |
 
+**E7 — step 5 `write-the-specs`: the whole-workspace rule is a `## Done when`
+bullet with no `## Fails when` row, so nobody meets it until a collect refuses
+them.** The atomic already says "No command in any block runs the whole
+workspace". Every worker agrees with that rule and this board has now paid for
+it three times, because the rule is stated where a worker checks their work
+*after* writing it and never where they would recognise the shape. Worse, the
+failure is **invisible to the worker**: run the block's commands one at a time
+by hand, as I did, and every one of them passes — spec02's block only fails
+under `collect`'s `pipefail`, where the last command's exit becomes the block's.
+Mine carried `bash resources/doctor.sh --harnesses . 2>&1 | grep -E "…"`, and
+doctor exits 1 whenever the *board-wide* sweep is red, so this unit's pass was
+conditional on six other PRDs being green. Measured: that line exits 1, the
+capture-then-grep form exits 0, the sweep itself unchanged at `7 of 46 green ·
+7 failed`. An earlier collect on `collect-reads-the-worker-s-report` hit the
+nastier variant — doctor piped into a `grep -q` sigpipes under `pipefail` and
+exits **141**; I reproduced that too while measuring this. Add the row:
+
+| seen | means | do |
+|------|-------|----|
+| `collect` refuses with `spec<NN> exit <n> — nothing written`, and every command in the block passes when you run it by hand | a line in the block is a **board-wide gate** — `doctor`, a full harness sweep, a repo-root `git status`/`git diff` — and `collect` runs the block under `pipefail`, so that command's exit becomes the block's. The unit's pass is now conditional on every other PRD on the board. `141` instead of `1` means the same shape sigpiped into a `grep -q` | capture, then grep: `out=$(<board-wide command> 2>&1 \|\| true)` then `printf '%s\n' "$out" \| grep -E "<rows>"`. The rows stay visible and stop deciding the exit. Gate **only** on commands reading a path from this spec's own `footprint:`. Check it the way collect will, not by hand: `bash -c "set -o pipefail; $(awk '/^```sh/{f=1;next} /^```/{f=0} f' <spec>)"` must exit 0 |
+
 ## Findings — outside this PRD's contract, not fixed here
 
 1. **Check A is a spelling-grep, not a semantic one — flagged, deliberately not
@@ -352,6 +410,8 @@ to `knowledge.py remember`.
 ## Numbers the orchestrator's next command takes
 
 - verdict **DONE**
+- **both `## Verify and Proof` blocks exit 0 under `pipefail`** — spec01 and
+  spec02, extracted from the fence and run the way `collect` runs them
 - specs **2**, boxes **9 of 9** ticked and verified (spec01 5/5, spec02 4/4);
   spec01 box 4 is annotated in the spec as satisfied at HEAD, not earned by
   this build — verified failable, not vacuous
@@ -364,4 +424,12 @@ to `knowledge.py remember`.
 - `index.py check` exit 0 · `doctor.sh` exit 0, every row `ok`
 - **this PRD claims no red-to-green flip on the board.** The census flip belongs
   to `scan-parses-the-board-once-and-caches-it-by-mtime`
-- 6 workflow edits proposed (E1–E6), none applied — E5 is the one that matters
+- 7 workflow edits proposed, **all seven now applied** — E1–E6 at 12:47, E7 as
+  `workflows/write-the-specs.md:45`. Nothing owed. E5 (diff the predicate
+  against HEAD before claiming a flip) remains the one that matters most
+- `attempt-the-build` was **run by me**; its `runs` counter reads 27, bumped.
+  `write-the-specs` correctly stays at 24 — I wrote no spec, only annotated
+  box 4 and rescoped a verify block on instruction
+- **the PRD is already collected**: `state: done`, committed as `6d4ff67` /
+  `3606a76` (12:57) and the rescope as `e933c58` (13:02). The only uncommitted
+  thing left is this report's final revision. Committing is not mine to do

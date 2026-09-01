@@ -17,3 +17,9 @@ wiki/board/
 
 # kept: .state/round.md, .state/history.jsonl, .state/transitions.jsonl —
 # the board's own record of what happened, which nothing regenerates.
+
+# machine-local, and two of them hold the same credential
+wiki/.obsidian-api-key
+wiki/.graphify/
+wiki/Dashboard.report.md
+.obsidian/

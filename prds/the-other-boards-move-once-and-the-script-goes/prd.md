@@ -1,9 +1,9 @@
 ---
-state: open        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
+state: done        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: requested  # requested = the user asked | derived = the board found it
 # from:            # derived only — the PRD whose work surfaced this one
 priority: 50        # higher first
-complexity: 0      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
+complexity: 23      # analyst, at spec time — 1-100. THE WEIGHT the board schedules by
 blast-radius:      # analyst, at spec time — high|mid|low. What breaks if this is wrong
 needs:
   - init-writes-a-board-on-the-pearde-layout
@@ -15,7 +15,7 @@ repo:              # the sub-repo the code lands in; delete if n/a
 #                  #   Absent = the brief alone, as before workflows
 time:              # OPTIONAL. See @references/parts/order.md
   est:             # the weight, only when complexity is absent. Not a duration
-  actual:          # a record. Nothing reads it
+  actual: 7.05h
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
@@ -106,3 +106,43 @@ Pointers: `resources/board/state/serve.json`, `resources/board/plan.py`.
 <!-- `## Failure` — implementer-only, after a FAILED attempt: what broke, what
      was tried. `retry` moves this into the body as history and reopens the
      PRD. -->
+
+## Report
+
+spec01: exit 0
+pre-gate ok
+MIGRATE FAILED
+GATE: FAILED
+LAYOUT: FAILED
+STATE: WRONG COPY
+spec01 probe: 4/4 gate lines above must read ok
+spec01 fixture gate done
+/opt/homebrew/Cellar/python@3.14/3.14.6/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/feb/dev/infra/pearde/probe/migrate.py': [Errno 2] No such file or directory
+cat: /var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/tmp.WXdlnyE2qg/b/.pearde/.state/history.jsonl: No such file or directory
+
+spec02: exit 0
+GATE ok: /Users/feb/dev/dotfiles
+GATE ok: /Users/feb/dev/infra/mitosys
+GATE ok: /Users/feb/dev/infra/model
+GATE ok: /Users/feb/dev/infra
+GATE ok: /Users/feb/dev/infra/realm
+GATE ok: /Users/feb/dev/infra/shared
+GATE ok: /Users/feb/dev/manola
+GATE ok: /Users/feb/dev/racer/.mi
+SERVE REGISTRY: ok — every row is a live board dir
+51
+MEMBER SIGILS: present
+spec02 gate: 8 GATE ok lines, SERVE REGISTRY ok, MEMBER SIGILS present
+
+spec03: exit 0
+/Users/feb/dev/infra/pearde/.pearde/prds/every-document-names-the-path-the-board-is-on/probe/migrate.py
+LEFTOVER migrate.py FOUND
+GATE ok: /Users/feb/dev/dotfiles
+GATE ok: /Users/feb/dev/infra/mitosys
+GATE ok: /Users/feb/dev/infra/model
+GATE ok: /Users/feb/dev/infra
+GATE ok: /Users/feb/dev/infra/realm
+GATE ok: /Users/feb/dev/infra/shared
+GATE ok: /Users/feb/dev/manola
+GATE ok: /Users/feb/dev/racer/.mi
+spec03 gate: TREE CLEAN plus 8 GATE ok lines

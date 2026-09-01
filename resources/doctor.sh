@@ -645,7 +645,7 @@ fi
 # a normal state, and `plan` is one command.
 if [ -n "$BOARD" ]; then
   PLANNED=$(sed -n 's/.*"planned_at"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' \
-            "$BOARD/.plan.json" 2>/dev/null | head -1)
+            "$BOARD/.state/plan.json" 2>/dev/null | head -1)
   if [ -z "$PLANNED" ]; then
     row plan off "no plan on record — the view has no bars until there is one"
     fix "python3 $DIR/board/plan.py plan $BOARD"
@@ -740,7 +740,7 @@ EOF
     if [ "$HF" -gt 0 ]; then
       row harnesses broken "$HDET · $HF failed"
       printf '%s\n' "$HFAILED" | while IFS= read -r l; do [ -n "$l" ] && note "$l"; done
-      fix "run the named harness and read its FAIL lines: bash $START/<path above>"
+      fix "run the named harness and read its FAIL lines: bash <board>/<path above>"
     else
       row harnesses ok "$HDET"
     fi

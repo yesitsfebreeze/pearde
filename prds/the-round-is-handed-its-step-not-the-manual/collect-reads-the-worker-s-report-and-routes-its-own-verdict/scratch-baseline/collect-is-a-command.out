@@ -1,0 +1,155 @@
+A. collect finished
+  ok   A exit 0
+  ok   A two commits on top of the fixture — the code, then the record
+  ok   A commit paths equal the footprint union plus the record
+  ok   A prd.md carries commit: <sha>
+  ok   A prd.md carries actual: <n>h
+  ok   A state done
+  ok   A claim cleared
+  ok   A the progress line printed once
+  ok   A the line carries the persona last
+  ok   A the line says the round file is owed
+  ok   A the daemon being down is said, not fatal
+  ok   A transition row appended
+  ok   A git log -1 --format=%B matches commits.md line for line
+  ok   A building left alone
+  ok   A collecting a done PRD exits 1
+  ok   A ...naming the state
+B. red verify
+  ok   B exit 1
+  ok   B the output printed
+  ok   B the exit named
+  ok   B git log unchanged
+  ok   B prd.md unchanged
+  ok   B nothing written, said
+  ok   B --fail exits 1
+  ok   B --fail sets failed
+  ok   B --fail clears the claim
+  ok   B --fail writes ## Failure
+  ok   B ## Failure holds the output
+  ok   B --fail commits nothing
+  ok   B --fail prints the line
+C. inherited
+  ok   C exit 0
+  ok   C listed as inherited
+  ok   C listed once
+  ok   C not added
+  ok   C still dirty after
+  ok   C collected all the same
+  ok   C the count on the line
+  ok   C --widen <path> exits 0
+  ok   C --widen commits it
+  ok   C --widen names it in the message
+  ok   C --widen names it on the line
+D. no argument
+  ok   D exit 0
+  ok   D finished collected
+  ok   D building left alone
+  ok   D one line
+  ok   D nothing left: exit 0
+  ok   D nothing left: said
+E. --dry
+  ok   E exit 0
+  ok   E no commit
+  ok   E prd.md unchanged
+  ok   E prints what 3 would add
+  ok   E prints what 4 would say
+  ok   E .transitions.jsonl not written
+F. --trust
+  ok   F exit 0 with a red verify
+  ok   F the line says trusted
+  ok   F done
+G. gate
+  ok   G red gate exits 1
+  ok   G the gate's output printed
+  ok   G no commit
+  ok   G green gate: exit 0
+  ok   G the gate ran and is in the report
+H. clean tree
+  ok   H exit 0
+  ok   H two commits — the record lands on a clean tree too
+  ok   H commit: names the record, never none
+  ok   H done
+I. riders
+  ok   I the record is not owed — it is in its own commit
+  ok   I the next collect is not stopped by the last one's record
+  ok   I finished's record is not on building's commit
+  ok   I nothing rides on the line
+  ok   I building's own record is not owed either
+  ok   I2 exit 0
+  ok   I2 a foreign dirty prd.md is inherited without a baseline
+J. open boxes
+  ok   J exit 1
+  ok   J names the file
+  ok   J names the box
+  ok   J no commit
+  ok   J2 an open spec box exits 1
+  ok   J2 names the spec
+  ok   J3 building (1/2) exits 1
+  ok   J4 a done PRD exits 1
+  ok   J5 no such PRD exits 1
+K. --also
+  ok   K --also without --also-note is usage
+  ok   K exit 0
+  ok   K the file is on the commit
+  ok   K named in the message
+L. flags
+  ok   L unknown flag is usage
+  ok   L --widen without a path is usage
+  ok   L --as sets the persona term
+N. baseline hunks
+  ok   N --snapshot exits 0
+  ok   N the diff recorded
+  ok   N exit 0
+  ok   N the file is on the commit
+  ok   N the worker's hunk landed
+  ok   N the inherited hunk did not
+  ok   N the inherited hunk is still in the tree
+  ok   N the file stays dirty by exactly that hunk
+  ok   N said on the line
+O. the stop
+  ok   O exit 1
+  ok   O the path listed
+  ok   O no commit
+  ok   O prd.md unchanged
+  ok   O --widen takes it
+  ok   O and it is on the commit
+  ok   O2 a tracked file whose every hunk predates the claim stops
+  ok   O2 named
+  ok   O3 no baseline: mtime before the claim stops
+  ok   O3 named
+P. gate baseline
+  ok   P the gate recorded
+  ok   P a red gate whose every line is in the baseline is green
+  ok   P said
+  ok   P2 a new line is red
+  ok   P2 printed
+  ok   P2 no commit
+Q. rename
+  ok   Q exit 0
+  ok   Q the new name is on the commit
+  ok   Q the old name is gone from HEAD
+R. report posted
+  ok   R the daemon came up on the spare port and registered the fixture
+  ok   R ...under the board's declared name
+  ok   R exit 0
+  ok   R the line says report posted
+  ok   R ...and not daemon down
+  ok   R ## Report is in prd.md
+  ok   R ## Report holds the verify's exit
+  ok   R done
+  ok   R the daemon knows the fixture
+  ok   R the real registry is untouched
+  ok   R the copy's registry never learned the fixture
+S. snapshot
+  ok   S the record is at, diff, gate, untracked
+  ok   S --dry after the snapshot exits 0
+  ok   S --dry lists the inherited path
+  ok   S --dry writes nothing to prd.md
+  ok   S --dry commits nothing
+M. COMMANDS
+  ok   M the module exposes COMMANDS['collect']
+Z. .claims never committed
+  ok   Z no path under .pearde/.claims/ on any commit above
+
+133 checks · 133 pass · 0 fail

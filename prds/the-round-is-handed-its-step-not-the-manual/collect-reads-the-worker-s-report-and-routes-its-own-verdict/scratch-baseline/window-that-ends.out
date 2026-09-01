@@ -1,0 +1,32 @@
+— the budget is measured from the floor
+  ok   A1 the first turn sets the floor and passes
+  ok   A2 90k of growth over a 60k floor passes
+  ok   A3 110k of growth is refused
+  ok   A4 a 99k window whose floor is 99k is not over budget
+— the ceiling leaves a way on
+  ok   B1 the round file stays writable
+  ok   B2 dispatching a worker stays allowed
+  ok   B3 asking the user stays allowed
+  ok   B4 a worker is never judged by the dispatcher's window
+  ok   B5 the refusal names the handover, not a stop
+  ok   B6 ...and the worker that carries on
+  ok   B7 ...and reports the growth over the floor
+— a stamp belongs to one window
+  ok   C1 a third read by the same worker is refused
+  ok   C2 the next worker's first read passes
+  ok   C3 the dispatcher's own first read passes
+— the text says the same thing the code does
+  ok   D1 references/parts/dispatch.md exists
+  ok   D2 references/agents/pearde-round.md exists
+  ok   D3 the skill sends the session to the dispatcher
+  ok   D4 dispatch.md names the four verdicts
+  ok   D5 ...and the prompt it sends
+  ok   D6 the round agent names its stop conditions
+  ok   D7 loop.md says the ceiling is a handover
+  ok   D8 guard.md says the budget is measured from the floor
+  ok   D9 settings.md documents transitions-per-round
+  ok   D10 loop.md is still one page
+  ok   D11 files.md lists the round worker
+  ok   D12 files.md lists the dispatcher
+
+26 checks · 26 pass · 0 fail

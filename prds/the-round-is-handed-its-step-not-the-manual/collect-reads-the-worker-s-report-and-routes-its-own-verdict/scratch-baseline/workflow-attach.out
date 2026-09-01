@@ -1,0 +1,49 @@
+  ok   a resolving slug prints wf <slug>
+  ok     … with the slug, unmarked
+  ok     … and no ?
+  ok   a slug naming no file marks wf <slug>?
+  ok   a slug naming an ATOMIC marks the same
+  ok   no workflow: prints no wf
+  ok   an empty workflow: prints no wf
+  ok   check names the dangling one
+  ok   check names the atomic one apart
+  ok   check is silent about the resolving one
+  ok   check is silent about the bare one
+  ok   check is silent about the empty one
+  ok   plan's ready now marks a dangling slug
+  ok     … and an atomic the same way
+  ok   plan does not mark a slug that resolves
+  ok   plan does not mark a PRD with no key
+  ok   a spec's dangling workflow is reported too
+  ok   a spec's workflow does not change the PRD's mark
+  ok   a member's own library still resolves on a master
+  ok   a member falls back to the master's library
+  ok     … unmarked
+  ok   contract.md carries the prd.md row
+  ok   contract.md carries the spec row
+  ok   contract.md defaults it to none
+  ok   the prd template carries the key
+  ok   the spec template carries the key
+  ok   workers.md carries the block
+  ok   workers.md names the brief command
+  ok   workers.md forbids editing the library
+  ok   the analyst reports the workflow — or drafts a route
+  ok   drill.md attaches on the tree it writes
+  ok   parts/workflows.md has the attach rows
+  ok   parts/workflows.md names the scan mark
+  ok   contract.md says who may write a spec
+  ok   the block is extractable from both files
+  ok   the block is byte-identical in prd.md and workers.md
+  ok   claim refuses a `workflow:` naming nothing
+  ok   claim refuses a `needs:` that is not done
+  ok   claim refuses a footprint a claimed PRD holds
+  ok   loop says claim names the gate that holds it
+  ok   loop says what to do instead
+  ok   loop names the scan mark
+  ok   loop names the checker
+  ok   loop names check's one-board limit
+  ok   loop says where to run check instead
+  ok   loop no longer says two skips
+  ok   loop no longer says which of the two
+
+47/47 checks pass

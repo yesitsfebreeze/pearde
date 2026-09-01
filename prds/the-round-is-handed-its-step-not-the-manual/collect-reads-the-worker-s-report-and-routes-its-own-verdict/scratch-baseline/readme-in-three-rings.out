@@ -1,0 +1,14 @@
+A. size and order
+B. the quickstart is five lines
+C. the diagram names the nine states, and no other
+D. the round is loop.md's seven rows
+FAIL: D seven rows in the README — got '0', want '7'
+E. the rings, the glossary, the addressing
+F. every claim is true to the code
+G. the footprint beside the README
+H. the five lines, end to end
+FAIL: H quickstart.sh exits 0 — got '1', want '0'
+FAIL: H ...and every check passed — missing ' 0 fail'
+  FAIL: 2 doctor closes green — missing 'pearde: every part this repo owns checks out.'
+
+74 checks · 71 pass · 3 fail

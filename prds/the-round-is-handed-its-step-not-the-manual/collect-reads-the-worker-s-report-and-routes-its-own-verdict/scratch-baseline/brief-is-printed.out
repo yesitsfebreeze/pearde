@@ -1,0 +1,115 @@
+── the source: workers.md
+  ok   marker pair brief:workflow opens once
+  ok   marker pair brief:every opens once
+  ok   marker pair brief:analyst opens once
+  ok   marker pair brief:implementer opens once
+  ok   marker pair brief:consultant opens once
+  ok   five closers
+  ok   --check is silent on the real file
+── the analyst brief on the ready PRD
+  ok   big/second exits 0
+  ok   header line
+  ok   persona line third
+  ok   the role section is the analyst block with the placeholders filled
+  ok   no unfilled <prd>
+  ok   no unfilled <repo>
+  ok   no unfilled <language>
+  ok   no unfilled <probe>
+  ok   no unfilled <board>
+  ok   no unfilled <id>
+  ok   probe path is in the brief
+  ok   the fixture clause
+  ok   the box clause
+  ok   the language is named
+  ok   the every-worker block ends the brief
+── the skips
+  ok   building exits 1
+  ok   building is held
+  ok   the claim is quoted
+  ok   next exits 1
+  ok   next names building
+  ok   next is gated
+  ok   finished (claimed, all boxes) exits 1
+  ok   finished is held
+  ok   landed (done) exits 1
+  ok   done is a state skip
+  ok   asking (question) exits 1
+  ok   unknown PRD exits 1
+  ok   unknown PRD is named
+  ok   next --force exits 0
+  ok   next --force says forced on the header
+  ok   next --force says why on stderr
+  ok   next --force still an analyst
+── the workflow block, route inlined
+  ok   building --force exits 0
+  ok   header says implementer
+  ok   header says wf fix-a-line
+  ok   header says as skeptic
+  ok   persona line is the skeptic
+  ok   the workflow block, slug filled
+  ok   the workflow block, board filled
+  ok   first atomic inlined
+  ok   second atomic inlined
+  ok   one block per distinct slug
+  ok   the implementer brief follows
+  ok   PRD and spec same slug — still one block
+  ok   slug on the spec only — one block
+  ok   header shows the spec's slug
+  ok   an analyst reads no spec slug
+  ok   analyst header says wf none
+  ok   dangling slug exits 1
+  ok   dangling slug is the workflow skip
+  ok   dangling slug forced exits 0
+  ok   dangling slug marked on the header
+  ok   dangling slug prints no block
+── the placeholders' sources
+  ok   language from settings.md
+  ok   repo: that is a directory is the repo
+  ok   the repo is in the brief
+  ok   repo: pearde (a name) falls back to the board's
+  ok   --role overrides the state
+  ok   --role foo exits 1
+  ok   --as nobody exits 1
+  ok   the roster is named
+── the consultant
+  ok   consult exits 0
+  ok   consult header
+  ok   consult persona line
+  ok   transcript filled
+  ok   board filled
+  ok   question filled
+  ok   the id fills the last line too
+  ok   consult: no unfilled <id>
+  ok   consult: no unfilled <transcript_path>
+  ok   consult: no unfilled <prds/>
+  ok   consult: no unfilled <repo>
+  ok   consult: no unfilled <the question
+  ok   consult without a question exits 1
+  ok   no transcript says so
+── --check reads the shape
+cp: /Users/feb/dev/infra/pearde/skills/.: No such file or directory
+  ok   copy: --check silent
+  ok   a removed closer: the unterminated block is named
+  ok   the swallowed text holds no unnamed placeholder
+  ok   one problem, no second
+  ok   a missing opener is reported
+  ok   and its stray closer
+  ok   a placeholder the table does not name
+  ok   a table row no block uses
+  ok   no table at all
+  ok   fenced tokens are not placeholders
+── the dispatcher and the doctor row
+  ok   pearde help exits 0 with brief.py in resources/board/
+  ok   help lists brief from the docstring
+  ok   brief is no longer reserved
+  ok   pearde brief routes
+  ok   routed header
+  ok   pearde brief --help
+  ok   doctor: briefs ok
+  ok   doctor: briefs broken when a closer is removed
+  ok   doctor: the problem lines follow
+  ok   doctor: the fix line
+  ok   doctor: briefs off with no module
+  ok   the real doctor carries the briefs row
+
+verify: 104/104 checks pass

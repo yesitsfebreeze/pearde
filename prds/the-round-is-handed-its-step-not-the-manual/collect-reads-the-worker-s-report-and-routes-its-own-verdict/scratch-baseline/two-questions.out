@@ -1,0 +1,31 @@
+# the three modules the count, the section and the gate live in
+  ok   questions.py, plan.py, transitions.py compile
+# the fixture board — every leg of ## Done when
+  ok   spec-fixture.sh exits 0
+  ok   no leg failed
+  ok   two questions: the header count
+  ok   two questions: the drill section stands first
+  ok   the claim is refused naming asking 2
+  ok   the round out, the claim goes
+  ok   one question: no gate
+  ok   zero questions: nothing prints
+  ok   a closed PRD's old round counts zero
+  ok   the list and the scan are one reader
+# the manual says where the drill starts
+  ok   loop.md step 1 names the count
+  ok   loop.md step 1: the section stands first
+  ok   loop.md step 2 row: no question
+  ok   loop.md step 2 row: one question
+  ok   loop.md step 2 row: two or more
+  ok   loop.md: nothing is dispatched while it is unput
+  ok   loop.md step 8 is the same drill
+  ok   drill.md: the scan count is the second entry point
+  ok   drill.md names the refusal
+  ok   round.md: ## Asked is what the gate reads
+  ok   round.md: it matches by title
+  ok   guard.md names the refusal
+  ok   guard.md: it lands in the refused count
+# every round already on the real board still passes the checker
+  ok   questions.py check is silent on this board
+
+25 checks · 25 pass · 0 fail

@@ -1,0 +1,68 @@
+── the two keys are documented
+  ok   settings.md has split-above at 40
+  ok   settings.md has specs-above at 6
+  ok   the analyst block carries <split_above>
+  ok   the analyst block carries <specs_above>
+  ok   the table names <split_above>
+  ok   the table names <specs_above>
+  ok   the prd template names the limit
+  ok   the prd template says where a split lands
+  ok   brief --check is silent
+── the brief carries the numbers, from the copy's settings.md
+  ok   brief big/second exits 0
+  ok   default split-above in the brief
+  ok   default specs-above in the brief
+  ok   no unfilled <split_above>
+  ok   no unfilled <specs_above>
+  ok   changed split-above changes the brief
+  ok   changed specs-above changes the brief
+  ok   limits() reads both keys
+  ok   a value that is not an integer reads at the default
+── specced refuses a set over either limit
+  ok   seven specs of 10: exit 1
+  ok   names specs-above
+  ok   and split-above, both over
+  ok   the PRD did not move
+  ok   --check refuses the same way
+  ok   --check names the limit
+  ok   three specs summing 58: exit 1
+  ok   names split-above
+  ok   and not specs-above
+  ok   the limit is the board's: 58 under 60 passes --check
+  ok   --check prints the sum
+  ok   under both limits: specced lands
+  ok   the progress line
+── the split is a command: refine lands ## Children and scan gates the parent
+  ok   refine exits 0
+  ok   left is open
+  ok   right needs left
+  ok   the parent went analyzing → open
+  ok   left/prd.md exists
+  ok   right/prd.md exists
+  ok   parent is open
+  ok   parent carries ## Children once
+  ok   the row for left
+  ok   the row for right
+  ok   the contract above it is untouched
+  ok   scan gates the parent on its children
+  ok   scan lists left as open
+  ok   the parent is not dispatchable
+  ok   brief names the children
+── depth is unbounded: a child over the limit is REFINEd in its turn
+  ok   the child is refused
+  ok   on specs-above
+  ok   the child splits again
+  ok   grandchild exists
+  ok   the child carries ## Children
+── add says big and gates nothing
+  ok   a 70-line body: exit 0
+  ok   first line is the warning
+  ok   and the PRD is created
+  ok   created open
+  ok   two When-this-is-done: exit 0
+  ok   first line is the warning
+  ok   60 lines is not over 60
+  ok   a small body says nothing
+  ok   small created open
+
+verify: 60/60 checks pass

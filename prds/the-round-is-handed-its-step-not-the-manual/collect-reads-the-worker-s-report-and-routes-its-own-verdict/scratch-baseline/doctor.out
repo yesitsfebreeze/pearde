@@ -1,0 +1,26 @@
+pearde doctor — /Users/feb/dev/infra/pearde
+
+  skills      ok      15 well-formed · pearde-doctor pearde-drill pearde-graph pearde-knowledge pearde-master pearde-memo pearde-persona-ask pearde-persona-create pearde-persona pearde-report pearde-scout pearde-update pearde-view pearde-workflow pearde 
+                      installed where your agent looks — @references/install.md, then: bash /Users/feb/dev/infra/pearde/resources/install.sh --apply <skills-dir>
+  plugins     ok      4 suggested · all installed on this machine
+  index       ok      123 files · 32 keywords · every anchor resolves
+  statusline  ok      ~/dev/infra/pearde board-wiki-obsidian-work-together *21 no-upstream
+                      ▸pearde 55/60 92% · open 1 1% · ▸board · ▸vault
+                      wire it where your setup runs a command for one — @references/install.md
+  guard       ok      wired in /Users/feb/dev/infra/pearde/.claude/settings.json · MAX_THINKING_TOKENS=8000 · skill tree guarded
+  board       ok      /Users/feb/dev/infra/pearde/.pearde/prds · 81 PRDs · language English
+  vault       ok      /Users/feb/dev/infra/pearde/.pearde/.obsidian · registered with Obsidian — ▸vault opens this board
+  vision      ok      1 terminal · 0 on · 5 off · longest chain 0
+  origin      ok      60 requested (5 live) · 21 derived (0 live)
+  memos       ok      19 memos · frontmatter checks out
+  workflows   ok      5 workflows · 13 atomics · the library checks out
+  knowledge   ok      10 notes on record · graph in sync · pending honest
+  briefs      ok      5 blocks in references/parts/workers.md · every placeholder named
+  questions   ok      no PRD carries a round — nothing is waiting on you
+  view        ok      watching · http://127.0.0.1:8443/board/pearde
+  plan        ok      planned 2026-08-31
+  harnesses   off     45 harnesses · not run — this row costs tens of seconds
+                      fix: harnesses: on in /Users/feb/dev/infra/pearde/.pearde/settings.md, or one run: bash /Users/feb/dev/infra/pearde/resources/doctor.sh --harnesses /Users/feb/dev/infra/pearde
+  jstests     off     not run — opt in: bash /Users/feb/dev/infra/pearde/resources/doctor.sh --harnesses /Users/feb/dev/infra/pearde
+
+pearde: every part this repo owns checks out.

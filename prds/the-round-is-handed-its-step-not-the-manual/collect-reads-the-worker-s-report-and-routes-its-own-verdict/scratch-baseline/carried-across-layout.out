@@ -1,0 +1,12 @@
+── the three suites, from the code repo root
+  ok   collect-keeps-its-word — 101 checks · 101 pass · 0 fail
+  ok   collect-is-a-command — 133 checks · 133 pass · 0 fail
+  ok   brief-is-printed — verify: 104/104 checks pass
+── the same three by absolute path from /
+  ok   collect-keeps-its-word from / — 101 checks · 101 pass · 0 fail
+  ok   collect-is-a-command from / — 133 checks · 133 pass · 0 fail
+  ok   brief-is-printed from / — verify: 104/104 checks pass
+── the census
+  ok   no suite hands a pre-move board to a tool
+verify: 7 checks · 7 pass · 0 fail
+probe: 7 checks · 7 pass · 0 fail

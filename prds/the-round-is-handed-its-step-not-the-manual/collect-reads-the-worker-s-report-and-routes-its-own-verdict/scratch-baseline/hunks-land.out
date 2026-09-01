@@ -1,0 +1,55 @@
+A. the old staging misplaces the line
+  ok   A the kept patch is the one-line hunk at its working line
+  ok   A git apply exits 0 — and that is the whole problem
+  ok   A the working file holds the line at 11
+  ok   A the old staging puts it at 11 of a blob four lines shorter — inside fetchPrd
+  ok   A the line above it in the blob is the callback's if
+  ok   A node --check passes on the misplaced blob — parsing is not placement
+B. collect stages the line where the working file has it
+  ok   B exit 0
+  ok   B said by hunk on the line
+  ok   B the line sits at 7 of HEAD — working 11 minus the four foreign lines
+  ok   B the line above it is the plan branch
+  ok   B the foreign block is not in the commit
+  ok   B the foreign block is still in the tree
+  ok   B the file stays dirty by exactly the foreign hunk
+  ok   B the working file is untouched
+  ok   B node --check passes on the committed blob
+C. deletion above, replacement below, no newline at the end
+  ok   C the worker's line is at working 5
+  ok   C exit 0
+  ok   C committed at 7 — working 5 plus the two deleted lines above
+  ok   C HEAD still has drawPlan and drawReport
+  ok   C HEAD's last line is the original, newline restored
+  ok   C the file stays dirty by the two foreign hunks
+D. the check, on its own and end to end
+  ok   D a correct blob has no misplacement
+  ok   D a blob with the line four lines down is refused, naming both lines
+  ok   D a blob of the wrong length is refused on its length
+  ok   D a foreign hunk whose + lines are not in the file is a refusal
+  ok   D exit 1
+  ok   D the refusal names the hunk and both lines
+  ok   D nothing committed
+  ok   D no commit landed
+  ok   D the index is HEAD again
+  ok   D the PRD is still claimed
+E. the parse check
+  ok   E the working tree parses
+  ok   E exit 1 — our closing quote without their opening one is a syntax error at HEAD
+  ok   E the refusal names the parser's line
+  ok   E the parser's path is the repo path, not the scratch file's
+  ok   E the parser's line is quoted
+  ok   E nothing committed
+  ok   E the index is HEAD again
+F. dry
+  ok   F exit 0
+  ok   F by hunk named
+  ok   F nothing staged
+G. a kept deletion
+  ok   G exit 0
+  ok   G the callback's line is gone from HEAD
+  ok   G the foreign block is not in HEAD
+  ok   G HEAD is the original minus one line
+  ok   G line 10 of HEAD closes the callback
+  ok   G the check sees a kept deletion that did not happen
+47 checks · 47 pass · 0 fail

@@ -1,0 +1,65 @@
+── the pages
+  ok   loop.md is 168 lines, ≤ 170
+  ok   solo.md is 23 lines, ≤ 25
+  ok   loop.md carries the eight-row table
+  ok   README carries the same eight rows
+  ok   pearde answer --help exits 0
+  ok   pearde claim --help exits 0
+  ok   pearde collect --help exits 0
+  ok   pearde init --help exits 0
+  ok   pearde next --help exits 0
+  ok   pearde scan --help exits 0
+  ok   pearde specced --help exits 0
+  ok   pearde sweep --help exits 0
+  ok   pearde view --help exits 0
+  ok   pearde workflow --help exits 0
+  ok   no part says never take a worker's word
+  ok   handles.md carries no pending mark
+  ok   pearde help prints no not-yet line
+  ok   states.md names sweep on the claimed row
+  ok   guard.md wires the Edit|Write matcher
+  ok   drill.md writes the tree through refine
+  ok   system.md sends the first run to init
+  ok   workers.md names no verify: key
+── the guard: a state written by hand
+  ok   Edit changing state: is denied
+  ok     …naming pearde set with the PRD and state
+  ok   Edit of a body line passes
+  ok   Write keeping state: passes
+  ok   Write changing state: is denied
+  ok   Write of a new prd.md with a state: is denied naming add
+  ok   a spec file is not matched
+  ok   a prd.md outside a board is not matched
+  ok   pearde set through Bash passes the hook
+  ok     …and passes again — a transition is never a repeated read
+  ok   the state file still says open — the hook wrote nothing
+── sweep
+  ok   sweep exits 0
+  ok   sweep lists building
+  ok     …not finished — a PRD to collect is never silent
+  ok     …with the age word the scan prints
+  ok   touching a footprint path in repo clears it
+  ok   sweep --apply exits 0
+  ok   an analyst with specs on disk is sent to specced, not moved
+  ok     …and stays analyzing
+  ok   a claim the round file names is left
+  ok     …and stays analyzing
+  ok   the stale implementer's line is printed
+  ok     …and ends round file owed before as
+  ok     …and the state is failed
+  ok     …with a ## Failure saying it was swept
+  ok     …and the claim cleared
+  ok   unnamed in the round file, the analyst without specs goes open
+  ok   sweep with an argument is refused
+── claim records, answer owes
+  ok   claim prints the line with round file owed
+  ok     …round file owed before as
+  ok   claim wrote prds/.claims/building/diff
+  ok     …and the gate record
+  ok   answer owes prds/asking/prd.md in .claims/riders
+  ok   claim outside a git repo still moves the state
+  ok     …and says there is no baseline
+── fixtures
+  ok   no fixture prd.md under prds/
+
+58 checks · 58 pass · 0 fail

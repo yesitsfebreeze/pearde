@@ -1,0 +1,94 @@
+A. collect refuses without a persona
+  ok   A1 collect finished, no --as, no PEARDE_AS → exit 1
+  ok   A2 …names PEARDE_AS
+  ok   A3 …names the install line
+  ok   A4 …is the transitions.py refusal, word for word
+  ok   A5 …writes nothing
+  ok   A6 …no line printed
+  ok   A7 --snapshot without a persona refuses too
+  ok   A8 an unknown flag still exits 2, before the persona
+  ok   A9 …naming the flag
+  ok   A10 PEARDE_AS alone is read (it was ignored before)
+  ok   A11 …the dry line ends with the env persona
+  ok   A12 --as engineer lands
+  ok   A13 …▸ finished: claimed → done
+  ok   A14 …as engineer last
+  ok   A15 state: done
+B. set --force clears a claim the target cannot carry
+  ok   B1 building starts claimed with a claim
+  ok   B2 brief says held before
+  ok   B3 --dry --force exits 0
+  ok   B4 …writes nothing
+  ok   B5 …claim still there
+  ok   B6 forcing the state it is in is refused
+  ok   B7 …claim intact
+  ok   B8 forced into analyzing — a claim-carrying state — exit 0
+  ok   B8b …the claim is kept
+  ok   B9 set building open --force exits 0
+  ok   B10 …the line says forced
+  ok   B11 …no claim: left
+  ok   B12 …state: open
+  ok   B13 brief no longer says held
+  ok   B14 forced to deferred — exit 0
+  ok   B15 …no claim:
+  ok   B16 forced to a parked word of the user's own — exit 0
+  ok   B17 …no claim:
+C. the first term of the line is done
+  ok   C1 scan: progress: done
+  ok   C2 …never asked
+  ok   C3 the transition line: ▸ next: open → claimed · forced · done
+  ok   C4 …never asked
+  ok   C5 statusline.sh <<< '{}' renders ▸pearde <rd>/<rn>
+  ok   C6 …never asked
+  ok   C7 no reader of the old key is left in resources/ references/ README.md
+D. vision and example declare their flags
+  ok   D1 pearde vision --bogus → exit 2
+  ok   D2 …names the flag and the list
+  ok   D3 vision --help prints the same list
+  ok   D4 vision --check --board still runs
+  ok   D5 …the same line plan.py vision --check <board> prints
+  ok   D6 the positional board still works
+  ok   D7 --board with no value → exit 2
+  ok   D8 …says it takes a value
+  ok   D9 pearde example --bogus → exit 2
+  ok   D10 …names the flag, and that it takes none
+  ok   D11 example --help prints no flags
+  ok   D12 example with no dir → usage, exit 2
+  ok   D13 example <dir> still copies
+  ok   D14 …a board is there
+  ok   D15 a transition's own refusal is unchanged (Flags moved, not changed)
+  ok   D16 …set takes: --as, --board, --worker, --force, --dry
+E. collect commits through a private index
+  ok   E1 a sibling's hunk is staged before collect
+  ok   E2 collect finished lands, exit 0
+  ok   E3 …two commits on top: the landing, the record
+  ok   E4 the landing does not carry README.md
+  ok   E5 …it carries the PRD's record
+  ok   E6 the record commit carries nothing foreign
+  ok   E7 the sibling's hunk is still staged after collect
+  ok   E8 the PRD folder reads clean in the shared index
+  ok   E9 the unstaged foreign edit is untouched
+  ok   E10 state: done in HEAD
+  ok   E11 the line carries commit and record
+  ok   E12 the sibling's next plain commit carries only its file
+  ok   E13 …and does not revert the landing
+  ok   E14 no scratch index is left behind
+  ok   E15 a HEAD moved under the build is refused
+  ok   E16 …the sibling's commit is HEAD, nothing on top
+  ok   E17 …mine.txt is not in HEAD
+F. the collect harnesses stop only the daemon they started
+  ok   F1 collect-keeps-its-word: every serve.py stop names its port inline
+  ok   F2 collect-keeps-its-word: 8443 is never written
+  ok   F1 collect-is-a-command: every serve.py stop names its port inline
+  ok   F2 collect-is-a-command: 8443 is never written
+  ok   F3 the sentinel daemon is up on its port
+  ok   F4 collect-is-a-command ran its daemon section
+  ok   F5 …the sentinel is still up afterwards
+G. statusline.sh weights by complexity
+  ok   G1 the example: statusline and scan agree
+  ok   G2 a done PRD re-weighted: both move, still agree
+  ok   G3 est as the fallback of an unscored PRD: agree
+  ok   G4 nothing scored: weight-default is on the board
+  ok   G5 …statusline and scan still agree
+
+verify: 85 checks · 85 pass · 0 fail

@@ -9,6 +9,7 @@
 # rebuilt by `pearde scan` and `pearde view`
 .state/plan.json
 .state/view.html
+.state/parse-cache.json
 
 # the round worker's handover to the dispatcher — read once, then answered
 .state/ask.md

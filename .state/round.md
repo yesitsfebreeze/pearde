@@ -32,11 +32,27 @@ explicit non-goal. **No analyst had to re-establish any of it, and none did.**
 
 ## Read this before dispatching two implementers at once
 
-**`pearde plan` offers all five in parallel. It is wrong about two of them.**
-Q4's `spec04` *reads* `references/parts/workers.md` — the file Q3 *rewrites*.
-Neither lists the other's path in its `footprint:`, so the clash check never
-fires. **Dispatch Q3 before Q4, or serialise them.** Run them together and one
-will look red for the other's work.
+**The board itself now gates Q3 last** — `scan` reads *4 dispatchable now* and
+puts `the-brief-names-the-verdict-line-collect-requires` under **gated ·
+after the-harness-sweep-is-capped-so-a-red-is-a-real-red**, a footprint clash
+on `references/parts/`. That ordering is the opposite of what Q4 needs, and it
+is the one thing on this board a person should look at before dispatching:
+
+- Q4's `spec04` **reads** `references/parts/workers.md`.
+- Q3 **rewrites** that file, and its analyst has already deleted `:156` in the
+  tree as pass one.
+- So Q4's specs were written against a `workers.md` that **already carries
+  Q3's edit**, uncommitted. If Q3's implementer is dispatched last and its
+  work is reverted or redone differently, Q4 goes red for Q3's reasons.
+
+**Safest order: Q5, then Q3, then Q4, with Q2 and Q1 free to run beside any of
+them.** If Q4 is dispatched before Q3 lands, tell its implementer that
+`workers.md` is mid-flight and `spec04`'s assertion is about the post-Q3 file.
+
+The earlier reading of this — before the scan showed the gate — was that
+`pearde plan` offers all five in parallel and is wrong about two of them:
+Q4's `spec04` *reads* `references/parts/workers.md` — the file Q3 *rewrites*,
+and neither lists the other's path in its own `footprint:`.
 
 The other three are genuinely independent: `collect.py` (Q2), `init.py` (Q1),
 `doctor.sh` + two harness probe dirs (Q5).
@@ -145,6 +161,22 @@ with the five `prd.md` files. Analyst `specs/`, `probe/` and `report.md` are
 
 The code repo (`/Users/feb/dev/infra/pearde`) is at `f3aea95` with the five
 analysts' pass-one builds uncommitted on top.
+
+## A trap that has now cost two rounds running
+
+**Any worker that calls `knowledge.py remember` leaves `doctor`'s `knowledge`
+row `broken` until someone runs `relink`.** Q5's analyst wrote
+`[[260902-e933]]`, and `doctor` went from green to *"the research layer does
+not check out"* — `graph.json is behind the files: 260902-e933`. One command
+closes it:
+
+    python3 resources/knowledge.py relink
+
+Run 2026-09-02 → `12 nodes, 14 edges`, `doctor: clean`, and `doctor .` back to
+*every part this repo owns checks out*. `graph.json` is gitignored, so there is
+nothing to commit. **The previous round hit exactly this and so did this one.
+Run `relink` after every collect whose report says it remembered something**,
+before reading anything into a red `knowledge` row.
 
 ## Green as of this round
 

@@ -14,6 +14,7 @@ time:              # OPTIONAL. See @references/parts/order.md
   actual: 0.17h
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
 workflow: probe-then-spec
+commit: eca3408 78357ed
 ---
 <!-- Ordering reads three axes and no clock: dependency (needs + footprint),
      vision importance (priority), and complexity/blast-radius. Add your own

@@ -1,9 +1,11 @@
 ---
 memo: <slug>       # equals this filename without .md
-kind: decision     # decision | note
+kind: decision     # decision | note | invariant
 status: decided    # open | decided | superseded
 subject: <one line — what this memo settles>
 date: <YYYY-MM-DD> # the day the call was recorded. Written, never stamped
+# verify:          # invariant only, and required there — a command that
+#                  # exits 0 while the invariant holds, run from the repo root
 # updated:         # only on a substantive revision; never for a path fix
 # prds:            # board-relative PRD dirs this memo governs
 #   - <prd-dir>

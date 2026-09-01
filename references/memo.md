@@ -32,10 +32,11 @@ prds:
 | key             | required | is                                                            |
 |-----------------|----------|----------------------------------------------------------------|
 | `memo`          | yes      | the slug — equals the filename without `.md`                   |
-| `kind`          | yes      | `decision` (a call was made) or `note` (source material folded in, arguing nothing of ours) |
+| `kind`          | yes      | `decision` (a call was made), `note` (source material folded in, arguing nothing of ours), or `invariant` (a rule that must keep holding, provable by its `verify:`) |
 | `status`        | yes      | `open`, `decided`, or `superseded`                             |
 | `subject`       | yes      | one line: what this memo settles                               |
 | `date`          | yes      | the day the call was recorded, ISO 8601 and only that          |
+| `verify`        | invariant only | the command that exits 0 while the invariant holds — required on an invariant, forbidden on every other kind |
 | `updated`       | no       | set only on a *substantive* revision                           |
 | `prds`          | no       | board-relative PRD dirs this memo governs. A list              |
 | `supersedes`    | no       | the slug this replaces                                         |
@@ -78,6 +79,40 @@ paragraphs are correct, per @references/language.md. Compress them.
 a decision — nobody can later tell whether the other road was walked and
 rejected or never seen.
 
+## Invariants
+
+`kind: invariant` is the one testable memo: a rule the board must not break,
+filed with the command that proves it. `verify:` holds a shell command, run
+from the repo root, that exits 0 while the invariant holds — required on an
+invariant and forbidden on every other kind, because a rule nobody can run is
+a claim, and a `verify:` on a decision would promise a proof nothing runs.
+
+```sh
+python3 @resources/memos.py verify [board]         # run every binding invariant
+python3 @resources/memos.py verify <slug> [board]  # just this one
+```
+
+An invariant is filed **proven, never on faith**: write the command, run
+`verify <slug>`, and only then is the memo done — `memo add --kind invariant`
+leaves `verify:` bare, which fails the check until the command is written.
+Re-run `verify` whenever a change might bend one. A broken invariant is a
+stop: either the change is wrong, or the invariant is dead and the memo goes
+`superseded` with a memo saying why. Superseded invariants no longer bind and
+are skipped.
+
+The check does not execute the commands — it stays fast and side-effect
+free — it only refuses an invariant without one. Executing is `verify`'s job.
+
+## The index
+
+`memos/README.md` is the index by kind — invariants first, because they bind
+now, then decisions, then notes, newest first within each. It is
+**generated**: `memo index` writes it, `memo add` rewrites it after every new
+file, and the check fails when it is stale — a maintained list beside a tree
+goes stale, so this one is never maintained, only regenerated. `scan` skips
+it; the index is not a memo. An external `memos:` dir gets no index — that
+mirror is read-only.
+
 ## An external source
 
 A repo whose decisions already live in another system does not move them —
@@ -104,6 +139,8 @@ same check alone. It fails on:
 - `status: superseded` naming no `superseded_by`, or naming a memo that does
   not exist
 - `prds:` naming a directory that is not a PRD on this board
+- an invariant without a `verify:` command, or a `verify:` on any other kind
+- a `README.md` index that does not match a regeneration from the tree
 
 Checked against the real board, never a fixture — the frontmatter and the
 board cannot drift apart quietly.

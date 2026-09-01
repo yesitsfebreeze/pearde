@@ -17,10 +17,17 @@ closed frontmatter set, and the argument for putting it on the board.
   declared keys.
 - `## Alternatives considered` is never empty — a memo with no alternatives is
   a claim.
+- `kind: invariant` is the testable memo: a rule that must keep holding,
+  carrying a `verify:` command that exits 0 while it does. Filed proven,
+  re-run by `verify` whenever a change might bend it.
+- `memos/README.md` is the index by kind — generated, never maintained;
+  `check` fails when it is stale.
 
 ```sh
 python3 @resources/memos.py list [board]    # slug · kind · status · date · subject
 python3 @resources/memos.py check [board]   # what doctor reports for `memos`
+python3 @resources/memos.py verify [board]  # run every invariant's command
+python3 @resources/memos.py index [board]   # regenerate the kind index
 ```
 
 Write one when a call is made that the code will not explain: a rule the board

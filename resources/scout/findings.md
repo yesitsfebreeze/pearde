@@ -29,6 +29,7 @@ Anything that has no answer yet goes to [Open](#open) — a queue, not a gap.
 | one widget API → terminal + web + native desktop | no single framework; `ratatui`+`ratzilla` (Rust) or `Textual`+`textual-web` (Python), each terminal-native and reusing the app on Win/Linux/macOS | gh stars · crates/pypi downloads · last-push cadence | 2026-08-27 | strong (as a rejection) |
 | community plugins to install alongside pearde | `ponytail`, `claude-hud`, `planning-with-files`, `cc-safety-net`; `claude-mem`/`claude-obsidian` rejected as duplicate of our knowledge layer | gh stars (2 search buckets) · repo state (push, license, archived) | 2026-08-31 | weak (both axes are GitHub-hosted) |
 | train and run a small model inside a Rust harness | `candle` | crates recent-dl · gh stars+state · scorecard · osv | 2026-08-28 | strong |
+| scrub an animation to scroll position on the web | native CSS scroll-driven animations where support allows; `motion` or GSAP ScrollTrigger `scrub` where logic is needed; `lenis` as the smoothing layer. Trigger-based reveal libraries rejected as a dead category | npm-dl · gh stars+state · hn | 2026-09-01 | strong (as a category verdict) |
 
 ## Findings
 
@@ -234,6 +235,35 @@ honest but disqualifying for a new install.
 
 **Overturned by** any pick going archived/frozen, or by pearde shipping the
 plugin's job natively (as it already did to `claude-mem`).
+
+### scrub an animation to scroll position on the web
+
+**Pick** native CSS scroll-driven animations (`animation-timeline: scroll()/view()`)
+where browser support allows; `motion` (framer-motion) or GSAP ScrollTrigger with
+`scrub` where JS logic is needed; `lenis` as the scroll-smoothing layer beneath
+either. **Beats** the entire trigger-based reveal-on-scroll category.
+
+| candidate | npm-dl /wk | gh stars | last push | state |
+|---|---|---|---|---|
+| framer-motion + motion | 45.7M + 20.0M | 33,438 | 1d | active, MIT |
+| gsap | 4.8M | 28,156 | 140d | slow (post-Webflow cadence), custom licence |
+| lenis | 1.3M | 15,643 | 4d | active, MIT |
+| locomotive-scroll | 14.5k | — | — | superseded by lenis (same authors' niche) |
+| lax.js | — | 10,474 | 468d | **ARCHIVED** |
+| scrollreveal | — | 22,475 | 878d | stale |
+| WOW | — | 9,899 | 799d | stale |
+
+**Why** the axes agree twice over. On installs and state, everything active is
+*scroll-linked* (position maps to timeline progress, reversible) and everything
+*trigger-based* (fire once at a threshold) is archived or years stale — a whole
+generation of libraries died when the model changed. On attention (`hn`),
+the native CSS API is the rising entrant: scroll-driven-animations.style at 62
+points, Addy Osmani and Josh Comeau writing it up in 2025. The category verdict
+is the finding: the web moved from *triggered* to *scrubbed* scroll animation.
+
+**Overturned by** the native API reaching universal support with off-main-thread
+guarantees, which would demote the JS engines to logic-only roles; or `motion`'s
+cadence collapsing after its split from Framer.
 
 ## Open
 

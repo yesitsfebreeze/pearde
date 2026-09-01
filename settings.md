@@ -5,7 +5,7 @@ workers: 6
 pipeline: 8
 weight-default: 20
 gantt-day: 8h
-context-budget: 700k
+context-budget: 160k
 ---
 
 # The pearde board

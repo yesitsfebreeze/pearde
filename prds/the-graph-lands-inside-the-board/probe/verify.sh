@@ -14,34 +14,92 @@
 #   - update's .graphify_root write does NOT resolve — str(watch_path) as
 #     passed. graph.sh must pass the FOLDER's resolved absolute path, never
 #     ".", or the marker stamps a literal "." (confirmed by reproduction).
-set -euo pipefail
+#
+# Affordability (graph-probe-makes-harness-sweep-unaffordable, 2026-09-01):
+# step [3] used to run `extract "$REPO" --force` — a full semantic pass, LLM
+# per doc chunk, unbounded (10+ min observed, then killed mid-flight), inside
+# doctor's --harnesses sweep whose wall-clock design is "the slowest harness".
+# The location contract extract must prove does not need the LLM: extract's
+# output placement (GRAPHIFY_OUT honored, marker resolved, no graphify-out
+# leak, vault emitted) is identical for a code-only corpus, which dispatches
+# zero LLM chunks. So extract now runs on a run-time fixture holding one
+# small Python file — 0 docs, 0 papers, 0 images — and the sweep pays seconds,
+# not minutes. The real repo's own graph is never rebuilt by a full extract.
+set -u
 REPO=/Users/feb/dev/infra/pearde
 SH="$REPO/resources/graph/graph.sh"
 
+PASS=0; FAIL=0
+ok()  { PASS=$((PASS+1)); printf '  ok   %s\n' "$1"; }
+bad() { FAIL=$((FAIL+1)); printf '  FAIL %s\n' "$1"; }
+
+FIX=$(mktemp -d "${TMPDIR:-/tmp}/graphprobe.XXXXXX")
+trap 'rm -rf "$FIX"' EXIT
+mkdir -p "$FIX/src"
+printf 'def add(a, b):\n    return a + b\n\nclass Calculator:\n    def total(self, xs):\n        return sum(add(x, 0) for x in xs)\n' > "$FIX/src/calc.py"
+
 echo "[1] update, then check output location + marker"
-bash "$SH" update "$REPO" --force >/dev/null
-test -f "$REPO/.pearde/graphify/graph.json" || { echo FAIL: no graph.json under .pearde/graphify; exit 1; }
-marker="$(cat "$REPO/.pearde/graphify/.graphify_root")"
-[ "$marker" = "$REPO" ] || { echo "FAIL: marker is '$marker', want '$REPO'"; exit 1; }
-[ -e "$REPO/graphify-out" ] && { echo "FAIL: graphify-out/ leaked at repo root"; exit 1; }
-echo ok
+if bash "$SH" update "$REPO" --force >/dev/null; then
+  ok "update runs clean and fast (AST, no LLM)"
+else
+  bad "update exited non-zero"
+fi
+if [ -f "$REPO/.pearde/graphify/graph.json" ]; then
+  ok "graph.json under .pearde/graphify"
+else
+  bad "no graph.json under .pearde/graphify"
+fi
+marker="$(cat "$REPO/.pearde/graphify/.graphify_root" 2>/dev/null)"
+if [ "$marker" = "$REPO" ]; then
+  ok "update's marker is the repo root"
+else
+  bad "marker is '$marker', want '$REPO'"
+fi
+if [ ! -e "$REPO/graphify-out" ]; then
+  ok "no graphify-out/ leak at repo root"
+else
+  bad "graphify-out/ leaked at repo root"
+fi
 
 echo "[2] query answers from the new location"
-bash "$SH" query "$REPO" "what is graph.sh" | grep -q "\.pearde/graphify/graph.json" || { echo "FAIL: query did not report the new graph path"; exit 1; }
-echo ok
+if bash "$SH" query "$REPO" "what is graph.sh" | grep -q "\.pearde/graphify/graph.json"; then
+  ok "query reports the graph at .pearde/graphify/graph.json"
+else
+  bad "query did not report the new graph path"
+fi
 
-echo "[3] extract (full, --force) leaves the vault + marker in place too"
-bash "$SH" extract "$REPO" --force >/dev/null
-test -d "$REPO/.pearde/graphify/obsidian" || { echo "FAIL: no obsidian vault under .pearde/graphify"; exit 1; }
-marker="$(cat "$REPO/.pearde/graphify/.graphify_root")"
-[ "$marker" = "$REPO" ] || { echo "FAIL: marker after extract is '$marker', want '$REPO'"; exit 1; }
-[ -e "$REPO/graphify-out" ] && { echo "FAIL: graphify-out/ leaked at repo root after extract"; exit 1; }
-echo ok
+echo "[3] extract lands vault + marker in place too — on a code-only fixture"
+if bash "$SH" extract "$FIX" >/dev/null; then
+  ok "extract runs clean on a 0-doc corpus (no LLM dispatched)"
+else
+  bad "extract exited non-zero on the fixture"
+fi
+if [ -f "$FIX/.pearde/graphify/graph.json" ]; then
+  ok "extract writes graph.json under the folder's .pearde/graphify/"
+else
+  bad "no graph.json under the fixture's .pearde/graphify/"
+fi
+if [ -d "$FIX/.pearde/graphify/obsidian" ]; then
+  ok "extract emits the obsidian vault"
+else
+  bad "no obsidian vault under the fixture's .pearde/graphify/"
+fi
+marker="$(cat "$FIX/.pearde/graphify/.graphify_root" 2>/dev/null)"
+if [ "$marker" = "$FIX" ] || [ "$marker" = "$(cd "$FIX" && pwd -P)" ]; then
+  ok "extract's marker resolves to the folder (never '.')"
+else
+  bad "extract marker is '$marker', want the fixture root"
+fi
+if [ ! -e "$FIX/graphify-out" ]; then
+  ok "no graphify-out/ leak in the fixture"
+else
+  bad "graphify-out/ leaked in the fixture"
+fi
 
-echo "ALL PASS"
-
-# the harness carries its own verdict — a run with a failed check must
-# not exit 0, or the proof cannot fail. every check above exits 1 on
-# first failure, so reaching here means none failed.
-fail=0
-exit "$fail"
+# The line below reports checks executed, not checks expected: drop one to a
+# stray `continue` or a quoting slip and it prints a smaller total and exits 0,
+# which is indistinguishable from success. Pin the denominator.
+[ "$((PASS+FAIL))" = 10 ] || { FAIL=$((FAIL+1)); printf '  FAIL expected 10 checks, ran %s\n' "$((PASS+FAIL))"; }
+echo
+echo "$((PASS+FAIL)) checks · $PASS pass · $FAIL fail"
+[ "$FAIL" = 0 ]

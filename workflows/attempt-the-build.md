@@ -2,7 +2,7 @@
 atomic: attempt-the-build
 subject: build the contract until it works or hits something undefined
 date: 2026-08-28
-updated: 2026-08-31
+updated: 2026-09-01
 runs: 25
 ---
 
@@ -59,3 +59,5 @@ runs: 25
 | a `--dry` run refuses on a gate the real run passes | the dry branch re-ran a gate that reads the file the real run writes first — `answer`'s gate saw the question still open because the answer is never on disk in a dry run | compute the gate's input on the scan dict in memory (the answer appended to `prd["body"]`, the state moved on `prd["fm"]`) and print the line off that dict; never re-enter `transition()` for a dry run of a two-step write |
 | every assertion in a harness passes, or every one fails, regardless of the command's output | the helper is `ok "<label>" "<expr>"` with the expr evaluated inside `ok`, so `$2`/`$3` in the expr name `ok`'s own arguments, not the caller's values | evaluate the test in the caller (`eq() { [ "$2" = "$3" ]; ok "$1" $? "…"; }`) and hand `ok` only a label and an exit code |
 | the brief says the probe's code is uncommitted, and `git status --short` is clean | a sibling session committed the whole tree, your hunks with it | `git log -1 -- <footprint path>` and read the file itself before concluding anything is missing; if the behaviour is present, the work stands — record the commit that took it, and read every spec's "what already stands" against the **file**, never against a diff |
+| a box asks you to prove a check *can* fail, and the file to mutate is an uncommitted footprint file | the restore cannot be `git checkout` — the committed text is not the text you must return to, and a checkout would silently discard the build | `cp <file> <scratch>/<name>.bak` into a scratch dir **outside** the repo, mutate, run, `cp` back, and prove the restore with `cmp <scratch>/<name>.bak <file>`. Quote the failing count, the restored count, and the `cmp`. Make the mutation unreachable at run time (`if false; then … fi`) when the check reads text rather than behaviour — a reachable one measures the mutation instead of the check |
+| a line appended with `>>` to a harness lands concatenated onto its last line | the harness ends on its exit-carrying check with no trailing newline — the shape every harness on this board ends in | `printf '\n%s\n' '<line>' >> <file>`, or check with `[ -n "$(tail -c1 <file>)" ]` first. An anchored matcher (`^…`) will not see a concatenated offender, so a can-it-fail box run this way reads green on a check that did not fire |

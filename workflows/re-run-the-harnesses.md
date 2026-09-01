@@ -2,8 +2,8 @@
 atomic: re-run-the-harnesses
 subject: re-run the recorded harnesses and account for every changed count
 date: 2026-08-28
-updated: 2026-08-29
-runs: 45
+updated: 2026-09-01
+runs: 46
 ---
 
 # re-run-the-harnesses — every number back, or explained
@@ -14,17 +14,26 @@ runs: 45
    same command line.
 2. Compare each count to the recorded one. A count that dropped is yours until
    you have shown otherwise.
-3. When a harness fails on a line you edited, read what it matches before you
+3. Before claiming any red-to-green flip, **diff the predicate against HEAD,
+   not just the result**. Extract the harness's own matcher and run it over
+   `git show HEAD:<file>` for every file it reads. If the pre-build file
+   already satisfies it, the flip is not yours and the box it backs cannot
+   fail. Name the file whose change actually moved it. A worker who only
+   re-runs checks will take credit for a neighbour's landing every time,
+   because a passing check looks identical whoever earned it.
+4. When a harness fails on a line you edited, read what it matches before you
    touch the harness. A matcher written against a markdown table row often
    matched that row's column padding, so re-aligning a table breaks it while
    the rule it asserts is intact — repair the matcher to read the cell's text,
    never the spacing, and say in the report that the rule did not move.
-4. Quote the final line of each harness in the report, next to its baseline.
+5. Quote the final line of each harness in the report, next to its baseline.
 
 ## Done when
 
 - Every recorded harness prints a count greater than or equal to its baseline.
 - Every count that changed has one sentence saying what moved it.
+- Every flip claimed as this PRD's has been shown against `git show HEAD:` —
+  the predicate failed on the old file and passes on the new one.
 - No harness was edited without the report saying which matcher changed and
   why the rule it asserts is unchanged.
 

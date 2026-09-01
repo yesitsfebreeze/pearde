@@ -2,8 +2,8 @@
 atomic: capture-the-harness-baseline
 subject: record what every committed harness prints before the tree is touched
 date: 2026-08-28
-updated: 2026-08-31
-runs: 45
+updated: 2026-09-01
+runs: 46
 ---
 
 # capture-the-harness-baseline — the numbers as they were before you
@@ -22,7 +22,7 @@ runs: 45
    --short` beside it: the untracked files a root-level check sees are the
    only way to tell your drop from a neighbour's later. Save each harness's
    whole output to a scratch file, not only its count — when a count moves you
-   need the FAIL line, and the machine may sleep before you can re-run it. Write them under a subdirectory named for this run — the scratch directory is shared across sessions, and a bare `grep FAIL <scratch>/*` sweeps another worker's outputs in with yours. Record the mtime and `git diff -U0 | grep -c '^@@'` of every file outside your footprint that a spec says it stands on — a predicate in a sibling's file moves during the run, and the number beside each run is the only way to say which plan.py a count was taken against.
+   need the FAIL line, and the machine may sleep before you can re-run it. Write them under a subdirectory named for this run — the scratch directory is shared across sessions, and a bare `grep FAIL <scratch>/*` sweeps another worker's outputs in with yours. Record the mtime and `git diff -U0 | grep -c '^@@'` of every file outside your footprint that a spec says it stands on — a predicate in a sibling's file moves during the run, and the number beside each run is the only way to say which plan.py a count was taken against. A harness that **enumerates** the board — `find … -name verify.sh`, a glob over `prds/`, a census — reads every footprint that is itself a file it enumerates, and spells none of their paths. Grep will not find it. Add every harness matching `grep -l 'find.*verify\.sh' $(find prds -name verify.sh)` to the baseline set whenever any footprint path lies under the board.
 3. Record `python3 resources/index.py check` and `bash resources/doctor.sh`
    the same way — **their exit codes as well as their lines** — the lines they print now, plus any line the contract itself
    adds (a new doctor row, a new file the map will name), are the lines you are
@@ -33,8 +33,16 @@ runs: 45
 ## Done when
 
 - Each harness that touches a footprint path has a recorded count, quoted.
-- The recording happened before any file was written — `git status --short`
-  at this point lists nothing you added.
+- The recording happened before any file *this run* writes — `git status
+  --short` at this point lists nothing you added in this session.
+- **Resuming a killed run:** when the footprint already carries a previous
+  worker's build, there is no pre-edit baseline left to take and none can be
+  reconstructed. Record the tree **as it stands now** as your measurement,
+  name the earlier worker's recorded numbers as the only baseline that
+  exists, and cite them from their report rather than re-deriving them. Say
+  in the report that the baseline is inherited. A count compared against a
+  number nobody re-took is worth nothing; a number honestly labelled
+  inherited is worth something.
 - Any pre-existing failure is written down with the words "before the first
   edit" beside it.
 

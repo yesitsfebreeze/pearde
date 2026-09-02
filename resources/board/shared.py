@@ -68,14 +68,27 @@ FLAGS = planlib.Flags(("board", "repo"), ("dry", "json"))
 class Share:
     """One thing worth sharing. `pattern` is relative to a checkout root;
     `kind` is `dir` when the whole directory is one shared object, `glob`
-    when every file the pattern matches is shared on its own."""
+    when every file the pattern matches is shared on its own; `key` is the
+    path it takes IN THE STORE, which is the pattern unless two patterns
+    name one object — the two board spellings do."""
 
-    def __init__(self, pattern, kind, why):
+    def __init__(self, pattern, kind, why, key=None):
         self.pattern, self.kind, self.why = pattern, kind, why
+        self.key = key or pattern
 
     def __repr__(self):
         return f"<Share {self.pattern} {self.kind}>"
 
+
+# One store key for the graphify cache, whichever way the board is spelled.
+# `.pearde` is a symlink onto `pearde` in an upgraded CHECKOUT and both rows
+# then resolve to one directory — but in a lane both are real directories, both
+# rows fire, and before this key the store grew two caches that shared no
+# entry. Measured 2026-09-02: 24 MB under `pearde/graphify/cache` beside 2.6 MB
+# under `.pearde/graphify/cache`, across 29 of 30 trees. One copy per machine,
+# twice, which is the duplication this module exists to remove.
+CACHE_KEY = "pearde/graphify/cache"
+RETIRED = ((".pearde/graphify/cache", CACHE_KEY),)
 
 # The table. A row is regenerable — losing it costs a refetch, never work —
 # and gitignored, which `git check-ignore` proves per tree before anything is
@@ -85,9 +98,11 @@ SHARED = (
     Share("resources/board/node_modules", "dir",
           "playwright-core, fetched on demand for the js tests"),
     Share("pearde/graphify/cache", "dir",
-          "graphify's AST cache — keyed on content hash and extractor version"),
+          "graphify's AST cache — keyed on content hash and extractor version",
+          key=CACHE_KEY),
     Share(".pearde/graphify/cache", "dir",
-          "graphify's AST cache, on a board not yet upgraded"),
+          "graphify's AST cache, on a board not yet upgraded",
+          key=CACHE_KEY),
     Share("resources/board/obsidian/plugins/*/main.js", "glob",
           "third-party plugin bundles, pinned by `install --apply`"),
     Share("resources/board/obsidian/plugins/*/styles.css", "glob",
@@ -133,6 +148,51 @@ def repo_root(tree):
     return r.stdout.strip() if r.returncode == 0 else None
 
 
+# The witness for a tree the shared table can reach. Every row hangs off
+# `resources/board/`, and this is a module that directory has always held.
+# `shared.py` would be the obvious marker and is the wrong one: a lane cut
+# before this module landed still regenerates a `node_modules` and a graphify
+# cache worth sharing, and 21 of the 31 lanes on this machine are such lanes.
+MARKER = "resources/board/plan.py"
+
+
+def main_worktree(tree):
+    """The repo's MAIN worktree — the first one `git worktree list` names.
+
+    `--show-toplevel` answers the worktree the path is IN, and on this machine
+    the board is a LINKED worktree of this same repo on a branch of its own.
+    So from the board it answers the board, from a lane it answers the lane,
+    and the code checkout — the only tree that holds `resources/board/` — is
+    named by neither. Every worktree of a repo can name the main one, which is
+    why this is the resolution and `--show-toplevel` is not."""
+    r = git(tree, "worktree", "list", "--porcelain")
+    if r.returncode != 0:
+        return None
+    for line in r.stdout.splitlines():
+        if line.startswith("worktree "):
+            return os.path.realpath(line[len("worktree "):].strip())
+    return None
+
+
+def offers(tree):
+    """Whether the shared table can ever be satisfied in this tree.
+
+    Every row hangs off `resources/board/`, and a worktree of this repo on
+    another branch holds none of it — the board is one. Surveying such a tree
+    prints rows that are permanently `store-only`, and applying to it creates
+    empty directories that satisfy nothing: measured on this machine, the board
+    worktree grew `resources/board/obsidian/`, `pearde/graphify/` and
+    `.pearde/graphify/` and shared not one byte."""
+    return os.path.isfile(os.path.join(tree, MARKER))
+
+
+def is_checkout(tree):
+    """Whether this tree holds THIS module — what the label `checkout` means,
+    and a stricter question than `offers`."""
+    return os.path.isfile(os.path.join(tree, "resources", "board",
+                                       os.path.basename(__file__)))
+
+
 def ignored(tree, rel):
     """Does git ignore this path in this tree? `check-ignore` exits 0 when
     the path IS ignored, 1 when it is not, 128 on an error — and an error
@@ -159,28 +219,78 @@ def invisible(tree, rel):
 def ignore_hint(rel):
     """The .gitignore line that would let this path be a symlink — what a
     refusal owes the person reading it."""
-    return (f"git would show it — add `{rel}` to .gitignore, with no "
+    return (f"git would show the link — add `{rel}` to .gitignore, with no "
             "trailing slash, and run `pearde share apply` again")
 
 
+def matched_pattern(r):
+    """The pattern out of `check-ignore -v`, whose line is
+    `<source>:<line>:<pattern>\\t<path>`. The empty string when it matched
+    nothing."""
+    if r.returncode != 0 or not r.stdout.strip():
+        return ""
+    field = r.stdout.splitlines()[0].split("\t")[0]
+    return field.rsplit(":", 1)[-1].strip()
+
+
+def refusal(tree, rel):
+    """Why a symlink at `rel` would be visible to git here — the sentence a
+    refusal owes the person reading it — or the empty string when it would
+    not be.
+
+    This is `invisible`'s question asked without writing anything.
+    `invisible` links the path, reads `git status` and puts the tree back;
+    a survey must write nothing, so it asks git about the ignore rules
+    instead, and asks twice, because `check-ignore` answers about the path as
+    it finds it on disk. A path that IS a directory is answered as one, so a
+    match is read for the trailing slash that makes a pattern
+    directory-only — `node_modules/` stops ignoring the path the moment the
+    real directory becomes a link. A path that is not there is answered as a
+    file, which is what a link is, so a miss is put again with the slash
+    written on, and the pattern that then matches is the same defect. No
+    pattern either way is the other refusal: nothing here ignores it at all."""
+    r = git(tree, "check-ignore", "-v", "--", rel)
+    pat = matched_pattern(r)
+    if r.returncode == 0 and pat and not pat.endswith("/"):
+        return ""                       # ignored as a link too — it can share
+    if not pat:
+        pat = matched_pattern(git(tree, "check-ignore", "-v", "--",
+                                  rel.rstrip("/") + "/"))
+    which = (f"`{pat}` ignores a directory and a symlink is not one — "
+             if pat else "no .gitignore row here ignores it — ")
+    return which + ignore_hint(rel)
+
+
+def reachable(tree, rel):
+    """Whether `link_one` would even try here. It skips a row whose top
+    directory this tree does not hold — `pearde/graphify/cache` on a board
+    spelled `.pearde/` — and a survey that judged such a row would report a
+    refusal for a link nothing was ever going to write."""
+    return os.path.lexists(os.path.join(tree, rel)) or \
+        os.path.isdir(os.path.join(tree, rel.split("/")[0]))
+
+
 def targets(tree):
-    """Every (rel, kind, why) this tree offers. A `glob` row expands against
+    """Every (rel, kind, why, key) this tree offers — `rel` where it sits in
+    the tree, `key` where it sits in the store. A `glob` row expands against
     what is on disk in the tree AND against what the store already holds, so
     a bundle no tree has fetched yet is still linked once one has."""
     out, store, seen_real = [], store_of(tree), set()
     for s in SHARED:
         if s.kind == "dir":
-            # `.pearde` is a symlink onto `pearde` on an upgraded board, so
-            # both spellings name ONE directory and the second row would
+            # `.pearde` is a symlink onto `pearde` on an upgraded CHECKOUT, so
+            # both spellings name ONE directory there and the second row would
             # report a duplicate — and report it wrong, because git reads a
             # path through a tracked symlink as tracked. The rows stay (a
-            # board not yet upgraded has a real `.pearde/`); the duplicate
-            # is dropped by what the path actually resolves to.
+            # board not yet upgraded has a real `.pearde/`, and in a lane both
+            # spellings are real directories); the duplicate is dropped by
+            # what the path actually resolves to, and where both survive they
+            # share one `key` and so one copy in the store.
             real = os.path.realpath(os.path.join(tree, s.pattern))
             if real in seen_real:
                 continue
             seen_real.add(real)
-            out.append((s.pattern, "dir", s.why))
+            out.append((s.pattern, "dir", s.why, s.key))
             continue
         seen = set()
         for base in (tree, store):
@@ -188,33 +298,48 @@ def targets(tree):
                 rel = os.path.relpath(p, base).replace(os.sep, "/")
                 if rel not in seen:
                     seen.add(rel)
-                    out.append((rel, "file", s.why))
+                    out.append((rel, "file", s.why, rel))
     return out
 
 
 # ── the state of one path ─────────────────────────────────────────────────────
 
-def state(tree, rel):
-    """What `rel` is in `tree`, against the store. One of:
+def state(tree, rel, key=None):
+    """What `rel` is in `tree`, against the store copy at `key`. One of:
 
         linked      a symlink onto this store's copy — done
+        stale       a symlink onto a RETIRED key of this same store
         foreign     a symlink somewhere else — left alone, never rewritten
         local       a real file or directory, not shared yet
+        refused     git would show the link — .gitignore names it with a
+                    trailing slash, or names it nowhere at all; no apply
+                    will change that until a row is added
         store-only  the store has it, the tree does not
         absent      neither has it
         tracked     git would track it here — refused, never linked
+
+    `refused` is the answer `apply` used to be the only thing that could
+    reach: it writes the link, reads `git status`, puts the tree back and
+    prints the reason. A survey must write nothing, so it reads the pattern
+    instead — see `refusal`. A tree already `linked` is never re-judged.
     """
-    dst = os.path.join(store_of(tree), rel)
+    store = store_of(tree)
+    dst = os.path.join(store, key or rel)
     src = os.path.join(tree, rel)
     here = os.path.lexists(src)
     if here and os.path.islink(src):
         try:
-            same = os.path.realpath(src) == os.path.realpath(dst)
+            real = os.path.realpath(src)
         except OSError:
-            same = False
-        return "linked" if same else "foreign"
+            return "foreign"
+        if real == os.path.realpath(dst):
+            return "linked"
+        return "stale" if real.startswith(store + os.sep) else "foreign"
     if here and not ignored(tree, rel):
         return "tracked"
+    if (here or os.path.exists(dst)) and reachable(tree, rel) \
+            and refusal(tree, rel):
+        return "refused"
     if here:
         return "local"
     return "store-only" if os.path.exists(dst) else "absent"
@@ -278,35 +403,48 @@ def relative_link(src, dst):
     return os.path.relpath(dst, os.path.dirname(src))
 
 
-def link_one(tree, rel, kind, dry=False):
-    """Make `tree/rel` a link onto the store. Returns (action, note).
+def link_one(tree, rel, kind, dry=False, key=None):
+    """Make `tree/rel` a link onto the store copy at `key`. Returns
+    (action, note).
 
     Actions: `linked` (already), `seeded` (this tree's copy became the
     store's), `merged` (its extra files were kept, then it was dropped),
     `attached` (linked onto a store copy it did not have), `created` (an
     empty store copy, so the next generator writes into the store),
-    `refused` (git would track it), `foreign` (someone else's symlink)."""
-    st = state(tree, rel)
+    `refused` (git would track it, or would show the link), `foreign`
+    (someone else's symlink)."""
+    key = key or rel
+    st = state(tree, rel, key)
     if st == "linked":
         return "linked", ""
     if st == "tracked":
         return "refused", "git tracks this path here"
+    if st == "refused":
+        return "refused", refusal(tree, rel)
     if st == "foreign":
         return "foreign", "already a symlink elsewhere — left alone"
+    if not reachable(tree, rel):
+        # A row whose top directory this tree does not hold. Linking it would
+        # create that directory to hang the link in — `.pearde/` in a tree
+        # spelled `pearde/`, and the other way round — which is inventing
+        # dirt, not sharing anything. Measured: an empty untracked directory
+        # that `git status` then reported forever.
+        return "skipped", "no such tree here"
 
     store = store_of(tree)
-    dst, src = os.path.join(store, rel), os.path.join(tree, rel)
-    if st == "absent":
-        if kind != "dir":
-            return "skipped", "nothing to share yet"
-        # A directory nothing has made yet is worth pre-creating so the
-        # next generator writes into the store — but only where it would
-        # belong. `.pearde/graphify/cache` on a board that spells itself
-        # `pearde/` is not a path this tree will ever hold, and creating it
-        # is inventing dirt: measured, an empty untracked directory that
-        # `git status` then reported forever.
-        if not os.path.isdir(os.path.join(tree, rel.split("/")[0])):
-            return "skipped", "no such tree here"
+    dst, src = os.path.join(store, key), os.path.join(tree, rel)
+    if st == "stale":
+        # Our own link, onto a key this module no longer keeps a copy at.
+        # It is not the tree's work and never was — drop it and re-link.
+        if dry:
+            return "attached", f"re-linked off the retired {os.path.relpath(os.path.realpath(src), store)}"
+        os.remove(src)
+        st = "store-only" if os.path.exists(dst) else "absent"
+    if st == "absent" and kind != "dir":
+        # A directory nothing has made yet is worth pre-creating, so the next
+        # generator writes into the store. A file is not: there is nothing to
+        # point at and nothing will write through the link.
+        return "skipped", "nothing to share yet"
     if dry:
         return {"local": "seeded" if not os.path.exists(dst) else "merged",
                 "store-only": "attached",
@@ -355,10 +493,10 @@ def link_one(tree, rel, kind, dry=False):
     return action, note
 
 
-def unlink_one(tree, rel, dry=False):
+def unlink_one(tree, rel, dry=False, key=None):
     """Put a real copy back where the link is. The store keeps its copy —
     `undo` is an escape hatch, not a teardown."""
-    if state(tree, rel) != "linked":
+    if state(tree, rel, key) != "linked":
         return "skipped", "not linked here"
     src = os.path.join(tree, rel)
     dst = os.path.realpath(src)
@@ -399,21 +537,40 @@ def find_board_soft(arg=None):
         return None
 
 
+def find_checkout(arg=None):
+    """The code checkout this call is about. `find_repo` answers the worktree
+    the path is IN, and the board is a linked worktree of this same repo on a
+    branch of its own — so from the board, and from a lane, that is a tree
+    holding no `resources/board/` at all. The main worktree is the one that
+    does, and every worktree of the repo can name it."""
+    here = find_repo(arg)
+    return main_worktree(here) or here
+
+
+def root_of(board, repo=None):
+    """The tree every label is relative to — the checkout, whether or not it
+    is itself worth surveying. `trees` may drop it; the store and the labels
+    still hang off it, so it is resolved separately and never read off
+    `trees()[0]`."""
+    return os.path.realpath(repo) if repo else find_checkout(board)
+
+
 def trees(board, repo=None):
-    """The checkout and every lane under the board, each a worktree root.
-    With no board there are no lanes, and the checkout alone is the answer.
-    A lane whose directory is gone is skipped, not reported — `sweep` owns
-    that."""
+    """The checkout and every lane under the board, each a worktree root —
+    and only those the shared table can reach, which `offers` decides. With no
+    board there are no lanes, and the checkout alone is the answer. A lane
+    whose directory is gone is skipped, not reported — `sweep` owns that."""
     import lanes as laneslib
-    root = repo or (repo_root(board) if board else None) or find_repo()
-    out = [os.path.realpath(root)]
+    root = root_of(board, repo)
+    out = [root] if offers(root) else []
     if not board:
         return out
     d = os.path.join(board, laneslib.LANES_DIR)
     if os.path.isdir(d):
         for slug in sorted(os.listdir(d)):
             p = os.path.join(d, slug)
-            if os.path.isdir(p) and os.path.exists(os.path.join(p, ".git")):
+            if os.path.isdir(p) and os.path.exists(os.path.join(p, ".git")) \
+                    and offers(p):
                 out.append(os.path.realpath(p))
     return out
 
@@ -440,13 +597,14 @@ LANES_MARK = ".lanes"
 
 def survey(board, repo=None):
     """One row per (tree, target): its state and what it costs unshared."""
-    ts = trees(board, repo)
-    rows, root = [], ts[0]
-    for t in ts:
-        for rel, kind, why in targets(t):
-            st = state(t, rel)
+    rows, root = [], root_of(board, repo)
+    for t in trees(board, repo):
+        for rel, kind, why, key in targets(t):
+            st = state(t, rel, key)
+            note = refusal(t, rel) if st == "refused" else ""
             rows.append({"tree": label(t, root), "path": t, "rel": rel,
-                         "kind": kind, "state": st, "why": why,
+                         "key": key, "kind": kind, "state": st, "why": why,
+                         "note": note,
                          "bytes": bytes_of(os.path.join(t, rel))
                          if st in ("local", "tracked") else 0})
     return rows
@@ -456,12 +614,12 @@ def apply_tree(tree, dry=False, undo=False, name=None):
     """Share (or un-share) every target in ONE worktree. The unit `lanes`
     calls on a fresh lane, and the unit `apply` loops."""
     out = []
-    for rel, kind, why in targets(tree):
+    for rel, kind, why, key in targets(tree):
         try:
             if undo:
-                action, note = unlink_one(tree, rel, dry)
+                action, note = unlink_one(tree, rel, dry, key)
             else:
-                action, note = link_one(tree, rel, kind, dry)
+                action, note = link_one(tree, rel, kind, dry, key)
         except (OSError, Refused) as e:
             action, note = "failed", str(e)
         out.append({"tree": name or tree, "rel": rel,
@@ -469,9 +627,41 @@ def apply_tree(tree, dry=False, undo=False, name=None):
     return out
 
 
+def retire(store, dry=False):
+    """Fold every store copy at a key this module no longer uses into the one
+    that survives, then drop it. One shared object is one store path; a second
+    path holding a second copy of it is the very duplication the store exists
+    to remove, moved from the lanes into the store. Nothing is lost — the
+    surviving copy wins every collision and the entries it does not have are
+    copied over first."""
+    out = []
+    for old, new in RETIRED:
+        a, b = os.path.join(store, old), os.path.join(store, new)
+        if not os.path.isdir(a) or os.path.islink(a) or a == b:
+            continue
+        if dry:
+            out.append({"tree": "store", "rel": old, "action": "retired",
+                        "note": f"would fold into {new}"})
+            continue
+        added = merge_into(a, b) if os.path.isdir(b) else 0
+        if not os.path.isdir(b):
+            os.makedirs(os.path.dirname(b), exist_ok=True)
+            shutil.move(a, b)
+        else:
+            shutil.rmtree(a)
+        d = os.path.dirname(a)                  # the shell the key hung in
+        while os.path.isdir(d) and not os.listdir(d) and d.startswith(store):
+            os.rmdir(d)
+            d = os.path.dirname(d)
+        out.append({"tree": "store", "rel": old, "action": "retired",
+                    "note": f"folded into {new}"
+                            + (f" — {added} entry(ies) kept" if added else "")})
+    return out
+
+
 def apply(board, repo=None, dry=False, undo=False):
-    ts = trees(board, repo)
-    out, root = [], ts[0]
+    ts, root = trees(board, repo), root_of(board, repo)
+    out = [] if undo else retire(store_of(root), dry)
     for t in ts:
         out += apply_tree(t, dry, undo, name=label(t, root))
     return out
@@ -501,7 +691,12 @@ def cmd_share(argv):
         else:
             where = a.opt.get("board") or (rest[0] if rest else None)
             board = find_board_soft(where)
-            repo = find_repo(board or where)
+            # `find_checkout`, not `find_repo`: the board is a linked worktree
+            # of this repo on its own branch, so `--show-toplevel` from it —
+            # and from any lane — answers a tree that holds no `resources/`
+            # at all, and the checkout was surveyed by no call that did not
+            # pass `--repo`. `--repo` still means exactly the tree it names.
+            repo = find_checkout(board or where)
     except Refused as e:
         print(f"pearde share: {e}", file=sys.stderr)
         return 1
@@ -510,7 +705,7 @@ def cmd_share(argv):
         if verb == "status":
             rows = survey(board, repo)
             if "json" in a.flags:
-                json.dump({"store": store_of(trees(board, repo)[0]),
+                json.dump({"store": store_of(root_of(board, repo)),
                            "rows": rows}, sys.stdout, indent=1)
                 print()
                 return 0
@@ -530,8 +725,22 @@ def cmd_share(argv):
 DONE = {"linked", "seeded", "merged", "attached", "created", "unlinked"}
 
 
+# Every state, in the order the summary reads them, with the words it uses.
+# The summary is built from this tuple and nothing else, so it accounts for
+# every row surveyed — a state left out of a hand-written line is a tree the
+# count cannot see, which is how 27 refused lanes once read as `0 refused`.
+WORDS = (("linked", "shared"),
+         ("local", "not yet"),
+         ("refused", "refused (git would show the link)"),
+         ("tracked", "refused (git tracks them)"),
+         ("stale", "linked to a retired store path"),
+         ("foreign", "someone else's link"),
+         ("store-only", "in the store only"),
+         ("absent", "not here"))
+
+
 def print_status(board, repo, rows):
-    store = store_of(trees(board, repo)[0])
+    store = store_of(root_of(board, repo))
     counts = {}
     for r in rows:
         counts[r["state"]] = counts.get(r["state"], 0) + 1
@@ -551,10 +760,15 @@ def print_status(board, repo, rows):
         for r in sorted(loose, key=lambda x: -x["bytes"]):
             size = f"  {human(r['bytes'])}" if r["bytes"] else ""
             print(f"  {r['state']:<11} {r['rel']}{size}")
-    print(f"\n{counts.get('linked', 0)} shared · "
-          f"{counts.get('local', 0)} not yet · "
-          f"{counts.get('tracked', 0)} refused (git tracks them) · "
-          f"{counts.get('foreign', 0)} someone else's link")
+            if r.get("note"):
+                print(f"  {'':<11} {r['note']}")
+    seen = {k for k, _ in WORDS}
+    for k in sorted(counts):
+        if k not in seen:                       # a state added and not worded
+            print(f"\nunaccounted state `{k}`: {counts[k]} row(s)")
+    print("\n" + " · ".join(f"{counts.get(k, 0)} {w}" for k, w in WORDS))
+    print(f"= {sum(counts.get(k, 0) for k, _ in WORDS)} "
+          f"of {len(rows)} row(s) surveyed")
     if waste:
         print(f"duplicated on disk: {human(waste)} — `pearde share apply` "
               "leaves one copy")

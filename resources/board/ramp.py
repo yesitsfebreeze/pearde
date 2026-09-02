@@ -149,8 +149,27 @@ def manifest_text(repo, paths):
 
 
 def board_words(board):
-    """What the board itself is about: every PRD's title line, lowercased. A
-    board full of Vue PRDs asks for Vue before a `package.json` does."""
+    """What the board is about: every PRD's title line, lowercased. A board
+    full of Vue PRDs asks for Vue before a `package.json` does. On a master
+    this is the union over its members — the master's own titles are one
+    member's worth, not the whole signal.
+
+    This is the public union accessor, and it is deliberately not what
+    `needs` calls. `needs` sums one board at a time so a row can credit the
+    member a count came from, and a union flattened here would lose which
+    board each title belongs to — so `_measure` reaches for `_words_of`, the
+    per-board half, and this function unions the same halves for any caller
+    that wants the whole signal and no split. It is uncalled inside this
+    module by design; deleting it as a leftover would remove the only name
+    the contract gives for the union."""
+    out = []
+    for _, b in scan_roots(board):
+        out.extend(_words_of(b))
+    return out
+
+
+def _words_of(board):
+    """One board's PRD titles, lowercased. `board_words` unions these."""
     out = []
     prds = os.path.join(board, "prds")
     for root, dirs, files in os.walk(prds):
@@ -197,8 +216,66 @@ def needs(board):
         if n:
             hits += n * 2
             why.append(f"{n} PRD{'s' if n > 1 else ''}")
-        if hits >= FLOOR.get(job, 1):
-            rows.append((job, hits, ", ".join(why)))
+        if hits:
+            out[job] = (hits, ", ".join(why))
+    return out
+
+
+def _union(board):
+    """`(totals, why, parts)` over `scan_roots` — the raw union, no floor.
+
+    `totals[job]` is the summed hits, `why[job]` the marker list a plain
+    board's single unnamed root left, and `parts[job]` the `[(member,
+    hits)]` a master's named roots left. A plain board fills `why` and
+    leaves `parts` empty; a master fills `parts` and leaves `why` empty.
+    `needs` floors the totals and `contributors` reads the parts, so the two
+    read one measurement rather than each walking the members again."""
+    totals, why, parts = {}, {}, {}
+    for name, b in scan_roots(board):
+        for job, (hits, w) in _measure(b).items():
+            totals[job] = totals.get(job, 0) + hits
+            if name:
+                parts.setdefault(job, []).append((name, hits))
+            else:
+                why[job] = w
+    return totals, why, parts
+
+
+def contributors(board):
+    """`{job: [(member, hits)]}`, loudest member first — who a master's
+    count came from. Empty on a plain board, which has no members to credit
+    and whose `why` is a marker list.
+
+    `needs` folds this into a `why` string for a row; a caller that must
+    name the member in a sentence needs the split back, and re-parsing the
+    string would guess at where a member name ends."""
+    _, _, parts = _union(board)
+    return {job: sorted(got, key=lambda r: -r[1])
+            for job, got in parts.items()}
+
+
+def needs(board):
+    """[(job, count, why)] — every job the tree or the board asks for, over
+    its floor, loudest first.
+
+    On a master board the count is the **union over its members**, each
+    measured in its own repo the way its own board would measure it, then
+    summed per job; the master's own tree is one more member of that union.
+    The floor is applied to the sum, never per member. `why` then credits
+    the members that contributed rather than restating the markers, because
+    on a union the marker list is the sum of five trees and says nothing.
+    """
+    totals, why, parts = _union(board)
+    rows = []
+    for job in totals:
+        if totals[job] < FLOOR.get(job, 1):
+            continue
+        if job in parts:
+            got = sorted(parts[job], key=lambda r: -r[1])
+            w = ", ".join(f"{n} {h}" for n, h in got)
+        else:
+            w = why.get(job, "")
+        rows.append((job, totals[job], w))
     rows.sort(key=lambda r: -r[1])
     return rows
 
@@ -382,18 +459,46 @@ def happiness(board):
         return 0
 
 
+def ask_subject(job, why, parts):
+    """Who is asking, as the sentence's subject.
+
+    On a plain board there is one tree and naming it says nothing, so the
+    subject is `The tree` and the marker list rides in the parenthesis. On a
+    master the signal is a union and `The tree` is a lie: the master's own
+    repo is usually the smallest member of it, and a person reading `The
+    tree asks for go` on a board whose own tree holds no Go at all has been
+    pointed at the wrong repo. So the subject names the members that
+    contributed, loudest first, with their counts — the three loudest, then
+    `and N more members`, because a subject listing twelve names is not read.
+    """
+    got = parts.get(job) or []
+    if not got:
+        return f"The tree asks for {job} ({why})", False
+    shown = ", ".join(f"{n} {h:,}" for n, h in got[:3])
+    rest = len(got) - 3
+    if rest > 0:
+        shown += f" and {rest} more member{'s' if rest > 1 else ''}"
+    return f"{shown} ask{'s' if len(got) == 1 else ''} for {job}", True
+
+
 def write_ask(board, proposals):
     """The forks the dispatcher puts, in `.pearde/.state/ask.md`'s own shape —
     one `## Q<n> ramp <question>` with its answers under it. One fork per
-    gap job, so a person answers each job once and never the whole toolbox."""
+    gap job, so a person answers each job once and never the whole toolbox.
+
+    The subject of each fork is `ask_subject`'s: on a master it names the
+    member the signal came from, because the union that raised the gap is
+    not this board's own tree."""
     state = os.path.join(board, ".state")
     os.makedirs(state, exist_ok=True)
+    parts = contributors(board)
     out = ["# ramp", ""]
     for i, (job, why, cands) in enumerate(proposals, 1):
+        subject, _ = ask_subject(job, why, parts)
         out.append(f"## Q{i} ramp Install a skill for {job}?")
         out.append("")
-        out.append(f"The tree asks for {job} ({why}) and no installed skill "
-                   f"mentions it. Which of these goes in, if any?")
+        out.append(f"{subject}, and no installed skill mentions it. "
+                   f"Which of these goes in, if any?")
         out.append("")
         for axis, n, src, name in cands:
             shown = src if name == "*" else name

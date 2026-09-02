@@ -85,6 +85,23 @@ never reads `off` — the map is either right or wrong.
   answer in one, and a gate nobody can afford to run is the defect it fixes,
   repeated. `harnesses: on` in `.pearde/settings.md`, default off, or
   `--harnesses` for a single run whatever the key says.
+- **A few at a time, so a red is a real red.** The sweep runs the harnesses in
+  parallel but caps how many are in flight at once — `PEARDE_HCAP`, default
+  **4**. Uncapped, forty-eight harnesses started together and collided over the
+  three fixed ports and the board service some of them bind: in the sweep of
+  2026-09-01 nearly half the reds went green on a serial re-run, so the row's
+  number could not be believed without re-running every failure by hand, which
+  is the work the row exists to avoid. Four is above the number of harnesses
+  that actually contend at any one moment and far below the box's core count,
+  so nothing waiting on a socket is starved of CPU. What it buys is isolation,
+  not speed: **wall-clock is not the case for the cap** and moves either way
+  between boxes. What is stable is that the uncapped run thrashes — the sum of
+  the harnesses' own durations was over three times higher uncapped than
+  capped on the same box, so most of an uncapped sweep's work is contention
+  rather than testing. Raising `PEARDE_HCAP` trades isolation for time,
+  lowering it buys no more isolation. It is an environment variable and not a
+  `.pearde/settings.md` key on purpose: it is the dial for an experiment, not
+  a contract surface a board is meant to tune.
 - **The expected count is the harness's own — no ledger.** A recorded total
   is a second copy of a number the file already carries, and this board has
   twice paid for that shape. A harness that pins its denominator —

@@ -735,14 +735,33 @@ if [ -n "$BOARD" ]; then
     HG=0; HU=0; HF=0; HFAILED=""; HUNPINNED=""
     HT0=$(date +%s)
     HTMP=$(mktemp -d)
-    # Every harness gets its own out/rc file and runs at once — the row's
-    # wall-clock is the slowest harness, not the sum of all of them.
-    # ponytail: unbounded parallelism, fine for ~40 short bash scripts; add a
-    # `wait -n` job cap only if a harness ever needs the whole box.
+    # Every harness gets its own out/rc file and several run at once — the
+    # row's wall-clock is far below the sum of all of them, but it is not the
+    # slowest harness either, and that is the point.
+    #
+    # The cap. Unbounded parallelism made this row's failures untrustworthy:
+    # in the sweep of 2026-09-01 nearly half the reds were contention, not
+    # faults — harnesses that bind fixed ports (8477-8479) or spawn a board
+    # service collide when forty-eight start at once, and a red that a serial
+    # re-run turns green is not evidence of anything. So the sweep runs a few
+    # at a time. HCAP=4: above the number of harnesses that actually contend
+    # for a port or a service at any moment, and far enough below the box's
+    # core count that no harness is starved of CPU while it waits on a socket
+    # with a timeout. Raising it trades trust for wall-clock; lowering it buys
+    # no more trust, only time. PEARDE_HCAP overrides it for an experiment.
+    #
+    # `wait -n` is what the comment here used to promise, and it does not
+    # exist: this file runs under /bin/bash, which on macOS is 3.2.57, and
+    # `wait -n` arrived in bash 4.3. Polling `jobs -r` is the portable
+    # equivalent and holds the cap exactly — the count is of this shell's own
+    # background jobs, and the `while read` loop's heredoc does not put the
+    # body in a subshell, so the jobs are visible to it.
+    HCAP="${PEARDE_HCAP:-4}"
     ji=0
     while IFS= read -r h; do
       [ -n "$h" ] || continue
       ji=$((ji + 1))
+      while [ "$(jobs -r 2>/dev/null | grep -c .)" -ge "$HCAP" ]; do sleep 0.1; done
       ( PEARDE_HARNESSES=1 bash "$h" </dev/null >"$HTMP/out.$ji" 2>&1; echo $? > "$HTMP/rc.$ji" ) &
     done <<EOF
 $HLIST

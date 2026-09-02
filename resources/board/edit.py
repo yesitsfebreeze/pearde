@@ -73,7 +73,7 @@ def section_span(body, heading):
     """(start, end) of the first `## <heading>` section, or None.
 
     Anchored to the start of a line, the way every reader of these files
-    finds a section — @plan._h2_sections, @questions.py, and `section()` in
+    finds a section — @plan._h2_sections, @resources/questions.py, and `section()` in
     @view.js. A substring search is not the same test: a PRD that *mentions*
     a heading in its prose — "the parent's `## Answers` settled that" — hands
     a substring search a match inside a paragraph, and a writer working off

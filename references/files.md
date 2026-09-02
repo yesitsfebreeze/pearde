@@ -190,6 +190,7 @@ command, and @references/install.md is the naming rule and the install.
 | @references/skills/pearde-graph.md | knowledge-graph passes over any folder, Obsidian vault out | `@@graph` |
 | @references/skills/pearde-knowledge.md | the research layer — query, capture, conclude, link | `@@knowledge` |
 | @references/skills/pearde-all.md | every watched board as one ordered frontier, and what could run at once — and the waves that dispatch it | `@@machine` |
+| @references/skills/pearde-machine.md | the frontier this machine can work now — the waves, the slot count and the reading behind it; it prints and moves nothing | `@@machine` |
 
 ### `resources/board/knowledge/` — the layer's content seed, planted by `init` and `upgrade`
 

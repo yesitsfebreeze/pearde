@@ -24,7 +24,7 @@ runs: 33
    removed at exit. A fixture `prd.md` left anywhere under `prds/` becomes a
    real PRD the scan picks up.
 4. Write `prds/<prd>/probe/verify.sh` as you go: one line per assertion, a
-   count at the end.
+   count at the end. The count is printed, never asserted by a spec.
 5. Stop at the first fork the build cannot pick and cannot build around, and
    record what the build was doing when it hit it. Which verdict that becomes
    is @references/parts/workers.md.
@@ -70,3 +70,4 @@ runs: 33
 | a box asks you to prove a check *can* fail, and the file to mutate is an uncommitted footprint file | the restore cannot be `git checkout` — the committed text is not the text you must return to, and a checkout would silently discard the build | `cp <file> <scratch>/<name>.bak` into a scratch dir **outside** the repo, mutate, run, `cp` back, and prove the restore with `cmp <scratch>/<name>.bak <file>`. Quote the failing count, the restored count, and the `cmp`. Make the mutation unreachable at run time (`if false; then … fi`) when the check reads text rather than behaviour — a reachable one measures the mutation instead of the check |
 | a line appended with `>>` to a harness lands concatenated onto its last line | the harness ends on its exit-carrying check with no trailing newline — the shape every harness on this board ends in | `printf '\n%s\n' '<line>' >> <file>`, or check with `[ -n "$(tail -c1 <file>)" ]` first. An anchored matcher (`^…`) will not see a concatenated offender, so a can-it-fail box run this way reads green on a check that did not fire |
 | your probe invokes another PRD's harness and its result is decided by that harness's own defect — a hard-coded port, a leaked process, a shared fixture | you are measuring the neighbour's file, and the box it backs is green or red by scheduling | do not edit that file. Make your own probe stand down when the condition holds (`PEARDE_HARNESSES` set, the port already bound) and say in the check's own text why, then report the neighbour's defect as a finding for the orchestrator to route. Demonstrate the box under the racing condition; never assert it |
+| the brief names `probe/run.sh` and only `probe/verify.sh` is on disk | a spec in this PRD's own set contracted the rename, and an earlier pass did it | take the file that exists as the same probe, name both spellings in the report, and check the spec's box against the file rather than against the brief |

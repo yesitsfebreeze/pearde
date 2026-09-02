@@ -2,8 +2,8 @@
 workflow: probe-then-spec
 subject: an open PRD, from its contract to specs written from a build
 date: 2026-08-28
-updated: 2026-08-28
-runs: 38
+updated: 2026-09-02
+runs: 40
 ---
 
 # probe-then-spec — build it first, then write down what it takes
@@ -13,6 +13,12 @@ runs: 38
 - A PRD is `open` and needs specs before anyone can be sent at it.
 - A PRD came back `refine` and a child now needs its own specs.
 - Not when the specs already exist — that is `implement-a-spec`.
+- Also when the specs **do** exist and an implementer is dispatched on this
+  same route — the second pass. Steps 3 and 5 are then not build-and-spec
+  work: step 3 re-measures and step 5 applies its `Fails when` table to the
+  blocks that already stand, without authoring a spec. Step 3's `Fails when`
+  table says so; this list should not read as excluding the case that table
+  handles.
 - Not when the contract is still a title and a hope: nothing here interviews a
   person, and a build against a vague contract produces questions nobody asked
   for.

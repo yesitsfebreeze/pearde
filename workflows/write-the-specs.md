@@ -3,7 +3,7 @@ atomic: write-the-specs
 subject: turn what the build stands up into implementable units
 date: 2026-08-28
 updated: 2026-09-02
-runs: 28
+runs: 29
 ---
 
 # write-the-specs — units another worker can finish
@@ -33,6 +33,40 @@ runs: 28
    producer that dies before printing looks exactly like a passing grep miss.
    There is no `verify:` frontmatter key — the template's keys are a closed
    set.
+
+   Before the spec is done, run the block **the way `collect` runs it** and
+   confirm the exit. The flags are `bash -e -o pipefail` — the pair at
+   `resources/board/collect.py:1242` — and both matter, in opposite directions:
+   `pipefail` makes a board-wide gate's exit inside a pipeline the block's, and
+   `-e` aborts the block at the first bare command that fails. A block tested
+   under `pipefail` alone is not tested. Awk the fence out and run it:
+
+   ```
+   bash -e -o pipefail -c "$(awk '/^```sh/{f=1;next} /^```/{f=0} f' <spec>)"
+   ```
+
+   It must exit 0 on a green tree, and must exit **non-zero** with one
+   footprint file mutated.
+
+   Two shapes are safe under `pipefail` and abort under `-e`, so they are only
+   ever caught by running with both. An assignment from a command substitution
+   carries the substitution's status, so `out=$(<gate> 2>&1); rc=$?` kills the
+   block on exactly the red output it was written to survive — write
+   `out=$(<gate> 2>&1) && rc=0 || rc=$?`, or `|| true` where the code is not
+   wanted. And a bare `<test> && <action>` aborts when the test is false, which
+   is its passing case whenever the test is looking for something that should
+   not be there — write it `if <test>; then <action>; fi`.
+
+   A mutation proves one of two different things, and only the second is what
+   the box claims. A mutation aimed at the string a `grep` reads — a renamed
+   function, an altered heading, a changed wording — proves the **counter is
+   wired**: the check runs and the failure reaches the exit. A mutation aimed
+   at what the tool **computes** — a score, a weight, an axis, a fallback,
+   a threshold — proves the block **detects a regression**. A block with only
+   the first kind behind it should say so in the report rather than let the
+   tick imply the second. The cheapest honest behavioural mutation is usually
+   one constant in the unit's own footprint file, restored by `cp` from a
+   scratch dir outside the repo and proved back with `cmp`.
 5. Say in each spec what already stands from the build and what is left.
 6. `grep -c '^- \[ \]' prds/<prd>/specs/*.md` — every spec has at least one
    box, and none is ticked before an implementer runs it. Then

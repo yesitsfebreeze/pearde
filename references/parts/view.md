@@ -12,30 +12,30 @@ a second of any file changing it swaps the new payload in **where it stands**:
 the rows move, and scroll, zoom, selection and half-typed text do not. Every
 registered board is listed at `/`. `PEARDE_PORT` moves the port.
 
-**The daemon ends its own life.** A board directory that is gone is forgotten
-on the next tick, and a daemon watching nothing on disk stops itself after
-`PEARDE_IDLE_EXIT_S` seconds (default 180). That is what stops a harness
-fixture — which points a daemon at a `mktemp -d` board and then deletes it —
-from leaving a process listening for days: no teardown of the fixture's can be
+**The daemon ends its own life.** A vanished board directory is forgotten on
+the next tick, and a daemon watching nothing on disk stops itself after
+`PEARDE_IDLE_EXIT_S` seconds (default 180). The rule stops a harness fixture —
+one pointing a daemon at a `mktemp -d` board and then deleting the board — from
+leaving a process listening for days. No teardown of the fixture's can be
 relied on, because a SIGKILL runs no trap and `ensure` detaches the child into
-its own session anyway. A daemon watching one board still on disk is never
-touched by the rule, whoever started it and whether or not they are still
-alive.
+a session of its own anyway. A daemon watching one board still on disk is never
+touched, whoever started the daemon and whether or not they are still alive.
 
-`serve.py reap` clears the ones that predate it — every `serve.py run` on this
-machine that watches no board still on disk, found through the process table
-because a daemon on a spare `PEARDE_PORT` is reachable by no port anyone
-remembers. `--dry-run` says what it would stop and stops nothing. It keeps
-anything watching a live board, anything answering for a different pid than
-the one asked about, and anything younger than `PEARDE_REAP_GRACE_S` seconds
-(default 60): between `ensure` binding its port and the board's first
-`/register`, a daemon a `SessionStart` hook just brought up is indistinguishable
-from a leak. `--pid <n>` narrows the sweep to the pids named, which is how a
-check stands the grace down to reach the stranded judgement without reaching a
-neighbouring session's daemon inside that window. `doctor.sh --harnesses` ends
-its sweep with a `reap` — no pid named and the shipped grace kept, which is
-what makes it safe beside another session — and puts what it stopped on the
-`harnesses` row.
+`serve.py reap` clears the daemons predating the rule — every `serve.py run`
+on the machine watching no board still on disk, found through the process table
+because a daemon on a spare `PEARDE_PORT` answers to no port anyone remembers.
+`--dry-run` names its candidates and stops nothing.
+
+`reap` keeps anything watching a live board, anything answering for a pid other
+than the one asked about, and anything younger than `PEARDE_REAP_GRACE_S`
+seconds (default 60): between `ensure` binding its port and the board's first
+`/register`, a daemon a `SessionStart` hook just brought up is
+indistinguishable from a leak. `--pid <n>` narrows the sweep to the pids named,
+standing the grace down to reach the stranded judgement without reaching a
+neighbouring session's daemon inside the same window. `doctor.sh --harnesses`
+ends its sweep with a `reap` — no pid named and the shipped grace kept, which
+is what makes the sweep safe beside another session — and puts what stopped on
+the `harnesses` row.
 
 The verbs, all reachable as `pearde view <verb>`: `ensure`, `status`, `stop`,
 `wait`, `forget`, `run`, `reap`.
@@ -68,16 +68,18 @@ nothing on this page is waiting for a click to exist.
 **Every board at once is `/board/all`.** The same page with no `.pearde/`
 behind it: one render over every board the service is watching, built out of
 their own payloads on each request and thrown away again. It gains a **boards**
-section, which is what it opens on — a card per board, the spread of its states
-and its counts as doors — and it loses the report, because a report is one
-board's state written for a person and picking one of several would be a lie
-about the rest. It is read-only end to end: no ＋ PRD, no save, no drag between
-columns, no answer box, and the write routes answer `409`, so the one thing a
-click does here is take you to the board that owns the row. It is not a master
-board (@references/parts/master.md) — a master is a board, with PRDs of its own
-and one merged critical path across the members it declares, where `all`
-declares nothing and computes nothing. Registering a board is the whole of
-joining it. @references/parts/all.md.
+section and opens on it — a card per board, the spread of its states and its
+counts as doors. The page loses the report, because a report is one board's
+state written for a person, and picking one of several would lie about the
+rest.
+
+`/board/all` is read-only end to end: no ＋ PRD, no save, no drag between
+columns, no answer box, and the write routes answer `409`, so a click does one
+thing only — take you to the board owning the row. The page is no master board
+(@references/parts/master.md): a master is a board, with PRDs of its own and
+one merged critical path across the members it declares, where `all` declares
+nothing and computes nothing. Registering a board is the whole of joining.
+@references/parts/all.md.
 
 **The now strip is the first thing under the title**, on every view: three
 doors — `to collect N` · `waiting on you N` · `in flight N` — the top three
@@ -88,14 +90,16 @@ the same shape on every board and the eye learns where to land. When a worker
 in flight has gone silent the door says how many.
 
 **Nothing that is git-ignored is rendered for a person.**
-A file git ignores is machine scratch: `.pearde/.state/pass.md` is one session's own
-memory (@references/parts/pass.md), `.pearde/.state/plan.json` and `.pearde/.state/history.jsonl`
-are the board's. Each is true only at the instant it was written and each is
-written in the board's own vocabulary — states, footprints, commit shas — which
-is the one register @@report forbids in the document a person reads. The view
-draws tracked files and nothing else. That rule is prose, and prose is not a
-mechanism: what would enforce it is a check that `git check-ignore -q` refuses
-every path the view fetches, and no such check exists.
+A file git ignores is machine scratch: `.pearde/.state/pass.md` holds one
+session's own memory (@references/parts/pass.md), `.pearde/.state/plan.json`
+and `.pearde/.state/history.jsonl` hold the board's. Each is true only at the
+instant of writing, and each is written in the board's own vocabulary — states,
+footprints, commit shas — the one register @@report forbids in the document a
+person reads. The view draws tracked files and nothing else.
+
+The rule is prose, and prose is no mechanism: enforcement would be a check
+running `git check-ignore -q` over every path the view fetches, and no such
+check exists.
 
 **Every number is a door.** A count, a swatch, a bar, a column head — if it
 names a set of PRDs, clicking it goes there: `5 waiting on you` opens **asks**,
@@ -105,11 +109,11 @@ dead end, and the URL follows, so where you are is a link you can send.
 
 **The timeline's x axis is not time** — agents start when work is
 dispatchable, so a date on a bar is a staffing guess. The dependency structure
-is not. The axis is weight along the **critical path**, and it is the **whole
-track** — done work laid out by the same dependency arithmetic to the LEFT of
-zero ending at now, the plan to the right, the right edge the vision reached.
-Where you are is a place on the track, and the header says what percent of it
-is behind you. Once `calibrate` has fitted the machine's hours-per-weight
+is no guess. The axis is weight along the **critical path**, and spans the
+**whole track**: done work laid out by the same dependency arithmetic to the
+LEFT of zero ending at now, the plan to the right, the right edge the vision
+reached. Where you are is a place on the track, and the header says what
+percent of the track lies behind you. Once `calibrate` has fitted the machine's hours-per-weight
 (see @references/parts/order.md), every weight on the page prints as tuned
 real hours — header, tiles, vision pill, axis, drawer; before the first fit
 they print as raw weight units. Parked PRDs — `failed`, `deferred`, the user's own states — sit
@@ -123,20 +127,20 @@ page prints the one sentence `.pearde/vision.md` declares — the payload's
   critical.
 - **ready now** is the frontier at zero, ordered by how much work each PRD
   unblocks. That ordering *is* the dispatch order. A PRD a worker already
-  holds is not on it — it is in **to collect** or nowhere.
+  holds is absent from the frontier — filed under **to collect** or nowhere.
 - **to collect** leads the frontier: finished work still open on the board.
   It comes first because closing one costs a commit and can open a whole
   frontier, which no dispatch can do. `x` filters to it, `#collect=1` links
   to it.
 - a **footprint clash** is a pairwise `after` edge — the lower-priority PRD
-  starts when the higher one ends, and nothing else waits with them. There
-  are no waves and no passes: a barrier would hold every unrelated PRD for
-  the slowest member of a pass, and agents do not work in passes — each one
-  starts the moment its own gates clear.
+  starts when the higher one ends, and nothing else waits with them. No waves
+  and no passes exist: a barrier would hold every unrelated PRD for the slowest
+  member of a pass, and agents do not work in passes — each one starts the
+  moment its own gates clear.
 - The header names the **peak agent count** the fastest path asks for. With
-  `workers` at `0` — unlimited, the default — that is the staffing; with a
-  cap set, the header shows what the cap costs beside it, and the gap is the
-  decision.
+  `workers` at `0` — unlimited, the default — the peak is the staffing; with a
+  cap set, the header shows what the cap costs beside the peak, and the gap is
+  the decision.
 - **dates** (or `v`) draws the same bars on the worker-limited calendar, at
   `gantt-day` weight per day.
 
@@ -150,25 +154,25 @@ are one claim. Inside a band the plan arithmetic breaks the tie: earliest
 start, then critical, then the size of the door it opens.
 
 The bands apply inside every grouping, and in **tree** a branch is as pressing
-as the most pressing thing inside it — a folded parent holding one `question`
-rises carrying it. Tree is one click away and it is not what a board opens on:
-under it a container's aggregate track and the landed work inside an early
-branch sit above the run that is happening right now.
+as the most pressing thing inside — a folded parent holding one `question`
+rises carrying the question. Tree is one click away and is not what a board
+opens on: under tree, a container's aggregate track and the landed work inside
+an early branch sit above the run happening right now.
 
-**A name rides its own work.** There is no column of names to correlate
-against: a PRD's name is written inside its pill where the pill can hold it,
-and floating just off the end where it cannot — off the *start* instead when
-the end is against the right edge — with what is left of it beside it, boxes
-while a worker holds it and weight otherwise. Ink inside a pill is chosen from
-that pill's own colour, so it is legible on a near-white `open` and a
-near-black `specced` alike.
+**A name rides its own work.** No column of names stands to correlate
+against: a PRD's name is written inside its pill where the pill can hold the
+name, and floating just off the end where the pill cannot — off the *start*
+instead when the end is against the right edge — with the remainder beside it,
+boxes while a worker holds the PRD and weight otherwise. Ink inside a pill is
+chosen from that pill's own colour, and so reads legibly on a near-white `open`
+and a near-black `specced` alike.
 
 Two names can want one patch of canvas, and at six pixels a row most of them
-do. Rows are in the pressure order, so placement is greedy from the top: what
-is to collect, waiting on you, in flight and ready claim their names first, and
-the settled tail is what loses one to a collision. A row without its name keeps
-its bar, its hover and its click — the name is the cheapest thing on a row to
-drop and the only one that can go without the work going with it.
+do. Rows sit in the pressure order, so placement is greedy from the top: to
+collect, waiting on you, in flight and ready claim their names first, and the
+settled tail loses one to a collision. A row without its name keeps its bar,
+its hover and its click — the name is the cheapest thing on a row to drop, and
+the only part able to go without the work going too.
 
 `names` (or `t`) brings the old column back for when a sorted list of names is
 the thing you want; it slides in rather than appears, and the plan re-lays out
@@ -178,26 +182,29 @@ what pairs a name to a bar.
 
 **Both axes fit the window.** `ppu` fits the weight across. Down, the **row
 rail** on the plot's own left edge is a slider between the two honest answers:
-at the top every row is the height it is meant to be read at and the board
-scrolls; at the bottom the whole board is on the screen and the rows are as
-short as that takes. Neither end is right for every board, which is why it is a
-rail and not a rule. It runs the axis it scales — up is the tall row, and the
-two end caps are the legend: two fat rows above, four thin ones below. Drag it
-anywhere, wheel over it, click an end, or arrow the thumb; hold shift for the
-fine grain. Hovering it, and every move of it, says the pitch in pixels and how
-many of the rows that puts on the screen. Row height still has two clamps — a
-ceiling so four PRDs are not four fat stripes, and a floor below which a bar
-stops being a shape, past which the remainder scrolls.
+at the top every row stands at its full reading height and the board scrolls;
+at the bottom the whole board is on the screen and the rows are as short as
+that takes. Neither end suits every board, hence a rail and not a rule.
+
+The rail runs the axis it scales — up is the tall row, and the two end caps are
+the legend: two fat rows above, four thin ones below. Drag the rail anywhere,
+wheel over it, click an end, or arrow the thumb; hold shift for the fine grain.
+Hovering, and every move, says the pitch in pixels and how many rows the pitch
+puts on the screen. Row height keeps two clamps — a ceiling so four PRDs are
+not four fat stripes, and a floor below which a bar stops being a shape, past
+which the remainder scrolls.
 
 **The plan opens on the default view** — now at the plot's left edge, the
-vision at its right, and the rows scaled until every one of them is on the
-screen. It is what the page loads on, what a mode switch re-establishes on the
-new axis, and what a resize keeps; `d` puts it back. The `view` dropdown in the
-plan's toolbar holds it and every other framing: the axis's three named scales
-(`fine` `mid` `whole` on vision, `day` `week` `month` on dates), `fit all` (or
-`f`) for the whole track, landed weight included, and `custom`, which is not
-chosen — it is where a wheel, a `+`/`−` or a hand on the row rail lands, and it
-is in the list so the control can say the plot has left a framing.
+vision at its right, and the rows scaled until every row is on the screen. The
+default is what the page loads on, what a mode switch re-establishes on the new
+axis, and what a resize keeps; `d` puts it back.
+
+The `view` dropdown in the plan's toolbar holds the default and every other
+framing: the axis's three named scales (`fine` `mid` `whole` on vision, `day`
+`week` `month` on dates), `fit all` (or `f`) for the whole track with landed
+weight included, and `custom`. Nobody chooses `custom` — a wheel, a `+`/`−` or
+a hand on the row rail lands there, and the entry sits in the list so the
+control can say the plot has left a framing.
 
 **Two cards, not one.** The plan and **focus** sit side by side with air
 between them, and focus pushes in and out from the right — `focus` (or `L`).
@@ -210,9 +217,8 @@ board it watches — not only masters — so a bar re-sizes and everything
 downstream of it slides within about a second of the file that moved.
 
 A state is written twice per PRD — once on dispatch, once on return — so a
-view that reads only states stands still for the whole of the run it is meant
-to be showing. The acceptance boxes move continuously, and the view reads
-them:
+view reading only states stands still for the whole run the view means to
+show. The acceptance boxes move continuously, and the view reads them:
 
 | on the page                | is                                                                  |
 |----------------------------|----------------------------------------------------------------------|
@@ -265,7 +271,7 @@ person.
 - On a `question` PRD, the pass itself — each fork with its three prepared
   answers as radio picks (the first is the recommendation, pre-selected), an
   own-answer box, and its own `answer Qn` button, which writes that pick under
-  `## Answers` (`**Q1** — <text>`). There is no pass-level submit. A
+  `## Answers` (`**Q1** — <text>`). No pass-level submit exists. A
   `## Questions` section not in @references/drill.md's format is flagged as
   not answerable and falls back to raw text, a free textarea, and a "send
   back — rewrite as questions" button that replies so under `## Answers` and
@@ -305,9 +311,9 @@ person.
   the same way, not dumped as PRD body.
 - **The answered panel** is the right half of that view: every question the
   board has settled, newest answer first, each row the question, the decision
-  and the PRD it belongs to — click one to open that PRD. It is read over
-  `GET /answers` out of the PRDs themselves, so it holds answers from PRDs
-  that have long since reopened, not only from the ones still asking. A
+  and the PRD it belongs to — click one to open that PRD. The panel is read
+  over `GET /answers` out of the PRDs themselves, so it holds answers from PRDs
+  long since reopened, not only from the ones still asking. A
   question answered here leaves its card in the same motion, so the cards
   hold open forks only and going through a pass is a list that empties.
 - `+ PRD` (or `n`) writes a new one.
@@ -386,8 +392,8 @@ pearde.onHold(() => document.body.classList.contains("my-dialog-open"));
 
 **Your own element in the page.** `view.user.js` is a module, and Lit ships
 with the view, so a board writes a component and the page renders it. The
-browser owns that contract — there is no plugin API to learn beyond where an
-element goes.
+browser owns that contract, so no plugin API waits to be learned beyond where
+an element goes.
 
 | seam        | where it renders                         |
 |-------------|------------------------------------------|
@@ -433,7 +439,7 @@ pearde.replace("list", "my-list");
 ```
 
 - `board`, `asks`, `list`, `analytics`, `memos` and `report` can be
-  replaced. The timeline cannot — it is a canvas the plan arithmetic draws.
+  replaced. The timeline cannot: a canvas the plan arithmetic draws.
 - `now` and `whatsup` — the door strip and the prose section above the plan —
   are replaced the same way: `pearde.replace("now", "my-now")` puts the element
   in the strip's place and hands it the payload on every swap.
@@ -442,18 +448,18 @@ pearde.replace("list", "my-list");
 - An unreplaceable name is ignored, never an error.
 
 **Checking a change.** `node @resources/board/viewtest.js .pearde/.state/view.html`
-opens the rendered page in a real browser and reports what it built — Lit
-bound, every seam, every view. It needs `playwright-core` installed where you
-run it, and exits 2 saying so when it is absent.
+opens the rendered page in a real browser and reports what the page built —
+Lit bound, every seam, every view. `viewtest.js` needs `playwright-core`
+installed where you run it, and exits 2 saying so on an absent install.
 
 `--snap <dir>` writes every view's markup and text. `--check <dir>` compares
 against it, so a change to how a view is built is provable rather than
 eyeballed — the text a reader sees must not move.
 
-Give it the served URL as well as the file — `node @resources/board/viewtest.js
-http://127.0.0.1:8443/board/<name>`. They are different code paths, and a page
-that is correct as a file can be broken as a service.
+Give the served URL as well as the file — `node @resources/board/viewtest.js
+http://127.0.0.1:8443/board/<name>`. The two are different code paths, and a
+page correct as a file can be broken as a service.
 
-It compares a page against a board in a known state. A PRD that moved changes
-what the views draw, and every check fails for that reason alone. Snapshot the
-board, change the code, compare — never across a pass.
+`--check` compares a page against a board in a known state. A moved PRD
+changes what the views draw, and every check fails for that reason alone.
+Snapshot the board, change the code, compare — never across a pass.

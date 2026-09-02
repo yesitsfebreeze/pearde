@@ -5,23 +5,57 @@ The loop: query first; a gap enqueues or researches; a finding is remembered;
 a conclusion is concluded from >=2 sources; relink holds the graph together;
 the dashboard and the wiki are what a person opens.
 
-Written for the folder this file sits beside: <repo>/.pearde/wiki/ —
-sources/, conclusions/, pending/, graphs/, WORKFLOW.md, Dashboard.md — the
-self-contained Obsidian vault. Every verb takes --root to run on any other
-board's folder.
+The folder is <board>/wiki/ — sources/, conclusions/, pending/, graphs/,
+WORKFLOW.md, Dashboard.md — the self-contained Obsidian vault. The board is
+the one above the cwd, found the way every other board tool finds it, so a
+worker in a lane worktree reads and writes the live record rather than a stub
+beside its own copy of this file (`default_root`). Every verb takes --root to
+run on any other board's folder.
 """
 
 import argparse
 import datetime as dt
 import hashlib
 import json
+import os
 import re
+import shutil
 import sys
 from pathlib import Path
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import memos  # noqa: E402 — the board resolver, one copy, as workflows.py does
+
 # --- paths -----------------------------------------------------------------
 
-def default_root():
+def default_root(start=None):
+    """The wiki of the board this call belongs to — the cwd's board first,
+    the folder beside this file only when the climb finds none.
+
+    The order is the whole point. A worker builds in a LANE, a git worktree
+    at `<board>/.lanes/<slug>` materialised WITHOUT the board directory on
+    purpose (@resources/board/lanes.py `create`: a tracked board copied into
+    a worktree hands every command a stale board). The lane therefore holds
+    a checkout of THIS file and no wiki beside it, so resolving
+    script-relative answered `<lane>/pearde/wiki`, `Store.ensure` created
+    it, and `query` reported `0 notes on record` against a record holding
+    82 — silently, no error, once per worker. The gap it then enqueued
+    landed in a directory `git worktree remove` deletes.
+
+    Climbing from the cwd is how every other board tool answers the same
+    question (@resources/memos.py `board_above`, and @resources/board/plan.py
+    says why discovery cannot be part of the climb). A lane's own `pearde/`
+    holds the shared graphify cache and nothing else, so it carries neither
+    `settings.md` nor `prds/` and `is_board_dir` walks straight past it to
+    the live board two levels up.
+
+    The fallback is the checkout with no board above the cwd — a call from
+    `/tmp`, a test fixture — where the folder beside this file is the only
+    answer there is. `--root` still overrides both.
+    """
+    board = memos.board_above(os.path.abspath(start or os.getcwd()))
+    if board:
+        return Path(board) / "wiki"
     repo = Path(__file__).resolve().parent.parent
     # `pearde/` since 2026-09-02, `.pearde/` on a board that never
     # migrated — @references/obsidian.md says why the dot had to go.
@@ -1102,6 +1136,127 @@ def cmd_doctor(store, args):
     return 0
 
 
+# --- harvest -----------------------------------------------------------------
+
+def stub_wikis(store):
+    """Every lane's leftover wiki under this board.
+
+    Before `default_root` climbed to the board, a worker in a lane resolved
+    the folder beside its own copy of this file and `Store.ensure` made it:
+    `<board>/.lanes/<slug>/pearde/wiki/`. Measured on this board 2026-09-02,
+    19 lanes held 29 notes that way — 5 of them `remember` findings, which
+    `git worktree remove` deletes with the lane. This finds them; `harvest`
+    moves them.
+
+    A lane whose wiki IS the live one — a symlink, a board mounted there on
+    purpose — is not a stub and is skipped by `resolve()`."""
+    board = store.root.parent
+    lanes = board / ".lanes"
+    out = []
+    if not lanes.is_dir():
+        return out
+    live = store.root.resolve()
+    for lane in sorted(lanes.iterdir()):
+        for name in ("pearde", ".pearde"):
+            w = lane / name / "wiki"
+            if not w.is_dir():
+                continue
+            try:
+                if w.resolve() == live:
+                    continue
+            except OSError:
+                continue
+            out.append(w)
+            break
+    return out
+
+
+def note_key(path):
+    """What makes two notes the same note. `enqueue` dedupes a pending note
+    on its `question:` and nothing else, so harvesting must ask the same
+    question or it re-queues every gap a lane already asked; a source or a
+    conclusion is its `title:`. The filename is never the key — `note_id`
+    is time entropy, so two lanes writing the same finding a second apart
+    get two names."""
+    try:
+        meta, _ = parse_frontmatter(path.read_text(encoding="utf-8"))
+    except OSError:
+        return None
+    for key in ("question", "title"):
+        v = str(meta.get(key, "")).strip().strip('"').lower()
+        if v:
+            return v
+    return None
+
+
+def cmd_harvest(store, args):
+    """Move every note a lane's stub wiki holds into the live record."""
+    store.ensure()
+    stubs = stub_wikis(store)
+    if not stubs:
+        print("harvest: no lane holds a wiki of its own — nothing stranded")
+        return 0
+    folders = ("pending", "sources", "conclusions")
+    have = {}
+    for folder in folders:
+        d = store.root / folder
+        have[folder] = {k for k in
+                        (note_key(p) for p in d.rglob("*.md")
+                         if p.name != "_index.md" and store.absorbed not in p.parents)
+                        if k}
+    moved, skipped = [], []
+    for stub in stubs:
+        lane = stub.parent.parent.name
+        for folder in folders:
+            src_dir = stub / folder
+            if not src_dir.is_dir():
+                continue
+            for src in sorted(src_dir.rglob("*.md")):
+                if src.name == "_index.md":
+                    continue
+                key = note_key(src)
+                if key and key in have[folder]:
+                    skipped.append((lane, folder, src.name))
+                    if not args.dry:
+                        src.unlink()
+                    continue
+                rel = src.relative_to(src_dir)
+                target = store.root / folder / rel
+                while target.exists():
+                    target = target.with_name(
+                        f"{target.stem}{hashlib.sha1(target.name.encode()).hexdigest()[:1]}.md")
+                moved.append((lane, folder, target.name))
+                if key:
+                    have[folder].add(key)
+                if args.dry:
+                    continue
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+                src.unlink()
+        if args.dry:
+            continue
+        # the emptied stub goes, so the next `harvest` has nothing to find.
+        # Only the wiki — `<lane>/pearde/graphify` is the shared cache, a
+        # symlink into <git-common-dir>/pearde-shared, and deleting through
+        # it would take every lane's cache with it.
+        if not any(stub.rglob("*.md")):
+            shutil.rmtree(stub, ignore_errors=True)
+            parent = stub.parent
+            try:
+                if parent.is_dir() and not any(parent.iterdir()):
+                    parent.rmdir()
+            except OSError:
+                pass
+    pre = "dry · " if args.dry else ""
+    for lane, folder, name in moved:
+        print(f"{pre}moved   {folder}/{name} <- {lane}")
+    for lane, folder, name in skipped:
+        print(f"{pre}already on record  {folder}/{name} <- {lane}")
+    print(f"{pre}harvest: {len(moved)} note(s) recovered, {len(skipped)} "
+          f"already on record, from {len(stubs)} lane wiki(s)")
+    return 0
+
+
 # --- CLI ----------------------------------------------------------------------
 
 def main(argv=None):
@@ -1147,6 +1302,8 @@ def main(argv=None):
     p = sub.add_parser("dashboard", help="print the plain report; --write saves Dashboard.report.md")
     p.add_argument("--write", action="store_true")
     p = sub.add_parser("doctor", help="frontmatter, wikilinks, graph sync, pending age")
+    p = sub.add_parser("harvest", help="move notes stranded in a lane's stub wiki into the record")
+    p.add_argument("--dry", action="store_true", help="report what would move, move nothing")
 
     args = parser.parse_args(argv)
     if not args.verb:
@@ -1164,6 +1321,7 @@ def main(argv=None):
         "wiki": cmd_wiki,
         "dashboard": cmd_dashboard,
         "doctor": cmd_doctor,
+        "harvest": cmd_harvest,
     }
     return verbs[args.verb](store, args)
 

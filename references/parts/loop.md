@@ -89,9 +89,12 @@ puts depends on the count step 1 printed:
 | one | that question, put as today |
 | two or more | one drill pass over all of them per @references/drill.md § The board's own frontier — before step 3, before any claim; the questions already `out` are carried, the rest are put |
 
-While two or more of that pass are not yet in `## Asked` nothing is
-dispatched: `pearde claim` refuses `asking N — drill first`, and putting them
-out is what reopens the board. One standing is not a gate — put it as today
+While two or more of that pass are not yet in `## Asked`, the PRDs those
+questions can reshape are not dispatched — each asker, its ancestors, its
+descendants and whatever `needs:` one of them: `pearde claim` refuses
+`asking N — drill first` on those and names the asker. Everything else on
+the board dispatches first, and the pass is put when those workers are in;
+putting the questions out is what reopens the rest. One standing is not a gate — put it as today
 and keep working. Otherwise: put every `question` PRD and every parked PRD
 naming a human as one pass per @references/drill.md, three answers a fork.
 
@@ -107,7 +110,12 @@ the PRD `open` on the last one. No reply: leave it.
 `a drill when it is not`, and never a split invented to keep the board moving.
 
 **4 · 5 · Spec ahead, implement.** Which persona the job wears is the
-decision; the commands are `next`'s to print. `pearde claim` refuses what is
+decision; the commands are `next`'s to print — every ready PRD, and all of
+them are claimed and dispatched in one turn, each its own background worker
+whose prompt is one line naming `pearde brief <prd> --worker <name>`: the
+worker runs it, and the brief never enters this window. `workers` and
+`pipeline` in `.pearde/settings.md` are caps a person set; `0`, the default,
+is no cap. `pearde claim` refuses what is
 not dispatchable — held, not a leaf, `needs:` not `done`, a footprint clash
 with a `claimed` PRD, a `workflow:` naming nothing — and names the gate;
 `brief` maps each refusal to a skip word, and the claim a worker's own
@@ -123,8 +131,10 @@ and its new atomics at `runs: 0` and runs `workflow check` over the library
 before either is kept, refusing the whole call with nothing written on red.
 `--workflow none` is refused outright, naming `## Route`.
 
-**6 · Collect.** Results are pushed, never polled: a finished analyst refills
-the pipeline, a finished implementer frees a slot. What a worker returns is
+**6 · Collect.** Results are pushed, never polled: a return is collected the
+moment it lands, and what its collect unblocks is dispatched in the same turn
+— the frontier is re-read off `scan` after every transition, never batched
+to the end of the pass. What a worker returns is
 one line naming its verdict and its report file — @references/parts/workers.md.
 Act on the line. Open `.pearde/prds/<prd>/report.md` only for what the line does not
 carry and the transition needs, and never for what a command already parses:

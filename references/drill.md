@@ -151,8 +151,10 @@ The count on the scan is the second entry point: when `pearde scan` prints the
 saying `asking N over M PRDs` — the pass opens on that drill before anything
 is dispatched, even though the rest of the board is moving. The drill is the
 orchestrator's, so `pearde claim` refuses with `asking N — drill first` until
-the questions are out; one question standing is not a gate, and is put as any
-pass is. Zero prints nothing.
+the questions are out — on the PRDs a question can reshape: the asker, its
+ancestors, its descendants and what `needs:` one of them. The rest of the
+board dispatches before the pass is put and runs while the user answers. One
+question standing is not a gate, and is put as any pass is. Zero prints nothing.
 
 Pass one's frontier is the board itself — every unanswered `## Questions`,
 every PRD parked on a person with no pass written, every `refine` with no
@@ -170,7 +172,8 @@ after every answer, and the drill ends when it is empty.
   loop. The tree below is for a drill that starts from a request, not from a
   board that already holds one.
 - **The orchestrator runs it.** A worker has no user to ask, so a drill is
-  never dispatched, and nothing else is dispatched while one runs.
+  never dispatched. What a question can reshape waits on it; everything else
+  is dispatched before the pass goes out.
 
 ## Facts vs decisions
 
@@ -198,6 +201,15 @@ stdin; each branch is `pearde refine <prd> < split`, a `## Split` table of the
 decisions hanging off it (`| child | contract | needs |`), repeated per
 level. Every PRD arrives `state: open` from the template. A hand-made
 `state:` is the edit @references/parts/guard.md refuses.
+
+**The tree is wide, not deep.** Every branch is dispatched the moment its
+gates clear and nothing caps how many run at once, so the shape of the tree
+is the speed of the build. Siblings with `—` in the `needs` column run
+together; a `needs` is written only where a child consumes what a sibling
+makes; and siblings own disjoint files — split by what each owns, never by
+phase. A branch whose children form one chain is one branch with steps, and
+`pearde refine` says so. Ask, before the tree is written, which decisions
+are independent of each other: those are the siblings.
 
 Attach a workflow while the tree is being written, not later. `python3
 @resources/workflows.py list` is the library; when a workflow's `## Use when`

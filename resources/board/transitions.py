@@ -156,6 +156,49 @@ def pass_problems(prd):
 # One function per gate, each raising Refused with the gate named and what
 # would clear it. `transition` picks the gate off the (from, to) edge.
 
+def drill_scope(prds, pending):
+    """rel → the askers whose unput question can reshape it — the set the
+    drill gate holds back, @references/drill.md § The board's own frontier.
+
+    For each asking rel: the rel itself, its ancestors (every `/`-prefix of
+    the rel that is a PRD), its descendants (every rel under `<rel>/`), and
+    then, transitively, every open PRD whose `needs:` resolves — through
+    `plan.needs_index` / `plan.resolve_need`, the one lookup — to a member
+    of the set. Siblings are not in it: a sibling with no `needs:` on the
+    asker owns its own files and is, by the tree's own rule, independent of
+    the answer — the one that is not says so with `needs:`, and is caught
+    by that."""
+    hit = {}
+
+    def mark(rel, asker):
+        hit.setdefault(rel, set()).add(asker)
+
+    for asker in sorted({q[0] for q in pending}):
+        parts = asker.split("/")
+        for i in range(1, len(parts) + 1):
+            pre = "/".join(parts[:i])
+            if pre in prds:
+                mark(pre, asker)
+        for r in prds:
+            if r.startswith(asker + "/"):
+                mark(r, asker)
+    idx = planlib.needs_index(prds)
+    grew = True
+    while grew:
+        grew = False
+        for r, p in prds.items():
+            if r in hit or p["state"] in qlib.CLOSED:
+                continue
+            deps = p["fm"].get("needs", [])
+            for d in (deps if isinstance(deps, list) else [deps]):
+                t = planlib.resolve_need(prds, p, d, idx)
+                if t in hit:
+                    hit[r] = set(hit[t])
+                    grew = True
+                    break
+    return hit
+
+
 def gate_claim(board, prds, prd, holder=None):
     """`plan.dispatchable` is the gate — the one predicate the scan's ready
     band reads too, so what `scan` offers is what `claim` takes. The reason
@@ -168,16 +211,27 @@ def gate_claim(board, prds, prd, holder=None):
 
     After the dispatchable gates, the drill: two or more unanswered questions
     not yet out — `@plan.drill_questions` reading the pass file's `## Asked`
-    beside the count — and nothing is dispatched, `asking N — drill first`,
-    because the drill is the orchestrator's and a worker has no user to ask.
-    One question left is step 2's ordinary put, not a gate."""
+    beside the count — and the PRDs a question can reshape wait, `asking N —
+    drill first; <rel> waits on <asker>'s questions — the rest of the board
+    dispatches`, because the drill is the orchestrator's and a worker has no
+    user to ask. The scope is `drill_scope`: the asker, its ancestors, its
+    descendants and what transitively `needs:` one of them. Every other PRD
+    dispatches before the pass is put. One question left is step 2's
+    ordinary put, not a gate."""
     why = planlib.dispatchable(prd, prds, board, holder=holder)
     if why:
         raise Refused(why)
     pending = [q for q in planlib.drill_questions(board) if not q[3]]
-    if len(pending) >= 2:
-        raise Refused(f"asking {len(pending)} — drill first; the unanswered "
-                      "questions go to the user before anything is dispatched")
+    if len(pending) < 2:
+        return
+    askers = drill_scope(prds, pending).get(prd["rel"])
+    if not askers:
+        return
+    n = sum(1 for q in pending if q[0] in askers)
+    raise Refused(f"asking {len(pending)} — drill first; {prd['rel']} waits "
+                  f"on {', '.join(sorted(askers))}'s "
+                  f"{'question' if n == 1 else 'questions'} — the rest of "
+                  "the board dispatches")
 
 
 def gate_release(board, prds, prd, to):
@@ -545,7 +599,9 @@ def progress_line(board, rel, frm, to, persona, forced=False, source=None):
         bits.append(f"collect {c}")
     if tripwire:
         bits.append("tripwire")
-    bits[-1] += f" @{workers} workers"
+    label = getattr(planlib, "workers_label",
+                    lambda n: "∞" if not n else str(n))(workers)
+    bits[-1] += f" @{label} workers"
     bits.append(f"as {persona}")
     return " · ".join(bits)
 

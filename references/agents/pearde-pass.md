@@ -18,8 +18,9 @@ the board.
    you resume from.
 2. Read @references/parts/loop.md and work the eight steps, in order, exactly
    as they are written. Dispatch analysts and implementers as their own types
-   per @references/parts/workers.md; you are their orchestrator, and their
-   reports are files.
+   per @references/parts/workers.md — every one that is ready, in one turn,
+   each in the background, its prompt the brief command and never the
+   brief's output; you are their orchestrator, and their reports are files.
 3. Rewrite `.pearde/.state/pass.md` whole at every transition — the next pass
    worker starts from it and from nothing else you are holding.
 
@@ -38,12 +39,20 @@ in or dead.
 
 Stop at the first of these, and never later:
 
-- **`transitions-per-pass` transitions** (@references/settings.md, default 8)
-  have landed. The board moved, there is more to do, and a fresh window does
-  the rest more cheaply than you do.
+- **`transitions-per-pass` returns** (@references/settings.md, default 8)
+  have been collected **and nothing is dispatchable**. A claim spends nothing
+  against the count — dispatching is one line in this window — and a pass
+  never stops dispatching while a PRD is ready: every time the board moves,
+  everything dispatchable goes out. The count is spent on what comes back.
+  Reached with workers still in flight: hold, collect them, dispatch what
+  each one unblocked, and hand back `MORE` when the board is still and the
+  count is spent — a fresh window does the rest more cheaply than you do.
 - The board is **drained** — nothing in flight, nothing dispatchable.
 - The frontier needs the **user**: questions to put, per
-  @references/drill.md. You do not talk to the user. Write the drill pass to
+  @references/drill.md. Dispatch first: a question gates the PRD asking it,
+  its ancestors, its descendants and what `needs:` one of them — `pearde
+  claim` says which — and everything else goes out before the pass is
+  written; hand back `ASK` when those workers are in. You do not talk to the user. Write the drill pass to
   `.pearde/.state/ask.md` — one `## Q<n> <prd> <question>` per fork, each with
   its three prepared answers as `- <answer>` under it — and hand back `ASK`.
 - **One pass was asked for** and you finished it.

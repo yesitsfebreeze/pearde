@@ -155,7 +155,7 @@ def payload(entries):
     land, repos, trans, dash = [], [], [], []
     hist, states, calibs = {}, set(), []
     counts = {"done": 0, "parked": 0, "containers": 0, "collect": 0, "held": 0}
-    day_h, anchor, workers = 0.0, None, 0
+    day_h, anchor, workers, unlimited = 0.0, None, 0, False
     for key, path in entries:
         try:
             p = board_payload(path)
@@ -184,10 +184,16 @@ def payload(entries):
         day_h = max(day_h, float(p.get("dayHours") or 0))
         a = p.get("anchor")
         anchor = a if anchor is None else min(anchor, a)
-        try:
-            workers += int(str(p.get("workers") or 0))
-        except ValueError:
-            pass
+        # a board's `workers` is a label — `∞` (or 0) is no cap, and one
+        # member with no cap means the merged set has none
+        w = str(p.get("workers") or "").strip()
+        if w in ("∞", "0"):
+            unlimited = True
+        else:
+            try:
+                workers += int(w)
+            except ValueError:
+                pass
         calibs.append(json.dumps(p.get("calib"), sort_keys=True))
         dash.append(dash_row(key, path, p))
     dash.sort(key=lambda r: (-(r["asks"] + r["collect"]), -r["left"],
@@ -221,7 +227,7 @@ def payload(entries):
         "dayHours": day_h or 8.0,
         "calib": calib,
         "tune": planlib.TUNE,
-        "workers": str(workers or ""),
+        "workers": "∞" if unlimited else str(workers or ""),
         "vision": {"purpose": ""},
         "counts": counts,
         "landing": land,

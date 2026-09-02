@@ -10,8 +10,8 @@ into every board.
 ```yaml
 ---
 language: English
-workers: 3
-pipeline: 3
+workers: 0
+pipeline: 0
 weight-default: 50
 gantt-day: 8h
 happiness: 0
@@ -33,8 +33,8 @@ members:
 | key           | default      | meaning                                                          |
 |---------------|--------------|-------------------------------------------------------------------|
 | `language`    | English      | the language every PRD, spec and report is written in. `pearde init` writes it by name and says so on its first line; `pearde settings language=<l>` changes it — `.pearde/memos/init-defaults-the-language.md` |
-| `workers`     | 3            | implementer slots, loop step 5                                    |
-| `pipeline`    | 3            | `specced` PRDs kept ahead, loop step 4                            |
+| `workers`     | 0            | implementer slots, loop step 5. `0` — the default — is **unlimited**: every dispatchable PRD is dispatched the moment its gates clear, and the plan's wall is the critical path. A number is a cap a person sets for a rate limit or a budget, never a guess about staffing; the view's header names the peak the fastest path asks for beside what the cap costs |
+| `pipeline`    | 0            | analyst slots, loop step 4 — `specced` PRDs kept ahead. `0` — the default — is unlimited: every `open` PRD the drill gate does not hold is specced at once. A number is a cap, same as `workers` |
 | `weight-default` | 50        | weight of an unscored PRD while no PRD on the board has `complexity` |
 | `gantt-day`   | 8h           | weight one calendar day represents in the view's `dates` mode. The timeline is decoration; nothing schedules on it |
 | `memos`       | `memos/`     | where decision records live, relative to `.pearde/`. Point it at another system's memo dir to mirror it read-only — the strict gate then applies only to the board's own `memos/`, per @references/memo.md |
@@ -47,8 +47,9 @@ members:
 | `members`     | none         | the boards this one merges — `- <path>` or `- <name>: <path>`, relative to `.pearde/`. Present means **master board**: every member's PRDs join the scan as `@<member>/<rel>`, one plan spans them. @references/parts/master.md |
 | `gate`        | none         | one command, run in the repo root by `collect` after the specs' verify blocks and before the commit. Red is exit 1 and no commit, like a red verify — measured against the output `claim:` recorded under `.pearde/.claims/<prd>/gate`: a line already there is known, a new line is red. With no record, red is any non-zero exit. @references/parts/commits.md |
 | `context-budget` | 100k      | how far one window may grow **over its own floor**, in tokens — `off` removes it, `160k` moves it. A window opens holding the system prompt, the tools, `CLAUDE.md` and the skill before a pass exists — 50k on this repo's own `/pearde` session — so the budget is measured from the smallest window the session was billed for, never from zero. Context is billed on every turn, so what a window grew is paid for again on every turn left. `resources/guard.py` is the only reader: it notes the crossing at 70% and 85%, and at the ceiling refuses everything but the pass file, @references/parts/dispatch.md, @references/parts/loop.md, @references/parts/pass.md, dispatching a worker, asking the user and the board's own commands — the ceiling is a handover, not a stop. @references/parts/dispatch.md |
-| `transitions-per-pass` | 8   | how many transitions one `pearde-pass` worker lands before it hands back `MORE` and a fresh window carries on. Read by the pass worker itself, off this file — the board is on disk and `.pearde/.state/pass.md` is what crosses, so ending a pass costs one scan. Lower it on a board whose PRDs are large, raise it where they are one-line collects. @references/agents/pearde-pass.md |
+| `transitions-per-pass` | 8   | how many **returns** one `pearde-pass` worker collects before it hands back `MORE` and a fresh window carries on. A claim spends nothing against it — dispatching is one line in the pass's window — and a pass never stops dispatching while a PRD is ready: the count is spent on what comes back, and `MORE` goes out only when it is spent and nothing is in flight. Read by the pass worker itself, off this file — the board is on disk and `.pearde/.state/pass.md` is what crosses, so ending a pass costs one scan. Lower it on a board whose PRDs are large, raise it where they are one-line collects. @references/agents/pearde-pass.md |
 | `claim-ttl`   | `30m`        | how long a held PRD's files may stand still before its claim is **silent** — the newest mtime over the PRD directory and its footprint union in `repo`, the same union `collect` commits. `30m`, `2h`, `1d`; a bare number is minutes. `plan.py`'s `silent_of` is the one reader; `scan`, the page and `sweep` print and act on its word. @references/parts/view.md |
+| `footprint-above` | 40       | a footprint entry that is a directory holding more tracked files than this is **wide**: `pearde specced` prints `wide footprint — <path> holds N tracked files` and still accepts the set. A warning, never a refusal — a rename across a tree is legitimately wide, and it is also the PRD every other one on the board waits behind, which is what the line says. @references/parts/workers.md |
 | `split-above` | 40           | a spec set whose `complexity` sums above this is REFINE, not SPECCED. The analyst brief carries the number as `<split_above>`, and `pearde specced` refuses the set — `over split-above: 58 > 40 — REFINE it` — so a verdict that ignored the brief cannot land. A limit, never a floor: a REFINE under it is still allowed. A master board reads each member's own |
 | `specs-above` | 6            | a spec set with more files than this is REFINE, not SPECCED — the same two readers, `<specs_above>` in the brief and `over specs-above: 7 > 6 — REFINE it` from `specced`. A child over either limit is REFINEd in its turn; depth is unbounded |
 | `name`        | inferred     | what the board calls itself — the view's title and `/board/<name>` URL. Inferred from the directory on a plain board, from the member names on a master — a placeholder: the first pass meeting an unnamed master asks the user and writes it |

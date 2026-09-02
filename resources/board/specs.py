@@ -31,6 +31,16 @@ undeclared one is refused with the list, exit 2, before the board is read;
 `--dry` prints the line the write would print, `dry ·` in front, and the
 paths, and writes nothing.
 
+Two warnings, never refusals, because a wide footprint can be legitimate: a
+footprint entry that is a directory holding more than `footprint-above`
+tracked files (the third key of `settings.md`, default 40, counted by `git
+ls-files` in the PRD's repo) prints `<spec>: wide footprint — <path> holds <N>
+tracked files …`, since a directory root clashes with every PRD on the board
+and serializes each behind this one. A `## Split` table of three or more
+children whose `needs` form one chain — the longest chain covers every child,
+so nothing in the split runs at once — prints `chain: <N> children in one
+line …` on stderr before `refine` writes anything, dry or real.
+
 `plan.py` does the reading, `edit.py` the writing, and `transitions.py` prints
 the progress line and records the row in `.transitions.jsonl` — the same
 three every other transition goes through. The model creates no directory
@@ -69,7 +79,9 @@ REFINE_FROM = ("refine", "analyzing", "open", "question")
 CHILD_HEADER = "| child | contract | needs |\n|---|---|---|"
 # The two size limits of @references/settings.md: over either, a spec set is
 # REFINE and `specced` refuses it. The brief prints the same two numbers.
-LIMITS = (("split-above", 40), ("specs-above", 6))
+# `footprint-above` is a third, a warning only: a footprint directory holding
+# more tracked files than this is a clash with the whole board.
+LIMITS = (("split-above", 40), ("specs-above", 6), ("footprint-above", 40))
 
 
 # ── can a verify block fail? ──────────────────────────────────────────────────
@@ -540,10 +552,44 @@ def check_spec(path, fm, text, lib, own_feet):
     return bad, warn, fp
 
 
+def tracked_under(repo, path, cache):
+    """How many tracked files `git ls-files` sees under `path` in `repo`, or
+    None when the path is no directory, the repo is no git repo, or git will
+    not answer — a directory root is what serializes a board, a file never.
+    `cache` keeps one fork per path across the spec set."""
+    if path in cache:
+        return cache[path]
+    n = None
+    full = os.path.join(repo, path)
+    if os.path.isdir(full) and plan.repo_root(full):
+        out = plan.git(repo, "ls-files", "--", path)   # None when git says no
+        if out is not None:
+            n = sum(1 for l in out.splitlines() if l.strip())
+    cache[path] = n
+    return n
+
+
+def wide_footprints(repo, name, feet, limit, cache):
+    """One warning per footprint entry of spec `name` that is a directory
+    holding more than `limit` tracked files. A warning, not a refusal: the
+    whole directory may be the work — but then the spec should say so, since
+    every PRD touching it waits behind this one."""
+    out = []
+    for path in feet:
+        n = tracked_under(repo, path, cache)
+        if n is not None and n > limit:
+            out.append(f"{name}: wide footprint — {path} holds {n} tracked "
+                       "files; every PRD touching it waits behind this one "
+                       "— list the files the spec writes, or say why the "
+                       "whole directory is the work")
+    return out
+
+
 def read_specs(prd, lib):
     """(sum, count, refusals, warnings, footprints, workflows) over every
     specs/*.md — the workflows in spec frontmatter too, in file order, the
-    route a `specced` with no flag may write down."""
+    route a `specced` with no flag may write down. A footprint directory
+    wider than `footprint-above` is a warning here, per spec and entry."""
     sdir = os.path.join(prd["dir"], "specs")
     files = (sorted(f for f in os.listdir(sdir) if f.endswith(".md"))
              if os.path.isdir(sdir) else [])
@@ -554,6 +600,9 @@ def read_specs(prd, lib):
     own = [str(p).rstrip("/") for p in (own if isinstance(own, list)
                                         else [own]) if p]
     total, bad, warn, feet, wfs = 0, [], [], [], []
+    repo = plan.prd_repo(prd)
+    wide = limits(prd["board_path"])["footprint-above"]
+    counts = {}
     for f in files:
         path = os.path.join(sdir, f)
         text = open(path, encoding="utf-8").read()
@@ -561,6 +610,7 @@ def read_specs(prd, lib):
         b, w, fp = check_spec(path, fm, text, lib, own)
         bad += [f"{path}:{ln}: {msg}" for ln, msg in b]
         warn += w
+        warn += wide_footprints(repo, f, fp, wide, counts)
         feet += fp
         wf = fm.get("workflow")
         if wf and not isinstance(wf, list) and str(wf).strip():
@@ -571,9 +621,9 @@ def read_specs(prd, lib):
 
 
 def limits(board_path):
-    """{key: int} for `split-above` and `specs-above` from one board's
-    `settings.md` — the PRD's own, so a master reads each member's. A key
-    missing or not an integer reads at its default."""
+    """{key: int} for `split-above`, `specs-above` and `footprint-above`
+    from one board's `settings.md` — the PRD's own, so a master reads each
+    member's. A key missing or not an integer reads at its default."""
     fm = plan.board_settings(board_path)
     out = {}
     for k, d in LIMITS:
@@ -829,6 +879,36 @@ def child_prd(parent_fm, child, contract, needs):
     return head + "".join(out) + tail
 
 
+def chain_line(rows):
+    """The `chain:` warning when the split's children form one line — three
+    or more, and the longest `needs` chain over the table covers every one
+    of them, so no two run at once — else None. Two or more children with
+    no needs at all is two starts, never a chain. Needs pointing outside the
+    table (children already on disk) do not lengthen a chain."""
+    names = [c for c, _, _ in rows]
+    if len(names) < 3:
+        return None
+    needs = {c: [n for n in ns if n in names and n != c] for c, _, ns in rows}
+    if sum(1 for c in names if not needs[c]) >= 2:
+        return None
+    depth, seen = {}, set()
+
+    def longest(c):
+        if c in depth:
+            return depth[c]
+        if c in seen:                      # a cycle: counts as its own end
+            return 1
+        seen.add(c)
+        depth[c] = 1 + max((longest(n) for n in needs[c]), default=0)
+        return depth[c]
+
+    if max(longest(c) for c in names) < len(names):
+        return None
+    return (f"chain: {len(names)} children in one line, nothing in this "
+            "split runs at once — a phase is not a child; split by what "
+            "each owns")
+
+
 def refine(board, args, persona):
     """split a PRD into children from the analyst's `## Split` table"""
     prds, rel, prd = find_prd(board, args.pos[0])
@@ -848,6 +928,12 @@ def refine(board, args, persona):
             if n not in names and n not in on_disk:
                 raise Refused(f"child `{c}` needs `{n}`, which is no sibling "
                               "in the table")
+    chain = chain_line(rows)
+    if chain:
+        # a warning; the split still writes. On stderr with the other
+        # warnings: stdout is one line per child then the progress line, and
+        # a reader counts on that shape.
+        print(chain, file=sys.stderr)
     exists = lambda c: os.path.isdir(os.path.join(prd["dir"], c))  # noqa
     new = [(c, k, n) for c, k, n in rows if not exists(c)]
     old = [c for c, _, _ in rows if exists(c)]

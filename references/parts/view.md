@@ -133,8 +133,10 @@ page prints the one sentence `.pearde/vision.md` declares — the payload's
   are no waves and no passes: a barrier would hold every unrelated PRD for
   the slowest member of a pass, and agents do not work in passes — each one
   starts the moment its own gates clear.
-- The header names the **peak agent count** the fastest path asks for, beside
-  what `workers` costs instead. The gap is the decision.
+- The header names the **peak agent count** the fastest path asks for. With
+  `workers` at `0` — unlimited, the default — that is the staffing; with a
+  cap set, the header shows what the cap costs beside it, and the gap is the
+  decision.
 - **dates** (or `v`) draws the same bars on the worker-limited calendar, at
   `gantt-day` weight per day.
 

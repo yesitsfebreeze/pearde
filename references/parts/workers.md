@@ -2,8 +2,17 @@
 
 The exact text to hand an analyst and an implementer.
 
-Hand each worker the output of `pearde brief <prd>` — one command, nothing
-composed. `@` and `@@` resolve in @index.md.
+A worker's prompt is the brief **command**, never its output:
+
+```
+Run `python3 <resources>/pearde.py brief <prd> --worker <name> --as <id>` and follow its output as your whole brief.
+```
+
+The worker runs it in its own window, so the brief — eight kilobytes, two
+thousand tokens — is paid for by the window that uses it and never enters
+the pass's, which is what lets one pass dispatch twenty workers in one turn.
+The claim a worker's own `brief` re-reads is not a refusal when the worker
+named is the one asking. `@` and `@@` resolve in @index.md.
 
 **Dispatch to the named type, never to a general one.** An analyst is
 `pearde-analyst`, an implementer is `pearde-implementer`, and the pass
@@ -174,7 +183,10 @@ decides the state, and a `stopped` row does not.
 > - **SPECCED** — the build went through, or far enough that only defined
 >   work remains. Write `specs/specNN.md` files from what you built, template
 >   `@references/templates/spec.md`, each one implementable unit: goal,
->   `complexity:` and `footprint:` in frontmatter, `- [ ]` acceptance boxes
+>   `complexity:` and `footprint:` in frontmatter — the footprint is the
+>   files the spec writes, a directory only when the spec creates it or
+>   writes most of it; a root such as `src` clashes with every PRD on the
+>   board, and `pearde specced` says how many files it holds — `- [ ]` acceptance boxes
 >   a check can fail, and a verify command. Each spec says what already
 >   stands and what is left to finish. Report the spec list, the PRD's
 >   `complexity` (1-100) and `blast-radius` (`high`|`mid`|`low`) with one
@@ -236,7 +248,11 @@ decides the state, and a `stopped` row does not.
 > - **REFINE** — the build hit a missing piece big enough to be its own
 >   contract, or the PRD holds more than one. Report the proposed children,
 >   `<dir-name> — one-line contract` each, and for each the thing the build
->   hit that it answers. End the report with the table `pearde refine`
+>   hit that it answers. The children are siblings that run at once:
+>   `needs` only where a child consumes what a sibling makes, and the
+>   footprints of siblings disjoint — split by what each owns, never by
+>   phase. Children in one chain are one PRD with steps, not a split, and
+>   `pearde refine` says so. End the report with the table `pearde refine`
 >   reads, verbatim:
 >
 >   ```

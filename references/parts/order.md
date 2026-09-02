@@ -67,6 +67,12 @@ board average. Nothing asks an analyst to produce one, and no pass reports
 hours left — wall-clock is a function of token throughput, tool latency and
 contention, not a property of the work.
 
+`workers` is no axis either. `0`, the default, is unlimited: the plan
+dispatches every ready PRD the moment its edges clear, and the wall it
+prints is the critical path — the one bound agents cannot argue with. A
+number is a cap a person set, and the plan then prints the wall that cap
+costs beside the peak the fastest path asked for.
+
 The one clock the board does show is fitted, not estimated: `plan.py
 calibrate` reads every done PRD carrying an `actual:` across every registered
 board and fits one machine-wide constant — hours per unit of weight, as a

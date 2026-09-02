@@ -20,8 +20,8 @@ each skill file says what it does with no board in scope.
 | the board as one page        | `scan` — `@resources/board/plan.py scan`: counts, progress terms, collect, in flight, waiting on you, ready, gated. Loop step 1, run on its own | `pearde scan` |
 | which step the pass is on   | `next` — `@resources/board/plan.py next`: the loop step, the decision it owes and the exact command, one call after `scan`. Reads and writes nothing | `pearde next` |
 | one pass, then stop         | `once`                                                                                                   | — |
-| more implementers            | `workers=5` — written to `.pearde/settings.md`, persists                                                    | — |
-| deeper spec pipeline         | `pipeline=5` — written to `.pearde/settings.md`, persists                                                   | — |
+| cap the implementers         | `workers=5` — a cap, written to `.pearde/settings.md`, persists; `workers=0` lifts it, and unlimited is the default | — |
+| cap the analysts             | `pipeline=5` — a cap, written to `.pearde/settings.md`, persists; `pipeline=0` lifts it, and unlimited is the default | — |
 | new PRD                      | `add <title>` — dir + `prd.md` from `@references/templates/prd.md`, `state: open`, `origin: requested`. Runs as printed: with no `--as` and no `PEARDE_AS` it files the PRD `· as engineer (default)`, the one transition that does — a new PRD has no earlier line to rewrite | `pearde add [--dry]` |
 | park a derived PRD           | `defer <prd>` — `state: deferred`, per @references/parts/derived.md; `release <prd> open` is its inverse, the one way back from any parked state | `pearde defer [--dry]` |
 | work out what is wanted      | `drill <prd>` — interview per `@references/drill.md`. With no `<prd>`: the board's own open frontier where there is one, else a new tree | — |

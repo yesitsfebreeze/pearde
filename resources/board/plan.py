@@ -1348,7 +1348,7 @@ def gantt_payload(board, prds, mp, settings):
         # hand-set margin the view multiplies on top of the fit
         "calib": read_calibration(board),
         "tune": TUNE,
-        "workers": str(settings.get("workers", "3")),
+        "workers": workers_label(parse_workers(settings.get("workers", "0"))),
         # the one sentence `prds/vision.md` says the board is for — the page
         # prints it under the numbers. Empty when the board declares none
         "vision": {"purpose": (read_vision(board) or {}).get("vision", "")},
@@ -1718,13 +1718,34 @@ def board_settings(board):
     return {}
 
 
+# The words that say "no cap" in settings.md or on the flag. The board
+# assumes unlimited parallel agents; a number is a cap the user chose.
+UNLIMITED = ("", "0", "off", "unlimited", "∞")
+
+
+def parse_workers(value):
+    """A `workers:` value as the cap — 0 is unlimited, and the default."""
+    s = str(value if value is not None else "").strip().lower()
+    if s in UNLIMITED:
+        return 0
+    try:
+        return max(int(s), 0)
+    except ValueError:
+        return 0
+
+
 def plan_workers(board, workers):
     if workers is not None:
-        return workers
+        return parse_workers(workers)
     try:
-        return int(board_settings(board).get("workers", 3))
-    except ValueError:
-        return 3
+        return max(int(board_settings(board).get("workers", 0)), 0)
+    except (TypeError, ValueError):       # `off`, `unlimited`, `∞`
+        return parse_workers(board_settings(board).get("workers"))
+
+
+def workers_label(n):
+    """What a cap prints as — `∞` when there is none."""
+    return "∞" if not n else str(n)
 
 
 def needs_index(prds):
@@ -1934,7 +1955,9 @@ def compute_plan(board, workers=None, warn=True):
     # moment its edges are done and a worker is free, best door first. The
     # dispatch order it visits IS the plan's order. The offsets only feed the
     # Gantt dates — a staffing guess, never a fact about the plan.
-    nslots = max(workers, 1)
+    # No cap means every ready PRD starts the moment its edges clear: the
+    # schedule is then the critical-path schedule itself.
+    nslots = workers if workers > 0 else max(len(todo), 1)
     left = {r: len(edges[r]) for r in todo}
     ready = [r for r in todo if not left[r]]
     # The ready band is `dispatchable`, the one predicate `claim` reads. A
@@ -1949,8 +1972,12 @@ def compute_plan(board, workers=None, warn=True):
         why = dispatchable(todo[r], prds, board)
         if why and not why.startswith("container:"):
             held[r] = why
-            ready.remove(r)
-    pending = list(held)
+            if workers > 0:
+                ready.remove(r)
+    # With no cap the hold costs no slot: a held PRD keeps its place on the
+    # critical path (the frontier still never offers it), so the wall is
+    # the path's length. Under a cap the held go to the tail, as before.
+    pending = list(held) if workers > 0 else []
     running, schedule, order, t0 = [], {}, [], 0.0
     def take(pool):
         best = min(pool, key=lambda x: axis_rank(x, unblocks))
@@ -1992,11 +2019,18 @@ def compute_plan(board, workers=None, warn=True):
         t0, r = running.pop(0)
         finish(r)
     wall = max((s["end"] for s in schedule.values()), default=0.0)
+    # the most PRDs running at once — what the schedule asks for at its widest
+    marks = sorted([(s["start"], 1) for r, s in schedule.items() if est[r] > 0]
+                   + [(s["end"], -1) for r, s in schedule.items() if est[r] > 0])
+    peak = run = 0
+    for _, d in marks:
+        run += d
+        peak = max(peak, run)
     return {"prds": prds, "todo": todo, "parked": parked, "settings": settings,
             "workers": workers, "needs": needs, "est": est, "feet": feet,
             "boxes": boxes, "collect": sorted(collect), "held": held,
             "after": after, "schedule": schedule, "order": order,
-            "unblocks": unblocks, "wall": wall, "avg": avg,
+            "unblocks": unblocks, "wall": wall, "avg": avg, "peak": peak,
             "prio": {r: prio(r) for r in todo}}
 
 
@@ -2296,7 +2330,7 @@ def cmd_scan(board):
                   + ("s" if askers != 1 else ""))
     print(f"board: {board} · {len(prds)} PRDs"
           + (f" · master of {len(mem)}: " + ", ".join(mem) if mem else "")
-          + (f" · workers={r['workers']}" if r else "")
+          + (f" · workers={workers_label(r['workers'])}" if r else "")
           + asking
           + axis_note)
     if vis and vis["vision"]:
@@ -2418,8 +2452,12 @@ def cmd_next(argv):
     r = compute_plan(board, None, warn=False)
     collect, yours, flight, ready, gated, why = \
         pressure_bands(board, prds, r)
+    # Every actionable section prints, in step order — the whole set this
+    # turn acts on, with the board assuming unlimited parallel agents. Each
+    # section only when non-empty; the first line keeps its shape.
     unput = [(rel, qid, title) for rel, qid, title, out
              in drill_questions(board) if not out]
+    acted = False
     if unput:
         gate = (" — one drill pass to the user before any claim"
                 if len(unput) > 1 else
@@ -2429,28 +2467,32 @@ def cmd_next(argv):
         for rel, qid, title in unput:
             print(f"  {rel} · {qid} {title}")
         print('  pearde answer <prd> Q<n> "<text>" per answer')
-        return
+        print("  claims on PRDs these questions do not touch go ahead; the"
+              " rest wait — pearde claim says which")
+        acted = True
     if collect:
         print(f"step 6 · collect — {len(collect)} finished, waiting to be"
               " closed")
         print("  decision: whether to believe the report; whether an edit"
               " was the atomic's")
-        more = f"  ({len(collect) - 1} more)" if len(collect) > 1 else ""
-        print(f"  pearde collect {collect[0]}" + more)
-        return
+        for x in collect:
+            print(f"  pearde collect {x}")
+        acted = True
     refine = [x for x in yours if prds[x]["state"] == "refine"]
     if refine:
         print(f"step 3 · refine — {len(refine)} came back REFINE")
         print("  decision: whether the analyst's `## Split` table is usable;"
               " a drill when it is not")
-        print(f"  pearde refine {refine[0]} < report")
-        return
+        for x in refine:
+            print(f"  pearde refine {x} < report")
+        acted = True
     failed = [x for x in yours if prds[x]["state"] == "failed"]
     if failed:
         print(f"step 6 · collect — {len(failed)} failed")
         print("  decision: what a failed attempt needs — `## Failure` first")
-        print(f"  pearde release {failed[0]} failed")
-        return
+        for x in failed:
+            print(f"  pearde release {x} failed")
+        acted = True
     if ready:
         x = ready[0]
         impl = prds[x]["state"] == "specced"
@@ -2458,9 +2500,16 @@ def cmd_next(argv):
         print(f"step {5 if impl else 4} · "
               f"{'implement' if impl else 'spec ahead'} — ready: {x}" + more)
         print("  decision: which persona the job wears")
-        print(f"  pearde claim {x} <worker>")
-        print(f"  pearde brief {x} --worker <worker>"
-              f" → dispatch as pearde-{'implementer' if impl else 'analyst'}")
+        print("  dispatch every one of these in this turn, each as its own"
+              " background worker — a worker's prompt is the brief command,"
+              " not its output")
+        for x in ready:
+            impl = prds[x]["state"] == "specced"
+            print(f"  pearde claim {x} <worker>")
+            print(f"  pearde brief {x} --worker <worker>"
+                  f" → dispatch as pearde-{'implementer' if impl else 'analyst'}")
+        acted = True
+    if acted:
         return
     if gated:
         x = gated[0]
@@ -2510,7 +2559,8 @@ def cmd_plan(board, workers):
     fw = lambda w: fmt_w(w, cal)
     mem = [n for n, _ in members(board)]
     print(f"plan: {len(todo)} PRDs"
-          f" · workers={r['workers']} · unspecced est'd at {fw(r['avg'])}"
+          f" · workers={workers_label(r['workers'])}"
+          f" · unspecced est'd at {fw(r['avg'])}"
           + (f" · master of {len(mem) + 1} boards: "
              + ", ".join([os.path.basename(os.path.dirname(board))] + mem)
              if mem else "")
@@ -2577,8 +2627,14 @@ def cmd_plan(board, workers):
                 why.append("wf " + wf[x])
             print(f"  · {x} [{p['state']}] p{p['fm'].get('priority', 0)}"
                   f" {fw(est[x])}" + (f"  ({'; '.join(why)})" if why else ""))
-    print(f"\n≈ {fw(r['wall'])} wall @ {r['workers']} workers — a staffing"
-          " guess, not a promise. The dependency structure above is the plan")
+    if r["workers"]:
+        print(f"\n≈ {fw(r['wall'])} wall @ {r['workers']} workers — a staffing"
+              f" guess, not a promise. The dependency structure above is the"
+              f" plan · peak {r['peak']} at once")
+    else:
+        print(f"\n≈ {fw(r['wall'])} on the critical path with unlimited agents"
+              f" · peak {r['peak']} at once — the dependency structure above"
+              " is the plan")
 
     mp, mp_path = load_map(board)
     mp["after"] = r["after"]
@@ -2836,14 +2892,19 @@ COMMANDS["next"] = cmd_next
 
 
 def main():
-    args = [a for a in sys.argv[1:] if not a.startswith("--")]
-    flags = [a for a in sys.argv[1:] if a.startswith("--")]
+    raw = sys.argv[1:]
+    for i in range(len(raw) - 1):           # `--workers N` is `--workers=N`
+        if raw[i] == "--workers":
+            raw[i:i + 2] = [f"--workers={raw[i + 1]}"]
+            break
+    args = [a for a in raw if not a.startswith("--")]
+    flags = [a for a in raw if a.startswith("--")]
     cmd = args[0] if args else "status"
     if cmd == "example":          # its argument is not a board yet
         sys.exit(cmd_example(sys.argv[2:]))
     board = find_board(args[1] if len(args) > 1 else None)
     if cmd == "plan":
-        workers = next((int(f.split("=")[1]) for f in flags
+        workers = next((f.split("=", 1)[1] for f in flags
                         if f.startswith("--workers=")), None)
         cmd_plan(board, workers)
     elif cmd == "reconcile":

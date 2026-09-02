@@ -2481,12 +2481,19 @@ function drawHeader() {
                  CAL.boards.length + " board(s), × " + TUNE + " tune" : "")));
   bits.push(lnk("Σ" + fmtW(CPM.total) + " of work", {view:"analytics"},
                 "how the work is distributed"));
-  bits.push(lnk("peak <b>" + CPM.peak + "</b> agents",
+  // `workers` is a label: "∞" (or 0, or nothing) is no cap — the board
+  // assumes unlimited agents, and the calendar is then the critical path
+  const uncapped = !DATA.workers || DATA.workers === "∞" || DATA.workers === "0";
+  bits.push(lnk("peak <b>" + CPM.peak + "</b>" +
+                (uncapped ? " · unlimited agents" : " agents"),
                 {view:"timeline", mode:"dates"},
                 "the fastest path wants this many at its widest — " +
-                "the calendar is what " + DATA.workers + " workers costs"));
+                (uncapped ? "with unlimited agents the calendar is this path"
+                          : "the calendar is what " + DATA.workers +
+                            " workers costs")));
   if (cal > CPM.length * 1.05)
-    bits.push(lnk("at " + DATA.workers + " workers: " + fmtW(cal),
+    bits.push(lnk((uncapped ? "unlimited agents: " : "at " + DATA.workers +
+                   " workers: ") + fmtW(cal),
                   {view:"timeline", mode:"dates"}));
   const collect = (CPM.collect || []).map(r => byRel.get(r)).filter(Boolean);
   if (collect.length)
@@ -4395,7 +4402,9 @@ function drawAnalytics() {
     tile("to the vision", fmtW(CPM.length),
          "of " + fmtW(CPM.total) + " in the plan",
          {view:"timeline", crit:1, mode:"vision"}) +
-    tile("peak agents", CPM.peak, "at " + DATA.workers + " workers: " +
+    tile("peak agents", CPM.peak,
+         ((!DATA.workers || DATA.workers === "∞" || DATA.workers === "0")
+           ? "unlimited agents: " : "at " + DATA.workers + " workers: ") +
          fmtW(cal), {view:"timeline", mode:"dates"}) +
     tile("ready now", ready, "dispatchable this second",
          {view:"timeline", ready:1, mode:"vision"}) +

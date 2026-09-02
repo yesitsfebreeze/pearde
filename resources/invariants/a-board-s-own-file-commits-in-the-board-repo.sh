@@ -127,6 +127,71 @@ true
 ```
 '
 
+# the board-spelled spec names the board file the way the BOARD spells it —
+# `prds/p1/probe/verify.sh`, which is where every probe on a pearde board is
+# told to live. Joined to the code repo that path names nothing, and a
+# `foot_root` that only ever joins to the code repo refuses the whole collect
+# before a single file is staged.
+BS_SPEC='---
+complexity: 4
+footprint:
+  - resources/board/session.py
+  - prds/p1/probe/verify.sh
+---
+
+# spec01 — a probe is spelled the way the board spells it
+
+## Acceptance
+
+- [x] `session.py` stands
+- [x] the probe stands where the board keeps it
+
+## Verify
+
+```bash
+true
+```
+'
+
+# the under PRD names its code repo: `repo: work`, resolved against the
+# board's own root, is how a board says the code lives somewhere other than
+# the directory above it. Here that somewhere is INSIDE the board, which is
+# the shape a lane and a run-session worktree both have.
+UNDER_PRD='---
+state: claimed
+origin: requested
+priority: 50
+complexity: 4
+blast-radius: low
+repo: work
+claim: probe 2026-09-02 10:00
+---
+
+# p1 — a session ledger gets its row in the board own gitignore
+'
+
+# the under spec names one code file and nothing else. The layout is what
+# makes it a case: the code repo is a checkout INSIDE the board directory,
+# which is every lane and every run-session worktree this board cuts.
+UNDER_SPEC='---
+complexity: 4
+footprint:
+  - resources/board/session.py
+---
+
+# spec01 — a code checkout under the board is still its own repo
+
+## Acceptance
+
+- [x] `session.py` stands
+
+## Verify
+
+```bash
+true
+```
+'
+
 FLAT_SPEC='---
 complexity: 4
 footprint:
@@ -149,8 +214,10 @@ true
 gitq() { git -C "$1" -c user.email=probe@example.com -c user.name=probe \
          "${@:2}" >/dev/null 2>&1; }
 
-# nested <dir> — a code repo that IGNORES its board, and a board that is its
-# own git repo tracking `.gitignore`. This repo's own layout since 2026-09-02.
+# nested <dir> [<spec text>] — a code repo that IGNORES its board, and a board
+# that is its own git repo tracking `.gitignore`. This repo's own layout since
+# 2026-09-02. The spec defaults to `$SPEC`; the board-spelled section hands its
+# own, so the two sections differ in the footprint and in nothing else.
 nested() {
   code=$1/code; board=$code/pearde
   mkdir -p "$code/resources/board" "$board/prds/p1/specs"
@@ -162,8 +229,28 @@ nested() {
   printf '.lanes/\n.claims/\n.state/\n' > "$board/.gitignore"
   printf '%s' "$SETTINGS" > "$board/settings.md"
   printf '%s' "$PRD" > "$board/prds/p1/prd.md"
-  printf '%s' "$SPEC" > "$board/prds/p1/specs/spec01.md"
+  printf '%s' "${2:-$SPEC}" > "$board/prds/p1/specs/spec01.md"
   gitq "$board" add -A; gitq "$board" commit -qm board
+}
+
+# under <dir> — the third layout, and the one the string prefix could never
+# read: the board is its own git repo and the CODE repo is a checkout INSIDE
+# it. Every lane this board cuts (`<board>/.lanes/<prd>`) and every run-session
+# worktree has this shape. The board ignores the directory the code checkout
+# sits in, exactly as it ignores `.lanes/`, so neither repo's status ever
+# reports the other's files.
+under() {
+  board=$1/board; code=$board/work
+  mkdir -p "$code/resources/board" "$board/prds/p1/specs"
+  gitq "$board" init -q -b pearde
+  printf '.lanes/\n.claims/\n.state/\nwork/\n' > "$board/.gitignore"
+  printf '%s' "$SETTINGS" > "$board/settings.md"
+  printf '%s' "$UNDER_PRD" > "$board/prds/p1/prd.md"
+  printf '%s' "$UNDER_SPEC" > "$board/prds/p1/specs/spec01.md"
+  gitq "$board" add -A; gitq "$board" commit -qm board
+  gitq "$code" init -q -b main
+  printf '# session\n' > "$code/resources/board/session.py"
+  gitq "$code" add -A; gitq "$code" commit -qm base
 }
 
 # flat <dir> — the other layout: `.pearde/` INSIDE the code repo and not a
@@ -194,6 +281,21 @@ print(lanes.create(sys.argv[2], sys.argv[3], "p1"))' \
   if [ -f "$2/.gitignore" ]; then
     printf '.sessions/\n' >> "$2/.gitignore"
   fi
+  printf '%s' "$lane"
+}
+
+# code_work <code> <board> — the same as `work` without the board edit, for a
+# section whose spec does not contract the board's `.gitignore`. Appending a
+# line no footprint names would leave foreign dirt on the board and the run
+# would be measuring the park, not the routing.
+code_work() {
+  lane=$(python3 -c 'import sys
+sys.path.insert(0, sys.argv[1])
+import lanes
+print(lanes.create(sys.argv[2], sys.argv[3], "p1"))' \
+    "$SRC/resources/board" "$2" "$1" 2>&1) || { printf '%s\n' "$lane"; return 1; }
+  printf '# session\ndef take():\n    pass\n' \
+    > "$lane/resources/board/session.py"
   printf '%s' "$lane"
 }
 
@@ -256,6 +358,71 @@ printf '%s\n' "$FLOG" | grep -qx 'resources/board/session\.py'; r=$?
 say $r "flat: the code file lands in the one repo there is"
 case "$FOUT" in *"not the lane"*) r=1;; *) r=0;; esac
 say $r "flat: nothing is rerouted — the two roots are one"
+
+# ── board-spelled: the footprint written the way the board writes it ─────────
+# The nested rows above only ever name the board file the CODE repo's way
+# (`pearde/.gitignore`). Every probe on a pearde board is told to live at
+# `prds/<prd>/probe/`, which is the board's own spelling, and a `foot_root`
+# that joins a footprint to the code repo and nowhere else cannot place it:
+# the whole collect stops before a file is staged. That regression is silent
+# in every row above it.
+S=$T/bs; mkdir -p "$S"
+nested "$S" "$BS_SPEC"
+SC=$S/code; SB=$SC/pearde
+SLANE=$(code_work "$SC" "$SB") || no "board-spelled: the lane could not be cut: $SLANE"
+mkdir -p "$SB/prds/p1/probe"
+printf '#!/usr/bin/env bash\necho "1 check · 1 pass · 0 fail"\n' \
+  > "$SB/prds/p1/probe/verify.sh"
+SB0=$(git -C "$SB" rev-parse HEAD)
+SC0=$(git -C "$SC" rev-parse HEAD)
+SOUT=$(run "$SC" "$SB"); SRC_=$?
+[ "$SRC_" = 0 ]
+say $? "board-spelled: collect exits 0 (got $SRC_)$(if [ "$SRC_" != 0 ]; then \
+  printf ' — %s' "$(printf '%s' "$SOUT" | tail -1)"; fi)"
+
+case "$SOUT" in *"in no repo that holds it"*|*"matched no repo"*) r=1;; *) r=0;; esac
+say $r "board-spelled: no run refuses the footprint for want of a repo"
+
+SLOG=$(git -C "$SB" log --name-only --pretty=format: "$SB0"..HEAD 2>/dev/null)
+printf '%s\n' "$SLOG" | grep -qx 'prds/p1/probe/verify\.sh'; r=$?
+say $r "board-spelled: a NEW commit in the BOARD repo holds prds/p1/probe/verify.sh"
+
+SCLOG=$(git -C "$SC" log --name-only --pretty=format: "$SC0"..HEAD 2>/dev/null)
+if printf '%s\n' "$SCLOG" | grep -q 'probe/verify\.sh'; then r=1; else r=0; fi
+say $r "board-spelled: the code repo never stages the board own probe path"
+
+# ── under: the code repo is a checkout INSIDE the board ──────────────────────
+# `full.startswith(board + os.sep)` reads "inside the board's path" as "the
+# board's file". A code checkout nested under the board is inside that path
+# and in neither the board's index nor its worktree, so every footprint of
+# that repo was routed to the board, staged against an index that ignores it,
+# and committed as nothing. No error and no refusal — which is why the two
+# rows that matter here read the BOARD's commit rather than an exit code.
+U=$T/u; mkdir -p "$U"
+under "$U"
+UB=$U/board; UC=$UB/work
+ULANE=$(code_work "$UC" "$UB") || no "under: the lane could not be cut: $ULANE"
+UB0=$(git -C "$UB" rev-parse HEAD)
+UC0=$(git -C "$UC" rev-parse HEAD)
+UOUT=$(run "$UC" "$UB"); URC=$?
+[ "$URC" = 0 ]
+say $? "under: collect exits 0 (got $URC)$(if [ "$URC" != 0 ]; then \
+  printf ' — %s' "$(printf '%s' "$UOUT" | tail -1)"; fi)"
+
+UCLOG=$(git -C "$UC" log --name-only --pretty=format: "$UC0"..HEAD 2>/dev/null)
+printf '%s\n' "$UCLOG" | grep -qx 'resources/board/session\.py'; r=$?
+say $r "under: the CODE repo commits resources/board/session.py"
+
+# under ANY spelling: the board could carry it as `work/resources/…` or as
+# `resources/…`, and both are the defect. A grep for the basename catches
+# every spelling there is.
+UBLOG=$(git -C "$UB" log --name-only --pretty=format: "$UB0"..HEAD 2>/dev/null)
+if printf '%s\n' "$UBLOG" | grep -q 'session\.py'; then r=1; else r=0; fi
+say $r "under: the BOARD repo commits the code path under no spelling"
+
+UDIRT=$(git -C "$UC" status --porcelain -- resources/board/session.py 2>/dev/null)
+[ -z "$UDIRT" ]
+say $? "under: the code working tree is clean after (got '${UDIRT}')"
 
 # ── nothing outside the temp dir was touched ─────────────────────────────────
 case "$T" in /*) r=0;; *) r=1;; esac

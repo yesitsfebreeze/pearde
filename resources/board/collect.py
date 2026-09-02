@@ -485,32 +485,136 @@ def _dirty(cwd):
     return rows
 
 
+_HOLDER = {}
+
+
+def holder(path):
+    """The git checkout that actually HOLDS `path` — `rev-parse
+    --show-toplevel` asked from the nearest directory that exists, cached
+    per directory so a footprint list costs one fork per directory and not
+    one per path.
+
+    Membership is a question only git can answer. A string prefix cannot:
+    a checkout nested UNDER another one — a lane at `<board>/.lanes/<prd>`,
+    a run-session worktree — is inside the outer path and belongs to
+    neither its index nor its worktree. `planlib.repo_root`'s walk-up is
+    the fallback when git cannot be run at all; it is right for every
+    layout this board ships on and wrong only where git's own rules
+    (`core.worktree`, a `.git` file pointing elsewhere, a ceiling) part
+    from a walk."""
+    d = os.path.abspath(path)
+    while d and not os.path.isdir(d):
+        nxt = os.path.dirname(d)
+        if nxt == d:
+            return None
+        d = nxt
+    if d in _HOLDER:
+        return _HOLDER[d]
+    root = None
+    try:
+        r = subprocess.run(["git", "-C", d, "rev-parse", "--show-toplevel"],
+                           capture_output=True, text=True,
+                           stdin=subprocess.DEVNULL)
+        if r.returncode == 0:
+            root = r.stdout.strip() or None
+    except OSError:
+        root = None
+    _HOLDER[d] = root or planlib.repo_root(d)
+    return _HOLDER[d]
+
+
+def same_dir(a, b):
+    """Two spellings of one directory. `os.path.samefile` and not a string
+    compare: the board is reached as `.pearde` (a symlink to `pearde`) by
+    one caller and by its real name by git, and both are the same root."""
+    if not a or not b:
+        return False
+    if os.path.abspath(a) == os.path.abspath(b):
+        return True
+    try:
+        return os.path.samefile(a, b)
+    except OSError:
+        return False
+
+
+def foot_places(p, board, board_root, repo):
+    """Where one footprint spelling could resolve, in the order it is tried:
+    the code repo first — a footprint is spelled relative to `repo` by
+    contract — then the board, then the board's own repo. The list is what
+    a refusal prints, so the message names every place that was tried and
+    nothing that was not."""
+    if os.path.isabs(p):
+        return [os.path.abspath(p)]
+    out = []
+    for base in (repo, board, board_root):
+        if not base:
+            continue
+        full = os.path.abspath(os.path.join(base, p))
+        if full not in out:
+            out.append(full)
+    return out
+
+
 def foot_root(p, board, board_root, repo):
     """`(root, path)` — the repo that HOLDS this footprint path, and its
     spelling inside that repo.
 
     A footprint is spelled relative to `repo`, the code repo. Since the
     board became a git repo of its own — `pearde/` here, and every nested
-    `.pearde` with a `.git` — a path under the board is spelled that way
-    too (`pearde/.gitignore`) and yet lives in NEITHER the code repo's
-    index nor its worktree: the code repo ignores the board, so `git add --
-    pearde/.gitignore` there is `fatal: pathspec … did not match any
-    files`, which took down a whole lane's merge and every PRD gated
-    behind it. It is the board repo that tracks the file, under
-    `.gitignore`. This is the one place that answers which, so the lane's
-    add, the guard's fence and step 3's grouping cannot disagree.
+    `.pearde` with a `.git` — a path under the board is spelled the
+    BOARD's way (`prds/<prd>/probe/verify.sh`, where every probe is told to
+    live) or the code repo's way (`pearde/.gitignore`), and either way it
+    lives in NEITHER the code repo's index nor its worktree: the code repo
+    ignores the board, so `git add -- pearde/.gitignore` there is `fatal:
+    pathspec … did not match any files`, which took down a whole lane's
+    merge and every PRD gated behind it. This is the one place that answers
+    which repo, so the lane's add, the guard's fence and step 3's grouping
+    cannot disagree.
 
-    Only a path that resolves INSIDE the board is rerouted, and only when
-    the board's root and the code repo's root are two different repos —
-    on a board that is not its own repo they are the same root and the
-    footprint's own spelling is already right."""
-    b = os.path.abspath(board)
-    full = os.path.abspath(os.path.join(repo, p))
-    if (os.path.abspath(board_root) != os.path.abspath(repo)
-            and (full == b or full.startswith(b + os.sep))):
-        return board_root, os.path.relpath(full, board_root).replace(
-            os.sep, "/")
-    return repo, p
+    The answer is git's, never a string's. Each place in `foot_places` is
+    tried in order and the first one the filesystem or an index holds wins;
+    `holder` says which checkout that is. The prefix test this replaced
+    read "inside the board's path" as "the board's file", which is false
+    the moment a code checkout is nested under the board — a lane, a
+    run-session worktree — and every footprint of that repo was then routed
+    to the board, staged against an index that ignores it, and committed as
+    nothing at all.
+
+    A footprint no place holds yet — the file a spec is about to create —
+    resolves to the first place, so a spec that has not run yet groups
+    under the code repo exactly as it always did."""
+    known = [r for r in (repo, board_root, board) if r]
+
+    def spell(root):
+        for k in known:
+            if same_dir(k, root):
+                return k
+        return root
+
+    places = foot_places(p, board, board_root, repo)
+    for full in places:
+        root = holder(full)
+        if not root:
+            continue
+        if not os.path.exists(full) and not tracked_in(root, full):
+            continue
+        root = spell(root)
+        return root, os.path.relpath(full, root).replace(os.sep, "/")
+    root = spell(holder(places[0]) or repo)
+    return root, os.path.relpath(places[0], root).replace(os.sep, "/")
+
+
+def tracked_in(root, full):
+    """`full` is in `root`'s index though the working tree does not hold it —
+    a footprint the spec deletes, or one a peer's checkout has not written.
+    Asked only when nothing on disk answered, so it costs a fork per miss."""
+    try:
+        rel = os.path.relpath(full, root)
+    except ValueError:
+        return False
+    if rel.startswith(".."):
+        return False
+    return bool(git_out(root, "ls-files", "-z", "--", rel).strip("\0"))
 
 
 def owned_by(prd, board_root, repo, feet, board=None):
@@ -1558,12 +1662,18 @@ def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since,
         # BOARD repo, spelled its way — the code repo ignores the board and
         # holds no such path, so filing it here is what made step 4 stage
         # `pearde/.gitignore` where it can never exist
+        raw = p
         root, p = foot_root(p, board, board_root, repo)
         full = os.path.join(root, p)
         tracked = git_out(root, "ls-files", "-z", "--", p).strip("\0")
         if not os.path.exists(full) and not tracked:
-            raise Stop(f"{rel}: footprint {p} is not under {root} — "
-                       f"repo_of matched no repo for it; nothing written")
+            # Name every place that was tried and nothing that was not. The
+            # message used to blame `repo_of`, a function that had not
+            # refused anything, and left the author of a board-spelled
+            # footprint with nowhere to look.
+            tried = ", ".join(foot_places(raw, board, board_root, repo))
+            raise Stop(f"{rel}: footprint {raw} is in no repo that holds it "
+                       f"— looked for {tried}; nothing written")
         groups.setdefault(root, set()).add(p)
     for a in opts["also"]:
         ap = also_path(board_root, a)   # `check_also` already proved it exists

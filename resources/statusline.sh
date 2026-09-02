@@ -78,14 +78,37 @@ fi
 
 # ── board segment — its own line ──────────────────────────────────────────────────────────────
 # A board is a `pearde/` directory holding settings.md (tooling's find_board)
-# — `.pearde/` on a board that never migrated out of the hidden name — or, one
-# board predating both, a `prds/` dir carrying its own settings.md. Walking up,
-# the board dir wins over prds/: a repo can hold both during a migration.
+# — `.pearde/` on a board that never migrated out of the hidden name, read
+# through the compatibility symlink so the name shown is the board's own — or
+# a directory called something else entirely carrying settings.md, which is
+# how a project whose folder tree already uses the word `pearde` names its
+# board (@resources/board/plan.py `named_boards`) — or, one board predating
+# all three, a `prds/` dir carrying its own settings.md. Walking up, the board
+# dir wins over prds/: a repo can hold both during a migration.
 BOARD=""; BOARD_OUT=""
 d="$DIR"
 while [ -n "$d" ] && [ "$d" != "/" ]; do
   if [ -f "$d/pearde/settings.md" ]; then BOARD="$d/pearde"; break; fi
-  if [ -f "$d/.pearde/settings.md" ]; then BOARD="$d/.pearde"; break; fi
+  if [ -f "$d/.pearde/settings.md" ]; then
+    if [ -L "$d/.pearde" ]; then
+      t=$(readlink "$d/.pearde")
+      case "$t" in /*) BOARD="$t" ;; *) BOARD="$d/$t" ;; esac
+    else BOARD="$d/.pearde"; fi
+    break
+  fi
+  AMB=""
+  for c in "$d"/*/; do
+    c=${c%/}
+    case "${c##*/}" in node_modules|target|vendor|__pycache__|build|dist) continue ;; esac
+    [ -f "$c/settings.md" ] || continue
+    [ -n "$BOARD" ] && { BOARD=""; AMB=1; break; }
+    BOARD="$c"
+  done
+  # two board-shaped directories in one project: the walk stops and the line
+  # carries no board segment at all. Every resolver refuses here; a status
+  # line has no way to say so, and naming one of the two would be a guess.
+  [ -n "$AMB" ] && break
+  [ -n "$BOARD" ] && break
   if [ -d "$d/prds" ]; then BOARD="$d/prds"; break; fi
   # dirname's fixpoint is not always `/` — on a Windows drive path it is `C:`,
   # and without this guard the loop never exits. A no-op on POSIX.

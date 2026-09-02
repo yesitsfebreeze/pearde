@@ -249,6 +249,46 @@ fi
 # project's own `.pearde/` reported that board broken and its PRDs gone.
 is_board() { [ -f "$1/settings.md" ] || [ -d "$1/prds" ]; }
 
+# The board's directory NAME is configurable too, and a directory carrying
+# `settings.md` is the whole of that configuration — @resources/board/plan.py
+# `named_boards` says why there is no setting for it anywhere. `board_in
+# <project>` echoes the board inside it, or nothing, making the same three
+# tests in the same order the Python resolvers make: `pearde/`; then
+# `.pearde/`, read THROUGH the compatibility symlink `upgrade` leaves behind,
+# because the link's name is not the board's name and a dot-segment is
+# invisible to the vault; then the one immediate child holding `settings.md`,
+# for a project that had to call its board something else. Two such children
+# is not a board to choose between: `!two <one> and <two>` is echoed instead
+# of a path — echoed, not set in a variable, because every caller reads this
+# through `$(…)` and a variable set inside that subshell never comes back.
+board_in() {
+  local n t p one two
+  for n in pearde .pearde; do
+    if is_board "$1/$n"; then
+      if [ -L "$1/$n" ]; then
+        t=$(readlink "$1/$n")
+        case "$t" in /*) echo "$t" ;; *) echo "$1/$t" ;; esac
+      else
+        echo "$1/$n"
+      fi
+      return 0
+    fi
+  done
+  one=""; two=""
+  for p in "$1"/*/; do
+    p=${p%/}
+    case "${p##*/}" in node_modules|target|vendor|__pycache__|build|dist) continue ;; esac
+    [ -f "$p/settings.md" ] || continue
+    if [ -z "$one" ]; then one="$p"; else two="$p"; break; fi
+  done
+  if [ -n "$two" ]; then
+    echo "!two $(basename "$one")/ and $(basename "$two")/ under $1"
+    return 0
+  fi
+  [ -n "$one" ] && { echo "$one"; return 0; }
+  return 1
+}
+
 # PreToolUse hook — @references/parts/guard.md. Where hooks are configured IS
 # knowable here, unlike a status line: the settings file sits in the repo the
 # board lives in, so this checks that file and `--fix` writes the block.
@@ -261,10 +301,7 @@ is_board() { [ -f "$1/settings.md" ] || [ -d "$1/prds" ]; }
 GSET=""
 d="$START"
 while [ -n "$d" ] && [ "$d" != "/" ]; do
-  for n in pearde .pearde; do
-    is_board "$d/$n" && { GSET="$d/.claude/settings.json"; break; }
-  done
-  [ -n "$GSET" ] && break
+  [ -n "$(board_in "$d")" ] && { GSET="$d/.claude/settings.json"; break; }
   p=$(dirname "$d"); [ "$p" = "$d" ] && break; d="$p"
 done
 if [ -z "$GSET" ]; then
@@ -301,17 +338,22 @@ fi
 # `.pearde/`), not a literal
 # `prds/` — that was the pre-migration contract. BOARD is the board root;
 # PRDS is where the PRDs actually live, one level under it.
-BOARD=""; d="$START"
+BOARD=""; AMBIG=""; d="$START"
 while [ -n "$d" ] && [ "$d" != "/" ]; do
-  for n in pearde .pearde; do
-    is_board "$d/$n" && { BOARD="$d/$n"; break; }
-  done
-  [ -n "$BOARD" ] && break
+  BOARD=$(board_in "$d")
+  case "$BOARD" in "!two "*) AMBIG=${BOARD#!two }; BOARD="" ;; esac
+  { [ -n "$BOARD" ] || [ -n "$AMBIG" ]; } && break
   # dirname's fixpoint is not always `/` — on a Windows drive path it is `C:`,
   # and without this guard the loop never exits. A no-op on POSIX.
   p=$(dirname "$d"); [ "$p" = "$d" ] && break; d="$p"
 done
-if [ -z "$BOARD" ]; then
+if [ -z "$BOARD" ] && [ -n "$AMBIG" ]; then
+  # two board-shaped directories in one project: named, never guessed between.
+  # Every resolver refuses here, so the whole tool is stopped until one of the
+  # two is renamed — that is the row, and there is no board below it.
+  row board broken "two boards in one project · $AMBIG"
+  fix "rename or remove one of them — a project has one board, and the one it keeps is found by the settings.md it carries, whatever it is called"
+elif [ -z "$BOARD" ]; then
   # a board still on the old layout is found, not skipped: three levels
   # down, dot-dirs too — a leftover root-level `prds/` with no board dir
   # beside it.

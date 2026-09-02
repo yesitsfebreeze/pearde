@@ -55,7 +55,7 @@ a question about the work, which @index.md's Keywords table does.
 |---|---|
 | @references/parts/loop.md | the eight steps, in order |
 | @references/parts/dispatch.md | the dispatcher — the session that holds nothing and starts passes |
-| @references/parts/board.md | the layout the scan walks |
+| @references/parts/board.md | the layout the scan walks, and how the board's own directory is found whatever it is called |
 | @references/parts/pass.md | `.pearde/.state/pass.md` — what the session holds, across a compaction |
 | @references/parts/guard.md | the loop's rules as a hook that refuses the waste |
 | @references/parts/contract.md | the frontmatter keys, and their defaults |

@@ -52,6 +52,12 @@ BOARD_DIR = "pearde"
 # (@references/obsidian.md says why the dot had to go).
 LEGACY_BOARD_DIR = ".pearde"
 BOARD_DIRS = (BOARD_DIR, LEGACY_BOARD_DIR)
+# The board's directory name is configurable, and a directory holding
+# `settings.md` is how it is configured — @resources/board/plan.py
+# `named_boards`. These names are never a board and are skipped unstatted;
+# everything hidden is skipped by the dot rule.
+SCAN_SKIP = frozenset(("node_modules", "target", "vendor", "__pycache__",
+                       "build", "dist"))
 PRDS_DIR = "prds"
 PASS_FILE = os.path.join(".state", "pass.md")
 
@@ -168,12 +174,67 @@ def is_board_dir(p):
         or os.path.isdir(os.path.join(p, PRDS_DIR)))
 
 
+def board_link(p):
+    """A board reached through the `.pearde` compatibility symlink is not
+    called what the link is called — the directory it points at is. One
+    level, resolved beside the link, never `realpath`, so a symlinked
+    ANCESTOR stays spelled the way the caller spelled it. Duplicated from
+    @resources/board/plan.py for the same reason the walk is."""
+    if not os.path.islink(p):
+        return p
+    return os.path.normpath(os.path.join(os.path.dirname(p), os.readlink(p)))
+
+
+def named_boards(d):
+    """Immediate children of `d` carrying `settings.md` — how a board called
+    neither `pearde` nor `.pearde` is found, and the whole of the
+    board-directory configuration. @resources/board/plan.py `named_boards`
+    carries the reasoning; at most two come back."""
+    hits, seen = [], set()
+    try:
+        names = sorted(os.listdir(d))
+    except OSError:
+        return hits
+    for name in names:
+        if name.startswith(".") or name in SCAN_SKIP:
+            continue
+        p = os.path.join(d, name)
+        if not os.path.isfile(os.path.join(p, "settings.md")):
+            continue
+        real = os.path.realpath(p)         # a link beside its target is one board
+        if real in seen:
+            continue
+        seen.add(real)
+        hits.append(p)
+        if len(hits) == 2:
+            break
+    return hits
+
+
+def board_in(d):
+    """The board inside project dir `d`, or None — `pearde/`, then `.pearde/`
+    through its symlink, then the one child carrying `settings.md`.
+
+    Two such children is None here and a refusal everywhere else. The guard
+    is a hook on every tool call, not the part of this tool that tells a
+    person to rename a directory: a project it cannot name one board in is a
+    project it has no opinion about, and doctor's `board` row is what reports
+    it. Nothing else consults this, so nothing else is made quiet by it."""
+    for name in BOARD_DIRS:
+        p = os.path.join(d, name)
+        if is_board_dir(p):
+            return board_link(p)
+    found = named_boards(d)
+    return found[0] if len(found) == 1 else None
+
+
 def board_of(start):
     """The nearest ancestor carrying a board, or None — the same walk
     @resources/board/plan.py `find_board` does, so the guard and `scan` name
     the same board from the same cwd. Carrying, not named: a folder called
-    `pearde` that holds no board is not one. The guard has no opinion about a
-    directory that is not a board."""
+    `pearde` that holds no board is not one, and a board a project had to
+    call something else is one. The guard has no opinion about a directory
+    that is not a board."""
     start = start or os.getcwd()
     if os.name == "nt":
         # Git Bash's own `cwd` (and `pwd`/`dirname` output doctor.sh builds
@@ -188,9 +249,9 @@ def board_of(start):
             start = f"{m.group(1)}:{m.group(2) or '/'}"
     d = os.path.abspath(start)
     while True:
-        for name in BOARD_DIRS:
-            if is_board_dir(os.path.join(d, name)):
-                return os.path.join(d, name)
+        b = board_in(d)
+        if b:
+            return b
         parent = os.path.dirname(d)
         if parent == d:
             return None

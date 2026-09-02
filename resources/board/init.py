@@ -69,7 +69,14 @@ DEFAULTS = (("language", "English"), ("workers", "0"), ("pipeline", "0"),
 # is the compatibility symlink `upgrade` leaves behind when it moves a board
 # out of the hidden name — a link, not a directory, and nobody's history
 # wants it.
-IGNORED = ("pearde/.state/", "pearde/wiki/", ".obsidian/", "/.pearde")
+def ignored_names(board):
+    """Those names, spelled with the board's OWN directory name. Only the two
+    paths under the board move when a project has to call its board something
+    other than `pearde`: `.obsidian/` is the project's vault and `/.pearde`
+    is the compat symlink, and neither depends on what the board ended up
+    being called."""
+    n = os.path.basename(os.path.abspath(board)) if board else planlib.BOARD_DIR
+    return (f"{n}/.state/", f"{n}/wiki/", ".obsidian/", "/.pearde")
 
 # A board is often its own git repo — the plan on its own branch, pushed. The
 # names below are written into *that* repo's `.gitignore`, not the parent's.
@@ -128,8 +135,13 @@ class Refused(Exception):
 FLAGS = {
     "init":     trlib.Flags(("language", "name"), ("example",) + trlib.DRY),
     "settings": trlib.Flags(("board",), trlib.DRY),
-    "vault":    trlib.Flags((), ("wait", "open") + trlib.DRY),
-    "upgrade":  trlib.Flags((), trlib.DRY),
+    "vault":    trlib.Flags(("dir",), ("wait", "open") + trlib.DRY),
+    # `--dir` is the board's DIRECTORY name, the one thing `upgrade` cannot
+    # work out for itself: a project whose tree already uses the word
+    # `pearde` has to call its board something else, and only a person knows
+    # which name is free. Nothing else in the tool asks for it — the board is
+    # found afterwards by the settings.md it carries.
+    "upgrade":  trlib.Flags(("dir",), trlib.DRY),
 }
 
 
@@ -268,9 +280,10 @@ def register_vault(vault, retire=None):
     return "added", vid
 
 
-def unhide_board(d):
-    """`<dir>/.pearde/` → `<dir>/pearde/`, and a `.pearde` symlink left where
-    the directory was.
+def unhide_board(d, name=None):
+    """`<dir>/.pearde/` → `<dir>/<name>/`, and a `.pearde` symlink left where
+    the directory was. `name` defaults to `pearde`, which is what every board
+    that can have it is called.
 
     The board carried a dot until 2026-09-02 and that dot decided what a
     person could see. Obsidian skips every path holding a dot-segment before
@@ -288,10 +301,23 @@ def unhide_board(d):
     copied project keeps working. It is gitignored, never a directory, and
     nothing pearde writes goes through it.
 
+    `name` is the other half of that. `pearde` is an ordinary word, and a
+    project whose own folder tree already uses it — this repo's checkout sits
+    at `infra/pearde`, right beside the `infra` board — has that name taken
+    and cannot move its board into it. So the target is an argument, the
+    board is found afterwards by the `settings.md` it carries rather than by
+    what it is called (@resources/board/plan.py `named_boards`), and the one
+    name that must never be the target is the hidden one this moves out of.
+
     Returns "moved", "linked" (the move was done, the link was not there),
     or None when there was nothing to do."""
+    name = name or planlib.BOARD_DIR
+    if (name.startswith(".") or os.sep in name
+            or (os.altsep and os.altsep in name)):
+        raise Refused(f"a board directory is one plain name with no dot in "
+                      f"front of it — `{name}` is what the move is out of")
     old = os.path.join(d, planlib.LEGACY_BOARD_DIR)
-    new = os.path.join(d, planlib.BOARD_DIR)
+    new = os.path.join(d, name)
     moved = False
     if os.path.isdir(old) and not os.path.islink(old):
         if os.path.exists(new):
@@ -304,7 +330,7 @@ def unhide_board(d):
     if not os.path.isdir(new):
         return None
     if not os.path.exists(old) and not os.path.islink(old):
-        os.symlink(planlib.BOARD_DIR, old)
+        os.symlink(name, old)          # relative: a copied project still works
         return "moved" if moved else "linked"
     return "moved" if moved else None
 
@@ -359,6 +385,12 @@ def write_obsidian(d):
                 plugins.append(plugin)
         elif not os.path.exists(dst):
             shutil.copyfile(src, dst)
+    # The preset's `userIgnoreFilters` are written for a board called
+    # `pearde`, and this one may not be — a vault-relative filter naming a
+    # folder the project does not have hides nothing and reads as a lie about
+    # the layout. Correcting it here means a vault seeded fresh is right from
+    # the first open, not right after the first `upgrade`.
+    repair_ignore_filters(dest, os.path.basename(board))
     # the key: fresh per board, in the v5 schema the plugin reads, both
     # where the plugin reads it and where a tool looks it up
     key = os.urandom(24).hex()
@@ -587,14 +619,20 @@ def repair_plugin_ids(dest):
     return changed
 
 
-def repair_ignore_filters(dest):
+def repair_ignore_filters(dest, name=None):
     """Obsidian's `userIgnoreFilters` are vault-relative, and the vault moved
     up one level: a filter written when the vault rooted at the board reads
     `wiki/pending/`, which under a project vault names nothing (and would name
     the wrong thing in a project that happens to have a `wiki/`). Rewrites
     only the filters this repo ships, prefixing them with the board's folder.
     A filter someone else added is left exactly where it is. Returns what it
-    changed."""
+    changed.
+
+    `name` is the board's directory name, and the preset is written for a
+    board called `pearde` — so a project that had to call its board something
+    else has BOTH shapes to correct: the bare suffix a board-rooted vault
+    left, and the default name a run before the rename wrote. Both map to the
+    one spelling this board actually has."""
     path = os.path.join(dest, "app.json")
     if not os.path.isfile(path):
         return []
@@ -606,12 +644,23 @@ def repair_ignore_filters(dest):
     if not isinstance(filters, list):
         return []
     try:
-        preset = json.load(open(os.path.join(OBSIDIAN_PRESET, "app.json"),
-                                encoding="utf-8")).get("userIgnoreFilters", [])
+        shipped = json.load(open(os.path.join(OBSIDIAN_PRESET, "app.json"),
+                                 encoding="utf-8")).get("userIgnoreFilters", [])
     except (OSError, ValueError):
         return []
-    old = {f[len(planlib.BOARD_DIR) + 1:]: f for f in preset
-           if isinstance(f, str) and f.startswith(planlib.BOARD_DIR + "/")}
+    name = name or planlib.BOARD_DIR
+    pre = planlib.BOARD_DIR + "/"
+    preset = [name + "/" + f[len(pre):]
+              if isinstance(f, str) and f.startswith(pre) else f
+              for f in shipped]
+    old = {}
+    for f in shipped:
+        if not isinstance(f, str) or not f.startswith(pre):
+            continue
+        want = name + "/" + f[len(pre):]
+        old[f[len(pre):]] = want          # a board-rooted vault's spelling
+        if f != want:
+            old[f] = want                 # written before this board was renamed
     fixed, changed = [], []
     for entry in filters:
         if isinstance(entry, str) and entry in old:
@@ -629,14 +678,16 @@ def repair_ignore_filters(dest):
     return changed
 
 
-def write_gitignore(d):
+def write_gitignore(d, board=None):
     """Step 4: the machine-local names, appended to `<dir>/.gitignore` — the
-    board's parent, where `pearde/…` is the right spelling — when they are not
-    already there. Returns the names it added."""
+    board's parent, where `<board>/…` is the right spelling — when they are
+    not already there. `board` names the directory the board is actually in,
+    because that name is not always `pearde`. Returns the names it added."""
     path = os.path.join(d, ".gitignore")
     text = open(path, encoding="utf-8").read() if os.path.isfile(path) else ""
     have = {l.strip() for l in text.splitlines()}
-    add = [n for n in IGNORED if n not in have]
+    add = [n for n in ignored_names(board or planlib.board_at(d))
+           if n not in have]
     if not add:
         return []
     if text and not text.endswith("\n"):
@@ -740,7 +791,7 @@ def cmd_init(argv):
         print(f"init: wrote {board}/settings.md and vision.md"
               + (" from the example board" if "example" in args.flags else ""))
         if in_git(d):
-            added = write_gitignore(d)
+            added = write_gitignore(d, board)
             if added:
                 print(f"init: .gitignore += {' '.join(added)}")
         indexed = index_memos(board)
@@ -848,7 +899,7 @@ def cmd_vault(argv):
                  if os.path.basename(board) == planlib.LEGACY_BOARD_DIR
                  else ""))
         return 0
-    if unhide_board(d):
+    if unhide_board(d, args.opt.get("dir")):
         board = planlib.board_at(d)
         print(f"vault: the board is {board} now, with a {planlib.LEGACY_BOARD_DIR} "
               "symlink where it was — Obsidian shows no path holding a "
@@ -914,8 +965,9 @@ def cmd_upgrade(argv):
     """
     args = trlib.Args(argv, FLAGS["upgrade"], "upgrade")
     if len(args.pos) > 1:
-        raise Refused("upgrade [<dir>]")
+        raise Refused("upgrade [<dir>] [--dir <board-directory-name>]")
     d = os.path.abspath(args.pos[0] if args.pos else os.getcwd())
+    into = args.opt.get("dir") or planlib.BOARD_DIR
     board = planlib.board_at(d)
     if not os.path.isfile(os.path.join(board, "settings.md")):
         raise Refused(f"no board at {board} — pearde init {d} writes one")
@@ -923,7 +975,7 @@ def cmd_upgrade(argv):
     if args.dry:
         print(f"dry · upgrade {name} — would seed wiki/ content, the vault, "
               "the gitignore names, the register, and regenerate wiki/board/"
-              + (f" · would move {board} to {os.path.join(d, planlib.BOARD_DIR)}"
+              + (f" · would move {board} to {os.path.join(d, into)}"
                  if os.path.basename(board) == planlib.LEGACY_BOARD_DIR
                  else ""))
         return 0
@@ -931,7 +983,7 @@ def cmd_upgrade(argv):
     # The board out of the hidden name, before anything else reads a path:
     # every step below writes into the board, and the vault seeded at the end
     # can only show a board with no dot in its name.
-    moved = unhide_board(d)
+    moved = unhide_board(d, into)
     if moved:
         board = planlib.board_at(d)
         print(f"  board     {'moved to ' + board if moved == 'moved' else board}"
@@ -973,7 +1025,8 @@ def cmd_upgrade(argv):
         print("  grammar   already on this board")
     plugins, missing, _ = write_obsidian(d)
     repaired = repair_plugin_ids(os.path.join(d, ".obsidian"))
-    repaired += repair_ignore_filters(os.path.join(d, ".obsidian"))
+    repaired += repair_ignore_filters(os.path.join(d, ".obsidian"),
+                                      os.path.basename(board))
     vault_line = ", ".join(plugins) if plugins else "already there"
     vault_line = f"{d} as {os.path.basename(d)} · " + vault_line
     if repaired:
@@ -983,7 +1036,7 @@ def cmd_upgrade(argv):
                        "pearde install --apply <skills-dir> fetches them")
     print(f"  vault     {vault_line}")
     if in_git(d):
-        added = write_gitignore(d)
+        added = write_gitignore(d, board)
         print(f"  gitignore {'+= ' + ' '.join(added) if added else 'already names them'}")
     board_added = write_board_gitignore(board)
     if board_added:

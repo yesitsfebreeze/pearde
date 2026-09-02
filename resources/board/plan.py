@@ -72,11 +72,23 @@ import workflows as wflib  # noqa: E402 — the skill root, one dir up
 # `.pearde` survives as the legacy name: `board_at` still finds a board that
 # never migrated, and `pearde upgrade` moves one and leaves a `.pearde`
 # symlink behind, so every path spelled the old way keeps resolving.
+#
+# The name is not fixed, either. A project whose own folder tree already uses
+# the word — this repo's checkout sits at `infra/pearde`, beside the `infra`
+# board — cannot call its board `pearde/` and still have one vault at the
+# project root. So the board's directory name is CONFIGURABLE, and the way it
+# is configured is that the board says so itself: see `named_boards`.
 BOARD_DIR = "pearde"
 LEGACY_BOARD_DIR = ".pearde"
 BOARD_DIRS = (BOARD_DIR, LEGACY_BOARD_DIR)
 STATE_DIR = ".state"
 PRDS_DIR = "prds"
+SETTINGS = "settings.md"
+# Never a board, and named so the scan below does not have to ask: a
+# dependency tree, a build output, a vendored copy. Everything hidden is
+# already skipped — the scan takes no dot-directory at all.
+SCAN_SKIP = frozenset(("node_modules", "target", "vendor", "__pycache__",
+                       "build", "dist"))
 
 
 def is_board_dir(p):
@@ -93,15 +105,104 @@ def is_board_dir(p):
         or os.path.isdir(os.path.join(p, PRDS_DIR)))
 
 
-def board_at(d):
-    """The board directory of project dir `d` — the plain name when a board
-    is there, the legacy hidden one when only that carries one, and the plain
-    name when neither does, which is what a board made here will be called."""
+def board_link(p):
+    """What a board reached through a compatibility symlink is really called.
+
+    `upgrade` leaves `.pearde` pointing at the directory it moved the board
+    to, so every path spelled the old way keeps resolving — but the name a
+    caller is handed has to be the board's own. That name is written into
+    vault-relative wikilinks, and Obsidian shows no path holding a
+    dot-segment, so handing back the link would put the board's own notes
+    where the vault cannot see them: the exact defect the plain name exists
+    to fix.
+
+    One level, resolved beside the link, never `realpath`: a symlinked
+    ANCESTOR (`/tmp` on macOS is `/private/tmp`) must stay spelled the way
+    the caller spelled it, or `os.path.dirname(board)` stops matching the cwd
+    every other check compares it against."""
+    if not os.path.islink(p):
+        return p
+    return os.path.normpath(os.path.join(os.path.dirname(p), os.readlink(p)))
+
+
+def named_boards(d):
+    """The boards inside project dir `d` that are called neither `pearde` nor
+    `.pearde` — immediate children holding `settings.md`. At most two are
+    returned: one is the answer and two is a refusal, so nothing past the
+    second changes either.
+
+    This scan IS the board-directory configuration, and there is no setting
+    for it anywhere. A setting would have to live in `settings.md`, inside
+    the board a resolver has not found yet; a marker file at the project root
+    would be a second name for one directory and a second thing to keep true;
+    an environment variable is one value for a machine that watches nine
+    boards; and a key in the project's `.claude/settings.json` binds this
+    layout to another tool's file and makes seven resolvers — one of them a
+    shell script — parse JSON on every command. The board already declares
+    itself, since ab1c762: it CARRIES the file. Renaming the directory is the
+    whole act of configuring it, and nothing can go stale because there is
+    only ever one place the name is written.
+
+    `settings.md` alone here, not the `prds/` half of `is_board_dir`: for the
+    two known names the name is corroboration and either marker is enough,
+    but a directory nothing named must carry the file only a board carries.
+    A repo with `docs/prds/` in it is not a repo with two boards.
+
+    Immediate children, one stat each, no dot-directory — `.pearde` is tried
+    above by name, and a hidden board is the thing the plain name exists to
+    stop being."""
+    hits, seen = [], set()
+    try:
+        names = sorted(os.listdir(d))
+    except OSError:                        # unreadable, or not a directory
+        return hits
+    for name in names:
+        if name.startswith(".") or name in SCAN_SKIP:
+            continue
+        p = os.path.join(d, name)
+        if not os.path.isfile(os.path.join(p, SETTINGS)):
+            continue
+        real = os.path.realpath(p)         # a link beside its target is one board
+        if real in seen:
+            continue
+        seen.add(real)
+        hits.append(p)
+        if len(hits) == 2:
+            break
+    return hits
+
+
+def two_boards(d, found):
+    """The refusal for a project holding two boards — one sentence naming
+    both. Duplicated in every resolver with that resolver's own prefix,
+    the way the walk itself is."""
+    return (f"two directories under {d} carry a board — "
+            f"{os.path.basename(found[0])}/ and {os.path.basename(found[1])}/"
+            "; a project has one board, so rename or remove one of them")
+
+
+def board_in(d):
+    """The board inside project dir `d`, or None. Three tests, cheapest
+    first: `pearde/` when it carries a board, `.pearde/` when only that does
+    — resolved through the compat symlink to whatever the board is really
+    called — and then the one immediate child holding `settings.md`, for a
+    project that had to call its board something else. Two such children is
+    not a board to choose between; it is refused, by name."""
     for name in BOARD_DIRS:
         p = os.path.join(d, name)
         if is_board_dir(p):
-            return p
-    return os.path.join(d, BOARD_DIR)
+            return board_link(p)
+    found = named_boards(d)
+    if len(found) > 1:
+        die(two_boards(d, found))
+    return found[0] if found else None
+
+
+def board_at(d):
+    """The board directory of project dir `d` — whatever it is called, and
+    the plain name when there is none, which is what a board made here will
+    be called."""
+    return board_in(d) or os.path.join(d, BOARD_DIR)
 
 
 def state_dir(board):
@@ -243,16 +344,21 @@ def find_board(arg):
     if arg:
         p = os.path.abspath(arg)
         if os.path.basename(p) in BOARD_DIRS and is_board_dir(p):
+            return board_link(p)
+        b = board_in(p)
+        if b:
+            return b
+        # the board named directly, under whatever it is called: the file only
+        # a board carries, and asked for last so a project holding one still
+        # resolves to the board inside it rather than to itself
+        if os.path.isfile(os.path.join(p, SETTINGS)):
             return p
-        for name in BOARD_DIRS:
-            if is_board_dir(os.path.join(p, name)):
-                return os.path.join(p, name)
         die(f"no {BOARD_DIR}/ board at {arg}")
     d = os.getcwd()
     while True:
-        for name in BOARD_DIRS:
-            if is_board_dir(os.path.join(d, name)):
-                return os.path.join(d, name)
+        b = board_in(d)
+        if b:
+            return b
         nxt = os.path.dirname(d)
         if nxt == d:
             die(f"no {BOARD_DIR}/ board found walking up from the cwd")

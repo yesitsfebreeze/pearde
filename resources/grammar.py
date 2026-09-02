@@ -39,6 +39,12 @@ BOARD_DIR = "pearde"
 # (@references/obsidian.md says why the dot had to go).
 LEGACY_BOARD_DIR = ".pearde"
 BOARD_DIRS = (BOARD_DIR, LEGACY_BOARD_DIR)
+# The board's directory name is configurable, and a directory holding
+# `settings.md` is how it is configured — @resources/board/plan.py
+# `named_boards`. These names are never a board and are skipped unstatted;
+# everything hidden is skipped by the dot rule.
+SCAN_SKIP = frozenset(("node_modules", "target", "vendor", "__pycache__",
+                       "build", "dist"))
 
 
 def _clean(v):
@@ -371,20 +377,79 @@ def is_board_dir(p):
         or os.path.isdir(os.path.join(p, "prds")))
 
 
+def board_link(p):
+    """A board reached through the `.pearde` compatibility symlink is not
+    called what the link is called — the directory it points at is. One
+    level, resolved beside the link, never `realpath`, so a symlinked
+    ANCESTOR stays spelled the way the caller spelled it. Duplicated from
+    @resources/board/plan.py for the same reason the walk is."""
+    if not os.path.islink(p):
+        return p
+    return os.path.normpath(os.path.join(os.path.dirname(p), os.readlink(p)))
+
+
+def named_boards(d):
+    """Immediate children of `d` carrying `settings.md` — how a board called
+    neither `pearde` nor `.pearde` is found, and the whole of the
+    board-directory configuration: renaming the directory is the only act
+    that configures it. @resources/board/plan.py `named_boards` carries the
+    reasoning. At most two come back, because one is the answer and two is a
+    refusal."""
+    hits, seen = [], set()
+    try:
+        names = sorted(os.listdir(d))
+    except OSError:
+        return hits
+    for name in names:
+        if name.startswith(".") or name in SCAN_SKIP:
+            continue
+        p = os.path.join(d, name)
+        if not os.path.isfile(os.path.join(p, "settings.md")):
+            continue
+        real = os.path.realpath(p)         # a link beside its target is one board
+        if real in seen:
+            continue
+        seen.add(real)
+        hits.append(p)
+        if len(hits) == 2:
+            break
+    return hits
+
+
+def board_in(d):
+    """The board inside project dir `d`, or None — `pearde/`, then `.pearde/`
+    through its symlink, then the one child that carries `settings.md`."""
+    for name in BOARD_DIRS:
+        p = os.path.join(d, name)
+        if is_board_dir(p):
+            return board_link(p)
+    found = named_boards(d)
+    if len(found) > 1:
+        sys.exit(f"grammar: two directories under {d} carry a board — "
+                 f"{os.path.basename(found[0])}/ and "
+                 f"{os.path.basename(found[1])}/; a project has one board, "
+                 "so rename or remove one of them")
+    return found[0] if found else None
+
+
 def find_board(arg):
     if arg:
         p = os.path.abspath(arg)
         if os.path.basename(p) in BOARD_DIRS and is_board_dir(p):
+            return board_link(p)
+        b = board_in(p)
+        if b:
+            return b
+        # the board named directly, under whatever it is called — asked last,
+        # so a project holding one still resolves to the board inside it
+        if os.path.isfile(os.path.join(p, "settings.md")):
             return p
-        for name in BOARD_DIRS:
-            if is_board_dir(os.path.join(p, name)):
-                return os.path.join(p, name)
         sys.exit(f"grammar: no {BOARD_DIR}/ board at {arg}")
     d = os.getcwd()
     while True:
-        for name in BOARD_DIRS:
-            if is_board_dir(os.path.join(d, name)):
-                return os.path.join(d, name)
+        b = board_in(d)
+        if b:
+            return b
         nxt = os.path.dirname(d)
         if nxt == d:
             sys.exit(f"grammar: no {BOARD_DIR}/ board found walking up from the cwd")

@@ -1,6 +1,6 @@
 {
   "collapse-filter": false,
-  "search": "-file:\"prd\" -path:\"specs\" -path:\"wiki/.graphify\" -path:\"wiki/graphs\" -path:\"wiki/pending\" -path:\".absorbed\" -file:\"Dashboard\" -path:\"graphify\"",
+  "search": "-file:\"prd\" -path:\"specs\" -path:\"wiki/.graphify\" -path:\"wiki/graphs\" -path:\"wiki/pending\" -path:\".absorbed\" -file:\"Dashboard\" -path:\"graphify\" -path:\"wiki/index\"",
   "showTags": true,
   "showAttachments": false,
   "hideUnresolved": true,

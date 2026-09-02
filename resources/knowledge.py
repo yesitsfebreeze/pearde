@@ -315,6 +315,9 @@ def cmd_enqueue(store, args):
         "type: pending",
         f"status: pending",
         f"priority: {args.priority}",
+        # the graph colours by kind, and a kind it can see is a tag — the
+        # `type:` beside it is a property, which the graph view cannot query
+        "tags: [pending]",
     ]
     if args.requested_by:
         lines.append(f"requested_by: \"{args.requested_by}\"")
@@ -544,6 +547,7 @@ def cmd_wiki(store, args):
             f"title: community-{index}-{slugify(hub)}",
             f"date: {dt.date.today().isoformat()}",
             "type: wiki",
+            "tags: [graph]",
             "community:",
             f"  hub: \"[[{hub}]]\"",
             f"  size: {len(component)}",
@@ -664,15 +668,27 @@ def cmd_board(store, args):
                                for n in p["needs"]))
         children = sorted(other for other, p in prds_found.items()
                           if p["from"] in name_parts)
+        # The properties above are what a Dataview query reads; the tags
+        # below are what the graph view can see, and they are the same three
+        # axes, not a second opinion — `tag_axes` derives them from the very
+        # fields written on the next lines, so a PRD whose state changed and
+        # whose note was regenerated cannot carry a stale tag. Three axes and
+        # not four: `workflow:` is already a wikilink, so the graph draws that
+        # edge to the workflow's own note, and a tag beside it would be a
+        # weaker second copy of an edge that is already there.
+        state = prd["state"] or "unknown"
+        origin = prd["origin"] or "requested"
+        blast = prd["blast"] or "low"
         lines = [
             "---",
             f"title: {name}",
             "type: prd",
-            f"state: {prd['state'] or 'unknown'}",
-            f"origin: {prd['origin'] or 'requested'}",
+            f"state: {state}",
+            f"origin: {origin}",
             f"priority: {prd['priority'] or 0}",
             f"complexity: {prd['complexity'] or 0}",
-            f"blast: {prd['blast'] or 'low'}",
+            f"blast: {blast}",
+            f"tags: [{', '.join(prd_tags(state, origin, blast))}]",
         ]
         if prd["from"]:
             lines.append(f'from: "[[{flat.get(prd["from"], prd["from"])}]]"')
@@ -737,6 +753,32 @@ def cmd_board(store, args):
     print(f"board: {len(written)} PRD note(s), {len(memos)} memos scanned"
           + (f" · {len(removed)} stale removed" if removed else ""))
     return 0
+
+
+# --- tags -------------------------------------------------------------------
+
+# What a tag may hold: Obsidian reads a tag up to the first character outside
+# this set, so a value carrying a space or a dot would silently become a
+# shorter tag than the one written. Slugged, never dropped.
+TAG_SAFE = re.compile(r"[^A-Za-z0-9_/-]+")
+
+
+def tag(value):
+    """One frontmatter value as a tag body — lowercased, unsafe runs folded to
+    `-`. Empty in, empty out; the caller drops it."""
+    return TAG_SAFE.sub("-", str(value or "").strip().lower()).strip("-")
+
+
+def prd_tags(state, origin, blast):
+    """The tags a generated PRD note carries: its kind, then one per axis the
+    contract gives it. Derived from the fields on every regeneration, so the
+    tag cannot outlive the value it names."""
+    out = ["prd"]
+    for name, value in (("state", state), ("origin", origin), ("blast", blast)):
+        body = tag(value)
+        if body:
+            out.append(f"{name}/{body}")
+    return out
 
 
 # --- the map as notes -------------------------------------------------------

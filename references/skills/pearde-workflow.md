@@ -15,6 +15,7 @@ python3 @resources/pearde.py workflow list  [board]        # slug · kind · run
 python3 @resources/pearde.py workflow show  <slug> [board] # the file
 python3 @resources/pearde.py workflow brief <slug> [board] # the workflow as one page, atomics inlined
 python3 @resources/pearde.py workflow check [board]        # what doctor reports for `workflows`
+python3 @resources/pearde.py workflow retag [board]        # rewrite every `tags:` from its own slug key
 ```
 
 `workflow` forwards to @resources/workflows.py, the only reader of that

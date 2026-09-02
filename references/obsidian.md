@@ -90,6 +90,35 @@ seeded by `@resources/board/init.py` into any new board's
   ships in the same server, so the MCP question is settled by the same
   install — nothing extra to add when an agent wants Obsidian as tools.
 
+## The graph view — coloured by tag, not by folder
+
+The graph's colour groups are `tag:` queries, one per kind: `#prd`, `#memo`,
+`#workflow`, `#atomic`, `#conclusion`, `#source`, `#pending`, `#graph`. They
+were `path:` queries until 2026-09-02, and every one of them died silently the
+day the layout moved — a group whose query matches nothing draws grey, and the
+graph then shows the wiki's own links and nothing else, which is the folder
+tree, not the board. A tag survives a move; a path does not.
+
+Every note carries the tag of its kind, and none of them is typed:
+
+| note | tags | written by |
+|---|---|---|
+| `wiki/board/<prd>` | `prd`, `state/<state>`, `origin/<origin>`, `blast/<blast>` | `knowledge.py board`, on every regeneration |
+| `memos/<slug>` | `memo`, `kind/<kind>`, `status/<status>` | `memos.py add`, `memos.py retag` |
+| `workflows/<slug>` | `atomic` or `workflow` | `workflows.py add`, `workflows.py retag` |
+| `wiki/sources`, `wiki/conclusions` | `source` / `conclusion`, plus the subject tags | `knowledge.py remember` / `conclude` |
+| `wiki/pending`, `wiki/graphs` | `pending` / `graph` | `knowledge.py enqueue` / `wiki` |
+
+The axis tags are what make the graph say something a folder cannot: `#state/open`
+is a node every open PRD hangs off, `#kind/invariant` gathers the memos that
+bind, and a PRD's `workflow:` stays a wikilink rather than a tag because the
+edge to the workflow's own note is already drawn.
+
+`showTags` is on, so those tag nodes are drawn. The preset is
+@resources/board/obsidian/graph.json; a vault already seeded keeps its own
+scale, node size and forces — `init` and `upgrade` overwrite only
+`colorGroups`, `search` and `showTags`, through `init.repair_graph_view`.
+
 ## The two ways in — and when each
 
 | | direct REST (curl / urllib) | MCP |

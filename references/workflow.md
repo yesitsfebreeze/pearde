@@ -49,6 +49,8 @@ subject: turn a reported break into a command that fails on this tree
 date: 2026-08-28
 updated: 2026-09-02
 runs: 4
+tags:
+  - atomic
 ---
 ```
 
@@ -59,6 +61,7 @@ runs: 4
 | `date`    | yes      | the day it was written. ISO 8601, written never stamped   |
 | `updated` | no       | the day the text last changed from a run                  |
 | `runs`    | no       | runs the file was in — one collect, one count. Integer ≥ 0, default 0 |
+| `tags`    | generated | the slug key's kind — `atomic` or `workflow`, derived and never typed. The graph view colours by tag and cannot query a key. `workflows add` writes it, `workflows retag` rewrites the lot, and the check calls a tag that disagrees with its own slug key a problem |
 
 Body — `@references/templates/atomic.md` is the shape:
 
@@ -81,6 +84,8 @@ workflow: fix-a-reported-break
 subject: a reported break, from the report to the verified fix
 date: 2026-08-28
 runs: 0
+tags:
+  - workflow
 ---
 ```
 
@@ -140,6 +145,8 @@ row `workflows` is that check. It fails on:
 - a required key missing, or a key nobody declared
 - a date that is not ISO 8601, an `updated` preceding its `date`, or `runs`
   that is not an integer ≥ 0
+- a `tags:` that is not what this file's own slug key derives — the repair
+  is `python3 @resources/workflows.py retag [board]`, never a hand edit
 - an atomic with no `## Do` or no `## Done when`
 - a workflow with no `## Steps` table
 - a step row whose `#` is not contiguous from 1, whose `atomic` names no file

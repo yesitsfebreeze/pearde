@@ -22,6 +22,10 @@ the work it governed.
 memo: one-writer
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: why the orchestrator is the only writer of PRD state
 date: 2026-08-23
 prds:
@@ -41,6 +45,7 @@ prds:
 | `prds`          | no       | board-relative PRD dirs this memo governs. A list              |
 | `supersedes`    | no       | the slug this replaces                                         |
 | `superseded_by` | no       | the slug that replaced this                                    |
+| `tags`          | generated | `memo`, `kind/<kind>`, `status/<status>` — derived from the two keys above, never typed. The graph view colours by tag and cannot query a key, and this is how a memo reaches it coloured. `memo add` writes it, `memo retag` rewrites the lot, and the check calls a tag that disagrees with its own kind or status a problem |
 
 The set is **closed**. Anything else fails the check — a misspelled key is
 worse than a missing one, because it reads as present.
@@ -140,6 +145,8 @@ same check alone. It fails on:
   not exist
 - `prds:` naming a directory that is not a PRD on this board
 - an invariant without a `verify:` command, or a `verify:` on any other kind
+- a `tags:` that is not what this memo's own kind and status derive — the
+  repair is `python3 @resources/memos.py retag [board]`, never a hand edit
 - a `README.md` index that does not match a regeneration from the tree
 
 Checked against the real board, never a fixture — the frontmatter and the

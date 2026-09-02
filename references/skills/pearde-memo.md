@@ -13,6 +13,7 @@ python3 @resources/pearde.py memo add <subject> [--kind <kind>]  # a new memo, s
 python3 @resources/pearde.py memo check [board]   # what doctor reports for `memos`
 python3 @resources/pearde.py memo verify [slug] [board]  # run every invariant's `verify:` command
 python3 @resources/pearde.py memo index [board]   # regenerate memos/README.md, the index by kind
+python3 @resources/pearde.py memo retag [board]   # rewrite every `tags:` from its own kind and status
 ```
 
 `memo` forwards to @resources/memos.py, the only reader of that format.

@@ -8,6 +8,7 @@
     python3 memos.py verify [slug] [board]
                                         run every invariant's `verify:` command; non-zero = broken
     python3 memos.py index [board]      regenerate memos/README.md, the index by kind
+    python3 memos.py retag [board]      rewrite every `tags:` from its own kind and status
 
 A memo is `.pearde/memos/<slug>.md`. It is not a PRD: no state, never claimed,
 never dispatched, invisible to the loop and to the progress line. It records
@@ -24,7 +25,8 @@ import subprocess
 import sys
 
 REQUIRED = ("memo", "kind", "status", "subject", "date")
-OPTIONAL = ("updated", "prds", "supersedes", "superseded_by", "verify")
+OPTIONAL = ("updated", "prds", "supersedes", "superseded_by", "verify",
+            "tags")
 KINDS = ("decision", "note", "invariant")
 STATUSES = ("open", "decided", "superseded")
 # The index groups in this order — invariants first, because they bind now;
@@ -186,6 +188,12 @@ def check(board):
         st = fm.get("status")
         if st and st not in STATUSES:
             bad.append(f"{at}: status `{st}` — the set is {'|'.join(STATUSES)}")
+        want = memo_tags(m["kind"], m["status"])
+        have = _listed(fm.get("tags"))
+        if have != want:
+            bad.append(f"{at}: `tags:` is {have or 'missing'}, derived from "
+                       f"this memo's own kind and status it is {want} — "
+                       "`memos.py retag` writes it")
         date, upd = str(fm.get("date") or ""), str(fm.get("updated") or "")
         if date and not ISO_RE.match(date):
             bad.append(f"{at}: date `{date}` is not ISO 8601 (YYYY-MM-DD)")
@@ -297,6 +305,88 @@ def slug(subject):
     return re.sub(r"[^a-z0-9]+", "-", subject.lower()).strip("-")
 
 
+# --- tags: derived, never authored -------------------------------------------
+
+# `tags:` is the one memo key nobody writes by hand. Obsidian's graph view
+# colours by tag and cannot query a property, so the kind and status a memo
+# already carries have to reach the graph as tags — and two fields that must
+# agree are one field that can disagree, which is why this one is generated
+# from the other two on every `add` and every `retag`, and why `check` calls
+# a memo whose tags drift from its own kind and status a problem.
+# The character set is Obsidian's: a tag ends at the first character outside
+# it, so a value with a space would silently become a shorter tag.
+TAG_SAFE = re.compile(r"[^A-Za-z0-9_/-]+")
+
+
+def tag(value):
+    """One frontmatter value as a tag body — lowercased, unsafe runs folded to
+    `-`. Empty in, empty out; the caller drops it."""
+    return TAG_SAFE.sub("-", str(value or "").strip().lower()).strip("-")
+
+
+def memo_tags(kind, status):
+    """The tags a memo carries: `memo`, then one axis per field the format
+    gives it. Derived from the fields, so a tag cannot outlive the value it
+    names."""
+    out = ["memo"]
+    for name, value in (("kind", kind), ("status", status)):
+        body = tag(value)
+        if body:
+            out.append(f"{name}/{body}")
+    return out
+
+
+def retag_text(text, tags):
+    """`text` with its `tags:` block rewritten to `tags`, written after
+    `status:` when it has none. Returns (text, changed). Frontmatter only —
+    the fence is the first `---` and the next one, and a body line reading
+    `tags: …` is prose, not a key. A block list and not `[a, b]`: this file's
+    own parser reads `- item` lines and would hand `check` one string with
+    brackets in it, and `prds:` is already written that way."""
+    want = ["tags:"] + [f"  - {t}" for t in tags]
+    lines = text.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return text, False
+    end = next((i for i, l in enumerate(lines[1:], 1) if l.strip() == "---"), None)
+    if end is None:
+        return text, False
+    at = next((i for i in range(1, end) if lines[i].startswith("tags:")), None)
+    if at is not None:
+        stop = at + 1
+        while stop < end and ITEM_RE.match(lines[stop]):
+            stop += 1
+        if lines[at:stop] == want:
+            return text, False
+        lines[at:stop] = want
+    else:
+        after = next((i for i in range(1, end)
+                      if lines[i].startswith("status:")), end - 1)
+        lines[after + 1:after + 1] = want
+    return "\n".join(lines) + ("\n" if text.endswith("\n") else ""), True
+
+
+def retag(board):
+    """Rewrite every memo's `tags:` from its own kind and status. Returns the
+    slugs it changed. An external memos dir is another system's contract and
+    is left alone — the same exemption `check` makes."""
+    d, external = memos_dir(board)
+    if external or not os.path.isdir(d):
+        return []
+    changed = []
+    for slug_, m in scan(board).items():
+        if not m["parsed"]:
+            continue
+        text = open(m["path"], encoding="utf-8").read()
+        out, did = retag_text(text, memo_tags(m["kind"], m["status"]))
+        if did:
+            tmp = m["path"] + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                f.write(out)
+            os.replace(tmp, m["path"])
+            changed.append(slug_)
+    return sorted(changed)
+
+
 def add(board, subject, kind="decision"):
     """Write `<memos>/<slug>.md` from @references/templates/memo.md and
     return its path. Line-based: `memo:`, `kind:`, `subject:`, `date:` and
@@ -350,6 +440,7 @@ def add(board, subject, kind="decision"):
     with open(tmp, "w", encoding="utf-8") as f:
         f.write("\n".join(out) + "\n")
     os.replace(tmp, path)
+    retag(board)
     write_index(board)
     return path
 
@@ -523,6 +614,11 @@ def main(argv):
         return 1 if bad else 0
     if cmd == "index":
         print(write_index(board))
+        return 0
+    if cmd == "retag":
+        done = retag(board)
+        print(f"retag: {len(done)} memo(s) rewritten"
+              + (" — " + ", ".join(done) if done else " (all current)"))
         return 0
     if cmd == "list":
         for m in scan(board).values():

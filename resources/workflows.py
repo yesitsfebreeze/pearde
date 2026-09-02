@@ -5,6 +5,7 @@
     python3 workflows.py show  <slug> [board] the file
     python3 workflows.py brief <slug> [board] the workflow as one page, atomics inlined
     python3 workflows.py check [board]        one problem per line; silent when clean
+    python3 workflows.py retag [board]        rewrite every `tags:` from its own slug key
     python3 workflows.py add <slug> <atomic|workflow> <subject> [board]
                                                write <slug>.md from the template, body on
                                                stdin — refused when the slug is taken
@@ -36,7 +37,7 @@ MEMBER_SIGIL = "@"
 
 SLUG_KEYS = ("atomic", "workflow")
 REQUIRED = ("subject", "date")
-OPTIONAL = ("updated", "runs")
+OPTIONAL = ("updated", "runs", "tags")
 
 # `| 1 | `slug` | why | `stop` |` — cells are read with backticks stripped, so
 # the template's `` `stop` `` and the format's bare `stop` are one grammar.
@@ -150,6 +151,44 @@ TEMPLATES_DIR = os.path.join(
     "references", "templates")
 
 
+# --- tags: derived, never authored -------------------------------------------
+
+# The same rule @resources/memos.py states for a memo, for the same reason:
+# Obsidian's graph view colours by tag and cannot query a frontmatter key, so
+# the kind a file already carries in its slug key has to reach the graph as a
+# tag — derived on every `add` and every `retag`, never typed, and `check`
+# calls a file whose tag disagrees with its own slug key a problem.
+
+
+def file_tags(kind):
+    """The tags a library file carries: its kind, and nothing else. A workflow
+    has one axis — what it is — because everything else about it (its steps,
+    its runs) is a row or a count, not a facet a reader filters on."""
+    return [kind] if kind in ("workflow", "atomic") else []
+
+
+def retag(board):
+    """Rewrite every library file's `tags:` from its own slug key. Returns the
+    slugs it changed. An external library is another repo's contract and is
+    left alone — the same exemption `check` makes."""
+    d, external = workflows_dir(board)
+    if external or not os.path.isdir(d):
+        return []
+    changed = []
+    for slug, e in scan(board).items():
+        if not e["parsed"] or not e["kind"]:
+            continue
+        text = open(e["path"], encoding="utf-8").read()
+        out, did = memos.retag_text(text, file_tags(e["kind"]))
+        if did:
+            tmp = e["path"] + ".tmp"
+            with open(tmp, "w", encoding="utf-8") as f:
+                f.write(out)
+            os.replace(tmp, e["path"])
+            changed.append(slug)
+    return sorted(changed)
+
+
 def add(board, slug, kind, subject, body, date):
     """Write `<slug>.md` to the library, shaped like `<kind>.md` in
     @references/templates — the slug key, `subject`, `date` and `runs: 0`
@@ -173,6 +212,7 @@ def add(board, slug, kind, subject, body, date):
     with open(tmp, "w", encoding="utf-8") as f:
         f.write(fm + body.strip("\n") + "\n")
     os.replace(tmp, path)
+    retag(board)
     return path
 
 
@@ -280,6 +320,13 @@ def check(board):
             bad.append(f"{at}: updated `{upd}` is not ISO 8601 (YYYY-MM-DD)")
         elif upd and ISO_RE.match(date or "") and upd < date:
             bad.append(f"{at}: updated {upd} precedes date {date}")
+        want = file_tags(key)
+        have = fm.get("tags") if isinstance(fm.get("tags"), list) else (
+            [fm["tags"]] if fm.get("tags") else [])
+        if have != want:
+            bad.append(f"{at}: `tags:` is {have or 'missing'}, derived from "
+                       f"this file's own slug key it is {want} — "
+                       "`workflows.py retag` writes it")
         runs = fm.get("runs")
         if runs not in (None, "", []):
             s = str(runs)
@@ -463,6 +510,11 @@ def main(argv):
         if bad:
             print("\n".join(bad))
         return 1 if bad else 0
+    if cmd == "retag":
+        done = retag(board)
+        print(f"retag: {len(done)} file(s) rewritten"
+              + (" — " + ", ".join(done) if done else " (all current)"))
+        return 0
     if cmd == "list":
         for e in scan(board).values():
             print(f"{e['slug']:28} {e['kind']:9} {str(e['runs'] or 0):>4}  "

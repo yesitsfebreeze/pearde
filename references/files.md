@@ -134,6 +134,7 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/questions.py | read + check a PRD's question pass — the only reader of that format |
 | @resources/invariants/ | one script per `kind: invariant` memo — what its `verify:` runs, named for its slug |
 | @resources/invariants/every-artifact-lands-inside-the-board.sh | the tool writes nowhere but a board: no `.state/` outside a `.pearde/`, a driven throwaway project that stays clean, and the guard that still refuses a pass file written beside the board |
+| @resources/invariants/no-colour-group-in-the-vault-preset-is-a-path-query.sh | the vault's graph stays coloured: every `colorGroups` query in the preset is a `tag:` query, and every tag one names is carried by a note on the board — a group matching nothing draws grey and reports no error |
 | @resources/invariants/a-master-need-is-the-union-of-its-members.sh | a master's `ramp need` is the union over `members:` to any depth, its own tree one member of it, the floor on the sum and a row crediting members — asserted on git repos built at run time, with the plain board that must not move |
 | @resources/graph/graph.sh | graphify passes — extract, update, query, path, explain, god-nodes, vault open |
 | @resources/knowledge.py | the research loop — query, enqueue, remember, conclude, relink, wiki, board, index, dashboard, doctor — over the board's `wiki/`; `index` writes one note per manifest row so a `@@<keyword>` is answerable from the dashboard |

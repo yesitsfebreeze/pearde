@@ -8,49 +8,56 @@
   "collapse-color-groups": false,
   "colorGroups": [
     {
-      "query": "path:\"wiki/board\"",
+      "query": "tag:#prd",
       "color": {
         "a": 1,
         "rgb": 12382067
       }
     },
     {
-      "query": "path:\"memos\"",
+      "query": "tag:#memo",
       "color": {
         "a": 1,
         "rgb": 16692479
       }
     },
     {
-      "query": "path:\"workflows\"",
+      "query": "tag:#workflow",
       "color": {
         "a": 1,
         "rgb": 6116761
       }
     },
     {
-      "query": "path:\"wiki/conclusions\"",
+      "query": "tag:#atomic",
+      "color": {
+        "a": 1,
+        "rgb": 9406406
+      }
+    },
+    {
+      "query": "tag:#conclusion",
       "color": {
         "a": 1,
         "rgb": 4357119
       }
     },
     {
-      "query": "path:\"wiki/sources\"",
+      "query": "tag:#source",
       "color": {
         "a": 1,
         "rgb": 5066061
       }
     },
     {
-      "query": "path:\"wiki/pending\"",
+      "query": "tag:#pending",
       "color": {
         "a": 1,
         "rgb": 16251222
       }
     },
     {
-      "query": "path:\"wiki/graphs\"",
+      "query": "tag:#graph",
       "color": {
         "a": 1,
         "rgb": 10306297

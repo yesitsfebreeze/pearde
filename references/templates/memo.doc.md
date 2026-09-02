@@ -28,6 +28,7 @@ Optional:
 | `prds` | list — board-relative PRD dirs this memo governs |
 | `supersedes` | the slug this replaces |
 | `superseded_by` | the slug that replaced this |
+| `tags` | generated, never typed — `memo`, `kind/<kind>`, `status/<status>`, so the graph view can colour a memo. `memo add` writes it and `memo retag` rewrites it |
 
 ## Sections
 

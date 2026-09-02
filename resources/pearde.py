@@ -78,8 +78,9 @@ FORWARD = {
                   ("ensure", "status", "stop", "wait", "forget", "run",
                    "reap")),
     "memo":      ("memos.py", [], ("list", "check", "add", "verify",
-                                   "index")),
-    "workflow":  ("workflows.py", [], ("list", "show", "brief", "check")),
+                                   "index", "retag")),
+    "workflow":  ("workflows.py", [], ("list", "show", "brief", "check",
+                                       "retag")),
     "grammar":   ("grammar.py", [], ("list", "show", "brief", "add", "check",
                                      "stale", "undefined", "init")),
     "health":    ("health.py", [], ("score", "list", "show", "check", "init")),
@@ -111,7 +112,16 @@ def discover():
     Only a module whose source says `COMMANDS =` is imported — importing
     plan.py or serve.py to find out they have none would cost every call."""
     found, problems = {}, []
-    for path in sorted(glob.glob(os.path.join(BOARD_PY, "*.py"))):
+    # An empty glob is not an answer. `board/` gone or unreadable returns no
+    # paths, no exception and no problem, and every subcommand then falls
+    # through to the did-you-mean arm — which tells the reader their verb was
+    # wrong when the truth is that the install is not there. Say it once, in
+    # the one place that can tell the difference.
+    scripts = sorted(glob.glob(os.path.join(BOARD_PY, "*.py")))
+    if not scripts:
+        problems.append(f"no subcommands: {BOARD_PY}/*.py matched nothing — "
+                        f"the install is incomplete, not the command wrong")
+    for path in scripts:
         try:
             src = open(path, encoding="utf-8").read()
         except OSError as e:

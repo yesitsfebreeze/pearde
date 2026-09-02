@@ -2,7 +2,8 @@
 
 The template is @references/templates/atomic.md. `pearde workflow add atomic
 <subject>` writes the frontmatter itself — slug key, `subject`, `date`,
-`runs: 0` — and takes the body from the template's shape. @references/workflow.md
+`runs: 0`, and a `tags:` derived from the slug key — and takes the body
+from the template's shape. @references/workflow.md
 is the format; @resources/workflows.py checks it.
 
 ## Frontmatter

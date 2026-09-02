@@ -2,7 +2,8 @@
 
 The template is @references/templates/workflow.md. `pearde workflow add
 <subject>` writes the frontmatter itself — slug key, `subject`, `date`,
-`runs: 0` — and takes the body from the template's shape. Every atomic a step
+`runs: 0`, and a `tags:` derived from the slug key — and takes the body
+from the template's shape. Every atomic a step
 names exists first, or the step sends a worker nowhere. @references/workflow.md
 is the format; @resources/workflows.py checks it.
 

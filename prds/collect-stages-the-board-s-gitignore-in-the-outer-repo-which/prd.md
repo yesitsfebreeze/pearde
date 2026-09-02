@@ -6,6 +6,7 @@ complexity: 18
 blast-radius:
 workflow: probe-then-spec
 actual: 0.35h
+commit: 3f4afe2 ad6aac4
 ---
 
 # collect stages the board s gitignore in the outer repo which ignores it

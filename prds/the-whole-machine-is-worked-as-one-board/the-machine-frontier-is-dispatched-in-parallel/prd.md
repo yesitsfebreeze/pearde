@@ -8,6 +8,7 @@ needs:
   - the-machine-frontier-is-one-ordered-list
 workflow: probe-then-spec
 actual: 0.85h
+commit: 0ca4c4c 59fb13a
 ---
 
 # the-machine-frontier-is-dispatched-in-parallel — That frontier's waves are dispatched as pass workers across boards, serialised on real-path footprint clashes, claim refusals named and skipped, one progress line over the merged set

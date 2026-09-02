@@ -6,6 +6,7 @@ complexity: 8
 blast-radius: mid
 workflow: probe-then-spec
 actual: 0.25h
+commit: 202cc14 f769d59
 ---
 
 # A cross-board need that names no board in the scan is ignored, not held

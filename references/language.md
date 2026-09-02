@@ -7,28 +7,26 @@ Reader: an agent, cold, without the conversation that produced the document.
 
 ## Rules
 
-- **Structure over prose.** A fact set is a table. A sequence is a numbered
-  list. A rule set is bullets. Write a paragraph only when the content is an
-  argument.
+- **Structure over prose.** A fact set is a table, a sequence a numbered list,
+  a rule set bullets. A paragraph carries an argument, nothing else.
 - **One idea per sentence.** A comma joining two thoughts is two sentences.
-- **Imperative.** `Set specced`, not "the state should then be set to specced".
-- **Name the thing.** The file, state, command, field. Never "the relevant
-  config" for `@references/templates/prd.md`.
-- **Address, do not describe a path.** One file is `@<path>` — the real path
-  from the repo root with `@` in front. A whole feature is `@@<keyword>`, the
-  scope defined in `@index.md`. Write `@@statusline`, not "the status line
-  script and the progress part".
-- **Reach for `@@` when the reader needs the scope, `@` when they need the
-  file.** A brief, a handle, an install step says `@@view`; a rule that cites
-  one table says `@references/parts/progress.md`.
+- **Imperative.** `Set specced`, not `the state should then be set to specced`.
+- **Name the thing.** The file, state, command, field — never `the relevant
+  config` for `@references/templates/prd.md`.
+- **Address, do not describe a path.** One file is `@<path>` from the repo
+  root, a whole feature `@@<keyword>`, scoped in `@index.md`. Write
+  `@@statusline`, not `the status line script and the progress part`.
+- **`@@` where the reader needs the scope, `@` where they need the file.** A
+  brief, a handle, an install step says `@@view`; a rule citing one table says
+  `@references/parts/progress.md`.
 - **No hedging.** No `might`, `probably`, `consider`. A real choice names who
   chooses and when.
-- **No meta.** No "this section explains", no "as mentioned above".
+- **No meta.** No `this section explains`, no `as mentioned above`.
 - **No legacy.** Present tense only. No former names, no migration notes, no
   deprecated aliases. History lives in version control.
 - **Rationale only where it changes a decision**, as a trailing clause after
-  `—`. "One writer — nothing to race, so no locking" earns its clause. "This is
-  important for correctness" does not.
+  `—`. `One writer — nothing to race, so no locking` earns its clause;
+  `This is important for correctness` does not.
 - **Delete, do not deprecate.** A stale line reads as current.
 
 ## Density
@@ -47,12 +45,13 @@ From @references/personas/writer.md, Vera Lindqvist. Checked by
 | Reference describes, never teaches | instruction and explanation become a link |
 | No preamble, no recap, no closer | the file opens on content and ends when the content ends; `prose.py check` flags a listed opener or closer phrase |
 | Emphasis earns its place | bold and italic only where a reader needed it, never both |
+| A quoted example of banned prose is backticked | bare, `prose.py check` reads the quote as the file's own prose and flags the rule that teaches it |
 
 ## Where prose stays
 
 A memo's `## Why` and `## Alternatives considered` are arguments, not facts —
-the one place paragraphs are correct. Compress them. Everything else in a memo
-is a table or a list.
+the one place paragraphs are correct. Compress them; the rest of a memo is a
+table or a list.
 
 ## Shape per document
 

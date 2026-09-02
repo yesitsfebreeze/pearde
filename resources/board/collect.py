@@ -95,6 +95,16 @@ FLAGS = translib.Flags(("as", "board", "also", "also-note", "widen",
 # refused rather than guessed at.
 VERDICTS = ("SPECCED", "REFINE", "QUESTION", "DONE", "BLOCKED", "FAILED")
 HELD = ("analyzing", "claimed", "blocked")
+# Whose uncommitted work a collect can run into. `HELD` is the in-flight
+# band the board schedules around; contending for a DIRTY PATH is wider
+# than that, because a worker leaves code in the tree on every verdict, not
+# only while it holds the PRD — an analyst's probe is uncommitted by
+# instruction, so a `specced`, `question` or `refine` sibling has code
+# standing exactly as a `claimed` one does. `done` is out: its work is in a
+# commit. `open` is out: nothing has been worked, and it has no spec to
+# carry a footprint anyway.
+CONTENDING = ("analyzing", "refine", "question", "specced",
+              "claimed", "blocked", "failed")
 
 
 class Stop(Exception):
@@ -724,7 +734,18 @@ def claims_dir(board, rel):
 def snapshot(board, rel, gate=None):
     """Record what is dirty and what the gate says at `claim:` — the
     baseline step 3 and the gate are measured against. Called by `claim`;
-    `collect --snapshot <prd>` is the same call by hand."""
+    `collect --snapshot <prd>` is the same call by hand.
+
+    TWO repos, not one. `repo_root(prd["dir"])` is the BOARD's repo, and on
+    every layout this board ships on — a nested `.pearde` with a `.git` of
+    its own, or a linked worktree at `.pearde`, which is what this machine
+    runs — that is not the repo the code lives in. A baseline that records
+    only the board's dirt can never explain a single code path, so step 3's
+    hunk-splitter finds nothing inherited and commits every footprint file
+    whole. `repo_of` gives the code repo; when it differs from the board's
+    it is snapshotted too, into `diff.repo` / `untracked.repo`, and `repo`
+    holds its path. A claim dir written before this holds only the board
+    side, and `baseline` reads it as it always did."""
     prds = planlib.scan(board)
     prd = prds.get(rel)
     if not prd:
@@ -734,12 +755,27 @@ def snapshot(board, rel, gate=None):
         raise Stop(f"{rel}: not inside a git repo")
     d = claims_dir(board, rel)
     os.makedirs(d, exist_ok=True)
-    dirty = dirty_paths(root)
-    with open(os.path.join(d, "diff"), "w", encoding="utf-8") as f:
-        f.write(git_out(root, "diff", "HEAD", "-U0", "--no-color"))
-    with open(os.path.join(d, "untracked"), "w", encoding="utf-8") as f:
-        f.write("".join(p + "\n" for p, k in sorted(dirty.items())
-                        if k == "untracked"))
+
+    def record(r, suffix):
+        dirty = dirty_paths(r)
+        with open(os.path.join(d, "diff" + suffix), "w",
+                  encoding="utf-8") as f:
+            f.write(git_out(r, "diff", "HEAD", "-U0", "--no-color"))
+        with open(os.path.join(d, "untracked" + suffix), "w",
+                  encoding="utf-8") as f:
+            f.write("".join(p + "\n" for p, k in sorted(dirty.items())
+                            if k == "untracked"))
+
+    record(root, "")
+    code = repo_of(prd, board, root)
+    for name in ("diff.repo", "untracked.repo", "repo"):
+        stale = os.path.join(d, name)          # a re-snapshot never inherits
+        if os.path.isfile(stale):              # the last one's second side
+            os.remove(stale)
+    if code and code != root:
+        record(code, ".repo")
+        with open(os.path.join(d, "repo"), "w", encoding="utf-8") as f:
+            f.write(code + "\n")
     gate = (str(planlib.board_settings(board).get("gate", "") or "").strip()
             if gate is None else gate)
     code, output = (run(["bash", "-e", "-o", "pipefail"], root, gate)
@@ -752,16 +788,34 @@ def snapshot(board, rel, gate=None):
 
 
 def baseline(board, rel):
-    """What `snapshot` recorded, or None."""
+    """What `snapshot` recorded, or None. `sides` is keyed `board` and
+    `repo` — the two repos `snapshot` records — each `{"hunks", "untracked"}`
+    in that repo's own relative paths. A claim dir written before the code
+    repo was recorded carries no `repo` side, and every caller reads that as
+    "no baseline for this root", which is the behaviour it always had."""
     d = claims_dir(board, rel)
     if not os.path.isfile(os.path.join(d, "diff")):
         return None
     rd = lambda n: open(os.path.join(d, n), encoding="utf-8").read()  # noqa
     gate = rd("gate") if os.path.isfile(os.path.join(d, "gate")) else ""
     m = re.match(r"exit (\d+)\n", gate)
-    return {"hunks": {p: {hunk_body(h) for h in hs}
-                      for p, (_, hs) in split_hunks(rd("diff")).items()},
-            "untracked": set(rd("untracked").split()),
+
+    def side(suffix):
+        return {"hunks": {p: {hunk_body(h) for h in hs}
+                          for p, (_, hs) in
+                          split_hunks(rd("diff" + suffix)).items()},
+                "untracked": set(rd("untracked" + suffix).split())}
+
+    sides = {"board": side("")}
+    if os.path.isfile(os.path.join(d, "diff.repo")):
+        sides["repo"] = side(".repo")
+    # `hunks` and `untracked` at the top are the board side under the names
+    # they had before there were two, for the readers written against the
+    # one-repo shape. On a board that is not its own repo — board and code
+    # are one root — they are the whole baseline, exactly as before.
+    return {"sides": sides,
+            "hunks": sides["board"]["hunks"],
+            "untracked": sides["board"]["untracked"],
             "gate_exit": int(m.group(1)) if m else 0,
             "gate_lines": set(gate.splitlines()[1:]) if m else set()}
 
@@ -923,7 +977,7 @@ def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since):
     # file is refused — `--widen` takes it whole.
     others = {}
     for r, p in prds.items():
-        if r == rel or p["state"] not in HELD:
+        if r == rel or p["state"] not in CONTENDING:
             continue
         if repo_of(p, board, board_root) != repo:
             continue
@@ -939,11 +993,26 @@ def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since):
     held = [os.path.relpath(p["dir"], board_root) for r, p in prds.items()
             if r != rel and p["state"] in HELD]
 
+    def side(root):
+        """The claim baseline for this repo, or None. `snapshot` records the
+        board's repo and the code repo; a third root — one `--also` reached
+        — has no baseline, and None means what it always meant: the file
+        goes whole or not at all."""
+        if base is None:
+            return None
+        if root == board_root:
+            return base["sides"].get("board")
+        if root == repo:
+            return base["sides"].get("repo") or (
+                base["sides"].get("board") if repo == board_root else None)
+        return None
+
     def predates(root, p, kind):
         """The whole of this path's dirt is older than the claim."""
-        if base is not None:
-            return (p in base["untracked"] if kind == "untracked"
-                    else p in base["hunks"] and not new_hunks(root, p))
+        b = side(root)
+        if b is not None:
+            return (p in b["untracked"] if kind == "untracked"
+                    else p in b["hunks"] and not new_hunks(root, p))
         if since is None:
             return False
         try:
@@ -959,14 +1028,15 @@ def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since):
         baseline — the file goes whole or not at all. Zero context on both
         sides, so two edits near each other are two hunks and not one
         merged one."""
-        if base is None:
+        b = side(root)
+        if b is None:
             return None
         cur = split_hunks(git_out(root, "diff", "HEAD", "-U0", "--no-color",
                                   "--", p)).get(p)
         if not cur:
             return ""
         _, hunks = cur
-        old = base["hunks"].get(p, set())
+        old = b["hunks"].get(p, set())
         keep = [h for h in hunks if hunk_body(h) not in old]
         theirs = [h for h in hunks if hunk_body(h) in old]
         gone = old - {hunk_body(h) for h in theirs}
@@ -996,15 +1066,42 @@ def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since):
                 p["add"].append(path)
             elif inside(path, union):
                 nh = new_hunks(root, path) if kind == "tracked" else None
-                if not predates(root, path, kind):
+                # A shared file is either split correctly, or the recording
+                # stops and says why — never swept whole in silence. The
+                # split comes FIRST: when the baseline explains part of this
+                # file's dirt, those hunks are reversed back out and only
+                # the rest is staged, which is the whole point of the
+                # snapshot. The refusal is what is left when no split is
+                # possible — every hunk is post-claim (`"all"`), so nothing
+                # tells this PRD's edits from the sibling's.
+                if nh not in (None, "", "all"):
+                    pass
+                elif not predates(root, path, kind):
                     share = sorted(r for r, claimed in others.items()
                                    if root == repo and inside(path, claimed))
                     if share:
+                        # A claim snapshotted before the baseline recorded
+                        # the code repo has nothing to split this file
+                        # against, and the refusal above would otherwise
+                        # read as "these edits are unattributable" when the
+                        # truth is "this claim cannot tell". Say which.
+                        stale = (base is not None and root != board_root
+                                 and side(root) is None)
+                        # One clause, wrapped so the sentence a check reads
+                        # sits whole on a line of its own.
+                        why = ""
+                        if stale:
+                            why = (
+                                "; this claim was"
+                                " recorded before the baseline covered"
+                                f" {root}, so there is nothing to split it"
+                                " against — `pearde collect --snapshot"
+                                f" {rel}` only after the tree is clean")
                         raise Stop(f"{rel}: {path} is in "
                                    + ", ".join(share)
                                    + "'s footprint too — not only this "
                                    f"PRD's edits; `--widen {path}` takes "
-                                   "it whole")
+                                   "it whole" + why)
                 if nh not in (None, "", "all"):
                     p["partial"][path] = nh
                 elif predates(root, path, kind):

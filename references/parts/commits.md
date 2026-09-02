@@ -29,14 +29,27 @@ rides the next commit.
 **Scope: the footprint, never the tree.** Add the union of the specs'
 `footprint:` and the PRD's own, plus the PRD's folder, plus any workflow file
 the collect edited. Never `git add -A`, never `git commit -a` — step 5 already
-proved no other `claimed` PRD writes that footprint.
+proved no other PRD with work standing in the tree writes that footprint. That
+band is every live state but `open`, which has never been worked and carries no
+spec, and `done`, whose work is already in a commit: an analyst leaves its probe
+uncommitted on every verdict, so a `specced`, `question` or `refine` sibling
+holds code exactly as a `claimed` one does. A file two of them share is split by
+hunk whenever the claim baseline explains part of its dirt, and refused with
+`--widen <path>` offered when it explains none — never swept whole in silence.
 
 - **The inherited tree is not the board's.** Step 1 records what is dirty
   before the pass starts. Those paths are never added, whatever footprint
   they fall in. Name them once in the pass.
   `collect` reads that record from `.pearde/.claims/<prd>/` — the tracked diff,
   the untracked list and the gate's output at `claim:`, written by
-  `snapshot()` in @resources/board/collect.py. A dirty path outside the
+  `snapshot()` in @resources/board/collect.py. That record covers two roots —
+  the repo the board is in and the code repo the footprint lands in — keyed
+  apart, so a board that is its own repo (a nested `.pearde`, or the linked
+  worktree this machine runs) still has the code repo's dirt on record and can
+  be split against it. A claim recorded before the baseline covered the code
+  repo holds no side for it, so nothing tells that file's authors apart: the
+  collect refuses, names the root the baseline never covered, and offers
+  `pearde collect --snapshot <prd>` on a clean tree. A dirty path outside the
   footprint is listed once and left. A dirty path inside the footprint that
   the claim predates stops the collect; `--widen <path>` takes it, and the
   message names it on a `widen:` line. A file holding inherited hunks and the

@@ -6,6 +6,7 @@ complexity: 36
 blast-radius: mid
 workflow: probe-then-spec
 actual: 1.72h
+commit: ce49e9a
 ---
 
 # the-loop-parts-are-rewritten-dense — references/parts/` loop, guard, commits, states, pass, dispatch, contract, derived, solo, roles and board rewritten dense, `prose.py check` green on each and no fact lost against `HEAD

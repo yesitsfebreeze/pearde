@@ -6,6 +6,7 @@ complexity: 35
 blast-radius:
 workflow: probe-then-spec
 actual: 0.49h
+commit: 1858a35 7680a1b
 ---
 
 # one copy per machine of what every lane regenerates

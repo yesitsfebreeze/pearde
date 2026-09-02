@@ -211,19 +211,25 @@ def named_boards(d):
     return hits
 
 
-def board_in(d):
-    """The board inside project dir `d`, or None — `pearde/`, then `.pearde/`
-    through its symlink, then the one child carrying `settings.md`.
+def board_named(d):
+    """`<d>/pearde`, or `<d>/.pearde` when only that carries a board — the two
+    names the tool knows, the second read through its compat symlink."""
+    for name in BOARD_DIRS:
+        p = os.path.join(d, name)
+        if is_board_dir(p):
+            return board_link(p)
+    return None
+
+
+def board_scanned(d):
+    """The board of `d` that is called something else — one immediate child
+    carrying `settings.md`.
 
     Two such children is None here and a refusal everywhere else. The guard
     is a hook on every tool call, not the part of this tool that tells a
     person to rename a directory: a project it cannot name one board in is a
     project it has no opinion about, and doctor's `board` row is what reports
     it. Nothing else consults this, so nothing else is made quiet by it."""
-    for name in BOARD_DIRS:
-        p = os.path.join(d, name)
-        if is_board_dir(p):
-            return board_link(p)
     found = named_boards(d)
     return found[0] if len(found) == 1 else None
 
@@ -234,7 +240,13 @@ def board_of(start):
     the same board from the same cwd. Carrying, not named: a folder called
     `pearde` that holds no board is not one, and a board a project had to
     call something else is one. The guard has no opinion about a directory
-    that is not a board."""
+    that is not a board.
+
+    Two passes, so a board under a known name wins at any depth over a
+    discovered one nearer the cwd — @resources/board/plan.py `board_above`
+    says why: `resources/board/example/` in this repo IS a board, and a
+    single pass would count a session's blocks against that fixture whenever
+    the cwd sat in `resources/board/`."""
     start = start or os.getcwd()
     if os.name == "nt":
         # Git Bash's own `cwd` (and `pwd`/`dirname` output doctor.sh builds
@@ -248,8 +260,13 @@ def board_of(start):
         if m:
             start = f"{m.group(1)}:{m.group(2) or '/'}"
     d = os.path.abspath(start)
+    return walk_up(d, board_named) or walk_up(d, board_scanned)
+
+
+def walk_up(d, find):
+    """`find` applied to `d` and every ancestor, first answer wins."""
     while True:
-        b = board_in(d)
+        b = find(d)
         if b:
             return b
         parent = os.path.dirname(d)

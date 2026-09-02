@@ -181,21 +181,59 @@ def two_boards(d, found):
             "; a project has one board, so rename or remove one of them")
 
 
-def board_in(d):
-    """The board inside project dir `d`, or None. Three tests, cheapest
-    first: `pearde/` when it carries a board, `.pearde/` when only that does
-    — resolved through the compat symlink to whatever the board is really
-    called — and then the one immediate child holding `settings.md`, for a
-    project that had to call its board something else. Two such children is
-    not a board to choose between; it is refused, by name."""
+def board_named(d):
+    """`<d>/pearde`, or `<d>/.pearde` when only that carries a board — the two
+    names the tool knows, the second read through its compat symlink."""
     for name in BOARD_DIRS:
         p = os.path.join(d, name)
         if is_board_dir(p):
             return board_link(p)
+    return None
+
+
+def board_scanned(d):
+    """The board of `d` that is called something else — one immediate child
+    holding `settings.md`. Two of them is not a board to choose between; it
+    is refused, by name."""
     found = named_boards(d)
     if len(found) > 1:
         die(two_boards(d, found))
     return found[0] if found else None
+
+
+def board_in(d):
+    """The board inside project dir `d`, or None — the named one, then the
+    scanned one. Cheapest first, and the answer for a directory a caller
+    pointed at deliberately."""
+    return board_named(d) or board_scanned(d)
+
+
+def walk_up(d, find):
+    """`find` applied to `d` and every ancestor, first answer wins."""
+    while True:
+        b = find(d)
+        if b:
+            return b
+        nxt = os.path.dirname(d)
+        if nxt == d:
+            return None
+        d = nxt
+
+
+def board_above(d):
+    """The board `d` belongs to, walking up — TWO passes, and a board under a
+    known name wins at any depth over a discovered one nearer the cwd.
+
+    Discovery is the fallback, so it cannot be part of the climb. This repo
+    ships `resources/board/example/`, which is a board and is meant to be —
+    `pearde example <dir>` copies it — so one pass that scanned as it went
+    would resolve a command run from `resources/board/` to the example
+    instead of to the repo's own board one level up, and the guard would
+    start counting a session's blocks against a fixture. The same is true of
+    any tree that keeps a board-shaped folder as data. So: climb for `pearde/`
+    and `.pearde/` first, all the way to the root, and only then climb again
+    asking which directory carries `settings.md`."""
+    return walk_up(d, board_named) or walk_up(d, board_scanned)
 
 
 def board_at(d):
@@ -354,15 +392,10 @@ def find_board(arg):
         if os.path.isfile(os.path.join(p, SETTINGS)):
             return p
         die(f"no {BOARD_DIR}/ board at {arg}")
-    d = os.getcwd()
-    while True:
-        b = board_in(d)
-        if b:
-            return b
-        nxt = os.path.dirname(d)
-        if nxt == d:
-            die(f"no {BOARD_DIR}/ board found walking up from the cwd")
-        d = nxt
+    b = board_above(os.getcwd())
+    if b:
+        return b
+    die(f"no {BOARD_DIR}/ board found walking up from the cwd")
 
 
 def die(msg, code=2):

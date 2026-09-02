@@ -416,13 +416,19 @@ def named_boards(d):
     return hits
 
 
-def board_in(d):
-    """The board inside project dir `d`, or None — `pearde/`, then `.pearde/`
-    through its symlink, then the one child that carries `settings.md`."""
+def board_named(d):
+    """`<d>/pearde`, or `<d>/.pearde` when only that carries a board — the two
+    names the tool knows, the second read through its compat symlink."""
     for name in BOARD_DIRS:
         p = os.path.join(d, name)
         if is_board_dir(p):
             return board_link(p)
+    return None
+
+
+def board_scanned(d):
+    """The board of `d` that is called something else — one immediate child
+    holding `settings.md`, and a refusal when there are two."""
     found = named_boards(d)
     if len(found) > 1:
         sys.exit(f"grammar: two directories under {d} carry a board — "
@@ -430,6 +436,31 @@ def board_in(d):
                  f"{os.path.basename(found[1])}/; a project has one board, "
                  "so rename or remove one of them")
     return found[0] if found else None
+
+
+def board_in(d):
+    """The board inside project dir `d` — the named one, then the scanned
+    one. The answer for a directory a caller pointed at deliberately."""
+    return board_named(d) or board_scanned(d)
+
+
+def walk_up(d, find):
+    """`find` applied to `d` and every ancestor, first answer wins."""
+    while True:
+        b = find(d)
+        if b:
+            return b
+        nxt = os.path.dirname(d)
+        if nxt == d:
+            return None
+        d = nxt
+
+
+def board_above(d):
+    """The board `d` belongs to — two passes, a named board winning at any
+    depth over a discovered one nearer the cwd. @resources/board/plan.py
+    `board_above` says why discovery cannot be part of the climb."""
+    return walk_up(d, board_named) or walk_up(d, board_scanned)
 
 
 def find_board(arg):
@@ -445,15 +476,10 @@ def find_board(arg):
         if os.path.isfile(os.path.join(p, "settings.md")):
             return p
         sys.exit(f"grammar: no {BOARD_DIR}/ board at {arg}")
-    d = os.getcwd()
-    while True:
-        b = board_in(d)
-        if b:
-            return b
-        nxt = os.path.dirname(d)
-        if nxt == d:
-            sys.exit(f"grammar: no {BOARD_DIR}/ board found walking up from the cwd")
-        d = nxt
+    b = board_above(os.getcwd())
+    if b:
+        return b
+    sys.exit(f"grammar: no {BOARD_DIR}/ board found walking up from the cwd")
 
 
 def main(argv):

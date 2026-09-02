@@ -261,8 +261,8 @@ is_board() { [ -f "$1/settings.md" ] || [ -d "$1/prds" ]; }
 # is not a board to choose between: `!two <one> and <two>` is echoed instead
 # of a path — echoed, not set in a variable, because every caller reads this
 # through `$(…)` and a variable set inside that subshell never comes back.
-board_in() {
-  local n t p one two
+board_named() {
+  local n t
   for n in pearde .pearde; do
     if is_board "$1/$n"; then
       if [ -L "$1/$n" ]; then
@@ -274,6 +274,11 @@ board_in() {
       return 0
     fi
   done
+  return 1
+}
+
+board_scanned() {
+  local p one two
   one=""; two=""
   for p in "$1"/*/; do
     p=${p%/}
@@ -289,6 +294,22 @@ board_in() {
   return 1
 }
 
+# `walk_up <dir> <fn>` — the first answer `fn` gives for that dir or any
+# ancestor. Called TWICE by every walk below, `board_named` before
+# `board_scanned`, so a board under a known name wins at any depth over a
+# discovered one nearer the start: this repo ships `resources/board/example/`,
+# which IS a board and is meant to be, and one pass that scanned as it climbed
+# would report the example whenever doctor ran from `resources/board/`.
+walk_up() {
+  local d p out
+  d="$1"
+  while [ -n "$d" ] && [ "$d" != "/" ]; do
+    out=$("$2" "$d") && { echo "$out"; return 0; }
+    p=$(dirname "$d"); [ "$p" = "$d" ] && break; d="$p"
+  done
+  return 1
+}
+
 # PreToolUse hook — @references/parts/guard.md. Where hooks are configured IS
 # knowable here, unlike a status line: the settings file sits in the repo the
 # board lives in, so this checks that file and `--fix` writes the block.
@@ -299,11 +320,8 @@ board_in() {
 # sitting a level up (its own leftover `prds/`) the old literal walk picked
 # THAT project's .claude/settings.json instead of this repo's.
 GSET=""
-d="$START"
-while [ -n "$d" ] && [ "$d" != "/" ]; do
-  [ -n "$(board_in "$d")" ] && { GSET="$d/.claude/settings.json"; break; }
-  p=$(dirname "$d"); [ "$p" = "$d" ] && break; d="$p"
-done
+GB=$(walk_up "$START" board_named || walk_up "$START" board_scanned)
+[ -n "$GB" ] && GSET="$(dirname "$GB")/.claude/settings.json"
 if [ -z "$GSET" ]; then
   :
 elif ! python3 -c 'import sys' 2>/dev/null; then
@@ -338,15 +356,9 @@ fi
 # `.pearde/`), not a literal
 # `prds/` — that was the pre-migration contract. BOARD is the board root;
 # PRDS is where the PRDs actually live, one level under it.
-BOARD=""; AMBIG=""; d="$START"
-while [ -n "$d" ] && [ "$d" != "/" ]; do
-  BOARD=$(board_in "$d")
-  case "$BOARD" in "!two "*) AMBIG=${BOARD#!two }; BOARD="" ;; esac
-  { [ -n "$BOARD" ] || [ -n "$AMBIG" ]; } && break
-  # dirname's fixpoint is not always `/` — on a Windows drive path it is `C:`,
-  # and without this guard the loop never exits. A no-op on POSIX.
-  p=$(dirname "$d"); [ "$p" = "$d" ] && break; d="$p"
-done
+AMBIG=""
+BOARD=$(walk_up "$START" board_named || walk_up "$START" board_scanned)
+case "$BOARD" in "!two "*) AMBIG=${BOARD#!two }; BOARD="" ;; esac
 if [ -z "$BOARD" ] && [ -n "$AMBIG" ]; then
   # two board-shaped directories in one project: named, never guessed between.
   # Every resolver refuses here, so the whole tool is stopped until one of the

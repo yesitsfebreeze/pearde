@@ -85,6 +85,11 @@ fi
 # board (@resources/board/plan.py `named_boards`) — or, one board predating
 # all three, a `prds/` dir carrying its own settings.md. Walking up, the board
 # dir wins over prds/: a repo can hold both during a migration.
+# Two passes over the same climb, the known names before the scan, so a board
+# under a known name wins at any depth over a discovered one nearer the cwd —
+# this repo ships `resources/board/example/`, which IS a board and is meant to
+# be. `dirname`'s fixpoint is not always `/` — on a Windows drive path it is
+# `C:` — so each loop guards its own exit; a no-op on POSIX.
 BOARD=""; BOARD_OUT=""
 d="$DIR"
 while [ -n "$d" ] && [ "$d" != "/" ]; do
@@ -96,6 +101,11 @@ while [ -n "$d" ] && [ "$d" != "/" ]; do
     else BOARD="$d/.pearde"; fi
     break
   fi
+  if [ -d "$d/prds" ]; then BOARD="$d/prds"; break; fi
+  p=$(dirname "$d"); [ "$p" = "$d" ] && break; d="$p"
+done
+d="$DIR"
+while [ -z "$BOARD" ] && [ -n "$d" ] && [ "$d" != "/" ]; do
   AMB=""
   for c in "$d"/*/; do
     c=${c%/}
@@ -109,9 +119,6 @@ while [ -n "$d" ] && [ "$d" != "/" ]; do
   # line has no way to say so, and naming one of the two would be a guess.
   [ -n "$AMB" ] && break
   [ -n "$BOARD" ] && break
-  if [ -d "$d/prds" ]; then BOARD="$d/prds"; break; fi
-  # dirname's fixpoint is not always `/` — on a Windows drive path it is `C:`,
-  # and without this guard the loop never exits. A no-op on POSIX.
   p=$(dirname "$d"); [ "$p" = "$d" ] && break; d="$p"
 done
 

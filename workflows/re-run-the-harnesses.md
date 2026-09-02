@@ -2,19 +2,24 @@
 atomic: re-run-the-harnesses
 subject: re-run the recorded harnesses and account for every changed count
 date: 2026-08-28
-updated: 2026-09-01
-runs: 52
+updated: 2026-09-02
+runs: 53
 ---
 
 # re-run-the-harnesses — every number back, or explained
 
 ## Do
 
-1. Re-run every harness whose count you recorded, in the same order, with the
+1. Before re-running the harnesses, run the repo's formatter and linter over
+   **your files only** — `rustfmt <your file>`, not `cargo fmt --all`, which
+   would rewrite every file a parallel worker has in flight. A gate that checks
+   formatting before it runs tests fails at a different line and a different
+   exit code, which is easily misread as a regression in the tests.
+2. Re-run every harness whose count you recorded, in the same order, with the
    same command line.
-2. Compare each count to the recorded one. A count that dropped is yours until
+3. Compare each count to the recorded one. A count that dropped is yours until
    you have shown otherwise.
-3. Before claiming any red-to-green flip, **diff the predicate against HEAD,
+4. Before claiming any red-to-green flip, **diff the predicate against HEAD,
    not just the result**. Extract the harness's own matcher and run it over
    `git show HEAD:<file>` for every file it reads. If the pre-build file
    already satisfies it, the flip is not yours and the box it backs cannot
@@ -26,12 +31,16 @@ runs: 52
    against `HEAD` — a sibling that committed the tree took your uncommitted
    hunks with it, and `HEAD:<file>` then shows your own change as the baseline
    and reads your flip as somebody else's.
-4. When a harness fails on a line you edited, read what it matches before you
+   A count that rose because *this unit added the tests* is not a flip to
+   attribute — name the suite and the number of tests you added, and show the
+   pre-existing counts are individually unchanged. The `git show HEAD:` check
+   applies to a harness whose predicate you did not write.
+5. When a harness fails on a line you edited, read what it matches before you
    touch the harness. A matcher written against a markdown table row often
    matched that row's column padding, so re-aligning a table breaks it while
    the rule it asserts is intact — repair the matcher to read the cell's text,
    never the spacing, and say in the report that the rule did not move.
-5. Quote the final line of each harness in the report, next to its baseline.
+6. Quote the final line of each harness in the report, next to its baseline.
 
 ## Done when
 

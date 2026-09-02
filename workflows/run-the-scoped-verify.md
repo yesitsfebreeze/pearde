@@ -2,8 +2,8 @@
 atomic: run-the-scoped-verify
 subject: run the unit's own verify command and quote what it printed
 date: 2026-08-28
-updated: 2026-08-29
-runs: 22
+updated: 2026-09-02
+runs: 23
 ---
 
 # run-the-scoped-verify — the unit measured, not the tree
@@ -49,3 +49,4 @@ runs: 22
 | a probe line in the block matches the wording of a line another file prints, and that file is a sibling's uncommitted hunk that moved between the baseline and this run | the matcher read the sibling's format, not the rule the box asserts | re-read the sibling file (`git diff --stat`, mtime against the baseline), re-aim the matcher to the rule — the PRD listed in the band, not the words on its row — quote both outputs, and name the box clause the move made stale |
 | a `grep -c` line in the block carries a `^` inside its needle and prints `0` while `sed -n <line>p` shows the text | grep read the `^` as an anchor, not the character the harness's own sed range quotes | re-run it as `grep -cF`, quote both, close the box on the `sed` line, and report the spec's line as a finding |
 | a `memos.py check` line `prds: <slug> is not a PRD on this board` for a box that spells a nested PRD by its basename | the memo checker keys `prds:` on the path under `prds/`, and the spec was written from the answer, not run | write `parent/child` as every other memo does, quote the refusal and the silent re-run, and report the spec's box as never run at spec time |
+| a `## Verify and Proof` line runs a probe harness that `cp`s a file into the tree and `rm`s it on exit, and this spec's work was to *land* that same path | the harness was written while the file lived only under `probe/`; landing it makes the harness's cleanup destructive, and the file is untracked so git cannot undo it | first copy the landed file outside the repository. Then **repair the harness** — it is inside the PRD folder and is yours: delete the `cp`/`trap`/`cleanup`, read the landed path in place, assert it exists and exit loudly if not, derive any expected count from the file instead of a literal, and assert it is still on disk when the run ends. Report the deletion and the repair; do not merely work around it |

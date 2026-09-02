@@ -2,8 +2,8 @@
 atomic: edit-inside-the-footprint
 subject: confine the change to the paths the contract names
 date: 2026-08-28
-updated: 2026-08-29
-runs: 22
+updated: 2026-09-02
+runs: 23
 ---
 
 # edit-inside-the-footprint — the change, and nothing beside it
@@ -20,6 +20,11 @@ runs: 22
    recorded before the first edit. A footprint of files not yet tracked shows
    nothing in `git diff` — account for those with `git status --short` and
    `wc -l` on each new file instead.
+   A footprint path that is **new and untracked** has no recovery: `git`
+   cannot restore it and a stray `rm` in any harness destroys it. Copy every
+   untracked deliverable outside the repository as soon as it first passes,
+   and re-take that copy after each change. Name the copy's location in the
+   report.
 
 ## Done when
 

@@ -3,15 +3,20 @@ atomic: capture-the-harness-baseline
 subject: record what every committed harness prints before the tree is touched
 date: 2026-08-28
 updated: 2026-09-02
-runs: 52
+runs: 53
 ---
 
 # capture-the-harness-baseline — the numbers as they were before you
 
 ## Do
 
-1. `find prds -name verify.sh | sort` — every committed harness on this board, at
-   whatever depth it sits. A fixed glob list aborts on the first depth that
+1. Locate the board root first — it is the `.pearde/` at or above the
+   `repo:` root, and it is often **not** the repo. Then
+   `find <board>/prds -name verify.sh | sort` for board harnesses, and
+   separately identify the *code* gate the PRD's own `verify:` key names.
+   On a board inside a code repo these are two different harness sets and
+   only the second usually reads the footprint.
+   A fixed glob list aborts on the first depth that
    has no match, and under a shell with `nomatch` it prints nothing at all.
 2. Run each one that reads a path in your `footprint:` — grep each harness
    for the footprint paths spelled from the repo root (`references/settings.md`,
@@ -23,8 +28,11 @@ runs: 52
    only way to tell your drop from a neighbour's later. Save each harness's
    whole output to a scratch file, not only its count — when a count moves you
    need the FAIL line, and the machine may sleep before you can re-run it. Write them under a subdirectory named for this run — the scratch directory is shared across sessions, and a bare `grep FAIL <scratch>/*` sweeps another worker's outputs in with yours. Record the mtime and `git diff -U0 | grep -c '^@@'` of every file outside your footprint that a spec says it stands on — a predicate in a sibling's file moves during the run, and the number beside each run is the only way to say which plan.py a count was taken against. A harness that **enumerates** the board — `find … -name verify.sh`, a glob over `prds/`, a census — reads every footprint that is itself a file it enumerates, and spells none of their paths. Grep will not find it. Add every harness matching `grep -l 'find.*verify\.sh' $(find prds -name verify.sh)` to the baseline set whenever any footprint path lies under the board.
-3. Record `python3 resources/index.py check` and `bash resources/doctor.sh`
-   the same way — **their exit codes as well as their lines** — the lines they print now, plus any line the contract itself
+3. Record the repo's own gate the same way — **its exit code as well as its
+   lines**. The gate is whatever the PRD's `verify:` key names, or the
+   repo's documented one (`just all` here, `python3 resources/index.py check`
+   + `bash resources/doctor.sh` on a pearde board). Do not assume the pearde
+   pair exists; check before running. The lines they print now, plus any line the contract itself
    adds (a new doctor row, a new file the map will name), are the lines you are
    allowed to still see at the end; name each added one in the report.
 4. A harness that is already failing is recorded as failing before your first
@@ -39,13 +47,21 @@ runs: 52
   worker already built:** if the earlier build is **uncommitted**, the
   pre-edit tree is still on disk and the baseline is recoverable — do not
   inherit it. `git clone --no-hardlinks` recovers the pre-edit tree
-  only where the harnesses are tracked. Where the board is gitignored (a
-  `.pearde/` inside a code repo, the common layout), copy the working tree
-  to scratch instead and restore only your own footprint files from `HEAD`
-  there (`git show HEAD:<path> > <copy>/<path>`) — that reverts your build
-  and keeps every neighbour's. Then run a control copy with nothing
-  reverted: a harness that reads the repo's own git history fails in any
-  copy, and only the control tells that apart from a regression. Only when the earlier build was **committed** is there no
+  only where the harnesses are tracked **in the repo you cloned**. Before
+  concluding they are not, check the board's **own** history: a board at
+  `.pearde/` is normally a separate repo or a **linked worktree**, so the
+  parent repo ignoring that path says nothing about whether the board's
+  files are tracked. `git -C <board> rev-parse --show-toplevel`, `git
+  worktree list` and `git -C <board> ls-tree -r --name-only HEAD` answer it.
+  Measured on this board: the parent's `.gitignore` ignores `.pearde/` and
+  the board's own `HEAD` still holds 49 harnesses, so `git -C <board> show
+  HEAD:<path>` returns them and a real pre-edit baseline was always
+  available. Only where the board's own history genuinely lacks a file do
+  you copy the working tree to scratch and restore your own footprint files
+  from `HEAD` there — that reverts your build and keeps every neighbour's —
+  then run a control copy with nothing reverted: a harness that reads the
+  repo's own git history fails in any copy, and only the control tells that
+  apart from a regression. Only when the earlier build was **committed** is there no
   pre-edit baseline: then record the tree as it stands, cite the earlier
   worker's numbers, and say in the report that the baseline is inherited. A
   number honestly labelled inherited is worth something; a number that

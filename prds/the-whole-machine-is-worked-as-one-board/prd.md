@@ -1,9 +1,11 @@
 ---
-state: open
+state: done
 origin: requested
 priority: 80
 complexity: 0
 blast-radius:
+actual: 1.18h
+commit: 0ca4c4c
 ---
 
 # the whole machine is worked as one board
@@ -153,3 +155,9 @@ each is fifty at once, competing for the same machine and the same budget?
 |---|---|---|
 | `the-machine-frontier-is-one-ordered-list` | Run from any directory, one command prints every watched board's PRDs as a single dependency-ordered frontier, with the concurrency it would use and the reading that produced it, and moves nothing | — |
 | `the-machine-frontier-is-dispatched-in-parallel` | That frontier's waves are dispatched as pass workers across boards, serialised on real-path footprint clashes, claim refusals named and skipped, one progress line over the merged set | the-machine-frontier-is-one-ordered-list |
+
+## Report
+
+container: every child done — pearde collect closes it
+
+children: the-whole-machine-is-worked-as-one-board/the-machine-frontier-is-one-ordered-list, the-whole-machine-is-worked-as-one-board/the-machine-frontier-is-dispatched-in-parallel

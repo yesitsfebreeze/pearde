@@ -31,7 +31,13 @@ runs: 33
 
 ## Done when
 
-- `bash prds/<prd>/probe/verify.sh` prints a count, and the count is quoted.
+- `bash prds/<prd>/probe/verify.sh` prints a count, and the count is
+  quoted — **unless the contract's verification is the repo's own gate**
+  (a `justfile` recipe, a `scripts/` tripwire, `cargo test`), in which case
+  that gate's command line and exit code are quoted instead and the probe
+  directory carries only what the build needed to reproduce a finding.
+  A probe `verify.sh` that merely re-calls the repo gate is a second copy
+  of it that can drift.
 - `ls <board>/prds` against the pre-run listing shows no `prds/<slug>/` you did not make — a hand-walked sweep over the board is refused by the guard in a wired repo, and the listing answers the same question. `git status --short` is silent here where the board is gitignored.
 - the probe is under `<board>/prds/<prd>/probe/` and nothing this run wrote
   is at the repo root — check with `ls`, not `git status`, where the board
@@ -41,6 +47,7 @@ runs: 33
 
 | seen | means | do |
 |------|-------|----|
+| the route's steps 3 and 5 have nothing to do because the specs already exist and the build is already in the tree | this is the route's **second** pass on the PRD — the analyst probed and specced, and an implementer has now been dispatched on the same route | run steps 1, 2 and 4 only, say in the report which steps were not entered and why, and claim no flip: every red-to-green on this tree was earned by the pass that built it. Ticking boxes against a green tree is the implementer's whole job here, and a route that forces a rebuild to have something to do would discard a working build |
 | a fixture board built under `mktemp -d` shows up in `serve.py status` after the run, on a path that no longer exists | the probe ran a command whose repair registers whatever board it is handed — `doctor --fix` is one — and the live daemon's registry outlives the temp dir | never run a `--fix`-shaped command against a fixture while a real service is up; point it at a dead port (`PEARDE_PORT=1`) so the repair cannot connect, and check `serve.py status` at the end. `serve.py forget <name>` removes one already landed |
 | the probe passes standalone and fails only when the runner that is its own subject runs it | the probe is itself an instance of the population it measures, and inherits the environment that runner sets — a guard variable, a cwd, a port — so it measures the guard instead of the behaviour | clear it explicitly for every fixture invocation (`env -u <VAR>`), keep one assertion that sets it deliberately, and run the harness both ways before quoting a count |
 | every fixture lands on one board, and assertions pass or fail in the wrong sections | the fixture-maker is called as `B=$(mktemp_helper)`, and command substitution runs it in a **subshell** — a counter or path it keeps never reaches the caller, so every call returns the same board | make each fixture with its own `mktemp -d` inside the helper and echo that; never keep state in a helper you call through `$(…)` |

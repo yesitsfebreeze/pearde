@@ -3,7 +3,7 @@ atomic: capture-the-harness-baseline
 subject: record what every committed harness prints before the tree is touched
 date: 2026-08-28
 updated: 2026-09-02
-runs: 54
+runs: 55
 ---
 
 # capture-the-harness-baseline — the numbers as they were before you
@@ -66,6 +66,13 @@ runs: 54
   worker's numbers, and say in the report that the baseline is inherited. A
   number honestly labelled inherited is worth something; a number that
   could have been re-taken and was not is worth less than it looks.
+  Where the earlier pass **published its counts** and the harnesses are
+  deterministic, a cheaper and safer confirmation is to re-run the same set
+  on the built tree and show every count equal to the published one: a
+  matching set confirms the inherited baseline without a window in which the
+  tree is half-reverted. Say in the report that the baseline is inherited and
+  confirmed, and name the pass it came from. Revert only when the counts
+  disagree or none were published.
 - Any pre-existing failure is written down with the words "before the first
   edit" beside it.
 

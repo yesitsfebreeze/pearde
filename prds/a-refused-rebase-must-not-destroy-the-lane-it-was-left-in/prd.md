@@ -7,6 +7,7 @@ blast-radius: mid
 from: collect-must-not-reset-the-checkout-it-did-not-write  # derived only — the PRD whose work surfaced this one
 workflow: probe-then-spec
 actual: 0.7h
+commit: d240590 a2019f2
 ---
 
 # a refused rebase must not destroy the lane it was left in

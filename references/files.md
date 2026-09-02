@@ -119,7 +119,8 @@ A template is the shape and nothing else — it lands whole in every file writte
 
 | anchor | is |
 |---|---|
-| @resources/pearde.py | the one command — a dispatcher over every script; discovers `COMMANDS` in `resources/board/*.py`; `help` from docstrings |
+| @resources/pearde.py | the one command — a dispatcher over every script; discovers `COMMANDS` in every directory under `resources/`; `help` from docstrings |
+| @resources/pearde_path.py | the one rule every module finds its siblings by — `resources/` and every directory under it on `sys.path`, the repo root by `resources/pearde.py`, and a launched sibling found by basename |
 | @resources/install.sh | build one skill folder of links per file in `references/skills/` |
 | @resources/update.sh | check every install on this machine and re-link the set — local, global, and the global that is not in force |
 | @resources/doctor.sh | install check + repair |

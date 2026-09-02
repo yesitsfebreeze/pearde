@@ -43,15 +43,21 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 RES = os.path.dirname(HERE)                          # the skill's resources/
 SKILL = os.path.dirname(RES)
-sys.path.insert(0, HERE)
+_D = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
+                else os.path.dirname(_D))
+import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
 import edit as editlib          # noqa: E402 — the one writer of bytes
 import plan as planlib          # noqa: E402 — every read
 import transitions as trlib     # noqa: E402 — the flag parser
 
 EXAMPLE = os.path.join(HERE, "example")   # the seed board
 VISION_TEMPLATE = os.path.join(SKILL, "references", "templates", "vision.md")
-SERVE = os.path.join(HERE, "serve.py")
-DOCTOR = os.path.join(RES, "doctor.sh")
+# Every script this one launches is found under resources/, never spelled as
+# a file beside this one — @resources/pearde_path.py `script`. sys.path does
+# nothing for a subprocess addressed by path.
+SERVE = pearde_path.script("serve.py")
+DOCTOR = pearde_path.script("doctor.sh")
 
 # The six knobs of @references/settings.md, in the order the file shows
 # them, every one written by name so a reader sees the choice on disk.
@@ -133,9 +139,9 @@ OBSIDIAN_PLUGINS = ("dataview", "obsidian-local-rest-api")
 # files is vault-relative — the vault roots at the PROJECT, so a KB query
 # reads `pearde/wiki/conclusions`, never `wiki/conclusions`.
 KNOWLEDGE_PRESET = os.path.join(HERE, "knowledge")
-KNOWLEDGE_PY = os.path.join(HERE, "..", "knowledge.py")
-MEMOS_PY = os.path.join(RES, "memos.py")
-GRAMMAR_PY = os.path.join(RES, "grammar.py")
+KNOWLEDGE_PY = pearde_path.script("knowledge.py")
+MEMOS_PY = pearde_path.script("memos.py")
+GRAMMAR_PY = pearde_path.script("grammar.py")
 
 KEY_RE = re.compile(r"^[a-z][a-z0-9-]*$")
 

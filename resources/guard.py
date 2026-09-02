@@ -32,8 +32,13 @@ import re
 import sys
 import time
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
-PEARDE = os.path.dirname(ROOT)          # the repo this guard ships in
+_D = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
+                else os.path.dirname(_D))
+import pearde_path  # noqa: E402 — @resources/pearde_path.py, the one rule
+
+ROOT = pearde_path.RES                  # the skill's resources/
+PEARDE = pearde_path.skill_root(__file__) or os.path.dirname(ROOT)
 # One JSON file per session, in the board's own corner:
 # `<board>/.state/guard/<session>.json`. The install is not a place this tool
 # writes — the invariant `every-artifact-lands-inside-the-board` — so there is
@@ -88,11 +93,15 @@ ESCAPE = re.compile(r"\.pass\.md$|/(loop|pass|dispatch)\.md$")
 REREADABLE = {"loop.md", "pass.md", "dispatch.md"}
 MANUAL = ("references" + os.sep, "skills" + os.sep)
 
-SCAN = "python3 %s/board/plan.py scan" % ROOT
+# The scan the guard offers instead of a hand walk. plan.py is found under
+# resources/, never spelled — @resources/pearde_path.py `script`.
+SCAN = "python3 %s scan" % (pearde_path.script("plan.py") or "plan.py")
 
 # The board's own tools write through edit.py and are never refused — a
 # transition repeated is a different board, and a refused one costs nothing.
-TOOLS = re.compile(r"\b(pearde|plan|guard)\.py\b|resources/board/\w+\.py")
+# `resources/<dir>/<mod>.py` matches wherever a module lands: the directory
+# is a wildcard, so a file that moves stays recognised as one of ours.
+TOOLS = re.compile(r"\b(pearde|plan|guard)\.py\b|resources/\w+/\w+\.py")
 STATE_RE = re.compile(r"^state:[ \t]*(.*?)[ \t]*$", re.M)
 
 # A board walked by hand. `find … prd.md`, `grep -r state:`, `ls prds/*/prd.md`
@@ -918,7 +927,7 @@ def check():
 # those and leaves the env key, an emptied event list dropped and `hooks`
 # itself kept. A file that is not JSON is refused untouched.
 SELF = os.path.realpath(__file__)
-SERVE = os.path.join(os.path.dirname(SELF), "board", "serve.py")
+SERVE = pearde_path.script("serve.py") or ""
 THINK = "8000"
 # (event, matcher, command, the pattern that recognises an entry as ours
 #  however its path is spelled). `SessionStart` carries no matcher: the

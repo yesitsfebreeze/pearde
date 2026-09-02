@@ -12,8 +12,10 @@ code passed through. The board is resolved by the script that reads it, the
 way @resources/board/plan.py `find_board` does — the path given, or the
 nearest `.pearde/` walking up from the working directory.
 
-Discovery. Every `resources/board/*.py` that exposes
-`COMMANDS = {"<name>": <callable>}` is imported and its names are routed. A
+Discovery. Every `*.py` in `resources/` or in any directory directly under
+it — @resources/pearde_path.py `dirs`, the same list that is on `sys.path` —
+that exposes `COMMANDS = {"<name>": <callable>}` is imported and its names
+are routed. A
 callable takes the argument list after the name and returns the exit code
 (`None` reads as 0); its docstring's first line is the `help` line, and its
 `flags` attribute — the declaration @resources/board/transitions.py `Args`
@@ -41,40 +43,43 @@ except Exception:
     pass
 
 
+_D = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
+                else os.path.dirname(_D))
+import pearde_path  # noqa: E402 — @resources/pearde_path.py, the one rule
+
+
 def skill_root():
     """The repo this file belongs to: the nearest ancestor holding
-    `resources/board/plan.py`. Works from `resources/pearde.py` and from a
-    probe copy alike."""
-    d = os.path.dirname(os.path.abspath(__file__))
-    while True:
-        if os.path.isfile(os.path.join(d, "resources", "board", "plan.py")):
-            return d
-        nxt = os.path.dirname(d)
-        if nxt == d:
-            print("pearde: no resources/board/plan.py above this file",
-                  file=sys.stderr)
-            sys.exit(2)
-        d = nxt
+    `resources/pearde.py` — this file, the one that cannot move, so it is the
+    marker. Works from `resources/pearde.py` and from a probe copy alike."""
+    d = pearde_path.skill_root(__file__)
+    if d is None:
+        print("pearde: no resources/pearde.py above this file",
+              file=sys.stderr)
+        sys.exit(2)
+    return d
 
 
 ROOT = skill_root()
 RES = os.path.join(ROOT, "resources")
-BOARD_PY = os.path.join(RES, "board")
 
 # The contract table of @.pearde/prds/the-board-runs-itself/one-command/prd.md, one
-# row per name pearde forwards. `script` is under resources/; `verbs` are the
+# row per name pearde forwards. `script` is a bare basename —
+# @resources/pearde_path.py `script` finds it under resources/, so a file can
+# move between directories and no row here changes; `verbs` are the
 # words the script takes first — when the first argument is one of them the
 # arguments go through untouched, otherwise `prefix` is put in front. A row
 # with no verbs always gets its prefix.
 FORWARD = {
-    "scan":      ("board/plan.py", ["scan"], ()),
-    "plan":      ("board/plan.py", ["plan"], ()),
-    "reconcile": ("board/plan.py", ["reconcile"], ()),
-    "gantt":     ("board/plan.py", ["gantt"], ()),
-    "calibrate": ("board/plan.py", ["calibrate"], ()),
-    "status":    ("board/plan.py", ["status"], ()),
-    "members":   ("board/plan.py", ["members"], ()),
-    "view":      ("board/serve.py", ["ensure"],
+    "scan":      ("plan.py", ["scan"], ()),
+    "plan":      ("plan.py", ["plan"], ()),
+    "reconcile": ("plan.py", ["reconcile"], ()),
+    "gantt":     ("plan.py", ["gantt"], ()),
+    "calibrate": ("plan.py", ["calibrate"], ()),
+    "status":    ("plan.py", ["status"], ()),
+    "members":   ("plan.py", ["members"], ()),
+    "view":      ("serve.py", ["ensure"],
                   ("ensure", "status", "stop", "wait", "forget", "run",
                    "reap")),
     "memo":      ("memos.py", [], ("list", "check", "add", "verify",
@@ -107,21 +112,32 @@ WIDTH = 80
 COMMANDS_RE = re.compile(r"^COMMANDS\s*=", re.M)
 
 
+def modules():
+    """Every `*.py` under `resources/` and under each directory directly
+    under it, sorted by basename — the walk @resources/pearde_path.py `dirs`
+    defines, so a module is found wherever it lands. A basename claimed by
+    two directories is a problem, not a silent win for whichever sorted
+    first: both paths come back and `discover` reports the clash."""
+    seen = {}
+    for d in pearde_path.dirs():
+        for path in sorted(glob.glob(os.path.join(d, "*.py"))):
+            seen.setdefault(os.path.basename(path), []).append(path)
+    return [(name, paths) for name, paths in sorted(seen.items())]
+
+
 def discover():
     """(commands, problems). commands: name -> (module basename, callable).
     Only a module whose source says `COMMANDS =` is imported — importing
     plan.py or serve.py to find out they have none would cost every call."""
     found, problems = {}, []
-    # An empty glob is not an answer. `board/` gone or unreadable returns no
-    # paths, no exception and no problem, and every subcommand then falls
-    # through to the did-you-mean arm — which tells the reader their verb was
-    # wrong when the truth is that the install is not there. Say it once, in
-    # the one place that can tell the difference.
-    scripts = sorted(glob.glob(os.path.join(BOARD_PY, "*.py")))
-    if not scripts:
-        problems.append(f"no subcommands: {BOARD_PY}/*.py matched nothing — "
-                        f"the install is incomplete, not the command wrong")
-    for path in scripts:
+    for base, paths in modules():
+        path = paths[0]
+        if len(paths) > 1:
+            problems.append(f"{base} is in "
+                            + " and ".join(os.path.basename(os.path.dirname(q))
+                                           for q in paths)
+                            + " — one basename, one directory")
+            continue
         try:
             src = open(path, encoding="utf-8").read()
         except OSError as e:
@@ -154,6 +170,17 @@ def discover():
                                 f"{found[name][0]}.py and {mod}.py")
                 continue
             found[name] = (mod, fn)
+    # An empty walk is not an answer. A `resources/` gone or unreadable
+    # yields no module, no exception and no problem, and every subcommand
+    # then falls through to the did-you-mean arm — which tells the reader
+    # their verb was wrong when the truth is that the install is not there.
+    # Say it once, in the one place that can tell the difference. The walk
+    # is now every directory under `resources/`, so the emptiness worth
+    # naming is an empty `found`, not an empty glob over one directory.
+    if not found:
+        problems.append(f"no subcommands: no *.py under {RES} or any "
+                        f"directory under it exposes COMMANDS — the install "
+                        f"is incomplete, not the command wrong")
     return found, problems
 
 
@@ -164,7 +191,9 @@ USAGE_RE = re.compile(r"^\s*(?:python3\s+|bash\s+)?(?:@?[\w./-]*/)?(\w+\.(?:py|s
 
 def docstring(script):
     """A .py's module docstring, or a .sh's leading `#` block."""
-    path = os.path.join(RES, script)
+    path = pearde_path.script(script)
+    if path is None:
+        return ""
     try:
         text = open(path, encoding="utf-8").read()
     except OSError:
@@ -290,7 +319,10 @@ def cmd_help(found, problems):
 # ── forwarding ────────────────────────────────────────────────────────────────
 
 def run(script, args):
-    path = os.path.join(RES, script)
+    path = pearde_path.script(script)
+    if path is None:
+        print(f"pearde: no {script} under {RES}", file=sys.stderr)
+        return 2
     cmd = (["bash", path] if script.endswith(".sh")
            else [sys.executable, path]) + list(args)
     try:
@@ -311,10 +343,13 @@ def cmd_view(args):
     other verbs pass through. `--no-open` keeps the browser shut — a harness
     wants the registration, not a window."""
     if args and args[0] in FORWARD["view"][2]:
-        return run("board/serve.py", args)
+        return run("serve.py", args)
     want_open = "--no-open" not in args
     rest = [a for a in args if a != "--no-open"]
-    path = os.path.join(RES, "board", "serve.py")
+    path = pearde_path.script("serve.py")
+    if path is None:
+        print(f"pearde: no serve.py under {RES}", file=sys.stderr)
+        return 2
     p = subprocess.run([sys.executable, path, "ensure"] + rest,
                        capture_output=True, text=True)
     sys.stdout.write(p.stdout)

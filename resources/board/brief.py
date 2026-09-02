@@ -38,27 +38,27 @@ import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+_D = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
+                else os.path.dirname(_D))
+import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
 
 
 def skill_root():
-    """The nearest ancestor holding resources/board/plan.py — works from
+    """The nearest ancestor holding resources/pearde.py — the one file that
+    cannot move, so it is the marker. @resources/pearde_path.py owns the
+    walk; this wraps it in the exit the dispatcher expects. Works from
     resources/board/brief.py and from a probe copy under prds/ alike."""
-    d = HERE
-    while True:
-        if os.path.isfile(os.path.join(d, "resources", "board", "plan.py")):
-            return d
-        nxt = os.path.dirname(d)
-        if nxt == d:
-            print("pearde brief: no resources/board/plan.py above this file",
-                  file=sys.stderr)
-            sys.exit(2)
-        d = nxt
+    d = pearde_path.skill_root(HERE)
+    if d is None:
+        print("pearde brief: no resources/pearde.py above this file",
+              file=sys.stderr)
+        sys.exit(2)
+    return d
 
 
 ROOT = skill_root()
 RES = os.path.join(ROOT, "resources")
-sys.path.insert(0, RES)
-sys.path.insert(0, os.path.join(RES, "board"))
 import plan as planlib              # noqa: E402 — every read
 import collect as collectlib        # noqa: E402 — `repo_of`, the one rule
 import lanes as laneslib            # noqa: E402 — `<repo>` is the worker's lane
@@ -269,7 +269,7 @@ def health_of(prd, board):
         _, feet = planlib.spec_data(prd)
     except Exception:  # a footprint that will not parse is the gate's to refuse
         feet = []
-    cmd = [sys.executable, os.path.join(RES, "health.py"), "list",
+    cmd = [sys.executable, pearde_path.script("health.py"), "list",
            "--board", bp] + [os.path.join(repo, f) for f in feet]
     try:
         r = subprocess.run(cmd, capture_output=True, text=True, timeout=20,

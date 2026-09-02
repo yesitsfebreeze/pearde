@@ -35,8 +35,10 @@ import sys
 # this file's own directory IS the board/ dir — the shipped code is imported
 # from beside it, never from a path written down
 BOARD = HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, os.path.dirname(BOARD))
-sys.path.insert(0, BOARD)
+_D = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
+                else os.path.dirname(_D))
+import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
 import plan as planlib  # noqa: E402
 import serve as servelib  # noqa: E402
 
@@ -355,7 +357,7 @@ def boards():
         if board is None:
             return [], ("no daemon is up and no board at the cwd — a cold "
                         "daemon watches nothing, so there is nothing to work")
-        subprocess.run([sys.executable, os.path.join(BOARD, "serve.py"),
+        subprocess.run([sys.executable, pearde_path.script("serve.py"),
                         "ensure", board], check=False,
                        stdout=subprocess.DEVNULL)
         st = servelib.running()

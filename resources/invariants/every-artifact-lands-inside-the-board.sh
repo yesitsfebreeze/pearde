@@ -138,7 +138,7 @@ cd "$REPO" || exit 1
 # PEARDE_PORT=1 above is what keeps the machine's daemon out of this; this
 # line stays as a second net for a board that landed there before that export
 # existed, and it names the port too so it cannot itself become the reach.
-PEARDE_PORT=1 python3 "$R/board/serve.py" forget pearde-invariant-probe \
+PEARDE_PORT=1 python3 "$(ls "$R"/serve.py "$R"/*/serve.py 2>/dev/null | head -1)" forget pearde-invariant-probe \
   >/dev/null 2>&1 || true
 
 # `.gitignore` and `.obsidian/` are the two paths pearde writes outside the

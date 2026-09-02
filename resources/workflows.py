@@ -23,7 +23,10 @@ import os
 import re
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+_D = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
+                else os.path.dirname(_D))
+import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
 
 import memos  # noqa: E402
 from memos import ISO_RE, parse  # noqa: E402
@@ -224,9 +227,6 @@ def members(board):
     the two never drift. The import is deferred on purpose: `plan.py` imports
     this module at its top, and a module-level import here would close that
     circle while both are still loading."""
-    d = os.path.join(os.path.dirname(os.path.abspath(__file__)), "board")
-    if d not in sys.path:
-        sys.path.insert(0, d)
     import plan  # noqa: E402 — deferred: plan.py imports this module
     return plan.members(board)
 

@@ -34,6 +34,20 @@ set -uo pipefail
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 SKILL_ROOT="$(cd "$DIR/.." && pwd -P)"
+
+# res <basename> — the path of a script or a directory under resources/, by
+# name: resources/ first, then every directory directly under it. The shell
+# half of @resources/pearde_path.py `script`. Nothing below spells a
+# directory, so a file can move between them and no row here changes.
+res() {
+  local d
+  [ -e "$DIR/$1" ] && { printf %s "$DIR/$1"; return 0; }
+  for d in "$DIR"/*/; do
+    [ -e "$d$1" ] && { printf %s "$d$1"; return 0; }
+  done
+  return 1
+}
+
 FIX=0
 HFLAG=0
 while [ $# -gt 0 ]; do
@@ -113,8 +127,9 @@ fi
 # never `broken`, and every missing plugin carries the exact two commands
 # that install it. A pass runs without them; they make it cheaper.
 PKEYS=""
-if [ -d "$DIR/board/adapters" ]; then
-  PIP=$(python3 - "$DIR/board/adapters" <<'PYEOF'
+ADAPTERS=$(res adapters)
+if [ -n "$ADAPTERS" ] && [ -d "$ADAPTERS" ]; then
+  PIP=$(python3 - "$ADAPTERS" <<'PYEOF'
 import json, os, sys
 ad = sys.argv[1]
 for fn in sorted(os.listdir(ad)):
@@ -478,7 +493,7 @@ fi
 # matters: the plan silently loses a whole project, and the board looks smaller
 # rather than broken.
 if [ -n "$BOARD" ] && grep -qE '^[[:space:]]*members:' "$BOARD/settings.md" 2>/dev/null; then
-  MEM=$(python3 "$DIR/board/plan.py" members "$BOARD" 2>/dev/null | grep .)
+  MEM=$(python3 "$(res plan.py)" members "$BOARD" 2>/dev/null | grep .)
   NM=$(printf '%s\n' "$MEM" | grep -c . )
   MISS=$(printf '%s\n' "$MEM" | grep -c MISSING || true)
   NAMES=$(printf '%s\n' "$MEM" | awk '{print $1}' | tr '\n' ' ')
@@ -518,7 +533,7 @@ if [ -n "$BOARD" ]; then
     row vision off "no vision.md — the board orders by dependency, weight and priority alone"
     fix "write $BOARD/vision.md from @references/templates/vision.md — one sentence, then terminals:"
   else
-    VOUT=$(python3 "$DIR/board/plan.py" vision --check "$BOARD" 2>&1); VRC=$?
+    VOUT=$(python3 "$(res plan.py)" vision --check "$BOARD" 2>&1); VRC=$?
     if [ "$VRC" -eq 0 ]; then
       row vision ok "$VOUT"
     else
@@ -728,11 +743,11 @@ fi
 # the outside. So is a brief:every that never names the `Verdict:` line
 # `collect` refuses a report without, and a rewrap that left its old
 # continuation behind. brief.py `--check` is the one reader of all four.
-if [ ! -f "$DIR/board/brief.py" ]; then
+if [ -z "$(res brief.py)" ]; then
   row briefs off "no resources/board/brief.py — nothing prints a brief yet"
   fix "land brief-is-printed: the module under resources/board/ exposing COMMANDS"
 else
-  BPROB=$(python3 "$DIR/board/brief.py" --check 2>&1)
+  BPROB=$(python3 "$(res brief.py)" --check 2>&1)
   NB=$(grep -c '^<!-- brief:' "$SKILL_ROOT/references/parts/workers.md" 2>/dev/null | tr -d ' ')
   if [ -z "$BPROB" ]; then
     row briefs ok "$NB blocks in references/parts/workers.md · every placeholder named · the verdict line named"
@@ -812,8 +827,8 @@ if [ -n "$BOARD" ]; then
   PBOARD=$(cd "$BOARD" 2>/dev/null && pwd -P)
   if [ -z "$SRV" ]; then
     row view off "not running — the board reads and plans without it"
-    fix "python3 $DIR/board/serve.py ensure $BOARD"
-    if [ "$FIX" = 1 ] && python3 "$DIR/board/serve.py" ensure "$BOARD" >/dev/null 2>&1; then
+    fix "python3 $(res serve.py) ensure $BOARD"
+    if [ "$FIX" = 1 ] && python3 "$(res serve.py)" ensure "$BOARD" >/dev/null 2>&1; then
       did "view service started"
     fi
   elif printf '%s' "$SRV" | grep -qF "\"$BOARD\"" \
@@ -825,8 +840,8 @@ if [ -n "$BOARD" ]; then
     row view ok "watching · http://127.0.0.1:$SRV_PORT/board/${BN:-?}"
   else
     row view broken "the service is up but this board is not registered"
-    fix "python3 $DIR/board/serve.py ensure $BOARD"
-    if [ "$FIX" = 1 ] && python3 "$DIR/board/serve.py" ensure "$BOARD" >/dev/null 2>&1; then
+    fix "python3 $(res serve.py) ensure $BOARD"
+    if [ "$FIX" = 1 ] && python3 "$(res serve.py)" ensure "$BOARD" >/dev/null 2>&1; then
       did "board registered"
     fi
   fi
@@ -841,7 +856,7 @@ if [ -n "$BOARD" ]; then
             "$BOARD/.state/plan.json" 2>/dev/null | head -1)
   if [ -z "$PLANNED" ]; then
     row plan off "no plan on record — the view has no bars until there is one"
-    fix "python3 $DIR/board/plan.py plan $BOARD"
+    fix "python3 $(res plan.py) plan $BOARD"
   else
     row plan ok "planned $PLANNED"
   fi
@@ -925,7 +940,7 @@ EOF
     # — the machine's real service among them — so this is safe to run beside
     # another session's sweep. HLEAK is a count of what THIS line stopped,
     # never of what is running on the machine.
-    HLEAK=$(python3 "$DIR/board/serve.py" reap 2>/dev/null \
+    HLEAK=$(python3 "$(res serve.py)" reap 2>/dev/null \
             | sed -n 's/^serve: \([0-9]*\) of [0-9]* stranded$/\1/p')
     HLEAK="${HLEAK:-0}"
     ji=0
@@ -1001,19 +1016,19 @@ if [ "$HFLAG" = 1 ]; then
     row jstests off "node found, playwright-core missing — both tests need it"
     fix "npm i playwright-core --prefix $DIR/board"
   else
-    JOUT=$(node "$DIR/board/viewtest.js" --example 2>&1); JRC=$?
+    JOUT=$(node "$(res viewtest.js)" --example 2>&1); JRC=$?
     JLINE=$(printf '%s\n' "$JOUT" | tail -1)
     if [ "$JRC" != 0 ]; then
       row jstests broken "viewtest.js --example failed · $JLINE"
       printf '%s\n' "$JOUT" | grep -m3 '^  FAIL' | while IFS= read -r l; do note "$(printf '%s' "$l" | sed 's/^  //')"; done
-      fix "node $DIR/board/viewtest.js --example"
+      fix "node $(res viewtest.js) --example"
     else
       SRV_PORT="${PEARDE_PORT:-8443}"
       HRSRV=$(curl -fsS -m 2 "http://127.0.0.1:$SRV_PORT/status" 2>/dev/null)
       if [ -z "$HRSRV" ] || [ -z "$BOARD" ]; then
         row jstests ok "viewtest.js --example · $JLINE"
         note "hotreload-test.js not run — needs the view service serving this board"
-        note "run: python3 $DIR/board/serve.py ensure $BOARD && node $DIR/board/hotreload-test.js http://127.0.0.1:$SRV_PORT/board/<name>"
+        note "run: python3 $(res serve.py) ensure $BOARD && node $(res hotreload-test.js) http://127.0.0.1:$SRV_PORT/board/<name>"
       else
         BN=$(printf '%s' "$HRSRV" | tr '{' '\n' \
              | grep -F "\"$BOARD\"" | sed -n 's/.*"name": "\([^"]*\)".*/\1/p' | head -1)
@@ -1021,12 +1036,12 @@ if [ "$HFLAG" = 1 ]; then
           row jstests ok "viewtest.js --example · $JLINE"
           note "hotreload-test.js not run — this board is not registered with the running service"
         else
-          HROUT=$(node "$DIR/board/hotreload-test.js" "http://127.0.0.1:$SRV_PORT/board/$BN" 2>&1); HRRC=$?
+          HROUT=$(node "$(res hotreload-test.js)" "http://127.0.0.1:$SRV_PORT/board/$BN" 2>&1); HRRC=$?
           HRLINE=$(printf '%s\n' "$HROUT" | tail -1)
           if [ "$HRRC" != 0 ]; then
             row jstests broken "viewtest ok · hotreload-test.js failed · $HRLINE"
             printf '%s\n' "$HROUT" | grep -m3 '^  FAIL' | while IFS= read -r l; do note "$(printf '%s' "$l" | sed 's/^  //')"; done
-            fix "node $DIR/board/hotreload-test.js http://127.0.0.1:$SRV_PORT/board/$BN"
+            fix "node $(res hotreload-test.js) http://127.0.0.1:$SRV_PORT/board/$BN"
           else
             row jstests ok "viewtest.js --example · $JLINE · hotreload-test.js · $HRLINE"
           fi

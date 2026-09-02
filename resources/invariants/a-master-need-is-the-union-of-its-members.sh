@@ -35,7 +35,8 @@
 # realpath that circle was an infinite recursion, and an unbounded check would
 # hang the harness sweep rather than fail it.
 set -u
-RAMP=${RAMP:-$(cd "$(dirname "$0")/../.." && pwd -P)/resources/board/ramp.py}
+RAMP=${RAMP:-$(RES=$(cd "$(dirname "$0")/.." && pwd -P); \
+       ls "$RES"/ramp.py "$RES"/*/ramp.py 2>/dev/null | head -1)}
 FAIL=0
 no() { printf 'FAIL  %s\n' "$*"; FAIL=$((FAIL + 1)); }
 okr() { printf 'PASS  %s\n' "$*"; }

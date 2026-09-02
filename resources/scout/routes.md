@@ -490,6 +490,31 @@ curl -sG 'https://registry.modelcontextprotocol.io/v0/servers' \
 jq -r '.servers[] | [.server.name, .server.description] | @tsv'
 ```
 
+### skills — the agent-skills directory, ranked by installs
+- **ranks** installs over eight weeks — the only skill index with a usage axis
+- **auth** none for this page; the `/api/v1` endpoints are OIDC-gated, see [Dead ends](#dead-ends)
+- **example** `rust`
+- **gotcha** the leaderboard ships inside the page's own payload, so this block is layout-coupled the way `trending` is — a shape change prints nothing rather than lying. No query returns the whole leaderboard
+
+```sh
+curl -s 'https://www.skills.sh/' -H "user-agent: $UA" |
+sed 's/\\"/"/g' |
+grep -o '{"source":"[^"]*","skillId":"[^"]*","name":"[^"]*","installs":[0-9]*[^}]*}' |
+jq -r --arg q "$Q" 'select(($q == "-") or ((.source + " " + .name) | ascii_downcase | contains($q | ascii_downcase))) |
+	[.installs, .source, .name] | @tsv' | head -n "$N"
+```
+
+### skillrepo — every skill one repository ships
+- **ranks** nothing — it is the census of one source, which is what a pick needs before it installs
+- **auth** `gh`
+- **example** `anthropics/skills`
+- **gotcha** one tree call, so a repo with no `SKILL.md` prints nothing; `npx skills add <repo> -l` is the same list with descriptions and costs a clone
+
+```sh
+gh api "repos/$Q/git/trees/HEAD?recursive=1" \
+	--jq '.tree[].path | select(endswith("SKILL.md"))' | head -n "$N"
+```
+
 ### llms — every model one gateway serves, with prices
 - **ranks** by nothing, but carries context length and price per token
 - **auth** none
@@ -556,6 +581,8 @@ evidence — the failure is recorded so the next sweep does not spend the call.
 | public SearXNG | 8 instances from `searx.space` | every one `429`s or ignores `format=json` — see the `searx` route |
 | product hunt | `api.producthunt.com/v2` | GraphQL, token required |
 | brave / exa / tavily | their search APIs | keys and billing. `marginalia`, `ddg` and a self-hosted `searx` cover the need |
+| skills.sh API | `skills.sh/api/v1/skills`, `/search`, `/curated` | `401 authentication_required` — a Vercel OIDC token, rotating every 12 hours. The `skills` route reads the same leaderboard off the page |
+| skills.sh CLI search | `npx skills find <q>` | an interactive TUI: it blocks on a tty that a route does not have. `npx skills add <repo> -l` is the non-interactive half and `skillrepo` covers it without the clone |
 
 ## Maintenance
 

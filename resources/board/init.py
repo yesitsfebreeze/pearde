@@ -53,10 +53,13 @@ VISION_TEMPLATE = os.path.join(SKILL, "references", "templates", "vision.md")
 SERVE = os.path.join(HERE, "serve.py")
 DOCTOR = os.path.join(RES, "doctor.sh")
 
-# The five knobs of @references/settings.md, in the order the file shows
+# The six knobs of @references/settings.md, in the order the file shows
 # them, every one written by name so a reader sees the choice on disk.
+# `happiness: 0` is written because the ramp gate reads it — a fresh board
+# has never been asked whether the machine is tooled for its repo, and a key
+# that is absent says the same thing less plainly.
 DEFAULTS = (("language", "English"), ("workers", "3"), ("pipeline", "3"),
-            ("weight-default", "50"), ("gantt-day", "8h"))
+            ("weight-default", "50"), ("gantt-day", "8h"), ("happiness", "0"))
 
 # Machine-local per board — regenerable. What this repo's own .gitignore
 # holds for the same names. `.obsidian/` is the board's own vault config,

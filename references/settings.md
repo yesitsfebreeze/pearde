@@ -14,6 +14,7 @@ workers: 3
 pipeline: 3
 weight-default: 50
 gantt-day: 8h
+happiness: 0
 context-budget: 100k
 ---
 ```
@@ -39,6 +40,7 @@ members:
 | `memos`       | `memos/`     | where decision records live, relative to `.pearde/`. Point it at another system's memo dir to mirror it read-only — the strict gate then applies only to the board's own `memos/`, per @references/memo.md |
 | `workflows`   | `workflows/` | where the workflow library lives, relative to `.pearde/`. Unlike `memos:`, elsewhere is not a foreign system mirrored read-only — it is **the** library, shared by several boards and written by all of them, so it gets the whole check wherever it sits. @references/workflow.md |
 | `harnesses`   | `off`        | run the board's own `verify.sh` harnesses as part of `doctor` — `on` runs them on every `doctor` run, and `doctor --harnesses` runs them whatever this key says. Off by default because the row costs tens of seconds where every other row answers in one. Read by `doctor` alone; no other reader on the board looks at it. @references/parts/doctor.md |
+| `happiness`  | 0            | whether a person has said this machine is tooled for this repo. `0` — the value `pearde init` writes — opens the ramp gate at loop step 0: it prints the gap between what the tree asks for and what is installed, proposes skills off scout's routes and hands the picks to the user, every pass until the answer is yes. Non-zero closes it, and only a person writes one — `pearde ramp happy 1`. @references/parts/ramp.md |
 | `members`     | none         | the boards this one merges — `- <path>` or `- <name>: <path>`, relative to `.pearde/`. Present means **master board**: every member's PRDs join the scan as `@<member>/<rel>`, one plan spans them. @references/parts/master.md |
 | `gate`        | none         | one command, run in the repo root by `collect` after the specs' verify blocks and before the commit. Red is exit 1 and no commit, like a red verify — measured against the output `claim:` recorded under `.pearde/.claims/<prd>/gate`: a line already there is known, a new line is red. With no record, red is any non-zero exit. @references/parts/commits.md |
 | `context-budget` | 100k      | how far one window may grow **over its own floor**, in tokens — `off` removes it, `160k` moves it. A window opens holding the system prompt, the tools, `CLAUDE.md` and the skill before a pass exists — 50k on this repo's own `/pearde` session — so the budget is measured from the smallest window the session was billed for, never from zero. Context is billed on every turn, so what a window grew is paid for again on every turn left. `resources/guard.py` is the only reader: it notes the crossing at 70% and 85%, and at the ceiling refuses everything but the pass file, @references/parts/dispatch.md, @references/parts/loop.md, @references/parts/pass.md, dispatching a worker, asking the user and the board's own commands — the ceiling is a handover, not a stop. @references/parts/dispatch.md |

@@ -57,3 +57,14 @@ rag	topic:rag stars:>3000
 memory	topic:llm-memory stars:>1000
 claude-plugins	topic:claude-code-plugin stars:>500
 claude-plugin	topic:claude-plugin stars:>500
+
+# What an agent can be handed, as opposed to what it can call. Added
+# 2026-09-02 for the ramp gate (@references/parts/ramp.md), which asks "does
+# this machine hold a skill for what this repo is" and needs a discovery
+# layer under the question. The `skills` and `skillrepo` routes rank a named
+# skill by installs; these buckets are the other half — the repositories that
+# ship sets of them, which is what a person installs from. Never swept yet:
+# the first sweep including them is a baseline, not a measurement.
+skills	topic:agent-skills stars:>300
+claude-skills	topic:claude-skills stars:>300
+skillsets	skills claude in:name,description stars:>1000

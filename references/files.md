@@ -74,6 +74,7 @@ whose scope it changed. Nothing else points at it.
 | @references/parts/view.md | the live view at `127.0.0.1:8443` |
 | @references/parts/doctor.md | broken install vs absent one |
 | @references/parts/master.md | one plan across several repos |
+| @references/parts/ramp.md | loop step 0 — is this machine tooled for this repo, and the `happiness:` key that closes the question |
 
 ### `references/personas/` — who works
 
@@ -126,6 +127,7 @@ whose scope it changed. Nothing else points at it.
 | @resources/board/lit-core.min.js | Lit 3, vendored — the page's component base |
 | @resources/board/edit.py | the writers — one line at a time |
 | @resources/board/collect.py | `collect` — verify, commit the footprint, `done`, one call |
+| @resources/board/ramp.py | `ramp` — need, have, gap and the toolbox gate; proposes skills off scout's routes and installs none |
 | @resources/board/orphans.py | `orphans` — every done PRD whose footprint never reached the branch that holds it; per-branch, never `git log --all`, reads only |
 | @resources/board/brief.py | `brief` — a worker's or a consultant's brief, one command's output; the text is the marker blocks of workers.md, this fills them and holds no copy |
 | @resources/board/transitions.py | the eight transition commands — the one writer of `state:` |

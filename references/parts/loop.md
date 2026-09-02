@@ -1,8 +1,8 @@
 # The loop
 
-Eight steps, in order. Run until the board is drained, or everything left is
-blocked on the user. `once` = one pass. `status` = step 1 plus the progress
-report, changing nothing.
+Step 0, then eight steps, in order. Run until the board is drained, or
+everything left is blocked on the user. `once` = one pass. `status` = step 1
+plus the progress report, changing nothing.
 
 **You are a `pearde-pass` worker, not the session that was asked** —
 @references/parts/dispatch.md dispatched you, reads your line back, says when
@@ -39,6 +39,7 @@ and the refusal names the command that answers instead.
 
 | step | the orchestrator decides |
 |---|---|
+| 0 ramp | nothing — one line, unless the gap is the user's |
 | 1 scan | nothing — read |
 | 2 answer | what to put to the user, per @references/drill.md, and what they said |
 | 3 refine | whether the analyst's `## Split` table is usable; a drill when it is not |
@@ -47,6 +48,14 @@ and the refusal names the command that answers instead.
 | 6 collect | whether to believe the report; whether an edit was the atomic's |
 | 7 knowledge | whether the record already answers it — cite the note under `## Answers` and skip the question, or let the drill stand |
 | 8 drill, then hand back | the forks and their three answers |
+
+**0 · Ramp.** `pearde ramp` — once per board, not once per pass. `happiness:`
+non-zero (@references/settings.md) is a person saying the machine is tooled
+for this repo, and the step is one line. Zero is the gate: the gap between
+what the tree asks for and what is installed is written to
+`.pearde/.state/ask.md` as one fork per job with its candidates and their
+`npx skills add` lines, and the pass hands back `ASK` before it scans.
+Nothing is installed by the board — @references/parts/ramp.md.
 
 **1 · Scan.** The sections come out in the pressure order of
 @references/parts/order.md — drill, collect, waiting on you, in flight, ready,

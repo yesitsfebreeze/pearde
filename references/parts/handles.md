@@ -16,6 +16,7 @@ each skill file says what it does with no board in scope.
 | Want                         | Say                                                                                                      | Command |
 |------------------------------|-----------------------------------------------------------------------------------------------------------|---------|
 | report only, change nothing  | `status` — `@resources/board/plan.py scan` plus the progress line. Changes nothing, reads no file the scan already read | `pearde status` |
+| is the machine tooled for this repo? | `ramp` — `@resources/board/ramp.py`: `happiness:` non-zero prints one line, zero prints the gap and writes the forks to `.pearde/.state/ask.md`. Loop step 0, once per board. `have`, `need`, `gap` and `find <job>` answer on their own; `happy <n>` is a person's word, per @references/parts/ramp.md | `pearde ramp` |
 | the board as one page        | `scan` — `@resources/board/plan.py scan`: counts, progress terms, collect, in flight, waiting on you, ready, gated. Loop step 1, run on its own | `pearde scan` |
 | which step the pass is on   | `next` — `@resources/board/plan.py next`: the loop step, the decision it owes and the exact command, one call after `scan`. Reads and writes nothing | `pearde next` |
 | one pass, then stop         | `once`                                                                                                   | — |

@@ -62,9 +62,10 @@ Stars ranked, plus `STATE` — days since push, ARCHIVED, issue load, license �
 so the dead-3-years 10k-star repo reads as what it is.
 
 ### `route.sh list | <id> [query] | check`
-Forty-three ranking pages beyond GitHub, one shell block each in `routes.md`,
+Forty-five ranking pages beyond GitHub, one shell block each in `routes.md`,
 addressed by id: `hn`, `brew`, `arch`, `popcon`, `crates`, `scorecard`, `osv`,
-`cht`, `marginalia`, `wayback`, `crawl`, `mcp`, `openalex`. `route.sh check`
+`cht`, `marginalia`, `wayback`, `crawl`, `mcp`, `skills`, `skillrepo`,
+`openalex`. `route.sh check`
 runs every one against its own example and prints `ok` or `DEAD` — the file
 cannot claim a route works without the claim being runnable.
 

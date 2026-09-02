@@ -6,6 +6,7 @@ complexity: 29
 blast-radius: high
 workflow: probe-then-spec
 actual: 2.75h
+commit: f0a443d
 ---
 
 # a-session-ledger-names-who-holds-what-and-reaps-what-is-gone — pearde session take/list/reap/owns` stands: every run session gets a worktree of its own under the board, a ledger names who holds which and how to tell it is alive, and a reaper removes a dead session's tree only after stashing everything it left, untracked files included

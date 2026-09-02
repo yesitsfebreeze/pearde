@@ -148,6 +148,42 @@ def manifest_text(repo, paths):
     return "\n".join(text).lower()
 
 
+def scan_roots(board):
+    """[(name, board)] — every board a need is measured over, each exactly
+    once. A plain board is itself, unnamed.
+
+    A master is itself *plus every board reachable through `members:`, to any
+    depth*: the tree it plans over is the union, and its own repo is one more
+    member of that union rather than the whole of it. The depth is the
+    contract's own words — a member is measured the way its own board would
+    measure it, and a member that is itself a master measures a union. The
+    name is what a row credits, taken from `members:` where that names one
+    and suffixed on a collision, because two rows crediting the same word
+    credit nothing.
+
+    `members:` is a path, so it may point in a circle or reach one board by
+    two routes. A board is keyed by the realpath it resolves to and visited
+    once: the walk terminates, and no repo is counted twice."""
+    if not planlib.members(board):
+        return [("", board)]
+    out, seen, taken = [], set(), set()
+    queue = [(planlib.project_name(board), board)]
+    while queue:
+        name, b = queue.pop(0)
+        rp = os.path.realpath(b)
+        if rp in seen:
+            continue
+        seen.add(rp)
+        n = re.sub(r"[^A-Za-z0-9_.-]", "-", name) or "board"
+        base, i = n, 2
+        while n in taken:
+            n, i = f"{base}-{i}", i + 1
+        taken.add(n)
+        out.append((n, b))
+        queue.extend(planlib.members(b))
+    return out
+
+
 def board_words(board):
     """What the board is about: every PRD's title line, lowercased. A board
     full of Vue PRDs asks for Vue before a `package.json` does. On a master
@@ -189,16 +225,18 @@ def _words_of(board):
     return out
 
 
-def needs(board):
-    """[(job, count, why)] — every job the tree or the board asks for, over
-    its floor, loudest first."""
+def _measure(board):
+    """{job: (hits, why)} for one board, floors not applied — the raw signal
+    off one repo and one `prds/`. `needs` sums these across `scan_roots` and
+    floors the sum, so a member too small to clear a floor on its own still
+    counts toward the union."""
     import fnmatch
     repo = repo_of(board)
     paths = tracked(repo)
     lowered = [p.lower() for p in paths]
     deps = manifest_text(repo, paths)
-    titles = board_words(board)
-    rows = []
+    titles = _words_of(board)
+    out = {}
     for job, marks, dep_words, words in JOBS:
         hits, why = 0, []
         for pat in marks:

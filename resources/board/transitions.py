@@ -381,6 +381,11 @@ def transition(board, name, to, persona, worker=None, force=False,
         paths = [path, os.path.join(prd["board_path"], TRANSITIONS_FILE)]
         if cmd == "claim" and not force and planlib.repo_root(board):
             paths.append(os.path.join(board, ".claims", rel) + os.sep)
+            # the lane the claim would cut. `cut_lane` sits past this return
+            # and stays there: a dry claim names the worktree and creates
+            # none, the same rule every other path on this line follows.
+            import lanes as laneslib
+            paths.append(laneslib.lane_dir(board, rel) + os.sep)
         say_dry(board, line, paths, out)
         return line
     # the gate passed, or was forced: now the writes, one line each
@@ -391,6 +396,7 @@ def transition(board, name, to, persona, worker=None, force=False,
         editlib.del_key(path, "claim")
     record(prd, frm, to)
     if cmd == "claim" and not force:
+        cut_lane(board, rel, out)
         snapshot_claim(board, rel)
     line = progress_line(board, rel, frm, to, persona, forced=force,
                          source=source)
@@ -460,6 +466,27 @@ def shown_path(board, path):
 def say_dry(board, line, paths, out=print):
     out(f"dry · {line}")
     out("  would write: " + " · ".join(shown_path(board, p) for p in paths))
+
+
+def cut_lane(board, rel, out=print):
+    """The worker's worktree — `lane/<slug>` at `<board>/.lanes/<rel>`, cut
+    on the claim. Returns its path, or None when the board is in no repo.
+    A git that says no is printed and the claim stands: a board that cannot
+    cut a lane still holds the PRD, and the worker falls back to the
+    checkout — the state machine is not git's to veto."""
+    import lanes as laneslib
+    import collect as collectlib
+    prds = planlib.scan(board)
+    prd = prds.get(rel)
+    root = planlib.repo_root(prd["dir"]) if prd else None
+    if not root:
+        return None
+    repo = collectlib.repo_of(prd, board, root)
+    try:
+        return laneslib.create(board, repo, rel)
+    except laneslib.LaneError as e:
+        out(f"claim: no lane — {e}")
+        return None
 
 
 def snapshot_claim(board, rel):
@@ -903,8 +930,9 @@ def sweep_rows(board):
         elif p["state"] == "analyzing":
             to, why = "open", "no specs — `--apply` sets open"
         else:
-            to, why = "failed", ("`--apply` sets failed; partial code may "
-                                 "stand in the tree")
+            import lanes as laneslib
+            to, why = "failed", ("`--apply` sets failed; partial code stands "
+                                 f"on `{laneslib.branch_of(rel)}`")
         rows.append((rel, p["state"], cl, age, to, why))
     return rows
 
@@ -929,15 +957,53 @@ def cmd_sweep(board, args, persona):
             transition(board, rel, to, persona, dry=True)
             continue
         if to == "failed":
+            import lanes as laneslib
             path = os.path.join(planlib.scan(board)[rel]["dir"], "prd.md")
+            # Name the branch. The sweep is about to unmount the worktree
+            # the worker was writing in, and `lane/<slug>` is the only
+            # place its committed work is left — a person told "partial
+            # code may stand in the tree" would look in the checkout and
+            # find nothing there.
             editlib.append_section(
                 path, "Failure",
                 f"swept {now()} — {held}, silent {planlib.fmt_age(age)}: "
                 "no file of this PRD's moved past `claim-ttl`. Read the "
-                "worker's output before a retry; partial code may stand in "
-                "the tree.")
+                "worker's output before a retry; partial code stands on "
+                f"branch `{laneslib.branch_of(rel)}`, whose worktree this "
+                "sweep removed — the branch is kept.")
         transition(board, rel, to, persona)
+        drop_lane(board, rel)
     return 0
+
+
+def drop_lane(board, rel, out=print):
+    """Remove the worktree of a claim `sweep` released. The branch stays —
+    an unmerged `lane/` is work this machine holds and `plan.lanes` draws
+    it; only the worktree and the dirt in it go, which is what a sweep
+    means. Prints what it dropped, says nothing when there was no lane.
+
+    `sweep` is the ONLY edge that drops a lane. `retry`, `release`,
+    `question`, `refine` and `park` leave the worktree and everything
+    uncommitted in it exactly where the worker left them, by design: an
+    analyst's probe survives its verdict there and the implementer
+    dispatched next continues it — that is what `lanes.create` returning
+    an existing worktree is for. Do not add a cleanup here."""
+    import lanes as laneslib
+    import collect as collectlib
+    prds = planlib.scan(board)
+    prd = prds.get(rel)
+    root = planlib.repo_root(prd["dir"]) if prd else None
+    if not root or not laneslib.exists(board, rel):
+        return False
+    left = laneslib.dirty(board, rel)
+    try:
+        laneslib.remove(board, collectlib.repo_of(prd, board, root), rel)
+    except laneslib.LaneError as e:
+        out(f"sweep: lane left standing — {e}")
+        return False
+    out(f"sweep: {rel} lane removed · branch {laneslib.branch_of(rel)} kept"
+        + (f" · {len(left)} uncommitted path(s) dropped" if left else ""))
+    return True
 
 
 # ── the surface ───────────────────────────────────────────────────────────────

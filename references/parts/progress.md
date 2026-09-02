@@ -24,7 +24,7 @@ passed as `--as <id>` or `PEARDE_AS` in the environment.
 | `<q>`      | `<o>/<n>`. A count — an `open` PRD is not scored yet                        |
 | `<n>`      | the states in the @references/parts/states.md table only                   |
 | a master   | every member's PRDs and its own, one set. A member's PRD is named `@<member>/<prd>` |
-| `<r>`      | **ready** — dispatchable right now: `needs:` all `done`, no footprint clash with a `claimed` PRD |
+| `<r>`      | **ready** — dispatchable right now: `needs:` all `done`. A footprint clash with a `claimed` PRD does not hold it: each worker has a lane of its own, so the plan orders that pair and the merge resolves it |
 | `<b>`      | **blocked** — not `done`, not ready. Name what holds the largest group      |
 | `<c>`      | **to collect** — finished work still open: every acceptance box `[x]`, state not yet `done`. Omitted at zero |
 | `as <persona>` | who is working, the id — @references/parts/personas.md. **Always last, never omitted**, because it is the only record of it |

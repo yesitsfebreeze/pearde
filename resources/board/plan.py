@@ -1673,7 +1673,6 @@ def dispatchable(prd, prds, board=None, holder=None):
       one exception is a cross-board need whose board is not in this
       scan: nothing here can say whether it is done, so it is ignored,
       the answer `resolve_needs` already gives the schedule.
-    - footprint — overlaps a `claimed` PRD's.
     - workflow — `workflow:` names no workflow in any library it can see;
       `board` is the master's library when there is one.
 
@@ -1711,16 +1710,13 @@ def dispatchable(prd, prds, board=None, holder=None):
             return f"needs: `{d}` names no PRD on this board"
         if prds[t]["state"] != "done":
             return f"needs: {t} is `{prds[t]['state']}`, not done"
-    _, mine = spec_data(prd)
-    for r, p in prds.items():
-        if p["state"] != "claimed" or r == rel:
-            continue
-        _, theirs = spec_data(p)
-        for x in mine:
-            for y in theirs:
-                if x == y or x.startswith(y + "/") or y.startswith(x + "/"):
-                    return (f"footprint: {r} is claimed and holds `{y}`, "
-                            f"which clashes with `{x}`")
+    # The footprint clash is no longer a gate. Every worker works in a lane
+    # of its own (@resources/board/lanes.py), so two PRDs on one file are
+    # two branches, not two writers in one tree: the plan's edge still
+    # orders them — `footprint_clash` is what `compute_plan` reads — and
+    # the collide is resolved at the merge, where a conflict is a red
+    # collect naming the file. Refusing the claim here only serialized what
+    # the plan already serialized, and stalled a board that had lanes.
     v = prd["fm"].get("workflow")
     if isinstance(v, list):
         return ("workflow: the key holds one slug — a list is a break, not "
@@ -2344,8 +2340,17 @@ def pressure_bands(board, prds, r):
              if prds[x]["state"] in ("open", "specced") else None)
         if (w or "").startswith("container:"):
             why[x] = w
-    ready = [x for x in free
-             if not why[x] and not needs.get(x) and not after.get(x)]
+    # `after` is the footprint-overlap edge and nothing else — `compute_plan`
+    # builds it from `overlap(feet[r], feet[s])` alone, and `cmd_plan` labels
+    # every one of them `(footprint)`. It orders the pair; it no longer holds
+    # the second back. Every worker works in a git worktree of its own
+    # (@resources/board/lanes.py), so two PRDs on one file are two branches
+    # that the merge reconciles — and holding the second here would put back,
+    # one command along, the single-tree serializer `claim`'s gate just gave
+    # up. `needs` still gates: that is a real dependency and no branch fixes
+    # it. The plan's own frontier keeps the edge, so `pearde plan` still says
+    # which of the two goes first.
+    ready = [x for x in free if not why[x] and not needs.get(x)]
     gated = [x for x in free if x not in ready]
     return collect, yours, flight, ready, gated, why
 

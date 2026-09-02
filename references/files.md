@@ -154,6 +154,7 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/board/orphans.py | `orphans` — every done PRD whose footprint never reached the branch that holds it; per-branch, never `git log --all`, reads only |
 | @resources/board/brief.py | `brief` — a worker's or a consultant's brief, one command's output; the text is the marker blocks of workers.md, this fills them and holds no copy |
 | @resources/board/transitions.py | the eight transition commands — the one writer of `state:` |
+| @resources/board/lanes.py | one git worktree per worker — cut `lane/<slug>` on the claim, board dir sparse-checked out of it, rebase-then-ff-only so the lane's commit is the PRD's, drop the worktree on a sweep and keep the branch |
 | @resources/board/specs.py | `specced` and `refine` — the two transitions a spec set decides |
 | @resources/board/init.py | `init`, `settings` and `vault` — a board after one command, no question; one key of settings.md; seeds the Obsidian vault at the board (`.pearde/.obsidian/`, and `vault` registers it in Obsidian's `obsidian.json` so the URI resolves — written only while the app is closed, `--wait` holds for the quit — dataview + local-rest-api copied from the preset the install fetched, a bundle the install never fetched named rather than skipped, fresh REST key minted at `.pearde/wiki/.obsidian-api-key`) |
 | @resources/board/example/ | the example board — eight PRDs, one per band; copied by `plan.py example`, never run in place |
@@ -185,7 +186,7 @@ command, and @references/install.md is the naming rule and the install.
 | @references/skills/pearde-health.md | which files resist being worked on, scored worst first | `@@health` |
 | @references/skills/pearde-graph.md | knowledge-graph passes over any folder, Obsidian vault out | `@@graph` |
 | @references/skills/pearde-knowledge.md | the research layer — query, capture, conclude, link | `@@knowledge` |
-| @references/skills/pearde-machine.md | every watched board as one ordered frontier, and what could run at once | `@@machine` |
+| @references/skills/pearde-all.md | every watched board as one ordered frontier, and what could run at once — and the waves that dispatch it | `@@machine` |
 
 ### `resources/board/knowledge/` — the layer's content seed, planted by `init` and `upgrade`
 

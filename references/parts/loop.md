@@ -107,8 +107,9 @@ in one turn, each its own background worker whose whole prompt is one line
 naming `pearde brief <prd> --worker <name>`: the worker runs it, and the brief
 never enters this window. `workers` and `pipeline` in `.pearde/settings.md` are
 caps a person set; `0`, the default, is no cap. `pearde claim` refuses what is
-not dispatchable — held, not a leaf, `needs:` not `done`, a footprint clash
-with a `claimed` PRD, a `workflow:` naming nothing — and names the gate;
+not dispatchable — held, not a leaf, `needs:` not `done`, a `workflow:` naming
+nothing — and names the gate. A footprint clash is not one: each worker has a
+worktree of its own, so the plan orders that pair and the merge resolves it;
 `brief` maps each refusal to a skip word, and a worker's own `brief` re-reading
 its claim is no refusal. `pearde scan` marks the PRD's line `wf <slug>?` when
 its workflow resolves to nothing: fix the slug or remove the key, then claim in

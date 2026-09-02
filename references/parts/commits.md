@@ -16,6 +16,34 @@ and nothing can be reviewed, reverted, or bisected on its own.
 The orchestrator commits. Never a worker — two implementers committing in
 parallel write each other's half-finished files into each other's commits.
 
+**Where the commit is made: the lane.** `claim` cuts the worker a git
+worktree of its own at `<board>/.lanes/<slug>` on branch `lane/<slug>`
+(@resources/board/lanes.py), and the brief names it as `<repo>`, so the
+worker's code never touches the checkout the orchestrator holds. `collect`
+merges that branch in before it measures anything: step 1b commits the
+lane's footprint paths **on the lane**, with the message below, rebases the
+lane onto the branch the checkout is on and fast-forwards it in — then runs
+the verify blocks and the gate on the MERGED tree, because a lane that
+passes alone and breaks against what landed while it ran is a red here and
+nowhere else. The lane's commit **is** the PRD's commit: step 4 does not
+commit that repo a second time, so the checkout's branch gains exactly two
+commits for a collected PRD — the work, and `<prd> — record`. A red verify
+resets the checkout to the commit it was on and leaves the lane branch
+untouched, so a retry merges the same commits again.
+
+**A merge conflict is a red collect, never a silent stage.** When the lane
+disagrees with what landed in the checkout while the worker ran, `collect`
+exits non-zero naming every conflicting file, the rebase and the merge are
+both aborted, the checkout is on the commit it was on and nothing is
+staged. The lane branch still holds the work; a person merges it by hand.
+That is the designed outcome of two PRDs claimed on one file — the plan
+orders the pair with an `after … (footprint)` edge, and the clash is
+resolved here rather than refused at `claim`.
+
+A board with no lane — a claim taken before lanes, a board outside any git
+repo — collects exactly as it did before: the work is dirt in the checkout,
+step 4 commits it, and every scope rule below reads that tree.
+
 | transition          | do                                                              |
 |---------------------|------------------------------------------------------------------|
 | `claimed → done`    | commit                                                           |

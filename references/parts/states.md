@@ -25,7 +25,13 @@ what `claim` takes: unclaimed; leaf — every child `done`, and a parked child
 holds its parent (`leaf: … held by <child> (parked)`, listed under `gated`,
 never ready); container — children all `done` and no specs or open box of
 its own, which `collect` closes and `claim` refuses (`container:`); `needs:`
-all `done`; no footprint overlap with a `claimed` PRD; `workflow:` resolves.
+all `done`; `workflow:` resolves. A footprint overlap with a `claimed` PRD
+is **not** a gate: every worker works in a git worktree of its own, so two
+PRDs on one file are two branches — the plan orders the pair (`after …
+(footprint)`) and the clash is resolved at the merge, where a real
+disagreement is a red `collect` naming the file. A person who sees two
+PRDs claimed on one path should expect that red as the designed outcome,
+not as a break.
 `defer <prd>` writes the parked `deferred` below.
 `set <prd> <state> --force` writes any transition and says `forced` on the
 line — the escape hatch, never the path. The view's drag calls the same

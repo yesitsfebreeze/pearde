@@ -1,0 +1,230 @@
+#!/usr/bin/env python3
+"""Lanes — one git worktree per worker, on `lane/<slug>`.
+
+A worker never edits the checkout the orchestrator holds. `claim` cuts a
+branch `lane/<slug>` off the code repo's HEAD and checks it out into a
+worktree of its own; the brief names that worktree as `<repo>`, so every
+path the worker writes lands there. `collect` merges the lane back into the
+branch the checkout is on, runs the verify blocks and the gate on the
+MERGED tree, and commits there. `sweep` removes the worktree of a claim it
+releases.
+
+Where the worktree lives: `<board>/.lanes/<slug>`. The board dir is already
+machine-local scratch on the code repo (`.pearde/` is gitignored) and
+`.lanes/` is a dotfile directly under the board, which `collect.scratch`
+skips and the board's own `.gitignore` drops — so a lane costs no row in
+either repo. Outside the code repo would need a directory the user never
+asked for; inside it, anywhere but under the board, would be dirt on every
+`git status` the person runs.
+
+The branch name is fixed: `plan.LANE_RE` already reads `lane/<slug>` as
+work on this machine, and the lane bar is drawn off it.
+"""
+
+import os
+import re
+import subprocess
+
+LANES_DIR = ".lanes"
+
+
+class LaneError(Exception):
+    """git said no. The message is what the caller prints."""
+
+
+def branch_of(slug):
+    """`lane/<slug>` — `plan.LANE_RE` reads it back. A nested PRD's rel
+    carries `/`, which a branch name takes as a path component; the lane
+    for `a/b` is `lane/a-b`, one segment under `lane/`, so the ref never
+    collides with a directory ref of the same prefix."""
+    return "lane/" + re.sub(r"[^A-Za-z0-9._-]+", "-", str(slug)).strip("-")
+
+
+def lane_dir(board, slug):
+    return os.path.join(board, LANES_DIR,
+                        re.sub(r"[^A-Za-z0-9._-]+", "-", str(slug)).strip("-"))
+
+
+def git(root, *args, check=True):
+    r = subprocess.run(("git", "-C", root) + args,
+                       capture_output=True, text=True, timeout=60)
+    if check and r.returncode != 0:
+        raise LaneError((r.stderr or r.stdout).strip()
+                        or f"git {' '.join(args)} exit {r.returncode}")
+    return r
+
+
+def exists(board, slug):
+    return os.path.isdir(lane_dir(board, slug))
+
+
+def board_rel(board, repo):
+    """The board's path inside the code repo, or None when the board is
+    not under it. `.pearde/` gitignored by its own repo answers None as
+    surely as a board kept somewhere else does — the caller only needs the
+    string when the repo TRACKS the board, and an untracked path costs the
+    sparse-checkout exclusion nothing."""
+    rel = os.path.relpath(os.path.abspath(board), os.path.abspath(repo))
+    if rel == os.curdir or rel.startswith(os.pardir) or os.path.isabs(rel):
+        return None
+    return rel.replace(os.sep, "/")
+
+
+def create(board, repo, slug, base=None):
+    """Cut `lane/<slug>` off `base` (the repo's HEAD by default) and check
+    it out at `<board>/.lanes/<slug>`. Returns the worktree path.
+
+    The lane is materialised WITHOUT the board directory. A repo that
+    tracks its own `.pearde/` hands every worktree a stale copy of the
+    board, and a worker running any board command from its lane resolves
+    to that phantom: measured, `pearde scan` from inside a lane printed
+    `0 PRDs` against a live board holding one — silently, no error. So the
+    worktree is added `--no-checkout`, the board's path is excluded by a
+    `--no-cone` sparse-checkout, and the checkout follows. The excluded
+    path keeps its skip-worktree bit, so a later `git add -A` in the lane
+    does not delete the board from the tree (measured: it did not). A
+    board the repo does not track needs none of this and gets it anyway,
+    where it costs one command and no behaviour.
+
+    Idempotent on the path: a lane dir that is already a worktree of this
+    repo is returned as it stands — a re-claim after a `failed` continues
+    the work that is standing there, which is the whole point of leaving a
+    probe uncommitted. A path that exists and is NOT a worktree is a
+    refusal, never a silent reuse."""
+    d = lane_dir(board, slug)
+    br = branch_of(slug)
+    if os.path.isdir(d):
+        if os.path.exists(os.path.join(d, ".git")):
+            return d
+        raise LaneError(f"lane: {d} exists and is not a worktree — "
+                        "move it or remove it")
+    os.makedirs(os.path.dirname(d), exist_ok=True)
+    have = git(repo, "rev-parse", "--verify", "--quiet", br,
+               check=False).returncode == 0
+    if have:
+        git(repo, "worktree", "add", "--no-checkout", d, br)
+    else:
+        args = ["worktree", "add", "--no-checkout", "-b", br, d]
+        if base:
+            args.append(base)
+        git(repo, *args)
+    rel = board_rel(board, repo)
+    if rel:
+        git(d, "sparse-checkout", "set", "--no-cone", "/*", "!/" + rel,
+            check=False)
+    git(d, "checkout")
+    return d
+
+
+def remove(board, repo, slug, force=True):
+    """Drop the worktree. The BRANCH stays — an unmerged lane is work this
+    machine holds and `plan.lanes` draws it; removing the branch would
+    erase a swept worker's commits. Uncommitted dirt in the lane dies with
+    the worktree, which is what a sweep means."""
+    d = lane_dir(board, slug)
+    if not os.path.isdir(d):
+        return False
+    args = ["worktree", "remove"] + (["--force"] if force else []) + [d]
+    git(repo, *args)
+    git(repo, "worktree", "prune", check=False)
+    return True
+
+
+def worktree_of(repo, branch):
+    """The worktree `branch` is checked out in, or None. `rebase` has to
+    run where the branch lives — git refuses to move a branch another
+    worktree holds — and `merge` is handed a slug, not a path."""
+    out = git(repo, "worktree", "list", "--porcelain", check=False).stdout
+    path = None
+    for line in out.splitlines():
+        if line.startswith("worktree "):
+            path = line[len("worktree "):].strip()
+        elif line.strip() == "branch refs/heads/" + branch:
+            return path
+    return None
+
+
+def merge(repo, slug, out=None):
+    """Land `lane/<slug>` on the branch the checkout is on as the lane's
+    OWN commits, and no others. Returns how many landed.
+
+    Rebase, then `merge --ff-only`. A plain `git merge` onto a checkout
+    that moved since the lane was cut writes a merge commit on top of the
+    lane's — two commits for one PRD, and
+    @references/parts/commits.md says one. `merge --squash` gives one
+    commit and leaves the branch reading unmerged forever, which would
+    break the lane bar `plan.lanes` draws off `git branch --merged`.
+    Rebasing first measured linear, one commit, and `--merged` listed the
+    lane.
+
+    A conflict — in the rebase or in the merge — is raised with the files
+    on it, the lane branch left exactly as it was, and the checkout on the
+    commit it was on. The caller reports it red. A conflict a person can
+    fix by hand is worth more than a rollback that loses which file
+    disagreed, so the files are read before anything is aborted."""
+    br = branch_of(slug)
+    if git(repo, "rev-parse", "--verify", "--quiet", br,
+           check=False).returncode != 0:
+        return None                      # no lane: nothing to merge
+    ahead = git(repo, "rev-list", "--count", "HEAD.." + br).stdout.strip()
+    if ahead in ("", "0"):
+        return 0                         # the lane committed nothing
+    onto = git(repo, "rev-parse", "--abbrev-ref", "HEAD").stdout.strip()
+    wt = worktree_of(repo, br)
+    if wt:
+        was = git(wt, "rev-parse", br).stdout.strip()
+        r = git(wt, "rebase", onto, check=False)
+        if r.returncode != 0:
+            files = conflicts(wt)
+            git(wt, "rebase", "--abort", check=False)
+            git(wt, "reset", "--hard", was, check=False)
+            raise LaneError(
+                f"merge conflict: {br} onto {onto} — "
+                + (", ".join(files) if files else "see git status"))
+        ahead = git(repo, "rev-list", "--count", "HEAD.." + br).stdout.strip()
+    r = git(repo, "merge", "--ff-only", "--no-edit", br, check=False)
+    if r.returncode != 0:
+        files = conflicts(repo)
+        git(repo, "merge", "--abort", check=False)
+        raise LaneError(
+            f"merge conflict: {br} into {onto} — "
+            + (", ".join(files) if files else "see git status"))
+    return int(ahead or 0)
+
+
+def conflicts(repo):
+    out = git(repo, "diff", "--name-only", "--diff-filter=U",
+              check=False).stdout
+    return [l for l in out.splitlines() if l.strip()]
+
+
+def dirty(board, slug):
+    """The lane's uncommitted paths — what a worker left standing."""
+    d = lane_dir(board, slug)
+    if not os.path.isdir(d):
+        return []
+    out = git(d, "status", "--porcelain", check=False).stdout
+    return [l[3:] for l in out.splitlines() if l.strip()]
+
+
+def commit_all(board, slug, message):
+    """Commit everything standing in the lane, on the lane's branch. The
+    worker never commits; this is the ORCHESTRATOR closing the lane before
+    it merges — one commit per PRD, in the lane, and the merge carries it
+    into the checkout's branch."""
+    d = lane_dir(board, slug)
+    if not os.path.isdir(d):
+        return None
+    git(d, "add", "-A")
+    if not git(d, "diff", "--cached", "--quiet", check=False).returncode:
+        return None                      # nothing staged
+    git(d, "commit", "-m", message)
+    return git(d, "rev-parse", "HEAD").stdout.strip()[:12]
+
+
+def list_lanes(board):
+    d = os.path.join(board, LANES_DIR)
+    if not os.path.isdir(d):
+        return []
+    return sorted(x for x in os.listdir(d)
+                  if os.path.isdir(os.path.join(d, x)))

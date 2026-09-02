@@ -61,6 +61,7 @@ sys.path.insert(0, RES)
 sys.path.insert(0, os.path.join(RES, "board"))
 import plan as planlib              # noqa: E402 — every read
 import collect as collectlib        # noqa: E402 — `repo_of`, the one rule
+import lanes as laneslib            # noqa: E402 — `<repo>` is the worker's lane
 import transitions as trlib         # noqa: E402 — the gate, and `resolve`
 import workflows as wflib           # noqa: E402 — the route inlined
 import specs as specslib            # noqa: E402 — `limits`, the two numbers
@@ -81,7 +82,12 @@ BLOCKS = ("workflow", "every", "analyst", "implementer", "consultant")
 # lines must share before a repeat is a rewrap's leftover and not a cadence.
 VERDICT_MARK = "Verdict:"
 DUP_TAIL = 30
-SKIP = {"unclaimed": "held", "needs": "gated", "footprint": "clash",
+# One word per reason `plan.dispatchable` can give. No `footprint` entry:
+# the clash is no longer a gate — every worker works in a lane of its own
+# and two PRDs on one file are two branches, ordered by the plan and
+# resolved at the merge (@resources/board/lanes.py). The gate cannot raise
+# it, so an entry here would be a word nothing prints.
+SKIP = {"unclaimed": "held", "needs": "gated",
         "workflow": "workflow", "leaf": "leaf", "container": "collect"}
 
 
@@ -238,9 +244,16 @@ def repo_of(prd, board):
     member's — else the board's."""
     board_root = planlib.repo_root(board) or os.path.dirname(board)
     found = collectlib.repo_of(prd, board, board_root)
-    if found != board_root:
-        return found
-    return planlib.repo_root(prd["board_path"]) or board_root
+    if found == board_root:
+        found = planlib.repo_root(prd["board_path"]) or board_root
+    # the lane, when the claim cut one: a worker works in its own worktree
+    # and never in the checkout the orchestrator holds. No lane on disk —
+    # a board outside a repo, or a claim from before lanes — is the
+    # checkout, exactly as before.
+    lane = laneslib.lane_dir(prd["board_path"], prd["local"])
+    if os.path.isdir(lane):
+        return lane
+    return found
 
 
 def health_of(prd, board):
@@ -393,6 +406,11 @@ def brief_prd(args, out=print):
         wf_lines.append(route(b, s))
     head = (f"# brief {local} · {role} · as {pid} · wf "
             f"{','.join(marks) if marks else 'none'} · repo {values['<repo>']}")
+    # Say when that path is a lane, and which branch it is. A worker that
+    # wandered into the checkout is otherwise undiagnosable from its
+    # report: `repo <path>` alone reads the same either way.
+    if laneslib.exists(prd["board_path"], prd["local"]):
+        head += f" · lane {laneslib.branch_of(prd['local'])}"
     if force:
         head += " · forced"
     parts = [head, persona] + wf_lines + [
@@ -402,6 +420,11 @@ def brief_prd(args, out=print):
 
 
 def brief_consult(args, out=print):
+    """A consultant's brief. `<repo>` here is the checkout, built from
+    `planlib.repo_root(board)` and never from a lane — deliberately: a
+    consultant answers one question and holds no claim, so there is no
+    lane to name and nothing it writes needs one. `repo_of` above is the
+    claimed worker's rule and does not apply."""
     pid = args.opt.get("consult", "")
     q = (args.opt.get("question") or "").strip()
     if not q:

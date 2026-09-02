@@ -103,7 +103,7 @@ One column per row, and it agrees with the waves printed below it.
 | mark | what it says |
 |---|---|
 | `ready` | it is in a wave. If the wave is not the first, the note says what pushed it there |
-| `held` | `plan.dispatchable` refuses it — a parked child, a stale claim, a `needs:` not done, a footprint held by a `claimed` PRD. The note is that verdict, verbatim |
+| `held` | `plan.dispatchable` refuses it — a parked child, a stale claim, a `needs:` not done, a `workflow:` naming nothing. A footprint held by a `claimed` PRD is not among them: each worker works in a lane of its own, so that pair is ordered rather than refused and the merge resolves it. The note is that verdict, verbatim |
 | `waits` | its state is not dispatchable. Only `open` and `specced` enter a wave; `claimed`, `analyzing`, `question`, `blocked` and `deferred` print `waits` with the reason and appear in none |
 | `collect` | it is finished work `pearde collect` closes, not a thing to dispatch |
 

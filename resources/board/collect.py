@@ -768,6 +768,16 @@ def snapshot(board, rel, gate=None):
 
     record(root, "")
     code = repo_of(prd, board, root)
+    # The lane, when the claim cut one. `transition` calls `cut_lane` and
+    # then this, so the worktree is already on disk. The worker writes
+    # THERE and not in the checkout, so the code side of the baseline has
+    # to be the lane's tree: a baseline taken in the checkout describes a
+    # tree the worker never touches, and step 2's `known — every line is
+    # in the claim's baseline` softening would then be reading somebody
+    # else's dirt. A board with no lane keeps the checkout, as before.
+    import lanes as laneslib
+    if code and laneslib.exists(board, rel):
+        code = laneslib.lane_dir(board, rel)
     for name in ("diff.repo", "untracked.repo", "repo"):
         stale = os.path.join(d, name)          # a re-snapshot never inherits
         if os.path.isfile(stale):              # the last one's second side
@@ -919,10 +929,21 @@ def transition_row(board, rel, frm, to, now):
 
 # ── step 3 ────────────────────────────────────────────────────────────────────
 
-def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since):
+def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since,
+               landed=None):
     """{root: plan} — for each repo, what to add whole, what to add by hunk,
     what is inherited, what is inherited inside the footprint (the stop),
-    what rides, what was widened."""
+    what rides, what was widened.
+
+    `landed` is truthy when a lane merged into `repo` moments ago. The
+    hunk-splitting and the two-authors refusal below exist because ONE
+    working tree held every PRD's dirt at once; a lane is cut clean off
+    HEAD, so everything committed in it is one worker's and there is
+    nothing to split. So the sharing refusal stops running against the
+    CODE repo on a lane run — and stays on for the BOARD repo, which every
+    PRD writes into whatever else it does, and for a laneless board, which
+    is every claim taken before lanes and every board outside a git repo.
+    The path is kept, never deleted."""
     prd_rel = os.path.relpath(prd["dir"], board_root)
     groups = {board_root: {prd_rel}}
     # `spec_data` qualifies a member PRD's footprint with its own member
@@ -1078,7 +1099,8 @@ def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since):
                     pass
                 elif not predates(root, path, kind):
                     share = sorted(r for r, claimed in others.items()
-                                   if root == repo and inside(path, claimed))
+                                   if root == repo and not landed
+                                   and inside(path, claimed))
                     if share:
                         # A claim snapshotted before the baseline recorded
                         # the code repo has nothing to split this file
@@ -1129,6 +1151,99 @@ def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since):
 
 # ── one PRD ───────────────────────────────────────────────────────────────────
 
+def commit_message(prd, prd_rel, opts, plan=None):
+    """The commit message for this PRD — the contract line, one line per
+    spec goal, the `--also` note, `widen:` per widened path, and `prd:`.
+
+    Built HERE and nowhere else, because two commits can carry it: step 4's
+    when the work is dirt in the checkout, and the LANE's when the worker
+    wrote in a worktree of its own. One PRD gets one commit
+    (@references/parts/commits.md) and one message; a second builder would
+    be a second copy that drifts. `plan` is step 4's — `land_lane` commits
+    before `sort_paths` has run and passes None, which is right: `--widen`
+    names paths dirty in the CHECKOUT, and nothing in a lane is widened."""
+    slug = str(prd["fm"].get("workflow", "") or "").strip()
+    lines = [f"{prd['name']} — {contract_line(prd)}", ""]
+    lines += [f"{n}: {g}" for n, g in spec_goals(prd)]
+    if opts["also"]:
+        lines.append(f"workflow: {slug or 'none'} — {opts['also_note']}")
+    for p in (plan or {}).values():
+        lines += [f"widen: {x}" for x in p["widened"]]
+    lines += ["", f"prd: {prd_rel}"]
+    return "\n".join(lines) + "\n"
+
+
+def land_lane(board, rel, prd, repo, opts, out=print):
+    """Commit what stands in the PRD's lane and merge it into the branch
+    the checkout is on. Returns `(pre, n)` — the checkout's commit before
+    the merge, so step 2 can put it back on a red, and how many of the
+    lane's commits landed. `(None, None)` when there is no lane, which is
+    every board that never cut one and every claim from before lanes: the
+    old path, unchanged.
+
+    Scope is the footprint, exactly as step 3's is — the lane is cut clean
+    off HEAD, so everything dirty in it is this worker's and no hunk needs
+    splitting, but a worker that wandered outside its footprint is still
+    not committed whole. The paths outside are named and left in the lane.
+
+    A merge conflict raises `Stop` with the file on it. The merge is
+    aborted, so the checkout is where it was; the lane branch still holds
+    the worker's commits, and a person resolves it by merging by hand.
+
+    `--dry` says what it WOULD merge — the branch and how many commits —
+    and merges nothing; `opts["dry"]` reaches here rather than being
+    checked by the caller, so the dry line and the real one are built from
+    the same read of the lane."""
+    import lanes as laneslib
+    if not laneslib.exists(board, rel):
+        return None, None
+    lane = laneslib.lane_dir(board, rel)
+    br = laneslib.branch_of(rel)
+    _, feet = planlib.spec_data(prd)
+    feet = [f for f in feet if not f.startswith(planlib.MEMBER_SIGIL)]
+    standing = laneslib.dirty(board, rel)
+    outside = [p for p in standing if not inside(p, feet)]
+    if outside:
+        out(f"{rel}: outside the footprint, left in the lane — "
+            + ", ".join(sorted(outside)))
+    if opts.get("dry"):
+        ahead = laneslib.git(repo, "rev-list", "--count", "HEAD.." + br,
+                             check=False).stdout.strip() or "0"
+        mine = [p for p in standing if inside(p, feet)]
+        out(f"{rel}: would merge lane {br} — {ahead} commit(s)"
+            + (f", and commit {len(mine)} path(s) standing in it first"
+               if mine else "")
+            + "; merged nothing")
+        return None, None
+    prd_rel = os.path.relpath(prd["dir"], planlib.repo_root(board)
+                              or os.path.dirname(board))
+    try:
+        if [p for p in standing if inside(p, feet)]:
+            laneslib.git(lane, "add", "--", *feet)
+            laneslib.git(lane, "commit", "-m",
+                         commit_message(prd, prd_rel, opts))
+        pre = laneslib.git(repo, "rev-parse", "HEAD").stdout.strip()
+        n = laneslib.merge(repo, rel)
+    except laneslib.LaneError as e:
+        raise Stop(f"{rel}: {e} — nothing written; the lane still holds the "
+                   f"work on `{br}`")
+    if n:
+        out(f"{rel}: lane {br} merged — {n} commit(s)")
+    return pre, n
+
+
+def unland(repo, pre, out=print):
+    """Put the checkout back where `land_lane` found it. Called when step 2
+    goes red: a verify that fails must not leave the lane's code standing
+    in the checkout, and the lane branch is untouched so a retry merges the
+    same commits again."""
+    if not pre:
+        return
+    import lanes as laneslib
+    laneslib.git(repo, "reset", "--hard", pre, check=False)
+    out(f"  lane unmerged — checkout back at {pre[:12]}")
+
+
 def collect_one(board, rel, opts, out=print):
     now = datetime.datetime.now()
     prds = planlib.scan(board)
@@ -1160,8 +1275,18 @@ def collect_one(board, rel, opts, out=print):
         raise Stop(f"{rel}: no acceptance box in specs/ — nothing says it "
                    f"is finished ({closed}/{total})")
 
-    # 2 — the verify, then the gate — never the worker's word
+    # 1b — the lane lands before anything is measured. The worker's code is
+    # committed on `lane/<slug>` in its own worktree and does not exist in
+    # the checkout at all, so a verify run before the merge measures the
+    # tree the work is missing from — which is a red on every PRD that used
+    # a lane. Merge first, then verify the MERGED tree: a lane that passes
+    # alone and breaks against what landed while it ran is a red here, and
+    # that is the whole reason the gate runs after the merge and not in the
+    # lane. `pre` is where to put the checkout back if step 2 goes red —
+    # the lane branch is never touched, so the worker's commits survive a
+    # failed collect and a retry merges them again.
     repo = repo_of(prd, board, board_root)
+    pre, landed = land_lane(board, rel, prd, repo, opts, out)
     base = baseline(board, rel)
     report, trusted, known = [], False, False
     if opts.get("trust"):
@@ -1187,6 +1312,7 @@ def collect_one(board, rel, opts, out=print):
             if red:
                 text = "\n\n".join(report)
                 out(text)
+                unland(repo, pre, out)   # the lane's code never stands on a red
                 if opts.get("fail") and not opts.get("dry"):
                     editlib.append_section(pmd, "Failure", text)
                     editlib.del_key(pmd, "claim")
@@ -1200,7 +1326,7 @@ def collect_one(board, rel, opts, out=print):
     # 3 — the paths
     _, feet = planlib.spec_data(prd)
     plan, prd_rel = sort_paths(board, rel, prd, prds, board_root, repo, feet,
-                               opts, since)
+                               opts, since, landed=landed)
     stops, inherited = [], []
     for root, p in plan.items():
         stops += [os.path.relpath(os.path.join(root, x), board_root)
@@ -1220,15 +1346,7 @@ def collect_one(board, rel, opts, out=print):
                    f"claim predates")
 
     # 4 — the message, one commit per repo
-    slug = str(prd["fm"].get("workflow", "") or "").strip()
-    lines = [f"{prd['name']} — {contract_line(prd)}", ""]
-    lines += [f"{n}: {g}" for n, g in spec_goals(prd)]
-    if opts["also"]:
-        lines.append(f"workflow: {slug or 'none'} — {opts['also_note']}")
-    for p in plan.values():
-        lines += [f"widen: {x}" for x in p["widened"]]
-    lines += ["", f"prd: {prd_rel}"]
-    message = "\n".join(lines) + "\n"
+    message = commit_message(prd, prd_rel, opts, plan)
     if opts.get("dry"):
         for root, p in plan.items():
             out(f"{rel}: repo {root}")
@@ -1304,8 +1422,30 @@ def collect_one(board, rel, opts, out=print):
       committed = {r_: list(plan[r_]["add"]) + list(plan[r_]["partial"])
                    for r_ in staged_roots}
       committed[board_root].append(prd_rel)
-      shas = []
+      # The lane's commit IS this PRD's commit in the repo it merged into:
+      # it carries `message` and the code the message names. A second one
+      # here would be one PRD with two commits, which
+      # @references/parts/commits.md forbids — so where the lane landed,
+      # step 4 takes the merged HEAD as its sha and stages nothing new of
+      # its own. Whatever the board record put in that index (the PRD's
+      # own folder, on a board that shares the code repo) rides the
+      # `<prd> — record` commit right behind, so the checkout's branch
+      # gains exactly two: the work, and the record.
+      lane_root = repo if landed else None
+      shas, rode = [], []
+      if lane_root and lane_root not in staged_roots:
+        # a board in a repo of its own: the code commit is the lane's and
+        # is in no `staged_roots`, but `commit:` must still name it or
+        # `orphans` reads the footprint as never having reached a branch
+        shas.append(git_out(lane_root, "rev-parse", "HEAD",
+                            shared=True).strip()[:7])
       for root in staged_roots:
+        if root == lane_root:
+            shas.append(git_out(root, "rev-parse", "HEAD",
+                                shared=True).strip()[:7])
+            if root == board_root:      # else nothing of this root's is
+                rode += committed[root]  # settled by the record commit
+            continue
         try:
             shas.append(commit_private(root, message))
         except Stop as e:
@@ -1326,7 +1466,7 @@ def collect_one(board, rel, opts, out=print):
       except Stop as e:
         raise Stop(f"{rel}: the record commit failed in {board_root} — "
                    f"`commit:` is written and unstaged: {e}")
-      settle_shared(board_root, [pmd_rel])
+      settle_shared(board_root, sorted(set([pmd_rel] + rode)))
 
     # 7 — the line, the row
     transition_row(board, rel, prd["state"], "done", now)

@@ -8,6 +8,7 @@ needs:
   - a-density-checker-and-the-root-docs-are-rewritten
 workflow: probe-then-spec
 actual: 1.11h
+commit: 64ed54a 85cde75
 ---
 
 # skills-and-scout-docs-are-rewritten-dense — references/skills/` and `resources/scout/` docs rewritten dense (includes the one file over the sentence-length target)

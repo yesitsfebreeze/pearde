@@ -1,0 +1,15 @@
+
+Read @references/parts/master.md — the contract: what `members:` does, how an
+entry is written and resolved, how a member PRD is addressed, what stays on
+the member against what the master holds, and how the group is named. The
+scopes are `@@master` and `@@settings`.
+
+```bash
+python3 @resources/pearde.py members [board]   # every member, its path, MISSING where it is not on disk
+```
+
+`master <path> …` appends to `members:` in the parent's `.pearde/settings.md`,
+and every pass from then on is worked in the parent. A missing member is the
+failure that matters — the plan loses a whole project silently and the board
+reads as smaller rather than broken — so `pearde doctor` grows a `members` row
+on a master board.

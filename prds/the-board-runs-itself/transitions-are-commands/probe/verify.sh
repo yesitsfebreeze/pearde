@@ -44,8 +44,8 @@ refused "claim with a dangling workflow names the slug" "no-such-route"         
 refused "claim a parent names the live child"          "leaf"                   claim big impl-3
 refused "  …the child by name"                         "second"                 claim big impl-3
 refused "claim a name that is nothing"                 "no PRD named"           claim nosuch impl-3
-refused "release to question with no round"            "no \`## Questions\`"    release probing question
-refused "release to question with a bad round"         "recommended"            release badround question
+refused "release to question with no pass"            "no \`## Questions\`"    release probing question
+refused "release to question with a bad pass"         "recommended"            release badround question
 refused "release analyzing → failed is not an edge"    "analyzing → refine"     release probing failed
 refused "release to blocked with no needs"             "needs:"                 release building blocked
 refused "release to failed with no ## Failure"         "## Failure"             release building failed
@@ -105,7 +105,7 @@ check "analyzing → refine" "$([ "$RC" = 0 ] && [ "$(state probing)" = refine ]
 check "claim: cleared" "$(! grep -q '^claim:' "$PRDS/probing/prd.md"; echo $?)"
 run set asking analyzing --force
 run release asking question
-check "analyzing → question with a round the check accepts" "$([ "$RC" = 0 ] && [ "$(state asking)" = question ]; echo $?)" "${ERR:0:160}"
+check "analyzing → question with a pass the check accepts" "$([ "$RC" = 0 ] && [ "$(state asking)" = question ]; echo $?)" "${ERR:0:160}"
 [ "$(state asking)" = question ] || run set asking question --force
 run retry broke
 check "failed → open" "$([ "$RC" = 0 ] && [ "$(state broke)" = open ]; echo $?)" "$ERR"

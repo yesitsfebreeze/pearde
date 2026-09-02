@@ -319,17 +319,24 @@ docall "solo.md names the same rules"          references/parts/solo.md \
     'every atomic that ran' \
     'never rewrite it'
 
-doc "round.md carries the Edits section"      references/parts/round.md \
+doc "pass.md carries the Edits section"      references/parts/pass.md \
     '## Edits'
-doc "round.md's row is applied or refused"    references/parts/round.md \
+doc "pass.md's row is applied or refused"    references/parts/pass.md \
     'applied | refused'
-doc "round.md says why a refusal is recorded" references/parts/round.md \
+doc "pass.md says why a refusal is recorded" references/parts/pass.md \
     'A refusal is the half that has to be'
 
 doc "workers.md has the on-return rule"       references/parts/workers.md \
     '**On return, either brief.**'
-doc "workers.md's table row"                  references/parts/workers.md \
-    'any of the three, plus `## Workflow <slug>`'
+# Re-aimed. This wanted a row of the three-way "On return" table, and 78357ed
+# replaced that table with prose when `collect --report` took the verdict
+# lookup off the orchestrator. The claim did not go with it: what the table's
+# fourth row said — a report's `## Workflow` rows are still the orchestrator's
+# to act on, whichever verdict came with them — is now the closing sentence of
+# both the analyst's and the implementer's return, so the check reads that.
+doc "workers.md keeps the ## Workflow rows with the orchestrator" \
+    references/parts/workers.md \
+    'is the belief and the `## Workflow` rows, as above.'
 doc "workers.md points at loop step 6"        references/parts/workers.md \
     'The five actions are'
 
@@ -375,9 +382,9 @@ agree() { # name needle file file...
 agree "two files count runs the same way" \
       'on the workflow and every atomic that ran' \
       references/parts/workers.md references/parts/workflows.md
-agree "two files send the refusal to the round file — renamed with the board" \
-      '.pearde/.state/round.md' \
-      references/parts/workflows.md references/parts/round.md
+agree "two files send the refusal to the pass file — renamed with the board" \
+      '.pearde/.state/pass.md' \
+      references/parts/workflows.md references/parts/pass.md
 agree "two files say an edit is refused, not repaired" \
       'refused, not repaired' \
       references/parts/loop.md references/parts/workflows.md

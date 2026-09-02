@@ -243,7 +243,7 @@ OUT="$(run collect finished --trust --dry)"; RC=$?
 eq  "D collect --dry exits 0" "$RC" "0"
 has "D …keeps 'dry — nothing written'" "$OUT" "finished: dry — nothing written"
 has "D …and prints the dry · line" "$OUT" "dry · ▸ finished: claimed → done ·"
-has "D …round file owed on it" "$OUT" "· round file owed · as engineer"
+has "D …pass file owed on it" "$OUT" "· pass file owed · as engineer"
 has "D …the paths" "$OUT" "would write: .pearde/prds/finished/prd.md · .pearde/.state/transitions.jsonl"
 eq  "D …git status clean" "$(clean)" ""
 eq  "D …state claimed" "$(fm finished state)" "claimed"

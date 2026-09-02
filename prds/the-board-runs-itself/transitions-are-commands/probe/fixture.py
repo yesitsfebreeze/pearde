@@ -297,7 +297,7 @@ blast-radius:
 claim: analyst-2 2026-08-28 14:10
 ---
 
-# badround — a round with no recommended answer
+# badround — a pass with no recommended answer
 
 ## Questions
 
@@ -312,10 +312,10 @@ Left or right?
     # the daemon's burn-down, one row a day — a command never touches it
     w(f"{board}/.state/history.jsonl", '{"d": "2026-08-27", "done": 1, "hdone": 10.0, '
       '"hleft": 60.0, "left": 9, "states": {"open": 2}}\n')
-    # the round file's `## Asked` — the four unanswered questions on this
+    # the pass file's `## Asked` — the four unanswered questions on this
     # board (asking's three, badround's one) have been put to the user, so
     # the claim gate's drill count is 0 and `claim next` is not refused
-    w(f"{board}/.state/round.md", """
+    w(f"{board}/.state/pass.md", """
 ## Asked
 
 - Which colour?

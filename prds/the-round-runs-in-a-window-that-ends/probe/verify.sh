@@ -49,13 +49,13 @@ is "A4 a 99k window whose floor is 99k is not over budget" "$(hook Write "$D/pro
 
 echo "— the ceiling leaves a way on"
 win 170000
-is "B1 the round file stays writable" "$(hook Write "$D/proj/.pearde/.state/round.md")" "allow"
+is "B1 the pass file stays writable" "$(hook Write "$D/proj/.pearde/.state/pass.md")" "allow"
 is "B2 dispatching a worker stays allowed" "$(hook Agent "")" "allow"
 is "B3 asking the user stays allowed" "$(hook AskUserQuestion "")" "allow"
 is "B4 a worker is never judged by the dispatcher's window" "$(hook Write "$D/proj/notes.md" agent-1)" "allow"
 R="$(reason)"
 has "B5 the refusal names the handover, not a stop" "$R" "Hand the rest over rather than stopping"
-has "B6 ...and the worker that carries on" "$R" "pearde-round"
+has "B6 ...and the worker that carries on" "$R" "pearde-pass"
 has "B7 ...and reports the growth over the floor" "$R" "over its floor"
 
 echo "— a stamp belongs to one window"
@@ -68,19 +68,19 @@ is "C3 the dispatcher's own first read passes" "$(hook Read "$D/proj/spec.md" ""
 
 echo "— the text says the same thing the code does"
 G="$ROOT/references/parts/guard.md"; L="$ROOT/references/parts/loop.md"
-D_="$ROOT/references/parts/dispatch.md"; A="$ROOT/references/agents/pearde-round.md"
+D_="$ROOT/references/parts/dispatch.md"; A="$ROOT/references/agents/pearde-pass.md"
 K="$ROOT/references/skills/pearde.md"
 [ -f "$D_" ]; ok "D1 references/parts/dispatch.md exists" $?
-[ -f "$A" ];  ok "D2 references/agents/pearde-round.md exists" $?
+[ -f "$A" ];  ok "D2 references/agents/pearde-pass.md exists" $?
 has "D3 the skill sends the session to the dispatcher" "$(cat "$K")" "Read @references/parts/dispatch.md"
 has "D4 dispatch.md names the four verdicts" "$(cat "$D_")" '`MORE`'
-has "D5 ...and the prompt it sends" "$(cat "$D_")" "Resume from .pearde/.state/round.md"
-has "D6 the round agent names its stop conditions" "$(cat "$A")" "transitions-per-round"
+has "D5 ...and the prompt it sends" "$(cat "$D_")" "Resume from .pearde/.state/pass.md"
+has "D6 the pass agent names its stop conditions" "$(cat "$A")" "transitions-per-pass"
 has "D7 loop.md says the ceiling is a handover" "$(cat "$L")" "The ceiling is a handover, never a stop"
 has "D8 guard.md says the budget is measured from the floor" "$(cat "$G")" "measured from the floor"
-has "D9 settings.md documents transitions-per-round" "$(cat "$ROOT/references/settings.md")" '`transitions-per-round`'
+has "D9 settings.md documents transitions-per-pass" "$(cat "$ROOT/references/settings.md")" '`transitions-per-pass`'
 is "D10 loop.md is still one page" "$([ "$(wc -l < "$L" | tr -d ' ')" -le 170 ] && echo yes || echo no)" "yes"
-has "D11 files.md lists the round worker" "$(cat "$ROOT/references/files.md")" "@references/agents/pearde-round.md"
+has "D11 files.md lists the pass worker" "$(cat "$ROOT/references/files.md")" "@references/agents/pearde-pass.md"
 has "D12 files.md lists the dispatcher" "$(cat "$ROOT/references/files.md")" "@references/parts/dispatch.md"
 
 echo

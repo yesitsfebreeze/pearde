@@ -32,7 +32,7 @@ state_of() { grep -m1 '^state:' "$D/prds/$1/prd.md" | tr -d '\r'; }
 rm -rf "$T"; mkdir -p "$D/prds"/{one,two,other,other2,old,sup} "$D/.state"
 
 # a question PRD in drill.md's own format — the fork, three prepared answers,
-# one recommended. `one` and `two` carry the same title on purpose: the round
+# one recommended. `one` and `two` carry the same title on purpose: the pass
 # file matches by title, so one `## Asked` line carries both.
 qprd() {
   { echo '---'; echo 'state: question'; echo 'priority: 50'; echo '---'
@@ -73,20 +73,20 @@ has "claim refused naming asking 2" "$OUT" "asking 2"
 has "the refusal says drill first" "$OUT" "drill first"
 has "other is untouched: still open" "$(state_of other)" "^state: open"
 
-echo "== leg 3 (spec01 box 2, spec02 box 2): round out — out marks, claim goes"
-printf '# Round\n\n## Asked\n- What the board shows a session first · out\n' > "$D/.state/round.md"
+echo "== leg 3 (spec01 box 2, spec02 box 2): pass out — out marks, claim goes"
+printf '# Pass\n\n## Asked\n- What the board shows a session first · out\n' > "$D/.state/pass.md"
 OUT=$($PLAN scan 2>&1)
 has "one's question marked · out" "$OUT" "^  one · Q1 What the board shows a session first · out$"
 has "two's question marked · out" "$OUT" "^  two · Q1 What the board shows a session first · out$"
 $TRANS claim other w --as engineer > /dev/null 2>&1; RC=$?
-ck "$RC" "claim went through once the round was out (exit $RC)"
+ck "$RC" "claim went through once the pass was out (exit $RC)"
 has "other moved open → analyzing" "$(state_of other)" "^state: analyzing"
 has "other carries the claim line" "$(cat "$D/prds/other/prd.md")" "^claim: w "
 
 echo "== leg 4 (spec01 box 3, spec02 box 3): one question — count, no section, claim goes"
-# the round file goes: the one question left is UNPUT, which is the case the
+# the pass file goes: the one question left is UNPUT, which is the case the
 # gate must still let through — one outstanding is step 2's ordinary put.
-rm -f "$D/.state/round.md"
+rm -f "$D/.state/pass.md"
 { echo '---'; echo 'state: question'; echo 'priority: 50'; echo '---'
   echo '# f-two — answered'; echo; echo '## Questions'; echo
   echo '### Q1: What the board shows a session first'; echo
@@ -115,18 +115,18 @@ lacks "zero prints no count" "$OUT" "asking"
 lacks "zero prints no section" "$OUT" "^drill"
 
 echo "== leg 6 (spec01 box 5): closed states count zero, and only the state does it"
-# `old` (done) and `sup` (superseded) each still hold an unanswered round.
-# Flipping the state — and nothing else — is what makes the round count, so
+# `old` (done) and `sup` (superseded) each still hold an unanswered pass.
+# Flipping the state — and nothing else — is what makes the pass count, so
 # the exclusion is proved by the count moving, not by an empty board.
 OUT=$($PLAN scan 2>&1)
-lacks "done + superseded rounds count zero" "$OUT" "asking"
+lacks "done + superseded passes count zero" "$OUT" "asking"
 sed -i.bak 's/^state: superseded$/state: open/' "$D/prds/sup/prd.md"; rm -f "$D/prds/sup/prd.md.bak"
 OUT=$($PLAN scan 2>&1)
-has "the superseded round is real — open, it counts 1" "$OUT" "asking 1 over 1 PRD"
+has "the superseded pass is real — open, it counts 1" "$OUT" "asking 1 over 1 PRD"
 sed -i.bak 's/^state: open$/state: superseded/' "$D/prds/sup/prd.md"; rm -f "$D/prds/sup/prd.md.bak"
 sed -i.bak 's/^state: done$/state: open/' "$D/prds/old/prd.md"; rm -f "$D/prds/old/prd.md.bak"
 OUT=$($PLAN scan 2>&1)
-has "the done round is real — open, it counts 1" "$OUT" "asking 1 over 1 PRD"
+has "the done pass is real — open, it counts 1" "$OUT" "asking 1 over 1 PRD"
 sed -i.bak 's/^state: open$/state: done/' "$D/prds/old/prd.md"; rm -f "$D/prds/old/prd.md.bak"
 OUT=$($PLAN scan 2>&1)
 lacks "both back in CLOSED — zero again" "$OUT" "asking"

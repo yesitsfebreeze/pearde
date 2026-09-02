@@ -93,31 +93,31 @@ edit.set_key(os.path.join(b, "big/second/prd.md"), "claim", "worker-second 2026-
 os.makedirs(os.path.join(b, "next/specs"), exist_ok=True)
 open(os.path.join(b, "next/specs/spec01.md"), "w").write("---\ncomplexity: 3\n---\n# spec01\n\n## Acceptance\n\n- [ ] x\n")
 os.makedirs(os.path.join(sys.argv[1], ".state"), exist_ok=True)
-open(os.path.join(sys.argv[1], ".state", "round.md"), "w").write("# Round\n\n## Established\n- big/second is mine · 10:00\n")
+open(os.path.join(sys.argv[1], ".state", "pass.md"), "w").write("# Pass\n\n## Established\n- big/second is mine · 10:00\n")
 PY
 age
 O="$($P sweep --apply --board "$B")"; RC=$?
 eq "sweep --apply exits 0" "$RC" "0"
 has "an analyst with specs on disk is sent to specced, not moved" "$O" 'specs on disk — an analyst that finished: `pearde specced next`'
 eq "  …and stays analyzing" "$(grep '^state:' "$PRDS/next/prd.md")" "state: analyzing"
-has "a claim the round file names is left" "$O" "big/second · analyzing · claim worker-second 2026-08-28 10:00 · silent 2m · named in prds/.round.md"
+has "a claim the pass file names is left" "$O" "big/second · analyzing · claim worker-second 2026-08-28 10:00 · silent 2m · named in prds/.pass.md"
 eq "  …and stays analyzing" "$(grep '^state:' "$PRDS/big/second/prd.md")" "state: analyzing"
 has "the stale implementer's line is printed" "$O" "▸ building: claimed → failed"
-has "  …and ends round file owed before as" "$O" "· round file owed · as engineer"
+has "  …and ends pass file owed before as" "$O" "· pass file owed · as engineer"
 eq "  …and the state is failed" "$(grep '^state:' "$PRDS/building/prd.md")" "state: failed"
 has "  …with a ## Failure saying it was swept" "$(cat "$PRDS/building/prd.md")" "swept "
 eq "  …and the claim cleared" "$(grep -c '^claim:' "$PRDS/building/prd.md")" "0"
-sed -i.bak 's/^- big\/second is mine.*$/- nothing/' "$B/.state/round.md"; age
+sed -i.bak 's/^- big\/second is mine.*$/- nothing/' "$B/.state/pass.md"; age
 O="$($P sweep --apply --board "$B")"
-eq "unnamed in the round file, the analyst without specs goes open" "$(grep '^state:' "$PRDS/big/second/prd.md")" "state: open"
+eq "unnamed in the pass file, the analyst without specs goes open" "$(grep '^state:' "$PRDS/big/second/prd.md")" "state: open"
 $P sweep x --board "$B" >/dev/null 2>&1; eq "sweep with an argument is refused" "$?" "1"
 
 echo "── claim records, answer owes"
 $P retry building --board "$B" >/dev/null 2>&1
 $P set building specced --force --board "$B" >/dev/null 2>&1
 O="$($P claim building w2 --board "$B" 2>&1)"
-has "claim prints the line with round file owed" "$O" "▸ building: specced → claimed"
-has "  …round file owed before as" "$O" "· round file owed · as engineer"
+has "claim prints the line with pass file owed" "$O" "▸ building: specced → claimed"
+has "  …pass file owed before as" "$O" "· pass file owed · as engineer"
 [ -f "$B/.claims/building/diff" ] && ok "claim wrote prds/.claims/building/diff" || bad "no .claims/building/diff"
 [ -f "$B/.claims/building/gate" ] && ok "  …and the gate record" || bad "no .claims/building/gate"
 $P answer asking Q1 "the first answer" --board "$B" >/dev/null 2>&1

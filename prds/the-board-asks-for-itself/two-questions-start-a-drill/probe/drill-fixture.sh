@@ -47,13 +47,13 @@ priority: 10
 Plain open PRD, the claim target while a drill is standing.
 EOF
 
-# old: `done` with an old unanswered round — history, counts zero.
+# old: `done` with an old unanswered pass — history, counts zero.
 cat > "$BOARD/.pearde/prds/old/prd.md" <<'EOF'
 ---
 state: done
 priority: 10
 ---
-# fixture-old — closed with an old round
+# fixture-old — closed with an old pass
 
 ## Questions
 
@@ -88,19 +88,19 @@ echo "$OUT" | head -1
   && echo "OK: claim refused naming asking 2" \
   || { echo "FAIL: claim was not refused with asking 2 (rc=$RC)"; fails=$((fails+1)); }
 
-echo "== leg 3: the round put — ## Asked carries both titles, claim goes"
-{ echo "# Round — drill out"
+echo "== leg 3: the pass put — ## Asked carries both titles, claim goes"
+{ echo "# Pass — drill out"
   echo
   echo "## Asked"
   echo "- What the board shows a session first · out"
   echo "- What the board shows a session first · answered"
-} > "$BOARD/.pearde/.state/round.md"
+} > "$BOARD/.pearde/.state/pass.md"
 OUT=$($PLAN scan 2>&1)
 echo "$OUT" | grep -A3 "drill —" | sed -n '1,4p'
 set +e
 OUT=$($TRANS claim other w --as engineer 2>&1); RC=$?
 set -e
-[ $RC -eq 0 ] && echo "OK: claim went through once the round was out" \
+[ $RC -eq 0 ] && echo "OK: claim went through once the pass was out" \
   || { echo "FAIL: claim still refused: $OUT"; fails=$((fails+1)); }
 
 echo "== leg 4: one question standing — no drill section, claim goes"
@@ -155,7 +155,7 @@ echo "$OUT" | head -1
 if echo "$OUT" | grep -q "asking"; then echo "FAIL: zero still prints the count"; fails=$((fails+1));
 else echo "OK: zero prints nothing"; fi
 
-echo "== leg 6: a done PRD with an old round counts zero"
+echo "== leg 6: a done PRD with an old pass counts zero"
 OUT=$($PLAN scan 2>&1)
 if echo "$OUT" | grep -q "asking"; then echo "FAIL: done PRD counted"; fails=$((fails+1));
 else echo "OK: old done PRD excluded (from leg 5's board, old is done)"; fi

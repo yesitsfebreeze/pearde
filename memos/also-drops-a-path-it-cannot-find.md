@@ -1,10 +1,11 @@
 ---
 memo: also-drops-a-path-it-cannot-find
 kind: decision
-status: decided
+status: superseded
 subject: collect --also resolves paths against the caller's cwd and silently drops one that lands in the wrong repo, while the commit message it writes still names the file
 date: 2026-09-01
-updated: 2026-09-01
+updated: 2026-09-02
+superseded_by: also-resolves-against-the-board-first
 prds:
   - seven-closed-probes-drifted-red/the-doctor-completes-without-a-home
 ---

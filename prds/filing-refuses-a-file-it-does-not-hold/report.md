@@ -1,151 +1,277 @@
-# filing-refuses-a-file-it-does-not-hold — analyst report
+# filing-refuses-a-file-it-does-not-hold — implementer report
 
-Verdict: SPECCED
+Verdict: DONE
 
-Workflow followed: `probe-then-spec` — its `## Use when` names exactly this
-job ("A PRD is `open` and needs specs before anyone can be sent at it"). All
-five of its steps were taken, in order. No new workflow is named, so there is
-no `## Route` below.
+One spec, `specs/spec01.md`, **10 of 10 acceptance boxes ticked**, every one
+against a command run in this session and quoted below. Box 10 — the
+board-wide `doctor` gate — was open for part of the run on the `knowledge`
+row, which `resources/knowledge.py` decides and which never reads
+`collect.py`; the orchestrator closed it and the box was re-run and ticked.
+The account is under `## Box 10 — closed`.
 
-One spec: `specs/spec01.md` — `--also` resolves against the board, and refuses
-what the board does not hold. `pearde specced --check` reads
-`ok · complexity 8 · footprint .pearde/prds/filing-refuses-a-file-it-does-not-hold/probe, resources/board/collect.py`.
+This is **pass two**. The spec was re-aimed by the orchestrator after the
+user answered Q1 (*look in the notes first, then where you are standing*),
+and pass one's build implemented the inverse rule. This pass re-aimed
+`also_path` and the harness to the answer and added the two scenarios the
+new boxes name. HEAD is `5f3270a` and did not move during the run.
 
-Footprint union: `resources/board/collect.py`,
-`.pearde/prds/filing-refuses-a-file-it-does-not-hold/probe`.
+This file replaces pass one's report on the same path. Its five findings are
+carried forward by name under `## Findings`, one of them corrected.
 
-**complexity 8** — one guard and one resolution change in one file, 37 lines,
-against a mechanism the PRD had already located line for line; the harness was
-the larger half of the work.
-**blast-radius mid** — `collect` is the board’s only write path and every board
-inherits this, and the change can newly refuse a call that used to succeed (a
-relative `--also` spelled from a cwd that is not the board); it is not `high`
-because it fires only when `--also` is passed, and the 133-check `collect`
-harness is unchanged by it.
+## The contract, met
 
-## What the record said
+`collect --also <path>` resolves a relative entry against the **board root
+first and the caller's cwd second**, a name both hold resolves to the
+**board's**, and a path neither holds refuses the **whole call**. From a
+throwaway board, `--also nope.md` run from a cwd inside the repo that is not
+the board root:
 
-`python3 resources/knowledge.py query` on the contract returned 11 hits, 11
-strong, over 11 notes on record — the closest being `[[260901-90ed]]
-collect-report-routes-the-verdict` and `[[260901-ee0f]] Every pearde board on
-this machine is on the .pearde layout`. **No gap was enqueued**:
-`.pearde/wiki/pending/` holds the same six files it held before the query, the
-newest dated 2026-09-01. Nothing was learned outside this tree, so nothing was
-written back with `remember`.
+```
+collect: --also nope.md: no such path — looked for /private/var/…/d2/nope.md
+and /private/var/…/d2/away/nope.md; board root /private/var/…/d2;
+nothing written, nothing committed
+exit=1
+```
 
-## The build
+Both places tried, the path as given, the board root, and nothing written.
+`git rev-list --count HEAD` on that fixture is `1` — its `fixture` commit and
+nothing else.
 
-The PRD’s mechanism was accurate line for line; it was cited, not re-derived.
-The build went through end to end and is in the tree, uncommitted.
+The change is three functions in `resources/board/collect.py`, all above
+`# ── reads ──`:
 
-`resources/board/collect.py`, +37/-1:
+- `also_places(board_root, a)` — the order, and the list a refusal prints.
+  Board root first, caller's cwd second; an absolute entry is its own only
+  place; the two are deduped when they coincide, so a call from the board
+  root does not print the same path twice.
+- `also_path(board_root, a)` — the first place that `os.path.exists`. This is
+  what makes precedence go to the board's copy. Still the one place an
+  `--also` entry becomes a path, so a refusal's path and a commit's path
+  cannot drift.
+- `check_also(board_root, opts)` — refuses when no place holds it, called
+  from `cmd_collect` before the `for rel in rels` loop.
 
-- `also_path(board_root, a)` — the one place an `--also` entry becomes a path,
-  resolving a relative entry against `board_root` the way `--widen` already
-  does two lines below the loop. Both the guard and `sort_paths` read it, so
-  the path a refusal names and the path a commit carries cannot drift.
-- `check_also(board_root, opts)` — refuses on `not os.path.exists(p)`, naming
-  the entry as given, the absolute path it resolved to, and the board root.
-- `cmd_collect` calls it immediately after `find_board`.
-- `sort_paths`’ `--also` loop reads `also_path(board_root, a)` in place of
-  `os.path.abspath(a)`. `--widen` and the footprint loop are untouched.
+`--widen` and the footprint loop were not touched. The predicate stays
+`os.path.exists`, not `os.path.isfile`.
 
-**Why the guard sits in `cmd_collect` and not in `sort_paths`.** The build hit
-this, and it decided the shape: `cmd_collect`’s `for rel in rels` loop catches
-`Stop` per PRD and carries on to the next one. A guard inside `collect_one`
-would refuse the PRD that noticed the bad path and then commit every later PRD
-on the same call — a partial filing, not the refusal the user chose at the
-drill. Probe section B holds this down: two collectable PRDs, one bad `--also`,
-both left `claimed` with no commit, and the refusal printed once, not per PRD.
+## Per-box status
 
-**The predicate is `os.path.exists`, not `os.path.isfile`.** The contract says
-"a file that exists on the board", but the model it names as correct — the
-footprint loop eight lines above — uses `os.path.exists`, and footprints are
-routinely directories. Narrowing to `isfile` would refuse `--also
-references/parts`, a live use and not what the PRD asks to stop. The probe pins
-both halves: a directory the board holds goes through and its files ride the
-commit; a directory the board does not hold is refused.
+| box | evidence |
+|---|---|
+| `[x]` probe reads `N · N pass · 0 fail`, exit 0, N > 41 | ran, exit 0, final line **`52 checks · 52 pass · 0 fail`** |
+| `[x]` pointed at HEAD's `collect.py` the same harness exits non-zero | exit 1, **`52 checks · 19 pass · 33 fail`**, zero `ModuleNotFoundError` — see `## An unrunnable can-fail proof, repaired` |
+| `[x]` a `--also` neither root holds exits 1, commits nothing, names path + both places + board root | sections A (9 checks) and D2 (7 checks), all green; refusal quoted above |
+| `[x]` two collectable PRDs, one bad `--also`, both left `claimed`, no commit | section B, 7 checks green, including the no-`--also` control that lands four commits |
+| `[x]` a relative `--also` under the board rides the commit from a foreign cwd | section C, 5 checks green (`C from another cwd, the file is still on the commit`) |
+| `[x]` a relative `--also` that exists only under the caller's cwd rides the commit | section D, 4 checks green — `--also rider.md` from `$D/away`, `git show --name-only` names `away/rider.md`, the PRD reaches `done` |
+| `[x]` a name both roots hold resolves to the **board's** | section I, 5 checks green — commit carries `dup.md` with the board's bytes (`the board copy`), `git status --porcelain -- away/dup.md` still reads `?? away/dup.md` |
+| `[x]` `collect-is-a-command` reads `133 checks · 133 pass · 0 fail` | ran, exit 0, `133 checks · 133 pass · 0 fail`; its section K (absolute `--also`) unchanged |
+| `[x]` `collect-keeps-its-word` reads `101 checks · 101 pass · 0 fail` | ran, exit 0, `101 checks · 101 pass · 0 fail` |
+| `[x]` `index.py check` exit 0 and `doctor.sh` exit 0 with no new row | `index.py check` **exit 0**; `bash resources/doctor.sh` **exit 0**. The only non-`ok` rows are `harnesses` and `jstests`, both `off` at the baseline too. Row set diffed against the baseline run: identical |
 
-## The reproduction
+The whole `## Verify and Proof` block, extracted with `awk` and run the way
+`collect` runs it — `bash -c "set -o pipefail; $BLK"` — exits **0**.
 
-`.pearde/prds/filing-refuses-a-file-it-does-not-hold/probe/verify.sh` — a
-throwaway board under its own `git init` per scenario, never the real board.
-Eight sections, 41 checks, **41 pass · 0 fail**.
+## Box 10 — closed
 
-The harness is provably able to fail: `COLLECT` is overridable, and pointed at
-`git show HEAD:resources/board/collect.py` the same 41 checks read **20 pass ·
-21 fail**. On that pre-fix binary `--also notes/nope.md` exits **0**, commits,
-and writes eleven paths into the record including
-`../../../../../../../private/var/…` — the `ca29535` mechanism, reproduced.
+`bash resources/doctor.sh` was `exit 0` at the baseline, before the first
+edit, with every row `ok` except `view`, `harnesses` and `jstests`, all `off`.
+It now reads:
 
-Sections: A a path that exists nowhere · B the whole call is refused, with a
-no-`--also` control · C board-relative resolution, including from a foreign cwd
-· D a path that exists only under the callers cwd · E absolute paths, both ways
-· F a directory, both ways · G a container close · H usage unchanged.
+```
+  knowledge   broken  the research layer does not check out
+                      graph.json is behind the files: 260902-14d9,
+                      260902-4b7c, cargo-vendor-is-order-independent-…
+```
 
-## Harnesses
+Not this unit's, and provably so:
 
-Baseline taken before the first edit, from `find .pearde/prds -name verify.sh`
-(48 harnesses), filtered to the six that read `collect.py` or enumerate the
-board. HEAD was `f3aea95` and `git status --short` was empty at that point.
+- `resources/doctor.sh:599` decides the row with
+  `python3 "$DIR/knowledge.py" --root "$BOARD/wiki" doctor`. It reads
+  `.pearde/wiki/` and its graph. It never reads `resources/board/collect.py`.
+- The three notes it names are `.pearde/wiki/sources/260902-14d9.md`,
+  `.pearde/wiki/sources/260902-4b7c.md` and
+  `.pearde/wiki/conclusions/cargo-vendor-is-order-independent-of-the-source-replacement-.md`.
+  All three are newer than `2026-09-02 09:50`; my baseline was taken at
+  ~10:03 with the row `ok`. `.pearde/wiki/.graphify/graph.json` is stamped
+  `2026-09-02 00:21` — behind them.
+- Nothing in my footprint writes under `.pearde/wiki/`.
 
-| harness | before the first edit | after |
+**Closed by the orchestrator, not by this footprint.** It ran
+`python3 resources/knowledge.py relink`, and box 10's two commands were then
+re-run here as the box spells them:
+
+```
+python3 resources/index.py check   → exit 0
+bash resources/doctor.sh           → exit 0
+```
+
+`knowledge` reads `ok · graph in sync`. The only non-`ok` rows are
+`harnesses` (`off`) and `jstests` (`off`), both `off` at the baseline. The row
+*names* were diffed against the baseline doctor run and are identical, so no
+row appeared and none was lost — which is what the box asks. Box ticked.
+
+Three doctor rows moved during the run and none is anyone's finding:
+`knowledge` `ok` → `broken` → `ok` (above), `view` `off` → `ok` (the
+coordinator started the service mid-run), and `statusline` `*16` → `*17` (the
+tree's dirty-file count, which every live session moves). `harnesses` counts
+53 rather than 52: a sibling landed a new probe mid-run. It names neither
+`resources/board/collect.py` nor a board census, so it is outside the
+baseline set and has no baseline to regress against.
+
+## Harnesses — baseline taken before the first edit
+
+Every number below was recorded before this run wrote a byte;
+`git status --short` at that point listed no file this session added.
+
+| harness | baseline | after |
 |---|---|---|
-| `collect-keeps-its-word` | 101 · 101 pass · 0 fail | 101 · 101 pass · 0 fail |
-| `hunks-land-where-they-came-from` | 47 · 47 pass · 0 fail | 47 · 47 pass · 0 fail |
-| `the-line-tells-the-truth` | 85 · 85 pass · 0 fail | 85 · 85 pass · 0 fail |
-| `collect-is-a-command` | 133 · 132 pass · **1 fail** | 133 · 133 pass · 0 fail |
-| `the-collect-and-brief-harnesses…` | 7 · 5 pass · **2 fail** | 7 · 7 pass · 0 fail |
-| `workflow-improve` | 70/71 · **1 fail** | 71/71 |
+| this PRD's probe | `41 · 41 pass · 0 fail` (the inverse rule) | **`52 · 52 pass · 0 fail`** |
+| `collect-is-a-command` | `133 · 133 pass · 0 fail` | `133 · 133 pass · 0 fail` |
+| `collect-keeps-its-word` | `101 · 101 pass · 0 fail` | `101 · 101 pass · 0 fail` |
+| `the-gate-runs-the-harnesses` | `57 · 57 pass · 0 fail` | `57 · 57 pass · 0 fail` |
+| `graph-probe-makes-harness-sweep-unaffordable` | `4 · 4 pass · 0 fail` | `4 · 4 pass · 0 fail` |
+| `nothing-left-open/the-line-tells-the-truth` | `85 · 85 pass · 0 fail` | `85 · 85 pass · 0 fail` |
+| `the-brief-names-the-verdict-line-collect-requires` | `15 ok · 0 FAIL` | `15 ok · 0 FAIL` |
+| `hunks-land-where-they-came-from` | `47 · 47 pass · 0 fail` | `47 · 47 pass · 0 fail` |
+| `the-fixtures-meet-the-tool` | `35 · 34 pass · 1 fail` **before the first edit** | `35 · 33 pass · 2 fail` |
 
-`python3 resources/index.py check` exit 0 before and after.
-`bash resources/doctor.sh` exit 0, every row `ok` or `off`, no row added and
-none removed.
-`resources/invariants/every-artifact-lands-inside-the-board.sh` green, 5/5.
+The set was chosen by `grep -l 'board/collect\.py\|find.*verify\.sh'` over all
+52 harnesses `find .pearde/prds -name verify.sh` prints, so it covers both the
+harnesses that name my footprint and the ones that enumerate the board.
 
-**Three harnesses were red before the first edit and are green after, and none
-of the three flips is mine.** They are a sibling session’s uncommitted work
-landing mid-run — finding 1 below. My diff is `resources/board/collect.py`
-alone; `git diff --stat` reads `1 file changed, 37 insertions(+), 1 deletion(-)`.
+**The one count that dropped is `the-fixtures-meet-the-tool`, and it is not
+mine.** The single new red line is:
 
-Baselined failure lines, recorded before the first edit:
+```
+  FAIL F no file under resources/ carries any of this
+       got [1] want [0]
+```
 
-- `collect-is-a-command`: `FAIL R the copy s registry never learned the fixture`
-- `the-collect-and-brief-harnesses-are-carried-across-the-layou`: both its
-  failures were only it observing `collect-is-a-command` at 132/133.
-- `workflow-improve`: `FAIL workers.md s table row — references/parts/workers.md
-  lacks any of the three, plus ## Workflow <slug>`
+Its predicate is
+`git diff --name-only -- resources/board/plan.py resources/board/init.py |
+grep -c .`. Running it now prints `resources/board/init.py`. That file's
+mtime is `2026-09-02 10:09`, after my ~10:03 baseline, and it is not in this
+spec's footprint — `git diff --stat -- resources/board/collect.py` is my whole
+change, `1 file changed, 64 insertions(+), 7 deletions(-)`. No back-edge was
+taken: there is nothing in the footprint that closes it.
+
+The route's `re-run-the-harnesses` row for exactly this — *a count dropped,
+and every failing line names a file outside your footprint that `git status`
+shows a live sibling modified after your baseline* — is what was followed.
+
+`python3 resources/index.py check` exit 0 at baseline and after.
+
+## An unrunnable can-fail proof, repaired
+
+The spec's `## Verify and Proof` block spelled the can-fail proof as a lone
+`git show HEAD:resources/board/collect.py > /tmp/pearde-head/board/collect.py`.
+`collect.py:74-78` inserts its own directory on `sys.path` and imports
+`plan`, `edit`, `transitions` and `specs` from beside itself, so a lone copy
+dies on `ModuleNotFoundError`. Run as spelled it gave `52 · 22 pass · 30
+fail` with **9 lines of `ModuleNotFoundError`** — non-zero for the wrong
+reason, and no evidence at all that the checks read the behaviour.
+
+The block now copies `resources/board/` and `resources/*.py` whole into
+scratch and swaps `collect.py` alone for `HEAD`'s. That reads
+`52 · 19 pass · 33 fail`, exit 1, with **zero** import errors: the checks do
+fail on the old code, and they fail because of the rule.
+
+The block's last line was also changed from a bare `bash resources/doctor.sh`
+to capture-then-grep. `collect` runs the block under `pipefail`, so a bare
+board-wide gate makes this unit's pass conditional on every other PRD on the
+board — the failure `write-the-specs` names. Doctor's rows stay printed; its
+exit no longer decides the block's.
+
+## Workflow probe-then-spec
+
+| # | step | outcome |
+|---|---|---|
+| 1 | `read-the-contract` | pass — PRD, `specs/spec01.md`, the new memo, pass one's report and `git status --short` all read before the first command. **The PRD carries no `## Answers` heading** though the spec and the brief both cite it; the answer's text is in the spec and in the memo, so the fork was closed and no question is asked back. Stale path in the atomic, below |
+| 2 | `capture-the-harness-baseline` | pass — pass one's build was uncommitted, so no baseline was inherited. Nine harnesses plus `index.py check` and `doctor.sh` recorded, exit codes and lines, into a scratch subdirectory named for this run |
+| 3 | `attempt-the-build` | pass — the change is an **edit to an existing footprint file** (`collect.py`), so per the atomic it stands in place and is not staged under `probe/`; only the harness lives under `probe/`. Every fixture is its own `mktemp -d` with its own `git init`; `ls .pearde/prds` and doctor's `board` row both still read 95 PRDs, so nothing was left on the real board |
+| 4 | `re-run-the-harnesses` | pass — one count dropped, shown above to be a neighbour's `init.py` edit. No harness outside my own probe was edited |
+| 5 | `write-the-specs` | not re-run — the specs exist and this is the implementer's pass. Nine boxes ticked as each closed, the tenth once the orchestrator cleared the `knowledge` row; the block checked under `pipefail`, exit 0 |
+
+No back-edge was taken.
+
+### Edits
+
+Replacement text for the failures the atomics caused. The workflow files were
+not edited.
+
+1. **`attempt-the-build`, its `Fails when` table, has no row for a
+   script-swap can-fail proof.** Add a row: *seen* — "a can-fail proof that
+   swaps one script for `git show HEAD:<f>` goes red on
+   `ModuleNotFoundError`"; *means* — "the script imports its siblings from
+   beside itself (`sys.path.insert(0, dirname(__file__))`), and a lone copy
+   has no siblings, so the harness measures the import and not the
+   behaviour"; *do* — "copy the whole directory the script imports from, plus
+   the package dir above it, and overwrite the one file from `HEAD`; then
+   assert `grep -c ModuleNotFoundError` is `0` in the red run before quoting
+   its count."
+
+2. **`capture-the-harness-baseline`, its "Resuming a killed run" clause**
+   (carried from pass one; the route now holds the corrected text —
+   `git -C <board> rev-parse --show-toplevel` and `ls-tree`). Verified again
+   this run: `git -C .pearde rev-parse --show-toplevel` prints
+   `/Users/feb/dev/infra/pearde/.pearde`, so the board is its own repo and its
+   harnesses are tracked there. No further edit needed; the row is correct as
+   it now stands.
+
+3. **`read-the-contract` steps 1-2, and `attempt-the-build` steps 2 and 4,
+   name `prds/<prd>/…`.** This board is at `.pearde/prds/`. Every such path
+   needs the `.pearde/` prefix. Already owned by
+   `every-probe-harness-is-re-aimed-at-the-pearde-layout` — carried forward,
+   not re-filed.
 
 ## Findings — outside this contract, not fixed
 
-1. **A sibling session is writing this tree right now.** At the end of the run
-   `git status --short` lists ` M references/parts/workers.md`, ` M
-   resources/board/brief.py`, ` M resources/board/init.py`, ` M
-   resources/doctor.sh` — none of them mine, none committed, HEAD still
-   `f3aea95`. Those edits are what flipped `workflow-improve` (`workers.md`) and
-   `collect-is-a-command`’s registry check (`init.py`) green under me. Whoever
-   collects this PRD must not carry those four files with it.
+1. **Corrected, twice over — there *is* a concurrent writer this run.** Pass
+   one reported one; its own correction denied it. Measured here: between the
+   step-1 `git status --short` (7 modified, 4 untracked) and the step-4 one
+   (12 modified, 5 untracked), a sibling session added `SKILL.md`,
+   `index.md`, `references/settings.md`, `references/parts/handles.md`,
+   `resources/pearde.py`, `resources/board/init.py` and
+   `references/skills/pearde-grammar.md` — the `grammar` work. HEAD did not
+   move (`5f3270a` throughout), so nothing was committed under me. **None of
+   those files is mine and none may ride this PRD's `--also`.** My whole diff
+   is `resources/board/collect.py`.
 
-2. **`close_container()` silently drops a valid `--also`.** It reads no
-   `opts["also"]` at all — the PRD says so and the build confirmed it. The new
-   pre-flight now refuses a *bad* `--also` on a container close (probe section
-   G), but a *good* one is still dropped: the file is not added and the message
-   never mentions it. That is a second way filing can fail to hold what it
-   names, and a different contract from this one — this PRD asks for a refusal,
-   not for `--also` to start working on containers.
+2. **`resources/board/collect.py` carries another PRD's uncommitted hunks.**
+   Four hunks in the same file rename `round file owed` → `pass file owed` and
+   `.round.md` → `.pass.md` (in `scratch`'s docstring, `dry_line`,
+   `collect_one` twice, and `close_container`). They were in the tree before
+   my first edit and are not mine. **A commit of this footprint takes them
+   too** unless the collector splits by hunk. Named here so the collector
+   knows before it stages.
 
-3. **`--widen` has no existence guard either.** The loop at `:860-862` builds a
-   set of absolute paths and never checks them; `--widen <path the board does
-   not hold>` silently widens nothing. Harmless where `--also` was not — it
-   drops a path rather than inventing one, and nothing false is named in the
-   record — but it is the same missing check. The PRD forbids touching
-   `--widen`, so it is left alone.
+3. **`close_container()` silently drops a valid `--also`** (unchanged from
+   pass one). It holds no `opts["also"]` reference. The pre-flight refuses a
+   *bad* `--also` on a container close — probe section G proves it — but a
+   *good* one is still never added and never named. A second way filing fails
+   to hold what it names, and a different contract from this one. The new memo
+   records it too, in its "second half".
 
-4. **`capture-the-harness-baseline` still names the pre-`.pearde` layout.** Its
-   step 1 says `find prds -name verify.sh`, which finds nothing on this board;
-   the harnesses live under `.pearde/prds/`. This is the job
-   `every-probe-harness-is-re-aimed-at-the-pearde-layout` already covers — a
-   finding, not a second workflow file and not a new PRD.
+4. **`--widen` has no existence guard either** (unchanged from pass one). It
+   builds absolute paths and checks none. Harmless where `--also` was not: it
+   drops a path rather than inventing one, so nothing false lands in the
+   record. The PRD forbids touching `--widen`, so it is left alone.
+
+5. **`the-fixtures-meet-the-tool`'s row `F no file under resources/` reads the
+   whole working tree's `git diff`** (unchanged from pass one, and it fired
+   again). Any uncommitted work under `resources/board/plan.py` or
+   `resources/board/init.py` reddens it, whoever wrote it. Its second red row,
+   `E …and every row it still fails is the quickstart's or the index's`, was
+   already failing **before the first edit** of this run. Not chased, not
+   fixed — noted so the next reader does not chase it either.
+
+6. **`prd.md` has no `## Answers` heading.** The spec and the memo both cite
+   `## Answers` Q1 for the resolution order, and the answer itself is
+   recorded in both, so nothing was ambiguous for this build. But the PRD's
+   own file does not carry it, and `## Questions` is gone too, so the board's
+   record of what was asked and what came back lives only in the memo. For the
+   orchestrator, not for an implementer.
 
 ## Scores
 

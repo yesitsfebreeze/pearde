@@ -6,6 +6,7 @@ complexity: 35
 blast-radius: low
 workflow: probe-then-spec
 actual: 0.59h
+commit: 3664de0 5cbd707
 ---
 
 # a-density-checker-and-the-root-docs-are-rewritten — resources/prose.py` checks word count, mean sentence length, unbound waste words and banned openers/closers per file; `references/language.md` carries the `## Density` section; `references/files.md`, `index.md`, `README.md` and `SKILL.md` are rewritten dense

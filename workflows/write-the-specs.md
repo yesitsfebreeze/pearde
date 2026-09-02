@@ -3,7 +3,7 @@ atomic: write-the-specs
 subject: turn what the build stands up into implementable units
 date: 2026-08-28
 updated: 2026-09-02
-runs: 27
+runs: 28
 ---
 
 # write-the-specs — units another worker can finish
@@ -18,9 +18,21 @@ runs: 27
 3. Every acceptance box names an output a check can read. Write the box
    spelling inside backticks in any prose about it — the matcher is
    line-based and fence-blind, so a pasted open box becomes a real one.
-4. Give each spec a `## Verify and Proof` block whose every command names a
-   path from that spec's own `footprint:` — a check that reads a footprint file through a script outside it (`index.py check` on `index.md`) counts as naming it. Never the whole workspace. There is
-   no `verify:` frontmatter key — the template's keys are a closed set.
+4. Give each spec a `## Verify and Proof` block in which every path is
+   spelled **literally**, not through a variable — the checker at
+   `resources/board/specs.py:523` matches the `footprint:` string, and a
+   `"references/personas/$f.md"` reads as no footprint path at all. Spelling
+   is not the point, though: **no command's exit may be decided by a file
+   outside the footprint.** A repo-wide command (`index.py check`, `doctor`, a
+   root `git status`) may be captured and printed, and the block may fail only
+   on the lines of its output that name a footprint path. A file the block
+   must read but does not own — a neighbour's fixture input, a sibling's
+   roster — is not copied, it is **stubbed**: the block writes a minimal valid
+   stand-in, so a rename or an empty read next door cannot decide the colour.
+   Guard every captured output with `[ -n "$out" ]` before greping it: a
+   producer that dies before printing looks exactly like a passing grep miss.
+   There is no `verify:` frontmatter key — the template's keys are a closed
+   set.
 5. Say in each spec what already stands from the build and what is left.
 6. `grep -c '^- \[ \]' prds/<prd>/specs/*.md` — every spec has at least one
    box, and none is ticked before an implementer runs it. Then
@@ -47,3 +59,4 @@ runs: 27
 | a block exits non-zero on the result that means it passed | a command whose **passing** result is "nothing matched" — `grep -c`, `grep -vc`, `ls <glob>`, `find … \| wc -l` — exits non-zero on exactly that result | guard the *producer*, not the pipeline: `{ <cmd> \|\| true; } \| wc -l` |
 | a block exits **0** while a line in it printed a failure | the assertion is written `[ <test> ] && echo "<the good news>"`, or `<probe> && echo BAD \|\| echo OK`. Neither can fail a block: a false test prints nothing and the next command's status becomes the block's, and the `&&…\|\|` pair always exits 0 | put the assertion **last** and write it bare — `[ ! -s "$f" ]` — or accumulate a counter in the loop and end on `[ "$N" = 0 ]`. Then run the block the way collect does (`awk` it out, `set -o pipefail`) **against a tree where the check should fail**, and confirm it does |
 | a box or block asserts a literal total of the PRD's **own** probe | the spec has locked its harness shut: a later pass cannot add the check a thin box needs without reddening the spec that names it | assert the tally *parses* and `failed == 0` — never a total, not even the probe's own. A floor (`>= N`) is honest; an equality is a wall |
+| `specced` refuses `<spec>:<n>: `## Verify and Proof` holds no fenced `sh` block` and the block is plainly there | a line inside the block begins `## ` — commonly a heredoc writing a markdown fixture. The section reader in `resources/board/specs.py` is line-based and fence-blind, the same way the acceptance-box matcher is | write the fixture's headings with a placeholder prefix and raise them at run time (`sed 's/^@@ /## /'`). Never a literal `## ` at line start inside a verify block, in a heredoc or out of one |

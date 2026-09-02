@@ -3,7 +3,7 @@ atomic: attempt-the-build
 subject: build the contract until it works or hits something undefined
 date: 2026-08-28
 updated: 2026-09-02
-runs: 33
+runs: 34
 ---
 
 # attempt-the-build — the attempt is the analysis
@@ -49,6 +49,7 @@ runs: 33
 |------|-------|----|
 | the route's steps 3 and 5 have nothing to do because the specs already exist and the build is already in the tree | this is the route's **second** pass on the PRD — the analyst probed and specced, and an implementer has now been dispatched on the same route | run steps 1, 2 and 4 only, say in the report which steps were not entered and why, and claim no flip: every red-to-green on this tree was earned by the pass that built it. Ticking boxes against a green tree is the implementer's whole job here, and a route that forces a rebuild to have something to do would discard a working build |
 | a fixture board built under `mktemp -d` shows up in `serve.py status` after the run, on a path that no longer exists | the probe ran a command whose repair registers whatever board it is handed — `doctor --fix` is one — and the live daemon's registry outlives the temp dir | never run a `--fix`-shaped command against a fixture while a real service is up; point it at a dead port (`PEARDE_PORT=1`) so the repair cannot connect, and check `serve.py status` at the end. `serve.py forget <name>` removes one already landed |
+| a check stands a machine-wide guard down (`PEARDE_REAP_GRACE_S=0`, a disabled cap, a bypassed lock) to reach the behaviour it is measuring | the guard is the only thing keeping the action off a neighbouring session's processes, and the check has just removed it machine-wide | scope the action to what the check itself started — a `--pid`, a port, a path filter — and make the narrowing flag **refuse** an unreadable value rather than falling back to "everything". Assert the guard both ways: kept inside it, and expiring outside it, or a widened default keeps every box green while the guard never fires |
 | the probe passes standalone and fails only when the runner that is its own subject runs it | the probe is itself an instance of the population it measures, and inherits the environment that runner sets — a guard variable, a cwd, a port — so it measures the guard instead of the behaviour | clear it explicitly for every fixture invocation (`env -u <VAR>`), keep one assertion that sets it deliberately, and run the harness both ways before quoting a count |
 | every fixture lands on one board, and assertions pass or fail in the wrong sections | the fixture-maker is called as `B=$(mktemp_helper)`, and command substitution runs it in a **subshell** — a counter or path it keeps never reaches the caller, so every call returns the same board | make each fixture with its own `mktemp -d` inside the helper and echo that; never keep state in a helper you call through `$(…)` |
 | a patch's anchor text no longer matches a file you read in step 1 | another session moved the file since | re-read it, merge into its current shape, keep your hunk disjoint from theirs, and name the collision in the report |

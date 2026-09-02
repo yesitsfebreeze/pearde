@@ -3,7 +3,7 @@ atomic: re-run-the-harnesses
 subject: re-run the recorded harnesses and account for every changed count
 date: 2026-08-28
 updated: 2026-09-02
-runs: 58
+runs: 60
 ---
 
 # re-run-the-harnesses — every number back, or explained
@@ -69,3 +69,4 @@ runs: 58
 | a state file in `resources/board/state/guard/` you were told not to write moves its mtime during the re-run | a harness in the set calls `doctor.sh` with no `PEARDE_GUARD_STATE`, and `doctor.sh`'s own guard probe carries no session | name the harness by `grep -c doctor.sh` and `grep -c PEARDE_GUARD_STATE`, compare the file's mtime to your start, remove it only if it did not exist before you, and report the writer's line |
 | doctor's `view` row is `off` after the run and `serve.py status` says not running | a harness in the set runs `serve.py stop` with no port and reaches the live daemon | name the harness line, do not restart it yourself — the coordinator owns the service |
 | a check backing an already-ticked box in your own spec goes red on the change the contract asked for | the check was written against the old behaviour in an environment the change makes reachable, not against the box's words | re-read the box's own sentence and re-aim the check at the shape that still meets it — never weaken it, and never special-case the new path to keep the old check green, which puts back the divergence the unit removes. Quote the red, the box's words, and the re-aimed check in the report |
+| a count dropped and the failing line is a harness's own `index.py check`, `doctor.sh` or manifest assertion over the live checkout | the harness measures the workspace, not its PRD's footprint; a parallel worker's new file with no manifest row reddens it | quote the line and the file that explains it (`git status --short` names it untracked, its mtime post-dates your baseline), leave the harness alone, and cite `.pearde/memos/a-harness-that-reads-the-whole-checkout-is-not-a-harness.md` — the repair is owed to that harness's own PRD, not to you |

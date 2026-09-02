@@ -9,5 +9,5 @@ gantt-day: 8h
 
 # The example board
 
-One row in every band, so a check has something to find in each one. Copied
-by `plan.py example <dir>`, never run where it lives.
+One row in every band, so a check finds something in each. Copied by
+`plan.py example <dir>`, never run where it lives.

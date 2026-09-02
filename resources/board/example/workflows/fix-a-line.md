@@ -9,8 +9,8 @@ runs: 0
 
 ## Use when
 
-- A report names one line that is wrong, and the fix is the line.
-- Not when the report names a behaviour and no line: that is a probe first.
+- A report names one wrong line, and the fix is the line.
+- Not when the report names a behaviour and no line — probe first.
 
 ## Steps
 

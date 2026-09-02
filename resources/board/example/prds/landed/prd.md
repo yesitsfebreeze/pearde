@@ -11,6 +11,5 @@ actual: 2h
 
 # landed — one PRD that is done
 
-This is the landed band. The `commit:` names the change that closed it and
-the `actual:` is the record `plan.py calibrate` reads; neither schedules
-anything.
+The landed band. `commit:` names the change that closed the PRD and `actual:`
+is the record `plan.py calibrate` reads. Neither schedules anything.

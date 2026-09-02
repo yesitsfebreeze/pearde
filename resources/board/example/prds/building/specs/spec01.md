@@ -6,8 +6,7 @@ footprint:
 
 # spec01 — the line is fixed and covered
 
-The one unit of `building`: change the line, cover it, and leave the tree
-green.
+Change the line, cover it, leave the tree green.
 
 ## Acceptance
 

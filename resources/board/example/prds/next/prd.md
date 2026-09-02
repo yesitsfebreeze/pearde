@@ -10,5 +10,5 @@ needs:
 
 # next — one PRD gated on another
 
-This is the gated band. It needs `building` to be `done`, and until then the
-scan lists it under gated with the gate named.
+The gated band. `next` needs `building` `done`; until then the scan lists
+`next` under gated, with the gate named.

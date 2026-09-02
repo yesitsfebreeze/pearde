@@ -6,8 +6,8 @@ hidden: true
 
 # Absorbed sources
 
-Sources crystallized into conclusions live here. Hidden from Obsidian (dotfolder) and excluded from active queries/dashboards.
+Sources crystallized into conclusions. A dotfolder, so Obsidian hides it and the active queries and dashboards skip it.
 
-Do not edit by hand. A manual condense moves files in; conclusions track provenance via `derived_from:` frontmatter.
+Never edit by hand — a condense moves files in, and the conclusion tracks provenance under `derived_from:`.
 
 Restore: move the file back to `sources/` and run `relink`.

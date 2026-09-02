@@ -12,6 +12,6 @@ footprint:
 
 # building — one PRD a worker holds, half done
 
-This is the in-flight band. The claim was written at a fixed time, so the
-holding time the view prints grows with the clock. Three of the five boxes in
-`specs/spec01.md` are closed, which is what draws the bar half full.
+The in-flight band. The claim carries a fixed time, so the holding time the
+view prints grows with the clock. Three of the five boxes in `specs/spec01.md`
+are closed, and the bar draws half full.

@@ -11,6 +11,6 @@ footprint:
 
 # finished — every box closed, a worker still holding it
 
-This is the band to collect. Every acceptance box in `specs/spec01.md` is
-closed and this file carries no open box, so the scan lists it first: one
-commit and it is `done`.
+The band to collect. Every acceptance box in `specs/spec01.md` is closed and
+`prd.md` carries none, so the scan lists `finished` first — one commit closes
+it `done`.

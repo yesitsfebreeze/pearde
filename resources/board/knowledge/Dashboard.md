@@ -4,7 +4,7 @@ type: dashboard
 
 # Pearde Dashboard
 
-Live views over the board and the knowledge base. Requires Dataview (DQL + JS).
+Live views over the board and the knowledge base. Needs Dataview (DQL + JS).
 
 > Configure focus + workflow in [[WORKFLOW]]. Regenerate the board notes with `python3 resources/knowledge.py board`.
 
@@ -18,7 +18,7 @@ SORT choice(state = "blocked", 0, choice(state = "open", 1, choice(state = "anal
 
 ## Board — open work ordered the way plan.py orders it
 
-Dependency first (unresolved needs), then priority. The same three axes the scheduler reads: needs, priority, complexity.
+Dependency first (unresolved needs), then priority — the three axes the scheduler reads.
 
 ```dataview
 TABLE WITHOUT ID file.link AS "PRD", needs AS "Gated on", priority, complexity, blast AS "Blast"
@@ -50,7 +50,7 @@ SORT from ASC
 
 ## Board — footprint heatmap
 
-Which files the touched-and-open PRDs point at — overlapping footprints are merge hazards.
+Which files the touched-and-open PRDs point at — an overlap is a merge hazard.
 
 ```dataview
 TABLE WITHOUT ID footprint AS "Path", length(rows) AS "Open PRDs touching it"
@@ -100,7 +100,7 @@ SORT choice(priority = "high", 0, choice(priority = "med", 1, 2)) ASC, date ASC
 
 ## KB — most important nodes (hub ranking)
 
-Inbound link count is a proxy for centrality.
+Inbound link count stands in for centrality.
 
 ```dataview
 TABLE WITHOUT ID file.link AS "Node", length(file.inlinks) AS "Inlinks", length(file.outlinks) AS "Outlinks", type
@@ -112,7 +112,7 @@ LIMIT 20
 
 ## KB — sources awaiting synthesis
 
-Sources with no inbound link from a conclusion — candidates for the next `conclude` pass.
+Sources no conclusion links — candidates for the next `conclude` pass.
 
 ```dataview
 TABLE WITHOUT ID file.link AS "Source", length(file.inlinks) AS "Inlinks", date
@@ -124,7 +124,7 @@ LIMIT 25
 
 ## KB — orphans (isolated nodes)
 
-No inbound, no outbound links. Candidates for `relink`.
+No links in either direction — candidates for `relink`.
 
 ```dataview
 LIST

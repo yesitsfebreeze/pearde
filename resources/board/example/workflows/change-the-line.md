@@ -9,13 +9,13 @@ runs: 0
 
 ## Do
 
-1. Write the test first and run it. It fails on the line as it stands.
-2. Change the line. Run the test again. It passes.
+1. Write the test first. Run it: the test fails on the line as it stands.
+2. Change the line. Run the test again: the test passes.
 3. Run the file's whole test module and quote the count.
 
 ## Done when
 
-- The new test fails before the change and passes after it.
+- The new test fails before the change and passes after.
 - The module's test count is quoted in the report.
 
 ## Fails when

@@ -5,7 +5,7 @@ scope: sources
 
 # Sources Index
 
-Raw findings from research runs. One file = one topic.
+Raw findings from research runs — one file, one topic.
 
 ## All sources by date
 
@@ -26,7 +26,7 @@ WHERE type = "source" AND (!tags OR length(tags) = 0)
 
 ## Sources with no inbound conclusion link
 
-Sources never referenced by a conclusion — candidates to synthesize or prune.
+Sources no conclusion references — synthesize or prune.
 
 ```dataview
 LIST

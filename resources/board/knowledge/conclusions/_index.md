@@ -5,7 +5,7 @@ scope: conclusions
 
 # Conclusions Index
 
-Synthesized answers built from sources. The KB the agent queries.
+Synthesized answers built from sources — the KB the agent queries.
 
 ## Hub conclusions (most linked)
 
@@ -27,7 +27,7 @@ LIMIT 25
 
 ## Thin conclusions (few sources)
 
-May need more research before trusting.
+Under two sources: research before trusting.
 
 ```dataviewjs
 const pages = dv.pages('"pearde/wiki/conclusions"')
@@ -40,7 +40,7 @@ dv.table(["Conclusion", "Sources", "Date"],
 
 ## Orphan conclusions
 
-Not linked from anywhere — verify discoverability.
+Linked from nowhere — check discoverability.
 
 ```dataview
 LIST

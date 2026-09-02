@@ -485,7 +485,35 @@ def _dirty(cwd):
     return rows
 
 
-def owned_by(prd, board_root, repo, feet):
+def foot_root(p, board, board_root, repo):
+    """`(root, path)` — the repo that HOLDS this footprint path, and its
+    spelling inside that repo.
+
+    A footprint is spelled relative to `repo`, the code repo. Since the
+    board became a git repo of its own — `pearde/` here, and every nested
+    `.pearde` with a `.git` — a path under the board is spelled that way
+    too (`pearde/.gitignore`) and yet lives in NEITHER the code repo's
+    index nor its worktree: the code repo ignores the board, so `git add --
+    pearde/.gitignore` there is `fatal: pathspec … did not match any
+    files`, which took down a whole lane's merge and every PRD gated
+    behind it. It is the board repo that tracks the file, under
+    `.gitignore`. This is the one place that answers which, so the lane's
+    add, the guard's fence and step 3's grouping cannot disagree.
+
+    Only a path that resolves INSIDE the board is rerouted, and only when
+    the board's root and the code repo's root are two different repos —
+    on a board that is not its own repo they are the same root and the
+    footprint's own spelling is already right."""
+    b = os.path.abspath(board)
+    full = os.path.abspath(os.path.join(repo, p))
+    if (os.path.abspath(board_root) != os.path.abspath(repo)
+            and (full == b or full.startswith(b + os.sep))):
+        return board_root, os.path.relpath(full, board_root).replace(
+            os.sep, "/")
+    return repo, p
+
+
+def owned_by(prd, board_root, repo, feet, board=None):
     """{root: [paths relative to that root]} this PRD owns — the same
     grouping `sort_paths` makes for what it is about to commit, so the guard
     and the commit agree on one answer to "whose is this?".
@@ -512,13 +540,18 @@ def owned_by(prd, board_root, repo, feet):
     prd_rel = os.path.relpath(prd["dir"], board_root)
     if not prd_rel.startswith(".."):
         groups[os.path.abspath(board_root)] = {prd_rel}
-    paths = set()
     for f in feet:
         if own and f.startswith(own):
-            paths.add(f[len(own):])
+            p = f[len(own):]
         elif not f.startswith(planlib.MEMBER_SIGIL):
-            paths.add(f)
-    groups.setdefault(os.path.abspath(repo), set()).update(paths)
+            p = f
+        else:
+            continue
+        # a footprint path under a board that is its own repo is the board
+        # repo's, spelled its way — `foot_root` is the one answer to that
+        root, p = foot_root(p, board or board_root, board_root, repo)
+        groups.setdefault(os.path.abspath(root), set()).add(p)
+    groups.setdefault(os.path.abspath(repo), set())
     return {k: sorted(v) for k, v in groups.items()}
 
 
@@ -1490,12 +1523,17 @@ def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since,
         # staged, so a spec whose finish is a deletion still passes); a path
         # that DOES exist but is merely clean is not this — it goes to
         # plan.add=[] further down, no bug, nothing to say.
-        full = os.path.join(repo, p)
-        tracked = git_out(repo, "ls-files", "-z", "--", p).strip("\0")
+        # a footprint under a board that is its own repo belongs to the
+        # BOARD repo, spelled its way — the code repo ignores the board and
+        # holds no such path, so filing it here is what made step 4 stage
+        # `pearde/.gitignore` where it can never exist
+        root, p = foot_root(p, board, board_root, repo)
+        full = os.path.join(root, p)
+        tracked = git_out(root, "ls-files", "-z", "--", p).strip("\0")
         if not os.path.exists(full) and not tracked:
-            raise Stop(f"{rel}: footprint {p} is not under {repo} — "
+            raise Stop(f"{rel}: footprint {p} is not under {root} — "
                        f"repo_of matched no repo for it; nothing written")
-        groups.setdefault(repo, set()).add(p)
+        groups.setdefault(root, set()).add(p)
     for a in opts["also"]:
         ap = also_path(board_root, a)   # `check_also` already proved it exists
         root = planlib.repo_root(ap)
@@ -1722,6 +1760,20 @@ def land_lane(board, rel, prd, repo, opts, out=print):
     br = laneslib.branch_of(rel)
     _, feet = planlib.spec_data(prd)
     feet = [f for f in feet if not f.startswith(planlib.MEMBER_SIGIL)]
+    # The lane is a worktree of the CODE repo, and it is cut without the
+    # board: `lanes.create` excludes the board's path by sparse-checkout,
+    # and where the code repo ignores the board there is nothing to check
+    # out anyway. So a footprint path the board repo holds is not the
+    # lane's to stage — `git add` on it is `fatal: pathspec … did not
+    # match any files`, which aborts the add whole and lands no commit at
+    # all. It is committed in the board repo by step 3, where it lives.
+    elsewhere = [f for f in feet
+                 if foot_root(f, board, planlib.repo_root(board) or board,
+                              repo)[0] != repo]
+    feet = [f for f in feet if f not in elsewhere]
+    if elsewhere:
+        out(f"{rel}: in the board's own repo, not the lane's — "
+            + ", ".join(sorted(elsewhere)))
     standing = laneslib.dirty(board, rel)
     outside = [p for p in standing if not inside(p, feet)]
     if outside:
@@ -1846,7 +1898,7 @@ def collect_one(board, rel, opts, out=print):
     pre, landed = land_lane(board, rel, prd, repo, opts, out)
     base = baseline(board, rel)
     _, feet = planlib.spec_data(prd)
-    owned = owned_by(prd, board_root, repo, feet)
+    owned = owned_by(prd, board_root, repo, feet, board)
     report, trusted, known = [], False, False
     if opts.get("trust"):
         trusted = True

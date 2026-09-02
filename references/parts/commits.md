@@ -162,6 +162,24 @@ subject — on a master board, the member's repo. A library `workflows:` points
 into another repo follows the same rule: its edits commit there, same subject,
 never riding a commit in the repo the PRD wrote.
 
+**Which repo a footprint path lands in.** A `footprint:` path is spelled
+relative to the code repo. A path resolving inside a board holding a `.git` of its
+own — a `pearde/` or `.pearde/` holding a `.git`, the layout this repo runs —
+is committed in the **board repo** under its **board-relative** name:
+`pearde/.gitignore` in a spec is `.gitignore` in the board's commit, beside
+the PRD's record. The code repo never stages it, because that repo ignores the
+board and holds no such path; `git add` there answers `fatal: pathspec … did
+not match any files` and aborts the whole add, so one such path used to take
+down a merge with nothing else wrong with it. The lane never stages it either
+— `claim` cuts the lane without the board — so the board's own file is the
+checkout's to commit. Where the board is not a repo of its own the two roots
+are one and nothing is rerouted. So a spec author names the path the one way
+open, code-repo-relative, and expects it in the board's commit rather than
+the code repo's: @resources/board/collect.py's `foot_root` is the single answer
+all three of the lane's add, the ownership fence and the grouping read, and
+@pearde/memos/a-board-s-own-file-commits-in-the-board-repo.md is the invariant
+that holds it.
+
 **Never push.** The commit is the board's, the push is the user's. Report what
 is ahead and stop.
 

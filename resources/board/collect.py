@@ -1232,15 +1232,51 @@ def land_lane(board, rel, prd, repo, opts, out=print):
     return pre, n
 
 
-def unland(repo, pre, out=print):
-    """Put the checkout back where `land_lane` found it. Called when step 2
-    goes red: a verify that fails must not leave the lane's code standing
-    in the checkout, and the lane branch is untouched so a retry merges the
-    same commits again."""
-    if not pre:
+def unland(repo, pre, landed, out=print):
+    """Put the checkout's BRANCH back where `land_lane` found it, and touch
+    nothing else. Called when step 2 goes red: a verify that fails must not
+    leave the lane's code standing in the checkout, and the lane branch is
+    untouched so a retry merges the same commits again.
+
+    The inverse of a fast-forward merge is moving the pointer back, not
+    `reset --hard`. `--hard` throws away the working tree and the index,
+    which the merge never touched — and this checkout is shared: the
+    uncommitted work standing in it is other sessions' and other PRDs',
+    none of it this PRD's to discard. Measured: `--hard` here destroyed
+    sixteen files of an unrelated, uncommitted implementation on a red
+    verify, and printed it as `lane unmerged`. `--keep` moves the ref,
+    updates only the files that differ between the two commits, and
+    REFUSES when one of those carries uncommitted work.
+
+    A refusal is reported and obeyed: the merge stays standing and the
+    person is told which paths held it. A gate that deletes what it was
+    checking is worse than a gate that stops.
+
+    `landed` is `land_lane`'s count. Zero means the merge merged nothing —
+    the lane committed nothing, or there was no lane — and there is
+    nothing to put back: rolling one back would be a reset for a merge
+    that did not happen."""
+    if not pre or not landed:
         return
     import lanes as laneslib
-    laneslib.git(repo, "reset", "--hard", pre, check=False)
+    files = [f for f in laneslib.git(repo, "diff", "--name-only",
+                                     pre + "..HEAD",
+                                     check=False).stdout.split() if f]
+    shown = ", ".join(files[:4]) + (f" +{len(files) - 4} more"
+                                    if len(files) > 4 else "")
+    out(f"  unmerging {landed} commit(s) — dropping {shown or 'no file'} "
+        f"from the checkout, back to {pre[:12]}")
+    r = laneslib.git(repo, "reset", "--keep", pre, check=False)
+    if r.returncode:
+        out("  not rolled back — the checkout holds uncommitted work in "
+            "those paths, and it is not this PRD's to discard:")
+        for line in ((r.stderr or r.stdout).strip().splitlines() or
+                     ["git reset --keep refused"]):
+            out(f"    {line}")
+        out(f"  the lane's code stands in the checkout; roll it back with "
+            f"`git -C {repo} reset --keep {pre[:12]}` once those paths are "
+            f"clear")
+        return
     out(f"  lane unmerged — checkout back at {pre[:12]}")
 
 
@@ -1312,7 +1348,9 @@ def collect_one(board, rel, opts, out=print):
             if red:
                 text = "\n\n".join(report)
                 out(text)
-                unland(repo, pre, out)   # the lane's code never stands on a red
+                # the lane's code never stands on a red — and nothing else
+                # in this shared checkout is touched putting it back
+                unland(repo, pre, landed, out)
                 if opts.get("fail") and not opts.get("dry"):
                     editlib.append_section(pmd, "Failure", text)
                     editlib.del_key(pmd, "claim")

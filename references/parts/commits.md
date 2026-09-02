@@ -28,8 +28,17 @@ passes alone and breaks against what landed while it ran is a red here and
 nowhere else. The lane's commit **is** the PRD's commit: step 4 does not
 commit that repo a second time, so the checkout's branch gains exactly two
 commits for a collected PRD — the work, and `<prd> — record`. A red verify
-resets the checkout to the commit it was on and leaves the lane branch
-untouched, so a retry merges the same commits again.
+moves the checkout's **branch pointer** back to the commit it was on —
+`git reset --keep`, never `--hard` — and leaves the lane branch untouched,
+so a retry merges the same commits again. Only the pointer moves: the
+checkout's uncommitted work standing beside the merge, other sessions' and
+other PRDs', is kept, because a gate that deletes the work it was checking
+is worse than a gate that stops. A merge that **merged nothing** is not
+rolled back at all — no commits came in, so there is nothing to put back and
+no ref to move. And a rollback that cannot keep the uncommitted work refuses
+rather than discarding it: `collect` prints the paths git named, leaves the
+merge standing in the checkout, and gives the `git reset --keep` line that
+finishes the rollback once those paths are clear.
 
 **A merge conflict is a red collect, never a silent stage.** When the lane
 disagrees with what landed in the checkout while the worker ran, `collect`

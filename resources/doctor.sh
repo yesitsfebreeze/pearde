@@ -13,7 +13,7 @@
 # `skills`, `index`, `statusline`, `board` and `briefs` always report.
 # `plugins` reports when an adapter carries a `plugins:` list — suggestions
 # for the machine, never a failure.
-# `memos`, `workflows`, `view` and `plan` need a board in scope, `origin`
+# `memos`, `workflows`, `grammar`, `view` and `plan` need a board in scope, `origin`
 # needs PRDs in it, and `members` only exists on a master board.
 #
 # No agent is named in this script and none is looked for. Where a skill goes
@@ -104,14 +104,14 @@ fi
 
 # ── plugins: what the adapters suggest for this machine ───────────────────────
 # An adapter may carry a `plugins:` list — the extensions its agent runs the
-# round with (`claude.json` ships one; see references/plugins.md for why these
+# pass with (`claude.json` ships one; see references/plugins.md for why these
 # four). Plugins are Claude-Code-only today, so the list lives on the adapter
 # that names that agent — an adapter for any other runtime simply carries no
 # list and this row stays silent. The install record lives in the agent's own
 # config dir ($CLAUDE_CONFIG_DIR, falling back to ~/.claude), which is this
 # machine's data and nothing this checklist can repair — so the row is `off`,
 # never `broken`, and every missing plugin carries the exact two commands
-# that install it. A round runs without them; they make it cheaper.
+# that install it. A pass runs without them; they make it cheaper.
 PKEYS=""
 if [ -d "$DIR/board/adapters" ]; then
   PIP=$(python3 - "$DIR/board/adapters" <<'PYEOF'
@@ -185,7 +185,7 @@ EOF
         fix "claude plugin install $pname@$pmkt  (suggested by adapter $padapter — @references/plugins.md)"
       fi
     done
-    note "plugins are suggestions, not requirements — the round runs without them; @references/plugins.md says what each one is for"
+    note "plugins are suggestions, not requirements — the pass runs without them; @references/plugins.md says what each one is for"
   fi
 fi
 
@@ -239,7 +239,7 @@ else
 fi
 
 # ── guard: the loop's rules, wired as a hook ─────────────────────────────────
-# A rule written in a reference file is advice, and the round that cost
+# A rule written in a reference file is advice, and the pass that cost
 # 318,584 tokens ignored three of them. The guard is the same rules as a
 # PreToolUse hook — @references/parts/guard.md. Where hooks are configured IS
 # knowable here, unlike a status line: the settings file sits in the repo the
@@ -418,14 +418,14 @@ if [ -n "$BOARD" ] && grep -qE '^[[:space:]]*members:' "$BOARD/settings.md" 2>/d
     fix "correct or drop those members: entries in $BOARD/settings.md"
   else
     # the name is reported, never repaired: what a group of projects is called
-    # is the user's call, and the first round that meets an unnamed master
+    # is the user's call, and the first pass that meets an unnamed master
     # board asks for it. Inference keeps the board working until then.
     BNAME=$(python3 -c "import sys;sys.path.insert(0,'$DIR/board');import plan;print(plan.board_name('$BOARD'))" 2>/dev/null)
     if grep -qE '^[[:space:]]*name:' "$BOARD/settings.md" 2>/dev/null; then
       row members ok "$NM member board(s) · ${NAMES}· $MPRDS member PRDs planned here · name $BNAME"
     else
       row members ok "$NM member board(s) · ${NAMES}· $MPRDS member PRDs planned here"
-      printf '  %-11s %-7s %s\n' "" "" "name inferred as '$BNAME' — the round asks the user and writes name: to settings.md"
+      printf '  %-11s %-7s %s\n' "" "" "name inferred as '$BNAME' — the pass asks the user and writes name: to settings.md"
     fi
   fi
 fi
@@ -548,6 +548,44 @@ if [ -n "$BOARD" ]; then
   fi
 fi
 
+# ── grammar: the board's vocabulary, and the shape of its rows ───────────────
+# One file, no state, nothing dispatched — the scan walks past it like memos/.
+# What can be wrong is the format, and every failure is silent from the
+# outside: a term defined twice answers a lookup two ways, and a row that is
+# neither two columns nor three is a row no reader can tell from a collision.
+# Like `workflows:`, a `grammar:` pointing elsewhere is not another system
+# mirrored read-only — it is this vocabulary, shared by the boards over one
+# codebase, so it gets the whole check wherever it sits. `stale` is no part of
+# it: a term that appears nowhere in the tree is a judgement, not a defect.
+if [ -n "${BOARD:-}" ]; then
+  GPATH=$(python3 -c "import sys;sys.path.insert(0,'$DIR');import grammar;print(grammar.grammar_path('$BOARD'))" 2>/dev/null)
+  [ -n "${GPATH:-}" ] || GPATH="$BOARD/grammar.md"
+  if [ ! -f "$GPATH" ]; then
+    row grammar off "no grammar.md — a word gets a row when it is coined"
+  elif ! command -v python3 >/dev/null 2>&1; then
+    row grammar broken "grammar.md present, no python3 to read it"
+    fix "install python3 — grammar.py is the only reader of the format"
+  else
+    GT=$(python3 "$DIR/grammar.py" list "$BOARD" 2>/dev/null | grep -c . )
+    GSRC=""
+    case "$GPATH" in
+      "$BOARD"/grammar.md) ;;
+      *) GSRC=" · shared vocabulary at $GPATH" ;;
+    esac
+    GPROB=$(python3 "$DIR/grammar.py" check "$BOARD" 2>&1)
+    if [ -z "$GPROB" ]; then
+      row grammar ok "$GT term$([ "$GT" = 1 ] || echo s) · the vocabulary checks out$GSRC"
+    else
+      NG=$(echo "$GPROB" | wc -l | tr -d ' ')
+      row grammar broken "$GT term$([ "$GT" = 1 ] || echo s) · $NG problem$([ "$NG" = 1 ] || echo s)"
+      echo "$GPROB" | while IFS= read -r l; do
+        [ -n "$l" ] && printf '  %-11s %-7s %s\n' "" "" "$l"
+      done
+      fix "edit it to match @references/grammar.md — the keys are a closed set, a term is defined once, and a row is two columns or three"
+    fi
+  fi
+fi
+
 # ── knowledge: the research layer, whole in one folder ───────────────────────
 # .pearde/wiki/ is not a PRD folder and holds no state — the scan walks past
 # it like memos/. What can be wrong is the layer itself: frontmatter the tools
@@ -577,7 +615,9 @@ fi
 # `<!-- brief:<name> -->` … `<!-- /brief -->` in references/parts/workers.md.
 # A marker missing or unterminated prints a brief with a hole in it, and a
 # placeholder the table does not name is filled by nobody — both silent from
-# the outside. brief.py `--check` is the one reader of that shape.
+# the outside. So is a brief:every that never names the `Verdict:` line
+# `collect` refuses a report without, and a rewrap that left its old
+# continuation behind. brief.py `--check` is the one reader of all four.
 if [ ! -f "$DIR/board/brief.py" ]; then
   row briefs off "no resources/board/brief.py — nothing prints a brief yet"
   fix "land brief-is-printed: the module under resources/board/ exposing COMMANDS"
@@ -585,7 +625,7 @@ else
   BPROB=$(python3 "$DIR/board/brief.py" --check 2>&1)
   NB=$(grep -c '^<!-- brief:' "$SKILL_ROOT/references/parts/workers.md" 2>/dev/null | tr -d ' ')
   if [ -z "$BPROB" ]; then
-    row briefs ok "$NB blocks in references/parts/workers.md · every placeholder named"
+    row briefs ok "$NB blocks in references/parts/workers.md · every placeholder named · the verdict line named"
   else
     NP=$(echo "$BPROB" | wc -l | tr -d ' ')
     NB=${NB:-0}
@@ -598,7 +638,7 @@ else
 fi
 
 # ── questions: what the board says it is waiting on you for ──────────────────
-# A round that is not asked is indistinguishable from a board with nothing to
+# A pass that is not asked is indistinguishable from a board with nothing to
 # ask. Both are silent. This row reads the shape of `## Questions` and
 # `## Answers` in every prd.md: a heading with nothing under it, a question
 # with no recommended answer, an answer to a question nobody wrote down, a
@@ -607,20 +647,20 @@ fi
 # @resources/questions.py is the only reader of that format.
 if [ -n "$BOARD" ] && [ "$N" -gt 0 ] 2>/dev/null; then
   if ! command -v python3 >/dev/null 2>&1; then
-    row questions broken "PRDs present, no python3 to read the rounds"
+    row questions broken "PRDs present, no python3 to read the passes"
     fix "install python3 — questions.py is the only reader of that format"
   else
     QSTAT=$(python3 "$DIR/questions.py" list "$BOARD" 2>/dev/null | wc -l | tr -d ' ')
     QBAD=$(python3 "$DIR/questions.py" check "$BOARD" 2>&1)
     if [ -z "$QBAD" ]; then
       if [ "$QSTAT" = 0 ]; then
-        row questions ok "no PRD carries a round — nothing is waiting on you"
+        row questions ok "no PRD carries a pass — nothing is waiting on you"
       else
-        row questions ok "$QSTAT PRD$([ "$QSTAT" = 1 ] || echo s) carr$([ "$QSTAT" = 1 ] && echo ies || echo y) a round · each asks and offers an answer"
+        row questions ok "$QSTAT PRD$([ "$QSTAT" = 1 ] || echo s) carr$([ "$QSTAT" = 1 ] && echo ies || echo y) a pass · each asks and offers an answer"
       fi
     else
       NQ=$(echo "$QBAD" | wc -l | tr -d ' ')
-      row questions broken "$NQ round$([ "$NQ" = 1 ] || echo s) the user cannot act on"
+      row questions broken "$NQ pass$([ "$NQ" = 1 ] || echo s) the user cannot act on"
       echo "$QBAD" | while IFS= read -r l; do
         [ -n "$l" ] && printf '  %-11s %-7s %s\n' "" "" "$l"
       done

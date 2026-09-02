@@ -6,16 +6,16 @@ Hand each worker the output of `pearde brief <prd>` — one command, nothing
 composed. `@` and `@@` resolve in @index.md.
 
 **Dispatch to the named type, never to a general one.** An analyst is
-`pearde-analyst`, an implementer is `pearde-implementer`, and the round
-itself is `pearde-round` — `references/agents/`
+`pearde-analyst`, an implementer is `pearde-implementer`, and the pass
+itself is `pearde-pass` — `references/agents/`
 in this repo, installed alongside the skills. The type carries the model: an analyst
 writes specs off a settled contract and runs on the cheaper one; an
 implementer writes the code and does not. A worker dispatched as
 `general-purpose` runs the orchestrator's own model on a job that never
 needed it, and the board has no way to tell afterwards.
 
-**The round is a worker too.** The session the user asked dispatches
-`pearde-round` and holds nothing else — @references/parts/dispatch.md. So the
+**The pass is a worker too.** The session the user asked dispatches
+`pearde-pass` and holds nothing else — @references/parts/dispatch.md. So the
 orchestrator these briefs speak of is itself a window that ends, and the rule
 below is the reason it stays small enough to be worth ending.
 
@@ -75,12 +75,20 @@ Rules for every worker:
 > Write in `<language>`, per @references/language.md. Never edit frontmatter,
 > never touch another PRD, never write outside `.pearde/prds/<prd>/` and the
 > footprint. A defect outside your scope goes in the report, not into a fix.
+> Look a word in your contract you do not know up with `python3
+> resources/grammar.py show`, and put a word you needed and it does not
+> define in your report rather than inventing one.
 > A fact learned outside this repo — the web, a library this tree does not
 > hold — is written back with `python3 resources/knowledge.py remember`
 > (`conclude` once two sources agree), never left standing only in this
-> report. Write your report to `.pearde/prds/<prd>/report.md` and return one
-> line — the
-> verdict, that path, and the numbers the orchestrator's command takes. Under
+> report. Write your report to `.pearde/prds/<prd>/report.md`. Its **first 40
+> lines** must carry a line beginning `Verdict:` and then the one word your
+> role's block names — nothing else on that line, and not inside a list item
+> or a block quote, both of which are read as no verdict at all. That line is
+> the only thing `pearde collect` reads to pick the transition, and a report
+> whose first 40 lines carry none is refused with nothing written. Then
+> return one line — the verdict, that path, and the numbers the
+> orchestrator's command takes. Under
 > fifteen lines back, whatever the report holds.
 <!-- /brief -->
 
@@ -153,7 +161,6 @@ decides the state, and a `stopped` row does not.
 > not a question of your own to ask. Run `python3 @resources/workflows.py
 > list <board-of-this-prd>` too, and follow the workflow whose `## Use when`
 > fits the build ahead, as you would one the PRD already carries. Then read
-> build ahead, as you would one the PRD already carries. Then read
 > `.pearde/prds/<prd>/prd.md`,
 > including `## Answers`. Then **build it** — never
 > spec from reading. Attempt the implementation in `<repo>` and keep going
@@ -242,7 +249,7 @@ decides the state, and a `stopped` row does not.
 >   around. **Only a fork you actually hit** — never a hedge, never "should
 >   I also check", never a fact: the build is how facts are found, and a
 >   question your probe did not run into is not yours to ask. Write
->   `## Questions` into `prd.md` in the round format of
+>   `## Questions` into `prd.md` in the pass format of
 >   `@references/drill.md`: each question is the fork in **two sentences,
 >   then the question mark** — what is being chosen, and what it changes for
 >   the person answering, never the PRD restated — with **three prepared
@@ -251,7 +258,7 @@ decides the state, and a `stopped` row does not.
 >   person who asked for this, not for the orchestrator**: no backtick, no
 >   path, no file extension, no PRD name, no board word, 60 words in the fork
 >   and 25 in an answer. `@references/drill.md`'s table is the whole rule and
->   `@resources/questions.py` enforces it, so a round that breaks it is
+>   `@resources/questions.py` enforces it, so a pass that breaks it is
 >   refused rather than written. Like this:
 >
 >   ```
@@ -265,14 +272,14 @@ decides the state, and a `stopped` row does not.
 >   2. **Work first** — the page opens on what is happening; your questions are one click away.
 >   3. **Ask each time** — the page remembers whichever you opened last.
 >
->   <!-- for the board: serve.py `/` default route; the-page-shows-the-round spec02 -->
+>   <!-- for the board: serve.py `/` default route; the-page-shows-the-pass spec02 -->
 >   ```
 >
 >   The last line is an HTML comment holding the technical anchor — which
 >   files, which slug, which spec the answer lands in. Nothing that shows the
 >   question to a person shows it; the orchestrator reads it when it acts on
 >   the answer. Say what the build was doing when it hit each. Report the
->   questions. Write the `## Questions` heading only with the round under it —
+>   questions. Write the `## Questions` heading only with the pass under it —
 >   an empty one stops the board on nothing, and `@resources/questions.py`
 >   reports it.
 >
@@ -378,5 +385,5 @@ respawn it.
 
 On return: relay the answer attributed to the persona, then respond to it in
 your own voice. Nothing about the board moves on a consult — a recommendation
-worth acting on becomes an ordinary transition in the round that follows,
+worth acting on becomes an ordinary transition in the pass that follows,
 made by the orchestrator, through the same gates as everything else.

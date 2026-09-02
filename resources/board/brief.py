@@ -5,7 +5,7 @@
     brief.py --consult <id> --question "<q>" [--transcript <path>] [--board <path>]
     brief.py --check                    the brief blocks in workers.md, one problem per line
 
-Prints, in this order: one header line the round logs, the persona line, the
+Prints, in this order: one header line the pass logs, the persona line, the
 workflow block with the route inlined (one per distinct slug), the role's
 brief, and the block every worker gets. The text lives in
 @references/parts/workers.md between `<!-- brief:<name> -->` … `<!-- /brief -->`
@@ -76,6 +76,10 @@ TOKEN_RE = re.compile(r"<[a-z][a-z_/]*>")
 TABLE_ROW_RE = re.compile(r"^\|\s*`(<[^`]+>)`\s*\|")
 ROLES = ("analyst", "implementer")
 BLOCKS = ("workflow", "every", "analyst", "implementer", "consultant")
+# The marker `collect.verdict_of` looks for, and the tail length two adjacent
+# lines must share before a repeat is a rewrap's leftover and not a cadence.
+VERDICT_MARK = "Verdict:"
+DUP_TAIL = 30
 SKIP = {"unclaimed": "held", "needs": "gated", "footprint": "clash",
         "workflow": "workflow", "leaf": "leaf", "container": "collect"}
 
@@ -186,6 +190,31 @@ def check(path=WORKERS):
         if t not in used:
             bad.append(f"{rel}: the table names `{t}` and no brief block "
                        "uses it")
+    # The brief has to say the one thing that decides whether the report it
+    # asks for is accepted at all: `collect.verdict_of` reads a `Verdict:`
+    # line out of the report's first 40 lines and `route_report` refuses a
+    # report carrying none. Counting blocks never caught its absence.
+    every = "\n".join(unquote(blocks.get("every", [])))
+    if VERDICT_MARK not in every:
+        bad.append(f"{rel}: brief:every never names the `{VERDICT_MARK}` "
+                   "line `pearde collect` reads — a worker following the "
+                   "brief writes a report the collect refuses")
+    elif "40" not in every:
+        bad.append(f"{rel}: brief:every names `{VERDICT_MARK}` but not the "
+                   "40-line window it must fall inside")
+    # A block is handed to a worker verbatim, so a duplicated continuation
+    # — the shape a rewrap leaves when the old line is never deleted — ships
+    # as instructions. Two adjacent lines ending in the same long tail is
+    # that shape and nothing else.
+    for name, lines in blocks.items():
+        prev = ""
+        for l in unquote(lines):
+            cur = l.strip()
+            if (len(cur) >= DUP_TAIL and prev.endswith(cur[-DUP_TAIL:])):
+                bad.append(f"{rel}: brief:{name} repeats a line ending "
+                           f"`…{cur[-DUP_TAIL:]}` — a rewrap that left the "
+                           "old continuation behind")
+            prev = cur
     return bad
 
 

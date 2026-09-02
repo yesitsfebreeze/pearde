@@ -22,7 +22,13 @@ from pathlib import Path
 # --- paths -----------------------------------------------------------------
 
 def default_root():
-    return Path(__file__).resolve().parent.parent / ".pearde" / "wiki"
+    repo = Path(__file__).resolve().parent.parent
+    # `pearde/` since 2026-09-02, `.pearde/` on a board that never
+    # migrated — @references/obsidian.md says why the dot had to go.
+    for name in ("pearde", ".pearde"):
+        if (repo / name / "wiki").is_dir():
+            return repo / name / "wiki"
+    return repo / "pearde" / "wiki"
 
 
 class Store:
@@ -570,7 +576,7 @@ def cmd_board(store, args):
     """board/ — one generated note per PRD, the board as a linkable graph.
 
     Reads the board beside the KB (the parent of the KB folder): every
-    .pearde/prds/<name>/prd.md's frontmatter (state, origin, priority, complexity,
+    pearde/prds/<name>/prd.md's frontmatter (state, origin, priority, complexity,
     blast-radius, needs, from, workflow, footprint), the memos, the
     workflows. Writes <KB>/board/<slug>.md per PRD — frontmatter carries the
     state fields as Dataview fields, the body carries the wikilinks: needs,
@@ -579,10 +585,11 @@ def cmd_board(store, args):
     the board are removed. Regenerable: edit prd.md, run board again.
     """
     store.ensure()
-    board_root = store.root.parent                # <board> — .pearde, the KB's parent
+    board_root = store.root.parent                # <board> — `pearde/`, the KB's parent
     prds = board_root / "prds"                     # <board>/prds, the PRD tree
-    vault_root = board_root                        # the Obsidian vault: the board
-                                                   # itself, `.pearde` — its own root
+    vault_root = board_root.parent                 # the Obsidian vault: the
+                                                   # PROJECT, so a vault-relative
+                                                   # path starts `pearde/`
     def scalar(value):
         # prd.md frontmatter carries trailing comments — "open  # open|..." —
         # so cut on the first " #", and treat the empty-list marker as empty
@@ -697,7 +704,8 @@ def cmd_board(store, args):
                        if (prd_dir := prds / name).exists() else [])
         if specs:
             lines += ["## Specs", ""]
-            # [[folder/spec]] — the full path resolves the spec file in the vault
+            # [[pearde/prds/…/spec]] — the vault-relative path, and the vault
+            # is the project, so it carries the board folder in front
             lines += [f"- [[{s.relative_to(vault_root).with_suffix('')}]]"
                       for s in specs] + [""]
         if memo_hits_by_prd[name]:
@@ -862,7 +870,7 @@ def main(argv=None):
         description="pearde knowledge — the research layer, whole.",
         epilog="The loop: query · enqueue · remember · conclude · relink · dashboard · doctor.",
     )
-    parser.add_argument("--root", help="KB folder (default: <repo>/.pearde/wiki)")
+    parser.add_argument("--root", help="KB folder (default: <repo>/pearde/wiki)")
     sub = parser.add_subparsers(dest="verb")
 
     p = sub.add_parser("remember", help="capture a finding as a source note (body on stdin)")

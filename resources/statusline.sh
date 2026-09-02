@@ -17,7 +17,7 @@
 # 127.0.0.1:8443/board/<name>, matched on the daemon's registered path, and
 # absent when no daemon is running. `▸vault` — beside it — opens the board in
 # Obsidian (a native obsidian:// URI, no daemon) and renders whenever the
-# board carries a vault at `.pearde/.obsidian/`. PRD_STATUS_LINK=off renders
+# project carries a vault at `<project>/.obsidian/`. PRD_STATUS_LINK=off renders
 # the label without the escape, for a terminal that shows them raw.
 #
 # It reads four frontmatter keys — `state`, `complexity`, `origin`, and `est`
@@ -77,12 +77,14 @@ fi
 [ -n "$MODEL" ] && OUT="$OUT \033[38;5;240m·\033[0m \033[38;5;245m${MODEL}\033[0m"
 
 # ── board segment — its own line ──────────────────────────────────────────────────────────────
-# A board is a `.pearde/` directory holding settings.md (tooling's find_board),
-# or — one board predating it — a `prds/` dir carrying its own settings.md.
-# Walking up, .pearde wins over prds/: a repo can hold both during a migration.
+# A board is a `pearde/` directory holding settings.md (tooling's find_board)
+# — `.pearde/` on a board that never migrated out of the hidden name — or, one
+# board predating both, a `prds/` dir carrying its own settings.md. Walking up,
+# the board dir wins over prds/: a repo can hold both during a migration.
 BOARD=""; BOARD_OUT=""
 d="$DIR"
 while [ -n "$d" ] && [ "$d" != "/" ]; do
+  if [ -f "$d/pearde/settings.md" ]; then BOARD="$d/pearde"; break; fi
   if [ -f "$d/.pearde/settings.md" ]; then BOARD="$d/.pearde"; break; fi
   if [ -d "$d/prds" ]; then BOARD="$d/prds"; break; fi
   # dirname's fixpoint is not always `/` — on a Windows drive path it is `C:`,
@@ -254,21 +256,21 @@ if [ -n "$BOARD" ]; then
     fi
   fi
 
-  # ▸vault — the board itself in Obsidian. The vault roots AT the board
-  # (`.pearde/.obsidian/`): a vault can root at a dot-directory, only
-  # dot-directories *inside* one are invisible, so this is the only root that
-  # shows the board's own folders. The repo root is the fallback for a board
-  # from before that.
+  # ▸vault — the project in Obsidian. The vault roots at the PROJECT
+  # (`<project>/.obsidian/`) and is named for its folder: Obsidian skips every
+  # path holding a dot-segment, so the board is `pearde/` and everything under
+  # the project shows, code and plan in one index. The board itself is the
+  # fallback, where a vault seeded before 2026-09-02 still roots.
   #
   # `obsidian://open?path=` resolves against the vaults Obsidian has
   # registered — an unregistered folder does not open, it lands in whichever
   # registered vault is its ancestor (the repo root, when the repo is a vault
   # too). So the id is looked up in obsidian.json by exact path and the URI
   # names the vault directly, which is unambiguous under nesting. No match —
-  # the board was never registered — falls back to `path=`, `%20` its only
-  # encode. `pearde init` registers the board; so does opening it once.
-  if [ -d "$BOARD/.obsidian" ]; then VAULT="$BOARD"
-  elif [ -d "${BOARD%/*}/.obsidian" ]; then VAULT="${BOARD%/*}"
+  # the project was never registered — falls back to `path=`, `%20` its only
+  # encode. `pearde init` registers it; so does opening it once.
+  if [ -d "${BOARD%/*}/.obsidian" ]; then VAULT="${BOARD%/*}"
+  elif [ -d "$BOARD/.obsidian" ]; then VAULT="$BOARD"
   fi
   if [ -n "$VAULT" ]; then
     OBS_CFG="$HOME/Library/Application Support/obsidian/obsidian.json"

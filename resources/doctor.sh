@@ -245,14 +245,18 @@ fi
 # knowable here, unlike a status line: the settings file sits in the repo the
 # board lives in, so this checks that file and `--fix` writes the block.
 # The same walk the `board` row below and @resources/guard.py `board_of` do:
-# the nearest ancestor holding `.pearde/`, not a literal `prds/` — that was
-# the pre-migration contract, and on a machine with another project's board
+# the nearest ancestor holding `pearde/` (or the legacy `.pearde/`), not a
+# literal `prds/` — that was the pre-migration contract, and on a machine with
+# another project's board
 # sitting a level up (its own leftover `prds/`) the old literal walk picked
 # THAT project's .claude/settings.json instead of this repo's.
 GSET=""
 d="$START"
 while [ -n "$d" ] && [ "$d" != "/" ]; do
-  [ -d "$d/.pearde" ] && { GSET="$d/.claude/settings.json"; break; }
+  for n in pearde .pearde; do
+    [ -d "$d/$n" ] && { GSET="$d/.claude/settings.json"; break; }
+  done
+  [ -n "$GSET" ] && break
   p=$(dirname "$d"); [ "$p" = "$d" ] && break; d="$p"
 done
 if [ -z "$GSET" ]; then
@@ -285,30 +289,34 @@ fi
 
 # ── board: on the contract path, with settings ────────────────────────────────
 # The same walk @resources/board/plan.py `find_board` and @resources/guard.py
-# `board_of` do: the nearest ancestor holding `.pearde/`, not a literal
-# `prds/` — that was the pre-migration contract. BOARD is the `.pearde/` root;
+# `board_of` do: the nearest ancestor holding `pearde/` (or the legacy
+# `.pearde/`), not a literal
+# `prds/` — that was the pre-migration contract. BOARD is the board root;
 # PRDS is where the PRDs actually live, one level under it.
 BOARD=""; d="$START"
 while [ -n "$d" ] && [ "$d" != "/" ]; do
-  [ -d "$d/.pearde" ] && { BOARD="$d/.pearde"; break; }
+  for n in pearde .pearde; do
+    [ -d "$d/$n" ] && { BOARD="$d/$n"; break; }
+  done
+  [ -n "$BOARD" ] && break
   # dirname's fixpoint is not always `/` — on a Windows drive path it is `C:`,
   # and without this guard the loop never exits. A no-op on POSIX.
   p=$(dirname "$d"); [ "$p" = "$d" ] && break; d="$p"
 done
 if [ -z "$BOARD" ]; then
   # a board still on the old layout is found, not skipped: three levels
-  # down, dot-dirs too — a leftover root-level `prds/` with no `.pearde/`
+  # down, dot-dirs too — a leftover root-level `prds/` with no board dir
   # beside it.
   OFF=$(find "$START" -maxdepth 3 -type d -name prds 2>/dev/null | head -3)
   if [ -n "$OFF" ]; then
     OFFROOT=$(dirname "$(echo "$OFF" | head -1)")
-    row board broken "no .pearde/ board · found $(echo "$OFF" | tr '\n' ' ') on the old layout"
+    row board broken "no pearde/ board · found $(echo "$OFF" | tr '\n' ' ') on the old layout"
     # git mv refuses a destination whose parent is not there, so the fix has
-    # to make `.pearde/` first — a fix line that fails when it is pasted is
+    # to make `pearde/` first — a fix line that fails when it is pasted is
     # not a fix line.
-    fix "mkdir -p $OFFROOT/.pearde && git mv $(echo "$OFF" | head -1) $OFFROOT/.pearde/prds — the board path is the contract; move memos/, workflows/, settings.md, vision.md and .state/ alongside it the same way"
+    fix "mkdir -p $OFFROOT/pearde && git mv $(echo "$OFF" | head -1) $OFFROOT/pearde/prds — the board path is the contract; move memos/, workflows/, settings.md, vision.md and .state/ alongside it the same way"
   else
-    row board off "no board — pearde init creates .pearde/"
+    row board off "no board — pearde init creates pearde/"
     fix "python3 $SKILL_ROOT/resources/pearde.py init [<dir>] — a board, asking nothing"
   fi
 else
@@ -325,13 +333,15 @@ else
   fi
 fi
 
-# ── vault: does ▸vault open THIS board ───────────────────────────────────────
+# ── vault: does ▸vault open THIS project ─────────────────────────────────────
 # `obsidian://open` resolves only against the vaults `obsidian.json` holds. A
-# board with a vault directory but no entry in that register does not fail
-# loudly: the URI opens the nearest registered ancestor instead — the repo
-# root, on a repo that is a vault too — and the person sees a tree that is not
-# the board. That is the failure this row is here to name. No vault directory
-# at all is `off`, not broken: a board is a board without Obsidian.
+# project with a vault directory but no entry in that register does not fail
+# loudly: the URI opens the nearest registered ancestor instead — the parent
+# folder holding every project, on a machine where that is a vault too — and
+# the person sees a tree that is not this one. That is the failure this row is
+# here to name. No vault directory at all is `off`, not broken: a board is a
+# board without Obsidian. The row before those: a board still called
+# `.pearde/`, which no vault can show at all (@references/obsidian.md).
 # The register lives under the user's home, and a shell can export no HOME
 # variable at all — `env -i`, a launchd job, a container, and every harness
 # that runs doctor under a scrubbed environment. Under `set -u` a bare $HOME
@@ -375,25 +385,29 @@ if [ -n "$BOARD" ]; then
       OBSCFG="$OBSHOME/.config/obsidian/obsidian.json"
     fi
   fi
-  BABS=$(cd "$BOARD" 2>/dev/null && pwd -P)
-  if [ ! -d "$BOARD/.obsidian" ]; then
-    if [ -d "$(dirname "$BOARD")/.obsidian" ]; then
-      row vault broken "the vault roots at $(dirname "$BOARD") — Obsidian hides a dot-directory inside a vault, so the whole board is invisible from there"
-    else
-      row vault off "no $BOARD/.obsidian — the status line's ▸vault stays hidden"
-    fi
-    fix "python3 $SKILL_ROOT/resources/pearde.py vault --wait --open $(dirname "$BOARD") — seeds $BOARD/.obsidian and registers it (quit Obsidian when it asks: the register is only writable while the app is closed)"
+  # The vault is the PROJECT, not the board: Obsidian skips every path with a
+  # dot-segment, so a board named `.pearde/` shows in no vault at all and a
+  # vault rooted at the board hides the project from the board. The board is
+  # `pearde/` and the project is the vault — this row checks that pair.
+  PROJ=$(dirname "$BOARD")
+  PABS=$(cd "$PROJ" 2>/dev/null && pwd -P)
+  if [ "$(basename "$BOARD")" = ".pearde" ] && [ ! -L "$BOARD" ]; then
+    row vault broken "the board is $BOARD — a dot-segment, and Obsidian skips every path holding one, so nothing of it can show in the project's vault"
+    fix "python3 $SKILL_ROOT/resources/pearde.py upgrade $PROJ — moves it to $PROJ/pearde and leaves a .pearde symlink, so every path spelled the old way still resolves"
+  elif [ ! -d "$PROJ/.obsidian" ]; then
+    row vault off "no $PROJ/.obsidian — the status line's ▸vault stays hidden"
+    fix "python3 $SKILL_ROOT/resources/pearde.py vault --wait --open $PROJ — seeds $PROJ/.obsidian and registers it (quit Obsidian when it asks: the register is only writable while the app is closed)"
   elif [ -z "$OBSCFG" ]; then
-    row vault broken "$BOARD/.obsidian · this shell's home directory could not be resolved, so the vault register cannot be read — this row did not run"
+    row vault broken "$PROJ/.obsidian · this shell's home directory could not be resolved, so the vault register cannot be read — this row did not run"
     fix "export HOME=<your home> and re-run doctor — the register lives under it"
   elif [ ! -f "$OBSCFG" ]; then
-    row vault ok "$BOARD/.obsidian · Obsidian not installed here, so nothing to register"
-  elif grep -Fq "\"path\":\"$BABS\"" "$OBSCFG" 2>/dev/null \
-       || grep -Fq "\"path\": \"$BABS\"" "$OBSCFG" 2>/dev/null; then
-    row vault ok "$BOARD/.obsidian · registered with Obsidian — ▸vault opens this board"
+    row vault ok "$PROJ/.obsidian · Obsidian not installed here, so nothing to register"
+  elif grep -Fq "\"path\":\"$PABS\"" "$OBSCFG" 2>/dev/null \
+       || grep -Fq "\"path\": \"$PABS\"" "$OBSCFG" 2>/dev/null; then
+    row vault ok "$PROJ/.obsidian · registered as $(basename "$PABS") — ▸vault opens the project, board and all"
   else
-    row vault broken "$BOARD/.obsidian is not in Obsidian's vault register — ▸vault opens the nearest registered ancestor instead"
-    fix "python3 $SKILL_ROOT/resources/pearde.py vault --wait --open $(dirname "$BOARD") — Obsidian reads the register at launch and rewrites it from memory on quit, so the entry has to be written while it is closed; --wait does that the moment you quit"
+    row vault broken "$PROJ is not in Obsidian's vault register — ▸vault opens the nearest registered ancestor instead"
+    fix "python3 $SKILL_ROOT/resources/pearde.py vault --wait --open $PROJ — Obsidian reads the register at launch and rewrites it from memory on quit, so the entry has to be written while it is closed; --wait does that the moment you quit"
   fi
 fi
 
@@ -433,7 +447,7 @@ if [ -n "$BOARD" ] && grep -qE '^[[:space:]]*members:' "$BOARD/settings.md" 2>/d
 fi
 
 # ── vision: where the board says it is going, and whether the names hold ─────
-# `.pearde/vision.md` names the PRDs whose completion is the destination, and the
+# `<board>/vision.md` names the PRDs whose completion is the destination, and the
 # plan orders toward them. A terminal or an edge end that names no PRD is a
 # silent failure: the PRD it meant is off the axis, and the scan just says so
 # in a number. `plan.py vision --check` is the one reader.
@@ -621,13 +635,13 @@ if [ -n "${BOARD:-}" ]; then
 fi
 
 # ── knowledge: the research layer, whole in one folder ───────────────────────
-# .pearde/wiki/ is not a PRD folder and holds no state — the scan walks past
+# <board>/wiki/ is not a PRD folder and holds no state — the scan walks past
 # it like memos/. What can be wrong is the layer itself: frontmatter the tools
 # cannot read, wikilinks pointing at nothing, a graph left behind by writes.
 # knowledge.py doctor is the one reader; `off` means the board never researches.
 if [ -n "$BOARD" ] && [ -d "$BOARD/wiki" ]; then
   if ! command -v python3 >/dev/null 2>&1; then
-    row knowledge broken ".pearde/wiki/ present, no python3 to read it"
+    row knowledge broken "$BOARD/wiki/ present, no python3 to read it"
     fix "install python3 — knowledge.py is the only reader of the format"
   else
     KPROB=$(python3 "$DIR/knowledge.py" --root "$BOARD/wiki" doctor 2>&1)

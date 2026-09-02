@@ -44,7 +44,7 @@ let arg = process.argv[2];
 let scratch = null;
 if (arg === "--example") {
   scratch = fs.mkdtempSync(path.join(os.tmpdir(), "pearde-example-"));
-  fs.cpSync(path.join(__dirname, "example"), path.join(scratch, ".pearde"), { recursive: true });
+  fs.cpSync(path.join(__dirname, "example"), path.join(scratch, "pearde"), { recursive: true });
   const r = spawnSync("python3", [path.join(__dirname, "plan.py"), "gantt", scratch],
                       { encoding: "utf8" });
   const printed = [...(r.stdout || "").matchAll(/^gantt: (.+\.html)$/mg)].pop();

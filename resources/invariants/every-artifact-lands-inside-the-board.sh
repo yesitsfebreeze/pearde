@@ -7,12 +7,12 @@
 # Exit 0 while the invariant holds, 1 the moment it does not. Five checks,
 # in the order a break shows up:
 #
-#   1. this tree      — no `.state/` corner anywhere but inside a `.pearde/`
+#   1. this tree      — no `.state/` corner anywhere but inside the board
 #   2. the install    — pearde writes nothing into its own directory: no
 #                       `resources/board/state/`, and no source line that
 #                       roots a writable path at the install
 #   3. a fresh board  — the whole command surface driven against a throwaway
-#                       project, and nothing lands in it outside `.pearde/`
+#                       project, and nothing lands in it outside `pearde/`
 #   4. the install, after driving — the surface of check 3 left the install
 #                       byte-identical, daemon and guard included
 #   5. the mechanism  — the guard still refuses a pass writing a board file
@@ -23,13 +23,13 @@
 # creates its file next to the board, and the diff of the project tree names
 # it; a writer that roots a path at the install instead shows up as a new file
 # under `resources/`. `.gitignore` is the one path pearde is allowed to touch
-# outside the board — the ignore rule for `.pearde/.state/` has to sit in a
+# outside the board — the ignore rule for `pearde/.state/` has to sit in a
 # file git reads, and git reads the parent repo's.
 #
 # The install had one exemption until 2026-09-01: `plan.py MACHINE_DIR`,
 # `resources/board/state/`, holding the daemon registry, its log, the
 # calibration fit and the guard's session cache. That is decided and gone —
-# one root, the board's `.pearde/` — so checks 2 and 4 exist to keep it gone.
+# one root, the board's `pearde/` — so checks 2 and 4 exist to keep it gone.
 set -u
 REPO=$(cd "$(dirname "$0")/../.." && pwd -P)
 R="$REPO/resources"
@@ -39,7 +39,7 @@ okr() { printf 'PASS  %s\n' "$*"; }
 
 # ── 1. no `.state/` outside a board in this tree ─────────────────────────────
 stray=$(find "$REPO" -name .git -prune -o -type d -name .state -print 2>/dev/null \
-        | sed "s|^$REPO/||" | grep -v '^\.pearde/\.state$' || true)
+        | sed "s|^$REPO/||" | grep -vE '^\.?pearde/\.state$' || true)
 if [ -n "$stray" ]; then
   no "a .state/ outside the board:"
   printf '        %s\n' $stray
@@ -91,9 +91,12 @@ export PEARDE_AS=engineer
 export PEARDE_PORT=1
 py() { python3 "$R/pearde.py" "$@" >/dev/null 2>&1 || true; }
 
-outside() {   # every path in the project that is not .git/ and not .pearde/
+outside() {   # every path in the project that is not .git/ and not the board
+  # both board names: `pearde/` is what init makes, `.pearde` the symlink
+  # upgrade leaves behind on a board that had the hidden name
   ( cd "$P" && find . -mindepth 1 \
       \( -path './.git' -o -path './.git/*' \
+         -o -path './pearde' -o -path './pearde/*' \
          -o -path './.pearde' -o -path './.pearde/*' \) -prune -o -print ) \
     | sed 's|^\./||' | sort
 }
@@ -119,7 +122,7 @@ py memo check
 py workflow check
 py upgrade
 py doctor
-python3 "$R/memos.py" index "$P/.pearde" >/dev/null 2>&1 || true
+python3 "$R/memos.py" index "$P/pearde" >/dev/null 2>&1 || true
 printf '{"workspace":{"current_dir":"%s"},"model":{"display_name":"x"},"transcript_path":""}\n' \
   "$P" | bash "$R/statusline.sh" >/dev/null 2>&1 || true
 cd "$REPO" || exit 1
@@ -135,7 +138,7 @@ if [ -n "$made" ]; then
   no "the commands wrote outside the board:"
   printf '        %s\n' $made
 else
-  okr "a driven board wrote nothing outside .pearde/ (bar .gitignore)"
+  okr "a driven board wrote nothing outside pearde/ (bar .gitignore)"
 fi
 
 # ── 4. the install is unchanged by the whole surface ─────────────────────────
@@ -157,7 +160,7 @@ if printf '%s' "$(hook "$P/.state/pass.md")" | grep -q '"permissionDecision": "d
 else
   no "the guard let a pass file be written to $P/.state/pass.md"
 fi
-if printf '%s' "$(hook "$P/.pearde/.state/pass.md")" | grep -q '"deny"'; then
+if printf '%s' "$(hook "$P/pearde/.state/pass.md")" | grep -q '"deny"'; then
   no "the guard refuses the board's own pass file — the rule is too wide"
 else
   okr "the guard passes the board's own pass file"

@@ -7,9 +7,9 @@
 #   graph.sh path [folder] "A" "B"        shortest path between two nodes
 #   graph.sh explain [folder] "X"         one node and its neighbors, plain language
 #   graph.sh god-nodes [folder]           most connected nodes
-#   graph.sh open [folder]                open .pearde/graphify/obsidian as a vault
+#   graph.sh open [folder]                open pearde/graphify/obsidian as a vault
 #
-# Output lands in <folder>/.pearde/graphify/ — graphify's own default
+# Output lands in <folder>/pearde/graphify/ — graphify's own default
 # (graphify-out/ relative to cwd) is redirected there with GRAPHIFY_OUT, set
 # absolute before every invocation so extract, update and every read command
 # resolve to the same place with no --graph flag needed.
@@ -52,12 +52,18 @@ FOLDER_ABS="$(pwd)"
 # GRAPHIFY_OUT as-is (paths.py); every subcommand below gets it, so the read
 # commands' own default (<GRAPHIFY_OUT>/graph.json) already resolves here —
 # --graph is passed too, defensively, matching the PRD's stated shape.
-export GRAPHIFY_OUT="$FOLDER_ABS/.pearde/graphify"
+# `pearde/` since 2026-09-02, `.pearde/` on a board that never migrated —
+# @references/obsidian.md says why the dot had to go.
+GRAPH_BOARD="$FOLDER_ABS/pearde"
+if [ ! -d "$GRAPH_BOARD" ] && [ -d "$FOLDER_ABS/.pearde" ]; then
+  GRAPH_BOARD="$FOLDER_ABS/.pearde"
+fi
+export GRAPHIFY_OUT="$GRAPH_BOARD/graphify"
 GRAPH_JSON="$GRAPHIFY_OUT/graph.json"
 
 # The Obsidian vault is a product of a graph pass, not a separate command a
 # person has to know to run: the pearde-graph skill describes
-# .pearde/graphify/obsidian/ as an output of extraction, and `graph.sh open`
+# pearde/graphify/obsidian/ as an output of extraction, and `graph.sh open`
 # opens it. graphify writes it ONLY from `export obsidian` — its `extract`
 # has no obsidian step at all — so every pass that rebuilds graph.json ends
 # here. Pure graph.json -> notes: no LLM call, no network. One function, so

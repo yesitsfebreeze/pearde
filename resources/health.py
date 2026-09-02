@@ -28,7 +28,12 @@ import re
 import subprocess
 import sys
 
-BOARD_DIR = ".pearde"
+BOARD_DIR = "pearde"
+# `.pearde` — the hidden name every board carried until 2026-09-02,
+# still found so a board that never migrated keeps working
+# (@references/obsidian.md says why the dot had to go).
+LEGACY_BOARD_DIR = ".pearde"
+BOARD_DIRS = (BOARD_DIR, LEGACY_BOARD_DIR)
 OUT_DIR = "health"
 
 NOTE_KEYS = ("health", "file", "language", "score", "lines", "branching",
@@ -72,7 +77,7 @@ SHEBANG = (("python", "python"), ("bash", "shell"), ("zsh", "shell"),
 DOCUMENT = {"markdown", "html"}
 NO_BRANCHING = {"markdown", "html", "css"}
 SKIP_DIRS = {"node_modules", "vendor", "third_party", "dist", "build",
-             "__pycache__", ".git", BOARD_DIR}
+             "__pycache__", ".git", *BOARD_DIRS}
 SKIP_NAMES = {"package-lock.json", "yarn.lock", "pnpm-lock.yaml",
               "Cargo.lock", "poetry.lock", "uv.lock", "Gemfile.lock"}
 SKIP_EXT = {".png", ".jpg", ".jpeg", ".gif", ".svg", ".ico", ".webp",
@@ -148,15 +153,17 @@ def parse_fm(text):
 def find_board(arg):
     if arg:
         p = os.path.abspath(arg)
-        if os.path.basename(p) == BOARD_DIR and os.path.isdir(p):
+        if os.path.basename(p) in BOARD_DIRS and os.path.isdir(p):
             return p
-        if os.path.isdir(os.path.join(p, BOARD_DIR)):
-            return os.path.join(p, BOARD_DIR)
+        for name in BOARD_DIRS:
+            if os.path.isdir(os.path.join(p, name)):
+                return os.path.join(p, name)
         sys.exit(f"health: no {BOARD_DIR}/ board at {arg}")
     d = os.getcwd()
     while True:
-        if os.path.isdir(os.path.join(d, BOARD_DIR)):
-            return os.path.join(d, BOARD_DIR)
+        for name in BOARD_DIRS:
+            if os.path.isdir(os.path.join(d, name)):
+                return os.path.join(d, name)
         nxt = os.path.dirname(d)
         if nxt == d:
             sys.exit(f"health: no {BOARD_DIR}/ board found walking up from the cwd")
@@ -165,8 +172,8 @@ def find_board(arg):
 
 def is_board(arg):
     p = os.path.abspath(arg)
-    return ((os.path.basename(p) == BOARD_DIR and os.path.isdir(p))
-            or os.path.isdir(os.path.join(p, BOARD_DIR)))
+    return ((os.path.basename(p) in BOARD_DIRS and os.path.isdir(p))
+            or any(os.path.isdir(os.path.join(p, n)) for n in BOARD_DIRS))
 
 
 def repo_root(board):
@@ -272,7 +279,7 @@ def tracked_files(root):
             for f in fs:
                 files.append(os.path.relpath(os.path.join(r, f), root))
     files = [os.path.normpath(p) for p in files]
-    files = [p for p in files if p.split(os.sep)[0] != BOARD_DIR
+    files = [p for p in files if p.split(os.sep)[0] not in BOARD_DIRS
              and os.path.isfile(os.path.join(root, p))]
     return sorted(set(files))
 

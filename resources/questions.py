@@ -562,21 +562,28 @@ def rows(board):
 # Duplicated from @resources/board/plan.py's own BOARD_DIR rather than
 # imported — same reason @resources/guard.py gives: this reader keeps its
 # own error prefix and does not depend on the planner to resolve a board.
-BOARD_DIR = ".pearde"
+BOARD_DIR = "pearde"
+# `.pearde` — the hidden name every board carried until 2026-09-02,
+# still found so a board that never migrated keeps working
+# (@references/obsidian.md says why the dot had to go).
+LEGACY_BOARD_DIR = ".pearde"
+BOARD_DIRS = (BOARD_DIR, LEGACY_BOARD_DIR)
 
 
 def find_board(arg):
     if arg:
         p = os.path.abspath(arg)
-        if os.path.basename(p) == BOARD_DIR and os.path.isdir(p):
+        if os.path.basename(p) in BOARD_DIRS and os.path.isdir(p):
             return p
-        if os.path.isdir(os.path.join(p, BOARD_DIR)):
-            return os.path.join(p, BOARD_DIR)
+        for name in BOARD_DIRS:
+            if os.path.isdir(os.path.join(p, name)):
+                return os.path.join(p, name)
         sys.exit(f"questions: no {BOARD_DIR}/ board at {arg}")
     d = os.getcwd()
     while True:
-        if os.path.isdir(os.path.join(d, BOARD_DIR)):
-            return os.path.join(d, BOARD_DIR)
+        for name in BOARD_DIRS:
+            if os.path.isdir(os.path.join(d, name)):
+                return os.path.join(d, name)
         nxt = os.path.dirname(d)
         if nxt == d:
             sys.exit(f"questions: no {BOARD_DIR}/ board found walking up from the cwd")

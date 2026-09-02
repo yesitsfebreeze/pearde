@@ -33,7 +33,12 @@ ISO_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 # A markdown table row: leading pipe, cells, trailing pipe. The separator row
 # (`|---|---|`) is every cell dashes and colons, and is skipped by shape.
 SEP_RE = re.compile(r"^[\s:|-]+$")
-BOARD_DIR = ".pearde"
+BOARD_DIR = "pearde"
+# `.pearde` — the hidden name every board carried until 2026-09-02,
+# still found so a board that never migrated keeps working
+# (@references/obsidian.md says why the dot had to go).
+LEGACY_BOARD_DIR = ".pearde"
+BOARD_DIRS = (BOARD_DIR, LEGACY_BOARD_DIR)
 
 
 def _clean(v):
@@ -260,7 +265,7 @@ def stale(board):
     g = read(board)
     repo = os.path.dirname(os.path.abspath(board))
     hay = []
-    skip = {".git", "__pycache__", "node_modules", BOARD_DIR}
+    skip = {".git", "__pycache__", "node_modules", *BOARD_DIRS}
     for r, ds, fs in os.walk(repo):
         ds[:] = [d for d in ds if d not in skip and not d.startswith(".")]
         for f in fs:
@@ -359,15 +364,17 @@ def undefined(board):
 def find_board(arg):
     if arg:
         p = os.path.abspath(arg)
-        if os.path.basename(p) == BOARD_DIR and os.path.isdir(p):
+        if os.path.basename(p) in BOARD_DIRS and os.path.isdir(p):
             return p
-        if os.path.isdir(os.path.join(p, BOARD_DIR)):
-            return os.path.join(p, BOARD_DIR)
+        for name in BOARD_DIRS:
+            if os.path.isdir(os.path.join(p, name)):
+                return os.path.join(p, name)
         sys.exit(f"grammar: no {BOARD_DIR}/ board at {arg}")
     d = os.getcwd()
     while True:
-        if os.path.isdir(os.path.join(d, BOARD_DIR)):
-            return os.path.join(d, BOARD_DIR)
+        for name in BOARD_DIRS:
+            if os.path.isdir(os.path.join(d, name)):
+                return os.path.join(d, name)
         nxt = os.path.dirname(d)
         if nxt == d:
             sys.exit(f"grammar: no {BOARD_DIR}/ board found walking up from the cwd")

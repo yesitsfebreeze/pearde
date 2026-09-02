@@ -53,12 +53,12 @@ trap 'rm -rf "$T"' EXIT
 # mkrepo <dir> <n .rs files> — a git repo with a board, its files staged so
 # `git ls-files` sees them. Nothing is committed: `tracked()` reads the index.
 mkrepo() {
-  mkdir -p "$1/src" "$1/.pearde/prds"
+  mkdir -p "$1/src" "$1/pearde/prds"
   i=0; while [ "$i" -lt "$2" ]; do : > "$1/src/f$i.rs"; i=$((i+1)); done
   printf 'x\n' > "$1/README.md"
   git -C "$1" init -q 2>/dev/null
   git -C "$1" add -A 2>/dev/null
-  printf -- '---\nname: %s\n---\n' "$(basename "$1")" > "$1/.pearde/settings.md"
+  printf -- '---\nname: %s\n---\n' "$(basename "$1")" > "$1/pearde/settings.md"
 }
 
 # master <dir> <member board>… — rewrite one board's settings as a master
@@ -85,25 +85,25 @@ why() { need "$1" | awk -v j="$2" '$1==j{$1="";$2="";print}'; }
 mkrepo "$T/a" 30
 mkrepo "$T/b" 12
 mkrepo "$T/top" 1
-master "$T/top/.pearde" "$T/a/.pearde" "$T/b/.pearde"
+master "$T/top/pearde" "$T/a/pearde" "$T/b/pearde"
 
 # ── 1. a plain board is unchanged ────────────────────────────────────────────
 # It counts its own tree, and its `why` is the marker list — not a member
 # credit. This row must stay green through the regression the rest catch.
-A=$(row "$T/a/.pearde" rust)
+A=$(row "$T/a/pearde" rust)
 [ "$A" = 30 ]; say $? "a plain board counts its own tree: 30 (got ${A:-none})"
-AW=$(why "$T/a/.pearde" rust)
+AW=$(why "$T/a/pearde" rust)
 case "$AW" in *'*.rs'*) r=0;; *) r=1;; esac
 say $r "a plain board's why is the marker list, not a member credit (got${AW:-  none})"
 
 # ── 2. the union is the sum, the master's own tree included ──────────────────
-B=$(row "$T/b/.pearde" rust)
+B=$(row "$T/b/pearde" rust)
 [ "$B" = 12 ]; say $? "the second member counts its own 12 (got ${B:-none})"
-O=$(row "$T/top/.pearde" rust)
+O=$(row "$T/top/pearde" rust)
 [ "$O" = 43 ]; say $? "the master sums 30+12+its own 1 = 43 (got ${O:-none})"
 
 # ── 3. the row credits the members it came from, loudest first ───────────────
-OW=$(why "$T/top/.pearde" rust)
+OW=$(why "$T/top/pearde" rust)
 case "$OW" in *"a 30"*) r=0;; *) r=1;; esac
 say $r "the master's row credits member a (got${OW:-  none})"
 case "$OW" in *"top 1"*) r=0;; *) r=1;; esac
@@ -120,10 +120,10 @@ say $r "the master's credits are loudest member first"
 mkrepo "$T/c" 0; mkrepo "$T/d" 0; mkrepo "$T/mid" 0
 i=0; while [ "$i" -lt 15 ]; do : > "$T/c/n$i.md"; : > "$T/d/n$i.md"; i=$((i+1)); done
 git -C "$T/c" add -A 2>/dev/null; git -C "$T/d" add -A 2>/dev/null
-master "$T/mid/.pearde" "$T/c/.pearde" "$T/d/.pearde"
-[ -z "$(row "$T/c/.pearde" writing)" ]
+master "$T/mid/pearde" "$T/c/pearde" "$T/d/pearde"
+[ -z "$(row "$T/c/pearde" writing)" ]
 say $? "one member's 15 .md stays under writing's floor on its own"
-MID=$(row "$T/mid/.pearde" writing)
+MID=$(row "$T/mid/pearde" writing)
 { [ -n "$MID" ] && [ "$MID" -ge 30 ]; }
 say $? "the floor lands on the sum: ${MID:-none} over two members that each fall short"
 
@@ -132,15 +132,15 @@ say $? "the floor lands on the sum: ${MID:-none} over two members that each fall
 # would measure it — and a member that is itself a master measures a union. A
 # one-level walk returns the middle repo's own tree and calls it the answer.
 mkrepo "$T/root" 0
-master "$T/root/.pearde" "$T/top/.pearde"
-R=$(row "$T/root/.pearde" rust)
+master "$T/root/pearde" "$T/top/pearde"
+R=$(row "$T/root/pearde" rust)
 [ "$R" = 43 ]; say $? "a master under a master reaches the grandchildren: 43 (got ${R:-none})"
 
 # ── 6. a members: cycle terminates and counts each repo once ─────────────────
 mkrepo "$T/x" 4; mkrepo "$T/y" 4
-master "$T/x/.pearde" "$T/y/.pearde"
-master "$T/y/.pearde" "$T/x/.pearde"
-if out=$(bounded 20 python3 "$RAMP" need --board "$T/x/.pearde" 2>&1); then
+master "$T/x/pearde" "$T/y/pearde"
+master "$T/y/pearde" "$T/x/pearde"
+if out=$(bounded 20 python3 "$RAMP" need --board "$T/x/pearde" 2>&1); then
   n=$(printf '%s' "$out" | awk '$1=="rust"{print $2}')
   [ "$n" = 8 ]; say $? "a members cycle terminates and counts each repo once: 8 (got ${n:-none})"
 else
@@ -151,9 +151,9 @@ fi
 # `board_words` is the public union accessor the contract names. Nothing
 # inside `needs` calls it — `_measure` needs the per-board split — so this is
 # the only thing that holds it to the contract.
-prd "$T/a/.pearde" only-a "a dockerfile for the thing"
-prd "$T/top/.pearde" only-top "the top board's own title"
-W=$(bounded 30 python3 - "$RAMP" "$T/top/.pearde" <<'PY' 2>&1
+prd "$T/a/pearde" only-a "a dockerfile for the thing"
+prd "$T/top/pearde" only-top "the top board's own title"
+W=$(bounded 30 python3 - "$RAMP" "$T/top/pearde" <<'PY' 2>&1
 import importlib.util, sys
 spec = importlib.util.spec_from_file_location("ramp_under_test", sys.argv[1])
 m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
@@ -177,7 +177,7 @@ say $r "board_words keeps the master's own PRD titles in that union"
 # `The tree` — so an unguarded "does not say The tree" needle reads green on
 # the exact regression it exists to catch. Nothing below runs unless the
 # producer exited 0 and printed the two lines it owes.
-S=$(bounded 30 python3 - "$RAMP" "$T/top/.pearde" "$T/a/.pearde" <<'PY' 2>&1
+S=$(bounded 30 python3 - "$RAMP" "$T/top/pearde" "$T/a/pearde" <<'PY' 2>&1
 import importlib.util, sys
 spec = importlib.util.spec_from_file_location("ramp_under_test", sys.argv[1])
 m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)

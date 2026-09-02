@@ -54,14 +54,40 @@ import workflows as wflib  # noqa: E402 — the skill root, one dir up
 
 # ── board ─────────────────────────────────────────────────────────────────────
 
-# The board is one directory at a project root, beside `.obsidian/` — it holds
-# `prds/`, `memos/`, `wiki/` and `workflows/`, so a reader can see what the tool
-# keeps without being told. `.state/` inside it is the machine-local corner:
-# the plan, the two journals, the pass file and the rendered view, none of them
-# committed, all of them regenerable.
-BOARD_DIR = ".pearde"
+# The board is one directory at a project root, under `.obsidian/`'s vault —
+# it holds `prds/`, `memos/`, `wiki/` and `workflows/`, so a reader can see
+# what the tool keeps without being told. `.state/` inside it is the
+# machine-local corner: the plan, the two journals, the pass file and the
+# rendered view, none of them committed, all of them regenerable.
+#
+# The name has no dot. It carried one until 2026-09-02, and that one character
+# decided what a person could see: Obsidian skips every path holding a
+# dot-segment before a setting is read, so from a vault at the project root the
+# whole board was invisible, and the vault had to root at the board instead —
+# which hid the project from the board. A symlink out of the hidden name is no
+# way round it either; Obsidian refuses a symlink that resolves back inside the
+# vault (@references/obsidian.md reads both mechanisms out of the app itself).
+# So the board is `pearde/`, the vault is the project, and everything shows.
+#
+# `.pearde` survives as the legacy name: `board_at` still finds a board that
+# never migrated, and `pearde upgrade` moves one and leaves a `.pearde`
+# symlink behind, so every path spelled the old way keeps resolving.
+BOARD_DIR = "pearde"
+LEGACY_BOARD_DIR = ".pearde"
+BOARD_DIRS = (BOARD_DIR, LEGACY_BOARD_DIR)
 STATE_DIR = ".state"
 PRDS_DIR = "prds"
+
+
+def board_at(d):
+    """The board directory of project dir `d` — the plain name when it is
+    there, the legacy hidden one when only that is, and the plain name when
+    neither is, which is what a board made here will be called."""
+    for name in BOARD_DIRS:
+        p = os.path.join(d, name)
+        if os.path.isdir(p):
+            return p
+    return os.path.join(d, BOARD_DIR)
 
 
 def state_dir(board):
@@ -188,15 +214,17 @@ def prds_dir(board):
 def find_board(arg):
     if arg:
         p = os.path.abspath(arg)
-        if os.path.basename(p) == BOARD_DIR and os.path.isdir(p):
+        if os.path.basename(p) in BOARD_DIRS and os.path.isdir(p):
             return p
-        if os.path.isdir(os.path.join(p, BOARD_DIR)):
-            return os.path.join(p, BOARD_DIR)
+        for name in BOARD_DIRS:
+            if os.path.isdir(os.path.join(p, name)):
+                return os.path.join(p, name)
         die(f"no {BOARD_DIR}/ board at {arg}")
     d = os.getcwd()
     while True:
-        if os.path.isdir(os.path.join(d, BOARD_DIR)):
-            return os.path.join(d, BOARD_DIR)
+        for name in BOARD_DIRS:
+            if os.path.isdir(os.path.join(d, name)):
+                return os.path.join(d, name)
         nxt = os.path.dirname(d)
         if nxt == d:
             die(f"no {BOARD_DIR}/ board found walking up from the cwd")
@@ -395,7 +423,7 @@ def members(board):
         # `_scan_one` walk `.pearde/prds/prds` and scan nothing: a nested
         # board member read as empty. Any other path with a `prds/` inside
         # is the old repo-root member, and `/prds` is appended as before.
-        is_nested_board = (os.path.basename(path) == BOARD_DIR
+        is_nested_board = (os.path.basename(path) in BOARD_DIRS
                            or os.path.isfile(os.path.join(path, "settings.md"))
                            or os.path.isdir(os.path.join(path, ".git")))
         if not is_nested_board and os.path.isdir(

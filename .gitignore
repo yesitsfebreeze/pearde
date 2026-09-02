@@ -12,8 +12,11 @@ resources/board/obsidian/plugins/*/main.js
 resources/board/obsidian/plugins/*/manifest.json
 resources/board/obsidian/plugins/*/styles.css
 
-# machine-local per board — regenerable
-.pearde/
+# machine-local per board — regenerable. `pearde/` since 2026-09-02: a board
+# with a dot in its name shows in no Obsidian vault (@references/obsidian.md),
+# and `.pearde` is the compatibility symlink left where it was.
+/pearde/
+/.pearde
 
 # one-off session measurements, kept beside the work they explain
 /report.md
@@ -22,7 +25,11 @@ resources/board/obsidian/plugins/*/styles.css
 
 /board
 
-# machine-local per board — regenerable
+# machine-local, under a board nested anywhere below the root — regenerable.
+# Both names: `pearde/` is the board since 2026-09-02, `.pearde/` the
+# compatibility symlink and every board not yet upgraded.
+pearde/.state/
+pearde/wiki/
 .pearde/.state/
 .pearde/wiki/
 

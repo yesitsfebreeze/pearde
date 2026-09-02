@@ -11,7 +11,7 @@ Synthesized answers built from sources. The KB the agent queries.
 
 ```dataview
 TABLE WITHOUT ID file.link AS "Conclusion", length(file.inlinks) AS "Refs", length(file.outlinks) AS "Cites", date
-FROM "wiki/conclusions"
+FROM "pearde/wiki/conclusions"
 SORT length(file.inlinks) DESC
 LIMIT 25
 ```
@@ -20,7 +20,7 @@ LIMIT 25
 
 ```dataview
 TABLE WITHOUT ID file.link AS "Conclusion", date, file.mtime AS "Modified"
-FROM "wiki/conclusions"
+FROM "pearde/wiki/conclusions"
 SORT file.mtime DESC
 LIMIT 25
 ```
@@ -30,7 +30,7 @@ LIMIT 25
 May need more research before trusting.
 
 ```dataviewjs
-const pages = dv.pages('"wiki/conclusions"')
+const pages = dv.pages('"pearde/wiki/conclusions"')
   .map(p => ({ p, n: (p.sources ?? []).length }))
   .where(x => x.n < 2)
   .sort(x => x.n, "asc");
@@ -44,7 +44,7 @@ Not linked from anywhere — verify discoverability.
 
 ```dataview
 LIST
-FROM "wiki/conclusions"
+FROM "pearde/wiki/conclusions"
 WHERE length(file.inlinks) = 0
 ```
 
@@ -52,7 +52,7 @@ WHERE length(file.inlinks) = 0
 
 ```dataview
 TABLE WITHOUT ID rows.file.link AS "Conclusions", length(rows) AS "Count"
-FROM "wiki/conclusions"
+FROM "pearde/wiki/conclusions"
 FLATTEN tags AS tag
 WHERE tag
 GROUP BY tag

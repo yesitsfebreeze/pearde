@@ -46,7 +46,12 @@ GUARD_STATE_ENV = "PEARDE_GUARD_STATE"
 # than imported — same reason member_dirs() gives for reading settings.md by
 # hand: the guard imports nothing from the planner, so a broken planner
 # never blocks a tool call.
-BOARD_DIR = ".pearde"
+BOARD_DIR = "pearde"
+# `.pearde` — the hidden name every board carried until 2026-09-02,
+# still found so a board that never migrated keeps working
+# (@references/obsidian.md says why the dot had to go).
+LEGACY_BOARD_DIR = ".pearde"
+BOARD_DIRS = (BOARD_DIR, LEGACY_BOARD_DIR)
 PRDS_DIR = "prds"
 PASS_FILE = os.path.join(".state", "pass.md")
 
@@ -172,8 +177,9 @@ def board_of(start):
             start = f"{m.group(1)}:{m.group(2) or '/'}"
     d = os.path.abspath(start)
     while True:
-        if os.path.isdir(os.path.join(d, BOARD_DIR)):
-            return os.path.join(d, BOARD_DIR)
+        for name in BOARD_DIRS:
+            if os.path.isdir(os.path.join(d, name)):
+                return os.path.join(d, name)
         parent = os.path.dirname(d)
         if parent == d:
             return None
@@ -365,7 +371,7 @@ def manual(path):
 # under the skill root from a session whose board is another repo's is
 # refused; the same repo, or no board in scope, passes as before.
 SKILL = os.path.realpath(PEARDE)
-MEMO = ".pearde/memos/the-install-is-live-symlinks.md"
+MEMO = "pearde/memos/the-install-is-live-symlinks.md"
 
 
 def skill_file(path):
@@ -375,7 +381,8 @@ def skill_file(path):
     real = os.path.realpath(path)
     if not real.startswith(SKILL + os.sep):
         return ""
-    if real.startswith(os.path.join(SKILL, BOARD_DIR, PRDS_DIR) + os.sep):
+    if any(real.startswith(os.path.join(SKILL, n, PRDS_DIR) + os.sep)
+           for n in BOARD_DIRS):
         return ""
     return real
 

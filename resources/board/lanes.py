@@ -161,7 +161,20 @@ def merge(repo, slug, out=None):
     on it, the lane branch left exactly as it was, and the checkout on the
     commit it was on. The caller reports it red. A conflict a person can
     fix by hand is worth more than a rollback that loses which file
-    disagreed, so the files are read before anything is aborted."""
+    disagreed, so the files are read before anything is aborted.
+
+    A rebase that never gets under way is not a conflict: `git rebase`
+    refuses outright when the lane's tree is dirty (exactly what
+    `land_lane` leaves standing on paths outside the footprint — see
+    `resources/board/collect.py`), and starts no rebase at all. `rebase
+    --abort` then fails with "no rebase in progress" — measured: exit 128,
+    nothing changed — and a `reset --hard` run anyway would discard that
+    dirt though nothing of the lane's history ever moved (measured: the
+    worker's uncommitted change was gone after, `git status` clean, the
+    branch tip unchanged throughout). So the hard reset runs only once
+    `rebase --abort` itself reports a rebase it actually stopped;
+    otherwise the lane is left exactly as it was handed to this
+    function, dirt included, and the raise below is the only effect."""
     br = branch_of(slug)
     if git(repo, "rev-parse", "--verify", "--quiet", br,
            check=False).returncode != 0:
@@ -176,8 +189,13 @@ def merge(repo, slug, out=None):
         r = git(wt, "rebase", onto, check=False)
         if r.returncode != 0:
             files = conflicts(wt)
-            git(wt, "rebase", "--abort", check=False)
-            git(wt, "reset", "--hard", was, check=False)
+            aborted = git(wt, "rebase", "--abort", check=False)
+            if aborted.returncode == 0:
+                # a real rebase was under way — `--abort` already put the
+                # branch and its tree back at `was`; this is redundant
+                # belt-and-suspenders for it, never the first thing to
+                # touch the tree.
+                git(wt, "reset", "--hard", was, check=False)
             raise LaneError(
                 f"merge conflict: {br} onto {onto} — "
                 + (", ".join(files) if files else "see git status"))

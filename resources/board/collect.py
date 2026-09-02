@@ -125,6 +125,56 @@ def parse_args(argv):
     return opts
 
 
+def also_places(board_root, a):
+    """Where one `--also` entry is looked for, in the order it is looked:
+    the board root first, the caller's cwd second — *look in the notes
+    first, then where you are standing*, the user's call on 2026-09-02
+    (`.pearde/memos/also-resolves-against-the-board-first.md`). An absolute
+    entry is taken as given and is its own only place. The list is what a
+    refusal prints, so the message names every place that was tried and
+    nothing that was not."""
+    if os.path.isabs(a):
+        return [os.path.abspath(a)]
+    board = os.path.abspath(os.path.join(board_root, a))
+    cwd = os.path.abspath(a)
+    return [board] if cwd == board else [board, cwd]
+
+
+def also_path(board_root, a):
+    """One `--also` entry as an absolute path: the first place that holds it,
+    so a name both roots hold is the **board's**. The one place `--also` is
+    turned into a path — `check_also` and `sort_paths` both read it here, so
+    the path a refusal names and the path a commit carries cannot drift.
+    When no place holds it the board's is returned and `check_also`, which
+    runs first, has already refused the call."""
+    places = also_places(board_root, a)
+    for p in places:
+        if os.path.exists(p):
+            return p
+    return places[0]
+
+
+def check_also(board_root, opts):
+    """Every `--also` entry names something one of its two places holds, or
+    the whole call stops before a single PRD is read.
+
+    The footprint loop in `sort_paths` has always refused a path the repo
+    does not hold; `--also` had no such guard, so an entry that resolved
+    nowhere was handed to `git add` and then named in the commit message —
+    a record naming a file the commit does not contain. The user's call at
+    the drill was refusal over a warning, and refusal of the *call*: this
+    runs in `cmd_collect` ahead of the per-PRD loop, which swallows a `Stop`
+    and carries on to the next PRD, so a guard inside `collect_one` would
+    still let a later PRD commit."""
+    for a in opts.get("also", []):
+        places = also_places(board_root, a)
+        if any(os.path.exists(p) for p in places):
+            continue
+        raise Stop(f"--also {a}: no such path — looked for "
+                   f"{' and '.join(places)}; board root {board_root}; "
+                   f"nothing written, nothing committed")
+
+
 # ── reads ─────────────────────────────────────────────────────────────────────
 
 def spec_files(prd):
@@ -450,7 +500,7 @@ def inside(path, union):
 
 
 def scratch(path, board_rel):
-    """A dotfile directly under the board — `.claims/`, `.round.md`,
+    """A dotfile directly under the board — `.claims/`, `.pass.md`,
     `.history.jsonl`, `.plan.json` — is machine-local and never committed."""
     rest = path[len(board_rel) + 1:] if inside(path, [board_rel]) else ""
     return rest.startswith(".")
@@ -792,13 +842,13 @@ def dry_line(board, prds, rel, prd, persona, paths, out=print):
     """The `dry ·` line every writer prints — the progress line the real
     run would print, on the scan with this PRD moved to `done`. The commit
     shas the real line carries do not exist yet, so `commit` and `record`
-    are not on it; `round file owed` is."""
+    are not on it; `pass file owed` is."""
     frm = prd["state"]
     prd["state"] = prd["fm"]["state"] = "done"
     prd["fm"].pop("claim", None)
     line = translib.dry_line(board, prds, rel, frm, "done", persona)
     head, _, tail = line.rpartition(" · as ")
-    translib.say_dry(board, f"{head} · round file owed · as {tail}",
+    translib.say_dry(board, f"{head} · pass file owed · as {tail}",
                      paths + [os.path.join(prd["board_path"], TRANSITION_FILE)],
                      out)
 
@@ -851,7 +901,7 @@ def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since):
                        f"repo_of matched no repo for it; nothing written")
         groups.setdefault(repo, set()).add(p)
     for a in opts["also"]:
-        ap = os.path.abspath(a)
+        ap = also_path(board_root, a)   # `check_also` already proved it exists
         root = planlib.repo_root(ap)
         if not root:
             raise Stop(f"--also {a}: not inside a git repo")
@@ -1046,7 +1096,7 @@ def collect_one(board, rel, opts, out=print):
                     editlib.set_key(pmd, "state", "failed")
                     transition_row(board, rel, prd["state"], "failed", now)
                     out(progress_line(board, rel, prd["state"], "failed",
-                                      opts["as"], "round file owed"))
+                                      opts["as"], "pass file owed"))
                     return 1
                 raise Stop(f"{rel}: {name} exit {code} — nothing written")
 
@@ -1185,7 +1235,7 @@ def collect_one(board, rel, opts, out=print):
     transition_row(board, rel, prd["state"], "done", now)
     extra = " · ".join(x for x in [
         "trusted" if trusted else "", "gate red, known" if known else "",
-        f"commit {' '.join(shas)}", *said, posted, "round file owed"] if x)
+        f"commit {' '.join(shas)}", *said, posted, "pass file owed"] if x)
     out(progress_line(board, rel, prd["state"], "done", opts["as"], extra))
     return 0
 
@@ -1272,7 +1322,7 @@ def close_container(board, rel, prd, prds, board_root, opts, now, out=print):
     transition_row(board, rel, prd["state"], "done", now)
     extra = " · ".join([f"container, {len(kids)} children",
                         f"commit {sha}", f"record {own}", posted,
-                        "round file owed"])
+                        "pass file owed"])
     out(progress_line(board, rel, prd["state"], "done", opts["as"], extra))
     return 0
 
@@ -1289,6 +1339,13 @@ def cmd_collect(argv, board=None):
         print(f"collect: refused — {e}", file=sys.stderr)
         return 1
     board = planlib.find_board(opts["board"] or board)
+    # before anything is read or written: a `--also` path the board does not
+    # hold refuses the whole call, not the one PRD that noticed it
+    try:
+        check_also(planlib.repo_root(board) or board, opts)
+    except Stop as e:
+        print(f"collect: {e}", file=sys.stderr)
+        return 1
     if opts["snapshot"]:
         try:
             print(f"snapshot: {snapshot(board, opts['snapshot'].strip('/'))}")

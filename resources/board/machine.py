@@ -3,15 +3,22 @@
 ordered list, and the concurrency a dispatch across it would use.
 
 Discovered by `resources/pearde.py` through its `COMMANDS` dict, so it runs
-from any directory — there need be no board above the cwd. Read-only: it
-prints and moves nothing. Dispatch is the sibling PRD
-`the-machine-frontier-is-dispatched-in-parallel`, not this file.
+from any directory — there need be no board above the cwd. The default mode is
+read-only: it prints and moves nothing. `dispatch` is the one verb that moves,
+and it lives in @resources/board/dispatch.py, imported only when asked for.
 
     pearde machine              the merged order, printed
     pearde machine boards       what the daemon watches
     pearde machine slots        the concurrency and its reading
     pearde machine progress     one progress line over the set
+    pearde machine groups       the labels the watched boards declare
     pearde machine --json       the same as data
+    pearde machine dispatch     the frontier run down to nothing
+
+A group is a label a board writes on itself (`groups:` in its own
+settings.md), and any of the above takes one as a bare word: `pearde machine
+work`, `pearde machine work slots`, `pearde machine work dispatch`. Same read,
+fewer boards. Nothing here keeps the list.
 """
 import json
 import os
@@ -359,6 +366,101 @@ def boards():
     return out, skipped
 
 
+# ── 1b. groups ───────────────────────────────────────────────────────────────
+# A group is a label a board writes on ITSELF — `groups: work infra` in its
+# own `.pearde/settings.md` — and `pearde machine work` is this same read over
+# the boards carrying it. Nothing here keeps a list of which board is in which
+# group, on the same rule the watch set already follows: the configuration is
+# distributed to the boards, and a board nobody watches is in no group because
+# it is in nothing. `## What it does not do` stands untouched — no registry is
+# written, and no board's settings.md is written either; `groups:` is read.
+#
+# Labels, not a partition: a board may carry several, and a group is a filter
+# over the set rather than a slice of a tree. `work` and `private` are two
+# labels among any others, and no board is required to declare one.
+
+VERBS = ("boards", "slots", "progress", "groups", "dispatch")
+
+# flags whose VALUE is a bare word — `--workers 4` must not read as the group
+VALUE_FLAGS = ("--workers", "--adapter", "--deadline")
+
+
+def declared(path):
+    """(labels, refused) — the groups a board writes on itself, and the ones
+    dropped with why.
+
+    `groups: work infra`, or the list form under `groups:`. Lowercased, so a
+    board writing `Work` and one writing `work` are one group. Two labels can
+    never be declared: a verb, because `pearde machine slots` has to keep
+    meaning the slot reading, and `all`, which is the whole set by definition
+    and so is never a subset of it. Both are refused where they are declared
+    — printed by `machine groups` — rather than silently at the point of use,
+    where the person cannot see what went wrong."""
+    v = planlib.board_settings(path).get("groups", "")
+    raw = v if isinstance(v, list) else re.split(r"[,\s]+", str(v or ""))
+    out, bad = [], []
+    for g in raw:
+        g = str(g).strip().lower().lstrip("@")
+        if not g or g in out:
+            continue
+        if g in VERBS:
+            bad.append((g, "collides with the verb of the same name"))
+        elif g == "all":
+            bad.append((g, "`all` is every board — never a group of them"))
+        else:
+            out.append(g)
+    return out, bad
+
+
+def all_groups(entries):
+    """{group: [board key…]} over the watch set, read off each board."""
+    out = {}
+    for k, p in entries:
+        for g in declared(p)[0]:
+            out.setdefault(g, []).append(k)
+    return out
+
+
+def in_group(entries, group):
+    """(kept, note) — the watched boards declaring `group`, and the line that
+    says what the filter left out. The note is printed with the frontier, so
+    a short list is never mistaken for a quiet machine."""
+    kept = [(k, p) for k, p in entries if group in declared(p)[0]]
+    note = (f"group `{group}`: {len(kept)} of {len(entries)} watched board(s) "
+            f"— {', '.join(k for k, _ in kept) if kept else 'none'}")
+    return kept, note
+
+
+def split_group(argv):
+    """(group, rest) — the first bare word that is not a verb is the group.
+
+    The verb set is closed and a label colliding with it is refused where it
+    is declared, so the two never compete: `machine work slots` and `machine
+    slots` both read unambiguously, in either order. A flag's value is
+    skipped — `--workers 4` is a count, not a group."""
+    skip = False
+    for i, a in enumerate(argv):
+        if skip:
+            skip = False
+            continue
+        if a.startswith("-"):
+            skip = a in VALUE_FLAGS
+            continue
+        if a in VERBS:
+            continue
+        return a.lstrip("@").lower(), list(argv[:i]) + list(argv[i + 1:])
+    return None, list(argv)
+
+
+def unknown_group(group, known):
+    """The refusal, naming what a person can do about it."""
+    have = (", ".join(sorted(known)) if known else
+            "no watched board declares one")
+    return (f"pearde machine: no watched board declares group `{group}` — "
+            f"known: {have}. A board joins by writing `groups: {group}` in "
+            f"its own .pearde/settings.md; nothing here keeps that list")
+
+
 # ── 2. footprints, resolved ──────────────────────────────────────────────────
 
 def real_feet(board_path, prd):
@@ -587,10 +689,11 @@ def progress(entries, rows, waves_, nslots):
 
 def cmd_machine(argv):
     """every watched board as one ordered frontier — `boards`, `slots`,
-    `progress`, `--json`; prints, and moves nothing
+    `progress`, `groups`, `--json`; prints, and moves nothing
 
     The one command. `pearde machine` prints the frontier; the verbs are
-    windows onto the same read."""
+    windows onto the same read, and a bare word before or after one is a
+    group — the same read over the boards declaring that label."""
     return main(argv)
 
 
@@ -598,19 +701,46 @@ COMMANDS = {"machine": cmd_machine}
 
 
 def main(argv):
+    if argv and argv[0] == "machine":
+        argv = argv[1:]
+    group, argv = split_group(argv)
+    if argv and argv[0] == "dispatch":
+        import dispatch as dispatchlib   # lazy: the read path never loads it
+        pre = ["--group", group] if group else []
+        return dispatchlib.main(pre + list(argv[1:]))
     entries, skipped = boards()
     if isinstance(skipped, str):
         print(f"pearde machine: {skipped}", file=sys.stderr)
         return 1
-    if argv and argv[0] == "machine":
-        argv = argv[1:]
+    known = all_groups(entries)
+    if argv and argv[0] == "groups":
+        for g in sorted(known):
+            print(f"{g:16} {', '.join(known[g])}")
+        loose = [k for k, p in entries if not declared(p)[0]]
+        if loose:
+            print(f"{'—':16} {', '.join(loose)}  (no group declared)")
+        for k, p in entries:
+            for bad, why in declared(p)[1]:
+                print(f"{k:16} refused `{bad}` — {why}")
+        if not known:
+            print("no watched board declares a group — a board joins one by "
+                  "writing `groups: <name>` in its own .pearde/settings.md")
+        return 0
+    gnote = []
+    if group is not None:
+        if group not in known:
+            print(unknown_group(group, known), file=sys.stderr)
+            return 1
+        entries, note = in_group(entries, group)
+        gnote = [note]
     if argv and argv[0] == "boards":
         for k, p in entries:
             # a board's own `workers:` is its cap, and `0` there means
             # unlimited — printing the bare number would read as "no
             # workers", the opposite. `workers_label` is plan.py's answer.
             cap = planlib.workers_label(planlib.plan_workers(p, None))
-            print(f"{k:16} {p}  cap {cap}")
+            gs = ", ".join(declared(p)[0]) or "—"
+            print(f"{k:16} {p}  cap {cap}  groups {gs}")
         for name, why in skipped:
             print(f"{name:16} skipped — {why}")
         return 0
@@ -626,11 +756,12 @@ def main(argv):
     if "--json" in argv:
         print(json.dumps({"boards": [k for k, _ in entries], "rows": rows,
                           "slots": nslots, "reading": reading,
-                          "demand": demand,
+                          "demand": demand, "group": group, "groups": known,
                           "waves": [[r["addr"] for r in w] for w in wv],
-                          "skipped": skipped, "notes": notes}, indent=1))
+                          "skipped": skipped,
+                          "notes": gnote + notes}, indent=1))
     else:
-        print(text(rows, wv, skipped, notes, reading,
+        print(text(rows, wv, skipped, gnote + notes, reading,
                    [k for k, _ in entries], demand, defer))
     return 0
 

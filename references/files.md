@@ -145,7 +145,8 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/board/adapters/claude.json | the Start button's default launch target — one JSON per adapter (`{"name","command","prompt"}`, optional `"plugins"` list of suggestions), read live by serve.py; doctor reports missing ones |
 | @resources/board/lit-core.min.js | Lit 3, vendored — the page's component base |
 | @resources/board/all.py | `all` — every watched board merged into one read-only page; no file of its own, the watch set is its whole configuration |
-| @resources/board/machine.py | `machine` — the same watch set merged into one dependency-ordered frontier, cut into waves by a load-derived slot count; prints, and moves nothing |
+| @resources/board/machine.py | `machine` — the same watch set merged into one dependency-ordered frontier, cut into waves by a load-derived slot count; the default mode prints and moves nothing |
+| @resources/board/dispatch.py | `machine dispatch` — that frontier run down to nothing: a rolling pool of pass workers, serialised on real-path footprint clashes, the claim gate re-asked per row, and a launch counted only once it has outlived the grace window |
 | @resources/board/edit.py | the writers — one line at a time |
 | @resources/board/collect.py | `collect` — verify, commit the footprint, `done`, one call |
 | @resources/board/ramp.py | `ramp` — need, have, gap and the toolbox gate; proposes skills off scout's routes and installs none |

@@ -106,6 +106,7 @@ is the `doctor` row `briefs`.
 | `<board>` | the board whose library holds the slug, for `workflows.py brief` |
 | `<split_above>` | `split-above` in the PRD's own board's `settings.md`, default 40 — @references/settings.md |
 | `<specs_above>` | `specs-above` there, default 6 |
+| `<health>` | `health.py list --under <health-floor>` over the PRD's footprint union, one line per file, worst first — or `none under the floor`, or `no health record — pearde health score writes one`. @references/health.md |
 | `<slug>` | the `workflow:` the block is printed for — in the analyst block it is the worker's to write |
 | `<id>` | `--as`, default `engineer`; `--consult <id>` |
 | `<transcript_path>` | `--transcript` |
@@ -328,6 +329,11 @@ the sweep reads it as pass one and not as damage.
 > do not redefine the spec. Return **DONE** (per-spec box status + verify
 > output) or **FAILED** (what broke, what you tried); on FAILED also write
 > `## Failure` into `prd.md`.
+> Files in your footprint under the health floor, worst first — leave each
+> better than you found it inside the spec's scope, never a refactor, and
+> say in the report what moved or why nothing could; a split is a defect
+> outside scope, reported, not done:
+> <health>
 <!-- /brief -->
 
 On return, the same one call as the analyst's: `pearde collect <prd> --report

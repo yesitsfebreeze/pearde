@@ -423,7 +423,8 @@ __CSS__</style>
   </div>
   <nav id="views" aria-label="sections of this page">
     <span id="segpill" aria-hidden="true"></span>
-    <a href="#view=timeline" data-v="timeline" class="on">plan</a
+    <a href="#view=boards" data-v="boards" id="tab-boards">boards</a
+    ><a href="#view=timeline" data-v="timeline" class="on">plan</a
     ><a href="#view=board" data-v="board">board</a
     ><a href="#view=analytics" data-v="analytics">analytics</a
     ><a href="#view=asks" data-v="asks">asks<span class="badge" id="askbadge"></span></a
@@ -460,6 +461,10 @@ __CSS__</style>
     <button class="act" data-go='{"view":"report"}'>the report, in full</button>
   </div>
 </aside>
+<section data-view="boards" id="s-boards">
+  <h2 class="sect">every board this machine watches</h2>
+  <pearde-boards id="boardlist"></pearde-boards>
+</section>
 <section data-view="timeline" id="s-timeline" class="on">
 <button id="landtog" class="edgetab tright"
   title="focus — what to collect, what to dispatch, what to land (l)"

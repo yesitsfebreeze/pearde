@@ -831,6 +831,38 @@ kbd{font:10.5px ui-monospace,SFMono-Regular,monospace;background:var(--fill);
   display:flex;flex-direction:column;gap:10px;align-items:center}
 .blank .big{font-size:14px;color:var(--ink2);font-weight:560}
 
+/* ── every board — the `all` page's dashboard ─────────────────────────────
+   One card per board the daemon watches. The name is the door out of this
+   page; the chips are doors into the sets they count; the spread under them
+   is that board's states in the same ink the plan draws them in. */
+#boardlist .boards{display:grid;gap:10px;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.brow{background:var(--content);border:.5px solid var(--sep);
+  border-radius:var(--r-lg);box-shadow:var(--shadow);padding:12px 14px;
+  display:flex;flex-direction:column;gap:8px}
+.brow.bad{border-color:var(--danger);color:var(--danger)}
+.brow .bn{font-size:14px;font-weight:600;color:var(--ink);
+  text-decoration:none;display:flex;align-items:center;gap:7px}
+.brow .bn:hover{text-decoration:underline}
+.brow .bn .tag{font-size:9.5px;font-weight:620;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink3);border:.5px solid var(--sep);
+  border-radius:4px;padding:1px 4px}
+.brow .bmeta{font-size:11.5px;color:var(--ink2);line-height:1.45}
+.brow .bmeta .dim{color:var(--ink3)}
+.brow .spread{display:flex;height:4px;border-radius:2px;overflow:hidden;
+  background:var(--sunk)}
+.brow .spread i{display:block;height:100%}
+.brow .bdoors{display:flex;flex-wrap:wrap;gap:5px}
+.brow .chip{font-size:10.5px;font-weight:540;color:var(--ink2);
+  background:var(--content-2);border:.5px solid var(--sep);
+  border-radius:999px;padding:2px 8px;cursor:pointer}
+.brow .chip:hover{border-color:var(--ink4);color:var(--ink)}
+.brow .chip.hot{color:var(--warn);border-color:var(--warn)}
+.brow .chip.got{color:var(--accent);border-color:var(--accent)}
+/* the door out of a read-only page, wherever one is offered */
+.act.out{text-decoration:none;font-size:11px;padding:3px 8px;min-height:0;
+  display:inline-flex;align-items:center}
+
 /* ── analytics ──────────────────────────────────────────────────────────── */
 #tiles{display:grid;gap:10px;
   grid-template-columns:repeat(auto-fit,minmax(158px,1fr));margin-bottom:12px}

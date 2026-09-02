@@ -34,6 +34,7 @@ import contextlib
 import io
 import os
 import re
+import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -242,6 +243,34 @@ def repo_of(prd, board):
     return planlib.repo_root(prd["board_path"]) or board_root
 
 
+def health_of(prd, board):
+    """The `<health>` lines: every file in the PRD's footprint union under
+    the board's `health-floor`, off the ranking `health.py` keeps, worst
+    first. One line when there is no record, one when nothing is under. The
+    footprint is what `collect` commits, read the same way; an empty one
+    reads the whole ranking, which is the honest answer for a PRD whose
+    paths are not yet known."""
+    bp = prd.get("board_path") or board
+    repo = repo_of(prd, board)
+    try:
+        _, feet = planlib.spec_data(prd)
+    except Exception:  # a footprint that will not parse is the gate's to refuse
+        feet = []
+    cmd = [sys.executable, os.path.join(RES, "health.py"), "list",
+           "--board", bp] + [os.path.join(repo, f) for f in feet]
+    try:
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=20,
+                           cwd=repo)
+    except (OSError, subprocess.TimeoutExpired):
+        return "no health record — `pearde health score` writes one"
+    lines = [l for l in r.stdout.splitlines() if l.strip()]
+    if r.returncode != 0 or not lines:
+        return (lines[0] if lines
+                else "none under the floor" if r.returncode == 0
+                else "no health record — `pearde health score` writes one")
+    return "\n".join(lines)
+
+
 def language_of(prd):
     v = planlib.board_settings(prd["board_path"]).get("language")
     return str(v).strip() if v and not isinstance(v, list) else "English"
@@ -350,7 +379,8 @@ def brief_prd(args, out=print):
               "<language>": language_of(prd),
               "<probe>": f"prds/{local}/probe/",
               "<split_above>": str(lim["split-above"]),
-              "<specs_above>": str(lim["specs-above"])}
+              "<specs_above>": str(lim["specs-above"]),
+              "<health>": health_of(prd, board)}
     slugs = slugs_of(prd, role)
     wf_lines, marks = [], []
     for s in slugs:

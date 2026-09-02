@@ -82,6 +82,13 @@ git -C "$P" add -A && git -C "$P" commit -qm init >/dev/null
 # check; PEARDE_AS keeps `add` from asking which persona is working.
 export PEARDE_GUARD_STATE="$D/guard"
 export PEARDE_AS=engineer
+# `init` runs `serve.py ensure`, and with no port named that reaches the
+# machine's real daemon on 8443 and registers this `mktemp -d` board into it —
+# a throwaway path the daemon then watches until somebody notices. Port 1 is
+# privileged and nothing is listening on it, so every command below refuses to
+# connect instead: no registration to undo, and no repair that has to run
+# after the fact on a line with no trap behind it.
+export PEARDE_PORT=1
 py() { python3 "$R/pearde.py" "$@" >/dev/null 2>&1 || true; }
 
 outside() {   # every path in the project that is not .git/ and not .pearde/
@@ -117,8 +124,11 @@ printf '{"workspace":{"current_dir":"%s"},"model":{"display_name":"x"},"transcri
   "$P" | bash "$R/statusline.sh" >/dev/null 2>&1 || true
 cd "$REPO" || exit 1
 
-# `serve.py ensure` runs from `init`; leave the machine's daemon as it was.
-python3 "$R/board/serve.py" forget pearde-invariant-probe >/dev/null 2>&1 || true
+# PEARDE_PORT=1 above is what keeps the machine's daemon out of this; this
+# line stays as a second net for a board that landed there before that export
+# existed, and it names the port too so it cannot itself become the reach.
+PEARDE_PORT=1 python3 "$R/board/serve.py" forget pearde-invariant-probe \
+  >/dev/null 2>&1 || true
 
 made=$(outside | grep -v '^README\.md$' | grep -v '^\.gitignore$' || true)
 if [ -n "$made" ]; then

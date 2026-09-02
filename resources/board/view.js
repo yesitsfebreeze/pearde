@@ -845,6 +845,12 @@ function fitFrame() {
 function resize() {
   dpr = Math.min(3, window.devicePixelRatio || 1);
   const W = plot.clientWidth, H = plot.clientHeight;
+  // A section that is not the open one is display:none, and everything in it
+  // measures zero. Sizing the canvas to that erases it, and the page that
+  // opens on another view (`all` opens on its dashboard) would carry a blank
+  // plot until something resized it again. Keep what it had; `setView` sizes
+  // it on the way in.
+  if (W <= 0 || H <= 0) return;
   cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
   cv.style.width = W + "px"; cv.style.height = H + "px";
   mini.width = Math.round((mini.clientWidth || 1) * dpr);
@@ -2266,8 +2272,10 @@ async function boards() {
 
 function drawPicks(list) {
   list = list.slice().sort((a, b) => a.name.localeCompare(b.name));
-  const mine = list.filter(b => (b.members || []).length);
-  const flat = list.filter(b => !(b.members || []).length);
+  // the pages that hold more than one board come first, `all` at their head
+  const mine = list.filter(b => b.virtual || (b.members || []).length)
+                   .sort((a, b) => (b.virtual ? 1 : 0) - (a.virtual ? 1 : 0));
+  const flat = list.filter(b => !b.virtual && !(b.members || []).length);
   const row = b =>
     '<button class="b' + (b.name === BOARD_KEY ? " on" : "") +
     '" role="option" aria-selected="' + (b.name === BOARD_KEY) +
@@ -2276,6 +2284,9 @@ function drawPicks(list) {
     '<span class="nm">' + esc(b.name) + "</span>" +
     (b.last_error ? '<span class="n bad" title="' + esc(b.last_error) +
        '">error</span>'
+     // `all` is in this list to be found, and says what it is: not a board
+     // with members, but the page over every board there is
+     : b.virtual ? '<span class="n">every board · read-only</span>'
      : (b.members || []).length
        ? '<span class="n">' + b.members.length + " boards</span>" : "") +
     "</button>";
@@ -2385,7 +2396,10 @@ bind(window, "keydown", e => {
     }
     return;
   }
-  if (e.key === "n" || e.key === "N") { e.preventDefault(); $("newprd").click(); }
+  if (e.key === "n" || e.key === "N") {
+    e.preventDefault();
+    const np = $("newprd"); if (np) np.click();
+  }
   else if (e.key === "/") { e.preventDefault();
     (view === "list" ? $("lq") : $("q")).focus(); }
   else if (e.key === "K") { e.preventDefault(); ksShow(); }
@@ -2546,6 +2560,32 @@ function drawLegend() {
 const BOARD_KEY = window.__BOARD || null;
 const API = window.__BASE || "";
 const SERVED = !!BOARD_KEY;
+/* `all` — every board the daemon watches, on one page. The payload says so,
+   and this page believes the payload rather than the URL: it is a display,
+   with no board directory under it and nothing to write into. Rows are
+   addressed `@<board>/<rel>`, so the one thing a click can do here is take
+   the reader to the board that owns the row. Every door that would write is
+   gated on EDITABLE, never on SERVED — the daemon IS there, it is this page
+   that has no file. */
+const VIRTUAL = !!DATA.virtual;
+const EDITABLE = SERVED && !VIRTUAL;
+const RO_MSG = "all is a display — open the board to change anything";
+
+/* Where a row came from. On `all` every rel is `@<board>/<rel>` and that
+   prefix IS the board's own `/board/<key>` URL, so the door out of this page
+   is already written into every address on it. Null anywhere else — a board's
+   own page has nowhere else to send a reader. */
+const rowBoard = rel => (VIRTUAL && rel && rel[0] === "@" && rel.includes("/"))
+  ? rel.slice(1, rel.indexOf("/")) : null;
+const boardHref = (key, rel) => API + "/board/" + encodeURIComponent(key) +
+  (rel ? "#prd=" + encodeURIComponent(rel) : "");
+const boardLink = (rel, label) => {
+  const k = rowBoard(rel);
+  if (!k) return "";
+  return '<a class="act out" href="' +
+    boardHref(k, rel.slice(rel.indexOf("/") + 1)) + '">' +
+    (label || "open in " + k) + " \u2197</a>";
+};
 const STATE_LIST = Object.keys(STATES).concat(["done"]);
 let dTask = null, dData = null, dDirty = false;
 // a re-imported view's handed-over inspector body; see openDrawer's tail
@@ -2779,9 +2819,10 @@ async function openDrawer(t) {
   dTask = t; dDirty = false; dData = prdCache.get(t.rel) || null;
   $("drawer").classList.add("open");
   $("dtitle").value = t.title || t.name;
-  $("drel").textContent = t.rel + (t.board ? "  ·  " + t.board : "");
-  $("dmsg").textContent = SERVED ? (dData ? "" : "loading…")
-                                 : "read-only — no daemon";
+  if (VIRTUAL) $("drel").innerHTML = esc(t.rel) + "  ·  " + boardLink(t.rel);
+  else $("drel").textContent = t.rel + (t.board ? "  ·  " + t.board : "");
+  $("dmsg").textContent = VIRTUAL ? "read-only — edited on its own board"
+    : SERVED ? (dData ? "" : "loading…") : "read-only — no daemon";
   drawBody();
   // the open PRD lives in the URL: a deep link to one task, and the thing
   // that survives the page updating itself
@@ -2834,11 +2875,13 @@ function drawBody() {
   if (!t.plain && t.held && t.boxes && t.boxes[1])
     facts.push(["boxes", t.boxes[0] + "/" + t.boxes[1] + " closed" +
                          heldFor(t).replace(/^ · /, " · ")]);
+  const ro = VIRTUAL ? " disabled" : "";
   let h = '<h4>state</h4><div class="fields">' +
-    '<select id="dstate">' + STATE_LIST.map(s =>
+    '<select id="dstate"' + ro + ">" + STATE_LIST.map(s =>
       `<option${s === t.state ? " selected" : ""}>${s}</option>`).join("") +
     "</select>" +
-    '<input type="number" id="dprio" step="1" value="' + t.prio + '">' +
+    '<input type="number" id="dprio" step="1" value="' + t.prio + '"' +
+      ro + ">" +
     "</div>";
   h += '<h4>plan</h4><div class="facts">' + facts.map(([k, v]) =>
     `<span>${k} <b>${esc(v)}</b></span>`).join("") + "</div>";
@@ -3037,7 +3080,7 @@ async function answer(rel, text) {
 }
 
 async function saveDrawer() {
-  if (!dTask || !SERVED) return;
+  if (!dTask || !EDITABLE) return;
   const payload = {board: BOARD_KEY, prd: dTask.rel,
                    title: $("dtitle").value.trim(), fm: {}};
   const st = $("dstate"), pr = $("dprio"), bd = $("dbodytext");
@@ -3079,7 +3122,7 @@ $("drevert").onclick = () => { dDirty = false; drawBody();
    between the click and that write — the daemon's own /run has the same
    guard server-side, so a second tab clicking the same card is refused too. */
 async function startPrd(rel, adapterId) {
-  if (!SERVED || STARTING.has(rel)) return;
+  if (!EDITABLE || STARTING.has(rel)) return;
   STARTING.add(rel); drawBoard();
   try {
     const r = await fetch(API + "/run", {method: "POST",
@@ -3117,6 +3160,7 @@ async function loadAdapters() {
 }
 
 async function save(rel, payload) {
+  if (VIRTUAL) return {error: RO_MSG};
   if (!SERVED) return {error: "no daemon — this file is read-only"};
   try {
     const r = await fetch(API + "/edit", {method: "POST",
@@ -3180,7 +3224,80 @@ function toast(msg, bad) {
    its DOM on load, so switching to it is instant and the fold is
    presentation, not a lazy load. Three of these fetch; they are all localhost
    and they all run once. */
+/* ── every board — the `all` page's dashboard ──────────────────────────────
+   The other half of the merged page (@references/parts/all.md). One row per
+   board the daemon watches, carrying the counts a person opens this page for
+   and nothing computed here: every number is that board's own, handed over in
+   `dash`. Each is a door — the name to that board's own page, a count to the
+   set it names, filtered to that board, on this one. A board that would not
+   read says so in its row rather than taking the page down with it.        */
+class PeardeBoards extends LitElement {
+  static properties = { rows: {}, api: {} };
+  createRenderRoot() { return this; }
+
+  spread(r) {
+    const sts = Object.keys(r.states).sort(
+      (a, b) => STATE_ORDER.indexOf(a) - STATE_ORDER.indexOf(b));
+    const total = sts.reduce((n, st) => n + r.states[st], 0);
+    if (!total) return "";
+    return html`<div class="spread" aria-hidden="true">${sts.map(st =>
+      html`<i style=${"width:" + (100 * r.states[st] / total).toFixed(2) +
+        "%;background:" + stVar(st)} title=${st + " " + r.states[st]}></i>`)}
+      </div>`;
+  }
+
+  door(n, label, dest, cls) {
+    if (!n) return "";
+    return html`<button class=${"chip " + (cls || "")}
+      data-go=${JSON.stringify(dest)}>${n} ${label}</button>`;
+  }
+
+  row(r) {
+    if (r.error) return html`<div class="brow bad">
+      <div class="bn">${r.board}</div>
+      <div class="bmeta">unreadable — ${r.error}</div></div>`;
+    const b = r.board;
+    return html`<div class="brow">
+      <a class="bn" href=${(this.api || "") + "/board/" +
+        encodeURIComponent(b)}>${b}${r.master
+          ? html`<span class="tag">master</span>` : ""}</a>
+      <div class="bmeta">${r.purpose ||
+        html`<span class="dim">${r.prds} PRD${r.prds === 1 ? "" : "s"} · ${
+          fmtW(r.left)} left · ${r.done} done</span>`}</div>
+      ${this.spread(r)}
+      <div class="bdoors">
+        ${this.door(r.collect, "to collect",
+                    {view: "timeline", collect: 1, group: "board"}, "got")}
+        ${this.door(r.asks, "waiting on you",
+                    {view: "list", board: b, state: "hot"}, "hot")}
+        ${this.door(r.held, r.silent ? "in flight · " + r.silent + " silent"
+                                     : "in flight",
+                    {view: "list", board: b, state: "held"},
+                    r.silent ? "hot" : "")}
+        ${this.door(r.prds, "PRDs", {view: "list", board: b})}
+      </div></div>`;
+  }
+
+  render() {
+    if (!this.rows || !this.rows.length)
+      return html`<div class="blank">no board registered — <code>pearde
+        view</code> on one registers it</div>`;
+    return html`<div class="boards">${this.rows.map(r => this.row(r))}</div>`;
+  }
+}
+if (!customElements.get("pearde-boards"))
+  customElements.define("pearde-boards", PeardeBoards);
+
+function drawBoards() {
+  const el = $("boardlist");
+  if (!el) return;
+  el.api = API;
+  el.rows = DATA.dash || [];
+  el.requestUpdate();
+}
+
 function drawAll() {
+  if (VIRTUAL) drawBoards();
   if (!replaced.has("board")) drawBoard();
   if (!replaced.has("list")) drawList();
   if (!replaced.has("asks")) drawAsks();
@@ -3324,7 +3441,7 @@ if (!customElements.get("pearde-board"))
 
 function drawBoard() {
   const el = $("board");
-  el.served = SERVED;
+  el.served = EDITABLE;
   el.rows = ALL;
   el.requestUpdate();
 }
@@ -3366,7 +3483,10 @@ async function drawAsks() {
       '<span class="flag' + (blocked ? " blocked" : "") + '">' +
         (blocked ? "blocked" : "question") + "</span></div>" +
       '<div class="q skel">reading the PRD…</div>' +
-      (SERVED ? '<div class="foot"><textarea placeholder="' +
+      (VIRTUAL
+        ? '<div class="foot"><span class="hint">answered where it lives</span>'
+          + boardLink(t.rel, "answer on " + rowBoard(t.rel)) + "</div>"
+        : SERVED ? '<div class="foot"><textarea placeholder="' +
         (blocked ? "what unblocks it — this goes in as the answer"
                  : "the answer, in your words") + '"></textarea>' +
       '<div class="row2"><button class="act send primary">answer &amp; reopen' +
@@ -3388,6 +3508,38 @@ async function drawAsks() {
       card.querySelector(".q").textContent =
         "the question is in the PRD — open this board through the service to " +
         "read and answer it here";
+      return;
+    }
+    if (VIRTUAL) {
+      // Read here, answered where it lives. The pass is rendered exactly as
+      // it is on its own board — the same parse, the same picks, the same
+      // prose — and then every control that would write one back is disabled:
+      // a reader on this page has to see what is being asked, and a pick that
+      // silently did nothing would be worse than no pick at all. The foot is
+      // the door to the board that can take the answer.
+      fetchPrd(rel).then(d => {
+        const q = card.querySelector(".q");
+        q.classList.remove("skel");
+        const qtxt = section(d.body, "Questions") ||
+          (blocked ? sectionLike(d.body, "Blocked") : "");
+        const cardQs = parseQuestions(qtxt);
+        if (cardQs) {
+          q.style.display = "none";
+          const holder = document.createElement("div");
+          holder.className = "qs";
+          holder.innerHTML = questionsHTML(cardQs, "aq-" + esc(rel));
+          q.after(holder);
+          markAnsweredFrom(holder, cardQs, section(d.body, "Answers"));
+          dropAnswered(holder);
+          for (const el of holder.querySelectorAll("input,textarea,button"))
+            el.disabled = true;
+          return;
+        }
+        q.textContent = qtxt || sectionLike(d.body, "Blocked") ||
+          section(d.body, "Notes") || (d.body || "").slice(0, 700) ||
+          "(the PRD says nothing yet)";
+        q.onclick = () => q.classList.toggle("open");
+      });
       return;
     }
     // fire serves the fallback foot only — a pass that parses answers one
@@ -4427,6 +4579,7 @@ $("newbox").onclick = e => {
 $("ncreate").onclick = async () => {
   const title = $("ntitle").value.trim();
   if (!title) return;
+  if (VIRTUAL) return toast(RO_MSG, true);
   if (!SERVED) return toast("no daemon — this file is read-only", true);
   try {
     const r = await fetch(API + "/new", {method: "POST",
@@ -4679,6 +4832,32 @@ bind(window, "hashchange", () => { if (!hashLock) readHash(); });
 
 /* ── boot ──────────────────────────────────────────────────────────────── */
 if (!SERVED) $("pick").classList.add("solo");
+/* `all` is a display over every watched board, so the page loses the doors
+   that belong to one board and gains the one that names them all. Removed,
+   not hidden: a tab nobody can use is still a tab a reader has to rule out,
+   and the pill measures the bar it is given. */
+if (VIRTUAL) {
+  document.body.classList.add("virtual");
+  $("sub").textContent = "every board";
+  const np = $("newprd"); if (np) np.remove();
+  // the report is one board's state written for a person. Several boards
+  // have several of them, and picking one would be a lie about the rest —
+  // the dashboard is what this page says instead
+  for (const sel of ['#views a[data-v="report"]', "#s-report", "#whatsup",
+                     '#state .act[data-go*="report"]']) {
+    const el = document.querySelector(sel); if (el) el.remove();
+  }
+  // the inspector reads here and writes nowhere: the door out is the row's
+  // own board, which its address already names
+  $("dtitle").readOnly = true;
+  for (const id of ["dgo", "drevert"]) {
+    const el = $(id); if (el) el.remove();
+  }
+} else {
+  const bt = document.querySelector('#views a[data-v="boards"]');
+  if (bt) bt.remove();
+  const bs = $("s-boards"); if (bs) bs.remove();
+}
 syncToggles();
 drawLegend();
 drawSide();
@@ -4692,6 +4871,9 @@ setMode("vision");
 drawHeader();
 drawAll();           // every section, on the first paint — not one per click
 readHash();
+// the merged page opens on its dashboard: the plan of a dozen boards at once
+// is not the first thing to hand a reader, the state of each of them is
+if (VIRTUAL && !/(^|&)view=/.test(location.hash.slice(1))) setView("boards");
 // The view's own code may have moved under this page: read what the copy
 // before it saved — the scroll, and the drawer with its half-typed body —
 // and put it back over the fresh payload the service just set on window.

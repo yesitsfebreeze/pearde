@@ -80,7 +80,7 @@ IGNORED = (".pearde/.state/", ".pearde/wiki/", ".obsidian/")
 # rather than in the install — the invariant
 # `every-artifact-lands-inside-the-board` — and none of them is plan.
 BOARD_IGNORED = ("wiki/.obsidian-api-key", "wiki/.graphify/",
-                 "wiki/Dashboard.report.md", ".obsidian/",
+                 "wiki/Dashboard.report.md", ".obsidian/", "health/",
                  ".state/serve.json", ".state/serve.log", ".state/run-*.log",
                  ".state/guard/", ".state/calibration.json")
 BOARD_HEADER = "# machine-local — two hold one credential, the rest rebuild"
@@ -110,6 +110,7 @@ OBSIDIAN_PLUGINS = ("dataview", "obsidian-local-rest-api")
 KNOWLEDGE_PRESET = os.path.join(HERE, "knowledge")
 KNOWLEDGE_PY = os.path.join(HERE, "..", "knowledge.py")
 MEMOS_PY = os.path.join(RES, "memos.py")
+GRAMMAR_PY = os.path.join(RES, "grammar.py")
 
 KEY_RE = re.compile(r"^[a-z][a-z0-9-]*$")
 
@@ -402,6 +403,49 @@ def index_memos(board, verb="init"):
     return os.path.relpath(written[-1], board)
 
 
+def grammar_file(board):
+    """Where the board's vocabulary sits — `.pearde/grammar.md` unless
+    `grammar:` in `settings.md` points elsewhere. The same resolution
+    @resources/grammar.py `grammar_path` does, and that file is its only
+    writer."""
+    v = str(planlib.board_settings(board).get("grammar", "")).strip()
+    return os.path.normpath(os.path.join(board, v or "grammar.md"))
+
+
+def plant_grammar(board, verb="init"):
+    """Write the board's grammar from @references/templates/grammar.md.
+
+    The template already holds pearde's own vocabulary — the words every board
+    shares — and ends on an empty `This repo` group, which is the half the
+    board fills. So a newcomer's first `show` answers rather than reporting an
+    empty file.
+
+    `grammar.py init` is the one writer of that file and never overwrites, so
+    this is idempotent: a board that already has a vocabulary keeps every row.
+    Runs after `settings.md` exists, since the template's `<board>` is filled
+    from `name:` there. Returns the relative path written, or None when the
+    file was already on disk.
+
+    A failure is said, not swallowed — a board with no grammar file is
+    doctor's `grammar` row reading `off` for the life of the board, and a
+    `verb` that exits 0 having quietly not written it is how that happens.
+    """
+    if os.path.isfile(grammar_file(board)):
+        return None
+    out = subprocess.run([sys.executable, os.path.abspath(GRAMMAR_PY),
+                          "init", board], capture_output=True, text=True)
+    written = out.stdout.strip().splitlines()
+    if out.returncode != 0 or not written:
+        why = (out.stderr.strip().splitlines() or written
+               or ["no output"])[-1]
+        print(f"{verb}: could not write the board's grammar from "
+              f"references/templates/grammar.md — {why} · doctor's `grammar` "
+              "row reads `off` until it exists; run `pearde grammar init` "
+              "once that is fixed")
+        return None
+    return os.path.relpath(written[-1], board)
+
+
 def plant_graph(board):
     """`knowledge.py board`, then `relink` — the two verbs `upgrade` runs.
 
@@ -559,7 +603,8 @@ def cmd_init(argv):
         language = args.opt.get("language", "").strip() or "English"
         name = args.opt.get("name", "").strip() or os.path.basename(d)
         paths = [os.path.join(board, "settings.md"),
-                 os.path.join(board, "vision.md")]
+                 os.path.join(board, "vision.md"),
+                 os.path.join(board, "grammar.md")]
         if in_git(d):
             paths.append(os.path.join(d, ".gitignore"))
         paths.append(os.path.join(board, ".obsidian", "plugins", "dataview"))
@@ -587,6 +632,11 @@ def cmd_init(argv):
             print(f"init: regenerated {indexed}, the memo index by kind — "
                   "the copy carries the memos, `memo index` writes the page "
                   "over them")
+        seeded = plant_grammar(board)
+        if seeded:
+            print(f"init: wrote {board}/{seeded}, the board's vocabulary — "
+                  "pearde's own words are already in it; `pearde grammar add "
+                  "<term> <meaning>` files this repo's")
         planted = write_knowledge(d)
         if planted:
             print(f"init: knowledge layer at .pearde/wiki/ — "
@@ -771,6 +821,17 @@ def cmd_upgrade(argv):
               f"{indexed}, the index by kind")
     else:
         print("  memos     no memo on this board — nothing to index")
+    # A board made before the grammar existed has no vocabulary file, which
+    # doctor's `grammar` row reads `off` for the life of the board. `init`
+    # plants it; bringing a board forward has to leave it as healthy as
+    # making one fresh, and `plant_grammar` never overwrites a file that is
+    # already there, so an existing vocabulary keeps every row.
+    seeded = plant_grammar(board, "upgrade")
+    if seeded:
+        print(f"  grammar   wrote {seeded} — the board vocabulary is in it, "
+              "this repo's words are yours to add")
+    else:
+        print("  grammar   already on this board")
     plugins, missing, _ = write_obsidian(d)
     repaired = repair_plugin_ids(os.path.join(board, ".obsidian"))
     vault_line = ", ".join(plugins) if plugins else "already there"

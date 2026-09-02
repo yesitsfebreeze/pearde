@@ -335,35 +335,6 @@ def slugs_of(board):
     return sorted(out, key=len, reverse=True)
 
 
-# An answer line, as every reader of one wants it: `**Q1** — the decision`.
-# The id closes its own bold. @resources/board/plan.py's ANSWER_LINE_RE, the
-# view's `markAnsweredFrom` and `answered_of` all read exactly this, and each
-# stops at a line that does not.
-ANSWER_OK_RE = re.compile(r"^\s*\*\*\s*(Q?\d+[a-z]?)\s*\*\*", re.M)
-
-# …and the near-miss that reads as prose to all three: the bold runs over the
-# title, `**Q1 - Transcribe the lawyer's text**`. Nothing rejects it, so the
-# pass silently counts as unanswered — and the view then offers a settled
-# question again. On `legal/legal-privacy` of the manola board that put a
-# second answer on Q4 reinstating the option the PRD had reversed, and two
-# commit messages were written from it. Caught here, on a live node, because
-# there is no other moment that reads an answer and can still say no.
-ANSWER_NEARMISS_RE = re.compile(r"^\s*\*\*\s*(Q?\d+[a-z]?)\s*[-\u2013\u2014:]\s",
-                                re.M)
-
-
-def unread_answers(text):
-    """Every `Qn` written under `## Answers` in a shape no counter reads."""
-    ok = {m.group(1).upper() for m in ANSWER_OK_RE.finditer(text)}
-    out = []
-    for m in ANSWER_NEARMISS_RE.finditer(text):
-        q = m.group(1).upper()
-        q = q if q.startswith("Q") else "Q" + q
-        if q not in ok and q not in out:
-            out.append(q)
-    return out
-
-
 def check(board):
     """Every problem, one string each. Empty means the passes are clean."""
     bad = []
@@ -438,12 +409,6 @@ def check(board):
             elif not any(t.strip() for _h, t in qs) and not closed:
                 bad.append(f"{rel}: `{head}` with no `## Questions` above it — "
                            "an answer to a question nobody wrote down")
-            elif not closed:
-                for qid in unread_answers(text):
-                    bad.append(f"{rel}: {qid} is answered in a shape no "
-                               "reader counts — the id closes its own bold, "
-                               "`**Q1** — the decision`, and the title comes "
-                               "after it")
 
         # `mode:` IS A PROPERTY OF THE WORK, NOT A POSITION IN A QUEUE. The
         # template defines it as `afk | hitl (needs the human: naming, taste,

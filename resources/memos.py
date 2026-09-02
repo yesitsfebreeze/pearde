@@ -300,8 +300,8 @@ def slug(subject):
 def add(board, subject, kind="decision"):
     """Write `<memos>/<slug>.md` from @references/templates/memo.md and
     return its path. Line-based: `memo:`, `kind:`, `subject:`, `date:` and
-    the title line are filled in; every other template line, comments
-    included, is kept — the reader fills the sections. An invariant gets a
+    the title line are filled in; every other template line is kept — the
+    reader fills the sections, @references/templates/memo.doc.md says how. An invariant gets a
     bare `verify:` line, which fails `check` until the command is written and
     run — an invariant is filed proven, never on faith. Rewrites the index.
     Exits 2 on a subject that slugs to nothing or a kind outside the set, 1
@@ -340,8 +340,8 @@ def add(board, subject, kind="decision"):
             line = f"subject: {subject}"
         elif line.startswith("date: "):
             line = f"date: {today}"
-        elif line.startswith("# verify:") and kind == "invariant":
-            line = "verify: "
+            if kind == "invariant":
+                line += "\nverify: "
         elif line.startswith("# <slug> — "):
             line = f"# {sl} — {subject}"
         out.append(line)

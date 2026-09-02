@@ -11,11 +11,26 @@ every registered board and serving the view that reads and writes it.
     serve.py wait  [board]    block until the board moves, then say what did
     serve.py forget <name>    stop watching one board
     serve.py stop             stop the daemon
+    serve.py reap [--dry-run] [--pid <n>]
+                              stop every daemon on this machine that watches
+                              no board still on disk — the fixtures' leftovers.
+                              --pid narrows it to the ones named, which is how
+                              a check stops only what it started
     serve.py selfcheck        assert the search ranker's own arithmetic
 
 Singleton by port bind: the daemon owns 127.0.0.1:8443 (PEARDE_PORT
 overrides), and a second `run` refuses to start because the bind fails. That
 is the whole locking story — no pidfile to go stale.
+
+Its own lifetime is its own business. A board directory that vanishes is
+forgotten on the next tick, and a daemon that has watched nothing for
+IDLE_EXIT_S exits. That is what stops a harness fixture — which points a
+daemon at a `mktemp -d` board and then deletes it — from leaving a process
+behind: no teardown of the fixture's can be relied on, because a SIGKILL runs
+no trap and `ensure` detaches the child into its own session anyway. `reap`
+clears the ones from before that rule existed, and keeps every daemon younger
+than PEARDE_REAP_GRACE_S — a daemon a `SessionStart` hook has just started
+watches nothing until its `/register` lands, and looks exactly like a leak.
 
 What it does, per registered board, within about a second of a file changing:
 
@@ -36,6 +51,11 @@ in one repo still get distinct watch entries and /board/ URLs.
 A master board (`members:` in its settings.md) is watched over its members'
 files too, and registering one registers every member as a board in its own
 right: the master carries the merged plan, each member keeps its own.
+
+`all` is the other way several boards are read at once, and the opposite kind
+of thing: not a board and not a plan, but one page over every board this
+daemon watches — no settings, no schedule of its own, no write back through
+it. The watch set is its whole configuration. @references/parts/all.md.
 
 Everything is local. The board is the files; this serves them, and the edits
 the view makes go back into the same files through one set of writers
@@ -61,7 +81,9 @@ HTTP API, all JSON, all 127.0.0.1-only:
                                    long-poll: 200 {seq, boot} on change, 204
                                    quiet — and 200 at once on a stale boot,
                                    which tells the page to reload its code
-  GET  /board/<name>               the view itself
+  GET  /board/<name>               the view itself — `all` is every watched
+                                   board on one page, read-only, held in no
+                                   file (@references/parts/all.md)
   GET  /                           302 to a board — the title is the switcher,
                                    so there is no index page to keep
   GET  /prd?board=<name>&rel=<rel> one PRD in full: frontmatter, body, specs
@@ -108,6 +130,7 @@ import json
 import os
 import re
 import shutil
+import signal
 import socket
 import subprocess
 import sys
@@ -131,6 +154,7 @@ import render as renderlib  # noqa: E402
 import memos as memoslib  # noqa: E402
 import edit as editlib  # noqa: E402
 import transitions as translib  # noqa: E402 — the one writer of `state:`
+import all as alllib  # noqa: E402 — the `all` page's merge
 
 PORT = int(os.environ.get("PEARDE_PORT", "8443"))
 DIR = os.path.dirname(os.path.abspath(__file__))
@@ -141,6 +165,10 @@ DIR = os.path.dirname(os.path.abspath(__file__))
 LOG_PATH = os.environ.get("PEARDE_SERVE_LOG") or ""
 LOG_MAX_LINES = 2000   # the log is a rolling tail, not a record
 LOG_TRIM_S = 60.0      # how often the daemon trims its own log
+
+# The `**Qn**` that opens one answer line — the shape @plan.ANSWER_LINE_RE
+# reads back, matched here on what the page is about to write.
+ANSWER_ID_RE = re.compile(r"(?m)^\s*\*\*\s*(Q?\d+[a-z]?)\s*\*\*")
 
 
 def trim_log(path=None):
@@ -170,6 +198,33 @@ def trim_log(path=None):
 POLL_S = 1.0       # how often each board is stat-swept
 SETTLE_S = 0.4     # a change must hold still this long before a sync
 WAIT_MAX_S = 25    # long-poll ceiling; clients just re-poll
+# How long the daemon runs with nothing left to watch before it exits. A
+# fixture starts a daemon, points it at a `mktemp -d` board and deletes the
+# directory; the watch loop caught the OSError and kept spinning, so the
+# process outlived the board by days. The lifetime is the daemon's own
+# business — no fixture can be trusted to run a teardown, because a SIGKILL
+# runs no trap and `ensure` puts the child in its own session anyway.
+# Generous, because a cold daemon legitimately watches nothing between its
+# bind and the `/register` that `ensure` sends a moment later.
+IDLE_EXIT_S = float(os.environ.get("PEARDE_IDLE_EXIT_S", "180"))
+# The process whose `ensure` spawned this daemon, named to the child through
+# the environment the way PEARDE_SERVE_LOG is. It gates one rule and one only:
+# a daemon watching nothing but EPHEMERAL boards outlives nobody. A fixture
+# SIGKILLed mid-run runs no trap, so its `mktemp -d` board survives too and
+# the vanished-board rule never fires — this is the leash that does. A daemon
+# watching a real board is never touched by it, whoever started it.
+OWNER_PID = int(os.environ.get("PEARDE_SERVE_OWNER") or 0)
+# How old a daemon must be before `reap` is allowed to have an opinion about
+# it. `ensure` binds the port first and POSTs `/register` a moment later, so
+# for a short window a daemon somebody very much wants watches nothing at all
+# — and before the bind it answers no `/status` either. The `SessionStart`
+# hook `pearde guard on` writes runs exactly that on every session start, and
+# `doctor.sh --harnesses` ends its sweep with `reap`, so the two meet
+# routinely on this machine. Reaping inside that window kills what the session
+# just brought up. Nothing is bought by being quicker: `reap` exists for the
+# daemons that predate IDLE_EXIT_S, which are hours or days old, and a daemon
+# that really did die on arrival is ended by IDLE_EXIT_S by itself.
+REAP_GRACE_S = float(os.environ.get("PEARDE_REAP_GRACE_S", "60"))
 
 # Two reloaders, two stamps. The board hot-reloads its data. The page
 # hot-reloads its own code, and the daemon hot-reloads itself — but they move
@@ -179,7 +234,7 @@ WAIT_MAX_S = 25    # long-poll ceiling; clients just re-poll
 # stamp, and a live page re-imports a moved view without a reload.
 PY_SOURCES = [os.path.join(DIR, f)
               for f in ("serve.py", "render.py", "plan.py", "edit.py",
-                        "transitions.py")]
+                        "transitions.py", "all.py")]
 PY_SOURCES.append(os.path.join(os.path.dirname(DIR), "memos.py"))
 VIEW_SOURCES = [os.path.join(DIR, f) for f in ("view.css", "view.js")]
 
@@ -246,6 +301,39 @@ class Board:
 
 BOARDS = {}  # name → Board
 BOARDS_LOCK = threading.Lock()
+
+
+class AllBoard:
+    """`all` — every watched board on one page (@references/parts/all.md).
+
+    Not a Board: it has no path, nothing on disk, no mirror pass and no watch
+    entry. What it needs from a Board is the half the page talks to — a
+    sequence number and a condition to sleep on — because the `all` page
+    long-polls `/wait` exactly like a board's own. Its payload is recomputed
+    per request out of the boards it merges, so there is nothing here to keep
+    in step."""
+
+    def __init__(self):
+        self.name = alllib.KEY
+        self.path = None
+        self.seq = 0
+        self.last_sync = None
+        self.last_error = None
+        self.cond = threading.Condition()
+
+
+ALL = AllBoard()
+
+
+def is_all(name):
+    return (name or "") == alllib.KEY
+
+
+def all_entries():
+    """[(key, path)] — every board the daemon watches, in the order the page
+    lists them. The watch set IS the configuration: `all` has no file naming
+    what it merges, and a board joins it by being registered."""
+    return sorted((b.name, b.path) for b in boards())
 
 # ── the Start button: a click launches a pass ────────────────────────────────
 # The view has no way to drive a Claude Code session itself — the daemon does,
@@ -444,14 +532,19 @@ def register(path):
             if cur.path == path:
                 return cur, False
         want = declared_name(path)
-        if want and want not in BOARDS:
+        if want and want not in BOARDS and not is_all(want):
             b.name = want
+        if is_all(b.name):
+            # `all` is the merged page's URL. A board that would key that way
+            # is suffixed instead — the page is not a board's to take.
+            b.name = f"{b.name}-board"
         n = 2
         while b.name in BOARDS:  # same key, different path: suffix, never replace
             b.name = f"{serve_name(path)}-{n}"
             n += 1
         BOARDS[b.name] = b
     save_entry(b)
+    bump(ALL)     # one more board is a change to the merged page
     return b, True
 
 
@@ -471,6 +564,10 @@ def bump(b):
     with b.cond:
         b.seq += 1
         b.cond.notify_all()
+    # `all` is a render over the others: whatever moved on one of them moved
+    # on it, and a page open on `all` has to be told by the same tick.
+    if b is not ALL:
+        bump(ALL)
 
 
 def history(b):
@@ -551,10 +648,82 @@ def restart(stamp):
              + sorted(b.path for b in boards()))
 
 
+def vanished():
+    """Drop every board whose directory is gone, and say how many are left.
+
+    A board directory that no longer exists is not a board with an error — it
+    is not a board. `digest()` raised OSError on it and the loop simply moved
+    on, so a fixture's `mktemp -d` board stayed in the watch set, in `status`,
+    and in the process table, for as long as the machine stayed up. Forgetting
+    it here is what makes `IDLE_EXIT_S` reachable."""
+    gone = [b for b in boards() if not os.path.isdir(b.path)]
+    if gone:
+        with BOARDS_LOCK:
+            for b in gone:
+                if BOARDS.get(b.name) is b:
+                    del BOARDS[b.name]
+        for b in gone:
+            print(f"serve: {b.name} is gone from disk — no longer watching "
+                  f"{b.path}", flush=True)
+        bump(ALL)     # one board fewer is a change to the merged page
+    return len(boards())
+
+
+def orphaned():
+    """True when this daemon watches only throwaway boards and the process
+    that started it is gone.
+
+    `save_entry` already refuses to record an EPHEMERAL board, on the grounds
+    that a marker outliving nothing is not worth the write — the same reading
+    applies to the process. A daemon holding nothing but `mktemp -d` boards is
+    a fixture's, and once the fixture is gone nobody can ever ask it for
+    anything again: its port is one nothing remembers and its boards are
+    directories only that run knew about."""
+    if not OWNER_PID:
+        return False
+    bs = boards()
+    if any(not b.path.startswith(EPHEMERAL) for b in bs):
+        return False
+    try:
+        os.kill(OWNER_PID, 0)
+    except ProcessLookupError:
+        return True
+    except OSError:
+        return False   # alive but not ours to signal
+    return False
+
+
 def watch():
     last_view = None
     last_trim = time.monotonic()
+    last_live = time.monotonic()
+    orphan_since = None
     while True:
+        # The owner leash is a grace period, not a trigger. A session start on
+        # a throwaway board legitimately outlives the shell that ran `ensure`
+        # — a harness asserts exactly that, one poll later — and the leak this
+        # closes was measured in days, so nothing is bought by exiting in the
+        # same second. IDLE_EXIT_S bounds both rules.
+        if orphaned():
+            if orphan_since is None:
+                orphan_since = time.monotonic()
+            elif time.monotonic() - orphan_since >= IDLE_EXIT_S:
+                print(f"serve: the run that started this daemon "
+                      f"(pid {OWNER_PID}) has been gone {IDLE_EXIT_S:.0f}s and "
+                      f"no board it watches outlives it — exiting", flush=True)
+                os._exit(0)
+        else:
+            orphan_since = None
+        if vanished():
+            last_live = time.monotonic()
+        elif time.monotonic() - last_live >= IDLE_EXIT_S:
+            # Nothing to watch and nothing arriving. `ensure` starts a daemon
+            # for a board and a session start re-announces every board it
+            # cares about, so a daemon that has been handed none for this long
+            # is one no board asked for any more.
+            print(f"serve: nothing watched for {IDLE_EXIT_S:.0f}s — exiting",
+                  flush=True)
+            os._exit(0)
         if time.monotonic() - last_trim >= LOG_TRIM_S:
             last_trim = time.monotonic()
             trim_log()   # the daemon keeps its own log bounded while it runs
@@ -828,13 +997,125 @@ class Handler(BaseHTTPRequestHandler):
         from urllib.parse import quote
         return f"obsidian://open?vault={vid}&file={quote(stem)}"
 
+    def search_board(self, bpath, mode, rx, needle, key=None):
+        """Every hit in one board. `key` is that board's /board/<key> name on
+        the `all` page and None on the board's own: it prefixes what a hit
+        jumps to, so a row found here opens the PRD it belongs to whichever
+        page asked."""
+        pre = f"{planlib.MEMBER_SIGIL}{key}/" if key else ""
+        prds = planlib.scan(bpath)
+        memos = {os.path.relpath(m["path"], bpath): m
+                 for m in memoslib.scan(bpath).values()
+                 if os.path.isabs(m.get("path") or "")
+                 and (m["path"] + os.sep).startswith(bpath + os.sep)}
+        SKIP = {"__pycache__", "graphs", "state"}
+        MAX_PER_FILE = 12
+        hits = []
+        for root, dirs, files in os.walk(bpath):
+            dirs[:] = sorted(d for d in dirs
+                             if not d.startswith(".") and d not in SKIP)
+            for f in sorted(files):
+                if not f.endswith(".md") or f == "README.md":
+                    continue
+                fp = os.path.join(root, f)
+                rel = os.path.relpath(fp, bpath)
+                parts = rel.split(os.sep)
+                kind, title, jump = "board", f, None
+                # anything the vault holds that has no view of its own —
+                # settings, the vision, graphify's notes — opens in
+                # Obsidian, the one place the file is readable whole
+                uri = self.vault_uri(bpath, rel)
+                if parts[0] == "prds":
+                    p = next((p for p in prds.values()
+                              if fp.startswith(p["dir"] + os.sep)
+                              or fp == os.path.join(p["dir"], "prd.md")),
+                             None)
+                    if p:
+                        kind = ("spec" if "specs" in parts else "prd")
+                        title = p["title"]
+                        jump = (pre + p["rel"]) if p.get("rel") else None
+                elif parts[0] == "memos":
+                    m = memos.get(rel)
+                    kind = "memo"
+                    title = (m.get("subject") or m.get("slug") or f) if m else f
+                elif parts[0] in ("wiki", "workflows"):
+                    kind = "wiki" if parts[0] == "wiki" else "workflow"
+                elif rel == "report.md":
+                    kind = "report"
+                # the path a person reads carries the board on `all`: two
+                # boards both have a `settings.md`, and a bare rel would say
+                # nothing about which one this is
+                shown = (key + "/" + rel) if key else rel
+                where = (title + " " + shown).lower()
+                in_name = mode == "text" and needle in where
+                n_file, first = 0, None
+                try:
+                    with open(fp, encoding="utf-8", errors="replace") as fh:
+                        for ln, line in enumerate(fh, 1):
+                            # what a fuzzy hit shows as context: the first
+                            # line a person wrote. `---`, a frontmatter
+                            # key and a heading's own `#` are not it —
+                            # the title already says that much.
+                            t = line.strip()
+                            if (first is None and t and t != "---"
+                                    and not t.startswith("#")
+                                    and not re.match(r"^[\w-]+:", t)
+                                    and not t.startswith("`state:")):
+                                first = t[:200]
+                            low = line.lower()
+                            at = (rx.search(line).start()
+                                  if rx and rx.search(line)
+                                  else (low.find(needle) if rx is None
+                                        else -1))
+                            if at < 0:
+                                continue
+                            hits.append({
+                                "kind": kind, "rel": jump, "title": title,
+                                "path": shown, "line": ln, "board": key,
+                                "text": line.strip()[:200], "uri": uri,
+                                "score": score_line(kind, low, at, needle,
+                                                    in_name, rx)})
+                            n_file += 1
+                            if n_file >= MAX_PER_FILE:
+                                break
+                except OSError:
+                    continue
+                # nothing in the body, but the name is a fuzzy match: the
+                # file itself is the hit, opened at its first line. This is
+                # the half of ⌘K that finds a note by an abbreviation.
+                if mode == "text" and not n_file:
+                    fz = fuzzy(needle, where)
+                    if fz > 0:
+                        hits.append({
+                            "kind": kind, "rel": jump, "title": title,
+                            "path": shown, "line": 1, "board": key,
+                            "text": first or "", "uri": uri,
+                            "fuzzy": True,
+                            "score": fz + KIND_RANK.get(kind, 0)})
+        return hits
+
     def do_GET(self):
         path, q = self.q()
         if path == "/status":
+            bs = [board_json(b) for b in boards()]
+            if bs:
+                # `all` is a page, not a watch entry — it is in this list
+                # because the switcher reads this list, and a page nobody can
+                # find is a page nobody opens. `virtual` is how the switcher
+                # tells it from a board it could open a file in.
+                bs.append({"name": alllib.KEY, "path": None, "seq": ALL.seq,
+                           "last_sync": None, "last_error": None,
+                           "virtual": True,
+                           "members": [b["name"] for b in bs]})
             return self.reply(200, {"pid": os.getpid(), "port": PORT,
-                                    "boot": BOOT,
-                                    "boards": [board_json(b) for b in boards()]})
+                                    "boot": BOOT, "boards": bs})
         if path == "/data":
+            if is_all(q.get("board")):
+                # recomputed per request, never mirrored: `all` has no state
+                # of its own to go stale, and the boards it merges each keep
+                # their own plan on disk
+                return self.reply(200, {"seq": ALL.seq, "payload":
+                    renderlib.enrich(alllib.payload(all_entries()))})
             b = by_name(q.get("board"))
             if not b:
                 return self.reply(404, {"error": "unknown board"})
@@ -871,10 +1152,17 @@ class Handler(BaseHTTPRequestHandler):
             # specs and its file. The chart asks for this when a row is
             # clicked, so the view is a place to read the work and not only to
             # look at its shape.
-            b = by_name(q.get("board"))
+            rel = q.get("rel") or ""
+            if is_all(q.get("board")):
+                # every row on the merged page is addressed `@<board>/<rel>`,
+                # so the file it stands for is one lookup away — the page
+                # reads a PRD where it lives and writes none
+                key, rel = alllib.unqualify(rel)
+                b = by_name(key)
+            else:
+                b = by_name(q.get("board"))
             if not b:
                 return self.reply(404, {"error": "unknown board"})
-            rel = q.get("rel") or ""
             prd = planlib.scan(b.path).get(rel)
             if not prd:
                 return self.reply(404, {"error": f"no PRD at {rel}"})
@@ -905,20 +1193,29 @@ class Handler(BaseHTTPRequestHandler):
             # answered question out of the inbox and shows it here instead,
             # newest first — so going through a pass is a list that empties,
             # and a decision made a week ago is still readable next to it.
-            b = by_name(q.get("board"))
-            if not b:
-                return self.reply(404, {"error": "unknown board"})
+            if is_all(q.get("board")):
+                targets = all_entries()
+            else:
+                b = by_name(q.get("board"))
+                if not b:
+                    return self.reply(404, {"error": "unknown board"})
+                targets = [(None, b.path)]
             out = []
-            for rel, prd in planlib.scan(b.path).items():
-                for a in planlib.answers_of(prd):
-                    out.append(dict(a, rel=rel, prd=prd["title"],
-                                    state=prd["state"], board=prd.get("board")))
+            for key, bpath in targets:
+                pre = f"{planlib.MEMBER_SIGIL}{key}/" if key else ""
+                for rel, prd in planlib.scan(bpath).items():
+                    for a in planlib.answers_of(prd):
+                        out.append(dict(a, rel=pre + rel, prd=prd["title"],
+                                        state=prd["state"],
+                                        board=key or prd.get("board")))
             # by date, and a stamped answer sorts above an unstamped one:
             # undated is older than anything the view has written
             out.sort(key=lambda a: (a["date"] or "", a["rel"], a["id"]),
                      reverse=True)
             return self.reply(200, {"answers": out})
         if path == "/memos":
+            if is_all(q.get("board")):
+                return self.reply(200, {"memos": alllib.memos(all_entries())})
             b = by_name(q.get("board"))
             if not b:
                 return self.reply(404, {"error": "unknown board"})
@@ -952,9 +1249,17 @@ class Handler(BaseHTTPRequestHandler):
             # a title match beats a body match, a whole word beats a fragment,
             # a PRD beats a generated graph note, and a fuzzy name match sits
             # below every literal one.
-            b = by_name(q.get("board"))
-            if not b:
-                return self.reply(404, {"error": "unknown board"})
+            #
+            # On `all` the same walk runs over every watched board and the
+            # scores compete in one list — one box for the whole machine.
+            name = q.get("board")
+            if is_all(name):
+                targets = all_entries()
+            else:
+                b = by_name(name)
+                if not b:
+                    return self.reply(404, {"error": "unknown board"})
+                targets = [(None, b.path)]
             raw = (q.get("q") or "").strip()
             if len(raw) < 2:
                 return self.reply(200, {"hits": [], "mode": "none"})
@@ -970,90 +1275,10 @@ class Handler(BaseHTTPRequestHandler):
                 if not pat:
                     return self.reply(200, {"hits": [], "mode": "regex"})
             needle = raw.lower()
-            prds = planlib.scan(b.path)
-            memos = {os.path.relpath(m["path"], b.path): m
-                     for m in memoslib.scan(b.path).values()
-                     if os.path.isabs(m.get("path") or "")
-                     and (m["path"] + os.sep).startswith(b.path + os.sep)}
-            SKIP = {"__pycache__", "graphs", "state"}
-            MAX_HITS, MAX_PER_FILE = 300, 12
+            MAX_HITS = 300
             hits = []
-            for root, dirs, files in os.walk(b.path):
-                dirs[:] = sorted(d for d in dirs
-                                 if not d.startswith(".") and d not in SKIP)
-                for f in sorted(files):
-                    if not f.endswith(".md") or f == "README.md":
-                        continue
-                    fp = os.path.join(root, f)
-                    rel = os.path.relpath(fp, b.path)
-                    parts = rel.split(os.sep)
-                    kind, title, jump = "board", f, None
-                    # anything the vault holds that has no view of its own —
-                    # settings, the vision, graphify's notes — opens in
-                    # Obsidian, the one place the file is readable whole
-                    uri = self.vault_uri(b.path, rel)
-                    if parts[0] == "prds":
-                        p = next((p for p in prds.values()
-                                  if fp.startswith(p["dir"] + os.sep)
-                                  or fp == os.path.join(p["dir"], "prd.md")),
-                                 None)
-                        if p:
-                            kind = ("spec" if "specs" in parts else "prd")
-                            title, jump = p["title"], p.get("rel")
-                    elif parts[0] == "memos":
-                        m = memos.get(rel)
-                        kind = "memo"
-                        title = (m.get("subject") or m.get("slug") or f) if m else f
-                    elif parts[0] in ("wiki", "workflows"):
-                        kind = "wiki" if parts[0] == "wiki" else "workflow"
-                    elif rel == "report.md":
-                        kind = "report"
-                    where = (title + " " + rel).lower()
-                    in_name = mode == "text" and needle in where
-                    n_file, first = 0, None
-                    try:
-                        with open(fp, encoding="utf-8", errors="replace") as fh:
-                            for ln, line in enumerate(fh, 1):
-                                # what a fuzzy hit shows as context: the first
-                                # line a person wrote. `---`, a frontmatter
-                                # key and a heading's own `#` are not it —
-                                # the title already says that much.
-                                t = line.strip()
-                                if (first is None and t and t != "---"
-                                        and not t.startswith("#")
-                                        and not re.match(r"^[\w-]+:", t)
-                                        and not t.startswith("`state:")):
-                                    first = t[:200]
-                                low = line.lower()
-                                at = (rx.search(line).start()
-                                      if rx and rx.search(line)
-                                      else (low.find(needle) if rx is None
-                                            else -1))
-                                if at < 0:
-                                    continue
-                                hits.append({
-                                    "kind": kind, "rel": jump, "title": title,
-                                    "path": rel, "line": ln,
-                                    "text": line.strip()[:200], "uri": uri,
-                                    "score": score_line(kind, low, at, needle,
-                                                        in_name, rx)})
-                                n_file += 1
-                                if n_file >= MAX_PER_FILE:
-                                    break
-                    except OSError:
-                        continue
-                    # nothing in the body, but the name is a fuzzy match: the
-                    # file itself is the hit, opened at its first line. This is
-                    # the half of ⌘K that finds a note by an abbreviation.
-                    if mode == "text" and not n_file:
-                        fz = fuzzy(needle, where)
-                        if fz > 0:
-                            hits.append({
-                                "kind": kind, "rel": jump, "title": title,
-                                "path": rel, "line": 1,
-                                "text": first or "", "uri": uri,
-                                "fuzzy": True,
-                                "score": fz + KIND_RANK.get(kind, 0)})
+            for key, bpath in targets:
+                hits += self.search_board(bpath, mode, rx, needle, key)
             # The counts are taken over EVERY hit, before any kind filter and
             # before the cap — they are what the filter chips offer, so they
             # have to say what is findable, not what survived. Filtering here
@@ -1077,6 +1302,11 @@ class Handler(BaseHTTPRequestHandler):
             # the board's state for a person — `prds/report.md`, read from
             # disk on each call like `/prd`. Not parsed here: the page renders
             # the text, and an absent file is `null`, which draws nothing.
+            if is_all(q.get("board")):
+                # a report is one board's state written for a person. Several
+                # boards have several of them, and picking one would be a lie
+                # about the rest — the merged page draws its dashboard instead
+                return self.reply(200, {"text": None, "path": None})
             b = by_name(q.get("board"))
             if not b:
                 return self.reply(404, {"error": "unknown board"})
@@ -1087,7 +1317,7 @@ class Handler(BaseHTTPRequestHandler):
                 text = None
             return self.reply(200, {"text": text, "path": fp})
         if path == "/wait":
-            b = by_name(q.get("board"))
+            b = ALL if is_all(q.get("board")) else by_name(q.get("board"))
             if not b:
                 return self.reply(404, {"error": "unknown board"})
             try:
@@ -1119,12 +1349,19 @@ class Handler(BaseHTTPRequestHandler):
             # single unrecognised segment under the prefix is a board name
             want = path[1:]
         if want is not None:
-            b = by_name(want)
-            if not b:
+            virtual = is_all(want)
+            b = ALL if virtual else by_name(want)
+            if not b or (virtual and not boards()):
                 return self.reply(404, "unknown board", "text/plain")
-            payload = planlib.gantt_payload(
-                b.path, planlib.scan(b.path), planlib.load_map(b.path)[0],
-                planlib.board_settings(b.path))
+            # `all` renders from the merge and from no board directory, so
+            # nothing board-local reaches it: no report.md, no view.user.css,
+            # no view.user.js. Those belong to a board, and this page is over
+            # all of them.
+            payload = (alllib.payload(all_entries()) if virtual
+                       else planlib.gantt_payload(
+                           b.path, planlib.scan(b.path),
+                           planlib.load_map(b.path)[0],
+                           planlib.board_settings(b.path)))
             head = (f'<script>window.__BASE={json.dumps(self.base)};'
                     f'window.__BOARD={json.dumps(b.name)};</script>')
             live = "" if q.get("nolive") else (
@@ -1147,9 +1384,13 @@ class Handler(BaseHTTPRequestHandler):
             # the one case the switcher cannot: no board registered at all.
             bs = sorted(boards(), key=lambda x: x.name)
             if bs:
-                first = next((b for b in bs if planlib.is_master(b.path)), bs[0])
+                # one board is its own answer. More than one and the honest
+                # landing is the page that holds them all — a master, which
+                # carries a merged plan, else `all`, which carries the lot.
+                first = next((b.name for b in bs if planlib.is_master(b.path)),
+                             alllib.KEY if len(bs) > 1 else bs[0].name)
                 self.send_response(302)
-                self.send_header("Location", f"{self.base}/board/{first.name}")
+                self.send_header("Location", f"{self.base}/board/{first}")
                 self.send_header("Content-Length", "0")
                 self.end_headers()
                 return
@@ -1170,6 +1411,14 @@ class Handler(BaseHTTPRequestHandler):
             body = json.loads(self.rfile.read(n) or b"{}")
         except ValueError:
             return self.reply(400, {"error": "bad json"})
+        # `all` is a display (@references/parts/all.md). Every write names a
+        # board and lands in that board's files; the merged page holds none of
+        # them, so it is refused here rather than guessed at. The page's rows
+        # carry the board they came from — the door is one click away.
+        if is_all(body.get("board")) and path in (
+                "/new", "/edit", "/report", "/run", "/unregister"):
+            return self.reply(409, {"error": "all is a display, not a board — "
+                                    "open the PRD's own board to write it"})
         if path == "/register":
             try:
                 board = planlib.find_board(body.get("cwd") or None)
@@ -1192,6 +1441,13 @@ class Handler(BaseHTTPRequestHandler):
             return self.reply(200, {"board": board_json(b), "new": new,
                                     "members": brought})
         if path == "/sync":
+            if is_all(body.get("board")):
+                # the merged page has no pass of its own: syncing it is
+                # syncing every board it draws
+                for b in boards():
+                    mirror(b, force=True)
+                return self.reply(200, {"name": alllib.KEY, "seq": ALL.seq,
+                                        "boards": [b.name for b in boards()]})
             b = by_name(body.get("board"))
             if not b:
                 return self.reply(404, {"error": "unknown board"})
@@ -1232,6 +1488,22 @@ class Handler(BaseHTTPRequestHandler):
             if not prd:
                 return self.reply(404, {"error": f"no PRD at {rel}"})
             path_md = os.path.join(prd["dir"], "prd.md")
+            # An answer this PRD already carries is refused before anything
+            # is written — the same rule `answer` enforces on the command
+            # line, on the other door into `## Answers`. Without it a page
+            # showing a stale pass writes a second answer to a settled
+            # question, and the newer line contradicts the recorded one with
+            # nothing to say which is the decision. Checked first, so a
+            # refusal leaves the file exactly as it was.
+            if body.get("append") and body.get("heading") == "Answers":
+                held = translib.answered_of(prd)
+                dup = [q for q in ANSWER_ID_RE.findall(str(body["append"]))
+                       if planlib._qid(q) in held]
+                if dup:
+                    return self.reply(409, {"prd": rel, "wrote": [], "error":
+                        "answer: " + ", ".join(planlib._qid(q) for q in dup)
+                        + (" is" if len(dup) == 1 else " are")
+                        + " already answered — retract before answering again"})
             # body first: it replaces everything under the frontmatter, so a
             # title written before it would be the first thing overwritten
             wrote = []
@@ -1449,7 +1721,11 @@ def cmd_ensure(arg):
         log = open(log_path, "a")
         subprocess.Popen([sys.executable, os.path.abspath(__file__), "run"],
                          stdout=log, stderr=log, start_new_session=True,
-                         env={**os.environ, "PEARDE_SERVE_LOG": log_path})
+                         env={**os.environ, "PEARDE_SERVE_LOG": log_path,
+                              # who to outlive, and who not to. `ensure` is
+                              # short-lived; its parent is the session or the
+                              # harness that wanted the daemon.
+                              "PEARDE_SERVE_OWNER": str(os.getppid())})
         for _ in range(50):
             if running():
                 break
@@ -1534,6 +1810,183 @@ def cmd_stop():
     return 0
 
 
+def daemon_pids():
+    """Every `serve.py run` on this machine but our own, newest last.
+
+    The process table is the only place a stranded daemon exists. There is no
+    machine-wide registry to consult — that is settled and gone — and a daemon
+    on a spare `PEARDE_PORT` is reachable by no port anyone remembers. So the
+    scan starts from `ps`, and every judgement about a pid is made by asking
+    the daemon itself."""
+    me = os.getpid()
+    try:
+        out = subprocess.run(["ps", "-eo", "pid=,command="],
+                             capture_output=True, text=True, timeout=10).stdout
+    except (OSError, subprocess.SubprocessError):
+        return []
+    found = []
+    for line in out.splitlines():
+        line = line.strip()
+        pid, _, cmd = line.partition(" ")
+        if not pid.isdigit() or int(pid) == me:
+            continue
+        # the daemon's own argv: `<python> …/serve.py run [board…]`. A shell
+        # or an editor whose command line merely quotes the phrase is not one.
+        parts = cmd.split()
+        if len(parts) >= 3 and os.path.basename(parts[1]) == "serve.py" \
+                and parts[2] == "run":
+            found.append(int(pid))
+    return found
+
+
+def listen_port(pid):
+    """The TCP port `pid` listens on, or None. `lsof` is the only portable
+    reader of that on both macOS and Linux; without it, nothing here can name
+    a daemon's port and `reap` says so rather than guessing."""
+    try:
+        out = subprocess.run(
+            ["lsof", "-nP", "-a", "-p", str(pid), "-iTCP", "-sTCP:LISTEN"],
+            capture_output=True, text=True, timeout=10).stdout
+    except (OSError, subprocess.SubprocessError):
+        return None
+    for line in out.splitlines()[1:]:
+        m = re.search(r":(\d+)\s*\(LISTEN\)", line)
+        if m:
+            return int(m.group(1))
+    return None
+
+
+def age_s(pid):
+    """Seconds since `pid` started, or None when `ps` will not say.
+
+    `ps -o etimes=` is procps-only and darwin's ps rejects the keyword;
+    `etime=` is on both, printing `[[dd-]hh:]mm:ss`. A pid whose age cannot be
+    read is reported as None and treated by the caller as young, which is the
+    safe direction: keeping a stranded daemon one more sweep costs a process,
+    stopping a live one costs somebody's session."""
+    try:
+        out = subprocess.run(["ps", "-o", "etime=", "-p", str(pid)],
+                             capture_output=True, text=True, timeout=10).stdout
+    except (OSError, subprocess.SubprocessError):
+        return None
+    t = out.strip()
+    if not t:
+        return None
+    days, _, rest = t.partition("-")
+    if not rest:
+        days, rest = "0", days
+    try:
+        secs = 0.0
+        for part in rest.split(":"):
+            secs = secs * 60 + float(part)
+        return secs + float(days) * 86400
+    except ValueError:
+        return None
+
+
+def stranded(pid):
+    """(verdict, port, detail) for one daemon pid.
+
+    Stranded means: it watches nothing that still exists. A daemon watching
+    one live board is a daemon someone is using, whatever port it is on — the
+    board's own directory is the whole test, and it is a test no neighbouring
+    session can move under us.
+
+    A daemon younger than REAP_GRACE_S is kept before any of that is asked.
+    Between `ensure`'s bind and the `/register` that follows it, a wanted
+    daemon is indistinguishable from a stranded one — it watches nothing, and
+    a moment earlier it answered nothing — and a `SessionStart` hook puts a
+    daemon in that window on every session start."""
+    age = age_s(pid)
+    if age is not None and age < REAP_GRACE_S:
+        port = listen_port(pid)
+        return False, port, (f"started {age:.0f}s ago — inside the "
+                             f"{REAP_GRACE_S:.0f}s grace a session start needs "
+                             f"to register its board")
+    port = listen_port(pid)
+    if port is None:
+        return True, None, "listening on no port"
+    try:
+        with urllib.request.urlopen(
+                f"http://127.0.0.1:{port}/status", timeout=3) as r:
+            st = json.loads(r.read() or b"{}")
+    except (urllib.error.URLError, OSError, ValueError):
+        return True, port, f"port {port} answers no /status"
+    if st.get("pid") != pid:
+        return False, port, f"port {port} is answered by pid {st.get('pid')}"
+    # A `/status` payload is another process's JSON, and a board entry mid-
+    # register carries a null `path`. `b.get("path", "")` returns that None —
+    # the default is only for a MISSING key — and `os.path.isdir(None)` raises
+    # TypeError, which took the whole reap down with a traceback. A reaper
+    # that crashes on one malformed neighbour reaps nothing at all, which is
+    # worse than the leak it exists to clear.
+    bs = [b for b in st.get("boards") or [] if isinstance(b, dict)]
+    live = [b for b in bs if os.path.isdir(b.get("path") or "")]
+    if live:
+        return False, port, (f"watching {len(live)} live board(s): "
+                             + ", ".join(str(b.get("name") or "?")
+                                         for b in live))
+    n = len(bs)
+    return True, port, (f"watching {n} board(s), none on disk" if n
+                        else "watching no board")
+
+
+def cmd_reap(dry=False, only=None):
+    """`reap` — stop every daemon nothing needs any more.
+
+    The fix for the leak is `IDLE_EXIT_S`, which makes a daemon end its own
+    life; this is for the ones already running when that landed, and for a
+    machine where a fixture died between `run` and its first `/register`.
+
+    `--pid <n>` narrows the sweep to pids the caller names. That is for a
+    check, not for a person: a harness proving the stop path has to stand
+    REAP_GRACE_S down to reach it, and a grace-less sweep over the whole
+    process table would stop a neighbouring session's daemon in the very
+    window the grace exists to protect. A check that reaps only the pids it
+    started cannot do that. The sweep `doctor.sh` runs names no pid and keeps
+    the shipped grace, which is what makes it safe beside another session."""
+    pids = daemon_pids()
+    if only:
+        pids = [p for p in pids if p in only]
+    if not pids:
+        print("serve: no other serve.py daemon is running")
+        return 0
+    killed = 0
+    for pid in pids:
+        bad, port, why = stranded(pid)
+        where = f"pid {pid}" + (f" · port {port}" if port else "")
+        if not bad:
+            print(f"serve: keeping {where} — {why}")
+            continue
+        if dry:
+            print(f"serve: would stop {where} — {why}")
+            killed += 1
+            continue
+        if port is not None:
+            try:
+                urllib.request.urlopen(urllib.request.Request(
+                    f"http://127.0.0.1:{port}/stop", data=b"{}",
+                    headers={"Content-Type": "application/json"},
+                    method="POST"), timeout=3).read()
+            except (urllib.error.URLError, OSError):
+                pass   # it died mid-reply, which is the goal
+        for _ in range(20):
+            try:
+                os.kill(pid, 0)
+            except OSError:
+                break
+            time.sleep(0.1)
+        else:
+            try:
+                os.kill(pid, signal.SIGTERM)
+            except OSError:
+                pass
+        print(f"serve: stopped {where} — {why}")
+        killed += 1
+    print(f"serve: {killed} of {len(pids)} stranded")
+    return 0
+
+
 def cmd_selfcheck():
     """`serve.py selfcheck` — the search ranker's own arithmetic, asserted.
 
@@ -1601,6 +2054,28 @@ def main():
         return cmd_status()
     if cmd == "stop":
         return cmd_stop()
+    if cmd == "reap":
+        rest = args[1:]
+        # `--pid` narrows a machine-wide action, so a pid it cannot read must
+        # REFUSE. Dropping the bad value and carrying on would leave `only`
+        # empty, and an empty filter means "every daemon on this machine" —
+        # so `--pid "$PIDVAR"` with PIDVAR unset would silently become the
+        # grace-less machine-wide sweep the flag exists to prevent.
+        only = []
+        i = 0
+        while i < len(rest):
+            if rest[i] == "--pid":
+                val = rest[i + 1] if i + 1 < len(rest) else ""
+                if not val.isdigit() or int(val) <= 0:
+                    print(f"serve: reap --pid wants a process id, got "
+                          f"{val!r} — refusing rather than widening to every "
+                          f"daemon on this machine", file=sys.stderr)
+                    return 2
+                only.append(int(val))
+                i += 2
+                continue
+            i += 1
+        return cmd_reap(dry="--dry-run" in rest, only=only)
     if cmd == "selfcheck":
         return cmd_selfcheck()
     if cmd == "wait":

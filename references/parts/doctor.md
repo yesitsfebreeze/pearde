@@ -25,7 +25,9 @@ never reads `off` — the map is either right or wrong.
 | `origin`     | no PRDs to read                        | a `derived` PRD with no `from:`, or the @references/parts/derived.md tripwire live |
 | `memos`      | no `memos/`                            | a memo fails the check in `@references/memo.md`                   |
 | `workflows`  | no `workflows/`                        | a file fails the check in `@references/workflow.md`               |
-| `questions`  | no PRDs to read                        | a round the user cannot act on — the four shapes are below        |
+| `grammar`    | no grammar file on the board           | a term defined twice, a row that is neither two columns nor three, or a frontmatter key nobody declared |
+| `health`     | no `health/` on the board              | a note with a key nobody declared or for a file no longer tracked, a ranking that disagrees with its notes, or a knob that cannot be read |
+| `questions`  | no PRDs to read                        | a pass the user cannot act on — the four shapes are below        |
 | `view`       | the service is not running             | it runs and this board is not registered                         |
 | `plan`       | no plan on record yet                  | —                                                                |
 | `harnesses`  | `harnesses:` is not `on` and `--harnesses` was not passed, or the board has no `verify.sh` | a harness exits non-zero — named, with its first `FAIL` line |
@@ -47,8 +49,8 @@ never reads `off` — the map is either right or wrong.
 - `--fix` repairs one thing: a view service down or not watching this board.
   It never writes a settings file — a status line lives in the user's own.
 - `questions` runs `@resources/questions.py check`, the only reader of the
-  round's format. It reports four shapes, and every one of them is silent from
-  the outside — a board with a broken round and a board with nothing to ask
+  pass's format. It reports four shapes, and every one of them is silent from
+  the outside — a board with a broken pass and a board with nothing to ask
   look identical: a `## Questions` or `## Answers` heading with nothing under
   it; a question that asks nothing, has no prepared answers to pick from, does
   not carry three, or whose recommended answer is missing or not first; an
@@ -57,7 +59,7 @@ never reads `off` — the map is either right or wrong.
   question`, or any parked state or `mode:` naming a human — that never says
   what it is asking. It reads `needs:` in the same pass, because a `needs:`
   holding prose instead of PRD names resolves to nothing in `plan` and is
-  reported nowhere else. An answered round is history and is left alone. Not
+  reported nowhere else. An answered pass is history and is left alone. Not
   `--fix`-able: what a question should have asked is the one thing only its
   author knows.
 - `workflows` runs `@resources/workflows.py check`, the only reader of the
@@ -71,6 +73,31 @@ never reads `off` — the map is either right or wrong.
   checked in full, not mirrored: it is this library shared between boards,
   not another system's. Not `--fix`-able — what a step should name is its
   author's to say.
+- `grammar` runs `@resources/grammar.py check`, the only reader of the
+  vocabulary format. It reads `.pearde/grammar.md` the way `memos` reads
+  `memos/` — the closed frontmatter set, an ISO date, an `updated` that does
+  not precede its `date` — and the half no single row can see: one term
+  defined twice, and a table row that is neither two columns nor three. Both
+  are silent from the outside. A term with two rows answers a lookup two ways,
+  which is what the collision table exists to stop; a row of the wrong width
+  is a row no reader can tell from a collision. A `grammar:` pointing outside
+  `.pearde/` is checked in full, not mirrored: it is this vocabulary shared by
+  the boards over one codebase, not another system's. `stale` is no part of
+  the check and fails no row — a term that appears nowhere in the tree is a
+  candidate for deletion and a judgement, not a defect, and a word said in
+  passes and never typed is exactly the word a grammar exists for. Not
+  `--fix`-able — what a word means is its author's to say.
+- `health` runs `@resources/health.py check`, the only reader of the health
+  record. It reads `.pearde/health/` the way `memos` reads `memos/` — the
+  closed key set on every note and on the ranking, a score that is an
+  integer 1-100, an ISO date — and the half no single file can see: a note
+  for a file the tree no longer tracks or now skips, a ranking whose count
+  disagrees with the notes beside it, a row with no note. `stale` is printed
+  and fails nothing: a ranking twenty commits behind HEAD, or a graph newer
+  than the one it read, is still the right pointer, and the line ends in the
+  command that refreshes it. `--fix`-able in the plain sense — the record is
+  regenerable and `pearde health score` is the fix — except a knob in
+  `settings.md` that cannot be read, which is a person's to correct.
 - `index` runs `@resources/index.py check` over both halves of the map — the
   scopes in @index.md, the manifest in @references/files.md: a file on disk
   with no row, a row naming no file, a scope naming no file, an `@@` keyword

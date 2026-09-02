@@ -566,7 +566,7 @@ def add(board, title, persona, priority=0, body="", parent=None, out=print,
     title = str(title).strip()
     if not title:
         raise Refused("add: a title is named")
-    slug = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")[:60]
+    slug = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")[:60].strip("-")
     if not slug:
         raise Refused("add: the title has no letters to slug")
     base = planlib.prds_dir(board)

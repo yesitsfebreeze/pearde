@@ -27,6 +27,14 @@ members:
   `memos/`, view. PRDs, specs and memos are written where they live. The master
   holds only the plan and the progress line.
 
+**A master is not `/board/all`.** A master is a board: it declares its members,
+computes one schedule across them, and is worked by one orchestrator. `all`
+(@references/parts/all.md) is a read-only page over whatever the live view
+happens to be watching — it declares nothing, computes nothing and writes
+nothing. Take a master when the projects share a plan, `all` when you only want
+to see them all at once. A master appears on `all` like any other board, showing
+its own PRDs.
+
 **Addressing.** A member PRD is `@<member>/<rel>` board-wide —
 `@model/nucleus`. A PRD directory is never named `@…`, so a qualified address
 cannot collide with the master's own PRDs. Every handle takes it: `run

@@ -492,16 +492,50 @@ jq -r '.servers[] | [.server.name, .server.description] | @tsv'
 
 ### skills — the agent-skills directory, ranked by installs
 - **ranks** installs over eight weeks — the only skill index with a usage axis
-- **auth** none for this page; the `/api/v1` endpoints are OIDC-gated, see [Dead ends](#dead-ends)
-- **example** `rust`
-- **gotcha** the leaderboard ships inside the page's own payload, so this block is layout-coupled the way `trending` is — a shape change prints nothing rather than lying. No query returns the whole leaderboard
+- **auth** none for these pages; the `/api/v1` endpoints are OIDC-gated, see [Dead ends](#dead-ends)
+- **example** `review`
+- **env** `SCOUT_DEPTH` — how far down the leaderboard the description pass reads, default `40`
+- **gotcha** the leaderboard ships inside the page's own payload, so this block is layout-coupled the way `trending` is — a shape change prints nothing rather than lying. `-` is the whole leaderboard, 600 rows
+
+Two passes, because the leaderboard carries no description: a skill is named
+`{"source","skillId","name","installs","weeklyInstalls"}` and nothing else. The
+first pass matches the name, which is free. The second reads the description
+off each skill's own page — one call each, so it is bounded to the top
+`$SCOUT_DEPTH` by installs and only runs while the name pass is short of `$N`.
+A query is every word, ANDed, as a substring: `test-driven` finds `tdd`, and
+`review` also finds a description that says *reviewing*.
 
 ```sh
-curl -s 'https://www.skills.sh/' -H "user-agent: $UA" |
-sed 's/\\"/"/g' |
-grep -o '{"source":"[^"]*","skillId":"[^"]*","name":"[^"]*","installs":[0-9]*[^}]*}' |
-jq -r --arg q "$Q" 'select(($q == "-") or ((.source + " " + .name) | ascii_downcase | contains($q | ascii_downcase))) |
-	[.installs, .source, .name] | @tsv' | head -n "$N"
+# every word of the query, against a haystack whose separators are spaces
+M='function hit(s,   i, W, n) { n = split(q, W, " "); gsub(/[-\/_.]/, " ", s)
+	s = tolower(s); for (i = 1; i <= n; i++) if (!index(s, W[i])) return 0; return 1 }'
+q=$(printf '%s' "$Q" | tr 'A-Z' 'a-z' | tr '_./-' '    ')
+
+board=$(curl -s 'https://www.skills.sh/' -H "user-agent: $UA" |
+	sed 's/\\"/"/g' |
+	grep -o '{"source":"[^"]*","skillId":"[^"]*","name":"[^"]*","installs":[0-9]*[^}]*}' |
+	jq -r '[.installs, .source, .skillId] | @tsv')
+[ "$Q" = "-" ] && { printf '%s\n' "$board" | head -n "$N"; exit 0; }
+
+# names first — free, and a skill named for its job needs no second call
+named=$(printf '%s\n' "$board" | awk -F'\t' -v q="$q" "$M"' hit($2 " " $3)')
+printf '%s' "$named" | grep . | head -n "$N"
+hits=$(printf '%s' "$named" | grep -c .)
+[ "$hits" -ge "$N" ] && exit 0
+
+# a description lives on the skill's own page, one call each. The three fields
+# are digits, `owner/repo` and a slug, so a comma joins them for `xargs` and
+# nothing needs quoting. A source that is not a repo (`open.feishu.cn`) has no
+# such page and comes back empty, which matches nothing.
+printf '%s\n' "$board" | head -n "${SCOUT_DEPTH:-40}" |
+	awk -F'\t' -v q="$q" "$M"' !hit($2 " " $3) { print $1 "," $2 "," $3 }' |
+	xargs -P 8 -n 1 sh -c '
+		inst=${0%%,*}; rest=${0#*,}; src=${rest%%,*}; sid=${rest#*,}
+		d=$(curl -s "https://www.skills.sh/$src/$sid" -H "user-agent: '"$UA"'" |
+			grep -o "\"description\":\"\(\\\\.\|[^\"\\\\]\)*" | head -1 | cut -c16-)
+		printf "%s\t%s\t%s\t%s\n" "$inst" "$src" "$sid" "$d"
+	' |
+	awk -F'\t' -v q="$q" "$M"' hit($4)' | sort -nr | head -n $((N - hits))
 ```
 
 ### skillrepo — every skill one repository ships
@@ -582,7 +616,7 @@ evidence — the failure is recorded so the next sweep does not spend the call.
 | product hunt | `api.producthunt.com/v2` | GraphQL, token required |
 | brave / exa / tavily | their search APIs | keys and billing. `marginalia`, `ddg` and a self-hosted `searx` cover the need |
 | skills.sh API | `skills.sh/api/v1/skills`, `/search`, `/curated` | `401 authentication_required` — a Vercel OIDC token, rotating every 12 hours. The `skills` route reads the same leaderboard off the page |
-| skills.sh CLI search | `npx skills find <q>` | an interactive TUI: it blocks on a tty that a route does not have. `npx skills add <repo> -l` is the non-interactive half and `skillrepo` covers it without the clone |
+| skills.sh CLI search | `npx skills find <q>` | an interactive TUI: it blocks on a tty that a route does not have. Its one advantage over the leaderboard — searching descriptions — is the `skills` route's second pass; `npx skills add <repo> -l` is the non-interactive half and `skillrepo` covers it without the clone |
 
 ## Maintenance
 

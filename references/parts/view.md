@@ -12,6 +12,34 @@ a second of any file changing it swaps the new payload in **where it stands**:
 the rows move, and scroll, zoom, selection and half-typed text do not. Every
 registered board is listed at `/`. `PEARDE_PORT` moves the port.
 
+**The daemon ends its own life.** A board directory that is gone is forgotten
+on the next tick, and a daemon watching nothing on disk stops itself after
+`PEARDE_IDLE_EXIT_S` seconds (default 180). That is what stops a harness
+fixture — which points a daemon at a `mktemp -d` board and then deletes it —
+from leaving a process listening for days: no teardown of the fixture's can be
+relied on, because a SIGKILL runs no trap and `ensure` detaches the child into
+its own session anyway. A daemon watching one board still on disk is never
+touched by the rule, whoever started it and whether or not they are still
+alive.
+
+`serve.py reap` clears the ones that predate it — every `serve.py run` on this
+machine that watches no board still on disk, found through the process table
+because a daemon on a spare `PEARDE_PORT` is reachable by no port anyone
+remembers. `--dry-run` says what it would stop and stops nothing. It keeps
+anything watching a live board, anything answering for a different pid than
+the one asked about, and anything younger than `PEARDE_REAP_GRACE_S` seconds
+(default 60): between `ensure` binding its port and the board's first
+`/register`, a daemon a `SessionStart` hook just brought up is indistinguishable
+from a leak. `--pid <n>` narrows the sweep to the pids named, which is how a
+check stands the grace down to reach the stranded judgement without reaching a
+neighbouring session's daemon inside that window. `doctor.sh --harnesses` ends
+its sweep with a `reap` — no pid named and the shipped grace kept, which is
+what makes it safe beside another session — and puts what it stopped on the
+`harnesses` row.
+
+The verbs, all reachable as `pearde view <verb>`: `ensure`, `status`, `stop`,
+`wait`, `forget`, `run`, `reap`.
+
 **Seven views, one at a time.** The bar in the header is tabs: one section
 visible, the rest hidden, and the URL names it — `#view=board` is the board.
 The page opens on the plan; ⌘1–7 switch the same way. The now strip sits
@@ -36,6 +64,20 @@ every state, every weight`, `13 on record · newest: …` — and opens on a cli
 or on the tab that lands on it. What folds is the body, by the reader's
 choice. **Every section draws on the first paint**, folded or hidden, so
 nothing on this page is waiting for a click to exist.
+
+**Every board at once is `/board/all`.** The same page with no `.pearde/`
+behind it: one render over every board the service is watching, built out of
+their own payloads on each request and thrown away again. It gains a **boards**
+section, which is what it opens on — a card per board, the spread of its states
+and its counts as doors — and it loses the report, because a report is one
+board's state written for a person and picking one of several would be a lie
+about the rest. It is read-only end to end: no ＋ PRD, no save, no drag between
+columns, no answer box, and the write routes answer `409`, so the one thing a
+click does here is take you to the board that owns the row. It is not a master
+board (@references/parts/master.md) — a master is a board, with PRDs of its own
+and one merged critical path across the members it declares, where `all`
+declares nothing and computes nothing. Registering a board is the whole of
+joining it. @references/parts/all.md.
 
 **The now strip is the first thing under the title**, on every view: three
 doors — `to collect N` · `waiting on you N` · `in flight N` — the top three

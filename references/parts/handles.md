@@ -8,7 +8,7 @@ arguments, "pearde status" in plain chat. The meanings are fixed.
 **Several of these are also skills of their own**, invocable without the
 board in front of them: `pearde-drill`, `pearde-memo`, `pearde-view`,
 `pearde-report`, `pearde-master`, `pearde-doctor`, `pearde-persona`,
-`pearde-persona-ask`, `pearde-persona-create`, `pearde-scout`, `pearde-workflow`. Typed inside a pass they are the
+`pearde-persona-ask`, `pearde-persona-create`, `pearde-scout`, `pearde-workflow`, `pearde-grammar`, `pearde-health`. Typed inside a pass they are the
 short handles below and behave exactly as this table says. Typed cold they
 are the same feature with no pass around it — `@@skills` is the list, and
 each skill file says what it does with no board in scope.
@@ -37,6 +37,15 @@ each skill file says what it does with no board in scope.
 | a new workflow               | `workflow add <subject>` — a file from `@references/templates/workflow.md`; every atomic a step names exists first, or the step sends a worker nowhere | — |
 | attach a workflow to a PRD   | `workflow attach <prd> <slug>` — writes `workflow:` on that `prd.md`. An orchestrator write; the drill writes it on the tree it produces | — |
 | check the library            | `workflow check` — `@resources/workflows.py check`: one problem per line, silent when clean. The `doctor` row alone | `pearde workflow check` |
+| the board's vocabulary       | `grammar` — `@resources/grammar.py list`: term · group · meaning, per `@@grammar` | `pearde grammar list` |
+| one word, as a worker asks it| `grammar <term>` — `@resources/grammar.py show`: one term and its collision row where the word carries two meanings | `pearde grammar show <term>` |
+| a word that was just coined  | `grammar add <term> <meaning>` — appends the row under `--group <g>`, default the file's last group, and moves `updated:`. An orchestrator write, on the transition that introduced the word | `pearde grammar add` |
+| check the vocabulary         | `grammar check` — `@resources/grammar.py check`: one problem per line, silent when clean. The `doctor` row alone | `pearde grammar check` |
+| words with no row            | `grammar undefined` — `@resources/grammar.py undefined`: every `@@` scope, PRD and spec frontmatter key and `settings.md` key no row defines, with where it is used. Reads keys and scopes, so a word reintroduced in prose alone is not caught. A judgement, in no check | `pearde grammar undefined` |
+| which files resist the work  | `health` — `@resources/health.py list`: every file under `health-floor`, worst first, score and what pulls it down, off the ranking. `--under <n>` moves the line, a path narrows it, per `@@health` | `pearde health list` |
+| score the tree               | `health score [path...]` — `@resources/health.py score`: one note per tracked file under `.pearde/health/files/` and `ranking.md` worst first, from the tree and the graph. Whole, or for these paths with the ranking rebuilt from every note. An orchestrator write, regenerable | `pearde health score` |
+| one file, and why            | `health show <path>` — `@resources/health.py show`: the note — the raw measures, the two axes that pull it down, its callers and calls | `pearde health show <path>` |
+| check the record             | `health check` — `@resources/health.py check`: one problem per line, silent when clean; `stale` lines fail nothing. The `doctor` row alone | `pearde health check` |
 | who is working               | `persona` — the active one and why; `persona <id>` switches, for this session only: `export PEARDE_AS=<id>`, the variable every command reads, exported as `engineer` by the install line. Stored on no board file | — |
 | one persona's read on one problem | `ask <id> <question>` — calls that persona, pointed at this session for context, and talks to it until the question is settled. It answers and writes nothing; the session keeps its own persona. The board calls one on its own judgment too, unasked | — |
 | a persona for a new field    | `persona create <topic>` — research the field and its real practitioners, compose one from the best of them, per `@@personas` | — |

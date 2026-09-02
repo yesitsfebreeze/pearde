@@ -189,26 +189,47 @@ const file = served ? arg : path.resolve(arg);
                !!s.querySelector("#purpose") && !!s.querySelector("#now") &&
                !!document.querySelector("#statetab");
       })(),
+      // the half of the panel that is not the report — all a merged page has
+      stateDoors: (() => {
+        const s = document.querySelector("#state");
+        return !!s && !!s.querySelector("#purpose") && !!s.querySelector("#now")
+               && !!document.querySelector("#statetab");
+      })(),
+      boardRows: document.querySelectorAll("#boardlist .brow").length,
       tcontrolsInside: !!document.querySelector(
         'section[data-view="timeline"] #tcontrols'),
       focusTab: !!document.querySelector(
         'section[data-view="timeline"] #landtog'),
     };
   });
-  const ORDER = ["timeline", "board", "analytics", "asks", "list", "memos",
-                 "report"];
+  // `all` is the same page over every watched board (references/parts/all.md):
+  // it gains the dashboard it opens on and loses the two things that belong
+  // to one board — the report, and every door that writes. Everything else on
+  // this page is asserted the same way, because it IS the same page.
+  const VIRTUAL = await page.evaluate(
+    () => !!(window.__PAYLOAD__ && window.__PAYLOAD__.virtual));
+  const ORDER = VIRTUAL
+    ? ["boards", "timeline", "board", "analytics", "asks", "list", "memos"]
+    : ["timeline", "board", "analytics", "asks", "list", "memos", "report"];
+  const FIRST = VIRTUAL ? "boards" : "timeline";
   checks.push(["the sections are in the PRD's order",
                page1.order.join(",") === ORDER.join(","), page1.order.join(" ")]);
   checks.push(["exactly one section is visible on load",
-               page1.visible.length === 1 && page1.visible[0] === "timeline",
+               page1.visible.length === 1 && page1.visible[0] === FIRST,
                page1.visible.join(" ")]);
   checks.push(["every section drew on first load, no click",
                page1.emptyHosts.length === 0,
                page1.emptyHosts.length ? "empty frames: " + page1.emptyHosts.join(" ") : ""]);
   checks.push(["the timeline's legend drew",
                page1.timelineDrew, ""]);
-  checks.push(["the state panel holds the doors, the prose and the vision line",
-               page1.whatsup && page1.statePanel, ""]);
+  checks.push([VIRTUAL
+                 ? "the state panel holds the doors and the vision line"
+                 : "the state panel holds the doors, the prose and the vision line",
+               VIRTUAL ? (!page1.whatsup && page1.stateDoors)
+                       : (page1.whatsup && page1.statePanel), ""]);
+  if (VIRTUAL)
+    checks.push(["the merged page draws a row per board",
+                 page1.boardRows > 0, `${page1.boardRows} boards`]);
   checks.push(["the plan's footer strip is inside the plan's section",
                page1.tcontrolsInside, ""]);
   checks.push(["the focus tab is too", page1.focusTab, ""]);
@@ -235,7 +256,19 @@ const file = served ? arg : path.resolve(arg);
   if (wide0) await page.setViewportSize(wide0);
   await page.waitForTimeout(300);
 
-  // N opens the new-PRD modal, and the modal carries its editor toolbar
+  // N opens the new-PRD modal, and the modal carries its editor toolbar.
+  // On `all` there is no such door at all, and its absence is the assertion.
+  if (VIRTUAL) {
+    const doors = await page.evaluate(() => ({
+      newprd: !!document.querySelector("#newprd"),
+      save: !!document.querySelector("#dgo"),
+      report: !!document.querySelector('#views a[data-v="report"]'),
+    }));
+    checks.push(["the merged page offers no door that writes",
+                 !doors.newprd && !doors.save && !doors.report,
+                 [doors.newprd && "+ PRD", doors.save && "save",
+                  doors.report && "report"].filter(Boolean).join(" ")]);
+  } else {
   await page.keyboard.press("n");
   await page.waitForTimeout(250);
   const modal = await page.evaluate(() => ({
@@ -248,6 +281,7 @@ const file = served ? arg : path.resolve(arg);
                  : modal.open ? "toolbar missing" : "did not open"]);
   await page.keyboard.press("Escape");
   await page.waitForTimeout(150);
+  }
 
   // the theme switch: pin, and the root wears the stamp; a full cycle
   // releases it back to the system
@@ -263,7 +297,7 @@ const file = served ? arg : path.resolve(arg);
                t0 === "" && (t1 === "light" || t1 === "dark") && t3 === "",
                `${t0 || "system"} → ${t1 || "system"} → ${t3 || "system"}`]);
 
-  for (const v of ["timeline", "board", "asks", "list", "analytics", "memos", "report"]) {
+  for (const v of ORDER) {
     const before = errors.length;
     await page.click(`#views a[data-v="${v}"]`).catch(e => errors.push(`${v}: ${e.message}`));
     await page.waitForTimeout(120);
@@ -302,9 +336,15 @@ const file = served ? arg : path.resolve(arg);
             c.querySelector(".qq") && !c.querySelector(".qq .opt")).length,
           // a parsed pass answers per question — the card's bulk
           // textarea/submit must be gone, one submit per question only
-          bulkOnParsed: cards.filter(c => c.querySelector(".qq") &&
-            c.querySelector(".foot") &&
-            getComputedStyle(c.querySelector(".foot")).display !== "none").length,
+          // — a foot carrying a textarea or a send button, still visible
+          // beside a parsed pass. A foot holding only a link (`all` puts the
+          // door to the PRD's own board there) answers nothing and is not one
+          bulkOnParsed: cards.filter(c => {
+            const f = c.querySelector(".foot");
+            return c.querySelector(".qq") && f &&
+              getComputedStyle(f).display !== "none" &&
+              !!f.querySelector("textarea, .send");
+          }).length,
           // every question carries its own reopen (revealed once answered)
           passesMissingReopen: [...document.querySelectorAll("#asks .qq")]
             .filter(q => !q.querySelector(".qreopen")).length,

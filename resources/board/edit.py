@@ -69,22 +69,40 @@ def set_body(path, body):
     keep = head + "".join(fm) + "---\n" if fm is not None else ""
     write_atomic(path, keep + "\n" + body.rstrip("\n") + "\n")
 
+def section_span(body, heading):
+    """(start, end) of the first `## <heading>` section, or None.
+
+    Anchored to the start of a line, the way every reader of these files
+    finds a section — @plan._h2_sections, @questions.py, and `section()` in
+    @view.js. A substring search is not the same test: a PRD that *mentions*
+    a heading in its prose — "the parent's `## Answers` settled that" — hands
+    a substring search a match inside a paragraph, and a writer working off
+    that match appends into the middle of the body, under a heading that is
+    not there. That is how `legal/legal-privacy` on the manola board came to
+    carry two answers above `## Constraints`, invisible to every reader that
+    counts answers, on 2026-08-31. The writer now finds sections the way the
+    readers do, so what is written back is what is read back."""
+    m = re.search(r"(?m)^##\s+" + re.escape(heading) + r"\b[^\n]*$", body or "")
+    if not m:
+        return None
+    nxt = re.compile(r"(?m)^##\s+").search(body, m.end())
+    return m.start(), (nxt.start() if nxt else len(body))
+
+
 def append_section(path, heading, text):
     """Append text under `## <heading>`, creating the heading at the end of
     the body when it is not there. Additive only — nothing already written is
     touched, so the daemon can do it unsupervised."""
     body = open(path, encoding="utf-8").read().rstrip("\n")
-    mark = f"## {heading}"
     block = text.strip()
-    if mark in body:
+    span = section_span(body, heading)
+    if span:
         # into the existing section, at its end: answers accumulate in order
-        i = body.index(mark)
-        j = body.find("\n## ", i + 1)
-        head, mid, tail = ((body[:i], body[i:j], body[j:]) if j > 0
-                           else (body[:i], body[i:], ""))
+        i, j = span
+        head, mid, tail = body[:i], body[i:j], body[j:]
         body = head + mid.rstrip("\n") + "\n\n" + block + "\n" + tail
     else:
-        body += f"\n\n{mark}\n\n{block}\n"
+        body += f"\n\n## {heading}\n\n{block}\n"
     write_atomic(path, body.rstrip("\n") + "\n")
 
 def retract_answer(path, qid):
@@ -97,12 +115,11 @@ def retract_answer(path, qid):
     as answered when it is not."""
     body = open(path, encoding="utf-8").read()
     mark = "## Answers"
-    i = body.find(mark)
-    if i < 0:
+    span = section_span(body, "Answers")
+    if not span:
         return False
-    j = body.find("\n## ", i + 1)
-    head, mid, tail = ((body[:i], body[i:j], body[j:]) if j > 0
-                       else (body[:i], body[i:], ""))
+    i, j = span
+    head, mid, tail = body[:i], body[i:j], body[j:]
     line_re = re.compile(r"^\s*\*\*\s*" + re.escape(qid) + r"\s*\*\*",
                          re.I)
     any_re = re.compile(r"^\s*\*\*\s*Q?\d+[a-z]?\s*\*\*", re.I)

@@ -54,7 +54,12 @@ Discovery is scout's, always — @resources/scout/README.md. The ramp holds the
 *fit*, and calls two routes for the rest:
 
 - `skills` — the skills.sh directory, **ranked by installs**. One skill per
-  row, installable by name.
+  row, installable by name. The leaderboard carries no description, so the
+  route matches the name first and then reads the description off each
+  skill's own page, bounded to the top rows by installs — a job word finds
+  `tdd` under *test-driven development* rather than only what is named for
+  the job. The gate holds that pass at `SCOUT_DEPTH=20` because it calls the
+  route once per word.
 - `skillrepo` / `gh` — a whole repository, **ranked by stars**. A source to
   enumerate, not a skill to install, so its line is `-l`, which lists and
   writes nothing.

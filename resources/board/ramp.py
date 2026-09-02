@@ -321,6 +321,10 @@ def route(rid, query, rows=8):
     if not os.path.isfile(ROUTE):
         return []
     env = dict(os.environ, SCOUT_N=str(rows))
+    # `skills` reads one page per row past the name match, and the gate calls
+    # it once per word — so it stays shallow here. The route on its own does
+    # not, and an explicit SCOUT_DEPTH still wins.
+    env.setdefault("SCOUT_DEPTH", "20")
     try:
         r = subprocess.run(["bash", ROUTE, rid, query], capture_output=True,
                            text=True, timeout=90, env=env)

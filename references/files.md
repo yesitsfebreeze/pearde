@@ -39,6 +39,8 @@ whose scope it changed. Nothing else points at it.
 | @references/settings.md | board knobs |
 | @references/memo.md | how a decision is recorded |
 | @references/workflow.md | how a job is done — the two file shapes, the steps grammar, the report section |
+| @references/grammar.md | what a word means here — the closed frontmatter set, the collision table, and what never earns a row |
+| @references/health.md | how much a file resists being worked on — the six axes, the two knobs, the note and the ranking, the check |
 | @references/report.md | the board written for a person |
 | @references/drill.md | how to ask |
 | @references/graph.md | the knowledge-graph feature — graphify passes, the ollama backend, the Obsidian vault |
@@ -68,12 +70,15 @@ whose scope it changed. Nothing else points at it.
 | @references/parts/commits.md | one PRD, one commit |
 | @references/parts/memos.md | what was decided, and what it beat |
 | @references/parts/workflows.md | the how, accumulated — the folder on one page |
+| @references/parts/grammar.md | what the words mean, and how a vocabulary grows |
+| @references/parts/health.md | which files resist being worked on, when they are scored, and what a worker owes one the brief names |
 | @references/parts/progress.md | the line printed on every state change |
 | @references/parts/statusline.md | the same numbers, continuously, for a person |
 | @references/parts/handles.md | every command the board answers to |
 | @references/parts/view.md | the live view at `127.0.0.1:8443` |
 | @references/parts/doctor.md | broken install vs absent one |
 | @references/parts/master.md | one plan across several repos |
+| @references/parts/all.md | `all` — every board this machine watches on one read-only page; what it merges, what it deliberately leaves out, and how it differs from a master |
 | @references/parts/ramp.md | loop step 0 — is this machine tooled for this repo, and the `happiness:` key that closes the question |
 
 ### `references/personas/` — who works
@@ -88,6 +93,8 @@ whose scope it changed. Nothing else points at it.
 
 ### `references/templates/` — what a handle writes from
 
+A template is the shape and nothing else — it lands whole in every file written from it. `<name>.doc.md` beside it holds the how and the why, read on demand, never copied.
+
 | anchor | is |
 |---|---|
 | @references/templates/prd.md | one PRD |
@@ -95,8 +102,17 @@ whose scope it changed. Nothing else points at it.
 | @references/templates/memo.md | one decision record |
 | @references/templates/atomic.md | one unit of work |
 | @references/templates/workflow.md | one ordered route over atomics |
+| @references/templates/grammar.md | one board's vocabulary, pearde's own already in it |
+| @references/templates/health.md | one file's health note — the closed key set, the thresholds in its comments |
 | @references/templates/report.md | the one rolling state, for a person |
 | @references/templates/vision.md | one board's destination — the vision, its terminals, its edges |
+| @references/templates/prd.doc.md | how to fill prd.md — every key, heading and rule the template no longer carries |
+| @references/templates/spec.doc.md | how to fill specNN.md, and what `pearde specced` refuses |
+| @references/templates/memo.doc.md | how to fill memo.md — the closed key set, the four sections |
+| @references/templates/atomic.doc.md | how to fill atomic.md — the closed key set, the three sections |
+| @references/templates/workflow.doc.md | how to fill workflow.md — the closed key set, the steps table's rules |
+| @references/templates/report.doc.md | how to fill report.md — the opening, the three sections |
+| @references/templates/vision.doc.md | how to fill vision.md — terminals, edges, the body |
 
 ## `resources/` — run
 
@@ -110,6 +126,8 @@ whose scope it changed. Nothing else points at it.
 | @resources/statusline.sh | continuous progress numbers |
 | @resources/memos.py | read + check memos — the only reader of that format |
 | @resources/workflows.py | read + check the workflow library, and brief one — the only reader of that format |
+| @resources/grammar.py | read + grow + check the board's vocabulary — the only reader of that format |
+| @resources/health.py | score every tracked file 1-100, worst first, and check the record — the only reader of that format |
 | @resources/index.py | read + check the map — the only reader of that format |
 | @resources/questions.py | read + check a PRD's question pass — the only reader of that format |
 | @resources/invariants/ | one script per `kind: invariant` memo — what its `verify:` runs, named for its slug |
@@ -125,6 +143,7 @@ whose scope it changed. Nothing else points at it.
 | @resources/board/hotreload-test.js | the view's hot-reload gate — one live page, a view source moved under it (`node hotreload-test.js <served-board-url>`) |
 | @resources/board/adapters/claude.json | the Start button's default launch target — one JSON per adapter (`{"name","command","prompt"}`, optional `"plugins"` list of suggestions), read live by serve.py; doctor reports missing ones |
 | @resources/board/lit-core.min.js | Lit 3, vendored — the page's component base |
+| @resources/board/all.py | `all` — every watched board merged into one read-only page; no file of its own, the watch set is its whole configuration |
 | @resources/board/edit.py | the writers — one line at a time |
 | @resources/board/collect.py | `collect` — verify, commit the footprint, `done`, one call |
 | @resources/board/ramp.py | `ramp` — need, have, gap and the toolbox gate; proposes skills off scout's routes and installs none |
@@ -158,6 +177,8 @@ command, and @references/install.md is the naming rule and the install.
 | @references/skills/pearde-persona-create.md | composing one for a field the roster misses | `@@personas` |
 | @references/skills/pearde-scout.md | ranked discovery, the route index, and the quality gates | `@@scout` |
 | @references/skills/pearde-workflow.md | how a kind of job is done, and improved on every run | `@@workflows` |
+| @references/skills/pearde-grammar.md | what a word means here, and how the vocabulary grows | `@@grammar` |
+| @references/skills/pearde-health.md | which files resist being worked on, scored worst first | `@@health` |
 | @references/skills/pearde-graph.md | knowledge-graph passes over any folder, Obsidian vault out | `@@graph` |
 | @references/skills/pearde-knowledge.md | the research layer — query, capture, conclude, link | `@@knowledge` |
 

@@ -13,7 +13,7 @@
 # `skills`, `index`, `statusline`, `board` and `briefs` always report.
 # `plugins` reports when an adapter carries a `plugins:` list — suggestions
 # for the machine, never a failure.
-# `memos`, `workflows`, `grammar`, `view` and `plan` need a board in scope, `origin`
+# `memos`, `workflows`, `grammar`, `health`, `view` and `plan` need a board in scope, `origin`
 # needs PRDs in it, and `members` only exists on a master board.
 #
 # No agent is named in this script and none is looked for. Where a skill goes
@@ -588,6 +588,38 @@ if [ -n "${BOARD:-}" ]; then
   fi
 fi
 
+# ── health: the record of which files resist being worked on ────────────────
+# Regenerable, never in the history — `pearde health score` rebuilds it whole.
+# What can be wrong is the shape: a note with a key nobody declared, a note
+# for a file the tree no longer tracks, a ranking that disagrees with the
+# notes beside it. `stale` is printed and fails nothing: a ranking twenty
+# commits behind is still the right pointer, and the line says what clears it.
+if [ -n "${BOARD:-}" ]; then
+  if [ ! -d "$BOARD/health" ]; then
+    row health off "no health/ — \`pearde health score\` writes the record"
+  elif ! command -v python3 >/dev/null 2>&1; then
+    row health broken "health/ present, no python3 to read it"
+    fix "install python3 — health.py is the only reader of the format"
+  else
+    HPROB=$(python3 "$DIR/health.py" check "$BOARD" 2>&1)
+    HRC=$?
+    HN=$(grep -m1 '^files:' "$BOARD/health/ranking.md" 2>/dev/null | awk '{print $2}')
+    HU=$(grep -m1 '^unhealthy:' "$BOARD/health/ranking.md" 2>/dev/null | awk '{print $2}')
+    HF=$(grep -m1 '^floor:' "$BOARD/health/ranking.md" 2>/dev/null | awk '{print $2}')
+    HSTALE=$(echo "$HPROB" | grep -c '^stale:')
+    if [ "$HRC" = 0 ]; then
+      row health ok "${HN:-0} file$([ "${HN:-0}" = 1 ] || echo s) · ${HU:-0} under ${HF:-40}$([ "$HSTALE" = 0 ] || echo " · stale, \`pearde health score\` refreshes it")"
+    else
+      NH=$(echo "$HPROB" | grep -vc '^stale:')
+      row health broken "${HN:-?} file$([ "${HN:-0}" = 1 ] || echo s) · $NH problem$([ "$NH" = 1 ] || echo s)"
+      echo "$HPROB" | while IFS= read -r l; do
+        [ -n "$l" ] && printf '  %-11s %-7s %s\n' "" "" "$l"
+      done
+      fix "python3 $DIR/health.py score $BOARD — the record is regenerable; a knob that cannot be read is fixed in settings.md"
+    fi
+  fi
+fi
+
 # ── knowledge: the research layer, whole in one folder ───────────────────────
 # .pearde/wiki/ is not a PRD folder and holds no state — the scan walks past
 # it like memos/. What can be wrong is the layer itself: frontmatter the tools
@@ -809,6 +841,17 @@ if [ -n "$BOARD" ]; then
 $HLIST
 EOF
     wait
+    # Whatever the harnesses started, the sweep stops. A harness's own EXIT
+    # trap is the first line of defence and forty-eight of them cannot all be
+    # trusted to have one: a SIGKILL runs no trap, and `serve.py ensure`
+    # detaches its child into its own session, so the fixture's process group
+    # never held it. `reap` keeps every daemon watching a board still on disk
+    # — the machine's real service among them — so this is safe to run beside
+    # another session's sweep. HLEAK is a count of what THIS line stopped,
+    # never of what is running on the machine.
+    HLEAK=$(python3 "$DIR/board/serve.py" reap 2>/dev/null \
+            | sed -n 's/^serve: \([0-9]*\) of [0-9]* stranded$/\1/p')
+    HLEAK="${HLEAK:-0}"
     ji=0
     while IFS= read -r h; do
       [ -n "$h" ] || continue
@@ -841,6 +884,9 @@ EOF
     HSECS=$(( $(date +%s) - HT0 ))
     HDET="$HG of $HN green · ${HSECS}s"
     [ "$HU" -gt 0 ] && HDET="$HG of $HN green · $HU unpinned · ${HSECS}s"
+    # a sweep that leaked is a sweep whose next run starts on a dirtier
+    # machine — say so on the row rather than only in a log nobody opens
+    [ "$HLEAK" -gt 0 ] && HDET="$HDET · $HLEAK leaked service$([ "$HLEAK" = 1 ] || echo s) reaped"
     if [ "$HF" -gt 0 ]; then
       row harnesses broken "$HDET · $HF failed"
       printf '%s\n' "$HFAILED" | while IFS= read -r l; do [ -n "$l" ] && note "$l"; done

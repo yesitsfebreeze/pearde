@@ -335,6 +335,59 @@ def unhide_board(d, name=None):
     return "moved" if moved else None
 
 
+def vault_weight(path):
+    """How much of a person is in an `.obsidian/` — files, plugin bundles, and
+    whether Obsidian ever wrote a layout into it.
+
+    Used only to say which of two vaults looks configured when both exist. A
+    seeded vault is the preset's five JSON files and the two bundles and
+    nothing else; a vault someone has opened has a `workspace.json`, because
+    Obsidian writes one the moment it loads a vault and never otherwise. That
+    file is the strongest single signal and is reported on its own rather
+    than folded into the count. Returns (files, bundles, has_workspace)."""
+    files = bundles = 0
+    for dirpath, _dirs, names in os.walk(path):
+        files += len(names)
+        if os.path.basename(dirpath) in OBSIDIAN_PLUGINS and "main.js" in names:
+            bundles += 1
+    return files, bundles, os.path.isfile(os.path.join(path, "workspace.json"))
+
+
+def stranded_vault(legacy, dest):
+    """The line to say when the lift could not happen because the project
+    root already had an `.obsidian/`.
+
+    `write_obsidian` moves a vault left at the old board root up to the
+    project, and refuses to when the destination exists — an installed vault
+    wins, which is the right call, because overwriting one silently would
+    lose a person's plugins and layout. The bug this repairs is that it also
+    said nothing: the board's vault stayed below, invisible, and whoever had
+    been using it found their plugins, their REST key and their layout gone
+    with no clue where. Both paths are named, both are weighed, and the one
+    that looks configured is called out, so a person is told rather than left
+    to discover it. Nothing is moved either way. Returns None when there is
+    no second vault to report."""
+    if not os.path.isdir(legacy) or not os.path.isdir(dest):
+        return None
+    lf, lb, lw = vault_weight(legacy)
+    df, db, dw = vault_weight(dest)
+    def say(n, f, b, w):
+        return (f"{n} ({f} file{'s' if f != 1 else ''}, {b} plugin bundle"
+                f"{'s' if b != 1 else ''}, "
+                f"{'a layout Obsidian wrote' if w else 'no workspace.json'})")
+    # A layout decides it; failing that, the bundles; failing that, the count.
+    richer = legacy if (lw, lb, lf) > (dw, db, df) else dest
+    return (f"two vaults, and nothing was moved: {say(dest, df, db, dw)} is "
+            f"where Obsidian opens this project, and {say(legacy, lf, lb, lw)} "
+            f"was left below by the board. "
+            + (f"The one that looks configured is the one below — copy what "
+               f"you want out of it, or move it up by hand once Obsidian is "
+               f"quit. " if richer == legacy else
+               f"The one in use looks the richer of the two, so the leftover "
+               f"below is most likely a seeded stub. ")
+            + "Neither is deleted; the installed vault wins by default.")
+
+
 def write_obsidian(d):
     """Step 4b: the vault, and it roots at the PROJECT — `<dir>/.obsidian/`.
 
@@ -359,15 +412,24 @@ def write_obsidian(d):
     whose bundle is not in the preset — the install has not run, or could not
     reach the network — is returned in the second list and named on the
     console, because a vault missing dataview renders no view at all.
-    Returns (installed, missing, key)."""
+
+    When BOTH vaults exist the lift does not happen — an installed
+    vault wins — and that used to be silent, which is how a person
+    lost a configured vault to a stub without being told. It is now
+    reported: `stranded` carries the line naming both paths and which
+    looks configured, and every caller prints it.
+    Returns (installed, missing, key, stranded)."""
     board = planlib.board_at(d)
     dest = os.path.join(d, ".obsidian")
     legacy = os.path.join(board, ".obsidian")
+    stranded = None
     if os.path.isdir(legacy) and not os.path.exists(dest):
         os.rename(legacy, dest)                # the vault a person has, moved up
+    else:
+        stranded = stranded_vault(legacy, dest)   # both there: say so
     plugins, missing = [], []
     if not os.path.isdir(OBSIDIAN_PRESET):
-        return [], list(OBSIDIAN_PLUGINS), None
+        return [], list(OBSIDIAN_PLUGINS), None, stranded
     os.makedirs(dest, exist_ok=True)
     for entry in sorted(os.listdir(OBSIDIAN_PRESET)):
         src = os.path.join(OBSIDIAN_PRESET, entry)
@@ -422,7 +484,7 @@ def write_obsidian(d):
     if have != key:
         os.makedirs(os.path.dirname(key_path), exist_ok=True)
         editlib.write_atomic(key_path, key + "\n")
-    return plugins, missing, key
+    return plugins, missing, key, stranded
 
 
 def write_knowledge(d):
@@ -811,7 +873,7 @@ def cmd_init(argv):
                   "front page, WORKFLOW.md its configuration")
         for verb, line in plant_graph(board):
             print(f"init: knowledge {verb} — {line}")
-        plugins, missing, _ = write_obsidian(d)
+        plugins, missing, _, stranded = write_obsidian(d)
         if plugins:
             print(f"init: obsidian vault at {d} — the project itself, named "
                   f"{os.path.basename(d)}, indexing every file under it, the "
@@ -820,6 +882,8 @@ def cmd_init(argv):
                   "from the first open, local-rest-api (local-rest-api with MCP) answers on "
                   "127.0.0.1:27124 (key: pearde/wiki/.obsidian-api-key) "
                   "after Obsidian loads the vault once")
+        if stranded:
+            print(f"init: obsidian {stranded}")
         state, _vid = register_vault(d, retire=board)
         if state == "added" and obsidian_running():
             print(f"init: registered {os.path.basename(d)} with Obsidian — "
@@ -906,10 +970,12 @@ def cmd_vault(argv):
               "dot-segment, so a board with a dot in its name cannot be in "
               "the project's vault at all")
     if not os.path.isdir(os.path.join(d, ".obsidian")):
-        plugins, missing, _ = write_obsidian(d)
+        plugins, missing, _, stranded = write_obsidian(d)
         print(f"vault: seeded {d}/.obsidian"
               + (f" — plugins: {', '.join(plugins)}" if plugins else "")
               + (f" · no bundle for {', '.join(missing)}" if missing else ""))
+        if stranded:
+            print(f"vault: {stranded}")
     if obsidian_running():
         if "wait" not in args.flags:
             raise Refused(
@@ -1023,7 +1089,7 @@ def cmd_upgrade(argv):
               "this repo's words are yours to add")
     else:
         print("  grammar   already on this board")
-    plugins, missing, _ = write_obsidian(d)
+    plugins, missing, _, stranded = write_obsidian(d)
     repaired = repair_plugin_ids(os.path.join(d, ".obsidian"))
     repaired += repair_ignore_filters(os.path.join(d, ".obsidian"),
                                       os.path.basename(board))
@@ -1031,6 +1097,8 @@ def cmd_upgrade(argv):
     vault_line = f"{d} as {os.path.basename(d)} · " + vault_line
     if repaired:
         vault_line += " · repaired " + "; ".join(repaired)
+    if stranded:
+        vault_line += " · " + stranded
     if missing:
         vault_line += (f" · no bundle for {', '.join(missing)} — "
                        "pearde install --apply <skills-dir> fetches them")

@@ -2,11 +2,11 @@
 
 @resources/guard.py — the loop's rules as a mechanism rather than a sentence.
 
-@references/parts/loop.md says a step is one command and one decision, that
-the board is read with one `scan`, and that an established fact is cited
-rather than re-run. A model that ignores those sentences still burns the context
-window; the pass that cost 318,584 output tokens ignored all three. The guard
-is the same three rules where ignoring them is not possible.
+@references/parts/loop.md says a step is one command and one decision, the
+board is read with one `scan`, and an established fact is cited rather than
+re-run. A model ignoring those sentences still burns the context window; the
+pass that cost 318,584 output tokens ignored all three. The guard is the same
+three rules where ignoring them is impossible.
 
 ## What it refuses
 
@@ -31,10 +31,10 @@ A reference is keyed by its real path, so the same file read once here and
 once through a skill folder of links is one file, not two.
 
 The skill-tree refusal matches `Edit` and `Write` only. The `Bash` hook is a
-reader's check — it stamps and refuses repeated board reads — and a `>` or a
-`tee` into a skill file through a link goes through it unrefused. That is a
-gap, said here rather than papered over: no brief asks a pass to write the
-skill from a shell, and a pass that does is not stopped by this guard.
+reader's check — it stamps and refuses repeated board reads — so a `>` or a
+`tee` into a skill file through a link passes unrefused. A gap, said here
+rather than papered over: no brief asks a pass to write the skill from a
+shell, and a pass that does is not stopped by this guard.
 
 ## The ceiling, measured from the floor
 
@@ -48,8 +48,8 @@ to stop a half-million-token window ended up stopping the work instead.
 `budget_floor` in the session file is the smallest window the session has been
 billed for, and the refusal is on `ctx - floor`.
 
-Two things it never does. It never measures a **worker**: the transcript the
-hook is handed is the dispatcher's, a worker's turns are not in it, and a call
+Two things it never does. It never measures a **worker**: the hook is handed
+the dispatcher's transcript, a worker's turns are absent from it, and a call
 carrying `agent_id` is skipped rather than judged by somebody else's number —
 a pass worker ends itself by `transitions-per-pass`, per
 @references/parts/dispatch.md. And it never leaves a session with nowhere to
@@ -62,14 +62,14 @@ handover, not a stop.
 The drill is one of the refusals the loop names where the guard is wired: a
 `claim` over an unput frontier — the scan printed a **drill** section and
 `## Asked` does not yet carry its questions — is refused by the command itself
-(`asking N — drill first`, @references/parts/loop.md step 2), and it lands in
-the transition window's `refused` count like every refused call, on the row the
-next transition writes. The scan's drill section is what the pass reads
-instead of dispatching.
+(`asking N — drill first`, @references/parts/loop.md step 2) and lands in the
+transition window's `refused` count like every refused call, on the row the
+next transition writes. The pass reads the scan's drill section instead of
+dispatching.
 
-The guard sees every tool call a session makes on a board, so it is where the
-pass's cost is counted — no second hook, no second process. Per board, in
-the session's file under `boards`:
+The guard sees every tool call a session makes on a board, so the guard is
+where the pass's cost is counted — no second hook, no second process. Per
+board, in the session's file under `boards`:
 
 | key | is |
 |---|---|
@@ -90,9 +90,9 @@ otherwise `null` — unmeasured, never zero. A session with the guard off writes
 
 `pearde status` prints the block as one line — `this session: <calls> calls ·
 <refused> refused · <n> transitions · <calls/n> per transition` — and `no
-guard` when there is no session file at all. The analytics view draws the
-same numbers as two series, per @references/parts/view.md. Calls are the
-proxy for tokens, and the page says so.
+guard` with no session file at all. The analytics view draws the same numbers
+as two series, per @references/parts/view.md. Calls are the proxy for tokens,
+and the page says so.
 
 One JSON file per session, in the board it counted on:
 `<board>/.state/guard/<session>.json`. `PEARDE_GUARD_STATE` moves the
@@ -101,11 +101,11 @@ a temp project sets it, and so writes into no real board.
 
 **It refuses only what is provably redundant.** "Nothing changed" is the
 newest mtime of any `.md` under the board and its members — 7 ms on a
-227-PRD master board. An unchanged stamp means an identical answer, which is
-why the refusal is safe; a board that moved lets the same command straight
+227-PRD master board. An unchanged stamp means an identical answer, which
+makes the refusal safe; a board that moved lets the same command straight
 through. `plan.py` itself is never refused: a pass recovering from a
-compaction has to be able to ask again, and that is exactly when the board has
-not moved.
+compaction has to be able to ask again, exactly when the board has not
+moved.
 
 Anything outside a board is not its business, and a guard that throws exits
 zero — a broken guard must never be able to block a tool call.
@@ -117,12 +117,12 @@ default the one above the working directory. It reads
 `<repo>/.claude/settings.json`, creating it when absent, and adds only what
 is missing: `env.MAX_THINKING_TOKENS` when unset, and the four hook entries
 below — three naming this skill's absolute `resources/guard.py`, one naming
-its `resources/board/serve.py`. Every other
-key stays, in its order; an entry already present is skipped, and a second
-`on` says `already wired, nothing changed` and writes nothing; a file that
-is not JSON is refused untouched. It prints the file and each line it added,
-then the one sentence to keep: a new settings file is read after `/hooks` or
-a restart. `pearde guard off` removes exactly those entries and nothing else —
+its `resources/board/serve.py`. Every other key stays, in its order; an entry
+already present is skipped, a second `on` says
+`already wired, nothing changed` and writes nothing, and a non-JSON file is
+refused untouched. It prints the file and each line it added, then the one
+sentence to keep: a new settings file is read after `/hooks` or a restart.
+`pearde guard off` removes exactly those entries and nothing else —
 the env key stays, an event list it emptied is dropped, `hooks` itself
 stays. `pearde guard status` prints `doctor`'s `guard` row alone and exits 0
 for `ok`, 1 for `off`, 2 for `broken`.
@@ -168,7 +168,7 @@ cold. Three details are load-bearing.
 | `>/dev/null 2>&1` | a session start prints nothing extra; `ensure` is chatty on success |
 | `\|\| true` | `ensure` exits 2 outside a board, and the hooks contract reserves exit 2 for refusing the session — the wrapper is the promise that a session outside a board, or with the port held, or with no python3, still starts |
 
-`doctor`'s `guard` row notes the entry when it is absent: `no SessionStart
+`doctor`'s `guard` row notes the entry when absent: `no SessionStart
 hook — the view is not brought up on a session start; pearde guard on writes
 it`. `pearde guard off` removes it with the other three.
 
@@ -183,12 +183,12 @@ settings watcher only watches directories that had a settings file when the
 session started.
 
 **`MAX_THINKING_TOKENS` is the other half.** The guard bounds what a pass
-re-reads; the cap bounds what it can think in one response. The pass that
-prompted all of this produced five responses that each hit a 32,000-token
-output ceiling inside a thinking block and emitted nothing at all — no tool
-call, no text — and were retried into the same analysis. No productive
-thinking block in that session exceeded 7,073 tokens. 8,000 is above every one
-of them and a quarter of the ceiling that was being hit.
+re-reads; the cap bounds the thinking in one response. The pass that prompted
+all of this produced five responses that each hit a 32,000-token output
+ceiling inside a thinking block, emitted nothing at all — no tool call, no
+text — and were retried into the same analysis. No productive thinking block
+in that session exceeded 7,073 tokens. 8,000 is above every one of them and a
+quarter of the ceiling being hit.
 
 ## Turning it off
 

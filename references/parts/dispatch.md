@@ -1,25 +1,25 @@
 # The dispatcher
 
-The session that was asked does not work the board. It dispatches
-`pearde-pass` workers that do, one after another, and carries the user's
-answers between them. It holds no board state, opens no PRD, reads no
-reference file but this one.
+The asked session does not work the board. The dispatcher runs
+`pearde-pass` workers one after another and carries the user's answers
+between them, holding no board state, opening no PRD, reading no reference
+file but this one.
 
 ## Why the pass is not worked here
 
-Context is billed on every turn, so what the asked session holds it pays for
-again on every turn that follows. Measured on this repo's own transcripts, on
-2026-09-01: a `/pearde` session opened at a 50,229-token floor — system
-prompt, tools, CLAUDE.md, the skill — and ended at 200,725, having produced
-66k of actual content. The window is what compounded, not the work.
+Context is billed on every turn, so the asked session pays again for
+everything it holds. Measured on this repo's own transcripts, on 2026-09-01:
+a `/pearde` session opened at a 50,229-token floor — system prompt, tools,
+CLAUDE.md, the skill — and ended at 200,725, having produced 66k of actual
+content. The window compounded, not the work.
 
 A pass worker's window is thrown away when it returns. The dispatcher's grows
 by one prompt and one line per pass — about 300 tokens — so a run of twenty
 passes ends roughly where it started, and no pass is ever stopped for being
 expensive: the expensive thing returns and the next one opens empty.
 
-The board is on disk. `.pearde/.state/pass.md` is what crosses between passes,
-and it is written by the worker that ends, not by the session that dispatches.
+The board is on disk. `.pearde/.state/pass.md` crosses between passes, written
+by the worker that ends, never by the session that dispatches.
 
 ## The turn
 
@@ -30,7 +30,7 @@ and it is written by the worker that ends, not by the session that dispatches.
    Resume from .pearde/.state/pass.md.
    ```
 
-   Add, each on its own line and only when it is true: `Scope: <prd>.` for
+   Add, each on its own line and only where true: `Scope: <prd>.` for
    `run <prd>`; `One pass only.` for `once`; `The user answered:` followed by
    what they said, verbatim, one line per fork.
 
@@ -56,9 +56,9 @@ and it is written by the worker that ends, not by the session that dispatches.
    the end of the session.
 
 `status` is the exception, and the only one: it changes nothing and costs one
-call, so it is answered here — `python3 @resources/pearde.py scan` and the
-progress line, per @references/parts/handles.md. Anything that moves a state
-is a pass worker's.
+call, so answer it here — `python3 @resources/pearde.py scan` and the progress
+line, per @references/parts/handles.md. Anything that moves a state is a pass
+worker's.
 
 ## What the user sees
 

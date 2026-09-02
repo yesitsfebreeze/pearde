@@ -1,6 +1,7 @@
 # Roles
 
-Who does what. The role is the job. The persona is who holds it.
+The role is the job; the persona is who holds it —
+@references/personas/INDEX.md.
 
 | role             | does                                                        |
 |------------------|--------------------------------------------------------------|
@@ -9,9 +10,6 @@ Who does what. The role is the job. The persona is who holds it.
 | **implementer**  | turns one `specced` PRD's specs into verified code           |
 | **consultant**   | a persona the orchestrator calls mid-pass and talks to. Reads the session and the board, answers, writes nothing |
 
-Workers do the work. The orchestrator moves the states. A consultant does
-neither: it is called, it answers, and the exchange stays open until the
-question is settled — @references/parts/consult.md.
-
-The role is what the session does. The persona is who does it —
-@references/personas/INDEX.md.
+Workers do the work; the orchestrator moves the states. A consultant does
+neither — called, it answers, and the exchange stays open until the question
+is settled, @references/parts/consult.md.

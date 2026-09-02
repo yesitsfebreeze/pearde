@@ -6,6 +6,16 @@
 # live worker state — a claim is true only while the worker holds it
 .claims/
 
+# a worker's own worktree, checked out here while it holds the PRD. Each is
+# a git repository of its own, so a person's `git add -A` on a layout where
+# the code repo tracks its board gets `warning: adding embedded git
+# repository` without this row.
+.lanes/
+
+# a run session's own worktree, checked out here while the session holds it.
+# Each is a git repository of its own — the same reason .lanes/ is here.
+.sessions/
+
 # rebuilt by `pearde scan` and `pearde view`
 .state/plan.json
 .state/view.html
@@ -25,6 +35,10 @@
 .state/guard/
 .state/calibration.json
 
+# which session holds which worktree, and how to tell that holder is alive —
+# machine-local, and regenerable from `git worktree list` plus `ps`
+.state/sessions.json
+
 # graphify's engine and its output — rebuilt by `pearde graph`
 graphify/
 wiki/graphs/
@@ -38,3 +52,6 @@ wiki/.obsidian-api-key
 wiki/.graphify/
 wiki/Dashboard.report.md
 .obsidian/
+
+# rebuilt by `pearde health score`
+health/

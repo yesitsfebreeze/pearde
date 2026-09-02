@@ -5,6 +5,7 @@ priority: 55
 complexity: 23
 blast-radius:
 actual: 0.11h
+commit: 318fbda 869a80d
 ---
 
 # the-worker-parts-are-rewritten-dense — references/parts/` workers, workflows, personas, consult, health, grammar and memos rewritten dense, `prose.py check` green on each and no fact lost against `HEAD

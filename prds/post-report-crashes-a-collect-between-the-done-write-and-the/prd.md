@@ -6,6 +6,7 @@ complexity: 9
 blast-radius:
 workflow: probe-then-spec
 actual: 0.12h
+commit: 1abd630 0377a70
 ---
 
 # post_report crashes a collect between the done write and the commit

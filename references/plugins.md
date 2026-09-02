@@ -14,7 +14,7 @@ list (`{"name","marketplace","repo"}` per entry), and `doctor.sh` compares it
 against the machine's install record
 (`$CLAUDE_CONFIG_DIR/plugins/installed_plugins.json`, falling back to
 `~/.claude/plugins/`). Run `bash resources/doctor.sh` — every missing plugin
-prints its exact two install commands. `off`, never `broken`: a round runs
+prints its exact two install commands. `off`, never `broken`: a pass runs
 without these; they make it cheaper. An adapter for any other runtime carries
 no list and the row stays silent — no agent is named by the check itself,
 only by the adapter's own data.
@@ -24,7 +24,7 @@ only by the adapter's own data.
 | plugin | stars | job | why it fits pearde |
 |---|---|---|---|
 | [ponytail](https://github.com/DietrichGebert/ponytail) | 117.9k | think like the laziest senior dev — best code is code never written | output discipline composes with caveman; MIT, active |
-| [claude-hud](https://github.com/jarrodwatts/claude-hud) | 27.7k | shows context usage, active tools, running agents | makes the round visible while it runs |
+| [claude-hud](https://github.com/jarrodwatts/claude-hud) | 27.7k | shows context usage, active tools, running agents | makes the pass visible while it runs |
 | [planning-with-files](https://github.com/OthmanAdi/planning-with-files) | 26.5k | crash-proof markdown plans that survive session death | same plain-markdown conviction as the board |
 | [cc-safety-net](https://github.com/kenryu42/cc-safety-net) | 1.5k | blocks destructive git/fs commands before execution | one board, many sessions, one writer per file — the guard earns its keep |
 

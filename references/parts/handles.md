@@ -8,17 +8,17 @@ arguments, "pearde status" in plain chat. The meanings are fixed.
 **Several of these are also skills of their own**, invocable without the
 board in front of them: `pearde-drill`, `pearde-memo`, `pearde-view`,
 `pearde-report`, `pearde-master`, `pearde-doctor`, `pearde-persona`,
-`pearde-persona-ask`, `pearde-persona-create`, `pearde-scout`, `pearde-workflow`. Typed inside a round they are the
+`pearde-persona-ask`, `pearde-persona-create`, `pearde-scout`, `pearde-workflow`. Typed inside a pass they are the
 short handles below and behave exactly as this table says. Typed cold they
-are the same feature with no round around it — `@@skills` is the list, and
+are the same feature with no pass around it — `@@skills` is the list, and
 each skill file says what it does with no board in scope.
 
 | Want                         | Say                                                                                                      | Command |
 |------------------------------|-----------------------------------------------------------------------------------------------------------|---------|
 | report only, change nothing  | `status` — `@resources/board/plan.py scan` plus the progress line. Changes nothing, reads no file the scan already read | `pearde status` |
 | the board as one page        | `scan` — `@resources/board/plan.py scan`: counts, progress terms, collect, in flight, waiting on you, ready, gated. Loop step 1, run on its own | `pearde scan` |
-| which step the round is on   | `next` — `@resources/board/plan.py next`: the loop step, the decision it owes and the exact command, one call after `scan`. Reads and writes nothing | `pearde next` |
-| one round, then stop         | `once`                                                                                                   | — |
+| which step the pass is on   | `next` — `@resources/board/plan.py next`: the loop step, the decision it owes and the exact command, one call after `scan`. Reads and writes nothing | `pearde next` |
+| one pass, then stop         | `once`                                                                                                   | — |
 | more implementers            | `workers=5` — written to `.pearde/settings.md`, persists                                                    | — |
 | deeper spec pipeline         | `pipeline=5` — written to `.pearde/settings.md`, persists                                                   | — |
 | new PRD                      | `add <title>` — dir + `prd.md` from `@references/templates/prd.md`, `state: open`, `origin: requested`. Runs as printed: with no `--as` and no `PEARDE_AS` it files the PRD `· as engineer (default)`, the one transition that does — a new PRD has no earlier line to rewrite | `pearde add [--dry]` |
@@ -43,7 +43,7 @@ each skill file says what it does with no board in scope.
 | the local timeline           | `gantt` — `@resources/board/plan.py gantt --open`: the plan as `.pearde/.state/view.html`, x = distance to the vision | `pearde gantt --open` |
 | weight in real hours         | `calibrate` — `@resources/board/plan.py calibrate`: fit hours-per-weight from every done PRD with an `actual:` across every registered board; the view prints real hours from it | `pearde calibrate` |
 | open the board               | `view` — `@resources/board/serve.py ensure`, then the URL it prints                                          | `pearde view` |
-| plan across projects         | `master <path> …` — writes `members:` in `.pearde/settings.md`, asks the group's `name:` the first time. This board is then the parent every round works in | — |
+| plan across projects         | `master <path> …` — writes `members:` in `.pearde/settings.md`, asks the group's `name:` the first time. This board is then the parent every pass works in | — |
 | what a master merges         | `master` with no path — `@resources/board/plan.py members`: every member, its path, `MISSING` when not on disk | `pearde members` |
 | re-order after anything moved| `reconcile` — `@resources/board/plan.py reconcile`: schedule recomputed, anchor kept. The live service already does it, on every board | `pearde reconcile` |
 | is this thing wired?         | `doctor` — `@resources/doctor.sh --fix`, per @@doctor; print every line | `pearde doctor --fix` |
@@ -54,13 +54,13 @@ each skill file says what it does with no board in scope.
 | validate the specs, sum the weight| `specced` | `pearde specced [--dry]` |
 | children from the analyst's split| `refine` | `pearde refine [--dry]` |
 | print a worker's brief       | `brief <prd> [--role <role>] [--as <id>] [--force]` — `@resources/board/brief.py`: header line, persona line, workflow block, the role's brief from `@references/parts/workers.md` with the placeholders filled; the role follows the state, `--role` overrides. `brief --consult <id> --question "<q>" [--transcript <path>]` is the consultant's | `pearde brief` |
-| sweep the stale claims       | `sweep [--apply]` — every claim silent past `claim-ttl` (@references/settings.md), one line each with what `--apply` does: `analyzing → open`, `claimed → failed` with `## Failure` written; never a claim `.pearde/.state/round.md` names, never an analyst whose specs are on disk. Loop step 1, once per session | `pearde sweep [--dry]` |
+| sweep the stale claims       | `sweep [--apply]` — every claim silent past `claim-ttl` (@references/settings.md), one line each with what `--apply` does: `analyzing → open`, `claimed → failed` with `## Failure` written; never a claim `.pearde/.state/pass.md` names, never an analyst whose specs are on disk. Loop step 1, once per session | `pearde sweep [--dry]` |
 | a board, registered and planned| `init` | `pearde init [--dry]` |
 | the board's settings         | `settings` | `pearde settings [--dry]` |
 | the vision and its axis      | `vision` | `pearde vision` |
 
 The Command column is the line @resources/pearde.py answers. A `—` is a
-handle the round answers by hand, with no command behind it. `[--dry]` marks
+handle the pass answers by hand, with no command behind it. `[--dry]` marks
 a command that writes: with it, the command prints the line the real run
 would print, `dry ·` in front, then `would write:` and every path, and
 writes nothing. A flag a command does not declare is refused before the
@@ -84,13 +84,13 @@ exit 2 — and `pearde <cmd> --help` prints that same list.
   is both the filename and the `memo:` key, and `doctor` fails if they
   disagree. Write the memo when the call is made, not when the work lands.
 - `persona <id>` and `ask <id>` are the switch and the question. Switch when
-  the whole round wants a different reading. Ask when one problem does.
+  the whole pass wants a different reading. Ask when one problem does.
   Neither writes a board file — the switch is `export PEARDE_AS=<id>` per
   `@@personas`, or `--as <id>` on a line that runs in a fresh shell; the call
-  is `@@consult`; and the round's `· as <id>` is the only record on the board
+  is `@@consult`; and the pass's `· as <id>` is the only record on the board
   either leaves.
 - `ask` is a handle, not a permission. The board reaches a persona on its own
-  judgment mid-round — before `done`, on a naming call, on a report it cannot
+  judgment mid-pass — before `done`, on a naming call, on a report it cannot
   check from inside its own frame — and says who it asked and what came back.
   Typing `ask` is how you start that conversation rather than waiting for it.
 - `add` takes the title as written. A one-line title is too thin to spec, so
@@ -113,4 +113,4 @@ exit 2 — and `pearde <cmd> --help` prints that same list.
 One writer per file, sequenced between sessions. On start, fresh `analyzing`
 / `claimed` claims you did not make may be another session's live workers:
 say so and run `status` only. `sweep` lists them and `--apply` leaves any
-claim `.pearde/.state/round.md` names.
+claim `.pearde/.state/pass.md` names.

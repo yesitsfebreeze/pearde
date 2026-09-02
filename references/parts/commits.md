@@ -32,8 +32,8 @@ the collect edited. Never `git add -A`, never `git commit -a` — step 5 already
 proved no other `claimed` PRD writes that footprint.
 
 - **The inherited tree is not the board's.** Step 1 records what is dirty
-  before the round starts. Those paths are never added, whatever footprint
-  they fall in. Name them once in the round.
+  before the pass starts. Those paths are never added, whatever footprint
+  they fall in. Name them once in the pass.
   `collect` reads that record from `.pearde/.claims/<prd>/` — the tracked diff,
   the untracked list and the gate's output at `claim:`, written by
   `snapshot()` in @resources/board/collect.py. A dirty path outside the
@@ -71,14 +71,14 @@ proved no other `claimed` PRD writes that footprint.
   it and says `rides <path>` on the line.
 - **A path the worker wrote outside its footprint is a wrong footprint.**
   Commit it with the rest and say so.
-- **The round that moves an interface runs the probes that assert it.** A
+- **The pass that moves an interface runs the probes that assert it.** A
   commit that changes what a tool prints, where a payload sits, or whether a
   route exists can leave a landed PRD's `probe/verify.sh` red without the
   commit going red — the probe lives in the PRD folder and nothing re-runs
   it. Read the change backward: which harnesses name the moved thing in their
   `want:` lines, and run those before landing (`bash resources/doctor.sh
   --harnesses` is the whole census, one line per red harness). A probe whose
-  contract moved on purpose asserts the move — `/round`'s removal is
+  contract moved on purpose asserts the move — `/pass`'s removal is
   asserted as a 404 — rather than going quietly red.
 - **A workflow file a collect edited is added with the rest, and named in the
   message.** It is the one path in the commit that no `footprint:` declares:
@@ -117,5 +117,5 @@ there, same subject, and never ride a commit in the repo the PRD wrote.
 is ahead and stop.
 
 `commits: off` in `.pearde/settings.md` holds all of it — each transition then
-names its dirty footprint. While on, a `*<dirty>` count climbing across rounds
+names its dirty footprint. While on, a `*<dirty>` count climbing across passes
 is a board whose commits are not landing.

@@ -84,7 +84,7 @@ report in between: the orchestrator followed the route itself, so it writes the
 edit at the step that failed.
 
 **The worker never writes here. The orchestrator does, and only it** — two
-workers proposing edits to one atomic in one round is two collects, and the
+workers proposing edits to one atomic in one pass is two collects, and the
 second reads the file as the first left it. Nothing merges two edits to one
 section.
 
@@ -100,7 +100,7 @@ What decides an edit:
 | the PRD's                             | refused     | the contract was wrong, and a route cannot carry that      |
 
 A refusal is said out loud — which of the two it was — and recorded in
-`.pearde/.state/round.md` per @references/parts/round.md. The file is unchanged, so
+`.pearde/.state/pass.md` per @references/parts/pass.md. The file is unchanged, so
 nothing else on disk would say the run proposed it.
 
 Four rules the collect holds the edit to:

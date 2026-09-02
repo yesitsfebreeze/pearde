@@ -2,7 +2,7 @@
 
 `workers=1`, `pipeline=1`, and the brief followed by hand. The seven steps do
 not change — @references/parts/loop.md is the table, and it is the one to
-read. Four of the rows are already what a solo round does; these three are
+read. Four of the rows are already what a solo pass does; these three are
 what changes in them.
 
 | step | by hand |

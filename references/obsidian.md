@@ -96,10 +96,10 @@ seeded by `@resources/board/init.py` into any new board's
 |---|---|---|
 | setup | zero — the port answers | one config line per client (`/mcp` endpoint) |
 | transport | `curl -sk https://127.0.0.1:27124/<route>` | the client's MCP handshake against `https://127.0.0.1:27124/mcp` |
-| best for | rounds, scripts, `knowledge.py` verbs — anything on this machine | a chat client that wants named tools (`read note`, `search`, `patch`) |
+| best for | passes, scripts, `knowledge.py` verbs — anything on this machine | a chat client that wants named tools (`read note`, `search`, `patch`) |
 | auth | same bearer key | same — the plugin's API key |
 
-Same server, same key, same vault. REST when a script or a round does the
+Same server, same key, same vault. REST when a script or a pass does the
 work; MCP when a chat client wants the button surface. Both die with the
 Obsidian app — the files remain, the port does not.
 
@@ -149,7 +149,7 @@ curl -sk https://127.0.0.1:27124/vault/wiki/Dashboard.md \
 
 The deep views stay in Dataview (DQL over `wiki/board`, `memos`,
 `workflows` — vault-relative, so `.pearde/`-relative — see `Dashboard.md`); the REST `search/`
-answers one flat predicate per call. A round that needs joins uses
+answers one flat predicate per call. A pass that needs joins uses
 `knowledge.py` and `plan.py` directly; REST is the door for everything a
 vault-shaped question needs — backlinks via `file.inlinks` stay in
 Dataview's DQL, which runs in-app.
@@ -163,7 +163,7 @@ Dataview's DQL, which runs in-app.
   opens it the first time — until then the port is silent.
 - **Already-installed wins.** `init` never overwrites a plugin, a key, or a
   hand-tuned config — the board conforms to the vault, never the reverse.
-- **A round reads files first.** The REST port is for app-flavored work —
+- **A pass reads files first.** The REST port is for app-flavored work —
   the person's active note, running a search against the live index,
   driving the app. `plan.py scan`, `knowledge.py query`, and plain file
   reads already answer a board question; Obsidian is reached when the

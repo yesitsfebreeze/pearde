@@ -24,7 +24,7 @@ whose scope it changed. Nothing else points at it.
 | file | what it is |
 |------|------------|
 | @references/agents/pearde-analyst.md | the analyst worker type — model and return contract |
-| @references/agents/pearde-round.md | the round worker type — the window the loop runs in, and the four verdicts it hands back |
+| @references/agents/pearde-pass.md | the pass worker type — the window the loop runs in, and the four verdicts it hands back |
 | @references/agents/pearde-implementer.md | the implementer worker type — model and return contract |
 
 ## `references/` — read
@@ -41,20 +41,20 @@ whose scope it changed. Nothing else points at it.
 | @references/workflow.md | how a job is done — the two file shapes, the steps grammar, the report section |
 | @references/report.md | the board written for a person |
 | @references/drill.md | how to ask |
-| @references/graph.md | the knowledge-graph feature — graphify rounds, the ollama backend, the Obsidian vault |
+| @references/graph.md | the knowledge-graph feature — graphify passes, the ollama backend, the Obsidian vault |
 | @references/knowledge.md | the research layer — sources, conclusions, the ask→capture→conclude loop, the tool behind it |
 | @references/system.md | drop-in instructions block for `AGENTS.md` |
 | @references/plugins.md | the curated plugin list — what to install alongside pearde, what not to, and why |
-| @references/obsidian.md | the vault and its native access — REST + MCP from the same port, the two required plugins, how a round uses them |
+| @references/obsidian.md | the vault and its native access — REST + MCP from the same port, the two required plugins, how a pass uses them |
 
 ### `references/parts/` — the workflow, one part per step
 
 | anchor | is |
 |---|---|
 | @references/parts/loop.md | the eight steps, in order |
-| @references/parts/dispatch.md | the dispatcher — the session that holds nothing and starts rounds |
+| @references/parts/dispatch.md | the dispatcher — the session that holds nothing and starts passes |
 | @references/parts/board.md | the layout the scan walks |
-| @references/parts/round.md | `.pearde/.state/round.md` — what the session holds, across a compaction |
+| @references/parts/pass.md | `.pearde/.state/pass.md` — what the session holds, across a compaction |
 | @references/parts/guard.md | the loop's rules as a hook that refuses the waste |
 | @references/parts/contract.md | the frontmatter keys, and their defaults |
 | @references/parts/states.md | the nine states, and what a tenth means |
@@ -64,7 +64,7 @@ whose scope it changed. Nothing else points at it.
 | @references/parts/workers.md | the exact brief handed to each |
 | @references/parts/solo.md | the same loop without parallel workers |
 | @references/parts/personas.md | who works the session, and how one is picked |
-| @references/parts/consult.md | putting one problem to one persona, mid-round |
+| @references/parts/consult.md | putting one problem to one persona, mid-pass |
 | @references/parts/commits.md | one PRD, one commit |
 | @references/parts/memos.md | what was decided, and what it beat |
 | @references/parts/workflows.md | the how, accumulated — the folder on one page |
@@ -110,10 +110,10 @@ whose scope it changed. Nothing else points at it.
 | @resources/memos.py | read + check memos — the only reader of that format |
 | @resources/workflows.py | read + check the workflow library, and brief one — the only reader of that format |
 | @resources/index.py | read + check the map — the only reader of that format |
-| @resources/questions.py | read + check a PRD's question round — the only reader of that format |
+| @resources/questions.py | read + check a PRD's question pass — the only reader of that format |
 | @resources/invariants/ | one script per `kind: invariant` memo — what its `verify:` runs, named for its slug |
-| @resources/invariants/every-artifact-lands-inside-the-board.sh | the tool writes nowhere but a board: no `.state/` outside a `.pearde/`, a driven throwaway project that stays clean, and the guard that still refuses a round file written beside the board |
-| @resources/graph/graph.sh | graphify rounds — extract, update, query, path, explain, god-nodes, vault open |
+| @resources/invariants/every-artifact-lands-inside-the-board.sh | the tool writes nowhere but a board: no `.state/` outside a `.pearde/`, a driven throwaway project that stays clean, and the guard that still refuses a pass file written beside the board |
+| @resources/graph/graph.sh | graphify passes — extract, update, query, path, explain, god-nodes, vault open |
 | @resources/knowledge.py | the research loop — query, enqueue, remember, conclude, relink, wiki, dashboard, doctor — over `.pearde/wiki/` |
 | @resources/board/serve.py | the live service |
 | @resources/board/plan.py | read + order the board |
@@ -143,7 +143,7 @@ command, and @references/install.md is the naming rule and the install.
 
 | anchor | is | scope |
 |---|---|---|
-| @references/skills/pearde.md | the round, and every handle that moves a PRD | `@@loop` |
+| @references/skills/pearde.md | the pass, and every handle that moves a PRD | `@@loop` |
 | @references/skills/pearde-drill.md | asking until the request is a contract | `@@drill` |
 | @references/skills/pearde-memo.md | recording a decision, and checking the record | `@@memos` |
 | @references/skills/pearde-view.md | the timeline, the order, and editing through it | `@@view` |
@@ -151,12 +151,12 @@ command, and @references/install.md is the naming rule and the install.
 | @references/skills/pearde-master.md | one plan across several repositories | `@@master` |
 | @references/skills/pearde-doctor.md | a broken install against an absent one | `@@doctor` |
 | @references/skills/pearde-update.md | check every install and bring it current | `@@update` |
-| @references/skills/pearde-persona.md | who is working, and switching for the round | `@@personas` |
+| @references/skills/pearde-persona.md | who is working, and switching for the pass | `@@personas` |
 | @references/skills/pearde-persona-ask.md | one problem, one colleague, nothing written | `@@consult` |
 | @references/skills/pearde-persona-create.md | composing one for a field the roster misses | `@@personas` |
 | @references/skills/pearde-scout.md | ranked discovery, the route index, and the quality gates | `@@scout` |
 | @references/skills/pearde-workflow.md | how a kind of job is done, and improved on every run | `@@workflows` |
-| @references/skills/pearde-graph.md | knowledge-graph rounds over any folder, Obsidian vault out | `@@graph` |
+| @references/skills/pearde-graph.md | knowledge-graph passes over any folder, Obsidian vault out | `@@graph` |
 | @references/skills/pearde-knowledge.md | the research layer — query, capture, conclude, link | `@@knowledge` |
 
 ### `resources/board/knowledge/` — the layer's content seed, planted by `init` and `upgrade`

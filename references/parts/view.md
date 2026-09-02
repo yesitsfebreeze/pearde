@@ -24,7 +24,7 @@ on a folded one opens it.
 | 2 | **timeline**  | what is in front of us — see below                                |
 | 3 | **board**     | what is where — kanban by state; drag a card to write `state:`    |
 | 4 | **analytics** | how this is going — where the work and weight sit, the est/actual records, the machine-wide hours-per-weight fit, weight left over time, and what a transition costs: calls per transition over the last thirty, refusals per session, both off the guard's count (@references/parts/guard.md). Calls are the proxy for tokens, named as such; no guard state at all reads `no guard`, never zero |
-| 5 | **asks**      | what is waiting on *you* — every `question` and `blocked` PRD, packed in a masonry wall, and beside them the answered panel. A round in `@references/drill.md`'s format renders as picks: the fork, its three prepared answers (the first is the recommendation, pre-selected), an own-answer box, and its own submit — per question, never one submit for the round. A round not in the format says so and offers "send back — rewrite as questions". An answered question leaves the cards at once and appears in the panel, newest first, where its `reopen` takes the answer back |
+| 5 | **asks**      | what is waiting on *you* — every `question` and `blocked` PRD, packed in a masonry wall, and beside them the answered panel. A pass in `@references/drill.md`'s format renders as picks: the fork, its three prepared answers (the first is the recommendation, pre-selected), an own-answer box, and its own submit — per question, never one submit for the pass. A pass not in the format says so and offers "send back — rewrite as questions". An answered question leaves the cards at once and appears in the panel, newest first, where its `reopen` takes the answer back |
 | 6 | **list**      | all of it — sortable, filterable, one row per PRD                 |
 | 7 | **memos**     | what the board decided — `.pearde/memos/`, rendered                  |
 | 8 | **report**    | the same file in full, folded — section 1 is its opening. ⌘7 |
@@ -46,8 +46,8 @@ the same shape on every board and the eye learns where to land. When a worker
 in flight has gone silent the door says how many.
 
 **Nothing that is git-ignored is rendered for a person.**
-A file git ignores is machine scratch: `.pearde/.state/round.md` is one session's own
-memory (@references/parts/round.md), `.pearde/.state/plan.json` and `.pearde/.state/history.jsonl`
+A file git ignores is machine scratch: `.pearde/.state/pass.md` is one session's own
+memory (@references/parts/pass.md), `.pearde/.state/plan.json` and `.pearde/.state/history.jsonl`
 are the board's. Each is true only at the instant it was written and each is
 written in the board's own vocabulary — states, footprints, commit shas — which
 is the one register @@report forbids in the document a person reads. The view
@@ -88,8 +88,8 @@ page prints the one sentence `.pearde/vision.md` declares — the payload's
   to it.
 - a **footprint clash** is a pairwise `after` edge — the lower-priority PRD
   starts when the higher one ends, and nothing else waits with them. There
-  are no waves and no rounds: a barrier would hold every unrelated PRD for
-  the slowest member of a round, and agents do not work in rounds — each one
+  are no waves and no passes: a barrier would hold every unrelated PRD for
+  the slowest member of a pass, and agents do not work in passes — each one
   starts the moment its own gates clear.
 - The header names the **peak agent count** the fastest path asks for, beside
   what `workers` costs instead. The gap is the decision.
@@ -101,7 +101,7 @@ date, the one PRD asking you a question sits three hundred rows down, and a
 board you have to hunt through is a board nobody glances at. Rows stack in the
 pressure order — to collect, waiting on you, in flight, ready now, gated,
 parked, landed — which is @references/parts/order.md's ranking and the same one
-`plan.py scan` prints a round in. The top of the chart and the top of the scan
+`plan.py scan` prints a pass in. The top of the chart and the top of the scan
 are one claim. Inside a band the plan arithmetic breaks the tie: earliest
 start, then critical, then the size of the door it opens.
 
@@ -218,20 +218,20 @@ person.
 **Clicking anything opens the PRD**, and the pane writes back:
 
 - title, `state`, `priority`, the body, and a note appended to `## Notes`.
-- On a `question` PRD, the round itself — each fork with its three prepared
+- On a `question` PRD, the pass itself — each fork with its three prepared
   answers as radio picks (the first is the recommendation, pre-selected), an
   own-answer box, and its own `answer Qn` button, which writes that pick under
-  `## Answers` (`**Q1** — <text>`). There is no round-level submit. A
+  `## Answers` (`**Q1** — <text>`). There is no pass-level submit. A
   `## Questions` section not in @references/drill.md's format is flagged as
   not answerable and falls back to raw text, a free textarea, and a "send
   back — rewrite as questions" button that replies so under `## Answers` and
   reopens the PRD.
-- A `blocked` PRD's wall renders the same way when it is written as a round.
+- A `blocked` PRD's wall renders the same way when it is written as a pass.
   The heading is matched by prefix, so `## Blocked on a human with a browser`
   is the same section as `## Blocked`.
 - **Each question answers on its own.** `answer Q1` writes that one under
-  `## Answers` and leaves the rest of the round open. The PRD only goes back
-  to `open` when nothing in the round is left unanswered.
+  `## Answers` and leaves the rest of the pass open. The PRD only goes back
+  to `open` when nothing in the pass is left unanswered.
 - Which questions are already answered is read off `## Answers`, not
   remembered by the page — a redraw, a reload and a second reader all agree,
   and nothing is answered twice.
@@ -239,14 +239,14 @@ person.
   decision>`. The id opens the line and the decision follows the dash, as
   before; the stamp is what the answered panel orders by. A line written
   before the stamp existed still reads — it sorts under the dated ones.
-- **Each answered question carries its own `reopen`** — in the round where it
+- **Each answered question carries its own `reopen`** — in the pass where it
   stands, and on its row in the answered panel. Reopening removes its
   `**Qn**` line from `## Answers` and parks the PRD on the user again, so
   every reader agrees off the file.
-- The **asks** view is that same round for every waiting PRD at once. It
+- The **asks** view is that same pass for every waiting PRD at once. It
   renders exactly what the inspector renders — the same picks, the same
   prose, the same per-question buttons — because both build from the same
-  parse. A `blocked` PRD with no `## Blocked` section and no round is flagged
+  parse. A `blocked` PRD with no `## Blocked` section and no pass is flagged
   the same way, not dumped as PRD body.
 - **The answered panel** is the right half of that view: every question the
   board has settled, newest answer first, each row the question, the decision
@@ -254,14 +254,14 @@ person.
   `GET /answers` out of the PRDs themselves, so it holds answers from PRDs
   that have long since reopened, not only from the ones still asking. A
   question answered here leaves its card in the same motion, so the cards
-  hold open forks only and going through a round is a list that empties.
+  hold open forks only and going through a pass is a list that empties.
 - `+ PRD` (or `n`) writes a new one.
 - Every write goes through @resources/board/edit.py: one line at a time,
   atomically, frontmatter and body never in the same write.
 - A worker's report lands via `POST /report` (`{"board","prd","text"}` →
   `## Report`).
 - `GET /report` serves `.pearde/report.md` as `{"text": <file or null>}`, read
-  from disk on each call like `/prd`. `/round` is gone: the page dropped the
+  from disk on each call like `/prd`. `/pass` is gone: the page dropped the
   panel, and a route nothing fetches is a door to nowhere.
 
 Deep links: `#prd=<rel>` opens one PRD, `#view=asks` a view, `#state=blocked`
@@ -282,7 +282,7 @@ every edit.
 
 **Being woken, not polling.** `serve.py wait` sleeps in the kernel and exits
 the moment anything on the board moves, printing what did. Park it in the
-background at session start, and whenever a round ends with work still open.
+background at session start, and whenever a pass ends with work still open.
 
 **What the board keeps.** `.pearde/.state/plan.json` is the last plan.
 `.pearde/.state/history.jsonl` is one row a day — the only memory the board has, and
@@ -401,4 +401,4 @@ that is correct as a file can be broken as a service.
 
 It compares a page against a board in a known state. A PRD that moved changes
 what the views draw, and every check fails for that reason alone. Snapshot the
-board, change the code, compare — never across a round.
+board, change the code, compare — never across a pass.

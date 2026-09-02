@@ -7,7 +7,7 @@
     index.py check                 problems, one per line. Silent and 0 when clean
 
 Two files, because they answer two questions and only one of them is asked
-mid-round. index.md holds the scopes — `@<path>` is one file, `@@<keyword>` is
+mid-pass. index.md holds the scopes — `@<path>` is one file, `@@<keyword>` is
 a scope. references/files.md holds the manifest, one row per tracked file, read
 when a file is added and never to work the board.
 

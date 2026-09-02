@@ -15,7 +15,7 @@
 #                       project, and nothing lands in it outside `.pearde/`
 #   4. the install, after driving — the surface of check 3 left the install
 #                       byte-identical, daemon and guard included
-#   5. the mechanism  — the guard still refuses a round writing a board file
+#   5. the mechanism  — the guard still refuses a pass writing a board file
 #                       into a `.state/` that is not the board's
 #
 # Checks 3 and 4 are the ones that catch a regression. A writer that spells a
@@ -137,20 +137,20 @@ else
   okr "the driven surface left the install unchanged"
 fi
 
-# ── 5. the guard still refuses a round writing the file by hand ──────────────
+# ── 5. the guard still refuses a pass writing the file by hand ──────────────
 hook() {   # hook <path> -> the guard's stdout
   printf '{"tool_name":"Write","cwd":"%s","session_id":"invariant","tool_input":{"file_path":"%s","content":"x"}}' \
     "$P" "$1" | python3 "$R/guard.py" pre 2>/dev/null
 }
-if printf '%s' "$(hook "$P/.state/round.md")" | grep -q '"permissionDecision": "deny"'; then
-  okr "the guard refuses a round file written outside the board"
+if printf '%s' "$(hook "$P/.state/pass.md")" | grep -q '"permissionDecision": "deny"'; then
+  okr "the guard refuses a pass file written outside the board"
 else
-  no "the guard let a round file be written to $P/.state/round.md"
+  no "the guard let a pass file be written to $P/.state/pass.md"
 fi
-if printf '%s' "$(hook "$P/.pearde/.state/round.md")" | grep -q '"deny"'; then
-  no "the guard refuses the board's own round file — the rule is too wide"
+if printf '%s' "$(hook "$P/.pearde/.state/pass.md")" | grep -q '"deny"'; then
+  no "the guard refuses the board's own pass file — the rule is too wide"
 else
-  okr "the guard passes the board's own round file"
+  okr "the guard passes the board's own pass file"
 fi
 
 [ "$FAIL" = 0 ] || printf '\n%s check(s) failed — the invariant is broken.\n' "$FAIL"

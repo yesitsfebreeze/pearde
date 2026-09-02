@@ -24,7 +24,7 @@ Code is parsed locally with tree-sitter AST: deterministic, no LLM, nothing
 leaves the machine. Docs, PDFs, images get a semantic pass through the
 backend. The wrapper pins `--backend ollama` and `--model glm-5.3-flash:cloud`
 — an ollama cloud model, routed by the local ollama daemon. Not local
-inference; it leaves the machine. For a fully local round:
+inference; it leaves the machine. For a fully local pass:
 
 ```bash
 PEARDE_GRAPH_MODEL=gpt-oss:20b graph.sh extract <folder>
@@ -36,7 +36,7 @@ the default folder.
 ## Commands
 
 Every command takes the folder first, optional; default is the current
-directory. Run them from a round, not for their own sake.
+directory. Run them from a pass, not for their own sake.
 
 ```bash
 bash @resources/graph/graph.sh extract @.          # full: AST + semantic + clusters + vault

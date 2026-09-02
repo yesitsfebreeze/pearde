@@ -5,7 +5,7 @@
 @references/parts/loop.md says a step is one command and one decision, that
 the board is read with one `scan`, and that an established fact is cited
 rather than re-run. A model that ignores those sentences still burns the context
-window; the round that cost 318,584 output tokens ignored all three. The guard
+window; the pass that cost 318,584 output tokens ignored all three. The guard
 is the same three rules where ignoring them is not possible.
 
 ## What it refuses
@@ -13,9 +13,9 @@ is the same three rules where ignoring them is not possible.
 | the call | what it says |
 |---|---|
 | a board walked by hand — `find … prd.md`, `grep -r state:`, `ls prds/*/prd.md` | step 1 is `plan.py scan`, and it already answers this. A walk carried as data — inside a heredoc body or a quoted string a script or an editor is given — is not a walk and passes; the string a walker itself or `sh -c` runs is |
-| a board-reading command run twice with nothing changed since | the output is byte-for-byte what you have; cite it from `.pearde/.state/round.md` |
-| a third read of the same file, unchanged since the first | what you needed from it belongs in the round file. Counted **per window**, never per session: one session id and one transcript cover the orchestrator and every worker it dispatches, so the stamps are keyed by `agent_id` as well as by path. A second `pearde-round` worker opens empty and is never refused the first read of a file the first one read |
-| a third read of a **reference** file — this manual, through any install link | the manual does not move while a round runs. @references/parts/loop.md and @references/parts/round.md are exempt, because a compacted round has to be able to re-read the steps |
+| a board-reading command run twice with nothing changed since | the output is byte-for-byte what you have; cite it from `.pearde/.state/pass.md` |
+| a third read of the same file, unchanged since the first | what you needed from it belongs in the pass file. Counted **per window**, never per session: one session id and one transcript cover the orchestrator and every worker it dispatches, so the stamps are keyed by `agent_id` as well as by path. A second `pearde-pass` worker opens empty and is never refused the first read of a file the first one read |
+| a third read of a **reference** file — this manual, through any install link | the manual does not move while a pass runs. @references/parts/loop.md and @references/parts/pass.md are exempt, because a compacted pass has to be able to re-read the steps |
 | an `Edit` or `Write` that changes the `state:` line of a `prd.md` — or writes a new `prd.md` carrying one | `use pearde set <prd> <state>`: the command checks the gate of @references/parts/states.md, and a new PRD is `pearde add` or `pearde refine`. A body edit passes. @resources/board/transitions.py writes through @resources/board/edit.py, never through a tool call, so it is never matched — and a worker's shell passes every gate a command has, which is why "never run a transition" stays a sentence in the brief |
 | an `Edit` or `Write` whose `file_path` resolves — through any install link, or by name — to a file under this skill's own root, from a session whose board is not this repo's | the install is links into this working tree, per `.pearde/memos/the-install-is-live-symlinks.md`: the refusal names the real path the link resolves to, the memo, and the two ways out — file a PRD on the skill's own board, or hand the edit to a session working it. The same repo passes, a session with no board in scope passes, and a write under this repo's `.pearde/prds/` passes — that is how another board files a PRD here |
 
@@ -23,9 +23,9 @@ And two it only comments on:
 
 - The first read of a spec says the boxes are counted for you — `boxes c/t` in
   the scan. The spec is read for its contract, never to count.
-- A `prd.md` written while `.pearde/.state/round.md` is older than it says the round
+- A `prd.md` written while `.pearde/.state/pass.md` is older than it says the pass
   file is owed. A command is never a tool edit, so every transition command
-  says the same on its own line — `round file owed`, before `as`.
+  says the same on its own line — `pass file owed`, before `as`.
 
 A reference is keyed by its real path, so the same file read once here and
 once through a skill folder of links is one file, not two.
@@ -33,17 +33,17 @@ once through a skill folder of links is one file, not two.
 The skill-tree refusal matches `Edit` and `Write` only. The `Bash` hook is a
 reader's check — it stamps and refuses repeated board reads — and a `>` or a
 `tee` into a skill file through a link goes through it unrefused. That is a
-gap, said here rather than papered over: no brief asks a round to write the
-skill from a shell, and a round that does is not stopped by this guard.
+gap, said here rather than papered over: no brief asks a pass to write the
+skill from a shell, and a pass that does is not stopped by this guard.
 
 ## The ceiling, measured from the floor
 
 `context-budget` (@references/settings.md) is a budget on what a window
 **grew**, not on how large it is. A window opens already holding the system
 prompt, the tool schemas, `CLAUDE.md` and the skill: 50,229 tokens on this
-repo's `/pearde` session of 2026-09-01, before the round had read anything.
+repo's `/pearde` session of 2026-09-01, before the pass had read anything.
 Measured absolutely, half a 100k budget was gone on the first turn and the
-ceiling fired on a round that had run one scan — which is how a ceiling meant
+ceiling fired on a pass that had run one scan — which is how a ceiling meant
 to stop a half-million-token window ended up stopping the work instead.
 `budget_floor` in the session file is the smallest window the session has been
 billed for, and the refusal is on `ctx - floor`.
@@ -51,10 +51,10 @@ billed for, and the refusal is on `ctx - floor`.
 Two things it never does. It never measures a **worker**: the transcript the
 hook is handed is the dispatcher's, a worker's turns are not in it, and a call
 carrying `agent_id` is skipped rather than judged by somebody else's number —
-a round worker ends itself by `transitions-per-round`, per
+a pass worker ends itself by `transitions-per-pass`, per
 @references/parts/dispatch.md. And it never leaves a session with nowhere to
 go: at the ceiling, dispatching a worker and asking the user stay allowed
-alongside the round file and the steps, so the answer to the ceiling is a
+alongside the pass file and the steps, so the answer to the ceiling is a
 handover, not a stop.
 
 ## What it counts
@@ -64,11 +64,11 @@ The drill is one of the refusals the loop names where the guard is wired: a
 `## Asked` does not yet carry its questions — is refused by the command itself
 (`asking N — drill first`, @references/parts/loop.md step 2), and it lands in
 the transition window's `refused` count like every refused call, on the row the
-next transition writes. The scan's drill section is what the round reads
+next transition writes. The scan's drill section is what the pass reads
 instead of dispatching.
 
 The guard sees every tool call a session makes on a board, so it is where the
-round's cost is counted — no second hook, no second process. Per board, in
+pass's cost is counted — no second hook, no second process. Per board, in
 the session's file under `boards`:
 
 | key | is |
@@ -103,7 +103,7 @@ a temp project sets it, and so writes into no real board.
 newest mtime of any `.md` under the board and its members — 7 ms on a
 227-PRD master board. An unchanged stamp means an identical answer, which is
 why the refusal is safe; a board that moved lets the same command straight
-through. `plan.py` itself is never refused: a round recovering from a
+through. `plan.py` itself is never refused: a pass recovering from a
 compaction has to be able to ask again, and that is exactly when the board has
 not moved.
 
@@ -160,8 +160,8 @@ created `.claude/settings.json` is picked up after `/hooks` or a restart: the
 settings watcher only watches directories that had a settings file when the
 session started.
 
-**`MAX_THINKING_TOKENS` is the other half.** The guard bounds what a round
-re-reads; the cap bounds what it can think in one response. The round that
+**`MAX_THINKING_TOKENS` is the other half.** The guard bounds what a pass
+re-reads; the cap bounds what it can think in one response. The pass that
 prompted all of this produced five responses that each hit a 32,000-token
 output ceiling inside a thinking block and emitted nothing at all — no tool
 call, no text — and were retried into the same analysis. No productive
@@ -176,5 +176,5 @@ under `<board>/.state/guard/`, machine-local and gitignored like everything
 else that corner rebuilds.
 
 An orchestrator that hits a refusal it believes is wrong should say so in the
-round rather than working around it: a false refusal is a bug in the stamp,
+pass rather than working around it: a false refusal is a bug in the stamp,
 and the stamp is one function.

@@ -6,8 +6,8 @@ Print on EVERY state change. **Printed by the tool**: every transition
 command — `pearde claim` · `release` · `answer` · `retry` · `unblock` ·
 `defer` · `add` · `set` · `sweep` · `specced` · `refine` · `collect` — prints
 it on its stdout with every term below computed from the board after the
-write, and a command run from a shell says `round file owed` before `as`. The
-round computes none of it; the one term the tool cannot know is the persona,
+write, and a command run from a shell says `pass file owed` before `as`. The
+pass computes none of it; the one term the tool cannot know is the persona,
 passed as `--as <id>` or `PEARDE_AS` in the environment.
 
 ```
@@ -33,11 +33,11 @@ passed as `--as <id>` or `PEARDE_AS` in the environment.
   the denominator with work the user never requested: a board 90% through its
   deliverable reads 63% combined. Report both or neither.
 - Omit the `derived` term on a board that has none.
-- When the tripwire is live, say so on the line and in the round.
+- When the tripwire is live, say so on the line and in the pass.
 - `<q>` and `<rp>` do not sum to 100 — untouched board vs requested work done.
 - A parked PRD is in neither numerator nor denominator. Name it in the report.
 - **`ready` and `blocked` are the actionable pair.** A board with 20 PRDs left
-  and `ready 1` is not slow, it is serial. The round says which dependency or
+  and `ready 1` is not slow, it is serial. The pass says which dependency or
   which footprint holds the other 19 — a fact a reader can act on.
 - **`collect` above zero is the board waiting on itself.** The work is done
   and the states have not caught up, so `ready` is under-reporting by
@@ -48,7 +48,7 @@ passed as `--as <id>` or `PEARDE_AS` in the environment.
 file, so this line is the only place it is recorded — never omitted, not even
 when it has not changed, and a `persona <id>` switch prints its own line in
 this form though no state moved. @resources/statusline.sh reads the last one
-out of the session transcript; a round that leaves it off leaves the terminal
+out of the session transcript; a pass that leaves it off leaves the terminal
 showing the persona before it.
 
 The same numbers rendered continuously in the terminal are

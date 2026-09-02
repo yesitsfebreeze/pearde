@@ -23,7 +23,7 @@ Three axes decide what runs next. None of them is a clock.
    board with no `terminals:` prints none of this and orders as above.
 3. **Complexity and blast-radius** — `complexity` 1-100 is the weight the
    progress line and `plan` use. `blast-radius` breaks ties and decides what a
-   round leads with: a `high` PRD that is wrong costs more than a `low` one
+   pass leads with: a `high` PRD that is wrong costs more than a `low` one
    that is late.
 
 The analyst scores `complexity` and `blast-radius` at spec time, from the specs
@@ -34,7 +34,7 @@ touch. The orchestrator writes them on the SPECCED transition.
 
 The three axes above decide what runs next among the PRDs that *can* run. The
 pressure order is the wider question — of everything on the board, what does
-this round touch first — and it is one ranking, written here once and read from
+this pass touch first — and it is one ranking, written here once and read from
 here by both ends:
 
 | # | band | is |
@@ -47,11 +47,11 @@ here by both ends:
 | 5 | **parked** | `deferred` and the board's own states — weighed, scheduled by nothing |
 | 6 | **landed** | `done`, laid out to the left of now |
 
-**The cut is between 1 and 2.** Above it is what this round can act on;
+**The cut is between 1 and 2.** Above it is what this pass can act on;
 below it is what somebody is already on. That is the whole rule — every band
 boundary follows from it.
 
-`plan.py scan` prints its five sections in this order, so a round reads the
+`plan.py scan` prints its five sections in this order, so a pass reads the
 board already sorted, and the timeline stacks its rows by it, so the top of the
 chart and the top of the scan are the same claim. Inside a band the three axes
 above break the tie — earliest start, then critical, then the weight it
@@ -63,7 +63,7 @@ what the banding is for. A PRD changes band when a state or a claim changes.
 
 `actual:` is a record the plan never schedules by. `est:` is a fallback: a
 PRD with no `complexity` is weighed by its `est` rather than dropping to the
-board average. Nothing asks an analyst to produce one, and no round reports
+board average. Nothing asks an analyst to produce one, and no pass reports
 hours left — wall-clock is a function of token throughput, tool latency and
 contention, not a property of the work.
 

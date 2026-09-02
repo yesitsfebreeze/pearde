@@ -1,7 +1,7 @@
 # The status line
 
-What @resources/statusline.sh renders — the round's numbers, continuously,
-for a person watching the terminal rather than the round. Nothing the loop
+What @resources/statusline.sh renders — the pass's numbers, continuously,
+for a person watching the terminal rather than the pass. Nothing the loop
 reads. The state-change line it draws from is @references/parts/progress.md.
 
 It renders the progress line's numbers, plus what the working tree owes and a
@@ -28,10 +28,10 @@ link to the board:
 - `*<dirty>` is uncommitted entries. `↑`/`↓` is commits against upstream. No
   upstream reads `no-upstream`, not `↑0`.
 - `<persona>` is who is working, read from the session's own transcript — the
-  last `· as <id>` a round printed, matched with the `▸` in front of it so
+  last `· as <id>` a pass printed, matched with the `▸` in front of it so
   prose cannot supply one. Nothing on disk holds a persona, and the status
   line runs in its own process, so the printed line is the only channel there
-  is. Before the first round it is absent rather than `engineer`: an unstated
+  is. Before the first pass it is absent rather than `engineer`: an unstated
   persona is `engineer` anyway, and rendering a default nobody chose reads as
   an answer. It is the id, not the name, because the id is what you type back.
 - `▸board` is an OSC-8 hyperlink to the live view. `PRD_STATUS_LINK=off`

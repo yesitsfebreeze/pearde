@@ -303,7 +303,7 @@ function hydrate() {
   ALL = DATA.all || [];
   allByRel = new Map(ALL.map(r => [r.rel, r]));
   HIST = DATA.history || [];
-  // a Start click's wait is over once the round it launched has actually
+  // a Start click's wait is over once the pass it launched has actually
   // claimed the PRD — gone from the board, or moved off `open` — so a later
   // retry that reopens the same PRD is not still held by the old click
   for (const rel of STARTING)
@@ -421,7 +421,7 @@ const anyFilter = () =>
    The vertical axis is not the schedule. Read top to bottom by start, the one
    PRD asking you a question sits three hundred rows down, and a board you have
    to hunt through is a board nobody glances at. So rows stack in THE PRESSURE
-   ORDER — the same five sections `plan.py scan` prints a round in, which is
+   ORDER — the same five sections `plan.py scan` prints a pass in, which is
    the order the board is worked in. @references/parts/order.md holds it, and
    both ends read it from there rather than each keeping their own:
 
@@ -437,7 +437,7 @@ const anyFilter = () =>
                       scheduled by nothing
      6 landed         `done`, laid out to the left of now
 
-   The cut is between 1 and 2: above it is what this round can act on, below it
+   The cut is between 1 and 2: above it is what this pass can act on, below it
    is what is already somebody's. Progress is deliberately NOT a key — a bar
    filling as its checks land would drag its own row up the page, and a row
    that moves while you read it is the thing this ordering exists to fix. A row
@@ -891,7 +891,7 @@ function schedule() {
 
 function niceStep(pxPerUnit, unit) {
   const want = 90 / pxPerUnit;                       // ~90px between labels
-  // calibrated, the axis labels are hours — pick steps that land on round
+  // calibrated, the axis labels are hours — pick steps that land on pass
   // hours, expressed back in the weight units the geometry runs in
   const steps = unit === "w"
     ? (K() ? [.1,.25,.5,1,2,4,8,16,24,48,96,168].map(s => s / K())
@@ -2592,7 +2592,7 @@ function stripAnchor(txt) {
 }
 
 /* ── questions as questions ───────────────────────────────────────────────
-   drill.md's round format, parsed: `### Q1: title`, the fork as prose, then
+   drill.md's pass format, parsed: `### Q1: title`, the fork as prose, then
    exactly three prepared answers as a numbered list, one `(recommended)`.
    Parsed here so answering is a pick — the analyst writes the three, the
    user's job is one click or their own words. A section that does not parse
@@ -2691,7 +2691,7 @@ function wireQuestions(root, qs, send, retire, reopen) {
       if (ta.value.trim()) r.checked = true;
     });
   if (!send) return;
-  // each question answers on its own. The round only reopens the PRD once
+  // each question answers on its own. The pass only reopens the PRD once
   // nothing in it is left unanswered — answering Q1 must not lose Q2.
   root.querySelectorAll(".qq .qsend").forEach(btn => {
     btn.onclick = async () => {
@@ -2874,7 +2874,7 @@ function drawBody() {
       h += '<div class="ask" id="dask"><h5>' +
         (t.state === "question" ? "waiting on you" : "questions") + "</h5>" +
         (dQs
-          // a round in the format: every question carries its own answer and
+          // a pass in the format: every question carries its own answer and
           // reopen — there is no bulk submit, one click settles one question
           ? questionsHTML(dQs, "dq") +
             '<div class="row2"><span class="hint">each question answers on ' +
@@ -2958,7 +2958,7 @@ function drawBody() {
   $("dtitle").oninput = () => { dDirty = true; $("dmsg").textContent = "unsaved"; };
 }
 
-/* One question of a round, written on its own. The PRD reopens only on the
+/* One question of a pass, written on its own. The PRD reopens only on the
    last one — answering Q1 must not set the PRD `open` and take Q2 off the
    asks view with it. */
 async function answerOne(rel, text, last) {
@@ -2967,7 +2967,7 @@ async function answerOne(rel, text, last) {
   const out = await save(rel, body);
   toast(out.error ? "Not saved — " + out.error
         : last ? "Answered — " + rel.split("/").pop() + " is open again"
-               : "Answered — the rest of the round still waits",
+               : "Answered — the rest of the pass still waits",
         !!out.error);
   if (out.error) return false;
   prdCache.delete(rel);
@@ -2982,7 +2982,7 @@ async function answerOne(rel, text, last) {
 
 /* The reverse write, also one question at a time: the answer's `**Qn**` line
    leaves ## Answers and the PRD parks on the user again — except a blocked
-   PRD, whose state is the wall, not the round. */
+   PRD, whose state is the wall, not the pass. */
 async function reopenOne(rel, qid, state) {
   const body = {retract: qid};
   if (state !== "blocked") body.fm = {state: "question"};
@@ -2999,12 +2999,12 @@ async function reopenOne(rel, qid, state) {
   return true;
 }
 
-/* A round that cannot be answered is not answered — it goes back to be
+/* A pass that cannot be answered is not answered — it goes back to be
    rewritten. The reply lands under ## Answers and the PRD reopens; the
-   orchestrator reads it as "the question was wrong" and owes a new round in
+   orchestrator reads it as "the question was wrong" and owes a new pass in
    the format. */
 async function sendBack(rel, blocked) {
-  return answer(rel, "**round** *(sent back " + stamp() + ")* — " + (blocked
+  return answer(rel, "**pass** *(sent back " + stamp() + ")* — " + (blocked
     ? "blocked without a stated wall. Write what is in the way and what " +
       "would clear it, as numbered questions with three prepared answers, " +
       "the recommended one first."
@@ -3073,7 +3073,7 @@ $("drevert").onclick = () => { dDirty = false; drawBody();
    this board — clicking launches one: `POST /run` has the daemon spawn the
    chosen adapter's command (its own agent, its own prompt template — see
    resources/board/adapters/*.json), detached, in the repo root. It does
-   not write `state:` itself; that round writes its own the moment it picks
+   not write `state:` itself; that pass writes its own the moment it picks
    the PRD up, and the live swap already running on this page shows the card
    move on its own within about a second. STARTING only guards the gap
    between the click and that write — the daemon's own /run has the same
@@ -3094,7 +3094,7 @@ async function startPrd(rel, adapterId) {
     return;
   }
   // left in STARTING until the state itself moves off `open` — a click that
-  // launched successfully should not offer a second one before the round has
+  // launched successfully should not offer a second one before the pass has
   // even had the chance to claim it
 }
 
@@ -3254,7 +3254,7 @@ class PeardeBoard extends LitElement {
         r.weight ? html`<span>${fmtW(r.weight)}</span>` : ""}${
         this.served && r.state === "open" && ADAPTERS.length === 1 ? html`<button class="start"
           draggable="false" ?disabled=${starting}
-          title="run this PRD's round now, with ${ADAPTERS[0].name}"
+          title="run this PRD's pass now, with ${ADAPTERS[0].name}"
           @mousedown=${e => { startBtnDown = true; e.stopPropagation(); }}
           @click=${e => { e.stopPropagation(); startPrd(r.rel, ADAPTERS[0].id); }}
           >${starting ? "starting…" : "▶ start"}</button>` : ""
@@ -3267,7 +3267,7 @@ class PeardeBoard extends LitElement {
         // comment above) since it sits in the same draggable card.
         this.served && r.state === "open" && ADAPTERS.length > 1 ? html`<select class="start"
           ?disabled=${starting}
-          title="run this PRD's round now — pick which agent"
+          title="run this PRD's pass now — pick which agent"
           @mousedown=${e => { startBtnDown = true; e.stopPropagation(); }}
           @click=${e => e.stopPropagation()}
           @change=${e => { e.stopPropagation(); const id = e.target.value;
@@ -3390,7 +3390,7 @@ async function drawAsks() {
         "read and answer it here";
       return;
     }
-    // fire serves the fallback foot only — a round that parses answers one
+    // fire serves the fallback foot only — a pass that parses answers one
     // question at a time through its own buttons, never in one submit
     const fire = async only => {
       send.disabled = true;
@@ -3410,7 +3410,7 @@ async function drawAsks() {
     bind(box, "keydown", e => {
       if ((e.metaKey || e.ctrlKey) && e.key === "Enter") fire();
     });
-    // the question text itself, read live out of the PRD. A round in
+    // the question text itself, read live out of the PRD. A pass in
     // drill.md's format renders as picks — the fork, three prepared answers,
     // an own-answer box per question — and the card's one textarea goes
     // away: the options carry their own
@@ -3447,7 +3447,7 @@ async function drawAsks() {
           }
           return ok;
         }, el => retireQuestion(holder, el));
-        // the round carries its own submits — the card's one textarea and
+        // the pass carries its own submits — the card's one textarea and
         // its one button would be a second way to answer, and the bulk
         // submit is exactly what "per question" took out
         const foot = card.querySelector(".foot");
@@ -3459,7 +3459,7 @@ async function drawAsks() {
       q.textContent = txt || "(the PRD says nothing yet)";
       // long text must not trap the page's scroll — it opens on a click
       q.onclick = () => q.classList.toggle("open");
-      // a card the user cannot act on is not an ask. A question round that
+      // a card the user cannot act on is not an ask. A question pass that
       // does not parse, a parked PRD that never asked, a blocked PRD whose
       // card is the PRD body instead of the wall — each says so, and offers
       // the reply that sends it back to be written as one
@@ -3500,11 +3500,11 @@ async function drawAsks() {
   });
 }
 
-/* ── answered: the half of the round that is over ───────────────────────
+/* ── answered: the half of the pass that is over ───────────────────────
    An answered question is not an ask. It leaves the inbox the moment it is
    written back — dropped from its card here, listed in the panel beside it
    there — so what is left on the left is only what is still being asked, and
-   going through a round is a list that empties.
+   going through a pass is a list that empties.
 
    The panel is read out of the PRDs over `/answers`, never accumulated in the
    page: a reload, a redraw and a second reader all see the same answers in
@@ -3526,7 +3526,7 @@ function retireQuestion(holder, el) {
 }
 
 /* A card whose every question is answered while the PRD is still `question`:
-   the round is done and the state has not caught up. Say that, rather than
+   the pass is done and the state has not caught up. Say that, rather than
    leaving a card with nothing in it. */
 function emptyNote(holder) {
   const had = holder.querySelector(".qnone");
@@ -4536,7 +4536,7 @@ function apply(payload) {
   retree();
   drawHeader(); drawLegend(); drawSide();
   memosLoaded = null;
-  answersLoaded = null;   // a terminal can answer a round too
+  answersLoaded = null;   // a terminal can answer a pass too
   drawAll();
   if (dTask) {                                  // keep the inspector honest
     const t = taskFor(dTask.rel);

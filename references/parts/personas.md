@@ -2,7 +2,7 @@
 
 Who works the **session**, and how one is chosen. Two other questions are
 answered elsewhere and do not need this file: a dispatched worker's persona is
-a table in @references/parts/workers.md, and calling one mid-round is
+a table in @references/parts/workers.md, and calling one mid-pass is
 @references/parts/consult.md.
 
 A persona is what gets noticed first, what gets pushed back on, what counts as
@@ -16,7 +16,7 @@ where it lives: `PEARDE_AS`, exported as `engineer` by the line
 PRD. It starts as `engineer`, holds until switched, ends with the shell.
 `persona <id>` is `export PEARDE_AS=<id>`; where each command runs in a fresh
 shell — an agent's tool call — it is `--as <id>` on the line instead. The
-round's line carries `· as <id>` from the same variable per
+pass's line carries `· as <id>` from the same variable per
 @references/parts/progress.md, and that line is the only record on the board
 — which is also where the status line reads it from.
 
@@ -26,16 +26,16 @@ record the switch has. `add` alone runs — a new PRD has no earlier line to
 rewrite — and its line says `· as engineer (default)`, so the record shows
 nobody chose it.
 
-That is deliberate — a persisted persona outlives the round that justified it,
+That is deliberate — a persisted persona outlives the pass that justified it,
 follows a board into work of a different shape, and lets two sessions on one
-board overwrite each other's answer. One line per round re-states it, cheaper
+board overwrite each other's answer. One line per pass re-states it, cheaper
 than a file that can disagree with the session holding it.
 
 ## Three scopes
 
 | scope       | who                                       | chosen                                 | asked | lives                          |
 |-------------|-------------------------------------------|----------------------------------------|-------|--------------------------------|
-| **session** | the orchestrator working this board       | once, and again on a real phase change | yes   | this session's context, and its round lines |
+| **session** | the orchestrator working this board       | once, and again on a real phase change | yes   | this session's context, and its pass lines |
 | **worker**  | one dispatched analyst or implementer     | per dispatch, from its job — @references/parts/workers.md | never | that worker's brief |
 | **consult** | one asked a question — @references/parts/consult.md | for the question | never | that one answer |
 
@@ -61,7 +61,7 @@ matches on what the work is, never on how the user phrased it.
   put back to them as a question.
 - **Rows 2-4 are the work speaking.** They propose. The user disposes.
 - **Two rows match** — a `drill` about a user flow is both 2 and 4. The lower
-  number wins: it describes the *round*, the higher one only the *subject*.
+  number wins: it describes the *pass*, the higher one only the *subject*.
   Genuinely tied and it matters — offer both in the ask.
 - Row 3 is about **checking finished work**, not about work going badly. A
   failing test inside an implementer's own loop is engineering, not review.
@@ -72,22 +72,22 @@ matches on what the work is, never on how the user phrased it.
 |-----------------------------------------------------------|-------------------------------------------------------------------------|
 | candidate = active                                         | nothing. Do not mention it                                              |
 | the user stated it (row 1)                                 | switch, and say so in one line. No question                             |
-| candidate ≠ active, and the round is dispatching a worker  | that is the worker's brief, not a switch — @references/parts/workers.md |
-| candidate ≠ active, and it governs the round               | ask — one question, below — and wear the answer                         |
-| nothing has been stated yet                                | run as `engineer`, and ask on the first round that has a job to match    |
+| candidate ≠ active, and the pass is dispatching a worker  | that is the worker's brief, not a switch — @references/parts/workers.md |
+| candidate ≠ active, and it governs the pass               | ask — one question, below — and wear the answer                         |
+| nothing has been stated yet                                | run as `engineer`, and ask on the first pass that has a job to match    |
 
 A switch takes effect immediately and holds until the next one or the end of
 the session. No board file is written, so nothing has to be unwritten: the way
 back to `engineer` is `export PEARDE_AS=engineer`, the install line again.
 
 **Never switch the session silently.** Print the switch in the same `▸ … · as
-<id>` form the round line uses, even when no state moved — that line is the
+<id>` form the pass line uses, even when no state moved — that line is the
 only record the switch has, and the status line reads it from there.
 
 ## The ask
 
-One question, in the @references/drill.md round format, folded into the round
-that raised it — never a round of its own, never twice in one round.
+One question, in the @references/drill.md pass format, folded into the pass
+that raised it — never a pass of its own, never twice in one pass.
 
 ```
 Question *Q1*: **Who should work this?**
@@ -102,7 +102,7 @@ Recommendation `<candidate>` — <the reason, in one line>
 
 - The recommendation is the candidate. Offer at most three — the roster is one
   hop away for the rest.
-- Wear the answer from the next line onward and carry it on the round's line.
+- Wear the answer from the next line onward and carry it on the pass's line.
 - Answered once, it holds for the session. The next PRD in the same loop is not
   a phase change, and the question is not asked twice for the same reason.
 - **None of the three fits** — that is `persona create <topic>`, per
@@ -120,7 +120,7 @@ Thrash costs more than a slightly wrong persona. None of these is a signal:
 - **Tone.** The user being terse, annoyed, or in a hurry.
 - **Formatting.** A request for shorter answers or no preamble — an output
   style, not a persona.
-- **One question.** A single "why did you do that" inside an engineering round
+- **One question.** A single "why did you do that" inside an engineering pass
   is answered, not switched for.
 - **A red build.** Fixing what you broke is the work, not a review of it.
 - **The board's language.** `language:` is a board setting; a persona is not a

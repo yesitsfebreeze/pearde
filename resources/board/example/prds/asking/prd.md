@@ -8,7 +8,7 @@ blast-radius: mid
 
 # asking — one PRD waiting on a person
 
-This is the waiting-on-you band. The round below is in the shape the view
+This is the waiting-on-you band. The pass below is in the shape the view
 parses, so the page renders it as picks.
 
 ## Questions

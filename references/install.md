@@ -70,7 +70,7 @@ bash @resources/install.sh --remove <skills-dir> # take it back out
   every install at once. A copy drifts, and nothing says it happened.
   The links run the other way too — a session on any other board reaches
   this repo's working tree through them — so `@resources/guard.py`, where it
-  is wired, refuses an `Edit` or `Write` through a link from a round whose
+  is wired, refuses an `Edit` or `Write` through a link from a pass whose
   board is not this repo's, naming the real path and
   `.pearde/memos/the-install-is-live-symlinks.md`; @references/parts/guard.md
   is the row.
@@ -151,7 +151,7 @@ is none, so it is safe to wire globally.
   every other key kept; `pearde guard off` takes exactly those out again.
   @references/parts/guard.md is the block it writes and the reasoning.
   Optional, and the loop runs without it — it is the loop's own rules made
-  unignorable, which is worth having exactly where a round is long enough to
+  unignorable, which is worth having exactly where a pass is long enough to
   forget them. `doctor` reports it as `ok`, `off` or `broken`, and its `off`
   fix line is the command; `pearde guard status` is that row alone.
 - **Compose, never overwrite.** An existing status line keeps working: export
@@ -201,7 +201,7 @@ members:
 
 - The members stay where they are, boards in their own right. The parent gets
   the merged scan, the merged plan, one timeline.
-- Run the round in the parent from then on. `@resources/doctor.sh` grows a
+- Run the pass in the parent from then on. `@resources/doctor.sh` grows a
   `members` row, and the status line marks the group `⊞N`.
 - `@references/parts/master.md` is the contract.
 

@@ -38,12 +38,12 @@ when refused, writing nothing.
 collect.py `snapshot()` — and `answer` lists the `prd.md` it wrote in
 `prds/.claims/riders`, through `owe()`: board state written between
 transitions rides the next collect. A line printed from a shell ends
-`round file owed`: the round file is rewritten at every transition, and
+`pass file owed`: the pass file is rewritten at every transition, and
 no hook sees a command.
 
 `sweep` lists every held claim `plan.py` `silent_of` calls silent — no
 file of the PRD's has moved for `claim-ttl` — and `--apply` moves
-`analyzing → open` and `claimed → failed`, never one `prds/.round.md`
+`analyzing → open` and `claimed → failed`, never one `prds/.pass.md`
 names, never an analyst whose specs are on disk.
 
 `COMMANDS` is what the dispatcher discovers. Each entry takes the argument
@@ -63,7 +63,7 @@ sys.path.insert(0, ROOT)
 sys.path.insert(0, HERE)
 import edit as editlib          # noqa: E402 — the only writer of bytes
 import plan as planlib          # noqa: E402 — every read
-import questions as qlib        # noqa: E402 — the round check `release … question` and `answer` run
+import questions as qlib        # noqa: E402 — the pass check `release … question` and `answer` run
 
 TEMPLATE = os.path.join(os.path.dirname(ROOT), "references", "templates",
                         "prd.md")
@@ -143,7 +143,7 @@ def answered_of(prd):
     return {a["id"] for a in planlib.answers_of(prd)}
 
 
-def round_problems(prd):
+def pass_problems(prd):
     """The plain-words rule of `@references/drill.md`, as this PRD's own lines.
     `release <prd> question` and `answer` both run it — one reader, so the two
     edges cannot drift."""
@@ -167,7 +167,7 @@ def gate_claim(board, prds, prd, holder=None):
     leaves it `None`, which is `dispatchable`'s original, stricter test.
 
     After the dispatchable gates, the drill: two or more unanswered questions
-    not yet out — `@plan.drill_questions` reading the round file's `## Asked`
+    not yet out — `@plan.drill_questions` reading the pass file's `## Asked`
     beside the count — and nothing is dispatched, `asking N — drill first`,
     because the drill is the orchestrator's and a worker has no user to ask.
     One question left is step 2's ordinary put, not a gate."""
@@ -189,10 +189,10 @@ def gate_release(board, prds, prd, to):
     if to == "question":
         qs = section(prd["body"], "Questions")
         if not qs or not qs.strip():
-            raise Refused("question: no `## Questions` round in the body")
-        bad = round_problems(prd)
+            raise Refused("question: no `## Questions` pass in the body")
+        bad = pass_problems(prd)
         if bad:
-            raise Refused("question: questions.py check refuses the round — "
+            raise Refused("question: questions.py check refuses the pass — "
                           + "; ".join(bad))
     elif to == "blocked":
         deps = prd["fm"].get("needs", [])
@@ -344,12 +344,12 @@ def transition(board, name, to, persona, worker=None, force=False,
 
 
 def owed_line(line):
-    """`round file owed` before `as`: a shell command moved a PRD, and the
+    """`pass file owed` before `as`: a shell command moved a PRD, and the
     guard's reminder fires on a tool edit, never on a command — so the line
     says it. The view's own lines do not: a person at the page is not a
-    round."""
+    pass."""
     head, _, tail = line.rpartition(" · as ")
-    return f"{head} · round file owed · as {tail}" if tail else line
+    return f"{head} · pass file owed · as {tail}" if tail else line
 
 
 # ── dry: the line a write would print, on a board that was not written ───────
@@ -684,13 +684,13 @@ def cmd_answer(board, args, persona):
     if qid not in questions_of(prd):
         qs = questions_of(prd)
         raise Refused(f"answer: {qid} is not in `## Questions`"
-                      + (" — " + ", ".join(qs) if qs else " — no round"))
+                      + (" — " + ", ".join(qs) if qs else " — no pass"))
     if qid in answered_of(prd):
         raise Refused(f"answer: {qid} is already answered")
-    bad = round_problems(prd)      # the round is refused at the last moment it
+    bad = pass_problems(prd)      # the pass is refused at the last moment it
     if bad:                        # can still be rewritten — and there is no
         raise Refused(             # flag past it, by design
-            "answer: questions.py check refuses the round — " + "; ".join(bad))
+            "answer: questions.py check refuses the pass — " + "; ".join(bad))
     path = os.path.join(prd["dir"], "prd.md")
     if args.dry:            # the real run's three outcomes, on a scan that
         left = [q for q in questions_of(prd)      # holds the answer in memory
@@ -805,12 +805,12 @@ def cmd_set(board, args, persona):
 # its word. What it lists is the orchestrator's to read first — a swept
 # worker's report and its `## Workflow` rows count whatever the verdict did.
 
-def round_names(board, rel, who):
-    """True when `prds/.round.md` names this claim — the PRD's path, its
-    basename or its worker. A claim the round file names is a session's
+def pass_names(board, rel, who):
+    """True when `prds/.pass.md` names this claim — the PRD's path, its
+    basename or its worker. A claim the pass file names is a session's
     live work, and `--apply` leaves it."""
     try:
-        text = open(os.path.join(board, planlib.ROUND_FILE),
+        text = open(os.path.join(board, planlib.PASS_FILE),
                     encoding="utf-8").read()
     except OSError:
         return False
@@ -839,8 +839,8 @@ def sweep_rows(board):
         if p["state"] == "analyzing" and specs:
             to, why = None, (f"specs on disk — an analyst that finished: "
                              f"`pearde specced {rel}`")
-        elif round_names(board, rel, cl["who"]):
-            to, why = None, "named in prds/.round.md — a session's live work"
+        elif pass_names(board, rel, cl["who"]):
+            to, why = None, "named in prds/.pass.md — a session's live work"
         elif p["state"] == "analyzing":
             to, why = "open", "no specs — `--apply` sets open"
         else:

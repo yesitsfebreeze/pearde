@@ -10,7 +10,7 @@ is yours and no tool touches it.
 | `state`     | the transition command — `pearde claim` · `release` · `answer` · `retry` · `unblock` · `defer` · `set --force`, @resources/board/transitions.py; never by hand | the loop, the status line                         |
 | `priority`  | user                           | **vision importance** — dispatch order, higher first |
 | `complexity`| analyst, at spec time          | **weight** — the progress line, `plan`'s ordering. 1-100 |
-| `blast-radius` | analyst, at spec time       | **what breaks if it is wrong** — `high` \| `mid` \| `low`. Breaks ties, and decides what a round leads with |
+| `blast-radius` | analyst, at spec time       | **what breaks if it is wrong** — `high` \| `mid` \| `low`. Breaks ties, and decides what a pass leads with |
 | `est`       | analyst, optional              | the weight of a PRD with no `complexity`. See @references/parts/order.md |
 | `actual`    | orchestrator, optional         | a record. The plan never schedules by it; `plan.py calibrate` fits real hours from it |
 | `claim`     | `pearde claim` writes it, `release` and `retry` clear it | the sweep, elapsed on `done`                      |

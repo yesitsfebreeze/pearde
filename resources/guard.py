@@ -2,20 +2,20 @@
 """The loop's guard — the rules in @references/parts/loop.md, enforced.
 
     guard.py pre     PreToolUse  — reads the hook payload on stdin, allows or denies
-    guard.py post    PostToolUse — reminds the round to write down what it just moved
+    guard.py post    PostToolUse — reminds the pass to write down what it just moved
     guard.py check   prints what the guard would say about the board it is run in
     guard.py on [<repo>]      writes the hooks block into <repo>/.claude/settings.json
     guard.py off [<repo>]     removes exactly what `on` wrote, nothing else
     guard.py status [<repo>]  doctor's guard row alone — exit 0 ok, 1 off, 2 broken
 
 A sentence in a reference file is advice. This is the same sentence as a
-mechanism: the three ways the 2026-08-27 round burned 318,584 tokens are the
+mechanism: the three ways the 2026-08-27 pass burned 318,584 tokens are the
 three things it refuses.
 
     a hand-walked board          → `plan.py scan` says it in one call
     the same board read twice    → nothing changed since; the answer is unchanged
-    the manual read three times  → it has not moved; the round file is the note
-    a state moved, nothing written → `.pearde/.state/round.md` survives a compaction
+    the manual read three times  → it has not moved; the pass file is the note
+    a state moved, nothing written → `.pearde/.state/pass.md` survives a compaction
     a `state:` written by hand   → `pearde set` checks the gate; an editor checks nothing
     the skill written from another board → the install is links into this tree; file a PRD here
 
@@ -46,33 +46,33 @@ GUARD_STATE_ENV = "PEARDE_GUARD_STATE"
 # never blocks a tool call.
 BOARD_DIR = ".pearde"
 PRDS_DIR = "prds"
-ROUND_FILE = os.path.join(".state", "round.md")
+PASS_FILE = os.path.join(".state", "pass.md")
 
-# The context budget. A round costs its context on every turn: 1,000 turns at
+# The context budget. A pass costs its context on every turn: 1,000 turns at
 # 500k is half a billion cache-read tokens for a session whose unique content
 # was 500k once. The orchestrator is meant to be slim — the board is on disk
-# and `.pearde/.state/round.md` is what it carries — so the budget is a
+# and `.pearde/.state/pass.md` is what it carries — so the budget is a
 # ceiling, not a window. `context-budget` in .pearde/settings.md moves it;
 # `off` removes it.
 #
 # It is measured from the session's own floor, never from zero. A window opens
 # already holding the system prompt, the tool schemas, the project's CLAUDE.md
 # and the skill — 50,229 tokens on the /pearde session of 2026-09-01, before
-# the round had done anything at all. Measured absolutely, half the budget was
-# spent on the first turn and the ceiling fired on a round that had read one
+# the pass had done anything at all. Measured absolutely, half the budget was
+# spent on the first turn and the ceiling fired on a pass that had read one
 # scan. `floor` is the smallest window this session has been billed for, and
-# the budget is what the round grew on top of it.
+# the budget is what the pass grew on top of it.
 BUDGET_DEFAULT = 100_000
 BUDGET_WARN = 0.70          # note once at 70%, once at 85%
 BUDGET_KEY = re.compile(r"^context-budget:[ \t]*(\S+)", re.M)
 # What stays allowed at the ceiling — everything the handover itself needs.
-ESCAPE = re.compile(r"\.round\.md$|/(loop|round|dispatch)\.md$")
+ESCAPE = re.compile(r"\.pass\.md$|/(loop|pass|dispatch)\.md$")
 
-# The manual does not change mid-round, so a repeat read of one of its files
+# The manual does not change mid-pass, so a repeat read of one of its files
 # returns the bytes already in the window. These two are the exception:
-# @references/parts/round.md sends a compacted round back to the steps, and
+# @references/parts/pass.md sends a compacted pass back to the steps, and
 # that has to stay possible however often it happens.
-REREADABLE = {"loop.md", "round.md", "dispatch.md"}
+REREADABLE = {"loop.md", "pass.md", "dispatch.md"}
 MANUAL = ("references" + os.sep, "skills" + os.sep)
 
 SCAN = "python3 %s/board/plan.py scan" % ROOT
@@ -261,7 +261,7 @@ def clock(t):
 
 # ── the count ─────────────────────────────────────────────────────────────────
 # The guard sees every tool call a session makes on a board, so it is the one
-# place the round's cost can be counted without a second hook. Per board,
+# place the pass's cost can be counted without a second hook. Per board,
 # under `boards` in the session file: `calls`, `reads`, `bash`, `edits` and
 # `refused` — counted since the session first saw the board — `since`, the
 # time of the last transition, `transitions`, how many there were, and
@@ -357,7 +357,7 @@ def manual(path):
 
 
 # ── the skill tree ────────────────────────────────────────────────────────────
-# The install is links into this repo (@references/install.md), so a round on
+# The install is links into this repo (@references/install.md), so a pass on
 # any board on the machine that edits the skill edits this working tree —
 # .pearde/memos/the-install-is-live-symlinks.md counts what that cost. A write
 # under the skill root from a session whose board is another repo's is
@@ -379,7 +379,7 @@ def skill_file(path):
 
 
 def another_boards_write(inp, cwd):
-    """`Edit|Write` into the skill tree from a round on another board —
+    """`Edit|Write` into the skill tree from a pass on another board —
     refused, naming the real path the link resolves to, the memo, and the
     two ways out. The session's board is the nearest `.pearde/` above its
     working directory, as `find_board` reads it; none, or this repo's own,
@@ -393,7 +393,7 @@ def another_boards_write(inp, cwd):
         return
     via = (f"{given} resolves to {real}" if os.path.abspath(given) != real
            else real)
-    deny(f"A round on another board does not write the skill: {via} — the "
+    deny(f"A pass on another board does not write the skill: {via} — the "
          f"pearde working tree — and this session's board is {board}. The "
          f"install is links into that tree — {MEMO} — so the edit would land "
          "uncommitted among hunks the sessions on that board are staging. "
@@ -429,7 +429,7 @@ def after_edit(path, tool, inp):
 
 def state_by_hand(tool, inp):
     """`Edit|Write` on a `prd.md` that changes its `state:` line — refused,
-    naming the command. A body edit passes; the round file reminder is
+    naming the command. A body edit passes; the pass file reminder is
     `post`'s. `transitions.py` writes through edit.py, never through a
     tool, so it is never here."""
     path = os.path.abspath(str(inp.get("file_path") or ""))
@@ -460,14 +460,14 @@ def state_by_hand(tool, inp):
 # invariant `every-artifact-lands-inside-the-board` on this repo's own board.
 # The commands hold to it on their own: every writer routes through
 # `plan.py state_dir(board)`, so a `.state/` corner is always `<board>/.state`.
-# A round writing the same file by hand does not: `.state/round.md` is how the
+# A pass writing the same file by hand does not: `.state/pass.md` is how the
 # guard's own notes and half the manual spell it, and a relative path resolves
 # against the session's cwd — the repo root, one level above the board. That
-# is exactly how an untracked `<repo>/.state/round.md` appeared on 2026-09-01.
+# is exactly how an untracked `<repo>/.state/pass.md` appeared on 2026-09-01.
 # Named basenames only, never the bare `.state` component: a project may keep
 # a `.state/` of its own, and the guard refuses what it can prove.
 STATE_OWNED = re.compile(
-    r"^(round(\.[^/]+)?\.md|ask\.md|plan\.json|parse-cache\.json"
+    r"^(pass(\.[^/]+)?\.md|ask\.md|plan\.json|parse-cache\.json"
     r"|history\.jsonl|transitions\.jsonl|view\.html)$")
 
 
@@ -491,8 +491,8 @@ def board_artifact_astray(inp, board):
          f"{want} instead — `.state/…` anywhere in the manual means "
          f"`{board}/.state/…`, and a relative path resolves against this "
          "session's working directory, one level above the board. If a "
-         "round file of your own is meant, name it "
-         f"{os.path.join(board, '.state', 'round.<what-you-are-on>.md')} so "
+         "pass file of your own is meant, name it "
+         f"{os.path.join(board, '.state', 'pass.<what-you-are-on>.md')} so "
          "it never overwrites another session's.")
 
 
@@ -559,9 +559,9 @@ def agent_of(data):
     the worker's own id for anything it dispatched. One session id and one
     transcript path cover the orchestrator and every worker it sends out, so
     this is the only thing that tells two windows apart — and the repeat-read
-    and repeat-command stamps are per window, not per session. A round worked
-    by successive `pearde-round` dispatches would otherwise have its second
-    round refused the first read of a file its first round had read: a fresh
+    and repeat-command stamps are per window, not per session. A pass worked
+    by successive `pearde-pass` dispatches would otherwise have its second
+    pass refused the first read of a file its first pass had read: a fresh
     window, refused for what it never saw."""
     return str(data.get("agent_id") or data.get("agent_type") or "")
 
@@ -574,9 +574,9 @@ def stamp_key(data, prefix, ident):
 
 def dispatched(data):
     """True when this tool call belongs to a worker the orchestrator sent
-    out, not the round's own turn. session_id and transcript_path are the
+    out, not the pass's own turn. session_id and transcript_path are the
     SAME file for every worker and the orchestrator alike — the hook payload
-    shares one session across a whole round — so they cannot tell one from
+    shares one session across a whole pass — so they cannot tell one from
     the other. `agent_id`/`agent_type` can: the orchestrator's own tool
     calls carry neither; a dispatched analyst, implementer or any other
     subagent carries both. Confirmed empirically, not from documentation —
@@ -586,21 +586,21 @@ def dispatched(data):
 
 def budget(data, st, session, board, tool, inp):
     """Refuse the window that outgrew its own ceiling. Everything the handover
-    needs stays open: the scan, the round file, and the files that say what a
+    needs stays open: the scan, the pass file, and the files that say what a
     handover is.
 
     Dispatched-only: a worker's window cannot be measured from here — the
     transcript this hook is handed is the dispatcher's, and a worker's turns
     are not in it — so a call carrying `agent_id`/`agent_type` never reaches
-    the cap check, the 70%/85% notes, or the ESCAPE bypass below. A round
+    the cap check, the 70%/85% notes, or the ESCAPE bypass below. A pass
     worker ends itself by the count in @references/parts/dispatch.md, not by
     this ceiling, and this is also what keeps a worker from being told, by the
-    ceiling's own deny text, to write a round file that is not its own.
+    ceiling's own deny text, to write a pass file that is not its own.
 
     Measured from the floor. `ctx` is the whole window, and a window opens
     holding the system prompt, the tools, CLAUDE.md and the skill before the
-    round exists. `floor` is the smallest this session has been billed for;
-    `grew` is what the round put on top of it, and that is what the budget
+    pass exists. `floor` is the smallest this session has been billed for;
+    `grew` is what the pass put on top of it, and that is what the budget
     is a budget for."""
     if dispatched(data):
         return
@@ -623,7 +623,7 @@ def budget(data, st, session, board, tool, inp):
             save(session, board, st)
             note(f"This window has grown {grew // 1000}k over its "
                  f"{floor // 1000}k floor, of the {cap // 1000}k budget. Every "
-                 "turn from here re-reads all of it. Write .pearde/.state/round.md now "
+                 "turn from here re-reads all of it. Write .pearde/.state/pass.md now "
                  "— what is established, decided, asked and owed — so the "
                  "handover at the ceiling costs one scan and not a "
                  "re-derivation.")
@@ -639,14 +639,14 @@ def budget(data, st, session, board, tool, inp):
          f"{cap // 1000}k budget — it has stopped being cheap to continue.\n"
          f"Every turn now bills {ctx // 1000}k of cache read for work the "
          "board already holds on disk.\n\nHand the rest over rather than "
-         "stopping: write .pearde/.state/round.md whole — established, decided, "
-         "asked, edits, owed — and dispatch `pearde-round` to carry on from "
+         "stopping: write .pearde/.state/pass.md whole — established, decided, "
+         "asked, edits, owed — and dispatch `pearde-pass` to carry on from "
          "it (@references/parts/dispatch.md). That worker opens on a fresh "
-         "window, reads the round file, runs the scan and is where this one "
+         "window, reads the pass file, runs the scan and is where this one "
          "is for one percent of the tokens. Only when you were asked for one "
-         "round and it is finished do you stop and say so.\n\nStill allowed: "
-         "the round file, references/parts/dispatch.md, "
-         "references/parts/loop.md, references/parts/round.md, dispatching a "
+         "pass and it is finished do you stop and say so.\n\nStill allowed: "
+         "the pass file, references/parts/dispatch.md, "
+         "references/parts/loop.md, references/parts/pass.md, dispatching a "
          "worker, asking the user, and the board's own commands.")
 
 
@@ -678,7 +678,7 @@ def pre(data):
                  f"    {SCAN}\n"
                  "It returns every state, gate, claim and acceptance count on "
                  "one page, including what this command was looking for.")
-        # `scan` is the thing this guard sends you to. A round that lost its
+        # `scan` is the thing this guard sends you to. A pass that lost its
         # context to a compaction has to be able to ask again, and the board
         # not having moved is exactly when the answer is cheapest.
         if TOOLS.search(cmd):
@@ -691,7 +691,7 @@ def pre(data):
         if prev and prev.get("stamp") == now:
             deny(f"You ran this at {clock(prev['at'])} and nothing on the board "
                  "has changed since — the output is byte-for-byte what you "
-                 "already have.\nCite it from .pearde/.state/round.md instead, or write "
+                 "already have.\nCite it from .pearde/.state/pass.md instead, or write "
                  "it there now if it is not in it.")
         st[key] = {"at": time.time(), "stamp": now}
         save(session, board, st)
@@ -717,13 +717,13 @@ def pre(data):
             if ref:
                 deny(f"Third read of this reference, unchanged since "
                      f"{clock(prev['at'])} — the manual does not move while a "
-                     "round runs.\nWhat you needed from it belongs in "
-                     ".pearde/.state/round.md. The steps themselves are the exception: "
-                     "references/parts/loop.md and references/parts/round.md "
+                     "pass runs.\nWhat you needed from it belongs in "
+                     ".pearde/.state/pass.md. The steps themselves are the exception: "
+                     "references/parts/loop.md and references/parts/pass.md "
                      "are always readable.")
             deny(f"Third read of this file, unchanged since {clock(prev['at'])}"
                  " — you have read it twice already and nothing has written to "
-                 "it since.\nWhat you needed from it belongs in .pearde/.state/round.md; "
+                 "it since.\nWhat you needed from it belongs in .pearde/.state/pass.md; "
                  f"board state comes from `{SCAN}`.")
         st[key] = {"n": n + 1, "at": time.time(), "mtime": mtime}
         save(session, board, st)
@@ -742,7 +742,7 @@ def post(data):
     board = board_of(os.path.dirname(path))
     if not board:
         ok()
-    rf = os.path.join(board, ROUND_FILE)
+    rf = os.path.join(board, PASS_FILE)
     try:
         moved = os.stat(path).st_mtime
     except OSError:
@@ -756,7 +756,7 @@ def post(data):
     print(json.dumps({"hookSpecificOutput": {
         "hookEventName": "PostToolUse",
         "additionalContext":
-            f"A PRD moved and {rf} has not been rewritten since. The round "
+            f"A PRD moved and {rf} has not been rewritten since. The pass "
             "file is what survives the next compaction: what was established "
             "and when, what was decided, what is out to the user, what is "
             "owed. Rewrite it whole with this transition in it."}}))

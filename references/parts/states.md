@@ -7,7 +7,7 @@ The nine states, what sets each, and what a tenth one means.
 | `open`      | claimable for analysis                    | user / orchestrator            | analyst dispatched → `analyzing`               | `add <title>` · `answer <prd> Q<n> "<text>"` on the last question · `retry <prd>` · `release <prd> open` |
 | `analyzing` | analyst working out what to do            | orchestrator                   | analyst returns → `specced` \| `refine` \| `question` | `claim <prd> <worker>` · `sweep --apply` → `open` when silent past `claim-ttl` |
 | `refine`    | needs a sub-PRD split or more detail      | orchestrator (analyst verdict) | children created → `open`                      | `release <prd> refine` |
-| `question`  | blocked on the user                       | orchestrator (analyst verdict) | answers written → `open`                       | `release <prd> question` — gate: a `## Questions` round `questions.py check` accepts |
+| `question`  | blocked on the user                       | orchestrator (analyst verdict) | answers written → `open`                       | `release <prd> question` — gate: a `## Questions` pass `questions.py check` accepts |
 | `specced`   | specs exist, ready to implement           | orchestrator                   | implementer dispatched → `claimed`             | `specced <prd> --blast <x>` — gate: every `specs/*.md` accepted, weight summed · `unblock <prd>` — gate: `needs:` all `done` |
 | `claimed`   | implementer working it                    | orchestrator                   | returns → `done` \| `failed`                   | `claim <prd> <worker>` · `sweep --apply` → `failed` when silent past `claim-ttl` |
 | `blocked`   | work done, boxes waiting on a named event | orchestrator                   | the event lands → `specced`                     | `release <prd> blocked` — gate: `needs:` |
@@ -50,7 +50,7 @@ nor backlog. A parked child holds its parent: it is neither done nor coming,
 so the parent is not dispatchable until that child is `done`.
 `release <prd> open` is the way back — the one target: it clears `claim:` and files the PRD as claimable work; a parked container is `collect`'s, and `release` says so.
 
-**Parked on a person owes a round.** A parked state, or a `mode:`, that names
+**Parked on a person owes a pass.** A parked state, or a `mode:`, that names
 a human — `hitl`, `waiting`, `user` — makes `question`'s claim without
 `question`'s obligation: the board is stopped and nobody wrote down what is
 being asked. Whichever word it uses, it carries `## Questions` in the format

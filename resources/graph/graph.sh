@@ -1,5 +1,5 @@
 #!/bin/bash
-# pearde graph — graphify rounds over any folder, Obsidian vault out.
+# pearde graph — graphify passes over any folder, Obsidian vault out.
 #
 #   graph.sh extract [folder] [--force]   full extraction, clusters + Obsidian vault
 #   graph.sh update [folder]              re-extract changed files only (AST, no LLM), vault rebuilt
@@ -55,11 +55,11 @@ FOLDER_ABS="$(pwd)"
 export GRAPHIFY_OUT="$FOLDER_ABS/.pearde/graphify"
 GRAPH_JSON="$GRAPHIFY_OUT/graph.json"
 
-# The Obsidian vault is a product of a graph round, not a separate command a
+# The Obsidian vault is a product of a graph pass, not a separate command a
 # person has to know to run: the pearde-graph skill describes
 # .pearde/graphify/obsidian/ as an output of extraction, and `graph.sh open`
 # opens it. graphify writes it ONLY from `export obsidian` — its `extract`
-# has no obsidian step at all — so every round that rebuilds graph.json ends
+# has no obsidian step at all — so every pass that rebuilds graph.json ends
 # here. Pure graph.json -> notes: no LLM call, no network. One function, so
 # extract and update cannot drift apart.
 export_vault() {

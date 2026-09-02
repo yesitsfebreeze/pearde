@@ -3,28 +3,28 @@
 Interview the user until you reach a shared understanding. Record it as a **PRD
 tree**: every decision branches into the decisions that hang off it.
 
-## Rounds
+## Passes
 
 The **frontier** is every decision whose prerequisites are settled — the
 questions askable now without guessing at answers not yet heard.
 
 1. Compute the frontier.
-2. Ask all of it in one round, numbered, each with three prepared answers.
+2. Ask all of it in one pass, numbered, each with three prepared answers.
 3. Wait for the user's picks — or their own answers.
 4. Answers reshape the tree: settled decisions push the frontier outward.
    Recompute and repeat.
 
-A question whose answer depends on another question still open in this round
-belongs to a later round.
+A question whose answer depends on another question still open in this pass
+belongs to a later pass.
 
-## The mechanism the round is put through
+## The mechanism the pass is put through
 
 The mapping onto that mechanism, stated once: the **header** is the `### Qn:`
 title, the **question** is the fork, the **three options** are the prepared
 answers with their labels, and the mechanism's own free-text choice is *write
 your own*. The HTML comment under the third answer is the technical anchor and
 is never shown — it is what the orchestrator reads when it acts on the answer.
-At a terminal with no such mechanism, print the round in the same words, with
+At a terminal with no such mechanism, print the pass in the same words, with
 *or write your own* as the fourth line.
 
 Stated here rather than in @references/parts/loop.md, whose contract is the
@@ -51,7 +51,7 @@ sentence of what they get** — never how it is built:
   sentence when all three are wrong.
 
 The last line under every question is the open door: **or write your own**. The
-numbering is how the three readers parse the round; those words are how it is
+numbering is how the three readers parse the pass; those words are how it is
 said to a person.
 
 ### What a question may never say
@@ -69,9 +69,9 @@ the answer labels and the answer text:
 
 `python3 @resources/questions.py check [board]` is that table as a mechanism:
 one line per row it catches, naming the word it caught. `pearde release <prd>
-question` runs it, so a round that fails is refused rather than written.
+question` runs it, so a pass that fails is refused rather than written.
 
-Round format — this exact shape, in the PRD's `## Questions` and in the round
+Pass format — this exact shape, in the PRD's `## Questions` and in the pass
 put to the user. The view parses it.
 
 ```
@@ -97,7 +97,7 @@ will act on; the other needs a click?
 2. **Work first** — the page opens on what is happening; your questions are one click away.
 3. **Ask each time** — the page remembers whichever you opened last.
 
-<!-- for the board: serve.py `/` default route; the-page-shows-the-round spec02 -->
+<!-- for the board: serve.py `/` default route; the-page-shows-the-pass spec02 -->
 ```
 
 The technical anchor — which files, which slug, which spec the answer lands in
@@ -105,7 +105,7 @@ The technical anchor — which files, which slug, which spec the answer lands in
 shows a question to a person shows it**. The orchestrator reads it when it acts
 on the answer; the checker never sees it, and the view strips it.
 
-Put the round through the ask-user-question mechanism where one exists — one
+Put the pass through the ask-user-question mechanism where one exists — one
 question per fork, the three answers as the options. A pick and the user's own
 words are equally an answer.
 
@@ -117,18 +117,18 @@ Answer format, written under `## Answers`, numbers matching:
 
 The view writes the same line with the moment it was settled — `**Q1**
 *(answered 2026-08-28 14:22)* — …` — and orders its answered panel by it. The
-stamp is optional when a round is answered at a terminal: the id and the
+stamp is optional when a pass is answered at a terminal: the id and the
 decision are the contract, the date only buys a place in that order.
 
 ## The heading is the claim
 
-Neither heading is a slot to leave empty. `## Questions` says a round is
+Neither heading is a slot to leave empty. `## Questions` says a pass is
 waiting on the user, and `## Answers` says one came back — so an empty
 `## Questions` stops the board on nothing, and an empty `## Answers` reads as
 answered when it is not. **Write the heading when it has content, and delete
 it when it does not.** The same goes the other way: an `## Answers` section
 with no `## Questions` above it is an answer to a question nobody wrote down,
-and a PRD parked on the user that carries no round never says what it is
+and a PRD parked on the user that carries no pass never says what it is
 asking — both are indistinguishable, from outside, from a board with nothing
 to ask.
 
@@ -137,34 +137,34 @@ mechanism, and `doctor`'s `questions` row runs it. It reports a heading with
 nothing under it, a question that asks nothing, one with no prepared answers
 to pick from, one with more or fewer than three, one whose recommended answer
 is not first or missing, an answer to nothing, and a parked PRD that never
-asked. An answered round is history and is left alone.
+asked. An answered pass is history and is left alone.
 
 ## The board's own frontier
 
 A blocked board is a drill whose questions are already written down. Step 8 of
 @references/parts/loop.md is that entry point: nothing dispatchable means every
-remaining PRD waits on a person, and the round's last act is one drill round
+remaining PRD waits on a person, and the pass's last act is one drill pass
 over all of them rather than a report naming them.
 
 The count on the scan is the second entry point: when `pearde scan` prints the
 **drill** section — more than one unanswered question on the board, the header
-saying `asking N over M PRDs` — the round opens on that drill before anything
+saying `asking N over M PRDs` — the pass opens on that drill before anything
 is dispatched, even though the rest of the board is moving. The drill is the
 orchestrator's, so `pearde claim` refuses with `asking N — drill first` until
 the questions are out; one question standing is not a gate, and is put as any
-round is. Zero prints nothing.
+pass is. Zero prints nothing.
 
-Round one's frontier is the board itself — every unanswered `## Questions`,
-every PRD parked on a person with no round written, every `refine` with no
+Pass one's frontier is the board itself — every unanswered `## Questions`,
+every PRD parked on a person with no pass written, every `refine` with no
 usable split, every `failed`, every `blocked` whose `needs:` only a person can
 land. From there the rules above are unchanged: the frontier is recomputed
 after every answer, and the drill ends when it is empty.
 
-- **One round for the board, never one per PRD.** Five stuck PRDs are one
-  numbered round, not five conversations.
+- **One pass for the board, never one per PRD.** Five stuck PRDs are one
+  numbered pass, not five conversations.
 - **A question already out is carried, not re-put** — `## Asked` in
-  `.pearde/.state/round.md` is what is out. Widen instead: ask what the stalled question
-  depends on. A frontier that is entirely already out is where the round stops.
+  `.pearde/.state/pass.md` is what is out. Widen instead: ask what the stalled question
+  depends on. A frontier that is entirely already out is where the pass stops.
 - **Answers go back where they were asked** — `## Answers` in each PRD, numbers
   matching, then `open`; a `refine` answer becomes children per step 3 of the
   loop. The tree below is for a drill that starts from a request, not from a

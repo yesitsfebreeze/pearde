@@ -1,20 +1,20 @@
 # The loop
 
 Eight steps, in order. Run until the board is drained, or everything left is
-blocked on the user. `once` = one round. `status` = step 1 plus the progress
+blocked on the user. `once` = one pass. `status` = step 1 plus the progress
 report, changing nothing.
 
-**You are a `pearde-round` worker, not the session that was asked** —
+**You are a `pearde-pass` worker, not the session that was asked** —
 @references/parts/dispatch.md dispatched you, reads your line back, says when
 to end. Ending is what this window is for.
 
 **Every step is one command and one decision.** The command checks its gate,
 writes the state, prints the progress line and refuses what
 @references/parts/states.md forbids. The decision is the right-hand column,
-and it is the only thing the round thinks about. **Which step the round is on
+and it is the only thing the pass thinks about. **Which step the pass is on
 is `pearde next`'s answer, not this file's** — one call after `scan`, it
 prints the step, the decision it owes and the exact command; this file holds
-only the judgment a command cannot make, and a round that runs `scan` then
+only the judgment a command cannot make, and a pass that runs `scan` then
 `next` needs no more of it for the routine case. Four rules keep the decision
 where it belongs:
 
@@ -22,14 +22,14 @@ where it belongs:
   scan` is step 1 — the whole board on one page, box counts included. Walking
   the tree or opening a `prd.md` for its state is the same page, a hundred
   times the tokens.
-- **Write down what the tool cannot know.** `.pearde/.state/round.md`,
-  rewritten at every transition — @references/parts/round.md. A window ends;
-  that file does not. Every command's line ends `round file owed` until it is.
+- **Write down what the tool cannot know.** `.pearde/.state/pass.md`,
+  rewritten at every transition — @references/parts/pass.md. A window ends;
+  that file does not. Every command's line ends `pass file owed` until it is.
 - **An established fact is cited, never re-established.** A count verified at
-  12:19 is in the round file with the time on it; re-running it costs the run.
+  12:19 is in the pass file with the time on it; re-running it costs the run.
 - **The ceiling is a handover, never a stop.** A window is billed again on
   every turn it survives, so `context-budget` (@references/settings.md) caps
-  what this one may grow. At it: write `.pearde/.state/round.md` whole and
+  what this one may grow. At it: write `.pearde/.state/pass.md` whole and
   hand back `MORE` — @references/parts/guard.md.
 
 Where @references/parts/guard.md is wired, none of this is advice: a
@@ -50,10 +50,10 @@ and the refusal names the command that answers instead.
 
 **1 · Scan.** The sections come out in the pressure order of
 @references/parts/order.md — drill, collect, waiting on you, in flight, ready,
-gated — and the cut is after `waiting on you`: above it is this round's, below
+gated — and the cut is after `waiting on you`: above it is this pass's, below
 it is already somebody's. The header names the drill count — `asking N over M
 PRDs` — and over one a **drill** section stands first, above *collect*: the
-round dispatches nothing past it until it is put (step 2). Open a file only
+pass dispatches nothing past it until it is put (step 2). Open a file only
 for what the scan does not print, and only when about to act on it. No
 `.pearde/settings.md` means first run: `pearde init` — English by default,
 said on its first line. `master of <n>` with no `name:`: ask the user and
@@ -62,7 +62,7 @@ write it. The persona is session state, `engineer` until switched —
 
 `pearde sweep` lists every claim silent past `claim-ttl`
 (@references/settings.md) and what `--apply` would do; a claim
-`.pearde/.state/round.md` names is a session's live work and stays. Before
+`.pearde/.state/pass.md` names is a session's live work and stays. Before
 `--apply`, read the swept worker's output off the scan: a PRD in **collect**
 is an implementer that finished — step 6; `analyzing` with specs on disk is an
 analyst that finished — `pearde specced`.
@@ -78,20 +78,20 @@ puts depends on the count step 1 printed:
 |---|---|
 | none | nothing |
 | one | that question, put as today |
-| two or more | one drill round over all of them per @references/drill.md § The board's own frontier — before step 3, before any claim; the questions already `out` are carried, the rest are put |
+| two or more | one drill pass over all of them per @references/drill.md § The board's own frontier — before step 3, before any claim; the questions already `out` are carried, the rest are put |
 
-While two or more of that round are not yet in `## Asked` nothing is
+While two or more of that pass are not yet in `## Asked` nothing is
 dispatched: `pearde claim` refuses `asking N — drill first`, and putting them
 out is what reopens the board. One standing is not a gate — put it as today
 and keep working. Otherwise: put every `question` PRD and every parked PRD
-naming a human as one round per @references/drill.md, three answers a fork.
+naming a human as one pass per @references/drill.md, three answers a fork.
 
-**You do not talk to the user; the dispatcher does** — put a round by writing
+**You do not talk to the user; the dispatcher does** — put a pass by writing
 it to `.pearde/.state/ask.md` and handing back `ASK`, then record what comes
 back with `pearde answer`. A `## Questions` with no three answers is not
 askable: write them or send the analyst back. What goes under `## Answers` is
 the decision in the user's words — a reply saying the question was wrong
-rewrites the round, and `pearde answer` records what was settled and moves
+rewrites the pass, and `pearde answer` records what was settled and moves
 the PRD `open` on the last one. No reply: leave it.
 
 **3 · Refine.** Whether the analyst's `## Split` table is usable is the decision;
@@ -105,7 +105,7 @@ with a `claimed` PRD, a `workflow:` naming nothing — and names the gate;
 `brief` re-reads is not itself a refusal when the worker named is the one
 asking. `pearde scan` marks the PRD's line `wf <slug>?` when its workflow
 resolves to nothing — the one refusal you clear yourself: fix the slug or remove the key,
-then claim in the same round. `pearde workflow check` names the file, but on
+then claim in the same pass. `pearde workflow check` names the file, but on
 a master it never reaches a member's PRDs. Run `check` on the board the PRD lives on. `--force` is the escape hatch past every gate, for the
 multi-session case where a PRD is genuinely someone else's.
 `specced` reads a `## Route` on stdin when `## Scores` names a slug the
@@ -134,7 +134,7 @@ improves it** — @references/parts/workflows.md. Read the rows: the verdict
 decides the transition, and a `stopped` row changes nothing about it.
 Apply an edit when the failure was the atomic's.
 Refuse it when the failure was the code's or the PRD's, and say which in the
-round. The worker wrote the text: paste it or refuse it, never rewrite it.
+pass. The worker wrote the text: paste it or refuse it, never rewrite it.
 **`runs` +1** on the workflow and on every atomic that ran, `updated: <today>`
 where the text changed — a route `specced` just drafted at `runs: 0` is no
 exception: its first collect is `runs: 1` like any other run, and an empty
@@ -143,7 +143,7 @@ later one. **`pearde workflow check` before the commit.** An edit that
 breaks the format is refused, not repaired. The changed files ride the PRD's
 commit, `pearde collect --also <path>`. The PRD's own `footprint:` does not change.
 **One writer: the orchestrator.** Two workers proposing edits to one atomic
-in one round is two collects. A defect a worker reports outside its scope is
+in one pass is two collects. A defect a worker reports outside its scope is
 the orchestrator's call per @references/parts/derived.md — a derived PRD or
 a memo, neither `open` by default.
 
@@ -156,14 +156,14 @@ fork still drills at step 8. This step reads the record; it never writes a
 `remember` or `conclude` itself — a worker's or the user's own.
 
 **8 · Drill, then stop.** Nothing in flight and nothing dispatchable means the
-board is blocked on a person: one drill round over the whole open frontier —
+board is blocked on a person: one drill pass over the whole open frontier —
 @references/drill.md § The board's own frontier — never one per PRD, and never
 a question `## Asked` already lists. It is the same drill the scan count starts
 when two or more questions stand (step 2), reached here because nothing else
 was left rather than because two questions were. Answers land as step 2 lands
-them, and the round returns to step 1. Stop when the whole frontier is already
+them, and the pass returns to step 1. Stop when the whole frontier is already
 out: report per-state counts, every `question` / `refine` / `failed` PRD with what it
 needs, the requested PRDs not `done` with their `complexity`, every `deferred` derived
-PRD by name; rewrite `.pearde/report.md` per `@@report` and `.pearde/.state/round.md`;
+PRD by name; rewrite `.pearde/report.md` per `@@report` and `.pearde/.state/pass.md`;
 then hand back `DRAINED` or `BLOCKED` in one line.
 You never park: `pearde view wait` is the dispatcher's.

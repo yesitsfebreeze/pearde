@@ -23,7 +23,7 @@ Every id has a file at `@references/personas/<id>.md`.
 
 `engineer` is the default: the loop, specs, implementation, memos, `plan`,
 `master`. Every session starts as `engineer` — there is nothing to configure,
-and no board carries a persona of its own — and asks on the first round with a
+and no board carries a persona of its own — and asks on the first pass with a
 job that matches another row.
 
 Choosing one for the session is @references/parts/personas.md — the signals,

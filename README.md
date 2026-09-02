@@ -63,7 +63,7 @@ stateDiagram-v2
     done --> [*]
 ```
 
-## The round
+## The pass
 
 | step | the orchestrator decides |
 |---|---|
@@ -76,34 +76,34 @@ stateDiagram-v2
 | 7 knowledge | whether the record already answers it — cite the note under `## Answers` and skip the question, or let the drill stand |
 | 8 drill, then hand back | the forks and their three answers |
 
-The round runs in a `pearde-round` worker, never in the session the user
+The pass runs in a `pearde-pass` worker, never in the session the user
 asked: that session dispatches, carries answers back, and holds one line per
-round — @references/parts/dispatch.md. A window is billed on every turn it
+pass — @references/parts/dispatch.md. A window is billed on every turn it
 survives, so the one that fills is the one that ends.
 
 The tool moves, the orchestrator chooses: every command checks its own gate
 and refuses what @references/parts/states.md forbids, and the right-hand
-column is the only thing a round thinks about.
+column is the only thing a pass thinks about.
 
 ## Three rings
 
 Everything below is one of three rings, and a newcomer meets them in order.
 Stop at the ring you need.
 
-**Core** is the board, the nine states, the round and the page — the five
+**Core** is the board, the nine states, the pass and the page — the five
 lines above, and what they touched. One session works it, and it is the
 orchestrator: it moves the states, and workers do the work — `@@workers` is
 the split and the brief each one is handed. The session works as a persona,
 `engineer` until switched. **One question, one file.** A scope is what a
 feature is made of, not a reading list — open the file that answers what is
-in front of you, and let it send you on. These are the mid-round lookups,
+in front of you, and let it send you on. These are the mid-pass lookups,
 and each is one file:
 
 | the question in front of you | the one file |
 |---|---|
 | what the session that was asked does | @references/parts/dispatch.md |
-| what the round does next | @references/parts/loop.md |
-| what a compaction lost | `.pearde/.state/round.md`, then `scan`. @references/parts/round.md |
+| what the pass does next | @references/parts/loop.md |
+| what a compaction lost | `.pearde/.state/pass.md`, then `scan`. @references/parts/pass.md |
 | what to hand a worker, and who it works as | @references/parts/workers.md |
 | what a state means, and what moves it | @references/parts/states.md |
 | what the progress line prints | @references/parts/progress.md |
@@ -115,7 +115,7 @@ and each is one file:
 | what a worker follows, and how a run improves it | @references/parts/workflows.md |
 
 Everything else is a scope, read when its handle fires and not before — the
-whole of this table is a book, and a round that opens it reads it again after
+whole of this table is a book, and a pass that opens it reads it again after
 every compaction:
 
 | stage | scopes |
@@ -129,7 +129,7 @@ The core ring, whole, is `@@loop`.
 
 **Advisors** are what a PRD reaches for when it needs one, and none of them
 moves a state. A one-line title is too thin to build, so `drill` interviews
-you until it is a contract, one round of questions at a time, each with three
+you until it is a contract, one pass of questions at a time, each with three
 prepared answers. A choice the code will not explain becomes a `memo`, written
 when the call is made. A job that recurs becomes a `workflow` of atomics that
 gets better on every run. A persona is who is working — `engineer`, `designer`,
@@ -169,7 +169,7 @@ researched; `install` is the first line above, explained. Open `@@master`,
 | workflow | an ordered route of atomics a worker follows, `.pearde/workflows/` |
 | atomic | one step of a workflow: what to do, when it is done, how it fails |
 | persona | who is working — a field, a bias and a way of reading |
-| consult | one problem put to one persona, mid-round, without switching |
+| consult | one problem put to one persona, mid-pass, without switching |
 | drill | the interview that turns a title into a contract and a tree |
 | master | a board whose `members:` are other boards, planned as one |
 | member | a board a master merges, unchanged where it is |

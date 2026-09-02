@@ -204,14 +204,14 @@ if [ -n "$BOARD" ]; then
 
   # who is working, from the session's own transcript. A persona is session
   # state and is stored nowhere — the transcript IS the session, so the last
-  # `· as <id>` the board printed is the active one. Every round's line
+  # `· as <id>` the board printed is the active one. Every pass's line
   # carries it, per @references/parts/progress.md.
   #
   # Anchored on `▸`, the line's own sigil: `· as` alone turns up in prose,
   # `▸…· as` does not. The tail is bounded because this runs on every render
   # and a long session's transcript is tens of megabytes — the id is
-  # re-stated each round, so the last 512K always holds the current one.
-  # Before the first round there is nothing to read and the segment is
+  # re-stated each pass, so the last 512K always holds the current one.
+  # Before the first pass there is nothing to read and the segment is
   # absent, which is correct: an unstated persona is `engineer` by default,
   # and rendering a default nobody chose reads as an answer.
   #

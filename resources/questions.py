@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""pearde questions — the round a PRD puts to the user, checked.
+"""pearde questions — the pass a PRD puts to the user, checked.
 
     python3 questions.py check [board]   one problem per line; silent when clean
     python3 questions.py list  [board]   prd · open · answered · state
 
-A question round is `## Questions` in a `prd.md`, in the format
+A question pass is `## Questions` in a `prd.md`, in the format
 @references/drill.md sets: each question is the fork, ending in `?`, with
 prepared answers, one of them recommended. `## Answers` is what the
 orchestrator writes back. @references/templates/prd.md ships both headings
@@ -12,7 +12,7 @@ commented, and this file is what keeps the comment honest.
 
 Why it exists, measured rather than argued. Across two boards on 2026-08-27:
 ten PRDs carried `## Questions` and `## Answers` as bare headings with nothing
-under them — a heading that says a round exists when none does; one carried
+under them — a heading that says a pass exists when none does; one carried
 `## Answers` holding a reader's two remarks and no answer, under a PRD with no
 `## Questions` at all; one sat parked on the user for three sessions without
 ever writing down what it was asking; and one carried a whole sentence in
@@ -21,7 +21,7 @@ them reads, from the outside, exactly like a board that is waiting on you.
 
 The rules that judge a written question are the ones the format is for: it
 asks something, it comes with prepared answers to pick from — three of them,
-genuinely different — and the recommended answer is the first. A round that
+genuinely different — and the recommended answer is the first. A pass that
 is a block of text with nothing to pick is not waiting on the user; it is
 waiting on its author. Closed PRDs are history and are not graded, so the
 old yes/no forks on settled boards stay green.
@@ -33,12 +33,12 @@ import re
 import sys
 
 # `## Questions`, `## Questions — from the analyst pass`, `## Questions for
-# the human`. The suffix is the round's own label and is never the contract.
+# the human`. The suffix is the pass's own label and is never the contract.
 Q_RE = re.compile(r"^##\s+Questions\b", re.M)
 A_RE = re.compile(r"^##\s+Answers\b", re.M)
 H2_RE = re.compile(r"^##\s+\S", re.M)
 
-# One item inside the round. Two spellings are live on real boards: `###`
+# One item inside the pass. Two spellings are live on real boards: `###`
 # heads — `### 1. …`, `### Q1: …` — and numbered items at the top level of the
 # section. A section that carries heads is split on the heads alone: under
 # one, a `1.` line at the top level is a prepared answer of that question,
@@ -47,9 +47,9 @@ H2_RE = re.compile(r"^##\s+\S", re.M)
 HEAD_RE = re.compile(r"^###\s+\S.*$", re.M)
 ITEM_RE = re.compile(r"^\d+\.\s+\S.*$", re.M)
 
-# …and which of those items is a question. A round also carries dividers and
-# notes — `### Round 2 — raised by the analyst`, `### What answering these
-# unlocks`, `### Answered 2026-08-24` — and those are prose about the round,
+# …and which of those items is a question. A pass also carries dividers and
+# notes — `### Pass 2 — raised by the analyst`, `### What answering these
+# unlocks`, `### Answered 2026-08-24` — and those are prose about the pass,
 # not entries in it. A question is numbered, or it asks something. An
 # unnumbered heading that asks nothing is neither.
 NUMBERED_RE = re.compile(r"^(question\s*)?(q\s*)?\d+[.:)\s]", re.I)
@@ -71,7 +71,7 @@ ITEM_LIST_RE = re.compile(r"^\s*-\s+(.*?)\s*$")
 # The nine states are @references/parts/states.md. `question` is the one that
 # means "blocked on the user" by name; anything outside the table is parked,
 # and a parked PRD that names a human is making the same claim without the
-# word. Both owe a round.
+# word. Both owe a pass.
 WAITING = ("question", "hitl", "waiting", "blocked-on-user", "user")
 
 # Terminal: nothing waits on anyone. A closed PRD still flying a
@@ -146,7 +146,7 @@ def sections(body, pattern):
 
 
 def questions_in(text):
-    """The round split into its questions. A section with `###` heads is
+    """The pass split into its questions. A section with `###` heads is
     those heads, each with the numbered answers under it; one with numbered
     items and no head is those items; one with prose and no item shape is one
     question."""
@@ -159,7 +159,7 @@ def questions_in(text):
 
 
 def is_question(q):
-    """An entry in the round, as against a divider or a note about it. A
+    """An entry in the pass, as against a divider or a note about it. A
     question is numbered (`### 1.`, `### Q1:`, `Question *Q1*:`) or it asks
     something; an unnumbered heading that asks nothing is neither."""
     first = q.strip().splitlines()[0] if q.strip() else ""
@@ -207,7 +207,7 @@ def prds(board):
 # each naming the word it caught so the analyst can see what to take out.
 #
 # Scope is the fork, the answer labels and the answer text. The `### Qn: title`
-# is not checked — it is the round's own index, and `Q1` there is the id every
+# is not checked — it is the pass's own index, and `Q1` there is the id every
 # other reader matches on. The technical anchor an analyst writes under the
 # third answer is an HTML comment, and `parse` drops every comment from the
 # body before anything here sees it, so it is never checked and never reported.
@@ -260,7 +260,7 @@ def bare(text, vocab):
 
 
 def split_question(q):
-    """(fork, [answer, …], rec) for one question of a round — `rec` is the
+    """(fork, [answer, …], rec) for one question of a pass — `rec` is the
     1-based number of the answer marked `(recommended)`, 0 when none is. The
     head line is dropped — it is the index, not the question."""
     body = q.strip()
@@ -335,7 +335,7 @@ def slugs_of(board):
 
 
 def check(board):
-    """Every problem, one string each. Empty means the rounds are clean."""
+    """Every problem, one string each. Empty means the passes are clean."""
     bad = []
     slugs = slugs_of(board)
     for rel, path in prds(board):
@@ -349,16 +349,16 @@ def check(board):
         for head, text in qs:
             if not text.strip():
                 bad.append(f"{rel}: `{head}` with nothing under it — a heading "
-                           "that says a round exists when none does")
+                           "that says a pass exists when none does")
                 continue
             if re.search(r"\banswered\b", head, re.I):
-                continue              # `## Questions (round 1, answered)`
-            # A CLOSED PRD'S ROUND IS HISTORY AND IS NOT GRADED. The same
+                continue              # `## Questions (pass 1, answered)`
+            # A CLOSED PRD'S PASS IS HISTORY AND IS NOT GRADED. The same
             # rule as the `## Answers` branch below, arrived at twice: on
             # 2026-08-29 this check was red only on `done` nodes, and the
             # correction that fixed it guarded only the two shapes it could
             # see. Every shape added since fired on the same history — 89
-            # rounds red, all closed — so the guard moves up here, over the
+            # passes red, all closed — so the guard moves up here, over the
             # whole grading pass. An empty heading is still reported at any
             # state: that is a formatting defect, not a record.
             if closed:
@@ -383,7 +383,7 @@ def check(board):
                                    "outcomes, or the fork is not ready")
                     if not rec and not REC_RE.search(q):
                         bad.append(f"{rel}: {label(q, n)} carries no "
-                                   "recommended answer — the round hands over "
+                                   "recommended answer — the pass hands over "
                                    "a fork with no way to pick")
                     elif rec > 1:
                         bad.append(f"{rel}: {label(q, n)} recommends answer "
@@ -400,7 +400,7 @@ def check(board):
         # to delete the decision. Both are worse than the flag.
         #
         # An OPEN node with the same shape is still reported: there the
-        # missing round is a live gap, not a record.
+        # missing pass is a live gap, not a record.
         for head, text in ans:
             if not text.strip():
                 bad.append(f"{rel}: `{head}` with nothing under it — "
@@ -420,7 +420,7 @@ def check(board):
         # `state:` is still read as a state, because it is one: a PRD parked
         # in `question` while closed really is a contradiction.
         # `blocked` is also the board waiting on a person, and it owes the
-        # same courtesy: either a round to answer or a `## Blocked` section
+        # same courtesy: either a pass to answer or a `## Blocked` section
         # stating the wall. Without both, the asks view has nothing to show
         # but the PRD body — a dump the reader cannot act on.
         if state.lower() == "blocked" and not closed \
@@ -440,7 +440,7 @@ def check(board):
                        "the work")
         elif waiting and not any(t.strip() for _h, t in qs):
             bad.append(f"{rel}: {said} — parked on the user with no "
-                       "`## Questions` round saying what is being asked")
+                       "`## Questions` pass saying what is being asked")
 
         needs = fm.get("needs", [])
         for n in (needs if isinstance(needs, list) else [needs]):
@@ -456,14 +456,14 @@ def check(board):
 # matching `**Qn**` under `## Answers`, on any PRD whose state is not terminal
 # — `CLOSED` above — and this is the ONE count both readers take: `list`
 # prints it, `plan.py scan` prints it, gates by it and reads it beside the
-# round file's `## Asked`. Two readers sharing a rule here is how the scan
+# pass file's `## Asked`. Two readers sharing a rule here is how the scan
 # and the list stopped being able to disagree about what still stands.
 
 # An answer as the drill writes it: `**Q1** — …`, optionally stamped
 # `*(answered 2026-08-28 14:22)*`. Only the id matches, never the text.
 ANSWER_ID_RE = re.compile(r"(?m)^\s*\*\*\s*Q?\s*(\d{1,2}[a-z]?)\s*\*\*")
 
-# The question's own id in the round: `### Q1: <title>` — also `### 1. <t>` —
+# The question's own id in the pass: `### Q1: <title>` — also `### 1. <t>` —
 # the two characters a prepared answer's `**Q1**` points back at.
 QHEAD_RE = re.compile(r"^###\s+(?:question\s+)?[Qq]?\s?(\d{1,2}[a-z]?)"
                       r"\s*[:.—–-]?\s*(.*)$")
@@ -475,7 +475,7 @@ def unanswered(board):
     A question is unanswered when a `### Qn:` head stands under `## Questions`
     with no matching `**Qn**` under `## Answers`, on any PRD whose state is
     not `CLOSED`. One reader: `questions.py list` prints it and `plan.py`
-    counts it — `drill_questions` there reads the round file beside it — so
+    counts it — `drill_questions` there reads the pass file beside it — so
     the two can never disagree about how many questions the board owes.
 
     A `### Qn:` head with no `###`-in-shape match (prose, a note) is not part
@@ -511,7 +511,7 @@ def unanswered(board):
 
 def rows(board):
     """(rel, open, answers, state) per PRD — the `list` line. `open` is the
-    drill count (`unanswered`), so a PRD whose round is answered prints its
+    drill count (`unanswered`), so a PRD whose pass is answered prints its
     state out of the way: it holds an answer, not a question."""
     open_qs = {}
     for rel, _qid, _title in unanswered(board):

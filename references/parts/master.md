@@ -61,12 +61,12 @@ The live service watches every member and reconciles within about a second.
 | `prd.md`, specs, memos, `state`  | the member. Written where the PRD lives, never at the master                             |
 | `needs:`                         | the whole master board. Resolved in the PRD's own board first; across boards it is `@<member>/<prd>`. A bare name matching two boards is ambiguous, reported, and ignored |
 | `footprint:`                     | qualified with the member name before any overlap check — two repos touching `src/lib.ts` are not one file. An **absolute** path is left as written, so a deliberate cross-repo overlap still clashes |
-| `language`                       | the PRD's own board. The master's is for its own PRDs and the round                      |
+| `language`                       | the PRD's own board. The master's is for its own PRDs and the pass                      |
 | `workers`, `pipeline`            | the master — it is the one dispatching                                                   |
 | `complexity` scoring             | the member — one repo's units do not size another's                                      |
 | `repo` for a worker brief        | the PRD's own `repo:`, else the member's repo root — the directory holding its `.pearde/prds/`   |
 
-**Naming.** The first round that meets a master board with no `name:` asks the
+**Naming.** The first pass that meets a master board with no `name:` asks the
 user for one and writes it to `settings.md`. Until then the name is inferred
 from the members (`mitosys+model`) — a placeholder, not an answer.
 

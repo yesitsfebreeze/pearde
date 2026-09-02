@@ -33,7 +33,7 @@ matches the same test, and the walk (and the count) go right on including it.
 
 The consequence: nothing under `.pearde/prds/archive/` is counted in the progress
 line, offered to `claim`, or walked by `doctor`'s PRD census. Moving 20 done
-PRDs there is 20 fewer directories `scan` opens on every round.
+PRDs there is 20 fewer directories `scan` opens on every pass.
 
 ## What's eligible
 

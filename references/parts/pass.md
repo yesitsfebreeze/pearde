@@ -1,10 +1,10 @@
-# The round file
+# The pass file
 
-`.pearde/.state/round.md` — the session's own memory, fifteen lines, rewritten at every
+`.pearde/.state/pass.md` — the session's own memory, fifteen lines, rewritten at every
 transition. Machine-local and git-ignored, like `.pearde/.state/plan.json`: it is what
 one session is holding, not what the board is.
 
-A context window ends without warning. When it does, everything the round
+A context window ends without warning. When it does, everything the pass
 worked out — which PRD is being collected, what a check returned, what the user
 answered, what is owed — is gone, and the cheapest thing the session can do
 next is the most expensive thing it can do: re-read the specs, re-run the
@@ -18,7 +18,7 @@ every state, weight, gate, claim and box count — copying those in makes the
 file wrong the moment a worker moves.
 
 ```markdown
-# Round — <what this round is doing>
+# Pass — <what this pass is doing>
 
 ## Established
 - <fact> — <how it was checked> · <time>
@@ -40,19 +40,19 @@ file wrong the moment a worker moves.
   command's verdict, with the time on it. A fact in here is cited, never
   re-run — @references/parts/loop.md. The progress line is printed by every
   command, so it is never computed by hand: quote the line, never the sum.
-- **Decided** is the round's judgment calls. A decision the code will not
+- **Decided** is the pass's judgment calls. A decision the code will not
   explain graduates to a memo, per @references/parts/memos.md; this is the
   scratch it is drafted in.
 - **Asked** is the live frontier: what went to the user and whether it came
   back. A question in here is never re-asked. It is also what the drill gate
   reads: a claim over an unput frontier refuses with `asking N — drill first`
-  until the round lists the questions — by title, the words the scan's drill
+  until the pass lists the questions — by title, the words the scan's drill
   section prints — and a question marked `answered` or `out` here stops
   gating.
-- **Edits** is every workflow edit this round applied or refused, per
+- **Edits** is every workflow edit this pass applied or refused, per
   @references/parts/loop.md step 6. A refusal is the half that has to be
   written down: the file is unchanged, so nothing on disk records that the run
-  proposed it or why it was turned down, and the next round would either
+  proposed it or why it was turned down, and the next pass would either
   re-refuse it from scratch or take it. Empty when no worker returned a
   `## Workflow` section — the section is then omitted, not left with a
   placeholder under it.
@@ -62,9 +62,9 @@ file wrong the moment a worker moves.
 ## When it is written
 
 At every transition — the same moment the progress line is printed, and the
-line says `round file owed` until this file is newer than the PRD it moved.
+line says `pass file owed` until this file is newer than the PRD it moved.
 Steps 2, 3, 6 and 7 of the loop all move something; each rewrites this file
-whole before it moves on. Never appended and never sectioned by round: the file says
+whole before it moves on. Never appended and never sectioned by pass: the file says
 what is true now, and there is nothing to prune later.
 
 ## After a compaction
@@ -75,6 +75,6 @@ carries. If the file does not carry it, that is the bug: write it down this
 time.
 
 If the steps themselves are gone, re-read @references/parts/loop.md — that
-one file, not the `@@loop` scope and not the reference tree behind it. A round
+one file, not the `@@loop` scope and not the reference tree behind it. A pass
 that re-opens the manual after every compaction pays for the manual as many
 times as it compacts.

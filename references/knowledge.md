@@ -82,5 +82,5 @@ verbs re-read it on every call.
   questions. `@resources/graph/graph.sh extract` reads the corpus and can
   also run semantic passes; `knowledge.py relink` reads `.pearde/wiki/`
   only, hand-built from the wikilinks, never an LLM call.
-- **The dashboard is the view a person opens.** A round queries the KB
+- **The dashboard is the view a person opens.** A pass queries the KB
   through the tools, never by reading `Dashboard.md`.

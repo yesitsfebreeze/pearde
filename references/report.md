@@ -12,9 +12,9 @@ what is stuck or waiting on them.
 - **One file.** `.pearde/report.md`, next to `settings.md`. A board is needed to
   write one; with none in scope, write the text and say where it goes.
 - **Rewritten whole.** Never appended, never a dated entry, never a section
-  per round. The file says what is true today and nothing about yesterday —
+  per pass. The file says what is true today and nothing about yesterday —
   git holds every earlier state.
-- **Written on demand, and at the end of a round that moved anything** —
+- **Written on demand, and at the end of a pass that moved anything** —
   @references/parts/loop.md step 7.
 
 ## Human, not agent

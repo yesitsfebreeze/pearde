@@ -22,7 +22,7 @@ Read off it directly:
     ordered by how much work each one unblocks. That ordering IS the dispatch
     order for the fastest path to the vision
   · a **footprint clash** is a pairwise `after` edge — the two PRDs are
-    serialized, and nothing else waits with them. No rounds, no barriers
+    serialized, and nothing else waits with them. No passes, no barriers
 
 `dates` mode is one click away for a human who wants a calendar — it draws
 the same bars on the worker-limited schedule `plan` computed.
@@ -67,7 +67,7 @@ def cpm(tasks):
     path, ordered pairwise so two agents never edit one file together. It is
     an edge like any dependency, and ONLY an edge: the pair is ordered, and
     nothing else on the board waits with it — agents start the moment their
-    own gates clear, so a round barrier would hold every PRD in the round for
+    own gates clear, so a pass barrier would hold every PRD in the pass for
     its slowest member.
 
     The track does not start at now. Tasks with `past: true` are done work,

@@ -285,8 +285,8 @@ const file = served ? arg : path.resolve(arg);
       checks.push(["the board view fits the viewport", fits,
                    fits ? "" : "the page scrolls on the board view"]);
     }
-    // asks reads each PRD over the wire and renders its round as picks. A card
-    // that could not read, or a parsed round showing no options, is the view
+    // asks reads each PRD over the wire and renders its pass as picks. A card
+    // that could not read, or a parsed pass showing no options, is the view
     // degrading quietly — which is exactly what it used to do.
     if (v === "asks") {
       await page.waitForTimeout(900);
@@ -296,17 +296,17 @@ const file = served ? arg : path.resolve(arg);
           n: cards.length,
           broken: cards.filter(c => /could not read the PRD/.test(c.textContent)).length,
           withPicks: cards.filter(c => c.querySelector(".qq .opt")).length,
-          // a round that parsed but rendered no options is the failure mode:
+          // a pass that parsed but rendered no options is the failure mode:
           // a card showing an empty question block answers nothing
-          emptyRounds: cards.filter(c =>
+          emptyPasses: cards.filter(c =>
             c.querySelector(".qq") && !c.querySelector(".qq .opt")).length,
-          // a parsed round answers per question — the card's bulk
+          // a parsed pass answers per question — the card's bulk
           // textarea/submit must be gone, one submit per question only
           bulkOnParsed: cards.filter(c => c.querySelector(".qq") &&
             c.querySelector(".foot") &&
             getComputedStyle(c.querySelector(".foot")).display !== "none").length,
           // every question carries its own reopen (revealed once answered)
-          roundsMissingReopen: [...document.querySelectorAll("#asks .qq")]
+          passesMissingReopen: [...document.querySelectorAll("#asks .qq")]
             .filter(q => !q.querySelector(".qreopen")).length,
           // a card that is not askable says so rather than dumping the body
           dumps: cards.filter(c => c.querySelector(".q") &&
@@ -316,7 +316,7 @@ const file = served ? arg : path.resolve(arg);
             !c.querySelector(".flag.blocked")).length,
           // every question answers on its own, and one already written back
           // is not in the inbox at all — it is in the answered panel
-          roundsMissingSend: [...document.querySelectorAll("#asks .qq")].filter(q =>
+          passesMissingSend: [...document.querySelectorAll("#asks .qq")].filter(q =>
             !q.classList.contains("answered") && !q.querySelector(".qsend")).length,
           answeredStillAsking: document.querySelectorAll("#asks .qq.answered")
             .length,
@@ -333,16 +333,16 @@ const file = served ? arg : path.resolve(arg);
       });
       checks.push(["no ask card failed to read its PRD", a.broken === 0,
                    `${a.broken} of ${a.n}`]);
-      checks.push(["no card renders a round with no options", a.emptyRounds === 0,
+      checks.push(["no card renders a pass with no options", a.emptyPasses === 0,
                    `${a.withPicks} of ${a.n} cards carry picks`]);
-      checks.push(["a parsed round has no bulk submit",
+      checks.push(["a parsed pass has no bulk submit",
                    a.bulkOnParsed === 0, `${a.bulkOnParsed} cards`]);
       checks.push(["every question carries its own reopen",
-                   a.roundsMissingReopen === 0, ""]);
+                   a.passesMissingReopen === 0, ""]);
       checks.push(["an unaskable card says so instead of dumping the body",
                    a.dumps === 0, `${a.dumps} cards`]);
       checks.push(["every open question has its own submit",
-                   a.roundsMissingSend === 0, ""]);
+                   a.passesMissingSend === 0, ""]);
       checks.push(["an answered question has left the inbox",
                    a.answeredStillAsking === 0, ""]);
       checks.push(["the answered panel built", a.panel,

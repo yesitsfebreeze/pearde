@@ -11,7 +11,7 @@ check sees.
 | `landed` | `done` | the landed band — a `commit:` a reader can follow and an `actual:` the calibration reads |
 | `building` | `claimed` | in flight — five boxes, three closed, a claim held since a written timestamp |
 | `finished` | `claimed` | to collect — every box closed and `prd.md` clean, the band that leads every list |
-| `asking` | `question` | waiting on you — one round, three answers, one recommended, rendered as picks |
+| `asking` | `question` | waiting on you — one pass, three answers, one recommended, rendered as picks |
 | `next` | `open` | gated — it needs `building`, and the scan says so |
 | `big` | `open` | the tree — a parent that weighs zero, with `big/first` landed and `big/second` open |
 

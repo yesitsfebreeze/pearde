@@ -1,6 +1,6 @@
 # Calling a persona
 
-Putting one problem to one colleague, mid-round, without switching.
+Putting one problem to one colleague, mid-pass, without switching.
 @references/personas/INDEX.md is the roster. The brief is the **Consultant**
 one in @references/parts/workers.md. Switching the session is a different
 question — @references/parts/personas.md.
@@ -14,8 +14,8 @@ can already do. Reaching a colleague is ordinary work, the way dispatching a
 worker is, and needs no permission.
 
 Personas are cheap to call and expensive to become. A switch re-aims the whole
-round; a question aimed at one problem does not need one — calling the skeptic
-about one PRD gets the adversarial read without the next three rounds being
+pass; a question aimed at one problem does not need one — calling the skeptic
+about one PRD gets the adversarial read without the next three passes being
 adversarial.
 
 ## When to call one, unprompted
@@ -24,7 +24,7 @@ adversarial.
 |--------------------------------------------------------------------------|------------|
 | write `done` on work this session implemented                             | `skeptic`  |
 | accept a worker's report you cannot check from inside your own frame      | `skeptic`  |
-| name a user-facing thing, or decide a flow, inside an engineering round    | `designer` |
+| name a user-facing thing, or decide a flow, inside an engineering pass    | `designer` |
 | recommend a fork to the user that turns on something they must understand  | `mentor`   |
 | work a field the roster does not cover, and it governs the decision        | `persona create <topic>` first, then call it |
 
@@ -57,14 +57,14 @@ adversarial.
   board path and the question, nothing else. A summary of the problem hands it
   your reading of the problem, which is the thing you were asking someone else
   for.
-- **Your persona does not move**, and the round line still carries yours. A
+- **Your persona does not move**, and the pass line still carries yours. A
   consultant never prints a `▸ … · as <id>` line — that form is what the
   status line reads, and one from a consultant shows a persona nobody wears.
 
 ## Relaying
 
 Say who you asked and what they said — `skeptic: <the answer>` — then answer
-it in your own voice if you disagree. An answer laundered into the round as
+it in your own voice if you disagree. An answer laundered into the pass as
 your own view costs the user two readings and gives them one. A call that
 changed nothing is still worth one line: a skeptic that found nothing is
 evidence, and dropping it makes the next `done` look unchecked.

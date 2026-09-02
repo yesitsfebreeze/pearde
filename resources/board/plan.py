@@ -57,7 +57,7 @@ import workflows as wflib  # noqa: E402 — the skill root, one dir up
 # The board is one directory at a project root, beside `.obsidian/` — it holds
 # `prds/`, `memos/`, `wiki/` and `workflows/`, so a reader can see what the tool
 # keeps without being told. `.state/` inside it is the machine-local corner:
-# the plan, the two journals, the round file and the rendered view, none of them
+# the plan, the two journals, the pass file and the rendered view, none of them
 # committed, all of them regenerable.
 BOARD_DIR = ".pearde"
 STATE_DIR = ".state"
@@ -99,7 +99,7 @@ def migrate_legacy_state():
     left a file behind.
 
     Destinations are read before they are written: `<board>/.state/` holds
-    live round files and the history and transitions journals, and anything
+    live pass files and the history and transitions journals, and anything
     already there outranks anything the install kept. The daemon's own
     `serve.log` and the adapters' `run-*.log` are rolling tails belonging to
     no board and are dropped, not moved."""
@@ -225,7 +225,7 @@ def strip_comment(v):
 
 
 # ── the parse cache ──────────────────────────────────────────────────────────
-# `scan` is step 1 of every round, the status line and the view daemon, and
+# `scan` is step 1 of every pass, the status line and the view daemon, and
 # each call re-read and re-parsed every prd.md and every spec's frontmatter.
 # The cache holds (fm, title, body) keyed on abspath + mtime_ns + size and is
 # persisted to <board>/.state/parse-cache.json by `scan` — machine-local,
@@ -700,7 +700,7 @@ def hours(v):
 # `weight-default`, `gantt-day` and `claim-ttl` in settings.md. The population
 # of writers is the population of workers, so the failure mode is a typo — and
 # a bare `float()` over one of them turns that typo into a traceback in `scan`,
-# step 1 of every round, that names no PRD and stops every session on the
+# step 1 of every pass, that names no PRD and stops every session on the
 # board. Nothing here reads a number off a file a person wrote except through
 # `num` and `dur`.
 #
@@ -713,7 +713,7 @@ def hours(v):
 # moves the PRD in the plan and in the progress percentage — so every bad
 # value is said out loud, on stderr, naming the file a person has to open.
 # Once per (file, key, value), never once per read: `complexity` is read by
-# five functions in a round and one typo is one problem.
+# five functions in a pass and one typo is one problem.
 _BAD_SEEN = set()
 # a duration that is honestly zero — `0`, `0h`, `0.0m` — so `dur` does not
 # report the one value `hours()` and a broken value agree on
@@ -855,10 +855,10 @@ def fmt_age(minutes):
     return f"{round(minutes)}m" if minutes < 90 else f"{minutes / 60:.1f}h"
 
 
-# The round's own memory — @references/parts/round.md. Fifteen lines the
+# The pass's own memory — @references/parts/pass.md. Fifteen lines the
 # orchestrator rewrites at every transition, so a compacted session recovers
-# by reading one file instead of re-deriving the round from the tree.
-ROUND_FILE = os.path.join(STATE_DIR, "round.md")
+# by reading one file instead of re-deriving the pass from the tree.
+PASS_FILE = os.path.join(STATE_DIR, "pass.md")
 
 
 # The states the loop moves work through. A board state outside LIVE_STATES is
@@ -905,7 +905,7 @@ def infer_name(board):
 def board_name(board):
     """What the board calls itself: `name:` in prds/settings.md, else inferred
     — from the members on a master board, from the directory walk-up on a
-    plain one. Inference is a placeholder: the first round that meets an
+    plain one. Inference is a placeholder: the first pass that meets an
     unnamed master board asks the user and writes `name:`."""
     raw = str(board_settings(board).get("name", "")).strip()
     return re.sub(r"[^A-Za-z0-9_. -]", "-", raw) or infer_name(board)
@@ -1874,7 +1874,7 @@ def compute_plan(board, workers=None, warn=True):
             return (1, -d, -u, -prio(r), r)
         return (2, 0, -u, -prio(r), r)
 
-    # A footprint clash serializes the PAIR, never a round. An agent starts
+    # A footprint clash serializes the PAIR, never a pass. An agent starts
     # the moment its own gates clear, so a barrier would hold back every PRD
     # it shares nothing with. The clash is an edge: the lower-priority PRD is
     # `after` the higher one, and only that pair is ordered. Two PRDs already
@@ -2026,7 +2026,7 @@ def question_counts(prd):
     """(questions, answers) in one PRD's body — the numbers step 2 asks for.
 
     A question is a `**Qn**` line under `## Questions`; an answer is the same
-    line under `## Answers`. Counting them here is what stops a round opening
+    line under `## Answers`. Counting them here is what stops a pass opening
     every `question` PRD to find out whether it is still asking."""
     out = {}
     for sec in re.split(r"(?m)^##\s+", prd.get("body") or "")[1:]:
@@ -2037,10 +2037,10 @@ def question_counts(prd):
     return out.get("q", 0), out.get("a", 0)
 
 
-# One line of a round, written back. `**Q1** *(answered 2026-08-28 14:22)*
+# One line of a pass, written back. `**Q1** *(answered 2026-08-28 14:22)*
 # — <the decision>`: the id says which fork, the stamp says when it was
 # settled, and everything after the dash is the decision itself. The stamp is
-# optional — rounds answered before the view wrote one still read, they only
+# optional — passes answered before the view wrote one still read, they only
 # lose their place in a date order.
 ANSWER_LINE_RE = re.compile(
     r"^\s*\*\*(Q?\d+[a-z]?)\*\*\s*"
@@ -2051,8 +2051,8 @@ def drill_questions(board):
     """[(rel, qid, title, out)] \u2014 the drill, as data.
 
     The unanswered questions `questions.unanswered` counts, each marked `out`
-    when the round file's `## Asked` already lists it \u2014 by title, normalized,
-    because that file holds the words the round put to the user and drill.md
+    when the pass file's `## Asked` already lists it \u2014 by title, normalized,
+    because that file holds the words the pass put to the user and drill.md
     sends a question there precisely so it is never re-put. Two entry points,
     one reader: `cmd_scan`'s drill section prints the list, and
     transitions.py `gate_claim` counts the ones still unput and refuses when
@@ -2061,7 +2061,7 @@ def drill_questions(board):
     if not un:
         return un
     try:
-        text = open(os.path.join(board, ROUND_FILE), encoding="utf-8").read()
+        text = open(os.path.join(board, PASS_FILE), encoding="utf-8").read()
     except OSError:
         text = ""
     asked = re.sub(r"\s+", " ",
@@ -2079,8 +2079,8 @@ QUESTION_HEAD_RE = re.compile(r"(?m)^###\s+(Q?\d+[a-z]?)\s*[:.\u2014\u2013-]?\s*
 
 
 def _h2_sections(body, name):
-    """Every `## <name>` section's text. A round can be asked twice — a second
-    `## Questions` round is a second section, not a replacement."""
+    """Every `## <name>` section's text. A pass can be asked twice — a second
+    `## Questions` pass is a second section, not a replacement."""
     out = []
     for m in re.finditer(r"(?m)^##\s+" + name + r"\b[^\n]*$", body or ""):
         rest = body[m.end():]
@@ -2137,7 +2137,7 @@ def progress_terms(board, prds=None, settings=None):
     """Every term of the progress line, computed once.
 
     @references/parts/progress.md defines them; deriving them by hand off a
-    board scan is a page of arithmetic a round pays for at every state change,
+    board scan is a page of arithmetic a pass pays for at every state change,
     and pays again after every compaction."""
     prds = scan(board) if prds is None else prds
     settings = board_settings(board) if settings is None else settings
@@ -2223,7 +2223,7 @@ def pressure_bands(board, prds, r):
     computation, read by `cmd_scan` for the sections it prints and by
     `cmd_next` for the one it acts on — @references/parts/order.md.
 
-    Everything above `in flight` is something this round can act on now;
+    Everything above `in flight` is something this pass can act on now;
     `in flight` is held by somebody else. A PRD in exactly one band, never
     two."""
     order = r["order"] if r else []
@@ -2256,9 +2256,9 @@ def pressure_bands(board, prds, r):
 
 
 def cmd_scan(board):
-    """The whole board as one page a round can hold — step 1, in one call.
+    """The whole board as one page a pass can hold — step 1, in one call.
 
-    Everything the loop reads at the top of a round: the counts, the progress
+    Everything the loop reads at the top of a pass: the counts, the progress
     terms, what is finished and waiting to be closed, what is dispatchable
     now, what gates the rest, who holds what, and how many questions are
     standing. It replaces a tree walk plus a `prd.md` read per PRD plus a spec
@@ -2287,7 +2287,7 @@ def cmd_scan(board):
         axis_note = f" · axis: {on} on · {len(t['live']) - on} off"
     # the drill count — the second entry point of @references/drill.md § The
     # board's own frontier: over one unanswered question, the drill section
-    # below stands first and nothing is dispatched until the round is out.
+    # below stands first and nothing is dispatched until the pass is out.
     drill = drill_questions(board)
     asking = ""
     if drill:
@@ -2352,19 +2352,19 @@ def cmd_scan(board):
     # One PRD, one section, in THE PRESSURE ORDER — the single ranking this
     # board is worked in, and the same one the timeline stacks its rows by.
     # See @references/parts/order.md. Everything above `in flight` is something
-    # this round can act on now; `in flight` is held by somebody else. A PRD
-    # listed twice is a round that has to work out which line meant it.
+    # this pass can act on now; `in flight` is held by somebody else. A PRD
+    # listed twice is a pass that has to work out which line meant it.
     # `bands` is the one computation of it — `cmd_next` reads the same call.
     collect, yours, flight, ready, gated, why = bands
     # The drill section, FIRST — above collect, the pressure order's own head:
     # the scan opens on the questions waiting on the user. A question already
-    # out — the round file's `## Asked` carries it — is marked `out`, carried
+    # out — the pass file's `## Asked` carries it — is marked `out`, carried
     # and never re-put; `claim` counts the unput ones and refuses.
     if len(drill) >= 2:
         askers = len({rel for rel, _q, _t, _o in drill})
         print(f"\ndrill — asking {len(drill)} over {askers} PRD"
               + ("s" if askers != 1 else "")
-              + " · one round to the user before any claim")
+              + " · one pass to the user before any claim")
         for rel, qid, title, is_out in drill:
             print(f"  {rel} · {qid} {title}" + (" · out" if is_out else ""))
     for title, group in (
@@ -2379,23 +2379,23 @@ def cmd_scan(board):
         print("\n" + title)
         for x in group:
             print(line(x))
-    rf = os.path.join(board, ROUND_FILE)
+    rf = os.path.join(board, PASS_FILE)
     print(f"\nround: {rf}" + ("" if os.path.isfile(rf) else "  (not written)"))
 
 
 def cmd_next(argv):
-    """the loop step the round is on — its decision and the exact command
+    """the loop step the pass is on — its decision and the exact command
 
     One call after `scan`: which of the eight steps the board is on, the
     decision that step asks the orchestrator to make, and the command to run
     — @references/parts/loop.md, with the step selection read off the same
-    bands `cmd_scan` prints. Reads and never writes: no state moves, no round
-    file written, safe at any point. The round file's `## Owed` line, when
-    one is written, stands first — it is the round's own memory of what is
+    bands `cmd_scan` prints. Reads and never writes: no state moves, no pass
+    file written, safe at any point. The pass file's `## Owed` line, when
+    one is written, stands first — it is the pass's own memory of what is
     next, and it outranks nothing: the bands below it are the board's answer.
     """
     board = find_board(argv[0] if argv else None)
-    rf = os.path.join(board, ROUND_FILE)
+    rf = os.path.join(board, PASS_FILE)
     if os.path.isfile(rf):
         try:
             lines = [l for l in "\n".join(_h2_sections(
@@ -2421,7 +2421,7 @@ def cmd_next(argv):
     unput = [(rel, qid, title) for rel, qid, title, out
              in drill_questions(board) if not out]
     if unput:
-        gate = (" — one drill round to the user before any claim"
+        gate = (" — one drill pass to the user before any claim"
                 if len(unput) > 1 else
                 " — one standing is not a gate; put it and keep working")
         print(f"step 2 · answer — asking {len(unput)}{gate}")
@@ -2468,7 +2468,7 @@ def cmd_next(argv):
         print(f"gated — {x}: {w}")
         if w.startswith("workflow:"):
             print("  decision: the one refusal you clear yourself — fix the"
-                  " slug or remove the key, then claim in the same round")
+                  " slug or remove the key, then claim in the same pass")
         else:
             print("  decision: none — the gate clears as its own work lands")
         return
@@ -2483,11 +2483,11 @@ def cmd_next(argv):
             print(f"  {x} · {prds[x]['state']}")
         print('  step 7 first: python3 resources/knowledge.py query'
               ' "<the frontier\'s question>"')
-        print("  drill round → .pearde/.state/ask.md; rewrite"
-              " .pearde/report.md and the round file; hand back ASK / BLOCKED")
+        print("  drill pass → .pearde/.state/ask.md; rewrite"
+              " .pearde/report.md and the pass file; hand back ASK / BLOCKED")
         return
     print("step 8 · hand back — nothing left to dispatch or ask")
-    print("  rewrite .pearde/report.md and the round file; hand back DRAINED")
+    print("  rewrite .pearde/report.md and the pass file; hand back DRAINED")
 
 
 def plan_frontier(r):
@@ -2525,10 +2525,10 @@ def cmd_plan(board, workers):
         for x in r["collect"]:
             c, t = r["boxes"][x]
             print(f"  ✓ {x} [{todo[x]['state']}] {c}/{t} boxes closed")
-    # The frontier, then the queue. There are no rounds: a PRD starts the
+    # The frontier, then the queue. There are no passes: a PRD starts the
     # moment its own gates clear, so the plan is the dispatch order and what
     # gates each entry — not waves that would hold unrelated work hostage to
-    # the slowest member of a round.
+    # the slowest member of a pass.
     frontier = plan_frontier(r)
     wf = workflow_marks(board, prds)
     if frontier:

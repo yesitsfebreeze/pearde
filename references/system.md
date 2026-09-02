@@ -15,9 +15,9 @@ On "pearde", "work the board", "run the prds", or "pearde status": read
 `@README.md` names it per question — and let it send you on. A scope is what a
 feature is made of, not a reading list.
 
-- **The round** — `@@loop`: scan, answer, refine, spec ahead, implement,
+- **The pass** — `@@loop`: scan, answer, refine, spec ahead, implement,
   collect, drill-then-stop. A board with nothing dispatchable is blocked on a
-  person: put its whole open frontier as one drill round, per `@@drill`, rather
+  person: put its whole open frontier as one drill pass, per `@@drill`, rather
   than reporting what is stuck. `@@board` is what the scan walks. `@@states` is what a state
   means and what may set it.
 - **Settings** — `language`, `workers`, `pipeline` live in `.pearde/settings.md`.
@@ -25,12 +25,12 @@ feature is made of, not a reading list.
   Missing means first run: `pearde init` — English by default, said on its
   first line; `pearde settings language=<l>` changes it.
 - **Who works** — one persona per session, one id from `@@personas`, stored
-  nowhere: `engineer` until switched, and the round's line carries it. A
-  candidate that differs from the active persona and governs the round: ask
+  nowhere: `engineer` until switched, and the pass's line carries it. A
+  candidate that differs from the active persona and governs the pass: ask
   once, recommend the candidate, wear the answer — never switch silently. The
   user naming one is not a question. A dispatched worker's persona comes from
   its own job — one table in `@@workers` — and moves nothing.
-- **Calling one** — the roster is colleagues you can reach mid-round, on your
+- **Calling one** — the roster is colleagues you can reach mid-pass, on your
   own judgment, without asking. Put one problem to a persona you are not
   wearing, talk to it — follow up, push back, answer its question — and relay
   what it said attributed. It writes nothing and your persona does not move.
@@ -38,7 +38,7 @@ feature is made of, not a reading list.
   <question>` is the user doing the same thing. `@@consult`.
 - **Writing** — PRDs, specs, and reports go in the board `language`, per
   `@@language`.
-- **Asking** — per `@@drill`: one round, the whole frontier, each question
+- **Asking** — per `@@drill`: one pass, the whole frontier, each question
   with your recommended answer.
 - **Following** — a job that recurs is a `workflow`: an ordered route of
   atomics a worker follows, named by `workflow:` on a PRD or a spec, and

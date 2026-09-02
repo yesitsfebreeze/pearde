@@ -91,7 +91,7 @@ HTTP API, all JSON, all 127.0.0.1-only:
                                    write one PRD — what the detail pane saves
   POST /report   {"board","prd","text"}   a worker's report → `## Report`
   POST /run      {"board","prd","adapter"?}
-                                   launch that PRD's round with one configured
+                                   launch that PRD's pass with one configured
                                    adapter — its own command, its own prompt
                                    template (resources/board/adapters/*.json;
                                    `claude.json` ships by default). `adapter`
@@ -247,13 +247,13 @@ class Board:
 BOARDS = {}  # name → Board
 BOARDS_LOCK = threading.Lock()
 
-# ── the Start button: a click launches a round ────────────────────────────────
+# ── the Start button: a click launches a pass ────────────────────────────────
 # The view has no way to drive a Claude Code session itself — the daemon does,
 # since it already runs local Python with subprocess access. RUNNING tracks one
-# in-flight launch per (board, prd) so a second click while the first round is
+# in-flight launch per (board, prd) so a second click while the first pass is
 # still starting up is refused rather than spawning a duplicate session; it is
 # not the board's own claim tracking (`claim:` in the PRD, which the spawned
-# round writes for itself once it picks the PRD up) and is dropped the moment
+# pass writes for itself once it picks the PRD up) and is dropped the moment
 # the process this daemon started exits.
 RUNNING = {}  # (board name, prd rel) → Popen
 RUN_LOCK = threading.Lock()
@@ -903,7 +903,7 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/answers":
             # what the board has already settled. The asks view takes an
             # answered question out of the inbox and shows it here instead,
-            # newest first — so going through a round is a list that empties,
+            # newest first — so going through a pass is a list that empties,
             # and a decision made a week ago is still readable next to it.
             b = by_name(q.get("board"))
             if not b:
@@ -1301,7 +1301,7 @@ class Handler(BaseHTTPRequestHandler):
         if path == "/run":
             # The Start button. Only `open` is offered one in the view, and
             # this is the server-side half of that same rule — a stale page,
-            # or a second tab, must not launch a round on a PRD that already
+            # or a second tab, must not launch a pass on a PRD that already
             # moved on.
             b = by_name(body.get("board"))
             if not b:
@@ -1489,7 +1489,7 @@ def cmd_status():
 
 def cmd_wait(arg, timeout):
     """Block until the board moves, then say what moved. An orchestrator with
-    nothing left to dispatch parks here instead of ending the round — see
+    nothing left to dispatch parks here instead of ending the pass — see
     @references/parts/loop.md.
 
     Exit 0 = something happened (the inbox, or any board change), 1 = the
@@ -1566,7 +1566,7 @@ def cmd_selfcheck():
     for needle, hay, want in (
             ("bwiki", "board/wiki", True),                # a compression
             ("abcdef", "alpha bravo charlie delta echo foxtrot", True),
-            ("wndw", "the round runs in a window that ends", True),
+            ("wndw", "the pass runs in a window that ends", True),
             ("xyzq", "board/wiki", False),                # letters absent
             ("ab", "a b", False),                         # too short to mean
             ("abcdef", "xxaxx xxbxx xxcxx xxdxx xxexx xxfxx zzz", False)):

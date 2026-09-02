@@ -2,9 +2,9 @@
   "collapse-filter": false,
   "search": "-file:\"prd\" -path:\"specs\" -path:\"wiki/.graphify\" -path:\"wiki/graphs\" -path:\"wiki/pending\" -path:\".absorbed\" -file:\"Dashboard\" -path:\"graphify\"",
   "showTags": true,
-  "showAttachments": true,
+  "showAttachments": false,
   "hideUnresolved": true,
-  "showOrphans": true,
+  "showOrphans": false,
   "collapse-color-groups": false,
   "colorGroups": [
     {

@@ -5,13 +5,22 @@
 
 ## Invariants
 
+- [no-colour-group-in-the-vault-preset-is-a-path-query](no-colour-group-in-the-vault-preset-is-a-path-query.md) — decided · 2026-09-02 — every colour group in the vault preset is a tag query, and every tag it names is carried by a note
+- [a-master-need-is-the-union-of-its-members](a-master-need-is-the-union-of-its-members.md) — decided · 2026-09-02 — a master board's ramp need is the union over its members, never its own repo alone
+- [a-board-s-own-file-commits-in-the-board-repo](a-board-s-own-file-commits-in-the-board-repo.md) — decided · 2026-09-02 — a footprint path inside a board that is its own git repo commits in the board repo, never in the code repo that ignores it
 - [every-artifact-lands-inside-the-board](every-artifact-lands-inside-the-board.md) — decided · 2026-09-01 — every file the tool writes into a project lands under that project's .pearde/
 
 ## Decisions
 
+- [the-graph-view-colours-by-tag-and-every-note-s-kind-tag-is-generated](the-graph-view-colours-by-tag-and-every-note-s-kind-tag-is-generated.md) — decided · 2026-09-02 — the vault's graph colours by tag and never by folder, and every note carries a generated kind tag
 - [the-board-assumes-unlimited-agents](the-board-assumes-unlimited-agents.md) — decided · 2026-09-02 — the plan, the pass and the drill assume every dispatchable PRD runs at once; a worker cap is a person's setting, never the plan's clock
+- [lanes-share-one-copy-of-what-they-regenerate](lanes-share-one-copy-of-what-they-regenerate.md) — decided · 2026-09-02 — lanes share one copy of what they regenerate
+- [an-analyst-that-picks-its-own-route-leaves-its-run-uncounted](an-analyst-that-picks-its-own-route-leaves-its-run-uncounted.md) — decided · 2026-09-02 — a workflow run named only in `## Scores` is left uncounted, not reconstructed
 - [also-resolves-against-the-board-first](also-resolves-against-the-board-first.md) — decided · 2026-09-02 — collect --also resolves against the board first, then the caller's cwd, and refuses a path neither holds
+- [a-session-that-writes-a-shared-checkout-can-revert-another-session-s-work](a-session-that-writes-a-shared-checkout-can-revert-another-session-s-work.md) — decided · 2026-09-02 — workers got worktrees and orchestrator sessions did not, so three sessions shared one checkout and two of them lost work in one afternoon
 - [a-harness-that-reads-the-whole-checkout-is-not-a-harness](a-harness-that-reads-the-whole-checkout-is-not-a-harness.md) — decided · 2026-09-02 — a probe asserts over its own footprint, never over the live working tree, and its flip probe runs every file it claims for
+- [a-group-is-a-label-a-board-writes-on-itself](a-group-is-a-label-a-board-writes-on-itself.md) — decided · 2026-09-02 — grouping the watch set is a `groups:` key on each board, never a registry of boards kept beside the machine
+- [a-duplicate-a-second-reader-forces-is-generated-and-checked-never-typed](a-duplicate-a-second-reader-forces-is-generated-and-checked-never-typed.md) — decided · 2026-09-02 — a field a second reader forces us to duplicate is generated from its source and checked, never hand-written
 - [the-dispatcher-holds-no-round](the-dispatcher-holds-no-round.md) — decided · 2026-09-01 — the round runs in a pearde-round worker whose window is thrown away, and the budget is measured from the window's own floor
 - [one-author-is-not-an-accepted-spec](one-author-is-not-an-accepted-spec.md) — decided · 2026-09-01 — a spec whose code, probe, acceptance boxes and proof block have one author is not accepted evidence; a box is ticked only against a check that has been seen fail
 - [invariants-are-testable-memos-and-the-kind-index-is-generated](invariants-are-testable-memos-and-the-kind-index-is-generated.md) — decided · 2026-09-01 — invariants are testable memos and the kind index is generated
@@ -35,6 +44,7 @@
 
 ## Notes
 
+- [a-config-change-is-proved-only-in-a-shell-that-loaded-the-config](a-config-change-is-proved-only-in-a-shell-that-loaded-the-config.md) — decided · 2026-09-02 — a probe that asserts a config change must run in a shell that loaded the config, or it reports a convincing false negative
 - [two-holes-the-flag-probe-found](two-holes-the-flag-probe-found.md) — decided · 2026-08-29 — collect defaults the persona silently where every transition refuses, and `set --force` leaves a stale `claim:`
 - [the-install-is-live-symlinks](the-install-is-live-symlinks.md) — decided · 2026-08-29 — The installed skill is file-by-file symlinks into this repo, so a pearde round on any board on the machine edits this working tree
 - [a-container-cannot-reach-done](a-container-cannot-reach-done.md) — decided · 2026-08-29 — a parent PRD whose children are all done has no path to done through the tool

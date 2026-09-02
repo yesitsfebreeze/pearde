@@ -32,12 +32,12 @@ makes a collision require two races in a row rather than one.
 
 ## Acceptance
 
-- [ ] The harness re-checks the picked port with `port_busy` before using it
-- [ ] A port found busy is discarded and another is picked, up to five tries
-- [ ] Exhausting the tries fails loudly rather than proceeding with an empty port value
-- [ ] That failure arm removes its own scratch directory, since the `EXIT` trap is not yet armed
-- [ ] The harness reads green end to end, standing down where it is designed to
-- [ ] The harness uses the same `port_busy` spelling as its two siblings, not a second one
+- [x] The harness re-checks the picked port with `port_busy` before using it
+- [x] A port found busy is discarded and another is picked, up to five tries
+- [x] Exhausting the tries fails loudly rather than proceeding with an empty port value
+- [x] That failure arm removes its own scratch directory, since the `EXIT` trap is not yet armed — the arm run, not the `rm -rf` grepped for
+- [x] The harness reads green end to end, standing down where it is designed to
+- [x] The harness uses the same `port_busy` spelling as its two siblings, not a second one
 
 ## Verify and Proof
 
@@ -53,6 +53,25 @@ bash .pearde/prds/seven-closed-probes-drifted-red/init-seeds-a-board-doctor-call
 # and under the sweep's own environment, where it stands down
 PEARDE_HARNESSES=1 bash .pearde/prds/seven-closed-probes-drifted-red/init-seeds-a-board-doctor-calls-green/probe/verify.sh
 
-# no scratch dir is left behind by the exhausted-tries arm
-ls -d /tmp/tmp.* 2>/dev/null | wc -l
+# The exhausted-tries arm's own cleanup is asserted behaviourally by the
+# probe above ("...and removes its own scratch directory"), which runs the
+# arm under a TMPDIR of its own and checks that directory is still empty.
+# An earlier line here looked in /tmp, where `mktemp -d` on this box does not
+# put anything — $TMPDIR is /var/folders/…/T — so it printed 0 whether or not
+# the arm leaked, and compared that 0 to nothing. This is the leak check that
+# does compare something: the harness's real TMPDIR, before against after.
+# The count is taken in a TMPDIR of this block's own, so a neighbour session
+# running mktemp at the same moment cannot move it — the machine-wide
+# $TMPDIR count did exactly that at collect (2461 -> 2471 with nothing of
+# the harness's among the ten), which is a check decided by scheduling.
+LEAK="$(mktemp -d)"
+BEFORE="$( { ls -d "$LEAK"/tmp.* 2>/dev/null || true; } | wc -l | tr -d ' ' )"
+TMPDIR="$LEAK" bash .pearde/prds/seven-closed-probes-drifted-red/init-seeds-a-board-doctor-calls-green/probe/verify.sh >/dev/null 2>&1 || true
+AFTER="$( { ls -d "$LEAK"/tmp.* 2>/dev/null || true; } | wc -l | tr -d ' ' )"
+echo "scratch dirs under the harness's own TMPDIR: $BEFORE -> $AFTER"
+if [ "$AFTER" -le "$BEFORE" ]; then
+  echo "the harness left no scratch directory behind"
+fi
+rm -rf "$LEAK"
+[ "$AFTER" -le "$BEFORE" ]
 ```

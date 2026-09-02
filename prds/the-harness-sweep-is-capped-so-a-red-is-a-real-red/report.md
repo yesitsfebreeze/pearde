@@ -1,134 +1,162 @@
-# the-harness-sweep-is-capped-so-a-red-is-a-real-red — analyst report
+# the-harness-sweep-is-capped-so-a-red-is-a-real-red — implementer report
 
-**Verdict: SPECCED** — 3 specs, complexity 18, blast-radius mid, workflow
-`probe-then-spec`.
+Verdict: DONE
 
-The build went all the way through. All four mechanisms the PRD names are
-implemented, uncommitted in the tree, and the PRD's acceptance demonstration
-passes: two consecutive capped sweeps returned the identical failure set, and
-that set equals what a full serial re-run of every harness returns.
+All twenty acceptance boxes across the three specs are ticked and quoted. The
+one that was open — spec01's acceptance sentence — was closed by this pass,
+against the bar the user settled at the drill of 2026-09-02 (`## Answers` Q1):
+a **rate cut**, not an elimination. The earlier `Verdict: QUESTION` is stale;
+the question it asked has been answered on the PRD and the box was measured
+against the answered bar without being reworded or lowered.
 
-## The number, before and after
+**The measurement.** Five capped `doctor --harnesses` runs produced **zero**
+contention-class reds. One uncapped run produced **one**. Five sweeps against
+one, zero against one — the per-run rate is cut by at least fivefold, which is
+the bar. No survivor in the contending class remains to name.
 
-| run | line | failures |
+## Box status — 20 of 20
+
+| spec | boxes | note |
 |---|---|---|
-| baseline, uncapped (this session) | `7 of 48 green · 40 unpinned · 84s · 8 failed` | 8 |
-| capped, run A | `8 of 52 green · 43 unpinned · 80s · 1 failed` | 1 |
-| capped, run B | `8 of 52 green · 43 unpinned · 80s · 1 failed` | 1 |
-| full serial re-run | — | 1, the same one |
+| spec01 — the cap | 7/7 | the last open box closed this pass; see the quoted block below |
+| spec02 — the view-row ports and the leak | 7/7 | unchanged, carried from the previous pass |
+| spec03 — the spare-port TOCTOU | 6/6 | unchanged, carried from the previous pass |
 
-Seven of the eight baseline reds were contention. The survivor is
-`seven-closed-probes-drifted-red/the-fixtures-meet-the-tool`, red on its merits
-and another PRD's business (finding 3 below).
+`grep -c '^- \[ \]'` over `specs/*.md` → `0`, `0`, `0`.
 
-**The cap costs nothing.** 80s capped against 84s uncapped. The uncapped run was
-not faster — it was thrashing. This settles the PRD's "do not serialise the whole
-run" constraint with measurement rather than argument.
+## spec01's `## Verify and Proof` block — run once, in full
 
-**The chosen cap is 4**, `PEARDE_HCAP` overriding it for an experiment. Above the
-number of harnesses that contend for a fixed port or a board service at any one
-moment, and far below the box's ten cores, so a harness waiting on a socket with
-a timeout is never starved of CPU. Raising it trades trust for wall-clock;
-lowering it buys no more trust, only time.
+Extracted with `awk` and run the way `collect` runs it
+(`bash -c "set -o pipefail; …"`) from `/Users/feb/dev/infra/pearde`. It took
+roughly twenty minutes: five capped sweeps, two serial re-runs over all 52
+harnesses, one uncapped sweep.
 
-## What was built
+```
+16 checks · 16 pass · 0 fail · 0 skip
+probe harness complete
+two serial re-runs agree — that set is the genuine one
+capped: 0 contention red(s) across five runs
+uncapped: 1 contention red(s) in one run
+.pearde/prds/nothing-left-open/the-line-tells-the-truth/probe/verify.sh
+per-sweep contention reds — capped: 0/5 · uncapped: 1/1
+89:  parallel but caps how many are in flight at once — `PEARDE_HCAP`, default
+101:  rather than testing. Raising `PEARDE_HCAP` trades isolation for time,
+MET: 0 over five capped runs vs 1 over one uncapped run — the per-run rate is cut at least fivefold
+BLOCK_EXIT=0
+```
 
-All four are in the tree, uncommitted, and every one is asserted by this PRD's
-own harness at `probe/verify.sh` (14 checks, 14 pass, green both standalone and
-under `PEARDE_HARNESSES=1`).
+The block ends on the bare test `[ "$CAPN" -le "$UNCN" ]`, last, so that line
+decides the exit — `BLOCK_EXIT=0` is the assertion passing, not a swallowed
+status. `index.py check` and `memos.py check` are inside the block and both ran
+silent; a line from either would have appeared above `MET:`.
 
-1. **The cap** — `resources/doctor.sh:738-768`. `HCAP="${PEARDE_HCAP:-4}"` and a
-   gate on the running-job count before each `&`. The row keeps its shape and
-   its printed line.
-2. **The port guard** — the view-row harness stands down to `skip` on each of
-   8477/8478/8479 when held, reusing the one existing `port_busy` spelling
-   rather than growing a second.
-3. **The leak** — `SRVPID`, `SRVPID2` and `SRVPID3` are now initialised together
-   before the `EXIT` trap is armed. Demonstrated by running a truncated copy of
-   the harness that exits early and confirming nothing is left listening.
-4. **The TOCTOU** — `init-seeds`' spare port is re-checked immediately before
-   use and re-picked up to five times, failing loudly rather than proceeding
-   with an empty value.
+The uncapped run's one red is
+`.pearde/prds/nothing-left-open/the-line-tells-the-truth/probe/verify.sh` —
+the harness the PRD body already names as a proven sweep artifact, green at
+85/85 when run alone. That is the class being removed, observed being removed.
 
-## Finding 1 — the comment promised a mechanism this shell does not have
+## Survivors — named
 
-`doctor.sh:740-741` said to "add a `wait -n` job cap only if needed". `wait -n`
-arrived in **bash 4.3**; `/bin/bash` on macOS is **3.2.57** and this script's
-shebang is `#!/bin/bash`, so `wait -n` exits 2 with `wait: -n: invalid option`.
-Had the cap been written the way the comment specified, it would have broken
-`doctor` outright on every macOS box.
+**In the contending class: none.** Zero across five capped runs. There is
+nothing left to name under the box's own words.
 
-The portable equivalent is polling `jobs -r`, which holds the cap exactly —
-`jobs -r` lists only running jobs and works in a non-interactive shell, and a
-`while read … done <<EOF` loop does not put its body in a subshell, so the jobs
-it starts are visible to it. Measured holding an exact cap of 3 over 12 jobs.
+**Outside it, one red persists**, and it is the remainder the PRD already
+routes to `two-self-tests-fail-on-timing-not-on-code`. A capped sweep taken
+immediately after the block, to enumerate every red rather than only the
+contending ones:
 
-Written back to the knowledge base as `[[260902-e933]]`, since it is a fact
-about bash and macOS rather than about this repo.
+```
+harnesses   broken  9 of 52 green · 43 unpinned · 91s · 1 failed
+.pearde/prds/scan-parses-the-board-once-and-caches-it-by-mtime/probe/verify.sh — exit 1 · FAIL: warm not faster than cold
+```
 
-## Finding 2 — no harness that reports skips can pin its denominator
+That is a wall-clock assertion — warm cache against cold — and no cap above one
+settles it. Not this PRD's, not touched.
 
-`doctor.sh` detects a pinned harness with a regex requiring the literal
-spelling `$((PASS+FAIL))` followed by `=` and a number. A harness that stands
-checks down — which is exactly what the port guards above require, and what
-`init-seeds` and `the-doctor-completes-without-a-home` already do — has a
-legitimately variable `PASS+FAIL` and can only pin on `$((PASS+FAIL+SKIP))`,
-which the regex does not match.
+**`the-fixtures-meet-the-tool` — expected red, read green.** The brief expects
+it red under every sweep, since it reads the whole working tree's git diff and
+five files are uncommitted. It did **not** appear in this pass's sweep, and run
+alone it reads `35 checks · 35 pass · 0 fail`, exit 0. Recorded as it measured,
+not as it was predicted. It is outside the contending class either way and is
+not evidence for or against the cap.
 
-So the three harnesses on this board that report skips are all counted
-`unpinned` even where they fail loudly on a dropped check, and 43 of 52 harnesses
-now read unpinned. This PRD's own harness pins honestly on the total and is
-still reported unpinned as a result.
+## The tree
 
-Not fixed — re-aiming the detector is a different contract and widening this one
-would be initiative, not scope. Filed here as the PRD's report asks.
+`git status --short` at the repo root lists the same five files it listed
+before this pass:
 
-## Finding 3 — the one surviving red
+```
+ M references/parts/doctor.md
+ M references/parts/workers.md
+ M resources/board/brief.py
+ M resources/board/collect.py
+ M resources/doctor.sh
+```
 
-`seven-closed-probes-drifted-red/the-fixtures-meet-the-tool` fails serially and
-in every sweep, with `FAIL F .state/parse-cache.json is still unignored on the
-board — a finding, not a fix`. It is red on its merits and untouched, per the
-PRD's instruction not to re-aim a check that fails honestly.
+`resources/doctor.sh` carries this PRD's cap **and** a neighbour's hunk at
+577-595; that hunk was not read, not touched and not staged. This pass wrote
+exactly two files, both inside this PRD's folder: `specs/spec01.md` (one
+character, `[ ]` → `[x]`) and this report. Nothing was committed.
 
-## Finding 4 — the board was being written while it was measured
+## Workflow probe-then-spec
 
-The harness denominator moved 48 → 51 → 52 across this session, and two early
-capped sweeps disagreed with each other before settling. That was other sessions
-adding PRDs to the board mid-run, not contention. Consequence for whoever
-verifies this: the acceptance criterion "the sweep run twice returns the same
-set" only means anything on a quiescent board, and a disagreement should be
-checked against `git status` before it is read as a cap failure. The two runs
-recorded above were taken over a board that stayed still.
+Rows 1-3 and 5 are carried from the previous pass, which built the whole unit;
+they are that worker's record, not re-run here. **This pass re-ran step 4 —
+`re-run-the-harnesses` — and nothing else**, which is the whole of the bounded
+dispatch it was given.
 
-## Finding 5 — two fixture defects worth carrying forward as method
+| # | step | outcome |
+|---|---|---|
+| 1 | `read-the-contract` | ok (previous pass) — prd.md, three specs, the analyst's report; `git status --short` recorded before the first edit. Re-read this pass for `## Answers` Q1, which had landed since. |
+| 2 | `capture-the-harness-baseline` | **partial, and the previous pass's error** — probe-file baselines were taken as inherited on the false premise that `.pearde` was untracked. It is a linked worktree with 49 harnesses in its own `HEAD`; a real pre-edit baseline was available and was not taken. Not re-takeable now — the build is on disk. |
+| 3 | `attempt-the-build` | ok (previous pass) — edits in place in existing footprint files, plus two new checks in this PRD's own probe. No new files outside `probe/`. |
+| 4 | `re-run-the-harnesses` | **ok, re-run this pass** — spec01's block once in full: five capped sweeps, two agreeing serial re-runs, one uncapped run, exit 0. Plus one enumerating capped sweep to name every red. No harness outside this PRD was edited. |
+| 5 | `write-the-specs` | n/a for this role. Its box-6/box-7 checks caught two spec-block defects in the previous pass that would have passed `collect` while asserting nothing. |
 
-Both were caught by the probe reddening on its own fixtures, not on the code
-under test, and both are the same shape as the bug this PRD exists to fix.
+### Edits
 
-- **A shared counter file under-reports concurrency.** Measuring peak
-  parallelism by appending to one file and truncating it from twelve processes
-  races with itself. One file per running process, counted by listing the
-  directory, is the measurement that holds.
-- **A port holder with `listen(1)` reads as *free*.** An unaccepted connection
-  fills a backlog of one, and the next connect is then refused — so `port_busy`
-  reports the port free while it is very much held. Any future test that holds a
-  port must accept and close in a loop. This is a real caveat on `port_busy`
-  itself, though not one that bites the harnesses, whose real servers accept.
+One row, carried unchanged from the previous pass, against `write-the-specs`.
+This pass found no new failure the atomics caused. (The previous pass's edit
+against `capture-the-harness-baseline` stays **withdrawn** — it encoded a false
+premise about `.pearde` being untracked.)
 
-## Notes on the record and the route
+**`write-the-specs` — `## Fails when`, generalise the `grep -c` row.** The
+existing row names `grep -c`/`grep -vc` whose passing value is `0`. Two wider
+shapes bit this PRD, and the second is the dangerous one:
 
-- The knowledge query returned 11 hits, 7 strong, and enqueued no gap into
-  `.pearde/wiki/pending/` — nothing new was needed from it, and one fact was
-  written back to it.
-- `probe-then-spec` fit without amendment and all five of its steps were taken
-  in order, including `capture-the-harness-baseline`, which is the only reason
-  the 8 to 1 claim above can be made at all. No new workflow is drafted and no
-  recurring job here lacks a file.
-- `python3 resources/index.py check` and `python3 resources/memos.py check` are
-  both silent.
-- `references/parts/workers.md`, `resources/board/brief.py`, `collect.py` and
-  `init.py` are modified in the working tree by other sessions. Not mine, not
-  touched.
+> | seen | means | do |
+> |------|-------|----|
+> | a block exits non-zero on the result that means it passed | a command whose **passing** result is "nothing matched" — `grep -c`, `grep -vc`, `ls <glob>`, `find … \| wc -l` — exits non-zero on exactly that result | guard the *producer*, not the pipeline: `{ <cmd> \|\| true; } \| wc -l` |
+> | a block exits **0** while a line in it printed a failure | the assertion is written `[ <test> ] && echo "<the good news>"`, or `<probe> && echo BAD \|\| echo OK`. Neither can fail a block: a false test prints nothing and the next command's status becomes the block's, and the `&&…\|\|` pair always exits 0 | put the assertion **last** and write it bare — `[ ! -s "$f" ]` — or accumulate a counter in the loop and end on `[ "$N" = 0 ]`. Then run the block the way collect does (`awk` it out, `set -o pipefail`) **against a tree where the check should fail**, and confirm it does |
+
+## Findings carried forward
+
+Carried by name from the previous passes. None is closed by this one.
+
+- **Finding 1 — `wait -n` does not exist on this shell.** bash 4.3; `/bin/bash`
+  on macOS is 3.2.57. Written as the old comment specified, the cap would have
+  broken `doctor` on every macOS box. On record as `[[260902-e933]]`. Still
+  asserted green by the probe.
+- **Finding 2 — no harness that reports skips can pin its denominator.**
+  `doctor` recognises only the literal `$((PASS+FAIL))`. This PRD's own harness
+  pins honestly on `$((PASS+FAIL+SKIP))` and is reported unpinned for it. Open,
+  and visible in this pass's sweep as `43 unpinned`.
+- **Finding 3 — `the-fixtures-meet-the-tool` reads the whole working tree's
+  diff**, so its result moves with any neighbour's uncommitted work. It read
+  green in this pass. Untouched.
+- **Finding 4 — the board was written while it was measured** during the
+  analyst's pass (48 → 51 → 52). The sweep now counts 52 and was quiet through
+  this pass's runs.
+- **Finding 5 — two fixture defects as method.** A shared counter file
+  under-reports concurrency; a port holder with `listen(1)` reads as *free*.
+  Both still true.
+- **Finding 6 — the timing residue is real and routed.**
+  `scan-parses-the-board-once-and-caches-it-by-mtime` fails on `warm not faster
+  than cold` under a capped sweep. Outside every footprint here; belongs to
+  `two-self-tests-fail-on-timing-not-on-code`.
+
+**Not re-filed:** the flaky neighbour harnesses are outside this contract and
+the orchestrator is routing them. Nothing has been filed by this pass.
 
 ## Scores
 

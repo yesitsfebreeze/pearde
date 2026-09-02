@@ -1,5 +1,5 @@
 ---
-state: specced        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
+state: done        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: requested  # requested = the user asked | derived = the board found it
 # from:            # derived only — the PRD whose work surfaced this one
 priority: 40        # higher first
@@ -11,7 +11,7 @@ repo:              # the sub-repo the code lands in; delete if n/a
 #                  #   Absent = the brief alone, as before workflows
 time:              # OPTIONAL. See @references/parts/order.md
   est:             # the weight, only when complexity is absent. Not a duration
-  actual:          # a record. Nothing reads it
+  actual: 9.71h
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
 workflow: probe-then-spec
 ---
@@ -92,8 +92,34 @@ the sweep exists to avoid.
   one. Name the chosen cap and say why in the report.
 - Do not re-aim any check that fails on its merits; the four stale ones are a
   separate PRD and must not be touched here.
-- Acceptance is a demonstration: the sweep run twice in a row must return the
-  same set of failures, and that set must equal what a serial re-run returns.
+- Acceptance is a demonstration. It was written as an **elimination** — the
+  sweep run twice in a row returning the same set of failures, equal to what a
+  serial re-run returns. **Re-aimed at the drill of 2026-09-02** (see
+  `## Answers` Q1) to the **rate cut** the mechanism can actually deliver:
+  five capped sweeps must produce **no more** reds in the contending class
+  than **one** uncapped sweep does — a fivefold cut in the per-run rate — and
+  every red that survives is named in the report. The residue is not the cap's
+  to remove: it comes from harnesses asserting on wall-clock or on a whole
+  `doctor` report, which reads machine-global state, and no cap above one
+  settles those. That remainder is filed separately as
+  `two-self-tests-fail-on-timing-not-on-code`.
+
+## Questions
+
+### Q1: How clean the checks have to be
+
+Running the checks a few at a time cut false failures about fivefold, but not
+to zero — roughly one run in five still shows a failure that is not real. The
+original bar was zero: do you accept the fivefold cut, or hold out for none?
+
+1. **Accept the fivefold cut** — take the big improvement now, judge the checks against what it can deliver, and handle the last few separately. (recommended)
+2. **Hold out for none** — keep this work open until five runs in a row show no false failure at all.
+3. **Call it good and stop measuring** — accept it as it stands and spend no more time counting how often a failure is false.
+
+or write your own
+
+<!-- for the board: the cap stands; the residue is three neighbour harnesses
+     asserting on wall-clock and on whole doctor reports, routed separately -->
 
 <!-- Three more headings exist, and none of them is a slot to copy down. Each
      is a claim about the state of this PRD, so an empty copy of it is a false
@@ -123,3 +149,7 @@ the sweep exists to avoid.
 <!-- `## Failure` — implementer-only, after a FAILED attempt: what broke, what
      was tried. `retry` moves this into the body as history and reopens the
      PRD. -->
+
+## Answers
+
+**Q1** *(answered 2026-09-02 08:41)* — Accept the fivefold cut — take the big improvement now, judge the checks against what it can deliver, reword the acceptance to match what the mechanism can deliver, and file the remainder separately.

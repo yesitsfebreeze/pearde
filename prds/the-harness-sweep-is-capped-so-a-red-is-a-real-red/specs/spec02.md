@@ -41,13 +41,13 @@ finding in the report: `doctor`'s unpinned-detector only recognises the literal
 
 ## Acceptance
 
-- [ ] All three server pids are initialised before the `EXIT` trap is armed
-- [ ] An exit before the third server starts leaves no listener on 8477 or 8478
-- [ ] With 8477 held by another process, the harness reports at least one skip and exits 0
-- [ ] No skip is counted as a pass in the summary line
-- [ ] The summary line still ends in the fail count, so `the-doctor-completes-without-a-home` still parses it
-- [ ] Exactly one spelling of `port_busy` exists across the three harnesses that use it
-- [ ] The harness reads green end to end on a clean box
+- [x] All three server pids are initialised before the `EXIT` trap is armed
+- [x] An exit before the third server starts leaves no listener on 8477 or 8478
+- [x] With 8477 held by another process, the harness reports at least one skip and exits 0
+- [x] No skip is counted as a pass in the summary line
+- [x] The summary line still ends in the fail count, so `the-doctor-completes-without-a-home` still parses it
+- [x] Exactly one spelling of `port_busy` exists across the three harnesses that use it
+- [x] The harness reads green end to end on a clean box
 
 ## Verify and Proof
 
@@ -64,8 +64,16 @@ bash .pearde/prds/the-view-row-names-a-variable-that-exists/probe/verify.sh
 # its reader still agrees with it
 bash .pearde/prds/seven-closed-probes-drifted-red/the-doctor-completes-without-a-home/probe/verify.sh
 
-# nothing was left listening by any of the above
+# nothing was left listening by any of the above. `&& echo LEAK || echo free`
+# always exits 0, so the leak would print and the block would still pass — the
+# count is accumulated and asserted on the last line instead.
+LEAKS=0
 for p in 8477 8478 8479; do
-  (: < /dev/tcp/127.0.0.1/$p) 2>/dev/null && echo "LEAK on $p" || echo "$p free"
+  if (: < /dev/tcp/127.0.0.1/$p) 2>/dev/null; then
+    echo "LEAK on $p"; LEAKS=$((LEAKS + 1))
+  else
+    echo "$p free"
+  fi
 done
+[ "$LEAKS" = 0 ]
 ```

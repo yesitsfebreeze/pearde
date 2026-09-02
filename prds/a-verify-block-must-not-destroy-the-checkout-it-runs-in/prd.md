@@ -6,6 +6,7 @@ complexity: 26
 blast-radius:
 from: every-task-is-a-verb-under-one-skill/the-machine-is-the-run-verb  # derived only — the PRD whose work surfaced this one
 actual: 0.35h
+commit: 6ea9c20 a2dd812
 ---
 
 # a verify block must not destroy the checkout it runs in

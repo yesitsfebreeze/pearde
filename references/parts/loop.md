@@ -55,9 +55,14 @@ and the refusal names the command that answers instead.
 and safe beside live work: a live session's worktree is never reaped, nor one
 whose liveness cannot be decided, nor this session's own, and a dead session's
 tree goes only once everything it left — untracked files included — is
-committed to `refs/pearde/reaped/<id>`. `take` is idempotent. Board commands
-do not yet resolve the taken tree as the code repo; that is a separate unit —
-@resources/board/session.py.
+committed to `refs/pearde/reaped/<id>`. `take` is idempotent. From it onward the taken tree **is** the code repo:
+every board command resolves it, a claim cuts the lane off `session/<id>`, and
+a collect merges and commits there. Each collect then puts that branch on the
+branch the checkout is on — a rebase, then a fast-forward, `landed on
+<branch>` on the transition line. A checkout holding uncommitted work refuses
+the fast-forward and the line names the refusal instead. Nothing is lost when
+it does: the commit stands on `session/<id>`, and `pearde session land`
+retries it once the checkout is clean — @resources/board/session.py.
 
 **0 · Ramp.** `pearde ramp` — once per board, not per pass. `happiness:`
 non-zero (@references/settings.md) is a person saying the machine is tooled for

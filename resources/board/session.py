@@ -5,6 +5,7 @@ which, and a reaper that snapshots before it deletes.
     session.py take  [<board>] [--board <path>] [--json]
     session.py list  [<board>] [--board <path>] [--json]
     session.py reap  [<board>] [--board <path>] [--apply] [--json]
+    session.py land  [<board>] [--board <path>] [--dry] [--json]
     session.py owns  [<path>] [--board <path>] [--json]
 
 `@resources/board/lanes.py` gives every WORKER a worktree. It gives the
@@ -75,7 +76,7 @@ LEDGER = "sessions.json"
 SNAP_REF = "refs/pearde/reaped/"
 SOCKS = "/tmp/cc-socks"
 
-FLAGS = planlib.Flags(("board",), ("json", "apply"))
+FLAGS = planlib.Flags(("board",), ("json", "apply", "dry"))
 
 
 # ── who this session is ──────────────────────────────────────────────────────
@@ -132,6 +133,21 @@ def sid(pid):
     return "s%d" % pid
 
 
+_MINE = {}
+
+
+def my_id():
+    """`s<pid>` for the session this process runs inside, cached for the life
+    of the process. `session_pid` costs one `ps` fork per step of the walk up
+    the process tree, and `held` below is asked once per PRD by every scan —
+    the daemon's included, once a second per board. A process cannot change
+    which session it is inside, so the answer is computed once."""
+    if "id" not in _MINE:
+        pid = session_pid()
+        _MINE["id"] = sid(pid) if pid else None
+    return _MINE["id"]
+
+
 # ── the ledger ───────────────────────────────────────────────────────────────
 
 def ledger_path(board):
@@ -162,6 +178,71 @@ def row_of(rows, ident):
         if r.get("id") == ident:
             return r
     return None
+
+
+_LEDGER_CACHE = {}
+
+
+def cached_ledger(board):
+    """`read_ledger` behind an mtime check. Same reason as `my_id`: the
+    resolver below is on the scan's per-PRD path, and re-parsing the ledger
+    for every PRD on a 140-PRD board is a file read a hundred and forty
+    times for an answer that changed on none of them."""
+    path = ledger_path(board)
+    try:
+        st = os.stat(path)
+        stamp = (st.st_mtime_ns, st.st_size)
+    except OSError:
+        stamp = None
+    hit = _LEDGER_CACHE.get(board)
+    if hit and hit[0] == stamp:
+        return hit[1]
+    rows = read_ledger(board) if stamp else []
+    _LEDGER_CACHE[board] = (stamp, rows)
+    return rows
+
+
+def held(board, repo=None):
+    """The worktree THIS session holds on `board`, or None.
+
+    The one question every board command asks before it names a code repo.
+    None is the ordinary answer, not a failure: a command run outside a
+    session, a session that has not `take`n, a worker inside its own lane,
+    and a board whose ledger names a tree that is no longer on disk all
+    resolve to the checkout exactly as they did before this existed.
+
+    `repo`, when given, is the checkout the caller resolved by walk-up; a
+    ledger row for a DIFFERENT repo is not this board's answer. That is what
+    keeps a master board — whose members are other repos — from handing one
+    member's PRD the session tree of another.
+
+    The tree must still be a worktree: a session whose directory was removed
+    under it (a reap that raced, a person with `rm -rf`) falls back to the
+    checkout rather than handing every command a path that is not there."""
+    ident = my_id()
+    if not ident:
+        return None
+    row = row_of(cached_ledger(board), ident)
+    if not row:
+        return None
+    tree = row.get("worktree") or ""
+    if not tree or not os.path.exists(os.path.join(tree, ".git")):
+        return None
+    if repo and os.path.realpath(row.get("repo") or "") != os.path.realpath(repo):
+        return None
+    return os.path.abspath(tree)
+
+
+def instead_of(board, repo):
+    """`repo`, or the session's own worktree of it. The call every resolver
+    makes: it never returns None and never raises, so a resolver that was
+    correct before stays correct when the ledger is empty or unreadable."""
+    if not repo:
+        return repo
+    try:
+        return held(board, repo) or repo
+    except Exception:
+        return repo
 
 
 # ── liveness ─────────────────────────────────────────────────────────────────
@@ -437,6 +518,103 @@ def cmd_reap(board, apply=False, as_json=False):
     return 1 if any(a["do"] == "failed" for a in acts) else 0
 
 
+def branch_read_by_a_person(repo):
+    """The branch the checkout is on — what a person sees when they open the
+    repo. Not `main` by name: a board on a repo whose trunk is `master`, or a
+    person parked on a release branch, reads that one."""
+    out = laneslib.git(repo, "rev-parse", "--abbrev-ref", "HEAD",
+                       check=False).stdout.strip()
+    return out if out and out != "HEAD" else None
+
+
+def land(board, ident=None, dry=False):
+    """Put this session's commits on the branch the person reads.
+
+    `lanes.merge` one level up, and for the same reason. The session's tree
+    is where every board command now commits, so its branch is where a PRD
+    lands — and a branch nobody checks out is not a place work has arrived.
+    Rebase `session/<id>` onto the checkout's branch and `merge --ff-only`
+    there: a plain merge writes a second commit for the PRD and
+    @references/parts/commits.md allows one, and `--squash` leaves the
+    branch reading unmerged forever.
+
+    Two things it will not do. It never rebases a branch another worktree
+    holds — git refuses, and so does this, by name. And it never forces the
+    checkout: `merge --ff-only` is what runs there, so a checkout with
+    uncommitted work of its own fails the merge and keeps that work. That
+    failure is the answer, not an error to route around — the four
+    destructive commands stay out of a tree this session does not own.
+
+    Returns (branch, target, landed) or (branch, target, 0)."""
+    repo = repo_of(board)
+    if not repo:
+        raise laneslib.LaneError(f"no git repo above {board}")
+    ident = ident or my_id()
+    if not ident:
+        raise laneslib.LaneError(
+            "no session process above this one — run it from a session, "
+            "or set PEARDE_SESSION_PID")
+    row = row_of(read_ledger(board), ident)
+    if not row:
+        raise laneslib.LaneError(f"{ident} holds no worktree on this board — "
+                                 "`pearde session take` first")
+    br = row.get("branch") or branch_of(ident)
+    target = branch_read_by_a_person(repo)
+    if not target:
+        raise laneslib.LaneError(f"{repo} is on no branch — nothing to land on")
+    if target == br:
+        raise laneslib.LaneError(
+            f"the checkout is on {br} itself — it is already the branch a "
+            "person reads")
+    if laneslib.git(repo, "rev-parse", "--verify", "--quiet", br,
+                    check=False).returncode != 0:
+        return br, target, 0
+    ahead = laneslib.git(repo, "rev-list", "--count", f"{target}..{br}",
+                         check=False).stdout.strip()
+    if ahead in ("", "0"):
+        return br, target, 0
+    if dry:
+        return br, target, int(ahead)
+    wt = laneslib.worktree_of(repo, br)
+    if wt:
+        was = laneslib.git(wt, "rev-parse", br).stdout.strip()
+        r = laneslib.git(wt, "rebase", target, check=False)
+        if r.returncode != 0:
+            files = laneslib.conflicts(wt)
+            if laneslib.git(wt, "rebase", "--abort",
+                            check=False).returncode == 0:
+                laneslib.git(wt, "reset", "--hard", was, check=False)
+            raise laneslib.LaneError(
+                f"conflict: {br} onto {target} — "
+                + (", ".join(files) if files else "see git status"))
+        ahead = laneslib.git(repo, "rev-list", "--count", f"{target}..{br}",
+                             check=False).stdout.strip()
+    r = laneslib.git(repo, "merge", "--ff-only", "--no-edit", br, check=False)
+    if r.returncode != 0:
+        raise laneslib.LaneError(
+            f"{target} would not fast-forward to {br} in {repo} — "
+            + ((r.stderr or r.stdout).strip().splitlines() or [""])[0])
+    return br, target, int(ahead or 0)
+
+
+def cmd_land(board, dry=False, as_json=False):
+    try:
+        br, target, n = land(board, dry=dry)
+    except laneslib.LaneError as e:
+        print(f"session land: {e}", file=sys.stderr)
+        return 1
+    ans = {"branch": br, "target": target, "commits": n, "dry": bool(dry)}
+    if as_json:
+        print(json.dumps(ans, indent=2))
+    elif not n:
+        print(f"{br} has nothing {target} has not got")
+    elif dry:
+        print(f"{n} commit(s) would land {br} on {target}")
+    else:
+        print(f"landed {n} commit(s) — {target} is {br}")
+    return 0
+
+
 def cmd_owns(board, path=None, as_json=False):
     """Does the running session own `path`? Exit 0 when it does, 1 when
     another session does or nobody does. The refusal child reads this."""
@@ -463,11 +641,11 @@ def cmd_owns(board, path=None, as_json=False):
     return 0 if ans["mine"] else 1
 
 
-VERBS = ("take", "list", "reap", "owns")
+VERBS = ("take", "list", "reap", "land", "owns")
 
 
 def cmd_session(argv):
-    """one worktree per run session, its ledger, and the reaper"""
+    """take/list/reap/land/owns — one tree per session"""
     import transitions as translib
     verb = argv[0] if argv and argv[0] in VERBS else None
     rest = argv[1:] if verb else argv
@@ -492,6 +670,8 @@ def cmd_session(argv):
         return cmd_list(board, j)
     if verb == "reap":
         return cmd_reap(board, "apply" in args.flags, j)
+    if verb == "land":
+        return cmd_land(board, "dry" in args.flags, j)
     return cmd_owns(board, path, j)
 
 

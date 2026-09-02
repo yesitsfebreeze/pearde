@@ -273,19 +273,29 @@ def repo_of(prd, board, board_root):
     own parent — a nested board defaults to the code repo it sits in, never
     to itself. When the board is not its own repo — `board_root` was found
     walking up *past* the board, so it already is the code repo — unchanged,
-    the board's own repo, exactly as before this default existed."""
+    the board's own repo, exactly as before this default existed.
+
+    Then, last: the running SESSION's own worktree of that repo, when the
+    ledger names one (`session.instead_of`). Every answer above is a
+    checkout resolved by walk-up, and the checkout is the one place the
+    parent PRD says nothing may run — three sessions shared it and two lost
+    work. So the walk-up answer is the repo this session's tree was cut
+    FROM, and the tree is what the command gets. A command outside a
+    session, or a session that never took one, gets the walk-up answer
+    unchanged: the rule adds a case, it removes none."""
+    import session as sessionlib
     raw = str(prd["fm"].get("repo", "") or "").strip()
     if raw:
         for cand in (raw, os.path.join(board_root, raw)):
             if os.path.isdir(cand):
                 root = planlib.repo_root(cand)
                 if root:
-                    return root
+                    return sessionlib.instead_of(board, root)
     if board_root == board:
         enclosing = planlib.repo_root(os.path.dirname(board_root))
         if enclosing:
-            return enclosing
-    return board_root
+            return sessionlib.instead_of(board, enclosing)
+    return sessionlib.instead_of(board, board_root)
 
 
 def parse_when(s):
@@ -540,13 +550,22 @@ def same_dir(a, b):
 def foot_places(p, board, board_root, repo):
     """Where one footprint spelling could resolve, in the order it is tried:
     the code repo first — a footprint is spelled relative to `repo` by
-    contract — then the board, then the board's own repo. The list is what
-    a refusal prints, so the message names every place that was tried and
-    nothing that was not."""
+    contract — then the checkout that repo was cut from, then the board,
+    then the board's own repo. The list is what a refusal prints, so the
+    message names every place that was tried and nothing that was not.
+
+    The second place is `spelling_root`, and it is a place only while a run
+    session holds a tree: `repo` is then `<board>/.sessions/<id>`, and a
+    board path the code repo ignores (`pearde/.gitignore`) is not in a fresh
+    worktree of it at all — no place would hold it and the footprint would
+    fall through to the session tree. `spelling_root` is `repo` itself in
+    every other case, and the dedupe below drops it, so a board with no
+    session tries exactly the three places it always tried."""
     if os.path.isabs(p):
         return [os.path.abspath(p)]
     out = []
-    for base in (repo, board, board_root):
+    for base in (repo, spelling_root(board, board_root, repo), board,
+                 board_root):
         if not base:
             continue
         full = os.path.abspath(os.path.join(base, p))
@@ -615,6 +634,55 @@ def tracked_in(root, full):
     if rel.startswith(".."):
         return False
     return bool(git_out(root, "ls-files", "-z", "--", rel).strip("\0"))
+
+
+def under(parent, child):
+    """Is `child` inside `parent`? By REAL path: this board is reached as
+    `pearde/` and as the `.pearde` symlink beside it, and a session tree
+    named through one while the board is named through the other compares
+    unequal under `abspath` and equal under `realpath`."""
+    p, c = os.path.realpath(parent), os.path.realpath(child)
+    return c == p or c.startswith(p + os.sep)
+
+
+def checkout_of(board, board_root):
+    """The board's code repo by walk-up ALONE — `repo_of` with the session
+    step left off. The checkout, in other words: the tree a session's own
+    worktree was cut from."""
+    if os.path.abspath(board_root) == os.path.abspath(board):
+        return planlib.repo_root(os.path.dirname(board_root)) or board_root
+    return board_root
+
+
+def spelling_root(board, board_root, repo):
+    """The second place `foot_places` tries a footprint's spelling.
+
+    Normally `repo` itself, and then it is not a second place at all. But a
+    session's worktree lives at `<board>/.sessions/<id>` — under the board,
+    the way a lane lives under it — and `repo` is that worktree once a
+    session holds one. A worktree of the code repo does not carry the paths
+    that repo ignores, and the board is one of them: `pearde/.gitignore` is
+    absent from `<board>/.sessions/<id>/pearde/` and from the board's own
+    tree, so no place holds it and the footprint falls through to the
+    session tree, which does not hold it either.
+
+    A worktree and the checkout it was cut from spell every tracked path
+    identically — that is what makes them the same repo — so asking the
+    checkout as well costs nothing where the session tree already answered,
+    and is the only place that answers for a path the code repo ignores.
+
+    STRICTLY under, and neither the board nor the board's own repo. A board
+    that is its own code repo — `repo` and `board` one directory — is under
+    itself by `under`'s own equality arm, and answering the enclosing
+    checkout there routes a footprint the board genuinely holds out of it:
+    measured against `the-verify-guard-parses-git-s-own-output-before-it-
+    trusts-it`, `resources/board/collect.py` left the board for the repo one
+    level up and came back spelled `../../../../../../..`. The case this
+    exists for is a tree cut BELOW the board, which is a session's and a
+    lane's alone."""
+    if not repo or same_dir(repo, board) or same_dir(repo, board_root):
+        return repo
+    return checkout_of(board, board_root) if under(board, repo) else repo
 
 
 def owned_by(prd, board_root, repo, feet, board=None):
@@ -2282,13 +2350,52 @@ def collect_one(board, rel, opts, out=print):
                    f"`commit:` is written and unstaged: {e}")
       settle_shared(board_root, sorted(set([pmd_rel] + rode)))
 
-    # 7 — the line, the row
+    # 7 — the session's branch onto the branch a person reads
+    put = land_session(board)
+
+    # 8 — the line, the row
     transition_row(board, rel, prd["state"], "done", now)
     extra = " · ".join(x for x in [
         "trusted" if trusted else "", "gate red, known" if known else "",
-        f"commit {' '.join(shas)}", *said, posted, "pass file owed"] if x)
+        f"commit {' '.join(shas)}", *said, put, posted,
+        "pass file owed"] if x)
     out(progress_line(board, rel, prd["state"], "done", opts["as"], extra))
     return 0
+
+
+def land_session(board):
+    """Put this session's commits on the branch a person reads, and say what
+    happened in one phrase. Runs after the commit, never before it.
+
+    A commit on `session/<id>` is a commit nobody reads. The session's tree
+    is the code repo now, so every PRD lands on that branch first, and the
+    contract is that it reaches the branch a person opens the repo on — so
+    the merge is part of finishing, not a thing to remember afterwards.
+
+    ADVISORY, like `post_report` and for the same reason: it runs after
+    `prd.md` says `done` and the commits are made, so anything raised here
+    would leave the board finished and the run reporting a failure it did
+    not have. A checkout with uncommitted work refuses the fast-forward, and
+    that refusal is a phrase on the line — the work is on the session branch
+    either way, `pearde session land` retries it, and nothing is lost. It is
+    also why the checkout is never forced: `merge --ff-only` is the whole of
+    what runs in a tree this session does not own.
+
+    Empty string when there is nothing to say: no session, no branch, or a
+    branch the reading branch already holds."""
+    def said(e):
+        return f"{type(e).__name__}: {e}".strip().replace("\n", " ")[:160]
+    try:
+        import session as sessionlib
+        if sessionlib.held(board) is None:
+            return ""
+    except Exception:
+        return ""
+    try:
+        br, target, n = sessionlib.land(board)
+    except Exception as e:
+        return f"not landed on the branch a person reads ({said(e)})"
+    return f"landed on {target}" if n else ""
 
 
 # ── a container ───────────────────────────────────────────────────────────────

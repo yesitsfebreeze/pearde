@@ -1023,8 +1023,23 @@ def prd_repo(prd):
             if os.path.isdir(cand):
                 r = repo_root(cand)
                 if r:
-                    return r
-    return root
+                    return session_tree(board, r)
+    return session_tree(board, root)
+
+
+def session_tree(board, root):
+    """`root`, or the worktree the running session holds of it — the same
+    last step `collect.repo_of` takes, so silence is measured in the tree
+    the session's own commands write. The import is here and not at the top:
+    `session` imports THIS module, and a module-level import either way
+    round is a cycle. It is also the reason this is a function and not one
+    more line inside `prd_repo` — `session.instead_of` swallows its own
+    failures, so a board with no ledger costs one dict lookup."""
+    try:
+        import session as sessionlib
+    except ImportError:
+        return root
+    return sessionlib.instead_of(board, root)
 
 
 def newest_mtime(paths):

@@ -5,6 +5,7 @@ priority: 80
 complexity: 28
 blast-radius:
 actual: 0.33h
+commit: fde172f f986510
 ---
 
 # the-machine-frontier-is-one-ordered-list — Run from any directory, one command prints every watched board's PRDs as a single dependency-ordered frontier, with the concurrency it would use and the reading that produced it, and moves nothing

@@ -1,14 +1,14 @@
 # Files
 
-Every tracked file, one row. @resources/index.py reads this and @index.md
-together: a file on disk with no row here is a map that is incomplete, and a
-row naming nothing is a map that points at nothing.
+One row per tracked file. @resources/index.py reads this against @index.md: a
+file on disk with no row here is an incomplete map; a row naming nothing is a
+map pointing nowhere.
 
-Nothing here answers a question about the work — @index.md's Keywords table
-does. Read this when you add a file, move one, or are told the index drifted.
+Read this to add a file, move one, or chase a drifted index — never to answer
+a question about the work, which @index.md's Keywords table does.
 
-**Adding a file**: write its row here, then every Keywords row in @index.md
-whose scope it changed. Nothing else points at it.
+**Adding a file**: write its row here, then update every Keywords row in
+@index.md whose scope changed.
 
 ## Entry points
 
@@ -130,6 +130,7 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/grammar.py | read + grow + check the board's vocabulary — the only reader of that format |
 | @resources/health.py | score every tracked file 1-100, worst first, and check the record — the only reader of that format |
 | @resources/index.py | read + check the map — the only reader of that format |
+| @resources/prose.py | check density — word count, mean sentence length, unbound waste words, banned openers/closers, per file — the only reader of `## Density` |
 | @resources/questions.py | read + check a PRD's question pass — the only reader of that format |
 | @resources/invariants/ | one script per `kind: invariant` memo — what its `verify:` runs, named for its slug |
 | @resources/invariants/every-artifact-lands-inside-the-board.sh | the tool writes nowhere but a board: no `.state/` outside a `.pearde/`, a driven throwaway project that stays clean, and the guard that still refuses a pass file written beside the board |
@@ -190,20 +191,18 @@ command, and @references/install.md is the naming rule and the install.
 
 ### `resources/board/knowledge/` — the layer's content seed, planted by `init` and `upgrade`
 
-Not the same thing as @resources/board/obsidian/: that preset is the
-`.obsidian` app config (dataview + local-rest-api), copied by `init.py`'s
-`write_obsidian` into `<dir>/.obsidian` on every fresh board. This folder is
-the knowledge-layer's *content* seed — dashboard, workflow config, the
-indexes — for a board's `.pearde/wiki/`. `init.py`'s `write_knowledge` plants
-it: `init` on a new board, and `upgrade` on one made before the step existed.
-`knowledge.py`'s `Store` makes the directories on first use but writes no
-Dashboard and no WORKFLOW, so without this a vault opens with no views at all.
-Every file is copied only when it is not already there — a file a person
-edited is never replaced.
+Distinct from @resources/board/obsidian/, which is the `.obsidian` app config
+(dataview + local-rest-api) `init.py`'s `write_obsidian` copies into
+`<dir>/.obsidian` on every fresh board. This folder seeds a board's
+`.pearde/wiki/` *content* — dashboard, workflow config, indexes. `init.py`'s
+`write_knowledge` plants it: `init` on a new board, `upgrade` on an older one.
+`knowledge.py`'s `Store` makes directories on first use but writes no
+Dashboard and no WORKFLOW — without this seed a vault opens with no views.
+Each file copies only where absent; an edited file is never replaced.
 
-Every path inside these files is **vault-relative**, and the vault roots at
-`.pearde/`. So a query reads `wiki/conclusions`, never `conclusions` — in the
-`FROM` clauses and in the `dv.pages()` calls alike.
+Every path inside is **vault-relative**, rooted at `.pearde/`: a query reads
+`wiki/conclusions`, never `conclusions`, in `FROM` clauses and `dv.pages()`
+calls alike.
 
 | anchor | is |
 |---|---|

@@ -1,8 +1,8 @@
 # pearde — the PRD board
 
-A board of PRDs — product requirement definitions — as files under
-`.pearde/prds/`, one session that moves them through nine states with one command each, and a
-live page that draws the board. Nothing leaves the machine: Python 3, no
+PRDs — product requirement definitions — live as files under
+`.pearde/prds/`. One session moves them through nine states, one command
+each. A live page draws the board. Nothing leaves the machine: Python 3, no
 dependency, no build step.
 
 ## In sixty seconds
@@ -37,9 +37,9 @@ every shape at once. `pearde init` with no flag writes an empty board.
 | `.pearde/settings.md` | the board's knobs: `language`, `workers`, `pipeline`, `weight-default`, `gantt-day`, and the optional ones | `init`, then `pearde settings <key>=<value>` |
 | `.pearde/vision.md` | the destination in one sentence, and `terminals:` — the PRDs whose completion is it — which orders the queue | `init` writes the template; you write the sentence |
 
-A directory holding `prd.md` is a PRD, and a child directory holding its own
-is a child PRD. `specs/`, `memos/` and `workflows/` hold none, so the scan
-walks past them.
+A directory holding `prd.md` is a PRD; a child directory holding its own is a
+child PRD. `specs/`, `memos/` and `workflows/` hold none — the scan walks
+past them.
 
 ## The nine states
 
@@ -87,17 +87,16 @@ column is the only thing a pass thinks about.
 
 ## Three rings
 
-Everything below is one of three rings, and a newcomer meets them in order.
-Stop at the ring you need.
+Everything below is one of three rings, met in order. Stop at the ring you
+need.
 
 **Core** is the board, the nine states, the pass and the page — the five
-lines above, and what they touched. One session works it, and it is the
-orchestrator: it moves the states, and workers do the work — `@@workers` is
-the split and the brief each one is handed. The session works as a persona,
-`engineer` until switched. **One question, one file.** A scope is what a
-feature is made of, not a reading list — open the file that answers what is
-in front of you, and let it send you on. These are the mid-pass lookups,
-and each is one file:
+lines above, and what they touched. One session, the orchestrator, works it
+and moves the states; workers do the work — `@@workers` is the split and the
+brief each one is handed. The session works as a persona, `engineer` until
+switched. **One question, one file.** A scope is what a feature is made of,
+not a reading list: open the file that answers what is in front of you and
+let it send you on. Each mid-pass lookup is one file:
 
 | the question in front of you | the one file |
 |---|---|
@@ -127,29 +126,29 @@ every compaction:
 
 The core ring, whole, is `@@loop`.
 
-**Advisors** are what a PRD reaches for when it needs one, and none of them
-moves a state. A one-line title is too thin to build, so `drill` interviews
-you until it is a contract, one pass of questions at a time, each with three
-prepared answers. A choice the code will not explain becomes a `memo`, written
-when the call is made. A job that recurs becomes a `workflow` of atomics that
-gets better on every run. A persona is who is working — `engineer`, `designer`,
-`skeptic` and the rest — switchable for a session, and `ask <id>` puts one
+**Advisors** are what a PRD reaches for when it needs one; none moves a
+state. A one-line title is too thin to build, so `drill` interviews you into
+a contract, one pass of questions at a time, each with three prepared
+answers. A choice the code will not explain becomes a `memo`, written when
+the call is made. A job that recurs becomes a `workflow` of atomics, better
+on every run. A persona is who is working — `engineer`, `designer`,
+`skeptic` and the rest — switchable for a session; `ask <id>` puts one
 problem to one of them without switching. `report` writes the board for a
 person, in plain words, rewritten whole. Open `@@drill`, `@@memos`,
-`@@workflows`, `@@personas`, `@@consult` or `@@report` when the PRD in front
-of you needs that one.
+`@@workflows`, `@@personas`, `@@consult` or `@@report` for whichever the PRD
+in front of you needs.
 
-**Tools** are what you meet when something is wired or broken. `master` names
-other boards as members and plans across them; `doctor` says of every part
-whether it is `ok`, `off` or `broken`, with the command that fixes it; the
-`guard` is a hook that refuses a hand-written `state:` and a board walked by
-hand; the status line puts the progress terms in your terminal; `scout` finds
-what is worth studying; `graph` maps a folder into a queryable knowledge graph
-with an Obsidian vault out; `knowledge` keeps what was learned from outside —
+**Tools** are what you meet when something is wired or broken. `master`
+names other boards as members and plans across them. `doctor` reports every
+part `ok`, `off` or `broken`, with the command that fixes it. The `guard` is
+a hook refusing a hand-written `state:` and a board walked by hand. The
+status line puts the progress terms in your terminal. `scout` finds what is
+worth studying. `graph` maps a folder into a queryable knowledge graph with
+an Obsidian vault out. `knowledge` keeps what was learned from outside —
 sources and conclusions with provenance, queried before anything new is
-researched; `install` is the first line above, explained. Open `@@master`,
+researched. `install` is the first line above, explained. Open `@@master`,
 `@@doctor`, `@@guard`, `@@statusline`, `@@scout`, `@@graph`, `@@knowledge` or
-`@@install` when one of them is in your way.
+`@@install` for whichever is in your way.
 
 ## Glossary
 

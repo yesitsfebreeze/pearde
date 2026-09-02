@@ -31,6 +31,23 @@ Reader: an agent, cold, without the conversation that produced the document.
   important for correctness" does not.
 - **Delete, do not deprecate.** A stale line reads as current.
 
+## Density
+
+From @references/personas/writer.md, Vera Lindqvist. Checked by
+`@resources/prose.py` where the rule is mechanical.
+
+| rule | test |
+|---|---|
+| Lead with the answer | the first line of a file or section is the finding, command or state — never the approach to it |
+| Every heading summarises what is beneath it | headings alone read as the argument |
+| Cut twice | half the words, then half of what is left, with no fact lost |
+| A fact set is a table, a sequence a numbered list | a paragraph survives only where the content is an argument |
+| About twenty words a sentence, on average | measured per file, `prose.py check` |
+| No unbound `it`, `this`, `that`, `there` | each is deleted or names its noun; `prose.py check` flags the vague-subject shape (`it is`, `this means`, `there are`) |
+| Reference describes, never teaches | instruction and explanation become a link |
+| No preamble, no recap, no closer | the file opens on content and ends when the content ends; `prose.py check` flags a listed opener or closer phrase |
+| Emphasis earns its place | bold and italic only where a reader needed it, never both |
+
 ## Where prose stays
 
 A memo's `## Why` and `## Alternatives considered` are arguments, not facts —

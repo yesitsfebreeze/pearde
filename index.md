@@ -5,37 +5,36 @@
 | `@<path>` | **one file** — the real path from the repo root with `@` in front | itself. Nothing to look up |
 | `@@<keyword>` | **one scope** — everything you must read to understand a feature | its row in [Keywords](#keywords) |
 
-`@@` names a row in this index, not a path on disk. No keyword is a directory.
+`@@` names a row in this index, never a path on disk. No keyword is a directory.
 
-Board paths (`.pearde/…`) are neither. They address a board, not this skill.
+Board paths (`.pearde/…`) are neither — they address a board, not this skill.
 
 **A scope is what a feature is made of, not a reading list.** Read the one
-file that answers the question in front of you — the first anchor in a row is
-that file, and the rest are what it sends you to. A pass that opens a whole
-scope pays for the manual again after every compaction, and pays for it in the
-window it needs for the work.
+file that answers the question in front of you: a row's first anchor. The
+rest are where that file sends you. Opening a whole scope pays for the manual
+again after every compaction, in the window the work needs.
 
-**Where a file goes.** Markdown that someone reads lives under `references/`.
+**Where a file goes.** Markdown someone reads lives under `references/`.
 Anything executed — a script, a tool, its config and its data — lives under
 `resources/`, whole. A tool's own README ships inside the tool.
 
-**Every skill is one file under `skills/`** — frontmatter that decides when
-it fires, and a body that points into `references/` and stops. The knowledge
-is never in the skill. What a skill *runs* lives under `resources/`, one
-folder per skill where there is one: @resources/board/, @resources/scout/ and
+**Every skill is one file under `skills/`** — frontmatter deciding when it
+fires, a body pointing into `references/` and stopping. The knowledge never
+lives in the skill. What a skill *runs* lives under `resources/`, one folder
+per skill that has one: @resources/board/, @resources/scout/,
 @resources/graph/. `.pearde/wiki/` is data the tools read and write —
-gitignored, not source, and its own Obsidian vault.
+gitignored, not source, with its own Obsidian vault.
 
-Installing turns each file into a folder of links elsewhere. Nothing in this
-repo moves. @references/install.md is the whole of it, and it names no agent
-— which directory to build in is the reader's to work out.
+Installing turns each file into a folder of links elsewhere; nothing in the
+repo moves. @references/install.md covers the whole of it and names no agent
+— working out which directory to build in is the reader's job.
 
-**Every tracked file has a row in @references/files.md** — the manifest, split
-off so this map stays the size of the question it answers. When a file moves or
-is added, write its row there, then every [Keywords](#keywords) row whose scope
-it changed. Nothing else points at it.
+**Every tracked file has a row in @references/files.md** — the manifest,
+split off so this map stays the size of the question it answers. Moving or
+adding a file means writing its row there, then updating every
+[Keywords](#keywords) row whose scope changed.
 
-@resources/index.py reads both and is the only reader of either format.
+@resources/index.py reads both, the only reader of either format.
 
 ## Keywords
 
@@ -74,7 +73,7 @@ explains the rest.
 | `@@all` | every watched board on one read-only page | @references/parts/all.md · @resources/board/all.py · @resources/board/serve.py · @resources/board/view.js · @references/parts/view.md · @references/parts/master.md |
 | `@@machine` | every watched board as one ordered frontier, what could run at once, and the verb that runs it | @references/skills/pearde-all.md · @references/parts/machine.md · @resources/board/machine.py · @resources/board/dispatch.py · @resources/board/plan.py · @resources/board/serve.py · @references/parts/all.md · @references/settings.md |
 | `@@settings` | every board-wide knob | @references/settings.md · @references/parts/contract.md · @resources/board/init.py |
-| `@@language` | how everything on the board is written | @references/language.md · @references/grammar.md · @references/templates/prd.md · @references/templates/spec.md · @references/templates/memo.md |
+| `@@language` | how everything on the board is written | @references/language.md · @resources/prose.py · @references/grammar.md · @references/templates/prd.md · @references/templates/spec.md · @references/templates/memo.md |
 | `@@templates` | the files a handle writes from — each the shape only, its `.doc.md` the how and why | @references/templates/prd.md · @references/templates/prd.doc.md · @references/templates/spec.md · @references/templates/spec.doc.md · @references/templates/memo.md · @references/templates/memo.doc.md · @references/templates/report.md · @references/templates/report.doc.md · @references/templates/vision.md · @references/templates/vision.doc.md · @references/templates/atomic.md · @references/templates/atomic.doc.md · @references/templates/workflow.md · @references/templates/workflow.doc.md |
 | `@@index` | addressing itself — the syntaxes, the scopes, the manifest, the check | @index.md · @references/files.md · @resources/index.py · @references/language.md |
 | `@@scout` | the discovery tool, whole — stars, routes, findings | @references/skills/pearde-scout.md · @resources/scout/README.md · @resources/scout/scout.sh · @resources/scout/buckets.txt · @resources/scout/route.sh · @resources/scout/routes.md · @resources/scout/findings.md · @resources/scout/reading-list.md |
@@ -83,6 +82,6 @@ explains the rest.
 
 ## Files
 
-@references/files.md — every tracked file, one row. It is read when a file is
-added or moved, and by @resources/index.py; never to answer a question about
-the work.
+@references/files.md — every tracked file, one row. Read when a file is added
+or moved, and by @resources/index.py — never to answer a question about the
+work.

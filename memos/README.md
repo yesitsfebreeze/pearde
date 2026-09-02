@@ -10,6 +10,7 @@
 ## Decisions
 
 - [also-resolves-against-the-board-first](also-resolves-against-the-board-first.md) — decided · 2026-09-02 — collect --also resolves against the board first, then the caller's cwd, and refuses a path neither holds
+- [a-harness-that-reads-the-whole-checkout-is-not-a-harness](a-harness-that-reads-the-whole-checkout-is-not-a-harness.md) — decided · 2026-09-02 — a probe asserts over its own footprint, never over the live working tree, and its flip probe runs every file it claims for
 - [the-dispatcher-holds-no-round](the-dispatcher-holds-no-round.md) — decided · 2026-09-01 — the round runs in a pearde-round worker whose window is thrown away, and the budget is measured from the window's own floor
 - [one-author-is-not-an-accepted-spec](one-author-is-not-an-accepted-spec.md) — decided · 2026-09-01 — a spec whose code, probe, acceptance boxes and proof block have one author is not accepted evidence; a box is ticked only against a check that has been seen fail
 - [invariants-are-testable-memos-and-the-kind-index-is-generated](invariants-are-testable-memos-and-the-kind-index-is-generated.md) — decided · 2026-09-01 — invariants are testable memos and the kind index is generated

@@ -31,29 +31,64 @@ finds it, and re-run the harness whole. Nothing else.
 
 ## Acceptance
 
-- [ ] `resources/board/render.py` and `resources/board/view.css` are byte-identical to what the implementer found — `git diff --name-only` names neither
-- [ ] The harness reports 31 checks, 31 pass, 0 fail, and exits 0
-- [ ] The drawer check fails when the `purpose` div is moved back out of `<aside id="state">` — shown against a scratch copy of the file's text, never against the real file
-- [ ] The height check fails when the needle is set back to `260px` — shown the same way
+- [x] `resources/board/render.py` and `resources/board/view.css` are byte-identical to what the implementer found — `git diff --name-only` names neither
+- [x] The harness reports every check passing with 0 fail and exits 0, and both re-aimed rows stand in it exactly once (31/31 at this run; the denominator is a shared board file three live sessions move, so it is printed, never gated)
+- [x] The drawer check fails when the `purpose` div is moved back out of `<aside id="state">` — shown against a scratch copy of the file's text, never against the real file
+- [x] The height check fails when the needle is set back to `260px` — shown the same way
 
 ## Verify and Proof
 
 ```sh
 cd /Users/feb/dev/infra/pearde
-bash .pearde/prds/one-page-that-says-whats-up/probe/verify.sh; echo "exit=$?"
-git diff --name-only -- resources/board/render.py resources/board/view.css
-# non-vacuity, entirely on scratch text — neither real file is written
-python3 - <<'PY'
-s=open('resources/board/render.py').read()
-def pred(t):
-    try:
-        a=t.index('<aside id="state"'); j=t.index('id="purpose"'); z=t.index('</aside>',a)
-        return a<j<z
-    except ValueError: return False
-m=s.replace('    <div id="purpose"></div>\n','',1)
-print("live:", pred(s), "| purpose out of the drawer:", pred(m))
+W="$(mktemp -d)"; trap 'rm -rf "$W"' EXIT
+H=.pearde/prds/one-page-that-says-whats-up/probe/verify.sh
+rc=0; bash "$H" > "$W/out" 2>&1 || rc=$?
+tail -2 "$W/out"; echo "exit=$rc"
+# green means every check passed and none failed. The denominator is NOT pinned:
+# this harness is a shared board file and a neighbour adding a passing check
+# must not redden this PRD's block.
+cat > "$W/tally.py" <<'PY'
+import re, sys
+last = None
+for line in open(sys.argv[1], errors="replace"):
+    m = re.search(r"(\d+) checks \S+ (\d+) pass \S+ (\d+) fail\s*$", line)
+    if m:
+        last = m.groups()
+if not last:
+    print("no-tally red")
+else:
+    print("%s/%s fail=%s %s" % (last[0], last[1], last[2],
+          "green" if last[0] == last[1] and last[2] == "0" else "red"))
 PY
-sed 's/height:calc(100vh - 104px)/height:calc(100vh - 260px)/' resources/board/view.css \
-  | grep -A1 '^#stage{display:flex' | grep -q 'height:calc(100vh - 104px);min-height:280px' \
-  && echo "VACUOUS" || echo "height check fails on a changed rule"
+tally="$(python3 "$W/tally.py" "$W/out")"
+# the two re-aimed checks still stand in this PRD's own footprint file
+drawer="$( { grep -c 'the vision line is in the state drawer' "$H" || true; } )"
+height="$( { grep -c "height:calc(100vh - 104px);min-height:280px" "$H" || true; } )"
+# neither view file is this PRD's to change
+moved="$(git diff --name-only -- resources/board/render.py resources/board/view.css | wc -l | tr -d ' ')"
+# non-vacuity, entirely on scratch text — neither real file is written
+mut="$(python3 - <<'PY'
+s = open('resources/board/render.py').read()
+c = open('resources/board/view.css').read()
+def drawer(t):
+    try:
+        a = t.index('<aside id="state"'); j = t.index('id="purpose"')
+        z = t.index('</aside>', a)
+        return a < j < z
+    except ValueError:
+        return False
+def height(t):
+    i = t.find('#stage{display:flex')
+    return i >= 0 and 'height:calc(100vh - 104px);min-height:280px' in t[i:i+400]
+m = s.replace('    <div id="purpose"></div>\n', '', 1)
+n = c.replace('height:calc(100vh - 104px)', 'height:calc(100vh - 260px)')
+print('drawer live=%s mutated=%s | height live=%s mutated=%s'
+      % (drawer(s), drawer(m), height(c), height(n)))
+PY
+)"
+echo "$mut"
+echo "tally=$tally drawer-rows=$drawer height-rows=$height view-files-moved=$moved"
+[ "$rc" = 0 ] && [ "${tally##* }" = green ] && [ "$moved" = 0 ] \
+  && [ "$drawer" = 1 ] && [ "$height" = 1 ] \
+  && [ "$mut" = 'drawer live=True mutated=False | height live=True mutated=False' ]
 ```

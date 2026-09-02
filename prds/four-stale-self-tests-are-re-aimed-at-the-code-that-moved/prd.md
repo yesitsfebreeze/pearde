@@ -1,5 +1,5 @@
 ---
-state: specced        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
+state: done        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: requested  # requested = the user asked | derived = the board found it
 # from:            # derived only — the PRD whose work surfaced this one
 priority: 20        # higher first
@@ -11,7 +11,7 @@ repo:              # the sub-repo the code lands in; delete if n/a
 #                  #   Absent = the brief alone, as before workflows
 time:              # OPTIONAL. See @references/parts/order.md
   est:             # the weight, only when complexity is absent. Not a duration
-  actual:          # a record. Nothing reads it
+  actual: 0.62h
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
 workflow: probe-then-spec
 ---
@@ -120,3 +120,40 @@ to skim past reds, which is how a real one gets shipped.
 <!-- `## Failure` — implementer-only, after a FAILED attempt: what broke, what
      was tried. `retry` moves this into the body as history and reopens the
      PRD. -->
+
+## Report
+
+spec01: exit 0
+31 checks · 31 pass · 0 fail
+exit=0
+drawer live=True mutated=False | height live=True mutated=False
+tally=31/31 fail=0 green drawer-rows=1 height-rows=1 view-files-moved=0
+
+spec02: exit 0
+  FAIL C every harness on the board ends on an exit-code-carrying check
+  FAIL C the-gate's census row is green
+  FAIL E …and the-gate fails only the two rows that read index.py check
+  FAIL F no file under resources/ carries any of this
+35 checks · 31 pass · 4 fail
+exit=1
+resources/board/init.py
+row-ok=1 row-red=0 in-place=1 spent-non-goal=0 ignore-live=1 ignore-without-the-line=0
+
+spec03: exit 0
+
+133 checks · 133 pass · 0 fail
+collect-is-a-command exit=0
+
+89 checks · 89 pass · 0 fail
+init-asks-nothing exit=0
+verify: 7 checks · 7 pass · 0 fail
+probe: 7 checks · 7 pass · 0 fail
+downstream exit=0
+collect=133/133 fail=0 green init=89/89 fail=0 green downstream=7/7 fail=0 green
+R-rows=2 J-rows=2 in-C=2 in-I=2 dead-path=0,0 downstream-edited=0
+find 0->1: 0 -> 1 | sentinel: absent -> 2192966820 2
+
+spec04: exit 0
+71/71 checks pass
+exit=0
+all-pass=1 row-ok=1 in-place=1 dead-needle=0 workers-moved=0 sentence-live=1 sentence-gone=0

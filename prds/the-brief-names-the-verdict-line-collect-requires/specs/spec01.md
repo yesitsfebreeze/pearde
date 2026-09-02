@@ -35,13 +35,13 @@ leave the file as the one source.
 
 ## Acceptance
 
-- [ ] The `brief:every` block names the marker `Verdict:`, the 40-line window, and says a report carrying none is refused.
-- [ ] The block names the shape that works: one word after the marker, nothing else on the line, and neither a list item nor a block quote.
-- [ ] The rendered analyst brief carries exactly one `Verdict:` line, and so does the rendered implementer brief.
-- [ ] The rendered consultant brief carries none — it writes no report, and `brief.py:361` must stay the one role that skips the `every` block.
-- [ ] The half-sentence `as you would one the PRD already carries` appears exactly once in `workers.md`, and the analyst brief renders with no repeated continuation.
-- [ ] `verdict_of` and its 40-line window are unchanged: the span from `VERDICT_RE` to `def scores_of` in `resources/board/collect.py` is byte-identical to `HEAD`. Scope the check to that span, not to the whole file — a sibling PRD is adding an `--also` guard to `collect.py`, so a whole-file diff measures that session's work, not this one's restraint.
-- [ ] `references/templates/report.md` shows no diff against `HEAD` — the PRD names it explicitly as not the gap.
+- [x] The `brief:every` block names the marker `Verdict:`, the 40-line window, and says a report carrying none is refused.
+- [x] The block names the shape that works: one word after the marker, nothing else on the line, and neither a list item nor a block quote.
+- [x] The rendered analyst brief carries exactly one `Verdict:` line, and so does the rendered implementer brief.
+- [x] The rendered consultant brief carries none — it writes no report, and `brief.py:361` must stay the one role that skips the `every` block.
+- [x] The half-sentence `as you would one the PRD already carries` appears exactly once in `workers.md`, and the analyst brief renders with no repeated continuation.
+- [x] `verdict_of` and its 40-line window are unchanged: the span from `VERDICT_RE` to `def scores_of` in `resources/board/collect.py` is byte-identical to `HEAD`. Scope the check to that span, not to the whole file — a sibling PRD is adding an `--also` guard to `collect.py`, so a whole-file diff measures that session's work, not this one's restraint.
+- [x] `references/templates/report.md` shows no diff against `HEAD` — the PRD names it explicitly as not the gap.
 
 ## Verify and Proof
 
@@ -56,7 +56,14 @@ diff <(git show HEAD:resources/board/collect.py | sed -n '/^VERDICT_RE/,/^def sc
   && echo "verdict_of unchanged"
 git diff --stat HEAD -- references/templates/report.md   # empty
 # the one source, and the consultant that must not carry the line
-grep -c 'as you would one the PRD already carries' references/parts/workers.md   # 1
-python3 resources/board/brief.py --consult skeptic --question x --board .pearde \
-  2>/dev/null | grep -c 'Verdict:'                                               # 0
+# Bare tests last, so the block's exit is the claim and not the last grep's:
+# a `grep -c` whose passing value is 0 exits 1, and collect runs this block
+# under `bash -e -o pipefail`.
+ONE=$(grep -c 'as you would one the PRD already carries' references/parts/workers.md || true)
+echo "workers.md carries the continuation once: $ONE"
+[ "$ONE" = 1 ]
+ZERO=$(python3 resources/board/brief.py --consult skeptic --question x --board .pearde \
+  2>/dev/null | { grep -c 'Verdict:' || true; })
+echo "consultant brief carries the verdict line: $ZERO time(s)"
+[ "$ZERO" = 0 ]
 ```

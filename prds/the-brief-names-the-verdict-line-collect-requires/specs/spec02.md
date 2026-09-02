@@ -37,12 +37,12 @@ wording are in place, `--check` is silent on the real file and `doctor` reads
 
 ## Acceptance
 
-- [ ] `python3 resources/board/brief.py --check` prints nothing and exits 0 on the repository as it stands.
-- [ ] With the `Verdict:` marker removed from `brief:every` in a temp copy, `check()` returns at least one problem naming that block.
-- [ ] With the duplicated continuation restored in a temp copy, `check()` returns at least one problem naming `brief:analyst` and quoting the repeated tail.
-- [ ] Neither new rule fires on any of the five blocks as they stand — no false positive, so the row can stay `ok`.
-- [ ] `doctor`'s `briefs` row renders `ok` and its summary names the verdict line, not only the placeholders.
-- [ ] `bash resources/doctor.sh` exits 0 and every other row reads exactly as it did before this PRD.
+- [x] `python3 resources/board/brief.py --check` prints nothing and exits 0 on the repository as it stands.
+- [x] With the `Verdict:` marker removed from `brief:every` in a temp copy, `check()` returns at least one problem naming that block.
+- [x] With the duplicated continuation restored in a temp copy, `check()` returns at least one problem naming `brief:analyst` and quoting the repeated tail.
+- [x] Neither new rule fires on any of the five blocks as they stand — no false positive, so the row can stay `ok`.
+- [x] `doctor`'s `briefs` row renders `ok` and its summary names the verdict line, not only the placeholders.
+- [x] `bash resources/doctor.sh` exits 0 and every other row reads exactly as it did before this PRD.
 
 ## Verify and Proof
 

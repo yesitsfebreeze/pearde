@@ -3,7 +3,7 @@ atomic: capture-the-harness-baseline
 subject: record what every committed harness prints before the tree is touched
 date: 2026-08-28
 updated: 2026-09-02
-runs: 55
+runs: 56
 ---
 
 # capture-the-harness-baseline — the numbers as they were before you
@@ -58,7 +58,13 @@ runs: 55
   HEAD:<path>` returns them and a real pre-edit baseline was always
   available. Only where the board's own history genuinely lacks a file do
   you copy the working tree to scratch and restore your own footprint files
-  from `HEAD` there — that reverts your build and keeps every neighbour's —
+  from `HEAD` there — that reverts your build and keeps every neighbour's,
+  **but only where no neighbour has hunks in a file of yours. Check first:
+  `git diff -U0 -- <footprint path>` and read the hunks. Where a file is
+  shared, restoring it from `HEAD` reverts their work as well and the copy
+  is not a baseline for anything that reads it — say so, and fall back to
+  comparing the two copies row by row for the rows your own hunks touch,
+  which is the comparison the control copy makes honest** —
   then run a control copy with nothing reverted: a harness that reads the
   repo's own git history fails in any copy, and only the control tells that
   apart from a regression. Only when the earlier build was **committed** is there no

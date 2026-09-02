@@ -1,5 +1,5 @@
 ---
-state: specced        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
+state: done        # open|analyzing|refine|question|specced|claimed|blocked|done|failed
 origin: requested  # requested = the user asked | derived = the board found it
 # from:            # derived only — the PRD whose work surfaced this one
 priority: 30        # higher first
@@ -11,7 +11,7 @@ repo:              # the sub-repo the code lands in; delete if n/a
 #                  #   Absent = the brief alone, as before workflows
 time:              # OPTIONAL. See @references/parts/order.md
   est:             # the weight, only when complexity is absent. Not a duration
-  actual:          # a record. Nothing reads it
+  actual: 0.41h
   # claim: <worker> <started>   # orchestrator-only, present while a worker holds this PRD
 workflow: correct-a-documented-claim
 ---
@@ -114,3 +114,81 @@ a worker that follows the instructions exactly gets its report refused.
 <!-- `## Failure` — implementer-only, after a FAILED attempt: what broke, what
      was tried. `retry` moves this into the body as history and reopens the
      PRD. -->
+
+## Report
+
+spec01: exit 0
+── G1 the source: brief:every names the line collect reads
+  ok   brief:every names `Verdict:`
+  ok   brief:every names the 40-line window
+  ok   brief:every says a report without one is refused
+  ok   verdict_of still reads 40 lines only
+  ok   collect still refuses a report naming none
+  ok   verdict_of is byte-identical to HEAD — the tool did not loosen
+── G2 the rendered brief, both roles
+  ok   analyst brief carries a `Verdict:` line
+  ok   implementer brief carries a `Verdict:` line
+── G3 the checker fails on each defect (a check that can fail)
+  ok   --check silent on the real file
+  ok   defect a is caught (1 problem(s))
+  ok   defect b is caught (1 problem(s))
+── G4 the shape the brief names is the shape collect reads
+  ok   `Verdict: SPECCED` reads as SPECCED
+  ok   `Verdict: REFINE` reads as REFINE
+  ok   `Verdict: QUESTION` reads as QUESTION
+  ok   `Verdict: DONE` reads as DONE
+  ok   `Verdict: BLOCKED` reads as BLOCKED
+  ok   `Verdict: FAILED` reads as FAILED
+  ok   a list item is read as no verdict
+  ok   a block quote is read as no verdict
+  ok   past the 40th line is no verdict
+  ok   G4: every shape reads as the brief says
+── G5 the duplicated continuation is gone
+  ok   the half-sentence appears once in workers.md
+  ok   no line repeats its predecessor's tail
+── G6 the doctor row no longer overstates what it proved
+  ok   the briefs ok row names the verdict line
+
+  15 ok · 0 FAIL
+verdict_of unchanged
+workers.md carries the continuation once: 1
+consultant brief carries the verdict line: 0 time(s)
+.pearde/prds/the-brief-names-the-verdict-line-collect-requires/probe/verify.sh: line 21: printf: write error: Broken pipe
+
+spec02: exit 0
+── G1 the source: brief:every names the line collect reads
+  ok   brief:every names `Verdict:`
+  ok   brief:every names the 40-line window
+  ok   brief:every says a report without one is refused
+  ok   verdict_of still reads 40 lines only
+  ok   collect still refuses a report naming none
+  ok   verdict_of is byte-identical to HEAD — the tool did not loosen
+── G2 the rendered brief, both roles
+  ok   analyst brief carries a `Verdict:` line
+  ok   implementer brief carries a `Verdict:` line
+── G3 the checker fails on each defect (a check that can fail)
+  ok   --check silent on the real file
+  ok   defect a is caught (1 problem(s))
+  ok   defect b is caught (1 problem(s))
+── G4 the shape the brief names is the shape collect reads
+  ok   `Verdict: SPECCED` reads as SPECCED
+  ok   `Verdict: REFINE` reads as REFINE
+  ok   `Verdict: QUESTION` reads as QUESTION
+  ok   `Verdict: DONE` reads as DONE
+  ok   `Verdict: BLOCKED` reads as BLOCKED
+  ok   `Verdict: FAILED` reads as FAILED
+  ok   a list item is read as no verdict
+  ok   a block quote is read as no verdict
+  ok   past the 40th line is no verdict
+  ok   G4: every shape reads as the brief says
+── G5 the duplicated continuation is gone
+  ok   the half-sentence appears once in workers.md
+  ok   no line repeats its predecessor's tail
+── G6 the doctor row no longer overstates what it proved
+  ok   the briefs ok row names the verdict line
+
+  15 ok · 0 FAIL
+check exit=0
+  briefs      ok      5 blocks in references/parts/workers.md · every placeholder named · the verdict line named
+doctor exit=0
+index exit=0

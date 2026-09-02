@@ -3,7 +3,7 @@ atomic: edit-inside-the-footprint
 subject: confine the change to the paths the contract names
 date: 2026-08-28
 updated: 2026-09-02
-runs: 23
+runs: 24
 ---
 
 # edit-inside-the-footprint — the change, and nothing beside it

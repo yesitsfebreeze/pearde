@@ -8,6 +8,7 @@ needs:
   - a-density-checker-and-the-root-docs-are-rewritten
 from: every-document-is-written-in-the-writer-s-prose/a-density-checker-and-the-root-docs-are-rewritten  # derived only — the PRD whose work surfaced this one
 actual: 0.06h
+commit: fc75bcf 5bc3def
 ---
 
 # the standard is held to its own standard

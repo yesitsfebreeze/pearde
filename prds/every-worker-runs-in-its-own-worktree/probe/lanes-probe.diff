@@ -1,0 +1,241 @@
+diff --git a/resources/board/brief.py b/resources/board/brief.py
+index 7346a66..66cd9ad 100644
+--- a/resources/board/brief.py
++++ b/resources/board/brief.py
+@@ -61,6 +61,7 @@ sys.path.insert(0, RES)
+ sys.path.insert(0, os.path.join(RES, "board"))
+ import plan as planlib              # noqa: E402 — every read
+ import collect as collectlib        # noqa: E402 — `repo_of`, the one rule
++import lanes as laneslib            # noqa: E402 — `<repo>` is the worker's lane
+ import transitions as trlib         # noqa: E402 — the gate, and `resolve`
+ import workflows as wflib           # noqa: E402 — the route inlined
+ import specs as specslib            # noqa: E402 — `limits`, the two numbers
+@@ -238,9 +239,16 @@ def repo_of(prd, board):
+     member's — else the board's."""
+     board_root = planlib.repo_root(board) or os.path.dirname(board)
+     found = collectlib.repo_of(prd, board, board_root)
+-    if found != board_root:
+-        return found
+-    return planlib.repo_root(prd["board_path"]) or board_root
++    if found == board_root:
++        found = planlib.repo_root(prd["board_path"]) or board_root
++    # the lane, when the claim cut one: a worker works in its own worktree
++    # and never in the checkout the orchestrator holds. No lane on disk —
++    # a board outside a repo, or a claim from before lanes — is the
++    # checkout, exactly as before.
++    lane = laneslib.lane_dir(prd["board_path"], prd["local"])
++    if os.path.isdir(lane):
++        return lane
++    return found
+ 
+ 
+ def health_of(prd, board):
+diff --git a/resources/board/collect.py b/resources/board/collect.py
+index da4e4d5..1f701f7 100644
+--- a/resources/board/collect.py
++++ b/resources/board/collect.py
+@@ -1129,6 +1129,61 @@ def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since):
+ 
+ # ── one PRD ───────────────────────────────────────────────────────────────────
+ 
++def land_lane(board, rel, prd, repo, opts, out=print):
++    """Commit what stands in the PRD's lane and merge it into the branch
++    the checkout is on. Returns `(pre, n)` — the checkout's commit before
++    the merge, so step 2 can put it back on a red, and how many of the
++    lane's commits landed. `(None, None)` when there is no lane, which is
++    every board that never cut one and every claim from before lanes: the
++    old path, unchanged.
++
++    Scope is the footprint, exactly as step 3's is — the lane is cut clean
++    off HEAD, so everything dirty in it is this worker's and no hunk needs
++    splitting, but a worker that wandered outside its footprint is still
++    not committed whole. The paths outside are named and left in the lane.
++
++    A merge conflict raises `Stop` with the file on it. The merge is
++    aborted, so the checkout is where it was; the lane branch still holds
++    the worker's commits, and a person resolves it by merging by hand."""
++    import lanes as laneslib
++    if not laneslib.exists(board, rel):
++        return None, None
++    lane = laneslib.lane_dir(board, rel)
++    _, feet = planlib.spec_data(prd)
++    feet = [f for f in feet if not f.startswith(planlib.MEMBER_SIGIL)]
++    standing = laneslib.dirty(board, rel)
++    outside = [p for p in standing if not inside(p, feet)]
++    if outside:
++        out(f"{rel}: outside the footprint, left in the lane — "
++            + ", ".join(sorted(outside)))
++    try:
++        if [p for p in standing if inside(p, feet)]:
++            laneslib.git(lane, "add", "--", *feet)
++            laneslib.git(lane, "commit", "-m",
++                         f"{prd['name']} — {contract_line(prd)}")
++        pre = laneslib.git(repo, "rev-parse", "HEAD").stdout.strip()
++        n = laneslib.merge(repo, rel)
++    except laneslib.LaneError as e:
++        raise Stop(f"{rel}: {e} — nothing written; the lane still holds the "
++                   f"work on `{laneslib.branch_of(rel)}`")
++    if n:
++        out(f"{rel}: lane {laneslib.branch_of(rel)} merged — "
++            f"{n} commit(s)")
++    return pre, n
++
++
++def unland(repo, pre, out=print):
++    """Put the checkout back where `land_lane` found it. Called when step 2
++    goes red: a verify that fails must not leave the lane's code standing
++    in the checkout, and the lane branch is untouched so a retry merges the
++    same commits again."""
++    if not pre:
++        return
++    import lanes as laneslib
++    laneslib.git(repo, "reset", "--hard", pre, check=False)
++    out(f"  lane unmerged — checkout back at {pre[:12]}")
++
++
+ def collect_one(board, rel, opts, out=print):
+     now = datetime.datetime.now()
+     prds = planlib.scan(board)
+@@ -1160,8 +1215,20 @@ def collect_one(board, rel, opts, out=print):
+         raise Stop(f"{rel}: no acceptance box in specs/ — nothing says it "
+                    f"is finished ({closed}/{total})")
+ 
+-    # 2 — the verify, then the gate — never the worker's word
++    # 1b — the lane lands before anything is measured. The worker's code is
++    # committed on `lane/<slug>` in its own worktree and does not exist in
++    # the checkout at all, so a verify run before the merge measures the
++    # tree the work is missing from — which is a red on every PRD that used
++    # a lane. Merge first, then verify the MERGED tree: a lane that passes
++    # alone and breaks against what landed while it ran is a red here, and
++    # that is the whole reason the gate runs after the merge and not in the
++    # lane. `pre` is where to put the checkout back if step 2 goes red —
++    # the lane branch is never touched, so the worker's commits survive a
++    # failed collect and a retry merges them again.
+     repo = repo_of(prd, board, board_root)
++    pre, landed = None, None
++    if not opts.get("dry"):
++        pre, landed = land_lane(board, rel, prd, repo, opts, out)
+     base = baseline(board, rel)
+     report, trusted, known = [], False, False
+     if opts.get("trust"):
+@@ -1187,6 +1254,7 @@ def collect_one(board, rel, opts, out=print):
+             if red:
+                 text = "\n\n".join(report)
+                 out(text)
++                unland(repo, pre, out)   # the lane's code never stands on a red
+                 if opts.get("fail") and not opts.get("dry"):
+                     editlib.append_section(pmd, "Failure", text)
+                     editlib.del_key(pmd, "claim")
+diff --git a/resources/board/plan.py b/resources/board/plan.py
+index 9ab6aa4..7835cc4 100755
+--- a/resources/board/plan.py
++++ b/resources/board/plan.py
+@@ -1670,7 +1670,6 @@ def dispatchable(prd, prds, board=None, holder=None):
+       its own. Finished work `collect` closes, never a thing to dispatch;
+       `claim` on it is the trap `a-container-cannot-reach-done` records.
+     - needs — a `needs:` entry naming nothing, or a PRD not `done`.
+-    - footprint — overlaps a `claimed` PRD's.
+     - workflow — `workflow:` names no workflow in any library it can see;
+       `board` is the master's library when there is one.
+ 
+@@ -1702,16 +1701,13 @@ def dispatchable(prd, prds, board=None, holder=None):
+             return f"needs: `{d}` names no PRD on this board"
+         if prds[t]["state"] != "done":
+             return f"needs: {t} is `{prds[t]['state']}`, not done"
+-    _, mine = spec_data(prd)
+-    for r, p in prds.items():
+-        if p["state"] != "claimed" or r == rel:
+-            continue
+-        _, theirs = spec_data(p)
+-        for x in mine:
+-            for y in theirs:
+-                if x == y or x.startswith(y + "/") or y.startswith(x + "/"):
+-                    return (f"footprint: {r} is claimed and holds `{y}`, "
+-                            f"which clashes with `{x}`")
++    # The footprint clash is no longer a gate. Every worker works in a lane
++    # of its own (@resources/board/lanes.py), so two PRDs on one file are
++    # two branches, not two writers in one tree: the plan's edge still
++    # orders them — `footprint_clash` is what `compute_plan` reads — and
++    # the collide is resolved at the merge, where a conflict is a red
++    # collect naming the file. Refusing the claim here only serialized what
++    # the plan already serialized, and stalled a board that had lanes.
+     v = prd["fm"].get("workflow")
+     if isinstance(v, list):
+         return ("workflow: the key holds one slug — a list is a break, not "
+diff --git a/resources/board/transitions.py b/resources/board/transitions.py
+index 8bdd216..8cdc4f8 100644
+--- a/resources/board/transitions.py
++++ b/resources/board/transitions.py
+@@ -388,6 +388,7 @@ def transition(board, name, to, persona, worker=None, force=False,
+         editlib.del_key(path, "claim")
+     record(prd, frm, to)
+     if cmd == "claim" and not force:
++        cut_lane(board, rel, out)
+         snapshot_claim(board, rel)
+     line = progress_line(board, rel, frm, to, persona, forced=force,
+                          source=source)
+@@ -459,6 +460,27 @@ def say_dry(board, line, paths, out=print):
+     out("  would write: " + " · ".join(shown_path(board, p) for p in paths))
+ 
+ 
++def cut_lane(board, rel, out=print):
++    """The worker's worktree — `lane/<slug>` at `<board>/.lanes/<rel>`, cut
++    on the claim. Returns its path, or None when the board is in no repo.
++    A git that says no is printed and the claim stands: a board that cannot
++    cut a lane still holds the PRD, and the worker falls back to the
++    checkout — the state machine is not git's to veto."""
++    import lanes as laneslib
++    import collect as collectlib
++    prds = planlib.scan(board)
++    prd = prds.get(rel)
++    root = planlib.repo_root(prd["dir"]) if prd else None
++    if not root:
++        return None
++    repo = collectlib.repo_of(prd, board, root)
++    try:
++        return laneslib.create(board, repo, rel)
++    except laneslib.LaneError as e:
++        out(f"claim: no lane — {e}")
++        return None
++
++
+ def snapshot_claim(board, rel):
+     """The claim's baseline — what is dirty, what the gate says — under
+     `prds/.claims/<rel>/`, the record `collect` measures against. collect.py
+@@ -932,11 +954,35 @@ def cmd_sweep(board, args, persona):
+                 f"swept {now()} — {held}, silent {planlib.fmt_age(age)}: "
+                 "no file of this PRD's moved past `claim-ttl`. Read the "
+                 "worker's output before a retry; partial code may stand in "
+-                "the tree.")
++                "the lane.")
+         transition(board, rel, to, persona)
++        drop_lane(board, rel)
+     return 0
+ 
+ 
++def drop_lane(board, rel, out=print):
++    """Remove the worktree of a claim `sweep` released. The branch stays —
++    an unmerged `lane/` is work this machine holds and `plan.lanes` draws
++    it; only the worktree and the dirt in it go, which is what a sweep
++    means. Prints what it dropped, says nothing when there was no lane."""
++    import lanes as laneslib
++    import collect as collectlib
++    prds = planlib.scan(board)
++    prd = prds.get(rel)
++    root = planlib.repo_root(prd["dir"]) if prd else None
++    if not root or not laneslib.exists(board, rel):
++        return False
++    left = laneslib.dirty(board, rel)
++    try:
++        laneslib.remove(board, collectlib.repo_of(prd, board, root), rel)
++    except laneslib.LaneError as e:
++        out(f"sweep: lane left standing — {e}")
++        return False
++    out(f"sweep: {rel} lane removed · branch {laneslib.branch_of(rel)} kept"
++        + (f" · {len(left)} uncommitted path(s) dropped" if left else ""))
++    return True
++
++
+ # ── the surface ───────────────────────────────────────────────────────────────
+ 
+ # The declaration class is plan.py's — the root every command module

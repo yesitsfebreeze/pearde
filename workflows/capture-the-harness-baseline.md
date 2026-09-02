@@ -3,7 +3,7 @@ atomic: capture-the-harness-baseline
 subject: record what every committed harness prints before the tree is touched
 date: 2026-08-28
 updated: 2026-09-02
-runs: 64
+runs: 65
 ---
 
 # capture-the-harness-baseline — the numbers as they were before you
@@ -94,3 +94,4 @@ runs: 64
 | **every** harness you baseline is red, and the failing lines share one cause outside your footprint | a layout or path migration landed between spec-writing and dispatch; the harness set is measuring the migration, not your unit | record the shared cause once instead of per-harness, verify your own contract items by hand on a fixture, and report the sweep that repairs the set as its own PRD — do not repair a subset, a half-swept harness set is worse evidence than a uniformly red one |
 | a failing line the brief names as inherited is **absent** when you take your own baseline, and harness rows it was reddening are green | a sibling closed it between the brief being composed and your first command; the brief's baseline is older than the tree | take your own baseline as the measurement and say in the report that the brief's line is gone and who closed it — `git status` in both roots names the file. Every harness row that line was reddening is that sibling's flip, not yours: the same rule as a count that went up |
 | `command not found: timeout` from a harness wrapper on **darwin** | `timeout` is GNU coreutils and is not on the base system | drop the wrapper, or `gtimeout` where coreutils is installed — and read the exit code of the wrapper, not only the harness's last line |
+| every board harness computes its own `ROOT` by walking up from `$0`, and the `repo:` root is a lane | the harness set is nailed to the orchestrator's checkout and can never read a lane; a worker's build is invisible to all of it until `collect` merges | build the merged tree in scratch — `git clone --shared <checkout> <scratch>` (a `git archive` or `git init` copy loses the history a pinned-sha harness reads), `git apply` the checkout's uncommitted diff, overlay the lane's files — then symlink `<scratch>/.pearde` to the live board and run each harness **through that path**, so its own `cd …/../../../../..` resolves to the merged tree. Say in the report that the counts are the merged tree's, not the lane's |

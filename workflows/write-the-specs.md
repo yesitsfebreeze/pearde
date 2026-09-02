@@ -3,7 +3,7 @@ atomic: write-the-specs
 subject: turn what the build stands up into implementable units
 date: 2026-08-28
 updated: 2026-09-02
-runs: 31
+runs: 32
 ---
 
 # write-the-specs — units another worker can finish
@@ -101,3 +101,4 @@ runs: 31
 | `specced` refuses `<spec>:<n>: `## Verify and Proof` holds no fenced `sh` block` and the block is plainly there | a line inside the block begins `## ` — commonly a heredoc writing a markdown fixture. The section reader in `resources/board/specs.py` is line-based and fence-blind, the same way the acceptance-box matcher is | write the fixture's headings with a placeholder prefix and raise them at run time (`sed 's/^@@ /## /'`). Never a literal `## ` at line start inside a verify block, in a heredoc or out of one |
 | a spec contracts a file under `.pearde/memos/` and `memos.py check` goes red the moment it lands | the index by kind is generated, and adding a memo makes `memos/README.md` stale — a file no footprint names and that the spec cannot omit | run `python3 resources/memos.py index <board>` and check `git diff --stat` names one added row; the index is part of adding a memo, not a separate edit. Say so in the report, because the footprint is wrong and the next author of a memo spec should carry the index row in it |
 | a `## Verify and Proof` block reads as instructions to a person — a `<placeholder>` argument, a `# note the dir` comment standing in for a value, a bare `$?` echoed after the command it describes | the block was written to be *read* and never run, and `collect` runs it: `<that dir>` is parsed as a redirect from a file named `that`, and the spec dies on a syntax error with every box already ticked | run every block, of every spec in the set, exactly as `collect` will — `bash -e -o pipefail -c "$(awk '/^```sh/{f=1;next} /^```/{f=0} f' <spec>)"` — before `specced` is called. `specced --check` reads the block's *presence*, never its exit, so a block that cannot parse passes the gate |
+| a block line reads `! <cmd>` and a mutation that should redden it leaves the block at exit 0 | `set -e` does not apply to a command whose status is inverted by a leading `!` (POSIX XCU 2.11), so the line prints its failure and the block carries on | write it `if <cmd>; then exit 1; fi`. This is the same class as the `<test> && <action>` shape the section already names, and the `!` form is not covered by it — a block can hold one and read green forever |

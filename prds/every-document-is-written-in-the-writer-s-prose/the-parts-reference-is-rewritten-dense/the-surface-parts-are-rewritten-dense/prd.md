@@ -6,6 +6,7 @@ complexity: 32
 blast-radius: low
 workflow: probe-then-spec
 actual: 1.55h
+commit: 58c92e6 9781c84
 ---
 
 # the-surface-parts-are-rewritten-dense — references/parts/` view, doctor, order, progress and statusline rewritten dense, `prose.py check` green on each and no fact lost against `HEAD

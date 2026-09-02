@@ -6,6 +6,7 @@ complexity: 18
 blast-radius: mid
 workflow: probe-then-spec
 actual: 0.54h
+commit: 740713b 551a422
 ---
 
 # The master ramp measures its own tree, not its members

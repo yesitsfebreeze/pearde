@@ -6,6 +6,7 @@ complexity: 32
 blast-radius:
 workflow: probe-then-spec
 actual: 0.31h
+commit: 344d09d ec3f0ed
 ---
 
 # a verify block that pipes a probe exits zero on a broken tree under pipefail

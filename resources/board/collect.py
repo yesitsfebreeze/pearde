@@ -1425,21 +1425,36 @@ def daemon_call(path, payload=None, timeout=3):
 
 
 def post_report(board, rel, text):
-    """What happened, in words. Down, or the board not registered, is said
-    and not an error — the verify output is in the PRD's own files too."""
+    """What happened, in words. Down, wrong, or the board not registered, is
+    said and never raised — the verify output is in the PRD's own files too.
+
+    This runs between the done write and the commit, so an exception here
+    leaves `prd.md` saying `done` with nothing committed. `URLError, OSError,
+    ValueError` is not the whole set a live socket can raise: a port held by
+    something that is not this daemon answers with `BadStatusLine`, a daemon
+    killed mid-write with `IncompleteRead` — both `HTTPException`, neither an
+    `OSError` — and a `/status` of another shape raises `AttributeError` or
+    `KeyError` off the parse. Nothing this function can hit is worth a torn
+    board, so every one of them is a returned phrase."""
+    def said(e):
+        return f"{type(e).__name__}: {e}".strip().replace("\n", " ")[:200]
     try:
         st = daemon_call("/status")
-    except (urllib.error.URLError, OSError, ValueError):
-        return "daemon down — report not posted"
-    name = next((b["name"] for b in st.get("boards", [])
-                 if os.path.abspath(b["path"]) == os.path.abspath(board)),
-                None)
+    except Exception as e:
+        return f"daemon down — report not posted ({said(e)})"
+    try:
+        name = next((b["name"] for b in st.get("boards", [])
+                     if os.path.abspath(b["path"]) == os.path.abspath(board)),
+                    None)
+    except Exception as e:
+        return f"daemon answered in another shape — report not posted " \
+               f"({said(e)})"
     if not name:
         return "board not registered with the daemon — report not posted"
     try:
         daemon_call("/report", {"board": name, "prd": rel, "text": text})
-    except (urllib.error.URLError, OSError, ValueError) as e:
-        return f"POST /report failed — {e}"
+    except Exception as e:
+        return f"POST /report failed — report not posted ({said(e)})"
     return "report posted"
 
 
@@ -2022,16 +2037,29 @@ def collect_one(board, rel, opts, out=print):
       # commit, so the commit carries them; put back whole if the commit fails
       with open(pmd, encoding="utf-8") as f:
         before = f.read()
-      hrs = (now - since).total_seconds() / 3600.0 if since else None
-      if hrs is not None:
-        editlib.set_key(pmd, "actual", fmt_hours(max(hrs, 0.0)))
-      editlib.del_key(pmd, "claim")
-      editlib.set_key(pmd, "state", "done")
-      # 6 — the report to the daemon, which appends `## Report` to prd.md
-      text = ("trusted — the verify was not run by collect" if trusted
-              else "\n\n".join(report) or "no `## Verify and Proof` block")
-      posted = post_report(board, rel, text)
-      git_out(board_root, "add", "--", prd_rel)
+      # From here to the commit the record on disk says `done` and git says
+      # nothing landed. Whatever raises in that window — the daemon, a git
+      # add, a line put here later — puts `prd.md` back the way it was and
+      # refuses, so a crash never leaves a PRD finished on the board and
+      # unfinished in the repo.
+      try:
+        hrs = (now - since).total_seconds() / 3600.0 if since else None
+        if hrs is not None:
+            editlib.set_key(pmd, "actual", fmt_hours(max(hrs, 0.0)))
+        editlib.del_key(pmd, "claim")
+        editlib.set_key(pmd, "state", "done")
+        # 6 — the report to the daemon, which appends `## Report` to prd.md
+        text = ("trusted — the verify was not run by collect" if trusted
+                else "\n\n".join(report) or "no `## Verify and Proof` block")
+        posted = post_report(board, rel, text)
+        git_out(board_root, "add", "--", prd_rel)
+      except BaseException as e:
+        editlib.write_atomic(pmd, before)
+        if isinstance(e, (KeyboardInterrupt, SystemExit)):
+            raise
+        raise Stop(f"{rel}: the record was written and the commit not "
+                   f"reached — put back, nothing written: "
+                   f"{type(e).__name__}: {e}") from e
       if board_root not in staged_roots:
         staged_roots.append(board_root)
       committed = {r_: list(plan[r_]["add"]) + list(plan[r_]["partial"])
@@ -2155,12 +2183,22 @@ def close_container(board, rel, prd, prds, board_root, opts, now, out=print):
         return 0
     with open(pmd, encoding="utf-8") as f:
         before = f.read()
-    editlib.set_key(pmd, "actual", actual)
-    editlib.set_key(pmd, "commit", sha)
-    editlib.del_key(pmd, "claim")
-    editlib.set_key(pmd, "state", "done")
-    posted = post_report(board, rel, f"{phrase}\n\nchildren: "
-                         + ", ".join(c["rel"] for c in kids))
+    # the same window as `collect_one`'s, guarded the same way: the record
+    # says `done` and nothing is committed until the commit below
+    try:
+        editlib.set_key(pmd, "actual", actual)
+        editlib.set_key(pmd, "commit", sha)
+        editlib.del_key(pmd, "claim")
+        editlib.set_key(pmd, "state", "done")
+        posted = post_report(board, rel, f"{phrase}\n\nchildren: "
+                             + ", ".join(c["rel"] for c in kids))
+    except BaseException as e:
+        editlib.write_atomic(pmd, before)
+        if isinstance(e, (KeyboardInterrupt, SystemExit)):
+            raise
+        raise Stop(f"{rel}: the record was written and the commit not "
+                   f"reached — put back, nothing written: "
+                   f"{type(e).__name__}: {e}") from e
     pmd_rel = os.path.relpath(pmd, board_root)
     with private_index([board_root]):
         git_out(board_root, "add", "--", pmd_rel)

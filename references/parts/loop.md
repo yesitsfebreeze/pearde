@@ -50,6 +50,15 @@ and the refusal names the command that answers instead.
 | 7 knowledge | whether the record already answers it — cite the note under `## Answers` and skip the question, or let the drill stand |
 | 8 drill, then hand back | the forks and their three answers |
 
+**Before step 0 · The session takes a tree of its own.** Every pass runs
+`pearde session reap --apply`, then `pearde session take`. The reap is first,
+and safe beside live work: a live session's worktree is never reaped, nor one
+whose liveness cannot be decided, nor this session's own, and a dead session's
+tree goes only once everything it left — untracked files included — is
+committed to `refs/pearde/reaped/<id>`. `take` is idempotent. Board commands
+do not yet resolve the taken tree as the code repo; that is a separate unit —
+@resources/board/session.py.
+
 **0 · Ramp.** `pearde ramp` — once per board, not per pass. `happiness:`
 non-zero (@references/settings.md) is a person saying the machine is tooled for
 this repo, and the step is one line. Zero is the gate: the gap between the

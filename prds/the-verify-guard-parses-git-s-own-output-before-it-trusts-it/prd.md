@@ -6,6 +6,7 @@ complexity: 26
 blast-radius: high
 workflow: probe-then-spec
 actual: 0.79h
+commit: 483cdcf
 ---
 
 # the verify guard parses git s own output before it trusts it

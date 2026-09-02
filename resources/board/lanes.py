@@ -9,13 +9,20 @@ branch the checkout is on, runs the verify blocks and the gate on the
 MERGED tree, and commits there. `sweep` removes the worktree of a claim it
 releases.
 
-Where the worktree lives: `<board>/.lanes/<slug>`. The board dir is already
-machine-local scratch on the code repo (`.pearde/` is gitignored) and
-`.lanes/` is a dotfile directly under the board, which `collect.scratch`
-skips and the board's own `.gitignore` drops — so a lane costs no row in
-either repo. Outside the code repo would need a directory the user never
-asked for; inside it, anywhere but under the board, would be dirt on every
-`git status` the person runs.
+Where the worktree lives: `<board>/.lanes/<slug>`. `.lanes/` is a dotfile
+directly under the board, so `collect.scratch` skips it and no lane is ever
+offered to a commit. Outside the code repo would need a directory the user
+never asked for; inside it, anywhere but under the board, would be dirt on
+every `git status` the person runs.
+
+**That is the commit, not the ignore, and the two are not the same guard.**
+This said the board dir was machine-local scratch because `.pearde/` is
+gitignored — which is false wherever the plan is tracked, and the plan is
+tracked on any board whose PRDs are meant to be shared. There `git status`
+sees the worktrees, and `git add -A` stages them: one board mid-pass held
+seven lanes and 36 GB. `init.ignored_names` and `init.BOARD_IGNORED` carry
+`.lanes/` for exactly this reason; a board initialised before they did has
+to be told once.
 
 The branch name is fixed: `plan.LANE_RE` already reads `lane/<slug>` as
 work on this machine, and the lane bar is drawn off it.
@@ -89,20 +96,21 @@ def create(board, repo, slug, base=None):
     board the repo does not track needs none of this and gets it anyway,
     where it costs one command and no behaviour.
 
+    The lane's regenerable directories are shared, not rebuilt.
+    `link_shared` points `node_modules`, the graphify cache and the
+    Obsidian plugin bundles at one copy per machine under the git common
+    dir. Measured on this repo: the checkout git tracks is 2.1 MB, and 27
+    lanes held 143 MB — the difference is entirely what each lane
+    regenerated for itself. Sharing runs after the checkout, on ignored
+    paths only, and never fails a claim: a store that cannot be written is
+    a lane with its own copies, which is exactly where this started.
+
     Idempotent on the path: a lane dir that is already a worktree of this
     repo is returned as it stands — a re-claim after a `failed` continues
     the work that is standing there, which is the whole point of leaving a
     probe uncommitted. Sharing is re-run on that path too, so a lane cut
     before the store existed picks it up on its next claim. A path that
-    exists and is NOT a worktree is a refusal, never a silent reuse.
-
-    The lane's regenerable directories are shared, not rebuilt.
-    `link_shared` points `node_modules`, the graphify cache and the Obsidian
-    plugin bundles at one copy per machine under the git common dir.
-    Measured on this repo: the checkout git tracks is 2.1 MB, and 27 lanes
-    held 143 MB — the difference is entirely what each lane regenerated for
-    itself. It runs after the checkout, on ignored paths only, and never
-    fails a claim."""
+    exists and is NOT a worktree is a refusal, never a silent reuse."""
     d = lane_dir(board, slug)
     br = branch_of(slug)
     if os.path.isdir(d):

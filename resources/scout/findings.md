@@ -29,6 +29,7 @@ Anything that has no answer yet goes to [Open](#open) — a queue, not a gap.
 | one widget API → terminal + web + native desktop | no single framework; `ratatui`+`ratzilla` (Rust) or `Textual`+`textual-web` (Python), each terminal-native and reusing the app on Win/Linux/macOS | gh stars · crates/pypi downloads · last-push cadence | 2026-08-27 | strong (as a rejection) |
 | community plugins to install alongside pearde | `ponytail`, `claude-hud`, `planning-with-files`, `cc-safety-net`; `claude-mem`/`claude-obsidian` rejected as duplicate of our knowledge layer | gh stars (2 search buckets) · repo state (push, license, archived) | 2026-08-31 | weak (both axes are GitHub-hosted) |
 | train and run a small model inside a Rust harness | `candle` | crates recent-dl · gh stars+state · scorecard · osv | 2026-08-28 | strong |
+| several sessions on one repo, without N full checkouts | share the regenerable dirs; keep worktrees. CoW cloning (`cp -Rc`, `rift`, `cow`) rejected for this tree; OpenZFS-on-macOS rejected outright | measured free-space delta on this repo · gh stars+state · brew installs · git 2.55 feature check | 2026-09-02 | strong |
 | scrub an animation to scroll position on the web | native CSS scroll-driven animations where support allows; `motion` or GSAP ScrollTrigger `scrub` where logic is needed; `lenis` as the smoothing layer. Trigger-based reveal libraries rejected as a dead category | npm-dl · gh stars+state · hn | 2026-09-01 | strong (as a category verdict) |
 
 ## Findings
@@ -264,6 +265,75 @@ is the finding: the web moved from *triggered* to *scrubbed* scroll animation.
 **Overturned by** the native API reaching universal support with off-main-thread
 guarantees, which would demote the JS engines to logic-only roles; or `motion`'s
 cadence collapsing after its split from Framer.
+
+### several sessions on one repo, without N full checkouts
+
+**Pick** keep `git worktree`; move every regenerable directory to one shared
+path per machine and symlink it into each lane. **Beats** OpenZFS on macOS,
+APFS `clonefile` cloning (`cp -Rc`, `rift`, `cow`, `claude-cow-worktree`,
+`cowtree`), bindfs/unionfs-fuse overlays, and `git clone --shared`.
+
+**The measurement that decides it** — this repo, 2026-09-02:
+
+| what | number |
+|---|---|
+| files in the tree | 15,992 |
+| files git tracks | 174 |
+| tracked bytes | 2.1 MB |
+| the tree on disk | 273 MB |
+| files under 4 KB | 11,766 |
+| a `git worktree` checkout | 2.1 MB |
+| one lane on disk | 9-26 MB |
+| `graphify/` dirs | 79 MB |
+| `obsidian/` plugin bundles | 61 MB |
+
+A worktree costs the tracked bytes and nothing else. 99% of what is on disk is
+untracked and regenerable, and each of the 27 lanes regenerates its own copy:
+graphify AST caches, Obsidian plugin bundles fetched per checkout, scout
+snapshots. The worktree is not what eats the disk — the lane's own output is.
+
+**Why copy-on-write does not fix it.** CoW shares blocks until one side writes
+them. Every lane writes its *own* graphify cache — different bytes by
+construction — so the divergence lands exactly where the disk goes, and a
+clone pays full price for it. Measured on this repo, free-space delta with an
+89 MB/3s noise floor: APFS clone of the whole tree ≈ 176 MB against a plain
+copy at ≈ 809 MB. Real, and nothing like the "near-zero" the tools claim,
+because a tree of 11,766 sub-4 KB files is metadata-bound: `clonefile` shares
+extents and still allocates every inode and directory entry.
+
+**Why not ZFS.** OpenZFS on macOS is real and shipping for Apple Silicon
+(2.4.0, 2025-12-18), and it is a kernel extension: a reboot, reduced security
+on Apple Silicon, panics on an unclean unmount, and a non-APFS volume holding
+the one repo every session writes. It buys the same CoW that APFS already
+gives for free via `clonefile`, against the eater that CoW does not address.
+`brew` knows no `openzfs` formula — the install is the project's own package.
+
+**The ready-mades, ranked** (gh stars · last push · state):
+
+| tool | stars | state | is |
+|---|---|---|---|
+| `anomalyco/rift` | 1211 | active, 19d | worktree replacement on `clonefile`/reflink/btrfs. README: "experimental and is not ready for use" |
+| `clawkwork/clawk` | 1003 | active, 19d | per-agent VMs; CoW is the disk layer, not the point |
+| `palmin/claude-cow-worktree` | 14 | slow, 116d | Python, exactly this job |
+| `joeinnes/cow` | 13 | slow, 166d | Rust, `clonefile` + symlinks `node_modules` |
+| `windsornguyen/cowtree` | 12 | slow, 122d | Python |
+
+The category exists and is immature. All of them call one syscall, and macOS
+exposes it as `cp -Rc <src> <dst>` — 0.07 s on 23 MB here, already installed,
+no dependency to adopt. Reach for the flag, not the wrapper.
+
+**Rejected on their own axis.** `git clone --shared`/`--reference` shares the
+object store, which is 11 MB here and already shared by worktrees; the
+checkout is untouched. `bindfs` needs macFUSE (kext) or FUSE-T, calls its own
+macOS support "best-effort", and reads 7 installs/30d on `brew` against 128
+for the `bindfs-mac` tap — and a bind mount is not a writable overlay, which
+is what a lane needs. macOS has no OverlayFS. `git` 2.55 has no reflink knob:
+no `core.useReflinks`, nothing in `clone --help`.
+
+**Overturned by** the tree changing shape. If the tracked checkout ever
+outgrows the generated output — a vendored dependency, a binary asset — the
+per-file metadata stops dominating and `cp -Rc` becomes the answer after all.
+Re-measure the two columns before switching, never the total.
 
 ## Open
 

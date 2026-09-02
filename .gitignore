@@ -15,7 +15,10 @@ resources/board/obsidian/plugins/*/styles.css
 # machine-local per board — regenerable. `pearde/` since 2026-09-02: a board
 # with a dot in its name shows in no Obsidian vault (@references/obsidian.md),
 # and `.pearde` is the compatibility symlink left where it was.
-/pearde/
+# no trailing slash on either: `pearde share` symlinks the graphify
+# cache under the board, and a `dir/` pattern does not match a
+# symlink — git would then report the link on every status. @@share
+/pearde
 /.pearde
 
 # one-off session measurements, kept beside the work they explain
@@ -34,6 +37,9 @@ pearde/wiki/
 .pearde/wiki/
 
 # playwright-core for the js tests, fetched on demand — doctor prints the line
-resources/board/node_modules/
+# no trailing slash: `pearde share` makes this a symlink onto the one
+# copy per machine, and a `dir/` pattern does not match a symlink —
+# git would then report the link on every status. @@share
+resources/board/node_modules
 resources/board/package.json
 resources/board/package-lock.json

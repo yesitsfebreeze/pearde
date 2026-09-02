@@ -65,6 +65,7 @@ each skill file says what it does with no board in scope.
 | children from the analyst's split| `refine` | `pearde refine [--dry]` |
 | print a worker's brief       | `brief <prd> [--role <role>] [--as <id>] [--force]` — `@resources/board/brief.py`: header line, persona line, workflow block, the role's brief from `@references/parts/workers.md` with the placeholders filled; the role follows the state, `--role` overrides. `brief --consult <id> --question "<q>" [--transcript <path>]` is the consultant's | `pearde brief` |
 | sweep the stale claims       | `sweep [--apply]` — every claim silent past `claim-ttl` (@references/settings.md), one line each with what `--apply` does: `analyzing → open`, `claimed → failed` with `## Failure` written; never a claim `.pearde/.state/pass.md` names, never an analyst whose specs are on disk. Loop step 1, once per session | `pearde sweep [--dry]` |
+| one copy of what every lane rebuilds | `share` — `@resources/board/shared.py`: the regenerable dirs (node_modules, the graphify cache, the Obsidian bundles) held once under the git common dir and symlinked into the checkout and every lane. `apply` links them and seeds the store from the first copy it finds, `undo` puts real directories back. Only a path `git status` cannot see is ever linked; `claim` runs it on each new lane | `pearde share [apply|undo]` |
 | a board, registered and planned| `init` | `pearde init [--dry]` |
 | the board's settings         | `settings` | `pearde settings [--dry]` |
 | the vision and its axis      | `vision` | `pearde vision` |

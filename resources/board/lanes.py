@@ -24,6 +24,9 @@ work on this machine, and the lane bar is drawn off it.
 import os
 import re
 import subprocess
+import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 LANES_DIR = ".lanes"
 
@@ -89,12 +92,22 @@ def create(board, repo, slug, base=None):
     Idempotent on the path: a lane dir that is already a worktree of this
     repo is returned as it stands — a re-claim after a `failed` continues
     the work that is standing there, which is the whole point of leaving a
-    probe uncommitted. A path that exists and is NOT a worktree is a
-    refusal, never a silent reuse."""
+    probe uncommitted. Sharing is re-run on that path too, so a lane cut
+    before the store existed picks it up on its next claim. A path that
+    exists and is NOT a worktree is a refusal, never a silent reuse.
+
+    The lane's regenerable directories are shared, not rebuilt.
+    `link_shared` points `node_modules`, the graphify cache and the Obsidian
+    plugin bundles at one copy per machine under the git common dir.
+    Measured on this repo: the checkout git tracks is 2.1 MB, and 27 lanes
+    held 143 MB — the difference is entirely what each lane regenerated for
+    itself. It runs after the checkout, on ignored paths only, and never
+    fails a claim."""
     d = lane_dir(board, slug)
     br = branch_of(slug)
     if os.path.isdir(d):
         if os.path.exists(os.path.join(d, ".git")):
+            link_shared(d)
             return d
         raise LaneError(f"lane: {d} exists and is not a worktree — "
                         "move it or remove it")
@@ -113,7 +126,25 @@ def create(board, repo, slug, base=None):
         git(d, "sparse-checkout", "set", "--no-cone", "/*", "!/" + rel,
             check=False)
     git(d, "checkout")
+    link_shared(d)
     return d
+
+
+def link_shared(tree):
+    """Point this tree's regenerable directories at the machine's one copy.
+    Returns what changed, or [] when nothing could be done.
+
+    Advisory by construction. A claim that dies because a cache could not
+    be symlinked has traded a disk problem for a work problem, so every
+    failure here — the module absent, the store unwritable, a path git
+    turns out to track — leaves the lane with its own copies and says
+    nothing. `pearde share` is where a person asks why."""
+    try:
+        import shared as sharedlib
+        return [r for r in sharedlib.apply_tree(tree)
+                if r["action"] not in ("linked", "skipped")]
+    except Exception:
+        return []
 
 
 def remove(board, repo, slug, force=True):

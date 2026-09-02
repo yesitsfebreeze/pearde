@@ -405,6 +405,515 @@ def run(cmd, cwd, script=None):
     return r.returncode, r.stdout + r.stderr
 
 
+# ── guarding a verify block against the checkout it runs in ────────────────
+# A verify or gate block is arbitrary shell, run by `run()` above directly in
+# a checkout other sessions and other PRDs share — `repo` for a spec's own
+# block, `board_root` for the board's `gate`. It runs AFTER the lane lands,
+# so `unland` only exists for a red *check*; nothing stands between a green
+# script and the checkout it just ran destructive shell in, and nothing
+# catches a script that never fails but still `rm -rf .`s something that
+# is not this PRD's. Measured: `git reset --hard`, `git clean -fdx` and
+# `rm -rf .` all reach past the PRD's own footprint into whatever else is
+# dirty there — the exact shape of the incident this PRD is filed from,
+# one step earlier than `unland`.
+#
+# `_park` moves every path dirty in `cwd` that is OUTSIDE the footprint into
+# a stash by pathspec, so the script cannot reach it at all — not "reach it
+# and get caught after," genuinely absent from the working tree for the
+# run. `_heal` looks at what changed outside the footprint once the script
+# is done and reverts it: a tracked path back to HEAD's blob (index and
+# tree both, so a foreign `git add` is undone too), a new untracked foreign
+# path removed. `_restore_head` puts the branch back if the script moved it
+# — the same compare-and-swap `commit_private` already writes a ref with,
+# so a real concurrent commit is refused rather than clobbered. The PRD's
+# OWN footprint is touched by none of this: on the non-lane path that is
+# the uncommitted work verify exists to measure, and a script destroying
+# its own PRD's footprint is that PRD's own fault, not the checkout's.
+def _dirty(cwd):
+    """`[(XY, path)]` for everything git calls dirty in `cwd`, read from the
+    `-z` form because the human one lies about paths.
+
+    `git status --porcelain` QUOTES any path holding a space or a non-ASCII
+    byte — `core.quotePath` is on unless a board turns it off — so ` M "src/a
+    b.py"` comes back and `line[3:]` hands every caller the quotes as part of
+    the name. Every consumer here then gets it wrong at once: `inside()`
+    matches no footprint, so an owned file reads as foreign and the block
+    measures a clean HEAD; `_park` feeds the quoted string in as a pathspec,
+    git refuses it, and ONE such path runs the whole block unguarded;
+    `_snapshot` finds the real path in neither `moved` nor `indexed`; and
+    `_unerase` writes HEAD's bytes over uncommitted work while printing
+    `put back:` as though it had saved it.
+
+    `-z` never quotes. Records are NUL-separated, and a rename or copy spends
+    a second record on its source — consumed here, since the ` -> ` the human
+    form uses does not exist in this one and a path may legitimately contain
+    it.
+
+    `--untracked-files=all` because the default collapses a wholly untracked
+    directory to one row spelled `other/`. That row is a bad pathspec subject
+    for `inside()` — a footprint deeper than the directory reads as foreign
+    against it — and it makes `_heal` take a whole tree aside and name the
+    directory rather than the file a peer actually wrote."""
+    r = subprocess.run(["git", "-C", cwd, "status", "--porcelain", "-z",
+                        "--untracked-files=all"], capture_output=True,
+                       text=True)
+    if r.returncode != 0:
+        return []
+    recs = r.stdout.split("\0")
+    rows, i = [], 0
+    while i < len(recs):
+        rec = recs[i]
+        i += 1
+        if len(rec) < 4:            # "XY p" is the shortest real record
+            continue
+        code, path = rec[:2], rec[3:]
+        if "R" in code or "C" in code:
+            i += 1                  # the rename/copy source, its own record
+        rows.append((code, path))
+    return rows
+
+
+def owned_by(prd, board_root, repo, feet):
+    """{root: [paths relative to that root]} this PRD owns — the same
+    grouping `sort_paths` makes for what it is about to commit, so the guard
+    and the commit agree on one answer to "whose is this?".
+
+    A footprint path is spelled relative to `repo`, NOT to `board_root`:
+    `sort_paths` resolves every one of them as `os.path.join(repo, p)`. The
+    two roots are the same only where the board is not its own git repo. On
+    a board that IS one — this repo since the board moved to `pearde/`, and
+    every nested `.pearde` with a `.git` — `repo_of` returns the enclosing
+    checkout and they differ, so a footprint rebased against `board_root`
+    names a path that exists in neither root: the file under test then reads
+    as foreign, gets parked, and the verify block measures a clean HEAD
+    instead of the change it was written to measure.
+
+    The board's own root also owns the PRD's directory, exactly as
+    `sort_paths` seeds `groups` with it — a verify block that writes its
+    proof under `prds/<prd>/` is writing where this PRD already commits.
+    `spec_data` qualifies a member PRD's footprint with its member sigil;
+    it comes off here for the PRD's own board and a path carrying another
+    member's sigil is left out, both as `sort_paths` does it."""
+    own = (f"{planlib.MEMBER_SIGIL}{prd['board']}/"
+           if prd.get("board") else None)
+    groups = {}
+    prd_rel = os.path.relpath(prd["dir"], board_root)
+    if not prd_rel.startswith(".."):
+        groups[os.path.abspath(board_root)] = {prd_rel}
+    paths = set()
+    for f in feet:
+        if own and f.startswith(own):
+            paths.add(f[len(own):])
+        elif not f.startswith(planlib.MEMBER_SIGIL):
+            paths.add(f)
+    groups.setdefault(os.path.abspath(repo), set()).update(paths)
+    return {k: sorted(v) for k, v in groups.items()}
+
+
+def _park(cwd, feet, out=print):
+    foreign = sorted({p for _, p in _dirty(cwd) if not inside(p, feet)})
+    if not foreign:
+        return False
+    r = subprocess.run(["git", "-C", cwd, "stash", "push",
+                        "--include-untracked", "-u",
+                        "-m", "collect: parked foreign dirt for verify",
+                        "--"] + foreign, capture_output=True, text=True)
+    if r.returncode != 0:
+        out(f"  could not park foreign dirt in {cwd} before verify — "
+           f"running unguarded: {(r.stderr or r.stdout).strip()}")
+        return False
+    return "No local changes to save" not in (r.stdout + r.stderr)
+
+
+def _aside(cwd):
+    """A directory to hold what `_heal` takes out of the checkout, inside the
+    git dir so it is outside the working tree — never committed, never seen by
+    a later block, never cleaned. Resolved through git so a worktree, whose
+    `.git` is a file, lands somewhere real."""
+    r = subprocess.run(["git", "-C", cwd, "rev-parse", "--absolute-git-dir"],
+                       capture_output=True, text=True)
+    base = r.stdout.strip() if r.returncode == 0 and r.stdout.strip() \
+        else os.path.join(os.path.abspath(cwd), ".git")
+    d = os.path.join(base, "collect-aside",
+                     datetime.datetime.now().strftime("%y%m%d-%H%M%S-%f"))
+    os.makedirs(d, exist_ok=True)
+    return d
+
+
+def _take_aside(cwd, rel, aside):
+    """Move one path's current bytes out of the checkout, keeping them.
+    Returns where they went, or None if the move failed."""
+    src = os.path.join(cwd, rel)
+    dst = os.path.join(aside, rel)
+    try:
+        os.makedirs(os.path.dirname(dst) or aside, exist_ok=True)
+        shutil.move(src, dst)
+    except (OSError, shutil.Error):
+        return None
+    return dst
+
+
+def _head_blob(cwd, rel):
+    """`(bytes, mode)` HEAD holds for `rel`, or `(None, None)` if HEAD has no
+    such path. Read rather than checked out: `git checkout HEAD -- <p>` writes
+    the INDEX too, which is where a peer's staging lives."""
+    r = subprocess.run(["git", "-C", cwd, "ls-tree", "-z", "HEAD", "--", rel],
+                       capture_output=True, text=True)
+    rec = r.stdout.split("\0")[0] if r.returncode == 0 else ""
+    if not rec or "\t" not in rec:
+        return None, None
+    meta = rec.split("\t", 1)[0].split()
+    if len(meta) < 3 or meta[1] != "blob":
+        return None, None
+    b = subprocess.run(["git", "-C", cwd, "cat-file", "blob", meta[2]],
+                       capture_output=True)
+    if b.returncode != 0:
+        return None, None
+    try:
+        mode = int(meta[0], 8) & 0o7777
+    except ValueError:
+        mode = 0o644
+    return b.stdout, mode
+
+
+def _heal(cwd, feet, out=print):
+    """Put the checkout outside this PRD's footprint back the way the block
+    found it — **without deleting anything, and without saying it put back
+    what it did not.**
+
+    Pass one reached for `git clean -f -d` on a foreign untracked path and
+    `git reset -q HEAD --` on a foreign tracked one, checked no returncode,
+    and printed `put back:` over the whole row set regardless. Both reaches
+    are wrong for the same reason: this board is written by several sessions
+    at once, so a foreign path dirty AFTER the block is a peer's live work as
+    readily as it is the block's litter, and nothing here can tell the two
+    apart. `clean` deleted a peer's new file outright and the stash pop, which
+    never held it, could not bring it back.
+
+    So nothing is deleted. What the block left is moved out of the checkout
+    with its bytes intact and its new home printed, and a path HEAD knows is
+    written back from HEAD's blob — read and written here rather than
+    `git checkout`ed, because checkout writes the index and a peer's staged
+    entry is not this block's to discard. The index is left exactly as it is;
+    `collect` commits through its own private index, so a foreign entry left
+    staged reaches no commit of ours. Returns the paths actually put back."""
+    rows = [(c, p) for c, p in _dirty(cwd) if not inside(p, feet)]
+    if not rows:
+        return []
+    aside, moved, back, failed, staged = None, [], [], [], []
+    for code, rel in rows:
+        # `code[0]` is the INDEX column. Anything but a space or a `?` there
+        # means someone ran `git add` on this path inside the verify window,
+        # and staging a foreign path is a peer's deliberate act far more often
+        # than a verify block's accident. Such a path is left exactly as it
+        # is — worktree and index both — and named. `collect` builds its
+        # commits in a private index, so what stays staged here reaches no
+        # commit of ours.
+        if code[0] not in " ?":
+            staged.append(rel)
+            continue
+        full = os.path.join(cwd, rel)
+        if os.path.exists(full) or os.path.islink(full):
+            aside = aside or _aside(cwd)
+            dst = _take_aside(cwd, rel, aside)
+            if dst is None:
+                failed.append(rel)
+                continue
+            moved.append(rel)
+        data, mode = _head_blob(cwd, rel)
+        if data is None:
+            continue                      # HEAD never had it — nothing to put
+        parent = os.path.dirname(full)
+        if parent:
+            os.makedirs(parent, exist_ok=True)
+        try:
+            with open(full, "wb") as f:
+                f.write(data)
+            os.chmod(full, mode)
+        except OSError:
+            failed.append(rel)
+            continue
+        back.append(rel)
+    if back:
+        out(f"  verify touched the checkout outside its footprint in {cwd} — "
+            f"put back: {', '.join(back)}")
+    if moved:
+        out(f"  and what it left there is not deleted — moved aside to "
+            f"{aside}: {', '.join(moved)}")
+    if staged:
+        out(f"  left staged in {cwd} (a peer's index is not ours to reset): "
+            f"{', '.join(staged)}")
+    if failed:
+        out(f"  NOT put back in {cwd} — restore by hand: "
+            f"{', '.join(sorted(set(failed)))}")
+    return back
+
+
+# ── and the one thing the fence deliberately leaves outside it ───────────────
+# The PRD's own footprint is never parked: on the laneless path it IS the
+# uncommitted change the verify block exists to measure, and parking it would
+# make every block read a clean HEAD. The cost of that decision is that a
+# green block which empties the working tree takes the work under test with
+# it, `collect` then commits the deletion and writes `done` — recoverable
+# from HEAD on a lane run, gone on the laneless path.
+#
+# `_snapshot` closes that without re-parking anything: the bytes and mode of
+# every owned path that exists on disk before the block, and `_unerase` puts
+# back only the ones the block made ABSENT. A path the block modifies stays
+# modified (a formatter or a build step editing the file under test is
+# legitimate, and indistinguishable from the change itself); a path it
+# creates stays created; a path the worker had already deleted before the
+# block — a spec whose finish is a deletion, which `sort_paths` supports —
+# was never on disk, so was never snapshotted, and is never resurrected.
+def _owned_files(cwd, scoped):
+    """The paths under `scoped` that exist on disk — a footprint entry may be
+    a directory, and only what is there is snapshotted.
+
+    A symlink counts. Pass one skipped every one of them, so a footprint
+    symlink a block deleted was never put back — and this repo's own `.pearde`
+    is a symlink, which makes that the live shape rather than a corner. A link
+    is snapshotted by its TARGET STRING, never by what it points at: following
+    it would copy the whole tree below it, and re-creating it is one
+    `os.symlink`. `os.walk` is left with `followlinks=False`, so a linked
+    directory under a footprint is recorded as the link it is and never
+    descended into twice."""
+    files = []
+    for rel in scoped:
+        full = os.path.join(cwd, rel)
+        if os.path.islink(full):
+            files.append(rel)
+            continue
+        if os.path.isfile(full):
+            files.append(rel)
+        elif os.path.isdir(full):
+            for root, dirs, names in os.walk(full):
+                for d in dirs:
+                    f = os.path.join(root, d)
+                    if os.path.islink(f):
+                        files.append(os.path.relpath(f, cwd))
+                dirs[:] = [d for d in dirs
+                           if d != ".git" and
+                           not os.path.islink(os.path.join(root, d))]
+                for n in names:
+                    f = os.path.join(root, n)
+                    if os.path.islink(f) or os.path.isfile(f):
+                        files.append(os.path.relpath(f, cwd))
+    return sorted(set(files))
+
+
+def _blobs(cwd, scoped):
+    """{path: index blob sha} for the owned paths git already holds bytes
+    for. The pathspec is the footprint, never the file list, so a directory
+    footprint costs one call however many files are under it."""
+    if not scoped:
+        return {}
+    r = subprocess.run(["git", "-C", cwd, "ls-files", "-s", "-z", "--"] +
+                       list(scoped), capture_output=True, text=True)
+    out = {}
+    for rec in r.stdout.split("\0"):
+        if not rec or "\t" not in rec:
+            continue
+        meta, path = rec.split("\t", 1)
+        bits = meta.split()
+        if len(bits) >= 2:
+            out[path] = bits[1]
+    return out
+
+
+def _snapshot(cwd, scoped):
+    """{path: (kind, payload, mode)} for every owned file on disk.
+
+    The size guard is `kind`. A path that is tracked and clean has its bytes
+    in git already, so the snapshot is a 40-character blob name and a
+    footprint naming a large directory is not copied at all ("blob"). Only a
+    path git does not hold the current bytes of — dirty, staged, or entirely
+    untracked — is read into memory ("copy")."""
+    files = _owned_files(cwd, scoped)
+    if not files:
+        return {}
+    indexed = _blobs(cwd, scoped)
+    moved = {p for _, p in _dirty(cwd)}
+    snap = {}
+    for rel in files:
+        full = os.path.join(cwd, rel)
+        if os.path.islink(full):
+            # a third kind: the target STRING, not what it points at. `stat`
+            # would follow it, and a dangling link would drop out here.
+            try:
+                snap[rel] = ("link", os.readlink(full), 0)
+            except OSError:
+                pass
+            continue
+        try:
+            mode = os.stat(full).st_mode & 0o7777
+        except OSError:
+            continue
+        if rel in indexed and rel not in moved:
+            snap[rel] = ("blob", indexed[rel], mode)   # git holds the bytes
+            continue
+        try:
+            with open(full, "rb") as f:
+                snap[rel] = ("copy", f.read(), mode)   # nothing else does
+        except OSError:
+            continue
+    return snap
+
+
+def _reverted(cwd, rel, kind, payload):
+    """True when the block put HEAD's own bytes back over the PRD's
+    uncommitted work at `rel`.
+
+    `spec02` decided that a path the block MODIFIES stays modified: a
+    formatter or a build step editing the file under test is legitimate and
+    indistinguishable from the change itself. `git reset --hard HEAD` is
+    distinguishable, and it is the shape of the incident this whole guard is
+    filed from — the file is byte-for-byte HEAD again, and the snapshot holds
+    something else. Nothing else lands exactly on HEAD by accident. Only a
+    `copy` snapshot can be reverted: a `blob` one already agreed with what
+    git holds, and a `link` has no blob to be reset to."""
+    if kind != "copy":
+        return False
+    head, _ = _head_blob(cwd, rel)
+    if head is None or head == payload:
+        return False
+    try:
+        with open(os.path.join(cwd, rel), "rb") as f:
+            return f.read() == head
+    except OSError:
+        return False
+
+
+def _unerase(cwd, snap, out=print):
+    """Put back each owned path the block made absent — or reverted to HEAD —
+    and name it, the shape `_heal`'s line already takes."""
+    back = []
+    for rel in sorted(snap):
+        full = os.path.join(cwd, rel)
+        kind, payload, mode = snap[rel]
+        there = os.path.exists(full) or os.path.islink(full)
+        if there and not _reverted(cwd, rel, kind, payload):
+            continue
+        if kind == "link":
+            try:
+                if there:
+                    os.unlink(full)
+                os.makedirs(os.path.dirname(full) or cwd, exist_ok=True)
+                os.symlink(payload, full)
+            except OSError as e:
+                out(f"  verify deleted the link {rel} in {cwd} and it could "
+                    f"not be put back: {e}")
+                continue
+            back.append(rel)
+            continue
+        if kind == "blob":
+            r = subprocess.run(["git", "-C", cwd, "cat-file", "blob",
+                                payload], capture_output=True)
+            if r.returncode != 0:
+                out(f"  verify deleted {rel} in {cwd} and its blob "
+                    f"{payload[:12]} is gone — not put back")
+                continue
+            data = r.stdout
+        else:
+            data = payload
+        parent = os.path.dirname(full)
+        if parent:
+            os.makedirs(parent, exist_ok=True)
+        try:
+            with open(full, "wb") as f:
+                f.write(data)
+            os.chmod(full, mode)
+        except OSError as e:
+            out(f"  verify deleted {rel} in {cwd} and it could not be put "
+                f"back: {e}")
+            continue
+        back.append(rel)
+    if back:
+        out(f"  verify deleted this PRD's own work in {cwd} — "
+            f"put back: {', '.join(back)}")
+    return back
+
+
+def _head_of(cwd):
+    r = subprocess.run(["git", "-C", cwd, "symbolic-ref", "-q", "HEAD"],
+                       capture_output=True, text=True)
+    ref = r.stdout.strip() if r.returncode == 0 else "HEAD"
+    sha = subprocess.run(["git", "-C", cwd, "rev-parse", "HEAD"],
+                         capture_output=True, text=True).stdout.strip()
+    return ref, sha
+
+
+def _restore_head(cwd, ref, old_sha, out=print):
+    _, now_sha = _head_of(cwd)
+    if now_sha == old_sha or not now_sha:
+        return
+    r = subprocess.run(["git", "-C", cwd, "update-ref", ref, old_sha,
+                        now_sha], capture_output=True, text=True)
+    if r.returncode != 0:
+        out(f"  verify moved {ref} in {cwd} and it could not be put back "
+           f"({now_sha[:12]} -> {old_sha[:12]}): "
+           f"{(r.stderr or r.stdout).strip()}")
+        return
+    out(f"  verify moved {ref} in {cwd} — put back at {old_sha[:12]}")
+
+
+def _reattach(here):
+    """Stand the process back in the directory it was invoked from.
+
+    `_park` stashes the foreign dirt, and `git stash push -u` REMOVES a
+    directory its last untracked file leaves empty — including, when
+    `collect` was called from a subdirectory of the checkout it is guarding,
+    the process's own cwd. The pop makes the path again, but the process
+    still holds the deleted inode: `os.getcwd()`, `os.path.abspath()` and
+    every relative open then raise `FileNotFoundError` for the rest of the
+    run. `--also <relative path>` resolves against the caller's cwd, so this
+    took out the whole call. Cheap to undo, and undone in the same `finally`
+    that puts the rest of the checkout back."""
+    if here is None:
+        return
+    try:
+        os.getcwd()
+        return
+    except OSError:
+        pass
+    try:
+        os.chdir(here)
+    except OSError:
+        pass
+
+
+def guarded_run(cmd, cwd, owned, script=None, out=print):
+    """`run()`, fenced: nothing this PRD does not own in `cwd` can be
+    reached, left changed, or have its branch moved by `cmd` — and nothing
+    this PRD DOES own can be left deleted by it.
+
+    `owned` is `owned_by`'s dict. A `cwd` it has no row for owns nothing
+    there, so everything dirty is parked — the safe reading, never the
+    permissive one."""
+    scoped = owned.get(os.path.abspath(cwd), [])
+    try:
+        here = os.getcwd()
+    except OSError:
+        here = None
+    parked = _park(cwd, scoped, out)
+    # the footprint stays in the tree for the block to measure; what it
+    # cannot do is leave it deleted
+    snap = _snapshot(cwd, scoped)
+    ref, old_sha = _head_of(cwd)
+    try:
+        return run(cmd, cwd, script)
+    finally:
+        _restore_head(cwd, ref, old_sha, out)
+        _heal(cwd, scoped, out)
+        _unerase(cwd, snap, out)
+        if parked:
+            r = subprocess.run(["git", "-C", cwd, "stash", "pop"],
+                               capture_output=True, text=True)
+            if r.returncode != 0:
+                out(f"  foreign dirt not restored in {cwd} — stash pop "
+                   f"conflict; resolve by hand: git -C {cwd} stash list")
+        _reattach(here)
+
+
 # ── the private index ─────────────────────────────────────────────────────────
 # The checkout's index is shared by every session in it, and `git commit`
 # commits the whole index — so a landing carried whatever a sibling had
@@ -1324,6 +1833,8 @@ def collect_one(board, rel, opts, out=print):
     repo = repo_of(prd, board, board_root)
     pre, landed = land_lane(board, rel, prd, repo, opts, out)
     base = baseline(board, rel)
+    _, feet = planlib.spec_data(prd)
+    owned = owned_by(prd, board_root, repo, feet)
     report, trusted, known = [], False, False
     if opts.get("trust"):
         trusted = True
@@ -1333,7 +1844,10 @@ def collect_one(board, rel, opts, out=print):
         if gate:
             checks.append(("gate", gate, board_root))
         for name, script, cwd in checks:
-            code, output = run(["bash", "-e", "-o", "pipefail"], cwd, script)
+            # fenced: nothing outside this PRD's footprint in `cwd` can be
+            # reached, left changed, or have its branch moved by the block
+            code, output = guarded_run(["bash", "-e", "-o", "pipefail"],
+                                       cwd, owned, script, out)
             red = code != 0
             if red and name == "gate" and base is not None:
                 # measured against the claim's baseline, not against silence
@@ -1362,7 +1876,6 @@ def collect_one(board, rel, opts, out=print):
                 raise Stop(f"{rel}: {name} exit {code} — nothing written")
 
     # 3 — the paths
-    _, feet = planlib.spec_data(prd)
     plan, prd_rel = sort_paths(board, rel, prd, prds, board_root, repo, feet,
                                opts, since, landed=landed)
     stops, inherited = [], []

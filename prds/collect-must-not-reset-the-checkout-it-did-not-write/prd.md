@@ -7,6 +7,7 @@ complexity: 11
 blast-radius: high
 workflow: probe-then-spec
 actual: 0.37h
+commit: e5abc5b a1156af
 ---
 
 # collect must not reset the checkout it did not write

@@ -4,7 +4,9 @@
     guard.py pre     PreToolUse  — reads the hook payload on stdin, allows or denies
     guard.py post    PostToolUse — reminds the pass to write down what it just moved
     guard.py check   prints what the guard would say about the board it is run in
-    guard.py on [<repo>]      writes the hooks block into <repo>/.claude/settings.json
+    guard.py on [<repo>]      writes the hooks block into <repo>/.claude/settings.json —
+                              the three guard hooks and the SessionStart hook
+                              that brings the board's view up
     guard.py off [<repo>]     removes exactly what `on` wrote, nothing else
     guard.py status [<repo>]  doctor's guard row alone — exit 0 ok, 1 off, 2 broken
 
@@ -781,10 +783,21 @@ def check():
 # those and leaves the env key, an emptied event list dropped and `hooks`
 # itself kept. A file that is not JSON is refused untouched.
 SELF = os.path.realpath(__file__)
+SERVE = os.path.join(os.path.dirname(SELF), "board", "serve.py")
 THINK = "8000"
-HOOKS = (("PreToolUse", "Bash|Read", "pre"),
-         ("PreToolUse", "Edit|Write", "pre"),
-         ("PostToolUse", "Edit|Write", "post"))
+# (event, matcher, command, the pattern that recognises an entry as ours
+#  however its path is spelled). `SessionStart` carries no matcher: the
+#  matcher there is the start reason — startup, resume, clear, compact, fork —
+#  and this hook wants every one of them.
+#  `>/dev/null 2>&1 || true` is the safety property, not tidiness: a
+#  SessionStart hook that exits 2 PREVENTS the session from starting, and
+#  `serve.py ensure` exits 2 outside a board. See @references/parts/guard.md.
+HOOKS = (("PreToolUse", "Bash|Read", f"python3 {SELF} pre", r"guard\.py\s+pre\b"),
+         ("PreToolUse", "Edit|Write", f"python3 {SELF} pre", r"guard\.py\s+pre\b"),
+         ("PostToolUse", "Edit|Write", f"python3 {SELF} post", r"guard\.py\s+post\b"),
+         ("SessionStart", None,
+          f"python3 {SERVE} ensure >/dev/null 2>&1 || true",
+          r"serve\.py\s+ensure\b"))
 ROW = "  %-11s %-7s %s"          # doctor.sh's row(), byte for byte
 
 
@@ -830,14 +843,16 @@ def write_settings(path, data):
         fh.write(json.dumps(data, indent=2, ensure_ascii=False) + "\n")
 
 
-def hook_cmd(mode):
-    return f"python3 {SELF} {mode}"
-
-
-def is_guard(hook, mode):
+def is_guard(hook, pat):
     return (isinstance(hook, dict)
-            and re.search(r"guard\.py\s+" + mode + r"\b",
-                          str(hook.get("command") or "")) is not None)
+            and re.search(pat, str(hook.get("command") or "")) is not None)
+
+
+def entry_for(matcher, command):
+    """The settings entry `on` appends. A row with no matcher writes no
+    `matcher` key — SessionStart fires on every start reason without one."""
+    e = {"hooks": [{"type": "command", "command": command}]}
+    return {"matcher": matcher, **e} if matcher is not None else e
 
 
 def entries_of(hooks, event):
@@ -867,18 +882,16 @@ def guard_on(args):
         hooks = data["hooks"] = {}
     if not isinstance(hooks, dict):
         raise Refused("hooks is not an object — nothing written")
-    for event, matcher, mode in HOOKS:
+    for event, matcher, command, pat in HOOKS:
         entries = entries_of(hooks, event)
         have = [h for e in entries if isinstance(e, dict)
                 and e.get("matcher") == matcher
-                for h in (e.get("hooks") or []) if is_guard(h, mode)]
+                for h in (e.get("hooks") or []) if is_guard(h, pat)]
         if have:
             continue
-        entries.append({"matcher": matcher,
-                        "hooks": [{"type": "command",
-                                   "command": hook_cmd(mode)}]})
+        entries.append(entry_for(matcher, command))
         hooks[event] = entries
-        added.append(f"{event} {matcher} → {hook_cmd(mode)}")
+        added.append(f"{event} {matcher or ''}{' ' if matcher else ''}→ {command}")
     if not added:
         print(f"guard on: {path} — already wired, nothing changed")
         return 0
@@ -897,17 +910,18 @@ def guard_off(args):
     removed = []
     hooks = data.get("hooks")
     if isinstance(hooks, dict):
-        for event, matcher, mode in HOOKS:
+        for event, matcher, command, pat in HOOKS:
             entries = entries_of(hooks, event)
             keep = []
             for e in entries:
-                own = ([h for h in e["hooks"] if is_guard(h, mode)]
+                own = ([h for h in e["hooks"] if is_guard(h, pat)]
                        if isinstance(e, dict) and e.get("matcher") == matcher
                        and isinstance(e.get("hooks"), list) else [])
                 if not own:
                     keep.append(e)
                     continue
-                removed += [f"{event} {matcher} → {h['command']}" for h in own]
+                removed += [f"{event} {matcher or ''}{' ' if matcher else ''}→ {h['command']}"
+                            for h in own]
                 rest = [h for h in e["hooks"] if h not in own]
                 if rest:
                     e["hooks"] = rest
@@ -964,6 +978,10 @@ def guard_status(args):
         m = re.search(r'MAX_THINKING_TOKENS"\s*:\s*"(\d*)', text)
         tk = f" · MAX_THINKING_TOKENS={m.group(1)}" if m and m.group(1) else ""
         print(ROW % ("guard", "ok", f"wired in {path}{tk} · skill tree guarded"))
+        if not re.search(r"serve\.py ensure", text):
+            print(ROW % ("", "", "no SessionStart hook — the view is not "
+                                 "brought up on a session start; "
+                                 "pearde guard on writes it"))
         return 0
     print(ROW % ("guard", "off", f"not wired in {path}"))
     print(ROW % ("", "", "fix: pearde guard on"))

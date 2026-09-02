@@ -115,8 +115,9 @@ zero — a broken guard must never be able to block a tool call.
 `pearde guard on [<repo>]` — `<repo>` is the repo the board lives in, by
 default the one above the working directory. It reads
 `<repo>/.claude/settings.json`, creating it when absent, and adds only what
-is missing: `env.MAX_THINKING_TOKENS` when unset, and the three hook entries
-below, each naming this skill's absolute `resources/guard.py`. Every other
+is missing: `env.MAX_THINKING_TOKENS` when unset, and the four hook entries
+below — three naming this skill's absolute `resources/guard.py`, one naming
+its `resources/board/serve.py`. Every other
 key stays, in its order; an entry already present is skipped, and a second
 `on` says `already wired, nothing changed` and writes nothing; a file that
 is not JSON is refused untouched. It prints the file and each line it added,
@@ -145,10 +146,31 @@ What `on` writes, `<pearde>` being this repo's absolute path:
       "matcher": "Edit|Write",
       "hooks": [{ "type": "command",
                   "command": "python3 <pearde>/resources/guard.py post" }]
+    }],
+    "SessionStart": [{
+      "hooks": [{ "type": "command",
+                  "command": "python3 <pearde>/resources/board/serve.py ensure >/dev/null 2>&1 || true" }]
     }]
   }
 }
 ```
+
+**The `SessionStart` entry brings the board up.** Opening a session in the
+repo runs `@resources/board/serve.py ensure`, which starts the view daemon if
+none runs and registers this board with it — so after a reboot the first
+session in a board's repo turns `doctor`'s `view` row from `off` to `ok` with
+nobody typing `pearde view`. Measured: 0.05s with the daemon already up, 0.16s
+cold. Three details are load-bearing.
+
+| detail | why |
+|---|---|
+| no `matcher` | the matcher there is the start reason — `startup`, `resume`, `clear`, `compact`, `fork` — and this wants all of them |
+| `>/dev/null 2>&1` | a session start prints nothing extra; `ensure` is chatty on success |
+| `\|\| true` | `ensure` exits 2 outside a board, and the hooks contract reserves exit 2 for refusing the session — the wrapper is the promise that a session outside a board, or with the port held, or with no python3, still starts |
+
+`doctor`'s `guard` row notes the entry when it is absent: `no SessionStart
+hook — the view is not brought up on a session start; pearde guard on writes
+it`. `pearde guard off` removes it with the other three.
 
 The `state:` refusal is a mechanism exactly where this block is wired and a
 sentence everywhere else. `doctor` reports `guard` as `ok`, `off` or `broken`

@@ -275,6 +275,8 @@ else
     [ -n "$tk" ] && tk="MAX_THINKING_TOKENS=$tk"
     row guard ok "wired in $GSET${tk:+ · $tk} · skill tree guarded"
     [ -z "$tk" ] && note "no MAX_THINKING_TOKENS — the other half of the fix, @references/parts/guard.md"
+    grep -q 'serve\.py ensure' "$GSET" 2>/dev/null \
+      || note "no SessionStart hook — the view is not brought up on a session start; pearde guard on writes it"
   else
     row guard off "not wired in $GSET"
     fix "pearde guard on — writes the block of @references/parts/guard.md into $GSET, then /hooks or restart (python3 $SKILL_ROOT/resources/pearde.py guard on)"

@@ -146,7 +146,9 @@ is none, so it is safe to wire globally.
   `bash @resources/statusline.sh <<< '{}'`.
 - `pearde guard on` in the repo the board lives in wires `python3
   @resources/guard.py` as a `PreToolUse` hook on `Bash|Read` and on
-  `Edit|Write` and a `PostToolUse` hook on `Edit|Write`, and sets
+  `Edit|Write` and a `PostToolUse` hook on `Edit|Write`, wires `python3
+  @resources/board/serve.py ensure` as a `SessionStart` hook so opening a
+  session brings this board's view up, and sets
   `MAX_THINKING_TOKENS` beside them, in that repo's `.claude/settings.json` —
   every other key kept; `pearde guard off` takes exactly those out again.
   @references/parts/guard.md is the block it writes and the reasoning.
@@ -183,7 +185,8 @@ board is listed at `/`.
   `<board>/.state/serve.json`; the daemon holds the union in memory, logs to
   the `.state/serve.log` of the board that started it, and knows no
   machine-wide list. A daemon that is stopped and started watches nothing
-  until each board is `ensure`d again — which every session start does.
+  until each board is `ensure`d again — which every session start does, from
+  the `SessionStart` hook `pearde guard on` writes.
 - No service at all? `python3 @resources/board/plan.py gantt --open` writes
   the same render to `.pearde/.state/view.html` as one self-contained file.
 

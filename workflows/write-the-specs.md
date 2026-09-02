@@ -3,7 +3,7 @@ atomic: write-the-specs
 subject: turn what the build stands up into implementable units
 date: 2026-08-28
 updated: 2026-09-02
-runs: 30
+runs: 31
 ---
 
 # write-the-specs — units another worker can finish
@@ -67,6 +67,11 @@ runs: 30
    tick imply the second. The cheapest honest behavioural mutation is usually
    one constant in the unit's own footprint file, restored by `cp` from a
    scratch dir outside the repo and proved back with `cmp`.
+
+   Run the block from the root `collect` will run it from — the orchestrator's
+   checkout, not your lane — and where the block hard-codes that path, run it
+   once with your own root substituted and leave the block as written. A block
+   rewritten to name the lane passes for you and fails for `collect`.
 5. Say in each spec what already stands from the build and what is left.
 6. `grep -c '^- \[ \]' prds/<prd>/specs/*.md` — every spec has at least one
    box, and none is ticked before an implementer runs it. Then
@@ -94,3 +99,4 @@ runs: 30
 | a block exits **0** while a line in it printed a failure | the assertion is written `[ <test> ] && echo "<the good news>"`, or `<probe> && echo BAD \|\| echo OK`. Neither can fail a block: a false test prints nothing and the next command's status becomes the block's, and the `&&…\|\|` pair always exits 0 | put the assertion **last** and write it bare — `[ ! -s "$f" ]` — or accumulate a counter in the loop and end on `[ "$N" = 0 ]`. Then run the block the way collect does (`awk` it out, `set -o pipefail`) **against a tree where the check should fail**, and confirm it does |
 | a box or block asserts a literal total of the PRD's **own** probe | the spec has locked its harness shut: a later pass cannot add the check a thin box needs without reddening the spec that names it | assert the tally *parses* and `failed == 0` — never a total, not even the probe's own. A floor (`>= N`) is honest; an equality is a wall |
 | `specced` refuses `<spec>:<n>: `## Verify and Proof` holds no fenced `sh` block` and the block is plainly there | a line inside the block begins `## ` — commonly a heredoc writing a markdown fixture. The section reader in `resources/board/specs.py` is line-based and fence-blind, the same way the acceptance-box matcher is | write the fixture's headings with a placeholder prefix and raise them at run time (`sed 's/^@@ /## /'`). Never a literal `## ` at line start inside a verify block, in a heredoc or out of one |
+| a spec contracts a file under `.pearde/memos/` and `memos.py check` goes red the moment it lands | the index by kind is generated, and adding a memo makes `memos/README.md` stale — a file no footprint names and that the spec cannot omit | run `python3 resources/memos.py index <board>` and check `git diff --stat` names one added row; the index is part of adding a memo, not a separate edit. Say so in the report, because the footprint is wrong and the next author of a memo spec should carry the index row in it |

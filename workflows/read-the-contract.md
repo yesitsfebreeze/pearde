@@ -2,8 +2,8 @@
 atomic: read-the-contract
 subject: read the PRD, its answers and everything it cites, before the first edit
 date: 2026-08-28
-updated: 2026-09-01
-runs: 63
+updated: 2026-09-02
+runs: 64
 ---
 
 # read-the-contract — the whole contract in the window before anything moves
@@ -39,3 +39,4 @@ runs: 63
 | a `footprint:` path is absent under the `repo:` root | the board is a `.pearde/` inside a code repo, and the footprint spans both | resolve each entry against the board root and the checkout above it, take whichever holds it, and record `git status --short` **in both** — one root's clean tree says nothing about the other's |
 | a `footprint:` path does not exist and no sibling is writing it | a layout change moved the file after the specs were written | `find <board> -name '<basename>'`; if exactly one match, take it as the same file, do the contracted work there, and name both spellings in the report — a missing footprint path is a stale spelling far more often than a file to create |
 | an edit aimed at `specs/spec01.md` does not find its anchor | every PRD numbers its specs from 01, so a footprint that names another PRD's files puts two identically-named `spec01.md` one directory apart — and this PRD's footprint is entirely inside another PRD's folder | anchor every spec edit on the box's own text and `assert` it before writing; then `git status --short -- prds/<other-prd>/specs/` to prove nothing landed in the neighbour. Never address a spec by number alone |
+| the `repo:` root is a worktree under `<board>/.lanes/`, `git status --short` in it is empty, and the brief says the probe's uncommitted code is already there | `lanes.create` cuts the lane off the code repo's **HEAD**, so it carries nothing the orchestrator's checkout has not committed — and with a dirty checkout that is every uncommitted pass before yours, your own included | `git -C <checkout> status --short` and `git -C <checkout> diff -- <each footprint path>`. Read the hunks: where they are entirely this PRD's, copy those files into the lane and continue there, and say in the report that the merge will refuse until the orchestrator runs `git -C <checkout> checkout -- <path>` on each file whose lane copy is a strict superset. Where a hunk is a neighbour's, leave it in the checkout and do not carry it |

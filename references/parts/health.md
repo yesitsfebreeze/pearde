@@ -2,26 +2,26 @@
 
 Which files resist being worked on, kept where the brief looks.
 
-A PRD says what to build, a spec says how, a workflow says the route. None of
-them says that the file the route runs through is 2,900 lines with a
-68-branch function in the middle. A **health record** says that — one score
-per tracked file, worst first — so a monolith is named before a worker meets
-it, not discovered by the fourth worker to lose an afternoon in it.
-@references/health.md is the format, the axes, the check.
+A PRD says what to build, a spec how, a workflow the route. None says the file
+the route runs through is 2,900 lines with a 68-branch function in the middle.
+A **health record** does — one score per tracked file, worst first — so a
+monolith is named before a worker meets it, rather than found by the fourth
+worker to lose an afternoon in it. @references/health.md is the format, the
+axes, the check.
 
 ```
 .pearde/health/ranking.md
 .pearde/health/files/<slug>.md
 ```
 
-- No `state`. Never claimed, specced, or dispatched — invisible to `scan` and
-  to the progress line, yet on the board.
-- Regenerable. `pearde health score` rebuilds the whole record from the tree
-  and the graph; the board's `.gitignore` carries `health/` and
-  @resources/board/init.py writes that row on a fresh board.
-- One reader, @resources/health.py. Six axes, two knobs
-  (`health-floor`, `health-weights` — @references/settings.md), and a floor
-  under which a file is **unhealthy**.
+- No `state`. Never claimed, specced or dispatched — invisible to `scan` and to
+  the progress line, yet on the board.
+- Regenerable. `pearde health score` rebuilds the whole record from the tree and
+  the graph; the board's `.gitignore` carries `health/`, written on a fresh
+  board by @resources/board/init.py.
+- One reader, @resources/health.py. Six axes, two knobs (`health-floor`,
+  `health-weights` — @references/settings.md), and a floor under which a file is
+  **unhealthy**.
 
 ## When it is scored
 
@@ -31,8 +31,8 @@ it, not discovered by the fourth worker to lose an afternoon in it.
 | a PRD landed | `pearde health score <its footprint>` — the notes for those paths, and the ranking rebuilt from every note on disk |
 | `doctor` runs | `health check` — the record's shape, and `stale` when the ranking is twenty commits behind or the graph is newer. Rescores nothing |
 
-The record is not rescored on every pass. A score a week old is still the
-right pointer; the `stale` line says when it is not.
+No pass rescores the record. A score a week old is still the right pointer, and
+the `stale` line says when the pointer stops being one.
 
 ## Handed to a worker
 
@@ -53,9 +53,9 @@ one`. What the worker owes is bounded and plain:
   gets a name. Not a refactor of the file — the spec is the scope, and a
   footprint is not a licence.
 - **Say in the report what moved.** One line per named file: what changed
-  and why it is better, or why nothing could move inside the scope. A file
+  and why the file is better, or why nothing could move inside the scope. A file
   named in the brief and absent from the report was not looked at.
-- **A split is a PRD, never a side effect.** A file that needs breaking
+- **A split is a PRD, never a side effect.** A file needing to be broken
   apart goes in the report as a defect outside scope, per
   @references/parts/derived.md — the orchestrator files it, or does not.
 
@@ -63,10 +63,10 @@ one`. What the worker owes is bounded and plain:
 
 - **A gate.** No transition reads a score. `collect` does not refuse a PRD
   whose files got worse; the brief says what to leave better and the report
-  says what moved, and that is the whole contract this round.
+  says what moved, the whole contract this round.
 - **A verdict.** 22 says look here and says why; it does not say split. A
   generated file, a table of constants, a test fixture can sit at 5 and be
-  exactly what it should be.
+  exactly right.
 - **A measure of the work.** `complexity` on a PRD is the weight the board
   schedules by, hand-written by the analyst — @references/parts/contract.md.
   A file's health is not in that number and does not change it.

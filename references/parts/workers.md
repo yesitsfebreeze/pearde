@@ -9,53 +9,51 @@ Run `python3 <resources>/pearde.py brief <prd> --worker <name> --as <id>` and fo
 ```
 
 The worker runs it in its own window, so the brief — eight kilobytes, two
-thousand tokens — is paid for by the window that uses it and never enters
-the pass's, which is what lets one pass dispatch twenty workers in one turn.
-The claim a worker's own `brief` re-reads is not a refusal when the worker
-named is the one asking. `@` and `@@` resolve in @index.md.
+thousand tokens — is paid for by the window using it and never enters the
+pass's, which is what lets one pass dispatch twenty workers in one turn. The
+claim a worker's own `brief` re-reads is not a refusal when the worker named is
+the one asking. `@` and `@@` resolve in @index.md.
 
 **Dispatch to the named type, never to a general one.** An analyst is
-`pearde-analyst`, an implementer is `pearde-implementer`, and the pass
-itself is `pearde-pass` — `references/agents/`
-in this repo, installed alongside the skills. The type carries the model: an analyst
-writes specs off a settled contract and runs on the cheaper one; an
-implementer writes the code and does not. A worker dispatched as
-`general-purpose` runs the orchestrator's own model on a job that never
-needed it, and the board has no way to tell afterwards.
+`pearde-analyst`, an implementer is `pearde-implementer`, and the pass itself
+is `pearde-pass` — `references/agents/` in this repo, installed alongside the
+skills. The type carries the model: an analyst specs off a settled contract and
+runs on the cheaper one; an implementer writes the code and does not. Dispatched
+as `general-purpose`, a worker runs the orchestrator's own model on a job that
+never needed it, with no way for the board to tell afterwards.
 
 **The pass is a worker too.** The session the user asked dispatches
-`pearde-pass` and holds nothing else — @references/parts/dispatch.md. So the
+`pearde-pass` and holds nothing else — @references/parts/dispatch.md. The
 orchestrator these briefs speak of is itself a window that ends, and the rule
-below is the reason it stays small enough to be worth ending.
+below is why it stays small enough to be worth ending.
 
 **A launch is not a life.** An async dispatch reports success even when the
-worker dies on its first API call — 402, 429, a model group with no
-fallback. Before the turn ends, verify each worker is alive: its transcript
-under the harness tasks dir must grow, and must hold no `API Error`. One
-dead worker is re-dispatched once, on the orchestrator's own model — never
-on the fallback that just killed it. A second death is `BLOCKED`, with the
-error text. The same check re-runs before any return: a worker that stopped
-without a report is dead, not thinking.
+worker dies on its first API call — 402, 429, a model group with no fallback.
+Before the turn ends, verify each worker is alive: its transcript under the
+harness tasks dir must grow, and must hold no `API Error`. One dead worker is
+re-dispatched once, on the orchestrator's own model — never on the fallback
+that just killed it. A second death is `BLOCKED`, with the error text. The same
+check re-runs before any return: a worker stopped without a report is dead, not
+thinking.
 
-**A report is a file. What comes back is one line.** Every brief ends by
-saying so: the worker writes `.pearde/prds/<prd>/report.md` and returns the verdict,
+**A report is a file. What comes back is one line.** Every brief ends by saying
+so: the worker writes `.pearde/prds/<prd>/report.md` and returns the verdict,
 that path, and the numbers the next command takes — under fifteen lines. The
-orchestrator reads the file only where the line is not enough to move the
-PRD, and never to re-read what `pearde collect` already parses — the
-verdict routing least of all: `pearde collect <prd> --report <the report's
-path>` does that lookup now. A report returned whole is pinned in the
-orchestrator's window for the rest of the session, and every turn after it
-pays for it again.
+orchestrator reads the file only where the line is not enough to move the PRD,
+and never to re-read what `pearde collect` already parses — the verdict routing
+least of all: `pearde collect <prd> --report <the report's path>` does that
+lookup now. A report returned whole is pinned in the orchestrator's window for
+the rest of the session, and every turn after it pays again.
 
 Rules for every worker:
 
 - Never edit frontmatter, never touch other PRDs, never write outside the PRD
   folder. Implementers also write the target repo.
 - Open the brief with one line naming the worker's persona — `Work as
-  @references/personas/<id>.md.` — read off this table, never asked, and it
-  moves nothing about the session's own. This table is the whole of it: a
-  dispatch never opens @references/parts/personas.md, which answers a
-  different question — who works the *session*.
+  @references/personas/<id>.md.` — read off this table, never asked, and moving
+  nothing about the session's own. This table is the whole of it: a dispatch
+  never opens @references/parts/personas.md, which answers a different question
+  — who works the *session*.
 
   | the job                                                        | wears      |
   |----------------------------------------------------------------|------------|
@@ -68,15 +66,15 @@ Rules for every worker:
 - A report that is incomplete, or a worker stopped mid-task: continue THAT
   worker — it holds the context. Never respawn it.
 - Report a defect found outside your scope. Do not file it and do not fix it.
-  Say what is wrong, what you measured, and which requested PRD it would get
-  wrong. The orchestrator decides what it becomes, per
+  Say what is wrong, what you measured, and which requested PRD would go
+  wrong because of it. The orchestrator decides what it becomes, per
   @references/parts/derived.md.
-- Two rules for **contested or load-bearing claims** — never for every
-  sentence of a routine report, which states what was done and quotes its
-  verify output, nothing more: a measured claim gets `reproduced`, `refuted`
-  or `unmeasured` with the fixture named beside it, and a census enumerates
-  its population rather than the members it already knows — a check written
-  from the answer passes on the answer.
+- Two rules for **contested or load-bearing claims** — never for every sentence
+  of a routine report, which states what was done and quotes its verify output,
+  nothing more: a measured claim gets `reproduced`, `refuted` or `unmeasured`
+  with the fixture named beside it, and a census enumerates its population
+  rather than the members it already knows — a check written from the answer
+  passes on the answer.
 
 **Every worker, on top of its role.** `pearde brief` prints this last:
 
@@ -84,27 +82,26 @@ Rules for every worker:
 > Write in `<language>`, per @references/language.md. Never edit frontmatter,
 > never touch another PRD, never write outside `.pearde/prds/<prd>/` and the
 > footprint. A defect outside your scope goes in the report, not into a fix.
-> Look a word in your contract you do not know up with `python3
-> resources/grammar.py show`, and put a word you needed and it does not
-> define in your report rather than inventing one.
+> Look up a word in your contract you do not know with `python3
+> resources/grammar.py show`; a word you needed and it does not define goes in
+> your report rather than being invented.
 > A fact learned outside this repo — the web, a library this tree does not
 > hold — is written back with `python3 resources/knowledge.py remember`
-> (`conclude` once two sources agree), never left standing only in this
-> report. Write your report to `.pearde/prds/<prd>/report.md`. Its **first 40
-> lines** must carry a line beginning `Verdict:` and then the one word your
-> role's block names — nothing else on that line, and not inside a list item
-> or a block quote, both of which are read as no verdict at all. That line is
-> the only thing `pearde collect` reads to pick the transition, and a report
-> whose first 40 lines carry none is refused with nothing written. Then
-> return one line — the verdict, that path, and the numbers the
-> orchestrator's command takes. Under
+> (`conclude` once two sources agree), never left standing only in this report.
+> Write your report to `.pearde/prds/<prd>/report.md`. Its **first 40 lines**
+> must carry a line beginning `Verdict:` and then the one word your role's
+> block names — nothing else on that line, and not inside a list item or a
+> block quote, both read as no verdict at all. `pearde collect` reads that line
+> and nothing else to pick the transition, and a report whose first 40 lines
+> carry none is refused with nothing written. Then return one line — the
+> verdict, that path, and the numbers the orchestrator's command takes — under
 > fifteen lines back, whatever the report holds.
 <!-- /brief -->
 
-**Placeholders.** `pearde brief` fills these and nothing else. A placeholder
-is `<name>` — lowercase, `_` or `/` inside; one a block uses and this table
-does not name, a row nothing uses, or a marker pair missing or unterminated,
-is the `doctor` row `briefs`.
+**Placeholders.** `pearde brief` fills these and nothing else. A placeholder is
+`<name>` — lowercase, `_` or `/` inside; one a block uses and this table does
+not name, a row nothing uses, or a marker pair missing or unterminated, is the
+`doctor` row `briefs`.
 
 | placeholder | filled from |
 |---|---|
@@ -138,28 +135,27 @@ verbatim, placeholders filled — nothing else about the brief changes:
 > yourself.
 <!-- /brief -->
 
-- No `workflow:` anywhere: no block, and the brief is exactly as it was.
+- No `workflow:` anywhere: no block, and the brief is exactly as before.
 - A spec with its own `workflow:` — the implementer follows that one for that
   spec and the PRD's for the rest, so the brief carries one block per distinct
   slug and the report one `## Workflow` section per workflow followed.
 - **A worker never writes under `workflows/`.** Edits go in the report; what
   becomes of them is @references/parts/workflows.md.
-- A slug that names no workflow is a broken PRD, not a silent one: it is not
-  dispatched until the key is fixed or removed. `python3
-  @resources/workflows.py check` reports it and `plan.py scan` marks the line
-  `wf <slug>?` — naming an atomic marks the same way, a route was asked for
-  and a single step was found.
+- A slug naming no workflow is a broken PRD, not a silent one: not dispatched
+  until the key is fixed or removed. `python3 @resources/workflows.py check`
+  reports it and `plan.py scan` marks the line `wf <slug>?` — naming an atomic
+  marks the same way, a route was asked for and a single step was found.
 - A member's worker resolves the slug against its own board's library first,
   then the master's — the order `needs:` resolves in.
 
 **On return, either brief.** `## Workflow <slug>` present in the report is a
-route that was run, and the run is what improves it. The five actions are
+route already run, and the run is what improves it. The five actions are
 @references/parts/loop.md step 6, in the same batch as the collect: read the
 rows, apply the edits whose failure was the atomic's and refuse the rest saying
 which, `runs` +1 on the workflow and every atomic that ran with `updated:
 <today>` where the text changed, `python3 @resources/workflows.py check` before
-the commit, and the changed files on the PRD's commit. Absent, there is nothing
-to collect and the PRD's transition is unchanged either way — the verdict
+the commit, and the changed files on the PRD's commit. Absent, nothing is
+collected and the PRD's transition is unchanged either way — the verdict
 decides the state, and a `stopped` row does not.
 
 **Analyst** — one per `open` PRD being probed:
@@ -319,18 +315,18 @@ decides the state, and a `stopped` row does not.
 <!-- /brief -->
 
 On return, hand the report itself to the tool: `pearde collect <prd> --report
-<the report's path>` reads the verdict word and runs the transition it maps
-to — `specced` with the `## Scores` values, a route draft on stdin when the
-slug is one the library did not hold, `refine` off the `## Split` table,
-`release` for QUESTION, BLOCKED and FAILED — every gate the command checks
-still running, a missing or unknown verdict refused with nothing written, a
-red verify still exit 1. The lookup is no longer yours and the file is no
-longer read for it; what stays prose is the judgment the tool cannot make:
-whether to believe the report at all, and whether a `## Workflow` edit was
-the atomic's fault or the code's. Believing it and it being wrong is the
-collect's gate to catch, not the line's. The probe code stays in the tree
-either way; a PRD abandoned with probe code in it is named in the report, so
-the sweep reads it as pass one and not as damage.
+<the report's path>` reads the verdict word and runs the transition it maps to
+— `specced` with the `## Scores` values, a route draft on stdin when the slug
+is one the library did not hold, `refine` off the `## Split` table, `release`
+for QUESTION, BLOCKED and FAILED — every gate the command checks still running,
+a missing or unknown verdict refused with nothing written, a red verify still
+exit 1. The lookup is no longer yours and the file is no longer read for it;
+what stays prose is the judgment the tool cannot make: whether to believe the
+report at all, and whether a `## Workflow` edit was the atomic's fault or the
+code's. Believing it and it being wrong is the collect's gate to catch, not the
+line's. The probe code stays in the tree either way; a PRD abandoned with probe
+code is named in the report, so the sweep reads it as pass one and not as
+damage.
 
 **Implementer** — one per `specced` PRD dispatched:
 
@@ -353,26 +349,26 @@ the sweep reads it as pass one and not as damage.
 <!-- /brief -->
 
 On return, the same one call as the analyst's: `pearde collect <prd> --report
-<the report's path>`. DONE routes into collect's own seven steps, BLOCKED
-into `release blocked` — the `needs:` key is the gate's to refuse on — and
-anything less into `release failed`, `## Failure` written first by the worker
-or written by `--fail`. Every open box the tool re-checks on its own; the
-report's word is never taken for the verify. What stays the orchestrator's
+<the report's path>`. DONE routes into collect's own seven steps, BLOCKED into
+`release blocked` — the `needs:` key is the gate's to refuse on — and anything
+less into `release failed`, `## Failure` written first by the worker or written
+by `--fail`. Every open box the tool re-checks on its own; the report's word is
+never taken for the verify. What stays the orchestrator's
 is the belief and the `## Workflow` rows, as above.
 
-Two unclosable boxes, caught at the gate rather than by eye: `pearde
-specced` refuses a box that asks the worker to commit — committing is not an
-implementer's act — and warns on a `## Verify and Proof` block naming no path
-under the footprint, because a whole-workspace command measures the tree's
-worst neighbour, not this node's work.
+Two unclosable boxes, caught at the gate rather than by eye: `pearde specced`
+refuses a box asking the worker to commit — committing is not an implementer's
+act — and warns on a `## Verify and Proof` block naming no path under the
+footprint, because a whole-workspace command measures the tree's worst
+neighbour, not this node's work.
 
 A spec asking to change **another** PRD's body is the orchestrator's edit on
 that transition. The worker reports the wording — one writer per file holds.
 
-**Consultant** — one per call, per @references/parts/consult.md. Called by
-the orchestrator on its own judgment as often as by the user's `ask <id>
-<question>`. The persona is chosen for the question, not the job, and this is
-the only brief that produces no state change:
+**Consultant** — one per call, per @references/parts/consult.md. Called by the
+orchestrator on its own judgment as often as by the user's `ask <id>
+<question>`. The persona is chosen for the question, not the job, and the consultant's is
+the only brief producing no state change:
 
 <!-- brief:consultant -->
 > Work as `@references/personas/<id>.md`.
@@ -399,13 +395,12 @@ the only brief that produces no state change:
 > recommendation. Do not print a `▸ … · as <id>` line.
 <!-- /brief -->
 
-While it is open: keep it. Follow-ups, disagreements and its own clarifying
-questions go to the consultant you already have — it holds the exchange, and
-a fresh dispatch is a different colleague who has read none of it. The rule
-is the same one that governs a stopped worker: continue THAT one, never
-respawn it.
+While the consult is open: keep it. Follow-ups, disagreements and its own clarifying
+questions go to the consultant you already have — it holds the exchange, and a
+fresh dispatch is a different colleague who has read none of it. The rule is
+the same one governing a stopped worker: continue THAT one, never respawn it.
 
 On return: relay the answer attributed to the persona, then respond to it in
 your own voice. Nothing about the board moves on a consult — a recommendation
-worth acting on becomes an ordinary transition in the pass that follows,
-made by the orchestrator, through the same gates as everything else.
+worth acting on becomes an ordinary transition in the pass that follows, made
+by the orchestrator, through the same gates as everything else.

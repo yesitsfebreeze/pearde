@@ -2,8 +2,8 @@
 
 What the words mean, kept where the next session looks.
 
-A PRD says what to build, a memo says what was decided, a workflow says how a
-job is done. A **grammar** says what a word means on this board.
+A PRD says what to build, a memo what was decided, a workflow how a job is
+done. A **grammar** says what a word means on this board.
 @references/grammar.md is the format, the closed frontmatter set, the collision
 table and the check.
 
@@ -11,8 +11,8 @@ table and the check.
 .pearde/grammar.md
 ```
 
-- No `state`. Never claimed, specced, or dispatched — invisible to `scan` and
-  to the progress line, yet on the board.
+- No `state`. Never claimed, specced or dispatched — invisible to `scan` and to
+  the progress line, yet on the board.
 - One file, one table per group, one row per term. `grammar:` in
   `.pearde/settings.md` points elsewhere, default `grammar.md`.
 - `pearde init` writes it from @references/templates/grammar.md, already
@@ -42,13 +42,13 @@ python3 @resources/grammar.py brief         # the whole vocabulary, one line per
 
 `show` is the call a worker makes mid-job. `brief` is for a worker whose
 contract is written in the board's own words end to end — a vocabulary read
-whole is in the window for the rest of the session, which is the cost
+whole stays in the window for the rest of the session, the cost
 @references/parts/loop.md's second rule is about.
 
 ## What it is not
 
-- **A style guide.** How a document is written is @references/language.md.
-  This file is what the things in it are called.
+- **A style guide.** How a document is written is @references/language.md; a
+  row says what the thing is called.
 - **A rule book.** A row says what a word means. What the thing must do stays
   in the file the group heading names.
 - **A search index.** No ranking, no tags. `list`, `show` and the group

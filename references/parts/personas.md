@@ -1,8 +1,8 @@
 # Personas
 
 Who works the **session**, and how one is chosen. Two other questions are
-answered elsewhere and do not need this file: a dispatched worker's persona is
-a table in @references/parts/workers.md, and calling one mid-pass is
+answered elsewhere: a dispatched worker's persona is a table in
+@references/parts/workers.md, and calling one mid-pass is
 @references/parts/consult.md.
 
 A persona is what gets noticed first, what gets pushed back on, what counts as
@@ -10,26 +10,25 @@ done. The role is what the session does; the persona is who does it. One is
 active at a time. @references/personas/INDEX.md is the roster.
 
 **A persona is stored on no board file.** No key in `.pearde/settings.md`, no
-file beside the board. It is session state, and the session's environment is
-where it lives: `PEARDE_AS`, exported as `engineer` by the line
-`install --apply` prints beside the alias, read by every command that moves a
-PRD. It starts as `engineer`, holds until switched, ends with the shell.
-`persona <id>` is `export PEARDE_AS=<id>`; where each command runs in a fresh
-shell — an agent's tool call — it is `--as <id>` on the line instead. The
-pass's line carries `· as <id>` from the same variable per
-@references/parts/progress.md, and that line is the only record on the board
-— which is also where the status line reads it from.
+file beside the board — session state, living in the session's environment:
+`PEARDE_AS`, exported as `engineer` by the line `install --apply` prints beside
+the alias, read by every command that moves a PRD. It starts as `engineer`,
+holds until switched, ends with the shell. `persona <id>` is
+`export PEARDE_AS=<id>`; where each command runs in a fresh shell — an agent's
+tool call — put `--as <id>` on the line instead. The pass's line carries
+`· as <id>` from the same variable per @references/parts/progress.md, the only
+record on the board and where the status line reads it.
 
-A command with neither `--as` nor `PEARDE_AS` refuses, naming the install
-line: a guessed `engineer` after a `persona skeptic` would rewrite the only
-record the switch has. `add` alone runs — a new PRD has no earlier line to
-rewrite — and its line says `· as engineer (default)`, so the record shows
-nobody chose it.
+A command with neither `--as` nor `PEARDE_AS` refuses, naming the install line:
+a guessed `engineer` after a `persona skeptic` would rewrite the only record
+the switch has. `add` alone runs — a new PRD has no earlier line to rewrite —
+and its line says `· as engineer (default)`, so the record shows nobody chose
+it.
 
-That is deliberate — a persisted persona outlives the pass that justified it,
+The design is deliberate. A persisted persona outlives the pass that justified it,
 follows a board into work of a different shape, and lets two sessions on one
 board overwrite each other's answer. One line per pass re-states it, cheaper
-than a file that can disagree with the session holding it.
+than a file able to disagree with the session holding it.
 
 ## Three scopes
 
@@ -39,10 +38,10 @@ than a file that can disagree with the session holding it.
 | **worker**  | one dispatched analyst or implementer     | per dispatch, from its job — @references/parts/workers.md | never | that worker's brief |
 | **consult** | one asked a question — @references/parts/consult.md | for the question | never | that one answer |
 
-A worker's persona is a property of the job it was handed. A `skeptic`
+A worker's persona is a property of its job. A `skeptic`
 verifying one PRD does not make the session skeptical, and neither does a
 consult: the user names one, gets its answer, and the session goes on wearing
-what it was wearing.
+what it wore.
 
 ## The signals
 
@@ -57,8 +56,8 @@ matches on what the work is, never on how the user phrased it.
 | 4 | the PRD's contract is user flow, product shape, or naming a user-facing thing; the view's UX calls             | `designer` |
 | 5 | anything else — the loop, specs, implementation, memos, commits, `plan`, `master`                              | `engineer` |
 
-- **Row 1 is the user speaking.** It outranks every other row, and it is never
-  put back to them as a question.
+- **Row 1 is the user speaking.** It outranks every other row, and is never put
+  back to them as a question.
 - **Rows 2-4 are the work speaking.** They propose. The user disposes.
 - **Two rows match** — a `drill` about a user flow is both 2 and 4. The lower
   number wins: it describes the *pass*, the higher one only the *subject*.
@@ -80,9 +79,9 @@ A switch takes effect immediately and holds until the next one or the end of
 the session. No board file is written, so nothing has to be unwritten: the way
 back to `engineer` is `export PEARDE_AS=engineer`, the install line again.
 
-**Never switch the session silently.** Print the switch in the same `▸ … · as
-<id>` form the pass line uses, even when no state moved — that line is the
-only record the switch has, and the status line reads it from there.
+**Never switch the session silently.** Print the switch in the same
+`▸ … · as <id>` form the pass line uses, even when no state moved — that line
+is the only record the switch has, and the status line reads it from there.
 
 ## The ask
 
@@ -107,8 +106,8 @@ Recommendation `<candidate>` — <the reason, in one line>
   a phase change, and the question is not asked twice for the same reason.
 - **None of the three fits** — that is `persona create <topic>`, per
   @references/personas/INDEX.md. Offer it only when the job really is a field
-  the roster does not cover; a job that is merely specific is still one of the
-  four wearing it.
+  the roster does not cover; a merely specific job is still one of the four
+  wearing it.
 
 `persona` with no argument reports who is working and which signal row put them
 there. It changes nothing.
@@ -130,7 +129,7 @@ Thrash costs more than a slightly wrong persona. None of these is a signal:
 
 ## What a persona does not change
 
-A persona changes emphasis. It never changes the contract:
+A persona changes emphasis, never the contract:
 
 - The seven steps, the nine states, and who may write them —
   @references/parts/loop.md, @references/parts/states.md.

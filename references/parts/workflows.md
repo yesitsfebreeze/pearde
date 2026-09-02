@@ -3,7 +3,7 @@
 How a kind of job is done, kept where the next session looks.
 
 A PRD says what to build and a memo says what was decided. A **workflow** says
-how a job is done, and gets better every time it is followed.
+how a job is done, and improves every time a worker follows it.
 @references/workflow.md is the format, the closed frontmatter set, the steps
 grammar and the report section.
 
@@ -16,7 +16,7 @@ grammar and the report section.
 | **atomic**   | `atomic: <slug>`   | one unit — `## Do`, `## Done when`, `## Fails when` |
 | **workflow** | `workflow: <slug>` | `## Use when`, then `## Steps` — an ordered list of atomics with a back-edge per row |
 
-- No `state`. Never claimed, specced, or dispatched — invisible to scan and to
+- No `state`. Never claimed, specced or dispatched — invisible to scan and to
   the progress line, yet on the board.
 - One flat directory, one file per slug, no nesting. `workflows:` in
   `.pearde/settings.md` points elsewhere, default `workflows/`.
@@ -47,12 +47,12 @@ contract:
 | `prd.md`    | the user · the drill, on the tree it writes · the orchestrator on `specced`, from the analyst's report | the route every worker on this PRD is handed |
 | `specNN.md` | the analyst                                                                   | overrides the PRD's, for that unit only          |
 
-Missing reads as none, and the brief is exactly as it was before workflows
+Missing reads as none, and the brief keeps the shape it had before workflows
 existed. Set, the worker's brief opens with the workflow block after the
 persona line — @references/parts/workers.md holds that text, and the worker
 returns `## Workflow <slug>` per @references/workflow.md.
 
-A slug that names **no workflow** in the library is a broken PRD, not a silent
+A slug naming **no workflow** in the library is a broken PRD, not a silent
 one: `check` reports it, `plan.py scan` marks the line `wf <slug>?`, and the
 PRD is not dispatched until the key is fixed or removed. Naming an **atomic**
 is that same break — an atomic is a file, so the slug resolves, but a route
@@ -70,9 +70,9 @@ python3 @resources/workflows.py check [board]        # what doctor reports for `
 ```
 
 `brief` is what a worker is handed: the `## Use when`, then each step's row
-with that atomic's body under it, in order — one page read once, instead of
-a workflow and N atomics opened one at a time. It exits 1 on an atomic slug:
-an atomic is shown, not briefed.
+with that atomic's body under it, in order — one page read once, instead of a
+workflow and N atomics opened one at a time. It exits 1 on an atomic slug: an
+atomic is shown, not briefed.
 
 ## Improved
 
@@ -99,19 +99,19 @@ What decides an edit:
 | the code's                            | refused     | the route was right and the tree was wrong                 |
 | the PRD's                             | refused     | the contract was wrong, and a route cannot carry that      |
 
-A refusal is said out loud — which of the two it was — and recorded in
-`.pearde/.state/pass.md` per @references/parts/pass.md. The file is unchanged, so
-nothing else on disk would say the run proposed it.
+A refusal is said out loud — which of the two reasons — and recorded in
+`.pearde/.state/pass.md` per @references/parts/pass.md. The file is unchanged,
+so nothing else on disk would say the run proposed it.
 
 Four rules the collect holds the edit to:
 
 - **From a run, never from reading.** An edit cites the step and the PRD that
-  ran it. An atomic that "could be clearer" to a reader is not an edit.
+  ran it. An atomic a reader merely finds unclear is not an edit.
 - **Fold, do not log.** The lesson replaces the sentence that was wrong. No
   dated lines in the body — `updated` is the date, and git holds what it
   replaced.
-- **An atomic stays one unit.** An edit that adds a second job splits the
-  atomic instead, and the workflow gains a row. "And then" is two files.
+- **An atomic stays one unit.** An edit adding a second job splits the atomic
+  instead, and the workflow gains a row. "And then" is two files.
 - **The order may change from a run.** A step that always fails until a later
   one has run is in the wrong place: the report says so, the orchestrator moves
   the row, and the `on failure` back-edges are renumbered with it.
@@ -129,15 +129,15 @@ ten times reads `runs: 10` with its original `updated`.
 files are exercised and which stand at `0`, and a `0` beside an old `date` is a
 file to delete or a job that stopped repeating, not a file to promote.
 
-Then `python3 @resources/workflows.py check`, before the commit. An edit that
-breaks the format is refused, not repaired — the worker's text was wrong, and
+Then `python3 @resources/workflows.py check`, before the commit. An edit
+breaking the format is refused, not repaired — the worker's text was wrong, and
 repairing it in the collect makes the orchestrator the author of a line no run
 produced.
 
 **The commit is the PRD's.** The edited files are added with the rest and named
 in the message, and the PRD's own `footprint:` does not grow to hold them: the
 library is the board's, not the PRD's — @references/parts/commits.md. A library
-`workflows:` points into another repo commits there, same subject, under the
+`workflows:` pointing into another repo commits there, same subject, under the
 one-commit-per-repo rule.
 
 ## The two shapes this is not

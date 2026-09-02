@@ -2,6 +2,10 @@
 memo: dates-are-written-not-stamped
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: Every date on this board is a fixed string, so a copy renders the same page every time
 date: 2026-08-28
 prds:

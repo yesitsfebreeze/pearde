@@ -3,6 +3,8 @@ atomic: change-the-line
 subject: change the named line and cover it with a test that fails without it
 date: 2026-08-28
 runs: 0
+tags:
+  - atomic
 ---
 
 # change-the-line — the fix, and the test that proves it

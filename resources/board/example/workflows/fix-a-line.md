@@ -3,6 +3,8 @@ workflow: fix-a-line
 subject: one wrong line, from the report to the change
 date: 2026-08-28
 runs: 0
+tags:
+  - workflow
 ---
 
 # fix-a-line — one wrong line, from the report to the change

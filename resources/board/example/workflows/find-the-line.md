@@ -3,6 +3,8 @@ atomic: find-the-line
 subject: turn a reported symptom into one file and one line number
 date: 2026-08-28
 runs: 0
+tags:
+  - atomic
 ---
 
 # find-the-line — the symptom, located

@@ -398,8 +398,20 @@ def run(cmd, cwd, script=None):
     """(exit, output) — stdout and stderr in one stream, the order a reader
     saw them in."""
     try:
-        r = subprocess.run(cmd, cwd=cwd, input=script, capture_output=True,
-                           text=True)
+        if script is not None:
+            # The block goes in as an ARGUMENT, never on stdin, and stdin is
+            # closed. Fed on stdin, the first command in the block that reads
+            # stdin with no operand — a bare `cat`, `grep PAT`, `sort`, a
+            # `python3` with no script — eats the REST of the block: every
+            # statement after it never runs and bash exits 0. Measured: a
+            # block whose assertion sits behind a bare `cat` exits 0 on a
+            # broken tree, and collect records that as green.
+            r = subprocess.run(list(cmd) + ["-c", script], cwd=cwd,
+                               stdin=subprocess.DEVNULL,
+                               capture_output=True, text=True)
+        else:
+            r = subprocess.run(cmd, cwd=cwd, stdin=subprocess.DEVNULL,
+                               capture_output=True, text=True)
     except OSError as e:
         return 127, str(e)
     return r.returncode, r.stdout + r.stderr

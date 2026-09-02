@@ -136,6 +136,16 @@ def _segments(line, op=""):
         elif ch == ")":
             depth = max(0, depth - 1)
         elif depth == 0 and ch in ";|&":
+            # `2>&1`, `>&2`, `&>f`: the `&` belongs to a redirect, not to a
+            # list. Split there and `cmd 2>&1 | tail -1` reads as TWO
+            # statements — `cmd 2>` and a pipeline starting `1` — so every
+            # block using `2>&1`, which is most of them, was analysed on a
+            # parse of something it does not say.
+            if ch == "&" and (cur.rstrip().endswith((">", "<"))
+                              or line[i + 1:i + 2] == ">"):
+                cur += ch                      # `2>&1`, `>&2`, `&>file`
+                i += 1
+                continue
             two = line[i:i + 2]
             if two in ("||", "&&"):
                 out.append((op, cur))
@@ -210,7 +220,10 @@ def _seg_can_fail(text):
     # may, `x=$(cmd)` inherits the substitution's: the classic abort
     if not stripped and all(re.match(r"^[A-Za-z_][A-Za-z0-9_]*=", t)
                             for t in tokens):
-        return bool(re.search(r"\$\(|`", s))
+        # `$((` is arithmetic, not a substitution — it runs no command and
+        # can leave no status. Read as `$(`, a counter bump `N=$((N+1))`
+        # counts as fallible and carries a dead block past this check.
+        return bool(re.search(r"\$\((?!\()|`", s))
     return True
 
 
@@ -429,6 +442,84 @@ def _cannot_fail_why(script):
     return why + " — nothing in it can make the block red"
 
 
+# A pipeline's exit is its LAST member's, and a member that only reshapes
+# text returns 0 on whatever it was handed, whatever that text says. So
+# `bash probe/verify.sh | tail -1` is green on a broken tree and
+# `_cannot_fail_why` accepts it — `tail` CAN fail, on a missing file, never
+# on a failing assertion. The pipe is not what breaks the check; it is what
+# hides it, showing a reader a tally where a status should be.
+FORMATTERS = frozenset(("tail", "head", "cat", "sed", "awk", "wc", "tr",
+                        "sort", "cut", "column", "nl", "tee"))
+
+
+def _bare_pipeline(line):
+    """[member] when this logical line is one bare pipeline — two or more
+    members joined only by `|`, no `;`, `&&`, `||` or `&` anywhere in it —
+    else None. A line carrying a list operator is somebody's guard, and the
+    guard is what `_cannot_fail_why` reads."""
+    segs = _segments(line)
+    if len(segs) < 2 or any(op not in ("", "|") for op, _t in segs):
+        return None
+    return [t.strip() for _op, t in segs]
+
+
+def _drains_the_verdict(block):
+    """Why this block's last statement carries no verdict of its own, or
+    None. A WARNING, not a refusal: piping for display beside a real
+    assertion is legitimate and common — 27 spec blocks on this board do it
+    — so only the block's LAST statement is read, where the pipeline's exit
+    is the block's, and a final member that judges (`awk '{…; exit 1}'`) is
+    left alone."""
+    lines = _logical_lines(block)
+    if not lines:
+        return None
+    members = _bare_pipeline(lines[-1])
+    if not members:
+        return None
+    last = members[-1]
+    if re.search(r"\bexit\b", last):
+        return None                       # it judges rather than formats
+    words = last.split()
+    word = words[0].strip("\"'") if words else ""
+    if word not in FORMATTERS:
+        return None
+    why = (f"its last statement ends `| {_snip(last, 40)}` — a formatter "
+           "returns 0 on any text it is handed, so the pipeline's exit says "
+           "nothing about what the text said")
+    if word == "head":
+        why += ("; `head` also truncates the failure away and races the "
+                "writer's SIGPIPE, so the same input can return 0 or 141")
+    return why
+
+
+def probe_verdict(prd_dir):
+    """[refusal] — one line per probe under this PRD whose verdict never
+    reaches its exit status. `pipefail` propagates a non-zero a member
+    RETURNS; it has nothing to propagate from a probe that reports by
+    PRINTING. A `probe/verify.sh` ending on `echo "$PASS passed, $FAIL
+    failed"` exits 0 whatever `$FAIL` holds, so every verify block that runs
+    it — piped or not — is green on a broken tree. 70 of the board's 71
+    probes already end on `[ "$FAIL" = 0 ]` or an `exit` on the counter:
+    this is that convention, written down. A PRD with no `probe/` is
+    neither refused nor warned, and a helper beside the harness
+    (`fixture.sh`, `build_fixture.sh`) is no probe and carries no verdict."""
+    path = os.path.join(prd_dir, "probe", "verify.sh")
+    if not os.path.isfile(path):
+        return []
+    try:
+        text = open(path, encoding="utf-8").read()
+    except OSError:
+        return []
+    lines = _logical_lines(text)
+    if not lines or _seg_can_fail(lines[-1]):
+        return []
+    return [f"probe/verify.sh: its last statement `{_snip(lines[-1])}` can "
+            "only exit 0 — the probe prints its verdict and never returns "
+            "it, so every verify block running this probe is green on a "
+            "broken tree. End it on the verdict itself: `[ \"$FAIL\" = 0 ]` "
+            "or `exit $((FAIL > 0))`"]
+
+
 def fm_lines(text):
     """{key: 1-based line} for every key in the frontmatter block — refusals
     name a line, and `parse_prd` keeps none."""
@@ -539,6 +630,11 @@ def check_spec(path, fm, text, lib, own_feet):
             why = _cannot_fail_why(block)
             if why:
                 bad.append((ver_ln, f"verify block {bi} cannot fail — {why}"))
+                continue
+            drain = _drains_the_verdict(block)
+            if drain:
+                warn.append(f"{name}:{ver_ln}: verify block {bi} drains its "
+                            f"own verdict — {drain}")
 
     wf = fm.get("workflow")
     if wf and not isinstance(wf, list):
@@ -617,6 +713,10 @@ def read_specs(prd, lib):
             wfs.append(str(wf).strip())
         if not b:
             total += int(str(fm.get("complexity")))
+    # the probe the specs were written from: a harness whose verdict never
+    # reaches its exit status makes every block that runs it green on a
+    # broken tree, so the set is refused with the offending line quoted
+    bad += [f"{prd['local']}/{m}" for m in probe_verdict(prd["dir"])]
     return total, len(files), bad, warn, feet, wfs
 
 

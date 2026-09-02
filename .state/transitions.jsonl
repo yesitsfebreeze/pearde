@@ -242,3 +242,42 @@
 {"calls": 0, "from": "analyzing", "prd": "the-brief-names-the-verdict-line-collect-requires", "reads": 0, "refused": 0, "t": "2026-09-02T00:09:53", "to": "specced", "tokens": 0}
 {"calls": 21, "from": "analyzing", "prd": "the-harness-sweep-is-capped-so-a-red-is-a-real-red", "reads": 0, "refused": 0, "t": "2026-09-02T00:18:50", "to": "specced", "tokens": 0}
 {"calls": 0, "from": "analyzing", "prd": "upgrade-leaves-the-memo-index-stale", "reads": 0, "refused": 0, "t": "2026-09-02T00:18:50", "to": "specced", "tokens": 0}
+{"calls": 25, "from": "specced", "prd": "the-harness-sweep-is-capped-so-a-red-is-a-real-red", "reads": 0, "refused": 0, "t": "2026-09-02T00:22:46", "to": "claimed", "tokens": 199}
+{"calls": 1, "from": "specced", "prd": "filing-refuses-a-file-it-does-not-hold", "reads": 0, "refused": 0, "t": "2026-09-02T00:22:46", "to": "claimed", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "upgrade-leaves-the-memo-index-stale", "reads": 0, "refused": 0, "t": "2026-09-02T00:22:47", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "upgrade-leaves-the-memo-index-stale", "t": "2026-09-02 01:10", "to": "done"}
+{"calls": 429, "from": null, "prd": "collect-stages-a-shared-file-whole", "reads": 12, "refused": 0, "t": "2026-09-02T08:39:50", "to": "open", "tokens": 2268}
+{"calls": 1, "from": null, "prd": "leaked-background-services-outlive-their-fixtures", "reads": 0, "refused": 0, "t": "2026-09-02T08:39:55", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "two-self-tests-fail-on-timing-not-on-code", "reads": 0, "refused": 0, "t": "2026-09-02T08:39:55", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "upgrade-says-two-contradictory-things", "reads": 0, "refused": 0, "t": "2026-09-02T08:39:55", "to": "open", "tokens": 0}
+{"calls": 3, "from": "open", "prd": "upgrade-says-two-contradictory-things", "reads": 0, "refused": 0, "t": "2026-09-02T08:40:12", "to": "deferred", "tokens": 0}
+{"calls": 55, "from": null, "prd": "a-session-start-brings-the-board-up", "reads": 3, "refused": 0, "t": "2026-09-02T09:59:53", "to": "open", "tokens": 4627}
+{"from": "claimed", "prd": "the-harness-sweep-is-capped-so-a-red-is-a-real-red", "t": "2026-09-02 10:04", "to": "done"}
+{"calls": 21, "from": "open", "prd": "a-session-start-brings-the-board-up", "reads": 1, "refused": 0, "t": "2026-09-02T10:05:51", "to": "analyzing", "tokens": 0}
+{"calls": 91, "from": "specced", "prd": "the-brief-names-the-verdict-line-collect-requires", "reads": 26, "refused": 1, "t": "2026-09-02T10:05:51", "to": "claimed", "tokens": 49702}
+{"from": "claimed", "prd": "the-brief-names-the-verdict-line-collect-requires", "t": "2026-09-02 10:29", "to": "done"}
+{"from": "claimed", "prd": "filing-refuses-a-file-it-does-not-hold", "t": "2026-09-02 10:30", "to": "done"}
+{"calls": 181, "from": "analyzing", "prd": "a-session-start-brings-the-board-up", "reads": 6, "refused": 0, "t": "2026-09-02T10:31:35", "to": "specced", "tokens": 4918}
+{"calls": 15, "from": "specced", "prd": "a-session-start-brings-the-board-up", "reads": 0, "refused": 0, "t": "2026-09-02T10:34:27", "to": "claimed", "tokens": 796}
+{"calls": 2, "from": "specced", "prd": "four-stale-self-tests-are-re-aimed-at-the-code-that-moved", "reads": 0, "refused": 0, "t": "2026-09-02T10:34:32", "to": "claimed", "tokens": 0}
+{"calls": 1, "from": "open", "prd": "collect-stages-a-shared-file-whole", "reads": 0, "refused": 0, "t": "2026-09-02T10:34:36", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "leaked-background-services-outlive-their-fixtures", "reads": 0, "refused": 0, "t": "2026-09-02T10:34:36", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "two-self-tests-fail-on-timing-not-on-code", "reads": 0, "refused": 0, "t": "2026-09-02T10:34:37", "to": "analyzing", "tokens": 0}
+{"calls": 383, "from": "analyzing", "prd": "collect-stages-a-shared-file-whole", "reads": 3, "refused": 1, "t": "2026-09-02T10:59:12", "to": "specced", "tokens": 1043}
+{"calls": 1, "from": "analyzing", "prd": "leaked-background-services-outlive-their-fixtures", "reads": 0, "refused": 0, "t": "2026-09-02T10:59:17", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "analyzing", "prd": "two-self-tests-fail-on-timing-not-on-code", "reads": 0, "refused": 0, "t": "2026-09-02T10:59:20", "to": "specced", "tokens": 0}
+{"calls": 19, "from": null, "prd": "the-four-personas-are-built-from-research", "reads": 0, "refused": 0, "t": "2026-09-02T11:07:15", "to": "open", "tokens": 0}
+{"from": "claimed", "prd": "four-stale-self-tests-are-re-aimed-at-the-code-that-moved", "t": "2026-09-02 11:11", "to": "done"}
+{"calls": 130, "from": null, "prd": "every-file-scores-1-100-worst-first-and-the-brief-names-the-", "reads": 13, "refused": 0, "t": "2026-09-02T11:14:12", "to": "open", "tokens": 15985}
+{"calls": 4, "from": null, "prd": "files-score-their-health-and-the-brief-names-the-unhealthy", "reads": 0, "refused": 1, "t": "2026-09-02T11:14:35", "to": "open", "tokens": 588}
+{"from": "claimed", "prd": "a-session-start-brings-the-board-up", "t": "2026-09-02 11:16", "to": "done"}
+{"calls": 36, "from": "open", "prd": "the-four-personas-are-built-from-research", "reads": 1, "refused": 1, "t": "2026-09-02T11:21:21", "to": "analyzing", "tokens": 836}
+{"calls": 0, "from": "specced", "prd": "collect-stages-a-shared-file-whole", "reads": 0, "refused": 0, "t": "2026-09-02T11:21:22", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "leaked-background-services-outlive-their-fixtures", "reads": 0, "refused": 0, "t": "2026-09-02T11:21:22", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "two-self-tests-fail-on-timing-not-on-code", "reads": 0, "refused": 0, "t": "2026-09-02T11:21:22", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "two-self-tests-fail-on-timing-not-on-code", "t": "2026-09-02 11:36", "to": "done"}
+{"calls": 466, "from": "analyzing", "prd": "the-four-personas-are-built-from-research", "reads": 20, "refused": 2, "t": "2026-09-02T11:50:29", "to": "specced", "tokens": 522}
+{"calls": 4, "from": "specced", "prd": "the-four-personas-are-built-from-research", "reads": 0, "refused": 0, "t": "2026-09-02T11:50:48", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "collect-stages-a-shared-file-whole", "t": "2026-09-02 11:57", "to": "done"}
+{"from": "claimed", "prd": "the-four-personas-are-built-from-research", "t": "2026-09-02 12:18", "to": "done"}
+{"calls": 250, "from": null, "prd": "the-master-ramp-measures-its-own-tree-not-its-members", "reads": 4, "refused": 0, "t": "2026-09-02T12:22:27", "to": "open", "tokens": 9386}

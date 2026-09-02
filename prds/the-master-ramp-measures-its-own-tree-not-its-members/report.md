@@ -2,16 +2,26 @@
 
 Verdict: DONE
 
-17 of 18 spec boxes ticked (spec01 8/8, spec02 8/9) and prd.md 5/5. The one
-open box asks for a repo-wide gate that is red on two files this PRD does not
-own — quoted below against a baseline taken before the first edit.
+18 of 18 spec boxes ticked (spec01 8/8, spec02 9/9) and prd.md 5/5.
+`specced --check` is `ok · complexity 18`. Both `## Verify and Proof` blocks
+exit 0 under `bash -e -o pipefail` on this tree and non-zero on a mutated
+footprint file — four mutations, each restored and proved back with `cmp`.
+
+**Urgent, and not mine to fix:** commit `551a422` landed a broken `ramp.py` —
+`scan_roots` and `_measure` dropped, `needs` duplicated — so `pearde ramp`
+raises `NameError` on every board at HEAD. The working tree is correct. See
+`## Findings`.
+
+Second pass, after the orchestrator moved the lane into the checkout: the last
+box was re-aimed rather than waited on, and two defects in the blocks
+themselves were found and fixed while re-aiming it.
 
 Headline: `ramp need` on `/Users/feb/dev/infra/.pearde` now prints
 `rust 15245  mitosys 14769, model 353, realm 99, shared 23, infra 1` where it
 printed `rust 1  *.rs×1`. The five plain boards on this machine print
 byte-identical output to the committed `ramp.py`.
 
-## Where the work landed — read this before merging
+## Where the work landed — done, recorded for the record
 
 The brief named the **lane** `.pearde/.lanes/the-master-ramp-measures-its-own-tree-not-its-members`
 as `repo:`. That worktree was cut off `HEAD` (59fb13a) and therefore did
@@ -23,25 +33,107 @@ resources/board/ramp.py` there is entirely this PRD's — `scan_roots`,
 `_words_of`, `_measure`, unioning `needs`, nothing else) and continued it
 there, which is what "continue it, it is pass one" means once the lane exists.
 
-**The merge will refuse unless the orchestrator clears the duplicate.** The
-checkout's working `resources/board/ramp.py` is now a strict subset of the
-lane's, and `git merge lane/…` will not overwrite a locally-modified file:
-
-```
-git -C /Users/feb/dev/infra/pearde checkout -- resources/board/ramp.py
-```
-
-That discards a copy of what the lane already carries and nothing else. The
-same shape is possible on `references/files.md`, which the concurrent
-`lanes.py` PRD also has modified in the checkout — my hunk there is one added
-row far from theirs, so it merges once the local modification is committed or
-stashed; it is not a duplicate and must **not** be checked out away.
+**Merged.** The orchestrator moved the lane into the checkout as this section
+asked — `git checkout -- resources/board/ramp.py` first, `references/files.md`
+merged by row rather than overwritten, `references/parts/ramp.md` and the new
+invariant copied across. Verified here: the checkout's `ramp.py` carries
+`ask_subject`, `_union` and `contributors`; `references/files.md` holds the one
+new row; `resources/invariants/a-master-need-is-the-union-of-its-members.sh`
+runs 17 PASS from the checkout root. Everything from this pass onward was done
+in the checkout, not the lane.
 
 Board files (outside the lane, in `/Users/feb/dev/infra/pearde/.pearde`):
 `memos/a-master-need-is-the-union-of-its-members.md`, `memos/README.md`
 (regenerated), `prd.md`, `specs/spec01.md`, `specs/spec02.md`,
 `probe/compare.sh`. spec02's footprint spans both roots by construction, so
 `git status --short` was recorded in both before the first edit.
+
+## Second pass — the blocks, re-aimed and made runnable
+
+The orchestrator's refusal was right and its diagnosis was right: the box
+asserted a **repo-wide** gate is clean when it is entitled to assert only that
+this unit did not redden it. Re-aiming it turned up two further defects in the
+blocks, both of which would have refused `collect` after the box was fixed.
+
+**Defect 1 — spec01's block could not be parsed, let alone run.** It carried
+the literal token `<that dir>` as an argument, which bash reads as a redirect
+from a file named `that`. Both specs fence with ```` ```sh ````, so `collect`
+extracts and runs both; spec01 would have died on a syntax error with the box
+already ticked. Its block is now a real one: `probe/fixture.sh` (ten PASS,
+decided by `resources/board/ramp.py` alone), a five-board identity loop against
+a `git archive HEAD` export, and the master's `ramp need` printed and gated
+only where that board is actually on the machine.
+
+**Defect 2 — both blocks used `git archive HEAD` as a "pre-union" baseline,
+which it stopped being the moment this unit was committed.** spec01 diffed
+five plain boards' output between the HEAD export and the working module; once
+`551a422` landed, HEAD *is* the union, so the diff proves nothing — and in the
+meantime the two copies use different `plan.py` files whenever a sibling has
+one in flight, so it reddens on a neighbour. spec02's can-it-fail proof had the
+worse version of the same fault: it was passing against a HEAD that raises
+`NameError` (see the finding below), so it was measuring a crash rather than a
+regression. spec01 now asserts the plain-board property against the module
+(`scan_roots` returns exactly one unnamed row; a plain `why` still carries a
+`×` marker), and spec02 reverts `scan_roots` in a scratch copy of `resources/`
+— which is spec02's box in its own words — with an `assert` on the anchor so a
+moved early-return fails loudly instead of silently mutating nothing.
+
+**Defect 3 — `memos.py check` was the same whole-checkout fault as
+`index.py check`, one line below it.** It reads every memo on the board, so a
+neighbour's malformed memo would have decided this unit's colour — and two
+neighbours have untracked memos on this board right now. It gets the same
+treatment: captured, printed with its exit, gated on lines naming this spec's
+own memo, plus a `Traceback` guard and three direct assertions on the memo
+file (present, `kind: invariant`, `verify:` naming the script).
+
+**The `-e` hazards the orchestrator named were both present and are both
+gone.** `RAMP=… bash …sh` followed by `echo "expect non-zero: $?"` aborted the
+block under `-e` on exactly the red it was written to observe; it is now
+`… && mrc=0 || mrc=$?` with the assertion made explicitly afterwards. Every
+capture in both blocks uses that form.
+
+**Why `index.py check`'s read is not asserted non-empty.** The instruction was
+to assert it, and I did not: `check` prints *nothing* and exits 0 on a clean
+tree, so a non-empty assertion would go red the moment the `lanes.py` PRD
+lands — the box would break on the neighbour finishing. The guards that
+actually distinguish a dead checker from a clean one are in the block instead:
+an exit greater than 1, a `Traceback` line (needed because `check` exits 1 for
+a real problem and 1 for an uncaught exception alike, so the code cannot tell
+them apart), and a **wiring proof** — the footprint matcher is run over the
+exact line shape `check` emits and must match it, or the gate below is a grep
+that can never fire.
+
+### The four mutations, and what each proves
+
+| mutation | block | result |
+|---|---|---|
+| `resources/board/ramp.py`: `totals[job] = totals.get(job,0) + hits` → `max(...)` | spec01 **and** spec02 | both exit **1**; restored, `cmp` identical, both exit 0 again. A **behavioural** mutation — the union arithmetic itself |
+| `references/parts/ramp.md`: append a dangling `@resources/no-such-file.py` | spec02 | exit **1** on `FAIL index.py check names this footprint: references/parts/ramp.md`, with the neighbour's `lanes.py` line printed above it and *not* deciding the exit. This is the re-aimed gate firing |
+| the invariant's own `[ "$O" = 43 ]` → `= 44` | spec02 | invariant alone exit 1, block exit **1**; restored, `cmp` identical |
+| the memo's `kind: invariant` → `kind: decision` | spec02 | `memos.py check exit 1` and `FAIL memos.py check names this spec's memo`; block exit **1**; restored, `cmp` identical |
+
+All four were re-run after the blocks were rewritten off `git archive HEAD`,
+not only before.
+
+Every backup was taken with `cp` into a scratch directory outside the repo and
+every restore proved with `cmp`, per the route's own row for mutating an
+uncommitted footprint file.
+
+### The box as it now reads
+
+```
+- [x] `index.py check` is captured and printed in full, and decides the
+      exit only on lines whose subject is a path in this spec's
+      `footprint:` — guarded on a non-zero exit and on a `Traceback`,
+      and with a wiring proof that the footprint matcher matches the
+      line shape `check` prints
+```
+
+The filter matches on the line's **subject** — `awk '{print $1}'`, then
+`grep -Ex` against the footprint — not on a substring. That distinction is
+load-bearing here: every line `check` prints ends in the words
+`references/files.md`, which is itself a footprint path, so a substring needle
+would have matched the neighbour's `lanes.py` line and failed on it.
 
 ## Boxes, and the check behind each
 
@@ -129,19 +221,21 @@ single machine's `have`, named as deliberate rather than left to be inferred
 as symmetry. `references/files.md` gained one row and nothing else
 (`git diff --stat`: 1 insertion), no reflow.
 
-**The open box:** `- [ ] python3 resources/index.py check is silent`. It is
-not, and no line names a footprint path. Baseline, taken before the first edit:
+**The box that was open on pass one, and is now closed by re-aiming rather
+than by the tree going quiet.** `index.py check` is still red, on the same one
+line, and no line names a footprint path. Baseline, taken before the first
+edit:
 
 | root | before the first edit | after |
 |---|---|---|
 | checkout `/Users/feb/dev/infra/pearde` | `resources/board/lanes.py is on disk with no row in references/files.md` | identical, byte for byte |
 | lane (cut off HEAD) | `references/skills/pearde-all.md is on disk with no row in references/files.md` and `resources/board/edit.py references @questions.py — not on disk` | identical |
 
-All three lines are the concurrent `lanes.py` / `pearde-all` PRD's, two of
-them already fixed in the checkout's uncommitted `references/files.md` and
-`index.md` — which the lane, cut off HEAD, does not carry. I did not add their
-rows: doing so in the lane would duplicate a hunk the checkout already holds.
-The box closes on the merged tree once that PRD lands.
+All three lines are the concurrent `lanes.py` / `pearde-all` PRD's; the lane's
+two closed on the merge, and the checkout's one remains. I did not add its row:
+`every-worker-runs-in-its-own-worktree`'s own spec01 carries the box
+`references/files.md carries a row for resources/board/lanes.py`, so writing it
+here would take that PRD's contracted work. The box no longer waits on it.
 
 **One thing the box's own check does not back.** Removing my new
 `references/files.md` row and re-running `index.py check` produces **no new
@@ -226,6 +320,32 @@ pass's knowledge note `[[260902-6e16]]` and used: the invariant bounds every
 command through `perl -e 'alarm N; exec @ARGV'`. Nothing new was learned
 outside this repo on this pass, so `knowledge.py remember` was not called.
 
+**Commit `551a422` landed a broken `resources/board/ramp.py` and loop step 0
+is dead at HEAD.** This is the most urgent thing in this report. The commit's
+`ramp.py` is a botched merge, not the file I wrote:
+
+| function | in `551a422` | in the working tree |
+|---|---|---|
+| `scan_roots` | **absent** | present |
+| `_measure` | **absent** | present |
+| `needs` | **two definitions** | one |
+
+`_union` *is* in the commit and calls `scan_roots`, so every `ramp need` at
+HEAD raises `NameError: name 'scan_roots' is not defined` — on a plain board as
+well as a master, which means the ramp gate is dead for every board on this
+machine at that commit. `git diff HEAD -- resources/board/ramp.py` shows
+`scan_roots` and `_measure` as additions and drops the duplicate `needs`, so
+the working tree is correct and the repair is a commit of it. Committing is not
+the implementer's act; the orchestrator has been told. Nothing of mine is
+missing from disk — the invariant runs 17 PASS from the checkout root.
+
+It also means a `git archive HEAD` baseline was silently broken for anything
+that used one, which is how it surfaced: spec02's can-it-fail proof went
+non-zero against HEAD for the wrong reason, and spec01's five-board diff went
+red on all five at once. A uniform red across a whole comparison set is the
+tell — the same shape the route's step 2 names for a migration landing
+mid-run.
+
 New, from this pass:
 
 **A lane worktree does not carry the checkout's uncommitted work, and the
@@ -282,7 +402,7 @@ built. So step 3 was entered for real.
 
 ### Edits
 
-Four replacement rows. Never edited the workflow files.
+Five replacement rows. Never edited the workflow files.
 
 **1 — `read-the-contract`, add to `## Fails when`:**
 
@@ -301,6 +421,12 @@ Four replacement rows. Never edited the workflow files.
 | seen | means | do |
 |------|-------|----|
 | a spec contracts a file under `.pearde/memos/` and `memos.py check` goes red the moment it lands | the index by kind is generated, and adding a memo makes `memos/README.md` stale — a file no footprint names and that the spec cannot omit | run `python3 resources/memos.py index <board>` and check `git diff --stat` names one added row; the index is part of adding a memo, not a separate edit. Say so in the report, because the footprint is wrong and the next author of a memo spec should carry the index row in it |
+
+**5 — `write-the-specs`, add to `## Fails when`:**
+
+| seen | means | do |
+|------|-------|----|
+| a `## Verify and Proof` block reads as instructions to a person — a `<placeholder>` argument, a `# note the dir` comment standing in for a value, a bare `$?` echoed after the command it describes | the block was written to be *read* and never run, and `collect` runs it: `<that dir>` is parsed as a redirect from a file named `that`, and the spec dies on a syntax error with every box already ticked | run every block, of every spec in the set, exactly as `collect` will — `bash -e -o pipefail -c "$(awk '/^```sh/{f=1;next} /^```/{f=0} f' <spec>)"` — before `specced` is called. `specced --check` reads the block's *presence*, never its exit, so a block that cannot parse passes the gate |
 
 **4 — `write-the-specs`, replace the fourth `Do` item's closing sentence** —
 it tells you to run the block `the way collect runs it`, and says nothing about

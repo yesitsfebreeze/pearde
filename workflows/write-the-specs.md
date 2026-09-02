@@ -3,7 +3,7 @@ atomic: write-the-specs
 subject: turn what the build stands up into implementable units
 date: 2026-08-28
 updated: 2026-09-02
-runs: 29
+runs: 30
 ---
 
 # write-the-specs — units another worker can finish

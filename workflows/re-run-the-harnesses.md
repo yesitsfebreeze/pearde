@@ -3,7 +3,7 @@ atomic: re-run-the-harnesses
 subject: re-run the recorded harnesses and account for every changed count
 date: 2026-08-28
 updated: 2026-09-02
-runs: 65
+runs: 66
 ---
 
 # re-run-the-harnesses — every number back, or explained
@@ -16,7 +16,10 @@ runs: 65
    formatting before it runs tests fails at a different line and a different
    exit code, which is easily misread as a regression in the tests.
 2. Re-run every harness whose count you recorded, in the same order, with the
-   same command line.
+   same command line — and with the same `PEARDE_ROOT`. A worker building in
+   a lane names its lane in both runs (`PEARDE_ROOT=<lane>`); a baseline taken
+   against the checkout and a re-run against the lane compare two different
+   trees, and every difference between them is the two roots, not your build.
 3. Compare each count to the recorded one. A count that dropped is yours until
    you have shown otherwise.
 4. Before claiming any red-to-green flip, **diff the predicate against HEAD,

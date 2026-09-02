@@ -3,7 +3,7 @@ atomic: capture-the-harness-baseline
 subject: record what every committed harness prints before the tree is touched
 date: 2026-08-28
 updated: 2026-09-02
-runs: 65
+runs: 66
 ---
 
 # capture-the-harness-baseline — the numbers as they were before you
@@ -18,6 +18,14 @@ runs: 65
    only the second usually reads the footprint.
    A fixed glob list aborts on the first depth that
    has no match, and under a shell with `nomatch` it prints nothing at all.
+   Then name the tree the set is to measure. Every board harness takes its
+   root from `PEARDE_ROOT` and falls back to the board's own repo, which is
+   always the orchestrator's checkout — so a worker building in a lane runs
+   `PEARDE_ROOT=<lane> bash resources/doctor.sh --harnesses <board>`, or
+   exports `PEARDE_ROOT=<lane>` before running one harness by hand. Without
+   it the baseline you record and the re-run you compare it against are both
+   the checkout's, the lane's build is invisible to every number, and the
+   comparison is empty.
 2. Run each one that reads a path in your `footprint:` — grep each harness
    for the footprint paths spelled from the repo root (`references/settings.md`,
    not `settings.md`: a bare board filename matches every fixture that writes
@@ -94,4 +102,4 @@ runs: 65
 | **every** harness you baseline is red, and the failing lines share one cause outside your footprint | a layout or path migration landed between spec-writing and dispatch; the harness set is measuring the migration, not your unit | record the shared cause once instead of per-harness, verify your own contract items by hand on a fixture, and report the sweep that repairs the set as its own PRD — do not repair a subset, a half-swept harness set is worse evidence than a uniformly red one |
 | a failing line the brief names as inherited is **absent** when you take your own baseline, and harness rows it was reddening are green | a sibling closed it between the brief being composed and your first command; the brief's baseline is older than the tree | take your own baseline as the measurement and say in the report that the brief's line is gone and who closed it — `git status` in both roots names the file. Every harness row that line was reddening is that sibling's flip, not yours: the same rule as a count that went up |
 | `command not found: timeout` from a harness wrapper on **darwin** | `timeout` is GNU coreutils and is not on the base system | drop the wrapper, or `gtimeout` where coreutils is installed — and read the exit code of the wrapper, not only the harness's last line |
-| every board harness computes its own `ROOT` by walking up from `$0`, and the `repo:` root is a lane | the harness set is nailed to the orchestrator's checkout and can never read a lane; a worker's build is invisible to all of it until `collect` merges | build the merged tree in scratch — `git clone --shared <checkout> <scratch>` (a `git archive` or `git init` copy loses the history a pinned-sha harness reads), `git apply` the checkout's uncommitted diff, overlay the lane's files — then symlink `<scratch>/.pearde` to the live board and run each harness **through that path**, so its own `cd …/../../../../..` resolves to the merged tree. Say in the report that the counts are the merged tree's, not the lane's |
+| every board harness computes its own `ROOT` by walking up from `$0`, and the `repo:` root is a lane | the harness set is nailed to the orchestrator's checkout and can never read a lane; a worker's build is invisible to all of it until `collect` merges | build the merged tree in scratch — `git clone --shared <checkout> <scratch>` (a `git archive` or `git init` copy loses the history a pinned-sha harness reads), `git apply` the checkout's uncommitted diff, overlay the lane's files — then symlink `<scratch>/.pearde` to the live board and run each harness **through that path**, so its own `cd …/../../../..` resolves to the merged tree. The symlink alone is not enough: `grep -l "pwd -P" $(find <board>/prds -name verify.sh)` first, and for every harness it names — and for every harness that honours it — export `PEARDE_ROOT=<scratch>` on the run, because `pwd -P` resolves the symlink back to the live board and the harness then measures the orchestrator's checkout while printing a count that looks like yours. Say in the report that the counts are the merged tree's, not the lane's, and name any harness that could be pointed at neither |

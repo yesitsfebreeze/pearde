@@ -20,6 +20,14 @@ the page offers no door that would call them: no `＋ PRD`, no save, no drag
 between columns, no answer box. Every row is addressed `@<board>/<rel>`, so
 the one thing a click can do is take the reader to the board that owns it.
 
+A pass is rendered here as what it asks — the fork, the three answers as a
+marked list with the recommended one filled — and carries no radio, no
+own-answer box, no submit, and no `reopen` on the answered panel beside it. A
+disabled control is indistinguishable from a live one: the reader picks,
+nothing moves, and the page reads as broken rather than as read-only. In the
+cards and in the inspector alike the foot is the door — *answered on its own
+board*. `viewtest.js` pointed at `/board/all` asserts it.
+
 **It is not a master board.** The two answer different questions and neither
 replaces the other:
 

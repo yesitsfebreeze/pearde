@@ -345,9 +345,23 @@ const file = served ? arg : path.resolve(arg);
               getComputedStyle(f).display !== "none" &&
               !!f.querySelector("textarea, .send");
           }).length,
+          // `all` is a display: it writes nothing back, so its passes carry
+          // no control at all. A disabled radio reads exactly like a live one
+          // — the reader picks, nothing moves, and the page looks broken
+          // rather than read-only — so the merged board must draw none.
+          ro: !!(window.pearde && window.pearde.data &&
+                 window.pearde.data.virtual),
+          roControls: document.querySelectorAll(
+            "#asks .qq.ro input, #asks .qq.ro textarea, #asks .qq.ro button")
+            .length,
+          roPasses: document.querySelectorAll("#asks .qq.ro").length,
+          rawPasses: document.querySelectorAll("#asks .qq:not(.ro)").length,
+          // and the one door the answered panel has writes too
+          panelReopens: document.querySelectorAll("#answered .areopen").length,
           // every question carries its own reopen (revealed once answered)
           passesMissingReopen: [...document.querySelectorAll("#asks .qq")]
-            .filter(q => !q.querySelector(".qreopen")).length,
+            .filter(q => !q.classList.contains("ro") &&
+                         !q.querySelector(".qreopen")).length,
           // a card that is not askable says so rather than dumping the body
           dumps: cards.filter(c => c.querySelector(".q") &&
             !c.querySelector(".qq") && !c.querySelector(".qbad") &&
@@ -357,7 +371,8 @@ const file = served ? arg : path.resolve(arg);
           // every question answers on its own, and one already written back
           // is not in the inbox at all — it is in the answered panel
           passesMissingSend: [...document.querySelectorAll("#asks .qq")].filter(q =>
-            !q.classList.contains("answered") && !q.querySelector(".qsend")).length,
+            !q.classList.contains("answered") && !q.classList.contains("ro") &&
+            !q.querySelector(".qsend")).length,
           answeredStillAsking: document.querySelectorAll("#asks .qq.answered")
             .length,
           panel: !!document.querySelector("#answered .ahd"),
@@ -389,6 +404,21 @@ const file = served ? arg : path.resolve(arg);
                    `${a.panelRows} answered`]);
       checks.push(["the answered panel is in date order",
                    a.panelUnsorted === 0, `${a.panelUnsorted} out of order`]);
+      // the merged board reads and never writes — on a board's own page the
+      // same two checks say the passes are the writable kind
+      if (a.ro) {
+        checks.push(["`all` draws no control it cannot honour",
+                     a.roControls === 0 && a.rawPasses === 0,
+                     `${a.roControls} control(s) · ${a.rawPasses} writable pass(es)`]);
+        checks.push(["`all` offers no reopen either",
+                     a.panelReopens === 0, `${a.panelReopens} button(s)`]);
+      } else {
+        checks.push(["a board's own passes are answerable",
+                     a.roPasses === 0, `${a.roPasses} read-only pass(es)`]);
+        checks.push(["an answered question can be taken back",
+                     a.panelRows === 0 || a.panelReopens > 0,
+                     `${a.panelReopens} of ${a.panelRows}`]);
+      }
     }
   }
 

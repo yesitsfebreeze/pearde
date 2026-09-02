@@ -286,7 +286,18 @@ person.
 - **Each answered question carries its own `reopen`** — in the pass where it
   stands, and on its row in the answered panel. Reopening removes its
   `**Qn**` line from `## Answers` and parks the PRD on the user again, so
-  every reader agrees off the file.
+  every reader agrees off the file. A PRD still `question` — the rest of its
+  pass is unanswered — is asked for no state at all: the transition refuses a
+  move to the state a PRD already holds, and a retract that landed must not
+  be reported as a write that failed.
+- **A write that half-landed is not a failure.** `/edit` applies each part of
+  a payload in order and reports every one that took in `wrote`; an answer
+  appended and a state the transition refused come back together in one 409.
+  The page reads `wrote` first and `error` second, so the answer counts as
+  written and the toast says only that the PRD has not moved. Reporting the
+  whole call as failed sent the reader back to `answer Qn`, whose second
+  press the service refuses as a duplicate of the line already on disk —
+  a pass where nothing but resubmitting appeared to work.
 - The **asks** view is that same pass for every waiting PRD at once. It
   renders exactly what the inspector renders — the same picks, the same
   prose, the same per-question buttons — because both build from the same

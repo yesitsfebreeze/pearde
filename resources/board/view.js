@@ -2387,6 +2387,15 @@ bind(window, "keydown", e => {
     ksShow();
     return;
   }
+  // ctrl-O / ⌘O — the project in Obsidian, the same vault the status line's
+  // `▸vault` opens. From anywhere, like ⌘K, because the vault is where the
+  // long-form reading happens and reaching it should not depend on where the
+  // caret is. The browser's own "open file" is what the preventDefault takes.
+  if ((e.metaKey || e.ctrlKey) && (e.key === "o" || e.key === "O")) {
+    e.preventDefault();
+    openVault();
+    return;
+  }
   if (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA") {
     if (e.key === "Escape") {
       if (e.target.closest("#newbox")) $("newbox").classList.remove("on");
@@ -2552,7 +2561,7 @@ function drawLegend() {
     '<span class="keys">drag to pan · ctrl+wheel zoom · ' +
     "<kbd>/</kbd> filter · <kbd>v</kbd> axis · <kbd>t</kbd> names · " +
     "<kbd>f</kbd> fit · <kbd>s</kbd> state · <kbd>l</kbd> focus · " +
-    "<kbd>↑↓</kbd> select</span>";
+    "<kbd>↑↓</kbd> select · <kbd>ctrl+o</kbd> vault</span>";
 }
 
 /* ── the inspector ────────────────────────────────────────────────────────
@@ -2702,30 +2711,43 @@ function answerLine(id, text) {
   return "**" + id + "** *(answered " + stamp() + ")* — " + text;
 }
 
-function questionsHTML(qs, prefix) {
+/* `ro` is the merged board's reading of a pass: `all` is a display and
+   nothing writes back through it (@references/parts/all.md), so the pass is
+   rendered here as what it says, not as a control that will refuse. A radio
+   that cannot be picked and a button that cannot be pressed look exactly like
+   ones that can — a reader clicks, nothing moves, and the page reads as
+   broken rather than as read-only. So under `ro` there is no radio, no own
+   box and no submit at all: the three answers are a list, the recommended one
+   is marked, and the door out is the board that owns the PRD. */
+function questionsHTML(qs, prefix, ro) {
   return qs.map((q, i) => {
     const name = prefix + "-" + i;
-    return '<div class="qq" data-qid="' + esc(q.id) + '">' +
+    return '<div class="qq' + (ro ? " ro" : "") + '" data-qid="' + esc(q.id) +
+      '">' +
       '<div class="qt">' + esc(q.id) + (q.title ? " · " + esc(q.title) : "") +
       "</div>" +
       (q.issue ? '<div class="qi">' + esc(q.issue) + "</div>" : "") +
       q.opts.map((o, j) =>
-        '<label class="opt"><input type="radio" name="' + name +
-        '" value="' + j + '"' + (o.rec ? " checked" : "") + '><span class="ot">' +
+        (ro ? '<div class="opt' + (o.rec ? " pick" : "") + '"><span class="ot">'
+            : '<label class="opt"><input type="radio" name="' + name +
+              '" value="' + j + '"' + (o.rec ? " checked" : "") +
+              '><span class="ot">') +
         (o.label ? "<b>" + esc(o.label) + "</b>" +
           (o.text !== o.label ? " — " : "") : "") +
         (o.text !== o.label || !o.label ? esc(o.text) : "") +
         (o.rec ? '<span class="rec">recommended</span>' : "") +
-        "</span></label>").join("") +
-      '<label class="opt own"><span class="ohd"><input type="radio" name="' +
-      name + '" value="own"><span class="ot">or write your own</span></span>' +
-      '<textarea placeholder="in your words — typing here picks this"></textarea>' +
-      "</label>" +
-      '<div class="qfoot"><button class="act qsend" data-qi="' + i +
-      '">answer ' + esc(q.id) + '</button>' +
-      '<span class="qdone">answered</span>' +
-      '<button class="act qreopen" data-qi="' + i + '">reopen ' +
-      esc(q.id) + '</button></div></div>';
+        "</span>" + (ro ? "</div>" : "</label>")).join("") +
+      (ro ? "" :
+        '<label class="opt own"><span class="ohd"><input type="radio" name="' +
+        name + '" value="own"><span class="ot">or write your own</span></span>' +
+        '<textarea placeholder="in your words — typing here picks this"></textarea>' +
+        "</label>" +
+        '<div class="qfoot"><button class="act qsend" data-qi="' + i +
+        '">answer ' + esc(q.id) + '</button>' +
+        '<span class="qdone">answered</span>' +
+        '<button class="act qreopen" data-qi="' + i + '">reopen ' +
+        esc(q.id) + "</button></div>") +
+      "</div>";
   }).join("");
 }
 
@@ -2923,7 +2945,17 @@ function drawBody() {
     if (t.state === "question" || qs)
       h += '<div class="ask" id="dask"><h5>' +
         (t.state === "question" ? "waiting on you" : "questions") + "</h5>" +
-        (dQs
+        // On `all` the inspector reads a PRD it cannot write: the pass is
+        // rendered read-only and the foot is the door to the board that owns
+        // it, the same rule the asks card follows. Drawing an answer box here
+        // that the service answers 409 to is the worst of both.
+        (VIRTUAL
+          ? (dQs ? questionsHTML(dQs, "dq", true)
+                 : "<pre>" + esc(stripAnchor(qs)) + "</pre>") +
+            '<div class="row2"><span class="hint">read here · answered on ' +
+            "its own board</span>" +
+            boardLink(t.rel, "answer on " + rowBoard(t.rel)) + "</div>"
+        : dQs
           // a pass in the format: every question carries its own answer and
           // reopen — there is no bulk submit, one click settles one question
           ? questionsHTML(dQs, "dq") +
@@ -2983,10 +3015,12 @@ function drawBody() {
   const askEl = $("dask");
   if (askEl && dQs) {
     markAnsweredFrom(askEl, dQs, section(d.body, "Answers"));
-    wireQuestions(askEl, dQs, (text, isLast) =>
-        answerOne(dTask.rel, text, isLast()),
-      null,
-      q => reopenOne(dTask.rel, q.id, dTask.state));
+    // nothing to wire on `all` — the read-only pass carries no control
+    if (!VIRTUAL)
+      wireQuestions(askEl, dQs, (text, isLast) =>
+          answerOne(dTask.rel, text, isLast()),
+        null,
+        q => reopenOne(dTask.rel, q.id, dTask.state));
   }
   const ansBtn = $("danswer");
   if (ansBtn) ansBtn.onclick = () => answer(dTask.rel, $("dsay").value);
@@ -3015,14 +3049,23 @@ async function answerOne(rel, text, last) {
   const body = {append: text, heading: "Answers"};
   if (last) body.fm = {state: "open"};
   const out = await save(rel, body);
-  toast(out.error ? "Not saved — " + out.error
-        : last ? "Answered — " + rel.split("/").pop() + " is open again"
-               : "Answered — the rest of the pass still waits",
-        !!out.error);
-  if (out.error) return false;
+  const wrote = wroteOf(out);
+  if (!wrote.includes("append")) {
+    toast("Not saved — " + (out.error || "the answer did not land"), true);
+    return false;
+  }
   prdCache.delete(rel);
   answersLoaded = null;                    // one more for the answered panel
-  if (last) {
+  // the answer landed; a state the transition refused is a separate sentence.
+  // Reporting it as a failed answer sends the reader back to `answer Qn`,
+  // which the service then refuses as a duplicate — the question is settled
+  // on disk and the only thing left to say is that the PRD has not moved.
+  toast(out.error
+          ? "Answered — but the PRD did not reopen: " + out.error
+          : last ? "Answered — " + rel.split("/").pop() + " is open again"
+                 : "Answered — the rest of the pass still waits",
+        !!out.error);
+  if (wrote.includes("state")) {
     const row = allByRel.get(rel);
     if (row) row.state = "open";              // optimistic, until /data lands
     refresh();
@@ -3035,16 +3078,30 @@ async function answerOne(rel, text, last) {
    PRD, whose state is the wall, not the pass. */
 async function reopenOne(rel, qid, state) {
   const body = {retract: qid};
-  if (state !== "blocked") body.fm = {state: "question"};
+  // The state is only worth asking for when the PRD is not already in it. A
+  // pass with two questions is still `question` while one of its answers is
+  // taken back, and the transition refuses a move to the state a PRD already
+  // holds — so asking anyway turned a retract that landed into a reported
+  // failure, and the answer left ## Answers while the page went on showing it
+  // as settled. A blocked PRD's state is the wall, not the pass, and is never
+  // touched here.
+  if (state !== "blocked" && state !== "question")
+    body.fm = {state: "question"};
   const out = await save(rel, body);
-  toast(out.error ? "Not reopened — " + out.error
-                  : "Reopened " + qid + " — it is waiting on you again",
-        !!out.error);
-  if (out.error) return false;
+  const wrote = wroteOf(out);
+  if (!wrote.includes("retract")) {
+    toast("Not reopened — " +
+          (out.error || qid + " is not in ## Answers"), true);
+    return false;
+  }
   prdCache.delete(rel);
   answersLoaded = null;                 // one less in the answered panel
+  toast(out.error
+          ? "Reopened " + qid + " — but the PRD did not move: " + out.error
+          : "Reopened " + qid + " — it is waiting on you again",
+        !!out.error);
   const row = allByRel.get(rel);
-  if (row && state !== "blocked") row.state = "question";
+  if (row && wrote.includes("state")) row.state = "question";
   refresh();
   return true;
 }
@@ -3072,18 +3129,26 @@ async function answer(rel, text) {
   }
   const out = await save(rel, {append: text, heading: "Answers",
                                fm: {state: "open"}});
-  toast(out.error ? "Not saved — " + out.error
+  const wrote = wroteOf(out);
+  if (!wrote.includes("append")) {
+    toast("Not saved — " + (out.error || "the answer did not land"), true);
+    return out;
+  }
+  // the answer is on disk. Whether the PRD also moved is the second half, and
+  // the reader is told which half refused rather than being sent back to a
+  // button that can now only write a duplicate
+  prdCache.delete(rel);
+  answersLoaded = null;                    // one more for the answered panel
+  toast(out.error ? "Answered — but the PRD did not reopen: " + out.error
                   : "Answered — " + rel.split("/").pop() + " is open again",
         !!out.error);
-  if (!out.error) {
-    prdCache.delete(rel);
-    answersLoaded = null;                  // one more for the answered panel
-    const row = allByRel.get(rel);
-    if (row) row.state = "open";               // optimistic, until /data lands
-    dDirty = false;
-    refresh();
-  }
-  return out;
+  const row = allByRel.get(rel);
+  if (row && wrote.includes("state")) row.state = "open";
+  dDirty = false;
+  refresh();
+  // the answer landed, so every caller treats this as answered — a state the
+  // transition refused is said in the toast, not returned as a failed write
+  return Object.assign({}, out, {error: null});
 }
 
 async function saveDrawer() {
@@ -3165,6 +3230,16 @@ async function loadAdapters() {
   }
   if (ADAPTERS.length) drawBoard();
 }
+
+/* What a half-landed write actually left on disk. `/edit` applies each part
+   of a payload in order and reports every one that took in `wrote` — an
+   append that succeeded and a state the transition refused come back
+   together, as a 409 carrying both. Reading only `error` there calls a write
+   that happened a failure: the reader presses the same button again, the
+   second answer is refused as a duplicate of the one already on disk, and the
+   pass reads as a page where nothing but resubmitting works. Every writer
+   below reads `wrote` first and `error` second. */
+const wroteOf = out => (out && out.wrote) || [];
 
 async function save(rel, payload) {
   if (VIRTUAL) return {error: RO_MSG};
@@ -3518,12 +3593,12 @@ async function drawAsks() {
       return;
     }
     if (VIRTUAL) {
-      // Read here, answered where it lives. The pass is rendered exactly as
-      // it is on its own board — the same parse, the same picks, the same
-      // prose — and then every control that would write one back is disabled:
-      // a reader on this page has to see what is being asked, and a pick that
-      // silently did nothing would be worse than no pick at all. The foot is
-      // the door to the board that can take the answer.
+      // Read here, answered where it lives. The pass is rendered as what it
+      // asks — the same parse, the same three answers, the same prose — and
+      // no control that would write one back is drawn at all. A disabled
+      // radio is indistinguishable from a live one: a reader picks, nothing
+      // moves, and the page reads as broken rather than as read-only. The
+      // foot is the door to the board that can take the answer.
       fetchPrd(rel).then(d => {
         const q = card.querySelector(".q");
         q.classList.remove("skel");
@@ -3534,12 +3609,10 @@ async function drawAsks() {
           q.style.display = "none";
           const holder = document.createElement("div");
           holder.className = "qs";
-          holder.innerHTML = questionsHTML(cardQs, "aq-" + esc(rel));
+          holder.innerHTML = questionsHTML(cardQs, "aq-" + esc(rel), true);
           q.after(holder);
           markAnsweredFrom(holder, cardQs, section(d.body, "Answers"));
           dropAnswered(holder);
-          for (const el of holder.querySelectorAll("input,textarea,button"))
-            el.disabled = true;
           return;
         }
         q.textContent = qtxt || sectionLike(d.body, "Blocked") ||
@@ -3732,9 +3805,12 @@ async function drawAnswered(fresh) {
       ? as.map(a => '<div class="adone" data-go="' +
           esc(JSON.stringify({prd: a.rel})) + '"><div class="am"><span ' +
           'class="qid">' + esc(a.id) + '</span>' +
-          '<button class="areopen" data-rel="' + esc(a.rel) +
-          '" data-qid="' + esc(a.id) + '" title="take this answer back — ' +
-          'the question returns to the inbox">reopen</button>' +
+          // `all` writes nothing back: reopening is the one door this panel
+          // has, and on the merged page it can only fail — the service
+          // refuses every write named `all`. It is not drawn there.
+          (EDITABLE ? '<button class="areopen" data-rel="' + esc(a.rel) +
+            '" data-qid="' + esc(a.id) + '" title="take this answer back — ' +
+            'the question returns to the inbox">reopen</button>' : "") +
           '<span class="when">' +
           esc(a.date || "undated") + "</span></div>" +
           (a.question ? '<div class="aq">' + esc(plain(a.question)) +
@@ -4129,6 +4205,23 @@ function ksJump(h) {
   if (h.uri) { window.open(h.uri, "_blank"); return; }
   navigator.clipboard && navigator.clipboard.writeText(h.path);
   toast("path copied — " + h.path);
+}
+
+/* The board's own vault, opened at its root. The server owns the lookup —
+   Obsidian's register, then a `.obsidian/` that was never opened — so the page
+   only has to say when there is nothing to open, which is a real answer and
+   not a failure: a board whose project is not a vault has none. */
+async function openVault() {
+  try {
+    const r = await fetch(API + "/vault?board=" + encodeURIComponent(BOARD_KEY));
+    const d = await r.json();
+    if (d.uri) { window.open(d.uri, "_blank"); return; }
+    toast(d.why === "merged"
+      ? "every board here has its own vault — open one board to open its vault"
+      : "no Obsidian vault for this board — run `pearde init`", 1);
+  } catch (err) {
+    toast("could not reach the board — " + err, 1);
+  }
 }
 
 /* ── the now strip: three doors under the title ───────────────────────────

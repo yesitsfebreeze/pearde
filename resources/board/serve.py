@@ -970,14 +970,15 @@ class Handler(BaseHTTPRequestHandler):
             path = path[len(self.PREFIX):] or "/"
         return path, {k: v[0] for k, v in parse_qs(u.query).items()}
 
-    def vault_uri(self, board_path, rel):
-        """obsidian://open for one note of the board's vault — the vault is the
-        PROJECT (the board's parent), so a vault-relative path carries the
-        board's own folder in front of `rel`. The id is looked up in Obsidian's
-        own register by exact path, the same lookup the status line does; a
-        project never registered has no id to name, and `None` sends the hit
-        nowhere the page can go. A board that never migrated is still found
-        under its own path, where its vault used to root."""
+    def vault_root(self, board_path):
+        """The vault this board belongs to, as `(root, id, prefix)` — the
+        directory Obsidian opens, the id it is registered under (`None` when it
+        is not) and what a board-relative path carries in front of it inside
+        that vault. The vault is the PROJECT (the board's parent) since
+        2026-09-02, so the prefix is the board's own folder; a board that never
+        migrated is still found under its own path, where its vault used to
+        root, and its prefix is empty. The id is looked up in Obsidian's own
+        register by exact path, the same lookup the status line does."""
         cfg = os.path.expanduser("~/Library/Application Support/obsidian/"
                                  "obsidian.json")
         if not os.path.exists(cfg):
@@ -986,26 +987,33 @@ class Handler(BaseHTTPRequestHandler):
                                "obsidian", "obsidian.json")
         board_path = board_path.rstrip("/")
         project = os.path.dirname(board_path)
-        # the project first — the vault since 2026-09-02 — then the board
-        # itself, which is where a vault registered before that one roots
-        wants = [(project, os.path.basename(board_path) + "/" + rel),
-                 (board_path, rel)]
-        vid, path = None, rel
+        wants = [(project, os.path.basename(board_path) + "/"),
+                 (board_path, "")]
         try:
             with open(cfg, encoding="utf-8") as fh:
                 vaults = (json.load(fh).get("vaults") or {})
         except (OSError, ValueError):
             vaults = {}
-        for root, want in wants:
+        for root, prefix in wants:
             for k, v in vaults.items():
                 if os.path.realpath(str(v.get("path", ""))) \
                         == os.path.realpath(root):
-                    vid, path = k, want
-                    break
-            if vid:
-                break
+                    return root, k, prefix
+        # never registered: the folder holding `.obsidian/` is still the vault,
+        # and `obsidian://open?path=` opens it — the status line's own fallback
+        for root, prefix in wants:
+            if os.path.isdir(os.path.join(root, ".obsidian")):
+                return root, None, prefix
+        return None, None, ""
+
+    def vault_uri(self, board_path, rel):
+        """obsidian://open for one note of the board's vault. A project never
+        registered has no id to name, and `None` sends the hit nowhere the page
+        can go — `path=` opens a vault, not a file inside one."""
+        root, vid, prefix = self.vault_root(board_path)
         if not vid:
             return None
+        path = prefix + rel
         stem = path[:-3] if path.endswith(".md") else path
         from urllib.parse import quote
         return f"obsidian://open?vault={vid}&file={quote(stem)}"
@@ -1308,6 +1316,29 @@ class Handler(BaseHTTPRequestHandler):
             return self.reply(200, {"hits": hits[:MAX_HITS], "mode": mode,
                                     "total": len(hits), "counts": counts,
                                     "capped": len(hits) > MAX_HITS})
+        if path == "/vault":
+            # ctrl+O in the page — the project in Obsidian, opened at the vault
+            # root rather than at a note, because the shortcut is "show me the
+            # vault" and picking a landing note would be a guess. Same lookup
+            # and same fallback as the status line's `▸vault`: the id when the
+            # project is registered, `path=` when it holds a `.obsidian/` but
+            # was never opened, and `null` — which the page says out loud —
+            # when there is no vault to open at all. `all` merges boards that
+            # have their own vaults each, so it names none.
+            if is_all(q.get("board")):
+                return self.reply(200, {"uri": None, "root": None,
+                                        "why": "merged"})
+            b = by_name(q.get("board"))
+            if not b:
+                return self.reply(404, {"error": "unknown board"})
+            root, vid, _ = self.vault_root(b.path)
+            if not root:
+                return self.reply(200, {"uri": None, "root": None,
+                                        "why": "none"})
+            from urllib.parse import quote
+            uri = (f"obsidian://open?vault={vid}" if vid
+                   else "obsidian://open?path=" + quote(root))
+            return self.reply(200, {"uri": uri, "root": root})
         if path == "/adapters":
             return self.reply(200, [{"id": a["id"], "name": a["name"]}
                                     for a in load_adapters()])

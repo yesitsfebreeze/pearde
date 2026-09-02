@@ -824,6 +824,15 @@ kbd{font:10.5px ui-monospace,SFMono-Regular,monospace;background:var(--fill);
     border:.5px solid var(--sep);border-radius:6px;color:var(--ink);
     font:12px/1.5 inherit;padding:6px 8px;resize:vertical}
 .qq .opt.own .ot{color:var(--ink3)}
+/* the merged board's reading of a pass: no radio, no box, no submit, because
+   `all` writes nothing back. A dot in the radio's place keeps the three
+   answers reading as the list they are, and the recommended one is filled —
+   what a pick would have said, said without offering one. */
+.qq.ro .opt{cursor:default}
+.qq.ro .opt:hover{background:transparent}
+.qq.ro .opt::before{content:"";flex:none;width:9px;height:9px;margin-top:4px;
+    border-radius:50%;border:1px solid var(--ink3);opacity:.5}
+.qq.ro .opt.pick::before{background:var(--ink3);opacity:.85}
 .blank{background:var(--content);border:.5px solid var(--sep);
   border-radius:var(--r-lg);box-shadow:var(--shadow);padding:34px 20px;
   text-align:center;color:var(--ink3);font-size:12.5px;grid-column:1/-1;

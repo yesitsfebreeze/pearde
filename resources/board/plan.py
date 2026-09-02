@@ -782,11 +782,25 @@ def claim_ttl(settings):
 
 
 def prd_repo(prd):
-    """Where the PRD's code lives — `collect`'s rule: `repo:` that is a
-    directory, absolute or relative to the board's repo, else the board's own
-    repo. The footprint silence is read over is the one collect commits."""
-    root = (repo_root(prd["board_path"])
-            or os.path.dirname(os.path.abspath(prd["board_path"])))
+    """Where the PRD's code lives — `collect`'s rule (`repo_of` there):
+    `repo:` that is a directory, absolute or relative to the board's repo,
+    else the board's own repo. The footprint silence is read over is the one
+    collect commits.
+
+    "The board's own repo" is the CODE repo, not the board dir. `repo_root`
+    stops at any `.git`, and a board that is a git repo of its own — a nested
+    `.pearde` with its own `.git`, or a linked worktree whose `.pearde/.git`
+    is a gitdir file, which is what this machine runs — answers with the
+    board itself; every footprint would then resolve under `.pearde/` to
+    nothing and `newest_mtime` read 0.0. So when the walk stops AT the board,
+    step out and walk from its parent, exactly as `repo_of` does. A board
+    that is a plain subdirectory of its repo never trips this: the walk went
+    past it already."""
+    board = os.path.abspath(prd["board_path"])
+    root = repo_root(board)
+    if root == board:
+        root = repo_root(os.path.dirname(board)) or root
+    root = root or os.path.dirname(board)
     raw = str(prd["fm"].get("repo", "") or "").strip()
     if raw:
         for cand in (raw, os.path.join(root, raw)):

@@ -1,21 +1,21 @@
 # The routes — every page a ranking comes from
 
 One route answers one question. The heading is the question; the block under
-the id is how it is asked. `route.sh <id> [query]` runs that block with `$Q`
-bound to the query and `$N` to the row count — this file is the knob,
-`route.sh` is only its reader, the same split as `buckets.txt` and `scout.sh`.
+the id asks it. `route.sh <id> [query]` runs that block with `$Q` bound to the
+query and `$N` to the row count. `routes.md` is the knob and `route.sh` only
+its reader — the same split as `buckets.txt` and `scout.sh`.
 
 **The axis is the finding.** `hn` ranks by attention, `brew` by installs, `gh`
-by stars, `scorecard` by hygiene. Four verdicts on one tool, and they
-disagree. A row in `findings.md` names which axis it was measured on, because
-a claim measured on stars is a different claim from one measured on installs.
+by stars, `scorecard` by hygiene — four verdicts on one tool, disagreeing. A
+row in `findings.md` names the axis a pick was measured on, because a claim
+measured on stars is a different claim from one measured on installs.
 
 **One question, at least two axes.** A pick backed by a single route is an
 opinion. `ripgrep` is top-30 on `brew` *and* 78% on `arch` *and* green on
-`scorecard` — that is a finding.
+`scorecard` — three axes agreeing, and a finding.
 
-Every block here ran green under `route.sh check` on **2026-08-26**. Re-run it
-before trusting a row; a route that dies is deleted or moved to
+Every block here ran green under `route.sh check` on **2026-08-26**. Re-run the
+check before trusting a row; a dead route is deleted or moved to
 [Dead ends](#dead-ends), never left in place.
 
 Conventions:
@@ -500,7 +500,7 @@ jq -r '.servers[] | [.server.name, .server.description] | @tsv'
 Two passes, because the leaderboard carries no description: a skill is named
 `{"source","skillId","name","installs","weeklyInstalls"}` and nothing else. The
 first pass matches the name, which is free. The second reads the description
-off each skill's own page — one call each, so it is bounded to the top
+off each skill's own page — one call each, so the pass is bounded to the top
 `$SCOUT_DEPTH` by installs and only runs while the name pass is short of `$N`.
 A query is every word, ANDed, as a substring: `test-driven` finds `tdd`, and
 `review` also finds a description that says *reviewing*.

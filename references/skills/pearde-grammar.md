@@ -17,19 +17,20 @@ python3 @resources/pearde.py grammar check [board]        # what doctor reports 
 ```
 
 `grammar` forwards to @resources/grammar.py, the only reader of that format.
-`show` is the call a worker makes mid-job; `brief` prints the whole vocabulary,
-one line per term, for a contract written in the board's own words end to end.
+`show` is the call a worker makes mid-job; `brief` prints the whole
+vocabulary, one line per term, for a contract written end to end in the
+board's own words.
 
-A word earns a row when it means something here that it does not mean in
-ordinary English, or when it stands beside a word it is not. A word with two
-meanings gets one row in the collision table, never two rows — the lookup is
-the spelling.
+A word earns a row where the board's meaning parts from the ordinary English
+one, or where the word sits beside a look-alike of another meaning. A word with two
+meanings gets one row in the collision table, never two — the lookup is the
+spelling.
 
-`stale` lists every term that appears nowhere else in the repo; `undefined`
-runs the other direction, over the `@@` scopes and the frontmatter and
-settings keys the board uses. Both are judgements, never defects, so neither
-fails a check.
+`stale` lists every term appearing nowhere else in the repo; `undefined` runs
+the other direction, over the `@@` scopes and the frontmatter and settings
+keys the board uses. Both are judgements, never defects, so neither fails a
+check.
 
-The grammar lives at `.pearde/grammar.md`, so a board is needed to read one.
-With none in scope, say where the file would be; adding a row is an
-orchestrator write, and it does not happen uninvited.
+The grammar lives at `.pearde/grammar.md`, so reading one needs a board. With
+none in scope, say where the file would be; adding a row is an orchestrator
+write and does not happen uninvited.

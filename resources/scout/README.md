@@ -11,10 +11,10 @@ Four layers, each answering a different question:
 4. **wire** — the passive quality gates that keep the trees honest
    (`quality.yml` + the configs, sccache)
 
-Stars are the discovery layer, never the verdict. The whole point of the
-curated layer is that a 74k-star case-study corpus beats a 243k-star hype
-repo for *improving the product* — and that a 10k-star archived TUI library
-is a worse dependency than a 3k-star active one.
+Stars are the discovery layer, never the verdict. A 74k-star case-study corpus
+beats a 243k-star hype repo for *improving the product*; a 10k-star archived
+TUI library is a worse dependency than a 3k-star active one. The curated layer
+exists for those two cases.
 
 ## Layout
 
@@ -35,31 +35,30 @@ is a worse dependency than a 3k-star active one.
 ## Commands
 
 ### `scout.sh sweep`
-Snapshot every bucket in `buckets.txt` into `snapshots/<date>.tsv` (one GitHub
-search call per bucket, sort=stars, top N). The **first** sweep is a baseline;
-every sweep after it is a measurement. Run it daily on a local cron and the
-delta accumulates while nobody looks — no cloud needed. A GH Actions template
-(`templates/scout.yml`) exists for a repo that chooses to run the sweep in CI.
-Each sweep also prunes `snapshots/` down to the 90 most recent TSVs (override
-with `SCOUT_SNAP_KEEP`) — enough daily history for any `delta [days]` window
-this doc mentions, plus slack for gaps in the cron, without growing forever.
+Snapshot every bucket in `buckets.txt` into `snapshots/<date>.tsv` — one GitHub
+search call per bucket, sort=stars, top N. The **first** sweep is a baseline;
+every sweep after is a measurement. Run daily on a local cron and the delta
+accumulates while nobody looks, no cloud needed. `templates/scout.yml` is the
+GH Actions equivalent for a repo running the sweep in CI. Each sweep prunes
+`snapshots/` to the 90 most recent TSVs, overridden with `SCOUT_SNAP_KEEP` —
+enough daily history for every `delta [days]` window named here, plus slack for
+cron gaps, without growing forever.
 
 ### `scout.sh delta [days]`
 What gained the most stars since ~N days ago, computed by **diffing our own
-snapshots** — the stargazers API is restricted as of 2026-06-30, so this is
-the only way left. `NEW` marks a repo
-that entered a bucket's top-N, which is the useful signal (it displaced
-established work).
+snapshots** — the stargazers API is restricted as of 2026-06-30, leaving no
+other route. `NEW` marks a repo that entered a bucket's top-N, the useful
+signal: the repo displaced established work.
 
 ### `scout.sh trending [daily|weekly|monthly]`
-Scrapes GitHub's own trending as a discovery channel for buckets you never
-thought to define. The response is layout-coupled HTML; a row misalignment
-fails loudly, not silently.
+Scrapes GitHub's own trending as a discovery channel for buckets nobody thought
+to define. The response is layout-coupled HTML; a row misalignment fails
+loudly, not silently.
 
 ### `toolscout.sh '<query>'`
 One-off ranker for a specific choice: `topic:tui language:rust stars:>1000`.
 Stars ranked, plus `STATE` — days since push, ARCHIVED, issue load, license —
-so the dead-3-years 10k-star repo reads as what it is.
+so the dead-3-years 10k-star repo reads as dead.
 
 ### `route.sh list | <id> [query] | check`
 Forty-five ranking pages beyond GitHub, one shell block each in `routes.md`,
@@ -77,7 +76,7 @@ Adding a route is editing `routes.md`; `route.sh` parses it and holds no list.
 decided. The loop between them:
 
 1. **Phrase the job as a choice.** "Recursive search over a source tree", not
-   "is ripgrep good". If nothing can be rejected, there is nothing to measure.
+   "is ripgrep good". A job with nothing to reject has nothing to measure.
 2. **Pick routes by axis, at least two.** Attention (`hn`, `lobsters`),
    installs (`brew`, `arch`, `popcon`, `crates`, `npm`), stars (`gh`,
    `codeberg`), hygiene (`scorecard`, `osv`, `depsdev`). Axes that disagree are
@@ -89,21 +88,20 @@ decided. The loop between them:
 5. **Anything unanswered goes to `## Open`** in `findings.md` — a queue, so the
    next sweep knows what was already asked.
 
-Six months is the expiry. A finding older than that is re-measured or deleted;
-there is no third option.
+Six months is the expiry. A finding past six months is re-measured or deleted,
+with no third option.
 
 ## The reading list discipline
 
-A repo earns a row in `reading-list.md` only by answering, in writing, *which
-file in which tree changes because we read this*. That file carries the
+A repo earns a row in `reading-list.md` only by answering in writing *which
+file in which tree changes because we read this*. `reading-list.md` carries the
 genres, the entries and the anti-list.
 
 ## The quality layer — "accelerate quality by just using it"
 
-Every quality gate below is verified green on the family's trees as of
-2026-08-25, then wired into CI so it runs itself. The weekly schedule is the
-point: a new CVE against a locked dep turns the tab red on Monday with no
-human action.
+Every quality gate below ran green on the family's trees as of 2026-08-25, then
+went into CI to run itself. The weekly schedule is the point: a new CVE against
+a locked dep turns the tab red on Monday with no human action.
 
 - **typos** (`_typos.toml`) — 2,000+ md files where the prose IS the spec. A
   typo in a frontmatter key is a silent behaviour change. The config is the

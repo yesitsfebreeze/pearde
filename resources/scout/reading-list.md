@@ -1,10 +1,10 @@
 # The reading list — repos to read, not install
 
-The star chart is the discovery layer, not the value layer. This is the
+The star chart is the discovery layer, not the value layer. Below is the
 curated residue of the sweeps: repos whose *content* or *mechanisms* are worth
 reading, each mapped to the tree it improves and the thing to steal. A repo
-lands here only with an answer to "what does this change in our trees" —
-stars alone put a repo in the snapshot, never here.
+lands here only with an answer to "what does this change in our trees" — stars
+alone put a repo in the snapshot, never here.
 
 Three genres, in rising order of value:
 
@@ -62,7 +62,7 @@ are the reference implementations of those two halves.
 
 ## Maintenance
 
-This list is hand-curated and intentionally short. The sweeps keep producing
-candidates. An entry survives one question — *which file in which tree changes
-because we read this* — and the answer is written into the table before the
-repo is added.
+The list is hand-curated and deliberately short against a sweep that keeps
+producing candidates. An entry survives one question — *which file in which
+tree changes because we read this* — and the answer goes into the table before
+the repo is added.

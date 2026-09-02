@@ -1,8 +1,9 @@
 # The findings — what won, on which axis, and when
 
-The second index. `routes.md` is where a number comes from; this is what the
-numbers decided. One row per **job**, never per tool — "recursive search over a
-source tree" is a job, "ripgrep" is an answer, and the job outlives the answer.
+The second index. `routes.md` says where a number comes from; the rows below
+say what the numbers decided. One row per **job**, never per tool — "recursive
+search over a source tree" is a job, "ripgrep" is an answer, and the job
+outlives the answer.
 
 What a finding is:
 
@@ -59,8 +60,8 @@ axes are measuring adoption and not fashion.
 the only entrant with comparable distro coverage and an active maintainer.
 
 **Route gotcha** `repology fd` returns 0 — the project is `fd-find` there. A
-zero from repology means the name is wrong far more often than it means the
-tool is unpackaged.
+zero from repology reports a wrong name far more often than an unpackaged
+tool.
 
 ### web search from a script, no API key
 
@@ -77,14 +78,14 @@ instance, Brave, Exa, Tavily, grep.app, Sourcegraph.
 | `grep.app/api/search` | `429` on the first anonymous call |
 | `sourcegraph.com/.api/search/stream` | 200, `matchCount: 0` — public code search needs a token |
 
-**Why** the free tier of web search has closed almost completely; what is left
-is one index that is deliberately non-commercial and one HTML endpoint that
-tolerates a scraper. Both are fine at a handful of queries an hour and neither
-survives a loop. Volume means running SearXNG yourself, which is a container
-and a one-line settings change.
+**Why** the free tier of web search has closed almost completely, leaving one
+deliberately non-commercial index and one HTML endpoint tolerating a scraper.
+Both are fine at a handful of queries an hour and neither survives a loop.
+Volume means running SearXNG yourself — a container and a one-line settings
+change.
 
 **Overturned by** a public instance answering `format=json` twice in a week —
-re-run the `searx.space` filter before assuming it is still closed.
+re-run the `searx.space` filter before assuming the tier stayed closed.
 
 ### star momentum for a repo we do not own
 
@@ -101,9 +102,9 @@ them. **Beats** the stargazers API, star-history, OSS Insight.
 **Why** every hosted timeline for a repo we do not own is gone or is a
 rendering. The only series that exists is the one we accumulate, which costs
 one search call per bucket per day and answers immediately about anything in
-`buckets.txt` — and nothing about what is not. OSS Insight fills exactly that
-hole: it is a discovery channel for repos we never bucketed, and its tail is
-30-star projects, so it is read as a candidate list and never as a ranking.
+`buckets.txt` — and nothing about the rest. OSS Insight fills exactly that
+hole as a discovery channel for repos we never bucketed, with a tail of 30-star
+projects, so the output reads as a candidate list and never as a ranking.
 
 **Overturned by** GitHub restoring the stargazers timeline, which would make
 the snapshot directory redundant for anything we did not already sample.
@@ -116,8 +117,8 @@ the snapshot directory redundant for anything we did not already sample.
 |---|---|
 | `r.jina.ai/<url>` | 200, markdown with title and published date, no key at low volume |
 
-**Why** it is the only extractor measured, and it worked on the first call
-without a key. That is a reason to use it today and not a finding.
+**Why** `r.jina.ai` is the only extractor measured, and worked on the first
+call without a key — a reason to use the tool today and not a finding.
 
 **Overturned by** the first head-to-head against a local extractor
 (`trafilatura`, `readability`) on a page with a paywall, a cookie wall and a
@@ -146,9 +147,9 @@ Native.
 guards for what a plugin can't do everywhere — has a single close-to-exact
 answer (Dioxus) that turns out to have quietly dropped the terminal leg: the
 last `dioxus-tui` release predates the current 0.8.0-alpha core by two and a
-half years, and the crate isn't in the current monorepo at all. That is a
-materially different failure than a *guarded* platform gap — the API wasn't
-kept and gated per target, it was deleted. Every remaining framework with a
+half years, and the crate isn't in the current monorepo at all — a materially
+different failure than a *guarded* platform gap, because the API was deleted
+rather than kept and gated per target. Every remaining framework with a
 real native (windowed) desktop renderer (Iced, egui, Slint, Flutter) has no
 terminal target at all, and every framework with a genuine same-code
 terminal→browser story (ratatui+ratzilla, Textual+textual-web) has no
@@ -182,7 +183,7 @@ it — the point of measuring was that it had never been measured.
 **Why** the axes disagree loudly, and the disagreement is the finding. `ort`
 leads installs by 2.5× over `candle` on an eighth of the stars — the signature
 of a library embedded inside other people's tools rather than built on
-directly. It is also **inference-only**: an ONNX Runtime wrapper cannot run
+directly. `ort` is also **inference-only**: an ONNX Runtime wrapper cannot run
 `apply_gradient`, which is half of this tree's `Node` trait, so its install
 lead is measuring a job we are not doing. `tch` can train and has the deepest
 all-time installs of the trainers, and loses on the thing the numbers do not
@@ -208,9 +209,9 @@ this route usually means the query was too short.
 
 **Hygiene axis is thin here and says so.** Five of the six have no OpenSSF
 scorecard at all; only `tch` is in the dataset, at 3.2, with `Code-Review` and
-`Token-Permissions` both 0. That is not evidence `candle` is safer — it is
-evidence the ML-in-Rust corner is largely outside the hygiene ecosystem, and
-the `deny.toml` gate is carrying that risk alone.
+`Token-Permissions` both 0. The gap is no evidence `candle` is safer — the
+ML-in-Rust corner sits largely outside the hygiene ecosystem, and the
+`deny.toml` gate carries that risk alone.
 
 ### community plugins to install alongside pearde
 
@@ -302,11 +303,11 @@ because a tree of 11,766 sub-4 KB files is metadata-bound: `clonefile` shares
 extents and still allocates every inode and directory entry.
 
 **Why not ZFS.** OpenZFS on macOS is real and shipping for Apple Silicon
-(2.4.0, 2025-12-18), and it is a kernel extension: a reboot, reduced security
-on Apple Silicon, panics on an unclean unmount, and a non-APFS volume holding
-the one repo every session writes. It buys the same CoW that APFS already
-gives for free via `clonefile`, against the eater that CoW does not address.
-`brew` knows no `openzfs` formula — the install is the project's own package.
+(2.4.0, 2025-12-18), and a kernel extension: a reboot, reduced security on
+Apple Silicon, panics on an unclean unmount, and a non-APFS volume holding the
+one repo every session writes. It buys the same CoW that APFS already gives
+for free via `clonefile`, against the eater that CoW does not address. `brew`
+knows no `openzfs` formula — the install is the project's own package.
 
 **The ready-mades, ranked** (gh stars · last push · state):
 

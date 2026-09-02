@@ -739,6 +739,199 @@ def cmd_board(store, args):
     return 0
 
 
+# --- the map as notes -------------------------------------------------------
+
+# what a path's first segments say the file is. A row ending in `/` names a
+# place rather than a file, and keeps its own kind.
+KINDS = {
+    "references/skills": "skill",
+    "references/templates": "template",
+    "references/personas": "persona",
+    "references/parts": "part",
+    "references/agents": "agent",
+    "resources/invariants": "invariant",
+}
+# a folder whose files are one family — the family is the area, not each file
+FAMILIES = {"templates", "personas", "agents", "invariants"}
+
+
+def index_kind(path):
+    """reference · resource · skill · template · persona · part · agent ·
+    invariant · entry · place — derived from the path, never stored."""
+    if path.endswith("/"):
+        return "place"
+    head = "/".join(path.split("/")[:2])
+    if head in KINDS:
+        return KINDS[head]
+    top = path.split("/")[0]
+    if top in ("references", "resources"):
+        return top[:-1]        # reference, resource
+    return "entry"             # SKILL.md, README.md, index.md, .gitignore
+
+
+def index_area(path):
+    """The subject a file belongs to — `graph`, `board`, `knowledge`, …
+
+    The keyword answers what to read; the area answers where a file sits, and
+    a file with no keyword still has one. Derived from the path so it never
+    drifts from the tree.
+    """
+    parts = path.rstrip("/").split("/")
+    if len(parts) == 1:
+        return "root"
+    if parts[0] == "resources":
+        if len(parts) > 3 and parts[1] == "board":
+            return parts[2]                     # knowledge, obsidian, adapters
+        if len(parts) > 2:
+            return parts[1]                     # board, scout, graph, invariants
+        return index_stem(parts[-1])            # resources/knowledge.py -> knowledge
+    if parts[1] in FAMILIES:
+        return parts[1]
+    return index_stem(parts[-1])                # parts/board.md -> board
+
+
+def index_stem(name):
+    """The subject in a file name — `pearde-graph.md` and `graph.md` and
+    `graph.sh` are all `graph`; a `.doc.md` is its template's subject."""
+    stem = name.split(".")[0]
+    return stem[7:] if stem.startswith("pearde-") else stem
+
+
+def index_slug(path):
+    """One flat note name per path, reversible by eye: `references/graph.md`
+    is `references-graph-md`."""
+    return re.sub(r"[^A-Za-z0-9]+", "-", path.strip("/")).strip("-").lower()
+
+
+def yaml_quote(value):
+    return '"' + str(value).replace("\\", "\\\\").replace('"', '\\"') + '"'
+
+
+def cmd_index(store, args):
+    """index/ — one generated note per row of the repo's manifest, the map as
+    a queryable set of notes.
+
+    Dataview reads markdown and nothing else: it cannot see `resources/*.py`
+    or a `.sh`, and the vault holds markdown and images by design. So an index
+    of the tree is markdown *about* the tree — one note per row of
+    @references/files.md, carrying the row's prose as `title`, the path as
+    `path`, a `kind` and an `area` read off the path, and every `@@<keyword>`
+    from @index.md naming that file. The body links the real file when the
+    real file is a note, and links the siblings that share its keyword, so
+    the graph shows a subject as one cluster.
+
+    @resources/index.py stays the only parser of either format — this reads it
+    through `rows()`, `keywords()` and `scope_text()`, against the project the
+    board sits in, so a board in a repo with no map indexes nothing and says
+    so. Stale notes for rows that left the manifest are removed, exactly as
+    `board` does. Regenerable: edit the manifest, run index again.
+    """
+    store.ensure()
+    board_root = store.root.parent                 # <board> — the KB's parent
+    project = board_root.parent                    # the vault root, and the repo
+    if not ((project / "index.md").is_file()
+            and (project / "references" / "files.md").is_file()):
+        print(f"index: no map at {project} — index.md and references/files.md "
+              "are what this reads; nothing indexed")
+        return 0
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import index as index_map                      # the one reader of the format
+
+    rows = index_map.rows(str(project))
+    scopes = index_map.keywords(str(project))
+    scope_says = index_map.scope_text(str(project))
+
+    # a keyword names files; a keyword naming a directory names everything
+    # under it, the same way a manifest row covers a tree
+    keywords_of = {path: set() for path in rows}
+    for keyword, anchors in scopes.items():
+        for anchor in anchors:
+            if anchor.endswith("/"):
+                for path in rows:
+                    if path.startswith(anchor):
+                        keywords_of[path].add(keyword)
+            elif anchor in keywords_of:
+                keywords_of[anchor].add(keyword)
+
+    slugs, taken = {}, {}
+    for path in rows:
+        slug = index_slug(path)
+        while slug in taken:
+            slug += "-2"
+        taken[slug] = path
+        slugs[path] = slug
+    link = {path: f"pearde/wiki/index/{slug}" for path, slug in slugs.items()}
+    # the board folder is `pearde/` since 2026-09-02, `.pearde/` where it never
+    # moved — the vault is the project either way, so the note's own address
+    # carries the board's real name in front
+    if board_root.name != "pearde":
+        link = {path: f"{board_root.name}/wiki/index/{slugs[path]}" for path in rows}
+
+    index_dir = store.root / "index"
+    index_dir.mkdir(parents=True, exist_ok=True)
+    written = []
+    for path, says in sorted(rows.items()):
+        keywords = sorted(keywords_of[path])
+        exists = (project / path).exists()
+        lines = [
+            "---",
+            f"title: {yaml_quote(says or path)}",
+            "type: fileindex",
+            f"path: {path}",
+            f"kind: {index_kind(path)}",
+            f"area: {index_area(path)}",
+            f"ext: {path.rsplit('.', 1)[-1] if '.' in path.rsplit('/', 1)[-1] else 'dir'}",
+            f"keywords: [{', '.join(keywords)}]",
+            f"present: {str(exists).lower()}",
+            "---", "",
+            f"# {path}", "",
+        ]
+        if says:
+            lines += [says, ""]
+        if path.endswith("/"):
+            lines += [f"A place, not a file — every path under `{path}`.", ""]
+        elif path.endswith(".md"):
+            # a note in this vault: the link opens the real file
+            lines += [f"→ [[{path[:-3]}|{path}]]", ""]
+        else:
+            lines += [f"→ `{path}` — not a note; Dataview cannot read it, "
+                      "which is why this page exists.", ""]
+        if keywords:
+            lines += ["## Keywords", ""]
+            lines += [f"- `@@{k}` — {scope_says.get(k, '')}".rstrip(" —")
+                      for k in keywords] + [""]
+            for keyword in keywords:
+                siblings = sorted(p for p in rows
+                                  if p != path and keyword in keywords_of[p])
+                if not siblings:
+                    continue
+                lines += [f"## Same scope — `@@{keyword}`", ""]
+                lines += [f"- [[{link[s]}|{s}]]" for s in siblings] + [""]
+        else:
+            lines += ["## Keywords", "",
+                      "None. No `@@` scope in @index.md names this file — it "
+                      "is reachable by path only.", ""]
+        target = index_dir / f"{slugs[path]}.md"
+        target.write_text("\n".join(lines), encoding="utf-8")
+        written.append(path)
+
+    keep = {f"{slug}.md" for slug in slugs.values()}
+    removed = []
+    for old in sorted(index_dir.rglob("*.md")):
+        if old.relative_to(index_dir).as_posix() not in keep:
+            old.unlink()
+            removed.append(old.stem)
+    orphan_keywords = sorted(k for k in scopes
+                             if not any(k in v for v in keywords_of.values()))
+    unkeyworded = sum(1 for path in rows if not keywords_of[path])
+    print(f"index: {len(written)} file note(s), {len(scopes)} keyword(s)"
+          + (f" · {unkeyworded} with no keyword" if unkeyworded else "")
+          + (f" · {len(removed)} stale removed" if removed else "")
+          + (f" · keyword(s) naming no row: {', '.join(orphan_keywords)}"
+             if orphan_keywords else ""))
+    return 0
+
+
 def memo_text(prds, slug):
     try:
         return (prds / "memos" / f"{slug}.md").read_text(encoding="utf-8")
@@ -873,7 +1066,8 @@ def main(argv=None):
     parser = argparse.ArgumentParser(
         prog="knowledge.py",
         description="pearde knowledge — the research layer, whole.",
-        epilog="The loop: query · enqueue · remember · conclude · relink · dashboard · doctor.",
+        epilog="The loop: query · enqueue · remember · conclude · relink · dashboard · doctor.\n"
+           "The generated notes: board (one per PRD) · index (one per file in the map) · wiki.",
     )
     parser.add_argument("--root", help="KB folder (default: <repo>/pearde/wiki)")
     sub = parser.add_subparsers(dest="verb")
@@ -906,6 +1100,7 @@ def main(argv=None):
 
     p = sub.add_parser("relink", help="rebuild the link graph (.graphify/graph.json), symmetrize related:")
     p = sub.add_parser("board", help="regenerate board/ — one linkable note per PRD with its needs, fed-by, memos")
+    p = sub.add_parser("index", help="regenerate index/ — one note per file in the manifest, with its keywords")
     p = sub.add_parser("wiki", help="regenerate graphs/ community pages from the graph")
     p = sub.add_parser("dashboard", help="print the plain report; --write saves Dashboard.report.md")
     p.add_argument("--write", action="store_true")
@@ -923,6 +1118,7 @@ def main(argv=None):
         "query": cmd_query,
         "relink": cmd_relink,
         "board": cmd_board,
+        "index": cmd_index,
         "wiki": cmd_wiki,
         "dashboard": cmd_dashboard,
         "doctor": cmd_doctor,

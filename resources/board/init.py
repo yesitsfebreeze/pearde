@@ -624,13 +624,16 @@ def plant_graph(board):
     `upgrade` has always ended on these two verbs; `init` did not, so the one
     command a newcomer runs left the layer half-planted.
 
-    `board` writes the generated PRD and memo notes, `relink` builds the
-    graph over what is on disk — so the order is fixed, and both run after
-    `index_memos`, since `board` reads the memos it indexes. Returns one
-    `(verb, first line)` pair per verb, for the caller to print or drop.
+    `board` writes the generated PRD and memo notes, `index` writes one note
+    per row of the repo's manifest so a `@@<keyword>` is answerable from the
+    dashboard (and writes nothing where the repo carries no map), `relink`
+    builds the graph over what is on disk — so the order is fixed, and all
+    three run after `index_memos`, since `board` reads the memos it indexes.
+    Returns one `(verb, first line)` pair per verb, for the caller to print
+    or drop.
     """
     lines = []
-    for verb in ("board", "relink"):
+    for verb in ("board", "index", "relink"):
         out = subprocess.run(
             [sys.executable, os.path.abspath(KNOWLEDGE_PY),
              "--root", os.path.join(board, "wiki"), verb],

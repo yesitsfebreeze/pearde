@@ -4,6 +4,7 @@
     index.py files                 every anchor in the manifest, one per line
     index.py keywords              every keyword, one per line
     index.py scope <keyword>       the anchors that keyword resolves to
+    index.py rows                  every row as `anchor<tab>what it is`
     index.py check                 problems, one per line. Silent and 0 when clean
 
 Two files, because they answer two questions and only one of them is asked
@@ -44,6 +45,8 @@ SKIP_NAMES = {".DS_Store"}
 TEXT_EXT = {".md", ".sh", ".py", ".txt"}
 
 ROW = re.compile(r"^\|\s*@([A-Za-z0-9_./-]+)\s*\|", re.M)
+# the same row, with the second column — what the row says the file is
+ROW_DESC = re.compile(r"^\|\s*@([A-Za-z0-9_./-]+)\s*\|([^|]*)\|", re.M)
 KEYWORD_ROW = re.compile(r"^\|\s*`@@([a-z][a-z0-9-]*)`\s*\|(.*)\|(.*)\|\s*$", re.M)
 KEYWORD_USE = re.compile(r"@@([a-z][a-z0-9-]*)")
 # an `@<path>` written anywhere, not only in a Files row. A trailing `.` is a
@@ -59,14 +62,32 @@ def text(path):
         return ""
 
 
-def index_text():
-    return text(INDEX)
+def index_text(root=ROOT):
+    return text(os.path.join(root, "index.md"))
 
 
-def files():
+def manifest_text(root=ROOT):
+    return text(os.path.join(root, "references", "files.md"))
+
+
+def files(root=ROOT):
     """Every anchor with a row in the manifest. One ending in `/` is a
     directory row."""
-    return [a for a in ROW.findall(text(FILES)) if not a.startswith("@")]
+    return [a for a in ROW.findall(manifest_text(root)) if not a.startswith("@")]
+
+
+def rows(root=ROOT):
+    """{anchor: what the row says it is} — the manifest with its prose, in
+    file order. `files()` answers what is listed; this answers what each row
+    claims, so a generator reading the map never parses the format itself.
+
+    `root` is any checkout of this repo — the default is the one this file
+    sits in, and a board elsewhere passes its own project."""
+    out = {}
+    for anchor, desc in ROW_DESC.findall(manifest_text(root)):
+        if not anchor.startswith("@"):
+            out.setdefault(anchor, desc.strip())
+    return out
 
 
 def covered(path, dir_rows):
@@ -74,12 +95,19 @@ def covered(path, dir_rows):
     return any(path.startswith(d) for d in dir_rows)
 
 
-def keywords():
+def keywords(root=ROOT):
     """{keyword: [anchor, ...]} — the scope each keyword resolves to."""
     out = {}
-    for name, _is, reads in KEYWORD_ROW.findall(index_text()):
+    for name, _is, reads in KEYWORD_ROW.findall(index_text(root)):
         out[name] = re.findall(r"@([A-Za-z0-9_./-]+)", reads)
     return out
+
+
+def scope_text(root=ROOT):
+    """{keyword: what the scope is} — the middle column of the Keywords
+    table, so a note can say what a keyword means without re-reading it."""
+    return {name: is_.strip()
+            for name, is_, _reads in KEYWORD_ROW.findall(index_text(root))}
 
 
 def board(path):
@@ -178,6 +206,9 @@ def main(argv):
             print(f"no keyword @@{argv[2]}", file=sys.stderr)
             return 1
         print("\n".join(scopes[argv[2]]))
+    elif cmd == "rows":
+        for anchor, desc in rows().items():
+            print(f"{anchor}\t{desc}")
     elif cmd == "check":
         problems = check()
         if problems:

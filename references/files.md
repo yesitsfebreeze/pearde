@@ -129,14 +129,14 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/workflows.py | read + check the workflow library, and brief one — the only reader of that format |
 | @resources/grammar.py | read + grow + check the board's vocabulary — the only reader of that format |
 | @resources/health.py | score every tracked file 1-100, worst first, and check the record — the only reader of that format |
-| @resources/index.py | read + check the map — the only reader of that format |
+| @resources/index.py | read + check the map — the only reader of that format; `rows` and `scope_text` hand it to @resources/knowledge.py's `index` |
 | @resources/prose.py | check density — word count, mean sentence length, unbound waste words, banned openers/closers, per file — the only reader of `## Density` |
 | @resources/questions.py | read + check a PRD's question pass — the only reader of that format |
 | @resources/invariants/ | one script per `kind: invariant` memo — what its `verify:` runs, named for its slug |
 | @resources/invariants/every-artifact-lands-inside-the-board.sh | the tool writes nowhere but a board: no `.state/` outside a `.pearde/`, a driven throwaway project that stays clean, and the guard that still refuses a pass file written beside the board |
 | @resources/invariants/a-master-need-is-the-union-of-its-members.sh | a master's `ramp need` is the union over `members:` to any depth, its own tree one member of it, the floor on the sum and a row crediting members — asserted on git repos built at run time, with the plain board that must not move |
 | @resources/graph/graph.sh | graphify passes — extract, update, query, path, explain, god-nodes, vault open |
-| @resources/knowledge.py | the research loop — query, enqueue, remember, conclude, relink, wiki, dashboard, doctor — over `.pearde/wiki/` |
+| @resources/knowledge.py | the research loop — query, enqueue, remember, conclude, relink, wiki, board, index, dashboard, doctor — over the board's `wiki/`; `index` writes one note per manifest row so a `@@<keyword>` is answerable from the dashboard |
 | @resources/board/serve.py | the live service |
 | @resources/board/plan.py | read + order the board |
 | @resources/board/render.py | the page — markup, and the arithmetic behind it |

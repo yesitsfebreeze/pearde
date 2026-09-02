@@ -6,6 +6,7 @@ complexity: 39
 blast-radius: high
 workflow: probe-then-spec
 actual: 0.65h
+commit: fb9f88b 3587817
 ---
 
 # Every worker runs in its own worktree

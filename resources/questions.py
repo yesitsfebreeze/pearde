@@ -570,19 +570,29 @@ LEGACY_BOARD_DIR = ".pearde"
 BOARD_DIRS = (BOARD_DIR, LEGACY_BOARD_DIR)
 
 
+def is_board_dir(p):
+    """A directory is a board only when it CARRIES one — `settings.md`, or a
+    `prds/`. Duplicated from @resources/board/plan.py for the same reason the
+    two names above are. The name alone is not proof: `pearde` is an ordinary
+    word, and a folder called that beside a real board would shadow it."""
+    return os.path.isdir(p) and (
+        os.path.isfile(os.path.join(p, "settings.md"))
+        or os.path.isdir(os.path.join(p, "prds")))
+
+
 def find_board(arg):
     if arg:
         p = os.path.abspath(arg)
-        if os.path.basename(p) in BOARD_DIRS and os.path.isdir(p):
+        if os.path.basename(p) in BOARD_DIRS and is_board_dir(p):
             return p
         for name in BOARD_DIRS:
-            if os.path.isdir(os.path.join(p, name)):
+            if is_board_dir(os.path.join(p, name)):
                 return os.path.join(p, name)
         sys.exit(f"questions: no {BOARD_DIR}/ board at {arg}")
     d = os.getcwd()
     while True:
         for name in BOARD_DIRS:
-            if os.path.isdir(os.path.join(d, name)):
+            if is_board_dir(os.path.join(d, name)):
                 return os.path.join(d, name)
         nxt = os.path.dirname(d)
         if nxt == d:

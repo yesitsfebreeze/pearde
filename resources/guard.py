@@ -158,10 +158,21 @@ WRITERS = re.compile(r"(^|[|;&]\s*)(rm|mv|cp|mkdir|touch|tee|install|chmod)\b"
 _GITBASH_DRIVE_RE = re.compile(r"^/([A-Za-z])(/.*)?$")
 
 
+def is_board_dir(p):
+    """A directory is a board only when it CARRIES one — `settings.md`, or a
+    `prds/`. Duplicated from @resources/board/plan.py for the same reason the
+    two names above are. The name alone is not proof: `pearde` is an ordinary
+    word, and a folder called that beside a real board would shadow it."""
+    return os.path.isdir(p) and (
+        os.path.isfile(os.path.join(p, "settings.md"))
+        or os.path.isdir(os.path.join(p, PRDS_DIR)))
+
+
 def board_of(start):
-    """The nearest ancestor holding `.pearde/`, or None — the same walk
+    """The nearest ancestor carrying a board, or None — the same walk
     @resources/board/plan.py `find_board` does, so the guard and `scan` name
-    the same board from the same cwd. The guard has no opinion about a
+    the same board from the same cwd. Carrying, not named: a folder called
+    `pearde` that holds no board is not one. The guard has no opinion about a
     directory that is not a board."""
     start = start or os.getcwd()
     if os.name == "nt":
@@ -178,7 +189,7 @@ def board_of(start):
     d = os.path.abspath(start)
     while True:
         for name in BOARD_DIRS:
-            if os.path.isdir(os.path.join(d, name)):
+            if is_board_dir(os.path.join(d, name)):
                 return os.path.join(d, name)
         parent = os.path.dirname(d)
         if parent == d:

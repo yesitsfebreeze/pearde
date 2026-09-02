@@ -102,7 +102,12 @@ def parse_frontmatter(text):
             continue
         item = re.match(r"^  - \"?(.+?)\"?\s*$", line)
         if item and current_key is not None:
-            current_list.append(item.group(1))
+            # `current_list` is None under a key that had a scalar value, so
+            # an indented item there is a malformed file, not a list. Skip
+            # the line: one stray dash in one note must not raise out of the
+            # parser and take the whole verb down with it.
+            if current_list is not None:
+                current_list.append(item.group(1))
             continue
         pair = re.match(r"^([A-Za-z_][\w-]*):\s*(.*)$", line)
         if pair:

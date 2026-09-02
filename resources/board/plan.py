@@ -79,21 +79,49 @@ STATE_DIR = ".state"
 PRDS_DIR = "prds"
 
 
+def is_board_dir(p):
+    """A directory is a board when it CARRIES one: `settings.md`, or a
+    `prds/` directory. The name alone stopped being proof the day the dot
+    came off it — `.pearde` was a name nothing else on a disk would take,
+    `pearde` is an ordinary word, and a project holding a folder called that
+    (a checkout of this repo beside its siblings, say) would otherwise be
+    read as the board and shadow the real one next to it. Either marker is
+    enough: a board mid-creation has `settings.md` before it has PRDs, and a
+    board a person made by hand may have PRDs before it has settings."""
+    return os.path.isdir(p) and (
+        os.path.isfile(os.path.join(p, "settings.md"))
+        or os.path.isdir(os.path.join(p, PRDS_DIR)))
+
+
 def board_at(d):
-    """The board directory of project dir `d` — the plain name when it is
-    there, the legacy hidden one when only that is, and the plain name when
-    neither is, which is what a board made here will be called."""
+    """The board directory of project dir `d` — the plain name when a board
+    is there, the legacy hidden one when only that carries one, and the plain
+    name when neither does, which is what a board made here will be called."""
     for name in BOARD_DIRS:
         p = os.path.join(d, name)
-        if os.path.isdir(p):
+        if is_board_dir(p):
             return p
     return os.path.join(d, BOARD_DIR)
 
 
 def state_dir(board):
-    """`<board>/.state`, made if it is not there. Every writer goes through
-    this — the board is a directory a person creates by hand, so the corner
-    the tool writes into cannot be assumed to exist."""
+    """`<board>/.state`, made if it is not there — but only INSIDE a board
+    that is already there. Every writer goes through this, so the corner the
+    tool writes into cannot be assumed to exist; the board holding it can.
+
+    `makedirs` used to make both, and that turned every reader into a writer:
+    `scan` — and so `plan`, `status` and the daemon's poll — loads the parse
+    cache through here, so any caller handed a stale board path (`<project>/
+    .pearde` after that board moved to `<project>/pearde` without leaving the
+    compat symlink: the daemon's watch set and a master's `members:` are both
+    full of absolute paths spelled the old way) quietly conjured a second,
+    hollow board directory holding one file. That is how a repo ends up with
+    two board directories and a session writing into the wrong one. A read
+    must never create a board: the path is refused instead, loudly, and the
+    caller is told to point at a board that exists."""
+    if not os.path.isdir(board):
+        die(f"no board at {board} — a read never creates one; point at the "
+            f"board that is there, or `pearde init` beside it")
     d = os.path.join(board, STATE_DIR)
     os.makedirs(d, exist_ok=True)
     return d
@@ -142,7 +170,7 @@ def migrate_legacy_state():
     for b in boards:
         try:
             sd = state_dir(b)
-        except OSError:
+        except (OSError, SystemExit):   # `state_dir` refuses a board that went
             continue
         # the registry entry: one board's own row, in its own corner
         entry = os.path.join(sd, "serve.json")
@@ -214,16 +242,16 @@ def prds_dir(board):
 def find_board(arg):
     if arg:
         p = os.path.abspath(arg)
-        if os.path.basename(p) in BOARD_DIRS and os.path.isdir(p):
+        if os.path.basename(p) in BOARD_DIRS and is_board_dir(p):
             return p
         for name in BOARD_DIRS:
-            if os.path.isdir(os.path.join(p, name)):
+            if is_board_dir(os.path.join(p, name)):
                 return os.path.join(p, name)
         die(f"no {BOARD_DIR}/ board at {arg}")
     d = os.getcwd()
     while True:
         for name in BOARD_DIRS:
-            if os.path.isdir(os.path.join(d, name)):
+            if is_board_dir(os.path.join(d, name)):
                 return os.path.join(d, name)
         nxt = os.path.dirname(d)
         if nxt == d:

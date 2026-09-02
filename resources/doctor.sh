@@ -241,6 +241,14 @@ fi
 # ── guard: the loop's rules, wired as a hook ─────────────────────────────────
 # A rule written in a reference file is advice, and the pass that cost
 # 318,584 tokens ignored three of them. The guard is the same rules as a
+# A directory is a board only when it CARRIES one — `settings.md`, or a
+# `prds/`. The same test @resources/board/plan.py `is_board_dir` makes, and
+# for the same reason: `.pearde` was a name nothing else took, `pearde` is an
+# ordinary word, and a folder called that beside a real board would otherwise
+# be walked into as the board — a checkout of this repo sitting next to the
+# project's own `.pearde/` reported that board broken and its PRDs gone.
+is_board() { [ -f "$1/settings.md" ] || [ -d "$1/prds" ]; }
+
 # PreToolUse hook — @references/parts/guard.md. Where hooks are configured IS
 # knowable here, unlike a status line: the settings file sits in the repo the
 # board lives in, so this checks that file and `--fix` writes the block.
@@ -254,7 +262,7 @@ GSET=""
 d="$START"
 while [ -n "$d" ] && [ "$d" != "/" ]; do
   for n in pearde .pearde; do
-    [ -d "$d/$n" ] && { GSET="$d/.claude/settings.json"; break; }
+    is_board "$d/$n" && { GSET="$d/.claude/settings.json"; break; }
   done
   [ -n "$GSET" ] && break
   p=$(dirname "$d"); [ "$p" = "$d" ] && break; d="$p"
@@ -296,7 +304,7 @@ fi
 BOARD=""; d="$START"
 while [ -n "$d" ] && [ "$d" != "/" ]; do
   for n in pearde .pearde; do
-    [ -d "$d/$n" ] && { BOARD="$d/$n"; break; }
+    is_board "$d/$n" && { BOARD="$d/$n"; break; }
   done
   [ -n "$BOARD" ] && break
   # dirname's fixpoint is not always `/` — on a Windows drive path it is `C:`,

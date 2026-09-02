@@ -278,6 +278,9 @@ def gate_unblock(board, prds, prd):
     for d in (deps if isinstance(deps, list) else [deps]):
         t = planlib.resolve_need(prds, prd, d)
         if t is None:
+            # ignored, not held — same rule as the claim gate
+            if planlib.unscanned_need(prds, d, board):
+                continue
             raise Refused(f"unblock: needs `{d}` names no PRD on this board")
         if prds[t]["state"] != "done":
             raise Refused(f"unblock: needs {t} is `{prds[t]['state']}` — "

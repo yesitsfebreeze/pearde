@@ -16,7 +16,7 @@ is yours and no tool touches it.
 | `claim`     | `pearde claim` writes it, `release` and `retry` clear it | the sweep, elapsed on `done`                      |
 | `repo`      | user                           | the worker brief. Optional                        |
 | `workflow`  | user · the drill, on the tree it writes · orchestrator on `specced`, from the analyst's report | the worker brief, `@resources/workflows.py check`, the scan line. A slug in `.pearde/workflows/`. Optional |
-| `needs`     | user                           | a hard gate in `plan`'s order. PRD dir names. Optional |
+| `needs`     | user                           | a hard gate in `plan`'s order. PRD dir names, or `@<board>/<prd>` across a master's members — one naming a board this scan does not hold is reported and ignored, @references/parts/master.md. Optional |
 | `footprint` | user / orchestrator            | the overlap check in step 5, `plan`'s pairwise `after` edges when specs carry none. Paths. Optional |
 | `origin`    | whoever creates the PRD        | the split in the progress line, the tripwire in @references/parts/derived.md. `requested` \| `derived` |
 | `from`      | orchestrator                   | which PRD's work surfaced a `derived` one         |

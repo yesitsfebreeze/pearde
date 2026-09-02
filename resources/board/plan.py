@@ -1669,7 +1669,10 @@ def dispatchable(prd, prds, board=None, holder=None):
     - container — children, every one `done`, and no specs or open box of
       its own. Finished work `collect` closes, never a thing to dispatch;
       `claim` on it is the trap `a-container-cannot-reach-done` records.
-    - needs — a `needs:` entry naming nothing, or a PRD not `done`.
+    - needs — a `needs:` entry naming nothing, or a PRD not `done`. The
+      one exception is a cross-board need whose board is not in this
+      scan: nothing here can say whether it is done, so it is ignored,
+      the answer `resolve_needs` already gives the schedule.
     - footprint — overlaps a `claimed` PRD's.
     - workflow — `workflow:` names no workflow in any library it can see;
       `board` is the master's library when there is one.
@@ -1699,6 +1702,12 @@ def dispatchable(prd, prds, board=None, holder=None):
     for d in (deps if isinstance(deps, list) else [deps]):
         t = resolve_need(prds, prd, d)
         if t is None:
+            # A cross-board need whose board is not in this scan is ignored,
+            # not held — the answer `resolve_needs` gives the schedule, so the
+            # gate and the edges say one thing. Every other unresolvable need
+            # names something this board should hold and does not: a hold.
+            if unscanned_need(prds, d, board or prd.get("board_path")):
+                continue
             return f"needs: `{d}` names no PRD on this board"
         if prds[t]["state"] != "done":
             return f"needs: {t} is `{prds[t]['state']}`, not done"
@@ -1798,7 +1807,40 @@ def resolve_need(prds, prd, d, idx=None):
     return same[0] if len(same) == 1 else None
 
 
-def resolve_needs(prds, todo, warn=True):
+def need_board(d):
+    """The board a qualified `needs:` entry names — `@<board>/<prd>` → `<board>`
+    — or None when the entry names no board at all."""
+    d = str(d).strip().rstrip("/")
+    if not d.startswith(MEMBER_SIGIL) or "/" not in d:
+        return None
+    return d[len(MEMBER_SIGIL):].split("/", 1)[0] or None
+
+
+def scanned_boards(prds, board=None):
+    """Every board name this scan can answer for: the members it merged, plus
+    the board's own `name:` when the caller knows the path — a master's own
+    PRDs carry `board: None`, so without it a need under the master's own name
+    would read as a board that is not here."""
+    names = {p.get("board") for p in prds.values() if p.get("board")}
+    if board:
+        names.add(board_name(board))
+    return names
+
+
+def unscanned_need(prds, d, board=None):
+    """True when `d` is a cross-board need whose board is not in this scan.
+
+    A member worked on its own board carries `needs: @<other>/<prd>` for a
+    board this session never read. Nothing here can say whether it is done, and
+    a gate that holds on what it cannot see holds for good — so it is ignored
+    and reported, the answer `resolve_needs` already gave the schedule. A
+    qualified need naming a board that IS in the scan is a different thing: the
+    board is here and the PRD is not, which is a typo, and a typo still holds."""
+    b = need_board(d)
+    return bool(b) and b not in scanned_boards(prds, board)
+
+
+def resolve_needs(prds, todo, warn=True, board=None):
     """rel → the rels it waits on. A parent implicitly needs its undone
     children — work flows to the leaves — and a need on a `done` PRD is
     satisfied."""
@@ -1812,9 +1854,14 @@ def resolve_needs(prds, todo, warn=True):
             t = resolve_need(prds, p, d, idx)
             if t is None:
                 ds = str(d).strip()
-                if warn and ds.startswith("@"):
+                if warn and unscanned_need(prds, ds, board):
                     print(f"plan: {r} needs '{d}' — that board is not in this "
                           f"scan, ignored", file=sys.stderr)
+                    continue
+                if ds.startswith(MEMBER_SIGIL):
+                    if warn:
+                        print(f"plan: {r} needs '{d}' — that board is in this "
+                              f"scan and holds no such PRD", file=sys.stderr)
                     continue
                 same = idx[0].get(os.path.basename(ds), [])
                 if warn and len(same) > 1:
@@ -1844,7 +1891,7 @@ def compute_plan(board, workers=None, warn=True):
                     if p["state"] not in LIVE_STATES and p["state"] != "done")
     if not todo:
         return None
-    needs = resolve_needs(prds, todo, warn)
+    needs = resolve_needs(prds, todo, warn, board)
 
     est, feet = {}, {}
     for r, p in todo.items():

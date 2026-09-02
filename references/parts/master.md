@@ -67,7 +67,7 @@ The live service watches every member and reconciles within about a second.
 | thing                            | scope                                                                                  |
 |----------------------------------|-----------------------------------------------------------------------------------------|
 | `prd.md`, specs, memos, `state`  | the member. Written where the PRD lives, never at the master                             |
-| `needs:`                         | the whole master board. Resolved in the PRD's own board first; across boards it is `@<member>/<prd>`. A bare name matching two boards is ambiguous, reported, and ignored |
+| `needs:`                         | the whole master board. Resolved in the PRD's own board first; across boards it is `@<member>/<prd>`. A bare name matching two boards is ambiguous, reported, and ignored. `@<board>/<prd>` naming a board this scan does not hold is **reported and ignored**, never a hold — a member worked on its own cannot see the other board and a gate that holds on what it cannot see holds for good. `@<board>/<prd>` naming a board that IS in the scan and holds no such PRD is a typo, and holds |
 | `footprint:`                     | qualified with the member name before any overlap check — two repos touching `src/lib.ts` are not one file. An **absolute** path is left as written, so a deliberate cross-repo overlap still clashes |
 | `language`                       | the PRD's own board. The master's is for its own PRDs and the pass                      |
 | `workers`, `pipeline`            | the master — it is the one dispatching                                                   |

@@ -29,8 +29,12 @@ first_section() { printf '%s\n' "$1" \
   | grep -E '^(drill|collect|waiting on you|in flight|ready|gated) ' | head -1; }
 state_of() { grep -m1 '^state:' "$D/prds/$1/prd.md" | tr -d '\r'; }
 
-rm -rf "$T"; mkdir -p "$D/prds"/{one,two,other,other2,old,sup} "$D/.state"
+rm -rf "$T"; mkdir -p "$D/prds"/{one,one/other,two,other2,old,sup} "$D/.state"
 
+# `other` sits under `one`: the drill gate is scoped to what a question can
+# reshape — the asker, its ancestors, its descendants, what needs one of
+# them — so the PRD it holds is a descendant of the asker; the rest of the
+# board dispatches (references/drill.md § The board's own frontier).
 # a question PRD in drill.md's own format — the fork, three prepared answers,
 # one recommended. `one` and `two` carry the same title on purpose: the pass
 # file matches by title, so one `## Asked` line carries both.
@@ -47,7 +51,7 @@ qprd() {
   } > "$D/prds/$1/prd.md"
 }
 for n in one two; do qprd "$n"; done
-printf -- '---\nstate: open\npriority: 10\n---\n# f-other\n\nplain\n' > "$D/prds/other/prd.md"
+printf -- '---\nstate: open\npriority: 10\n---\n# f-other\n\nplain\n' > "$D/prds/one/other/prd.md"
 printf -- '---\nstate: open\npriority: 10\n---\n# f-other2\n\nplain\n' > "$D/prds/other2/prd.md"
 printf -- '---\nstate: done\npriority: 10\n---\n# f-old\n\n## Questions\n\n### Q1: What this closed on\n\nIt closed?\n\n1. **One** — so. (recommended)\n2. **Two** — so.\n3. **Three** — so.\n' > "$D/prds/old/prd.md"
 printf -- '---\nstate: superseded\npriority: 10\n---\n# f-sup\n\n## Questions\n\n### Q1: What replaced this\n\nGone?\n\n1. **One** — so. (recommended)\n2. **Two** — so.\n3. **Three** — so.\n' > "$D/prds/sup/prd.md"
@@ -71,7 +75,7 @@ OUT=$($TRANS claim other w --as engineer 2>&1); RC=$?
 ck "$([ $RC -eq 1 ] && echo 0 || echo 1)" "claim exits 1 (got $RC)"
 has "claim refused naming asking 2" "$OUT" "asking 2"
 has "the refusal says drill first" "$OUT" "drill first"
-has "other is untouched: still open" "$(state_of other)" "^state: open"
+has "other is untouched: still open" "$(state_of one/other)" "^state: open"
 
 echo "== leg 3 (spec01 box 2, spec02 box 2): pass out — out marks, claim goes"
 printf '# Pass\n\n## Asked\n- What the board shows a session first · out\n' > "$D/.state/pass.md"
@@ -80,8 +84,8 @@ has "one's question marked · out" "$OUT" "^  one · Q1 What the board shows a s
 has "two's question marked · out" "$OUT" "^  two · Q1 What the board shows a session first · out$"
 $TRANS claim other w --as engineer > /dev/null 2>&1; RC=$?
 ck "$RC" "claim went through once the pass was out (exit $RC)"
-has "other moved open → analyzing" "$(state_of other)" "^state: analyzing"
-has "other carries the claim line" "$(cat "$D/prds/other/prd.md")" "^claim: w "
+has "other moved open → analyzing" "$(state_of one/other)" "^state: analyzing"
+has "other carries the claim line" "$(cat "$D/prds/one/other/prd.md")" "^claim: w "
 
 echo "== leg 4 (spec01 box 3, spec02 box 3): one question — count, no section, claim goes"
 # the pass file goes: the one question left is UNPUT, which is the case the

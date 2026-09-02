@@ -1,8 +1,8 @@
 ---
 name: pearde
 language: English
-workers: 6
-pipeline: 8
+workers: 0
+pipeline: 0
 weight-default: 20
 gantt-day: 8h
 context-budget: 160k

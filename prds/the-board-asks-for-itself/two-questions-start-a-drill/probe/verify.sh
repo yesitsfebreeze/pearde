@@ -50,7 +50,7 @@ has "loop.md step 1: the section stands first" "$LOOP" "a **drill** section stan
 has "loop.md step 2 row: no question" "$LOOP" "| none | nothing |"
 has "loop.md step 2 row: one question" "$LOOP" "| one | that question, put as today |"
 has "loop.md step 2 row: two or more" "$LOOP" "| two or more | one drill pass over all of them"
-has "loop.md: nothing is dispatched while it is unput" "$LOOP" "dispatched: \`pearde claim\` refuses \`asking N — drill first\`"
+has "loop.md: what a question can reshape is not dispatched while it is unput" "$LOOP" "\`asking N — drill first\` on those and names the asker"
 has "loop.md step 8 is the same drill" "$LOOP" "same drill the scan count starts"
 DRILL=$(cat "$REPO/references/drill.md")
 has "drill.md: the scan count is the second entry point" "$DRILL" "second entry point"

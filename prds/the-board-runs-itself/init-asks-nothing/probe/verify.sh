@@ -37,8 +37,15 @@ else
 fi
 for f in skills references index.md README.md; do ln -s "$ROOT/$f" "$TOP/srv/$f"; done
 PEARDE="$SRV/pearde.py"
-REG="$ROOT/resources/board/state/serve.json"
-REG_BEFORE="$( [ -f "$REG" ] && cksum < "$REG" )"
+# Re-aimed. There is no machine-wide registry in the install any more: the
+# `every-artifact-lands-inside-the-board` invariant moved it to the board that
+# owns it (serve.py entry_path → `<board>/.state/serve.json`). The old path
+# never existed after that move, so this and its sibling below compared empty
+# to empty and measured nothing. `absent` stands in for the missing file so
+# that a run which CREATES the real board's registration is caught too — that
+# is the failure this check exists for, and an empty string could not see it.
+REG="$ROOT/.pearde/.state/serve.json"
+REG_BEFORE="$( [ -f "$REG" ] && cksum < "$REG" || echo absent )"
 SPARE="$(python3 -c 'import socket; s=socket.socket(); s.bind(("127.0.0.1",0)); print(s.getsockname()[1]); s.close()')"
 export PEARDE_PORT="$SPARE"
 trap 'PEARDE_PORT="$SPARE" python3 "$SRV/board/serve.py" stop >/dev/null 2>&1; rm -rf "$TOP"' EXIT
@@ -54,10 +61,11 @@ OUT="$( cd "$D" && python3 "$PEARDE" init 2>&1 )"; RC=$?
 eq  "A exit 0" "$RC" "0"
 eq  "A the first line says the language and the command that changes it" "$(printf '%s\n' "$OUT" | head -1)" "board a · language English — pearde settings language=<l> changes it"
 eq  "A settings.md · language" "$(fm a language)" "English"
-eq  "A settings.md · workers" "$(fm a workers)" "3"
-eq  "A settings.md · pipeline" "$(fm a pipeline)" "3"
+eq  "A settings.md · workers" "$(fm a workers)" "0"
+eq  "A settings.md · pipeline" "$(fm a pipeline)" "0"
 eq  "A settings.md · weight-default" "$(fm a weight-default)" "50"
 eq  "A settings.md · gantt-day" "$(fm a gantt-day)" "8h"
+eq  "A settings.md · happiness" "$(fm a happiness)" "0"
 eq  "A no name: — inferred" "$(fm a name)" ""
 eq  "A no members: — never a master" "$(fm a members)" ""
 eq  "A vision.md is the template" "$(cksum < "$D/.pearde/vision.md")" "$(cksum < "$ROOT/references/templates/vision.md")"
@@ -109,14 +117,14 @@ echo "D. pearde settings"
 OUT="$( cd "$D" && python3 "$PEARDE" settings workers=5 2>&1 )"; RC=$?
 eq  "D exit 0" "$RC" "0"
 eq  "D workers: 5" "$(fm c workers)" "5"
-eq  "D the line says what moved" "$OUT" "settings: workers 3 → 5"
-eq  "D every other line byte-identical" "$(grep -v '^workers:' "$D/.pearde/settings.md" | cksum)" "$(printf -- '---\nname: kanban\nlanguage: German\npipeline: 3\nweight-default: 50\ngantt-day: 8h\n---\n' | cksum)"
+eq  "D the line says what moved" "$OUT" "settings: workers 0 → 5"
+eq  "D every other line byte-identical" "$(grep -v '^workers:' "$D/.pearde/settings.md" | cksum)" "$(printf -- '---\nname: kanban\nlanguage: German\npipeline: 0\nweight-default: 50\ngantt-day: 8h\nhappiness: 0\n---\n' | cksum)"
 OUT="$( cd "$D" && python3 "$PEARDE" settings language=English 2>&1 )"
 eq  "D language=English replaces the key" "$(fm c language)" "English"
 OUT="$( cd "$D" && python3 "$PEARDE" settings split-above=40 2>&1 )"
 eq  "D a new key is appended" "$(fm c split-above)" "40"
 eq  "D ...and said as new" "$OUT" "settings: split-above 40"
-eq  "D --board names the board from elsewhere" "$( cd "$TOP" && python3 "$PEARDE" settings pipeline=2 --board "$D/.pearde" 2>&1 )" "settings: pipeline 3 → 2"
+eq  "D --board names the board from elsewhere" "$( cd "$TOP" && python3 "$PEARDE" settings pipeline=2 --board "$D/.pearde" 2>&1 )" "settings: pipeline 0 → 2"
 OUT="$( cd "$D" && python3 "$PEARDE" settings workers 2>&1 )"; RC=$?
 eq  "D a key with no = is refused" "$RC" "1"
 has "D ...naming the shape" "$OUT" "settings <key>=<value>"
@@ -207,8 +215,12 @@ pearde"
 
 # ── J. the real registry ─────────────────────────────────────────────────────
 echo "J. nothing touched the real daemon"
-eq  "J the real registry is untouched" "$( [ -f "$REG" ] && cksum < "$REG" )" "$REG_BEFORE"
-eq  "J the copy's registry never learned a fixture" "$(tr -d '[:space:]' < "$SRV/board/state/serve.json" 2>/dev/null)" "[]"
+eq  "J the real board's registration is untouched" "$( [ -f "$REG" ] && cksum < "$REG" || echo absent )" "$REG_BEFORE"
+# Re-aimed from `$SRV/board/state/serve.json` = "[]". That file is the registry
+# the invariant deleted; asking what it holds asks nothing. The claim underneath
+# it survives the move and is now the invariant itself — the copied install is
+# code only, and nothing this run did wrote state beside it.
+eq  "J the copied install holds no registration at all" "$(find "$TOP/srv" -name 'serve.json' | wc -l | tr -d ' ')" "0"
 eq  "J no fixture prd.md under this probe" "$(find "$HERE" -name prd.md | wc -l | tr -d ' ')" "0"
 
 echo

@@ -9,6 +9,7 @@
 
 ## Decisions
 
+- [the-board-assumes-unlimited-agents](the-board-assumes-unlimited-agents.md) — decided · 2026-09-02 — the plan, the pass and the drill assume every dispatchable PRD runs at once; a worker cap is a person's setting, never the plan's clock
 - [also-resolves-against-the-board-first](also-resolves-against-the-board-first.md) — decided · 2026-09-02 — collect --also resolves against the board first, then the caller's cwd, and refuses a path neither holds
 - [a-harness-that-reads-the-whole-checkout-is-not-a-harness](a-harness-that-reads-the-whole-checkout-is-not-a-harness.md) — decided · 2026-09-02 — a probe asserts over its own footprint, never over the live working tree, and its flip probe runs every file it claims for
 - [the-dispatcher-holds-no-round](the-dispatcher-holds-no-round.md) — decided · 2026-09-01 — the round runs in a pearde-round worker whose window is thrown away, and the budget is measured from the window's own floor

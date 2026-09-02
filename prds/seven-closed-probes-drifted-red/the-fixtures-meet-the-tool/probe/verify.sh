@@ -67,15 +67,15 @@ eq "A the two harnesses this contract names carry the filter" \
       2>/dev/null | wc -l | tr -d ' ')" "2"
 
 echo
-echo "── B. the drill gate, and the round file's ## Asked ─────────────────────"
+echo "── B. the drill gate, and the pass file's ## Asked ─────────────────────"
 # `claim` refuses while two or more unanswered questions have not been put to
-# the user. The escape is by design: the round file's `## Asked` lists the
+# the user. The escape is by design: the pass file's `## Asked` lists the
 # titles already put, by title, normalized. The transitions fixture was built
 # before that gate existed, so its four questions blocked every claim in it.
 FIX="$PRDS/the-board-runs-itself/transitions-are-commands/probe/fixture.py"
 eq "B the transitions fixture is where the harness reads it" \
    "$( [ -f "$FIX" ] && echo yes || echo no )" "yes"
-has "B …and it now writes the round file's ## Asked" "$(cat "$FIX")" '## Asked'
+has "B …and it now writes the pass file's ## Asked" "$(cat "$FIX")" '## Asked'
 # with `## Asked`: the gate is clear, and `claim next` gets through once its
 # own needs gate is released.
 B2="$W/b"; mkdir -p "$B2"; python3 "$FIX" "$B2" >/dev/null
@@ -92,13 +92,16 @@ eq "B claim next is accepted with ## Asked in place" "$RC" "0"
 no "B …and the drill gate never fires" "$OUTB" "drill first"
 # without it: the same board, the same command, refused by the drill gate.
 B3="$W/c"; mkdir -p "$B3"; python3 "$FIX" "$B3" >/dev/null
-: > "$B3/.pearde/.state/round.md"
+: > "$B3/.pearde/.state/pass.md"
 CNT3="$(python3 -c "
 import sys; sys.path.insert(0, '$ROOT/resources/board')
 import plan
 print(len([x for x in plan.drill_questions('$B3/.pearde') if not x[3]]))")"
 eq "B stripping ## Asked puts all four back on the frontier" "$CNT3" "4"
 python3 "$TR" set building done --force --board "$B3/.pearde" >/dev/null 2>&1
+# the gate is scoped to what a question can reshape — asker, ancestors,
+# descendants, what needs one of them — so `next` goes under the asker.
+mv "$B3/.pearde/prds/next" "$B3/.pearde/prds/asking/next"
 ERRC="$(python3 "$TR" claim next impl-1 --board "$B3/.pearde" 2>&1 >/dev/null)"; RC=$?
 eq "B without ## Asked the same claim is refused — the edit is load-bearing" "$RC" "1"
 has "B …in the gate's own words" "$ERRC" "asking 4 — drill first"
@@ -127,7 +130,7 @@ eq "C the-gate's census row is green" \
 
 echo
 echo "── D. the README's step table moved to two columns ─────────────────────"
-# The pearde-next work re-aimed loop.md's round table from `| step | command |`
+# The pearde-next work re-aimed loop.md's pass table from `| step | command |`
 # to `| step | the orchestrator decides |`, and the README mirrors it. The
 # readme-in-three-rings harness anchored its awk on the retired header, so it
 # read zero rows out of a table that was sitting right there.
@@ -171,8 +174,13 @@ echo "── F. the contract's non-goal, and the root this fix did not touch ─
 eq "F no file under resources/ carries any of this" \
    "$( cd "$ROOT" && git diff --name-only -- resources/board/plan.py \
         resources/board/init.py | grep -c . )" "0"
-eq "F .state/parse-cache.json is still unignored on the board — a finding, not a fix" \
-   "$(grep -c 'parse-cache' "$ROOT/.pearde/.gitignore")" "0"
+# Re-aimed. This pinned the ABSENCE of a fix: the cache was unignored, that was
+# recorded as a finding this PRD would not act on, and the check froze it. The
+# fix has since landed, so the non-goal is spent. What is worth guarding now is
+# the fix itself — the cache is a rebuilt file and must stay out of the board's
+# history — so the check asserts the ignore line is there, and fails if it goes.
+eq "F .state/parse-cache.json is git-ignored on the board" \
+   "$(grep -c '^\.state/parse-cache\.json$' "$ROOT/.pearde/.gitignore")" "1"
 eq "F …and init.py does not seed it either" \
    "$(grep -c 'parse-cache' "$ROOT/resources/board/init.py")" "0"
 

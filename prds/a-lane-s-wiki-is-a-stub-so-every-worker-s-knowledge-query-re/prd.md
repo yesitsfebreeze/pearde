@@ -6,6 +6,7 @@ complexity: 18
 blast-radius:
 workflow: probe-then-spec
 actual: 0.24h
+commit: 148e009 57db2bf
 ---
 
 # a lane's wiki is a stub so every worker's knowledge query returns nothing

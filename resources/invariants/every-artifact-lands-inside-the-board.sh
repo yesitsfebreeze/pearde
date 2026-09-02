@@ -38,8 +38,13 @@ no() { printf 'FAIL  %s\n' "$*"; FAIL=$((FAIL + 1)); }
 okr() { printf 'PASS  %s\n' "$*"; }
 
 # ── 1. no `.state/` outside a board in this tree ─────────────────────────────
+# A lane is a git worktree of this repo (`pearde/.lanes/<slug>/`), so it
+# carries a whole checkout — its own board, and that board's own `.state/`.
+# That is the worker's state inside the worker's board, which is what this
+# check is for, so the lanes are excluded rather than counted as strays.
 stray=$(find "$REPO" -name .git -prune -o -type d -name .state -print 2>/dev/null \
-        | sed "s|^$REPO/||" | grep -vE '^\.?pearde/\.state$' || true)
+        | sed "s|^$REPO/||" | grep -vE '^\.?pearde/\.state$' \
+        | grep -vE '^\.?pearde/\.lanes/' || true)
 if [ -n "$stray" ]; then
   no "a .state/ outside the board:"
   printf '        %s\n' $stray
@@ -133,12 +138,18 @@ cd "$REPO" || exit 1
 PEARDE_PORT=1 python3 "$R/board/serve.py" forget pearde-invariant-probe \
   >/dev/null 2>&1 || true
 
-made=$(outside | grep -v '^README\.md$' | grep -v '^\.gitignore$' || true)
+# `.gitignore` and `.obsidian/` are the two paths pearde writes outside the
+# board, and both are outside because they can be nowhere else: git reads the
+# ignore file from the repo it belongs to, and Obsidian reads a vault's config
+# from the vault's own root — and the vault is the PROJECT since 2026-09-02
+# (@references/obsidian.md), not the board.
+made=$(outside | grep -v '^README\.md$' | grep -v '^\.gitignore$' \
+       | grep -vE '^\.obsidian(/|$)' || true)
 if [ -n "$made" ]; then
   no "the commands wrote outside the board:"
   printf '        %s\n' $made
 else
-  okr "a driven board wrote nothing outside pearde/ (bar .gitignore)"
+  okr "a driven board wrote nothing outside pearde/ (bar .gitignore, .obsidian/)"
 fi
 
 # ── 4. the install is unchanged by the whole surface ─────────────────────────

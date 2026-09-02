@@ -74,9 +74,20 @@ def ignored_names(board):
     paths under the board move when a project has to call its board something
     other than `pearde`: `.obsidian/` is the project's vault and `/.pearde`
     is the compat symlink, and neither depends on what the board ended up
-    being called."""
+    being called.
+
+    Everything else here is output a tool rebuilds, and it is listed because
+    `collect.scratch` is not the same guard: that one skips dotfiles directly
+    under the board, so it answers for `.lanes/`, `.claims/` and `.state/` at
+    commit time and for nothing a person types. `git status`, `git add -A`
+    and a board whose plan is *tracked* — the normal case, since the PRDs are
+    the plan — see the lot unless it is named here. `.lanes/` is the one that
+    hurts: a lane is a git worktree, and a board mid-pass holds one per
+    worker, tens of gigabytes offered to a commit that never wanted them."""
     n = os.path.basename(os.path.abspath(board)) if board else planlib.BOARD_DIR
-    return (f"{n}/.state/", f"{n}/wiki/", ".obsidian/", "/.pearde")
+    return (f"{n}/.state/", f"{n}/.lanes/", f"{n}/.claims/", f"{n}/wiki/",
+            f"{n}/health/", f"{n}/graphify/", f"{n}/graphs/",
+            f"{n}/prds/**/probe/", ".obsidian/", "/.pearde")
 
 # A board is often its own git repo — the plan on its own branch, pushed. The
 # names below are written into *that* repo's `.gitignore`, not the parent's.
@@ -93,6 +104,8 @@ def ignored_names(board):
 # `every-artifact-lands-inside-the-board` — and none of them is plan.
 BOARD_IGNORED = ("wiki/.obsidian-api-key", "wiki/.graphify/",
                  "wiki/Dashboard.report.md", ".obsidian/", "health/",
+                 ".lanes/", ".claims/", "graphify/", "graphs/",
+                 "prds/**/probe/",
                  ".state/serve.json", ".state/serve.log", ".state/run-*.log",
                  ".state/guard/", ".state/calibration.json")
 BOARD_HEADER = "# machine-local — two hold one credential, the rest rebuild"
@@ -453,6 +466,7 @@ def write_obsidian(d):
     # the layout. Correcting it here means a vault seeded fresh is right from
     # the first open, not right after the first `upgrade`.
     repair_ignore_filters(dest, os.path.basename(board))
+    repair_graph_view(dest)
     # the key: fresh per board, in the v5 schema the plugin reads, both
     # where the plugin reads it and where a tool looks it up
     key = os.urandom(24).hex()
@@ -743,6 +757,42 @@ def repair_ignore_filters(dest, name=None):
     return changed
 
 
+def repair_graph_view(dest):
+    """The graph view's own config, brought to the preset. `graph.json` is
+    seeded once and then owned by Obsidian, which rewrites it as a person
+    pans and zooms — so the copy in `write_obsidian` never overwrites it, and
+    a vault seeded under an older layout kept colour groups naming folders
+    that no longer exist (`prds/knowledge/board`, `prds/memos`). A group whose
+    query matches nothing is not an error the app reports: the graph simply
+    draws grey, and the layout looks like the one thing it is not.
+
+    Only the three keys this repo has an opinion about are taken from the
+    preset — the colour groups, the search filter and `showTags`. Everything
+    else in the file is where the person left their view: scale, node size,
+    the forces. The groups are `tag:` queries now, and a tag survives a folder
+    move, which is what makes this the last time this repair is needed.
+    Returns what it changed."""
+    path = os.path.join(dest, "graph.json")
+    if not os.path.isfile(path):
+        return []
+    try:
+        have = json.load(open(path, encoding="utf-8"))
+        want = json.load(open(os.path.join(OBSIDIAN_PRESET, "graph.json"),
+                              encoding="utf-8"))
+    except (OSError, ValueError):
+        return []
+    if not isinstance(have, dict) or not isinstance(want, dict):
+        return []
+    changed = []
+    for key in ("colorGroups", "search", "showTags"):
+        if key in want and have.get(key) != want[key]:
+            have[key] = want[key]
+            changed.append(f"graph {key}")
+    if changed:
+        editlib.write_atomic(path, json_text(have))
+    return changed
+
+
 def write_gitignore(d, board=None):
     """Step 4: the machine-local names, appended to `<dir>/.gitignore` — the
     board's parent, where `<board>/…` is the right spelling — when they are
@@ -791,6 +841,64 @@ def write_board_gitignore(board):
     text += "".join(n + "\n" for n in add)
     editlib.write_atomic(path, text)
     return add
+
+
+# ── the host's own settings ───────────────────────────────────────────────────
+
+# Suggestions, never writes. Each one is a fixed per-turn cost in the window
+# every pass runs in — context is billed on every turn, so what a window
+# carries is paid for again on each turn left in the session, and a setting
+# is the only place that kind of cost can be cut once instead of per pass.
+# `key: value` is what the host settings file would say; the line is what a
+# person needs to decide it. Measured on this machine, 2026-09-02.
+HOST_SETTINGS = os.path.expanduser("~/.claude/settings.json")
+HOST_SUGGESTIONS = (
+    ("enableWorkflows", False,
+     "workflows dispatch their own agents — a second orchestrator beside the "
+     "board, competing for the same slots"),
+    ("enableArtifact", False,
+     "artifacts publish a hosted page; a board's readers are already in the "
+     "terminal and in `report.md`"),
+    ("promptSuggestionEnabled", False,
+     "suggestions are extra model calls per prompt, and a pass is not typing"),
+    ("skillOverrides", None,
+     "the skill listing is re-sent on every turn — 64 skills measured at "
+     "~5,900 tokens. pearde's own siblings are reached by shell (`pearde memo "
+     "add`), never the Skill tool, so `name-only` on them costs the "
+     "orchestrator nothing and cut that listing to ~1,950"),
+)
+
+
+def host_gap():
+    """Which HOST_SUGGESTIONS the machine has not settled. Unreadable or
+    absent settings answers the whole list — a file nobody has written is
+    the case the suggestion is for. Reads; writes nothing."""
+    try:
+        with open(HOST_SETTINGS, encoding="utf-8") as f:
+            have = json.load(f)
+        if not isinstance(have, dict):
+            have = {}
+    except (OSError, ValueError):
+        have = {}
+    return [(k, v, why) for k, v, why in HOST_SUGGESTIONS
+            if k not in have or (v is not None and have.get(k) != v)]
+
+
+def suggest_host(out=print):
+    """Print the gap as suggestions. Returns how many it printed, so a caller
+    can stay silent on a machine that has already settled them."""
+    gap = host_gap()
+    if not gap:
+        return 0
+    out(f"init: the machine, not this board — {len(gap)} setting"
+        f"{'' if len(gap) == 1 else 's'} in {HOST_SETTINGS} the loop pays "
+        "for on every turn:")
+    for key, value, why in gap:
+        shown = f"{key}: {json.dumps(value)}" if value is not None else key
+        out(f"  {shown} — {why}")
+    out("  none of these is written for you; a pass runs the same without "
+        "them, and more expensively")
+    return len(gap)
 
 
 def ensure(board):
@@ -904,6 +1012,7 @@ def cmd_init(argv):
                   "pearde install --apply <skills-dir>")
     url = ensure(board)
     if not existing:
+        suggest_host()
         doctor(d)
     print("pearde guard on — optional, refuses the waste the loop's rules name")
     print(url)
@@ -1096,6 +1205,7 @@ def cmd_upgrade(argv):
     repaired = repair_plugin_ids(os.path.join(d, ".obsidian"))
     repaired += repair_ignore_filters(os.path.join(d, ".obsidian"),
                                       os.path.basename(board))
+    repaired += repair_graph_view(os.path.join(d, ".obsidian"))
     vault_line = ", ".join(plugins) if plugins else "already there"
     vault_line = f"{d} as {os.path.basename(d)} · " + vault_line
     if repaired:

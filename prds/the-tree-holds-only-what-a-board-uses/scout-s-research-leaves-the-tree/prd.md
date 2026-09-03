@@ -1,11 +1,13 @@
 ---
-state: specced
+state: claimed
 origin: requested
 priority: 50
 complexity: 20
 blast-radius: mid
 workflow: probe-then-spec
+claim: impl-redo-scout-s-rese 2026-09-03 21:38
 ---
+
 
 # scout's research leaves the tree
 
@@ -20,3 +22,16 @@ The user's data — moved, never deleted.
 ## Needs
 
 No gate.
+
+## History
+
+**failed, retried 2026-09-03 21:37**
+
+**2026-09-03 21:4x — the claim is dead; the report is the analyst's**
+
+The report on disk is the analyst's SPECCED (mtime earlier than the claim's
+`since`), so no implementer ever returned. The worker's session was reaped —
+no process on this machine holds it. The claim only reads live because its
+footprint names shared files other sessions keep writing
+(`silence-measures-the-workers-own-tree` names the artefact). The analyst's
+work stands in `specs/`; the next implementer continues from it.

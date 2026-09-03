@@ -1,5 +1,5 @@
 ---
-state: blocked
+state: done
 origin: derived
 from: resources-are-organised-by-responsibility/the-largest-module-is-cut-by-responsibility
 priority: 85
@@ -89,7 +89,7 @@ the routing, not the reader.
 - [x] `plan --json` emits the merged payload with `waves` and `slots`
 - [x] `plan` with no word and `plan here` print the cwd board's own page, and `run` is absent from `sys.modules` after both
 - [x] `the-machine-frontier-is-dispatched-in-parallel/probe/verify.sh` is green on a tree holding this fix
-- [ ] `a-harness-never-dispatches-the-live-board` collects
+- [x] `a-harness-never-dispatches-the-live-board` collects
 
 ## Pointers
 
@@ -110,3 +110,27 @@ the routing, not the reader.
   PRD's own fix landing; its worker holds the claim (impl-harness-nodispatch2
   since 21:03). This PRD's five code boxes stand verified on the lane
   (probe/verify.sh 11/11 under PEARDE_ROOT=<lane>).
+
+**2026-09-03 21:35 — the lane will not rebase**
+
+`lane/the-module-split-dropped-the-merged-read-plan-all-boards-slo` does not land on `main`; 1 file(s) disagree:
+
+- `references/files.md`
+
+Nothing is lost: the worker's commits are on `lane/the-module-split-dropped-the-merged-read-plan-all-boards-slo` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-module-split-dropped-the-merged-read-plan-all-boards-slo`.
+
+## Report
+
+spec01: exit 0
+ok   plan all prints the merged frontier with a wave 1 line
+ok   plan all exits 0
+ok   plan boards prints and exits 0
+ok   plan slots prints and exits 0
+ok   plan progress prints and exits 0
+ok   plan groups prints and exits 0
+ok   plan --json emits waves and slots
+ok   bare plan stays the cwd board page
+ok   plan here stays the cwd board page
+ok   run is absent from sys.modules after bare plan and plan here
+ok   the machine-frontier harness is green on this tree
+PASS

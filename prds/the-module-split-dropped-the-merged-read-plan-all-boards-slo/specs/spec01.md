@@ -33,7 +33,7 @@ repo checkout — the machine-frontier harness and the sibling's collect below.
 - [x] `plan --json` emits the merged payload with `waves` and `slots`
 - [x] `plan` with no word and `plan here` print the cwd board's own page, and `run` is absent from `sys.modules` after both
 - [x] `the-machine-frontier-is-dispatched-in-parallel/probe/verify.sh` is green on a tree holding this fix
-- [ ] `a-harness-never-dispatches-the-live-board` collects
+- [x] `a-harness-never-dispatches-the-live-board` collects
 
 ## Verify and Proof
 

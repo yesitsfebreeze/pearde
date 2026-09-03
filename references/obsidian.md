@@ -43,6 +43,13 @@ entry, opens the vault; without `--wait` it refuses while the app runs. `init`
 calls the same writer, saying so when Obsidian is up; `doctor`'s `vault` row
 reads the register back, `broken` with no entry.
 
+`doctor --fix` reaches that same writer for the one case it can act on
+unasked — the entry missing, `.obsidian/` already there: Obsidian up refuses
+and names the quit-first order above rather than writing behind it; two
+register entries already resolving to this project refuses and names both,
+never picking one; otherwise it writes and the row's fix line is followed by
+`vault repaired`.
+
 ## `doctor` resolves the home from passwd, never from `HOME`
 
 The register lives under a home, and doctor runs in shells exporting no `HOME`:

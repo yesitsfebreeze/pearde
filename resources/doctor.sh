@@ -436,6 +436,15 @@ else
   fi
 fi
 
+# vault_obsidian_running — mirrors @resources/board/init.py `obsidian_running`:
+# pgrep -x on both process name spellings, the same check the writer makes
+# before it touches obsidian.json. No pgrep, or neither name found, reads as
+# not running — the safe default, since the only thing this decides is
+# whether the fix below is allowed to write.
+vault_obsidian_running() {
+  pgrep -x Obsidian >/dev/null 2>&1 || pgrep -x obsidian >/dev/null 2>&1
+}
+
 # ── vault: does ▸vault open THIS project ─────────────────────────────────────
 # `obsidian://open` resolves only against the vaults `obsidian.json` holds. A
 # project with a vault directory but no entry in that register does not fail
@@ -511,6 +520,42 @@ if [ -n "$BOARD" ]; then
   else
     row vault broken "$PROJ is not in Obsidian's vault register — ▸vault opens the nearest registered ancestor instead"
     fix "python3 $SKILL_ROOT/resources/pearde.py vault --wait --open $PROJ — Obsidian reads the register at launch and rewrites it from memory on quit, so the entry has to be written while it is closed; --wait does that the moment you quit"
+    # `--fix` reaches the same writer this fix line names — `register_vault`
+    # under `pearde vault` — never obsidian.json directly. Two refusals come
+    # first, both unwritten: a register already holding more than one entry
+    # for this exact project (a hand-edited file, or a stale id from before
+    # the writer deduped by realpath) is named rather than picked between,
+    # the way the board resolver above refuses two children with
+    # `settings.md` rather than guessing one; and the app running at all,
+    # since a write under it is invisible to it and erased on quit
+    # (@references/obsidian.md). Only when neither refusal fires does the
+    # writer run — no `--wait`, because doctor's own check just established
+    # the app is not running, so there is nothing to wait for.
+    if [ "$FIX" = 1 ]; then
+      VDUPS=$(python3 - "$OBSCFG" "$PROJ" <<'PY' 2>/dev/null
+import json, os, sys
+cfg, target = sys.argv[1], sys.argv[2]
+try:
+    data = json.load(open(cfg, encoding="utf-8"))
+except (OSError, ValueError):
+    sys.exit(0)
+rp = os.path.realpath(target)
+hits = [(vid, e.get("path", "")) for vid, e in data.get("vaults", {}).items()
+        if os.path.realpath(str(e.get("path", ""))) == rp]
+if len(hits) > 1:
+    print(" ".join(f"{vid}={p}" for vid, p in hits))
+PY
+      )
+      if [ -n "$VDUPS" ]; then
+        note "refused — $OBSCFG already carries more than one entry for $PROJ: $VDUPS. One vault, one entry: remove the stale id by hand before this repairs it."
+      elif vault_obsidian_running; then
+        note "refused — Obsidian is running, and a write now is invisible to it and erased on quit: quit it (⌘Q) → re-run doctor --fix, which writes the entry the moment it is gone → reopen the vault"
+      elif python3 "$SKILL_ROOT/resources/pearde.py" vault "$PROJ" >/dev/null 2>&1; then
+        did "vault repaired"
+      else
+        note "the writer refused — run python3 $SKILL_ROOT/resources/pearde.py vault --wait --open $PROJ by hand to see why"
+      fi
+    fi
   fi
 fi
 

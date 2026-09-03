@@ -9,6 +9,7 @@ footprint:
   - resources/board/plan.py
 workflow: probe-then-spec
 actual: 3.13h
+commit: f9333f1 938e74f
 ---
 
 # the plan is parallel and only dispatch is capped

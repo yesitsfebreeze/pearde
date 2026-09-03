@@ -171,6 +171,14 @@ def check():
             if not os.path.exists(os.path.join(ROOT, anchor)):
                 problems.append(f"@@{name} names @{anchor} — not on disk")
 
+    # The same drift check the manifest above runs on files, run on verbs:
+    # a row in capabilities.md naming a verb `pearde.py` no longer
+    # discovers, a discovered verb with no row, or a hand-edit the two have
+    # since disagreed on. `doctor`'s `index` row is this function's caller,
+    # so the line lands there with no second wire.
+    import capabilities  # noqa: E402 — deferred: only `check` needs it
+    problems += capabilities.check()
+
     for path in sorted(disk):
         if os.path.splitext(path)[1] not in TEXT_EXT:
             continue

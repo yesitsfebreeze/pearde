@@ -6,6 +6,7 @@ complexity: 18
 blast-radius: mid
 workflow: probe-then-spec
 actual: 1.4h
+commit: c456baa
 ---
 
 # The daemon's liveness moves onto the board

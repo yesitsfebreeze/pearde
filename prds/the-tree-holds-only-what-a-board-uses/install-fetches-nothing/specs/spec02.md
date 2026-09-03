@@ -54,14 +54,14 @@ where `doctor --harnesses` finds it (`<prd>/probe/verify.sh`).
 
 ## Acceptance
 
-- [ ] no file under `references/`, no `index.md`, no `README.md`, and neither `init.py` nor `shared.py` claims the install fetches the plugin bundles
-- [ ] `references/obsidian.md` names `pearde vault` as the fetch and says it is the one command that reaches the network
-- [ ] the `@resources/board/obsidian/` and `@resources/board/init.py` rows of `references/files.md` both name `vault`, not the install
-- [ ] the three bundle `Share` rows in `shared.py` say "pinned by `pearde vault`"
-- [ ] `resources/update.sh` no longer says the installer emits plugin rows
-- [ ] `probe/verify.sh` exists, is executable, runs seven checks and ends `7 passed, 0 failed` on the patched tree
-- [ ] `probe/verify.sh` exits non-zero against a tree where the installer still fetches
-- [ ] `python3 resources/index.py check` reports no problem this PRD introduced
+- [x] no file under `references/`, no `index.md`, no `README.md`, and neither `init.py` nor `shared.py` claims the install fetches the plugin bundles
+- [x] `references/obsidian.md` names `pearde vault` as the fetch and says it is the one command that reaches the network
+- [x] the `@resources/board/obsidian/` and `@resources/board/init.py` rows of `references/files.md` both name `vault`, not the install
+- [x] the three bundle `Share` rows in `shared.py` say "pinned by `pearde vault`"
+- [x] `resources/update.sh` no longer says the installer emits plugin rows
+- [x] `probe/verify.sh` exists, is executable, runs seven checks and ends `7 passed, 0 failed` on the patched tree
+- [x] `probe/verify.sh` exits non-zero against a tree where the installer still fetches
+- [x] `python3 resources/index.py check` reports no problem this PRD introduced
 
 ## Verify and Proof
 

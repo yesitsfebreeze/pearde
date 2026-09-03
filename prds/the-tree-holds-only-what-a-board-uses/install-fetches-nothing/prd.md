@@ -1,10 +1,11 @@
 ---
-state: specced
+state: done
 origin: requested
 priority: 50
 complexity: 12
 blast-radius: mid
 workflow: probe-then-spec
+actual: 0.99h
 ---
 
 # install fetches nothing
@@ -18,3 +19,14 @@ The Obsidian plugin download leaves `install.sh --apply` — an installer whose 
 ## Needs
 
 No gate.
+
+## Report
+
+spec01: exit 0
+0 problem(s)
+spec01 green
+
+spec02: exit 0
+
+7 passed, 0 failed, 0 skipped
+spec02 green

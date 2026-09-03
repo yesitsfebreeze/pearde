@@ -69,14 +69,14 @@ never writes through the real preset for exactly this reason; a person who runs
 
 ## Acceptance
 
-- [ ] `resources/install.sh` matches no `curl`, no `wget` and no `http` URL
-- [ ] `resources/install.sh` names no `main.js`, `manifest.json` or `styles.css`, so `--remove` deletes no bundle
-- [ ] `bash resources/install.sh --apply <scratch-dir>` exits 0 with every route to the network cut, and prints no fetch line
-- [ ] `init.py` defines `OBSIDIAN_BUNDLES` with both pins, and `bundle_state`, `fetch_bundle`, `ensure_bundles`, `copy_bundles`
-- [ ] `ensure_bundles` brings a missing bundle in at its pinned version and fetches nothing on a second run
-- [ ] `copy_bundles` fills a vault that has no plugin directory and leaves an installed one untouched
-- [ ] `cmd_vault` calls `ensure_bundles` before it copies or registers anything, and `--dry` names what it would fetch
-- [ ] no console line in `init.py` sends a person to `install --apply` for a missing bundle
+- [x] `resources/install.sh` matches no `curl`, no `wget` and no `http` URL
+- [x] `resources/install.sh` names no `main.js`, `manifest.json` or `styles.css`, so `--remove` deletes no bundle
+- [x] `bash resources/install.sh --apply <scratch-dir>` exits 0 with every route to the network cut, and prints no fetch line
+- [x] `init.py` defines `OBSIDIAN_BUNDLES` with both pins, and `bundle_state`, `fetch_bundle`, `ensure_bundles`, `copy_bundles`
+- [x] `ensure_bundles` brings a missing bundle in at its pinned version and fetches nothing on a second run
+- [x] `copy_bundles` fills a vault that has no plugin directory and leaves an installed one untouched
+- [x] `cmd_vault` calls `ensure_bundles` before it copies or registers anything, and `--dry` names what it would fetch
+- [x] no console line in `init.py` sends a person to `install --apply` for a missing bundle
 
 ## Verify and Proof
 

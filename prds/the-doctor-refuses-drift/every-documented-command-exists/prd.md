@@ -6,6 +6,7 @@ complexity: 38
 blast-radius:
 needs: every-module-finds-its-siblings-by-one-rule
 actual: 5.3h
+commit: 866892f
 ---
 
 # every documented command exists

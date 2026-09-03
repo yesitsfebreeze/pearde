@@ -2,8 +2,8 @@
 
 One plan across several repos, without moving a file.
 
-A **master board** merges other boards to plan across projects: one scan, one
-plan, one timeline, one progress line over several repos.
+A **master board** merges other boards: one scan, one plan, one timeline, one
+progress line.
 
 ```yaml
 # .pearde/settings.md, at the master
@@ -18,8 +18,8 @@ members:
 ---
 ```
 
-- `members:` in `settings.md` **is** what makes a master board. Otherwise it is
-  an ordinary board: its own PRDs, memos, view.
+- `members:` in `settings.md` **is** what makes a master board. Without the key
+  the board is ordinary: its own PRDs, memos, view.
 - An entry is `- <path>` or `- <name>: <path>`. A relative path resolves
   against the master's `.pearde/`. A path at a repo root gains `/prds`. The name
   defaults to the directory the board sits in, and `<name>: <path>` pins it.
@@ -27,17 +27,16 @@ members:
   `memos/`, view. PRDs, specs and memos are written where they live. The master
   holds only the plan and the progress line.
 
-**A master is not `/board/all`.** A master is a board: it declares its members,
-computes one schedule across them, and is worked by one orchestrator. `all`
+**A master is not `/board/all`.** A master declares its members, computes one
+schedule across them, and is worked by one orchestrator; `all`
 (@references/parts/all.md) is a read-only page over whatever the live view
-happens to be watching — it declares nothing, computes nothing and writes
-nothing. Take a master when the projects share a plan, `all` when you only want
-to see them all at once. A master appears on `all` like any other board, showing
-its own PRDs.
+happens to be watching, declaring, computing and writing nothing. Take a master
+when the projects share a plan, `all` to see them all at once. A master appears
+on `all` like any other board, showing its own PRDs.
 
 **Addressing.** A member PRD is `@<member>/<rel>` board-wide —
 `@model/nucleus`. A PRD directory is never named `@…`, so a qualified address
-cannot collide with the master's own PRDs. Every handle takes it: `run
+cannot collide with the master's own PRDs. Every handle takes one: `run
 @model/nucleus`, `needs: @model/nucleus`.
 
 **The vision.** `.pearde/vision.md` at the master writes `terminals:` and
@@ -45,10 +44,10 @@ cannot collide with the master's own PRDs. Every handle takes it: `run
 plus the one form `needs:` lacks: `@<name>/<rel>`, with the `name:` from the
 master's `settings.md`, is the master's own PRD, so its own terminals stand
 beside its members' in one list. The master reads only its own `vision.md`;
-a member's is that member's axis when it is worked alone.
+a member's vision is that member's axis only when the member is worked alone.
 
-**The master is where you work.** One orchestrator, on the master. It scans
-every member, dispatches their workers, and writes each transition into that
+**The master is where you work.** One orchestrator, on the master, scanning
+every member, dispatching their workers, and writing each transition into that
 PRD's own `prd.md` at its real path — exactly one file per PRD, the member's.
 A member session working its own board while a master session works the group
 is the forbidden two-orchestrators case.

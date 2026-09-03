@@ -7,18 +7,18 @@ pearde view                       # register this board, as always
 open http://127.0.0.1:8443/board/all
 ```
 
-`all` is not a board. Nothing of it is on disk: no `.pearde/`, no
-`settings.md`, no PRD of its own, no plan file, no watch entry. It is one
+`all` is not a board. Nothing of the page is on disk: no `.pearde/`, no
+`settings.md`, no PRD of its own, no plan file, no watch entry — only one
 render over every board the live service is watching, built fresh on each
 request out of those boards' own payloads and thrown away again. Registering a
 board is the whole of joining it — **the watch set is the configuration**, and
-there is no file naming what it merges.
+no file names what it merges.
 
-**It is a display, not a plan.** Nothing writes back through it. `/edit`,
-`/new`, `/report` and `/run` answer `409` when the board named is `all`, and
-the page offers no door that would call them: no `＋ PRD`, no save, no drag
-between columns, no answer box. Every row is addressed `@<board>/<rel>`, so
-the one thing a click can do is take the reader to the board that owns it.
+**A display, not a plan.** Nothing writes back through it. `/edit`, `/new`,
+`/report` and `/run` answer `409` when the board named is `all`, and the page
+offers no door to call them: no `＋ PRD`, no save, no drag between columns, no
+answer box. Every row is addressed `@<board>/<rel>`, so the one thing a click
+can do is take the reader to the board that owns it.
 
 A pass is rendered here as what it asks — the fork, the three answers as a
 marked list with the recommended one filled — and carries no radio, no
@@ -28,7 +28,7 @@ nothing moves, and the page reads as broken rather than as read-only. In the
 cards and in the inspector alike the foot is the door — *answered on its own
 board*. `viewtest.js` pointed at `/board/all` asserts it.
 
-**It is not a master board.** The two answer different questions and neither
+**Not a master board.** The two answer different questions and neither
 replaces the other:
 
 | | master (@references/parts/master.md) | `all` |
@@ -57,8 +57,8 @@ registering a master registers every member as a board in its own right.
   which the view already groups, colours and folds by. The key is the
   `/board/<key>` key, so every row on this page names the page it came from.
 - **`needs` inside a board**, qualified with it. One pointing across a board
-  boundary is dropped: `all` draws no edge it did not compute, and the one
-  place such an edge is real is the master that declared it.
+  boundary is dropped: `all` draws no edge it did not compute, and only the
+  master that declared such an edge makes it real.
 - **The counts, the burn-down and the transitions**, summed. One row a day per
   board becomes one row a day.
 - **The memos**, slugged `@<board>/<slug>`, and **the answers**, both fanned
@@ -75,8 +75,8 @@ Nothing else is merged, and two things are deliberately absent:
   page and `/report?board=all` answers `null`.
 - **No real hours.** Weight prints as tuned hours off a fit made per board
   (@references/parts/order.md), and two fits cannot both be the axis. Boards
-  that agree keep theirs; boards that disagree print raw weight units, which
-  is the one number that means the same thing on every board here.
+  that agree keep theirs; boards that disagree print raw weight units, the one
+  number meaning the same thing on every board here.
 
 ## What it draws
 
@@ -92,15 +92,15 @@ The same page, with one section added and one taken away.
 
 A board's card carries four doors: the name goes to that board's own page,
 `to collect` to the timeline's collect filter, `waiting on you` and `in flight`
-to the list filtered to that board and that band. A board that will not read
-says so in its own row rather than taking the page down with it.
+to the list filtered to that board and that band. A board failing to read says
+so in its own row rather than taking the page down with it.
 
 ## The mechanics
 
 - The key `all` is reserved. A real board that would key that way is suffixed
   `-board` by `register()` — the page is not a board's to take.
 - `/` redirects to `all` when more than one board is registered, to the one
-  board when there is one, and to a master when one is registered — a master
+  board when only one exists, and to a master when one is registered — a master
   carries a merged plan, which is more than a display.
 - `/wait?board=all` sleeps like any board's: every bump on a real board bumps
   `all` too, and so does a board joining or leaving the watch set. A page open
@@ -114,7 +114,6 @@ python3 @resources/board/all.py <board>…          # the dashboard, as text
 python3 @resources/board/all.py --json <board>…   # the merged payload
 ```
 
-The text form is the same rows the page draws, for a check that has no
-browser. `node @resources/board/viewtest.js http://127.0.0.1:8443/board/all`
+The text form is the same rows the page draws, for a check with no browser. `node @resources/board/viewtest.js http://127.0.0.1:8443/board/all`
 is the page's own gate — it reads `virtual` off the payload and asserts the
 merged page's shape, the dashboard's rows, and that no door on it writes.

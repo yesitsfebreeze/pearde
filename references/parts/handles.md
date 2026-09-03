@@ -9,9 +9,9 @@ arguments, "pearde status" in plain chat. The meanings are fixed.
 board in front of them: `pearde-drill`, `pearde-memo`, `pearde-view`,
 `pearde-report`, `pearde-master`, `pearde-doctor`, `pearde-persona`,
 `pearde-persona-ask`, `pearde-persona-create`, `pearde-scout`, `pearde-workflow`, `pearde-grammar`, `pearde-health`. Typed inside a pass they are the
-short handles below and behave exactly as this table says. Typed cold they
-are the same feature with no pass around it — `@@skills` is the list, and
-each skill file says what it does with no board in scope.
+short handles below, behaving as this table says. Typed cold they are the
+same feature with no pass around it — `@@skills` is the list, and each skill
+file says what it does with no board in scope.
 
 | Want                         | Say                                                                                                      | Command |
 |------------------------------|-----------------------------------------------------------------------------------------------------------|---------|
@@ -74,24 +74,23 @@ each skill file says what it does with no board in scope.
 
 The Command column is the line @resources/pearde.py answers. A `—` is a
 handle the pass answers by hand, with no command behind it. `[--dry]` marks
-a command that writes: with it, the command prints the line the real run
-would print, `dry ·` in front, then `would write:` and every path, and
-writes nothing. A flag a command does not declare is refused before the
+a command that writes: with it, the command prints the real run's line,
+`dry ·` in front, then `would write:` and every path, and writes nothing. A flag a command does not declare is refused before the
 board is read — `unknown flag --dyr — release takes: --as, --board, --dry`,
 exit 2 — and `pearde <cmd> --help` prints that same list.
 
 - `add` is the user asking, so `origin: requested`. Only the orchestrator
   writes `origin: derived`, and only with `from:` — @references/parts/derived.md
-  says what must be true before it is filed `open` rather than `deferred`.
-- `collect` changes nothing about the gate: a PRD with an open box, or with no
+  says what must be true before a PRD is filed `open` rather than `deferred`.
+- `collect` changes nothing about the gate: a PRD with an open box, or no
   verify output on record, is verified first and `failed` if the tree is red —
   a board whose finished work is not closed schedules around it.
 - `master <path>` takes one or more paths, each a board or a repo holding one,
   and appends them to `members:`. It creates nothing in the member and moves
   no file. Print what the merged board now holds: member count, PRD count, the
   plan `reconcile` produced.
-- `report` is the only document on the board a person is the reader of. It is
-  one state and never a log: the file is rewritten whole, and no PRD name,
+- `report` is the only document on the board written for a person. It is one
+  state and never a log: the file is rewritten whole, and no PRD name,
   board state or weight survives into it.
 - `memo <subject>` slugs the subject — lowercase, spaces to hyphens. The slug
   is both the filename and the `memo:` key, and `doctor` fails if they
@@ -105,7 +104,7 @@ exit 2 — and `pearde <cmd> --help` prints that same list.
 - `ask` is a handle, not a permission. The board reaches a persona on its own
   judgment mid-pass — before `done`, on a naming call, on a report it cannot
   check from inside its own frame — and says who it asked and what came back.
-  Typing `ask` is how you start that conversation rather than waiting for it.
+  Typing `ask` starts that conversation rather than waiting for it.
 - `add` takes the title as written. A one-line title is too thin to spec, so
   the analyst returns REFINE or QUESTION. `drill` settles it first — it runs
   @references/drill.md to completion and leaves a tree the loop picks up:
@@ -121,7 +120,7 @@ exit 2 — and `pearde <cmd> --help` prints that same list.
 - A `done` target is reported and left alone. No match: list the near-misses,
   change nothing.
 - The run ends when the subtree is drained — report the target's final state —
-  or everything left in it is blocked on the user.
+  or everything left in the subtree is blocked on the user.
 
 One writer per file, sequenced between sessions. On start, fresh `analyzing`
 / `claimed` claims you did not make may be another session's live workers:

@@ -1,7 +1,7 @@
 # `machine` — every watched board as one ordered frontier
 
-What the whole machine should work on next, as one list, in the order it
-should be worked, cut into the waves that could run at once.
+What the whole machine should work on next: one ordered list, cut into the
+waves able to run at once.
 
 ```sh
 pearde machine              # the frontier, the waves, and the reading behind them
@@ -17,30 +17,28 @@ pearde machine work slots   # any verb takes the group, in either order
 pearde machine work dispatch
 ```
 
-It runs from anywhere. There need be no board above the cwd: the watch set is
-the live service's, not the directory's, and @resources/board/machine.py is
-found through `pearde.py`'s `COMMANDS` discovery rather than a path.
+Runs from anywhere, with no board above the cwd: the watch set is the live
+service's, not the directory's, and @resources/board/machine.py is found
+through `pearde.py`'s `COMMANDS` discovery rather than a path.
 
 **The default mode moves nothing.** `pearde machine`, and every verb but one,
-make no claim, no transition, no dispatch and no write to any board, any
-settings file or any PRD: they read and they print. Moving the machine is a
-verb you have to type — `pearde machine dispatch`, `## Dispatch` below —
-precisely so that reading the machine and moving it are never the same
-command. A person must be able to look at the whole machine without the
-looking starting anything.
+make no claim, no transition, no dispatch and no write to any board, settings
+file or PRD: they read and print. Moving the machine is a verb you type —
+`pearde machine dispatch`, `## Dispatch` below — so no command both reads the
+machine and moves it. A person must be able to look at the whole machine
+without the looking starting anything.
 
 ## What it merges
 
 - **Every board the daemon watches**, from `/status` — the same set
   @references/parts/all.md renders. Registering a board is the whole of
-  joining, and **an unwatched board is not discoverable**: there is no
-  persisted registry of boards here and none is written. A board that has
-  never been registered is invisible to this command, on the same rule
-  @references/parts/all.md states of its own merge — *a member nobody watches
-  is not one of them*.
+  joining, and **an unwatched board is not discoverable**: no persisted
+  registry of boards is kept here or written. An unregistered board is
+  invisible to this command, on the same rule @references/parts/all.md states
+  of its own merge — *a member nobody watches is not one of them*.
 - **A row with no path is skipped**, with its reason printed. The `all` page
-  sits in the watch set as exactly such a row; it is a render over the boards,
-  never one of them, and it is never counted as a board.
+  sits in the watch set as exactly such a row — a render over the boards,
+  never one of them, and never counted as a board.
 - **A row already carrying a `board` is dropped.** A master's payload carries
   its members' PRDs, and those members are watched boards in their own right,
   so each PRD is taken once, from the board that owns it. The same reason a
@@ -67,8 +65,8 @@ same arithmetic, fewer boards.
 
 **Nothing here keeps the list.** No file names which board is in which group,
 on the rule this command already follows for the watch set: the configuration
-is distributed to the boards, and a board nobody watches is in no group
-because it is in nothing. `machine <group>` reads `groups:` off each watched
+is distributed to the boards, and a board nobody watches is in no group,
+being in nothing. `machine <group>` reads `groups:` off each watched
 board's settings as it walks them, and writes nothing — *No board's
 `settings.md` written* below stands unchanged, `groups:` included. A person
 sets one with `pearde settings groups=work`, standing in that board.
@@ -109,7 +107,8 @@ One column per row, and it agrees with the waves printed below it.
 
 `claimed` is the one this command reads more strictly than a board does. For a
 single board a `claimed` PRD is *in flight* rather than refused; across the
-machine it is in somebody's window right now, and offering it is a double-book.
+machine the PRD sits in somebody's window right now, and offering the row
+again is a double-book.
 
 **A question standing on one PRD does not empty its board.** The gate is
 scoped to the asker, so every ungated row on that board still reaches the
@@ -121,19 +120,19 @@ Three gates, in order: the PRD's own `dispatchable` verdict, the slot count,
 and a footprint clash with something already in this wave.
 
 A footprint is `realpath`'d against the board's **parent** directory, not
-`plan.prd_repo` — a board that is a git worktree of its own code repo stops
-the walk at the board itself, and every path would resolve under `.pearde/`
-where no such file exists. Real paths are what is compared, so two boards'
+`plan.prd_repo` — the walk stops at the board itself for a board kept as a git
+worktree of its own code repo, and every path would then resolve under
+`.pearde/` where no such file exists. Real paths are what is compared, so two boards'
 `resources/x.py` are different files, and one file reached through two
 symlinks is one file. Two PRDs whose footprints resolve to the same path never
 share a wave; the later one prints `footprint clash with @<board>/<rel>` and
 falls to the next. The clash serialises the pair and nothing else.
 
 **The waves are the plan; the pool is the plan run.** `dispatch` does not walk
-the waves as barriers. It keeps a rolling pool `slots()` wide and starts a
-queued row the moment a slot is free and nothing **in flight** clashes with its
-real-path footprint. That is the same guarantee — never two writers on one real
-path — without the barrier: wave 2's first row starts when wave 1's clashing
+the waves as barriers: a rolling pool `slots()` wide starts a queued row the
+moment a slot is free and nothing **in flight** clashes with its real-path
+footprint. The same guarantee holds — never two writers on one real path —
+without the barrier: wave 2's first row starts when wave 1's clashing
 row is in, not when wave 1's slowest is. The printed cut is still what a person
 reads to see the shape of the run.
 
@@ -150,14 +149,14 @@ with their raw numbers, so the binding one is visible rather than asserted.
 
 `machine-ceiling: 0` lifts the ceiling, and reads as unlimited the same way
 `workers: 0` and `pipeline: 0` already do here: the load-derived count with
-the floor under it and nothing above it, printed `ceiling ∞`. It is never
-printed as a bare `0`, which reads as *no slots* and means the opposite. The
+the floor under it and nothing above it, printed `ceiling ∞`. The count is
+never printed as a bare `0`, which reads as *no slots* and means the opposite. The
 default does not move — an untouched board still gets the measured 12, and
 only an explicit `0` lifts the cap, because unlimited is a thing a person
 chooses rather than inherits. One case has no obvious answer and so is stated
 rather than guessed: a machine that cannot be read at all, on a board with no
-ceiling set, holds at the measured 12 and says so — there is no load term to
-hold, and no number the person gave to hold instead.
+ceiling set, holds at the measured 12 and says so — with no load term to hold,
+and no number the person gave to hold instead.
 
 Two measured gotchas are coded and commented in the file:
 
@@ -172,8 +171,8 @@ Two measured gotchas are coded and commented in the file:
 The mitigation is a second opinion asked **only on the throttle path**: when
 the load-derived count would fall to the floor and cpu is the binding term, a
 one-second instantaneous sample is taken — `top -l 2 -n 0 -s 1` on darwin, two
-reads of `/proc/stat` elsewhere — and if the machine is genuinely free that is
-used instead and the reading says `load1 stale`. A quiet machine is already at
+reads of `/proc/stat` elsewhere — and if the machine is genuinely free the
+sample is used instead and the reading says `load1 stale`. A quiet machine is already at
 the ceiling and needs no confirming, so it spawns nothing. The residual
 weakness is stated in the file: a one-second window can read a bursty machine
 either way, and the floor of 1 is what makes that safe — the worst reading
@@ -181,7 +180,7 @@ still makes progress.
 
 `demand <n> at once, unconstrained` is printed beside the reading: the sum of
 every board's `peak`, which is what the boards ask for against what the
-machine will give. It is `plan.py`'s own number added up, not a second
+machine will give. The sum is `plan.py`'s own number added up, not a second
 schedule.
 
 ## Dispatch
@@ -218,8 +217,8 @@ tests separate a launch from a worker, and neither works alone:
   caught here;
 - a **scan of the run log** for `API Error`, `credit balance`, `insufficient
   quota`, `402`, `429`, `rate limit`. Only consulted on an exited process,
-  because a 429 that was retried and recovered from appears in the log of a
-  perfectly live worker.
+  because a 429 retried and recovered from appears in the log of a perfectly
+  live worker.
 
 A dead worker is re-dispatched **once** on the same terms; a second death is
 named with the error line quoted, never paraphrased, and the command exits
@@ -233,14 +232,14 @@ re-scanned and `transitions.gate_claim` — the same predicate `pearde claim`
 asks — is put to it again, with no claim of the dispatcher's own written: the
 session it launches claims the PRD for itself. A refusal prints
 `skip <addr> · <reason>` with the gate's verdict verbatim and the row is
-skipped; a board that will not scan is skipped by name and the rest of the
+skipped; a board failing to scan is skipped by name and the rest of the
 machine still dispatches. Nothing is dropped without a printed reason, and
 every refusal is in the closing `dispatched N · refused N · dead N`.
 
 Between them, `machine.progress` is printed at every transition — a worker
 coming in, or one finally declared dead — with `· in flight <n> · in <n> ·
 skipped <n> · dead <n>` for the run itself on the end of it. A line per poll
-would be a log; this is a state.
+would be a log; one line per transition is a state.
 
 **Dispatching changes none of the three things below.** No write door appears
 on `all`, no registry of boards is written, and no board's `settings.md` is
@@ -259,8 +258,8 @@ line and nowhere else.
   the whole configuration and a board's own `groups:` is the whole of its
   membership. Nothing here writes a list of boards, and nothing here starts
   a daemon from a directory with no board — a cold daemon watches nothing, so
-  that would buy an empty watch set and a stray process.
+  starting one would buy an empty watch set and a stray process.
 - **No board's `settings.md` written.** `machine-ceiling` is read, off the
-  board at the cwd when there is one, and `groups:` is read off every watched
+  board at the cwd when one exists, and `groups:` is read off every watched
   board as the walk passes it. Not written, not defaulted into a file,
   not proposed.

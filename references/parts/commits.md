@@ -235,6 +235,7 @@ invariant that holds it.
 **Never push.** The commit is the board's, the push is the user's. Report what
 is ahead and stop.
 
+<!-- claims: ignore -->
 `commits: off` in `.pearde/settings.md` holds all of it — each transition then
 names its dirty footprint. While on, a `*<dirty>` count climbing across passes
 is a board whose commits are not landing.

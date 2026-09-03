@@ -202,7 +202,8 @@ def gantt_payload(board, prds, mp, settings):
         # uses — this row and that one describe the same PRD in the same
         # payload, and a second spelling of the rule here is how they came to
         # disagree about a PRD whose specs are closed and whose `prd.md` is
-        # not (`prds/memos/done-counts-which-boxes.md`).
+        # not — <!-- claims: ignore --> the memo below was never written:
+        # `prds/memos/done-counts-which-boxes.md`.
         closed, total, collect = 0, 0, False
         if p["state"] in LIVE_STATES:
             _, closed, total, collect = standing(p)
@@ -229,8 +230,10 @@ def gantt_payload(board, prds, mp, settings):
             "mtime": os.path.getmtime(os.path.join(p["dir"], "prd.md")),
         })
     land, repos = landing(board, everything)
+    import ramp as ramplib  # lazy: ramp imports plan, plan imports this file
     return {
         "board": board_name(board),
+        "face": ramplib.face(settings),   # happiness, first thing in the titlebar
         # a master's members, in plan order — the renderer groups by them
         "boards": [n for n, _ in members(board)],
         "all": everything,

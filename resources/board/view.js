@@ -282,6 +282,7 @@ const STARTING = new Set();  // prd rel → a Start click this page is waiting o
 let startBtnDown = false;
 bind(document, "mouseup", () => { startBtnDown = false; }, {capture: true});
 function hydrate() {
+  $("face").textContent = DATA.face || "";
   CPM = DATA.cpm;
   CAL = DATA.calib;
   tasks = DATA.tasks;

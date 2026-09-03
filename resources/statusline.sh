@@ -2,7 +2,7 @@
 # pearde statusbar. Wire it as the global status line — @references/install.md.
 #
 # Renders line 1:  <dir> <branch> <*dirty ↑ahead ↓behind> · <model>  — always
-#         line 2:  ▸pearde<⊞b> <rd>/<rn> <rp>% · +<dr>d · open <o> <q>% · <persona> · ▸board · ▸vault
+#         line 2:  <face> ▸pearde<⊞b> <rd>/<rn> <rp>% · +<dr>d · open <o> <q>% · <persona> · ▸board · ▸vault
 #
 # Every term on line 2 is defined in @references/parts/progress.md. `⊞b` is the
 # board count, on a master board only — the board plus its members.
@@ -226,7 +226,15 @@ if [ -n "$BOARD" ]; then
   set -- $STATS
   N=${1:-0}; D=${2:-0}; P=${3:-0}; O=${4:-0}; Q=${5:-0}; DR=${6:-0}
   if [ "$N" -gt 0 ] 2>/dev/null; then
-    BOARD_OUT="\033[38;5;108m▸pearde\033[0m"
+    # the face first — `happiness:` 0-5, @references/parts/ramp.md. 0 is the
+    # unmeasured `:?`; `pearde be happy` writes the rest
+    H=$(awk 'p>=2{exit} /^---[ \t]*$/{p++; next} p==1 && $1=="happiness:" {v=$2; sub(/#.*/,"",v); print v+0; exit}' "$BOARD/settings.md" 2>/dev/null)
+    case "${H:-0}" in
+      1) FACE="\033[38;5;167m:(\033[0m" ;; 2) FACE="\033[38;5;173m:/\033[0m" ;;
+      3) FACE="\033[38;5;245m:|\033[0m" ;; 4) FACE="\033[38;5;108m:)\033[0m" ;;
+      0) FACE="\033[38;5;240m:?\033[0m" ;; *) FACE="\033[38;5;114m:D\033[0m" ;;
+    esac
+    BOARD_OUT="$FACE \033[38;5;108m▸pearde\033[0m"
     # attached to the label, not appended to the row — it qualifies what the
     # numbers count over
     [ "$NB" -gt 1 ] 2>/dev/null && \

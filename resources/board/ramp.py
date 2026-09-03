@@ -7,12 +7,14 @@ missing before the first pass.
     ramp need [<board>]                       the jobs the tree and the board ask for
     ramp gap [<board>]                        need minus have, loudest signal first
     ramp find <job> [<job>…]                  candidates for one job, off scout's routes
-    ramp happy [<n>] [<board>]                record the happiness value — 0 reopens the gate
+    ramp happy [<n>] [<board>]                record the happiness, 1-5 — 0 reopens the gate
+    be happy [<board>]                        fix what doctor can, measure the setup whole, write it
 
 The gate is loop step 0 and it is read off one key: `happiness:` in
-`.pearde/settings.md`, `0` when the file does not carry it. Non-zero is a
-person saying the toolbox is good enough, and the gate prints one line and
-gets out of the way. Zero means it has never been settled — or was reopened —
+`.pearde/settings.md`, `0` when the file does not carry it. 1-5 is how good
+the setup is — one face per step, :( to :D — and any of them closes the
+gate: it prints one line and gets out of the way. `be happy` measures it
+over everything: doctor's parts, the ramp's gap, the knowledge layer. Zero means it has never been settled — or was reopened —
 and the pass owes the user a proposal before it touches a PRD.
 
 Three lists, and the third is the only one anybody acts on:
@@ -491,11 +493,28 @@ def install_line(source, name):
 
 # ── the gate ──────────────────────────────────────────────────────────────────
 
+SMILIES = (":(", ":/", ":|", ":)", ":D")          # happiness 1..5; 0 is the open gate
+
+
+def smiley(h):
+    return SMILIES[min(max(h, 1), len(SMILIES)) - 1] if h else ""
+
+
+def face(settings):
+    """The face for a settings dict — what the titlebar shows."""
+    try:
+        h = int(str(settings.get("happiness", 0)).strip())
+    except ValueError:
+        h = 0
+    return smiley(min(max(h, 0), len(SMILIES)))
+
+
 def happiness(board):
     try:
-        return int(str(planlib.board_settings(board).get("happiness", 0)).strip())
+        h = int(str(planlib.board_settings(board).get("happiness", 0)).strip())
     except ValueError:
         return 0
+    return min(max(h, 0), len(SMILIES))
 
 
 def ask_subject(job, why, parts):
@@ -547,10 +566,11 @@ def write_ask(board, proposals):
         out.append("")
     out.append("## Q%d ramp Happy with the toolbox?" % (len(proposals) + 1))
     out.append("")
-    out.append("Once the picks above are in, is this repo tooled well enough "
-               "to start? A yes writes `happiness:` and the gate stops asking.")
+    out.append("Once the picks above are in, how well is this repo tooled? "
+               "Any answer writes `happiness:` and the gate stops asking.")
     out.append("")
-    out.append("- **yes** — `pearde ramp happy 1`, and passes run from here")
+    for i, face_ in enumerate(SMILIES, 1):
+        out.append(f"- **{face_}** — `pearde ramp happy {i}`")
     out.append("- **not yet** — leave it at 0; the next pass proposes again")
     out.append("")
     path = os.path.join(state, "ask.md")
@@ -621,11 +641,72 @@ def cmd_happy(board, value):
     if not os.path.isfile(path):
         print("ramp: no settings.md — run `pearde init` first", file=sys.stderr)
         return 2
+    if value > len(SMILIES):
+        print(f"ramp: happy takes 0-{len(SMILIES)} — {' '.join(SMILIES)}",
+              file=sys.stderr)
+        return 2
     editlib.set_key(path, "happiness", value)
     if value == 0:
         print("happiness 0 — the ramp gate is open again; the next pass proposes")
     else:
-        print(f"happiness {value} — the ramp gate is closed; passes start at step 1")
+        print(f"happiness {value} {smiley(value)} — the ramp gate is closed; "
+              "passes start at step 1")
+    return 0
+
+
+def cmd_be(argv, board=None):
+    """be happy — fix what doctor can, measure the whole setup, write it"""
+    import transitions as translib
+    if not argv or argv[0] != "happy":
+        print("pearde be: the one mood is `be happy`", file=sys.stderr)
+        return 2
+    try:
+        a = translib.Args(argv[1:], FLAGS, "be")
+    except translib.FlagRefused as e:
+        print(f"pearde be: {e}", file=sys.stderr)
+        return 2
+    pos = list(a.pos)
+    board = planlib.find_board(a.opt.get("board") or (pos[0] if pos else board))
+    root = os.path.dirname(board)
+    red, green = [], 0
+    # doctor, repairing first — every part is one item; broken is red, and so
+    # is off: a part not switched on is a part of the setup not done
+    out = subprocess.run(["bash", pearde_path.script("doctor.sh"), "--fix", root],
+                         capture_output=True, text=True).stdout
+    print(out.rstrip())
+    for m in re.finditer(r"^  (\S+)\s+(ok|off|broken)\b", out, re.M):
+        if m.group(2) != "ok":
+            red.append(f"doctor {m.group(1)} {m.group(2)}")
+        else:
+            green += 1
+    # the ramp — every job the tree asks for is one item, a gap is red
+    for job, _, why, by in gap(board):
+        if by:
+            green += 1
+        else:
+            red.append(f"ramp {job} — {why}")
+    # the knowledge layer — one item: present and clean
+    wiki = os.path.join(board, "wiki")
+    if not os.path.isdir(wiki):
+        red.append("knowledge — no wiki/ on the board; `pearde knowledge round` starts one")
+    else:
+        kd = subprocess.run([sys.executable, pearde_path.script("knowledge.py"),
+                             "--root", wiki, "doctor"],
+                            capture_output=True, text=True)
+        if kd.returncode:
+            said = (kd.stdout + kd.stderr).strip().splitlines() or ["did not run"]
+            print("\n".join(said))
+            red.append(f"knowledge — {said[-1]}")
+        else:
+            green += 1
+    total = green + len(red)
+    h = 1 + round(4 * green / total) if total else 1
+    editlib.set_key(os.path.join(board, "settings.md"), "happiness", h)
+    print()
+    for r in red:
+        print(f"SAD  {r}")
+    print(f"happiness {h} {smiley(h)} — {green} of {total} green"
+          + (" · the fixes are above; run it again after" if red else ""))
     return 0
 
 
@@ -634,13 +715,14 @@ def cmd_gate(board, as_json=False):
     the ask when it is not."""
     h = happiness(board)
     if h > 0:
-        print(f"ramp: happy {h} — skipped (`pearde ramp happy 0` reopens it)")
+        print(f"ramp: happy {h} {smiley(h)} — skipped "
+              "(`pearde ramp happy 0` reopens it)")
         return 0
     rows = gap(board)
     missing = [r for r in rows if not r[3]]
     if not missing:
         print(f"ramp: no gap — {len(rows)} jobs answered by installed skills; "
-              f"`pearde ramp happy 1` closes the gate")
+              f"`pearde ramp happy 1-5` closes the gate")
         return 0
     proposals = []
     for job, hits, why, _ in missing[:5]:
@@ -653,7 +735,7 @@ def cmd_gate(board, as_json=False):
     gaps = f"{len(missing)} gap{'s' if len(missing) != 1 else ''}"
     if not proposals:
         print(f"ramp: {gaps}, no candidates — the routes answered nothing; "
-              f"`pearde ramp happy 1` closes the gate anyway")
+              f"`pearde ramp happy 1-5` closes the gate anyway")
         return 0
     path = write_ask(board, proposals)
     print(f"ramp: {gaps}, {len(proposals)} with candidates → "
@@ -692,14 +774,16 @@ def cmd_ramp(argv, board=None):
         return cmd_gap(board, as_json)
     if verb == "happy":
         if value is None:
-            print(f"happiness {happiness(board)}")
+            h = happiness(board)
+            print(f"happiness {h} {smiley(h)}".rstrip())
             return 0
         return cmd_happy(board, value)
     return cmd_gate(board, as_json)
 
 
 cmd_ramp.flags = FLAGS          # what `pearde ramp --help` prints
-COMMANDS = {"ramp": cmd_ramp}
+cmd_be.flags = FLAGS
+COMMANDS = {"ramp": cmd_ramp, "be": cmd_be}
 
 
 if __name__ == "__main__":

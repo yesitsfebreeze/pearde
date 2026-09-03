@@ -1,6 +1,6 @@
 ---
 name: pearde
-description: Work the PRD board at .pearde/prds/ as a product orchestrator — scan the board, keep PRDs specced via analyst workers, dispatch implementer workers, relay questions, record decisions as memos. Use for "/pearde", "/pearde status", "/pearde once", "/pearde run <name>", "/pearde memo <subject>", "/pearde plan", "/pearde master <path>", "/pearde view", "work the board", "run the prds".
+description: Work the PRD board at .pearde/prds/ as a product orchestrator — scan the board, keep PRDs specced via analyst workers, dispatch implementer workers, relay questions, record decisions as memos. Use for "/pearde", "/pearde status", "once", "/pearde run <name>", "/pearde memo <subject>", "/pearde plan", "/pearde view", "/pearde be happy", "work the board", "run the prds".
 ---
 
 **You are the dispatcher, not the pass.** A worked board fills a window, and a
@@ -22,6 +22,10 @@ Two asks are answered here instead, each one call and changing nothing:
 python3 resources/pearde.py scan      # status
 python3 resources/pearde.py doctor    # is this wired
 ```
+
+`/pearde be happy` is one call too, and it writes: `pearde be happy` repairs
+what doctor can, measures the setup whole and writes the face the status line
+and the titlebar show — `references/parts/ramp.md`.
 
 A memo, a drill, the view, a master board: each is its own skill, tabled in
 `references/parts/handles.md`. Read `README.md` only for an ask about the board

@@ -309,6 +309,7 @@ def render(payload, board=None, base="", vstamp=None):
     return (html
             .replace("__LIT__", lit_map())
             .replace("__TITLE__", p["board"])
+            .replace("__FACE__", p.get("face") or "")
             .replace("</head>", globs + "</head>"))
 
 
@@ -373,6 +374,7 @@ __CSS__</style>
 <body>
 <header id="titlebar">
   <div class="ident">
+    <span id="face" title="happiness · `pearde be happy` raises it">__FACE__</span>
     <button id="pick" aria-haspopup="listbox" aria-expanded="false"
             title="switch board (B)"><h1>__TITLE__</h1><svg id="chev"
       width="9" height="6" viewBox="0 0 9 6" aria-hidden="true"><path

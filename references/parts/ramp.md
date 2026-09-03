@@ -14,17 +14,46 @@ happiness: 0
 ```
 
 `.pearde/settings.md`, `0` when the file does not carry it —
-@references/settings.md. Non-zero is **a person saying the toolbox is good
-enough**, and the gate prints one line and gets out of the way:
+@references/settings.md. `1` to `5` is **how good the setup is**, one face a
+step, and the face is the first thing on the status line and in the view's
+titlebar:
+
+| 0 | 1 | 2 | 3 | 4 | 5 |
+|---|---|---|---|---|---|
+| `:?` | `:(` | `:/` | `:|` | `:)` | `:D` |
+
+Any of `1`-`5` closes the gate — a `:(` is still an answer — and it prints one
+line and gets out of the way:
 
 ```
-ramp: happy 1 — skipped (`pearde ramp happy 0` reopens it)
+ramp: happy 4 :) — skipped (`pearde ramp happy 0` reopens it)
 ```
 
 Zero means the gate was never settled, or a person reopened it. Then the gate
-owes the user a proposal before step 1, and it repeats — every pass, until the
-answer comes back **yes** and `pearde ramp happy 1` is written — the whole
-loop the value exists for: *zero, propose, install, ask, until happy.*
+owes the user a proposal before step 1, and it repeats — every pass, until a
+value is written — the whole loop the value exists for: *zero, propose,
+install, ask, until happy.* Above 5 is refused; a stray larger value in the
+file reads as 5.
+
+## `be happy` — the whole setup, measured
+
+```sh
+python3 @resources/pearde.py be happy [board]
+```
+
+The toolbox is one part of being tooled. `be happy` runs the rest and writes
+the one number: `doctor --fix` first (@references/parts/doctor.md), every part
+one item and anything but `ok` red — `off` is a part of the setup not done;
+then the ramp, every job the tree asks for one item and a gap red; then the
+knowledge layer, one item — a `wiki/` on the board that `knowledge doctor`
+passes (@references/knowledge.md). The face is the green share,
+`1 + round(4 · green / total)`; every red prints as a `SAD` line with the
+command that answers it. A person raises happiness by running it again after
+doing what the `SAD` lines say — nothing here installs a skill or writes
+outside the board.
+
+`pearde ramp happy <n>` still writes the number by hand — a person overruling
+the measure, or `0` to reopen the gate.
 
 Nobody but a person writes a non-zero value. A pass that decides on its own
 that the toolbox is fine has answered the one question nobody asked.
@@ -131,7 +160,7 @@ A gap with no candidates is said plainly and closes nothing:
 
 ```
 ramp: 2 gaps, no candidates — the routes answered nothing;
-      `pearde ramp happy 1` closes the gate anyway
+      `pearde ramp happy 1-5` closes the gate anyway
 ```
 
 An empty answer is not a failure. A field with no published skill is a field

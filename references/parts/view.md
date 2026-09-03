@@ -48,7 +48,7 @@ on a folded one opens it.
 
 | # | section       | answers                                                        |
 |---|---------------|------------------------------------------------------------------|
-| 1 | **what's up** | what the board is doing and what is next, in prose — `.pearde/report.md`'s title, lede, `## In work` and `## Planned`, each cut to two or three whole sentences. A renderer, never an author. Beside it, how old the file is, off its modification time and not the dateline inside it; past a day the line says `stale` and carries the class. No file, one line naming `pearde report` |
+| 1 | **what's up** | what the board is doing and what is next, in prose — `.pearde/report.md`'s title, lede, `## In work` and `## Planned`, each cut to two or three whole sentences. A renderer, never an author. Beside it, how old the file is, off its modification time and not the dateline inside it; past a day the line says `stale` and carries the class. No file, one line naming `pearde report` <!-- claims: ignore --> |
 | 2 | **timeline**  | what is in front of us — see below                                |
 | 3 | **board**     | what is where — kanban by state; drag a card to write `state:`    |
 | 4 | **analytics** | how this is going — where the work and weight sit, the est/actual records, the machine-wide hours-per-weight fit, weight left over time, and what a transition costs: calls per transition over the last thirty, refusals per session, both off the guard's count (@references/parts/guard.md). Calls are the proxy for tokens, named as such; no guard state at all reads `no guard`, never zero |

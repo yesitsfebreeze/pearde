@@ -16,6 +16,7 @@ persona, passed as `--as <id>` or `PEARDE_AS` in the environment.
 | term       | is                                                                        |
 |------------|---------------------------------------------------------------------------|
 | weight     | the PRD's `complexity`; missing counts at the average of scored PRDs, `weight-default` if none |
+| `<face>`   | `happiness:` 0-5 as `:?` `:(` `:/` `:|` `:)` `:D` — how well the machine is set up for this repo, @references/parts/ramp.md. `pearde be happy` writes it |
 | `<rd>/<rn>`| `done` / all `origin: requested` — **the deliverable**                     |
 | `<rp>`     | Σ weight(done, requested) / Σ weight(all requested). `failed` counts as remaining |
 | `<dd>/<dn>`| `done` / all `origin: derived`. Counts, never weighted                      |

@@ -344,8 +344,8 @@ def standing(prd):
     `frac`/`closed`/`total` stay the SPECS' numbers — they are the only thing
     that moves while a worker works, which is what the lane bar is drawn
     from. `collect` is the stricter question and answers from `prd.md` too;
-    the two deliberately disagree, and `prds/memos/done-counts-which-boxes.md`
-    is why."""
+    the two deliberately disagree — a memo <!-- claims: ignore --> never written,
+    `prds/memos/done-counts-which-boxes.md`, was meant to say why."""
     closed, total = acceptance(prd)
     frac = (closed / total) if total else 0.0
     held = prd["state"] in HOLDING_STATES

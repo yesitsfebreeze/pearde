@@ -169,6 +169,9 @@ body{background:var(--bg);color:var(--ink);
 #titlebar h1{font-size:15px;font-weight:640;letter-spacing:-.014em;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #sub{font-size:12px;color:var(--ink2);white-space:nowrap}
+#face{font-family:var(--mono,ui-monospace,monospace);font-size:13px;color:var(--ink2);
+  white-space:pre;cursor:help}
+#face:empty{display:none}
 /* the board title is the switcher. There is no other door to the other
    boards, which is the point — an index page nobody wants to look at is one
    more surface to keep beautiful. */

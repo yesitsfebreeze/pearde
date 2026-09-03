@@ -38,7 +38,7 @@ One row per verb `pearde` dispatches — what exists, never what to run.
 | `release` | — | — | — | python |
 | `retry` | `## Failure` becomes history in the body, then `failed → open`. | — | — | python |
 | `run` | dispatch a board, a group or every watched board — `here`, `all`, | — | — | python |
-| `scan` | HAND EDITED | — | — | python |
+| `scan` | the board, read and ordered | — | — | python |
 | `scout` | not just libraries, but the reference | — | — | shell |
 | `session` | take/list/reap/land/owns — one tree per session | — | — | python |
 | `set` | — | — | — | python |

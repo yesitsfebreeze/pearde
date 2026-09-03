@@ -136,22 +136,36 @@ def silent_of(prd, settings, collect=None, now=None):
     """Minutes since anything of this PRD's last moved, when that is longer
     than `claim-ttl`; None otherwise. THE rule for a quiet worker.
 
-    "Anything of this PRD's" is its directory and every path of its footprint
-    union — the PRD's own plus its specs', the union `collect` commits — in
-    its repo. Only a held PRD in the in-flight band can be silent: a `blocked`
-    one is waiting on a person, and a PRD to collect is a worker that
-    finished, which is the opposite of one that went quiet. `collect` is
-    `standing()`'s verdict; pass it when you already hold it."""
+    "Anything of this PRD's" is its own directory plus, when the worker has
+    one, its LANE worktree — where an implementer's edits land. The footprint
+    union in the shared checkout is deliberately NOT measured: a footprint is
+    the set of paths the work will touch, and two PRDs on one board routinely
+    share one (plan.py, init.py, collect.py), so a neighbour's collect edit
+    refreshed this PRD's liveness for hours. Measured 2026-09-03: every
+    `sweep` row on a 226-PRD board read the same `silent 36m` off one
+    session's 18:51 write to a shared file, and a claim seven hours dead at
+    0/14 boxes read `silent 36m` too. A worker that is alive moves its own
+    lane or its own PRD folder — specs, report, probe — and nothing else.
+
+    A PRD with no lane is one whose worker has not touched the repo yet — an
+    analyst mid-spec — and its own directory is the record of that work. Only
+    a held PRD in the in-flight band can be silent: a `blocked` one is
+    waiting on a person, and a PRD to collect is a worker that finished,
+    which is the opposite of one that went quiet. `collect` is `standing()`'s
+    verdict; pass it when you already hold it."""
     if prd["state"] not in SILENT_STATES or not claim_of(prd["fm"]):
         return None
     if collect is None:
         collect = standing(prd)[3]
     if collect:
         return None
-    repo = prd_repo(prd)
-    _, feet = spec_data(prd)
-    paths = [prd["dir"]] + [os.path.join(repo, f) for f in feet
-                            if not f.startswith(MEMBER_SIGIL)]
+    paths = [prd["dir"]]
+    try:
+        import lanes as laneslib  # noqa: E402 — beside this file
+        if laneslib.exists(prd["board_path"], prd["local"]):
+            paths.append(laneslib.lane_dir(prd["board_path"], prd["local"]))
+    except Exception:
+        pass
     newest = newest_mtime(paths)
     if not newest:
         return None

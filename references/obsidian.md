@@ -61,7 +61,7 @@ Precedence inside the home is unchanged: macOS `Library/Application Support`
 where it exists, then `XDG_CONFIG_HOME`, then `~/.config`. The row never claims
 the uid **has** no home, nor Obsidian absent.
 
-## Two plugins, seeded by `init` and never overwritten
+## Three plugins, seeded by `init` and never overwritten
 
 Settings at `@resources/board/obsidian/`, pinned bundles fetched by
 `pearde vault` — the one command in the repo that reaches the network, and it
@@ -75,6 +75,22 @@ until then the port is silent.
 |---|---|
 | dataview | runs the DQL/DataviewJS views in `Dashboard.md` and the `_index.md` files, vault open |
 | obsidian-local-rest-api ("Local REST API with MCP") | the port a tool talks to — HTTPS on `127.0.0.1:27124`, its `/mcp` endpoint in the same server: Obsidian-as-tools installs nothing more |
+| unhide (`polyipseity/obsidian-unhide`, formerly "Show Hidden Files") | makes a dot-segment readable at all. Vanilla Obsidian skips every path holding one, so a board named `.pearde` shows in no vault and `doctor`'s `vault` row reports **broken**; with this seeded and enabled, the hidden folder is a folder like any other |
+
+The preset ships `plugins/unhide/data.json` because a plugin installed and
+switched off ships nothing: its `showingRules` open with `+/` — everything
+hidden is shown — and then subtract the dot-caches a project keeps and nobody
+reads (`.git`, `.venv`, `.cache`, `.next`, the three test caches, `.gstack`,
+`.claude`). That subtraction is the point of writing the file rather than
+leaving the plugin's defaults: Obsidian scans every file it can see, and a
+`.git/` with tens of thousands of objects in it freezes the app on first open.
+A hidden folder the board itself writes is never in that list.
+
+Two fixes for one problem, and they compose: `pearde vault` also *renames* a
+`.pearde` board to `pearde` and leaves a symlink where it was, so a board is
+visible even in a vault without the plugin. `unhide` is what makes the rest of
+a project's hidden folders — and a board on a machine that never ran the
+rename — readable.
 
 ## The graph view colours by tag, never by folder
 

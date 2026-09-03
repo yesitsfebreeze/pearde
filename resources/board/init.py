@@ -116,8 +116,11 @@ BOARD_IGNORED = ("wiki/.obsidian-api-key", "wiki/.graphify/",
                  ".state/guard/", ".state/calibration.json")
 BOARD_HEADER = "# machine-local — two hold one credential, the rest rebuild"
 
-# The Obsidian requirement: dataview (the live views) and local-rest-api
-# (the port a tool reads the vault through). The preset at
+# The Obsidian requirement: dataview (the live views), local-rest-api (the
+# port a tool reads the vault through) and unhide (Obsidian refuses to read
+# any path holding a dot-segment, so without it a board named `.pearde` — or
+# any `.`-prefixed folder a project keeps — is invisible in the vault it is
+# supposed to be). The preset at
 # resources/board/obsidian/ carries the settings; the plugin bundles are not
 # vendored — `pearde vault` fetches them at the pinned versions below into
 # the preset's plugins/, and this file copies whatever it finds there to
@@ -127,7 +130,7 @@ BOARD_HEADER = "# machine-local — two hold one credential, the rest rebuild"
 #
 # The fetch lives here and not in `install.sh` because the install is links
 # and nothing else: it must run on a machine with no network, and a person
-# who never opens Obsidian should never pay for two bundles they will not
+# who never opens Obsidian should never pay for bundles they will not
 # read. `pearde vault` is the one command that says "I want this vault", so
 # it is the one command allowed to reach the network.
 OBSIDIAN_PRESET = os.path.join(HERE, "obsidian")
@@ -135,13 +138,14 @@ OBSIDIAN_PRESET = os.path.join(HERE, "obsidian")
 # patience — long enough for a person to finish what they were doing and quit,
 # short enough that a forgotten command does not sit there for a session.
 WAIT_TICK, WAIT_TICKS = 0.5, 1200
-OBSIDIAN_PLUGINS = ("dataview", "obsidian-local-rest-api")
+OBSIDIAN_PLUGINS = ("dataview", "obsidian-local-rest-api", "unhide")
 # name -> (github repo, release tag). Pinned, because a vault that opens is
 # worth more than the newest plugin. The three files are what an Obsidian
 # release ships; styles.css is optional and a 404 on it is not a failure.
 OBSIDIAN_BUNDLES = {
     "dataview": ("blacksmithgu/obsidian-dataview", "0.5.68"),
     "obsidian-local-rest-api": ("coddingtonbear/obsidian-local-rest-api", "5.1.0"),
+    "unhide": ("polyipseity/obsidian-unhide", "3.1.0"),
 }
 BUNDLE_FILES = ("main.js", "manifest.json", "styles.css")
 BUNDLE_TIMEOUT = 30
@@ -544,7 +548,7 @@ def write_obsidian(d):
     own notes are `pearde/wiki/…`.
 
     Copies the vendored preset and plugins in — dataview,
-    obsidian-local-rest-api, the graph and app configuration — and mints a
+    obsidian-local-rest-api, unhide, the graph and app configuration — and mints a
     fresh REST key into the plugin's data.json, mirrored at
     `pearde/wiki/.obsidian-api-key` where the loop's tools read it. Everything
     already there is kept (a hand-tuned vault wins), including a whole

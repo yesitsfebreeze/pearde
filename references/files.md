@@ -47,7 +47,7 @@ a question about the work, which @index.md's Keywords table does.
 | @references/knowledge.md | the research layer — sources, conclusions, the ask→capture→conclude loop, the tool behind it |
 | @references/system.md | drop-in instructions block for `AGENTS.md` |
 | @references/plugins.md | the curated plugin list — what to install alongside pearde, what not to, and why |
-| @references/obsidian.md | the vault and its native access — REST + MCP from the same port, the two required plugins, how a pass uses them |
+| @references/obsidian.md | the vault and its native access — REST + MCP from the same port, the three required plugins (unhide is what makes a dot-segment board readable at all), how a pass uses them |
 
 ### `references/parts/` — the workflow, one part per step
 
@@ -121,6 +121,7 @@ A template is the shape and nothing else — it lands whole in every file writte
 |---|---|
 | @resources/pearde.py | the one command — a dispatcher over every script; discovers `COMMANDS` in every directory under `resources/`; `help` from docstrings |
 | @resources/pearde_path.py | the one rule every module finds its siblings by — `resources/` and every directory under it on `sys.path`, the repo root by `resources/pearde.py`, and a launched sibling found by basename |
+| @resources/common.py | the advisors' shared primitives — `find_board`, the frontmatter reader, the atomic write, `Collection`, the git runner and the section extractor every script imports instead of carrying a copy |
 | @resources/install.sh | build one skill folder of links per file in `references/skills/` |
 | @resources/update.sh | check every install on this machine and re-link the set — local, global, and the global that is not in force |
 | @resources/doctor.sh | install check + repair |
@@ -158,7 +159,6 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/board/view.css | the page's stylesheet, inlined at render |
 | @resources/board/view.js | the page's script, inlined at render |
 | @resources/board/viewtest.js | the view's gate — a rendered page in a real browser |
-| @resources/board/hotreload-test.js | the view's hot-reload gate — one live page, a view source moved under it (`node hotreload-test.js <served-board-url>`) |
 | @resources/board/adapters/claude.json | the Start button's default launch target — one JSON per adapter (`{"name","command","prompt"}`, optional `"plugins"` list of suggestions), read live by serve.py; doctor reports missing ones |
 | @resources/board/lit-core.min.js | Lit 3, vendored — the page's component base |
 | @resources/board/all.py | `all` — every watched board merged into one read-only page; no file of its own, the watch set is its whole configuration |
@@ -168,6 +168,7 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/board/collect.py | `collect` — verify, commit the footprint, `done`, one call |
 | @resources/board/ramp.py | `ramp` — need, have, gap and the toolbox gate; proposes skills off scout's routes and installs none |
 | @resources/board/orphans.py | `orphans` — every done PRD whose footprint never reached the branch that holds it; per-branch, never `git log --all`, reads only |
+| @resources/board/purge.py | `purge` — the lifecycle contract's reclaim: one verb over the five leftovers a skipped shutdown leaks (stale lanes, dead session trees, unregistered tmp boards, probe fixtures past a day, reaped refs past the cap); read-only until `--apply`, and a board the scan reads in-flight, a registered board and any ledger answering alive or unknown are never candidates |
 | @resources/board/brief.py | `brief` — a worker's or a consultant's brief, one command's output; the text is the marker blocks of workers.md, this fills them and holds no copy |
 | @resources/board/transitions.py | the eight transition commands — the one writer of `state:` |
 | @resources/board/lanes.py | one git worktree per worker — cut `lane/<slug>` on the claim, board dir sparse-checked out of it, rebase-then-ff-only so the lane's commit is the PRD's, drop the worktree on a sweep and keep the branch |
@@ -175,9 +176,9 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/board/refuse.py | `refuse tree/cmd` — `reset --hard`, `checkout --`, `clean`, a real `stash`, `restore` and `switch --discard-changes` refused in any tree the running session does not own; a tree is owned when the ledger's row for it is this session's, or when it is the worktree this process is itself working in and no other live session holds it; stdlib only and imports nothing from the planner, so @resources/guard.py can call it on every Bash tool call |
 | @resources/board/shared.py | `share` — one copy per machine of what every lane regenerates, under the git common dir and symlinked into each worktree; only a path `git status` cannot see is ever linked, and a refusal puts the tree back as it was |
 | @resources/board/specs.py | `specced` and `refine` — the two transitions a spec set decides |
-| @resources/board/init.py | `init`, `settings` and `vault` — a board after one command, no question; one key of settings.md; seeds the Obsidian vault at the board (`.pearde/.obsidian/`, and `vault` registers it in Obsidian's `obsidian.json` so the URI resolves — written only while the app is closed, `--wait` holds for the quit — dataview + local-rest-api copied from the preset `vault` fetches into, a bundle the fetch never got named rather than skipped, fresh REST key minted at `.pearde/wiki/.obsidian-api-key`) |
+| @resources/board/init.py | `init`, `settings` and `vault` — a board after one command, no question; one key of settings.md; seeds the Obsidian vault at the board (`.pearde/.obsidian/`, and `vault` registers it in Obsidian's `obsidian.json` so the URI resolves — written only while the app is closed, `--wait` holds for the quit — dataview + local-rest-api + unhide copied from the preset `vault` fetches into, a bundle the fetch never got named rather than skipped, fresh REST key minted at `.pearde/wiki/.obsidian-api-key`) |
 | @resources/board/example/ | the example board — eight PRDs, one per band; copied by `plan.py example`, never run in place |
-| @resources/board/obsidian/ | the vault preset — `.obsidian` root files (app, graph colors, community/core plugin lists, appearance), every path in them `.pearde/`-relative and the two required plugins' settings; copied by `init` to any new board, an existing install wins. The plugin bundles (`main.js`, `manifest.json`, `styles.css`) are **not** in the repo: `pearde vault` fetches them at pinned versions and `.gitignore` holds them out |
+| @resources/board/obsidian/ | the vault preset — `.obsidian` root files (app, graph colors, community/core plugin lists, appearance), every path in them `.pearde/`-relative and the three required plugins' settings — including `plugins/unhide/data.json`, the rules that make hidden folders visible by default and subtract the dot-caches that would freeze the app; copied by `init` to any new board, an existing install wins. The plugin bundles (`main.js`, `manifest.json`, `styles.css`) are **not** in the repo: `pearde vault` fetches them at pinned versions and `.gitignore` holds them out |
 
 ## `references/skills/` — one file per skill
 
@@ -211,7 +212,7 @@ command, and @references/install.md is the naming rule and the install.
 ### `resources/board/knowledge/` — the layer's content seed, planted by `init` and `upgrade`
 
 Distinct from @resources/board/obsidian/, which is the `.obsidian` app config
-(dataview + local-rest-api) `init.py`'s `write_obsidian` copies into
+(dataview + local-rest-api + unhide) `init.py`'s `write_obsidian` copies into
 `<dir>/.obsidian` on every fresh board. This folder seeds a board's
 `.pearde/wiki/` *content* — dashboard, workflow config, indexes. `init.py`'s
 `write_knowledge` plants it: `init` on a new board, `upgrade` on an older one.
@@ -259,3 +260,32 @@ Nothing outside it links in past `@@scout`. Its docs ship with it.
 | @resources/scout/templates/dependabot.yml | dependency updates |
 | @resources/scout/templates/quality.yml | the quality gate workflow |
 | @resources/scout/templates/scout.yml | the sweep in CI |
+
+## `docs/` — the fumadocs site
+
+The tools' documentation site: what each tool is, and what it scores. Built
+with Next.js + fumadocs (`npm --prefix docs run build`), committed —
+`node_modules`, `.next` and `.source` are machine-local, `docs/.gitignore`
+carries them. Scope in @@docs. The app tree is three directory rows — the
+page paths carry parens and brackets the manifest's row syntax cannot hold.
+
+| anchor | is |
+|---|---|
+| @docs/.gitignore | what git leaves alone in the docs app |
+| @docs/package.json | the deps — fumadocs-core/mdx/ui, next 16, react 19 |
+| @docs/package-lock.json | the pinned resolution of the above |
+| @docs/next.config.mjs | the MDX bundler plugin and the turbopack root |
+| @docs/postcss.config.mjs | tailwind 4 through postcss |
+| @docs/tsconfig.json | `@/*` → the app root |
+| @docs/app/ | the app — root, home and docs layouts, the page renderer, global css, the MDX component map |
+| @docs/components/ | the MDX component map every page renders through |
+| @docs/lib/ | the loader — `lib/source.ts` names the one content shape — plus shared.ts, layout.shared.tsx, cn.ts |
+| @docs/content/ | the content — the overview (`index.mdx`), the sidebar order (`meta.json`), and one folder per tool holding its page and its score page |
+| @docs/content/docs/board/ | what the board is; its score page |
+| @docs/content/docs/scout/ | what scout is; its score page |
+| @docs/content/docs/obsidian/ | what the vault is; its score page — the worst tool |
+| @docs/content/docs/knowledge/ | what the knowledge layer is; its score page |
+| @docs/content/docs/view/ | what the view is; its score page |
+| @docs/content/docs/health/ | what health is; its score page |
+| @docs/content/docs/workflows/ | what workflows is; its score page — the healthiest tool |
+| @docs/content/docs/improvements/ | one improvement per page, atomic — what, why, done-when, fails-when; the index orders them |

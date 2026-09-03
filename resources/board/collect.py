@@ -1671,8 +1671,14 @@ def post_report(board, rel, text):
     except Exception as e:
         return f"daemon down — report not posted ({said(e)})"
     try:
+        # `b["path"]` is None for a board the daemon holds without one — the
+        # `all` board is registered that way on this machine — and
+        # `os.path.abspath(None)` is a TypeError, which this function then
+        # reports as "another shape" and every report on the machine is
+        # silently dropped. A pathless board matches nothing; skip it.
         name = next((b["name"] for b in st.get("boards", [])
-                     if os.path.abspath(b["path"]) == os.path.abspath(board)),
+                     if b.get("path")
+                     and os.path.abspath(b["path"]) == os.path.abspath(board)),
                     None)
     except Exception as e:
         return f"daemon answered in another shape — report not posted " \
@@ -1994,13 +2000,37 @@ def commit_message(prd, prd_rel, opts, plan=None):
     return "\n".join(lines) + "\n"
 
 
+def moved_onto(repo):
+    """The branch the checkout is on, for the line below. `--abbrev-ref` on
+    a detached HEAD answers `HEAD`, which names nothing a person recognises;
+    the fallback phrase is the honest reading of that."""
+    import lanes as laneslib
+    br = laneslib.git(repo, "rev-parse", "--abbrev-ref", "HEAD",
+                      check=False).stdout.strip()
+    return br if br and br != "HEAD" else "the checkout"
+
+
+def moved_line(rel, onto, moved):
+    """One line, printed by the run and written into the report, so the two
+    say the same thing in the same words. `moved` is already narrowed to
+    the footprint by the caller."""
+    return f"{rel}: {onto} moved under the lane — " + ", ".join(moved)
+
+
 def land_lane(board, rel, prd, repo, opts, out=print):
     """Commit what stands in the PRD's lane and merge it into the branch
-    the checkout is on. Returns `(pre, n)` — the checkout's commit before
-    the merge, so step 2 can put it back on a red, and how many of the
-    lane's commits landed. `(None, None)` when there is no lane, which is
-    every board that never cut one and every claim from before lanes: the
-    old path, unchanged.
+    the checkout is on. Returns `(pre, n, moved)` — the checkout's commit
+    before the merge, so step 2 can put it back on a red; how many of the
+    lane's commits landed; and the footprint files this branch changed
+    since the lane was cut. `(None, None, [])` when there is no lane, which
+    is every board that never cut one and every claim from before lanes:
+    the old path, unchanged.
+
+    `moved` is read before the merge and printed before it — `lanes.merge`
+    rebases the lane onto this branch, and after that there is no cut point
+    left to compare against. It is also what the report carries: the worker
+    wrote its own report before any of this landed, so the only place that
+    can say what moved under its feet is here.
 
     Scope is the footprint, exactly as step 3's is — the lane is cut clean
     off HEAD, so everything dirty in it is this worker's and no hunk needs
@@ -2023,7 +2053,7 @@ def land_lane(board, rel, prd, repo, opts, out=print):
     the same read of the lane."""
     import lanes as laneslib
     if not laneslib.exists(board, rel):
-        return None, None
+        return None, None, []
     lane = laneslib.lane_dir(board, rel)
     br = laneslib.branch_of(rel)
     _, feet = planlib.spec_data(prd)
@@ -2047,6 +2077,16 @@ def land_lane(board, rel, prd, repo, opts, out=print):
     if outside:
         out(f"{rel}: outside the footprint, left in the lane — "
             + ", ".join(sorted(outside)))
+    # What moved under the worker's feet, read BEFORE anything merges:
+    # `lanes.merge` rebases the lane onto this branch, and from then on the
+    # cut point IS this branch's HEAD and the comparison has no answer left
+    # to give. Narrowed to the footprint — a lane is verified against the
+    # merged tree whatever else landed, and the names worth a line are the
+    # ones this PRD's own files moved under.
+    moved = [p for p in laneslib.moved_since_cut(repo, rel)
+             if inside(p, feet)]
+    if moved:
+        out(moved_line(rel, moved_onto(repo), moved))
     if opts.get("dry"):
         ahead = laneslib.git(repo, "rev-list", "--count", "HEAD.." + br,
                              check=False).stdout.strip() or "0"
@@ -2055,7 +2095,7 @@ def land_lane(board, rel, prd, repo, opts, out=print):
             + (f", and commit {len(mine)} path(s) standing in it first"
                if mine else "")
             + "; merged nothing")
-        return None, None
+        return None, None, moved
     prd_rel = os.path.relpath(prd["dir"], planlib.repo_root(board)
                               or os.path.dirname(board))
     try:
@@ -2072,7 +2112,7 @@ def land_lane(board, rel, prd, repo, opts, out=print):
                    f"work on `{br}`")
     if n:
         out(f"{rel}: lane {br} merged — {n} commit(s)")
-    return pre, n
+    return pre, n, moved
 
 
 def block_conflict(board, rel, prd, pmd, conflict, opts, now, out=print):
@@ -2222,7 +2262,7 @@ def collect_one(board, rel, opts, out=print):
     # failed collect and a retry merges them again.
     repo = repo_of(prd, board, board_root)
     try:
-        pre, landed = land_lane(board, rel, prd, repo, opts, out)
+        pre, landed, moved = land_lane(board, rel, prd, repo, opts, out)
     except LaneConflict as e:
         return block_conflict(board, rel, prd, pmd, e, opts, now, out)
     base = baseline(board, rel)
@@ -2375,6 +2415,11 @@ def collect_one(board, rel, opts, out=print):
         # 6 — the report to the daemon, which appends `## Report` to prd.md
         text = ("trusted — the verify was not run by collect" if trusted
                 else "\n\n".join(report) or "no `## Verify and Proof` block")
+        if moved:
+            # the report says what moved under the worker's feet, in the
+            # same words the run printed — the worker wrote its own report
+            # before any of this landed and cannot know it
+            text = moved_line(rel, moved_onto(repo), moved) + "\n\n" + text
         posted = post_report(board, rel, text)
         git_out(board_root, "add", "--", prd_rel)
       except BaseException as e:

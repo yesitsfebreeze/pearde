@@ -213,6 +213,43 @@ def worktree_of(repo, branch):
     return None
 
 
+def cut_base(repo, slug):
+    """The commit `lane/<slug>` was cut off — the merge base of the branch
+    the checkout is on and the lane. `None` when there is no lane branch.
+
+    Read it BEFORE `merge` runs: the rebase there replays the lane onto the
+    checkout's HEAD, and from that moment the merge base IS that HEAD. The
+    answer afterwards is not wrong, it is a different question — nothing
+    has moved since the lane was re-based — and it names no file."""
+    br = branch_of(slug)
+    if git(repo, "rev-parse", "--verify", "--quiet", br,
+           check=False).returncode != 0:
+        return None
+    return git(repo, "merge-base", "HEAD", br,
+               check=False).stdout.strip() or None
+
+
+def moved_since_cut(repo, slug):
+    """The files the checkout's branch changed since the lane was cut, in
+    git's own spelling, relative to the repo root, sorted. `[]` when there
+    is no lane and when nothing landed while the worker ran.
+
+    This is exactly the set the rebase in `merge` is about to replay the
+    worker's commits on top of — what moved under the worker's feet. The
+    caller narrows it to the footprint: every other name is a file the PRD
+    never claimed, and printing those would make the line unreadable on any
+    repo where landing anything is normal."""
+    base = cut_base(repo, slug)
+    if not base:
+        return []
+    head = git(repo, "rev-parse", "HEAD", check=False).stdout.strip()
+    if not head or base == head:
+        return []
+    out = git(repo, "diff", "--name-only", base + ".." + head,
+              check=False).stdout
+    return sorted({l.strip() for l in out.splitlines() if l.strip()})
+
+
 def merge(repo, slug, out=None):
     """Land `lane/<slug>` on the branch the checkout is on as the lane's
     OWN commits, and no others. Returns how many landed.

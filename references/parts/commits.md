@@ -24,7 +24,16 @@ before measuring: step 1b commits the lane's footprint paths **on the lane**
 with the message below, rebases the lane onto the checkout's branch and
 fast-forwards it in, then runs the verify blocks and the gate on the MERGED
 tree — a lane that passes alone and breaks against what landed while it ran
-goes red here and nowhere else. The lane's commit **is** the PRD's commit:
+goes red here and nowhere else. It also **says what moved**: before it
+rebases, `collect` reads the files the checkout's branch changed since the
+lane was cut, narrows them to the PRD's footprint, and prints
+`<prd>: <branch> moved under the lane — <files>`. The read has to happen
+before the rebase, because the rebase replays the lane onto the branch and
+from that moment the cut point **is** the branch's HEAD and the comparison
+has no answer left to give. The same sentence heads the PRD's `## Report` —
+the worker wrote that report from inside its lane, before any of this landed,
+so this line is the only place the board says what moved under its feet.
+The lane's commit **is** the PRD's commit:
 step 4 does not commit that repo again, so the checkout's branch gains two
 commits per collected PRD — the work, and `<prd> — record`.
 

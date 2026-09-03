@@ -60,26 +60,27 @@ import workflows as wflib  # noqa: E402 — the skill root, one dir up
 # machine-local corner: the plan, the two journals, the pass file and the
 # rendered view, none of them committed, all of them regenerable.
 #
-# The name has no dot. It carried one until 2026-09-02, and that one character
-# decided what a person could see: Obsidian skips every path holding a
-# dot-segment before a setting is read, so from a vault at the project root the
-# whole board was invisible, and the vault had to root at the board instead —
-# which hid the project from the board. A symlink out of the hidden name is no
-# way round it either; Obsidian refuses a symlink that resolves back inside the
-# vault (@references/obsidian.md reads both mechanisms out of the app itself).
-# So the board is `pearde/`, the vault is the project, and everything shows.
+# The name carries a dot. It lost one for a day — 2026-09-02 to 2026-09-03 —
+# on the reading that Obsidian skips every path holding a dot-segment, so a
+# vault at the project root could not see the board. That reading was right
+# about Obsidian and wrong about which root the vault takes: the fix is the
+# vault at `<board>/.obsidian`, which @references/obsidian.md already says, not
+# a board renamed out of hiding. The undotted name cost more than it bought.
+# `pearde/` is an ordinary word, so a checkout that already uses it — this
+# repo sits at `infra/pearde` — answers to two names at once, and one board
+# resolving twice fans every dispatch out twice and refuses every collect.
+# The nine other boards on this machine never moved off `.pearde`.
 #
-# `.pearde` survives as the legacy name: `board_at` still finds a board that
-# never migrated, and `pearde upgrade` moves one and leaves a `.pearde`
-# symlink behind, so every path spelled the old way keeps resolving.
+# So the board is `.pearde/`, a real directory holding every file it owns, and
+# no board file is reachable only through a symlink. `pearde` survives as the
+# legacy name: `board_at` still finds a board that never migrated, and
+# `pearde upgrade` moves one.
 #
-# The name is not fixed, either. A project whose own folder tree already uses
-# the word — this repo's checkout sits at `infra/pearde`, beside the `infra`
-# board — cannot call its board `pearde/` and still have one vault at the
-# project root. So the board's directory name is CONFIGURABLE, and the way it
-# is configured is that the board says so itself: see `named_boards`.
-BOARD_DIR = "pearde"
-LEGACY_BOARD_DIR = ".pearde"
+# The name is not fixed, either. The board's directory name is CONFIGURABLE,
+# and the way it is configured is that the board says so itself: see
+# `named_boards`.
+BOARD_DIR = ".pearde"
+LEGACY_BOARD_DIR = "pearde"
 BOARD_DIRS = (BOARD_DIR, LEGACY_BOARD_DIR)
 STATE_DIR = ".state"
 PRDS_DIR = "prds"

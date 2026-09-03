@@ -87,7 +87,7 @@ mv "$D/resources/board/orphans.py"     "$D/resources/read/"
 mv "$D/resources/board/transitions.py" "$D/resources/write/"
 mv "$D/resources/board/collect.py"     "$D/resources/write/"
 mv "$D/resources/board/init.py"        "$D/resources/write/"
-mv "$D/resources/board/machine.py"     "$D/resources/run/"
+mv "$D/resources/board/run.py"         "$D/resources/run/"
 mv "$D/resources/board/dispatch.py"    "$D/resources/run/"
 mv "$D/resources/board/ramp.py"        "$D/resources/run/"
 mv "$D/resources/board/brief.py"       "$D/resources/run/"
@@ -103,7 +103,7 @@ OUT=$(cd "$D" && python3 resources/pearde.py help 2>&1)
 ok "15 modules moved to four new directories — 'pearde help' byte-identical" $? \
    "$(diff <(printf '%s\n' "$BASE") <(printf '%s\n' "$OUT") | head -3 | tr '\n' ' ')"
 
-for m in specs.py transitions.py machine.py brief.py memos.py guard.py; do
+for m in specs.py transitions.py run.py brief.py memos.py guard.py; do
   OUT=$(cd "$D" && python3 -c "
 import sys; sys.path.insert(0, 'resources')
 import pearde_path, importlib.util as u
@@ -164,9 +164,18 @@ fresh
 mkdir -p "$D/resources/read" "$D/resources/draw"
 mv "$D/resources/board/plan.py"   "$D/resources/read/"
 mv "$D/resources/board/render.py" "$D/resources/draw/"
-OUT=$(cd "$D" && python3 resources/read/plan.py scan 2>&1 | tail -1)
+OUT=$(cd "$D" && python3 -c "
+import sys, os
+d = os.path.abspath('resources/read')            # where plan.py now sits
+sys.path.insert(0, os.path.dirname(d))           # its first line:  resources/
+sys.path.insert(0, d)                            # its second:      its own dir
+try:
+    import render
+    print('found')
+except ModuleNotFoundError as e:
+    print(e)" 2>&1 | tail -1)
 case "$OUT" in *"No module named 'render'"*) R=0 ;; *) R=1 ;; esac
-ok "run as a script from a new directory, plan.py alone still cannot find render — the handoff" $R \
+ok "plan.py's own two-line preamble, alone, still cannot find a moved render — the handoff" $R \
    "got: $OUT"
 
 # ── 8. every other module carries the rule ───────────────────────────────────

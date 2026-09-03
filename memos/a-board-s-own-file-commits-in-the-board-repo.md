@@ -11,6 +11,7 @@ date: 2026-09-02
 verify: bash resources/invariants/a-board-s-own-file-commits-in-the-board-repo.sh
 prds:
   - collect-stages-the-board-s-gitignore-in-the-outer-repo-which
+  - collect-resolves-a-board-path-two-ways-and-both-are-wrong
 ---
 <!-- Unlike a prd.md, a memo's keys are a CLOSED set: an undeclared key is a
      typo and @resources/doctor.sh fails on it. @references/memo.md is the
@@ -20,11 +21,20 @@ prds:
 
 ## Decision
 
-A `footprint:` path is spelled relative to the **code** repo. A path that
-resolves inside a board which is **its own git repo** is committed in the
-**board** repo, under its board-relative name. It is never staged in the code
-repo, which ignores the board and holds no such path, and it is never staged
-in the lane, which `lanes.create` cuts deliberately without the board.
+Which repo holds a `footprint:` path is decided by the git checkout that holds
+it — `git rev-parse --show-toplevel` — never by the board's path as a prefix.
+Both spellings resolve: the code repo's (`pearde/<file>`), which stays the one
+to prefer for a file the code repo could hold, and the board's own
+(`prds/<prd>/probe/verify.sh`, where every probe on the board lives). A code
+checkout nested **under** the board — a lane at `<board>/.lanes/<slug>`, a
+run-session worktree — is a repo of its own, and its footprints are never the
+board's.
+
+Either spelling of a path inside a board which is **its own git repo** is
+committed in the **board** repo, under its board-relative name. It is never
+staged in the code repo, which ignores the board and holds no such path, and
+it is never staged in the lane, which `lanes.create` cuts deliberately without
+the board.
 
 Where the board is not its own repo — the flat `.pearde/` layout, `board_root`
 and `repo` the same root — nothing is rerouted and the behaviour is what it
@@ -108,10 +118,11 @@ live board holding one. Silently. That cure is worse than the abort.
 
 ## Consequences
 
-- A spec author writes the footprint the one way there is —
-  `pearde/<file>`, relative to the code repo — and `collect` decides where it
-  lands. @references/parts/commits.md carries the rule in prose, so the
-  expectation is readable before the merge rather than after it.
+- A spec author writes the footprint either way — `pearde/<file>` relative to
+  the code repo, which is the one to prefer for a file the code repo could
+  hold, or the board's own `prds/<prd>/probe/verify.sh` — and `collect`
+  decides where it lands. @references/parts/commits.md carries the rule in
+  prose, so the expectation is readable before the merge rather than after it.
 - The board's own file lands in the board's commit, beside the PRD's record.
   A reader looking for it in the code repo's history will not find it, and
   should not.

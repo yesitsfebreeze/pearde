@@ -5,6 +5,7 @@
 
 ## Invariants
 
+- [the-board-directory-is-pearde-and-the-compat-symlink-is-gone](the-board-directory-is-pearde-and-the-compat-symlink-is-gone.md) — decided · 2026-09-03 — the board directory is .pearde and the compat symlink is gone
 - [no-destructive-git-runs-in-a-tree-the-session-does-not-own](no-destructive-git-runs-in-a-tree-the-session-does-not-own.md) — decided · 2026-09-02 — every destructive git in the board's own Python asks who owns the tree first, or it is a finding
 - [no-colour-group-in-the-vault-preset-is-a-path-query](no-colour-group-in-the-vault-preset-is-a-path-query.md) — decided · 2026-09-02 — every colour group in the vault preset is a tag query, and every tag it names is carried by a note
 - [a-master-need-is-the-union-of-its-members](a-master-need-is-the-union-of-its-members.md) — decided · 2026-09-02 — a master board's ramp need is the union over its members, never its own repo alone

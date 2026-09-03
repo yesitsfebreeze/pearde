@@ -1,62 +1,107 @@
-Verdict: QUESTION
+Verdict: DONE
 
-## What the build did
+# runs meets the report count — implementer
 
-Followed `probe-then-spec` (61 prior runs, `## Use when` fits an open PRD
-needing specs before a build). Ran `read-the-contract` on this PRD's body —
-no `## Answers` present. `knowledge.py query` on the contract's own sentence
-returned 104 strong hits (no gap auto-enqueued — the record already covers
-adjacent claims, nothing new to remember here).
+Both specs stood on the probe pass's uncommitted code in the lane
+(`lane/runs-meets-the-report-count`). This pass ran every check, closed all
+six boxes against output, and made one accuracy edit inside spec01's
+footprint. 6/6 boxes ticked, 0 blocked.
 
-The PRD asks for a doctor check: count "report sections" for a workflow
-library file and compare that count against its `runs:` frontmatter,
-`broken` when they disagree, both numbers named.
+## spec01 — the workflow check counts report sections against `runs:`
 
-I located the actual mechanism the PRD is extending: `@references/workflow.md`
-`## The report section` defines a fixed report shape, `## Workflow <slug>`,
-that a worker embeds in their own `report.md` when they follow a workflow —
-this is the only "report section" shape defined anywhere in the tree, and it
-is not stored inside the workflow's own library file (`workflow.md` is
-explicit: "No log"). So the count has to come from the corpus of
-`.pearde/prds/*/report.md` files currently on disk.
+All four boxes `[x]`.
 
-I built the count and ran it against the live board:
+`python3 .pearde/prds/runs-meets-the-report-count/probe/probe_report_count.py`:
 
 ```
-grep -h "^## Workflow " .pearde/prds/*/report.md | sort | uniq -c
-  33 ## Workflow probe-then-spec
-   1 ## Workflow correct-a-documented-claim
+OK — 2 problem(s):
+  broken-flow.md: 4 report sections in prds/*/report.md, runs: 3 — the counter is behind the evidence
+  prds/p2/report.md:1: `## Workflow` — a report section heading names no slug
 ```
 
-`probe-then-spec`'s own file (`.pearde/workflows/probe-then-spec.md`) reads
-`runs: 61`. 33 ≠ 61 — on the board's own most-used workflow, today, with no
-bug in flight. The gap is structural: a PRD's `report.md` is overwritten by
-its next pass (an implementer's report replaces the analyst's), so a
-workflow followed early in a PRD's life stops being counted the moment that
-PRD moves on, while `runs:` — bumped once and then left alone — keeps every
-count it was ever given.
+That one run closes boxes 1–3: the `runs: 3` fixture names both `4` and `3`;
+the `ok-flow` fixture (same four sections, `runs: 4`) produces no line at all;
+the slugless heading is named by file and line.
 
-## The fork I hit
+Box 4 — `doctor.sh` unedited (`git status --short resources/doctor.sh` in the
+lane is empty). The same fixture board written to disk and `doctor.sh` run
+against it:
 
-The PRD's own text ("the two disagreeing is `broken`") reads as an equality
-check. Built literally, that reads the board's real, non-broken
-`probe-then-spec` as broken right now, on data with no failure in it — the
-`## Fails when` guard in the PRD only covers an in-flight two-step write
-race, not this steady-state gap from normal `report.md` replacement. Which
-of the two the doctor should actually implement — an equality check, an
-asymmetric one that only fires when reports outnumber `runs:` (matching the
-"died before the increment" bug the PRD opens with), or a running tally
-counted at use-time instead of read off `report.md` at check-time — changes
-both what the doctor will say about this board today and how expensive the
-check is to run. I could not pick between them without guessing at intent,
-and could not build around it: any of the three is a different, non-trivial
-check.
+```
+  workflows   broken  2 workflows · 1 atomic · 2 problems
+                      broken-flow.md: 4 report sections in prds/*/report.md, runs: 3 — the counter is behind the evidence
+                      prds/p2/report.md:1: `## Workflow` — a report section heading names no slug
+```
 
-Written to `prd.md` as Q1, per drill.md's pass format, three prepared
-answers, answer 1 (the asymmetric snapshot check — cheapest, matches the
-actual bug the PRD describes, and does not flag the board's own live data)
-marked recommended.
+The row goes `broken` and prints both lines with no edit to `doctor.sh` — the
+comparison landed in the one shared function every caller routes through.
+
+### One edit this pass
+
+`report_workflow_counts`'s docstring declared its second return as
+`[(path, lineno)]`; it returns `{(path, lineno): line}`, which is what spec01
+specifies and what `check()` iterates. Corrected the docstring line. No
+behaviour change; the probe re-ran green after it.
+
+## spec02 — the failure documented in `references/workflow.md`
+
+Both boxes `[x]`.
+
+```
+$ grep -n "outnumber its own \`runs:\`" references/workflow.md
+152:  outnumber its own `runs:` — never the other way: a report is overwritten
+$ grep -n "report-section heading naming no slug" references/workflow.md
+155:- a `## Workflow` report-section heading naming no slug
+```
+
+Two bullets, one per failure, in the same shape as the rest of `## The check`.
+The first states the asymmetry in its own clause ("never the other way"), so
+the list cannot be read as an equality check.
+
+## The repo's own gate
+
+`bash resources/doctor.sh` from the lane root. The `workflows` row is now
+`broken` on the live board, and every line is a real case:
+
+```
+  workflows   broken  7 workflows · 23 atomics · 4 problems
+                      implementer-continue.md: 1 report section in prds/*/report.md, runs: 0 — the counter is behind the evidence
+                      probe-then-spec.md: 77 report sections in prds/*/report.md, runs: 66 — the counter is behind the evidence
+                      prds/one-board-path-resolver-fewer/report.md:76: `## Workflow` — a report section heading names no slug
+                      prds/the-tree-holds-only-what-a-board-uses/legacy-migrations-retire/report.md:128: `## Workflow` — a report section heading names no slug
+```
+
+`grammar`, `health`, `knowledge`, `briefs`, `view`, `plan` all `ok`. The
+`memos` and `questions` rows are `broken` on missing `tags:` and on `##
+Answers` without `## Questions` in three other PRDs — both pre-existing, both
+outside this footprint, neither touched by this change.
+
+The 77-vs-66 line is not a double count: 77 distinct `report.md` files each
+carry exactly one `## Workflow probe-then-spec` heading
+(`grep -rc … | awk -F: '$2>1'` returns nothing). The counter really is eleven
+behind its evidence, which is the fault the PRD opens with, now visible.
+
+## Findings — outside this PRD's footprint, reported not fixed
+
+- `implementer-continue.md` carries `runs: 0` with one live report section on
+  disk. A real instance of a run that wrote its report and never bumped the
+  counter. One edit fixes it; it is another file's contract, not mine.
+- `prds/one-board-path-resolver-fewer/report.md:76` and
+  `prds/the-tree-holds-only-what-a-board-uses/legacy-migrations-retire/report.md:128`
+  each write a bare `## Workflow` heading with no slug. Editing another PRD's
+  report prose is outside this footprint.
+- `probe-then-spec.md`: `runs: 66` against 77 sections. Whether the counter is
+  backfilled to 77 or the gap is accepted is the library owner's call — the
+  PRD rules out auto-repair by design.
+
+## Health floor
+
+The brief listed nothing under the floor in this footprint. `resources/
+workflows.py` and `references/workflow.md` both stayed above it; the docstring
+correction above is the only thing that moved.
 
 ## Scores
 
-No specs written — QUESTION, no spec/split table applies.
+complexity: 5
+blast-radius: low
+workflow: implementer-continue

@@ -8,6 +8,7 @@ needs:
   - common-py-gains-a-git-runner-and-a-section-extractor
 workflow: probe-then-spec
 actual: 0.94h
+commit: a55a685 12f6432
 ---
 
 # the-top-level-resources-modules-delegate-to-common — resources/guard.py`, `health.py`, `knowledge.py`, `questions.py` and `workflows.py` hold no second definition of a primitive; each keeps its own behaviour on failure through a one-line delegation into `common.py`.

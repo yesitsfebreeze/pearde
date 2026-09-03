@@ -6,6 +6,7 @@ complexity: 12
 blast-radius: mid
 workflow: probe-then-spec
 actual: 0.45h
+commit: 77665a3 318b6e5
 ---
 
 # a conflicted lane is reported not stranded

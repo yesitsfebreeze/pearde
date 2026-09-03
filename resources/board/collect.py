@@ -1183,11 +1183,43 @@ def inside(path, union):
     return any(path == u or path.startswith(u + "/") for u in union)
 
 
+def board_prefix(board, board_root):
+    """How the board is spelled inside its OWN repo's paths: `"pearde"` on
+    a board nested in the code repo, and `""` on a board that IS its repo.
+
+    `os.path.relpath` answers `"."` for the second case, and `"."` is a
+    prefix of no path git ever prints — `inside(p, ["."])` is False for
+    every one of them, `scratch` then swallows nothing and the rider sweep
+    fires on nothing. That is the third wrong board-path resolution, after
+    the two `foot_root` replaced; `""` is the honest answer and
+    `under_board` is the one reader of it."""
+    b, r = os.path.abspath(board), os.path.abspath(board_root)
+    return "" if b == r else os.path.relpath(b, r).replace(os.sep, "/")
+
+
+def under_board(path, board_rel):
+    """`path` respelled relative to the BOARD, or None when it is not under
+    the board at all. `path` is relative to the board's own repo root.
+
+    On a board that is its own repo `board_rel` is `""` and every path in
+    that repo is under the board, spelled exactly as it stands — which is
+    why this is a function and not `inside(path, [board_rel])` plus
+    `path[len(board_rel) + 1:]`: that arithmetic chops a character off
+    every name the moment the prefix is empty."""
+    if board_rel == "":
+        return path
+    if path == board_rel:
+        return ""
+    if path.startswith(board_rel + "/"):
+        return path[len(board_rel) + 1:]
+    return None
+
+
 def scratch(path, board_rel):
     """A dotfile directly under the board — `.claims/`, `.pass.md`,
     `.history.jsonl`, `.plan.json` — is machine-local and never committed."""
-    rest = path[len(board_rel) + 1:] if inside(path, [board_rel]) else ""
-    return rest.startswith(".")
+    rest = under_board(path, board_rel)
+    return rest is not None and rest.startswith(".")
 
 
 def split_hunks(diff):
@@ -1688,7 +1720,7 @@ def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since,
         widen.add(wp)
     base = baseline(board, rel)
     riders = owed(board)
-    board_rel = os.path.relpath(board, board_root)
+    board_rel = board_prefix(board, board_root)
     # What another held PRD's footprint already claims, relative to the repo
     # the footprints are written against — only siblings whose code lives in
     # this run's `repo` can share a dirty path with it. A dirty path the
@@ -1776,8 +1808,20 @@ def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since,
              "stop": [], "riders": [], "widened": []}
         for path, kind in sorted(dirty_paths(root).items()):
             full = os.path.join(root, path)
-            if root == board_root and scratch(path, board_rel):
-                continue           # the board's own dotfiles — never anyone's
+            # the board's own dotfiles — never anyone's, UNLESS somebody
+            # claimed this one: a `footprint:` naming `pearde/.gitignore`,
+            # the PRD's own folder, or `--widen`. Until `board_rel` was
+            # honest this branch could not fire on a board that is its own
+            # repo, and the claimed case was reached by that accident; with
+            # the prefix fixed, an unguarded `continue` here drops a
+            # board-owned footprint path silently — measured, it took
+            # `a-board-s-own-file-commits-in-the-board-repo` from 12 PASS
+            # to 2 FAIL. Every claim below is tested first, so the rule is
+            # what it always meant: unclaimed machine-local dirt.
+            if (root == board_root and scratch(path, board_rel)
+                    and full not in widen and not inside(path, union)
+                    and not inside(path, [prd_rel])):
+                continue
             if full in widen:
                 p["add"].append(path)
                 p["widened"].append(path)
@@ -1839,7 +1883,8 @@ def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since,
                 p["add"].append(path)
                 p["riders"].append(path)
             elif (root == board_root and base is not None
-                  and inside(path, [board_rel]) and not inside(path, held)
+                  and under_board(path, board_rel) is not None
+                  and not inside(path, held)
                   and not predates(root, path, kind)):
                 p["add"].append(path)
                 p["riders"].append(path)

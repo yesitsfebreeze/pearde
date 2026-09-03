@@ -117,7 +117,32 @@ wherever the claim baseline explains part of its dirt, and refused with
 - **Board state written between transitions rides the next collect.** An
   `answer` writes a `prd.md` no collect is about to commit; `owe()` lists
   the path in `.pearde/.claims/riders`, and the next collect on the board adds
-  it and says `rides <path>` on the line.
+  it and says `rides <path>` on the line. Beyond that named list, the collect
+  sweeps the board: any file in the board's repo dirty since the claim's
+  snapshot, that no other held PRD's folder holds, rides too — a memo, a
+  workflow file, a report a worker wrote beside its build. Anything already
+  dirty at `claim:` predates the claim and is inherited, never swept, so the
+  sweep carries this worker's board edits and nobody else's.
+- **The board's own machine-local dotfiles ride nothing, unless a footprint
+  names one.** A dotfile under the board — `.claims/`, `.state/`, a
+  `.pass.md`, a `.plan.json` — is this machine's, not the board's record, and
+  the collect drops it in silence: not added, and not listed as inherited
+  either, because nobody has to decide about it. The exception is a claim: a
+  `footprint:` naming `pearde/.gitignore`, a `--widen`, or a path inside the
+  PRD's own folder is committed like any other, since somebody said out loud
+  that it is theirs.
+- **Which board a path is under is one string, and on a board that is its own
+  repo that string is empty.** Both rules above ask "is this path under the
+  board?", spelled inside the board's *own* repo. On the flat layout the
+  answer is the board's directory name, `.pearde`. On a board that is a git
+  repo of its own — this repo since 2026-09-02, and every nested `.pearde`
+  with a `.git` — every path that repo prints is already under the board, so
+  the prefix is the empty string and `under_board` in
+  @resources/board/collect.py is the one function that reads it.
+  `os.path.relpath` answers `"."` for that case, which is a prefix of no path
+  git prints, and a `"."` here is the third wrong resolution of a board path
+  after the two @pearde/memos/a-board-s-own-file-commits-in-the-board-repo.md
+  replaced.
 - **A path the worker wrote outside its footprint is a wrong footprint.**
   Commit it with the rest and say so.
 - **The pass that moves an interface runs the probes that assert it.** A

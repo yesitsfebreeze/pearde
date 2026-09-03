@@ -37,6 +37,7 @@ import json
 import re
 import shutil
 import subprocess
+import tempfile
 import time
 import sys
 
@@ -1224,6 +1225,91 @@ def cmd_settings(argv):
 
 # ── vault ─────────────────────────────────────────────────────────────────────
 
+# obsidian.json is one file for the whole machine, not one per board — so the
+# writer slot the wait guards is machine-wide too. A lock under the board
+# would let two boards each think they were the only one waiting.
+VAULT_LOCK = os.path.join(tempfile.gettempdir(), "pearde-vault.lock")
+
+
+def _lock_holder_alive(pid):
+    """Same liveness check the rest of the tree uses for a pid it did not
+    start: signal 0, ProcessLookupError means gone, any other answer means
+    it is still there (or not ours to ask), which is read as held."""
+    try:
+        os.kill(pid, 0)
+    except ProcessLookupError:
+        return False
+    except OSError:
+        return True
+    return True
+
+
+def acquire_vault_lock():
+    """Claim the one writer slot the wait-then-write holds. Two `pearde
+    vault` runs waiting on the same Obsidian quit would both wake and both
+    write `obsidian.json` — the second one now refuses instead, the way
+    `claim` refuses a PRD someone already holds. A lock left by a process
+    that is no longer running is dropped and retried once; a live one
+    refuses."""
+    for _ in range(2):
+        try:
+            fd = os.open(VAULT_LOCK, os.O_CREAT | os.O_EXCL | os.O_WRONLY, 0o644)
+        except FileExistsError:
+            pid = None
+            try:
+                pid = int(open(VAULT_LOCK, encoding="utf-8").read().strip())
+            except (OSError, ValueError):
+                pass
+            if pid is not None and _lock_holder_alive(pid):
+                raise Refused(
+                    "vault: the writer is already held — another `pearde "
+                    f"vault` (pid {pid}) is waiting for Obsidian to quit")
+            try:
+                os.remove(VAULT_LOCK)   # a dead holder's lock — clear it
+            except OSError:
+                pass
+            continue
+        with os.fdopen(fd, "w") as f:
+            f.write(str(os.getpid()))
+        return
+    raise Refused("vault: the writer is already held — another `pearde "
+                  "vault` is waiting for Obsidian to quit")
+
+
+def release_vault_lock():
+    """Drop the lock, but only the copy this process wrote — a lock another
+    run has since taken (ours was cleared as dead and re-claimed) is never
+    this process's to remove."""
+    try:
+        held = open(VAULT_LOCK, encoding="utf-8").read().strip()
+    except OSError:
+        return
+    if held == str(os.getpid()):
+        try:
+            os.remove(VAULT_LOCK)
+        except OSError:
+            pass
+
+
+def wait_for_quit():
+    """Block until Obsidian's process is gone, or raise Refused naming the
+    process after the same timeout `--wait` has always carried. One code
+    path: the flagless run and `--wait` both call this the moment Obsidian is
+    found running, so the flag no longer decides whether the command waits
+    — only `--wait` asked for it in words, the flagless run finds out from
+    `obsidian_running()` instead."""
+    print("vault: waiting for Obsidian to quit — the register is only "
+          "writable while it is closed. Quit it now (⌘Q)…", flush=True)
+    for _ in range(WAIT_TICKS):
+        if not obsidian_running():
+            break
+        time.sleep(WAIT_TICK)
+    else:
+        raise Refused(f"Obsidian still running after "
+                      f"{int(WAIT_TICKS * WAIT_TICK)}s — nothing written")
+    time.sleep(1)                     # let the app finish its own last write
+
+
 def cmd_vault(argv):
     """[<dir>] [--wait] [--open] — put the board in Obsidian's vault register,
     which is what makes `obsidian://open` resolve to it.
@@ -1232,9 +1318,14 @@ def cmd_vault(argv):
     from memory on quit. So an entry added under a running app is invisible to
     it and gone afterwards — the app answers "Unable to find a vault for the
     URL" and then erases the line. This command holds that order: it writes
-    only while Obsidian is closed. `--wait` waits for the running app to exit
-    and writes the instant it does; `--open` launches the vault after writing.
-    The vault directory itself is seeded when it is not there yet."""
+    only while Obsidian is closed. Obsidian running is no longer a refusal —
+    with no flag named it prints the quit instruction and waits for the same
+    process exit `--wait` has always waited for, one code path either way.
+    `--wait` keeps its meaning for a headless script (no TTY needed, still
+    waits, still writes, still exits zero); `--open` launches the vault after
+    writing. A second `pearde vault` started while the first is waiting
+    refuses — the register is one writer at a time. The vault directory
+    itself is seeded when it is not there yet."""
     args = trlib.Args(argv, FLAGS["vault"], "vault")
     d = os.path.abspath(args.pos[0] if args.pos else os.getcwd())
     board = planlib.board_at(d)
@@ -1277,23 +1368,14 @@ def cmd_vault(argv):
             print(f"vault: put {', '.join(copied)} into {d}/.obsidian — "
                   "Obsidian loads a plugin on the next open of the vault")
     if obsidian_running():
-        if "wait" not in args.flags:
-            raise Refused(
-                "Obsidian is running — it rewrites obsidian.json from memory "
-                "when it quits, so anything written now is erased and never "
-                "read. Quit it and run this again, or run it with --wait and "
-                "quit: the entry lands the moment the process goes")
-        print("vault: waiting for Obsidian to quit — the register is only "
-              "writable while it is closed. Quit it now (⌘Q)…", flush=True)
-        for _ in range(WAIT_TICKS):
-            if not obsidian_running():
-                break
-            time.sleep(WAIT_TICK)
-        else:
-            raise Refused(f"Obsidian still running after "
-                          f"{int(WAIT_TICKS * WAIT_TICK)}s — nothing written")
-        time.sleep(1)                 # let the app finish its own last write
-    state, vid = register_vault(d, retire=board)
+        acquire_vault_lock()
+        try:
+            wait_for_quit()
+            state, vid = register_vault(d, retire=board)
+        finally:
+            release_vault_lock()
+    else:
+        state, vid = register_vault(d, retire=board)
     if state is None:
         print("vault: Obsidian has no config on this machine — nothing to "
               "register. The vault directory is there for when it does")

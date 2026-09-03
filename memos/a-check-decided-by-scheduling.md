@@ -2,6 +2,10 @@
 memo: a-check-decided-by-scheduling
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: a harness whose verdict depends on what else is running is not evidence, and a check that stands down reports skip and is never counted as a pass
 date: 2026-09-01
 prds:

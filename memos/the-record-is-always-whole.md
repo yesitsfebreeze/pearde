@@ -2,6 +2,10 @@
 memo: the-record-is-always-whole
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: collect must never stage a PRD's own folder by hunk, and the state it writes after staging must land in the same commit
 date: 2026-08-29
 prds:

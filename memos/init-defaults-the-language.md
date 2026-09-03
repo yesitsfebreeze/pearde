@@ -2,6 +2,10 @@
 memo: init-defaults-the-language
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: A board is created with no question — language defaults to English and says so on the first line
 date: 2026-08-28
 prds:

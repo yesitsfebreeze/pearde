@@ -2,6 +2,10 @@
 memo: a-probe-that-prints-no-count
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: the seven-closed-probes container's run-all.sh prints pass=0 fail=0 on every row and empty FAIL excerpts, so only its exit code carries information
 date: 2026-09-01
 prds:

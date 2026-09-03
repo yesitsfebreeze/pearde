@@ -2,6 +2,10 @@
 memo: the-tool-moves-the-states
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: Every transition is a command that checks its own gate, and the prose becomes the spec of the tool
 date: 2026-08-28
 prds:

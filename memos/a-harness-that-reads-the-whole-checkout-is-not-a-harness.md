@@ -2,6 +2,10 @@
 memo: a-harness-that-reads-the-whole-checkout-is-not-a-harness
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: a probe asserts over its own footprint, never over the live working tree, and its flip probe runs every file it claims for
 date: 2026-09-02
 prds:

@@ -2,10 +2,14 @@
 memo: every-artifact-lands-inside-the-board
 kind: invariant    # decision | note | invariant
 status: decided    # open | decided | superseded
+tags:
+  - memo
+  - kind/invariant
+  - status/decided
 subject: every file the tool writes into a project lands under that project's .pearde/
 date: 2026-09-01
 verify: bash resources/invariants/every-artifact-lands-inside-the-board.sh
-# updated:         # only on a substantive revision; never for a path fix
+updated: 2026-09-02
 # prds:            # board-relative PRD dirs this memo governs
 #   - <prd-dir>
 # supersedes:      # the slug this replaces
@@ -28,6 +32,15 @@ since the install stopped being writable, `serve.json` (this board's own
 registration with the daemon), `serve.log`, `run-<prd>.log`,
 `calibration.json` and `guard/<session>.json`. Nothing of ours is written
 beside the board, and nothing of ours is written into the install.
+
+Two paths outside the board are exempt, and both are outside because no other
+location exists for them. `.gitignore` is read by git from the repository it
+belongs to. `.obsidian/` is read by Obsidian from the vault's own root, and
+the vault has been the PROJECT since 2026-09-02 — @references/obsidian.md
+carries why the board could not stay the vault. A third exemption is not a
+path but a nesting: `pearde/.lanes/<slug>/` is a git worktree of this repo, so
+it carries a whole checkout including its own board and that board's own
+`.state/`, which is this rule holding one level down rather than breaking.
 
 Two things make it hold rather than being asked for:
 

@@ -2,6 +2,10 @@
 memo: also-resolves-against-the-board-first
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: collect --also resolves against the board first, then the caller's cwd, and refuses a path neither holds
 date: 2026-09-02
 updated: 2026-09-02

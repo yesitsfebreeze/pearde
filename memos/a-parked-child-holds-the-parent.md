@@ -2,6 +2,10 @@
 memo: a-parked-child-holds-the-parent
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: scan's ready band ignores a parked child; claim's gate counts it — one rule has to win
 date: 2026-08-28
 prds:

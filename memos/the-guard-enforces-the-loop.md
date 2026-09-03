@@ -2,6 +2,10 @@
 memo: the-guard-enforces-the-loop
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: The loop's three token rules are a PreToolUse hook, not three sentences
 date: 2026-08-27
 ---

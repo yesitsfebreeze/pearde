@@ -2,6 +2,10 @@
 memo: a-drill-round-fails-its-own-checker
 kind: note
 status: decided
+tags:
+  - memo
+  - kind/note
+  - status/decided
 subject: questions.py reads each prepared answer as a question, so a well-formed drill round reports six problems
 date: 2026-08-28
 ---

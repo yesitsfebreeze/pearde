@@ -2,7 +2,7 @@
 workflow: implementer-continue
 subject: the vault roots at the project and obsidian is taught to index the dotted board
 date: 2026-09-03
-runs: 0
+runs: 1
 tags:
   - workflow
 ---

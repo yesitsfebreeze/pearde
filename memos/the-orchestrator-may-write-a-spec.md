@@ -2,6 +2,10 @@
 memo: the-orchestrator-may-write-a-spec
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: The orchestrator may write a spec, and only to close a rule the PRD already states
 date: 2026-08-28
 prds:

@@ -2,6 +2,10 @@
 memo: one-author-is-not-an-accepted-spec
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: a spec whose code, probe, acceptance boxes and proof block have one author is not accepted evidence; a box is ticked only against a check that has been seen fail
 date: 2026-09-01
 prds:

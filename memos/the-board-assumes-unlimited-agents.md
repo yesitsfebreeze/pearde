@@ -2,6 +2,10 @@
 memo: the-board-assumes-unlimited-agents
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: the plan, the pass and the drill assume every dispatchable PRD runs at once; a worker cap is a person's setting, never the plan's clock
 date: 2026-09-02
 ---

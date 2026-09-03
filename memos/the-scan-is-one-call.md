@@ -2,6 +2,10 @@
 memo: the-scan-is-one-call
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: Step 1 is one `plan.py scan` call and one round file, never a hand-walked tree
 date: 2026-08-27
 ---

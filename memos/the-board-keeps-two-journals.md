@@ -2,6 +2,10 @@
 memo: the-board-keeps-two-journals
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: .history.jsonl and .transitions.jsonl are two different records, not one duplicated
 date: 2026-08-31
 prds:

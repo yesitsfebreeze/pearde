@@ -2,6 +2,10 @@
 memo: the-round-has-a-context-ceiling
 kind: decision
 status: superseded
+tags:
+  - memo
+  - kind/decision
+  - status/superseded
 subject: a round is capped at 100k context and resumed from the round file, and workers are dispatched as typed agents
 date: 2026-08-31
 superseded_by: the-dispatcher-holds-no-round

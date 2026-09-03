@@ -2,6 +2,10 @@
 memo: a-report-must-say-verdict
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: collect requires the literal word Verdict: in a report and nothing tells a worker to write it; the orchestrator adds the prefix rather than sending the worker back
 date: 2026-09-01
 prds:

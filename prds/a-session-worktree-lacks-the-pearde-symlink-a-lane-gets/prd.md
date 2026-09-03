@@ -1,6 +1,7 @@
 ---
 state: deferred
 origin: derived
+from: no-work-is-lost-on-the-board/a-lane-rebases-before-collect
 priority: 60
 complexity: 0
 blast-radius:

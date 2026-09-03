@@ -1,6 +1,7 @@
 ---
 state: deferred
 origin: derived
+from: every-document-is-written-in-the-writer-s-prose
 priority: 60
 complexity: 0
 blast-radius:

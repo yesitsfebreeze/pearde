@@ -2,6 +2,10 @@
 memo: adjacent-edits-merge-into-one-hunk
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: Two workers editing adjacent lines produce one `-U0` hunk, and `collect` cannot tell whose it is
 date: 2026-08-28
 prds:

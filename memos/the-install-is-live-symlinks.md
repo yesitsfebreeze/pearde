@@ -2,6 +2,10 @@
 memo: the-install-is-live-symlinks
 kind: note
 status: decided
+tags:
+  - memo
+  - kind/note
+  - status/decided
 subject: The installed skill is file-by-file symlinks into this repo, so a pearde round on any board on the machine edits this working tree
 date: 2026-08-29
 updated: 2026-08-29

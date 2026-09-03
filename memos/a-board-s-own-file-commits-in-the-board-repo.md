@@ -2,6 +2,10 @@
 memo: a-board-s-own-file-commits-in-the-board-repo
 kind: invariant    # decision | note | invariant
 status: decided    # open | decided | superseded
+tags:
+  - memo
+  - kind/invariant
+  - status/decided
 subject: a footprint path inside a board that is its own git repo commits in the board repo, never in the code repo that ignores it
 date: 2026-09-02
 verify: bash resources/invariants/a-board-s-own-file-commits-in-the-board-repo.sh

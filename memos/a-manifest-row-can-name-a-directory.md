@@ -2,6 +2,10 @@
 memo: a-manifest-row-can-name-a-directory
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: A growing data directory gets one manifest row for the directory, not one per file
 date: 2026-08-28
 prds:

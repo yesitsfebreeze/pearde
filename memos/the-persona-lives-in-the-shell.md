@@ -2,6 +2,10 @@
 memo: the-persona-lives-in-the-shell
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: The session's persona is `PEARDE_AS` in the environment — exported once at install, re-exported on a switch, never a board file
 date: 2026-08-28
 prds:

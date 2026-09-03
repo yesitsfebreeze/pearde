@@ -2,6 +2,10 @@
 memo: lanes-share-one-copy-of-what-they-regenerate
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: lanes share one copy of what they regenerate
 date: 2026-09-02
 ---

@@ -2,6 +2,10 @@
 memo: the-dispatcher-holds-no-round
 kind: decision
 status: decided
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: the round runs in a pearde-round worker whose window is thrown away, and the budget is measured from the window's own floor
 date: 2026-09-01
 supersedes: the-round-has-a-context-ceiling

@@ -2,6 +2,10 @@
 memo: a-pass-holds-its-turn-until-its-workers-are-in
 kind: invariant
 status: decided
+tags:
+  - memo
+  - kind/invariant
+  - status/decided
 subject: a background worker does not outlive the pass window that dispatched it, so a pass returns only once every worker it dispatched is in or measurably dead
 date: 2026-09-03
 verify: bash resources/invariants/a-pass-holds-its-turn-until-its-workers-are-in.sh

@@ -2,6 +2,10 @@
 memo: one-typo-crashes-every-round
 kind: note
 status: open
+tags:
+  - memo
+  - kind/note
+  - status/open
 subject: a non-numeric complexity in any spec crashes scan board-wide, three lines from the try/except that would prevent it
 date: 2026-08-28
 ---

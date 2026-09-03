@@ -2,6 +2,10 @@
 memo: a-container-cannot-reach-done
 kind: note
 status: decided
+tags:
+  - memo
+  - kind/note
+  - status/decided
 subject: a parent PRD whose children are all done has no path to done through the tool
 date: 2026-08-29
 prds:

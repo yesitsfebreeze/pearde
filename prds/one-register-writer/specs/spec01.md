@@ -88,16 +88,16 @@ printf -- '---\nlanguage: English\n---\n' > "$SCRATCH/proj/pearde/settings.md"
 mkdir -p "$SCRATCH/home/Library/Application Support/obsidian"
 REALPROJ=$(cd "$SCRATCH/proj" && pwd -P)
 
-row=$(HOME="$SCRATCH/home" bash resources/doctor.sh "$SCRATCH/proj" 2>&1 | grep -i '^  vault')
+row=$( { HOME="$SCRATCH/home" bash resources/doctor.sh "$SCRATCH/proj" 2>&1 || true; } | grep -i '^  vault')
 case "$row" in *"ok"*"not installed"*) : ;; *) echo "NOT_INSTALLED_FAIL: $row"; exit 1 ;; esac
 
 echo '{"vaults":{}}' > "$SCRATCH/home/Library/Application Support/obsidian/obsidian.json"
-row=$(HOME="$SCRATCH/home" bash resources/doctor.sh "$SCRATCH/proj" 2>&1 | grep -i '^  vault')
+row=$( { HOME="$SCRATCH/home" bash resources/doctor.sh "$SCRATCH/proj" 2>&1 || true; } | grep -i '^  vault')
 case "$row" in *"broken"*"not in Obsidian"*) : ;; *) echo "NOT_REGISTERED_FAIL: $row"; exit 1 ;; esac
 
 echo "{\"vaults\":{\"cafef00d\":{\"path\":\"$REALPROJ\",\"ts\":1}}}" \
   > "$SCRATCH/home/Library/Application Support/obsidian/obsidian.json"
-row=$(HOME="$SCRATCH/home" bash resources/doctor.sh "$SCRATCH/proj" 2>&1 | grep -i '^  vault')
+row=$( { HOME="$SCRATCH/home" bash resources/doctor.sh "$SCRATCH/proj" 2>&1 || true; } | grep -i '^  vault')
 case "$row" in *"ok"*"registered as proj"*) : ;; *) echo "REGISTERED_FAIL: $row"; exit 1 ;; esac
 echo DOCTOR_VAULT_ROW_OK
 

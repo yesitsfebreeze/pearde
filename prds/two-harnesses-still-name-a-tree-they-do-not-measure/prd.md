@@ -6,6 +6,7 @@ complexity: 8
 blast-radius:
 workflow: probe-then-spec
 actual: 11.72h
+commit: a27c5c0
 ---
 
 # two harnesses still name a tree they do not measure

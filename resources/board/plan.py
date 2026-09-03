@@ -91,6 +91,18 @@ SCAN_SKIP = frozenset(("node_modules", "target", "vendor", "__pycache__",
                        "build", "dist"))
 
 
+class NotABoard(NotADirectoryError):
+    """A path that was handed to a writer and is not a board.
+
+    An `OSError`, deliberately: every writer on this board already guards its
+    open() with `except OSError`, so the daemon's `save_entry`, `drop_entry`
+    and `migrate_legacy_state` skip one board instead of dying. `die()` would
+    raise `SystemExit`, which is not an `Exception` and so walks straight
+    through the daemon's `except Exception` watch-thread guard — one stale
+    watch entry would stop every board the daemon holds. The CLI turns it back
+    into a one-line refusal at its own boundary."""
+
+
 def is_board_dir(p):
     """A directory is a board when it CARRIES one: `settings.md`, or a
     `prds/` directory. The name alone stopped being proof the day the dot
@@ -257,9 +269,18 @@ def state_dir(board):
     hollow board directory holding one file. That is how a repo ends up with
     two board directories and a session writing into the wrong one. A read
     must never create a board: the path is refused instead, loudly, and the
-    caller is told to point at a board that exists."""
-    if not os.path.isdir(board):
-        die(f"no board at {board} — a read never creates one; point at the "
+    caller is told to point at a board that exists.
+
+    `is_board_dir`, not `os.path.isdir`: a path this defect has already run
+    on holds a HUSK — a directory at the board's old name carrying nothing
+    but the `.state/` the defect made. `isdir` is true of a husk for ever, so
+    a guard written on it keeps writing into the very thing it was added to
+    stop, and `serve.vanished()` — which drops on the same test — never drops
+    it. Carrying a board is the only property that heals a machine the defect
+    has already touched."""
+    if not is_board_dir(board):
+        raise NotABoard(
+            f"no board at {board} — a read never creates one; point at the "
             f"board that is there, or `pearde init` beside it")
     d = os.path.join(board, STATE_DIR)
     os.makedirs(d, exist_ok=True)
@@ -3196,4 +3217,11 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    # `state_dir` refuses with an exception rather than `die()` so the daemon's
+    # writers skip one board instead of dying. A person at the CLI wants the
+    # one-line refusal, not the traceback: it is turned back here, at the
+    # boundary where the process IS the caller.
+    try:
+        main()
+    except NotABoard as e:
+        die(str(e))

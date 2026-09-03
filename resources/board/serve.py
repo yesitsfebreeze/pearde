@@ -475,8 +475,14 @@ EPHEMERAL = ("/tmp/", "/private/tmp/", "/var/folders/", "/private/var/folders/")
 
 def entry_path(board):
     """`<board>/.state/serve.json` — one board's own registration, and the
-    only file this daemon writes about the watch set."""
-    return os.path.join(planlib.state_dir(board), "serve.json")
+    only file this daemon writes about the watch set.
+
+    Joined, never made. `state_dir()` used to be how this path was built, and
+    `os.makedirs` there brought every intermediate directory into being — so
+    naming the marker of a board that had moved re-created the board at the
+    name it had moved off. `save_entry` makes the corner it is about to write
+    into; nothing else here needs it to exist."""
+    return os.path.join(board, planlib.STATE_DIR, "serve.json")
 
 
 def save_entry(b):
@@ -489,7 +495,15 @@ def save_entry(b):
     not worth the write."""
     if b.path.startswith(EPHEMERAL):
         return
+    if not planlib.is_board_dir(b.path):
+        # The watch set holds the path a board registered at, and a board can
+        # move under it — `.pearde/` to `pearde/`, this repo's own 92e318c.
+        # Revalidate before every write: the entry is stale, and writing it
+        # would put a board directory back into a project that deliberately
+        # has none. `vanished()` drops the entry on the next tick.
+        return
     try:
+        planlib.state_dir(b.path)
         with open(entry_path(b.path), "w", encoding="utf-8") as fh:
             json.dump({"path": b.path, "name": b.name, "port": PORT,
                        "at": datetime.datetime.now().isoformat(
@@ -499,7 +513,9 @@ def save_entry(b):
 
 
 def drop_entry(b):
-    """`forget` — the board stops saying it is watched."""
+    """`forget` — the board stops saying it is watched. A removal, and only a
+    removal: `entry_path` makes no directory, so un-watching a board that is
+    gone leaves the ground where it stood untouched."""
     try:
         os.remove(entry_path(b.path))
     except OSError:
@@ -656,15 +672,15 @@ def vanished():
     on, so a fixture's `mktemp -d` board stayed in the watch set, in `status`,
     and in the process table, for as long as the machine stayed up. Forgetting
     it here is what makes `IDLE_EXIT_S` reachable."""
-    gone = [b for b in boards() if not os.path.isdir(b.path)]
+    gone = [b for b in boards() if not planlib.is_board_dir(b.path)]
     if gone:
         with BOARDS_LOCK:
             for b in gone:
                 if BOARDS.get(b.name) is b:
                     del BOARDS[b.name]
         for b in gone:
-            print(f"serve: {b.name} is gone from disk — no longer watching "
-                  f"{b.path}", flush=True)
+            print(f"serve: {b.name} carries no board any more — no longer "
+                  f"watching {b.path}", flush=True)
         bump(ALL)     # one board fewer is a change to the merged page
     return len(boards())
 

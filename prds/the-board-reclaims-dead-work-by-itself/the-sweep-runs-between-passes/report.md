@@ -1,99 +1,192 @@
 # report — the sweep runs between passes
 
-worker: an-sweep-between2 · persona: engineer
+worker: impl-sweep-between · persona: engineer · pass two (implementer)
 board: /Users/feb/dev/infra/pearde/.pearde · lane: .pearde/.lanes/the-board-reclaims-dead-work-by-itself-the-sweep-runs-between-passes
 
-Verdict: SPECCED
+Verdict: DONE
 
-## What the build is
+specs 1/1 · acceptance 6/6 ticked · probe 11 checks, 11 pass, 0 fail, three
+runs in a row · regression 74 checks, 67 pass, 7 fail, the same 7 as the
+pre-edit tree.
 
-The contract asked for one carrier that fires `sweep` with nobody watching,
-and forbade the obvious way to build it: running the mtime rule more often
-is a regression, because a worker legitimately silent past `claim-ttl` while
-thinking is now caught deterministically instead of by the luck of when a
-pass opened next. The build picked the carrier and then built the gate the
-contract requires before anything may act unattended.
+## What this pass did
 
-Carrier: `resources/board/serve.py`'s `watch()` loop, not a scheduled run —
-it already polls every watched board every second for the life of the
-process, which is already up wherever a pass or `pearde view` is; a cron/
-launchd job would be a second OS-specific process per machine, sharing none
-of the daemon's board state, needing its own idle-exit story, in a tree that
-is Python-stdlib-only everywhere else.
+The build the first pass left standing was correct and is unchanged in
+substance. This pass closed the three acceptance boxes it had no standing
+check for, and removed a neighbour's work that had been copied into the
+lane by mistake.
 
-Gate: `transitions.claim_liveness(who)` asks `session.py`'s own pid check
-(`sid()`'s `s<pid>` shape) — the one identity-to-process resolver that
-already exists — and `tick_sweep` reclaims only a claim it answers DEAD for.
-`pearde claim` writes `who` as a worker name today, so `claim_liveness`
-answers UNKNOWN for every claim on this board right now and `tick_sweep`
-leaves every one of them exactly as `sweep` without `--apply` would. It is
-wired and inert: the day `a-claim-names-the-process-that-holds-it` gives a
-claim's `who` a resolvable shape, this starts reclaiming the dead ones with
-no further edit in this footprint.
+1. **Stripped a live neighbour's hunks out of the lane.** The lane's
+   `resources/board/serve.py` carried `ask_digest()`, `Board.ask_stamp`
+   and the watch-loop block that reads them — 23 lines belonging to
+   `the-board-reclaims-dead-work-by-itself/a-fork-reaches-the-user-when-it-is-written`,
+   whose spec01 footprint is the same file and whose worker
+   `impl-fork-reaches` is claimed and building **in the checkout right
+   now** (`git status` names `resources/board/serve.py` dirty there, 23
+   insertions, all `ask_*`). Pass one's report says how they got in: it
+   built in the checkout, then copied *the checkout's whole uncommitted
+   `serve.py` diff* into the lane, which swept the neighbour's in-flight
+   work along with its own. Left alone, this lane would have carried a
+   stale copy of another PRD's unit into `collect`. Removed; the lane's
+   diff is now exactly this unit — `SWEEP_S`, `Board.last_sweep`, the
+   guarded `tick_sweep` call, and
+   `transitions.claim_liveness`/`tick_sweep`. See **Findings**.
+2. **Extended `probe/tick.sh` from 7 checks to 11**, closing acceptance
+   boxes 4 (second half), 5 and 6, which no check covered.
+3. Re-ran everything after both edits.
 
-The lane the brief named had been swept out from under the claim before the
-build started (created it fresh with `lanes.create` before reading the
-contract — the branch survived, only the worktree was gone). Also: the
-edits were made in the checkout, not the lane, before that was noticed —
-copied verbatim into the lane afterward (`git diff` / `git apply`,
-byte-identical, applied clean) and re-verified there. **The merge will
-refuse until the orchestrator runs `git checkout -- resources/board/
-transitions.py resources/board/serve.py` in the checkout** — the lane's
-copy is the same content, not a superset, so the checkout copy is simply
-redundant now.
+## Acceptance, box by box
 
-## What the probe proved
+- **box 1 — `claim_liveness` verdicts.** Run directly against the lane's
+  module: `dead : ('dead', 'pid 79457 is gone')` · `alive : ('alive',
+  'pid 79455 running since Thu Sep  3 17:53:45 2026')` · `name :
+  ('unknown', 'claim names no process — mtime is all there is')`, the
+  same `unknown` for `''` and `None`. `impl-sweep-between` — the shape
+  `pearde claim` writes today — is the `name` case.
+- **box 2 — only DEAD is reclaimed.** Probe checks 1–3: `dead holder:
+  the claim was reclaimed with no pass open — state failed` · `live
+  holder: silent past claim-ttl and left held — mtime alone does not
+  reclaim` · `claim naming no process: left held — unknown never
+  reclaims`. All three fixtures are stamped `202001010000` against a
+  `claim-ttl: 1m`, so every one of them is silent past the ttl and only
+  the dead pid moves.
+- **box 3 — the lane is committed before it is dropped.** Probe checks
+  4–6, and the daemon log names the order:
+  `serve: sweep: a-held-prd uncommitted path(s) committed as 8012aa36d2fe`
+  then `serve: sweep: a-held-prd lane removed · branch lane/a-held-prd
+  kept`. The bytes are recovered after the worktree is gone with
+  `git show lane/a-held-prd:src/b.py` and `…:src/a.py`.
+- **box 4 — `## Failure` names the kept branch, the log says so.** Probe
+  checks 7–9; checks 8 and 9 are new this pass. Check 8 reads the
+  `## Failure` section itself for `lane/a-held-prd` rather than only for
+  the heading; check 9 asserts the log line
+  `pid 53794 is gone — reclaiming without a pass`.
+- **box 5 — `SWEEP_S` defaults to 0 and ticks nothing.** Probe check 10,
+  new: a fourth fixture, dead pid, silent since 2020, watched by a daemon
+  started with `env -u PEARDE_SWEEP_S` — state stays `claimed`, log holds
+  no `reclaiming without a pass`. **Negative control** (the check can
+  fail): the identical fixture under `PEARDE_SWEEP_S=2` gives
+  `state: failed reclaims=1`.
+- **box 6 — a raise is logged and the loop survives it.** Probe check 11,
+  new: two boards, the bad one registered first, its `prd.md` `chmod 000`
+  so `tick_sweep` raises `PermissionError` (verified it does before the
+  check was written). The log:
 
-`probe/tick.sh` (built by the previous pass on this PRD, continued here) —
-7 checks, 7 of 7 pass, run 8 times in a row from the lane with no failure:
-a dead pid's claim is reclaimed (lane committed to `lane/<rel>` before the
-worktree is removed, `## Failure` naming the kept branch, log line
-`reclaiming without a pass`); a live pid's claim, and a claim naming no
-process at all (today's shape), are both left `claimed` however long past
-`claim-ttl` they sit. One run out of nine total, under heavy concurrent
-load on this shared machine (two unrelated `serve.py` daemons already
-running), came back 2 pass/5 fail and was not reproduced in the other
-eight — noted, not chased further; nothing in the 8 clean runs suggests a
-code cause.
+      serve: sweep tick on tmp.MzE8bQhICC raised PermissionError(13, 'Permission denied')
+      serve: a-held-prd · claimed · claim s6903 … — reclaiming without a pass
+      serve: sweep: a-held-prd uncommitted path(s) committed as 961dbccb0923
+      serve: sweep: a-held-prd lane removed · branch lane/a-held-prd kept
+      serve: sweep tick on tmp.MzE8bQhICC raised PermissionError(13, 'Permission denied')
+
+  — the second board was swept after the raise, and the bad board raised
+  again a tick later, so the loop kept both.
+
+## Verify and Proof
+
+Three runs in a row, from the lane, after the strip and the extension:
+`11 passed, 0 failed` · `11 passed, 0 failed` · `11 passed, 0 failed`,
+exit 0 each time. Three earlier runs of the unextended probe after the
+strip gave `7 passed, 0 failed` each — the strip changed no behaviour.
+
+Pass one reported one 2-pass/5-fail run out of nine under load. It did not
+recur in the six runs here (three at 7, three at 11).
+
+## Workflow probe-then-spec
+
+| # | step | outcome |
+|---|------|---------|
+| 1 | read-the-contract | ok — PRD, spec01, pass one's report; second pass on this route, so step 3 re-measures and step 5 applies `Fails when` to the blocks that stand rather than authoring a spec |
+| 2 | capture-the-harness-baseline | ok — see Harnesses |
+| 3 | attempt-the-build | ok — no back-edge taken |
+| 4 | re-run-the-harnesses | ok — no count moved against its own pre-edit baseline |
+| 5 | write-the-specs | ok — spec01 stood; ticked its six boxes and corrected its `Verify` count from 7 to 11 for the checks this pass added |
+
+### Edits
+
+None. No atomic named a wrong command, a stale path, a check that cannot
+fail, or a shape its `## Fails when` does not list.
 
 ## Harnesses
 
-`the-board-runs-itself/transitions-are-commands` — 74 checks, 67 pass, 7
-fail, identical with this unit's two files stashed out and restored: the
-7 fails are pre-existing (`add`'s template-comment box, three memory-log
-boxes, one master-board box), none naming `sweep`/`tick_sweep`.
-`index.py check` and `doctor.sh`: same pre-existing reds as before the
-edit (an unrelated file with no manifest row, stale knowledge/health
-rankings, memo tag drift) — nothing this footprint touches.
+23 of the board's 97 `verify.sh` name a footprint path; all 23 honour
+`PEARDE_ROOT` (`grep -L PEARDE_ROOT` over the set returns nothing), so
+every count below is the lane's, not the checkout's.
 
-## Findings (report-only)
+Baseline taken **before the first edit** of this pass, as a real pre-edit
+tree — the earlier build is uncommitted in a lane, so
+`git clone --shared <lane> <scratch>/pre` is the lane's own `HEAD`:
 
-- `the-board-reclaims-dead-work-by-itself/a-worker-survives-the-window-
-  that-launched-it` already has `specs/spec01.md` for "the sweep commits
-  a lane before it drops it" — `drop_lane` calling `lanes.commit_all`
-  before `lanes.remove`, complexity 22, not yet implemented into this
-  tree. This PRD's own "Constraint" paragraph asks for the same thing;
-  no second file is written for it here. `tick_sweep` calls
-  `lanes.commit_all` itself at its own call site (not inside `drop_lane`)
-  so the unattended reclaim is safe today independent of that spec
-  landing — `commit_all` is idempotent, so the two call sites never
-  double-commit once spec01 is built.
-- This PRD's "Needs `a-claim-names-the-process-that-holds-it`" is prose in
-  the body only — the frontmatter carries no `needs:` key, though `needs:`
-  is a real, machine-read key elsewhere on this board (`gate_claim` reads
-  it). Nothing enforced the ordering: this brief was issued and self-
-  claimed while the sibling is still `analyzing`, no `specs/` on disk yet.
-  The build did not wait on it — `claim_liveness`'s inertness on today's
-  claim shape is what makes that safe.
+| harness | pre-edit (`<scratch>/pre`) | lane before this pass | lane after |
+|---|---|---|---|
+| `the-board-runs-itself/transitions-are-commands` | 74 · 67 pass · 7 fail | 74 · 67 · 7 | 74 · 67 · 7 |
+| `probe/tick.sh` (this unit) | n/a — the unit is the build | 7 pass 0 fail | 11 pass 0 fail |
+| `index.py check` (lane) | 4 lines, exit 1 | identical | identical |
 
-## Specs
+The 7 fails are pre-existing **before the first edit**, and the failing
+*set* is identical in all three columns, not only the count: `claim with a
+footprint clash names both`, `…and the clashing PRD`, `git diff empty
+after every refusal`, `.transitions.jsonl not created by a refusal`, `the
+template's comments survive`, `.transitions.jsonl has one row per state
+move (13)`, `only prd.md files, the two new PRDs, .transitions.jsonl and
+.claims/ moved`. None names `sweep` or `tick_sweep`.
 
-- specs/spec01.md — the view daemon ticks the sweep on its own, gated to a
-  confirmed-dead claim. Footprint `resources/board/transitions.py`,
-  `resources/board/serve.py`. Complexity 16.
+`index.py check`: exit 1 in the lane, exit 0 in the checkout, on 4 lines —
+`resources/common.py` with no row in `references/files.md`,
+`references/files.md` and `@@view` naming
+`@resources/board/hotreload-test.js`, and `references/parts/commits.md`
+naming a `@pearde/memos/…` target. Byte-identical to the pre-edit clone's
+output. The lane is 3 commits behind `main` and `lanes.create` cuts it
+without the board, so these are the lane's, not this unit's.
 
-## Scores
+`doctor.sh` in the lane: `vault`, `origin`, `memos`, `knowledge` and
+`questions` broken before the first edit and after it, no row added. Rows
+that moved during the run — `board 224 → 226 PRDs`, `harnesses 96 → 97`,
+`vision 72 → 74 off`, `health … stale`, and `statusline`, which carries
+the tree's dirty count — are neighbours landing PRDs while this ran. This
+unit writes no board file, so it added none of them.
 
-complexity: 16
-blast-radius: mid
-workflow: probe-then-spec
+## Findings (report-only, not fixed)
+
+- **A live footprint clash on `resources/board/serve.py`.**
+  `a-fork-reaches-the-user-when-it-is-written` (state `claimed`,
+  `impl-fork-reaches`, spec01 footprint `resources/board/serve.py`) is
+  building **in the orchestrator's checkout**, not in its own lane — the
+  lane `.pearde/.lanes/the-board-reclaims-dead-work-by-itself-a-fork-reaches-the-user-when-it-is-written`
+  exists and its `git status` is clean, while the checkout's `serve.py`
+  carries all 23 of its lines uncommitted. Two consequences for the
+  orchestrator:
+  1. `collect` on **this** PRD merges
+     `lane/…-the-sweep-runs-between-passes` into a checkout whose
+     `serve.py` is dirty with the neighbour's work. A merge touching a
+     dirty path is refused. The neighbour has to land or park first;
+     this lane no longer duplicates their lines, so once they land there
+     is nothing to conflict on — my hunks are at lines 228, 306 and 767,
+     theirs at 301, 449 and 812, and none overlap.
+  2. This is the second pass in a row on this route where a worker built
+     in the checkout instead of the lane the brief named. Pass one's
+     report says its lane had been swept out from under its claim before
+     it started. That is this PRD's own subject, from the other side.
+- **The lane is 3 commits behind `main`** (lane `HEAD` `7a162c2`, `main`
+  `77665a3`). Nothing in those commits touches this footprint; noted so
+  the merge is expected to be a fast catch-up, not a surprise.
+- **`## Failure` on the swept PRD is appended, never replaced.** A PRD
+  swept twice accumulates two `## Failure` sections. Outside this spec's
+  scope (`edit.append_section`'s own behaviour), reported not fixed.
+- **This PRD's `Needs a-claim-names-the-process-that-holds-it` is prose
+  in the body only** — the frontmatter carries no `needs:` key, though
+  `needs:` is machine-read elsewhere (`gate_claim` reads it). Nothing
+  enforced the ordering. Pass one raised this too; it still stands, and
+  it is why `claim_liveness` had to be built inert rather than relied on.
+
+## Files
+
+- `resources/board/transitions.py` — `CLAIM_ID_RE`, `claim_liveness`,
+  `tick_sweep` (+74 lines). Unchanged from pass one.
+- `resources/board/serve.py` — `SWEEP_S`, `Board.last_sweep`, the guarded
+  `tick_sweep` call in `watch()` (+18 lines, was +41 before the strip).
+- `prds/…/the-sweep-runs-between-passes/probe/tick.sh` — 7 checks → 11.
+- `prds/…/the-sweep-runs-between-passes/specs/spec01.md` — six boxes
+  ticked, `Verify and Proof` count corrected 7 → 11.
+
+Nothing under the health floor was in the footprint; nothing was
+refactored. The lane is left uncommitted, as `collect` expects.

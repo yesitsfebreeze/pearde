@@ -58,25 +58,27 @@ lane):
 
 ## Acceptance
 
-- [ ] `claim_liveness("s<pid>")` for a pid that is gone answers `("dead", …)`; for a pid still running answers `("alive", …)`; for any `who` not shaped `s<digits>` — every claim `pearde claim` writes today — answers `("unknown", …)`
-- [ ] `tick_sweep` reclaims a claim only when `claim_liveness` answers `"dead"`; a claim silent past `claim-ttl` naming a live pid, or naming no process at all, is left `claimed`/`analyzing` untouched
-- [ ] a reclaim commits every uncommitted path standing in the lane to `lane/<rel>` (printed `… committed as <sha>`) before the worktree is removed, and the committed bytes are recoverable with `git show lane/<rel>:<path>` after the worktree is gone
-- [ ] the reclaimed PRD's `## Failure` section names the kept branch, and the daemon's log line says `reclaiming without a pass`
-- [ ] `SWEEP_S` defaults to `0`; with it unset or `0`, no watched board is ever ticked by `tick_sweep`, whatever the mtime and pid say
-- [ ] with `PEARDE_SWEEP_S` set, `watch()` calls `tick_sweep` on each watched board at most once per `SWEEP_S` seconds, and an exception it raises for one board is printed to the daemon's log and does not stop the loop watching the others
+- [x] `claim_liveness("s<pid>")` for a pid that is gone answers `("dead", …)`; for a pid still running answers `("alive", …)`; for any `who` not shaped `s<digits>` — every claim `pearde claim` writes today — answers `("unknown", …)`
+- [x] `tick_sweep` reclaims a claim only when `claim_liveness` answers `"dead"`; a claim silent past `claim-ttl` naming a live pid, or naming no process at all, is left `claimed`/`analyzing` untouched
+- [x] a reclaim commits every uncommitted path standing in the lane to `lane/<rel>` (printed `… committed as <sha>`) before the worktree is removed, and the committed bytes are recoverable with `git show lane/<rel>:<path>` after the worktree is gone
+- [x] the reclaimed PRD's `## Failure` section names the kept branch, and the daemon's log line says `reclaiming without a pass`
+- [x] `SWEEP_S` defaults to `0`; with it unset or `0`, no watched board is ever ticked by `tick_sweep`, whatever the mtime and pid say
+- [x] with `PEARDE_SWEEP_S` set, `watch()` calls `tick_sweep` on each watched board at most once per `SWEEP_S` seconds, and an exception it raises for one board is printed to the daemon's log and does not stop the loop watching the others
 
 ## Verify and Proof
 
 ```sh
-LANE="<the lane or checkout holding this unit's build>"
+LANE="$(git rev-parse --show-toplevel)"
 SKILL="$LANE" PEARDE_SWEEP_S=2 bash \
   /Users/feb/dev/infra/pearde/.pearde/prds/the-board-reclaims-dead-work-by-itself/the-sweep-runs-between-passes/probe/tick.sh
 ```
 
-Run three times in a row: 7 checks, 7 pass, 0 fail each time — a dead pid's
+Run three times in a row: 11 checks, 11 pass, 0 fail each time — a dead pid's
 claim reclaimed (lane committed, worktree gone, `## Failure` naming the
 branch, log line `reclaiming without a pass`), a live pid's claim and a
-claim naming no process both left `claimed`, silent past `claim-ttl` or not.
+claim naming no process both left `claimed`, silent past `claim-ttl` or not,
+a daemon with `PEARDE_SWEEP_S` unset ticking none of it, and a board whose
+tick raises logged while the loop still sweeps the next board.
 
 Regression: `bash /Users/feb/dev/infra/pearde/.pearde/prds/the-board-runs-itself/transitions-are-commands/probe/verify.sh`
 — 74 checks, 67 pass, 7 fail before and after this unit (same 7, unrelated

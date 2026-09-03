@@ -55,6 +55,19 @@ def lane_dir(board, slug):
                         re.sub(r"[^A-Za-z0-9._-]+", "-", str(slug)).strip("-"))
 
 
+def _may_discard(tree):
+    """May this process throw `tree`'s uncommitted work away? The rule and
+    the reasoning are @resources/board/refuse.py. False when the module will
+    not load: a lane whose dirt is left standing is a report a person can
+    read, and the alternative is the loss that memo records."""
+    try:
+        import refuse as refuselib
+        ok, _ = refuselib.allowed(refuselib.board_above(None, tree), tree)
+        return ok
+    except Exception:
+        return False
+
+
 def git(root, *args, check=True):
     r = subprocess.run(("git", "-C", root) + args,
                        capture_output=True, text=True, timeout=60)
@@ -229,11 +242,18 @@ def merge(repo, slug, out=None):
         if r.returncode != 0:
             files = conflicts(wt)
             aborted = git(wt, "rebase", "--abort", check=False)
-            if aborted.returncode == 0:
+            if aborted.returncode == 0 and _may_discard(wt):
                 # a real rebase was under way — `--abort` already put the
                 # branch and its tree back at `was`; this is redundant
                 # belt-and-suspenders for it, never the first thing to
-                # touch the tree.
+                # touch the tree. `_may_discard` is the second condition
+                # because `wt` is a WORKER's tree and this process is not
+                # in it: the memo
+                # `a-session-that-writes-a-shared-checkout-can-revert-
+                # another-session-s-work` puts `reset --hard` out of bounds
+                # in a tree the running session does not own, and a
+                # redundant reset is the cheapest thing on this board to
+                # give up.
                 git(wt, "reset", "--hard", was, check=False)
             raise LaneError(
                 f"merge conflict: {br} onto {onto} — "

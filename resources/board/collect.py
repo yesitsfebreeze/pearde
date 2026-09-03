@@ -556,6 +556,22 @@ def owned_by(prd, board_root, repo, feet, board=None):
 
 
 def _park(cwd, feet, out=print):
+    # This `stash push -u` is NOT one of the four commands
+    # `a-session-that-writes-a-shared-checkout-can-revert-another-session-s-
+    # work` puts out of bounds, and @resources/board/refuse.py is deliberately
+    # not consulted here. It is a stash-then-POP pair, and the pop is in
+    # `guarded_run`'s `finally`: its whole purpose is to move a PEER's dirt
+    # out of the verify block's reach and put it back afterwards.
+    #
+    # Measured, and the measurement is why this comment exists: putting this
+    # call under the refusal flipped four checks of
+    # `prds/collect-must-not-reset-the-checkout-it-did-not-write` from pass to
+    # fail — "the neighbour's uncommitted work is still there" stopped being
+    # true, because the verify block then ran over it. Refusing a protective
+    # stash destroys exactly the work the refusal exists to protect.
+    #
+    # A `stash` a session TYPES has no matching pop, which is why the shell
+    # half refuses that one and this one stands.
     foreign = sorted({p for _, p in _dirty(cwd) if not inside(p, feet)})
     if not foreign:
         return False

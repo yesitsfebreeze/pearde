@@ -748,6 +748,37 @@ def budget(data, st, session, board, tool, inp):
          "worker, asking the user, and the board's own commands.")
 
 
+REFUSE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                      "board", "refuse.py")
+
+
+def destructive_in_another_tree(cmd, cwd, board):
+    """`reset --hard`, `checkout --`, `clean` and a real stash, refused in any
+    tree this session does not own — the shell half of
+    `pearde/memos/a-session-that-writes-a-shared-checkout-can-revert-another-
+    session-s-work.md`. The board's own code is guarded at its call sites by
+    @resources/board/refuse.py; this is the same module reading what a session
+    types by hand, which is the other way that memo's `reset --hard` reaches a
+    peer's tree.
+
+    Everything here is inside one try: `@resources/board/refuse.py` is
+    stdlib-only and imports nothing from the planner, but a guard that raises
+    is a session that cannot use a tool, so a refusal module that will not
+    load or will not answer denies nothing. A missed refusal costs a warning
+    the call sites still make; a raised hook costs the whole session."""
+    try:
+        d = os.path.dirname(REFUSE)
+        if d not in sys.path:
+            sys.path.insert(0, d)
+        import refuse as refuselib
+        bad = refuselib.check_line(board, cmd, cwd)
+    except Exception:
+        return
+    if bad:
+        verb, tree, reason, why = bad[0]
+        deny(refuselib.refuse_line(verb, tree, reason, why))
+
+
 def pre(data):
     tool = data.get("tool_name") or ""
     inp = data.get("tool_input") or {}
@@ -758,6 +789,14 @@ def pre(data):
     if tool in ("Edit", "Write"):
         board = board_of(os.path.dirname(os.path.abspath(
             str(inp.get("file_path") or "")))) or board
+    # Before the board test, not after it: the tree a destructive git would
+    # discard is the one whose board decides, and a session types that command
+    # from wherever it happens to be standing — including a directory with no
+    # board above it at all. Everything below this line is per-board
+    # bookkeeping and rightly stops when there is no board.
+    if tool == "Bash":
+        destructive_in_another_tree(str(inp.get("command") or ""),
+                                    data.get("cwd"), board)
     if not board:
         ok()
     st = load(session, board)

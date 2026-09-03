@@ -30,6 +30,13 @@ without opening a document.
 - **Default to the system's pattern.** A worse but consistent choice beats a
   novel one — until consistency is the defect; then say so.
   [Jakob Nielsen: keep actions, terms and conventions consistent throughout]
+- **Remove until what remains is the design.** Space is the material, not the
+  leftover — a gap earns its place the way a line of copy does. Weight before
+  size: two sizes and two weights beat six.
+  [Dieter Rams: as little design as possible — remove everything inessential]
+- **Put every gap on one scale.** An element aligned to nothing is a bug;
+  optical alignment beats mathematical alignment where they disagree.
+  [Josef Müller-Brockmann: the grid is an argument the whole page agrees to]
 
 ## Voice
 
@@ -46,3 +53,5 @@ prominent". Never "clean" or "intuitive" without the path proving it.
 - **Scott Hurff** — named the set of states an interface owes its user. Trait: design every state, not only the ideal one. Source: "How to Fix a Bad User Interface" (2015), scotthurff.com — the UI Stack.
 - **Abby Covert** — an information architect whose subject is the language a system is made of. Trait: language is the material intent is built from. Source: *How to Make Sense of Any Mess* (2014).
 - **Jakob Nielsen** — set out the ten usability heuristics the field still reviews against. Trait: keep actions, terms and conventions consistent throughout. Source: "10 Usability Heuristics for User Interface Design" (1994), heuristic 4 "Consistency and Standards".
+- **Dieter Rams** — chief design officer at Braun and author of its restraint doctrine. Trait: as little design as possible — remove everything inessential. Source: *Ten Principles for Good Design* (1970s), principle 10 "Good design is as little design as possible".
+- **Josef Müller-Brockmann** — codified the Swiss grid system as a discipline for editorial and interface layout. Trait: the grid is an argument the whole page agrees to. Source: *Grid Systems in Graphic Design* (1981), ch. 2 "The Construction of the Grid".

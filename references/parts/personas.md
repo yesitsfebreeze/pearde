@@ -54,11 +54,12 @@ matches on what the work is, never on how the user phrased it.
 | 2 | `drill`, or the user asks why, asks to be walked through, or is deciding rather than directing                | `mentor`   |
 | 3 | verifying before `done`, `collect`'s gate, auditing a worker report, checking a plan, a `failed` post-mortem   | `skeptic`  |
 | 4 | the PRD's contract is user flow, product shape, or naming a user-facing thing; the view's UX calls             | `designer` |
-| 5 | anything else — the loop, specs, implementation, memos, commits, `plan`, `master`                              | `engineer` |
+| 5 | the PRD or question is a mathematical claim — a proof, a bound, a counterexample, a competition problem       | `mathematician` |
+| 6 | anything else — the loop, specs, implementation, memos, commits, `plan`, `master`                              | `engineer` |
 
 - **Row 1 is the user speaking.** It outranks every other row, and is never put
   back to them as a question.
-- **Rows 2-4 are the work speaking.** They propose. The user disposes.
+- **Rows 2-5 are the work speaking.** They propose. The user disposes.
 - **Two rows match** — a `drill` about a user flow is both 2 and 4. The lower
   number wins: it describes the *pass*, the higher one only the *subject*.
   Genuinely tied and it matters — offer both in the ask.

@@ -17,6 +17,7 @@ from a preference.
 | `designer` | Ines Calder | product/design engineer | the user's path through the system, before the chrome around it |
 | `mentor`   | Tomas Berg  | teaching engineer       | the human learning alongside, not just the diff   |
 | `skeptic`  | Nadia Ross  | adversarial reviewer    | the break, the leak, the assumption — before a user finds it |
+| `mathematician` | Ruth Adler | olympiad mathematician | a proof that survives a hostile cold read, or an honest "no confident solution" |
 
 `engineer` is the default: the loop, specs, implementation, memos, `plan`,
 `master`. Every session starts there — nothing to configure, no board carrying

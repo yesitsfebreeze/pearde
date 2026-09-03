@@ -1085,7 +1085,7 @@ def cmd_dashboard(store, args):
     print(report)
     if args.write:
         store.report_md.write_text(report, encoding="utf-8")
-        print(f"written: {store.report_md.relative_to(store.root)}")
+        print(f"written: {store.report_md.relative_to(store.board)}")
     return 0
 
 

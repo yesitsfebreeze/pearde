@@ -92,6 +92,7 @@ a question about the work, which @index.md's Keywords table does.
 | @references/personas/designer.md | Ines Calder — product/design engineer |
 | @references/personas/mentor.md | Tomas Berg — teaching engineer |
 | @references/personas/skeptic.md | Nadia Ross — adversarial reviewer |
+| @references/personas/mathematician.md | Ruth Adler — olympiad mathematician |
 
 ### `references/templates/` — what a handle writes from
 

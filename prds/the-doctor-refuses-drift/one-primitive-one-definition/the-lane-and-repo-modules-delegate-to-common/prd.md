@@ -8,6 +8,7 @@ needs:
   - common-py-gains-a-git-runner-and-a-section-extractor
 workflow: probe-then-spec
 actual: 2.17h
+commit: e0a2c1c
 ---
 
 # the-lane-and-repo-modules-delegate-to-common — resources/board/lanes.py`, `orphans.py`, `ramp.py`, `refuse.py`, `repos.py`, `shared.py` and `transitions.py` hold no second definition of a primitive; each keeps its own behaviour on failure through a one-line delegation into `common.py`.

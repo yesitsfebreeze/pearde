@@ -1,10 +1,10 @@
 ---
-state: analyzing
+state: specced
 origin: requested
 priority: 40
-complexity: 15
-blast-radius:
-claim: an-tags-derived 2026-09-03 11:44
+complexity: 32
+blast-radius: mid
+workflow: probe-then-spec
 ---
 
 # tags are derived when the vault is written

@@ -17,7 +17,7 @@ derived_from: []
 Three taps, in the order a round should use them:
 
 1. **The KB first** (`query`): what past rounds measured, with routes and dates. Cheapest, and it improves every time it is used.
-2. **Scout's own indexes second** (`findings.md` for decided jobs, `reading-list.md` for mechanisms to steal): for a job the KB has not absorbed yet.
+2. **The archived indexes second** ([[scout-findings-index-2026-08]] for decided jobs, [[scout-reading-list-2026-08]] for mechanisms to steal): for a job the KB has not absorbed yet.
 3. **Live routes last** (`route.sh <id> <query>`): only to re-measure a cell or answer a job no index covers — and the result is written back as a source note, not left in the transcript.
 
-What does *not* happen: a question answered by a fresh web search when the answer is on record, or a finding left only inside `findings.md` where no wikilink can reach it. Scout feeds the KB; the KB feeds the round; the round writes back what it learned. That loop is the whole integration.
+What does *not* happen: a question answered by a fresh web search when the answer is on record, or a finding left in the tool's own tree where no wikilink can reach it. Scout feeds the KB; the KB feeds the round; the round writes back what it learned. That loop is the whole integration.

@@ -27,18 +27,18 @@ published skill on this machine. Every verb in this module exits 0.
 
 ## Acceptance
 
-- [ ] `grep -rl happiness resources/` matches no file.
-- [ ] `ramp.py` defines no `happiness`, `write_ask`, `cmd_happy` or `cmd_gate`, and `"happy"` is not in its verb set.
-- [ ] `python3 resources/pearde.py init <fresh repo>` writes a `settings.md` with no `happiness:` line; so does `init --example`.
-- [ ] `ramp gap` on a board with an unanswered job prints its `GAP <job>` row and exits **0**.
-- [ ] Bare `pearde ramp` prints the gap and, per unanswered job, the candidates with their `npx skills add` line, writes no file, and exits 0.
-- [ ] No `.pearde/.state/ask.md` exists on a board that has only ever been `init`ed.
-- [ ] `resources/invariants/a-master-need-is-the-union-of-its-members.sh` is green — `ask_subject` survives the removal, and a master's credit line with it.
+- [x] `grep -rl happiness resources/` matches no file.
+- [x] `ramp.py` defines no `happiness`, `write_ask`, `cmd_happy` or `cmd_gate`, and `"happy"` is not in its verb set.
+- [x] `python3 resources/pearde.py init <fresh repo>` writes a `settings.md` with no `happiness:` line; so does `init --example`.
+- [x] `ramp gap` on a board with an unanswered job prints its `GAP <job>` row and exits **0**.
+- [x] Bare `pearde ramp` prints the gap and, per unanswered job, the candidates with their `npx skills add` line, writes no file, and exits 0.
+- [x] No `.pearde/.state/ask.md` exists on a board that has only ever been `init`ed.
+- [x] `resources/invariants/a-master-need-is-the-union-of-its-members.sh` is green — `ask_subject` survives the removal, and a master's credit line with it.
 
 ## Verify and Proof
 
 ```sh
-PEARDE_ROOT=$(pwd) bash .pearde/prds/the-tree-holds-only-what-a-board-uses/ramp-is-a-doctor-row-not-a-gate/probe/verify.sh
+B="$(cd "$(git rev-parse --git-common-dir)/.." && pwd)/.pearde"; PEARDE_ROOT=$(pwd) bash "$B/prds/the-tree-holds-only-what-a-board-uses/ramp-is-a-doctor-row-not-a-gate/probe/verify.sh"
 bash resources/invariants/a-master-need-is-the-union-of-its-members.sh
 python3 -c 'import ast;ast.parse(open("resources/board/ramp.py").read())'
 ```

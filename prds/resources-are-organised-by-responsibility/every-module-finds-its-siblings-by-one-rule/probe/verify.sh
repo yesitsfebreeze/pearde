@@ -164,6 +164,11 @@ fresh
 mkdir -p "$D/resources/read" "$D/resources/draw"
 mv "$D/resources/board/plan.py"   "$D/resources/read/"
 mv "$D/resources/board/render.py" "$D/resources/draw/"
+# Running plan.py as a script no longer shows this: plan.py imports memos.py,
+# memos.py now carries the rule, and the rule puts every directory under
+# resources/ on the path for the whole process — so a moved render is found by
+# a sibling's rule rather than by plan's own two lines. Put exactly plan's two
+# lines in a bare interpreter, which is the only way left to measure them.
 OUT=$(cd "$D" && python3 -c "
 import sys, os
 d = os.path.abspath('resources/read')            # where plan.py now sits

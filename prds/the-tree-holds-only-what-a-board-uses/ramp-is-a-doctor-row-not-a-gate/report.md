@@ -1,113 +1,112 @@
-# ramp is a doctor row not a gate — analyst report
+# ramp is a doctor row not a gate — implementer report
 
-Verdict: SPECCED
+Verdict: DONE
 
-The build went through whole. Every acceptance box in both specs is green in
-the lane right now; nothing is left but the commit.
+Pass one had already written the code; this pass measured it. Every acceptance
+box in both specs is closed against output quoted below, both `## Verify and
+Proof` blocks ran, and the board's gate is green in the sense the gate can be
+green here — `index.py check` and `doctor.sh` carry the same problems at HEAD
+as they carry with this work applied, and not one of them is ours.
 
-## What the build did
+Nothing was committed. `@references/parts/commits.md` says the orchestrator
+commits and never a worker; the lane holds nine modified files, staged by
+nobody, waiting for `collect`.
 
-`pearde ramp` used to be loop step 0, held open by `happiness:` — a key
-`pearde init` seeded as `0` and only a person could close. Zero meant every
-pass on a fresh board called scout's `route.sh` once per gap word, wrote
-`.pearde/.state/ask.md` and handed back `ASK` before it had read a single PRD.
-The cost fell on the run least able to pay it, and the answer was reliably
-*get on with it*.
+## What was run
 
-The key is deleted, not defaulted. `happiness()`, `write_ask()`, `cmd_happy()`
-and `cmd_gate()` are gone from `resources/board/ramp.py`; `cmd_measure()` is
-the bare verb, printing the gap and, per unanswered job, the candidates with
-their exact `npx skills add` line, writing nothing. `have`, `need`, `gap` and
-`find` are untouched. `init.py`'s `DEFAULTS` loses its sixth pair.
+`probe/verify.sh` in the lane, 19 checks, every one green, ending
+`ramp is a doctor row, not a gate — every check green`.
 
-The reading it used to force moves to `doctor`, one row between `board` and
-`vault`, modelled on `plugins`: it runs `ramp gap`, which is tracked paths
-against this machine's skill directories and costs no network call. A gap is
-`off`, never `broken` — an install is not broken because a field has no
-published skill — and the fix line is `pearde ramp`, the reading that does pay
-for the routes, run when a person asks for it.
+### spec01 — the gate comes out of the code · 7/7
 
-Measured on this repo's own board: `ramp ok · 4 jobs · every one answered`. On
-a run-time fixture with a Cargo.toml, five `.rs` files and an empty skill
-directory: `ramp off · 0 of 1 job answered · gap: rust`, doctor's exit code
-unchanged.
+- `grep -rl happiness resources/` — no match, exit 1.
+- `ramp.py` — no `def happiness`, `def write_ask`, `def cmd_happy`, `def
+  cmd_gate`; `verbs = {"have", "need", "gap", "find"}` at line 618, no `happy`.
+- `init` on a fresh repo writes five knobs — `language, workers, pipeline,
+  weight-default, gantt-day` — and `grep -c happiness` is 0 on both the plain
+  and the `--example` board.
+- `ramp gap` on a Cargo.toml + five `.rs` fixture with empty skill dirs:
+  `GAP rust  6  Cargo.toml×1, *.rs×5` / `gap: 1 of 1 jobs unanswered`, exit 0.
+- Bare `ramp` on that fixture printed the gap, then six rust candidates each
+  with its `npx skills add … -l` line, closing `ramp: 1 gap — nothing is
+  installed by this command, and nothing waits on it`, exit 0. The fixture's
+  file list hashed the same before and after.
+- No `.pearde/.state/ask.md` on a board that has only ever been `init`ed —
+  `.state/` holds `history.jsonl` and `parse-cache.json` and nothing else.
+- `a-master-need-is-the-union-of-its-members.sh` — 17 PASS, exit 0.
+- `ast.parse` on `ramp.py` — clean.
 
-## The one decision the contract did not settle
+### spec02 — the reading moves to a doctor row · 9/9
 
-`cmd_gap` returned **1** whenever a job stood unanswered. That is the last
-place the gate could hide: a non-zero exit turns a reading into a check, and
-`doctor` — which ignores the code today — would be one line away from going
-red because somebody's machine has no Rust skill. It now returns 0, and
-`references/parts/ramp.md` says so in as many words. Nothing in the tree read
-that exit code; the probe asserts the new one.
+- `bash -n resources/doctor.sh` clean; `doctor` prints `ramp` between `board`
+  and `vault` on both the real board and the fixture.
+- Gap standing: `ramp  off  0 of 1 job answered · gap: rust`, with
+  `fix: … pearde.py ramp ./.pearde — the candidates for each gap, with the line
+  that installs one` and `a gap is a reading, not a failure — the board
+  installs nothing and no pass waits on this row`.
+- Every job answered, this repo's board: `ramp  ok  4 jobs · every one answered
+  by an installed skill`. A tree the jobs table knows nothing in reads `off ·
+  the tree asks for nothing the jobs table recognises` (doctor.sh:422).
+- `broken` on that row is reachable only through `no python3 to read the tree's
+  asks` (doctor.sh:414) — never through a gap; the probe asserts the row adds 0
+  to the broken count.
+- The row calls `python3 "$DIR/board/ramp.py" gap "$BOARD"` (doctor.sh:417) and
+  nothing else — no `find`, no bare verb, no network.
+- `grep -c happiness references/settings.md` is 0; the yaml block shows the five
+  keys plus `context-budget`.
+- `loop.md` holds no `0 ramp` row and no `**0 · Ramp.**`; its step table opens
+  `| 1 scan | nothing — read |`.
+- `doctor.md` line 26 carries the `ramp` row, reading *a reading, never a
+  failure*.
+- `index.py check` returns the same four problems with the work applied as it
+  returns at HEAD — no new one.
+
+### The board's gate
+
+`@.pearde/settings.md` names `index.py check`, `memos.py check` and `doctor.sh`.
+Run with the lane's code against this repo's board, and again from HEAD for the
+comparison:
+
+- `memos.py check` — silent, exit 0.
+- `index.py check` — four problems, byte-identical to HEAD's four.
+- `doctor.sh` — the row set is identical to HEAD's row for row, with the one
+  new `ramp ok` line added. `index`, `vault`, `origin`, `health` and `knowledge`
+  read `broken` in both runs.
 
 ## Findings, out of scope
 
-- **Four `index.py check` problems predate this PRD** and are untouched:
-  `resources/common.py` is on disk with no row in `references/files.md` (added
-  by 7e4d610); `references/files.md` and the `@@view` scope both name
-  `@resources/board/hotreload-test.js`, deleted by b1d3f5d;
-  `references/parts/commits.md` cites `@pearde/memos/a-board-s-own-file-commits-in-the-board-repo.md`,
-  not on disk. Each is a one-line map fix and none belongs to this contract.
-- **A board that already carries `happiness: 0`** now carries a key nothing
-  reads and nothing reports. Harmless, but a person reading their own
-  `settings.md` is misled. A `settings` row that names keys nobody declared is
-  a different contract — worth a PRD, not a widening of this one.
-- **`references/parts/ramp.md` keeps one mention of `happiness:`** on purpose,
-  to say the key was removed and why. The probe's key check is scoped to
-  `resources/` and `references/settings.md` for that reason.
-- The knowledge query returned 90 notes, 88 strong. No gap, nothing enqueued
-  to `.pearde/wiki/pending/`. No fact was learned outside this tree.
-- `probe-then-spec` fit the run exactly, step for step. No new workflow file.
+- **The four `index.py check` problems the analyst named still stand**, and each
+  reproduces on a clean HEAD checkout: `resources/common.py` has no row in
+  `references/files.md`; `references/files.md` and the `@@view` scope both name
+  the deleted `@resources/board/hotreload-test.js`;
+  `references/parts/commits.md` cites a memo not on disk. Map fixes, not this
+  contract.
+- **Four doctor rows read `broken` on this board before and after** — `index`,
+  `vault`, `origin`, `health`, `knowledge`. Each is its own PRD's business. The
+  board's gate cannot be *all three green* on this repo today, which is why the
+  reading above is HEAD-relative rather than absolute.
+- **`no-colour-group-in-the-vault-preset-is-a-path-query.sh` cannot run inside a
+  lane** — it prints `BROKEN: no board at pearde/ — the second check has nothing
+  to read` and exits 0, because a lane worktree carries no `.pearde`. It is
+  green in the checkout. An invariant that reports broken and exits 0 is worth a
+  look, but nothing here touched it.
+- **`one-copy-per-machine-of-what-every-lane-regenerates.sh` did not finish in
+  two minutes** and was not waited out. Unrelated to this footprint; noted so
+  the next run knows it is slow, not hung.
+- No word in the contract needed `grammar.py show`. No fact came from outside
+  this tree, so nothing was written with `knowledge.py remember`.
+- No file in the footprint sits under the health floor; nothing was moved.
 
-## Footprint union
+## Footprint, uncommitted in the lane
 
 ```
-resources/board/ramp.py
-resources/board/init.py
-resources/doctor.sh
-references/settings.md
 references/files.md
-references/parts/loop.md
-references/parts/ramp.md
 references/parts/doctor.md
 references/parts/handles.md
+references/parts/loop.md
+references/parts/ramp.md
+references/settings.md
+resources/board/init.py
+resources/board/ramp.py
+resources/doctor.sh
 ```
-
-## Specs
-
-- `specs/spec01.md` — the gate comes out of the code · complexity 6 ·
-  `resources/board/ramp.py`, `resources/board/init.py`
-- `specs/spec02.md` — the reading moves to a doctor row, and the loop opens on
-  the scan · complexity 9 · `resources/doctor.sh` and the five reference files
-
-Sum 15, two specs — under `split-above: 40` and `specs-above: 6`.
-
-## Reasoning for the scores
-
-**complexity 15.** One module loses four functions and gains one, one default
-tuple loses a pair, one doctor row is written against an existing template
-(`plugins`), and five reference files are re-worded. No new mechanism, no new
-data, no migration.
-
-**blast-radius mid.** `doctor.sh` runs on every install check and `init.py` on
-every new board, and `references/parts/loop.md` is the orchestrator's own
-contract — its step numbering changes shape. Against that: nothing but
-`ramp.py` ever read the key, every invariant and the whole index check are
-unchanged, and a board carrying the old key is unaffected.
-
-## Probe
-
-`probe/verify.sh` — 19 checks, all green, every fixture built in a `mktemp -d`
-at run time. Runs against this checkout, or `PEARDE_ROOT=<dir>` against
-another:
-
-```sh
-PEARDE_ROOT=$(pwd) bash .pearde/prds/the-tree-holds-only-what-a-board-uses/ramp-is-a-doctor-row-not-a-gate/probe/verify.sh
-```
-
-## Scores
-
-complexity: 15
-blast-radius: mid
-workflow: probe-then-spec

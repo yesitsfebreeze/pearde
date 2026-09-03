@@ -32,21 +32,29 @@ are re-worded off the gate.
 
 ## Acceptance
 
-- [ ] `doctor` prints a `ramp` row on any board, between `board` and `vault`.
-- [ ] With a gap standing the row reads `off`, names the missing jobs, and carries `fix: … pearde.py ramp <board>` plus a note that a gap is not a failure.
-- [ ] With every job answered the row reads `ok · N jobs`; on a tree the jobs table recognises nothing in, it reads `off · the tree asks for nothing the jobs table recognises`.
-- [ ] The `ramp` row never reads `broken` for a gap, and never contributes to doctor's exit code.
-- [ ] The row costs no network call: it runs `ramp gap`, never `ramp find` or the bare verb.
-- [ ] `grep -n 'happiness' references/settings.md` matches nothing, and the yaml block shows five keys plus `context-budget`.
-- [ ] `references/parts/loop.md` holds no `0 ramp` row and no `**0 · Ramp.**` paragraph; its step table starts at `1 scan`.
-- [ ] `references/parts/doctor.md`'s parts table holds a `ramp` row saying `off` is a reading and not a failure.
-- [ ] `python3 resources/index.py check` reports no problem that was not already there before this PRD — the four standing ones are named in the report as out of scope.
+- [x] `doctor` prints a `ramp` row on any board, between `board` and `vault`.
+- [x] With a gap standing the row reads `off`, names the missing jobs, and carries `fix: … pearde.py ramp <board>` plus a note that a gap is not a failure.
+- [x] With every job answered the row reads `ok · N jobs`; on a tree the jobs table recognises nothing in, it reads `off · the tree asks for nothing the jobs table recognises`.
+- [x] The `ramp` row never reads `broken` for a gap, and never contributes to doctor's exit code.
+- [x] The row costs no network call: it runs `ramp gap`, never `ramp find` or the bare verb.
+- [x] `grep -n 'happiness' references/settings.md` matches nothing, and the yaml block shows five keys plus `context-budget`.
+- [x] `references/parts/loop.md` holds no `0 ramp` row and no `**0 · Ramp.**` paragraph; its step table starts at `1 scan`.
+- [x] `references/parts/doctor.md`'s parts table holds a `ramp` row saying `off` is a reading and not a failure.
+- [x] `python3 resources/index.py check` reports no problem that was not already there before this PRD — the four standing ones are named in the report as out of scope.
 
 ## Verify and Proof
 
 ```sh
 bash -n resources/doctor.sh
-PEARDE_ROOT=$(pwd) bash .pearde/prds/the-tree-holds-only-what-a-board-uses/ramp-is-a-doctor-row-not-a-gate/probe/verify.sh
-python3 resources/index.py check
-grep -c happiness references/settings.md; grep -c '0 ramp' references/parts/loop.md
+B="$(cd "$(git rev-parse --git-common-dir)/.." && pwd)/.pearde"; PEARDE_ROOT=$(pwd) bash "$B/prds/the-tree-holds-only-what-a-board-uses/ramp-is-a-doctor-row-not-a-gate/probe/verify.sh"
+# the box is "no problem that was not already there" — the four standing ones are out of scope
+cat > /tmp/idx-standing.txt <<'STANDING'
+resources/common.py is on disk with no row in references/files.md
+references/files.md lists @resources/board/hotreload-test.js — not on disk
+@@view names @resources/board/hotreload-test.js — not on disk
+references/parts/commits.md references @pearde/memos/a-board-s-own-file-commits-in-the-board-repo.md — not on disk
+STANDING
+python3 resources/index.py check 2>&1 | grep -vxF -f /tmp/idx-standing.txt | grep -q . && { echo 'index check grew a new problem'; exit 1; }
+! grep -q happiness references/settings.md
+! grep -q '0 ramp' references/parts/loop.md
 ```

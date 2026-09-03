@@ -2,6 +2,10 @@
 memo: invariants-are-testable-memos-and-the-kind-index-is-generated
 kind: decision     # decision | note | invariant
 status: decided    # open | decided | superseded
+tags:
+  - memo
+  - kind/decision
+  - status/decided
 subject: invariants are testable memos and the kind index is generated
 date: 2026-09-01
 # verify:          # invariant only, and required there — a command that
@@ -72,5 +76,12 @@ board's own memo on hand-kept lists standing in for properties of the tree.
 - `verify` commands are trusted shell run from the repo root; a slow or
   destructive command in `verify:` is a memo-author error the tooling does
   not police.
-- What this does not fix: nothing runs `memo verify` automatically. Wiring
-  it into doctor or a hook is the next memo's problem, named here.
+- `collect` runs them, and that is where the automatic reader landed. Step 2b:
+  after the lane lands and after the board's `gate:`, before a byte of the
+  record is written, every binding invariant's `verify:` runs against the
+  merged tree, and one non-zero exit refuses the collect whole — the slug, the
+  command and the script's own output printed, the PRD left exactly where it
+  was. Wired by the PRD
+  `no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses`.
+  Not doctor: the fast/slow split above still holds, and `verify` is still the
+  reader a person runs by hand.

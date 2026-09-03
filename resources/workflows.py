@@ -318,6 +318,7 @@ def report_workflow_counts(board):
     return counts, bad
 
 
+
 def _routed_atoms(body, slug, lib):
     """The slugs an atomic's `## Do` routes to, in file order, deduplicated.
 

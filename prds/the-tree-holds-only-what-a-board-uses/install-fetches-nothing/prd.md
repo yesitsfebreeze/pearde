@@ -6,6 +6,7 @@ complexity: 12
 blast-radius: mid
 workflow: probe-then-spec
 actual: 0.99h
+commit: f68b88f cb399bc
 ---
 
 # install fetches nothing

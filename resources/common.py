@@ -9,7 +9,7 @@
     read_text(path)                the text, or "" when it cannot be read
     pop_flag(argv, name)           (value, rest) for one `--flag value`
     Collection                     a directory of `<slug>.md` records under the board
-    prd_shape(dir)                 one PRD's (fm, title, body, specs, children, problems)
+prd_shape(dir)                 one PRD's (fm, title, body, specs, children, problems)
     run_git(root, *args, ...)      one `git -C root ...`, shaped to each caller's own return-or-raise
     section(text, name, ...)       the body under `## <name>`, shaped to each caller's own match and shape
 

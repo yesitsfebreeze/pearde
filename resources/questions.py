@@ -302,29 +302,37 @@ def slugs_of(board):
 
 
 # An answer line, as every reader of one wants it: `**Q1** — the decision`.
-# The id closes its own bold. @resources/board/plan.py's ANSWER_LINE_RE, the
-# view's `markAnsweredFrom` and `answered_of` all read exactly this, and each
-# stops at a line that does not.
-ANSWER_OK_RE = re.compile(r"^\s*\*\*\s*(Q?\d+[a-z]?)\s*\*\*", re.M)
+# The id closes its own bold. There is no second pattern for it here: the
+# accepted shape is @resources/board/plan.py's ANSWER_LINE_RE itself — the
+# reader `answer` and `release` gate on, and the one the view's
+# `markAnsweredFrom` mirrors — so a shape this check calls fine and the gate
+# then refuses cannot exist.
 
-# …and the near-miss that reads as prose to all three: the bold runs over the
-# title, `**Q1 - Transcribe the lawyer's text**`. Nothing rejects it, so the
-# pass silently counts as unanswered — and the view then offers a settled
-# question again. On `legal/legal-privacy` of the manola board that put a
-# second answer on Q4 reinstating the option the PRD had reversed, and two
-# commit messages were written from it. Caught here, on a live node, because
-# there is no other moment that reads an answer and can still say no.
-ANSWER_NEARMISS_RE = re.compile(r"^\s*\*\*\s*(Q?\d+[a-z]?)\s*[-\u2013\u2014:]\s",
-                                re.M)
+# The near-miss that reads as prose to all of them: the bold runs over the
+# title, `**Q1 - Transcribe the lawyer's text**`, or it does not close on the
+# id, `** Q1 **`. Nothing rejects either, so the pass silently counts as
+# unanswered — and the view then offers a settled question again. On
+# `legal/legal-privacy` of the manola board that put a second answer on Q4
+# reinstating the option the PRD had reversed, and two commit messages were
+# written from it. Caught here, on a live node, because there is no other
+# moment that reads an answer and can still say no.
+ANSWER_NEARMISS_RE = re.compile(
+    r"^\s*\*\*\s*(Q?\d+[a-z]?)\s*(?:[-\u2013\u2014:]\s|\*\*)", re.M)
+
+
+def qid_of(raw):
+    """`1` and `q1` and `Q1` are the one id `Q1` — as `plan.py` reads it."""
+    q = raw.upper()
+    return q if q.startswith("Q") else "Q" + q
 
 
 def unread_answers(text):
     """Every `Qn` written under `## Answers` in a shape no counter reads."""
-    ok = {m.group(1).upper() for m in ANSWER_OK_RE.finditer(text)}
+    ok = {qid_of(m.group(1)) for m in
+          (planlib.ANSWER_LINE_RE.match(ln) for ln in text.splitlines()) if m}
     out = []
     for m in ANSWER_NEARMISS_RE.finditer(text):
-        q = m.group(1).upper()
-        q = q if q.startswith("Q") else "Q" + q
+        q = qid_of(m.group(1))
         if q not in ok and q not in out:
             out.append(q)
     return out
@@ -461,10 +469,6 @@ def check(board):
 # pass file's `## Asked`. Two readers sharing a rule here is how the scan
 # and the list stopped being able to disagree about what still stands.
 
-# An answer as the drill writes it: `**Q1** — …`, optionally stamped
-# `*(answered 2026-08-28 14:22)*`. Only the id matches, never the text.
-ANSWER_ID_RE = re.compile(r"(?m)^\s*\*\*\s*Q?\s*(\d{1,2}[a-z]?)\s*\*\*")
-
 # The question's own id in the pass: `### Q1: <title>` — also `### 1. <t>` —
 # the two characters a prepared answer's `**Q1**` points back at.
 QHEAD_RE = re.compile(r"^###\s+(?:question\s+)?[Qq]?\s?(\d{1,2}[a-z]?)"
@@ -479,6 +483,12 @@ def unanswered(board):
     not `CLOSED`. One reader: `questions.py list` prints it and `plan.py`
     counts it — `drill_questions` there reads the pass file beside it — so
     the two can never disagree about how many questions the board owes.
+    "Answered" is `@resources/board/prdfile.py`'s own `answers_of` — the
+    reader `transitions.py`'s `answered_of` gates `answer` and `release` on
+    — so this count and the gate that gives up a `## Answers` block written
+    by hand cannot disagree either: a second regex here, looser than
+    `ANSWER_LINE_RE`, is what let `scan` call a question settled that
+    `answer` still refused.
 
     A `### Qn:` head with no `###`-in-shape match (prose, a note) is not part
     of this count, and neither is a head whose block is not asking or is
@@ -488,9 +498,7 @@ def unanswered(board):
         fm, body = parse(path)
         if str(fm.get("state", "")).strip().lower() in CLOSED:
             continue
-        answered = {"Q" + m.group(1).upper()
-                    for _h, atext in sections(body, "Answers")
-                    for m in ANSWER_ID_RE.finditer(atext)}
+        answered = {a["id"] for a in planlib.answers_of({"body": body})}
         for _head, text in sections(body, "Questions"):
             if re.search(r"\banswered\b", _head, re.I):
                 continue

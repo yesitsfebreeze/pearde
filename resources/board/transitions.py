@@ -31,9 +31,10 @@ declaration.
 Every command checks the gate @references/parts/states.md names, writes
 through edit.py — one frontmatter line at a time, atomically — prints the
 progress line of @references/parts/progress.md with every term computed here,
-appends `{"t","prd","from","to"}` to `prds/.transitions.jsonl` — never to
-`.history.jsonl`, the daemon's burn-down — and exits 1 with the gate named
-when refused, writing nothing.
+appends `{"t","prd","from","to"}` to `prds/.transitions.jsonl` — `"why"`
+too, on an edge the state pair alone does not explain, `question → open`
+among them — never to `.history.jsonl`, the daemon's burn-down — and exits
+1 with the gate named when refused, writing nothing.
 
 `claim` also records the claim's baseline — `prds/.claims/<prd>/`, through
 collect.py `snapshot()` — and `answer` lists the `prd.md` it wrote in
@@ -403,7 +404,9 @@ def transition(board, name, to, persona, worker=None, force=False,
         editlib.set_key(path, "claim", f"{worker} {now()}")
     elif cmd in ("release", "retry") and not force:
         editlib.del_key(path, "claim")
-    record(prd, frm, to)
+    why = ("every question answered"
+           if cmd == "answer" and frm.lower() in qlib.WAITING else None)
+    record(prd, frm, to, why=why)
     if cmd == "claim" and not force:
         cut_lane(board, rel, out)
         snapshot_claim(board, rel)
@@ -519,13 +522,17 @@ def owe_path(board, path):
         collectlib.owe(board, os.path.relpath(path, root))
 
 
-def record(prd, frm, to):
+def record(prd, frm, to, why=None):
     """One row in the PRD's own board's `.transitions.jsonl` — the only memory
     of when a state moved. Appended, never rewritten, and never
     `.history.jsonl`: that one is the daemon's burn-down, one row a day,
-    truncated to 400 rows on every write."""
+    truncated to 400 rows on every write. `why` is set only on an edge whose
+    (from, to) pair alone does not say why it was let through — `question →
+    open` among them, allowed because nothing was left owed."""
     row = {"t": datetime.datetime.now().isoformat(timespec="seconds"),
            "prd": prd["local"], "from": frm, "to": to}
+    if why:
+        row["why"] = why
     row.update(hand_over(prd["board_path"]))
     path = os.path.join(prd["board_path"], TRANSITIONS_FILE)
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -754,13 +761,15 @@ def cmd_release(board, args, persona):
     rel = resolve(prds, rel)
     frm = prds[rel]["state"]
     allowed = {"analyzing": ("refine", "question", "open"),
-               "claimed": ("blocked", "failed")}
+               "claimed": ("blocked", "failed"),
+               "question": ("open",)}
     if parked(frm):
         if to != "open":
             raise Refused(way_back(rel, frm))
     elif frm not in allowed or to not in allowed[frm]:
         raise Refused(f"release: {rel} is `{frm}` — analyzing → "
-                      "refine|question|open, claimed → blocked|failed")
+                      "refine|question|open, claimed → blocked|failed, "
+                      "question → open")
     transition(board, rel, to, persona, dry=args.dry)
     return 0
 

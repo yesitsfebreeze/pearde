@@ -8,6 +8,7 @@ needs:
   - the-machine-frontier-is-dispatched-in-parallel
 workflow: probe-then-spec
 actual: 13.15h
+commit: 60f49d1 02af158
 ---
 
 

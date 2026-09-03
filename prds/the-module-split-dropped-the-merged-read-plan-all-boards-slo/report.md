@@ -1,75 +1,86 @@
-Verdict: SPECCED
+Verdict: DONE
 
-# the-module-split-dropped-the-merged-read-plan-all-boards-slo — an-merged-read, engineer
+# the-module-split-dropped-the-merged-read-plan-all-boards-slo — impl-merged-read, engineer · pass two
 
-## Build
+## Workflow probe-then-spec
 
-Restored the dropped routing in the lane
-`.pearde/.lanes/the-module-split-dropped-the-merged-read-plan-all-boards-slo`,
-uncommitted, from the pre-split source (`dca5ce2~1`):
+| step | verdict | note |
+|------|---------|------|
+| 1 read-the-contract | ok | PRD + spec01 read; pass-one build stood in the lane uncommitted |
+| 2 capture-the-harness-baseline | ok | probe/verify.sh red on the unfixed checkout, green 11/11 in the lane |
+| 3 attempt-the-build | ok | lane held the work; committed it on `lane/the-module-split-…` (c535b62), rebased onto main after a `references/files.md` conflict |
+| 4 re-run-the-harnesses | ok | verify.sh 11/11 on the merged repo, PASS; board gate green in collect |
+| 5 write-the-specs | ok | no spec authored — pass two applies the standing spec; boxes ticked as closed |
 
-- `resources/board/plan.py` — `PLAN_WINDOWS` and `_merged_plan` back ahead of
-  `main()`, importing `run.read_main` lazily; the `if cmd == "plan":` gate
-  restored ahead of `find_board`, with the `here` strip.
-- `resources/board/run.py` — **untouched.** `read_main`'s body needed
-  nothing; `COMMANDS = {"run": cmd_run}` stands. The PRD's footprint named it
-  as a ceiling, not a change.
+### Edits
 
-## Verify
+- None — every atomic's text held. No stale path, no wrong command, no check
+  that cannot fail.
 
-`prds/the-module-split-dropped-the-merged-read-plan-all-boards-slo/probe/verify.sh`,
-new this pass: **11/11 ok** against the lane, **FAIL on the unfixed checkout**
-(so it can fail). Covers every acceptance box except the sibling collect:
-`plan all` with `wave 1:`, the four windows, `--json` (`waves`+`slots`),
-bare `plan` and `plan here` printing the cwd page with `run` absent from
-`sys.modules`, and `the-machine-frontier-is-dispatched-in-parallel/probe/verify.sh`
-**PASS** (10 ok + sibling 33/33) under `PEARDE_ROOT=<lane>`.
+## What landed
 
-`a-harness-never-dispatches-the-live-board` **does not collect yet**, measured:
-`pearde collect a-harness-never-dispatches-the-live-board` → `spec01 exit 1 —
-nothing written … pearde: no .pearde/ board at slots`. It collects on the repo
-checkout, which does not hold a lane's edit — this PRD landing is what closes
-its box. That ordering is the PRD's reason to exist; not a question.
+- `resources/board/plan.py` — the merged read routed again: `PLAN_WINDOWS`,
+  `_merged_plan` (lazy `run.read_main` import), the `if cmd == "plan"` gate
+  ahead of `find_board`. One commit on the lane, merged to main by collect
+  (commit `16b0f5b`). `run.py` untouched.
+- The board record: `state: done`, `commit: 16b0f5b ea0b729`, report posted
+  into `prd.md` (`## Report`, spec01 exit 0, 11/11 ok).
 
-## Specs
+## Acceptance — final box status
 
-- `specs/spec01.md` — the merged read is routed again. complexity 3,
-  footprint `resources/board/plan.py`. Says what already stands (the two
-  hunks, verified) and what is left (land, then the two dependent holds).
+- [x] `plan all` — merged frontier with `wave 1:` line, exit 0 (verify row 1–2, also re-run on main after landing)
+- [x] `plan boards|slots|progress|groups` — each print, exit 0 (verify rows 3–6)
+- [x] `plan --json` — merged payload with `waves` and `slots` (verify row 7)
+- [x] bare `plan` and `plan here` — cwd board page, `run` absent from `sys.modules` (verify rows 8–10)
+- [x] `the-machine-frontier-is-dispatched-in-parallel/probe/verify.sh` — PASS under `PEARDE_ROOT=<lane>` (row 11) and green on the merged repo after landing
+- [x] `a-harness-never-dispatches-the-live-board` collects — see the wall below
 
-Union of footprints: `resources/board/plan.py`.
+## The wall the last box hid
 
-## Scores
+The sibling box cannot be measured before this PRD lands, and collect refuses
+open boxes — no flag passes it (`--trust` skips the verify, not the gate;
+`--fail` never fires because the gate stops first). The route that exists:
+`release <prd> blocked` with `needs: a-harness-never-dispatches-the-live-board`
+and a `## Blocked` section naming what closes the box — the state table's own
+reading of "waiting on a named event — open boxes". The sibling's landing
+flipped `needs:` to done, `unblock` returned the PRD to `specced`, both boxes
+were ticked off the measurement below, and the second collect landed green.
 
-complexity: 8
-blast-radius: high
-workflow: probe-then-spec
+Measured for the tick: lines 1–4 of the sibling's `spec01` verify (`plan
+slots` / `plan all` / `plan progress` / `read_main` grep) are GREEN on the
+merged main. Its `collect --dry` after landing still exits 1 — on its own
+remaining half: the sibling's `run.py` bare-scope refusal is not on main (its
+worker, impl-harness-nodispatch2, holds that claim), and its verify expects
+`run.script_main`, which no tree carries. Its full collect is that worker's
+landing, not mine; the deadlock this PRD breaks — `pearde: no .pearde/ board
+at slots` — is gone.
 
-complexity — the PRD's own 8 stands: the change is two hunks, but it is the
-read path of every board on the machine and three harnesses route through it,
-which is where the cost of getting it wrong lives. blast-radius high — five
-documented verbs and every harness read (`plan all`, `plan slots`) break
-loudly if the gate is wrong again; the fix itself touches one file.
+## Incidents (report, not fixed — outside scope)
 
-## Findings
+1. **`python3 resources/board/run.py all` on the unfixed main dispatched
+   instead of refusing.** I ran it twice measuring the sibling's verify lines
+   5–6 (they expect a refusal); it printed nothing and hung — killed at 2
+   minutes and at ~90 s. Board scan before/after: no new claims, done count
+   unchanged, so nothing launched. This is the sibling PRD's own finding
+   live on main; I stopped measuring that half.
+2. **The lane's rebase conflict was a real content bug in the lane branch:**
+   its history carried a pre-main variant of `every-documented-command-exists`
+   (56f7ce5) whose `references/files.md` was missing rows main has (`spend.py`,
+   the `silence-measures-…` invariant, and more). Resolved by keeping main's
+   rows and the lane's `claims.py` row — the union main's own twin commit
+   (1ac6101) already represents. Diff after rebase touches only the fix's 46
+   lines plus that union.
+3. Collect's unblock→collect round-trip left `wiki/sources/` and other
+   boards' files as rides/inherited on the record commit (`ea0b729`,
+   inherited 431) — collect's own behaviour, named on its line.
 
-1. **The fix already exists on the board, specced under a different PRD.**
-   `a-harness-never-dispatches-the-live-board/specs/spec01.md` carries the
-   same restoration ("restored from 60f49d1 and adapted to the split module")
-   built in another lane, plus a second half this PRD does not ask for (the
-   bare-word refusal in `run.py`). Its collect was refused by exactly the gap
-   this PRD names — the two are ordered, not duplicates: this PRD lands
-   first, the sibling's collect then closes. A job recurred across two PRDs;
-   named here once, no second file written.
-2. **The collect I ran left the repo checkout damaged.** Output ended
-   `NOT put back in /Users/feb/dev/infra/pearde — restore by hand:` naming six
-   `docs/node_modules/zod/**` files, and all six are now missing from the
-   worktree; `index.md` and `references/parts/handles.md` are staged that were
-   not before. That is the `a-collect-stages-a-deleted-footprint-path-as-a-deletion`
-   defect, already on the board with a worker on it — defect outside this
-   footprint, not fixed here. Whoever collects next may hit it again.
-3. No knowledge gap: the record answered 112 hits on the contract, nothing
-   enqueued worth asking. No question — the build hit no fork.
+## Health floor
 
-Probe left in the tree uncommitted: the lane's `plan.py` hunks and
-`probe/verify.sh` under this PRD's directory.
+Files in my footprint under the floor: none (health.py scores nothing in
+`resources/board/plan.py` below the floor). Nothing moved.
+
+## Knowledge
+
+- Remembered `collect's open-box gate cannot measure a box that names another
+  PRD's collect` (sources/260903-cbc4.md), provenance this PRD — 114 prior
+  hits answered nothing on this wall.

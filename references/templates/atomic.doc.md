@@ -24,6 +24,12 @@ A CLOSED set with exactly one slug key: `atomic` here, `workflow` in
 `python3 resources/index.py check`, not "verify the index". ONE unit of work,
 closable in one sitting; one needing "and then" is two atomics and a workflow
 ordering them. Name commands and files, never an agent, tool, hook or vendor.
+A step that says "run `<slug>`" of another atomic has already written that
+pair by hand, and the check refuses it: **route it** — promote both into a
+workflow whose steps table orders them — or **inline it**, if the second is a
+detail of the first and belongs here as prose. Both land on one file shape.
+A slug named without a routing verb ("compare with the `<slug>` atomic") is
+prose about a sibling, and passes.
 
 **`## Done when`** — checks that can FAIL: an output, a file, an exit code.
 "The check is silent", not "the index is tidy".

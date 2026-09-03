@@ -139,6 +139,7 @@ runs it. Failures:
 - a `tags:` the file's own slug key does not derive — repaired by `python3
   @resources/workflows.py retag [board]`, never by hand
 - an atomic with no `## Do` or no `## Done when`
+- an atomic whose `## Do` routes to another atomic **by slug** — "run `<slug>`" is an ordered pair written by hand, so it is refused: route it (a workflow with two atomics) or inline it (prose, one unit again). A slug named with no routing verb ("compare with the `<slug>` atomic") is prose, and passes
 - a workflow with no `## Steps` table
 - a step row whose `#` breaks the count from 1, whose `atomic` names no file in
   the directory, or whose `on failure` is neither `stop` nor `→ N` with N < `#`

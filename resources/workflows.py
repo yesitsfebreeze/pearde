@@ -49,6 +49,14 @@ ROW_RE = re.compile(r"^\s*\|(.+)\|\s*$")
 SEP_RE = re.compile(r"^[\s|:-]+$")
 JUMP_RE = re.compile(r"^→\s*(\d+)$")
 
+# `1. Run `reproduce-the-failure`.` — an atomic's `## Do` step handing the
+# reader off to another atomic **by slug**. The pattern matches the routing
+# verb, never the slug alone: "compare with the `reproduce-the-failure`
+# atomic" is prose about a sibling, and prose is not a route. Optional `the`
+# and a trailing `atomic` are the two spellings the library already uses.
+ROUTE_RE = re.compile(r"\brun\s+(?:the\s+)?`([a-z0-9][a-z0-9-]*)`",
+                      re.IGNORECASE)
+
 
 def _cells(line):
     m = ROW_RE.match(line)
@@ -310,6 +318,34 @@ def report_workflow_counts(board):
     return counts, bad
 
 
+def _routed_atoms(body, slug, lib):
+    """The slugs an atomic's `## Do` routes to, in file order, deduplicated.
+
+    An atomic is one unit; ordered atomics are a workflow. A `## Do` step that
+    says "run `<other>`" is already an ordered pair written by hand, and the
+    reader cannot tell the unit from the route. So it is refused, and the
+    author picks: inline the second (it was a detail — one unit again) or
+    promote both into a workflow (it was a step — a route with a steps table).
+
+    Only a slug the library actually holds as an atomic counts. `run `pytest
+    tests/`` names a command, not a unit, and a slug the library does not hold
+    is nothing to inline or promote.
+    """
+    lines = section(body, "Do")
+    if lines is None:
+        return []
+    out = []
+    for line in lines:
+        for m in ROUTE_RE.finditer(line):
+            other = m.group(1)
+            e = lib.get(other)
+            if other == slug or not e or e["kind"] != "atomic":
+                continue
+            if other not in out:
+                out.append(other)
+    return out
+
+
 def check(board):
     """Every problem, one string each. Empty means the library is clean."""
     d, external = workflows_dir(board)
@@ -378,6 +414,10 @@ def check(board):
             for s in ("Do", "Done when"):
                 if not section(body, s):
                     bad.append(f"{at}: an atomic with no `## {s}`")
+            for other in _routed_atoms(body, slug, lib):
+                bad.append(f"{at}: `## Do` routes to `{other}` by slug — "
+                           "route it (a workflow with two atomics) or "
+                           "inline it (prose, one unit again)")
         else:
             rows = steps(body)
             if not rows:

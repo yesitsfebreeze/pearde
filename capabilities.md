@@ -11,6 +11,7 @@ One row per verb `pearde` dispatches — what exists, never what to run.
 | `brief` | the worker's brief for one PRD, or a consultant's — one command's output | — | — | python |
 | `calibrate` | the board, read and ordered | — | — | python |
 | `capabilities` | the registry of every verb `pearde` dispatches: what | — | — | python |
+| `checkpoint` | commit everything standing in a claim's lane to `lane/<slug>` — the work outlives the window | — | — | python |
 | `claim` | hold one PRD for one worker — what `scan` offers is what claim takes | — | — | python |
 | `collect` | The entry: `collect [<prd>…] [flags]`. Exit 0 when every PRD named | — | — | python |
 | `defer` | — | — | — | python |

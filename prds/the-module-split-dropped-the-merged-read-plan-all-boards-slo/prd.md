@@ -11,6 +11,7 @@ footprint:
   - resources/board/run.py
 workflow: probe-then-spec
 needs: a-harness-never-dispatches-the-live-board
+commit: 16b0f5b ea0b729
 ---
 
 # the-module-split-dropped-the-merged-read-plan-all-boards-slo

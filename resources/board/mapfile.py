@@ -172,8 +172,11 @@ def gantt_payload(board, prds, mp, settings):
             est=round(s["end"] - s["start"], 2),
             startDay=round(s["start"] / day_h, 4),
             endDay=round(s["end"] / day_h, 4),
-            # a footprint clash, serialized pairwise: this PRD starts when
-            # those end. An edge, so nothing else on the board waits with it
+            # a footprint clash, named pairwise — real, and what `dispatch`
+            # will serialise on the in-flight set, but it moves no bar here:
+            # `startDay`/`endDay` above come from the `needs:`-only schedule,
+            # so a clashing pair may draw side by side. An edge that reports,
+            # never one that orders.
             after=mp.get("after", {}).get(rel, []),
             boxes=[closed, total],
             part=round(frac, 4),

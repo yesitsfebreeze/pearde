@@ -132,15 +132,21 @@ page prints the one sentence `.pearde/vision.md` declares — the payload's
   It comes first because closing one costs a commit and can open a whole
   frontier, which no dispatch can do. `x` filters to it, `#collect=1` links
   to it.
-- a **footprint clash** is a pairwise `after` edge — the lower-priority PRD
-  starts when the higher one ends, and nothing else waits with them. No waves
-  and no passes exist: a barrier would hold every unrelated PRD for the slowest
-  member of a pass, and agents do not work in passes — each one starts the
-  moment its own gates clear.
-- The header names the **peak agent count** the fastest path asks for. With
-  `workers` at `0` — unlimited, the default — the peak is the staffing; with a
-  cap set, the header shows what the cap costs beside the peak, and the gap is
-  the decision.
+- a **footprint clash** is a pairwise `after` edge, named on the row — real,
+  and what `dispatch` will serialise on the in-flight set — but it moves no
+  bar here: the plan's structure is `needs:` alone, so a clashing pair may
+  draw side by side. No waves and no passes exist: a barrier would hold every
+  unrelated PRD for the slowest member of a pass, and agents do not work in
+  passes — each one starts the moment its own gates clear. `pearde plan`'s
+  own text prints the other honest number beside this one — the ceiling, what
+  the calendar would total if every clash here really did serialise; this
+  view draws the floor alone.
+- The header names the **peak agent count** the fastest path asks for,
+  computed with unlimited agents: `workers:` is `dispatch`'s own cap here for
+  display, not a fact this schedule uses, so it moves no bar. `plan --workers
+  N` prints a second, deliberate view on the command line — the staffed
+  simulation under that many agents — for a board that wants to see what a
+  real budget costs.
 - **dates** (or `v`) draws the same bars on the worker-limited calendar, at
   `gantt-day` weight per day.
 

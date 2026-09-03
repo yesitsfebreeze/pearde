@@ -49,6 +49,23 @@ def overlap(a, b):
                for x in a for y in b)
 
 
+def overlap_paths(a, b):
+    """The actual path(s) two footprints clash on — `overlap`'s own pair,
+    named rather than merely detected, for the row that reports a footprint
+    clash instead of scheduling around it. The more specific (longer) of a
+    clashing pair is the one a person recognizes as the shared file."""
+    out = set()
+    for x in a:
+        for y in b:
+            if x == y:
+                out.add(x)
+            elif x.startswith(y + "/"):
+                out.add(x)
+            elif y.startswith(x + "/"):
+                out.add(y)
+    return sorted(out)
+
+
 def dispatchable(prd, prds, board=None, holder=None):
     """None when `claim` would take this PRD now, else why not — one string,
     `<gate>: <why>`, the gate word first so `transitions.gate_claim` raises
@@ -164,7 +181,16 @@ def compute_plan(board, workers=None, warn=True):
     when somebody remembers to run `plan`. `cmd_plan` prints what this
     returns. `reconcile` only saves it."""
     settings = board_settings(board)
+    # `workers:` is a dispatch cap, not a fact about how much of the work is
+    # independent — it never shapes this schedule on its own. `explicit` is
+    # true only when THIS call was handed a cap to honour (`plan --workers N`,
+    # a deliberate ask for the staffed view `cmd_plan` still offers); the
+    # board's own `settings.md` value is resolved into `workers` below for
+    # display and for every other reader of it (`board_caps`, `dispatch`) —
+    # it is not read again here as a simulation cap.
+    explicit = workers is not None
     workers = plan_workers(board, workers)
+    cap = workers if explicit else 0
     prds = scan(board)
     todo = {r: p for r, p in prds.items() if p["state"] in LIVE_STATES}
     parked = sorted(r for r, p in prds.items()
@@ -236,34 +262,39 @@ def compute_plan(board, workers=None, warn=True):
             return (1, -d, -u, -prio(r), r)
         return (2, 0, -u, -prio(r), r)
 
-    # A footprint clash serializes the PAIR, never a pass. An agent starts
-    # the moment its own gates clear, so a barrier would hold back every PRD
-    # it shares nothing with. The clash is an edge: the lower-priority PRD is
-    # `after` the higher one, and only that pair is ordered. Two PRDs already
-    # ordered by a dependency path need no edge — the path is the order.
+    # A footprint clash is real — dispatch will serialise it, one writer at a
+    # time, on the in-flight set (`dispatch.py`'s own clash check) — but it is
+    # not a fact about what depends on what, and the plan's structure is
+    # `needs:` alone. `edges` stays the dependency graph; `after` is computed
+    # alongside it, over a SEPARATE growing graph (`combined`, seeded from
+    # `edges`) so the pairing still avoids ordering two PRDs both ways and
+    # still resolves to nothing when a dependency path already orders them —
+    # but nothing found here is added back into `edges`. `combined` is kept
+    # only to answer "if every clash were serialised", the ceiling below.
     edges = {r: list(needs[r]) for r in todo}
+    combined = {r: list(needs[r]) for r in todo}
 
-    def path(a, b, _seen=None):
-        """a reaches b along edges — a runs after b already."""
+    def path(a, b, g, _seen=None):
+        """a reaches b along graph g — a runs after b already."""
         if _seen is None:
             _seen = set()
         if a == b:
             return True
         _seen.add(a)
-        return any(d not in _seen and path(d, b, _seen) for d in edges[a])
+        return any(d not in _seen and path(d, b, g, _seen) for d in g[a])
 
     after = {r: [] for r in todo}
     ranked = sorted(todo, key=lambda x: axis_rank(x))
     for i, r in enumerate(ranked):
         for s in ranked[i + 1:]:
             if (overlap(feet[r], feet[s])
-                    and not path(s, r) and not path(r, s)):
-                after[s].append(r)      # s yields: r outranks it
-                edges[s].append(r)
+                    and not path(s, r, combined) and not path(r, s, combined)):
+                after[s].append(r)      # s yields: r outranks it, reported —
+                combined[s].append(r)   # — never scheduled: `edges` untouched
 
-    # topological order over needs + after; a cycle in `needs` is an error
+    # topological order over `needs` alone; a cycle in `needs` is an error
     # (an `after` edge is only ever added between unordered PRDs, so it
-    # cannot close one)
+    # cannot close one even in `combined`)
     depth, visiting = {}, set()
     def dp(r):
         if r in depth:
@@ -297,8 +328,10 @@ def compute_plan(board, workers=None, warn=True):
     # dispatch order it visits IS the plan's order. The offsets only feed the
     # Gantt dates — a staffing guess, never a fact about the plan.
     # No cap means every ready PRD starts the moment its edges clear: the
-    # schedule is then the critical-path schedule itself.
-    nslots = workers if workers > 0 else max(len(todo), 1)
+    # schedule is then the critical-path schedule itself. `cap`, not
+    # `workers` — the board's own `workers:` setting never binds here on its
+    # own; only an explicit ask (`plan --workers N`) does.
+    nslots = cap if cap > 0 else max(len(todo), 1)
     left = {r: len(edges[r]) for r in todo}
     ready = [r for r in todo if not left[r]]
     # The ready band is `dispatchable`, the one predicate `claim` reads. A
@@ -313,12 +346,13 @@ def compute_plan(board, workers=None, warn=True):
         why = dispatchable(todo[r], prds, board)
         if why and not why.startswith("container:"):
             held[r] = why
-            if workers > 0:
+            if cap > 0:
                 ready.remove(r)
     # With no cap the hold costs no slot: a held PRD keeps its place on the
     # critical path (the frontier still never offers it), so the wall is
-    # the path's length. Under a cap the held go to the tail, as before.
-    pending = list(held) if workers > 0 else []
+    # the path's length. Under an explicit cap the held go to the tail, as
+    # before.
+    pending = list(held) if cap > 0 else []
     running, schedule, order, t0 = [], {}, [], 0.0
     def take(pool):
         best = min(pool, key=lambda x: axis_rank(x, unblocks))
@@ -367,11 +401,31 @@ def compute_plan(board, workers=None, warn=True):
     for _, d in marks:
         run += d
         peak = max(peak, run)
+    # The band `plan` prints, always — whether or not THIS call also asked
+    # for a capped, staffed simulation: `wall_floor` is `needs:` alone,
+    # unlimited agents (`wall` above equals it exactly when `cap` is 0, but
+    # under an explicit cap `wall` answers a different, third question — see
+    # `cmd_plan`). `wall_ceiling` is the other honest number — what if every
+    # footprint clash really did serialise the pair, worst case — over
+    # `combined` (`needs:` + every `after` edge). Both are a critical path,
+    # not a second discrete-event simulation: unlimited agents make the two
+    # arithmetics the same.
+    def critical_finish(g):
+        seen = {}
+        def f(r):
+            if r in seen:
+                return seen[r]
+            seen[r] = est[r] + max((f(d) for d in g[r]), default=0.0)
+            return seen[r]
+        return max((f(r) for r in g), default=0.0)
+    wall_floor = critical_finish(edges)
+    wall_ceiling = critical_finish(combined)
     return {"prds": prds, "todo": todo, "parked": parked, "settings": settings,
             "workers": workers, "needs": needs, "est": est, "feet": feet,
             "boxes": boxes, "collect": sorted(collect), "held": held,
             "after": after, "schedule": schedule, "order": order,
-            "unblocks": unblocks, "wall": wall, "avg": avg, "peak": peak,
+            "unblocks": unblocks, "wall": wall, "wall_floor": wall_floor,
+            "wall_ceiling": wall_ceiling, "avg": avg, "peak": peak,
             "prio": {r: prio(r) for r in todo}}
 
 def weight_of(prd, avg):
@@ -514,8 +568,12 @@ def pressure_bands(board, prds, r):
     return collect, yours, flight, ready, gated, why
 
 def plan_frontier(r):
-    """`plan`'s ready set — every PRD nothing gates, in dispatch order. The
-    same list `vision --next` prints alone."""
+    """`plan`'s ready set — every PRD `needs:` does not gate, in dispatch
+    order. A footprint clash offers both PRDs of a pair here together: it is
+    reported on the row, never a reason either one waits — `dispatch` holds
+    the loser of the pair at launch, on the real in-flight set, which is the
+    arrangement the dispatcher was built for. The same list `vision --next`
+    prints alone."""
     return [x for x in r["order"]
-            if not r["needs"][x] and not r["after"][x] and r["est"][x] > 0
+            if not r["needs"][x] and r["est"][x] > 0
             and x not in r["held"]]

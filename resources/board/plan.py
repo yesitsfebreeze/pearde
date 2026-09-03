@@ -69,7 +69,7 @@ from registry import (MEMBER_NAME_RE, MEMBER_SIGIL, board_name, infer_name, proj
 from silence import (CLAIM_TTL, SILENT_STATES, claim_ttl, newest_mtime, prd_repo, session_tree)  # noqa: E402,F401
 from needs import (need_board, needs_index, resolve_need, resolve_needs, scanned_boards, unscanned_need)  # noqa: E402,F401
 from vision import (axis_depth, resolve_addr)  # noqa: E402,F401
-from schedule import (UNLIMITED, dispatchable, overlap, parse_workers, plan_workers, weight_of)  # noqa: E402,F401
+from schedule import (UNLIMITED, dispatchable, overlap, overlap_paths, parse_workers, plan_workers, weight_of)  # noqa: E402,F401
 from mapfile import (HISTORY_FILE, TRANSITIONS_FILE, guard_block, guard_sessions, guard_view, landing, read_history, read_transitions, write_history)  # noqa: E402,F401
 
 
@@ -442,30 +442,46 @@ def cmd_plan(board, workers):
     # the slowest member of a pass.
     frontier = plan_frontier(r)
     wf = workflow_marks(board, prds)
+
+    def share(x):
+        """`shares <path(s)> with <prd>` for every PRD `x` clashes with — a
+        footprint clash is real and dispatch will serialise it, but it is
+        reported on the row, never a reason `x` is missing from `ready now`."""
+        return "; ".join(
+            "shares " + ", ".join(overlap_paths(feet[x], feet[d]))
+            + " with " + os.path.basename(d)
+            for d in after[x])
+
     if frontier:
         # `ready now` is the dispatch list, and step 5 of @references/parts/
         # loop.md skips a PRD whose `workflow:` names no workflow. The other
-        # two skips already show here — an unmet `needs:` drops a PRD out of
-        # this list, a footprint clash prints `after … (footprint)` — so
-        # without this the one skip the ordering does NOT model is the one
-        # the list silently contradicts. Display only: the mark is printed,
-        # the order is untouched. Only the `?` form prints, because this
-        # parenthetical is the register of what holds a PRD back and a slug
-        # that resolves holds back nothing.
+        # skip already shows here — an unmet `needs:` drops a PRD out of this
+        # list. A footprint clash drops nothing: both PRDs of a clashing pair
+        # are offered together, and the row that clashes says what it shares
+        # and with which PRD — `dispatch` holds the loser of the pair at
+        # launch, on the real in-flight set. Display only: the mark is
+        # printed, the order is untouched. The workflow `?` form prints,
+        # because this parenthetical is the register of what a person still
+        # has to fix and a slug that resolves needs no fixing.
         print(f"\nready now — {len(frontier)} in parallel, widest door first")
         for x in frontier:
             p = todo[x]
             hot = p["state"] in ("question", "blocked", "refine", "failed")
             tags = ["waiting on you"] if hot else [] if feet[x] \
                 else ["unspecced"]
+            if after[x]:
+                tags.append(share(x))
             if wf.get(x, "").endswith("?"):
                 tags.append("wf " + wf[x])
             print(f"  · {x} [{p['state']}] p{p['fm'].get('priority', 0)}"
                   f" {fw(est[x])} · unblocks {fw(unblocks[x])}"
                   + (f"  ({'; '.join(tags)})" if tags else ""))
     held = r["held"]
+    # A footprint clash holds nothing here any more — `needs:` and a claim
+    # gate are the only reasons a PRD is not in `ready now`. `after[x]` can
+    # still be true on a row gated for a real reason; the row says so too.
     gated = [x for x in r["order"]
-             if (needs[x] or after[x] or x in held) and est[x] > 0]
+             if (needs[x] or x in held) and est[x] > 0]
     if gated:
         print("\nthen, as gates clear — dispatch order")
         for x in gated:
@@ -477,9 +493,7 @@ def cmd_plan(board, workers):
                 why.append("needs " + ", ".join(os.path.basename(d)
                                                 for d in needs[x]))
             if after[x]:
-                why.append("after " + ", ".join(os.path.basename(d)
-                                                for d in after[x])
-                           + " (footprint)")
+                why.append(share(x))
             if not feet[x]:
                 why.append("unspecced")
             if wf.get(x, "").endswith("?"):
@@ -488,14 +502,23 @@ def cmd_plan(board, workers):
                 why.append("wf " + wf[x])
             print(f"  · {x} [{p['state']}] p{p['fm'].get('priority', 0)}"
                   f" {fw(est[x])}" + (f"  ({'; '.join(why)})" if why else ""))
-    if r["workers"]:
-        print(f"\n≈ {fw(r['wall'])} wall @ {r['workers']} workers — a staffing"
-              f" guess, not a promise. The dependency structure above is the"
-              f" plan · peak {r['peak']} at once")
+    # The wall is a band, not a number: the dependency floor (`needs:` alone,
+    # what `ready now` and the order above actually are) and the
+    # clash-serialised ceiling (every footprint clash paired up too) — both
+    # printed, neither labelled as the other. `workers:` shapes no schedule
+    # on its own; it is `dispatch`'s cap, printed as context — UNLESS this
+    # call was explicitly handed one (`plan --workers N`), the staffed
+    # simulation a board may still ask for, printed as a third, separate
+    # number rather than folded into the floor it is not.
+    print(f"\n≈ {fw(r['wall_floor'])} on the critical path — the dependency"
+          f" floor, `needs:` alone · ≈ {fw(r['wall_ceiling'])} if every"
+          " footprint clash serialises — the ceiling")
+    if workers is not None:
+        print(f"≈ {fw(r['wall'])} @ {r['workers']} workers — the staffed"
+              f" simulation asked for, not the plan · peak {r['peak']} at once")
     else:
-        print(f"\n≈ {fw(r['wall'])} on the critical path with unlimited agents"
-              f" · peak {r['peak']} at once — the dependency structure above"
-              " is the plan")
+        print(f"peak {r['peak']} at once, unlimited agents — the dependency"
+              " structure above is the plan")
 
     mp, mp_path = load_map(board)
     mp["after"] = r["after"]

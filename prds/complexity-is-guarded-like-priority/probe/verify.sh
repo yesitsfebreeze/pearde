@@ -6,8 +6,26 @@
 # Every fixture is a board built in a fresh `mktemp -d` and removed at exit —
 # a `prd.md` left anywhere under `prds/` becomes a real PRD the scan picks up.
 set -u
-ROOT=$(cd "$(dirname "$0")/../../../.." && pwd)
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 PLAN="$ROOT/resources/board/plan.py"
+# plan.py was cut into modules named for one responsibility each. The CLI is
+# still plan.py; the typed-number guards moved with the code they guard —
+# num/dur/bad_value/hours into prdfile.py, claim_ttl into silence.py, and
+# plan_workers' guarded int() into schedule.py. The census below reads the
+# file that holds each rule; every expectation is the one it always was.
+PRDF="$ROOT/resources/board/prdfile.py"
+SIL="$ROOT/resources/board/silence.py"
+SCHED="$ROOT/resources/board/schedule.py"
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
 pass=0; fail=0
@@ -147,43 +165,48 @@ has   "quoted complexity is the weight"  "$OUT" "q · p50 · w30"
 echo "── 9. the census, asserted over the file ──"
 # every remaining float() in plan.py sits inside a guard; no float() reads
 # frontmatter or settings directly any more.
-check "no float() over fm.get"       "$(grep -c 'float(.*\[\"fm\"\]\.get\|float(fm\.get' "$PLAN")" 0
-check "no float() over settings.get" "$(grep -c 'float(settings\.get' "$PLAN")" 0
+check "no float() over fm.get"       "$(grep -c 'float(.*\[\"fm\"\]\.get\|float(fm\.get' "$PRDF")" 0
+check "no float() over settings.get" "$(grep -c 'float(settings\.get' "$PRDF")" 0
 check "no int() over settings.get unguarded" \
-      "$(grep -c 'int(board_settings' "$PLAN")" 1     # inside plan_workers' try
+      "$(grep -c 'int(board_settings' "$SCHED")" 1    # inside plan_workers' try
 # 3 calls, each inside a guard: hours()'s try, claim_ttl()'s isdigit, num()'s
 # try. The 4th `grep` hit is the word in the block comment above `bad_value`.
-check "float() CALLS remaining"      "$(grep -c '^ *[a-z].*float(' "$PLAN")" 3
+check "float() CALLS remaining"      "$(( $(grep -c '^ *[a-z].*float(' "$PRDF") + $(grep -c '^ *[a-z].*float(' "$SIL") ))" 3
 # The line above counts. This one reads the RULE. A grep census is spelling-
 # and indent-dependent — `EST = float(x)`, or a call at module level, slips
 # past it — so the rule is asserted over the syntax tree instead: every
-# `float()` anywhere in the file sits inside one of the three functions that
+# `float()` anywhere in these files sits inside one of the three functions that
 # guard it. A new unguarded read of a hand-written number fails here whatever
 # it is named and however it is laid out. This is the only mechanism the rule
-# has — nothing on this repo runs this harness for you.
-LOOSE=$(python3 - "$PLAN" <<'CENSUS'
+# has — nothing on this repo runs this harness for you. hours() and num() are
+# in prdfile.py and claim_ttl() is in silence.py since the cut, so the tree is
+# walked over both files rather than over one.
+LOOSE=$(python3 - "$PRDF" "$SIL" <<'CENSUS'
 import ast, sys
-tree = ast.parse(open(sys.argv[1], encoding="utf-8").read())
 guards = {"hours", "num", "claim_ttl"}
 
 
-def calls(node):
-    return {n.lineno for n in ast.walk(node)
+def calls(node, path):
+    return {(path, n.lineno) for n in ast.walk(node)
             if isinstance(n, ast.Call) and isinstance(n.func, ast.Name)
             and n.func.id == "float"}
 
 
-inside = set()
-for fn in ast.walk(tree):
-    if isinstance(fn, ast.FunctionDef) and fn.name in guards:
-        inside |= calls(fn)
-print(" ".join(str(ln) for ln in sorted(calls(tree) - inside)))
+loose = []
+for path in sys.argv[1:]:
+    tree = ast.parse(open(path, encoding="utf-8").read())
+    inside = set()
+    for fn in ast.walk(tree):
+        if isinstance(fn, ast.FunctionDef) and fn.name in guards:
+            inside |= calls(fn, path)
+    loose += sorted(calls(tree, path) - inside)
+print(" ".join("%s:%d" % (p.rsplit("/", 1)[-1], ln) for p, ln in loose))
 CENSUS
 )
 check "every float() sits in hours/num/claim_ttl" "$LOOSE" ""
-has   "num() exists"                 "$PLAN" "def num(fm, key, where="
-has   "dur() exists"                 "$PLAN" "def dur(fm, key, where="
-has   "bad_value() exists"           "$PLAN" "def bad_value(where, key, v):"
+has   "num() exists"                 "$PRDF" "def num(fm, key, where="
+has   "dur() exists"                 "$PRDF" "def dur(fm, key, where="
+has   "bad_value() exists"           "$PRDF" "def bad_value(where, key, v):"
 python3 -c "import ast,sys; ast.parse(open(sys.argv[1]).read())" "$PLAN" 2>/dev/null
 check "plan.py parses"               "$?" 0
 
@@ -228,7 +251,7 @@ REPO
 has   "…and the # survives into the value"  "$TMP/repo.txt" "repo=a#b"
 
 echo "── 11. the real board is unmoved ──"
-run "$ROOT/.pearde" scan
+run "$BOARD" scan
 check "the repo's own board scans"       "$RC" 0
 hasnt "the repo's own board reports nothing bad" "$ERR" "is not a number"
 

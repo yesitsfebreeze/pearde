@@ -10,29 +10,44 @@
 # clash. The board is one PRD. Nothing here touches the live daemon: `view`
 # is only asked for --help.
 set -uo pipefail
-HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO="$(cd "$HERE/../../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
+REPO="$ROOT"
 D="$(mktemp -d)"; D="$(cd "$D" && pwd -P)"; trap 'rm -rf "$D"' EXIT
-R="$D/root"
+FIXR="$D/root"
 PASS=0; FAIL=0
 ok()   { PASS=$((PASS + 1)); echo "ok   $PASS — $1"; }
 fail() { FAIL=$((FAIL + 1)); echo "FAIL — $1"; }
 check() { if eval "$2"; then ok "$1"; else fail "$1"; fi; }
 
 # ── fixture ───────────────────────────────────────────────────────────────────
-mkdir -p "$R/resources/board" "$R/references/templates" "$R/.pearde/prds/memos" "$R/.pearde/prds/alpha" "$R/.pearde/memos"
-for f in "$REPO"/resources/*.py "$REPO"/resources/*.sh; do ln -s "$f" "$R/resources/"; done
-for f in plan.py serve.py render.py edit.py; do ln -s "$REPO/resources/board/$f" "$R/resources/board/$f"; done
-ln -s "$REPO/references/templates/memo.md" "$R/references/templates/memo.md"
-rm -f "$R/resources/pearde.py"; cp "$REPO/resources/pearde.py" "$R/resources/pearde.py"  # the link loop above already made a link; the copy is the point
-P="python3 $R/resources/pearde.py"
-mkdir -p "$R/.pearde"
-cat > "$R/.pearde/settings.md" <<'EOF'
+mkdir -p "$FIXR/resources/board" "$FIXR/references/templates" "$FIXR/.pearde/prds/memos" "$FIXR/.pearde/prds/alpha" "$FIXR/.pearde/memos"
+for f in "$REPO"/resources/*.py "$REPO"/resources/*.sh; do ln -s "$f" "$FIXR/resources/"; done
+# plan.py is ten modules beside each other and imports the nine; a fixture
+# that links only plan.py leaves it importing nothing.
+for f in plan.py boards.py prdfile.py repos.py registry.py silence.py needs.py \
+         vision.py schedule.py mapfile.py serve.py render.py edit.py; do
+  ln -s "$REPO/resources/board/$f" "$FIXR/resources/board/$f"
+done
+ln -s "$REPO/references/templates/memo.md" "$FIXR/references/templates/memo.md"
+rm -f "$FIXR/resources/pearde.py"; cp "$REPO/resources/pearde.py" "$FIXR/resources/pearde.py"  # the link loop above already made a link; the copy is the point
+P="python3 $FIXR/resources/pearde.py"
+mkdir -p "$FIXR/.pearde"
+cat > "$FIXR/.pearde/settings.md" <<'EOF'
 ---
 language: English
 ---
 EOF
-cat > "$R/.pearde/prds/alpha/prd.md" <<'EOF'
+cat > "$FIXR/.pearde/prds/alpha/prd.md" <<'EOF'
 ---
 state: open
 origin: requested
@@ -42,7 +57,7 @@ complexity: 0
 
 # alpha — the one PRD on the fixture board
 EOF
-cat > "$R/.pearde/memos/bad.md" <<'EOF'
+cat > "$FIXR/.pearde/memos/bad.md" <<'EOF'
 ---
 memo: bad
 kind: decision
@@ -52,7 +67,7 @@ date: 2026-08-28
 
 # bad — a memo missing its subject
 EOF
-cat > "$R/resources/board/hello.py" <<'EOF'
+cat > "$FIXR/resources/board/hello.py" <<'EOF'
 """hello — a fixture module a child would add."""
 def cmd_hello(args):
     """say hello — the fixture command"""
@@ -62,7 +77,7 @@ COMMANDS = {"hello": cmd_hello, "collect": cmd_hello}
 EOF
 
 # ── help ──────────────────────────────────────────────────────────────────────
-cd "$R"
+cd "$FIXR"
 H="$($P help)"; RC=$?
 check "help exits 0" '[ "$RC" = 0 ]'
 check "help lists every name once" '[ "$(printf "%s\n" "$H" | grep -c "^  pearde")" = "$(printf "%s\n" "$H" | grep "^  pearde" | sort -u | wc -l | tr -d " ")" ]'
@@ -71,21 +86,21 @@ check "help reads plan.py's docstring for reconcile" 'grep -q "pearde reconcile 
 check "help reads doctor.sh's comment block" 'grep -q "pearde doctor --fix \[board\] *report, then repair" <<< "$H"'
 check "help reads install.sh's three modes" '[ "$(grep -c "^  pearde install" <<< "$H")" = 3 ]'
 check "help reads a discovered module's docstring" 'grep -q "pearde hello *say hello — the fixture command" <<< "$H"'
-check "RESERVED is empty — every name a child was to deliver has landed" 'python3 -c "import sys; sys.path.insert(0, \"$R/resources\"); import pearde; sys.exit(pearde.RESERVED != {})"'
+check "RESERVED is empty — every name a child was to deliver has landed" 'python3 -c "import sys; sys.path.insert(0, \"$FIXR/resources\"); import pearde; sys.exit(pearde.RESERVED != {})"'
 check "help: a claimed reserved name is no longer pending" '! grep -q "pearde collect *not yet" <<< "$H"'
 for c in scan plan reconcile gantt calibrate status members view memo workflow questions index doctor install hello; do
   check "$c --help exits 0" "$P $c --help >/dev/null 2>&1"
 done
-check "--help never runs the command (doctor --help prints one line per mode, no report)" '[ "$($P doctor --help | wc -l | tr -d " ")" = "$(grep -cE "^#   doctor\.sh " "$R/resources/doctor.sh")" ]'
+check "--help never runs the command (doctor --help prints one line per mode, no report)" '[ "$($P doctor --help | wc -l | tr -d " ")" = "$(grep -cE "^#   doctor\.sh " "$FIXR/resources/doctor.sh")" ]'
 
 # ── the default and the board ─────────────────────────────────────────────────
 $P > "$D/a.txt" 2>&1; RA=$?
 $P scan > "$D/b.txt" 2>&1; RB=$?
 check "pearde and pearde scan exit 0" '[ "$RA" = 0 ] && [ "$RB" = 0 ]'
 check "pearde and pearde scan are byte-identical" 'cmp -s "$D/a.txt" "$D/b.txt"'
-(cd "$R/.pearde/prds/alpha" && $P scan > "$D/c.txt" 2>&1)
+(cd "$FIXR/.pearde/prds/alpha" && $P scan > "$D/c.txt" 2>&1)
 check "the board is found walking up from a subdirectory" 'cmp -s "$D/a.txt" "$D/c.txt"'
-$P scan "$R" > "$D/d.txt" 2>&1
+$P scan "$FIXR" > "$D/d.txt" 2>&1
 check "the board is found from the path given" 'cmp -s "$D/a.txt" "$D/d.txt"'
 E="$(cd "$D" && $P 2>&1)"; RC=$?
 check "no board: exit 2 and the script's own message" '[ "$RC" = 2 ] && grep -q "no .pearde/ board found" <<< "$E"'
@@ -102,23 +117,23 @@ E="$($P colect 2>&1)"; RC=$?
 check "an unknown name exits 2 and names the near miss" '[ "$RC" = 2 ] && grep -q "did you mean collect" <<< "$E"'
 
 # ── memo ──────────────────────────────────────────────────────────────────────
-E="$(cd "$R" && $P memo check 2>&1)"; RC=$?
+E="$(cd "$FIXR" && $P memo check 2>&1)"; RC=$?
 check "memo check forwards and its exit code passes through" '[ "$RC" != 0 ] && grep -q "bad.md: missing" <<< "$E"'
-OUT="$(cd "$R" && $P memo add "Dates Are Written, not stamped")"; RC=$?
-check "memo add prints the path and exits 0" '[ "$RC" = 0 ] && [ "$OUT" = "$R/.pearde/memos/dates-are-written-not-stamped.md" ]'
+OUT="$(cd "$FIXR" && $P memo add "Dates Are Written, not stamped")"; RC=$?
+check "memo add prints the path and exits 0" '[ "$RC" = 0 ] && [ "$OUT" = "$FIXR/.pearde/memos/dates-are-written-not-stamped.md" ]'
 check "memo add: the slug is the memo: key" 'grep -q "^memo: dates-are-written-not-stamped$" "$OUT"'
 check "memo add: the subject is kept as written" 'grep -q "^subject: Dates Are Written, not stamped$" "$OUT"'
 check "memo add: the date is today, ISO" 'grep -q "^date: $(date +%Y-%m-%d)$" "$OUT"'
 # memos.py reports one LINE per missing key — bad.md lacks exactly one key
 # (subject:), so its count is 1; the new memo must add nothing
-check "memo add: the new memo passes memo check (bad.md still reported)" '[ "$(cd "$R" && $P memo check 2>&1 | grep -c ^bad.md:)" = 1 ]'
+check "memo add: the new memo passes memo check (bad.md still reported)" '[ "$(cd "$FIXR" && $P memo check 2>&1 | grep -c ^bad.md:)" = 1 ]'
 check "memo add refuses to overwrite" '! (cd "$D" && $P memo add "dates are written not stamped") >/dev/null 2>&1'
 mkdir -p "$D/ext/.pearde/prds" "$D/ext/records"
 printf -- "---\nlanguage: English\nmemos: ../records\n---\n" > "$D/ext/.pearde/settings.md"
 check "memo add refuses an external memos: dir" '(cd "$D/ext" && ! $P memo add "x" >/dev/null 2>&1 && [ -z "$(ls "$D/ext/records")" ])'
 
 # ── clash ─────────────────────────────────────────────────────────────────────
-cat > "$R/resources/board/other.py" <<'EOF'
+cat > "$FIXR/resources/board/other.py" <<'EOF'
 def cmd(args):
     """other"""
     return 0
@@ -129,10 +144,10 @@ check "two modules on one name: help exits 1" '[ "$RC" = 1 ]'
 check "two modules on one name: help names both" 'grep -q "\`hello\` is claimed by both hello.py and other.py" <<< "$E"'
 check "a module on a forwarded name is refused" 'grep -q "\`scan\` is forwarded by pearde.py and claimed by other.py" <<< "$E"'
 check "the first claimant still runs" '[ "$($P hello 2>/dev/null)" = "hello" ]'
-echo "def (" > "$R/resources/board/broken.py"; echo "COMMANDS = {}" >> "$R/resources/board/broken.py"
+echo "def (" > "$FIXR/resources/board/broken.py"; echo "COMMANDS = {}" >> "$FIXR/resources/board/broken.py"
 E="$($P help 2>&1)"
 check "a module that fails to import is reported, not fatal" 'grep -q "broken.py failed to import" <<< "$E" && [ "$($P hello 2>/dev/null)" = "hello" ]'
-rm "$R/resources/board/other.py" "$R/resources/board/broken.py"
+rm "$FIXR/resources/board/other.py" "$FIXR/resources/board/broken.py"
 check "clash gone: help exits 0 again" '$P help >/dev/null 2>&1'
 
 # ── the real tree ─────────────────────────────────────────────────────────────

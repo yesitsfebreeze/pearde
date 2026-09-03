@@ -4,8 +4,21 @@
 # a parked child holds its parent; a container is collect's, never claim's.
 # Every fixture is a copy of the example board under mktemp -d, removed at exit.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 SRC="$ROOT/resources/board"; PLAN="$SRC/plan.py"; TR="$SRC/transitions.py"
+# the predicate, the frontier and the plan live in schedule.py since plan.py
+# was cut by responsibility; cmd_scan stays on the command line in plan.py.
+SCHED="$SRC/schedule.py"
 BRIEF="$SRC/brief.py"
 PASS=0; FAIL=0
 ok()    { PASS=$((PASS+1)); echo "  ok   $1"; }
@@ -61,13 +74,13 @@ PY
 }
 
 echo "# source — one predicate, three readers"
-eq  "plan.py defines dispatchable once" "$(grep -c '^def dispatchable(' "$PLAN")" 1
+eq  "schedule.py defines dispatchable once" "$(grep -c '^def dispatchable(' "$SCHED")" 1
 has "gate_claim calls plan.dispatchable" "$(cat "$TR")" "planlib.dispatchable(prd, prds, board)"
 lacks "the leaf wording left transitions.py" "$(cat "$TR")" "has children not done"
 lacks "the footprint wording left transitions.py" "$(cat "$TR")" "is claimed and holds"
-has "cmd_scan calls it on the free set" "$(cat "$PLAN")" "why = {x: dispatchable(prds[x], prds, board) for x in free}"
-has "compute_plan holds what it refuses" "$(cat "$PLAN")" "why = dispatchable(todo[r], prds, board)"
-has "plan_frontier reads the hold" "$(cat "$PLAN")" 'and x not in r["held"]'
+has "cmd_scan calls it on the free set" "$(cat "$SCHED")" "why = {x: dispatchable(prds[x], prds, board) for x in free}"
+has "compute_plan holds what it refuses" "$(cat "$SCHED")" "why = dispatchable(todo[r], prds, board)"
+has "plan_frontier reads the hold" "$(cat "$SCHED")" 'and x not in r["held"]'
 
 echo "# untouched copy — the old shape stands"
 B0=$(fixture); S0=$(python3 "$PLAN" scan "$B0" 2>/dev/null)

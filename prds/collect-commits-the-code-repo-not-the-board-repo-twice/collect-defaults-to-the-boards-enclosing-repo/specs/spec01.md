@@ -49,7 +49,7 @@ verify script re-proves all four cases from a clean fixture each run.
 
 ```sh
 set -e
-PRD=.pearde/prds/collect-commits-the-code-repo-not-the-board-repo-twice/collect-defaults-to-the-boards-enclosing-repo
+PRD="$(cd "$(git rev-parse --git-common-dir)/.." && pwd)/.pearde/prds/collect-commits-the-code-repo-not-the-board-repo-twice/collect-defaults-to-the-boards-enclosing-repo"
 T=$(mktemp -d)
 trap 'rm -rf "$T"' EXIT
 

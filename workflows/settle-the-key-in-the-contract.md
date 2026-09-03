@@ -3,6 +3,8 @@ atomic: settle-the-key-in-the-contract
 subject: give a new frontmatter key its contract row and its default
 date: 2026-08-28
 runs: 0
+tags:
+  - atomic
 ---
 
 # settle-the-key-in-the-contract — one home for what the key means

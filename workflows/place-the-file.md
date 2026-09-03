@@ -4,6 +4,8 @@ subject: put a new file under the root its kind belongs to
 date: 2026-08-28
 updated: 2026-08-28
 runs: 2
+tags:
+  - atomic
 ---
 
 # place-the-file — the right root, before the first line of content

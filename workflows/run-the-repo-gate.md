@@ -4,6 +4,8 @@ subject: run the map check and the install check, and account for every line
 date: 2026-08-28
 updated: 2026-08-29
 runs: 24
+tags:
+  - atomic
 ---
 
 # run-the-repo-gate — the two commands that read the whole tree

@@ -3,6 +3,8 @@ atomic: ask-the-tool-what-it-actually-read
 subject: kern status` named the store it resolved and every other store on the machine — the reported reading was against a store that was not the subject
 date: 2026-09-02
 runs: 1
+tags:
+  - atomic
 ---
 
 ## Do

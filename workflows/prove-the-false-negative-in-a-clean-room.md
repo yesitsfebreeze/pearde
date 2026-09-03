@@ -4,6 +4,8 @@ subject: Reproduced the empty-store auto-create in a fresh temp dir, so the mech
 date: 2026-09-02
 updated: 2026-09-02
 runs: 1
+tags:
+  - atomic
 ---
 
 ## Do

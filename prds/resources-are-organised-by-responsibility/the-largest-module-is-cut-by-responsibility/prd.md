@@ -6,6 +6,7 @@ complexity: 29
 blast-radius: high
 workflow: probe-then-spec
 actual: 13.49h
+commit: dca5ce2 f74bdfb
 ---
 
 # the-largest-module-is-cut-by-responsibility — resources/board/plan.py` is several modules beside each other, each named for one thing it is responsible for and none over 700 lines, with every command, caller and harness unchanged from the outside

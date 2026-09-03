@@ -35,19 +35,19 @@ orders the pair, and whichever lands second rebases onto the first.
 
 ## Acceptance
 
-- [ ] `references/parts/commits.md` no longer says a person merges a conflicted lane by hand
-- [ ] it says instead that the PRD is written `blocked` with the lane branch and the conflicting files named, and that `unblock` returns it to `specced`
-- [ ] it says why `blocked` and not `failed`, in one clause a reader can act on
-- [ ] its `claimed → blocked` row names the conflicted lane as the case that commits nothing
-- [ ] the `blocked` row of `references/parts/states.md` names `collect` among what sets it
-- [ ] `references/parts/states.md` no longer reads as though every `blocked` PRD carries `needs:`
-- [ ] `python3 resources/board/mapfile.py check` prints nothing and exits 0
+- [x] `references/parts/commits.md` no longer says a person merges a conflicted lane by hand
+- [x] it says instead that the PRD is written `blocked` with the lane branch and the conflicting files named, and that `unblock` returns it to `specced`
+- [x] it says why `blocked` and not `failed`, in one clause a reader can act on
+- [x] its `claimed → blocked` row names the conflicted lane as the case that commits nothing
+- [x] the `blocked` row of `references/parts/states.md` names `collect` among what sets it
+- [x] `references/parts/states.md` no longer reads as though every `blocked` PRD carries `needs:`
+- [x] `python3 resources/board/mapfile.py check` prints nothing and exits 0
 
 ## Verify and Proof
 
 ```sh
 set -e
-! grep -q "a person merges it by hand" references/parts/commits.md
+if grep -q "a person merges it by hand" references/parts/commits.md; then exit 1; fi
 grep -q "unblock" references/parts/commits.md
 grep -q "never a stranded lane" references/parts/commits.md
 grep -q "A conflicted lane is the exception" references/parts/commits.md

@@ -23,7 +23,10 @@ import shutil
 import sys
 from pathlib import Path
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+_D = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
+                else os.path.dirname(_D))
+import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
 import common  # noqa: E402 — the board resolver, one copy
 import memos as memos_lib  # noqa: E402 — the memos, read by their own reader
 
@@ -33,10 +36,9 @@ PROG = "knowledge"
 def _plan():
     """@resources/board/plan.py, the one reader of a PRD — imported on
     demand, the way @resources/workflows.py `members` reaches it, since
-    plan.py imports memos.py at its top and this file sits beside memos."""
-    d = os.path.join(os.path.dirname(os.path.abspath(__file__)), "board")
-    if d not in sys.path:
-        sys.path.insert(0, d)
+    plan.py imports memos.py at its top and this file sits beside memos.
+    The rule already put every directory under resources/ on the path, so
+    the directory it sits in is never spelled here."""
     import plan  # noqa: E402
     return plan
 
@@ -934,8 +936,8 @@ def cmd_index(store, args):
         print(f"index: no map at {project} — index.md and references/files.md "
               "are what this reads; nothing indexed")
         return 0
-    sys.path.insert(0, str(Path(__file__).resolve().parent))
-    import index as index_map                      # the one reader of the format
+    import index as index_map   # noqa: E402 — the one reader of the format,
+                                # on the path by the rule, wherever it sits
 
     rows = index_map.rows(str(project))
     scopes = index_map.keywords(str(project))

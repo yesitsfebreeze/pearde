@@ -55,7 +55,14 @@
 set -u
 
 ROOT=${1:-$PWD}
-exec python3 - "$ROOT" <<'PY'
+# `refuse.py` found by the one rule — resources/ first, then every
+# directory directly under it — so the module can move and this harness
+# needs no second edit. @resources/pearde_path.py `script()` is the
+# Python half of the same rule; this is the smallest shell that holds it,
+# and it searches the tree being MEASURED, not the one this file sits in.
+REFUSE=$(ls "$ROOT"/resources/refuse.py "$ROOT"/resources/*/refuse.py \
+         2>/dev/null | head -1)
+exec python3 - "$ROOT" "$REFUSE" <<'PY'
 import ast
 import importlib.util
 import os
@@ -74,9 +81,9 @@ def ok(msg):
     print("PASS  " + msg)
 
 
-refuse_path = os.path.join(root, "resources", "board", "refuse.py")
-if not os.path.isfile(refuse_path):
-    no("no resources/board/refuse.py under %s — the reader the whole "
+refuse_path = sys.argv[2] if len(sys.argv) > 2 else ""
+if not refuse_path or not os.path.isfile(refuse_path):
+    no("no refuse.py anywhere under %s/resources — the reader the whole "
        "mechanism is built on is gone" % root)
     sys.exit(1)
 spec = importlib.util.spec_from_file_location("_refuse_invariant", refuse_path)
@@ -84,7 +91,7 @@ refuse = importlib.util.module_from_spec(spec)
 try:
     spec.loader.exec_module(refuse)
 except Exception as e:                                   # noqa: BLE001
-    no("resources/board/refuse.py will not import: %s" % e)
+    no("%s will not import: %s" % (refuse_path, e))
     sys.exit(1)
 
 # the two call shapes the board writes a git in

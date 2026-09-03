@@ -757,10 +757,6 @@ def budget(data, st, session, board, tool, inp):
          "worker, asking the user, and the board's own commands.")
 
 
-REFUSE = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                      "board", "refuse.py")
-
-
 def destructive_in_another_tree(cmd, cwd, board):
     """`reset --hard`, `checkout --`, `clean` and a real stash, refused in any
     tree this session does not own — the shell half of
@@ -776,10 +772,7 @@ def destructive_in_another_tree(cmd, cwd, board):
     load or will not answer denies nothing. A missed refusal costs a warning
     the call sites still make; a raised hook costs the whole session."""
     try:
-        d = os.path.dirname(REFUSE)
-        if d not in sys.path:
-            sys.path.insert(0, d)
-        import refuse as refuselib
+        import refuse as refuselib   # on sys.path via @resources/pearde_path.py
         bad = refuselib.check_line(board, cmd, cwd)
     except Exception:
         return

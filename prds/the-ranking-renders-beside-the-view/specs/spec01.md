@@ -95,25 +95,25 @@ Nothing to build. Land the six files as they stand.
 
 ## Acceptance
 
-- [ ] `python3 resources/health.py score <board>` then a Python call to
+- [x] `python3 resources/health.py score <board>` then a Python call to
       `mapfile.gantt_payload(board, ...)` returns a `"health"` key shaped
       `{"floor": int, "rows": [...]}`, each row carrying `score`, `file`,
       `worst` and `axes` for all six axes.
-- [ ] The same call against a board with no `.pearde/health/ranking.md`
+- [x] The same call against a board with no `.pearde/health/ranking.md`
       returns `"health": None`.
-- [ ] `resources/health.py check` and `resources/health.py list` print
+- [x] `resources/health.py check` and `resources/health.py list` print
       exactly what they did before this spec — `read_ranking`'s extra keys
       change nothing either reads.
-- [ ] `node --check resources/board/view.js` — compiles.
-- [ ] `node resources/board/viewtest.js --example` — 50/50, including
+- [x] `node --check resources/board/view.js` — compiles.
+- [x] `node resources/board/viewtest.js --example` — 50/50, including
       `eight section anchors`, the PRD-order line naming `health`, and
       `section "health" is the one shown`.
-- [ ] Opening the `health` tab on a scored board shows a table, worst score
+- [x] Opening the `health` tab on a scored board shows a table, worst score
       first, each axis cell classed `ok`/`warn`/`danger`/`dim` by its own
       band.
-- [ ] Opening the `health` tab on an unscored board shows the one line
+- [x] Opening the `health` tab on an unscored board shows the one line
       `not scored`.
-- [ ] On the merged `all` page, no `health` tab and no `#s-health` exist in
+- [x] On the merged `all` page, no `health` tab and no `#s-health` exist in
       the DOM.
 
 ## Verify and Proof

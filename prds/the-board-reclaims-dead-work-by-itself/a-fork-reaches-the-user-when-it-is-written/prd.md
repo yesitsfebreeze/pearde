@@ -1,10 +1,11 @@
 ---
-state: analyzing
+state: done
 origin: requested
 priority: 75
-complexity: 0
-blast-radius:
-claim: an-fork-reaches 2026-09-03 12:04
+complexity: 8
+blast-radius: mid
+workflow: probe-then-spec
+actual: 0.7h
 ---
 
 # a fork reaches the user when it is written
@@ -46,3 +47,15 @@ instead of once?
 ## Answers
 
 **Q1** *(answered 2026-09-03 14:56)* — Not one of the three prepared options — the user asked to search the repo for a satisfactory answer instead. Found one: `resources/board/serve.py`'s daemon already has this mechanism. `POLL_S = 1.0` — the mirror loop stat-sweeps every board file once a second and calls `bump()`, which increments the board's `seq` and does `cond.notify_all()`, waking every long-poller blocked on `/wait`. `pearde view wait` already rides this. Consequence: forks written within the same one-second window collapse into a single wake, and a fork written any time after still wakes within about a second — no dispatcher-side batching, hold timer, or "wait for the whole run" logic needed. Route the fork-write through this existing seq/wait primitive rather than building new mechanism: when `ask.md` changes, bump the board the same way any other board file change already does, and let existing `/wait` callers pick it up.
+
+## Report
+
+spec01: exit 0
+control (nothing)          3 -> 3   quiet
+ask.md written             3 -> 4   BUMP
+control (nothing)          4 -> 4   quiet
+## Questions in prd.md     4 -> 5   BUMP
+control (nothing)          5 -> 5   quiet
+--- what the board says it owes, with no pass worker involved ---
+one                                           1 open   0 answered  analyzing
+drill_questions: [('one', 'Q1', 'What the thing does', False)]

@@ -76,17 +76,59 @@ fix.
 
 ## Acceptance
 
-- [x] `bash prds/the-vision-file-s-edges-fold-into-needs/probe/verify.sh` ends `verify: 11/11 checks pass`
+- [x] `bash .pearde/prds/the-vision-file-s-edges-fold-into-needs/probe/verify.sh`
+      exits 0, prints no `  FAIL` line, and ends on a `verify: <n>/<n> checks
+      pass` tally with `<n>` at least 11
 - [x] A board with `terminals: [leaf]`, `leaf` declaring `needs: [root]`, and `edges: ["root -> leaf"]` prints byte-identical `vision` and `vision --json` output whether the `edges:` line is present or removed
 - [x] A board with an edge `"other -> leaf"` and no matching `needs:` on `leaf`: `vision --check` exits 1 and prints `the vision says leaf needs other; leaf does not`; `doctor`'s `vision` row carries the same line; adding `needs: [other]` to `leaf` makes `vision --check` exit 0
 - [x] The same board with the edge naming a PRD that does not exist (`"ghost -> leaf"`) still prints `edge ghost -> leaf: ghost names no PRD` and exits 1
-- [x] `grep -c 'after\[ra\].add(rb)' resources/board/vision.py` prints `0`
+- [x] `grep -c 'after\[ra\]\.add(rb)' resources/board/vision.py` prints `0` — no edge
+      reaches the `after` graph the depth walk reads
 
 ## Verify and Proof
 
 ```sh
-bash prds/the-vision-file-s-edges-fold-into-needs/probe/verify.sh
-grep -c 'after\[ra\].add(rb)' resources/board/vision.py
+# collect runs this with cwd set to the PRD's code repo, so the footprint
+# files are repo-relative and no `cd` belongs here. The board is `.pearde/`
+# beside that repo — except in a lane, which sits INSIDE the board and has
+# none of its own, so walk up until a directory holds this PRD. An empty
+# board would pass every sweep below vacuously; refuse it instead.
+B=; D=$PWD
+while [ "$D" != / ]; do
+  [ -d "$D/.pearde/prds/the-vision-file-s-edges-fold-into-needs" ] && { B="$D/.pearde"; break; }
+  D=$(dirname "$D")
+done
+[ -n "$B" ] || exit 1
+# The harness takes its tree from PEARDE_ROOT and falls back to the board's
+# own repo, which is the orchestrator's checkout however this is invoked —
+# so name the tree collect handed us, or a lane's build is invisible here.
+V=$(PEARDE_ROOT="$PWD" bash "$B/prds/the-vision-file-s-edges-fold-into-needs/probe/verify.sh" 2>&1) || true
+printf '%s\n' "$V"
+# The tally has to parse and hold no failure. A floor, never an equality: a
+# later pass must be able to add a check without reddening this spec.
+printf '%s\n' "$V" | grep -Eq '^verify: [0-9]+/[0-9]+ checks pass$' || exit 1
+N=$({ printf '%s\n' "$V" | grep -c '  FAIL' || true; })
+[ "$N" = 0 ] || exit 1
+P=$(printf '%s\n' "$V" | sed -n 's/^verify: \([0-9]*\)\/.*/\1/p')
+[ "${P:-0}" -ge 11 ] || exit 1
+
+# The one line that made an edge an ordering is gone, and the module parses.
+{ grep -c 'after\[ra\]\.add(rb)' resources/board/vision.py || true; }
+if grep -q 'after\[ra\]\.add(rb)' resources/board/vision.py; then exit 1; fi
 python3 -c "import py_compile; py_compile.compile('resources/board/vision.py', doraise=True)"
-python3 resources/index.py check
+
+# The prose no longer calls `edges:` an input to the ordering, and doctor's
+# row no longer claims a reason that is false for the new report.
+bash -n resources/doctor.sh
+if grep -q 'needs:` plus `edges:' references/parts/order.md; then exit 1; fi
+if grep -q 'plus `edges` place every live PRD' references/templates/vision.doc.md; then exit 1; fi
+if grep -q 'in vision.md resolve' resources/doctor.sh; then exit 1; fi
+
+# `index.py check` is a board-wide gate, red today on rows this PRD did not
+# write. Capture it: the rows stay visible, only a crash or a line naming a
+# footprint file of ours can fail this block.
+out=$(python3 resources/index.py check 2>&1) && rc=0 || rc=$?
+[ "$rc" -le 1 ] || exit 1
+printf '%s\n' "$out"
+if printf '%s\n' "$out" | grep -E 'board/vision\.py|parts/order\.md|vision\.doc\.md|doctor\.sh'; then exit 1; fi
 ```

@@ -36,7 +36,6 @@ the plan on disk, the journals, and the payload the view reads; `TUNE`, the hand
 - [[.pearde/wiki/index/resources-board-adapters-claude-json|resources/board/adapters/claude.json]]
 - [[.pearde/wiki/index/resources-board-all-py|resources/board/all.py]]
 - [[.pearde/wiki/index/resources-board-edit-py|resources/board/edit.py]]
-- [[.pearde/wiki/index/resources-board-hotreload-test-js|resources/board/hotreload-test.js]]
 - [[.pearde/wiki/index/resources-board-lit-core-min-js|resources/board/lit-core.min.js]]
 - [[.pearde/wiki/index/resources-board-plan-py|resources/board/plan.py]]
 - [[.pearde/wiki/index/resources-board-render-py|resources/board/render.py]]

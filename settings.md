@@ -8,7 +8,7 @@ gantt-day: 8h
 context-budget: 160k
 groups: private
 happiness: 4
-harnesses: on
+harnesses: off
 ---
 
 # The pearde board

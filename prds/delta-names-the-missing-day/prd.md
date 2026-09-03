@@ -5,6 +5,7 @@ priority: 42
 complexity: 15
 blast-radius: low
 workflow: probe-then-spec
+commit: 6578857
 ---
 
 # delta names the missing day

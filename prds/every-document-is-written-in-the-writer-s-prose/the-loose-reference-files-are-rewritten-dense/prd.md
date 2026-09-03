@@ -8,6 +8,7 @@ needs:
   - a-density-checker-and-the-root-docs-are-rewritten
 workflow: probe-then-spec
 actual: 13.18h
+commit: aedd41c 147bc32
 ---
 
 # the-loose-reference-files-are-rewritten-dense — every loose file under `references/` except `language.md` and `files.md` (15 files, 16,857 words) rewritten dense

@@ -85,9 +85,15 @@ Rules for every worker:
 > Look up a word in your contract you do not know with `python3
 > resources/grammar.py show`; a word you needed and it does not define goes in
 > your report rather than being invented.
-> A fact learned outside this repo — the web, a library this tree does not
-> hold — is written back with `python3 resources/knowledge.py remember`
-> (`conclude` once two sources agree), never left standing only in this report.
+> The record runs both ways, and both ways are one command. Before you
+> research anything outside this repo, ask it:
+> `python3 resources/knowledge.py query "the question"` — a strong hit is
+> your answer and the research never happens; a gap is enqueued for you by
+> the same call. What you then learn goes back:
+> `python3 resources/knowledge.py remember "the title"` with the finding on
+> stdin and `--provenance` naming the URL or route it came from
+> (`conclude` once two sources agree). A fact left standing only in this
+> report is a fact the next worker pays for again.
 > Write your report to `.pearde/prds/<prd>/report.md`. Its **first 40 lines**
 > must carry a line beginning `Verdict:` and then the one word your role's
 > block names — nothing else on that line, and not inside a list item or a

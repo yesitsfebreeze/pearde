@@ -255,6 +255,31 @@ def cmd_scan(board):
     print(f"\nround: {rf}" + ("" if os.path.isfile(rf) else "  (not written)"))
 
 
+def knowledge_step(board):
+    """Print step 7 — what the knowledge layer owes this round, if anything.
+
+    Reads @resources/knowledge.py `stale_rows`: three mtimes, no note parsed,
+    so this is affordable on every `next`. The tools are advisory to the
+    loop, never a gate — an unimportable knowledge.py, a board with no wiki
+    and a machine with no `gh` all print nothing and change nothing about
+    which step the pass is on.
+    """
+    try:
+        import knowledge as kb  # noqa: E402 — beside this file, per pearde_path
+        store = kb.Store(os.path.join(board, "wiki"))
+        rows = [r for r in kb.stale_rows(store) if r[0] >= 0]
+    except Exception:
+        return
+    if not rows:
+        return
+    print(f"step 7 · knowledge — {len(rows)} tool(s) behind the board")
+    print("  decision: none — each is one command, and the record is what"
+          " step 2 answers a fork from")
+    for _over, name, state, command in sorted(rows, key=lambda r: -r[0]):
+        print(f"  {name}: {state}")
+        print(f"  {command}")
+
+
 def cmd_next(argv):
     """the loop step the pass is on — its decision and the exact command
 
@@ -295,6 +320,13 @@ def cmd_next(argv):
     # section only when non-empty; the first line keeps its shape.
     unput = [(rel, qid, title) for rel, qid, title, out
              in drill_questions(board) if not out]
+    # Step 7 · knowledge, on EVERY pass. It used to print only at step 8,
+    # under `nothing left to dispatch` — so on a board that never drained it
+    # never printed, and the sweep, the corpus map and the board notes went
+    # weeks between runs while the loop ran hourly. Three `stat` calls, and
+    # only the stale tools take a line: a current board pays one line saying
+    # so, or nothing when knowledge.py is not importable at all.
+    knowledge_step(board)
     acted = False
     if unput:
         gate = (" — one drill pass to the user before any claim"
@@ -368,7 +400,7 @@ def cmd_next(argv):
               " on a person")
         for x in yours:
             print(f"  {x} · {prds[x]['state']}")
-        print('  step 7 first: python3 resources/knowledge.py query'
+        print('  step 7 first: pearde knowledge query'
               ' "<the frontier\'s question>"')
         print("  drill pass → .pearde/.state/ask.md; rewrite"
               " .pearde/report.md and the pass file; hand back ASK / BLOCKED")

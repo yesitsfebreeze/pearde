@@ -13,13 +13,14 @@ memo per @references/memo.md, a conclusion here.
     graphs/              generated wiki pages over the KB
     .graphify/           the note graph, graph.json (gitignored, regenerable)
     WORKFLOW.md          focus, rules, routing — the configuration every verb reads
-    Dashboard.md         live Dataview views over all of it
 ```
 
-The board's vault roots at `.pearde/` (@references/obsidian.md): the dashboard
-renders at `wiki/Dashboard.md`, every Dataview source `.pearde/`-relative —
-`wiki/conclusions`, not `conclusions`. @resources/knowledge.py runs the loop:
-stdlib-only Python, `--root` per board.
+The board's vault roots at `.pearde/` (@references/obsidian.md), so the one
+page a person opens sits at the board's own root — `.pearde/Dashboard.md`,
+beside `graphify/`, not one folder down inside the layer it renders. Every
+Dataview source in it is vault-relative and unchanged by that: `wiki/conclusions`,
+`memos`, `wiki/board`. DQL `FROM` never reads from the file's own folder.
+@resources/knowledge.py runs the loop: stdlib-only Python, `--root` per board.
 
 ## The loop — ask, gap, capture, conclude, link
 
@@ -30,6 +31,7 @@ stdlib-only Python, `--root` per board.
 | capture | `remember <title>` — body on stdin, one topic per file | the finding, and the sweep or page behind it (`--provenance`) |
 | conclude | `conclude <title> --sources <slug,…>` | whether ≥ `min_sources_per_conclusion` takeaways agree enough to synthesize |
 | link | `relink` | the note graph, symmetrized `related:`, `graphs/` communities via `wiki` |
+| owe | `round` | which of scout, graph and the vault is behind the board, and the one command that clears it |
 
 | rule | mechanism |
 |---|---|
@@ -39,6 +41,33 @@ stdlib-only Python, `--root` per board.
 | pending is not a backlog | a question never needed again is deleted, not drained to zero; stale rows read as work owed, `doctor` naming them |
 | the vault is output | hand edits to `graphs/` die on the next `wiki`, `Dashboard.report.md` on the next `dashboard --write` |
 | `doctor` closes the loop | frontmatter valid, wikilinks resolving, graph in sync, pending honest — after moves, before calling a KB fact settled |
+
+## `round` is how the layer reaches the loop
+
+The read direction always ran: `query` before a fork goes to the user, step 7
+of @references/parts/loop.md. The write direction never had a caller — nothing
+scheduled a sweep, re-extracted the corpus after a collect landed, or
+regenerated the board notes the vault renders, so three tools sat *beside* the
+loop waiting for a person to remember them.
+
+`knowledge round` is the one page that says which is behind and the exact
+command that clears it, and `pearde next` prints the same rows as step 7 on
+**every** pass. Three `stat` calls, no note parsed. Staleness is a knob per
+tool in `WORKFLOW.md` — `stale_after_scout` (7 days), `stale_after_graph` (3),
+`stale_after_vault` (1) — and every row is a suggestion, never a gate: a board
+with no `gh`, no ollama and no network still scans and still dispatches.
+
+```
+knowledge: 104 notes (7 conclusions, 97 sources) · 44 pending · 1 of 3 tools stale
+  stale scout  the sweep — 9d old, stale past 7d
+         pearde scout sweep && pearde scout delta 7
+  ok    graph  the corpus map — 0d old
+  ok    vault  the board notes — 0d old
+```
+
+`pending/` is the same edge read backwards — the KB asking the round for work,
+where step 7 is the round asking the KB. `round` names the oldest three: research
+one, or delete it.
 
 ## The verbs write only under `.pearde/wiki/`
 
@@ -54,4 +83,6 @@ is the configuration, re-read every call: `active_focus` biases `query`,
 | memos | a memo wikilinks `[[<conclusion>]]` where a decision rests on knowledge, the conclusion links back; neither moves a state |
 | scout | `@resources/scout/findings.md` holds a sweep's dated record, never copied here — the note is the takeaway, the sweep the citation |
 | `@@graph` | `@resources/graph/graph.sh extract` maps the repo, semantic passes included; `knowledge.py relink` maps the KB from `.pearde/wiki/` wikilinks — hand-built, never an LLM call |
-| the dashboard | the view a person opens; a pass queries through the tools, never by reading `Dashboard.md` |
+| the dashboard | `.pearde/Dashboard.md`, the view a person opens; a pass queries through the tools, never by reading it |
+| the loop | step 7 runs `round` on every pass, not only on a drained board — @references/parts/loop.md |
+| a worker | the brief hands every worker both directions: `query` before it researches, `remember` after it learns — @references/parts/workers.md |

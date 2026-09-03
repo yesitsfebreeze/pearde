@@ -47,7 +47,7 @@ and the refusal names the command that answers instead.
 | 4 spec ahead | which persona the job wears |
 | 5 implement | which persona the job wears |
 | 6 collect | whether to believe the report; whether an edit was the atomic's |
-| 7 knowledge | whether the record already answers it — cite the note under `## Answers` and skip the question, or let the drill stand |
+| 7 knowledge | whether the record already answers it — cite the note under `## Answers` and skip the question, or let the drill stand; and which stale tool `round` names is worth one command now |
 | 8 drill, then hand back | the forks and their three answers |
 
 **Before step 0 · The session takes a tree of its own.** Every pass runs
@@ -167,12 +167,27 @@ is refused, not repaired. The changed files ride the PRD's commit —
 defect outside a worker's scope is the orchestrator's:
 @references/parts/derived.md — a derived PRD or memo, not `open` by default.
 
-**7 · Knowledge.** Before a fork goes to the user, query the record for it —
-`python3 resources/knowledge.py query`. A strong hit is the answer: write it
-under `## Answers` per step 2, and the fork never reaches the user. A gap or
-thin hit changes nothing — `query` already enqueued it in
-`.pearde/wiki/pending/`, and the fork still drills at step 8. This step only
-reads; a `remember` or `conclude` is a worker's or the user's own.
+**7 · Knowledge — every pass, not only a drained one.** Two directions, and
+`pearde next` prints both.
+
+*The read.* Before a fork goes to the user, query the record for it —
+`pearde knowledge query "<the question>"`. A strong hit is the answer: write
+it under `## Answers` per step 2, and the fork never reaches the user. A gap
+or thin hit changes nothing — `query` already enqueued it in
+`.pearde/wiki/pending/`, and the fork still drills at step 8.
+
+*The write.* `pearde knowledge round` names which of the three tools beside
+the loop is behind the board and the one command that clears it: the sweep
+(`pearde scout sweep`), the corpus map (`pearde graph update`), the board
+notes the vault renders (`pearde knowledge board && pearde knowledge relink`).
+`next` prints only the stale rows, so a current board costs nothing. None is a
+gate — a board with no `gh`, no ollama and no network dispatches exactly as
+before — and none needs remembering: printing them every pass is the whole
+mechanism. Running them was left to a person, and a person ran them monthly.
+
+A `remember` or `conclude` is still a worker's or the user's own; the brief
+hands every worker both commands (@references/parts/workers.md), so a fact
+learned in a lane reaches the record instead of dying with the worktree.
 
 **8 · Drill, then stop.** Nothing in flight and nothing dispatchable means a
 person blocks the board: one drill pass over the open frontier —

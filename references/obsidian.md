@@ -14,6 +14,14 @@ sources in `Dashboard.md`, wikilinks in `wiki/board/` — is `.pearde/`-relative
 an older board reading one level off until `knowledge.py board` regenerates
 it.
 
+The two things a person opens the vault *for* sit at that root, not inside a
+child: `Dashboard.md`, the live views, and `graphify/`, the corpus map
+(@references/graph.md). The dashboard renders `wiki/`; it does not live in it.
+A board seeded before that was true carries its own edited copy at
+`wiki/Dashboard.md`, and `pearde upgrade` moves that file up rather than
+planting a second one beside it — the Dataview sources are vault-relative, so
+the move is a rename and no query changes.
+
 ## The register is written only with Obsidian closed
 
 `obsidian://open` resolves only against Obsidian's own register
@@ -143,12 +151,12 @@ curl -sk -X POST https://127.0.0.1:27124/search/ -H "Authorization: Bearer $K" \
   -d '{"==": [{"var": "frontmatter.state"}, "open"]}'
 
 # read the dashboard a person sees
-curl -sk https://127.0.0.1:27124/vault/wiki/Dashboard.md \
+curl -sk https://127.0.0.1:27124/vault/Dashboard.md \
   -H "Authorization: Bearer $K"
 ```
 
 REST `search/` answers one flat predicate per call. Before the port:
 `plan.py scan`, `knowledge.py query`, a file read; for joins `knowledge.py`
 and `plan.py`. The deep views stay in Dataview — DQL over `wiki/board`,
-`memos`, `workflows` per `Dashboard.md`, `file.inlinks` backlinks included,
+`memos`, `workflows` per `Dashboard.md` at the vault root, `file.inlinks` backlinks included,
 in-app.

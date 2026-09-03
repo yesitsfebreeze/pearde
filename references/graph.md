@@ -32,10 +32,18 @@ PEARDE_GRAPH_MODEL=gpt-oss:20b graph.sh extract <folder>
 `PEARDE_GRAPH_MODEL` overrides the model for one call, `PEARDE_GRAPH_FOLDER`
 the default folder.
 
-## Commands — folder first, optional, default the cwd
+## Commands — folder first, optional, default the project root
+
+The folder defaults to the **project root**, never the cwd: `graph.sh` climbs
+for the nearest board directory above it and graphs that board's parent. A
+call made from inside `.pearde/` — a pass writing the round file, the command
+typed in the vault — therefore maps the repo and lands beside the board.
+Trusting the cwd wrote `.pearde/.pearde/graphify/`, a second board one level
+deeper holding a graph of the board rather than the tree. An explicit folder
+argument and `PEARDE_GRAPH_FOLDER` still win.
 
 ```bash
-bash @resources/graph/graph.sh extract @.          # full: AST + semantic + clusters + vault
+bash @resources/graph/graph.sh extract             # full: AST + semantic + clusters + vault
 bash @resources/graph/graph.sh extract @. --force  # skip the incremental manifest gate and cache
 bash @resources/graph/graph.sh update @.           # changed files only; code needs no LLM
 bash @resources/graph/graph.sh query @. "what connects the board to the view?"
@@ -55,6 +63,14 @@ Run from a pass, not for its own sake.
 - **A mixed corpus needs the backend up.** Code-only work needs none; a failed
   semantic pass leaves the AST graph intact.
 
+## Reached through the one command
+
+`pearde graph <verb>` forwards here — @references/parts/handles.md — the way
+`pearde knowledge` and `pearde scout` reach their own tools. `pearde knowledge
+round` names the corpus map as one of the three tools a round owes, stale past
+`stale_after_graph` days (default 3), with `pearde graph update` as the row's
+command; `pearde next` prints it as step 7 on every pass.
+
 ## The vault is output, separate from the board's
 
 `.pearde/graphify/obsidian/` is its own vault, `.pearde/` being one already and
@@ -68,3 +84,5 @@ edit the corpus and re-extract, never a note.
   different questions, different vaults.
 - One commit per PRD holds @references/files.md and @index.md;
   `.pearde/graphify/` never enters one.
+- `@@knowledge`'s `round` is what makes a pass re-run this: the map goes stale
+  on the commits the round itself lands, so nobody has to remember it.

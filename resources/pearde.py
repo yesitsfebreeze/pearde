@@ -89,6 +89,19 @@ FORWARD = {
     "grammar":   ("grammar.py", [], ("list", "show", "brief", "add", "check",
                                      "stale", "undefined", "init")),
     "health":    ("health.py", [], ("score", "list", "show", "check", "init")),
+    # The research layer, the corpus map and the sweep — three tools that
+    # were reachable only as `python3 resources/knowledge.py` and
+    # `bash resources/scout/scout.sh`, so nothing in the loop called them and
+    # `pearde help` never named them. A bare `pearde knowledge "<question>"`
+    # is a query, the verb the loop asks for most.
+    "knowledge": ("knowledge.py", ["query"],
+                  ("remember", "conclude", "enqueue", "query", "relink",
+                   "board", "index", "wiki", "dashboard", "doctor",
+                   "harvest", "round")),
+    "graph":     ("graph.sh", [],
+                  ("extract", "update", "query", "path", "explain",
+                   "god-nodes", "open")),
+    "scout":     ("scout.sh", [], ("sweep", "delta", "trending")),
     "questions": ("questions.py", ["check"], ("check", "list")),
     "index":     ("index.py", ["check"],
                   ("check", "files", "keywords", "scope")),

@@ -9,6 +9,7 @@
 #   graph.sh god-nodes [folder]           most connected nodes
 #   graph.sh open [folder]                open .pearde/graphify/obsidian as a vault
 #
+# The folder defaults to the PROJECT ROOT (the board's parent), never the cwd.
 # Output lands in <folder>/.pearde/graphify/ — graphify's own default
 # (graphify-out/ relative to cwd) is redirected there with GRAPHIFY_OUT, set
 # absolute before every invocation so extract, update and every read command
@@ -63,8 +64,28 @@ if [ "${#MISSING[@]}" -gt 0 ]; then
   exit 2
 fi
 
+# The corpus is the PROJECT, never the board. Climb for the nearest board
+# directory above the cwd and graph its parent, so a call made from inside
+# `.pearde/` — a pass writing the round file, `graph.sh` typed in the vault —
+# maps the repo and lands beside the board, not a second board one level
+# deeper. `.pearde/.pearde/graphify` was the shape of that bug on disk.
+# Falls back to the cwd where no board is above it: a bare folder graphed for
+# its own sake still works, and an explicit folder argument still wins.
+project_root() {
+  local d="$PWD"
+  while [ "$d" != "/" ]; do
+    for n in .pearde pearde; do
+      if [ -f "$d/$n/settings.md" ] || [ -d "$d/$n/prds" ]; then
+        printf '%s\n' "$d"; return 0
+      fi
+    done
+    d="$(dirname "$d")"
+  done
+  printf '%s\n' "$PWD"
+}
+
 # First positional arg that is a directory is the folder; the rest are args.
-FOLDER="${PEARDE_GRAPH_FOLDER:-.}"
+FOLDER="${PEARDE_GRAPH_FOLDER:-$(project_root)}"
 ARGS=()
 for a in "$@"; do
   if [ -d "$a" ] && [ "${#ARGS[@]}" -eq 0 ]; then FOLDER="$a"; else ARGS+=("$a"); fi

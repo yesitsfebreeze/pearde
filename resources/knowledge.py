@@ -1,6 +1,19 @@
 #!/usr/bin/env python3
 """pearde knowledge — the research layer, whole. One tool, no dependency.
 
+  knowledge.py query "<question>"  what the record already answers; a gap enqueues
+  knowledge.py round [board]       what the round owes the KB, one line per tool
+  knowledge.py remember <title>    a finding, body on stdin — one topic per file
+  knowledge.py conclude <title>    synthesize from >=2 named sources
+  knowledge.py enqueue <question>  a research question, priority-tagged
+  knowledge.py relink [board]      resolve wikilinks, symmetrize `related:`
+  knowledge.py board [board]       regenerate the board notes the vault renders
+  knowledge.py index [board]       regenerate every folder's `_index.md`
+  knowledge.py wiki [board]        the generated pages over the KB
+  knowledge.py dashboard [board]   the numbers in Dashboard.md; --write the report
+  knowledge.py doctor [board]      frontmatter, links, graph, pending — one per line
+  knowledge.py harvest [board]     move a lane's stranded notes into the record
+
 The loop: query first; a gap enqueues or researches; a finding is remembered;
 a conclusion is concluded from >=2 sources; relink holds the graph together;
 the dashboard and the wiki are what a person opens.
@@ -91,8 +104,15 @@ class Store:
         self.graphify = self.root / ".graphify"
         self.graph_json = self.graphify / "graph.json"
         self.workflow_md = self.root / "WORKFLOW.md"
-        self.dashboard_md = self.root / "Dashboard.md"
-        self.report_md = self.root / "Dashboard.report.md"
+        # The dashboard sits at the BOARD's root, not the wiki's. The vault
+        # roots at `.pearde/` (@references/obsidian.md), so the one page a
+        # person opens is the first file they see on opening it — one folder
+        # down was one folder to know about. Every Dataview source in it is
+        # vault-relative (`wiki/board`, `memos`), so the move changes no
+        # query: DQL `FROM` never reads from the file's own folder.
+        self.board = self.root.parent
+        self.dashboard_md = self.board / "Dashboard.md"
+        self.report_md = self.board / "Dashboard.report.md"
 
     def ensure(self):
         for d in (self.sources, self.conclusions, self.pending,
@@ -143,6 +163,10 @@ CONFIG = {
     "priority_tags": ([], _csv),
     "auto_enqueue": (True, _flag),
     "min_sources_per_conclusion": (2, _count),
+    # days a tool's output may age before `round` calls it stale
+    "stale_after_scout": (7, _count),
+    "stale_after_graph": (3, _count),
+    "stale_after_vault": (1, _count),
 }
 
 
@@ -1274,6 +1298,115 @@ def cmd_harvest(store, args):
     return 0
 
 
+# --- the round --------------------------------------------------------------
+
+# How many days a tool's output may age before the round is told to run it
+# again. A sweep is a daily measurement whose delta only sharpens (scout's
+# README), the corpus map goes stale on the commits the round itself lands,
+# and the board notes are the vault's whole read layer — so the graph and the
+# vault are re-run more often than the sweep, which costs a GitHub call per
+# bucket. Knobs, not laws: WORKFLOW.md overrides each by name.
+STALE_AFTER = {"scout": 7, "graph": 3, "vault": 1}
+
+
+def _age_days(path):
+    """Whole days since `path` was last written, or None when it is absent."""
+    try:
+        mtime = os.path.getmtime(path)
+    except OSError:
+        return None
+    return int((dt.datetime.now().timestamp() - mtime) // 86400)
+
+
+def _newest(directory, pattern="*"):
+    """The most recently written entry matching `pattern`, or None."""
+    try:
+        entries = list(Path(directory).glob(pattern))
+    except OSError:
+        return None
+    return max(entries, key=lambda p: p.stat().st_mtime, default=None)
+
+
+def stale_rows(store):
+    """[(days_over, tool, state, command)] — three `stat` calls and no note
+    read, so the loop can print this on every pass without paying for the
+    record. `days_over` is negative when the tool is current, 10**6 when it
+    has never run, and the list is unsorted: callers rank it.
+    """
+    config = store.workflow()
+    rows = []
+
+    def row(name, age, what, command):
+        limit = config.get(f"stale_after_{name}", STALE_AFTER[name])
+        if age is None:
+            rows.append((10 ** 6, name, f"{what} — never run", command))
+        elif age > limit:
+            rows.append((age - limit,
+                         name, f"{what} — {age}d old, stale past {limit}d",
+                         command))
+        else:
+            rows.append((-1, name, f"{what} — {age}d old", command))
+
+    # scout: the sweep's own snapshots, wherever the tool keeps them.
+    scout_sh = pearde_path.script("scout.sh")
+    snap = _newest(Path(scout_sh).parent / "snapshots", "*.tsv") if scout_sh else None
+    row("scout", _age_days(snap) if snap else None,
+        "the sweep", "pearde scout sweep && pearde scout delta 7")
+
+    # graph: graphify's corpus map, at the board's root beside this wiki.
+    row("graph", _age_days(store.board / "graphify" / "graph.json"),
+        "the corpus map", "pearde graph update")
+
+    # vault: the board notes Dataview renders, and the note graph over them.
+    row("vault", _age_days(store.root / "board"),
+        "the board notes", "pearde knowledge board && pearde knowledge relink")
+    return rows
+
+
+def cmd_round(store, args):
+    """What the round owes the KB — one line per tool, worst first.
+
+    The read direction of the knowledge layer already ran every pass:
+    `query` before a fork goes to the user. The WRITE direction never did.
+    Nothing scheduled a sweep, nothing re-extracted the corpus after a
+    collect landed, nothing regenerated the board notes the vault renders —
+    so three tools sat beside the loop rather than in it, each waiting for a
+    person to remember it existed. This verb is the one page that says which
+    of them is behind and the exact command that clears it; `pearde next`
+    prints the same rows as step 7, so a pass cannot run without seeing them.
+
+    Reads only. Every row is a suggestion with a command, never a gate: a
+    board with no ollama, no `gh` and no network still scans, still
+    dispatches, and simply carries three rows saying so.
+    """
+    rows = stale_rows(store)
+    notes = load_notes(store)
+    pending = sorted(store.pending.glob("*.md"))
+    sources = sum(1 for n in notes if n.kind == "sources")
+    conclusions = sum(1 for n in notes if n.kind == "conclusions")
+    stale = [r for r in rows if r[0] >= 0]
+    print(f"knowledge: {len(notes)} notes ({conclusions} conclusions, "
+          f"{sources} sources) · {len(pending)} pending · "
+          + (f"{len(stale)} of {len(rows)} tools stale" if stale
+             else "every tool current"))
+    for over, name, state, command in sorted(rows, key=lambda r: -r[0]):
+        print(f"  {'stale' if over >= 0 else 'ok   '} {name:<6} {state}")
+        if over >= 0:
+            print(f"         {command}")
+    # A question standing in `pending/` is the KB asking the round for work,
+    # the mirror of the round asking the KB at step 7. Naming the oldest ones
+    # is what makes the queue a thing that drains rather than a thing that
+    # grows: `research it, or delete it` is the whole rule.
+    if pending:
+        print(f"  pending — {len(pending)} question(s), oldest first;"
+              " research one or delete it")
+        for path in sorted(pending, key=lambda p: p.stat().st_mtime)[:3]:
+            meta, _body = parse_frontmatter(path.read_text(encoding="utf-8"))
+            print(f"    {path.stem} · {meta.get('question', path.stem)}"
+                  f" · {meta.get('priority', 'med')}")
+    return 0
+
+
 # --- CLI ----------------------------------------------------------------------
 
 def main(argv=None):
@@ -1321,6 +1454,7 @@ def main(argv=None):
     p = sub.add_parser("doctor", help="frontmatter, wikilinks, graph sync, pending age")
     p = sub.add_parser("harvest", help="move notes stranded in a lane's stub wiki into the record")
     p.add_argument("--dry", action="store_true", help="report what would move, move nothing")
+    p = sub.add_parser("round", help="what the round owes the KB — one line per tool, worst first")
 
     args = parser.parse_args(argv)
     if not args.verb:
@@ -1339,6 +1473,7 @@ def main(argv=None):
         "dashboard": cmd_dashboard,
         "doctor": cmd_doctor,
         "harvest": cmd_harvest,
+        "round": cmd_round,
     }
     return verbs[args.verb](store, args)
 

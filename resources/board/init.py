@@ -109,7 +109,7 @@ def ignored_names(board):
 # rather than in the install — the invariant
 # `every-artifact-lands-inside-the-board` — and none of them is plan.
 BOARD_IGNORED = ("wiki/.obsidian-api-key", "wiki/.graphify/",
-                 "wiki/Dashboard.report.md", ".obsidian/", "health/",
+                 "Dashboard.report.md", ".obsidian/", "health/",
                  ".lanes/", ".claims/", "graphify/", "graphs/",
                  "prds/**/probe/",
                  ".state/serve.json", ".state/serve.log", ".state/run-*.log",
@@ -631,7 +631,8 @@ def write_obsidian(d):
 
 
 def write_knowledge(d):
-    """The knowledge layer's content, seeded into `<dir>/pearde/wiki/`.
+    """The knowledge layer's content, seeded into `<dir>/.pearde/wiki/` —
+    except `Dashboard.md`, which lands at the board's own root.
 
     `knowledge.py`'s Store makes the directories on first use but writes no
     Dashboard and no WORKFLOW — a board that never had them opens in Obsidian
@@ -639,8 +640,20 @@ def write_knowledge(d):
     step existed. Copies every file of the preset that is not already there;
     a file a person edited is never replaced. Returns the vault-relative
     names it planted."""
-    wiki = os.path.join(planlib.board_at(d), "wiki")
+    board = planlib.board_at(d)
+    wiki = os.path.join(board, "wiki")
     planted = []
+    # The dashboard is the vault's front page and the vault roots at the
+    # board, so it lands at the board's root. A board seeded before that was
+    # true carries the person's own edited copy one folder down: move it,
+    # never plant a second one beside it. Its Dataview sources are already
+    # vault-relative, so the move is a rename and nothing else.
+    old_dash = os.path.join(wiki, "Dashboard.md")
+    new_dash = os.path.join(board, "Dashboard.md")
+    if os.path.isfile(old_dash) and not os.path.exists(new_dash):
+        os.makedirs(board, exist_ok=True)
+        os.replace(old_dash, new_dash)
+        planted.append("../Dashboard.md (moved up from wiki/)")
     if not os.path.isdir(KNOWLEDGE_PRESET):
         return planted
     for src_dir, _dirs, files in os.walk(KNOWLEDGE_PRESET):
@@ -650,7 +663,8 @@ def write_knowledge(d):
         for name in sorted(files):
             if name == ".DS_Store":
                 continue
-            dst = os.path.join(dst_dir, name)
+            dst = (new_dash if rel == "." and name == "Dashboard.md"
+                   else os.path.join(dst_dir, name))
             if os.path.exists(dst):
                 continue
             shutil.copyfile(os.path.join(src_dir, name), dst)

@@ -6,6 +6,7 @@ complexity: 34
 blast-radius: high
 workflow: probe-then-spec
 actual: 15.8h
+commit: e55a0e7 d4626c9
 ---
 
 # every-module-finds-its-siblings-by-one-rule — One file puts every directory under `resources/` on the import path, one probe finds the repo root by `resources/pearde.py`, discovery walks every directory under `resources/`, and every tool that launches a sibling script finds it rather than spelling `board/` — so a file can move with no second edit anywhere; nothing has moved yet

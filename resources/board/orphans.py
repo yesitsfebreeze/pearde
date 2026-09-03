@@ -36,7 +36,6 @@ index rebuild.
 import json
 import os
 import re
-import subprocess
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -44,6 +43,7 @@ _D = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
                 else os.path.dirname(_D))
 import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
+import common       # noqa: E402
 import plan as planlib          # noqa: E402
 import transitions as translib  # noqa: E402
 
@@ -54,12 +54,8 @@ FLAGGED = ("branch-only", "nowhere", "absent")
 def git(repo, *args):
     """stdout of one git call, "" on any failure — a missing repo, a branch
     that is not there, git itself absent. Never raises."""
-    try:
-        r = subprocess.run(["git", "-C", repo, *args],
-                           capture_output=True, text=True, timeout=120)
-        return r.stdout if r.returncode == 0 else ""
-    except (OSError, subprocess.TimeoutExpired):
-        return ""
+    return common.run_git(repo, *args, check=True, default="", stdout=True,
+                          timeout=120)
 
 
 def branch_holds(repo, branch, rel):

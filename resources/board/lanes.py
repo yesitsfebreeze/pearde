@@ -30,10 +30,13 @@ work on this machine, and the lane bar is drawn off it.
 
 import os
 import re
-import subprocess
 import sys
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+_D = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
+                else os.path.dirname(_D))
+import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
+import common  # noqa: E402
 
 LANES_DIR = ".lanes"
 
@@ -86,12 +89,7 @@ def _may_discard(tree):
 
 
 def git(root, *args, check=True):
-    r = subprocess.run(("git", "-C", root) + args,
-                       capture_output=True, text=True, timeout=60)
-    if check and r.returncode != 0:
-        raise LaneError((r.stderr or r.stdout).strip()
-                        or f"git {' '.join(args)} exit {r.returncode}")
-    return r
+    return common.run_git(root, *args, check=check, raise_as=LaneError)
 
 
 def exists(board, slug):

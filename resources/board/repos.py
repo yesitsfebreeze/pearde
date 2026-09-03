@@ -13,7 +13,6 @@ import math
 import os
 import re
 import shutil
-import subprocess
 import sys
 # win: a cp1252 console cannot encode the box/greek glyphs this prints,
 # and the trailing summary dies on UnicodeEncodeError. Force UTF-8 out.
@@ -30,6 +29,7 @@ _D = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
                 else os.path.dirname(_D))
 import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
+import common  # noqa: E402
 import memos as memolib  # noqa: E402 — on the path by the rule
 import questions as qlib  # noqa: E402 — the drill count, one reader with list
 import render as renderlib  # noqa: E402 — on the path by the rule
@@ -89,12 +89,8 @@ def ref_stamp(path):
 def git(root, *args):
     """stdout, or None if git said no. Never raises: a board that is not in a
     repo is an ordinary case here, not an error."""
-    try:
-        r = subprocess.run(("git", "-C", root) + args,
-                           capture_output=True, text=True, timeout=5)
-    except (OSError, subprocess.SubprocessError):
-        return None
-    return r.stdout if r.returncode == 0 else None
+    return common.run_git(root, *args, check=True, default=None, stdout=True,
+                          timeout=5)
 
 
 def scan_lanes(path):

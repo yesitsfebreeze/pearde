@@ -70,6 +70,7 @@ _D = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
                 else os.path.dirname(_D))
 import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
+import common                   # noqa: E402
 import edit as editlib          # noqa: E402 — the only writer of bytes
 import plan as planlib          # noqa: E402 — every read
 import questions as qlib        # noqa: E402 — the pass check `release … question` and `answer` run
@@ -133,8 +134,7 @@ def own_footprint(prd):
 
 def section(body, name):
     """The text under the first `## <name>` heading, or None."""
-    secs = planlib._h2_sections(body, name)
-    return secs[0] if secs else None
+    return common.section(body, name, prefix=True, word=True, ci=False)
 
 
 def questions_of(prd):

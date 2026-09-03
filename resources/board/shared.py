@@ -53,13 +53,13 @@ import glob as globlib
 import json
 import os
 import shutil
-import subprocess
 import sys
 
 _D = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
                 else os.path.dirname(_D))
 import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
+import common                   # noqa: E402
 import plan as planlib          # noqa: E402
 import transitions as trlib     # noqa: E402
 import lanes as laneslib        # noqa: E402
@@ -129,15 +129,7 @@ class Refused(Exception):
 # ── where things are ──────────────────────────────────────────────────────────
 
 def git(root, *args, check=False):
-    try:
-        r = subprocess.run(["git", "-C", root, *args],
-                           capture_output=True, text=True, timeout=60)
-    except (OSError, subprocess.TimeoutExpired) as e:
-        raise Refused(f"git {' '.join(args)}: {e}")
-    if check and r.returncode != 0:
-        raise Refused((r.stderr or r.stdout).strip()
-                      or f"git {' '.join(args)} exit {r.returncode}")
-    return r
+    return common.run_git(root, *args, check=check, raise_as=Refused)
 
 
 def store_of(tree):

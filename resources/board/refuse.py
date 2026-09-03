@@ -219,12 +219,42 @@ def _run(*args, cwd=None):
     return r.stdout.strip() if r.returncode == 0 else None
 
 
+_COMMON = {}
+
+
+def _common():
+    """`@resources/common.py`'s `run_git`, found the same way
+    `_guard_board_of` finds the guard — a module already imported, else
+    loaded from its file directly, never through `sys.path`, which this
+    module leaves alone. None when neither holds it, so a missing or
+    broken `common.py` still leaves `toplevel` answering through `_run`."""
+    if "mod" in _COMMON:
+        return _COMMON["mod"]
+    mod = sys.modules.get("common")
+    if mod is None:
+        try:
+            import importlib.util
+            path = os.path.join(os.path.dirname(os.path.dirname(
+                os.path.abspath(__file__))), "common.py")
+            spec = importlib.util.spec_from_file_location("_pearde_common", path)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+        except Exception:                                # noqa: BLE001
+            mod = None
+    _COMMON["mod"] = mod
+    return mod
+
+
 def toplevel(path):
     """The root of the worktree `path` sits in, or None."""
     d = path if os.path.isdir(path) else os.path.dirname(path) or "."
     if not os.path.isdir(d):
         return None
-    return _run("git", "-C", d, "rev-parse", "--show-toplevel")
+    c = _common()
+    if c is None:
+        return _run("git", "-C", d, "rev-parse", "--show-toplevel")
+    return c.run_git(d, "rev-parse", "--show-toplevel", check=True, default=None,
+                     stdout=True, strip=True, timeout=15)
 
 
 def read_ledger(board):

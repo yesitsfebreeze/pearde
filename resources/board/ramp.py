@@ -46,6 +46,7 @@ _D = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
                 else os.path.dirname(_D))
 import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
+import common                   # noqa: E402
 import edit as editlib          # noqa: E402
 import plan as planlib          # noqa: E402
 
@@ -120,13 +121,10 @@ def tracked(repo):
     """Every tracked path, repo-relative. git is the filter: a vendored
     `node_modules` is not the repo asking for node. Falls back to a walk that
     skips the usual heavy directories where git cannot answer."""
-    try:
-        r = subprocess.run(["git", "-C", repo, "ls-files"],
-                           capture_output=True, text=True, timeout=60)
-        if r.returncode == 0 and r.stdout.strip():
-            return r.stdout.splitlines()
-    except (OSError, subprocess.TimeoutExpired):
-        pass
+    out = common.run_git(repo, "ls-files", check=True, default="", stdout=True,
+                         timeout=60)
+    if out.strip():
+        return out.splitlines()
     skip = {".git", "node_modules", "target", "dist", "build", "venv",
             ".venv", "__pycache__"}
     out = []

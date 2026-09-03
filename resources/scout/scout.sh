@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
-# Sweep GitHub for things worth reusing — not just libraries, but the reference
-# lists, starters and written-down practice that get cloned across every field.
+# One door onto scout's four layers — discover, ask, curate, wire — that used
+# to be four files with four `--help` texts and a distinction (daily
+# measurement vs one-off ranker vs curated list vs passive gate) held in the
+# head, not printed anywhere. `scout.sh <verb>` is now the whole surface;
+# `toolscout.sh` stays only as a compat entry that execs `scout.sh tool`.
 #
-# Two axes, because they answer different questions:
+# Two axes on the discovery layer, because they answer different questions:
 #   stars  — what the field already settled on. Safe, but you are late.
 #   delta  — what it is settling on right now. Early, but half of it is hype.
 #
@@ -12,22 +15,19 @@
 # reports nothing until the second sweep and sharpens with every one after —
 # and it measures the buckets in buckets.txt, not GitHub's global firehose.
 #
-#   scout.sh sweep              take a snapshot of every bucket
-#   scout.sh delta [days]       what gained the most stars since ~N days ago
-#   scout.sh trending [window]  GitHub's own trending, as a discovery channel
-#                               for buckets you never thought to define
-#                               (window: daily | weekly | monthly)
-#   scout.sh reading            check reading-list.md: every row needs a
-#                               mapping column, and a row whose repo has gone
-#                               ARCHIVED is marked stale in place
+# `scout.sh` with no verb prints the table below — REGISTRY is the one place
+# the verb list, its one-line contract and its landing file are written, and
+# `README.md`'s Commands table is generated from a run of this same table
+# (`README.md` names the exact command; a diff between the two is a doctor
+# finding, never a second copy typed by hand).
 set -euo pipefail
 
 # Repo descriptions are full of emoji and CJK; byte-wise collation keeps sort
 # and awk from erroring out on sequences that are not valid in the user locale.
 export LC_ALL=C
 
-root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-scout="$root/scout"
+here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+scout="$here"
 snaps="$scout/snapshots"
 buckets="$scout/buckets.txt"
 per_bucket="${SCOUT_PER_BUCKET:-30}"
@@ -36,6 +36,27 @@ per_bucket="${SCOUT_PER_BUCKET:-30}"
 snap_keep="${SCOUT_SNAP_KEEP:-90}"
 
 die() { echo "scout: $*" >&2; exit 1; }
+
+# The single source of the verb list: verb (with its args), one-line
+# contract, and the file a reader finds its record in — tab-separated, one
+# row per verb, in the order `scout.sh` (no args) and README.md's Commands
+# table both print them. Editing a verb's shape means editing this row and
+# nothing else prints a stale one.
+registry() {
+	cat <<-'EOF'
+	sweep	snapshot every bucket's star counts	snapshots/<date>.tsv
+	delta [days]	what gained the most stars since ~N days ago	snapshots/ (diffed, no new write)
+	trending [window]	GitHub's own trending feed, a discovery channel	none kept — pipe to a file to save it
+	tool <query>	one-off dependency ranking: stars + what stars hide	none kept — pipe to a file to save it
+	find <id> [query]	call one ranking page by id (was route.sh)	routes.md defines it; a settled pick goes in findings.md
+	reading	check the curated reading list: mappings present, archived rows marked	reading-list.md
+	quality	the passive quality gates and their templates	templates/
+	EOF
+}
+
+cmd_list() {
+	{ printf 'VERB\tCONTRACT\tLANDS IN\n'; registry; } | column -t -s $'\t'
+}
 
 cmd_sweep() {
 	[ -f "$buckets" ] || die "no bucket file at $buckets"
@@ -63,7 +84,7 @@ cmd_sweep() {
 	done < "$buckets"
 
 	echo >&2
-	echo "snapshot: $out  ($n buckets, $(wc -l < "$out" | tr -d ' ') rows)" >&2
+	echo "record: $out  ($n buckets, $(wc -l < "$out" | tr -d ' ') rows)" >&2
 
 	# Cap: keep only the snap_keep most recent snapshots so snapshots/ does
 	# not grow unbounded — one ~700-line TSV per sweep, forever, otherwise.
@@ -137,6 +158,14 @@ cmd_delta() {
 		echo "delta ${want_days} · diffed against ${base_date} (${actual_days} days back, nearest to ${want_days})"
 	fi
 
+	# pipefail off for this one pipeline: `head -40` closes its end of the
+	# pipe as soon as it has its 40 lines, `awk`/`sort` upstream then die of
+	# SIGPIPE, and pipefail turns that ordinary truncation into a nonzero
+	# pipeline status — which `set -e` then reads as a failure of the whole
+	# function, skipping the `record:` line below on every diff over 40 rows.
+	# Measured: a 2026-08-25 -> 2026-08-28 diff on this repo's own snapshots
+	# exits 141 without it.
+	set +o pipefail
 	awk -F'\t' -v OFS='\t' '
 		NR==FNR { old[$2] = $3; next }
 		{
@@ -154,10 +183,15 @@ cmd_delta() {
 		sort -t$'\t' -k1,1nr | cut -f2- |
 		{ printf 'BUCKET\tREPO\tSTARS\tGAIN\tRATE\tWHAT\n'; cat; } |
 		head -40 | column -t -s $'\t'
+	set -o pipefail
+
+	echo "record: $base vs $newest — diffed in place, nothing new written to snapshots/" >&2
 }
 
 
-# Check pass over reading-list.md: every data row needs a non-empty mapping
+# Layer three, "curate": the mechanism-mapped reading list — repos worth
+# reading, never just installing. The verb is the check over that list, not a
+# dump of it: every data row needs a non-empty mapping
 # (its last column, "what to steal") and its repo's live state, resolved
 # through the same signal toolscout.sh reads (archived, last push) — a row
 # whose repo has gone ARCHIVED is marked `<!-- stale: archived YYYY-MM-DD -->`
@@ -248,6 +282,7 @@ cmd_reading() {
 	fi
 	rm -f "$tmp"
 	echo "reading: $checked repo(s) checked against state, $marked marked stale" >&2
+	echo "record: $list" >&2
 
 	if [ -n "$bare" ]; then
 		echo "reading: bare row(s) — no mapping column ('what to steal'):" >&2
@@ -275,13 +310,120 @@ cmd_trending() {
 
 	{ printf 'REPO\tGAIN (%s)\n' "$window"; paste <(echo "$names") <(echo "$gains"); } \
 		| column -t -s $'\t'
+
+	echo >&2
+	echo "record: none kept — a live scrape of github.com/trending, pipe to a file to save it" >&2
+}
+
+# The one-off dependency ranker — moved here from toolscout.sh, which now
+# execs `scout.sh tool "$@"`. Same flags, same payload, same jq pipeline, so
+# `toolscout.sh <query>` and `scout.sh tool <query>` are byte-identical.
+cmd_tool() {
+	local limit=25
+	local args=()
+	while [ $# -gt 0 ]; do
+		case "$1" in
+			--limit) limit="$2"; shift 2 ;;
+			*) args+=("$1"); shift ;;
+		esac
+	done
+
+	if [ ${#args[@]} -eq 0 ]; then
+		die "usage: scout.sh tool '<github search query>' [--limit N]"
+	fi
+
+	local query="${args[*]}"
+	local now
+	now="$(date -u +%s)"
+
+	# GitHub caps search results at 100/page; sort=stars gives the popularity
+	# axis, every other axis is computed below from the same payload.
+	gh api -X GET search/repositories \
+		-f q="$query" -f sort=stars -f order=desc -F per_page="$limit" \
+		--jq '.items[] | {
+			name: .full_name,
+			stars: .stargazers_count,
+			pushed: .pushed_at,
+			issues: .open_issues_count,
+			license: (.license.spdx_id // "NONE"),
+			archived: .archived,
+			lang: (.language // "-"),
+			desc: (.description // "")
+		}' |
+	jq -rs --argjson now "$now" '
+		def days(t): (($now - (t | fromdateiso8601)) / 86400) | floor;
+		def flag(r):
+			if r.archived then "ARCHIVED"
+			elif days(r.pushed) > 365 then "stale"
+			elif days(r.pushed) > 90 then "slow"
+			else "active" end;
+		["REPO","STARS","LAST PUSH","STATE","ISSUES","LICENSE","LANG"],
+		(.[] | [
+			.name,
+			(.stars | tostring),
+			"\(days(.pushed))d ago",
+			flag(.),
+			(.issues | tostring),
+			.license,
+			.lang
+		])
+		| @tsv
+	' | column -t -s "$(printf '\t')"
+
+	echo
+	echo "query: $query   (stars rank; 'STATE' is what stars do not tell you)"
+	echo "record: none kept — pipe to a file to save this ranking"
+}
+
+# Layer two, "ask": call one ranking page from routes.md by id. This is
+# `route.sh` under scout's own door — the id space, `list` and `check`
+# subcommands are unchanged, `route.sh` itself still holds the list and reads
+# routes.md; this only forwards and, on an actual route run, names where the
+# answer belongs once it is decided.
+cmd_find() {
+	set +e
+	"$scout/route.sh" "$@"
+	local rc=$?
+	set -e
+	case "${1:-}" in
+		''|-h|--help|list|check) : ;;
+		*) echo "record: routes.md defines the route just run; a settled pick's row goes in findings.md" >&2 ;;
+	esac
+	return "$rc"
+}
+
+# Layer four, "wire": the passive quality-gate templates a tree copies in.
+cmd_quality() {
+	local tdir="$scout/templates"
+	[ -d "$tdir" ] || die "no templates at $tdir"
+	{
+		printf 'FILE\tGATE\n'
+		for f in "$tdir"/*; do
+			local b g
+			b="$(basename "$f")"
+			case "$b" in
+				_typos.toml)     g="typos — deliberate-spelling allowlist" ;;
+				deny.toml)       g="cargo-deny — RustSec advisories hard-gated" ;;
+				dependabot.yml)  g="dependency updates" ;;
+				quality.yml)     g="typos + gitleaks + cargo-deny + cargo-machete, weekly in CI" ;;
+				scout.yml)       g="the sweep, run in CI instead of a local cron" ;;
+				*)               g="-" ;;
+			esac
+			printf '%s\t%s\n' "$b" "$g"
+		done
+	} | column -t -s $'\t'
+	echo >&2
+	echo "record: $tdir — copy these into a tree to wire the gates" >&2
 }
 
 case "${1:-}" in
-	sweep)    shift; cmd_sweep "$@" ;;
-	delta)    shift; cmd_delta "$@" ;;
-	reading)  shift; cmd_reading "$@" ;;
-	trending) shift; cmd_trending "$@" ;;
-	*)        awk 'NR>1 && /^#/ {sub(/^# ?/,""); print; next} NR>1 {exit}' \
-	              "${BASH_SOURCE[0]}" >&2; exit 2 ;;
+	sweep)     shift; cmd_sweep "$@" ;;
+	delta)     shift; cmd_delta "$@" ;;
+	trending)  shift; cmd_trending "$@" ;;
+	tool)      shift; cmd_tool "$@" ;;
+	find)      shift; cmd_find "$@" ;;
+	reading)   shift; cmd_reading "$@" ;;
+	quality)   shift; cmd_quality "$@" ;;
+	''|-h|--help) cmd_list ;;
+	*)         die "unknown verb '$1' — 'scout.sh' with no argument lists them" ;;
 esac

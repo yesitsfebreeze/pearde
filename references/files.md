@@ -253,9 +253,10 @@ Nothing outside it links in past `@@scout`. Its docs ship with it.
 | anchor | is |
 |---|---|
 | @resources/scout/README.md | the scout manual — what @references/skills/pearde-scout.md is a door to |
-| @resources/scout/scout.sh | sweep / delta / trending |
-| @resources/scout/toolscout.sh | one-off dependency ranker |
-| @resources/scout/route.sh | call one ranking page by id — reader of the route index |
+| @resources/scout/scout.sh | the one entry point — sweep, delta, trending, tool, find, reading, quality |
+| @resources/scout/toolscout.sh | compat entry — execs `scout.sh tool "$@"` |
+| @resources/scout/route.sh | `scout.sh find`'s reader of the route index, holds no list of its own |
+| @resources/scout/check.sh | doctor-style: scout.sh's verb table and README.md's Commands table agree |
 | @resources/scout/routes.md | index one — every page a ranking comes from |
 | @resources/scout/findings.md | index two — what won, on which axis, when |
 | @resources/scout/buckets.txt | the taxonomy — the knob |

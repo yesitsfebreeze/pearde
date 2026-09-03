@@ -5,6 +5,7 @@ priority: 92
 complexity: 8
 blast-radius: low
 workflow: probe-then-spec
+commit: e861cca 5b85126
 ---
 
 # a verify block resolves the board absolutely not from its cwd

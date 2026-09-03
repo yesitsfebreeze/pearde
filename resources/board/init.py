@@ -117,10 +117,9 @@ BOARD_IGNORED = ("wiki/.obsidian-api-key", "wiki/.graphify/",
 BOARD_HEADER = "# machine-local — two hold one credential, the rest rebuild"
 
 # The Obsidian requirement: dataview (the live views), local-rest-api (the
-# port a tool reads the vault through) and unhide (Obsidian refuses to read
-# any path holding a dot-segment, so without it a board named `.pearde` — or
-# any `.`-prefixed folder a project keeps — is invisible in the vault it is
-# supposed to be). The preset at
+# port a tool reads the vault through) and hidden-folders-access (Obsidian
+# refuses to read any path holding a dot-segment, so without it a board named
+# `.pearde` is invisible in the vault it is supposed to be). The preset at
 # resources/board/obsidian/ carries the settings; the plugin bundles are not
 # vendored — `pearde vault` fetches them at the pinned versions below into
 # the preset's plugins/, and this file copies whatever it finds there to
@@ -138,14 +137,18 @@ OBSIDIAN_PRESET = os.path.join(HERE, "obsidian")
 # patience — long enough for a person to finish what they were doing and quit,
 # short enough that a forgotten command does not sit there for a session.
 WAIT_TICK, WAIT_TICKS = 0.5, 1200
-OBSIDIAN_PLUGINS = ("dataview", "obsidian-local-rest-api", "unhide")
+# The names are plugin *ids* — the `id` field of each bundle's own
+# manifest.json — not repo names: `hidden-folders-access` is
+# dsebastien/obsidian-hidden-folders-access.
+OBSIDIAN_PLUGINS = ("dataview", "obsidian-local-rest-api",
+                    "hidden-folders-access")
 # name -> (github repo, release tag). Pinned, because a vault that opens is
 # worth more than the newest plugin. The three files are what an Obsidian
 # release ships; styles.css is optional and a 404 on it is not a failure.
 OBSIDIAN_BUNDLES = {
     "dataview": ("blacksmithgu/obsidian-dataview", "0.5.68"),
     "obsidian-local-rest-api": ("coddingtonbear/obsidian-local-rest-api", "5.1.0"),
-    "unhide": ("polyipseity/obsidian-unhide", "3.1.0"),
+    "hidden-folders-access": ("dsebastien/obsidian-hidden-folders-access", "2.0.0"),
 }
 BUNDLE_FILES = ("main.js", "manifest.json", "styles.css")
 BUNDLE_TIMEOUT = 30
@@ -548,7 +551,8 @@ def write_obsidian(d):
     own notes are `pearde/wiki/…`.
 
     Copies the vendored preset and plugins in — dataview,
-    obsidian-local-rest-api, unhide, the graph and app configuration — and mints a
+    obsidian-local-rest-api, hidden-folders-access, the graph and app
+    configuration — and mints a
     fresh REST key into the plugin's data.json, mirrored at
     `pearde/wiki/.obsidian-api-key` where the loop's tools read it. Everything
     already there is kept (a hand-tuned vault wins), including a whole

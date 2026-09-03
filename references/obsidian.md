@@ -75,22 +75,26 @@ until then the port is silent.
 |---|---|
 | dataview | runs the DQL/DataviewJS views in `Dashboard.md` and the `_index.md` files, vault open |
 | obsidian-local-rest-api ("Local REST API with MCP") | the port a tool talks to — HTTPS on `127.0.0.1:27124`, its `/mcp` endpoint in the same server: Obsidian-as-tools installs nothing more |
-| unhide (`polyipseity/obsidian-unhide`, formerly "Show Hidden Files") | makes a dot-segment readable at all. Vanilla Obsidian skips every path holding one, so a board named `.pearde` shows in no vault and `doctor`'s `vault` row reports **broken**; with this seeded and enabled, the hidden folder is a folder like any other |
+| hidden-folders-access (`dsebastien/obsidian-hidden-folders-access`, "Hidden Folders Access", MIT) | makes a dot-segment readable at all. Vanilla Obsidian skips every path holding one, so a board named `.pearde` shows in no vault and `doctor`'s `vault` row reports **broken**; with this seeded and enabled, the hidden folder is a folder like any other — file explorer, search, graph, metadata cache, Dataview |
 
-The preset ships `plugins/unhide/data.json` because a plugin installed and
-switched off ships nothing: its `showingRules` open with `+/` — everything
-hidden is shown — and then subtract the dot-caches a project keeps and nobody
-reads (`.git`, `.venv`, `.cache`, `.next`, the three test caches, `.gstack`,
-`.claude`). That subtraction is the point of writing the file rather than
-leaving the plugin's defaults: Obsidian scans every file it can see, and a
-`.git/` with tens of thousands of objects in it freezes the app on first open.
-A hidden folder the board itself writes is never in that list.
+The preset ships `plugins/hidden-folders-access/data.json` because a plugin
+installed and switched off ships nothing: `enabledFolders` lists `.pearde`, so
+a fresh board opens with the board already indexed and nobody has to find the
+toggle. The list is the plugin's whole model — it indexes hidden root folders
+one by one, opt-in, rather than unhiding everything — which is also why no
+exclusion list is needed here: `.git`, `.venv` and the rest of a project's
+dot-caches are never named, so Obsidian never scans them and a repository with
+tens of thousands of objects in it does not freeze the app on first open. The
+cost of that model is the other half: a hidden folder that is *not* `.pearde`
+stays hidden until someone adds it in **Settings → Hidden Folders Access**.
+
+Requires Obsidian 1.13 or later (it uses the declarative settings API) and is
+desktop-only.
 
 Two fixes for one problem, and they compose: `pearde vault` also *renames* a
 `.pearde` board to `pearde` and leaves a symlink where it was, so a board is
-visible even in a vault without the plugin. `unhide` is what makes the rest of
-a project's hidden folders — and a board on a machine that never ran the
-rename — readable.
+visible even in a vault without the plugin. `hidden-folders-access` is what
+makes a board on a machine that never ran the rename readable.
 
 ## The graph view colours by tag, never by folder
 

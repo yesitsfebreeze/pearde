@@ -47,7 +47,7 @@ a question about the work, which @index.md's Keywords table does.
 | @references/knowledge.md | the research layer — sources, conclusions, the ask→capture→conclude loop, the tool behind it |
 | @references/system.md | drop-in instructions block for `AGENTS.md` |
 | @references/plugins.md | the curated plugin list — what to install alongside pearde, what not to, and why |
-| @references/obsidian.md | the vault and its native access — REST + MCP from the same port, the three required plugins (unhide is what makes a dot-segment board readable at all), how a pass uses them |
+| @references/obsidian.md | the vault and its native access — REST + MCP from the same port, the three required plugins (hidden-folders-access is what makes a dot-segment board readable at all), how a pass uses them |
 
 ### `references/parts/` — the workflow, one part per step
 
@@ -176,9 +176,9 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/board/refuse.py | `refuse tree/cmd` — `reset --hard`, `checkout --`, `clean`, a real `stash`, `restore` and `switch --discard-changes` refused in any tree the running session does not own; a tree is owned when the ledger's row for it is this session's, or when it is the worktree this process is itself working in and no other live session holds it; stdlib only and imports nothing from the planner, so @resources/guard.py can call it on every Bash tool call |
 | @resources/board/shared.py | `share` — one copy per machine of what every lane regenerates, under the git common dir and symlinked into each worktree; only a path `git status` cannot see is ever linked, and a refusal puts the tree back as it was |
 | @resources/board/specs.py | `specced` and `refine` — the two transitions a spec set decides |
-| @resources/board/init.py | `init`, `settings` and `vault` — a board after one command, no question; one key of settings.md; seeds the Obsidian vault at the board (`.pearde/.obsidian/`, and `vault` registers it in Obsidian's `obsidian.json` so the URI resolves — written only while the app is closed, `--wait` holds for the quit — dataview + local-rest-api + unhide copied from the preset `vault` fetches into, a bundle the fetch never got named rather than skipped, fresh REST key minted at `.pearde/wiki/.obsidian-api-key`) |
+| @resources/board/init.py | `init`, `settings` and `vault` — a board after one command, no question; one key of settings.md; seeds the Obsidian vault at the board (`.pearde/.obsidian/`, and `vault` registers it in Obsidian's `obsidian.json` so the URI resolves — written only while the app is closed, `--wait` holds for the quit — dataview + local-rest-api + hidden-folders-access copied from the preset `vault` fetches into, a bundle the fetch never got named rather than skipped, fresh REST key minted at `.pearde/wiki/.obsidian-api-key`) |
 | @resources/board/example/ | the example board — eight PRDs, one per band; copied by `plan.py example`, never run in place |
-| @resources/board/obsidian/ | the vault preset — `.obsidian` root files (app, graph colors, community/core plugin lists, appearance), every path in them `.pearde/`-relative and the three required plugins' settings — including `plugins/unhide/data.json`, the rules that make hidden folders visible by default and subtract the dot-caches that would freeze the app; copied by `init` to any new board, an existing install wins. The plugin bundles (`main.js`, `manifest.json`, `styles.css`) are **not** in the repo: `pearde vault` fetches them at pinned versions and `.gitignore` holds them out |
+| @resources/board/obsidian/ | the vault preset — `.obsidian` root files (app, graph colors, community/core plugin lists, appearance), every path in them `.pearde/`-relative and the three required plugins' settings — including `plugins/hidden-folders-access/data.json`, whose `enabledFolders` names `.pearde` so the board is indexed by default and no other dot-folder is scanned; copied by `init` to any new board, an existing install wins. The plugin bundles (`main.js`, `manifest.json`, `styles.css`) are **not** in the repo: `pearde vault` fetches them at pinned versions and `.gitignore` holds them out |
 
 ## `references/skills/` — one file per skill
 
@@ -212,7 +212,7 @@ command, and @references/install.md is the naming rule and the install.
 ### `resources/board/knowledge/` — the layer's content seed, planted by `init` and `upgrade`
 
 Distinct from @resources/board/obsidian/, which is the `.obsidian` app config
-(dataview + local-rest-api + unhide) `init.py`'s `write_obsidian` copies into
+(dataview + local-rest-api + hidden-folders-access) `init.py`'s `write_obsidian` copies into
 `<dir>/.obsidian` on every fresh board. This folder seeds a board's
 `.pearde/wiki/` *content* — dashboard, workflow config, indexes. `init.py`'s
 `write_knowledge` plants it: `init` on a new board, `upgrade` on an older one.

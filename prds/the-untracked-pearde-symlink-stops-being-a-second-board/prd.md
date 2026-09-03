@@ -1,5 +1,5 @@
 ---
-state: open
+state: done
 origin: requested
 priority: 95
 complexity: 0

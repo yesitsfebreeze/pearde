@@ -1,5 +1,5 @@
 ---
-state: deferred
+state: superseded
 origin: derived
 priority: 70
 complexity: 0

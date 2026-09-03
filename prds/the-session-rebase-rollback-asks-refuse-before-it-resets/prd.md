@@ -1,8 +1,8 @@
 ---
-state: open
+state: superseded
 origin: requested
 priority: 70
-complexity: 0
+complexity: 8
 blast-radius:
 ---
 

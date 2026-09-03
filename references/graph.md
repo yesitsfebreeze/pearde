@@ -1,30 +1,29 @@
 # Graph
 
-The knowledge-graph feature, whole. One tool: [graphify](https://github.com/Graphify-Labs/graphify),
-installed once per machine, driven through @resources/graph/graph.sh.
+The knowledge-graph feature, whole. One tool:
+[graphify](https://github.com/Graphify-Labs/graphify), installed per machine,
+driven through @resources/graph/graph.sh.
 
-## What it is
+## What a pass writes, under `.pearde/graphify/`
 
 | piece | is |
 |---|---|
 | `graph.json` | the persistent graph — nodes, typed edges, provenance (`EXTRACTED` / `INFERRED` / `AMBIGUOUS`) |
-| `graph.html` | interactive graph — click nodes, search, filter by community |
-| `obsidian/` | the graph as an Obsidian vault — one note per concept, wikilinks per edge, opened as its own vault |
+| `graph.html` | interactive — click nodes, search, filter by community |
+| `obsidian/` | an Obsidian vault — one note per concept, wikilinks per edge |
 | `GRAPH_REPORT.md` | god nodes, surprising connections, suggested questions |
 | `cache/` | SHA256 cache — re-runs touch only changed files |
 
-Everything lands in `.pearde/graphify/` inside the folder being mapped —
-`graph.sh` redirects graphify's own default there with `GRAPHIFY_OUT`, set
-absolute before every call. It is regenerable and gitignored — the graph is
-data, not source.
+The folder sits inside whatever is mapped, `graph.sh` redirecting graphify's
+default with `GRAPHIFY_OUT`, absolute on every call. Regenerable and
+gitignored: data, not source.
 
-## The backend split
+## Code parses locally, prose goes to an ollama cloud model
 
-Code is parsed locally with tree-sitter AST: deterministic, no LLM, nothing
-leaves the machine. Docs, PDFs, images get a semantic pass through the
-backend. The wrapper pins `--backend ollama` and `--model glm-5.3-flash:cloud`
-— an ollama cloud model, routed by the local ollama daemon. Not local
-inference; it leaves the machine. For a fully local pass:
+Code takes a tree-sitter AST pass: deterministic, no LLM, nothing leaving the
+machine. Docs, PDFs and images take a semantic pass through the backend, pinned
+by the wrapper to `--backend ollama` and `--model glm-5.3-flash:cloud` — an
+ollama cloud model on the local daemon, so that half leaves. Fully local:
 
 ```bash
 PEARDE_GRAPH_MODEL=gpt-oss:20b graph.sh extract <folder>
@@ -33,10 +32,7 @@ PEARDE_GRAPH_MODEL=gpt-oss:20b graph.sh extract <folder>
 `PEARDE_GRAPH_MODEL` overrides the model for one call, `PEARDE_GRAPH_FOLDER`
 the default folder.
 
-## Commands
-
-Every command takes the folder first, optional; default is the current
-directory. Run them from a pass, not for their own sake.
+## Commands — folder first, optional, default the cwd
 
 ```bash
 bash @resources/graph/graph.sh extract @.          # full: AST + semantic + clusters + vault
@@ -49,26 +45,26 @@ bash @resources/graph/graph.sh god-nodes @.
 bash @resources/graph/graph.sh open @.             # .pearde/graphify/obsidian as a vault in Obsidian
 ```
 
+Run from a pass, not for its own sake.
+
 - **Extract is the only LLM call.** Update, query, path, explain, god-nodes
   read `graph.json` locally.
-- **Cloud models answer through the local daemon** — `ollama list` names what
-  is available; `glm-5.3-flash:cloud` and `deepseek-v4-flash:cloud` are paired,
-  `gpt-oss:20b` and `granite4:3b` run on the machine.
-- **A mixed corpus needs the backend up.** Code-only work needs none — a
-  failed semantic pass leaves the AST graph intact.
+- **Cloud models answer through the local daemon.** `ollama list` names them:
+  `glm-5.3-flash:cloud` and `deepseek-v4-flash:cloud` paired, `gpt-oss:20b` and
+  `granite4:3b` local.
+- **A mixed corpus needs the backend up.** Code-only work needs none; a failed
+  semantic pass leaves the AST graph intact.
 
-## The vault
+## The vault is output, separate from the board's
 
-`.pearde/graphify/obsidian/` is its own vault, separate from the board's —
-`.pearde/` is already an Obsidian vault, and the graph's notes stay out of it
-(the board vault ignores `graphify/`).
-`graph.sh open` opens it in Obsidian. The vault is output: edit nothing in it,
-edit the corpus and re-extract instead.
+`.pearde/graphify/obsidian/` is its own vault, `.pearde/` being one already and
+the board vault ignoring `graphify/`. `graph.sh open` opens it in Obsidian —
+edit the corpus and re-extract, never a note.
 
 ## Relationship to the rest
 
-- The `.pearde/wiki/` KB is the research layer with its own graph of
-  conclusions, hand-built by @resources/knowledge.py; graphify's graph is
-  the corpus map. Different questions, kept in different vaults.
-- One commit per PRD holds @references/files.md and @index.md; `.pearde/graphify/`
-  never enters one.
+- The `.pearde/wiki/` KB is the research layer's graph of conclusions,
+  hand-built by @resources/knowledge.py; graphify's is the corpus map —
+  different questions, different vaults.
+- One commit per PRD holds @references/files.md and @index.md;
+  `.pearde/graphify/` never enters one.

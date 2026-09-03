@@ -1,21 +1,19 @@
 # Memos
 
-A PRD says what to build. A memo says what was decided and what it beat.
-Different lifetimes: a PRD goes `done` and stops mattering, a memo outlives
-the work it governed.
+A PRD says what to build; a memo, what was decided and what it beat. The PRD
+stops mattering at `done`; the memo outlives the work.
 
 ```
 .pearde/memos/<slug>.md
 ```
 
 - No `state`. Never claimed, specced, or dispatched.
-- `memos/` holds no `prd.md`, so scan walks past it and the progress line
-  never counts it.
+- `memos/` holds no `prd.md`: scan walks past, the progress line counts none.
 - One flat directory, no nesting. A memo is found by its slug.
-- On the board anyway — a decision recorded where the next session does not
-  look is a decision nobody has.
+- On the board anyway: a decision off the next session's path is one nobody
+  has.
 
-## Frontmatter
+## Frontmatter — a closed set
 
 ```
 ---
@@ -35,122 +33,95 @@ prds:
 
 | key             | required | is                                                            |
 |-----------------|----------|----------------------------------------------------------------|
-| `memo`          | yes      | the slug — equals the filename without `.md`                   |
-| `kind`          | yes      | `decision` (a call was made), `note` (source material folded in, arguing nothing of ours), or `invariant` (a rule that must keep holding, provable by its `verify:`) |
-| `status`        | yes      | `open`, `decided`, or `superseded`                             |
+| `memo`          | yes      | the slug — the filename without `.md`                          |
+| `kind`          | yes      | `decision`, a call made; `note`, source folded in and arguing nothing of ours; `invariant`, a rule that must hold, proved by its `verify:` |
+| `status`        | yes      | `open`, `decided`, `superseded`. One word; a status needing a sentence belongs in the body |
 | `subject`       | yes      | one line: what this memo settles                               |
-| `date`          | yes      | the day the call was recorded, ISO 8601 and only that          |
-| `verify`        | invariant only | the command that exits 0 while the invariant holds — required on an invariant, forbidden on every other kind |
+| `date`          | yes      | the day the call was recorded, ISO 8601 only. **Written, never stamped**: a generated date moves on every sweep, mtime sorts by last touch, padded spelling makes string comparison date comparison |
+| `verify`        | invariant only | the command exiting 0 while the invariant holds. Required here, forbidden on every other kind |
 | `updated`       | no       | set only on a *substantive* revision                           |
 | `prds`          | no       | board-relative PRD dirs this memo governs. A list              |
 | `supersedes`    | no       | the slug this replaces                                         |
 | `superseded_by` | no       | the slug that replaced this                                    |
-| `tags`          | generated | `memo`, `kind/<kind>`, `status/<status>` — derived from the two keys above, never typed. The graph view colours by tag and cannot query a key, and this is how a memo reaches it coloured. `memo add` writes it, `memo retag` rewrites the lot, and the check calls a tag that disagrees with its own kind or status a problem |
+| `tags`          | generated | `memo`, `kind/<kind>`, `status/<status>`, derived from the two keys above and never typed — the graph colours by tag and cannot query a key. `memo add` writes them, `memo retag` rewrites the lot |
 
-The set is **closed**. Anything else fails the check — a misspelled key is
-worse than a missing one, because it reads as present.
-
-`status` is one word. A status needing a sentence goes in the body, where a
-reader can argue with it.
-
-`date` is **written, never stamped** — a generated date moves on every
-mechanical sweep, and mtime sorts by who last touched a path, not by when the
-call was made. One padded spelling means string comparison is date comparison.
+A misspelled key reads as present, so anything outside the set fails.
 
 Dialect: a `---` fence, one `key: value` per line, `-` items for lists,
-matched by name at any indentation — what `prd.md` and a spec already use, so
-one parser reads all three.
+matched by name at any indentation — as `prd.md` and a spec do, one parser
+reading all three.
 
 ## Body
 
-`@references/templates/memo.md` is the shape:
+Per `@references/templates/memo.md`:
 
 | section                     | holds                                              |
 |-----------------------------|-----------------------------------------------------|
 | `## Decision`               | what was settled, present tense                    |
-| `## Why`                    | the argument — the part that has to survive        |
-| `## Alternatives considered`| what lost, and on what count. Never empty          |
+| `## Why`                    | the argument — the part that has to survive. On recorded knowledge, wikilinks the conclusion `[[<slug>]]` under `.pearde/wiki/conclusions/`: the memo cites, the KB holds the provenance, the body argues |
+| `## Alternatives considered`| what lost, and on what count. Never empty — a memo with no alternatives is a claim, not a decision |
 | `## Consequences`           | what this costs, including what it does not fix    |
 
-Where the decision rests on recorded knowledge, `Why` wikilinks the
-conclusion — `[[<slug>]]`, the note under `.pearde/wiki/conclusions/`. The
-memo cites, the KB holds the provenance; no frontmatter key for it, the body
-is the only place a reference can be argued with.
-
-`Why` and `Alternatives considered` are the one place on the board where
-paragraphs are correct, per @references/language.md. Compress them.
-
-**Alternatives is not optional.** A memo with no alternatives is a claim, not
-a decision — nobody can later tell whether the other road was walked and
-rejected or never seen.
+`Why` and `Alternatives considered` are the board's one place for paragraphs,
+per @references/language.md. Compress them.
 
 ## Invariants
 
-`kind: invariant` is the one testable memo: a rule the board must not break,
-filed with the command that proves it. `verify:` holds a shell command, run
-from the repo root, that exits 0 while the invariant holds — required on an
-invariant and forbidden on every other kind, because a rule nobody can run is
-a claim, and a `verify:` on a decision would promise a proof nothing runs.
+`kind: invariant` is the one testable memo — a rule the board must not break,
+filed with `verify:`, a shell command run from the repo root. A rule nobody
+can run is a claim.
 
 ```sh
 python3 @resources/memos.py verify [board]         # run every binding invariant
 python3 @resources/memos.py verify <slug> [board]  # just this one
 ```
 
-An invariant is filed **proven, never on faith**: write the command, run
-`verify <slug>`, and only then is the memo done — `memo add --kind invariant`
-leaves `verify:` bare, which fails the check until the command is written.
-Re-run `verify` whenever a change might bend one. A broken invariant is a
-stop: either the change is wrong, or the invariant is dead and the memo goes
-`superseded` with a memo saying why. Superseded invariants no longer bind and
-are skipped.
+Filed **proven, never on faith**: write the command and run `verify <slug>`
+before the memo is done. `memo add --kind invariant` leaves `verify:` bare,
+failing the check until written. Re-run `verify` whenever a change might bend
+one. A broken invariant stops the pass — either the change is wrong, or the
+invariant is dead and goes `superseded` with a memo saying why, no longer
+binding.
 
-The check does not execute the commands — it stays fast and side-effect
-free — it only refuses an invariant without one. Executing is `verify`'s job.
+The check refuses an invariant without a command but never runs one — fast and
+side-effect free. Executing is `verify`'s job.
 
 ## The index
 
-`memos/README.md` is the index by kind — invariants first, because they bind
-now, then decisions, then notes, newest first within each. It is
-**generated**: `memo index` writes it, `memo add` rewrites it after every new
-file, and the check fails when it is stale — a maintained list beside a tree
-goes stale, so this one is never maintained, only regenerated. `scan` skips
-it; the index is not a memo. An external `memos:` dir gets no index — that
-mirror is read-only.
+`memos/README.md` indexes by kind — invariants first, because they bind now,
+then decisions, then notes, newest first within each. **Generated**: `memo
+index` writes it, `memo add` rewrites it after every new file, the check
+failing on a stale one. `scan` skips it, the index being no memo; an external
+`memos:` dir gets none, read-only.
 
 ## An external source
 
-A repo whose decisions already live in another system does not move them —
-one fact, one home. Point `memos:` in `.pearde/settings.md` at that dir:
+A repo whose decisions live elsewhere does not move them — one fact, one
+home. Point `memos:` in `.pearde/settings.md` at that dir:
 
 ```yaml
 memos: ../.mi/docs/memos
 ```
 
-The dir is read-only, every scalar frontmatter key rendered as-is. The check
-then verifies only what is universal — the file parses, the required five are
-present — and leaves the foreign vocabulary alone. The closed set applies only
-to the board's own `memos/`.
+Read-only, every scalar frontmatter key rendered as-is. The check verifies
+only the universal, that the file parses and the required five are present.
+The closed set binds the board's own `memos/`.
 
 ## The check
 
-`doctor.sh` reports `memos`; `python3 @resources/memos.py check [board]` is the
-same check alone. It fails on:
+`doctor.sh` reports `memos`; `python3 @resources/memos.py check [board]` is
+that check, run against the real board and never a fixture. Failures:
 
 - a `kind` or `status` word outside the closed set
 - a slug that disagrees with its filename
 - a required key missing, or a key nobody declared
-- a date that is not ISO 8601, or an `updated` preceding its `date`
-- `status: superseded` naming no `superseded_by`, or naming a memo that does
-  not exist
-- `prds:` naming a directory that is not a PRD on this board
+- a date not ISO 8601, or an `updated` preceding its `date`
+- `status: superseded` naming no `superseded_by`, or naming a missing memo
+- `prds:` naming what is not a PRD on this board
 - an invariant without a `verify:` command, or a `verify:` on any other kind
-- a `tags:` that is not what this memo's own kind and status derive — the
-  repair is `python3 @resources/memos.py retag [board]`, never a hand edit
-- a `README.md` index that does not match a regeneration from the tree
-
-Checked against the real board, never a fixture — the frontmatter and the
-board cannot drift apart quietly.
+- a `tags:` disagreeing with this memo's kind and status — repaired by
+  `python3 @resources/memos.py retag [board]`, never by hand
+- a `README.md` index no regeneration from the tree would produce
 
 ## Why the board, not a docs folder
 
@@ -158,6 +129,6 @@ board cannot drift apart quietly.
 Rejected:
 
 - **`docs/` at the repo root** — reads fine for a human, invisible to the
-  loop. Memos beside the PRDs let `prds:` name a sibling the check can verify.
+  loop. Memos beside the PRDs let `prds:` name a sibling the check verifies.
 - **Status as the folder** (`open/`, `decided/`, …) — moving a file to change
   a status rots every inbound link.

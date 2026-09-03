@@ -1,58 +1,32 @@
-<!-- pearde:begin — from the pearde skill's system.md -->
+<!-- pearde:begin — <PEARDE>/references/system.md -->
 ## Pearde
 
-This repo has a PRD board at `.pearde/`.
-
-The skill itself lives at `<PEARDE>` — an absolute path, written in when this
-block was installed. Every `@<path>` below is relative to *that* folder and
-never to this repo.
+The board is `.pearde/`; the skill is `<PEARDE>`, absolute, written in at
+install. Every `@<path>` resolves there, never in this repo.
 
 On "pearde", "work the board", "run the prds", or "pearde status": read
 `<PEARDE>/README.md` and follow it exactly.
 
-`@<path>` is one file in the skill. `@@<keyword>` is a scope, listed in
-`@index.md`. Read the one file that answers the question in front of you —
-`@README.md` names it per question — and let it send you on. A scope is what a
-feature is made of, not a reading list.
+`@<path>` is one file, `@@<keyword>` a scope in `@index.md`. Read the file
+answering the question in front of you — `@README.md` names it — then follow
+where it sends you. A scope is what a feature is made of, not a reading list.
 
-- **The pass** — `@@loop`: scan, answer, refine, spec ahead, implement,
-  collect, drill-then-stop. A board with nothing dispatchable is blocked on a
-  person: put its whole open frontier as one drill pass, per `@@drill`, rather
-  than reporting what is stuck. `@@board` is what the scan walks. `@@states` is what a state
-  means and what may set it.
-- **Settings** — `language`, `workers`, `pipeline` live in `.pearde/settings.md`.
-  Read it before working the board. Write it when the user changes one.
-  Missing means first run: `pearde init` — English by default, said on its
-  first line; `pearde settings language=<l>` changes it.
-- **Who works** — one persona per session, one id from `@@personas`, stored
-  nowhere: `engineer` until switched, and the pass's line carries it. A
-  candidate that differs from the active persona and governs the pass: ask
-  once, recommend the candidate, wear the answer — never switch silently. The
-  user naming one is not a question. A dispatched worker's persona comes from
-  its own job — one table in `@@workers` — and moves nothing.
-- **Calling one** — the roster is colleagues you can reach mid-pass, on your
-  own judgment, without asking. Put one problem to a persona you are not
-  wearing, talk to it — follow up, push back, answer its question — and relay
-  what it said attributed. It writes nothing and your persona does not move.
-  Call the `skeptic` before `done` on work you implemented. `ask <id>
-  <question>` is the user doing the same thing. `@@consult`.
-- **Writing** — PRDs, specs, and reports go in the board `language`, per
-  `@@language`.
-- **Asking** — per `@@drill`: one pass, the whole frontier, each question
-  with your recommended answer.
-- **Following** — a job that recurs is a `workflow`: an ordered route of
-  atomics a worker follows, named by `workflow:` on a PRD or a spec, and
-  handed to that worker expanded. A run returns its edits; only the
-  orchestrator writes the library, and only from a run. `@@workflows`.
-- **Deciding** — a call the code will not explain goes in
-  `.pearde/memos/<slug>.md`, never in a PRD. `@@memos` is the format.
-- **Dispatching** — `@@workers` is the brief for an analyst and an
-  implementer, verbatim. It also holds the single-agent mode.
-- **Not wired up?** `@@install` says what installed means. `@@doctor` tells a
-  broken install from an absent one.
+| topic | rule |
+|---|---|
+| The pass — `@@loop` | scan, answer, refine, spec ahead, implement, collect, drill-then-stop. Nothing dispatchable means the board is blocked on a person: drill the whole open frontier in one pass, per `@@drill`, never a report of what is stuck. `@@board` is the scan's reach, `@@states` a state's meaning and who sets it |
+| Settings — `.pearde/settings.md` | `language`, `workers`, `pipeline`. Read before the pass, write when the user changes one. Missing means first run: `pearde init`, English by default, said on its first line; `pearde settings language=<l>` changes it |
+| Who works — `@@personas` | one per session, one id, stored nowhere: `engineer` until switched, carried on the pass's line. A candidate governing the pass: ask once, recommend it, wear the answer — never switch silently. The user naming one is no question. A worker's persona comes from its own job in `@@workers` and moves nothing |
+| Calling one — `@@consult` | put one problem to a persona you are not wearing, mid-pass, on your own judgment, without asking. Talk, then relay what it said, attributed. The colleague writes nothing, your persona holds. Call the `skeptic` before `done` on work you implemented. `ask <id> <question>` is the user doing the same |
+| Writing — `@@language` | PRDs, specs and reports go in the board `language` |
+| Asking — `@@drill` | one pass, the whole frontier, each question carrying your recommended answer |
+| Following — `@@workflows` | a recurring job is a `workflow`: an ordered route of atomics, named by `workflow:` on a PRD or spec and handed to the worker expanded. A run returns its edits; only the orchestrator writes the library, only from a run |
+| Deciding — `@@memos` | a call the code will not explain goes in `.pearde/memos/<slug>.md`, never in a PRD |
+| Dispatching — `@@workers` | the analyst and implementer briefs, verbatim, and the single-agent mode |
+| Not wired up? | `@@install` is what installed means; `@@doctor` tells broken from absent |
 
 Handles: `status`, `once`, `add <title>`, `drill <prd>`, `retry <prd>`,
-`unblock <prd>`, `sweep`, `collect`, `run <prd>`, `memo <subject>`, `workflow [<slug>]`, `plan`, `view`,
-`persona [<id>]`, `persona create <topic>`, `workers=N`, `pipeline=N` —
-`@@handles` is all of them.
+`unblock <prd>`, `sweep`, `collect`, `run <prd>`, `memo <subject>`,
+`workflow [<slug>]`, `plan`, `view`, `persona [<id>]`,
+`persona create <topic>`, `workers=N`, `pipeline=N` — `@@handles` is all of
+them.
 <!-- pearde:end -->

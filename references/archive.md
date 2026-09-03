@@ -1,11 +1,7 @@
 # Archive
 
-`.pearde/prds/` accumulates every PRD it ever finishes and never sheds one — a
-`done` PRD stays a live-looking directory forever, `scan` walks it on every
-call, and `doctor`'s census (requested / derived / live) only ever grows.
-Nothing here changes what `state: done` means; it moves the file once the
-work it describes stops being current, using the same trick the board
-already uses to hide `memos/` and `workflows/` from itself.
+A `done` PRD moves to `.pearde/prds/archive/` as one flat file, so `scan` stops
+walking it. `state: done` keeps its meaning; only the file moves.
 
 ```
 .pearde/prds/archive/
@@ -13,66 +9,59 @@ already uses to hide `memos/` and `workflows/` from itself.
     <parent>--<child>.md  a former child PRD, flattened, parent-prefixed
 ```
 
-- One flat directory, no nesting — the same shape as `.pearde/memos/`
-  (@references/memo.md).
-- A file here is `prd.md`'s frontmatter, title and body, unchanged, just
-  renamed and moved. Nothing new is required in it — no `archived_at:`, no
-  new frontmatter key — because nothing ever reads this directory back.
+Flat, no nesting — the shape of `.pearde/memos/` (@references/memo.md). The file
+is `prd.md`'s frontmatter, title and body unchanged. No `archived_at:`, no new
+key — nothing reads the directory back.
 
-## Why scan already ignores it
+## Why `scan` already ignores it
 
 `_scan_one` (@resources/board/plan.py) finds a PRD by one test: `"prd.md" in
-files`. `.pearde/memos/` and `.pearde/workflows/` are already invisible to `scan`
-for the same reason `references/parts/board.md` gives — they hold no file
-literally named `prd.md`. `.pearde/prds/archive/` needs no line added to `scan`'s
-`dirs[:] = [d for d in dirs if d not in ("specs",)]` prune, because it is
-never a directory *of* PRDs, only a directory *of* their remains: every file
-in it is `<name>.md`, never `prd.md`. That is also why the shape has to be a
-flat file and not a moved *directory* — `.pearde/prds/archive/<name>/prd.md` still
-matches the same test, and the walk (and the count) go right on including it.
+files`. `.pearde/memos/` and `.pearde/workflows/` are invisible for the same
+reason (@references/parts/board.md) — they hold no file named `prd.md`. Every
+file in the archive is `<name>.md`, never `prd.md`. So no name joins
+`dirs[:] = [d for d in dirs if d not in ("specs",)]`.
 
-The consequence: nothing under `.pearde/prds/archive/` is counted in the progress
-line, offered to `claim`, or walked by `doctor`'s PRD census. Moving 20 done
-PRDs there is 20 fewer directories `scan` opens on every pass.
+The shape has to be a flat file. `.pearde/prds/archive/<name>/prd.md` matches the
+same test, and the walk and the count go on including it.
 
-## What's eligible
+An archived PRD is not counted in the progress line, not offered to `claim`,
+not walked by `doctor`'s census. Twenty archived PRDs are twenty fewer
+directories `scan` opens per pass.
 
-`state: done` only, once its own commit has landed and nothing live still
-needs it (see below). A `superseded` PRD (`probe-code-lives-in-the-prd-folder`,
-`snapshots-fold-to-one-row`) is written to keep its evidence readable at the
-top level on purpose — archive one only once whoever wrote it judges the
-evidence no longer needs that visibility; the state alone isn't the
-signal.
+## What is eligible
 
-Never archive a parked state (`deferred`, or any other spelling
-@references/parts/states.md calls "the user's own"). Parked is not
-finished — `release <prd> open` exists precisely to bring one back
-(`a-parked-prd-comes-back`), and archiving one would move the very file that
-path reads.
+| PRD | rule |
+|---|---|
+| `state: done` | eligible once its commit has landed and nothing live needs it |
+| `superseded` | kept at top level for its evidence — `probe-code-lives-in-the-prd-folder`, `snapshots-fold-to-one-row`; archive only when whoever wrote it judges the evidence no longer needs the visibility |
+| parked — `deferred`, or any spelling @references/parts/states.md calls "the user's own" | never; `release <prd> open` reads the very file a move would take (`a-parked-prd-comes-back`) |
 
-Check first: `grep -rl '<name>' .pearde/prds/*/prd.md .pearde/prds/*/*/prd.md` for a
-`needs:` or `footprint:` still naming it. This should rarely fire —
-`dispatchable` already requires every `needs:` to be `done`
-(@references/parts/states.md) — but a stale mention would go dangling
-silently otherwise.
+Check for a live `needs:` or `footprint:` first:
+
+```
+grep -rl '<name>' .pearde/prds/*/prd.md .pearde/prds/*/*/prd.md
+```
+
+Rarely fires — `dispatchable` already requires every `needs:` to be `done`
+(@references/parts/states.md) — but a stale mention dangles silently.
 
 ## Moving one
 
-A leaf, done PRD:
+A leaf:
 
 ```
 git mv .pearde/prds/<name>/prd.md .pearde/prds/archive/<name>.md
 git rm -r .pearde/prds/<name>
 ```
 
-`specs/` goes with it. A done PRD's specs are already history `scan` never
-reads back (`resources/board/plan.py`, "boxes for live PRDs only"); the whole
-tree survives forever at `git log --follow -- .pearde/prds/<name>` up to the `git
-rm` — the same tool `plan.py` already reaches for when a done PRD's history
-(its `done_at`) is wanted but not worth a stat-cheap read on every rebuild.
+`specs/` goes with it. A done PRD's specs are history `scan` never reads back
+(`resources/board/plan.py`, "boxes for live PRDs only"), and the whole tree
+survives at `git log --follow -- .pearde/prds/<name>` up to the `git rm` — the
+same tool `plan.py` reaches for when a done PRD's `done_at` is wanted and not
+worth a stat-cheap read on every rebuild.
 
-A container whose children are all `done` (already `collect`ed): archive
-bottom-up so `.pearde/prds/archive/` never collides on a bare child name:
+A container whose children are all `done` and `collect`ed — bottom-up, so
+`.pearde/prds/archive/` never collides on a bare child name:
 
 ```
 git mv .pearde/prds/<parent>/<child>/prd.md .pearde/prds/archive/<parent>--<child>.md
@@ -84,31 +73,22 @@ git rm -r .pearde/prds/<parent>
 
 ## When
 
-By hand, when the board feels heavy — alongside a `doctor` pass, not on
-every `collect`. A PRD that just landed is still the thing a fresh commit
-message points at; give it a few days of top-level visibility before moving
-it. No new command exists for this yet — two `git` calls is the whole
-mechanism, and the smallest thing that could be true of a repo already this
-prose-driven.
+By hand, alongside a `doctor` pass, never on every `collect`. A PRD that just
+landed is what a fresh commit message points at — leave it at top level for a
+few days. Two `git` calls are the whole mechanism; no command wraps them.
 
 ## Finding one again
 
-`grep -l <name> .pearde/prds/archive/*.md`, or `git log --follow -- .pearde/prds/<name>` for
-everything before the move.
+```
+grep -l <name> .pearde/prds/archive/*.md
+git log --follow -- .pearde/prds/<name>
+```
 
 ## Rejected
 
-- **A `pearde archive` command.** The board's existing idiom for a directory
-  `scan` ignores is a naming trick, not an entry added to `plan.py`'s prune
-  list — `memos/` and `workflows/` prove it out. Script the two `git` calls
-  above once running them by hand gets old; don't teach `scan` a new
-  directory name to skip.
-- **Moving the whole directory, `prd.md` and all.** Still matches `"prd.md"
-  in files` — `scan` keeps walking it, `doctor`'s count doesn't move, and
-  the report's actual complaint (the walk cost) is unfixed.
-- **A tenth `state:` meaning, e.g. `state: archived`.** Still a live
-  directory under `.pearde/prds/` either way — the walk cost this document exists to
-  cut is the size of `.pearde/prds/`, not the spelling of `state:`.
-- **Deleting done PRDs.** Out of scope by instruction, and against the
-  board's own practice — `superseded` PRDs are kept specifically for their
-  evidence, not as clutter.
+| rejected | why |
+|---|---|
+| A `pearde archive` command | the board's idiom for a directory `scan` ignores is a naming trick, not an entry in `plan.py`'s prune list — `memos/` and `workflows/` prove the shape. Script the two `git` calls once running them by hand gets old |
+| Moving the whole directory, `prd.md` and all | still matches `"prd.md" in files` — `scan` keeps walking, `doctor`'s count holds, and the walk cost is unfixed |
+| A tenth `state:` meaning, `state: archived` | still a live directory under `.pearde/prds/` — the walk cost is the size of `.pearde/prds/`, not the spelling of `state:` |
+| Deleting done PRDs | out of scope by instruction, and against practice — `superseded` PRDs are kept for their evidence |

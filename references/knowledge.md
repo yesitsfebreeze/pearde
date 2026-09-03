@@ -1,9 +1,9 @@
 # Knowledge
 
-The research layer: what the board has learned from outside the repo, as
-linked notes with provenance. The board holds process and decisions; this
-holds conclusions and the sources they stand on. One question, one home — a
-decision goes to a memo per @references/memo.md, knowledge here.
+The research layer: what the board learned outside the repo, as linked notes
+with provenance. The board holds process and decisions, knowledge the
+conclusions and their sources — one home per question, a decision going to a
+memo per @references/memo.md, a conclusion here.
 
 ```
 .pearde/wiki/          one folder, the whole layer — the wiki and its graph
@@ -16,71 +16,42 @@ decision goes to a memo per @references/memo.md, knowledge here.
     Dashboard.md         live Dataview views over all of it
 ```
 
-The folder is read through the board's vault: the vault roots at `.pearde/`
-(@references/obsidian.md), so the dashboard renders at `wiki/Dashboard.md`
-and the graph view colors sources and conclusions beside the PRDs, the memos
-and the workflows they argue about. Every Dataview source here is written
-`.pearde/`-relative — `wiki/conclusions`, not `conclusions`. The folder is gitignored —
-machine-local data, not source. The tool that runs the loop is @resources/knowledge.py:
-stdlib-only Python, every verb takes `--root`, so another board's folder
-follows the same contract.
+The board's vault roots at `.pearde/` (@references/obsidian.md): the dashboard
+renders at `wiki/Dashboard.md`, every Dataview source `.pearde/`-relative —
+`wiki/conclusions`, not `conclusions`. @resources/knowledge.py runs the loop:
+stdlib-only Python, `--root` per board.
 
-## The loop
+## The loop — ask, gap, capture, conclude, link
 
 | step | verb | decides |
 |---|---|---|
-| ask | `knowledge.py query "<question>"` | whether an answer is already on record |
-| gap | prints `gap:` when nothing strong hits | `enqueue` the question (auto on gap) or research it now |
-| capture | `remember <title>` — body on stdin, one topic per file | what the finding is, which sweep or page it came from (`--provenance`) |
+| ask | `knowledge.py query "<question>"` | whether an answer is on record |
+| gap | prints `gap:` when nothing strong hits | `enqueue` it (auto) or research now |
+| capture | `remember <title>` — body on stdin, one topic per file | the finding, and the sweep or page behind it (`--provenance`) |
 | conclude | `conclude <title> --sources <slug,…>` | whether ≥ `min_sources_per_conclusion` takeaways agree enough to synthesize |
 | link | `relink` | the note graph, symmetrized `related:`, `graphs/` communities via `wiki` |
 
-- **A source states, a conclusion argues.** A source carries findings and the
-  route id or URL that produced it (`--provenance`). A conclusion carries
-  `sources:` naming every file it derived from — fewer than two, the tool
-  refuses: a hunch, not a conclusion.
-- **Wikilinks hold the graph together.** `[[their-slug]]` from conclusion to
-  source and conclusion to conclusion; `relink` resolves them, symmetrizes
-  `related:`, and writes `.pearde/wiki/.graphify/graph.json`. Links are by
-  slug or title — a note id like `260831-cbe9` and its human title both
-  resolve. The graph is hand-built, no LLM pass, so no backend key is needed
-  and no note orphans.
-- **Scout is the tap.** A sweep finds; the ranking pages are the raw material
-  per @@scout. Distill what won into `sources/` notes tagged with the bucket
-  and route id, then `conclude` when a job's answer is stable.
-- **Pending is not a backlog.** A question enqueued and never needed again is
-  deleted, not drained to zero. Stale rows read as work owed; `doctor` names
-  them.
-- **The vault is output.** Edit the corpus through the tools; hand edits to
-  `graphs/` die on the next `wiki`, and `Dashboard.report.md` on the next
-  `dashboard --write`.
-- **`doctor` closes the loop.** Frontmatter valid, every wikilink resolves,
-  graph in sync with the files, pending honest. Run it after moves and
-  before calling a KB fact settled.
+| rule | mechanism |
+|---|---|
+| a source states, a conclusion argues | findings plus the route id or URL behind them (`--provenance`); a conclusion's `sources:` names every file it derived from — under two, refused as a hunch |
+| wikilinks hold the graph together | `[[their-slug]]`, conclusion to source or conclusion; `relink` resolves them, symmetrizes `related:`, writes `.pearde/wiki/.graphify/graph.json`. A note id like `260831-cbe9` or its title resolves — hand-built, no LLM pass, no backend key, no orphans |
+| scout is the tap | a sweep finds, the ranking pages raw material per @@scout. Distill winners into `sources/` notes tagged by bucket and route id, then `conclude` once a job's answer is stable |
+| pending is not a backlog | a question never needed again is deleted, not drained to zero; stale rows read as work owed, `doctor` naming them |
+| the vault is output | hand edits to `graphs/` die on the next `wiki`, `Dashboard.report.md` on the next `dashboard --write` |
+| `doctor` closes the loop | frontmatter valid, wikilinks resolving, graph in sync, pending honest — after moves, before calling a KB fact settled |
 
-## Where the tools end and the repo starts
+## The verbs write only under `.pearde/wiki/`
 
-The verbs write only under `.pearde/wiki/` — the folder is machine-local
-(gitignored) and the tool's default root is the repo it sits in; pass
-`--root` to run the loop on another board's folder. Inside pearde the scope
-is `@@knowledge` and its door is @references/skills/pearde-knowledge.md.
-
-`WORKFLOW.md` is the configuration: `active_focus` biases `query`, `min_sources_per_conclusion`
-guards `conclude`, `auto_enqueue` decides whether a gap queues itself. The
-verbs re-read it on every call.
+Gitignored, machine-local, defaulting to the tool's repo. The scope is
+`@@knowledge`, its door @references/skills/pearde-knowledge.md. `WORKFLOW.md`
+is the configuration, re-read every call: `active_focus` biases `query`,
+`min_sources_per_conclusion` guards `conclude`, `auto_enqueue` queues a gap.
 
 ## Relationship to the rest
 
-- **Memos cite knowledge, knowledge cites memos.** A memo's body wikilinks
-  `[[<conclusion>]]` when the decision rests on recorded knowledge; a
-  conclusion's body links back to the memo that consumed it. Neither moves a
-  state.
-- **Scout findings stay where they land.** `@resources/scout/findings.md` is
-  the dated record of what a sweep measured — never copied here. The
-  distilled takeaway is the note; the sweep is the citation.
-- **`@@graph` maps the repo; the note graph maps the KB.** Two graphs, two
-  questions. `@resources/graph/graph.sh extract` reads the corpus and can
-  also run semantic passes; `knowledge.py relink` reads `.pearde/wiki/`
-  only, hand-built from the wikilinks, never an LLM call.
-- **The dashboard is the view a person opens.** A pass queries the KB
-  through the tools, never by reading `Dashboard.md`.
+| the other | how they meet |
+|---|---|
+| memos | a memo wikilinks `[[<conclusion>]]` where a decision rests on knowledge, the conclusion links back; neither moves a state |
+| scout | `@resources/scout/findings.md` holds a sweep's dated record, never copied here — the note is the takeaway, the sweep the citation |
+| `@@graph` | `@resources/graph/graph.sh extract` maps the repo, semantic passes included; `knowledge.py relink` maps the KB from `.pearde/wiki/` wikilinks — hand-built, never an LLM call |
+| the dashboard | the view a person opens; a pass queries through the tools, never by reading `Dashboard.md` |

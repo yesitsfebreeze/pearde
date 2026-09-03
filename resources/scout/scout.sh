@@ -81,7 +81,18 @@ cmd_sweep() {
 	cmd_delta 0 2>/dev/null || echo "run again tomorrow for a delta" >&2
 }
 
-# Diff the newest snapshot against the most recent one at least N days older.
+# Portable day epoch: GNU `date -d`, else BSD `date -j -f`. Both forced to UTC
+# midnight — an unforced BSD parse fills the missing time-of-day from *now*,
+# which skews every day-count by however far into today the caller runs.
+epoch_of() {
+	local d="$1"
+	date -u -d "$d 00:00:00" +%s 2>/dev/null \
+		|| date -u -j -f "%Y-%m-%d %H:%M:%S" "$d 00:00:00" +%s
+}
+
+# Diff the newest snapshot against the most recent one at least N days older,
+# and say which day it actually landed on — a gap in the cron otherwise reads
+# as ordinary movement, just mislabeled with the wrong window.
 cmd_delta() {
 	local want_days="${1:-7}"
 	local files
@@ -96,15 +107,36 @@ cmd_delta() {
 	# Prefer the oldest snapshot still inside the requested window, so `delta 30`
 	# measures a month of movement rather than yesterday's noise.
 	if [ "$want_days" -gt 0 ]; then
-		local cutoff f
+		local cutoff f today candidates base_date actual_days tolerance
+		today=$(date -u +%Y-%m-%d)
 		cutoff=$(date -u -v-"${want_days}"d +%Y-%m-%d 2>/dev/null || date -u -d "$want_days days ago" +%Y-%m-%d)
-		for f in $files; do
+		# Candidates exclude $newest itself — it is the diff's upper anchor,
+		# never its own base, or a sparse history reports a false exact match
+		# (today diffed against today, zero rows, no signal anything is wrong).
+		candidates=$(echo "$files" | sed '$d')
+		for f in $candidates; do
 			[ "$(basename "$f" .tsv)" \< "$cutoff" ] && continue
 			base="$f"; break
 		done
+
+		base_date=$(basename "$base" .tsv)
+		actual_days=$(( ( $(epoch_of "$today") - $(epoch_of "$base_date") ) / 86400 ))
+		tolerance=$(( want_days * 2 ))
+
+		# The window doubled or worse: the reference day is not the one asked
+		# for, and the worst reading of the table below is the plausible wrong
+		# one. Name the gap and suppress the table rather than print it wrong.
+		# Never narrow a legitimate long window — a young tree diffs against
+		# its oldest snapshot and says so; only a window *stretched past
+		# tolerance* is refused.
+		if [ "$actual_days" -ge "$tolerance" ]; then
+			echo "gap: no snapshot within 2× of ${want_days} days — run sweep first"
+			return 0
+		fi
+
+		echo "delta ${want_days} · diffed against ${base_date} (${actual_days} days back, nearest to ${want_days})"
 	fi
 
-	echo "# $(basename "$base" .tsv) -> $(basename "$newest" .tsv)" >&2
 	awk -F'\t' -v OFS='\t' '
 		NR==FNR { old[$2] = $3; next }
 		{

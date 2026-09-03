@@ -1,5 +1,5 @@
 <!-- pearde:begin — from the pearde skill's system.md -->
-## PRD board (pearde)
+## Pearde
 
 This repo has a PRD board at `.pearde/`.
 

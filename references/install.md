@@ -11,7 +11,7 @@ Three folders, and the split between them is the whole design.
 
 | folder | holds | who touches it |
 |---|---|---|
-| `skills/` | one `.md` per skill — frontmatter and a short body | an agent, as an entry point |
+| `references/skills/` | one `.md` per skill — frontmatter and a short body | an agent, as an entry point |
 | `references/` | everything **read**: the workflow, personas, templates, rules | an agent, mid-task |
 | `resources/` | everything **run**: the board service, scout, the status line, doctor | a shell, never read for meaning |
 
@@ -21,7 +21,7 @@ is what makes it findable and what decides when it fires. Its body points into
 door.
 
 **The file name is the command.** `name:` must equal the file name, and an
-install builds the folder from it, so `skills/pearde-view.md` is invoked as
+install builds the folder from it, so `references/skills/pearde-view.md` is invoked as
 `pearde-view` wherever it lands. Namespace and grouping are spelled into that
 one name, `-` separated: `pearde-persona-ask` is the namespace `pearde`, the
 group `persona`, the verb `ask`.
@@ -38,7 +38,7 @@ it.
 
 ## What installing means
 
-Putting each file in `skills/` where your agent looks for a skill, without
+Putting each file in `references/skills/` where your agent looks for a skill, without
 copying anything.
 
 **The one catch.** A skill file says `Read @README.md` — a path relative to
@@ -48,7 +48,7 @@ out of links:
 
 ```
 <skills-dir>/<name>/            # <name> is the file name, minus .md
-    SKILL.md    -> <repo>/skills/<name>.md
+    SKILL.md    -> <repo>/references/skills/<name>.md
     README.md   -> <repo>/README.md
     index.md    -> <repo>/index.md
     references  -> <repo>/references
@@ -57,7 +57,7 @@ out of links:
 
 Five links, one skill, nothing copied. Read through them, every `@<path>` in
 the repo resolves exactly as it does here. `@resources/install.sh` does this
-for all of `skills/` in one command if you would rather not do it by hand:
+for all of `references/skills/` in one command if you would rather not do it by hand:
 
 ```bash
 bash @resources/install.sh <skills-dir>          # say what it would make
@@ -92,11 +92,11 @@ stop at the first that is true.
    built over it — the repo *is* that skill. Build the *others* as siblings.
    - **Then retire the installer.** `@SKILL.md` is the entry point that made
      this repo invocable before any of its skills were, and it answers to the
-     same name as `skills/pearde.md`. Two things called `pearde` is one too
+     same name as `references/skills/pearde.md`. Two things called `pearde` is one too
      many, and the installer is the one whose job is finished:
 
      ```bash
-     ln -sfn skills/pearde.md SKILL.md
+     ln -sfn references/skills/pearde.md SKILL.md
      ```
 
      Relative, so the repo survives being moved. The installer is gone, the
@@ -124,7 +124,7 @@ stop at the first that is true.
      a file that is not ours or into nothing at all. The placeholder is there
      to stop exactly that.
 4. **Neither.** Nothing is broken. Every skill reads where it lies — point
-   yourself at `skills/<name>.md` and its `references/` and you have the whole
+   yourself at `references/skills/<name>.md` and its `references/` and you have the whole
    system. That is a complete install, it is just one you do by hand each
    time.
 

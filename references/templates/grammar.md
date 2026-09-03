@@ -222,7 +222,7 @@ A verdict outside its set is refused with nothing written.
 | `@<member>/<prd>` | a member's PRD, board-wide. A PRD directory is never named `@…`, so the address cannot collide |
 | **slug** | a lowercase hyphenated name that is both a filename and the key inside it. `doctor` fails when the two disagree |
 | **handle** | a word the board answers to — @references/parts/handles.md. Several are also skills of their own |
-| **skill** | one file under `skills/`: frontmatter deciding when it fires, a body pointing into `references/`. The knowledge is never in the skill |
+| **skill** | one file under `references/skills/`: frontmatter deciding when it fires, a body pointing into `references/`. The knowledge is never in the skill |
 | **install** | the set of links from a skills directory into this tree. Updating is re-linking, never a copy |
 
 ## The view

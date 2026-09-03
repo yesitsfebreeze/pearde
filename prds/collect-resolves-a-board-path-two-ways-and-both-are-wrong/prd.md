@@ -6,6 +6,7 @@ complexity: 32
 blast-radius:
 workflow: probe-then-spec
 actual: 9.33h
+commit: 1880990 b2d4234
 ---
 
 # collect resolves a board path two ways and both are wrong

@@ -5,6 +5,7 @@ priority: 55
 complexity: 16
 blast-radius: mid
 workflow: probe-then-spec
+commit: 272e7c4
 ---
 
 # One register writer

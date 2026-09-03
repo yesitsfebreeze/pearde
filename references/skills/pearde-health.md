@@ -29,11 +29,9 @@ and nesting heuristics, markdown by section. The last three are read from
 are `none` otherwise; the score is drawn from what was measured, on the same
 scale either way. Under `health-floor` (default 40) a file is unhealthy.
 
-A score says where to look and what pulls the file down, never that the file
-should split: a generated file or a table of constants can sit at 5 and be
-exactly right. Whether the file changes is the PRD's call, and
-what a worker owes a named file is bounded to the spec's scope, per the part
-doc.
+The pointer-not-verdict rule — a score says where to look, never what to do —
+is @references/health.md's, stated once there, not repeated here. What a
+worker owes a named file is bounded to the spec's scope, per the part doc.
 
 The record lives at `.pearde/health/`, so writing one needs a board. With none
 in scope, say where the record would be; scoring is an orchestrator write and

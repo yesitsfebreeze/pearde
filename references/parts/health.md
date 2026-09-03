@@ -4,10 +4,10 @@ Which files resist being worked on, kept where the brief looks.
 
 A PRD says what to build, a spec how, a workflow the route. None says the file
 the route runs through is 2,900 lines with a 68-branch function in the middle.
-A **health record** does — one score per tracked file, worst first — so a
-monolith is named before a worker meets it, rather than found by the fourth
-worker to lose an afternoon in it. @references/health.md is the format, the
-axes, the check.
+A **health record** does — one score per tracked file, worst first, rather
+than found by the fourth worker to lose an afternoon in it. It never decides
+which PRD is dispatched or when: @references/health.md is the format, the
+axes, the check, and the one place the pointer-not-verdict rule is stated.
 
 ```
 .pearde/health/ranking.md
@@ -40,8 +40,8 @@ The implementer's brief carries one paragraph, filled by `pearde brief` from
 `health list --under <floor>` over the PRD's footprint:
 
 ```
- 22  resources/board/plan.py  branching, lines
- 39  resources/board/view.js  lines, branching
+ 22  resources/board/plan.py  branching, lines  .pearde/health/files/resources-board-plan.py.md
+ 39  resources/board/view.js  lines, branching  .pearde/health/files/resources-board-view.js.md
 ```
 
 or `none under the floor`, or `no health record — pearde health score writes

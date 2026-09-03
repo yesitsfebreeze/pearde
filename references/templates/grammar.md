@@ -258,7 +258,7 @@ A verdict outside its set is refused with nothing written.
 | **part** | one row of that report — `skills`, `index`, `board`, `memos`, `workflows`, `grammar`, `health`, `questions`, `view`, `guard`, `vault`, `harnesses` |
 | **harness** | a board's own `verify.sh`. Opt-in in `doctor`, because it is the one row measured in tens of seconds |
 | **pinned** | a harness asserting its own executed total against a literal. An unpinned one prints a smaller total and exits 0, which is indistinguishable from success |
-| **health** | how much a file resists being worked on — 1-100, 100 healthy, from its lines, branching, longest function and the graph's fan-in, fan-out and links. A pointer, never a verdict. @references/health.md |
+| **health** | how much a file resists being worked on — 1-100, 100 healthy, from its lines, branching, longest function and the graph's fan-in, fan-out and links. @references/health.md states the pointer-not-verdict rule; not restated here |
 | **unhealthy** | a file scoring under `health-floor`. The one the implementer's brief names |
 
 Every board knob is @references/settings.md. A key is a word here only where

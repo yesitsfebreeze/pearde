@@ -1,8 +1,9 @@
 # Health
 
 A **health record** says how much each file resists being worked on — one
-number per file, 1 to 100, 100 healthy, worst first on one page — so a
-monolith is named before a worker meets it.
+number per file, 1 to 100, 100 healthy, worst first on one page. The order it
+names files in is not the order the board works them: see the pointer rule
+below.
 
 ```
 .pearde/health/
@@ -176,6 +177,11 @@ clears it: `stale: ranking is 34 commits behind HEAD` (over twenty), and
 
 @references/parts/workers.md's implementer block carries `<health>`, filled by
 `pearde brief` from `health list --under <floor>` over the PRD's footprint —
-one line per unhealthy file with its score and `worst`, one line saying no
-record exists, or nothing under the floor. What the worker owes is in
+one line per unhealthy file with its score, its `worst` axis and its note's
+path, the anchor the pointer needs; one line saying no record exists, or
+nothing under the floor. A file scoring under the floor with no note on disk
+is named as missing its note, never named without one. The line never says
+"fix this": **the score does not reorder the plan** — `plan.py` reads no
+health key, so a board scoring everything under the floor plans exactly as
+one scoring nothing under it. What the worker owes the named file is in
 @references/parts/health.md.

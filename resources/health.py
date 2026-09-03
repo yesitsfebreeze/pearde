@@ -1045,6 +1045,11 @@ def score_tree(board, paths=None, out=print):
 
 
 def list_ranking(board, under=None, paths=None, out=print):
+    """Worst first, one line per file: score, path, worst axis, note path —
+    the anchor a pointer needs, never the file named alone. A row scoring
+    under the limit with no note on disk is refused the same way: the line
+    names the file and the missing note instead of a `worst` with nothing to
+    point at."""
     rank, problems = read_ranking(board)
     if rank is None:
         out("no health record — `pearde health score` writes one")
@@ -1060,7 +1065,12 @@ def list_ranking(board, under=None, paths=None, out=print):
         rows = [r for r in rows if any(r["file"] == p or r["file"].startswith(p + os.sep)
                                        for p in prefixes)]
     for r in rows:
-        out(f"{r['score']:>3}  {r['file']}  {r['why']}")
+        note = os.path.join(out_dir(board), "files", slug(r["file"]) + ".md")
+        if os.path.isfile(note):
+            out(f"{r['score']:>3}  {r['file']}  {r['why']}  {os.path.relpath(note, root)}")
+        else:
+            out(f"{r['score']:>3}  {r['file']}  no note at "
+                f"{os.path.relpath(note, root)} — `pearde health score` writes one")
     return 0
 
 

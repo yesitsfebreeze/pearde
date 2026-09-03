@@ -118,7 +118,7 @@ not name, a row nothing uses, or a marker pair missing or unterminated, is the
 | `<board>` | the board whose library holds the slug, for `workflows.py brief` |
 | `<split_above>` | `split-above` in the PRD's own board's `settings.md`, default 40 — @references/settings.md |
 | `<specs_above>` | `specs-above` there, default 6 |
-| `<health>` | `health.py list --under <health-floor>` over the PRD's footprint union, one line per file, worst first — or `none under the floor`, or `no health record — pearde health score writes one`. @references/health.md |
+| `<health>` | `health.py list --under <health-floor>` over the PRD's footprint union, one line per file, worst first, each naming its score, its worst axis and its note's path — or `none under the floor`, or `no health record — pearde health score writes one`. Never "fix this": the score does not reorder this or any other brief. @references/health.md |
 | `<slug>` | the `workflow:` the block is printed for — in the analyst block it is the worker's to write |
 | `<id>` | `--as`, default `engineer`; `--consult <id>` |
 | `<transcript_path>` | `--transcript` |

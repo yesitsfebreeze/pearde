@@ -1,9 +1,10 @@
 ---
-state: open
+state: analyzing
 origin: requested
 priority: 75
 complexity: 0
 blast-radius:
+claim: an-fork-reaches 2026-09-03 12:04
 ---
 
 # a fork reaches the user when it is written
@@ -26,3 +27,22 @@ unblock the PRD that asked.
 covers the whole frontier in one pass rather than trickling one question at a
 time — @references/drill.md. Waking the dispatcher earlier must not turn one
 drill pass into four interruptions.
+
+## Questions
+
+### Q1: When a question reaches you
+
+Several helpers can each hit a fork minutes apart, and a run is not finished
+when the first one does. Reaching you the moment the first is written gets you
+answering soonest, but the same run could reach you four separate times
+instead of once?
+
+1. **The moment one is written** — you hear within seconds of the first, and again each time a later one lands. (recommended)
+2. **When nothing can still ask** — you hear once, after everything running has finished and the list can no longer grow.
+3. **After a short hold** — you hear once the first has waited a few minutes for company, whatever is still running.
+
+<!-- for the board: ask.py `settled()` and the one-pass-out rule in `cmd_wait`; the wake predicate is the only thing the answer moves — probe p2-wake.sh cases 4 and 5 -->
+
+## Answers
+
+**Q1** *(answered 2026-09-03 14:56)* — Not one of the three prepared options — the user asked to search the repo for a satisfactory answer instead. Found one: `resources/board/serve.py`'s daemon already has this mechanism. `POLL_S = 1.0` — the mirror loop stat-sweeps every board file once a second and calls `bump()`, which increments the board's `seq` and does `cond.notify_all()`, waking every long-poller blocked on `/wait`. `pearde view wait` already rides this. Consequence: forks written within the same one-second window collapse into a single wake, and a fork written any time after still wakes within about a second — no dispatcher-side batching, hold timer, or "wait for the whole run" logic needed. Route the fork-write through this existing seq/wait primitive rather than building new mechanism: when `ask.md` changes, bump the board the same way any other board file change already does, and let existing `/wait` callers pick it up.

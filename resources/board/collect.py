@@ -79,6 +79,9 @@ import plan as planlib  # noqa: E402 — beside this script
 import edit as editlib  # noqa: E402 — beside this script
 import transitions as translib  # noqa: E402 — the one printer of the line
 import specs as specslib  # noqa: E402 — SPECCED/REFINE reuse its own gates
+import lanes as laneslib  # noqa: E402 — every other use of it is lazy, but
+# `except lanes.Conflict` needs the class at the moment the clause is read
+LaneConflict = laneslib.Conflict
 
 # collect writes done/failed transitions straight to the same log
 # transitions.py record() appends to — never to .history.jsonl, the
@@ -2004,9 +2007,15 @@ def land_lane(board, rel, prd, repo, opts, out=print):
     splitting, but a worker that wandered outside its footprint is still
     not committed whole. The paths outside are named and left in the lane.
 
-    A merge conflict raises `Stop` with the file on it. The merge is
-    aborted, so the checkout is where it was; the lane branch still holds
-    the worker's commits, and a person resolves it by merging by hand.
+    A merge conflict raises `lanes.Conflict` — through, not caught. The
+    merge is aborted, so the checkout is where it was and the lane branch
+    still holds the worker's commits; `collect_one` catches it and writes
+    the PRD `blocked` with the files on it. Turning it into a `Stop` here
+    is what left a conflicted lane `claimed` forever: the run printed one
+    line to stderr and the board recorded nothing, so `pearde scan` went
+    on showing a worker holding a PRD no worker was working on. Every
+    OTHER `LaneError` is still a `Stop` — a lane git cannot read is a
+    broken board, not a wall a person takes down.
 
     `--dry` says what it WOULD merge — the branch and how many commits —
     and merges nothing; `opts["dry"]` reaches here rather than being
@@ -2056,12 +2065,70 @@ def land_lane(board, rel, prd, repo, opts, out=print):
                          commit_message(prd, prd_rel, opts))
         pre = laneslib.git(repo, "rev-parse", "HEAD").stdout.strip()
         n = laneslib.merge(repo, rel)
+    except laneslib.Conflict:
+        raise
     except laneslib.LaneError as e:
         raise Stop(f"{rel}: {e} — nothing written; the lane still holds the "
                    f"work on `{br}`")
     if n:
         out(f"{rel}: lane {br} merged — {n} commit(s)")
     return pre, n
+
+
+def block_conflict(board, rel, prd, pmd, conflict, opts, now, out=print):
+    """A lane that will not rebase becomes a `blocked` PRD, and returns 1.
+
+    The wall this puts on the board is `## Blocked` — the heading
+    @references/parts/view.md already draws as the wall and `questions.py`
+    already refuses a `blocked` PRD for not having. So the reason a person
+    reads is written in the one place every reader of this board already
+    looks, and nothing new has to learn to render it.
+
+    What it writes: the lane branch, the branch it would not land on, and
+    one bullet per file git named on the conflict — git's own list, carried
+    as data from `lanes.Conflict` rather than parsed back out of a sentence.
+    The claim goes, because no worker is working on it; the state goes to
+    `blocked`, because a person has to take the wall down. Nothing else is
+    touched: the checkout is where `lanes.merge` left it, and the worker's
+    commits are on the lane branch, which is why the reason can say so.
+
+    `blocked` and not `failed`. A `failed` PRD is work that did not do what
+    it said; this work may be perfect and merely disagree with what landed
+    while it ran. `failed` also routes to `retry`, which would dispatch a
+    second worker onto a lane that already holds the answer. `unblock` is
+    the edge out, and it lands on `specced` — the PRD is specced work with
+    a lane standing, which is exactly what it was before the collect.
+
+    Unconditional, and not behind `--fail`. `--fail` chooses whether a red
+    VERIFY is recorded, and a bare `collect` leaving that on the board
+    would be a judgement about the code. This is not a judgement: without
+    the write the PRD stays `claimed` with no worker, which is the defect
+    the contract names. `--dry` never reaches here — `land_lane` returns
+    before it merges."""
+    files = sorted(set(conflict.files))
+    lines = [f"**{now.strftime('%Y-%m-%d %H:%M')} — the lane will not "
+             f"rebase**", "",
+             f"`{conflict.branch}` does not land on `{conflict.onto}`; "
+             + (f"{len(files)} file(s) disagree:" if files
+                else "git named no file — `git status` in the lane says "
+                     "which."), ""]
+    lines += [f"- `{f}`" for f in files]
+    lines += ["", f"Nothing is lost: the worker's commits are on "
+              f"`{conflict.branch}` and the checkout never moved. Resolve "
+              f"the conflict in the lane, then `pearde unblock {rel}`."]
+    text = "\n".join(lines)
+    if opts.get("dry"):                 # unreachable today; free if it changes
+        out(f"{rel}: dry — would block on {conflict.branch}")
+        return 1
+    editlib.append_section(pmd, "Blocked", text)
+    editlib.del_key(pmd, "claim")
+    editlib.set_key(pmd, "state", "blocked")
+    transition_row(board, rel, prd["state"], "blocked", now)
+    # the exception's own words on the line, so the run still prints what
+    # git said and not a second paraphrase of it
+    out(progress_line(board, rel, prd["state"], "blocked", opts["as"],
+                      str(conflict)))
+    return 1
 
 
 def unland(repo, pre, landed, out=print):
@@ -2154,7 +2221,10 @@ def collect_one(board, rel, opts, out=print):
     # the lane branch is never touched, so the worker's commits survive a
     # failed collect and a retry merges them again.
     repo = repo_of(prd, board, board_root)
-    pre, landed = land_lane(board, rel, prd, repo, opts, out)
+    try:
+        pre, landed = land_lane(board, rel, prd, repo, opts, out)
+    except LaneConflict as e:
+        return block_conflict(board, rel, prd, pmd, e, opts, now, out)
     base = baseline(board, rel)
     _, feet = planlib.spec_data(prd)
     owned = owned_by(prd, board_root, repo, feet, board)

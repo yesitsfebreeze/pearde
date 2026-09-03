@@ -42,6 +42,23 @@ class LaneError(Exception):
     """git said no. The message is what the caller prints."""
 
 
+class Conflict(LaneError):
+    """The lane and the branch it lands on disagree about a file, and no
+    tool can pick. A subclass, so every caller that already catches
+    `LaneError` keeps working; the extra attributes are for the one caller
+    that reports it instead of stopping.
+
+    `files` is what git named on the conflict, `branch` is `lane/<slug>`
+    and `onto` is the branch it was landing on. They are carried as data
+    and not only in the message because the caller writes them into
+    `prd.md`, and re-parsing a sentence to get a file list back is how a
+    reason drifts from what git actually said."""
+
+    def __init__(self, message, branch, onto, files):
+        super().__init__(message)
+        self.branch, self.onto, self.files = branch, onto, list(files)
+
+
 def branch_of(slug):
     """`lane/<slug>` — `plan.LANE_RE` reads it back. A nested PRD's rel
     carries `/`, which a branch name takes as a path component; the lane
@@ -209,11 +226,13 @@ def merge(repo, slug, out=None):
     Rebasing first measured linear, one commit, and `--merged` listed the
     lane.
 
-    A conflict — in the rebase or in the merge — is raised with the files
-    on it, the lane branch left exactly as it was, and the checkout on the
-    commit it was on. The caller reports it red. A conflict a person can
-    fix by hand is worth more than a rollback that loses which file
-    disagreed, so the files are read before anything is aborted.
+    A conflict — in the rebase or in the merge — raises `Conflict` with the
+    files on it, the lane branch left exactly as it was, and the checkout on
+    the commit it was on. The caller reports it: `collect.land_lane` turns it
+    into a `blocked` PRD naming those files, so no lane sits `claimed` with a
+    conflict nobody was told about. A conflict a person can fix by hand is
+    worth more than a rollback that loses which file disagreed, so the files
+    are read before anything is aborted.
 
     A rebase that never gets under way is not a conflict: `git rebase`
     refuses outright when the lane's tree is dirty (exactly what
@@ -255,17 +274,19 @@ def merge(repo, slug, out=None):
                 # redundant reset is the cheapest thing on this board to
                 # give up.
                 git(wt, "reset", "--hard", was, check=False)
-            raise LaneError(
+            raise Conflict(
                 f"merge conflict: {br} onto {onto} — "
-                + (", ".join(files) if files else "see git status"))
+                + (", ".join(files) if files else "see git status"),
+                br, onto, files)
         ahead = git(repo, "rev-list", "--count", "HEAD.." + br).stdout.strip()
     r = git(repo, "merge", "--ff-only", "--no-edit", br, check=False)
     if r.returncode != 0:
         files = conflicts(repo)
         git(repo, "merge", "--abort", check=False)
-        raise LaneError(
+        raise Conflict(
             f"merge conflict: {br} into {onto} — "
-            + (", ".join(files) if files else "see git status"))
+            + (", ".join(files) if files else "see git status"),
+            br, onto, files)
     return int(ahead or 0)
 
 

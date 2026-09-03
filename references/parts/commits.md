@@ -40,14 +40,20 @@ rollback that cannot keep the uncommitted work refuses rather than discard it:
 checkout, and gives the `git reset --keep` line that finishes the rollback
 once those paths are clear.
 
-**A merge conflict is a red collect, never a silent stage.** When the lane
-disagrees with what landed in the checkout while the worker ran, `collect`
-exits non-zero naming every conflicting file, aborts both the rebase and the
-merge, and leaves the checkout on its starting commit with nothing staged.
-The lane branch still holds the work; a person merges it by hand. Two PRDs
-claimed on one file end here by design — the plan orders the pair with an
-`after … (footprint)` edge, and the clash resolves here rather than being
-refused at `claim`.
+**A merge conflict is a reported PRD, never a silent stage and never a stranded lane.** When the lane disagrees with what landed in the checkout
+while the worker ran, `collect` exits non-zero naming every conflicting file,
+aborts both the rebase and the merge, and leaves the checkout on its starting
+commit with nothing staged. The lane branch still holds the work — and the
+PRD is written `blocked`, its `claim:` dropped, with a `## Blocked` section
+naming the lane branch, the branch it would not land on, and one bullet per
+file git named. Nothing stays `claimed` under a worker that is gone: `pearde
+scan` shows the PRD waiting on a person, and `pearde unblock <prd>` after the
+conflict is resolved in the lane returns it to `specced`. `blocked` and not
+`failed` — the work may be perfect and merely disagree with what landed while
+it ran, and `failed` would dispatch a second worker onto a lane that already
+holds the answer. Two PRDs claimed on one file end here by design — the plan
+orders the pair with an `after … (footprint)` edge, and the clash resolves
+here rather than being refused at `claim`.
 
 A board with no lane — a claim taken before lanes, a board outside any git
 repo — collects as before: the work is dirt in the checkout, step 4 commits
@@ -56,7 +62,7 @@ it, and every scope rule below reads that tree.
 | transition          | do                                                              |
 |---------------------|------------------------------------------------------------------|
 | `claimed → done`    | commit                                                           |
-| `claimed → blocked` | commit — the work is done, the open boxes wait on something named |
+| `claimed → blocked` | commit — the work is done, the open boxes wait on something named. A conflicted lane is the exception: nothing merged, so nothing is committed |
 | `blocked → done`    | commit what closing the boxes wrote                              |
 | `claimed → failed`  | nothing. Name the dirty paths in the report, leave them on disk  |
 

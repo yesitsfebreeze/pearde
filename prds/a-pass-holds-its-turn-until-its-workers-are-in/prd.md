@@ -1,11 +1,12 @@
 ---
-state: open
+state: claimed
 origin: derived
 from: the-board-is-a-real-directory-at-pearde-never-a-symlink
 priority: 90
 complexity: 11
 blast-radius: mid
 workflow: probe-then-spec
+claim: impl-nova2-a-pass-holds 2026-09-03 21:40
 ---
 
 

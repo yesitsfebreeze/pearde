@@ -9,17 +9,17 @@ date: <today>
 Every word this repo gives a meaning of its own. One vocabulary, so a session,
 a worker and a person name the same thing the same way.
 
-Reader: an agent, cold. A row is the meaning, never the rule — the rule stays
+Reader: an agent, cold. A row is the meaning, never the rule; the rule stays
 in the file the group heading names.
 
-**A word earns a row when it means something here that it does not mean in
-ordinary English, or when it stands beside a word it is not.** A word that
-means everywhere what it means here gets no row.
+**A word earns a row where its meaning here differs from ordinary English, or
+where it stands beside another a reader confuses it with.** A word carrying its
+everyday meaning gets no row.
 
-The groups down to **Words that collide** ship with the board: they are
-pearde's own vocabulary, the same on every board. **This repo** at the end is
-yours, and it is the half that makes this file worth reading.
-@references/grammar.md is the format and the rules for growing it.
+The groups down to **Words that collide** ship with the board — pearde's own
+vocabulary, the same everywhere. **This repo** at the end is yours, and the
+half that makes this file worth reading. @references/grammar.md is the format
+and the rules for growing it.
 
 ## The board
 
@@ -261,12 +261,12 @@ A verdict outside its set is refused with nothing written.
 | **health** | how much a file resists being worked on — 1-100, 100 healthy, from its lines, branching, longest function and the graph's fan-in, fan-out and links. A pointer, never a verdict. @references/health.md |
 | **unhealthy** | a file scoring under `health-floor`. The one the implementer's brief names |
 
-Every board knob is @references/settings.md. A key is a word in this file only
-where this file gives it one.
+Every board knob is @references/settings.md. A key is a word here only where
+this file gives it one.
 
 ## Words that collide
 
-The pairs a cold reader gets wrong. Each row is one spelling with two meanings.
+The pairs a cold reader gets wrong — one spelling, two meanings, per row.
 
 | the word | here | and here |
 |---|---|---|
@@ -291,8 +291,8 @@ The pairs a cold reader gets wrong. Each row is one spelling with two meanings.
 
 ## Words a person never sees
 
-Everything in this file is the orchestrator's vocabulary. None of it appears in
-a fork, an answer label, or answer text — @references/drill.md is the rule and
+Everything here is the orchestrator's vocabulary. None of it appears in a fork,
+an answer label, or answer text — @references/drill.md is the rule and
 @resources/questions.py refuses a pass that breaks it. Nor does a backtick, a
 path, a file extension, a PRD slug, or a `Q<n>` cross-reference.
 
@@ -300,9 +300,9 @@ path, a file extension, a PRD slug, or a `Q<n>` cross-reference.
 
 ## This repo
 
-The words this project gives a meaning of its own. Empty is an honest state on
-a board whose domain has no vocabulary yet; one row is better than a
-conversation that discovers the word twice.
+The words this project gives a meaning of its own. Empty is honest on a board
+whose domain has no vocabulary yet; one row beats discovering the word twice in
+conversation.
 
 | term | is |
 |---|---|

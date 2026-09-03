@@ -3,7 +3,7 @@
 *<YYYY-MM-DD>*
 
 <Two or three sentences: what works now that did not, what is happening, and
-the one thing that decides how fast the rest goes.>
+the one thing deciding how fast the rest goes.>
 
 ## Planned
 

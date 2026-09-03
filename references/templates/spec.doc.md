@@ -1,15 +1,15 @@
 # specNN.md — how to fill it, and why each line is there
 
 The template is @references/templates/spec.md. The analyst writes one file per
-implementable unit by hand from it; `pearde specced` is the reader and refuses
-a file that breaks the contract, naming the line.
+implementable unit by hand; `pearde specced` reads it and refuses a file that
+breaks the contract, naming the line.
 
 ## Frontmatter
 
 | key | why |
 |---|---|
-| `complexity` | analyst — 1-100, this unit's share of the PRD's weight. Summed into the PRD's `complexity`. Outside 1-100 is refused |
-| `footprint` | analyst — every dir or file this spec touches. The orchestrator unions a PRD's footprints to avoid dispatching overlapping PRDs. Missing is a warning; the PRD's own stands for it |
+| `complexity` | analyst — 1-100, this unit's share of the PRD's weight, summed into the PRD's `complexity`. Outside 1-100 is refused |
+| `footprint` | analyst — every dir or file this spec touches. The orchestrator unions a PRD's footprints so overlapping PRDs never dispatch together. Missing is a warning; the PRD's own stands for it |
 
 Optional, read when present:
 
@@ -25,17 +25,17 @@ Add your own keys freely; nothing outside these is read.
 ONE implementable unit per spec file: an implementer finishes it in one sitting
 from this file plus the PRD, without reading the sibling specs.
 
-**`## Acceptance`** — boxes, each a concrete, observable check that can FAIL:
-behavior, not effort. A file with no box is refused. Never write a box that
-asks for a commit or a commit message — the orchestrator commits the PRD on
-the transition that lands it, and such a box is refused.
+**`## Acceptance`** — boxes, each a concrete observable check that can FAIL:
+behavior, not effort. A file with no box is refused, and so is a box asking for
+a commit or a commit message — the orchestrator commits the PRD on the
+transition that lands it.
 
-The implementer ticks a box `[x]` only for a check it actually ran, quoting the
-output in its report — and ticks it WHEN it runs it, not in a batch at the
-end: these boxes are the only thing on the board that moves while a run is in
-flight, and the plan is drawn from them.
+The implementer ticks a box `[x]` only for a check it ran, quoting the output
+in its report, and ticks it WHEN it runs rather than in a batch at the end:
+these boxes are the only thing on the board that moves mid-run, and the plan is
+drawn from them.
 
 **`## Verify and Proof`** — one `sh` block (no block is refused) of commands
-that exercise the boxes. The implementer runs them and quotes the output.
-Scope them to this PRD's footprint: a whole-workspace command inherits every
-other node's flake, and `pearde specced` warns when no path here is under it.
+exercising the boxes, which the implementer runs and quotes. Scope them to this
+PRD's footprint: a whole-workspace command inherits every other node's flake,
+and `pearde specced` warns when no path here is under it.

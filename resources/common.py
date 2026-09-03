@@ -9,6 +9,8 @@
     read_text(path)                the text, or "" when it cannot be read
     pop_flag(argv, name)           (value, rest) for one `--flag value`
     Collection                     a directory of `<slug>.md` records under the board
+    run_git(root, *args, ...)      one `git -C root ...`, shaped to each caller's own return-or-raise
+    section(text, name, ...)       the body under `## <name>`, shaped to each caller's own match and shape
 
 Stdlib only, and it imports nothing from @resources/board/: memos.py stands
 on this file and @resources/board/plan.py imports memos.py, so a link back
@@ -18,6 +20,7 @@ reason @resources/guard.py gives — a reader keeps its own error prefix
 """
 import os
 import re
+import subprocess
 import sys
 
 # ── the board ────────────────────────────────────────────────────────────────
@@ -379,3 +382,130 @@ class Collection:
         path = os.path.join(self.dir, name)
         atomic_write(path, text)
         return path
+
+
+# ── one git runner ───────────────────────────────────────────────────────────
+
+_UNSET = object()
+
+
+def run_git(root, *args, check=False, default=_UNSET, raise_as=None,
+             timeout=60, input=None, env=None, stdout=False, strip=False,
+             msg=None):
+    """`git -C root <*args>`, both streams captured as text.
+
+    A failure is git not found or the call timing out, or — when `check`
+    — a non-zero exit. A failure raises `raise_as(message)` when one is
+    given; else it returns `default` when one was passed (even `None` —
+    pass nothing to mean "no default"); else a process-level failure is
+    re-raised as it came, and a checked non-zero exit with neither becomes
+    `RuntimeError(message)` — a combination no caller in this tree uses,
+    since every `check=True` caller here also names its own `raise_as`.
+    `msg(args, root, completed_or_exc)` builds the failure text when a
+    caller's own wording (a prefix naming the root, the failed subcommand)
+    is part of its contract; the default is the stripped stderr, or stdout
+    when stderr is empty, or `git <args> exit <code>` when both are.
+
+    Success returns the `CompletedProcess` — `.stdout` and `.returncode`
+    are the caller's to read, the shape a caller that inspects the exit
+    code itself wants (an unchecked non-zero exit is still success here).
+    `stdout=True` returns `.stdout` directly instead (`.strip()`ped when
+    `strip`), the shape a caller that never reads `.returncode` wants in
+    one line.
+    """
+    def fail(built):
+        if raise_as:
+            raise raise_as(built)
+        if default is not _UNSET:
+            return default
+        raise RuntimeError(built)
+
+    try:
+        r = subprocess.run(("git", "-C", root) + tuple(args),
+                           capture_output=True, text=True, timeout=timeout,
+                           input=input, env=env)
+    except (OSError, subprocess.TimeoutExpired) as e:
+        if msg:
+            return fail(msg(args, root, e))
+        if raise_as:
+            raise raise_as(f"git {' '.join(args)}: {e}") from e
+        if default is not _UNSET:
+            return default
+        raise
+    if check and r.returncode != 0:
+        built = msg(args, root, r) if msg else (
+            (r.stderr or r.stdout).strip()
+            or f"git {' '.join(args)} exit {r.returncode}")
+        return fail(built)
+    if stdout:
+        out = r.stdout
+        return out.strip() if strip else out
+    return r
+
+
+# ── one section extractor ────────────────────────────────────────────────────
+
+_H2_RE = re.compile(r"(?m)^##\s+(.*?)\s*$")
+
+
+def _h2_spans(text):
+    """[(heading text, body start, body end)] for every `## ` line in
+    `text`, in order — a body runs from the end of its heading's line
+    (before its newline, so the body carries it) to the start of the next
+    `## ` line, or the end of the text."""
+    heads = list(_H2_RE.finditer(text))
+    out = []
+    for i, m in enumerate(heads):
+        end = heads[i + 1].start() if i + 1 < len(heads) else len(text)
+        out.append((m.group(1), m.end(), end))
+    return out
+
+
+def section(text, name, *, all=False, lines=False, prefix=False, word=False,
+             ci=True, heading=False, chomp=False, default=None):
+    """The body under `## <name>`, up to the next `## ` line — every
+    caller here reads the same shape of file, and differs only in how
+    loosely `name` matches and how the answer comes back.
+
+    `name` is matched against a heading's text (the line after `## `,
+    trailing space trimmed): as the whole line unless `prefix`, in which
+    case a heading matches when it *starts with* `name` — `word` then
+    requires the character after the shared prefix to end a word, so
+    `"Questions"` does not match a heading spelled `"Questionable"`.
+    Matched case-insensitively unless `ci=False`. `name` may instead be a
+    compiled pattern, matched with `.match()` against the heading text —
+    the arbitrary-heading case no string mode reaches.
+
+    The body carries the newline that ends the heading's own line — the
+    same substring `text[m.end():next]` a plain regex search on the board's
+    dialect gets. `chomp` drops that one leading newline instead (a reader
+    that partitions the heading off `name`'s own line never sees it either
+    way); `lines` implies `chomp` and splits what is left on the rest.
+
+    One match (the default): the first hit's body — a string, or its lines
+    when `lines` — or `default` when nothing matched. `all=True`: every
+    hit, in file order, as a list — `[]` when nothing matched, `default`
+    unused. `heading=True`: each body comes back as `(heading, body)`
+    instead of bare `body`, in both shapes.
+    """
+    def match(h):
+        if hasattr(name, "match"):
+            return bool(name.match(h))
+        a, b = (h, name) if ci is False else (h.lower(), name.lower())
+        if not prefix:
+            return a == b
+        if not a.startswith(b):
+            return False
+        return not word or len(a) == len(b) or not (
+            a[len(b)].isalnum() or a[len(b)] == "_")
+
+    def shape(h, body):
+        if (chomp or lines) and body.startswith("\n"):
+            body = body[1:]
+        body = body.splitlines() if lines else body
+        return (h, body) if heading else body
+
+    hits = [shape(h, text[s:e]) for h, s, e in _h2_spans(text) if match(h)]
+    if all:
+        return hits
+    return hits[0] if hits else default

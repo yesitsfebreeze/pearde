@@ -438,7 +438,7 @@ fi
 
 # vault_obsidian_running — mirrors @resources/board/init.py `obsidian_running`:
 # pgrep -x on both process name spellings, the same check the writer makes
-# before it touches obsidian.json. No pgrep, or neither name found, reads as
+# before it writes the register. No pgrep, or neither name found, reads as
 # not running — the safe default, since the only thing this decides is
 # whether the fix below is allowed to write.
 vault_obsidian_running() {
@@ -514,7 +514,7 @@ if [ -n "$BOARD" ]; then
     row vault broken "$PROJ is not in Obsidian's vault register — ▸vault opens the nearest registered ancestor instead"
     fix "python3 $SKILL_ROOT/resources/pearde.py vault --wait --open $PROJ — Obsidian reads the register at launch and rewrites it from memory on quit, so the entry has to be written while it is closed; --wait does that the moment you quit"
     # `--fix` reaches the same writer this fix line names — `register_vault`
-    # under `pearde vault` — never obsidian.json directly. Two refusals come
+    # under `pearde vault` — never the register file directly. Two refusals come
     # first, both unwritten: a register already holding more than one entry
     # for this exact project (a hand-edited file, or a stale id from before
     # the writer deduped by realpath) is named rather than picked between,

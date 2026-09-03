@@ -6,6 +6,7 @@ complexity: 9
 blast-radius: mid
 workflow: probe-then-spec
 actual: 0.14h
+commit: ccd21c6 a267e4a
 ---
 
 # Write affordances on focus

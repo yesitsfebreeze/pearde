@@ -3,7 +3,9 @@ atomic: capture-the-harness-baseline
 subject: record what every committed harness prints before the tree is touched
 date: 2026-08-28
 updated: 2026-09-02
-runs: 67
+runs: 82
+tags:
+  - atomic
 ---
 
 # capture-the-harness-baseline — the numbers as they were before you
@@ -18,14 +20,17 @@ runs: 67
    only the second usually reads the footprint.
    A fixed glob list aborts on the first depth that
    has no match, and under a shell with `nomatch` it prints nothing at all.
-   Then name the tree the set is to measure. Every board harness takes its
-   root from `PEARDE_ROOT` and falls back to the board's own repo, which is
+   Then name the tree the set is to measure. Most board harnesses take their
+   root from `PEARDE_ROOT` and fall back to the board's own repo, which is
    always the orchestrator's checkout — so a worker building in a lane runs
    `PEARDE_ROOT=<lane> bash resources/doctor.sh --harnesses <board>`, or
-   exports `PEARDE_ROOT=<lane>` before running one harness by hand. Without
-   it the baseline you record and the re-run you compare it against are both
-   the checkout's, the lane's build is invisible to every number, and the
-   comparison is empty.
+   exports `PEARDE_ROOT=<lane>` before running one by hand. Not all of them
+   do. `grep -L PEARDE_ROOT $(find <board>/prds -name verify.sh)` names the
+   ones that do not, and every count from those is the checkout's however you
+   invoke them — record them as measuring another tree, and never claim a flip
+   on one. Without it the baseline you record and the re-run you compare it
+   against are both the checkout's, the lane's build is invisible to every
+   number, and the comparison is empty.
 2. Run each one that reads a path in your `footprint:` — grep each harness
    for the footprint paths spelled from the repo root (`references/settings.md`,
    not `settings.md`: a bare board filename matches every fixture that writes
@@ -90,6 +95,15 @@ runs: 67
 - Any pre-existing failure is written down with the words "before the first
   edit" beside it.
 
+> A count published by the previous pass of this same route is the count as of
+> the moment it was taken, not as of that pass's final tree — a pass that
+> re-writes a probe after running the census publishes a stale number in good
+> faith. Before calling a difference a regression, compare the **mtime** of the
+> harness and of every file it reads against the timestamp of the pass that
+> published the count. Where the harness has not moved and a file it reads was
+> written after the count was taken, the difference is inside the earlier pass,
+> and it is neither a landing nor yours.
+
 ## Fails when
 
 | seen | means | do |
@@ -103,3 +117,7 @@ runs: 67
 | a failing line the brief names as inherited is **absent** when you take your own baseline, and harness rows it was reddening are green | a sibling closed it between the brief being composed and your first command; the brief's baseline is older than the tree | take your own baseline as the measurement and say in the report that the brief's line is gone and who closed it — `git status` in both roots names the file. Every harness row that line was reddening is that sibling's flip, not yours: the same rule as a count that went up |
 | `command not found: timeout` from a harness wrapper on **darwin** | `timeout` is GNU coreutils and is not on the base system | drop the wrapper, or `gtimeout` where coreutils is installed — and read the exit code of the wrapper, not only the harness's last line |
 | every board harness computes its own `ROOT` by walking up from `$0`, and the `repo:` root is a lane | the harness set is nailed to the orchestrator's checkout and can never read a lane; a worker's build is invisible to all of it until `collect` merges | build the merged tree in scratch — `git clone --shared <checkout> <scratch>` (a `git archive` or `git init` copy loses the history a pinned-sha harness reads), `git apply` the checkout's uncommitted diff, overlay the lane's files — then symlink `<scratch>/.pearde` to the live board and run each harness **through that path**, so its own `cd …/../../../..` resolves to the merged tree. The symlink alone is not enough: `grep -l "pwd -P" $(find <board>/prds -name verify.sh)` first, and for every harness it names — and for every harness that honours it — export `PEARDE_ROOT=<scratch>` on the run, because `pwd -P` resolves the symlink back to the live board and the harness then measures the orchestrator's checkout while printing a count that looks like yours. Say in the report that the counts are the merged tree's, not the lane's, and name any harness that could be pointed at neither |
+| a harness scores worse on a merged tree built by `git archive`/`git clone` than on the live checkout, and the extra failures name a board path | the board directory is gitignored, so it is in the checkout and not in the archive — the difference is the missing board, not the build | never compare an archive tree to the checkout. Build **both** sides the same way — `git archive main` into one scratch dir and the merged tree into another — and compare those. Do not symlink the live board into the scratch tree to close the gap: `pwd -P` resolves it straight back to the live board and the score gets *worse*, measured here at 35 pass against 36 |
+| the earlier build is uncommitted in a **lane**, and that pass published no counts | the pre-edit tree is the lane's own `HEAD`, and it is a whole tree, not a file to restore | `git clone --shared <lane> <scratch>/pre` and run the set with `PEARDE_ROOT=<scratch>/pre`. It is a real pre-edit baseline, taken without a window in which the live tree is half-reverted and without touching a neighbour's hunks in a file of yours. Compare the failing **sets**, not only the counts: a subset proves no harness went green-to-red even when the count is noisy |
+| a repo-wide reference gate (`index.py check`) is red in the lane on a line naming an `@pearde/…` or `@.pearde/…` target, and green in the checkout | `lanes.create` cuts the lane deliberately without the board, so every reference from a tracked file into the board dangles there by construction — this never closes on a merge and is not a defect in the file | baseline the gate in both roots and quote both. A line whose target is under the board is the lane's missing board and nothing else; count only the lines whose target exists in the checkout. Do not add the board to the lane to silence it — a second board under a lane is a board the scan will find |
+| the harness sweep is baselined with a board symlinked into the lane, and re-run without it | the symlink is inside the tree the sweep measures: a harness asserting about `<root>/pearde/…` sees the real board where it expects a lane's stub, and a harness reading the git store sees the lane's | measured here: `a-lane-s-wiki-is-a-stub-…` exits 1 with the symlink and 0 without, and `list-the-collects-the-repo-bug-orphaned` names the lane's `worktrees/-pearde`. Take both baseline and re-run with the scaffolding in the same state, name the state beside every count, and take the deciding count at the root `collect` will use |

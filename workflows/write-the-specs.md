@@ -3,7 +3,9 @@ atomic: write-the-specs
 subject: turn what the build stands up into implementable units
 date: 2026-08-28
 updated: 2026-09-02
-runs: 33
+runs: 48
+tags:
+  - atomic
 ---
 
 # write-the-specs — units another worker can finish
@@ -19,8 +21,9 @@ runs: 33
    spelling inside backticks in any prose about it — the matcher is
    line-based and fence-blind, so a pasted open box becomes a real one.
 4. Give each spec a `## Verify and Proof` block in which every path is
-   spelled **literally**, not through a variable — the checker at
-   `resources/board/specs.py:523` matches the `footprint:` string, and a
+   spelled **literally**, not through a variable — the checker in
+   `check_spec` (`resources/board/specs.py`, the `any(p in b for b in blocks
+   for p in fp)` line) matches the `footprint:` string, and a
    `"references/personas/$f.md"` reads as no footprint path at all. Spelling
    is not the point, though: **no command's exit may be decided by a file
    outside the footprint.** A repo-wide command (`index.py check`, `doctor`, a
@@ -35,8 +38,9 @@ runs: 33
    set.
 
    Before the spec is done, run the block **the way `collect` runs it** and
-   confirm the exit. The flags are `bash -e -o pipefail` — the pair at
-   `resources/board/collect.py:1242` — and both matter, in opposite directions:
+   confirm the exit. The flags are `bash -e -o pipefail` — the pair
+   `collect.py` passes to `run` and to `guarded_run` — and both matter, in
+   opposite directions:
    `pipefail` makes a board-wide gate's exit inside a pipeline the block's, and
    `-e` aborts the block at the first bare command that fails. A block tested
    under `pipefail` alone is not tested. Awk the fence out and run it:
@@ -72,6 +76,20 @@ runs: 33
    checkout, not your lane — and where the block hard-codes that path, run it
    once with your own root substituted and leave the block as written. A block
    rewritten to name the lane passes for you and fails for `collect`.
+
+   Where the block invokes the tool by a path relative to the root — `python3
+   resources/<mod>.py` — running it from the checkout runs the checkout's copy,
+   not your lane's, and the exit says nothing about your build. Substitute the
+   module path, not the root: run from the checkout with
+   `s#resources/<mod>.py#<lane>/resources/<mod>.py#`, and run the block verbatim
+   as well. Where instead the block runs a **harness** that resolves the tree
+   itself from `PEARDE_ROOT`, there is no module path in the block to
+   substitute and rewriting the harness path would name a different harness, not
+   a different tree: run the block verbatim under `PEARDE_ROOT=<lane>`, which
+   leaves the block untouched, and verbatim with `PEARDE_ROOT` unset as well.
+   Verbatim it must FAIL before the merge — that failure is the red-to-green
+   flip shown against the tree that does not hold the build, and it is stronger
+   evidence than `git show HEAD:`, because the whole gate ran on the old file.
 5. Say in each spec what already stands from the build and what is left.
 6. `grep -c '^- \[ \]' prds/<prd>/specs/*.md` — every spec has at least one
    box, and none is ticked before an implementer runs it. Then
@@ -93,7 +111,7 @@ runs: 33
 |------|-------|----|
 | `over split-above: N > 40 — REFINE it` | the set is heavier than the board allows | weigh each spec against the siblings' spec files first; if the weight is honest at that scale the verdict is REFINE with a `## Split` table, never a lower number |
 | an implementer reports a box whose command prints a different number than the box asserts | the number was written from the build's memory rather than from running the command **as the box spells it** — a `grep -c` counts every matching line, and a word quoted in a comment beside the code counts too | run each box's own command line verbatim, from the repo root, and paste what it prints into the box. A count in a box is quoted output, never a recollection; when a literal appears in both prose and code, aim the box at the content instead of at the count |
-| `collect` refuses with `spec<NN> exit <n> — nothing written`, and every command in the block passes when you run it by hand | a line in the block is a **board-wide gate** — `doctor`, a full harness sweep, a repo-root `git status`/`git diff` — and `collect` runs the block under `pipefail`, so that command's exit becomes the block's. The unit's pass is now conditional on every other PRD on the board. `141` instead of `1` means the same shape sigpiped into a `grep -q` | capture, then grep: `out=$(<board-wide command> 2>&1 \|\| true)` then `printf '%s\n' "$out" \| grep -E "<rows>"`. The rows stay visible and stop deciding the exit. Gate **only** on commands reading a path from this spec's own `footprint:`. Check it the way collect will, not by hand: `bash -c "set -o pipefail; $(awk '/^```sh/{f=1;next} /^```/{f=0} f' <spec>)"` must exit 0 |
+| `collect` refuses with `spec<NN> exit <n> — nothing written`, and every command in the block passes when you run it by hand | a line in the block is a **board-wide gate** — `doctor`, a full harness sweep, a repo-root `git status`/`git diff`, `index.py check` — and it decides the block's exit two ways: `-e` takes a bare call's status, and `pipefail` takes it out of a pipeline. Either way the unit's pass is conditional on every other PRD on the board, and a gate already red on an inherited line means the spec can never pass, however green the work is. `141` instead of `1` is the same shape sigpiped into a `grep -q` | capture, then grep: `out=$(<board-wide command> 2>&1 \|\| true)` then `printf '%s\n' "$out" \| grep -E "<rows>"`. The rows stay visible and stop deciding the exit. Gate **only** on commands reading a path from this spec's own `footprint:`. Check it the way collect will, not by hand: `bash -c "set -o pipefail; $(awk '/^```sh/{f=1;next} /^```/{f=0} f' <spec>)"` must exit 0 |
 | the report path already holds a previous pass's report | this route is run twice on one PRD — the analyst's pass and an implementer's — and both write `prds/<prd>/report.md` whole | read it before writing and carry its `## Findings` forward into yours by name. A finding reported and not fixed is the route's only record of a defect nobody owns; an overwrite that drops it loses the board's sole copy |
 | a block exits non-zero on the result that means it passed | a command whose **passing** result is "nothing matched" — `grep -c`, `grep -vc`, `ls <glob>`, `find … \| wc -l` — exits non-zero on exactly that result | guard the *producer*, not the pipeline: `{ <cmd> \|\| true; } \| wc -l` |
 | a block exits **0** while a line in it printed a failure | the assertion is written `[ <test> ] && echo "<the good news>"`, or `<probe> && echo BAD \|\| echo OK`. Neither can fail a block: a false test prints nothing and the next command's status becomes the block's, and the `&&…\|\|` pair always exits 0 | put the assertion **last** and write it bare — `[ ! -s "$f" ]` — or accumulate a counter in the loop and end on `[ "$N" = 0 ]`. Then run the block the way collect does (`awk` it out, `set -o pipefail`) **against a tree where the check should fail**, and confirm it does |
@@ -102,3 +120,6 @@ runs: 33
 | a spec contracts a file under `.pearde/memos/` and `memos.py check` goes red the moment it lands | the index by kind is generated, and adding a memo makes `memos/README.md` stale — a file no footprint names and that the spec cannot omit | run `python3 resources/memos.py index <board>` and check `git diff --stat` names one added row; the index is part of adding a memo, not a separate edit. Say so in the report, because the footprint is wrong and the next author of a memo spec should carry the index row in it |
 | a `## Verify and Proof` block reads as instructions to a person — a `<placeholder>` argument, a `# note the dir` comment standing in for a value, a bare `$?` echoed after the command it describes | the block was written to be *read* and never run, and `collect` runs it: `<that dir>` is parsed as a redirect from a file named `that`, and the spec dies on a syntax error with every box already ticked | run every block, of every spec in the set, exactly as `collect` will — `bash -e -o pipefail -c "$(awk '/^```sh/{f=1;next} /^```/{f=0} f' <spec>)"` — before `specced` is called. `specced --check` reads the block's *presence*, never its exit, so a block that cannot parse passes the gate |
 | a block line reads `! <cmd>` and a mutation that should redden it leaves the block at exit 0 | `set -e` does not apply to a command whose status is inverted by a leading `!` (POSIX XCU 2.11), so the line prints its failure and the block carries on | write it `if <cmd>; then exit 1; fi`. This is the same class as the `<test> && <action>` shape the section already names, and the `!` form is not covered by it — a block can hold one and read green forever |
+| a block ends on `<board-wide gate> \| grep <own files> && exit 1`, and the gate is red on rows outside the footprint | under `pipefail` the pipeline carries the gate's exit, so the `&& exit 1` never fires and the block's own exit is the gate's — the check cannot fail, and where the line is last the block fails for a reason outside its footprint | capture the gate (`out=$(<gate> 2>&1) && rc=0 \|\| rc=$?`), refuse a crashed producer by exit code, and put the grep in an `if … then exit 1; fi`. The existing row names the capture; it does not name that the `&& exit 1` tail is dead in the same breath |
+| a block reading `.pearde/prds/…` passes in the lane and its census counts read 0 or near it | `lanes.create` gives the lane its own `.pearde/`, holding `graphify/` and no `prds/` — the block is sweeping an empty board and passing vacuously | build the merged tree (`git clone --shared <checkout>`, `git apply` the lane's diff, `ln -s <board> <scratch>/.pearde`) and run every block there, rebuilding it after each edit. Quote a census count from the block: a sweep that finds no PRDs is the tell |
+| a spec contracts a `resources/invariants/*.sh` script and its memo's `verify:`, and `memo verify` answers `BROKEN (exit 127) — No such file or directory` in the lane | `memos.py verify` runs each command with the cwd set to `os.path.dirname(board)`, and `board_link` resolves a board reached through a symlink to what the link points at — so a lane's root is the checkout, and the script the lane holds is not on it | run the invariant directly (`bash resources/invariants/<name>.sh`, which takes its tree from `$PWD`) to prove the rule, and keep a byte-identical copy in the checkout — proved with `cmp` — so the memo's own command resolves. Say both in the report; the copy is one of the paths the merge needs cleared |

@@ -3,6 +3,8 @@ atomic: write-the-manifest-row
 subject: give a new file its row in the manifest and its place in every scope
 date: 2026-08-28
 runs: 2
+tags:
+  - atomic
 ---
 
 # write-the-manifest-row — the two files that point at a third

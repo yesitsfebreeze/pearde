@@ -4,6 +4,8 @@ subject: Found the excluded rename resting on the refuted claim, so the ruling i
 date: 2026-09-02
 updated: 2026-09-02
 runs: 1
+tags:
+  - atomic
 ---
 
 ## Do

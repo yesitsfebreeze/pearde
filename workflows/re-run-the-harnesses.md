@@ -3,7 +3,9 @@ atomic: re-run-the-harnesses
 subject: re-run the recorded harnesses and account for every changed count
 date: 2026-08-28
 updated: 2026-09-02
-runs: 67
+runs: 82
+tags:
+  - atomic
 ---
 
 # re-run-the-harnesses — every number back, or explained
@@ -74,3 +76,5 @@ runs: 67
 | a check backing an already-ticked box in your own spec goes red on the change the contract asked for | the check was written against the old behaviour in an environment the change makes reachable, not against the box's words | re-read the box's own sentence and re-aim the check at the shape that still meets it — never weaken it, and never special-case the new path to keep the old check green, which puts back the divergence the unit removes. Quote the red, the box's words, and the re-aimed check in the report |
 | a count dropped and the failing line is a harness's own `index.py check`, `doctor.sh` or manifest assertion over the live checkout | the harness measures the workspace, not its PRD's footprint; a parallel worker's new file with no manifest row reddens it | quote the line and the file that explains it (`git status --short` names it untracked, its mtime post-dates your baseline), leave the harness alone, and cite `.pearde/memos/a-harness-that-reads-the-whole-checkout-is-not-a-harness.md` — the repair is owed to that harness's own PRD, not to you |
 | a repo-wide gate is red in the lane on lines the orchestrator's checkout does not print | the lane is behind the checkout's uncommitted work, so a fix that landed there is missing here — the mirror image of an inherited red | baseline the gate in **both** roots before the first edit and quote both in the report. A line present in the lane and absent in the checkout closes on the merge; a line present in both is a live finding. Never add a neighbour's missing row in the lane to silence it — the checkout already holds that hunk and you would duplicate it into the merge |
+| a footprint file of yours is also modified, uncommitted, in the orchestrator's checkout, and the two hunks are on **adjacent** lines | both edits are correct and neither is a conflict with the other's meaning, but a three-way merge cannot keep both automatically — the same adjacency `-U0` hides in a diff | prove it before the merge rather than discovering it in `collect`: clone the checkout to scratch, commit the neighbour's working copy there, `git apply --3way` your own diff, and read whether it conflicts. Name the file, both hunks and the resolution in the report. Do not move your hunk to avoid it — a hunk written to dodge a neighbour's uncommitted line is wrong the moment they land |
+| a block gates on the PRD's slug appearing in a sweep's failing lines, and goes red with the PRD's own probe green | the worker's lane directory is named for the slug, so any neighbour's FAIL line quoting a path inside that lane matches | gate on the **path** of the PRD's own probe — `prds/<prd>/probe/verify.sh` — never on the slug. Measured: two matches for the bare slug against zero for the path, on the same sweep output |

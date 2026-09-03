@@ -70,14 +70,24 @@ echo
 # one of its skills. That slot is already correct — the agent reading @SKILL.md
 # found it that way — and building a folder over it would replace the repo
 # with a link into itself. Step 1 of @references/install.md, enforced.
-SELF="$(basename "$ROOT")"
+#
+# Decided once, on the physical path of both sides: <skills-dir> resolved with
+# `pwd -P` against the repo's own parent resolved the same way. Only when the
+# repo's root is literally under <skills-dir> does a slot count as taken —
+# a checkout elsewhere whose parent merely shares a name never fires this.
+SELF=""
+DEST_P="$(cd "$DEST" 2>/dev/null && pwd -P)"
+PARENT_P="$(cd "$(dirname "$ROOT")" 2>/dev/null && pwd -P)"
+if [ -n "$DEST_P" ] && [ "$DEST_P" = "$PARENT_P" ]; then
+  SELF="$(basename "$ROOT")"
+fi
 
 for f in "$ROOT"/references/skills/*.md; do
   [ -e "$f" ] || continue
   name="$(basename "$f" .md)"
   at="$DEST/$name"
 
-  if [ "$name" = "$SELF" ] && [ "$(cd "$DEST" 2>/dev/null && pwd -P)" = "$(dirname "$ROOT")" ]; then
+  if [ -n "$SELF" ] && [ "$name" = "$SELF" ]; then
     # The repo occupies this slot, so the folder is already correct. What is
     # left is @SKILL.md — the installer, which shadows the skill of the same
     # name for exactly as long as it exists.

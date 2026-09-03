@@ -36,6 +36,33 @@ case "$cmd" in
     exit 2 ;;
 esac
 
+# Every dependency this command needs, named before any work starts — a pass
+# that dies at the model call leaves a half-written graphify/ behind, and
+# `open` failing after the vault is registered is a URI printed to no one.
+# One line per missing piece, with the command that installs it; exit 2.
+MISSING=()
+case "$cmd" in
+  extract)
+    command -v graphify >/dev/null 2>&1 || MISSING+=("graphify — pip install graphify")
+    if ! command -v ollama >/dev/null 2>&1; then
+      MISSING+=("ollama — brew install ollama")
+    elif ! LISTED=$(ollama list 2>/dev/null); then
+      MISSING+=("the ollama daemon — ollama serve")
+    elif ! printf '%s\n' "$LISTED" | awk '{print $1}' | grep -qx "$MODEL"; then
+      MISSING+=("model $MODEL — ollama pull $MODEL")
+    fi ;;
+  update|query|path|explain|god-nodes)
+    command -v graphify >/dev/null 2>&1 || MISSING+=("graphify — pip install graphify") ;;
+  open)
+    command -v python3 >/dev/null 2>&1 || MISSING+=("python3 — the vault register is written through init.py")
+    command -v open >/dev/null 2>&1 || command -v xdg-open >/dev/null 2>&1 \
+      || MISSING+=("an opener — \`open\` (macOS) or \`xdg-open\` (Linux); the vault URI is printed instead") ;;
+esac
+if [ "${#MISSING[@]}" -gt 0 ]; then
+  for m in "${MISSING[@]}"; do echo "graph $cmd: missing $m" >&2; done
+  exit 2
+fi
+
 # First positional arg that is a directory is the folder; the rest are args.
 FOLDER="${PEARDE_GRAPH_FOLDER:-.}"
 ARGS=()
@@ -127,6 +154,9 @@ except Exception:
 print('obsidian://open?vault=' + vid if vid
       else 'obsidian://open?path=' + urllib.parse.quote(vault))
 ")
-    open "$VAULT_URI"
+    if command -v open >/dev/null 2>&1; then open "$VAULT_URI"
+    elif command -v xdg-open >/dev/null 2>&1; then xdg-open "$VAULT_URI"
+    else echo "$VAULT_URI"
+    fi
     ;;
 esac

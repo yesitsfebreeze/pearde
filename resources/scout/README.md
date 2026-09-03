@@ -28,9 +28,8 @@ exists for those two cases.
 | `buckets.txt` | the taxonomy — `name<TAB>query` per line; **the knob** |
 | `snapshots/` | star counts, one TSV per day, capped at the 90 most recent (`SCOUT_SNAP_KEEP`) |
 | `reading-list.md` | the curated, mechanism-mapped list |
-| `templates/` | quality-gate configs + workflow for wiring a new tree |
-| `SKILL.md` | this skill's entry |
-| `README.md` | this file |
+| `templates/` | quality-gate configs + workflows for wiring a new tree: `quality.yml`, `scout.yml`, `dependabot.yml`, `_typos.toml`, `deny.toml` |
+| `README.md` | this file — the skill's entry is `references/skills/pearde-scout.md`, two levels up |
 
 ## Commands
 
@@ -106,8 +105,10 @@ a locked dep turns the tab red on Monday with no human action.
 - **typos** (`_typos.toml`) — 2,000+ md files where the prose IS the spec. A
   typo in a frontmatter key is a silent behaviour change. The config is the
   record of deliberate spellings, not an ad-hoc suppression.
-- **gitleaks** (`.gitleaks.toml`) — full-history secret scan. The allowlist is
-  fixtures asserting on fake keys, each with a recorded reason.
+- **gitleaks** — full-history secret scan. `quality.yml` names a
+  `.gitleaks.toml` for the allowlist — fixtures asserting on fake keys, each
+  with a recorded reason — but `templates/` ships none: gitleaks runs on its
+  defaults until the tree writes its own.
 - **cargo-deny** (`deny.toml`) — RustSec advisories hard-gated. The ignore
   list is the audited unmaintained-transitive set, by ID, with reasoning. A
   NEW advisory fails the job. 0.20.x has no `unmaintained` severity key —
@@ -118,8 +119,9 @@ a locked dep turns the tab red on Monday with no human action.
   add `rustc-wrapper = "sccache"` to `~/.cargo/config.toml`.
 
 Wire a new tree by copying `templates/` — `quality.yml`, `dependabot.yml`,
-and the three config files — then adjust the deny.toml ignore list to that
-tree's actual advisories.
+`_typos.toml` and `deny.toml` — then adjust the deny.toml ignore list to that
+tree's actual advisories, and write a `.gitleaks.toml` if the tree needs an
+allowlist.
 
 ## Maintenance
 

@@ -12,9 +12,10 @@
 # one is never a copy: the links already point at this working tree and the
 # content is current the moment the tree is. What goes stale is the *set* —
 # a skill added since the install has no folder, one renamed leaves a folder
-# pointing at nothing, and either is silent. This walks the places a skill
-# folder can live, reports each as ok / off / broken the way doctor does, and
-# re-applies the links where an install is already present.
+# pointing at nothing, and either is silent. This visits the places a skill
+# folder can live, reads each through `install.sh <dir>` — the one reader of
+# where a link points — reports it ok / off / stale / broken the way doctor
+# does, and re-applies the links where an install is already present.
 #
 # It never creates an install that is not there. A directory with no pearde in
 # it reads `off` and carries the one command that would install it — because
@@ -46,7 +47,7 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-BROKEN=0
+BROKEN=0; STALE=0
 row() { printf '  %-11s %-7s %s\n' "$1" "$2" "$3"; [ "$2" = broken ] && BROKEN=1; return 0; }
 fix() { printf '  %-11s %-7s fix: %s\n' "" "" "$1"; }
 note() { printf '  %-11s %-7s %s\n' "" "" "$1"; }
@@ -101,34 +102,40 @@ check_dir() {
     fix "bash $INSTALL --apply $dir"
     return 0
   fi
-  local have
-  have=$(ls -d "$dir"/pearde "$dir"/pearde-* 2>/dev/null | wc -l | tr -d ' ')
-  if [ "$DRY" = 1 ]; then
-    row "$label" ok "$dir · $have of $WANT skills$aside"
-    note "dry · would run: bash $INSTALL --apply $dir"
-    return 0
-  fi
-  local out
-  out=$(bash "$INSTALL" --apply "$dir" 2>&1)
-  # every link that does not resolve, and every pearde folder no skill claims
-  local dead=0 stale=""
-  local f l
+  # `install.sh <dir>` in report mode is the one reader of what a link points
+  # at — readlink against the source it should name, per link — so the verdict
+  # here is parsed from its rows, never re-derived from a walk of our own. A
+  # walk testing `-e` reads a link into some other checkout as fine.
+  local out=""
+  [ "$DRY" = 1 ] || out=$(bash "$INSTALL" --apply "$dir" 2>&1)
+  local rep name st _rest have=0 absent=0 wrong=0 copies=0
+  rep=$(bash "$INSTALL" "$dir" 2>&1)
+  while read -r name st _rest; do
+    [ -n "$name" ] && [ -f "$SKILLS/$name.md" ] || continue   # agents and plugins report too
+    case "$st" in
+      ok|self)  have=$((have + 1)) ;;
+      copy)     copies=$((copies + 1)) ;;
+      missing)  if [ -d "$dir/$name" ]; then wrong=$((wrong + 1)); else absent=$((absent + 1)); fi ;;
+    esac
+  done <<<"$rep"
+  # every pearde folder no skill file claims — install.sh never looks at those
+  local stale="" f
   for f in "$dir"/pearde "$dir"/pearde-*; do
-    [ -d "$f" ] || continue
-    if [ ! -f "$SKILLS/$(basename "$f").md" ]; then
-      stale="$stale $(basename "$f")"
-      continue
-    fi
-    for l in SKILL.md README.md index.md references resources; do
-      [ -e "$f/$l" ] || dead=$((dead + 1))
-    done
+    [ -d "$f" ] && [ ! -f "$SKILLS/$(basename "$f").md" ] && stale="$stale $(basename "$f")"
   done
-  have=$(ls -d "$dir"/pearde "$dir"/pearde-* 2>/dev/null | wc -l | tr -d ' ')
-  if [ "$dead" -gt 0 ]; then
-    row "$label" broken "$dir · $dead link(s) resolve to nothing$aside"
-    fix "the repo moved — bash $INSTALL --remove $dir && bash $INSTALL --apply $dir"
+  if [ "$copies" -gt 0 ]; then
+    row "$label" broken "$dir · $copies skill folder(s) hold a real SKILL.md, not a link$aside"
+    fix "reconcile by hand — the ! lines of: bash $INSTALL $dir"
+  elif [ "$wrong" -gt 0 ]; then
+    row "$label" broken "$dir · $wrong skill folder(s) link somewhere other than this tree$aside"
+    fix "bash $INSTALL --apply $dir"
+  elif [ "$absent" -gt 0 ]; then
+    row "$label" stale "$dir · $have of $WANT skills · $absent without a folder$aside"
+    fix "bash $INSTALL --apply $dir"
+    STALE=1
   else
-    row "$label" ok "$dir · $have of $WANT skills linked$aside"
+    row "$label" ok "$dir · $have of $WANT skills$aside"
+    [ "$DRY" = 1 ] && note "dry · would run: bash $INSTALL --apply $dir"
   fi
   [ -n "$stale" ] && note "stale, no skill file claims them:$stale — remove by hand"
   echo "$out" | grep -E '✓|!' | while IFS= read -r l; do
@@ -137,13 +144,12 @@ check_dir() {
   return 0
 }
 
-# ── local: the project this shell is in ──────────────────────────────────────
+# ── local: this repo's own project skills directory ──────────────────────────
 # A project skills directory is `<repo>/.claude/skills`, and it is per-repo by
-# design — skills that exist here and nowhere else.
+# design — skills that exist here and nowhere else. This repo's, not the
+# cwd's: the script is the install it checks, wherever the shell stands.
 if [ "$MODE" = all ] || [ "$MODE" = local ]; then
-  LOCAL_TOP=$(git rev-parse --show-toplevel 2>/dev/null)
-  [ -n "$LOCAL_TOP" ] || LOCAL_TOP="$PWD"
-  check_dir local "$LOCAL_TOP/.claude/skills" "$(basename "$LOCAL_TOP")"
+  check_dir local "$ROOT/.claude/skills" "$(basename "$ROOT")"
 fi
 
 # ── global: the machine-wide one, and the one that is not in force ───────────
@@ -163,5 +169,9 @@ echo
 if [ "$BROKEN" = 1 ]; then
   echo "pearde: an install is broken — the fix line under it is the whole repair."
   exit 1
+fi
+if [ "$STALE" = 1 ]; then
+  echo "pearde: an install is behind — \`pearde update\` without --dry re-links it."
+  exit 0
 fi
 echo "pearde: every install found is current. \`pearde upgrade [<dir>]\` brings a *board* up to this layout."

@@ -4,8 +4,6 @@ subject: record what every committed harness prints before the tree is touched
 date: 2026-08-28
 updated: 2026-09-02
 runs: 82
-tags:
-  - atomic
 ---
 
 # capture-the-harness-baseline — the numbers as they were before you

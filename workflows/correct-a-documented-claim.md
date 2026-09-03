@@ -3,8 +3,6 @@ workflow: correct-a-documented-claim
 subject: a wrong or ambiguous claim, corrected everywhere it is copied
 date: 2026-08-28
 runs: 3
-tags:
-  - workflow
 ---
 
 # correct-a-documented-claim — the claim, and its copies

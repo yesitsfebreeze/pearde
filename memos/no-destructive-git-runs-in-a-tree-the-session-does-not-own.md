@@ -2,10 +2,6 @@
 memo: no-destructive-git-runs-in-a-tree-the-session-does-not-own
 kind: invariant
 status: decided
-tags:
-  - memo
-  - kind/invariant
-  - status/decided
 subject: every destructive git in the board's own Python asks who owns the tree first, or it is a finding
 date: 2026-09-02
 verify: bash resources/invariants/no-destructive-git-runs-in-a-tree-the-session-does-not-own.sh

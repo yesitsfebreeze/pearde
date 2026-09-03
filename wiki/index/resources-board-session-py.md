@@ -29,6 +29,7 @@ present: true
 - [[.pearde/wiki/index/resources-board-orphans-py|resources/board/orphans.py]]
 - [[.pearde/wiki/index/resources-board-transitions-py|resources/board/transitions.py]]
 - [[.pearde/wiki/index/resources-pearde-py|resources/pearde.py]]
+- [[.pearde/wiki/index/resources-pearde-path-py|resources/pearde_path.py]]
 
 ## Same scope — `@@own`
 

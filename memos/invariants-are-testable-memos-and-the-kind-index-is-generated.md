@@ -2,10 +2,6 @@
 memo: invariants-are-testable-memos-and-the-kind-index-is-generated
 kind: decision     # decision | note | invariant
 status: decided    # open | decided | superseded
-tags:
-  - memo
-  - kind/decision
-  - status/decided
 subject: invariants are testable memos and the kind index is generated
 date: 2026-09-01
 # verify:          # invariant only, and required there — a command that

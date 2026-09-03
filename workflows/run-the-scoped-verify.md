@@ -4,8 +4,6 @@ subject: run the unit's own verify command and quote what it printed
 date: 2026-08-28
 updated: 2026-09-02
 runs: 23
-tags:
-  - atomic
 ---
 
 # run-the-scoped-verify — the unit measured, not the tree

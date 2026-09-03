@@ -3,8 +3,6 @@ workflow: add-a-contract-key
 subject: a new frontmatter key, from the contract row to the check that fails on it
 date: 2026-08-28
 runs: 0
-tags:
-  - workflow
 ---
 
 # add-a-contract-key — a key the tools read, wired end to end

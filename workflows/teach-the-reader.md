@@ -3,8 +3,6 @@ atomic: teach-the-reader
 subject: make one reader parse the key and one check fail on a bad value
 date: 2026-08-28
 runs: 0
-tags:
-  - atomic
 ---
 
 # teach-the-reader — the row turned into behaviour

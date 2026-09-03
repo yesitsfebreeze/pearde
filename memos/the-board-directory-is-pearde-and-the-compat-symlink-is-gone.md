@@ -2,10 +2,6 @@
 memo: the-board-directory-is-pearde-and-the-compat-symlink-is-gone
 kind: invariant
 status: decided
-tags:
-  - memo
-  - kind/invariant
-  - status/decided
 subject: the board directory is .pearde and the compat symlink is gone
 date: 2026-09-03
 verify: test -d .pearde -a ! -L .pearde -a ! -e pearde

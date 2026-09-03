@@ -21,4 +21,5 @@ present: true
 
 ## Same scope — `@@share`
 
-- [[pearde/wiki/index/resources-board-lanes-py|resources/board/lanes.py]]
+- [[.pearde/wiki/index/resources-board-lanes-py|resources/board/lanes.py]]
+- [[.pearde/wiki/index/resources-invariants-one-copy-per-machine-of-what-every-lane-regenerates-sh|resources/invariants/one-copy-per-machine-of-what-every-lane-regenerates.sh]]

@@ -4,8 +4,6 @@ subject: read the PRD, its answers and everything it cites, before the first edi
 date: 2026-08-28
 updated: 2026-09-02
 runs: 82
-tags:
-  - atomic
 ---
 
 # read-the-contract — the whole contract in the window before anything moves

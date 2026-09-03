@@ -1,207 +1,152 @@
-# the-prose-and-the-invariants-say-dot-pearde — analyst report
+# the-prose-and-the-invariants-say-dot-pearde — implementer report
 
-Verdict: SPECCED
+Verdict: DONE
 
-Three specs, complexity 3 + 6 + 8 = 17, over six files of prose and invariants
-plus eight modules. The build went through: the whole sweep stands in the lane,
-uncommitted, and one invariant that was red in every lane is now green.
+Second pass on this route. The analyst's pass (2026-09-03, report below this
+one in git) probed, built and specced; its build stands uncommitted in the
+lane — 14 files, +128 −100 — and every spec's **Stands** held when checked
+against the files. This pass ran no build of its own: it entered step 3 for no
+spec, re-measured, ran every spec's `## Verify and Proof` block the way
+`collect` runs it, proved each can fail, and ticked 16 of 16 boxes.
 
-Workflow followed: `probe-then-spec`. `correct-a-documented-claim` is the route
-the build inside step 3 took, and its `## Use when` fits this contract exactly —
-but this pass is an analyst on an `analyzing` PRD, which is what
-`probe-then-spec` is for. Both files already exist; neither is a finding.
+Baseline inherited and confirmed: the five board harnesses this footprint
+moves were re-run in the lane and every count equals the number the analyst's
+report published (colour-group 8 groups, board-file 20 PASS 0 FAIL,
+every-artifact 7 PASS 0 FAIL, destructive 6 PASS 0 FAIL, one-copy 4 PASS 0
+FAIL) — so the inherited baseline stands without a revert window, per the
+route's cheaper confirmation. Lane HEAD was `f8968fe` at the first command and
+at the last; the checkout's HEAD was `e55a0e7` at both. No head moved.
 
-The record had the answer before the build: `knowledge.py query` returned 90
-hits, 90 strong, the top one `[[260901-ee0f]] Every pearde board on this machine
-is on the .pearde layout`. No gap enqueued into `.pearde/wiki/pending/`.
+## Workflow probe-then-spec
 
-## What the build found first
-
-The parent PRD describes a repo that no longer exists. Its **Today** section
-says the board is `<project>/pearde/` with `.pearde` a symlink beside it; the
-move back landed in `c88a64a` before this pass started, and
-`.pearde/memos/the-board-directory-is-pearde-and-the-compat-symlink-is-gone.md`
-records it as an invariant with `verify: test -d .pearde -a ! -L .pearde -a ! -e
-pearde`. Measured on this checkout: `.pearde` is a real directory and no
-`pearde/` exists. So this PRD is not prose written ahead of a move — the move
-happened, and the prose is what is behind.
-
-`references/` was already almost entirely dotted. The undotted spellings left
-sit in three places: `references/parts/board.md`'s *Where the board is*, the
-invariant scripts, and module comments.
-
-## Specs
-
-| spec | goal | complexity |
+| step | atomic | result |
 |---|---|---|
-| `specs/spec01.md` | *Where the board is* reads the dotted order, and the pages that copy it agree | 3 |
-| `specs/spec02.md` | every invariant finds the dotted board, and exercises it | 6 |
-| `specs/spec03.md` | the comments and printed paths outside the resolvers say `.pearde` | 8 |
+| 1 | read-the-contract | prd.md read; three specs read; git status recorded in both roots before any edit — checkout held `references/drill.md` and `references/skills/pearde-drill.md` modified (a neighbour's, outside the footprint, untouched); lane held exactly the 14 footprint files |
+| 2 | capture-the-harness-baseline | taken in the lane, then confirmed equal to the analyst's published counts; repo gate recorded in both roots |
+| 3 | attempt-the-build | not entered — second pass; every spec's footprint is in the lane tree, checked by reading `git -C <lane> status --short` (14 files, all named in the specs' footprints) |
+| 4 | re-run-the-harnesses | all five harnesses re-run in the lane, same order, no PEARDE_ROOT either time: 20/0, 7/0, 6/0, 4/0, 8 groups — equal to baseline and to the analyst's published numbers |
+| 5 | write-the-specs | none authored — second pass; boxes ticked as closed |
 
-Union of the footprints, 14 files:
+### Edits
 
-```
-references/parts/board.md
-references/parts/commits.md
-references/parts/guard.md
-resources/board/collect.py
-resources/board/refuse.py
-resources/board/serve.py
-resources/board/session.py
-resources/board/shared.py
-resources/guard.py
-resources/knowledge.py
-resources/graph/graph.sh
-resources/invariants/a-board-s-own-file-commits-in-the-board-repo.sh
-resources/invariants/every-artifact-lands-inside-the-board.sh
-resources/invariants/no-colour-group-in-the-vault-preset-is-a-path-query.sh
-```
+None — the route's workflow files are not this pass's to edit, and no atomic
+failed in a way that named a wrong command, path, or check. The one mis-run
+that could have become an edit did not: the first spec01 block run executed
+from the checkout because the shell resets cwd between calls, and its
+`cd "$(git rev-parse --show-toplevel)"` then resolved the checkout — the
+expected pre-merge failure, which was re-run deliberately in the lane and in
+the merged scratch tree after. No workflow edit needed.
 
-All three verify blocks were run in the lane and each printed `ok`. `spec01`'s
-and `spec02`'s greps were each proved to fail against an injected line asserting
-`pearde/` as the board's name.
+## Per-spec verification
 
-## The red invariant nobody was seeing
+Run the way `collect` runs it, `bash -e -o pipefail` with the block awked out,
+from the lane:
 
-`resources/invariants/no-colour-group-in-the-vault-preset-is-a-path-query.sh`
-exited **1** in this lane at baseline —
+| spec | in lane | verbatim in checkout | merged tree |
+|---|---|---|---|
+| spec01 | rc 0 · `spec01 ok` | rc 1 · `FAIL references/parts/commits.md` | rc 0 · `spec01 ok` |
+| spec02 | rc 0 · `spec02 ok` | rc 1 · `BROKEN: no board at pearde/` | rc 0 · `spec02 ok` |
+| spec03 | rc 0 · `spec03 ok` | rc 1 · undotted `guard.MEMO` grep hit | rc 0 · `spec03 ok` |
 
-```
-BROKEN: no board at pearde/ — the second check has nothing to read
-```
+The verbatim-in-checkout column is the red-to-green flip shown against the
+tree that does not hold the build, quoted per the route.
 
-It resolves the board beside itself (`dirname $0/../..`). From the checkout that
-is the repo root and the board is there; from a lane — a worktree of this repo,
-holding an empty `.pearde/` — nothing is. Green from the checkout, red from
-every one of the 50 trees a worker actually builds in. It now resolves the
-checkout from `git rev-parse --git-common-dir`, asks `.pearde/` before
-`pearde/`, and names the path it looked at when it finds none. Green from the
-lane and from a fresh worktree.
+Can-it-fail proof, one mutation per spec, each restored from a scratch copy
+outside the repo and proved back with `cmp`:
 
-This is the memo's own last consequence arriving in a script instead of a spec:
-*"A verify block that names a board path cannot spell it relative to the cwd: a
-worktree of the code repo holds an empty `.pearde/`."*
-
-## The invariant that was testing the wrong layout
-
-`a-board-s-own-file-commits-in-the-board-repo.sh` built its `nested` fixture —
-"a code repo that ignores its board, and a board that is its own git repo",
-which is this repo's layout — at `<code>/pearde`. It was green, because the
-fixture is self-consistent, and it was green about the name the board no longer
-uses. The fixture is now `.pearde` throughout: the board directory, the code
-repo's `/.pearde` ignore line, the lane probe path, both log needles and the
-board-spelled section. Still 20 PASS 0 FAIL, now against the real layout.
-
-## Findings
-
-**1. Three siblings and this PRD overlap on eleven files.** The parent set all
-four children `needs: —`, so they run at once, but the comments this contract
-owns sit inside the readers the other three rewrite. Measured:
-
-- `the-board-name-is-one-dotted-constant` owns `boards.py`, `common.py`,
-  `plan.py`, `health.py`, `questions.py`, `memos.py`, `grammar.py`, `doctor.sh`,
-  `statusline.sh`.
-- `init-and-upgrade-write-the-dotted-board` owns `init.py`.
-- `the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` owns
-  `doctor.sh`'s vault row, `obsidian/app.json`, `knowledge/Dashboard.md`,
-  `knowledge/{sources,conclusions}/_index.md`, `references/obsidian.md` and
-  `references/parts/statusline.md`'s vault section.
-
-The specs stop at that line, so none of those files is in this PRD's footprint.
-The stale comments inside them are listed below, so the sibling that rewrites
-each reader rewrites its comment in the same hunk. That is why `spec03` says so
-in its body rather than reaching for the file.
-
-**2. Two resolvers still ask the legacy name first.** Not this PRD's to fix —
-`the-board-name-is-one-dotted-constant`'s — but both are wrong against
-`boards.py BOARD_DIRS`, which is `(".pearde", "pearde")`:
-
-- `resources/doctor.sh:264` — `for n in pearde .pearde`
-- `resources/statusline.sh:96` — `if [ -f "$d/pearde/settings.md" ]` before the
-  dotted test
-
-On a board carrying both names the two shell readers pick the legacy directory
-and every Python reader picks the dotted one, so `doctor` and the status line
-report a different board from the one every command works.
-
-**3. `doctor`'s `board broken` fix line moves a board to the undotted name.**
-`resources/doctor.sh:379` prints `mkdir -p $OFFROOT/pearde && git mv …` as the
-repair for a board found on the old layout, and `:381` says `no board — pearde
-init creates pearde/`. Both contradict the invariant memo and the init sibling.
-Same owner as finding 2, plus the vault row at `:457`, whose fix line runs
-`pearde upgrade` to move the board *back* — which the vault PRD already names in
-its own body.
-
-**4. The graphify cache store is keyed on a path no tree holds.**
-`shared.py CACHE_KEY` is `"pearde/graphify/cache"`, and the store carries 29 MB
-under it (`/Users/feb/dev/infra/pearde/.git/pearde-shared/pearde/graphify/cache`,
-measured 2026-09-03). The dotted row is `RETIRED` onto it, so nothing is broken
-and `one-copy-per-machine` is 4 PASS 0 FAIL. The cost is the row: applying the
-table materialises an undotted `pearde/graphify/` in every tree it reaches, and
-**25 of this repo's 50 lanes carry one**. None is board-shaped — no
-`settings.md`, no `prds/` — so `is_board_dir` is false and no tree resolves
-twice; if one ever gained either marker, that is the double-resolution outage
-the memo describes, arriving through the share table. `spec03` reorders the two
-rows so the dotted one is listed first and states in the comment why the key
-keeps the legacy spelling. Flipping the key itself is a store migration and a
-wider contract than this PRD's.
-
-**5. `references/parts/board.md` cannot state where the vault roots.** The page
-argued the board's name from Obsidian's behaviour, and the vault contract is
-being reversed underneath it right now:
-`the-vault-roots-at-the-board-not-the-project` is `superseded` by
-`the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind`, which roots the
-vault at the project and adds `obsidian-unhide` to index the dot. Whichever way
-it lands, a vault claim on this page goes stale the day it does. The rewrite
-therefore cites `@references/obsidian.md` as the page that settles it and
-asserts nothing itself, and `spec01`'s first box holds that line.
-
-**6. Pre-existing, not cleared, not this PRD's.** `python3 resources/index.py
-check` printed the same three lines before and after — `resources/common.py`
-with no row in `references/files.md`, and `references/files.md` plus `@@view`
-naming `resources/board/hotreload-test.js`, deleted in `b1d3f5d`. `doctor` shows
-the same six broken rows as at baseline (`index`, `vault`, `origin`, `health`,
-`knowledge`, `questions`) and no new one. `prose.py check
-references/parts/commits.md` reports 3 unbound waste words at `HEAD` as well as
-in the lane.
-
-## Stale comments inside sibling-owned files
-
-Handed over, not fixed. Each says the board is `pearde/`, or that `.pearde` is a
-symlink onto it:
-
-| file | lines |
-|---|---|
-| `resources/doctor.sh` | 256-258, 317, 355-356, 375, 377, 379, 381, 451, 453 |
-| `resources/statusline.sh` | 80-82, 290-291 |
-| `resources/board/boards.py` | 113 — `board_link` argues from the superseded premise; 184 — `board_named`'s docstring gives the two names in the order the code no longer uses |
-| `resources/common.py` | 87 — same docstring, same wrong order |
-| `resources/guard.py` | 50, 178, 216 — same |
-| `resources/board/init.py` | 7, 23, 69-76, 129, 134, 179, 297-311, 407-420, 589, 822, 994, 1027, 1074, 1082, 1161 |
-| `resources/board/knowledge/*.md`, `resources/board/obsidian/app.json` | every Dataview `FROM "pearde/…"` and every ignored-path row — vault-relative, so their spelling follows the vault sibling's answer |
-
-## Harnesses
-
-Baseline and after, both from the lane:
-
-| harness | before | after |
+| spec | mutation | result |
 |---|---|---|
-| `a-board-s-own-file-commits-in-the-board-repo.sh` | rc 0 · 20 PASS 0 FAIL | rc 0 · 20 PASS 0 FAIL |
-| `a-master-need-is-the-union-of-its-members.sh` | rc 0 · 17 PASS 0 FAIL | rc 0 · 17 PASS 0 FAIL |
-| `every-artifact-lands-inside-the-board.sh` | rc 0 · 7 PASS 0 FAIL | rc 0 · 7 PASS 0 FAIL |
-| `no-colour-group-in-the-vault-preset-is-a-path-query.sh` | **rc 1 · BROKEN** | rc 0 · 8 groups carried |
-| `no-destructive-git-runs-in-a-tree-the-session-does-not-own.sh` | rc 0 · 6 PASS 0 FAIL | rc 0 · 6 PASS 0 FAIL |
-| `one-copy-per-machine-of-what-every-lane-regenerates.sh` | rc 0 · 4 PASS 0 FAIL | rc 0 · 4 PASS 0 FAIL |
+| spec01 | appended a line spelling `pearde/` as the board to `board.md` | rc 1, `FAIL board.md` |
+| spec02 | appended an undotted comment to the board-file invariant | rc 1, grep names line 433 |
+| spec03 | `guard.MEMO` spelled undotted | rc 1, grep names line 463 |
 
-`python3 resources/index.py check`: three lines before, the same three after.
-`bash resources/doctor.sh`: no row broken that was not broken at baseline.
+spec03's mutation is a computed constant, not a grep needle — it proves the
+block detects a regression, not only that the counter is wired. spec01's and
+spec02's are counter-wiring mutations against string greps; the report says so
+rather than let the ticks imply more.
 
-## Probe
+The merged tree: `git clone --no-hardlinks` of the checkout at `e55a0e7`, then
+`git apply --3way` of the lane's diff — rc 0, no conflict — so the
+rebase/merge `collect` runs will land clean. spec01 and spec03 pass in the
+merged tree; spec02 passes there with the live board symlinked in (state
+named: the merged tree has no board of its own, and the colour-group harness
+needs one to read).
 
-The build is uncommitted in
-`/Users/feb/dev/infra/pearde/.pearde/.lanes/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-prose-and-the-invariants-say-dot-pearde`
-— 14 files, +128 -100. The implementer continues it; nothing here needs
-rebuilding.
+## Box status
+
+All 16 boxes ticked against commands run this session:
+
+- spec01 — 5/5: `prose.py check references/parts/board.md` printed nothing;
+  the dotted-order greps, the memo name, `leaves no link behind` and
+  `@references/obsidian.md's` all hit; the bare-`pearde/` grep over
+  `commits.md`, `guard.md` and `board.md` is clean and fires under mutation.
+- spec02 — 5/5: colour-group green from the lane and from a fresh worktree
+  holding an empty `.pearde/` (the case that was red at the analyst's
+  baseline); board-file 20 PASS 0 FAIL with `board=$code/.pearde`;
+  every-artifact 7 PASS 0 FAIL; the all-invariants grep clean, fires under
+  mutation.
+- spec03 — 6/6: refusal strings name `.pearde/memos/…` (asserted in Python
+  against the imported `refuse` and `guard`); `graph.sh` asks `.pearde/`
+  first; `shared.py` rows ordered `['.pearde/graphify/cache',
+  'pearde/graphify/cache']` with the LEGACY comment present; all modules
+  parse; one-copy 4 PASS 0 FAIL, destructive 6 PASS 0 FAIL.
+
+## The repo gate
+
+- `python3 resources/index.py check` — lane: rc 1, three lines (common.py
+  row, hotreload-test.js row, @@view), unchanged before and after, inherited.
+  Checkout: rc 1, four lines — the three above plus
+  `references/parts/commits.md references @pearde/memos/a-board-s-own-file-commits-in-the-board-repo.md — not on disk`. That fourth line exists only in
+  the checkout, where `commits.md` is still undotted; the lane's rewrite dots
+  the reference, so the merge closes it. Inherited, closing on merge.
+- `bash resources/doctor.sh` — lane: broken rows index, vault, origin,
+  health, knowledge; checkout: the same five, and the checkout's index row
+  carries the fourth line. The vault row's fix line still spells
+  `upgrade → pearde/` — the vault sibling's row, not this footprint's. No row
+  went from ok to broken in either root, and none was closed by this run's
+  edits (the checkout's two dirty files are a neighbour's `drill` files).
+
+## Findings carried forward by name (all stand, none closed by this PRD)
+
+From the analyst's report, unchanged and still owned by their siblings:
+
+1. Three siblings overlap on eleven files — stands; the specs stop at the
+   line.
+2. Two resolvers ask the legacy name first (`doctor.sh:264`,
+   `statusline.sh:96`) — stands, owner `the-board-name-is-one-dotted-constant`.
+3. `doctor`'s `board broken` fix line moves a board to the undotted name
+   (`doctor.sh:379/381`), and the vault row's fix line runs `pearde upgrade`
+   — stands, same owner plus the vault PRD.
+4. The graphify cache store keyed on a path no tree holds (`shared.py
+   CACHE_KEY`) — stands; this PRD reorders the rows and comments the key only.
+5. `board.md` defers the vault to `@references/obsidian.md` — stands by
+   design; the vault sibling settles it.
+6. Pre-existing reds: index.py check's lines, doctor's five broken rows,
+   `prose.py check references/parts/commits.md`'s three waste words — stand,
+   not this PRD's.
+
+New findings this pass:
+
+7. The checkout's `commits.md` at HEAD references a memo path that does not
+   exist — `@pearde/memos/a-board-s-own-file-commits-in-the-board-repo.md`,
+   the undotted spelling of a memo that lives at `.pearde/memos/`. The lane's
+   rewrite dots it, so this closes on the merge; it is the only gate line
+   this PRD's merge closes.
+8. The live serve registry holds two fixture boards from earlier probe runs —
+   `a` at `/private/tmp/pearde-probe-c78NOK/a/.pearde` and `tmp.0BOFUrSzMM`
+   at a deleted temp path, both under the master board `all`. Not landed by
+   this run (no `--fix`-shaped command ran here); the coordinator should
+   `[ -d <path> ] || serve.py forget <name>` each — test the path first.
+9. Two warns from `specced --check` a later author should fix in the spec
+   text: spec02's verify block spells its harness paths through `$I` and a
+   loop variable, so the checker reads no footprint path in it — the block
+   ran green and its mutation proof fires, but it is the checker's blind spot
+   by construction. The implementer-ticked warn on all three specs is the
+   expected shape, not a defect.
+
+## Health floor
+
+The brief names none of the 14 footprint files under the floor. Nothing moved.
 
 ## Scores
 

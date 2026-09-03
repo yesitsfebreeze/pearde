@@ -3,8 +3,6 @@ atomic: write-the-check-that-cannot-lie
 subject: Turned the correct measurement into a command, and made it fail on an injected bogus id and refuse an absent store — it reported 13 false danglers before that
 date: 2026-09-02
 runs: 1
-tags:
-  - atomic
 ---
 
 ## Do

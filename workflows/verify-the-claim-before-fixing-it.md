@@ -3,8 +3,6 @@ workflow: verify-the-claim-before-fixing-it
 subject: Every id in the ontology digest points at a store nothing reads
 date: 2026-09-02
 runs: 1
-tags:
-  - workflow
 ---
 
 ## Use when

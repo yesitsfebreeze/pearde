@@ -4,8 +4,6 @@ subject: a new file under references/ or resources/, from the file to a silent m
 date: 2026-08-28
 updated: 2026-08-28
 runs: 2
-tags:
-  - workflow
 ---
 
 # add-a-file-to-the-skill — a new file, and the two places that must point at it

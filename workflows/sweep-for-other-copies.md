@@ -4,8 +4,6 @@ subject: find the copies of a claim you corrected in one place
 date: 2026-08-28
 updated: 2026-08-28
 runs: 4
-tags:
-  - atomic
 ---
 
 # sweep-for-other-copies — one fix is not a fixed claim

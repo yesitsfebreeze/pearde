@@ -4,8 +4,6 @@ subject: an open PRD, from its contract to specs written from a build
 date: 2026-08-28
 updated: 2026-09-02
 runs: 60
-tags:
-  - workflow
 ---
 
 # probe-then-spec — build it first, then write down what it takes

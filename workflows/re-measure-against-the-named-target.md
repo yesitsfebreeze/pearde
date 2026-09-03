@@ -3,8 +3,6 @@ atomic: re-measure-against-the-named-target
 subject: Pinned `KERN_DIR` to the store the artefact names; 21 of 21 ids resolved where 21 had been reported dead
 date: 2026-09-02
 runs: 1
-tags:
-  - atomic
 ---
 
 ## Do

@@ -4,8 +4,6 @@ subject: re-run the recorded harnesses and account for every changed count
 date: 2026-08-28
 updated: 2026-09-02
 runs: 82
-tags:
-  - atomic
 ---
 
 # re-run-the-harnesses — every number back, or explained

@@ -1,9 +1,10 @@
 ---
-state: open
+state: specced
 origin: requested
 priority: 95
-complexity: 0
-blast-radius:
+complexity: 20
+blast-radius: high
+workflow: probe-then-spec
 ---
 
 # a claim names the process that holds it

@@ -1,9 +1,10 @@
 ---
-state: open
+state: specced
 origin: requested
 priority: 85
-complexity: 0
-blast-radius:
+complexity: 16
+blast-radius: mid
+workflow: probe-then-spec
 ---
 
 # the sweep runs between passes

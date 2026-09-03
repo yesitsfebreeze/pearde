@@ -6,6 +6,7 @@ complexity: 8
 blast-radius: mid
 workflow: probe-then-spec
 actual: 0.7h
+commit: 9a558a1
 ---
 
 # a fork reaches the user when it is written

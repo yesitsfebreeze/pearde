@@ -82,14 +82,15 @@ fi
 [ -n "$MODEL" ] && OUT="$OUT \033[38;5;240m·\033[0m \033[38;5;245m${MODEL}\033[0m"
 
 # ── board segment — its own line ──────────────────────────────────────────────────────────────
-# A board is a `pearde/` directory holding settings.md (tooling's find_board)
-# — `.pearde/` on a board that never migrated out of the hidden name, read
-# through the compatibility symlink so the name shown is the board's own — or
-# a directory called something else entirely carrying settings.md, which is
-# how a project whose folder tree already uses the word `pearde` names its
-# board (@resources/board/plan.py `named_boards`) — or, one board predating
-# all three, a `prds/` dir carrying its own settings.md. Walking up, the board
-# dir wins over prds/: a repo can hold both during a migration.
+# A board is a `.pearde/` directory holding settings.md (tooling's find_board)
+# — `pearde/` on a board that has not run `pearde upgrade` out of the legacy
+# name, read through the compatibility symlink so the name shown is the
+# board's own — or a directory called something else entirely carrying
+# settings.md, which is how a project whose folder tree already uses the
+# word `pearde` names its board (@resources/board/plan.py `named_boards`) —
+# or, one board predating all three, a `prds/` dir carrying its own
+# settings.md. Walking up, the board dir wins over prds/: a repo can hold
+# both during a migration.
 # Two passes over the same climb, the known names before the scan, so a board
 # under a known name wins at any depth over a discovered one nearer the cwd —
 # this repo ships `resources/board/example/`, which IS a board and is meant to
@@ -98,7 +99,6 @@ fi
 BOARD=""; BOARD_OUT=""
 d="$DIR"
 while [ -n "$d" ] && [ "$d" != "/" ]; do
-  if [ -f "$d/pearde/settings.md" ]; then BOARD="$d/pearde"; break; fi
   if [ -f "$d/.pearde/settings.md" ]; then
     if [ -L "$d/.pearde" ]; then
       t=$(readlink "$d/.pearde")
@@ -106,6 +106,7 @@ while [ -n "$d" ] && [ "$d" != "/" ]; do
     else BOARD="$d/.pearde"; fi
     break
   fi
+  if [ -f "$d/pearde/settings.md" ]; then BOARD="$d/pearde"; break; fi
   if [ -d "$d/prds" ]; then BOARD="$d/prds"; break; fi
   p=$(dirname "$d"); [ "$p" = "$d" ] && break; d="$p"
 done

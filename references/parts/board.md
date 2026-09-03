@@ -87,10 +87,11 @@ one stat each, no dot-directory — the board's own two names are asked by name
 in steps 1 and 2, before the scan, and the scan is what skips a dot. The walk
 runs on every command and on every ancestor up to the root.
 
-The walk is written seven times on purpose — `plan.py`, `health.py`,
-`questions.py`, `memos.py`, `grammar.py`, `guard.py` and the shell one in
-`doctor.sh` — each with its own error prefix, so no reader depends on the
-planner to find a board and every refusal says which command refused.
+The walk is written eight times on purpose — `plan.py`, `health.py`,
+`questions.py`, `memos.py`, `grammar.py`, `guard.py` and the two shell ones,
+in `doctor.sh` and `statusline.sh` — each with its own error prefix, so no
+reader depends on the planner to find a board and every refusal says which
+command refused.
 
 `pearde upgrade` moves a board still at `pearde/` into `.pearde/` — a rename
 inside the board's own repo, so its log survives, and it leaves no link behind.

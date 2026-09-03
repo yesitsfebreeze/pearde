@@ -294,17 +294,17 @@ is_board() { [ -f "$1/settings.md" ] || [ -d "$1/prds" ]; }
 # `settings.md` is the whole of that configuration — @resources/board/plan.py
 # `named_boards` says why there is no setting for it anywhere. `board_in
 # <project>` echoes the board inside it, or nothing, making the same three
-# tests in the same order the Python resolvers make: `pearde/`; then
-# `.pearde/`, read THROUGH the compatibility symlink `upgrade` leaves behind,
-# because the link's name is not the board's name and a dot-segment is
-# invisible to the vault; then the one immediate child holding `settings.md`,
-# for a project that had to call its board something else. Two such children
+# tests in the same order the Python resolvers make: `.pearde/`, read
+# THROUGH the compatibility symlink a board not yet moved by `upgrade`
+# leaves behind, because the link's name is not the board's name; then the
+# legacy `pearde/`; then the one immediate child holding `settings.md`, for
+# a project that had to call its board something else. Two such children
 # is not a board to choose between: `!two <one> and <two>` is echoed instead
 # of a path — echoed, not set in a variable, because every caller reads this
 # through `$(…)` and a variable set inside that subshell never comes back.
 board_named() {
   local n t
-  for n in pearde .pearde; do
+  for n in .pearde pearde; do
     if is_board "$1/$n"; then
       if [ -L "$1/$n" ]; then
         t=$(readlink "$1/$n")
@@ -355,7 +355,7 @@ walk_up() {
 # knowable here, unlike a status line: the settings file sits in the repo the
 # board lives in, so this checks that file and `--fix` writes the block.
 # The same walk the `board` row below and @resources/guard.py `board_of` do:
-# the nearest ancestor holding `pearde/` (or the legacy `.pearde/`), not a
+# the nearest ancestor holding `.pearde/` (or the legacy `pearde/`), not a
 # literal `prds/` — that was the pre-migration contract, and on a machine with
 # another project's board
 # sitting a level up (its own leftover `prds/`) the old literal walk picked
@@ -393,8 +393,8 @@ fi
 
 # ── board: on the contract path, with settings ────────────────────────────────
 # The same walk @resources/board/plan.py `find_board` and @resources/guard.py
-# `board_of` do: the nearest ancestor holding `pearde/` (or the legacy
-# `.pearde/`), not a literal
+# `board_of` do: the nearest ancestor holding `.pearde/` (or the legacy
+# `pearde/`), not a literal
 # `prds/` — that was the pre-migration contract. BOARD is the board root;
 # PRDS is where the PRDs actually live, one level under it.
 AMBIG=""
@@ -413,13 +413,13 @@ elif [ -z "$BOARD" ]; then
   OFF=$(find "$START" -maxdepth 3 -type d -name prds 2>/dev/null | head -3)
   if [ -n "$OFF" ]; then
     OFFROOT=$(dirname "$(echo "$OFF" | head -1)")
-    row board broken "no pearde/ board · found $(echo "$OFF" | tr '\n' ' ') on the old layout"
+    row board broken "no .pearde/ board · found $(echo "$OFF" | tr '\n' ' ') on the old layout"
     # git mv refuses a destination whose parent is not there, so the fix has
-    # to make `pearde/` first — a fix line that fails when it is pasted is
+    # to make `.pearde/` first — a fix line that fails when it is pasted is
     # not a fix line.
-    fix "mkdir -p $OFFROOT/pearde && git mv $(echo "$OFF" | head -1) $OFFROOT/pearde/prds — the board path is the contract; move memos/, workflows/, settings.md, vision.md and .state/ alongside it the same way"
+    fix "mkdir -p $OFFROOT/.pearde && git mv $(echo "$OFF" | head -1) $OFFROOT/.pearde/prds — the board path is the contract; move memos/, workflows/, settings.md, vision.md and .state/ alongside it the same way"
   else
-    row board off "no board — pearde init creates pearde/"
+    row board off "no board — pearde init creates .pearde/"
     fix "python3 $SKILL_ROOT/resources/pearde.py init [<dir>] — a board, asking nothing"
   fi
 else

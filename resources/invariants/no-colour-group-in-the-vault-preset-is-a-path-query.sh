@@ -14,7 +14,7 @@
 #
 # A colour group that matches nothing is not an error Obsidian reports: the
 # graph draws grey and looks like a layout choice. That is how the path-keyed
-# groups died unnoticed when the board moved to `pearde/wiki/`, and check 2
+# groups died unnoticed when the board moved to `.pearde/wiki/`, and check 2
 # catches the same break in its tag-shaped form — a writer that stops emitting
 # a kind's tag leaves a group matching nothing.
 set -u
@@ -22,7 +22,7 @@ root="$(cd "$(dirname "$0")/../.." && pwd)"
 cd "$root" || exit 1
 
 python3 - "$root" <<'PY'
-import glob, json, os, re, sys
+import glob, json, os, re, subprocess, sys
 
 root = sys.argv[1]
 preset = os.path.join(root, "resources", "board", "obsidian", "graph.json")
@@ -41,12 +41,21 @@ if bad:
     print("BROKEN: colour group(s) not keyed on a tag — " + ", ".join(bad))
     sys.exit(1)
 
-# the board of this repo, under either name
-board = next((p for p in (os.path.join(root, "pearde"),
-                          os.path.join(root, ".pearde"))
+# The board of this repo, `.pearde/` first and the legacy `pearde/` after it.
+# Rooted at the CHECKOUT, never at `root`: a lane is a worktree of this repo
+# and holds an empty `.pearde/` of its own, so a script spelling the board
+# beside itself reads that empty directory and reports BROKEN on a tree where
+# nothing is wrong. `--git-common-dir` is the one `.git` every worktree shares.
+common = subprocess.run(["git", "-C", root, "rev-parse", "--git-common-dir"],
+                        capture_output=True, text=True)
+checkout = (os.path.dirname(os.path.realpath(common.stdout.strip()))
+            if common.returncode == 0 and common.stdout.strip() else root)
+board = next((p for p in (os.path.join(checkout, ".pearde"),
+                          os.path.join(checkout, "pearde"))
               if os.path.isdir(os.path.join(p, "prds"))), None)
 if board is None:
-    print("BROKEN: no board at pearde/ — the second check has nothing to read")
+    print(f"BROKEN: no board at {checkout}/.pearde — "
+          "the second check has nothing to read")
     sys.exit(1)
 
 # `[ \\t]` and not `\\s`: a block list writes `tags:` alone on its line, and

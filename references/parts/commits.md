@@ -128,7 +128,7 @@ wherever the claim baseline explains part of its dirt, and refused with
   `.pass.md`, a `.plan.json` — is this machine's, not the board's record, and
   the collect drops it in silence: not added, and not listed as inherited
   either, because nobody has to decide about it. The exception is a claim: a
-  `footprint:` naming `pearde/.gitignore`, a `--widen`, or a path inside the
+  `footprint:` naming `.pearde/.gitignore`, a `--widen`, or a path inside the
   PRD's own folder is committed like any other, since somebody said out loud
   that it is theirs.
 - **Which board a path is under is one string, and on a board that is its own
@@ -141,7 +141,7 @@ wherever the claim baseline explains part of its dirt, and refused with
   @resources/board/collect.py is the one function that reads it.
   `os.path.relpath` answers `"."` for that case, which is a prefix of no path
   git prints, and a `"."` here is the third wrong resolution of a board path
-  after the two @pearde/memos/a-board-s-own-file-commits-in-the-board-repo.md
+  after the two @.pearde/memos/a-board-s-own-file-commits-in-the-board-repo.md
   replaced.
 - **A path the worker wrote outside its footprint is a wrong footprint.**
   Commit it with the rest and say so.
@@ -194,7 +194,7 @@ repo first, then the board — takes the first one the filesystem or an index
 holds, and asks `git rev-parse --show-toplevel` for the checkout that holds
 it. The board's path as a prefix decides nothing.
 
-Both spellings resolve. `pearde/.gitignore`, code-repo-relative, is the one to
+Both spellings resolve. `.pearde/.gitignore`, code-repo-relative, is the one to
 prefer for any file the code repo could hold; the board's own spelling —
 `prds/<prd>/probe/verify.sh`, where every probe on the board lives — resolves
 as well, and a spec that names it is no longer refused. Either way a path
@@ -214,7 +214,7 @@ the board's index nor its worktree. A prefix test read each of them as the
 board's, staged them against an index that ignores them, and committed
 nothing — no error, no refusal, an empty commit. `foot_root` is the single
 answer all three of the lane's add, the ownership fence and the grouping read,
-and @pearde/memos/a-board-s-own-file-commits-in-the-board-repo.md is the
+and @.pearde/memos/a-board-s-own-file-commits-in-the-board-repo.md is the
 invariant that holds it.
 
 **Never push.** The commit is the board's, the push is the user's. Report what

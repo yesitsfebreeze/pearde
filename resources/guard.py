@@ -469,7 +469,7 @@ def manual(path):
 # under the skill root from a session whose board is another repo's is
 # refused; the same repo, or no board in scope, passes as before.
 SKILL = os.path.realpath(PEARDE)
-MEMO = "pearde/memos/the-install-is-live-symlinks.md"
+MEMO = ".pearde/memos/the-install-is-live-symlinks.md"
 
 
 def skill_file(path):
@@ -760,7 +760,7 @@ def budget(data, st, session, board, tool, inp):
 def destructive_in_another_tree(cmd, cwd, board):
     """`reset --hard`, `checkout --`, `clean` and a real stash, refused in any
     tree this session does not own — the shell half of
-    `pearde/memos/a-session-that-writes-a-shared-checkout-can-revert-another-
+    `.pearde/memos/a-session-that-writes-a-shared-checkout-can-revert-another-
     session-s-work.md`. The board's own code is guarded at its call sites by
     @resources/board/refuse.py; this is the same module reading what a session
     types by hand, which is the other way that memo's `reset --hard` reaches a

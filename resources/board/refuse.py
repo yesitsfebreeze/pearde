@@ -7,7 +7,7 @@ the running session does not own.
 
 `@resources/board/session.py` says WHO holds which tree. This module is the
 other half of the same decision: what may be RUN in one. The memo is
-`pearde/memos/a-session-that-writes-a-shared-checkout-can-revert-another-
+`.pearde/memos/a-session-that-writes-a-shared-checkout-can-revert-another-
 session-s-work.md` — on 2026-09-02 three orchestrator sessions shared one
 checkout, `collect`'s `unland` ran `git reset --hard` in it, and the entire
 uncommitted implementation of another session's PRD was destroyed with no
@@ -338,7 +338,7 @@ def allowed(board, tree, cwd=None, mine=None):
 def refuse_line(verb, tree, reason, why):
     return (f"git {verb} refused in {tree}: {reason}.\n"
             f"{why}, and the memo is "
-            "pearde/memos/a-session-that-writes-a-shared-checkout-can-revert-"
+            ".pearde/memos/a-session-that-writes-a-shared-checkout-can-revert-"
             "another-session-s-work.md — three sessions shared one checkout "
             "and a reset --hard destroyed a whole uncommitted PRD.\n"
             "Run it in the tree `pearde session take` gave this session, or "

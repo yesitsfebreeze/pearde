@@ -559,7 +559,7 @@ def foot_places(p, board, board_root, repo):
 
     The second place is `spelling_root`, and it is a place only while a run
     session holds a tree: `repo` is then `<board>/.sessions/<id>`, and a
-    board path the code repo ignores (`pearde/.gitignore`) is not in a fresh
+    board path the code repo ignores (`.pearde/.gitignore`) is not in a fresh
     worktree of it at all — no place would hold it and the footprint would
     fall through to the session tree. `spelling_root` is `repo` itself in
     every other case, and the dedupe below drops it, so a board with no
@@ -582,12 +582,12 @@ def foot_root(p, board, board_root, repo):
     spelling inside that repo.
 
     A footprint is spelled relative to `repo`, the code repo. Since the
-    board became a git repo of its own — `pearde/` here, and every nested
-    `.pearde` with a `.git` — a path under the board is spelled the
+    board became a git repo of its own — `.pearde/` here, and every board
+    carrying a `.git` — a path under the board is spelled the
     BOARD's way (`prds/<prd>/probe/verify.sh`, where every probe is told to
-    live) or the code repo's way (`pearde/.gitignore`), and either way it
+    live) or the code repo's way (`.pearde/.gitignore`), and either way it
     lives in NEITHER the code repo's index nor its worktree: the code repo
-    ignores the board, so `git add -- pearde/.gitignore` there is `fatal:
+    ignores the board, so `git add -- .pearde/.gitignore` there is `fatal:
     pathspec … did not match any files`, which took down a whole lane's
     merge and every PRD gated behind it. This is the one place that answers
     which repo, so the lane's add, the guard's fence and step 3's grouping
@@ -640,10 +640,12 @@ def tracked_in(root, full):
 
 
 def under(parent, child):
-    """Is `child` inside `parent`? By REAL path: this board is reached as
-    `pearde/` and as the `.pearde` symlink beside it, and a session tree
-    named through one while the board is named through the other compares
-    unequal under `abspath` and equal under `realpath`."""
+    """Is `child` inside `parent`? By REAL path: a board upgraded by an
+    older release is reached both as the legacy `pearde/` and through the
+    `.pearde` symlink beside it, and a session tree named through one while the board
+    is named through the other compares unequal under `abspath` and equal
+    under `realpath`. A symlinked ancestor — `/tmp` on macOS — does the same
+    to a board nothing links to."""
     p, c = os.path.realpath(parent), os.path.realpath(child)
     return c == p or c.startswith(p + os.sep)
 
@@ -664,8 +666,8 @@ def spelling_root(board, board_root, repo):
     session's worktree lives at `<board>/.sessions/<id>` — under the board,
     the way a lane lives under it — and `repo` is that worktree once a
     session holds one. A worktree of the code repo does not carry the paths
-    that repo ignores, and the board is one of them: `pearde/.gitignore` is
-    absent from `<board>/.sessions/<id>/pearde/` and from the board's own
+    that repo ignores, and the board is one of them: `.pearde/.gitignore` is
+    absent from `<board>/.sessions/<id>/.pearde/` and from the board's own
     tree, so no place holds it and the footprint falls through to the
     session tree, which does not hold it either.
 
@@ -696,8 +698,8 @@ def owned_by(prd, board_root, repo, feet, board=None):
     A footprint path is spelled relative to `repo`, NOT to `board_root`:
     `sort_paths` resolves every one of them as `os.path.join(repo, p)`. The
     two roots are the same only where the board is not its own git repo. On
-    a board that IS one — this repo since the board moved to `pearde/`, and
-    every nested `.pearde` with a `.git` — `repo_of` returns the enclosing
+    a board that IS one — this repo, and every board carrying a `.git` of
+    its own — `repo_of` returns the enclosing
     checkout and they differ, so a footprint rebased against `board_root`
     names a path that exists in neither root: the file under test then reads
     as foreign, gets parked, and the verify block measures a clean HEAD
@@ -1764,7 +1766,7 @@ def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since,
         # a footprint under a board that is its own repo belongs to the
         # BOARD repo, spelled its way — the code repo ignores the board and
         # holds no such path, so filing it here is what made step 4 stage
-        # `pearde/.gitignore` where it can never exist
+        # `.pearde/.gitignore` where it can never exist
         raw = p
         root, p = foot_root(p, board, board_root, repo)
         full = os.path.join(root, p)
@@ -1880,7 +1882,7 @@ def sort_paths(board, rel, prd, prds, board_root, repo, feet, opts, since,
         for path, kind in sorted(dirty_paths(root).items()):
             full = os.path.join(root, path)
             # the board's own dotfiles — never anyone's, UNLESS somebody
-            # claimed this one: a `footprint:` naming `pearde/.gitignore`,
+            # claimed this one: a `footprint:` naming `.pearde/.gitignore`,
             # the PRD's own folder, or `--widen`. Until `board_rel` was
             # honest this branch could not fire on a board that is its own
             # repo, and the claimed case was reached by that accident; with

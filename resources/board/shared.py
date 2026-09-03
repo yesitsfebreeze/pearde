@@ -44,7 +44,7 @@ Concurrency. The shared caches are content-addressed (`graphify/cache` keys on
 a hash of the file and the extractor version) or install-once
 (`node_modules`, the plugin bundles), so two lanes writing at once write
 distinct paths or the same bytes. Nothing here is a lock, and nothing here
-holds state a lane owns: `pearde/.state/`, the board and the specs stay
+holds state a lane owns: `.pearde/.state/`, the board and the specs stay
 per-lane, as they must.
 
 Python 3 stdlib only.
@@ -84,27 +84,34 @@ class Share:
 
 
 # One store key for the graphify cache, whichever way the board is spelled.
-# `.pearde` is a symlink onto `pearde` in an upgraded CHECKOUT and both rows
-# then resolve to one directory — but in a lane both are real directories, both
-# rows fire, and before this key the store grew two caches that shared no
-# entry. Measured 2026-09-02: 24 MB under `pearde/graphify/cache` beside 2.6 MB
-# under `.pearde/graphify/cache`, across 29 of 30 trees. One copy per machine,
-# twice, which is the duplication this module exists to remove.
+# The board is `.pearde/` and `pearde/` is the legacy name, so on a tree with
+# no compatibility symlink the two rows below are two real directories, both
+# fire, and before this key the store grew two caches that shared no entry.
+# Measured 2026-09-02: 24 MB under `pearde/graphify/cache` beside 2.6 MB under
+# `.pearde/graphify/cache`, across 29 of 30 trees. One copy per machine, twice,
+# which is the duplication this module exists to remove.
+#
+# The key is the LEGACY spelling because the store already holds the cache
+# there — 29 MB measured 2026-09-03 at `<git-common-dir>/pearde-shared/pearde/
+# graphify/cache`. Nothing reads the key as a board path, so the spelling costs
+# only the row below it, which materialises an undotted `pearde/graphify/` in
+# every tree it applies to: 25 of this repo's lanes carry one. Neither is a
+# board — no `settings.md`, no `prds/` — so no tree resolves twice.
 CACHE_KEY = "pearde/graphify/cache"
 RETIRED = ((".pearde/graphify/cache", CACHE_KEY),)
 
 # The table. A row is regenerable — losing it costs a refetch, never work —
 # and gitignored, which `git check-ignore` proves per tree before anything is
-# linked. Both board spellings are listed: `pearde/` since 2026-09-02, and
-# `.pearde/` the compatibility symlink and every board not yet upgraded.
+# linked. Both board spellings are listed: `.pearde/`, and the legacy `pearde/`
+# a board that has not run `pearde upgrade` still carries.
 SHARED = (
     Share("resources/board/node_modules", "dir",
           "playwright-core, fetched on demand for the js tests"),
-    Share("pearde/graphify/cache", "dir",
+    Share(".pearde/graphify/cache", "dir",
           "graphify's AST cache — keyed on content hash and extractor version",
           key=CACHE_KEY),
-    Share(".pearde/graphify/cache", "dir",
-          "graphify's AST cache, on a board not yet upgraded",
+    Share("pearde/graphify/cache", "dir",
+          "graphify's AST cache, on a board still on the legacy name",
           key=CACHE_KEY),
     Share("resources/board/obsidian/plugins/*/main.js", "glob",
           "third-party plugin bundles, pinned by `install --apply`"),
@@ -184,8 +191,8 @@ def offers(tree):
     another branch holds none of it — the board is one. Surveying such a tree
     prints rows that are permanently `store-only`, and applying to it creates
     empty directories that satisfy nothing: measured on this machine, the board
-    worktree grew `resources/board/obsidian/`, `pearde/graphify/` and
-    `.pearde/graphify/` and shared not one byte."""
+    worktree grew `resources/board/obsidian/`, `.pearde/graphify/` and
+    `pearde/graphify/` and shared not one byte."""
     return os.path.isfile(os.path.join(tree, MARKER))
 
 
@@ -259,7 +266,7 @@ def refusal(tree, rel):
 
 def reachable(tree, rel):
     """Whether `link_one` would even try here. It skips a row whose top
-    directory this tree does not hold — `pearde/graphify/cache` on a board
+    directory this tree does not hold — `.pearde/graphify/cache` on a board
     spelled `.pearde/` — and a survey that judged such a row would report a
     refusal for a link nothing was ever going to write."""
     return os.path.lexists(os.path.join(tree, rel)) or \
@@ -422,7 +429,7 @@ def link_one(tree, rel, kind, dry=False, key=None):
     if not reachable(tree, rel):
         # A row whose top directory this tree does not hold. Linking it would
         # create that directory to hang the link in — `.pearde/` in a tree
-        # spelled `pearde/`, and the other way round — which is inventing
+        # spelled `.pearde/`, and the other way round — which is inventing
         # dirt, not sharing anything. Measured: an empty untracked directory
         # that `git status` then reported forever.
         return "skipped", "no such tree here"

@@ -785,7 +785,7 @@ def cmd_board(store, args):
                        if (prd_dir := prds / name).exists() else [])
         if specs:
             lines += ["## Specs", ""]
-            # [[pearde/prds/…/spec]] — the vault-relative path, and the vault
+            # [[.pearde/prds/…/spec]] — the vault-relative path, and the vault
             # is the project, so it carries the board folder in front
             lines += [f"- [[{s.relative_to(vault_root).with_suffix('')}]]"
                       for s in specs] + [""]

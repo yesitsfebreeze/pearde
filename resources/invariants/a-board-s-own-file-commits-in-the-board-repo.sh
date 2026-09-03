@@ -10,13 +10,13 @@
 # own git repo is committed in the BOARD repo under its board-relative name.
 # It is never staged in the code repo, which ignores the board and holds no
 # such path, and it is never staged in the lane, which is cut without the
-# board. A board that is not its own repo — the flat `.pearde/` layout — is
+# board. A board that is not its own repo — the flat layout — is
 # untouched by all of that and keeps the behaviour it always had.
 #
 # The fault this exists for: `pearde session` needed a row in the board's own
-# `.gitignore`, so a spec's `footprint:` named `pearde/.gitignore`. `collect`
+# `.gitignore`, so a spec's `footprint:` named `.pearde/.gitignore`. `collect`
 # spells every footprint against the code repo, so `land_lane` ran `git add --
-# pearde/.gitignore` in a worktree that holds no such path. git answers
+# .pearde/.gitignore` in a worktree that holds no such path. git answers
 # `fatal: pathspec … did not match any files` and aborts the add WHOLE — so
 # nothing was staged, nothing committed, the lane never merged, and every PRD
 # gated behind it stalled. Past that, `sort_paths` filed the path under the
@@ -110,7 +110,7 @@ SPEC='---
 complexity: 4
 footprint:
   - resources/board/session.py
-  - pearde/.gitignore
+  - .pearde/.gitignore
 ---
 
 # spec01 — the session tree is not dirt on the board branch
@@ -215,14 +215,13 @@ gitq() { git -C "$1" -c user.email=probe@example.com -c user.name=probe \
          "${@:2}" >/dev/null 2>&1; }
 
 # nested <dir> [<spec text>] — a code repo that IGNORES its board, and a board
-# that is its own git repo tracking `.gitignore`. This repo's own layout since
-# 2026-09-02. The spec defaults to `$SPEC`; the board-spelled section hands its
+# that is its own git repo tracking `.gitignore`. This repo's own layout. The spec defaults to `$SPEC`; the board-spelled section hands its
 # own, so the two sections differ in the footprint and in nothing else.
 nested() {
-  code=$1/code; board=$code/pearde
+  code=$1/code; board=$code/.pearde
   mkdir -p "$code/resources/board" "$board/prds/p1/specs"
   gitq "$code" init -q -b main
-  printf '/pearde\n' > "$code/.gitignore"
+  printf '/.pearde\n' > "$code/.gitignore"
   printf '# session\n' > "$code/resources/board/session.py"
   gitq "$code" add -A; gitq "$code" commit -qm base
   gitq "$board" init -q -b pearde
@@ -253,7 +252,7 @@ under() {
   gitq "$code" add -A; gitq "$code" commit -qm base
 }
 
-# flat <dir> — the other layout: `.pearde/` INSIDE the code repo and not a
+# flat <dir> — the other layout: the board INSIDE the code repo and not a
 # repo of its own, so `board_root` and `repo` are one root and nothing is ever
 # rerouted. This row is the regression guard and must stay green.
 flat() {
@@ -304,9 +303,9 @@ run() { (cd "$1" && python3 "$CO" p1 --board "$2" --as engineer --trust 2>&1); }
 # ── the nested layout: the case this invariant exists for ────────────────────
 N=$T/n; mkdir -p "$N"
 nested "$N"
-NC=$N/code; NB=$NC/pearde
+NC=$N/code; NB=$NC/.pearde
 LANE=$(work "$NC" "$NB") || no "the lane could not be cut: $LANE"
-if [ -e "$NB/.lanes/p1/pearde/.gitignore" ]; then r=1; else r=0; fi
+if [ -e "$NB/.lanes/p1/.pearde/.gitignore" ]; then r=1; else r=0; fi
 say $r "the lane does not hold the board own file — it is cut without the board"
 
 # both HEADs BEFORE the run: every log needle below reads only what
@@ -331,12 +330,12 @@ DIRT=$(git -C "$NB" status --porcelain -- .gitignore 2>/dev/null)
 say $? "nested: the board working tree is clean after (got '${DIRT}')"
 
 # the code repo committed the code file and never the board's — a
-# `pearde/.gitignore` in the code repo's history is the bug coming back by
+# `.pearde/.gitignore` in the code repo's history is the bug coming back by
 # another door, since that repo ignores the whole directory.
 CLOG=$(git -C "$NC" log --name-only --pretty=format: "$NC0"..HEAD 2>/dev/null)
 printf '%s\n' "$CLOG" | grep -qx 'resources/board/session\.py'; r=$?
 say $r "nested: the code repo commits the code file"
-if printf '%s\n' "$CLOG" | grep -q 'pearde/\.gitignore'; then r=1; else r=0; fi
+if printf '%s\n' "$CLOG" | grep -q '\.pearde/\.gitignore'; then r=1; else r=0; fi
 say $r "nested: the code repo never stages the board own path"
 
 case "$OUT" in *"own repo, not the lane"*) r=0;; *) r=1;; esac
@@ -361,14 +360,14 @@ say $r "flat: nothing is rerouted — the two roots are one"
 
 # ── board-spelled: the footprint written the way the board writes it ─────────
 # The nested rows above only ever name the board file the CODE repo's way
-# (`pearde/.gitignore`). Every probe on a pearde board is told to live at
+# (`.pearde/.gitignore`). Every probe on a pearde board is told to live at
 # `prds/<prd>/probe/`, which is the board's own spelling, and a `foot_root`
 # that joins a footprint to the code repo and nowhere else cannot place it:
 # the whole collect stops before a file is staged. That regression is silent
 # in every row above it.
 S=$T/bs; mkdir -p "$S"
 nested "$S" "$BS_SPEC"
-SC=$S/code; SB=$SC/pearde
+SC=$S/code; SB=$SC/.pearde
 SLANE=$(code_work "$SC" "$SB") || no "board-spelled: the lane could not be cut: $SLANE"
 mkdir -p "$SB/prds/p1/probe"
 printf '#!/usr/bin/env bash\necho "1 check · 1 pass · 0 fail"\n' \

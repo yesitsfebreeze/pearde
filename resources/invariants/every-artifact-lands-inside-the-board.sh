@@ -12,7 +12,7 @@
 #                       `resources/board/state/`, and no source line that
 #                       roots a writable path at the install
 #   3. a fresh board  — the whole command surface driven against a throwaway
-#                       project, and nothing lands in it outside `pearde/`
+#                       project, and nothing lands in it outside `.pearde/`
 #   4. the install, after driving — the surface of check 3 left the install
 #                       byte-identical, daemon and guard included
 #   5. the mechanism  — the guard still refuses a pass writing a board file
@@ -23,13 +23,13 @@
 # creates its file next to the board, and the diff of the project tree names
 # it; a writer that roots a path at the install instead shows up as a new file
 # under `resources/`. `.gitignore` is the one path pearde is allowed to touch
-# outside the board — the ignore rule for `pearde/.state/` has to sit in a
+# outside the board — the ignore rule for `.pearde/.state/` has to sit in a
 # file git reads, and git reads the parent repo's.
 #
 # The install had one exemption until 2026-09-01: `plan.py MACHINE_DIR`,
 # `resources/board/state/`, holding the daemon registry, its log, the
 # calibration fit and the guard's session cache. That is decided and gone —
-# one root, the board's `pearde/` — so checks 2 and 4 exist to keep it gone.
+# one root, the board's `.pearde/` — so checks 2 and 4 exist to keep it gone.
 set -u
 REPO=$(cd "$(dirname "$0")/../.." && pwd -P)
 R="$REPO/resources"
@@ -38,7 +38,7 @@ no() { printf 'FAIL  %s\n' "$*"; FAIL=$((FAIL + 1)); }
 okr() { printf 'PASS  %s\n' "$*"; }
 
 # ── 1. no `.state/` outside a board in this tree ─────────────────────────────
-# A lane is a git worktree of this repo (`pearde/.lanes/<slug>/`), so it
+# A lane is a git worktree of this repo (`.pearde/.lanes/<slug>/`), so it
 # carries a whole checkout — its own board, and that board's own `.state/`.
 # That is the worker's state inside the worker's board, which is what this
 # check is for, so the lanes are excluded rather than counted as strays.
@@ -97,12 +97,12 @@ export PEARDE_PORT=1
 py() { python3 "$R/pearde.py" "$@" >/dev/null 2>&1 || true; }
 
 outside() {   # every path in the project that is not .git/ and not the board
-  # both board names: `pearde/` is what init makes, `.pearde` the symlink
-  # upgrade leaves behind on a board that had the hidden name
+  # both board names: `.pearde/` is what init makes, `pearde/` the legacy
+  # name a board that has not run `pearde upgrade` still carries
   ( cd "$P" && find . -mindepth 1 \
       \( -path './.git' -o -path './.git/*' \
-         -o -path './pearde' -o -path './pearde/*' \
-         -o -path './.pearde' -o -path './.pearde/*' \) -prune -o -print ) \
+         -o -path './.pearde' -o -path './.pearde/*' \
+         -o -path './pearde' -o -path './pearde/*' \) -prune -o -print ) \
     | sed 's|^\./||' | sort
 }
 
@@ -114,7 +114,7 @@ before=$(installed)
 cd "$P" || exit 1
 py init --name pearde-invariant-probe
 # the board init made, under whichever of the two names this tree gives it —
-# `.pearde/` since the rename, `pearde/` on a tree from before it
+# `.pearde/` is what init makes, `pearde/` on a board that has not upgraded
 B="$P/.pearde"; [ -d "$B" ] || B="$P/pearde"
 py add "a thing the board must carry"
 py scan
@@ -152,7 +152,7 @@ if [ -n "$made" ]; then
   no "the commands wrote outside the board:"
   printf '        %s\n' $made
 else
-  okr "a driven board wrote nothing outside pearde/ (bar .gitignore, .obsidian/)"
+  okr "a driven board wrote nothing outside .pearde/ (bar .gitignore, .obsidian/)"
 fi
 
 # ── 4. the install is unchanged by the whole surface ─────────────────────────

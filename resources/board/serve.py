@@ -499,7 +499,8 @@ def save_entry(b):
         return
     if not planlib.is_board_dir(b.path):
         # The watch set holds the path a board registered at, and a board can
-        # move under it — `.pearde/` to `pearde/`, this repo's own 92e318c.
+        # move under it — this repo went to the legacy `pearde/` and back
+        # inside two days, 92e318c and the move that undid it.
         # Revalidate before every write: the entry is stale, and writing it
         # would put a board directory back into a project that deliberately
         # has none. `vanished()` drops the entry on the next tick.

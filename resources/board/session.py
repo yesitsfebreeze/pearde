@@ -11,7 +11,7 @@ which, and a reaper that snapshots before it deletes.
 `@resources/board/lanes.py` gives every WORKER a worktree. It gives the
 session that dispatches them nothing, and on 2026-09-02 three orchestrator
 sessions shared one checkout and two of them lost work — the whole of it in
-`pearde/memos/a-session-that-writes-a-shared-checkout-can-revert-another-
+`.pearde/memos/a-session-that-writes-a-shared-checkout-can-revert-another-
 session-s-work.md`. This module is the layer above lanes: the session takes a
 checkout of its own before it dispatches anything, the ledger records who
 holds what, and a new session reaps what is gone.

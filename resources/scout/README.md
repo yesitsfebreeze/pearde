@@ -7,7 +7,7 @@ Four layers, each answering a different question:
 2. **ask** — one job, answered off many ranking pages and written down
    (`route.sh` + `routes.md` → `findings.md`)
 3. **curate** — what is worth *reading*, mapped to what it teaches a specific
-   tree (`reading-list.md`)
+   tree (`reading-list.md`, checked by `scout.sh reading`)
 4. **wire** — the passive quality gates that keep the trees honest
    (`quality.yml` + the configs, sccache)
 
@@ -20,7 +20,7 @@ exists for those two cases.
 
 | path | what |
 |---|---|
-| `scout.sh` | sweep/delta/trending — the daily measurement loop |
+| `scout.sh` | sweep/delta/trending — the daily measurement loop — plus `reading`, the check over the curated list |
 | `toolscout.sh` | one-off dependency ranker: stars + what stars hide |
 | `route.sh` | call one ranking page by id — reader of `routes.md`, holds no list |
 | `routes.md` | **index one** — every page a ranking comes from, one shell block each |
@@ -42,6 +42,17 @@ GH Actions equivalent for a repo running the sweep in CI. Each sweep prunes
 `snapshots/` to the 90 most recent TSVs, overridden with `SCOUT_SNAP_KEEP` —
 enough daily history for every `delta [days]` window named here, plus slack for
 cron gaps, without growing forever.
+
+### `scout.sh reading`
+Check pass over `reading-list.md`: every row's *mapping* column (the last
+one, "what to steal") must be non-empty — a bare row fails the check and is
+named, exit non-zero. Every row's repo is then resolved for state — archived,
+last push — the same signal `toolscout.sh`'s `STATE` column reads, checked
+against the newest snapshot first and only reached over the network (`gh api
+repos/<repo>`) for a repo no snapshot names. A repo that reads `ARCHIVED` is
+marked `<!-- stale: archived YYYY-MM-DD -->` in its row, in place — never
+deleted, and never re-marked once it carries the comment. A repo the API
+cannot resolve (renamed, deleted) is left as-is: unknown state is not stale.
 
 ### `scout.sh delta [days]`
 What gained the most stars since ~N days ago, computed by **diffing our own
@@ -94,7 +105,10 @@ with no third option.
 
 A repo earns a row in `reading-list.md` only by answering in writing *which
 file in which tree changes because we read this*. `reading-list.md` carries the
-genres, the entries and the anti-list.
+genres, the entries and the anti-list. `scout.sh reading` holds the *shape*
+honest — a bare mapping fails the check — and the state current — an
+archived repo is marked stale in place — but writes no row itself; the
+curation stays human.
 
 ## The quality layer — "accelerate quality by just using it"
 

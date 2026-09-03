@@ -17,6 +17,9 @@
 #   scout.sh trending [window]  GitHub's own trending, as a discovery channel
 #                               for buckets you never thought to define
 #                               (window: daily | weekly | monthly)
+#   scout.sh reading            check reading-list.md: every row needs a
+#                               mapping column, and a row whose repo has gone
+#                               ARCHIVED is marked stale in place
 set -euo pipefail
 
 # Repo descriptions are full of emoji and CJK; byte-wise collation keeps sort
@@ -121,6 +124,106 @@ cmd_delta() {
 		head -40 | column -t -s $'\t'
 }
 
+
+# Check pass over reading-list.md: every data row needs a non-empty mapping
+# (its last column, "what to steal") and its repo's live state, resolved
+# through the same signal toolscout.sh reads (archived, last push) — a row
+# whose repo has gone ARCHIVED is marked `<!-- stale: archived YYYY-MM-DD -->`
+# in place, never deleted; the curated judgement in the row stands.
+#
+# Guard against the network: a row's repo is looked up in the *newest*
+# snapshot first (already-fetched archived/pushed_at, free), and `gh api` is
+# called per repo only when no snapshot row names it — sweep's buckets are
+# topic searches, not this list's specific repos, so most rows still miss
+# the snapshot and pay one REST call each (5000/hr authenticated, no
+# per-item rate wait like the search endpoint sweep uses).
+cmd_reading() {
+	local list="$scout/reading-list.md"
+	[ -f "$list" ] || die "no reading list at $list"
+
+	local newest=""
+	newest=$(ls -1 "$snaps"/*.tsv 2>/dev/null | sort | tail -1) || true
+
+	local tmp bare="" checked=0 marked=0 today
+	tmp="$(mktemp)"
+	today="$(date -u +%Y-%m-%d)"
+
+	while IFS= read -r line || [ -n "$line" ]; do
+		case "$line" in
+			'| ['*)
+				local n mapping repo
+				# The link *text* is not always `owner/repo` (a display name
+				# like `[cargo-mutants](...)` is common) — the URL is the only
+				# reliable source for the full name.
+				# `|| true`: the script runs under `pipefail`, and a row that
+				# links anywhere but GitHub makes `grep` exit 1 — which would
+				# abort the whole check mid-file, silently, with no output and
+				# a status indistinguishable from a bare row. No match here is
+				# a normal row, not an error.
+				repo=$(printf '%s' "$line" | grep -oE 'github\.com/[^)]+' | head -1 | sed 's#github\.com/##' || true)
+				n=$(awk -F'|' '{print NF}' <<<"$line")
+				mapping=$(awk -F'|' -v n="$n" '{v=$(n-1); gsub(/^[ \t]+|[ \t]+$/,"",v); print v}' <<<"$line")
+
+				if [ -z "$mapping" ]; then
+					# A row that links somewhere other than GitHub parses to
+					# no `owner/repo`, and an unnamed row is a check that
+					# does not name the row it failed on — fall back to the
+					# link text, which every row has.
+					local label="$repo"
+					[ -n "$label" ] || label=$(printf '%s' "$line" | sed -E 's#^\| *\[([^]]*)\].*#\1#')
+					bare="$bare  $label\n"
+				fi
+
+				if [ -n "$repo" ] && [ "${line#*"<!-- stale:"}" = "$line" ]; then
+					checked=$((checked + 1))
+					local archived="" pushed="" hit resp
+					if [ -n "$newest" ]; then
+						hit=$(awk -F'\t' -v want="$repo" '$2==want{print; exit}' "$newest")
+						if [ -n "$hit" ]; then
+							archived=$(cut -f5 <<<"$hit")
+							pushed=$(cut -f4 <<<"$hit")
+						fi
+					fi
+					if [ -z "$archived" ]; then
+						resp=$(gh api "repos/$repo" --jq '{archived, pushed_at}' 2>/dev/null) || resp=""
+						if [ -n "$resp" ]; then
+							archived=$(jq -r '.archived' <<<"$resp")
+							pushed=$(jq -r '.pushed_at' <<<"$resp")
+						fi
+					fi
+					if [ "$archived" = "true" ]; then
+						local asof="${pushed%%T*}"
+						[ -n "$asof" ] || asof="$today"
+						# Insert right after the repo link, inside the same
+						# cell — the row stays one line, the comment shows in
+						# the raw file, and the table does not break.
+						line=$(printf '%s' "$line" | sed -E "s#(\]\([^)]+\))#\1 <!-- stale: archived $asof -->#")
+						marked=$((marked + 1))
+					fi
+				fi
+				;;
+		esac
+		printf '%s\n' "$line" >> "$tmp"
+	done < "$list"
+
+	# Write back only when a row was actually marked. `mv` from a `mktemp`
+	# file carries that file's 0600 mode and its inode onto the list on
+	# every run — a check that found nothing to say would leave the list
+	# owner-readable only, and the bare-row run is contracted to fail
+	# *without modifying the file*. `cat >` keeps the list's own mode.
+	if [ "$marked" -gt 0 ]; then
+		cat "$tmp" > "$list"
+	fi
+	rm -f "$tmp"
+	echo "reading: $checked repo(s) checked against state, $marked marked stale" >&2
+
+	if [ -n "$bare" ]; then
+		echo "reading: bare row(s) — no mapping column ('what to steal'):" >&2
+		printf '%b' "$bare" >&2
+		return 1
+	fi
+}
+
 cmd_trending() {
 	local window="${1:-weekly}"
 	local html
@@ -145,6 +248,7 @@ cmd_trending() {
 case "${1:-}" in
 	sweep)    shift; cmd_sweep "$@" ;;
 	delta)    shift; cmd_delta "$@" ;;
+	reading)  shift; cmd_reading "$@" ;;
 	trending) shift; cmd_trending "$@" ;;
 	*)        awk 'NR>1 && /^#/ {sub(/^# ?/,""); print; next} NR>1 {exit}' \
 	              "${BASH_SOURCE[0]}" >&2; exit 2 ;;

@@ -30,8 +30,6 @@ a question about the work, which @index.md's Keywords table does.
 
 ## `references/` — read
 
-| anchor | is |
-|---|---|
 | @references/archive.md | how a finished PRD leaves `.pearde/prds/` — the flat `.pearde/prds/archive/` shape, and why `scan` already ignores it |
 | @references/files.md | this manifest — every tracked file, one row |
 | @references/language.md | how every document is written |
@@ -52,8 +50,6 @@ a question about the work, which @index.md's Keywords table does.
 
 ### `references/parts/` — the workflow, one part per step
 
-| anchor | is |
-|---|---|
 | @references/parts/loop.md | the eight steps, in order |
 | @references/parts/dispatch.md | the dispatcher — the session that holds nothing and starts passes |
 | @references/parts/board.md | the layout the scan walks, and how the board's own directory is found whatever it is called |
@@ -85,8 +81,6 @@ a question about the work, which @index.md's Keywords table does.
 
 ### `references/personas/` — who works
 
-| anchor | is |
-|---|---|
 | @references/personas/INDEX.md | the roster, and how `persona create` builds a new one |
 | @references/personas/engineer.md | Mara Vogt — the default, engineering generalist |
 | @references/personas/designer.md | Ines Calder — product/design engineer |
@@ -98,8 +92,6 @@ a question about the work, which @index.md's Keywords table does.
 
 A template is the shape and nothing else — it lands whole in every file written from it. `<name>.doc.md` beside it holds the how and the why, read on demand, never copied.
 
-| anchor | is |
-|---|---|
 | @references/templates/prd.md | one PRD |
 | @references/templates/spec.md | one implementable unit |
 | @references/templates/memo.md | one decision record |
@@ -119,8 +111,6 @@ A template is the shape and nothing else — it lands whole in every file writte
 
 ## `resources/` — run
 
-| anchor | is |
-|---|---|
 | @resources/pearde.py | the one command — a dispatcher over every script; discovers `COMMANDS` in every directory under `resources/`; `help` from docstrings |
 | @resources/pearde_path.py | the one rule every module finds its siblings by — `resources/` and every directory under it on `sys.path`, the repo root by `resources/pearde.py`, and a launched sibling found by basename |
 | @resources/common.py | the advisors' shared primitives — `find_board`, the frontmatter reader, the atomic write, `Collection`, the git runner and the section extractor every script imports instead of carrying a copy |
@@ -139,6 +129,7 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/prose.py | check density — word count, mean sentence length, unbound waste words, banned openers/closers, per file — the only reader of `## Density` |
 | @resources/questions.py | read + check a PRD's question pass — the only reader of that format |
 | @resources/spend.py | what the workers cost — per model, turns, context billed, the first-turn floor, turns over 80K, idle polls and tool-result bytes, read off `~/.claude/projects/*/*/subagents/*.jsonl` since a date |
+||||||| parent of 56f7ce5 (every-documented-command-exists — every documented command exists)
 | @resources/claims.py | check every name a document uses against the thing that answers it — a `pearde <verb>` against @resources/pearde.py, a settings or frontmatter key against the registry in @resources/board/init.py, a memo slug cited in code against the board's memos |
 | @resources/invariants/ | one script per `kind: invariant` memo — what its `verify:` runs, named for its slug |
 | @resources/invariants/every-artifact-lands-inside-the-board.sh | the tool writes nowhere but a board: no `.state/` outside a `.pearde/`, a driven throwaway project that stays clean, and the guard that still refuses a pass file written beside the board |
@@ -231,8 +222,6 @@ Every path inside is **vault-relative**, rooted at `.pearde/`: a query reads
 `wiki/conclusions`, never `conclusions`, in `FROM` clauses and `dv.pages()`
 calls alike.
 
-| anchor | is |
-|---|---|
 | @resources/board/knowledge/ | the seed for a board's `.pearde/wiki/` — dashboard, workflow, indexes, the empty pending/graphs/absorbed scaffolds; planted by `init.py`'s `write_knowledge` |
 | @resources/board/knowledge/Dashboard.md | the dashboard template — Dataview views, vault-relative |
 | @resources/board/knowledge/WORKFLOW.md | the configuration template — focus, rules, routing |
@@ -251,8 +240,6 @@ Obsidian vault. No rows — the folder is machine-local output of
 
 Nothing outside it links in past `@@scout`. Its docs ship with it.
 
-| anchor | is |
-|---|---|
 | @resources/scout/README.md | the scout manual — what @references/skills/pearde-scout.md is a door to |
 | @resources/scout/scout.sh | the one entry point — sweep, delta, trending, tool, find, reading, quality |
 | @resources/scout/toolscout.sh | compat entry — execs `scout.sh tool "$@"` |
@@ -277,8 +264,6 @@ with Next.js + fumadocs (`npm --prefix docs run build`), committed —
 carries them. Scope in @@docs. The app tree is three directory rows — the
 page paths carry parens and brackets the manifest's row syntax cannot hold.
 
-| anchor | is |
-|---|---|
 | @docs/.gitignore | what git leaves alone in the docs app |
 | @docs/package.json | the deps — fumadocs-core/mdx/ui, next 16, react 19 |
 | @docs/package-lock.json | the pinned resolution of the above |

@@ -5,6 +5,7 @@ priority: 85
 complexity: 6
 blast-radius:
 actual: 0.08h
+commit: 9c2b644 0d74c21
 ---
 
 # A collect does not stage a tracked-but-ignored probe file

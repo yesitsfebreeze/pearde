@@ -858,6 +858,28 @@ def read_main(argv, entries=None, skipped=None, scope=None):
 
 # ── 6. the move ──────────────────────────────────────────────────────────────
 
+def script_main(argv):
+    """the entry `python3 resources/board/run.py` takes.
+
+    The file's command word is `run`, so the script form spells it: the verb
+    is the first word or there is no move. A bare scope here once DISPATCHED —
+    `run.py all` fanned every watched board out while its author believed they
+    had asked for the read, because before the plan.py split this file's `main`
+    was the only spelling left that printed a frontier. It refuses instead, and
+    names both commands: the read that replaces it and the move spelled in
+    full. In-process `pearde run all` is untouched — @resources/pearde.py has
+    already eaten the verb by the time `cmd_run` is called."""
+    if argv and argv[0] == "run":
+        return main(argv[1:])
+    word = next((a for a in argv if not a.startswith("-")),
+                argv[0] if argv else "all")
+    print(f"pearde run: bare `{word}` refused — the verb is part of the "
+          f"command, and spelled without it this dispatched every board it "
+          f"matched. The read is `pearde plan {word}`; the move is "
+          f"`run.py run {word}`", file=sys.stderr)
+    return 2
+
+
 def main(argv):
     """`pearde run [scope] [flags]` — the scope resolved, then dispatched."""
     if argv and argv[0] == "run":
@@ -898,4 +920,4 @@ def main(argv):
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1:]))
+    sys.exit(script_main(sys.argv[1:]))

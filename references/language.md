@@ -31,8 +31,7 @@ Reader: an agent, cold, without the conversation that produced the document.
 
 ## Density
 
-From @references/personas/writer.md, Vera Lindqvist. Checked by
-`@resources/prose.py` where the rule is mechanical.
+Checked by `@resources/prose.py` where the rule is mechanical.
 
 | rule | test |
 |---|---|

@@ -32,8 +32,8 @@
 # state the repairs left behind.
 set -uo pipefail
 
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SKILL_ROOT="$(cd "$DIR/.." && pwd)"
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+SKILL_ROOT="$(cd "$DIR/.." && pwd -P)"
 FIX=0
 HFLAG=0
 while [ $# -gt 0 ]; do

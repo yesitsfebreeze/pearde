@@ -28,8 +28,8 @@
 # present and inert looks exactly like one that works.
 set -uo pipefail
 
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT="$(cd "$DIR/.." && pwd)"
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+ROOT="$(cd "$DIR/.." && pwd -P)"
 SKILLS="$ROOT/references/skills"
 INSTALL="$DIR/install.sh"
 

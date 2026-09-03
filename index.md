@@ -18,7 +18,7 @@ again after every compaction, in the window the work needs.
 Anything executed — a script, a tool, its config and its data — lives under
 `resources/`, whole. A tool's own README ships inside the tool.
 
-**Every skill is one file under `skills/`** — frontmatter deciding when it
+**Every skill is one file under `references/skills/`** — frontmatter deciding when it
 fires, a body pointing into `references/` and stopping. The knowledge never
 lives in the skill. What a skill *runs* lives under `resources/`, one folder
 per skill that has one: @resources/board/, @resources/scout/,

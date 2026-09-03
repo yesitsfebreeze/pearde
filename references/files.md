@@ -120,7 +120,7 @@ A template is the shape and nothing else — it lands whole in every file writte
 | anchor | is |
 |---|---|
 | @resources/pearde.py | the one command — a dispatcher over every script; discovers `COMMANDS` in `resources/board/*.py`; `help` from docstrings |
-| @resources/install.sh | build one skill folder of links per file in `skills/` |
+| @resources/install.sh | build one skill folder of links per file in `references/skills/` |
 | @resources/update.sh | check every install on this machine and re-link the set — local, global, and the global that is not in force |
 | @resources/doctor.sh | install check + repair |
 | @resources/guard.py | the PreToolUse/PostToolUse hook that enforces the loop |

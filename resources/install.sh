@@ -33,8 +33,8 @@
 # `git checkout SKILL.md` brings the installer back if you want to re-run it.
 set -uo pipefail
 
-DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT="$(cd "$DIR/.." && pwd)"
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+ROOT="$(cd "$DIR/.." && pwd -P)"
 LINKS=(SKILL.md README.md index.md references resources)
 
 MODE=report
@@ -100,8 +100,6 @@ for f in "$ROOT"/references/skills/*.md; do
 
   # A folder we built is one whose SKILL.md resolves to this repo's skill file.
   want="$(source_of "$name" SKILL.md)"
-  have=""
-  [ -e "$at/SKILL.md" ] && have="$(cd "$(dirname "$at/SKILL.md")" 2>/dev/null && pwd -P)/$(basename "$at/SKILL.md")"
   if [ -e "$at" ] && [ ! -L "$at/SKILL.md" ] && [ -e "$at/SKILL.md" ]; then
     say "$name" copy "$at holds a real SKILL.md, not a link"
     stop "reconcile it yourself, then re-run — it may hold your edits"
@@ -137,8 +135,8 @@ for f in "$ROOT"/references/skills/*.md; do
   fi
 done
 
-# The worker types. `references/agents/` becomes `agents/` beside `skills/` in
-# and it carries the model each worker runs on — an analyst on the cheaper one,
+# The worker types. `references/agents/` becomes `agents/` beside the skills
+# directory, and it carries the model each worker runs on — an analyst on the cheaper one,
 # an implementer on the one that writes the code. Without them every worker
 # runs the orchestrator's model on a job that never needed it.
 AGENTS="$(dirname "$DEST")/agents"

@@ -4859,7 +4859,6 @@ function replace(view, tag) {
   return el;
 }
 
-function currentView() { return view; }
 
 // every slotted element sees the payload the page is drawing
 function slotsApply() { for (const el of slotted) el.data = DATA; }

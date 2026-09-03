@@ -51,7 +51,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # `pearde/` is an ordinary word, so a checkout that already uses it — this
 # repo sits at `infra/pearde` — answers to two names at once, and one board
 # resolving twice fans every dispatch out twice and refuses every collect.
-# The nine other boards on this machine never moved off `.pearde`.
+# The nine other boards on this machine were renamed the same day: seven still
+# carry the undotted directory and the symlink beside it, one (`zirkle/kern`)
+# is dotted, and `pearde upgrade` is what moves the seven — which is why the
+# legacy name has to keep resolving.
 #
 # So the board is `.pearde/`, a real directory holding every file it owns, and
 # no board file is reachable only through a symlink. `pearde` survives as the

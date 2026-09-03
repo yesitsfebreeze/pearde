@@ -1,32 +1,42 @@
-# `machine` — every watched board as one ordered frontier
+# `run` — the command that moves, and the `plan` that reads it
 
 What the whole machine should work on next: one ordered list, cut into the
-waves able to run at once.
+waves able to run at once — and the one command that runs that list down.
 
 ```sh
-pearde machine              # the frontier, the waves, and the reading behind them
-pearde machine boards       # what the daemon watches, and each board's own cap
-pearde machine slots        # the concurrency and the numbers that produced it
-pearde machine progress     # one progress line over the merged set
-pearde machine groups       # the labels the watched boards declare, and who holds them
-pearde machine --json       # the same read, as data
-pearde machine dispatch     # the one verb that moves: run that frontier down
+pearde run                  # dispatch the board at the cwd
+pearde run here             # the same, said out loud
+pearde run all              # every board the daemon watches
+pearde run work             # the boards declaring `groups: work`
+pearde run <prd>            # the loop over that PRD's subtree on the cwd board
 
-pearde machine work         # the same read over one group of boards
-pearde machine work slots   # any verb takes the group, in either order
-pearde machine work dispatch
+pearde plan                 # the cwd board's own frontier — moves nothing
+pearde plan all             # every watched board as one ordered frontier
+pearde plan boards          # what the daemon watches, and each board's own cap
+pearde plan slots           # the concurrency and the numbers that produced it
+pearde plan progress        # one progress line over the merged set
+pearde plan groups          # the labels the watched boards declare, and who holds them
+pearde plan --json          # the same read, as data
+pearde plan work slots      # a window and a scope compose in either order
 ```
 
-Runs from anywhere, with no board above the cwd: the watch set is the live
-service's, not the directory's, and @resources/board/machine.py is found
-through `pearde.py`'s `COMMANDS` discovery rather than a path.
+Both run from anywhere, with no board above the cwd for the merged reads: the
+watch set is the live service's, not the directory's, and
+@resources/board/run.py is found through `pearde.py`'s `COMMANDS` discovery
+rather than a path.
 
-**The default mode moves nothing.** `pearde machine`, and every verb but one,
-make no claim, no transition, no dispatch and no write to any board, settings
-file or PRD: they read and print. Moving the machine is a verb you type —
-`pearde machine dispatch`, `## Dispatch` below — so no command both reads the
-machine and moves it. A person must be able to look at the whole machine
-without the looking starting anything.
+**Reading and moving are two commands.** `plan` makes no claim, no transition,
+no dispatch and no write to any board, settings file or PRD: it reads and
+prints. Moving the machine is a different word — `pearde run`, `## Dispatch`
+below — so no command both reads the machine and moves it. A person must be
+able to look at the whole machine without the looking starting anything.
+
+**A bare word is a scope, and the order is printed when it refuses.** `here`
+and `all` are reserved and name neither a group nor a PRD; then a `groups:`
+label a watched board declares; then a PRD on the cwd board. A word carrying
+both a declared group and a PRD is **refused, naming both** — guessing would
+dispatch the wrong set. A word carrying neither is refused with the groups
+that exist and the PRDs that nearly match.
 
 ## What it merges
 
@@ -58,31 +68,31 @@ had (`.pearde/memos/the-board-assumes-unlimited-agents.md`).
 ## Groups
 
 A group is a label a board writes **on itself** — `groups: work infra` in its
-own `.pearde/settings.md` (@references/settings.md) — and `pearde machine
-<group>` is this same read over the boards carrying it. The frontier, the
-waves, the demand, the progress line and `dispatch` are then that group's:
-same arithmetic, fewer boards.
+own `settings.md` (@references/settings.md) — and `pearde plan <group>` is
+this same read over the boards carrying it, `pearde run <group>` the same set
+run down. The frontier, the waves, the demand and the progress line are then
+that group's: same arithmetic, fewer boards.
 
 **Nothing here keeps the list.** No file names which board is in which group,
 on the rule this command already follows for the watch set: the configuration
 is distributed to the boards, and a board nobody watches is in no group,
-being in nothing. `machine <group>` reads `groups:` off each watched
+being in nothing. A scoped read walks `groups:` off each watched
 board's settings as it walks them, and writes nothing — *No board's
 `settings.md` written* below stands unchanged, `groups:` included. A person
 sets one with `pearde settings groups=work`, standing in that board.
 
 **Labels, not a partition.** A board may carry several and most carry none;
 `work` and `private` are two labels among any others, and nothing forces the
-set to divide. `machine groups` prints each label with its boards, then the
+set to divide. `plan groups` prints each label with its boards, then the
 ungrouped ones on a `—` row.
 
-Two labels are refused, at the board that declares them and named by `machine
-groups` rather than silently at the point of use:
+Two kinds of label are refused, at the board that declares them and named by
+`plan groups` rather than silently at the point of use:
 
 | refused | why |
 |---|---|
-| a verb — `boards`, `slots`, `progress`, `groups`, `dispatch` | `pearde machine slots` has to keep meaning the slot reading. The verb set is closed, so a group is any bare word outside it and the two never compete |
-| `all` | `all` is every board by definition, and never a subset of them (@references/parts/all.md) |
+| a window — `boards`, `slots`, `progress`, `groups` | `pearde plan slots` has to keep meaning the slot reading. The window set is closed, so a group is any bare word outside it and the two never compete |
+| `here` and `all` | reserved scopes: `here` is the board at the cwd and `all` is every watched board, so neither is ever a subset of them (@references/parts/all.md) |
 
 A group naming no watched board is a **refusal, not an empty frontier**: an
 unwatched board is invisible here, so a silent empty list would read as
@@ -185,7 +195,7 @@ schedule.
 
 ## Dispatch
 
-`pearde machine dispatch` is the one verb that moves, and
+`pearde run` is the one command that moves, and
 @resources/board/dispatch.py is where it lives — imported lazily, so the read
 path never loads it. The order, its waves and the slot reading are printed
 **before the first launch**: what is about to happen is on screen before
@@ -198,7 +208,12 @@ anything starts.
 | `--workers N` | overrides the load-derived count and says `(override)` in the reading. Without it the count is `slots()` |
 | `--adapter <id>` | which adapter to launch. With two or more configured and none named it refuses with the list rather than picking one |
 | `--deadline S` | stops **filling** after S seconds and names what is still in flight. It kills nothing |
-| `--group <g>` | only the boards declaring `<g>`, applied to the READ before anything is planned — the pool, the waves and the count are that group's, and no board outside it is ever a launch candidate. `machine <group> dispatch` is how it is normally set |
+
+The scope is the command's own bare word, and no flag names it. `pearde run
+<group>` filters the READ before anything is planned — the pool, the waves and
+the count belong to that group, and no board outside the group ever becomes a
+launch candidate. `pearde run <prd>` narrows the same way, to one subtree of
+the cwd board.
 
 Launching goes through `serve.load_adapters` and `serve.adapter_bin` — the
 same adapter set, the same `PEARDE_ADAPTER_BIN` override and the same
@@ -236,7 +251,7 @@ skipped; a board failing to scan is skipped by name and the rest of the
 machine still dispatches. Nothing is dropped without a printed reason, and
 every refusal is in the closing `dispatched N · refused N · dead N`.
 
-Between them, `machine.progress` is printed at every transition — a worker
+Between them, `run.progress` is printed at every transition — a worker
 coming in, or one finally declared dead — with `· in flight <n> · in <n> ·
 skipped <n> · dead <n>` for the run itself on the end of it. A line per poll
 would be a log; one line per transition is a state.
@@ -252,7 +267,7 @@ line and nowhere else.
 
 - **No write door on `all`.** This command adds nothing to that page and takes
   nothing from it. @references/parts/all.md's *"nobody works it"* stands
-  untouched; `machine` is a separate command over the same watch set, and the
+  untouched; `run` is a separate command over the same watch set, and the
   page stays a display.
 - **No persisted registry of boards, and none of groups.** The watch set is
   the whole configuration and a board's own `groups:` is the whole of its

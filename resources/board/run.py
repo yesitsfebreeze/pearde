@@ -1,24 +1,29 @@
 #!/usr/bin/env python3
-"""The machine frontier: every board this daemon watches merged into one
-ordered list, and the concurrency a dispatch across it would use.
+"""`pearde run` — the one command that moves a board.
+
+`run` is a verb, so the command name is the whole of it: there is no verb
+under it. A bare word after it is a SCOPE — where to run — and the scope is
+resolved in one printed order: `here` and `all` are reserved, then a group a
+watched board declares, then a PRD on the cwd board.
+
+    pearde run                  dispatch the board at the cwd
+    pearde run here             the same, said out loud
+    pearde run all              every board the daemon watches
+    pearde run <group>          the boards declaring `groups: <group>`
+    pearde run <prd>            the loop scoped to that PRD's subtree
+
+`--dry`, `--once`, `--workers N`, `--adapter <id>` and `--deadline S` are the
+flags; the launching itself is @resources/board/dispatch.py, imported here and
+never a command word of its own.
+
+Reading is the other command. Every read this file computes — discovery,
+`slots`, `frontier`, `waves`, `progress` — is printed by `pearde plan`, which
+calls `read_main` below. Reading the machine and moving it are never the same
+command, and that rule is now carried by two names rather than by a verb under
+one.
 
 Discovered by `resources/pearde.py` through its `COMMANDS` dict, so it runs
-from any directory — there need be no board above the cwd. The default mode is
-read-only: it prints and moves nothing. `dispatch` is the one verb that moves,
-and it lives in @resources/board/dispatch.py, imported only when asked for.
-
-    pearde machine              the merged order, printed
-    pearde machine boards       what the daemon watches
-    pearde machine slots        the concurrency and its reading
-    pearde machine progress     one progress line over the set
-    pearde machine groups       the labels the watched boards declare
-    pearde machine --json       the same as data
-    pearde machine dispatch     the frontier run down to nothing
-
-A group is a label a board writes on itself (`groups:` in its own
-settings.md), and any of the above takes one as a bare word: `pearde machine
-work`, `pearde machine work slots`, `pearde machine work dispatch`. Same read,
-fewer boards. Nothing here keeps the list.
+from any directory — there need be no board above the cwd.
 """
 import json
 import os
@@ -89,9 +94,13 @@ def board_at(start=None):
     written here because this command must also run where there is none."""
     d = os.path.abspath(start or os.getcwd())
     while True:
-        cand = os.path.join(d, planlib.BOARD_DIR)
-        if os.path.isdir(cand):
-            return cand
+        # every spelling the board may carry, in `plan.find_board`'s order —
+        # reading only `BOARD_DIR` here made `run here` and `plan here`
+        # resolve two different boards in one worktree
+        for name in getattr(planlib, "BOARD_DIRS", (planlib.BOARD_DIR,)):
+            cand = os.path.join(d, name)
+            if os.path.isdir(cand):
+                return cand
         nxt = os.path.dirname(d)
         if nxt == d:
             return None
@@ -368,7 +377,7 @@ def boards():
 
 # ── 1b. groups ───────────────────────────────────────────────────────────────
 # A group is a label a board writes on ITSELF — `groups: work infra` in its
-# own `.pearde/settings.md` — and `pearde machine work` is this same read over
+# own `settings.md` — and `pearde plan work` is this same read over
 # the boards carrying it. Nothing here keeps a list of which board is in which
 # group, on the same rule the watch set already follows: the configuration is
 # distributed to the boards, and a board nobody watches is in no group because
@@ -379,7 +388,13 @@ def boards():
 # over the set rather than a slice of a tree. `work` and `private` are two
 # labels among any others, and no board is required to declare one.
 
-VERBS = ("boards", "slots", "progress", "groups", "dispatch")
+# The windows onto the read, all of them under `plan`. `dispatch` is not
+# among them: the verb that moves is the command name `run`.
+READ_VERBS = ("boards", "slots", "progress", "groups")
+
+# Scope words that are never a group and never a PRD. `here` is the cwd board
+# and `all` is every watched board, so neither can be a subset of anything.
+RESERVED = ("here", "all")
 
 # flags whose VALUE is a bare word — `--workers 4` must not read as the group
 VALUE_FLAGS = ("--workers", "--adapter", "--deadline")
@@ -391,10 +406,10 @@ def declared(path):
 
     `groups: work infra`, or the list form under `groups:`. Lowercased, so a
     board writing `Work` and one writing `work` are one group. Two labels can
-    never be declared: a verb, because `pearde machine slots` has to keep
+    never be declared: a window, because `pearde plan slots` has to keep
     meaning the slot reading, and `all`, which is the whole set by definition
     and so is never a subset of it. Both are refused where they are declared
-    — printed by `machine groups` — rather than silently at the point of use,
+    — printed by `plan groups` — rather than silently at the point of use,
     where the person cannot see what went wrong."""
     v = planlib.board_settings(path).get("groups", "")
     raw = v if isinstance(v, list) else re.split(r"[,\s]+", str(v or ""))
@@ -403,10 +418,10 @@ def declared(path):
         g = str(g).strip().lower().lstrip("@")
         if not g or g in out:
             continue
-        if g in VERBS:
-            bad.append((g, "collides with the verb of the same name"))
-        elif g == "all":
-            bad.append((g, "`all` is every board — never a group of them"))
+        if g in READ_VERBS:
+            bad.append((g, "collides with the window of the same name"))
+        elif g in RESERVED:
+            bad.append((g, f"`{g}` is reserved — never a group of boards"))
         else:
             out.append(g)
     return out, bad
@@ -431,13 +446,13 @@ def in_group(entries, group):
     return kept, note
 
 
-def split_group(argv):
-    """(group, rest) — the first bare word that is not a verb is the group.
+def split_scope(argv, verbs=READ_VERBS):
+    """(scope, rest) — the first bare word that is not a window verb.
 
     The verb set is closed and a label colliding with it is refused where it
-    is declared, so the two never compete: `machine work slots` and `machine
-    slots` both read unambiguously, in either order. A flag's value is
-    skipped — `--workers 4` is a count, not a group."""
+    is declared, so the two never compete: `plan work slots` and `plan slots
+    work` both read unambiguously, in either order. A flag's value is skipped
+    — `--workers 4` is a count, not a scope."""
     skip = False
     for i, a in enumerate(argv):
         if skip:
@@ -446,19 +461,89 @@ def split_group(argv):
         if a.startswith("-"):
             skip = a in VALUE_FLAGS
             continue
-        if a in VERBS:
+        if a in verbs:
             continue
         return a.lstrip("@").lower(), list(argv[:i]) + list(argv[i + 1:])
     return None, list(argv)
 
 
-def unknown_group(group, known):
-    """The refusal, naming what a person can do about it."""
+# ── 1c. what a bare word means ───────────────────────────────────────────────
+# One order, and it is printed when it refuses:
+#
+#   1. `here` and `all` — reserved. Neither is a group and neither is a PRD.
+#   2. a `groups:` label a watched board declares.
+#   3. a PRD on the cwd board.
+#
+# A word that is BOTH a declared group and a PRD is refused naming both:
+# guessing would dispatch the wrong set, and the two are not interchangeable
+# — one is many boards, the other is one subtree of one.
+
+def here_entry(entries, board):
+    """The one watch-set row for `board`, or a row made for it.
+
+    Matched by realpath: a board registered twice under two spellings —
+    `<repo>/pearde` and a `<repo>/.pearde` symlink to it — is ONE board, and
+    dispatching both would race two pools over one tree."""
+    for k, p in entries:
+        if os.path.realpath(p) == os.path.realpath(board):
+            return [(k, p)]
+    return [(os.path.basename(os.path.dirname(board)), board)]
+
+
+def prds_here(board=None):
+    """(board, {rel: prd}) for the board at the cwd, or (None, {})."""
+    board = board or board_at()
+    if not board:
+        return None, {}
+    try:
+        return board, planlib.scan(board)
+    except Exception:
+        return board, {}
+
+
+def resolve_scope(word, known, board=None):
+    """(kind, value) for a bare word — `("group", label)`, `("prd", rel)` or
+    `("reserved", word)`. Raises ValueError carrying the refusal a person
+    reads."""
+    w = str(word).strip().strip("/").lstrip("@").lower()
+    if w in RESERVED:
+        return "reserved", w
+    is_group = w in known
+    board, prds = prds_here(board)
+    hit = None
+    if w in prds:
+        hit = w
+    else:
+        same = [r for r in prds if os.path.basename(r) == w]
+        if len(same) == 1:
+            hit = same[0]
+        elif len(same) > 1:
+            raise ValueError(f"`{w}` names {len(same)} PRDs on this board — "
+                             + ", ".join(same) + "; give the full path")
+    if is_group and hit:
+        raise ValueError(
+            f"`{w}` is both a group {len(known[w])} board(s) declare "
+            f"({', '.join(known[w])}) and a PRD on this board ({hit}) — "
+            f"refused rather than guessed. Rename one of the two: a group is "
+            f"a label in a board's own settings.md, a PRD is a directory")
+    if is_group:
+        return "group", w
+    if hit:
+        return "prd", hit
+    raise ValueError(unknown_scope(w, known, prds))
+
+
+def unknown_scope(scope, known, prds=()):
+    """The refusal, naming what a person can do about it: the groups that
+    exist, the PRDs that nearly match, and how a board joins a group."""
     have = (", ".join(sorted(known)) if known else
             "no watched board declares one")
-    return (f"pearde machine: no watched board declares group `{group}` — "
-            f"known: {have}. A board joins by writing `groups: {group}` in "
-            f"its own .pearde/settings.md; nothing here keeps that list")
+    near = [r for r in prds if scope in r.lower()][:5]
+    tail = (" — near PRDs: " + ", ".join(near)) if near else ""
+    return (f"pearde run: `{scope}` is neither a group nor a PRD here. "
+            f"Groups: {have}{tail}. A board joins a group by writing "
+            f"`groups: {scope}` in its own settings.md; nothing here keeps "
+            f"that list")
 
 
 # ── 2. footprints, resolved ──────────────────────────────────────────────────
@@ -687,30 +772,35 @@ def progress(entries, rows, waves_, nslots):
             f"@{nslots} workers · as engineer")
 
 
-def cmd_machine(argv):
-    """every watched board as one ordered frontier — `boards`, `slots`,
-    `progress`, `groups`, `--json`; prints, and moves nothing
+def cmd_run(argv):
+    """dispatch a board, a group or every watched board — `here`, `all`,
+    `<group>`, `<prd>`; the one command that moves
 
-    The one command. `pearde machine` prints the frontier; the verbs are
-    windows onto the same read, and a bare word before or after one is a
-    group — the same read over the boards declaring that label."""
+    `run` is the verb, so nothing sits under it. The bare word after it is
+    the scope, resolved reserved -> declared group -> PRD on the cwd board,
+    and a word that is both a group and a PRD is refused naming both. The
+    read is `pearde plan`, which moves nothing."""
     return main(argv)
 
 
-COMMANDS = {"machine": cmd_machine}
+cmd_run.flags = ("--dry --once --workers N --adapter <id> --deadline S")
+
+COMMANDS = {"run": cmd_run}
 
 
-def main(argv):
-    if argv and argv[0] == "machine":
-        argv = argv[1:]
-    group, argv = split_group(argv)
-    if argv and argv[0] == "dispatch":
-        import dispatch as dispatchlib   # lazy: the read path never loads it
-        pre = ["--group", group] if group else []
-        return dispatchlib.main(pre + list(argv[1:]))
-    entries, skipped = boards()
+# ── 5. the read: what `pearde plan` prints ───────────────────────────────────
+
+def read_main(argv, entries=None, skipped=None, scope=None):
+    """Every window onto the merged frontier, printed. Moves nothing.
+
+    Called by @resources/board/plan.py for `plan all`, `plan <group>` and the
+    four windows; never routed as a command of its own, because reading is
+    `plan` and this file is `run`."""
+    scope, argv = (scope, list(argv)) if scope else split_scope(argv)
+    if entries is None:
+        entries, skipped = boards()
     if isinstance(skipped, str):
-        print(f"pearde machine: {skipped}", file=sys.stderr)
+        print(f"pearde plan: {skipped}", file=sys.stderr)
         return 1
     known = all_groups(entries)
     if argv and argv[0] == "groups":
@@ -724,14 +814,15 @@ def main(argv):
                 print(f"{k:16} refused `{bad}` — {why}")
         if not known:
             print("no watched board declares a group — a board joins one by "
-                  "writing `groups: <name>` in its own .pearde/settings.md")
+                  "writing `groups: <name>` in its own settings.md")
         return 0
     gnote = []
-    if group is not None:
-        if group not in known:
-            print(unknown_group(group, known), file=sys.stderr)
+    if scope is not None and scope != "all":
+        if scope not in known:
+            print(unknown_scope(scope, known, prds_here()[1]).replace(
+                "pearde run:", "pearde plan:"), file=sys.stderr)
             return 1
-        entries, note = in_group(entries, group)
+        entries, note = in_group(entries, scope)
         gnote = [note]
     if argv and argv[0] == "boards":
         for k, p in entries:
@@ -756,7 +847,7 @@ def main(argv):
     if "--json" in argv:
         print(json.dumps({"boards": [k for k, _ in entries], "rows": rows,
                           "slots": nslots, "reading": reading,
-                          "demand": demand, "group": group, "groups": known,
+                          "demand": demand, "group": scope, "groups": known,
                           "waves": [[r["addr"] for r in w] for w in wv],
                           "skipped": skipped,
                           "notes": gnote + notes}, indent=1))
@@ -764,6 +855,47 @@ def main(argv):
         print(text(rows, wv, skipped, gnote + notes, reading,
                    [k for k, _ in entries], demand, defer))
     return 0
+
+
+# ── 6. the move ──────────────────────────────────────────────────────────────
+
+def main(argv):
+    """`pearde run [scope] [flags]` — the scope resolved, then dispatched."""
+    if argv and argv[0] == "run":
+        argv = argv[1:]
+    word, rest = split_scope(argv, verbs=())
+    import dispatch as dispatchlib   # the launcher, never a command word
+
+    entries, skipped = boards()
+    if isinstance(skipped, str):
+        print(f"pearde run: {skipped}", file=sys.stderr)
+        return 1
+    known = all_groups(entries)
+
+    if word is None or word == "here":
+        board = board_at()
+        if not board:
+            print("pearde run: no board at or above this directory — "
+                  "`pearde run all` runs every watched board",
+                  file=sys.stderr)
+            return 1
+        return dispatchlib.main(rest, entries=here_entry(entries, board))
+
+    try:
+        kind, value = resolve_scope(word, known, board_at())
+    except ValueError as e:
+        print(str(e), file=sys.stderr)
+        return 1
+
+    if kind == "reserved" and value == "all":
+        return dispatchlib.main(rest, entries=entries)
+    if kind == "group":
+        kept, note = in_group(entries, value)
+        print(note)
+        return dispatchlib.main(rest, entries=kept)
+    # a PRD: the loop scoped to that subtree, on the cwd board alone
+    return dispatchlib.main(rest, entries=here_entry(entries, board_at()),
+                            only=value)
 
 
 if __name__ == "__main__":

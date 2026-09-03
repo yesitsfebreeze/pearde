@@ -1,20 +1,21 @@
 #!/usr/bin/env python3
-"""`pearde machine dispatch`: the frontier's waves actually launched.
+"""`pearde run`: the frontier's waves actually launched.
 
-The other half of @resources/board/machine.py. That file reads — discovery,
+The other half of @resources/board/run.py. That file reads — discovery,
 `real_feet`, `frontier`, `waves`, `slots`, `progress` — and this one runs what
 it read: a rolling pool of pass workers, `slots()` wide, each row started the
 moment a slot is free and nothing in flight clashes with its real-path
 footprint. None of the read path's arithmetic is re-derived here; it is
 imported.
 
-    pearde machine dispatch              plan, then dispatch
-    pearde machine dispatch --dry        the plan, launching nothing
-    pearde machine dispatch --once       one fill, then report and stop
-    pearde machine work dispatch         the same, over one group of boards
+    pearde run                  plan the cwd board, then dispatch it
+    pearde run --dry            the plan, launching nothing
+    pearde run --once           one fill, then report and stop
+    pearde run all              the same over every watched board
+    pearde run <group>          the same over one group of boards
 
-`pearde machine` with no verb stays the read-only mode that moves nothing.
-Dispatch is a verb, never a change to that mode.
+This file is a library, not a command word. `run` resolves the scope and hands
+the entries here; `pearde plan` is the read that moves nothing.
 """
 import argparse
 import os
@@ -28,7 +29,7 @@ import time
 BOARD = HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.dirname(BOARD))
 sys.path.insert(0, BOARD)
-import machine as mach          # noqa: E402  the shipped read path
+import run as runlib            # noqa: E402  the shipped read path
 import plan as planlib          # noqa: E402
 import serve as servelib        # noqa: E402
 import transitions as trans     # noqa: E402  the same gate `claim` asks
@@ -121,7 +122,7 @@ def refusal(row):
     session on that board may have claimed the row itself. So the gate is
     re-asked here, against a FRESH scan of that one board, and the same gate
     `pearde claim` uses — `transitions.gate_claim`, which is
-    `plan.dispatchable` plus the drill gate — so what the machine dispatches
+    `plan.dispatchable` plus the drill gate — so what this pool launches
     is exactly what `claim` would take.
 
     A refusal is returned as its own sentence and the row is skipped by name;
@@ -152,16 +153,16 @@ def adapter(name=None):
     prompt template, one resolution of the binary."""
     ads = servelib.load_adapters()
     if not ads:
-        raise SystemExit("machine dispatch: no adapter under "
+        raise SystemExit("pearde run: no adapter under "
                          "resources/board/adapters/")
     if name:
         a = next((x for x in ads if x["id"] == name), None)
         if not a:
-            raise SystemExit(f"machine dispatch: no adapter {name!r}")
+            raise SystemExit(f"pearde run: no adapter {name!r}")
         return a
     if len(ads) == 1:
         return ads[0]
-    raise SystemExit("machine dispatch: several adapters — name one with "
+    raise SystemExit("pearde run: several adapters — name one with "
                      f"--adapter ({', '.join(a['id'] for a in ads)})")
 
 
@@ -183,7 +184,7 @@ def launch(row, ad, attempt=1):
     log_path = os.path.join(planlib.state_dir(row["path"]), f"run-{safe}.log")
     try:
         log = open(log_path, "a", encoding="utf-8")
-        log.write(f"\n─── machine dispatch {time.strftime('%F %T')} "
+        log.write(f"\n─── pearde run {time.strftime('%F %T')} "
                   f"attempt {attempt} · {row['addr']}\n")
         log.flush()
         proc = subprocess.Popen(argv, cwd=os.path.dirname(row["path"]),
@@ -210,13 +211,13 @@ def board_caps(entries):
 
 def live_progress(entries, nslots, live, done, refused, dead):
     """The merged progress line, re-read, with what this run is holding on the
-    end of it. `machine.progress` is the board's own line over the whole set
+    end of it. `run.progress` is the board's own line over the whole set
     (@references/parts/progress.md) and is not re-derived here — the dispatch
     counts are appended to it, so a person reads one line and sees both the
     machine and this run."""
-    rows, _, _ = mach.frontier(entries, nslots)
-    wv, _ = mach.waves(rows, nslots)
-    return (mach.progress(entries, rows, wv, nslots)
+    rows, _, _ = runlib.frontier(entries, nslots)
+    wv, _ = runlib.waves(rows, nslots)
+    return (runlib.progress(entries, rows, wv, nslots)
             + f" · in flight {len(live)} · in {len(done)}"
             + f" · skipped {len(refused)} · dead {len(dead)}")
 
@@ -225,7 +226,7 @@ def dispatch(entries, rows, nslots, ad, dry=False, once=False,
              log=print, poll_every=0.5, deadline=None, tick=None):
     """Run the frontier down to nothing, `nslots` at a time.
 
-    The waves `machine` prints are the PLAN; this is the plan run live. A
+    The waves `plan` prints are the PLAN; this is the plan run live. A
     queued row starts when three things are true at once:
 
       * a slot is free (machine-wide `nslots`, and the row's own board's
@@ -282,7 +283,7 @@ def dispatch(entries, rows, nslots, ad, dry=False, once=False,
                 rest.append(r)
                 continue
             blocker = next((j.addr for j in live
-                            if mach.clash(r["feet"], j.feet)), None)
+                            if runlib.clash(r["feet"], j.feet)), None)
             if blocker:
                 rest.append(r)
                 continue
@@ -322,46 +323,44 @@ def dispatch(entries, rows, nslots, ad, dry=False, once=False,
 
 # ── 5. the command ───────────────────────────────────────────────────────────
 
-def main(argv):
-    ap = argparse.ArgumentParser(prog="machine dispatch")
+def main(argv, entries=None, only=None):
+    """`entries` are the boards `run` resolved the scope to; `only` is a PRD
+    rel when the scope was a PRD, and the frontier is then cut to that
+    subtree. Neither is a flag: the scope word is the command's argument, and
+    the resolving is @resources/board/run.py's."""
+    ap = argparse.ArgumentParser(prog="pearde run")
     ap.add_argument("--dry", action="store_true")
     ap.add_argument("--once", action="store_true")
     ap.add_argument("--adapter")
     ap.add_argument("--workers", type=int, default=0,
                     help="dispatch-time override; 0 = the load-derived count")
     ap.add_argument("--deadline", type=float, default=0.0)
-    ap.add_argument("--group",
-                    help="only boards declaring this label in their own "
-                         "settings.md; `machine <group> dispatch` sets it")
     a = ap.parse_args(argv)
 
-    entries, skipped = mach.boards()
-    if isinstance(skipped, str):
-        print(f"machine dispatch: {skipped}", file=sys.stderr)
-        return 1
-    # the group is a filter on the READ, applied before anything is planned:
-    # the pool, the waves and the slot count are then this group's, and no
-    # board outside it is ever a launch candidate.
-    if a.group:
-        known = mach.all_groups(entries)
-        if a.group not in known:
-            print(mach.unknown_group(a.group, known).replace(
-                "pearde machine:", "machine dispatch:"), file=sys.stderr)
+    skipped = []
+    if entries is None:
+        entries, skipped = runlib.boards()
+        if isinstance(skipped, str):
+            print(f"pearde run: {skipped}", file=sys.stderr)
             return 1
-        entries, note = mach.in_group(entries, a.group)
-        print(note)
-    nslots, reading = mach.slots()
+    nslots, reading = runlib.slots()
     if a.workers:
         nslots = a.workers
         reading = f"{nslots} slots (override) · " + reading
-    rows, notes, demand = mach.frontier(entries, nslots)
-    wv, defer = mach.waves(rows, nslots)
+    rows, notes, demand = runlib.frontier(entries, nslots)
+    if only:
+        # a PRD scope is the loop over that subtree: the PRD itself and every
+        # PRD under it, and nothing else on the board is a launch candidate
+        pre = only.rstrip("/") + "/"
+        rows = [r for r in rows if r["rel"] == only or r["rel"].startswith(pre)]
+        notes = notes + [f"scope `{only}`: {len(rows)} PRD(s) in that subtree"]
+    wv, defer = runlib.waves(rows, nslots)
 
     # contract step 4: the order is printed BEFORE anything moves
-    print(mach.text(rows, wv, skipped, notes, reading,
+    print(runlib.text(rows, wv, skipped, notes, reading,
                     [k for k, _ in entries], demand, defer))
     print()
-    print(mach.progress(entries, rows, wv, nslots))
+    print(runlib.progress(entries, rows, wv, nslots))
     print()
 
     ad = adapter(a.adapter)
@@ -370,7 +369,7 @@ def main(argv):
                                    deadline=(time.time() + a.deadline
                                              if a.deadline else None))
     print()
-    print(mach.progress(entries, mach.frontier(entries, nslots)[0], wv, nslots))
+    print(runlib.progress(entries, runlib.frontier(entries, nslots)[0], wv, nslots))
     print(f"dispatched {len(done)} · refused {len(refused)} · dead {len(dead)}")
     return 1 if dead else 0
 

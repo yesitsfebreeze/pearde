@@ -79,7 +79,7 @@ a question about the work, which @index.md's Keywords table does.
 | @references/parts/doctor.md | broken install vs absent one |
 | @references/parts/master.md | one plan across several repos |
 | @references/parts/all.md | `all` — every board this machine watches on one read-only page; what it merges, what it deliberately leaves out, and how it differs from a master |
-| @references/parts/machine.md | `machine` — every watched board merged into one ordered frontier, the slot count and the reading behind it; what it prints, and the three things it does not do |
+| @references/parts/run.md | `run` — the command that moves a board, a group or every watched board, and the `plan` that reads the same merged frontier without moving it; how a bare word resolves, the slot count and the reading behind it |
 | @references/parts/ramp.md | loop step 0 — is this machine tooled for this repo, and the `happiness:` key that closes the question |
 
 ### `references/personas/` — who works
@@ -150,8 +150,8 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/board/adapters/claude.json | the Start button's default launch target — one JSON per adapter (`{"name","command","prompt"}`, optional `"plugins"` list of suggestions), read live by serve.py; doctor reports missing ones |
 | @resources/board/lit-core.min.js | Lit 3, vendored — the page's component base |
 | @resources/board/all.py | `all` — every watched board merged into one read-only page; no file of its own, the watch set is its whole configuration |
-| @resources/board/machine.py | `machine` — the same watch set merged into one dependency-ordered frontier, cut into waves by a load-derived slot count; the default mode prints and moves nothing |
-| @resources/board/dispatch.py | `machine dispatch` — that frontier run down to nothing: a rolling pool of pass workers, serialised on real-path footprint clashes, the claim gate re-asked per row, and a launch counted only once it has outlived the grace window |
+| @resources/board/run.py | `run` — the scope resolved (reserved, group, PRD) and dispatched; the same watch set merged into one dependency-ordered frontier, cut into waves by a load-derived slot count, and `read_main` is what `plan` prints |
+| @resources/board/dispatch.py | the launcher `run` calls — that frontier run down to nothing: a rolling pool of pass workers, serialised on real-path footprint clashes, the claim gate re-asked per row, and a launch counted only once it has outlived the grace window |
 | @resources/board/edit.py | the writers — one line at a time |
 | @resources/board/collect.py | `collect` — verify, commit the footprint, `done`, one call |
 | @resources/board/ramp.py | `ramp` — need, have, gap and the toolbox gate; proposes skills off scout's routes and installs none |
@@ -193,8 +193,8 @@ command, and @references/install.md is the naming rule and the install.
 | @references/skills/pearde-health.md | which files resist being worked on, scored worst first | `@@health` |
 | @references/skills/pearde-graph.md | knowledge-graph passes over any folder, Obsidian vault out | `@@graph` |
 | @references/skills/pearde-knowledge.md | the research layer — query, capture, conclude, link | `@@knowledge` |
-| @references/skills/pearde-all.md | every watched board as one ordered frontier, and what could run at once — and the waves that dispatch it | `@@machine` |
-| @references/skills/pearde-machine.md | the frontier this machine can work now — the waves, the slot count and the reading behind it; it prints and moves nothing | `@@machine` |
+| @references/skills/pearde-all.md | every watched board as one ordered frontier, and what could run at once — and the waves that dispatch it | `@@run` |
+| @references/skills/pearde-run.md | dispatch a board, a group or every watched board — the one command that moves, and how its bare word resolves | `@@run` |
 
 ### `resources/board/knowledge/` — the layer's content seed, planted by `init` and `upgrade`
 

@@ -645,6 +645,47 @@ COMMANDS["example"] = cmd_example
 COMMANDS["next"] = cmd_next
 
 
+# ── `plan` over more than one board ──────────────────────────────────────────
+# Every read `run` computes is printed here: `plan all`, `plan <group>` and the
+# four windows `boards`, `slots`, `progress`, `groups`. Reading and moving are
+# two commands, and this is the one that moves nothing.
+#
+# `plan` and `plan here` stay the cwd board's own page, unchanged. The merged
+# read is @resources/board/run.py's `read_main`, imported only when a scope or
+# a window asks for it — the single-board path never loads it.
+
+PLAN_WINDOWS = ("boards", "slots", "progress", "groups")
+
+
+def _merged_plan(argv):
+    """(handled, exit) — the merged read, when the arguments ask for one.
+
+    A bare word that is not `here` is a scope: `all`, or a group a watched
+    board declares. `here` and no word alike are the cwd board, and the merged
+    machinery is not loaded for either unless a window or `--json` asks."""
+    words = [a for a in argv if not a.startswith("-")]
+    flags = [a for a in argv if a.startswith("-")]
+    scope = next((w for w in words if w not in PLAN_WINDOWS), None)
+    window = next((w for w in words if w in PLAN_WINDOWS), None)
+    wants = bool(window) or "--json" in flags or (scope and scope != "here")
+    if not wants:
+        return False, 0
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import run as runlib
+    rest = ([window] if window else []) + flags
+    if scope == "here":
+        # a window narrowed to the one board at the cwd — no watch set is
+        # read, so this answers where the daemon is not running
+        board = find_board(None)
+        key = os.path.basename(os.path.dirname(board))
+        return True, runlib.read_main(rest, entries=[(key, board)],
+                                      skipped=[], scope="all")
+    # a window with no scope is the whole watch set: `plan slots` is the
+    # machine's concurrency, not one board's. Only the BARE `plan` defaults
+    # to the cwd board, and that path never reaches here.
+    return True, runlib.read_main(rest, scope=(scope or "all"))
+
+
 def main():
     raw = sys.argv[1:]
     for i in range(len(raw) - 1):           # `--workers N` is `--workers=N`
@@ -656,6 +697,11 @@ def main():
     cmd = args[0] if args else "status"
     if cmd == "example":          # its argument is not a board yet
         sys.exit(cmd_example(sys.argv[2:]))
+    if cmd == "plan":
+        handled, code = _merged_plan(raw[1:])
+        if handled:
+            sys.exit(code)
+        args = [a for a in args if a != "here"]
     board = find_board(args[1] if len(args) > 1 else None)
     if cmd == "plan":
         workers = next((f.split("=", 1)[1] for f in flags

@@ -101,8 +101,13 @@ class Store:
         self.conclusions = self.root / "conclusions"
         self.pending = self.root / "pending"
         self.graphs = self.root / "graphs"
-        self.graphify = self.root / ".graphify"
+        # one graph writer, one file: graphify writes the repo's scan to
+        # <board>/graphify/graph.json and relink merges the KB's scan into
+        # that same file as a second root — the wiki-side sibling below is
+        # the pre-merge path, kept only so relink can retire it.
+        self.graphify = self.root.parent / "graphify"
         self.graph_json = self.graphify / "graph.json"
+        self.old_graph_json = self.root / ".graphify" / "graph.json"
         self.workflow_md = self.root / "WORKFLOW.md"
         # The dashboard sits at the BOARD's root, not the wiki's. The vault
         # roots at `.pearde/` (@references/obsidian.md), so the one page a
@@ -473,9 +478,10 @@ def cmd_query(store, args):
 
 
 def build_graph(store):
-    """Nodes = notes. Edges: body wikilinks (resolved), `sources:` frontmatter,
-    `related:` frontmatter, symmetrized. Provenance per edge says where it
-    came from. Writes .graphify/graph.json. Returns (notes, edges)."""
+    """Nodes = notes, each tagged `root: kb`. Edges: body wikilinks (resolved),
+    `sources:` frontmatter, `related:` frontmatter, symmetrized. Provenance per
+    edge says where it came from. Returns (notes, edges, graph); writing is
+    `relink`'s job — it merges this into the repo's own graph.json."""
     notes = load_notes(store)
     by_stem, by_title = note_maps(notes)
 
@@ -529,6 +535,7 @@ def build_graph(store):
                 "tags": n.tags,
                 "date": str(n.meta.get("date", "")),
                 "path": str(n.path.relative_to(store.root)),
+                "root": "kb",
             }
             for n in notes
         ],
@@ -540,10 +547,66 @@ def build_graph(store):
     return notes, list(edges.values()), graph
 
 
+def _load_repo_graph(path):
+    """The repo's own graph as it lies on disk — graphify's native shape —
+    or an empty skeleton of the same shape when `graph.sh extract` has never
+    run, so `relink` always has a repo graph to merge onto."""
+    skeleton = {"directed": False, "multigraph": False, "graph": {},
+                "nodes": [], "links": [], "hyperedges": []}
+    try:
+        data = json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return skeleton
+    if not isinstance(data, dict) or not isinstance(data.get("nodes"), list) \
+            or not isinstance(data.get("links"), list):
+        return skeleton
+    return data
+
+
+def merge_kb_into_repo_graph(repo_graph, kb_nodes, kb_edges):
+    """One graph.json, two roots. Repo nodes/links already on disk stay (each
+    tagged `root: repo` when untagged, never otherwise altered); this run's KB
+    nodes/links replace whichever `root: kb` ones were there before, so a
+    second relink does not accumulate; a KB edge is translated from its
+    `from/to/type` typing to graphify's `source/target/relation` so both roots
+    are typed the same way, and the union is keyed by
+    (source, relation, target), so a link both roots record is never doubled."""
+    repo_nodes = [n for n in repo_graph.get("nodes", [])
+                  if isinstance(n, dict) and n.get("root") != "kb"]
+    repo_links = [l for l in repo_graph.get("links", [])
+                  if isinstance(l, dict) and l.get("root") != "kb"]
+    for node in repo_nodes:
+        if "root" not in node:
+            node["root"] = "repo"
+    for link in repo_links:
+        if "root" not in link:
+            link["root"] = "repo"
+    seen = {(l["source"], l.get("relation"), l["target"]) for l in repo_links}
+    for edge in kb_edges:
+        link = {"source": edge["from"], "target": edge["to"],
+                "relation": edge["type"],
+                "provenance": edge.get("provenance", "wikilink"),
+                "root": "kb"}
+        key = (link["source"], link["relation"], link["target"])
+        # a KB edge translated to (from, type, to): the same triple the repo
+        # side is keyed by, so an edge both roots record lands once
+        if key not in seen:
+            seen.add(key)
+            repo_links.append(link)
+    merged = dict(repo_graph)
+    merged["nodes"] = repo_nodes + kb_nodes
+    merged["links"] = repo_links
+    return merged
+
+
 def cmd_relink(store, args):
     store.ensure()
     notes, edges, graph = build_graph(store)
-    store.graph_json.write_text(json.dumps(graph, indent=2), encoding="utf-8")
+    repo_graph = _load_repo_graph(store.graph_json)
+    merged = merge_kb_into_repo_graph(repo_graph, graph["nodes"], edges)
+    store.graph_json.write_text(json.dumps(merged, indent=2), encoding="utf-8")
+    if store.old_graph_json.exists():
+        shutil.rmtree(store.old_graph_json.parent, ignore_errors=True)
     # symmetrize related: frontmatter, both directions, idempotently
     for note in notes:
         wanted = sorted({e["to"] if e["from"] == note.path.stem else e["from"]
@@ -566,8 +629,8 @@ def cmd_relink(store, args):
                                       [f'"[[{s}]]"' for s in items])
         note.path.write_text(text, encoding="utf-8")
         print(f"  related: {note.path.stem} + {', '.join(missing)}")
-    print(f"relink: {graph['note_count']} nodes, {graph['edge_count']} edges "
-          f"-> {store.graph_json}")
+    print(f"relink: {graph['note_count']} kb nodes, {graph['edge_count']} kb edges "
+          f"merged into {store.graph_json}")
     orphan_stems = set()
     for edge in edges:
         orphan_stems.add(edge["from"])
@@ -1127,7 +1190,10 @@ def cmd_doctor(store, args):
         try:
             graph = json.loads(store.graph_json.read_text(encoding="utf-8"))
             disk = {n.path.stem for n in notes}
-            graph_ids = {n["id"] for n in graph.get("nodes", [])}
+            # the merged file also holds the repo's code nodes, which no KB
+            # note stem ever matches — compare against the KB's own root only
+            graph_ids = {n["id"] for n in graph.get("nodes", [])
+                         if isinstance(n, dict) and n.get("root") == "kb"}
             if graph_ids != disk:
                 stale = (graph_ids - disk) | (disk - graph_ids)
                 problems.append("graph.json is behind the files: " + ", ".join(sorted(stale)[:6]))

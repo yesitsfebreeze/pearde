@@ -566,7 +566,7 @@ def load_graph(board):
     commit = str(data.get("built_at_commit") or "")[:7] or "unknown"
     file_of = {}
     for n in data.get("nodes") or []:
-        if not isinstance(n, dict):
+        if not isinstance(n, dict) or n.get("root") == "kb":
             continue
         sf = n.get("source_file")
         nid = n.get("id")

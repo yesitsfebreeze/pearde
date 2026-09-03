@@ -87,7 +87,7 @@ yours, and it is the half that makes this file worth reading.
 | `est` | a fallback weight for a PRD with no `complexity`. Nothing asks an analyst to produce one |
 | `actual` | what one PRD took. A record: the plan never schedules by it |
 | **calibrate** | the fit of one machine-wide constant — hours per unit of weight — from every `done` PRD carrying `actual:` across every registered board |
-| `TUNE` | the hand-set margin in `plan.py`, 1.618. Tuned hours are weight × the fit × this |
+| `TUNE` | the hand-set margin in `mapfile.py`, 1.618. Tuned hours are weight × the fit × this |
 | **dispatchable** | `plan.dispatchable` — the one predicate `scan`'s ready band and `claim` both read, so what the scan offers is what `claim` takes |
 | **pressure order** | the one ranking of the whole board: to collect, waiting on you, in flight, ready now, gated, parked, landed. The cut is between 1 and 2 — above it is this pass's, below it is already somebody's |
 | **to collect** | every box closed, a worker still holding it. No dispatch is cheaper |

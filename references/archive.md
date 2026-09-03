@@ -15,7 +15,7 @@ key — nothing reads the directory back.
 
 ## Why `scan` already ignores it
 
-`_scan_one` (@resources/board/plan.py) finds a PRD by one test: `"prd.md" in
+`_scan_one` (@resources/board/registry.py) finds a PRD by one test: `"prd.md" in
 files`. `.pearde/memos/` and `.pearde/workflows/` are invisible for the same
 reason (@references/parts/board.md) — they hold no file named `prd.md`. Every
 file in the archive is `<name>.md`, never `prd.md`. So no name joins

@@ -141,7 +141,16 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/graph/graph.sh | graphify passes — extract, update, query, path, explain, god-nodes, vault open |
 | @resources/knowledge.py | the research loop — query, enqueue, remember, conclude, relink, wiki, board, index, dashboard, doctor — over the board's `wiki/`; `index` writes one note per manifest row so a `@@<keyword>` is answerable from the dashboard |
 | @resources/board/serve.py | the live service |
-| @resources/board/plan.py | read + order the board |
+| @resources/board/plan.py | the command line, and the module every caller imports — `import plan` re-exports the nine modules below, so a caller names one file |
+| @resources/board/boards.py | where a board is on disk, and how a new one is made |
+| @resources/board/prdfile.py | one PRD file — frontmatter, boxes, typed numbers, the question pass |
+| @resources/board/repos.py | the git tree under a board, and the lanes cut off it |
+| @resources/board/registry.py | the PRDs a board holds and the boards a master merges — the scan and its mtime cache |
+| @resources/board/silence.py | whether a held PRD is still moving |
+| @resources/board/needs.py | what a PRD waits on before it may run |
+| @resources/board/vision.py | the axis `prds/vision.md` declares, and a PRD's depth along it |
+| @resources/board/schedule.py | what may run now, and in what order — `dispatchable`, the frontier, the plan |
+| @resources/board/mapfile.py | the plan on disk, the journals, and the payload the view reads; `TUNE`, the hand-set margin |
 | @resources/board/render.py | the page — markup, and the arithmetic behind it |
 | @resources/board/view.css | the page's stylesheet, inlined at render |
 | @resources/board/view.js | the page's script, inlined at render |

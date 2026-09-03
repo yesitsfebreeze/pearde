@@ -79,7 +79,7 @@ board and fits one machine-wide constant — hours per unit of weight, as a rati
 of sums so a five-minute PRD cannot outvote a three-day one, with a P20–P80
 band from the per-PRD spread. Once fitted, every weight on the board prints as
 tuned real hours: weight × the fit × `TUNE`, a hand-set margin hard-coded in
-`plan.py` (1.618). Raise `TUNE` when the board keeps finishing late, lower it
+`mapfile.py` (1.618). Raise `TUNE` when the board keeps finishing late, lower it
 when the board keeps beating the number.
 
 A bad fit can mislabel an axis and can never re-order the work — precisely

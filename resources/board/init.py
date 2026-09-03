@@ -1149,7 +1149,7 @@ def cmd_settings(argv):
 
 # ── vault ─────────────────────────────────────────────────────────────────────
 
-# obsidian.json is one file for the whole machine, not one per board — so the
+# the register file is one file for the whole machine, not one per board — so the
 # writer slot the wait guards is machine-wide too. A lock under the board
 # would let two boards each think they were the only one waiting.
 VAULT_LOCK = os.path.join(tempfile.gettempdir(), "pearde-vault.lock")
@@ -1171,7 +1171,7 @@ def _lock_holder_alive(pid):
 def acquire_vault_lock():
     """Claim the one writer slot the wait-then-write holds. Two `pearde
     vault` runs waiting on the same Obsidian quit would both wake and both
-    write `obsidian.json` — the second one now refuses instead, the way
+    write the register — the second one now refuses instead, the way
     `claim` refuses a PRD someone already holds. A lock left by a process
     that is no longer running is dropped and retried once; a live one
     refuses."""

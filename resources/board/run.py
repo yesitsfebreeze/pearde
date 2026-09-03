@@ -32,9 +32,6 @@ import re
 import subprocess
 import sys
 
-# this file's own directory IS the board/ dir — the shipped code is imported
-# from beside it, never from a path written down
-BOARD = HERE = os.path.dirname(os.path.abspath(__file__))
 _D = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
                 else os.path.dirname(_D))

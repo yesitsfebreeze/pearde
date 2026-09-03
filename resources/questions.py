@@ -33,12 +33,15 @@ import os
 import re
 import sys
 
-# The board resolver and the frontmatter dialect are @resources/board/plan.py's,
-# one directory down. Bound here and read only inside a call: plan imports
-# this file for the drill count, so whichever loads first sees the other
-# half-built, and neither touches the other before main runs.
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                "board"))
+# The board resolver and the frontmatter dialect are @resources/board/plan.py's.
+# Bound here and read only inside a call: plan imports this file for the drill
+# count, so whichever loads first sees the other half-built, and neither
+# touches the other before main runs. The rule puts plan on the path
+# wherever it sits, so no directory is spelled.
+_D = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
+                else os.path.dirname(_D))
+import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
 import plan as planlib  # noqa: E402
 
 # `## Questions`, `## Questions — from the analyst pass`, `## Questions for

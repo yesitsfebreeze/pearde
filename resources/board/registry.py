@@ -26,12 +26,14 @@ import time
 import urllib.error
 import urllib.request
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import memos as memolib  # noqa: E402 — the skill root, one dir up
+_D = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
+                else os.path.dirname(_D))
+import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
+import memos as memolib  # noqa: E402 — on the path by the rule
 import questions as qlib  # noqa: E402 — the drill count, one reader with list
-import render as renderlib  # noqa: E402 — beside this script
-import workflows as wflib  # noqa: E402 — the skill root, one dir up
+import render as renderlib  # noqa: E402 — on the path by the rule
+import workflows as wflib  # noqa: E402 — on the path by the rule
 from boards import (BOARD_DIR, BOARD_DIRS, PRDS_DIR, prds_dir)  # noqa: E402,F401
 import prdfile  # noqa: E402 — a rebound global, read live
 from prdfile import (dur, num, parse_cache_load, parse_cache_save, parse_prd)  # noqa: E402,F401

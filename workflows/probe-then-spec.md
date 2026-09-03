@@ -3,7 +3,7 @@ workflow: probe-then-spec
 subject: an open PRD, from its contract to specs written from a build
 date: 2026-08-28
 updated: 2026-09-02
-runs: 65
+runs: 67
 tags:
   - workflow
 ---

@@ -3,7 +3,7 @@ atomic: capture-the-harness-baseline
 subject: record what every committed harness prints before the tree is touched
 date: 2026-08-28
 updated: 2026-09-03
-runs: 87
+runs: 89
 tags:
   - atomic
 ---
@@ -21,11 +21,18 @@ tags:
    A fixed glob list aborts on the first depth that
    has no match, and under a shell with `nomatch` it prints nothing at all.
    Then name the tree the set is to measure. Most board harnesses take their
-   root from `PEARDE_ROOT` and fall back to the board's own repo, which is
-   always the orchestrator's checkout — so a worker building in a lane runs
-   `PEARDE_ROOT=<lane> bash resources/doctor.sh --harnesses <board>`, or
-   exports `PEARDE_ROOT=<lane>` before running one by hand. Not all of them
-   do. `grep -L PEARDE_ROOT $(find <board>/prds -name verify.sh)` names the
+   root from `PEARDE_ROOT` and fall back to the board's own repo. Count them
+   first — `find <board>/prds -name verify.sh | wc -l`. Past about thirty,
+   the whole sweep is not a baseline you can take: it costs tens of minutes
+   and dies before it prints. Select the set instead — every harness naming
+   a footprint path, every one whose PRD is in `needs:`, every one that runs
+   a repo-root `git status`/`git diff`, and every one that enumerates the
+   board — and run those with `PEARDE_ROOT=<lane>`, four at a time, saving
+   each output. Say in the report that the baseline is the selected set and
+   name how it was selected. A worker building in a lane runs
+   `PEARDE_ROOT=<lane> bash resources/doctor.sh --harnesses <board>` on the
+   selected set, or exports `PEARDE_ROOT=<lane>` before running one by hand.
+   Not all of them do. `grep -L PEARDE_ROOT $(find <board>/prds -name verify.sh)` names the
    ones that do not, and every count from those is the checkout's however you
    invoke them — record them as measuring another tree, and never claim a flip
    on one. Without it the baseline you record and the re-run you compare it
@@ -60,7 +67,19 @@ tags:
   worker already built:** if the earlier build is **uncommitted**, the
   pre-edit tree is still on disk and the baseline is recoverable — do not
   inherit it. `git clone --no-hardlinks` recovers the pre-edit tree
-  only where the harnesses are tracked **in the repo you cloned**. Before
+  only where the harnesses are tracked **in the repo you cloned**.
+  Recover it with `clone`, never with `git archive`: an extracted tree has
+  no `.git`, and on a board whose harnesses run `git` at `ROOT` that alone
+  moves dozens of counts — a baseline that reads red for the absence of a
+  repository is not a baseline. Then put back what a clone leaves out
+  before measuring anything: the gitignored third-party bundles
+  (`resources/board/node_modules`, the vendored plugin directories) the
+  js and view harnesses need, and a symlink to the live board at the
+  clone's root, because the clone has none and every board-rooted line in
+  a harness would otherwise answer about nothing. Measured here: with
+  `archive` and no bundles, four of seven harnesses moved and read as
+  regressions; with `clone` plus both, all seven read identically before
+  and after. Before
   concluding they are not, check the board's **own** history: a board at
   `.pearde/` is normally a separate repo or a **linked worktree**, so the
   parent repo ignoring that path says nothing about whether the board's
@@ -124,3 +143,4 @@ tags:
 | a repo-wide reference gate (`index.py check`) is red in the lane on a line naming an `@pearde/…` or `@.pearde/…` target, and green in the checkout | `lanes.create` cuts the lane deliberately without the board, so every reference from a tracked file into the board dangles there by construction — this never closes on a merge and is not a defect in the file | baseline the gate in both roots and quote both. A line whose target is under the board is the lane's missing board and nothing else; count only the lines whose target exists in the checkout. Do not add the board to the lane to silence it — a second board under a lane is a board the scan will find |
 | the harness sweep is baselined with a board symlinked into the lane, and re-run without it | the symlink is inside the tree the sweep measures: a harness asserting about `<root>/pearde/…` sees the real board where it expects a lane's stub, and a harness reading the git store sees the lane's | measured here: `a-lane-s-wiki-is-a-stub-…` exits 1 with the symlink and 0 without, and `list-the-collects-the-repo-bug-orphaned` names the lane's `worktrees/-pearde`. Take both baseline and re-run with the scaffolding in the same state, name the state beside every count, and take the deciding count at the root `collect` will use |
 | the harness set that names a footprint path is a large fraction of the board, and a full sweep does not finish | the footprint is a file the board reads about itself — `doctor.sh`, `plan.py`, a reference page — so "every harness that touches it" is the board | narrow in two named steps and record both: the harnesses whose text spells a footprint path, then those that also assert on the *row or verb* the unit changes. Run that set twice. Name every harness dropped and why — one that enumerates the board costs the same as the sweep, one with no `PEARDE_ROOT` measures another tree — and never report a narrowed set as the set — measured here: 22 of 94 harnesses name `resources/doctor.sh`, and `doctor.sh --harnesses` did not reach its own row in ten minutes at load 33–43 |
+| `diff -r <clone> <lane>` never returns | the board symlinked into the tree points at a directory holding `.lanes/<slug>`, which is the tree itself — `diff -r` follows it and walks the same path forever | compare with `git diff` between the two roots, or pass `-x .pearde -x pearde`; never recurse a tree a board has been linked into |

@@ -51,9 +51,33 @@ is to read it, run the probe, and tick each box against what it printed.
 
 ## What is left to finish
 
-Nothing to build. Land the two files as they stand and keep
-`.pearde/prds/write-affordances-on-focus/probe/keyboard-affordances.js` as
-the regression check — it is pass one's own evidence, not throwaway.
+**Pass one's build did not survive.** "Already stands in the tree" was true
+when this was written and was gone by the time an implementer read it: a
+concurrent `collect` reset the checkout at ~17:50, and the hunks were in no
+commit, no stash and no dangling blob (`git fsck --lost-found` searched for
+`open to move or edit`, `tabindex="0"` and `.card:focus-visible`; nothing).
+Pass two rebuilt both files from the description above, which was complete
+enough to do it from — read this section as the record of what was rebuilt,
+not as a claim that nothing was.
+
+Two details of that description were off, and the rebuild follows the file:
+`#vrail` uses `@media (hover:hover)` (view.css:443), not `(hover:none)`, and
+it is ~820 lines up, not two hundred — `(hover:none)` is its complement, a
+new query rather than a reused one. And `#answered .areopen` reveals on
+`:focus`, not `:focus-visible`: a pointer that focuses this button is
+already hovering it, so there is nothing to withhold, and a programmatic
+focus must reveal it too — under `:focus-visible` alone the reveal depends
+on Chrome's last-input-modality heuristic and the probe's own box reads 0.
+The card keeps `:focus-visible`, where a mouse-down would otherwise leave
+the lift stuck on.
+
+Keep both files under `probe/` as the regression check — they are pass one's
+and pass two's own evidence, not throwaway.
+`keyboard-affordances.js` is pass one's; `extra-affordances.js` covers the
+three boxes it does not reach (`role="button"` on every served card,
+`#dstate`'s `aria-label`, and the `(hover:none)` reveal, which needs
+Chromium's mobile emulation — an `Emulation.setEmulatedMedia` `hover`
+feature alone does not flip `matchMedia("(hover:none)")`, measured).
 
 ## Findings for whoever reads this next (not acted on here — out of footprint)
 
@@ -85,33 +109,58 @@ the regression check — it is pass one's own evidence, not throwaway.
 
 ## Acceptance
 
-- [ ] On the unserved (read-only) render, no `.card` carries a `tabindex`
+- [x] On the unserved (read-only) render, no `.card` carries a `tabindex`
       attribute — the `all` page's copy of this component gains nothing.
-- [ ] Once `served` is true, every `.card` carries `tabindex="0"`,
+- [x] Once `served` is true, every `.card` carries `tabindex="0"`,
       `role="button"` and an `aria-label` containing the PRD's title and its
       current state.
-- [ ] A Tab walkthrough from the top of the page reaches a served card.
-- [ ] The focused card matches `:focus-visible` (a real, visible focus
+- [x] A Tab walkthrough from the top of the page reaches a served card.
+- [x] The focused card matches `:focus-visible` (a real, visible focus
       indicator, not only a property flag).
-- [ ] Pressing Enter on a focused card opens the drawer.
-- [ ] Pressing Enter on a focused card does **not** change which column
+- [x] Pressing Enter on a focused card opens the drawer.
+- [x] Pressing Enter on a focused card does **not** change which column
       (state) the card is in — the guard from the PRD's `## Fails when`.
-- [ ] `#dstate` inside the drawer carries an `aria-label` naming the write.
-- [ ] `#answered .areopen` can receive focus via `.focus()` even before any
+- [x] `#dstate` inside the drawer carries an `aria-label` naming the write.
+- [x] `#answered .areopen` can receive focus via `.focus()` even before any
       hover or click — the old `visibility:hidden` bug, reproduced with a
       markup fixture since the example board ships no answered question.
-- [ ] `#answered .areopen` is visually de-emphasised (`opacity:0`) until
+- [x] `#answered .areopen` is visually de-emphasised (`opacity:0`) until
       hovered or focused, and plainly visible under `(hover:none)`.
-- [ ] `node --check resources/board/view.js` — compiles.
-- [ ] `node resources/board/viewtest.js --example` — the committed harness,
+- [x] `node --check resources/board/view.js` — compiles.
+- [x] `node resources/board/viewtest.js --example` — the committed harness,
       49/49, no new failure.
 
 ## Verify and Proof
 
 ```sh
-# from the repo root (or the lane's own copy)
-node --check resources/board/view.js && echo "resources/board/view.js compiles"
+# `collect` runs this from the PRD's `repo:` root — the checkout, or the lane
+# that is a worktree of it. Both need `playwright-core` in resources/board and
+# a Chrome on the machine: `npm i playwright-core` there is one-time setup,
+# not a gate, so it is not run here — an install inside a verify block hits
+# the network on every collect and dirties the tree the collect then reads.
+node --check resources/board/view.js
+
+# the committed harness. Its exit code is the gate, never a literal total: a
+# later PRD adding a check must not redden this spec.
 node resources/board/viewtest.js --example
-cd resources/board && npm i playwright-core   # once, if not already present
-node ../../.pearde/prds/write-affordances-on-focus/probe/keyboard-affordances.js
+
+# the affordances themselves, in the two footprint files. These go red the
+# moment the work is reverted, whatever a browser is or is not able to say.
+grep -q 'tabindex=${this.served ? "0" : nothing}' resources/board/view.js
+grep -q 'role=${this.served ? "button" : nothing}' resources/board/view.js
+grep -q 'open to move or edit, currently' resources/board/view.js
+grep -q 'aria-label="state — writes this PRD' resources/board/view.js
+grep -q '^.card:hover,.card:focus-visible{' resources/board/view.css
+grep -q 'cursor:pointer;opacity:0}' resources/board/view.css
+grep -q '@media (hover:none){#answered .areopen{opacity:1}}' resources/board/view.css
+# the bug this unit fixed, asserted as absent rather than as a count
+if grep -q '#answered .areopen{.*visibility:hidden' resources/board/view.css; then exit 1; fi
+
+# the browser probes: pass one's own evidence, kept as the regression check.
+# A lane has no board of its own, so the board is found through the checkout
+# the lane is a worktree of — `--git-common-dir` is that root from either.
+CO="$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")"
+PROBE="$CO/.pearde/prds/write-affordances-on-focus/probe"
+( cd resources/board && node "$PROBE/keyboard-affordances.js" )
+( cd resources/board && node "$PROBE/extra-affordances.js" )
 ```

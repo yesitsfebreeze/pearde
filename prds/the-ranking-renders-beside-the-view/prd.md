@@ -6,6 +6,7 @@ complexity: 14
 blast-radius: mid
 workflow: probe-then-spec
 actual: 0.98h
+commit: b8e6fff
 ---
 
 # The ranking renders beside the view

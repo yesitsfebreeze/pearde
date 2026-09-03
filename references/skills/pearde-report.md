@@ -1,6 +1,6 @@
 ---
 name: pearde-report
-description: Write the board's state for a person — one file, rewritten whole, saying what is planned, what is being worked on now, and what is undecided or failing. Prose and lists, no PRD names, no states, no weights. Use for "/pearde-report", "report", "write the report", "where do things stand", "status for a human", "what should I tell the team", "summarise the board in plain words", "update the report", "what is waiting on me". One state, never a log — git holds every earlier one.
+description: Write the board's state for a person — one file rewritten whole, saying what is planned, what is being worked on now, and what is undecided or failing. Prose and lists, no PRD names, states or weights. Use for "/pearde-report", "report", "write the report", "where do things stand", "status for a human", "what should I tell the team", "update the report", "what is waiting on me".
 ---
 
 Read @references/report.md — one state and not a log, human and not agent, the

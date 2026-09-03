@@ -1,6 +1,6 @@
 ---
 name: pearde-knowledge
-description: The project knowledge base — research sources and synthesized conclusions with provenance links, queried before new research, fed by scout sweeps, cross-linked into memos, graphed by wikilink and viewed through an Obsidian vault with Dataview dashboards. Use for "/pearde-knowledge", "what do we know about X", "query the knowledge base", "research <topic>", "save this finding", "record this conclusion", "what sources back this", "is this on record", "knowledge dashboard", "relink the knowledge graph".
+description: The project knowledge base — research sources and synthesized conclusions with provenance, queried before new research, fed by scout sweeps, linked into memos, viewed through an Obsidian vault. Use for "/pearde-knowledge", "what do we know about X", "query the knowledge base", "research <topic>", "save this finding", "record this conclusion", "what sources back this", "relink the knowledge graph".
 ---
 
 Read @references/knowledge.md. The scope is `@@knowledge`. The tool is

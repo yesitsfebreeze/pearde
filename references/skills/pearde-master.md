@@ -1,6 +1,6 @@
 ---
 name: pearde-master
-description: Plan across several repositories at once — one parent board that names other boards as members, scans them all, and returns a single ordered plan and one timeline over the merged set. The members stay where they are, boards in their own right; nothing is copied and no file in a member moves. Use for "/master", "plan across projects", "plan over several repos", "one board for all my projects", "master board", "add <path> as a member", "what does this master merge", "combine these boards", "portfolio view of my work".
+description: Plan across several repositories at once — one parent board naming other boards as members, scanning them all into a single ordered plan and one timeline; members stay in place, nothing is copied. Use for "/master", "plan across projects", "plan over several repos", "master board", "add <path> as a member", "what does this master merge", "combine these boards", "portfolio view of my work".
 ---
 
 Read @references/parts/master.md — the contract: what `members:` does, how an

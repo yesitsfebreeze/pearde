@@ -125,6 +125,7 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/update.sh | check every install on this machine and re-link the set — local, global, and the global that is not in force |
 | @resources/doctor.sh | install check + repair |
 | @resources/guard.py | the PreToolUse/PostToolUse hook that enforces the loop |
+| @resources/board/quiet.py | `quiet check` — an idle poll (`echo`/`sleep`/`true` to pass time) and a `cat` of a whole file over 8 KB denied before they run, each naming the cheaper spelling; stdlib only, never raises, called by @resources/guard.py on every Bash tool call |
 | @resources/statusline.sh | continuous progress numbers |
 | @resources/memos.py | read + check memos — the only reader of that format |
 | @resources/workflows.py | read + check the workflow library, and brief one — the only reader of that format |
@@ -133,6 +134,7 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/index.py | read + check the map — the only reader of that format; `rows` and `scope_text` hand it to @resources/knowledge.py's `index` |
 | @resources/prose.py | check density — word count, mean sentence length, unbound waste words, banned openers/closers, per file — the only reader of `## Density` |
 | @resources/questions.py | read + check a PRD's question pass — the only reader of that format |
+| @resources/spend.py | what the workers cost — per model, turns, context billed, the first-turn floor, turns over 80K, idle polls and tool-result bytes, read off `~/.claude/projects/*/*/subagents/*.jsonl` since a date |
 | @resources/invariants/ | one script per `kind: invariant` memo — what its `verify:` runs, named for its slug |
 | @resources/invariants/every-artifact-lands-inside-the-board.sh | the tool writes nowhere but a board: no `.state/` outside a `.pearde/`, a driven throwaway project that stays clean, and the guard that still refuses a pass file written beside the board |
 | @resources/invariants/no-colour-group-in-the-vault-preset-is-a-path-query.sh | the vault's graph stays coloured: every `colorGroups` query in the preset is a `tag:` query, and every tag one names is carried by a note on the board — a group matching nothing draws grey and reports no error |

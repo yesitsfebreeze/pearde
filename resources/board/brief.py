@@ -318,11 +318,27 @@ def resolve_slug(slug, prd, board):
     return None
 
 
+ROUTE_MAX = 24000  # chars — over this the harness spills the brief to a file
+
+
 def route(board, slug):
-    buf = io.StringIO()
-    with contextlib.redirect_stdout(buf):
-        rc = wflib.brief(board, slug)
-    return buf.getvalue().rstrip() if rc == 0 else ""
+    """The workflow page with every atomic inlined — or, past ROUTE_MAX,
+    the steps table alone and one line saying where each atomic is. A
+    spilled brief is re-run and read whole, three copies pinned for the
+    worker's whole life; a step read at its turn is one."""
+    def page(inline):
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            rc = wflib.brief(board, slug, inline=inline)
+        return buf.getvalue().rstrip() if rc == 0 else ""
+    full = page(True)
+    if len(full) <= ROUTE_MAX:
+        return full
+    short = page(False)
+    kb = (len(full) - len(short)) // 1024
+    d, _ = wflib.workflows_dir(board)
+    return (short + f"\n\natomics are large ({kb} KB total) — read "
+            f"`{d}/<name>.md` when you reach its step, one at a time.")
 
 
 def persona_line(pid):

@@ -1,6 +1,6 @@
 ---
 name: pearde-health
-description: Which files resist being worked on — every tracked file scored 1-100 from its lines, branching, longest function and what the knowledge graph knows of its callers, worst first on one page, and the implementer's brief naming the ones in its footprint under the floor. Score the tree, read the ranking, look one file up, check the record. Use for "/health", "score the files", "which files are the worst", "which file is a monolith", "how healthy is this file", "what pulls this file down", "rank the files", "what should we split", "rescore", "check the health record". A score is a pointer, never a verdict.
+description: Which files resist being worked on — every tracked file scored 1-100 from its lines, branching, longest function and graph callers, worst first, and the implementer's brief naming the ones in its footprint under the floor. Use for "/health", "score the files", "which files are the worst", "which file is a monolith", "how healthy is this file", "rank the files", "what should we split", "rescore".
 ---
 
 Read @references/parts/health.md for when the tree is scored and what a worker

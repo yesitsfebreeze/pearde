@@ -36,6 +36,10 @@ _D = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
                 else os.path.dirname(_D))
 import pearde_path  # noqa: E402 — @resources/pearde_path.py, the one rule
+try:
+    import quiet  # noqa: E402 — @resources/board/quiet.py, stdlib-only; a broken module denies nothing
+except Exception:
+    quiet = None
 
 ROOT = pearde_path.RES                  # the skill's resources/
 PEARDE = pearde_path.skill_root(__file__) or os.path.dirname(ROOT)
@@ -812,6 +816,9 @@ def pre(data):
 
     if tool == "Bash":
         cmd = str(inp.get("command") or "")
+        r = quiet and quiet.check(cmd, str(data.get("cwd") or ""))
+        if r:
+            deny(r)
         if any(w.search(data_free(cmd)) for w in WALKS):
             deny("The board is not walked by hand — loop step 1 is one call:\n"
                  f"    {SCAN}\n"

@@ -433,9 +433,11 @@ def _under(body):
     return "\n".join(out)
 
 
-def brief(board, slug):
+def brief(board, slug, inline=True):
     """The workflow as one page: `## Use when`, then per step its row and the
-    atomic's body. What a worker reads once before starting."""
+    atomic's body. What a worker reads once before starting. `inline=False`
+    prints the rows and no body — the caller that found the page too large
+    to hand over whole."""
     lib = scan(board)
     e = lib.get(slug)
     if e is None:
@@ -467,7 +469,8 @@ def brief(board, slug):
             out += [f"*no `{r['atomic']}.md` in the library — this step "
                     "sends a worker nowhere*", ""]
             continue
-        out += [_under(a["body"].strip()), ""]
+        if inline:
+            out += [_under(a["body"].strip()), ""]
     print("\n".join(out).rstrip())
     return 0
 

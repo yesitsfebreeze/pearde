@@ -1,6 +1,6 @@
 ---
 name: pearde-memo
-description: Record a decision the code will not explain, and check the ones on record — one file per call, holding what was decided, what it beat, and why, never buried in a PRD. Slugged from the subject, with a closed set of frontmatter keys that a checker enforces; invariants carry a verify command and an index by kind is generated beside them. Use for "/memo", "memo <subject>", "record this decision", "write this down as a decision", "why did we choose X", "what did we decide about Y", "check the memos", "record an invariant", "is the invariant still true", "verify the invariants", "adr", "decision record", "document this tradeoff". Write it when the call is made, not when the work lands.
+description: Record a decision the code will not explain, and check the ones on record — one file per call holding what was decided, what it beat and why; a checker enforces the keys, invariants carry a verify command, an index by kind is generated. Use for "/memo", "memo <subject>", "record this decision", "why did we choose X", "check the memos", "record an invariant", "verify the invariants", "adr".
 ---
 
 Read @references/parts/memos.md for when a memo is owed, @references/memo.md

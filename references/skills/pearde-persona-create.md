@@ -1,6 +1,6 @@
 ---
 name: pearde-persona-create
-description: Build a persona for a field the roster does not cover — research the field, research the real practitioners working in it, take one named trait from each, and compose a single fictional colleague holding the best of them. Written to references/personas/, registered, and selectable from that moment. Use for "/pearde-persona-create", "persona create <topic>", "make me a persona for <field>", "I need an expert in X", "we have no one for this field", "add a persona", "compose a specialist". A persona is built from research, never invented. Sibling skills: pearde-persona switches who is working, pearde-persona-ask puts one problem to an existing colleague.
+description: Build a persona for a field the roster does not cover — research the field and its real practitioners, take one named trait from each, compose a single fictional colleague; written to references/personas/, registered, selectable. Use for "/pearde-persona-create", "persona create <topic>", "make me a persona for <field>", "I need an expert in X", "add a persona", "compose a specialist".
 ---
 
 Read @references/personas/INDEX.md — **`persona create <topic>`** is the

@@ -1,6 +1,6 @@
 ---
 name: pearde-grammar
-description: What the words mean on this board — one file holding every term this repo gives a meaning of its own, so a session, a worker and a person name the same thing the same way. Read the vocabulary, look one term up mid-job, add a row when a word is coined, check the file. Use for "/grammar", "what do we call this", "what does <term> mean here", "define this term", "add a word to the vocabulary", "check the grammar", "is that the right word for it", "what is the word for this", "which of the two meanings is this". A row is written from use, never from reading.
+description: What the words mean on this board — one file holding every term this repo gives a meaning of its own. Read the vocabulary, look one term up, add a row when a word is coined, check the file. Use for "/grammar", "what do we call this", "what does <term> mean here", "define this term", "add a word to the vocabulary", "check the grammar", "which of the two meanings is this".
 ---
 
 Read @references/parts/grammar.md for when a row is written and what is handed

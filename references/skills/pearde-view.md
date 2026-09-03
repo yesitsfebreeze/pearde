@@ -1,6 +1,6 @@
 ---
 name: pearde-view
-description: Look at the board and edit it — a local service rendering every PRD as a timeline ordered by dependency, importance and complexity, with the critical path marked and edits written straight back to the files. Also the one-shot render when no service is wanted. Binds 127.0.0.1, needs Python 3, nothing leaves the machine. Use for "/view", "open the board", "show me the board", "show me the plan", "gantt", "timeline", "what is the critical path", "what runs next", "reconcile the plan", "re-order the board", "board ui", "visualise the prds", "show me everything", "all my boards", "every board on one page".
+description: Look at the board and edit it — a local service rendering every PRD as a timeline ordered by dependency, importance and complexity, the critical path marked, edits written back to the files. Binds 127.0.0.1. Use for "/view", "open the board", "show me the board", "gantt", "timeline", "what is the critical path", "what runs next", "reconcile the plan", "all my boards".
 ---
 
 Read @references/parts/view.md — the service and its singleton, the sections,

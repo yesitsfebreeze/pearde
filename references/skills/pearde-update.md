@@ -1,6 +1,6 @@
 ---
 name: pearde-update
-description: Check every install of pearde on this machine and bring it current — the project-local skills directory for this repo first, then the machine-wide one, each reported ok, off or broken with the exact command that fixes it. An install is symlinks, so updating is re-linking the set, never a copy. Use for "/pearde-update", "update pearde", "pearde update", "is pearde up to date", "am I on the latest pearde", "re-install pearde", "a skill is missing", "the new skill does not fire", "update the skills", "did the install pick up the new skill", "check my pearde install".
+description: Check every install of pearde on this machine and bring it current — the project-local skills directory first, then the machine-wide one, each reported ok, off or broken with the command that fixes it. An install is symlinks. Use for "/pearde-update", "update pearde", "is pearde up to date", "re-install pearde", "a skill is missing", "the new skill does not fire", "check my pearde install".
 ---
 
 Read @references/update.md — what each row means, why an install is never

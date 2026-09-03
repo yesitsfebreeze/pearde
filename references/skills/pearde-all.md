@@ -1,6 +1,6 @@
 ---
 name: pearde-all
-description: Every board this machine watches merged into one dependency-ordered frontier — what to work next across all of them, cut into the waves able to run at once, with the load-derived slot count and its reading. Runs from any directory, with no board above the cwd. Takes a group as a bare word: `pearde plan work` reads the same over boards declaring `groups: work` in their own settings. `plan` prints and moves nothing; `pearde run` runs the frontier down, launching a pass worker per row. Use for "/pearde-all", "/all", "dispatch the machine", "run every board at once", "work the all board", "work every board", "all my projects at once", "what should the machine do next", "the machine frontier", "what can run in parallel right now", "how many workers should I run", "one plan over every board", "what is ready across all my repos", "just the work projects", "only my private repos", "group these boards", "which group is this board in", "run the work group".
+description: Every board this machine watches merged into one dependency-ordered frontier — what to work next across all of them, cut into the waves able to run at once, with the slot count. `plan` moves nothing; `pearde run` runs the frontier down. Use for "/pearde-all", "/all", "dispatch the machine", "run every board at once", "work every board", "what should the machine do next", "run the work group".
 ---
 
 Read @references/parts/run.md — the contract: what is merged and what is

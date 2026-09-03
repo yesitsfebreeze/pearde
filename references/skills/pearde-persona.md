@@ -1,6 +1,6 @@
 ---
 name: pearde-persona
-description: Say who is working and why, and switch to a different one for this session — a persona is a field, a bias and a way of reading that re-aims a whole pass, held in session state and stored in no file. Engineer until switched. Use for "/pearde-persona", "persona", "persona <id>", "who is working", "which persona is active", "switch to the designer", "work as the skeptic", "be a mentor for this", "change how you are approaching this". Sibling skills: pearde-persona-ask puts one problem to a colleague without switching, pearde-persona-create builds one for a field the roster does not cover.
+description: Say who is working and why, and switch to a different persona for this session — a field, a bias and a way of reading that re-aims a whole pass, held in session state, stored in no file. Engineer until switched. Use for "/pearde-persona", "persona", "persona <id>", "who is working", "which persona is active", "switch to the designer", "work as the skeptic", "change how you are approaching this".
 ---
 
 Read @references/parts/personas.md — the signals table that picks one, the

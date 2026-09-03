@@ -4,6 +4,7 @@ __pycache__/
 .DS_Store
 .gstack/
 .obsidian/
+.kern/
 
 
 # third-party bundles, fetched by `pearde install --apply` and pinned there.

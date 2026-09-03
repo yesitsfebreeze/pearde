@@ -1,6 +1,6 @@
 ---
 name: pearde-workflow
-description: How a kind of job is done, kept where the next session looks — an ordered route of atomic steps a worker follows, improving every time a worker runs it. Read the library, print one as a worker is handed it, attach one to a PRD, check the set. Use for "/workflow", "workflow", "how do we do X", "how is this kind of job done", "which workflow fits this", "attach a workflow", "improve the workflow", "check the workflows", "add an atomic", "what route should this worker follow". A workflow is written from a run, never from reading.
+description: How a kind of job is done, kept where the next session looks — an ordered route of atomic steps a worker follows, improving every time a worker runs it. Read the library, print one for a worker, attach one to a PRD, check the set. Use for "/workflow", "workflow", "how do we do X", "which workflow fits this", "attach a workflow", "improve the workflow", "check the workflows", "add an atomic".
 ---
 
 Read @references/workflow.md for the format — the two file shapes, the closed

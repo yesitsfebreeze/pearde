@@ -1,6 +1,6 @@
 ---
 name: pearde-run
-description: Dispatch a board, a group of boards, or every board this machine watches — the one command that moves. `pearde run` works the board at the cwd, `pearde run all` every watched board, `pearde run <group>` the boards declaring that label, and `pearde run <prd>` the loop over one subtree. `pearde plan` reads the same frontier and moves nothing. Use for "/run", "run the board", "dispatch the machine", "run every board at once", "work every board", "all my projects at once", "run the work group", "run this PRD to done", "launch the workers".
+description: Dispatch a board, a group of boards, or every board this machine watches — the one command that moves. `pearde run` works the board at the cwd, `pearde run all` every watched board, `pearde run <group>` a labelled group, `pearde run <prd>` the loop over one subtree. Use for "/run", "run the board", "dispatch the machine", "run the work group", "run this PRD to done", "launch the workers".
 ---
 
 Read @references/parts/run.md — the contract: how a bare word resolves, what

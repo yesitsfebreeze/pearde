@@ -113,6 +113,9 @@ before=$(installed)
 
 cd "$P" || exit 1
 py init --name pearde-invariant-probe
+# the board init made, under whichever of the two names this tree gives it —
+# `.pearde/` since the rename, `pearde/` on a tree from before it
+B="$P/.pearde"; [ -d "$B" ] || B="$P/pearde"
 py add "a thing the board must carry"
 py scan
 py plan
@@ -127,7 +130,7 @@ py memo check
 py workflow check
 py upgrade
 py doctor
-python3 "$R/memos.py" index "$P/pearde" >/dev/null 2>&1 || true
+python3 "$R/memos.py" index "$B" >/dev/null 2>&1 || true
 printf '{"workspace":{"current_dir":"%s"},"model":{"display_name":"x"},"transcript_path":""}\n' \
   "$P" | bash "$R/statusline.sh" >/dev/null 2>&1 || true
 cd "$REPO" || exit 1
@@ -171,7 +174,7 @@ if printf '%s' "$(hook "$P/.state/pass.md")" | grep -q '"permissionDecision": "d
 else
   no "the guard let a pass file be written to $P/.state/pass.md"
 fi
-if printf '%s' "$(hook "$P/pearde/.state/pass.md")" | grep -q '"deny"'; then
+if printf '%s' "$(hook "$B/.state/pass.md")" | grep -q '"deny"'; then
   no "the guard refuses the board's own pass file — the rule is too wide"
 else
   okr "the guard passes the board's own pass file"

@@ -19,10 +19,11 @@ in a session's own shell.
 
 **What counts as destructive.** Only a command that can leave uncommitted
 bytes nowhere git can reach. `git stash create` is not one: it writes a commit
-object and leaves the worktree alone — it is what the reaper uses precisely
-because it is safe. `git clean -n` is not one. `git restore --staged` alone
-moves the index, not the worktree. The table is `SPELLINGS`, and every row
-names the discard it can do.
+object and leaves the worktree alone. (The reaper in
+`@resources/board/session.py` spells no stash at all — it snapshots through a
+copy of the index, `write-tree` and `commit-tree`.) `git clean -n` is not one.
+`git restore --staged` alone moves the index, not the worktree. The table is
+`SPELLINGS`, and every row names the discard it can do.
 
 **What counts as owning.** Two answers, and the second is why this is not
 just `session owns`:
@@ -42,10 +43,13 @@ writing, and that is exactly what rule 2 refuses.
 A tree with no board above it is nobody's business here — there is no ledger,
 so there is no ownership to be had, and `allowed()` says yes.
 
-Python 3 stdlib only, and it imports nothing from the board's other modules:
+Python 3 stdlib only, and it imports nothing from the planner:
 `@resources/guard.py` calls this on every Bash tool call and keeps the rule
 that a broken planner never blocks one, so `board` is always passed in and
-never found here.
+never found here. The one board walk it does make — `board_above`, for the
+tree a line targets — is `guard.py`'s own `board_of`, borrowed lazily and
+with an os.path fallback, so the guard and this reader name the same board
+and a missing module still answers.
 """
 import json
 import os
@@ -101,8 +105,9 @@ STASH_SAFE = ("create", "store", "list", "show", "branch", "drop", "clear")
 def _stash(args):
     # "A real stash", the memo's words. `push`/`save` revert the worktree to
     # HEAD; `pop`/`apply` write over it. `create` builds a commit object and
-    # touches nothing — it is what @resources/board/session.py's reaper uses.
-    # A bare `git stash` is `push`.
+    # touches nothing (@resources/board/session.py's reaper spells no stash
+    # at all — it snapshots through `write-tree` / `commit-tree`). A bare
+    # `git stash` is `push`.
     sub = next((a for a in args if not a.startswith("-")), "push")
     return sub not in STASH_SAFE
 
@@ -380,14 +385,59 @@ def check_line(board, line, cwd=None):
 
 # ── the command ──────────────────────────────────────────────────────────────
 
+_GUARD = {}
+
+
+def _guard_board_of():
+    """`@resources/guard.py`'s `board_of`, found once. The guard is usually
+    the process this runs in (`__main__` of the hook), else a module already
+    imported, else loaded from its file beside `board/` — never through
+    `sys.path`, which this module leaves alone. None when none of those
+    holds it."""
+    if "fn" in _GUARD:
+        return _GUARD["fn"]
+    fn = None
+    for mod in (sys.modules.get("guard"), sys.modules.get("__main__")):
+        f = getattr(mod, "__file__", "") or ""
+        if os.path.basename(f) == "guard.py" and callable(
+                getattr(mod, "board_of", None)):
+            fn = mod.board_of
+            break
+    if fn is None:
+        try:
+            import importlib.util
+            path = os.path.join(os.path.dirname(os.path.dirname(
+                os.path.abspath(__file__))), "guard.py")
+            spec = importlib.util.spec_from_file_location("_pearde_guard", path)
+            mod = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(mod)
+            fn = mod.board_of
+        except Exception:                                # noqa: BLE001
+            fn = None
+    _GUARD["fn"] = fn
+    return fn
+
+
 def board_above(arg, start=None):
-    """The nearest board at or above `start`, or the one named. Walked here
-    with os.path alone so this module keeps importing nothing."""
+    """The nearest board at or above `start`, or the one named.
+
+    The walk is @resources/guard.py `board_of` — the two-pass climb the guard
+    and every board command make, so a board called something else, and one
+    carrying `prds/` before it has a `settings.md`, are found here the same
+    as there. When the guard cannot be loaded the os.path walk below answers
+    instead, both board names accepted: this runs inside a PreToolUse hook,
+    and a hook that raises is a session that cannot use a tool."""
     if arg:
         return os.path.abspath(arg)
     d = os.path.abspath(start or os.getcwd())
+    board_of = _guard_board_of()
+    if board_of:
+        try:
+            return board_of(d)
+        except Exception:                                # noqa: BLE001
+            pass
     while True:
-        for name in ("pearde", ".pearde"):
+        for name in (".pearde", "pearde"):
             b = os.path.join(d, name)
             if os.path.isfile(os.path.join(b, "settings.md")):
                 return b

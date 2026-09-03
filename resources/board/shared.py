@@ -60,6 +60,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import plan as planlib          # noqa: E402
 import transitions as trlib     # noqa: E402
+import lanes as laneslib        # noqa: E402
 
 STORE = "pearde-shared"
 FLAGS = planlib.Flags(("board", "repo"), ("dry", "json"))
@@ -184,13 +185,6 @@ def offers(tree):
     worktree grew `resources/board/obsidian/`, `pearde/graphify/` and
     `.pearde/graphify/` and shared not one byte."""
     return os.path.isfile(os.path.join(tree, MARKER))
-
-
-def is_checkout(tree):
-    """Whether this tree holds THIS module — what the label `checkout` means,
-    and a stricter question than `offers`."""
-    return os.path.isfile(os.path.join(tree, "resources", "board",
-                                       os.path.basename(__file__)))
 
 
 def ignored(tree, rel):
@@ -560,7 +554,6 @@ def trees(board, repo=None):
     and only those the shared table can reach, which `offers` decides. With no
     board there are no lanes, and the checkout alone is the answer. A lane
     whose directory is gone is skipped, not reported — `sweep` owns that."""
-    import lanes as laneslib
     root = root_of(board, repo)
     out = [root] if offers(root) else []
     if not board:
@@ -587,10 +580,7 @@ def label(tree, root):
     if rel.startswith(os.pardir):
         return tree
     parts = rel.split(os.sep)
-    return parts[-1] if LANES_MARK in parts else rel
-
-
-LANES_MARK = ".lanes"
+    return parts[-1] if laneslib.LANES_DIR in parts else rel
 
 
 # ── the command ───────────────────────────────────────────────────────────────

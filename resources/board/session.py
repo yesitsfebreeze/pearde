@@ -583,7 +583,13 @@ def land(board, ident=None, dry=False):
             files = laneslib.conflicts(wt)
             if laneslib.git(wt, "rebase", "--abort",
                             check=False).returncode == 0:
-                laneslib.git(wt, "reset", "--hard", was, check=False)
+                # `--abort` has already put the branch and its tree back at
+                # `was`; this is the belt over those braces. `--keep`, not
+                # `--hard`: `wt` can be a tree this process is not in, and
+                # `--keep` refuses where `--hard` discards — the spelling
+                # `collect.unland` uses, and one @resources/board/refuse.py
+                # reads as discarding nothing.
+                laneslib.git(wt, "reset", "--keep", was, check=False)
             raise laneslib.LaneError(
                 f"conflict: {br} onto {target} — "
                 + (", ".join(files) if files else "see git status"))
@@ -617,7 +623,9 @@ def cmd_land(board, dry=False, as_json=False):
 
 def cmd_owns(board, path=None, as_json=False):
     """Does the running session own `path`? Exit 0 when it does, 1 when
-    another session does or nobody does. The refusal child reads this."""
+    another session does or nobody does. The answer for a person or a
+    script; @resources/board/refuse.py asks the same question of the ledger
+    by hand and never calls this."""
     p = os.path.abspath(path or os.getcwd())
     rows = read_ledger(board)
     mine = session_pid()

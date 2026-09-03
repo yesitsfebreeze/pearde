@@ -6,6 +6,7 @@ complexity: 16
 blast-radius: low
 workflow: probe-then-spec
 actual: 0.8h
+commit: 26ce568 b49d2be
 ---
 
 # Doctor repairs the register entry

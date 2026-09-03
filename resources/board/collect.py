@@ -11,6 +11,10 @@ is — the seven steps of @references/parts/loop.md step 6, in order:
   1  the finished condition off both files      `standing()` in plan.py
   2  every spec's `## Verify and Proof` block    run in `repo`, output kept
      then the board's `gate:`                    against the claim's baseline
+  2b every binding invariant memo's `verify:` command, in the board's
+     repo root — any non-zero exit refuses the collect whole: the slug and
+     its output printed, the lane put back, the PRD left where it was.
+     No baseline, no `--fail`, and `--trust` does not skip it
   3  the paths: specs' footprints ∪ the PRD's ∪ the PRD dir ∪ `--also`
      — the PRD's own folder is the board's record: added whole, always —
        never by hunk, never a stop
@@ -75,6 +79,7 @@ _D = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
                 else os.path.dirname(_D))
 import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
+import memos as memolib  # noqa: E402 — @resources/memos.py, the invariant runner
 import plan as planlib  # noqa: E402 — beside this script
 import edit as editlib  # noqa: E402 — beside this script
 import transitions as translib  # noqa: E402 — the one printer of the line
@@ -2321,6 +2326,58 @@ def collect_one(board, rel, opts, out=print):
                                       opts["as"], "pass file owed"))
                     return 1
                 raise Stop(f"{rel}: {name} exit {code} — nothing written")
+
+    # 2b — the board's invariants, against the MERGED tree
+    #
+    # A spec's verify block proves this PRD; the board's `gate:` proves the
+    # repo still builds. Neither reads the rules the board wrote down as
+    # binding — @resources/memos.py's `kind: invariant` memos, each carrying
+    # the `verify:` command that proves it. Until this ran nowhere in the
+    # loop, and the memo that introduced the kind said so in as many words:
+    # "nothing runs `memo verify` automatically". A rule nothing re-asks rots
+    # while its memo still reads `decided`, and the tree that broke it is
+    # already committed by the time a person notices.
+    #
+    # So: after the lane lands and after the gate, before a single byte of
+    # the record is written. Any non-zero exit refuses the whole collect —
+    # the failing slug and its whole output are printed, the lane is put
+    # back, and the PRD stays exactly where it was, `claimed`.
+    #
+    # Three things this deliberately does NOT do, each the gate's behaviour
+    # and each wrong here:
+    #
+    #   * no baseline. A red gate whose every line is in the claim's
+    #     snapshot is "known" and rides. An invariant has no such reading:
+    #     it exits 0 while the rule holds, and a rule already broken when
+    #     the PRD was claimed is still broken now. Landing on it would be
+    #     the board recording that the rule does not bind.
+    #   * `--fail` does not apply. A red verify block is the worker's work
+    #     failing and `--fail` files that as `failed`. A red invariant says
+    #     the BOARD is broken, which is nothing about this PRD — writing
+    #     `failed` on it would blame the wrong thing and lose the claim.
+    #     The contract is "leaves state unchanged", so `Stop` and only Stop.
+    #   * `--trust` does not skip them. `--trust` is the orchestrator saying
+    #     it has already run this PRD's verify. Nobody has run the board's
+    #     invariants, and they measure the merged tree that only exists now.
+    #
+    # A board with no invariant memo runs nothing and prints nothing — which
+    # is every board but this one today.
+    for slug, cmd, code, output in memolib.run_invariants(board):
+        if code == 0:
+            continue
+        # the slug AND the command: the contract asks the output to name the
+        # script, and a slug only spells its script where the memo author
+        # happened to name them alike — `the-board-directory-is-pearde…`
+        # verifies with an inline `test`, and its slug names no file at all.
+        # The command is the one string that is always what actually ran.
+        out(f"invariant {slug}: exit {code} — `{cmd}`" if cmd
+            else f"invariant {slug}: exit {code}")
+        text = output.rstrip()
+        if text:
+            out(text)
+        unland(repo, pre, landed, out)
+        raise Stop(f"{rel}: invariant `{slug}` exit {code} — nothing "
+                   f"written, the PRD stays `{prd['state']}`")
 
     # 3 — the paths
     plan, prd_rel = sort_paths(board, rel, prd, prds, board_root, repo, feet,

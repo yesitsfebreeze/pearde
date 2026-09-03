@@ -4,11 +4,13 @@ One PRD, one commit, on the transition that lands it.
 
 `collect` is the command — `python3 @resources/board/collect.py [<prd>…]`:
 it reads the finished condition off both files, runs every spec's `## Verify
-and Proof` block and the board's `gate:`, commits the paths below with the
-message below, writes `commit:` and `actual:`, clears `claim:`, sets `done`,
-posts the report, prints the progress line. `--dry` prints what would be added
-and what would be left. This page is that command's behaviour, the scope
-rules its step 3's spec.
+and Proof` block and the board's `gate:`, runs every binding invariant memo's
+`verify:` against the merged tree — one non-zero exit refuses the collect
+whole, prints the slug, the command and its output, and leaves the PRD where
+it was — commits the paths below with the message below, writes `commit:` and
+`actual:`, clears `claim:`, sets `done`, posts the report, prints the progress
+line. `--dry` prints what would be added and what would be left. This page is
+that command's behaviour, the scope rules its step 3's spec.
 
 Commit on the transition, or one working tree holds every PRD's work and
 nothing can be reviewed, reverted or bisected alone.

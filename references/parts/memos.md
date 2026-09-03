@@ -18,7 +18,8 @@ frontmatter set, and the argument for keeping one on the board.
 - `## Alternatives considered` is never empty; a memo with none is a claim.
 - `kind: invariant` is the testable memo — a rule that must keep holding,
   carrying a `verify:` command exiting 0 while it does. Filed proven, re-run by
-  `verify` whenever a change might bend it.
+  `verify` whenever a change might bend it, and by `collect` on every landing —
+  one red refuses the collect whole.
 - `memos/README.md` is the index by kind — generated, never maintained; `check`
   fails on a stale one.
 

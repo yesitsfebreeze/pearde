@@ -204,38 +204,74 @@ def write_index(board):
     return coll.write("README.md", render_index(scan(board)))
 
 
+def binding(board, only=None):
+    """[(slug, memo)] — every invariant that binds now, in slug order. `kind:
+    invariant` and a status other than `superseded`; a superseded one records
+    a rule that has been replaced and no longer holds anything to account.
+    The one place that answers "which rules bind" — `verify` prints them and
+    @resources/board/collect.py refuses on them, and two readers asking the
+    same question ask it here."""
+    memos = scan(board)
+    return [(sl, m) for sl, m in memos.items()
+            if m["kind"] == "invariant" and m["status"] != "superseded"
+            and (not only or sl == only)]
+
+
+def run_invariants(board, only=None):
+    """[(slug, cmd, exit, output)] — every binding invariant run, nothing
+    printed. cwd is the repo root (the board's parent), so a command is
+    written the way the PRD contract's `verify:` is, and stdout and stderr
+    come back in one stream in the order a reader saw them.
+
+    An invariant with no `verify:` command is exit 1 here, not a skip: the
+    memo claims a rule binds and hands nothing that proves it, and a rule
+    that cannot be checked is indistinguishable from one that is broken.
+    `check` already refuses that memo, so this only fires on a board whose
+    check is red.
+
+    This is the runner both readers share. `verify` below is its printer;
+    `collect` reads the exit codes to refuse a landing, and needs the whole
+    output rather than the one tail line a person reads."""
+    root = os.path.dirname(board)
+    out = []
+    for sl, m in binding(board, only):
+        cmd = m["fm"].get("verify")
+        if not cmd or isinstance(cmd, list):
+            out.append((sl, cmd if isinstance(cmd, str) else "",
+                        1, "BROKEN — no `verify:` command"))
+            continue
+        try:
+            r = subprocess.run(cmd, shell=True, cwd=root,
+                               capture_output=True, text=True)
+        except OSError as e:                # a cwd that is gone, a dead shell
+            out.append((sl, cmd, 127, str(e)))
+            continue
+        out.append((sl, cmd, r.returncode, r.stdout + r.stderr))
+    return out
+
+
 def verify(board, only=None):
     """Run every binding invariant's `verify:` command — status superseded no
     longer binds and is skipped. cwd is the repo root (the board's parent), so
     a command is written the way the PRD contract's `verify:` is. Prints one
     line per invariant; returns the broken slugs."""
-    memos = scan(board)
-    root = os.path.dirname(board)
-    broken, seen = [], False
-    for sl, m in memos.items():
-        if m["kind"] != "invariant" or m["status"] == "superseded":
-            continue
-        if only and sl != only:
-            continue
-        seen = True
-        cmd = m["fm"].get("verify")
-        if not cmd or isinstance(cmd, list):
-            print(f"{sl}: BROKEN — no `verify:` command")
-            broken.append(sl)
-            continue
-        r = subprocess.run(cmd, shell=True, cwd=root,
-                           capture_output=True, text=True)
-        if r.returncode == 0:
+    ran = run_invariants(board, only)
+    broken = []
+    for sl, _cmd, code, output in ran:
+        if code == 0:
             print(f"{sl}: holds")
+            continue
+        tail = output.strip().splitlines()
+        if tail and tail[-1].startswith("BROKEN"):
+            print(f"{sl}: {tail[-1]}")
         else:
-            tail = (r.stderr or r.stdout).strip().splitlines()
             why = f" — {tail[-1]}" if tail else ""
-            print(f"{sl}: BROKEN (exit {r.returncode}){why}")
-            broken.append(sl)
-    if only and not seen:
+            print(f"{sl}: BROKEN (exit {code}){why}")
+        broken.append(sl)
+    if only and not ran:
         print(f"memos: `{only}` names no binding invariant", file=sys.stderr)
         sys.exit(2)
-    if not only and not seen:
+    if not only and not ran:
         print("no invariants on this board")
     return broken
 

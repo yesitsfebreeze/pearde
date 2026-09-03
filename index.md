@@ -53,7 +53,7 @@ explains the rest.
 | `@@consult` | putting one problem to one persona, mid-pass | @references/parts/consult.md · @references/parts/workers.md · @resources/board/brief.py · @references/personas/INDEX.md |
 | `@@derived` | work the board found, and its tripwire | @references/parts/derived.md · @references/parts/order.md · @references/templates/prd.md |
 | `@@commits` | one PRD, one commit, on the transition that lands it | @references/parts/commits.md · @references/parts/states.md · @resources/board/orphans.py |
-| `@@memos` | recording a decision and checking it | @references/skills/pearde-memo.md · @references/memo.md · @references/parts/memos.md · @references/templates/memo.md · @resources/memos.py |
+| `@@memos` | recording a decision and checking it | @references/skills/pearde-memo.md · @references/memo.md · @references/parts/memos.md · @references/templates/memo.md · @resources/memos.py · @resources/board/collect.py |
 | `@@workflows` | how a kind of job is done, and improved on every run | @references/skills/pearde-workflow.md · @references/workflow.md · @references/parts/workflows.md · @references/templates/workflow.md · @references/templates/atomic.md · @resources/workflows.py |
 | `@@grammar` | what the words mean, and how a vocabulary grows | @references/skills/pearde-grammar.md · @references/grammar.md · @references/parts/grammar.md · @references/templates/grammar.md · @resources/grammar.py |
 | `@@health` | which files resist being worked on — scored, worst first, named in the brief | @references/skills/pearde-health.md · @references/health.md · @references/parts/health.md · @references/templates/health.md · @resources/health.py |

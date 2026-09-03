@@ -6,6 +6,7 @@ complexity: 12
 blast-radius: low
 workflow: probe-then-spec
 actual: 0.65h
+commit: 4680284
 ---
 
 # The vision file's edges fold into needs

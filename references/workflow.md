@@ -148,6 +148,11 @@ runs it. Failures:
 - on a master board, either of those on a **member's** PRD or spec, addressed
   `@<member>/<rel>`
 - a board in `members:` that is not on disk
+- a workflow whose `## Workflow <slug>` report sections on disk right now
+  outnumber its own `runs:` — never the other way: a report is overwritten
+  by its PRD's next pass, so `runs:` outliving the reports that earned it is
+  not a fault
+- a `## Workflow` report-section heading naming no slug
 
 Checked against the real library, never a fixture.
 

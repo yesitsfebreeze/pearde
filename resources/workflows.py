@@ -269,6 +269,47 @@ def board_workflow_refs(board):
     return refs
 
 
+REPORT_HEADING_RE = re.compile(r"^## Workflow\s+(\S+)\s*$")
+
+
+def report_workflow_counts(board):
+    """({slug: count}, {(path, lineno): line}) — every `## Workflow <slug>` report
+    section in `<board>/prds/**/report.md`, and every line that opens one
+    (`## Workflow` at line start) but does not close on one bare slug.
+
+    Counts what is on disk right now, never a running tally: a PRD's
+    `report.md` is overwritten by its own next pass, so a workflow followed
+    early in a PRD's life stops being counted the moment that PRD moves on.
+    That is a natural gap, not a fault — `check` only compares it one way,
+    below."""
+    counts, bad = {}, {}
+    lib, _ = workflows_dir(board)
+    lib = os.path.abspath(lib)
+    prds_root = os.path.join(board, "prds")
+    if not os.path.isdir(prds_root):
+        return counts, bad
+    for root, dirs, names in os.walk(prds_root):
+        if os.path.abspath(root) == lib:
+            dirs[:] = []
+            continue
+        if "report.md" not in names:
+            continue
+        path = os.path.join(root, "report.md")
+        try:
+            text = open(path, encoding="utf-8").read()
+        except OSError:
+            continue
+        for i, line in enumerate(text.splitlines(), start=1):
+            if not line.startswith("## Workflow"):
+                continue
+            m = REPORT_HEADING_RE.match(line)
+            if m:
+                counts[m.group(1)] = counts.get(m.group(1), 0) + 1
+            else:
+                bad[(path, i)] = line.strip()
+    return counts, bad
+
+
 def check(board):
     """Every problem, one string each. Empty means the library is clean."""
     d, external = workflows_dir(board)
@@ -276,6 +317,7 @@ def check(board):
         return [f"settings.md: `workflows: …` points at {d}, "
                 "which does not exist"]
     lib, bad = scan(board), []
+    reports, bad_headings = report_workflow_counts(board)
     for slug in sorted(lib):
         e, at = lib[slug], f"{slug}.md"
         if not e["parsed"]:
@@ -317,10 +359,20 @@ def check(board):
                        f"this file's own slug key it is {want} — "
                        "`workflows.py retag` writes it")
         runs = fm.get("runs")
+        runs_ok = False
         if runs not in (None, "", []):
             s = str(runs)
-            if not (s.isdigit() and int(s) >= 0):
+            runs_ok = s.isdigit() and int(s) >= 0
+            if not runs_ok:
                 bad.append(f"{at}: runs `{s}` is not an integer >= 0")
+        if key == "workflow":
+            n_reports = reports.get(slug, 0)
+            n_runs = int(runs) if runs_ok else 0
+            if n_reports > n_runs:
+                bad.append(
+                    f"{at}: {n_reports} report section"
+                    f"{'' if n_reports == 1 else 's'} in prds/*/report.md, "
+                    f"runs: {n_runs} — the counter is behind the evidence")
         body = e["body"]
         if key == "atomic":
             for s in ("Do", "Done when"):
@@ -348,6 +400,13 @@ def check(board):
                 else:
                     bad.append(f"{at}: step {r['n']} on failure `{f}` — "
                                "neither `stop` nor `→ N` with N earlier")
+    # A `## Workflow` line that opens a report section but does not close on
+    # one bare slug is named the way a dangling slug is named — the file and
+    # the line, not silently dropped from the count.
+    for (path, lineno), line in sorted(bad_headings.items()):
+        bad.append(f"{os.path.relpath(path, board)}:{lineno}: `{line}` — "
+                   "a report section heading names no slug")
+
     # A member named in `members:` and absent from disk is reported, not
     # skipped: `plan.py`'s `cmd_status` prints MISSING for one, and a check
     # that walks past it would call a board clean it never opened.

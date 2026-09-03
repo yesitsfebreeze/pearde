@@ -50,8 +50,12 @@ wiki/board/
 # machine-local, and two of them hold the same credential
 wiki/.obsidian-api-key
 wiki/.graphify/
-wiki/Dashboard.report.md
+Dashboard.report.md
 .obsidian/
 
 # rebuilt by `pearde health score`
 health/
+
+# machine-local — two hold one credential, the rest rebuild
+graphs/
+prds/**/probe/

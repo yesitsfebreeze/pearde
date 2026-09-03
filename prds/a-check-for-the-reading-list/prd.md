@@ -6,6 +6,7 @@ complexity: 12
 blast-radius: low
 workflow: probe-then-spec
 actual: 0.22h
+commit: 7dd9b15 103b665
 ---
 
 # A check for the reading list

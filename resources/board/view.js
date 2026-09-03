@@ -1,4 +1,4 @@
-import { LitElement, html, css, render as litRender } from "lit";
+import { LitElement, html, css, nothing, render as litRender } from "lit";
 "use strict";
 /* ═══════════════════════════════════════════════════════════════════════════
    The page has one datum — the enriched payload — and five readings of it,
@@ -2878,7 +2878,10 @@ function drawBody() {
                          heldFor(t).replace(/^ · /, " · ")]);
   const ro = VIRTUAL ? " disabled" : "";
   let h = '<h4>state</h4><div class="fields">' +
-    '<select id="dstate"' + ro + ">" + STATE_LIST.map(s =>
+    // the move menu: a reader who lands on it by Tab reads only the select,
+    // never the `<h4>state</h4>` beside it, so it names its own write
+    '<select id="dstate" aria-label="state — writes this PRD\'s state"' +
+      ro + ">" + STATE_LIST.map(s =>
       `<option${s === t.state ? " selected" : ""}>${s}</option>`).join("") +
     "</select>" +
     '<input type="number" id="dprio" step="1" value="' + t.prio + '"' +
@@ -3387,11 +3390,36 @@ class PeardeBoard extends LitElement {
     else { prdCache.delete(rel); refresh(); }
   }
 
+  /* A card is a write affordance: it drags to a column and it opens the
+     drawer that edits the PRD. Both were pointer-only — hover to learn the
+     card is grabbable, click to open. Focus now says the same thing: once
+     `served`, the card is a real button in the tab order and its label names
+     the write. `this.served` is the same flag that already gates `draggable`
+     and `▶ start`, so the read-only `all` page's copy of this component grows
+     no attribute here and gains no stop a Tab reaches.
+     Drag itself keeps no keyboard twin — activating the card opens the
+     drawer, and the drawer's `#dstate` select is the move menu. */
   card(r) {
     const t = byRel.get(r.rel);
     const starting = STARTING.has(r.rel);
+    const open = () => { const x2 = taskFor(r.rel); if (x2) openDrawer(x2); };
     return html`<div class="card" draggable=${this.served} data-rel=${r.rel}
-      @click=${() => { const x2 = taskFor(r.rel); if (x2) openDrawer(x2); }}
+      tabindex=${this.served ? "0" : nothing}
+      role=${this.served ? "button" : nothing}
+      aria-label=${this.served
+        ? (r.title || r.name) + " — open to move or edit, currently " + r.state
+        : nothing}
+      @click=${open}
+      @keydown=${e => {
+        if (!this.served || (e.key !== "Enter" && e.key !== " ")) return;
+        // the nested `▶ start` button fires its own native Enter/Space; this
+        // handler is the card's alone
+        if (e.target !== e.currentTarget) return;
+        e.preventDefault();          // Space would scroll the column
+        e.stopPropagation();         // not the window's Enter, which opens
+                                     // the timeline's own selection instead
+        open();
+      }}
       @dragstart=${e => { if (startBtnDown) { e.preventDefault(); return; }
                           e.dataTransfer.setData("text/plain", r.rel);
                           e.currentTarget.classList.add("drag"); }}

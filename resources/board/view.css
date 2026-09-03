@@ -711,7 +711,11 @@ kbd{font:10.5px ui-monospace,SFMono-Regular,monospace;background:var(--fill);
   border-radius:var(--r-md);padding:8px 10px;font-size:12px;cursor:grab;
   line-height:1.4;transition:transform var(--dur-fast) var(--ease),
     box-shadow var(--dur-fast) ease,border-color var(--dur-fast) ease}
-.card:hover{border-color:var(--sep);box-shadow:var(--shadow);
+/* the lift is what says "this card is grabbable and openable". A pointer
+   gets it on hover; a keyboard gets it on focus, so the same affordance is
+   drawn either way. The ring itself comes from the global :focus-visible
+   rule above — this only matches the card's own shape to it. */
+.card:hover,.card:focus-visible{border-color:var(--sep);box-shadow:var(--shadow);
   transform:translateY(-1px)}
 .card:active{cursor:grabbing}
 .card.drag{opacity:.35;transform:scale(.98)}
@@ -1278,10 +1282,21 @@ kbd{font:10.5px ui-monospace,SFMono-Regular,monospace;background:var(--fill);
   cursor:pointer;color:inherit}
 #answered .adone:last-child{border-bottom:none}
 #answered .adone:hover{background:var(--content)}
+/* reopen is a write, and it used to be reachable only by hovering: it was
+   `visibility:hidden`, which takes an element out of the tab order, and its
+   only ancestor is a plain `.adone` div with nothing else in it that could
+   focus first and reveal it — no sequence of Tab presses could ever land
+   here. `opacity` de-emphasises it without removing it, so focus reveals it
+   the way hover does. `:focus` rather than `:focus-visible`: a pointer that
+   focuses this button is already hovering it, so there is nothing to hide
+   from, and a programmatic focus must reveal it too.
+   A touch reader hovers nothing — `(hover:none)` is the complement of the
+   `(hover:hover)` query #vrail already uses, not a second breakpoint. */
 #answered .areopen{font-size:10px;padding:2px 8px;border-radius:var(--r-sm);
   background:none;border:.5px solid var(--sep);color:var(--ink3);
-  cursor:pointer;visibility:hidden}
-#answered .adone:hover .areopen{visibility:visible}
+  cursor:pointer;opacity:0}
+#answered .adone:hover .areopen,#answered .areopen:focus{opacity:1}
+@media (hover:none){#answered .areopen{opacity:1}}
 #answered .areopen:hover{color:var(--ink);background:var(--content-2)}
 #answered .am{display:flex;gap:8px;align-items:baseline}
 #answered .qid{font:10.5px ui-monospace,SFMono-Regular,monospace;

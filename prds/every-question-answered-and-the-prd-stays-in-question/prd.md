@@ -1,13 +1,13 @@
 ---
-state: open
+state: specced
 origin: requested
 priority: 78
-complexity: 0
+complexity: 18
 blast-radius: mid
 repo: pearde
 footprint:
   - resources/board/transitions.py
-  - resources/board/questions.py
+  - resources/questions.py
 ---
 
 # every-question-answered-and-the-prd-stays-in-question — a `question` PRD whose answers were written by hand has no command that will move it
@@ -102,12 +102,12 @@ disagreement in place.
 
 ## Acceptance
 
-- [ ] a PRD in `question` with nothing owed can be moved to `open` by a documented command, and the command is named in `references/parts/handles.md`
-- [ ] the move writes a `.transitions.jsonl` row naming the from-state, the to-state and why it was allowed
-- [ ] `answer` still refuses to overwrite an existing answer silently
-- [ ] `questions_of()` and the `## Answers` block cannot disagree without `questions check` saying so
-- [ ] `--dry` on the new path prints the transition and writes nothing
-- [ ] a probe reproduces the stall from a pristine tree before the fix and fails after it
+- [x] a PRD in `question` with nothing owed can be moved to `open` by a documented command, and the command is named in `references/parts/handles.md`
+- [x] the move writes a `.transitions.jsonl` row naming the from-state, the to-state and why it was allowed
+- [x] `answer` still refuses to overwrite an existing answer silently
+- [x] `questions_of()` and the `## Answers` block cannot disagree without `questions check` saying so
+- [x] `--dry` on the new path prints the transition and writes nothing
+- [x] a probe reproduces the stall from a pristine tree before the fix and fails after it
 
 ## Questions
 
@@ -122,3 +122,21 @@ line; a new one would name it honestly as a repair. Which should it be?
 3. **A re-check on the answering command** — it re-reads the answers on record and moves the work on if nothing is owed.
 
 <!-- for the board: option 1 is one row in release's source-state table (question joins analyzing); option 2 is a new verb plus a handles.md row; option 3 keeps the move inside cmd_answer at transitions.py:792 but needs a flag that does not re-answer -->
+
+## Blocked
+
+**2026-09-03 19:20 — the lane will not rebase**
+
+`lane/every-question-answered-and-the-prd-stays-in-question` does not land on `session/s34612`; 1 file(s) disagree:
+
+- `resources/questions.py`
+
+Nothing is lost: the worker's commits are on `lane/every-question-answered-and-the-prd-stays-in-question` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock every-question-answered-and-the-prd-stays-in-question`.
+
+**2026-09-03 21:00 — the lane will not rebase**
+
+`lane/every-question-answered-and-the-prd-stays-in-question` does not land on `session/s27323`; 1 file(s) disagree:
+
+- `resources/questions.py`
+
+Nothing is lost: the worker's commits are on `lane/every-question-answered-and-the-prd-stays-in-question` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock every-question-answered-and-the-prd-stays-in-question`.

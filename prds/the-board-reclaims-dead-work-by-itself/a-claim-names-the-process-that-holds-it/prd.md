@@ -1,11 +1,12 @@
 ---
-state: specced
+state: open
 origin: requested
 priority: 95
 complexity: 20
 blast-radius: high
 workflow: probe-then-spec
 ---
+
 
 # a claim names the process that holds it
 
@@ -37,3 +38,9 @@ release belongs in this child, not in a later one.
 
 This is the headline of the container — the other children are cheaper without
 it and none of them replaces it.
+
+## History
+
+**failed, retried 2026-09-03 21:03**
+
+swept 2026-09-03 20:59 — claim impl-claim-pid 2026-09-03 17:46, silent 3.2h: no file of this PRD's moved past `claim-ttl`. Read the worker's output before a retry; partial code stands on branch `lane/the-board-reclaims-dead-work-by-itself-a-claim-names-the-process-that-holds-it`, whose worktree this sweep removed — the branch is kept.

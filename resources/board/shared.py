@@ -114,11 +114,11 @@ SHARED = (
           "graphify's AST cache, on a board still on the legacy name",
           key=CACHE_KEY),
     Share("resources/board/obsidian/plugins/*/main.js", "glob",
-          "third-party plugin bundles, pinned by `install --apply`"),
+          "third-party plugin bundles, pinned by `pearde vault`"),
     Share("resources/board/obsidian/plugins/*/styles.css", "glob",
-          "third-party plugin bundles, pinned by `install --apply`"),
+          "third-party plugin bundles, pinned by `pearde vault`"),
     Share("resources/board/obsidian/plugins/*/manifest.json", "glob",
-          "third-party plugin bundles, pinned by `install --apply`"),
+          "third-party plugin bundles, pinned by `pearde vault`"),
 )
 
 

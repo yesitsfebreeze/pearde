@@ -119,17 +119,32 @@ BOARD_HEADER = "# machine-local — two hold one credential, the rest rebuild"
 # The Obsidian requirement: dataview (the live views) and local-rest-api
 # (the port a tool reads the vault through). The preset at
 # resources/board/obsidian/ carries the settings; the plugin bundles are not
-# vendored — `pearde install --apply` fetches them at pinned versions into
+# vendored — `pearde vault` fetches them at the pinned versions below into
 # the preset's plugins/, and this file copies whatever it finds there to
 # <dir>/.obsidian when the board's parent is the vault it seeds. A bundle the
-# install never fetched is reported, not silently skipped. The REST key is
+# fetch never got is reported, not silently skipped. The REST key is
 # minted fresh — one per board, never shipped in the template.
+#
+# The fetch lives here and not in `install.sh` because the install is links
+# and nothing else: it must run on a machine with no network, and a person
+# who never opens Obsidian should never pay for two bundles they will not
+# read. `pearde vault` is the one command that says "I want this vault", so
+# it is the one command allowed to reach the network.
 OBSIDIAN_PRESET = os.path.join(HERE, "obsidian")
 # `vault --wait` polls for the app to go: half a second apart, ten minutes of
 # patience — long enough for a person to finish what they were doing and quit,
 # short enough that a forgotten command does not sit there for a session.
 WAIT_TICK, WAIT_TICKS = 0.5, 1200
 OBSIDIAN_PLUGINS = ("dataview", "obsidian-local-rest-api")
+# name -> (github repo, release tag). Pinned, because a vault that opens is
+# worth more than the newest plugin. The three files are what an Obsidian
+# release ships; styles.css is optional and a 404 on it is not a failure.
+OBSIDIAN_BUNDLES = {
+    "dataview": ("blacksmithgu/obsidian-dataview", "0.5.68"),
+    "obsidian-local-rest-api": ("coddingtonbear/obsidian-local-rest-api", "5.1.0"),
+}
+BUNDLE_FILES = ("main.js", "manifest.json", "styles.css")
+BUNDLE_TIMEOUT = 30
 
 # The knowledge layer's *content* seed — Dashboard.md, WORKFLOW.md, the
 # indexes, the empty scaffolds — for `pearde/wiki/`, the folder the preset
@@ -407,6 +422,114 @@ def stranded_vault(legacy, dest):
             + "Neither is deleted; the installed vault wins by default.")
 
 
+# ── the plugin bundles: the one place this repo reaches the network ───────────
+# `install.sh` used to do this, and an installer whose whole thesis is links —
+# five symlinks per skill, no copies — had a `curl` in it that a person with no
+# network watched fail. The bundles are not part of an install: they are part of
+# a vault, and a vault is opt-in. So the fetch moved here, behind the one verb
+# that asks for one.
+
+def bundle_at(name):
+    """Where a bundle lives in the preset."""
+    return os.path.join(OBSIDIAN_PRESET, "plugins", name)
+
+
+def bundle_state(name):
+    """`ok`, `stale` or `missing` for the bundle in the preset, against the
+    version pinned above. A manifest whose version cannot be read is stale —
+    a half-written bundle is not one we should copy into someone's vault."""
+    want = OBSIDIAN_BUNDLES.get(name, (None, None))[1]
+    at = bundle_at(name)
+    main, manifest = os.path.join(at, "main.js"), os.path.join(at, "manifest.json")
+    if not (os.path.getsize(main) if os.path.isfile(main) else 0):
+        return "missing"
+    try:
+        with open(manifest, encoding="utf-8") as f:
+            have = json.load(f).get("version")
+    except (OSError, ValueError):
+        return "stale"
+    return "ok" if have == want else "stale"
+
+
+def fetch_bundle(name):
+    """Download one pinned bundle into the preset. Returns None on success or
+    the line to print on failure.
+
+    Every file lands as `<f>.part` and is renamed, so an interrupted fetch
+    leaves no half-file that `bundle_state` would read as ok. `styles.css` is
+    optional — dataview ships one, plenty of plugins do not — so only a
+    missing `main.js` or `manifest.json` fails the bundle."""
+    import urllib.error
+    import urllib.request
+    repo, ver = OBSIDIAN_BUNDLES[name]
+    at = bundle_at(name)
+    os.makedirs(at, exist_ok=True)
+    got = []
+    try:
+        for f in BUNDLE_FILES:
+            url = f"https://github.com/{repo}/releases/download/{ver}/{f}"
+            try:
+                with urllib.request.urlopen(url, timeout=BUNDLE_TIMEOUT) as r:
+                    data = r.read()
+            except urllib.error.HTTPError as e:
+                if e.code == 404 and f == "styles.css":
+                    continue                   # optional, and plenty ship none
+                raise
+            part = os.path.join(at, f + ".part")
+            with open(part, "wb") as out:
+                out.write(data)
+            os.replace(part, os.path.join(at, f))
+            got.append(f)
+    except Exception as e:                      # network, DNS, TLS, HTTP, disk
+        for f in BUNDLE_FILES:
+            part = os.path.join(at, f + ".part")
+            if os.path.isfile(part):
+                os.remove(part)
+        return f"{name} {ver}: {e}"
+    return None if "main.js" in got else f"{name} {ver}: the release carried no main.js"
+
+
+def ensure_bundles(names=OBSIDIAN_PLUGINS):
+    """Fetch every pinned bundle the preset does not already hold at its
+    version. Returns (fetched, failed) — `fetched` the names brought in or
+    refreshed, `failed` one line per bundle that could not be got.
+
+    Never raises: a vault without dataview renders no view, which is worth
+    saying out loud, but it is not worth refusing to register the vault
+    over."""
+    fetched, failed = [], []
+    for name in names:
+        if name not in OBSIDIAN_BUNDLES:
+            continue
+        state = bundle_state(name)
+        if state == "ok":
+            continue
+        bad = fetch_bundle(name)
+        (failed.append(bad) if bad else fetched.append(name))
+    return fetched, failed
+
+
+def copy_bundles(dest):
+    """Put every preset bundle the vault at `dest` does not already have into
+    it. Returns the names copied.
+
+    `write_obsidian` seeds a vault that is not there yet and never touches one
+    that is — a hand-tuned vault wins, which is right. But a person whose
+    vault was seeded before the bundles arrived has an `.obsidian/` and no
+    dataview, and telling them to run `pearde vault` has to actually fix that.
+    A plugin directory that is already there is left alone: their copy, their
+    settings, their version."""
+    copied = []
+    for plugin in OBSIDIAN_PLUGINS:
+        src = bundle_at(plugin)
+        dst = os.path.join(dest, "plugins", plugin)
+        if os.path.isdir(dst) or not os.path.isfile(os.path.join(src, "main.js")):
+            continue
+        shutil.copytree(src, dst, dirs_exist_ok=True)
+        copied.append(plugin)
+    return copied
+
+
 def write_obsidian(d):
     """Step 4b: the vault, and it roots at the PROJECT — `<dir>/.obsidian/`.
 
@@ -428,8 +551,8 @@ def write_obsidian(d):
     `.obsidian/` a person already had at the project root. A vault the board
     left at the old root is moved up rather than copied, so the plugins,
     workspace and key a person has been using survive the move. A plugin
-    whose bundle is not in the preset — the install has not run, or could not
-    reach the network — is returned in the second list and named on the
+    whose bundle is not in the preset — `pearde vault` has not run, or could
+    not reach the network — is returned in the second list and named on the
     console, because a vault missing dataview renders no view at all.
 
     When BOTH vaults exist the lift does not happen — an installed
@@ -479,7 +602,7 @@ def write_obsidian(d):
     cfg = {"port": 27124, "insecurePort": 27123, "enableInsecureServer": False,
            "apiKey": key}
     # The key is written beside the plugin's own bundle, and the bundle is not
-    # vendored — a machine that never ran `install --apply` has no plugin dir
+    # vendored — a machine that never ran `pearde vault` has no plugin dir
     # at all (the loop above reported it into `missing`). Writing the key
     # cannot create the directory it belongs to and crash init: makedirs, and
     # the key lands whenever the bundle later arrives.
@@ -1015,7 +1138,7 @@ def cmd_init(argv):
         if missing:
             print(f"init: no bundle for {', '.join(missing)} — the vault "
                   "opens without them and renders no view. Fetch them with: "
-                  "pearde install --apply <skills-dir>")
+                  "pearde vault")
     url = ensure(board)
     if not existing:
         suggest_host()
@@ -1074,7 +1197,9 @@ def cmd_vault(argv):
     if not os.path.isdir(board):
         raise Refused(f"no board at {board} — pearde init {d} writes one")
     if args.dry:
+        want = [n for n in OBSIDIAN_PLUGINS if bundle_state(n) != "ok"]
         print(f"dry · would register {d} with Obsidian"
+              + (f" · would fetch {', '.join(want)}" if want else "")
               + (" · seeds .obsidian/ first" if not os.path.isdir(
                   os.path.join(d, ".obsidian")) else "")
               + (f" · would move {board} out of the hidden name first"
@@ -1087,6 +1212,14 @@ def cmd_vault(argv):
               "symlink where it was — Obsidian shows no path holding a "
               "dot-segment, so a board with a dot in its name cannot be in "
               "the project's vault at all")
+    # The bundles, before anything is copied anywhere. This is the one command
+    # in the repo that reaches the network, and it does it only for what the
+    # preset does not already hold at the pinned version.
+    fetched, failed = ensure_bundles()
+    if fetched:
+        print(f"vault: fetched {', '.join(fetched)}")
+    for line in failed:
+        print(f"vault: could not fetch {line}")
     if not os.path.isdir(os.path.join(d, ".obsidian")):
         plugins, missing, _, stranded = write_obsidian(d)
         print(f"vault: seeded {d}/.obsidian"
@@ -1094,6 +1227,11 @@ def cmd_vault(argv):
               + (f" · no bundle for {', '.join(missing)}" if missing else ""))
         if stranded:
             print(f"vault: {stranded}")
+    else:
+        copied = copy_bundles(os.path.join(d, ".obsidian"))
+        if copied:
+            print(f"vault: put {', '.join(copied)} into {d}/.obsidian — "
+                  "Obsidian loads a plugin on the next open of the vault")
     if obsidian_running():
         if "wait" not in args.flags:
             raise Refused(
@@ -1220,7 +1358,7 @@ def cmd_upgrade(argv):
         vault_line += " · " + stranded
     if missing:
         vault_line += (f" · no bundle for {', '.join(missing)} — "
-                       "pearde install --apply <skills-dir> fetches them")
+                       "pearde vault fetches them")
     print(f"  vault     {vault_line}")
     if in_git(d):
         added = write_gitignore(d, board)

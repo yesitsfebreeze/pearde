@@ -111,7 +111,7 @@ check_dir() {
   local rep name st _rest have=0 absent=0 wrong=0 copies=0
   rep=$(bash "$INSTALL" "$dir" 2>&1)
   while read -r name st _rest; do
-    [ -n "$name" ] && [ -f "$SKILLS/$name.md" ] || continue   # agents and plugins report too
+    [ -n "$name" ] && [ -f "$SKILLS/$name.md" ] || continue   # the agent rows report here too
     case "$st" in
       ok|self)  have=$((have + 1)) ;;
       copy)     copies=$((copies + 1)) ;;

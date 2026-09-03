@@ -56,7 +56,9 @@ the uid **has** no home, nor Obsidian absent.
 ## Two plugins, seeded by `init` and never overwritten
 
 Settings at `@resources/board/obsidian/`, pinned bundles fetched by
-`install.sh --apply`, both seeded with a fresh API key into a new board's
+`pearde vault` — the one command in the repo that reaches the network, and it
+fetches only what the preset does not already hold at the pinned version — both
+seeded with a fresh API key into a new board's
 `.pearde/.obsidian/` by `@resources/board/init.py`, which overwrites no plugin,
 key or hand-tuned config. Obsidian loads a vault's plugins only on first open —
 until then the port is silent.

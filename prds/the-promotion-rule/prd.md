@@ -6,6 +6,7 @@ complexity: 12
 blast-radius: low
 workflow: probe-then-spec
 actual: 0.45h
+commit: fd73eff
 ---
 
 # The promotion rule

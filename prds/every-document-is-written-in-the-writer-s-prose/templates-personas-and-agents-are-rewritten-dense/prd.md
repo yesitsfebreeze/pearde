@@ -8,6 +8,7 @@ needs:
   - a-density-checker-and-the-root-docs-are-rewritten
 workflow: probe-then-spec
 actual: 15.31h
+commit: 7a162c2 0349204
 ---
 
 # templates-personas-and-agents-are-rewritten-dense — references/templates/`, `references/personas/` and `references/agents/` rewritten dense, prescribed shapes kept

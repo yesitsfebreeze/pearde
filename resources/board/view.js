@@ -7,36 +7,27 @@ import { LitElement, html, css, render as litRender } from "lit";
    views.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/* ── re-entrancy ──────────────────────────────────────────────────────────
-   A live page re-imports this module in place when the view's code moves —
-   the service imports `view.js` again, over the copy already mounted, in the
-   same document. So the second copy must dispose everything the first copy
-   attached, or the two double up. The signal below is per instance: the new
-   import aborts the old one's signal first, which cancels every listener the
-   old copy registered through it. `window.__pearde_ivs` is the same registry
-   for the clock loops. Custom elements cannot be redefined — the browser
-   keeps the first class and its template until a real reload — so the copies
-   that came after only ever mount the DOM, and a template made stale by a
-   view change waits for the page to be reloaded to catch up. */
-if (window.__pearde_sig) window.__pearde_sig.abort();
-window.__pearde_sig = new AbortController();
-const SIG = window.__pearde_sig.signal;
-for (const iv of (window.__pearde_ivs || [])) clearInterval(iv);
-window.__pearde_ivs = [];
-/* every listener goes through here, so a later copy of this module can abort
-   the copy before it: one signal, threaded into all of them (a listener's
-   own options merge in behind it). */
-const bind = (t, e, f, o) => t.addEventListener(e, f,
-  Object.assign({ signal: SIG }, o || {}));
+/* ── one copy per page ────────────────────────────────────────────────────
+   When the view's own code moves under a live page the page reloads: the
+   URL already carries the view, the filter and the open PRD, so a reload
+   lands where the reader was. This module is never mounted twice in one
+   document — custom elements cannot be redefined, so a second copy could not
+   mount cleanly anyway. The daemon's live loop imports the moved module; if
+   one is already here, that import becomes the reload. */
+if (window.__pearde_mounted) {
+  location.reload();
+  throw new Error("view.js moved — reloading the page");
+}
+window.__pearde_mounted = true;
+const bind = (t, e, f, o) => t.addEventListener(e, f, o);
 
 /* The payload reaches this module on window, in both modes. `plan.py gantt`
    renders a one-file page whose head script sets the same globals; the live
-   service's shell and a re-importing page set them just before loading the
-   module. Both are classic scripts, so both run before this deferred module —
-   `window.__PAYLOAD__` is always there, and a view re-importing mid-page finds
-   the fresh data the service put there. (The renderer once wrote the token
-   `__PAYLOAD__` into this file with a blind string replace; it cannot any
-   more, so the token must not appear here at all.) */
+   service's shell sets them just before loading the module. Both are classic
+   scripts, so both run before this deferred module — `window.__PAYLOAD__` is
+   always there. (The renderer once wrote the token `__PAYLOAD__` into this
+   file with a blind string replace; it cannot any more, so the token must not
+   appear here at all.) */
 let DATA = window.__PAYLOAD__;
 let CPM = DATA.cpm;
 
@@ -280,7 +271,6 @@ function silentFor(t, rich) {
 
 let tasks = [], byRel = new Map(), ALL = [], allByRel = new Map(), HIST = [];
 const STARTING = new Set();  // prd rel → a Start click this page is waiting on
-let ADAPTERS = [];  // [{id, name}] — which launch targets the daemon has configured
 // A mousedown on the Start button still lets the browser promote the .card
 // ancestor as the HTML5 drag source — `draggable="false"` on the button only
 // opts the button itself out, it does not stop Blink's hit-test from walking
@@ -444,6 +434,7 @@ const anyFilter = () =>
    changes band when a state or a claim does, which is when the board has
    something new to say. */
 const ASKING = {question:1, blocked:1, refine:1, failed:1};
+// duplicates plan.py's pressure_bands — the two must rank the same way
 const pressure = t =>
   t.collect          ? 0 :
   ASKING[t.state]    ? 1 :
@@ -2570,11 +2561,9 @@ function drawLegend() {
    editable in place: the panel writes prd.md through the service, one field at
    a time. Served live it fetches; opened as a file with no service it degrades
    to what the payload already carries.                                       */
-// The daemon stamps these in: the board's key, and the prefix its own routes
-// live under, so the same page works behind a reverse proxy with no absolute
-// URL anywhere in it.
+// The daemon stamps the board's key in; its routes live at the origin root.
 const BOARD_KEY = window.__BOARD || null;
-const API = window.__BASE || "";
+const API = "";
 const SERVED = !!BOARD_KEY;
 /* `all` — every board the daemon watches, on one page. The payload says so,
    and this page believes the payload rather than the URL: it is a display,
@@ -2604,13 +2593,10 @@ const boardLink = (rel, label) => {
 };
 const STATE_LIST = Object.keys(STATES).concat(["done"]);
 let dTask = null, dData = null, dDirty = false;
-// a re-imported view's handed-over inspector body; see openDrawer's tail
-let _pending = null;
 // the live page updates itself on every board change. It must not do that
-// while someone is halfway through typing into this panel, and a board's own
-// script may hold it too — see `pearde.onHold`.
-const HOLDS = [() => dDirty];
-window.__pearde_hold = () => HOLDS.some(f => f());
+// while someone is halfway through typing into this panel — serve.py's live
+// loop asks here before every swap.
+window.__pearde_hold = () => dDirty;
 
 // one `## Heading` section out of a body, ending at the next heading
 /* The wall's heading is written by whoever hit it — `## Blocked on a human
@@ -2859,25 +2845,11 @@ async function openDrawer(t) {
   if (!SERVED) return;
   try {
     dData = await fetchPrd(t.rel, true);
-    if (dTask !== t) { _pending = null; return; }  // the reader moved on
+    if (dTask !== t) return;                       // the reader moved on
     $("dmsg").textContent = "";
     drawBody();
   } catch (e) {
     $("dmsg").textContent = "could not load the PRD";
-  }
-  // a re-imported view hands its half-typed body across: the fetch's final
-  // drawBody just replaced the textarea, so the saved text goes in now, over
-  // whatever the server had. The marker is read once and cleared.
-  if (_pending) {
-    const bt = $("dbodytext");
-    if (bt) {
-      bt.value = _pending.body;
-      if (_pending.dirty) {
-        dDirty = true;
-        $("dmsg").textContent = "unsaved";
-      }
-    }
-    _pending = null;
   }
 }
 
@@ -3186,20 +3158,20 @@ $("drevert").onclick = () => { dDirty = false; drawBody();
 
 /* The Start button, on an `open` card. There is no session already running
    this board — clicking launches one: `POST /run` has the daemon spawn the
-   chosen adapter's command (its own agent, its own prompt template — see
-   resources/board/adapters/*.json), detached, in the repo root. It does
-   not write `state:` itself; that pass writes its own the moment it picks
-   the PRD up, and the live swap already running on this page shows the card
-   move on its own within about a second. STARTING only guards the gap
-   between the click and that write — the daemon's own /run has the same
-   guard server-side, so a second tab clicking the same card is refused too. */
-async function startPrd(rel, adapterId) {
+   agent command (`PEARDE_ADAPTER_BIN`, `claude` by default) with
+   `/pearde run <rel>`, detached, in the repo root. It does not write
+   `state:` itself; that pass writes its own the moment it picks the PRD up,
+   and the live swap already running on this page shows the card move on its
+   own within about a second. STARTING only guards the gap between the click
+   and that write — the daemon's own /run has the same guard server-side, so
+   a second tab clicking the same card is refused too. */
+async function startPrd(rel) {
   if (!EDITABLE || STARTING.has(rel)) return;
   STARTING.add(rel); drawBoard();
   try {
     const r = await fetch(API + "/run", {method: "POST",
       headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({board: BOARD_KEY, prd: rel, adapter: adapterId})});
+      body: JSON.stringify({board: BOARD_KEY, prd: rel})});
     const out = await r.json();
     if (!r.ok || out.error) throw new Error(out.error || "failed to start");
     toast("Started — " + rel.split("/").pop());
@@ -3211,24 +3183,6 @@ async function startPrd(rel, adapterId) {
   // left in STARTING until the state itself moves off `open` — a click that
   // launched successfully should not offer a second one before the pass has
   // even had the chance to claim it
-}
-
-/* Which launch targets the daemon has configured — read once at boot, not
-   re-polled: adapters are a machine-wide config file set, not board data,
-   and changing one is rare enough that a page reload (which a code change
-   to this very file already triggers) is an acceptable way to pick it up.
-   Empty on a plain fetch failure or an unserved page — the Start button's
-   own `ADAPTERS.length > 0` check then simply never renders it, same as
-   today's behavior on an unserved static export. */
-async function loadAdapters() {
-  if (!SERVED) return;
-  try {
-    const r = await fetch(API + "/adapters");
-    ADAPTERS = r.ok ? await r.json() : [];
-  } catch {
-    ADAPTERS = [];
-  }
-  if (ADAPTERS.length) drawBoard();
 }
 
 /* What a half-landed write actually left on disk. `/edit` applies each part
@@ -3380,12 +3334,8 @@ function drawBoards() {
 
 function drawAll() {
   if (VIRTUAL) drawBoards();
-  if (!replaced.has("board")) drawBoard();
-  if (!replaced.has("list")) drawList();
-  if (!replaced.has("asks")) drawAsks();
-  if (!replaced.has("analytics")) drawAnalytics();
-  if (!replaced.has("memos")) drawMemos();
-  if (!replaced.has("report")) drawReport();
+  drawBoard(); drawList(); drawAsks(); drawAnalytics(); drawMemos();
+  drawReport();
   resize(); retree(); place();
 }
 
@@ -3451,29 +3401,12 @@ class PeardeBoard extends LitElement {
           + boardHue(r.board)}>${r.board}</span>` : ""
       }<span>p${r.prio}</span>${
         r.weight ? html`<span>${fmtW(r.weight)}</span>` : ""}${
-        this.served && r.state === "open" && ADAPTERS.length === 1 ? html`<button class="start"
+        this.served && r.state === "open" ? html`<button class="start"
           draggable="false" ?disabled=${starting}
-          title="run this PRD's pass now, with ${ADAPTERS[0].name}"
+          title="run this PRD's pass now"
           @mousedown=${e => { startBtnDown = true; e.stopPropagation(); }}
-          @click=${e => { e.stopPropagation(); startPrd(r.rel, ADAPTERS[0].id); }}
+          @click=${e => { e.stopPropagation(); startPrd(r.rel); }}
           >${starting ? "starting…" : "▶ start"}</button>` : ""
-      }${
-        // 2+ adapters configured: the button becomes a native <select> — one
-        // click opens it, picking an option fires the same startPrd() the
-        // single-adapter button does. No custom popup: a <select> is already
-        // keyboard-navigable and dismisses itself, and mousedown/click still
-        // need the same startBtnDown guard as the button (see its own
-        // comment above) since it sits in the same draggable card.
-        this.served && r.state === "open" && ADAPTERS.length > 1 ? html`<select class="start"
-          ?disabled=${starting}
-          title="run this PRD's pass now — pick which agent"
-          @mousedown=${e => { startBtnDown = true; e.stopPropagation(); }}
-          @click=${e => e.stopPropagation()}
-          @change=${e => { e.stopPropagation(); const id = e.target.value;
-                            e.target.value = ""; if (id) startPrd(r.rel, id); }}
-          ><option value="">${starting ? "starting…" : "▶ start…"}</option>${
-            ADAPTERS.map(a => html`<option value=${a.id}>${a.name}</option>`)
-          }</select>` : ""
       }</div></div>`;
   }
 
@@ -4257,7 +4190,6 @@ class PeardeNow extends LitElement {
 if (!customElements.get("pearde-now"))
   customElements.define("pearde-now", PeardeNow);
 function drawNow() {
-  if (replaced.has("now")) return;
   const el = $("now"); if (el) el.data = DATA;
 }
 
@@ -4363,7 +4295,6 @@ if (!customElements.get("pearde-whatsup"))
   customElements.define("pearde-whatsup", PeardeWhatsup);
 
 async function drawWhatsup() {
-  if (replaced.has("whatsup")) return;
   const el = $("whatsup"); if (!el) return;
   el.served = SERVED;
   el.tick = Date.now();          // the age is counted, so it has to re-render
@@ -4779,7 +4710,6 @@ function apply(payload) {
   const keepRel = selected ? selected.rel : null;
   const sx = scroll.scrollLeft, sy = scroll.scrollTop;
   DATA = payload;
-  slotsApply();          // a board's own elements see every swap too
   hydrate();
   remode(); M = MODE[mode];
   if (!GROUPS[groupBy]) groupBy = "none";
@@ -4804,91 +4734,6 @@ window.__litOK = typeof LitElement === "function";
 
 window.__pearde_apply = apply;
 window.__pearde_refresh = refresh;
-
-/* ── seams: where a board's own elements render ────────────────────────────
-   A board registers a custom element for a seam and the page renders it,
-   passing the payload down as `data` and updating it on every swap. The
-   browser owns the element contract, so this file does not invent one — it
-   only says where an element goes and when its data changes. */
-const SEAMS = ["toolbar", "sidebar", "inspector"];
-const slotted = [];
-
-function slot(name, tag) {
-  if (!SEAMS.includes(name)) return;          // an unknown seam is ignored
-  const host = $("seam-" + name);
-  if (!host) return;
-  const el = document.createElement(tag);
-  el.data = DATA;
-  host.appendChild(el);
-  slotted.push(el);
-  return el;
-}
-
-/* Replacing a view outright. A custom element name is unique per document, so
-   a board cannot define its own `pearde-list` over ours — it registers a
-   different element for the view instead, and the page hands that element the
-   view rather than drawing its own. */
-const VIEWS_REPLACEABLE = ["board", "asks", "list", "analytics", "memos",
-                           "report"];
-// not views, but the page's own elements above them — the now strip and the
-// what's-up section — a board may take over the same way. The host id is
-// the name.
-const PARTS_REPLACEABLE = ["now", "whatsup"];
-const replaced = new Set();
-
-function replace(view, tag) {
-  if (PARTS_REPLACEABLE.includes(view)) {
-    const host = $(view);
-    if (!host) return;
-    const el = document.createElement(tag);
-    el.id = view; el.data = DATA;
-    host.replaceWith(el);
-    replaced.add(view);          // drawNow / drawWhatsup leave it alone
-    slotted.push(el);
-    return el;
-  }
-  if (!VIEWS_REPLACEABLE.includes(view)) return;
-  const section = document.querySelector(`section[data-view="${view}"]`);
-  if (!section) return;
-  const el = document.createElement(tag);
-  el.data = DATA;
-  section.replaceChildren(el);
-  replaced.add(view);          // the built-in draw for it stops running
-  slotted.push(el);            // it sees every payload swap like any other
-  drawAll();
-  return el;
-}
-
-
-// every slotted element sees the payload the page is drawing
-function slotsApply() { for (const el of slotted) el.data = DATA; }
-
-// The surface a board's own `view.user.js` may use. The `__pearde_*` globals
-// above stay: serve.py injects LIVE_JS into this page and calls them by name.
-window.pearde = {
-  slot,
-  replace,
-  get data() { return DATA; },   // a getter — `apply` replaces the payload
-  get board() { return BOARD_KEY; },
-  refresh,
-  apply,
-  onHold(f) { HOLDS.push(f); },
-};
-
-// serve.py calls this just before it re-imports a moved `view.js`: the
-// scroll and a half-typed inspector of the copy going away are handed to the
-// copy coming in. No hold here — the point is that the text survives.
-window.__pearde_save = () => {
-  const s = { x: scroll.scrollLeft, y: scroll.scrollTop };
-  if ($("drawer").classList.contains("open") && dTask) {
-    const ta = $("dbodytext");
-    s.open = true;
-    s.prd = dTask.rel;
-    s.body = ta ? ta.value : (dData ? dData.body : "");
-    s.dirty = dDirty;
-  }
-  window.__pearde_restore = s;
-};
 
 /* ── the URL is the view ──────────────────────────────────────────────────
    Where you are is a link you can send: which view, which filter, which PRD.
@@ -4975,33 +4820,13 @@ readHash();
 // the merged page opens on its dashboard: the plan of a dozen boards at once
 // is not the first thing to hand a reader, the state of each of them is
 if (VIRTUAL && !/(^|&)view=/.test(location.hash.slice(1))) setView("boards");
-// The view's own code may have moved under this page: read what the copy
-// before it saved — the scroll, and the drawer with its half-typed body —
-// and put it back over the fresh payload the service just set on window.
-// Each copy tracks its own clocks and listeners, so this one starts clean;
-// only the user's place survives. `_pending` is consumed by the drawer's
-// last drawBody once the fresh PRD text lands.
-(async () => {
-  const st = window.__pearde_restore;
-  delete window.__pearde_restore;
-  if (!st) return;
-  scroll.scrollLeft = st.x; scroll.scrollTop = st.y;
-  if (!st.open || !st.prd) return;
-  const t = byRel.get(st.prd);
-  if (!t) return;
-  _pending = { body: st.body || "", dirty: !!st.dirty };
-  if (dTask !== t) openDrawer(t);
-})();
 // the clock ticks for two reasons: the calendar's now-line, and how long a
 // worker has been holding a PRD. Both are read off Date.now(), so both go
-// stale between board changes if nothing repaints. Every interval is
-// registered so a later copy of this module clears them all on its way in.
-window.__pearde_ivs.push(setInterval(() => {
+// stale between board changes if nothing repaints. Board changes themselves
+// arrive through the daemon's live loop, which reconnects on its own.
+setInterval(() => {
   if (mode === "dates" || tasks.some(t => t.held)) draw();
   // and a third: how old the report is, which is counted from a baked mtime
   // and would otherwise read "just now" for the whole life of the page
   const w = $("whatsup"); if (w) w.tick = Date.now();
-}, 60000));
-if (SERVED) window.__pearde_ivs.push(setInterval(refresh, 90000));
-   // a floor under the live loop
-loadAdapters();
+}, 60000);

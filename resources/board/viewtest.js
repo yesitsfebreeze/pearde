@@ -94,22 +94,11 @@ const file = served ? arg : path.resolve(arg);
 
   const r = await page.evaluate(() => {
     const $ = s => document.querySelector(s), q = s => [...document.querySelectorAll(s)];
-    const P = window.pearde;
     return {
       lit: window.__litOK === true,
-      slot: !!(window.pearde && typeof window.pearde.slot === "function"),
-      seams: ["toolbar", "sidebar", "inspector"]
-        .every(n => !!document.getElementById("seam-" + n)),
-      seamsQuiet: ["toolbar", "sidebar", "inspector"].every(n => {
-        const el = document.getElementById("seam-" + n);
-        return el.children.length > 0 || getComputedStyle(el).display === "none";
-      }),
-      pearde: !!P && typeof P === "object",
-      data: !!(P && P.data && P.data.cpm),
-      board: !!(P && "board" in P),
-      refresh: !!(P && typeof P.refresh === "function"),
-      apply: !!(P && typeof P.apply === "function"),
-      onHold: !!(P && typeof P.onHold === "function"),
+      data: !!(window.__PAYLOAD__ && window.__PAYLOAD__.cpm),
+      refresh: typeof window.__pearde_refresh === "function",
+      apply: typeof window.__pearde_apply === "function",
       hold: typeof window.__pearde_hold === "function",
       titlebar: !!$("#titlebar"),
       views: q("#views a").length,
@@ -131,15 +120,9 @@ const file = served ? arg : path.resolve(arg);
   const checks = [
     ["no page error", errors.length === 0, errors.slice(0, 2).join(" | ")],
     ["Lit is bound, offline", r.lit, ""],
-    ["pearde.slot is callable", r.slot, ""],
-    ["all three seams present", r.seams, ""],
-    ["an unused seam renders nothing", r.seamsQuiet, ""],
-    ["window.pearde published", r.pearde, ""],
-    ["pearde.data is the payload", r.data, ""],
-    ["pearde.board is the key", r.board, ""],
-    ["pearde.refresh callable", r.refresh, ""],
-    ["pearde.apply callable", r.apply, ""],
-    ["pearde.onHold callable", r.onHold, ""],
+    ["the payload is on window, enriched", r.data, ""],
+    ["live refresh hook wired", r.refresh, ""],
+    ["live apply hook wired", r.apply, ""],
     ["hold hook still wired", r.hold, ""],
     ["the toolbar built", r.titlebar, ""],
     ["seven section anchors", r.views === 7, `got ${r.views}`],
@@ -349,8 +332,7 @@ const file = served ? arg : path.resolve(arg);
           // no control at all. A disabled radio reads exactly like a live one
           // — the reader picks, nothing moves, and the page looks broken
           // rather than read-only — so the merged board must draw none.
-          ro: !!(window.pearde && window.pearde.data &&
-                 window.pearde.data.virtual),
+          ro: !!(window.__PAYLOAD__ && window.__PAYLOAD__.virtual),
           roControls: document.querySelectorAll(
             "#asks .qq.ro input, #asks .qq.ro textarea, #asks .qq.ro button")
             .length,
@@ -454,8 +436,8 @@ const file = served ? arg : path.resolve(arg);
     fs.mkdirSync(dir, { recursive: true });
     // the board's own name, not its directory — every board's dir is `prds`,
     // so a directory-derived key collides across boards
-    const tag = (await page.evaluate(() => (window.pearde && window.pearde.data
-      && window.pearde.data.board) || "board")).replace(/[^A-Za-z0-9_.-]/g, "-");
+    const tag = (await page.evaluate(() => (window.__PAYLOAD__
+      && window.__PAYLOAD__.board) || "board")).replace(/[^A-Za-z0-9_.-]/g, "-");
     for (const v of ["timeline", "board", "asks", "list", "analytics", "memos", "report"]) {
       await page.click(`#views a[data-v="${v}"]`).catch(() => {});
       await page.waitForTimeout(150);

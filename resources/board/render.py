@@ -35,7 +35,6 @@ module enriches it, renders it and writes it.
 import base64
 import json
 import os
-import re
 
 VIEW_FILE = os.path.join(".state", "view.html")
 
@@ -245,6 +244,7 @@ def asset(name):
 
 
 LIT_FILE = "lit-core.min.js"
+# no longer read here — serve.py's digest() still names both; drop them there
 USER_CSS = "view.user.css"
 USER_JS = "view.user.js"
 
@@ -252,8 +252,7 @@ USER_JS = "view.user.js"
 def lit_map():
     """Lit as an import map, inlined. The page opens over `file://` with no
     network, so the module is carried as a data: URL rather than fetched. The
-    name it binds is `lit`, so a board's own `view.user.js` imports it exactly
-    as any Lit code does."""
+    name it binds is `lit`, which is what `view.js` imports."""
     src = asset(LIT_FILE).encode("utf-8")
     url = "data:text/javascript;base64," + base64.b64encode(src).decode("ascii")
     return ('<script type="importmap">'
@@ -278,80 +277,42 @@ def report_age(board):
         return None
 
 
-def user_asset(board, name):
-    """A board's own stylesheet or script, or "". It lives on the board, not
-    in this skill, so it survives a skill upgrade and differs per board."""
-    if not board:
-        return ""
-    try:
-        with open(os.path.join(board, name), encoding="utf-8") as fh:
-            return fh.read()
-    except OSError:
-        return ""
+def render(payload, board=None, base="", vstamp=None):
+    """The page. With no `vstamp` the view's css and js are inlined — the
+    one self-contained file `plan.py gantt` writes, which opens over
+    `file://`. With one, the live service's shell: the same page with the
+    view linked as `/view.css` and `/view.js` under a `?v=` stamp that busts
+    the browser's cache when either file moves. `base` is the route prefix
+    the service passes; nothing configures one, so it is "".
 
-
-def untag(text, tag):
-    """`</script` inside the text would close the tag it is inlined into.
-    `<\\/` is the same character sequence to both a JS string and a CSS
-    escape, so the page reads what the author wrote."""
-    return re.sub(r"</(?=%s)" % tag, r"<\\/", text, flags=re.I)
-
-
-def render(payload, board=None):
-    p = enrich(payload)
-    data = json.dumps(p, sort_keys=True).replace("</", "<\\/")
-    # the payload and the report's mtime go in as globals in a classic script,
-    # which runs before the module below (classic scripts run during parse,
-    # modules are deferred) — the view reads both off window in every mode
-    globs = ('<script>window.__PAYLOAD__ = ' + data + ';'
-             + 'window.__REPORTMTIME__ = ' + json.dumps(report_age(board))
-             + ';</script>')
-    html = (TEMPLATE
-            .replace("__LIT__", lit_map())
-            .replace("__CSS__", asset("view.css"))
-            .replace("__JS__", asset("view.js"))
-            .replace("__TITLE__", p["board"])
-            .replace("</head>", globs + "</head>"))
-    # the board's own last, so a user rule wins the cascade and a user script
-    # sees a built page. A module, so it can `import ... from "lit"` the way
-    # the page itself does.
-    css, js = user_asset(board, USER_CSS), user_asset(board, USER_JS)
-    tail = ((f"<style>\n{untag(css, 'style')}\n</style>\n" if css else "")
-            + (f'<script type="module">\n{untag(js, "script")}\n</script>\n'
-               if js else ""))
-    return html.replace("</body>", tail + "</body>") if tail else html
-
-
-def render_shell(payload, board=None, base="", vstamp=""):
-    """The live service's page — the same shell, with the view linked as files
-    rather than inlined, so an open page can re-import `view.js` where it
-    stands when the view's code moves. `render()` stays the one-file output
-    for `plan.py gantt`; this is only what `/board/<name>` serves.
-
-    The payload and the report's mtime are baked as globals in a classic
-    script ahead of the module, and `view.js` reads them off `window` when it
-    is loaded as a file — the identical data, one hand-off, no fetch on boot.
-    The `?v=` stamp on each asset busts the browser's cache when one moves."""
+    The payload and the report's mtime go in as globals in a classic script,
+    which runs before the module (classic scripts run during parse, modules
+    are deferred) — the view reads both off `window` in every mode, the
+    identical data, one hand-off, no fetch on boot."""
     p = enrich(payload)
     data = json.dumps(p, sort_keys=True).replace("</", "<\\/")
     globs = ('<script>window.__PAYLOAD__ = ' + data + ';'
              + 'window.__REPORTMTIME__ = ' + json.dumps(report_age(board))
              + ';</script>')
-    html = (TEMPLATE
-            .replace("<style>\n__CSS__</style>",
-                     f'<link rel="stylesheet" href="{base}/view.css'
-                     f'?v={vstamp}">')
-            .replace('<script type="module">\n__JS__</script>',
-                     f'<script type="module" src="{base}/view.js?v={vstamp}">'
-                     f"</script>")
+    if vstamp is None:
+        html = (TEMPLATE
+                .replace("__CSS__", asset("view.css"))
+                .replace("__JS__", asset("view.js")))
+    else:
+        html = (TEMPLATE
+                .replace("<style>\n__CSS__</style>",
+                         f'<link rel="stylesheet" href="{base}/view.css'
+                         f'?v={vstamp}">')
+                .replace('<script type="module">\n__JS__</script>',
+                         f'<script type="module" src="{base}/view.js'
+                         f'?v={vstamp}"></script>'))
+    return (html
             .replace("__LIT__", lit_map())
             .replace("__TITLE__", p["board"])
             .replace("</head>", globs + "</head>"))
-    css, js = user_asset(board, USER_CSS), user_asset(board, USER_JS)
-    tail = ((f"<style>\n{untag(css, 'style')}\n</style>\n" if css else "")
-            + (f'<script type="module">\n{untag(js, "script")}\n</script>\n'
-               if js else ""))
-    return html.replace("</body>", tail + "</body>") if tail else html
+
+
+render_shell = render   # the name serve.py calls, with the same arguments
 
 
 def write(board, payload):
@@ -443,7 +404,6 @@ __CSS__</style>
     <button id="newprd" class="primary" title="write a PRD (N)">＋ PRD</button>
   </div>
 </header>
-<div class="seam" id="seam-toolbar"></div>
 <button id="statetab" class="edgetab tleft"
   title="the board's state — the report, the purpose, what wants you (s)"
   aria-controls="state" aria-expanded="false">
@@ -598,7 +558,6 @@ __CSS__</style>
 </div></div>
 <div id="tip"></div>
 <div id="toast" role="status" aria-live="polite"></div>
-<div class="seam" id="seam-sidebar"></div>
 <aside id="drawer">
   <div id="dhead">
     <div class="who">
@@ -608,7 +567,6 @@ __CSS__</style>
     <button id="dclose" title="close (Esc)">✕</button>
   </div>
   <div id="dbody"></div>
-  <div class="seam" id="seam-inspector"></div>
   <div id="dsave">
     <button class="go" id="dgo">save</button>
     <button id="drevert">revert</button>

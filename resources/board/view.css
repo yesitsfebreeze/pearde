@@ -1205,14 +1205,6 @@ kbd{font:10.5px ui-monospace,SFMono-Regular,monospace;background:var(--fill);
 #tip .warn{color:var(--warn)}
 #tip .got{color:var(--ok)}
 
-/* a seam is nothing until a board registers an element for it — no wrapper,
-   no gap, no box on a page that extends nothing */
-.seam:empty{display:none}
-.seam{display:block}
-#seam-sidebar{position:fixed;right:12px;bottom:12px;z-index:20;
-  display:flex;flex-direction:column;gap:8px;max-width:300px}
-#seam-sidebar:empty{display:none}
-
 /* each question answers on its own — the pass reopens the PRD only when
    nothing in it is left unanswered */
 .qq .qfoot{display:flex;align-items:center;gap:8px;padding:8px 12px 10px;

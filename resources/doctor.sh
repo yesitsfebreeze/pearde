@@ -446,7 +446,7 @@ vault_obsidian_running() {
 }
 
 # ── vault: does ▸vault open THIS project ─────────────────────────────────────
-# `obsidian://open` resolves only against the vaults `obsidian.json` holds. A
+# `obsidian://open` resolves only against the vaults the register holds. A
 # project with a vault directory but no entry in that register does not fail
 # loudly: the URI opens the nearest registered ancestor instead — the parent
 # folder holding every project, on a machine where that is a vault too — and
@@ -478,44 +478,37 @@ vault_obsidian_running() {
 # actually check — that the home could not be resolved — and reports it as
 # `broken`, because a row that could not perform its check has not passed it.
 if [ -n "$BOARD" ]; then
-  OBSHOME="${HOME:-}"
-  [ -z "$OBSHOME" ] && OBSHOME=$(unset HOME; echo ~)
-  # bash leaves `~` literal when it cannot resolve one; that is not a home
-  [ "$OBSHOME" = "~" ] && OBSHOME=""
-  if [ -z "$OBSHOME" ]; then
-    OBSHOME=$(python3 -c 'import os,pwd;print(pwd.getpwuid(os.getuid()).pw_dir)' 2>/dev/null || true)
-  fi
-  OBSCFG=""
-  if [ -n "${XDG_CONFIG_HOME:-}" ]; then
-    OBSCFG="$XDG_CONFIG_HOME/obsidian/obsidian.json"
-  fi
-  if [ -n "$OBSHOME" ]; then
-    OBSMAC="$OBSHOME/Library/Application Support/obsidian/obsidian.json"
-    if [ -f "$OBSMAC" ]; then
-      OBSCFG="$OBSMAC"
-    elif [ -z "$OBSCFG" ]; then
-      OBSCFG="$OBSHOME/.config/obsidian/obsidian.json"
-    fi
-  fi
+  # The register itself — where it lives, how this shell's home is resolved
+  # when it exports none, and whether a path is in it — is
+  # @resources/board/obsidian_register.py and nothing here. Its `status`
+  # answers in exactly the four states the branches below report:
+  # no-home, not-installed, `registered <id>`, not-registered.
   # The vault is the PROJECT, not the board: Obsidian skips every path with a
   # dot-segment, so a board named `.pearde/` shows in no vault at all and a
   # vault rooted at the board hides the project from the board. The board is
   # `pearde/` and the project is the vault — this row checks that pair.
   PROJ=$(dirname "$BOARD")
   PABS=$(cd "$PROJ" 2>/dev/null && pwd -P)
+  OBSREG=$(res obsidian_register.py)
+  OBSTATE=$(python3 "$OBSREG" status "$PABS" 2>/dev/null) || OBSTATE=""
+  [ -z "$OBSTATE" ] && OBSTATE="no-home"
+  # The register file itself, as the module resolved it — empty when this
+  # shell exports no home and no passwd entry answers for it either, which is
+  # the one thing the `no-home` arm below claims. The row keeps the path in
+  # hand rather than working out where it is: that is the module's business.
+  OBSCFG=$(python3 "$OBSREG" open 2>/dev/null) || OBSCFG=""
   if [ "$(basename "$BOARD")" = ".pearde" ] && [ ! -L "$BOARD" ]; then
     row vault broken "the board is $BOARD — a dot-segment, and Obsidian skips every path holding one, so nothing of it can show in the project's vault"
     fix "python3 $SKILL_ROOT/resources/pearde.py upgrade $PROJ — moves it to $PROJ/pearde and leaves a .pearde symlink, so every path spelled the old way still resolves"
   elif [ ! -d "$PROJ/.obsidian" ]; then
     row vault off "no $PROJ/.obsidian — the status line's ▸vault stays hidden"
     fix "python3 $SKILL_ROOT/resources/pearde.py vault --wait --open $PROJ — seeds $PROJ/.obsidian and registers it (quit Obsidian when it asks: the register is only writable while the app is closed)"
+  elif [ "$OBSTATE" = "not-installed" ]; then
+    row vault ok "$PROJ/.obsidian · Obsidian not installed here, so nothing to register"
   elif [ -z "$OBSCFG" ]; then
     row vault broken "$PROJ/.obsidian · this shell's home directory could not be resolved, so the vault register cannot be read — this row did not run"
     fix "export HOME=<your home> and re-run doctor — the register lives under it"
-  elif [ ! -f "$OBSCFG" ]; then
-    row vault ok "$PROJ/.obsidian · Obsidian not installed here, so nothing to register"
-  elif grep -Fq "\"path\":\"$PABS\"" "$OBSCFG" 2>/dev/null \
-       || grep -Fq "\"path\": \"$PABS\"" "$OBSCFG" 2>/dev/null; then
+  elif [ "${OBSTATE%% *}" = "registered" ]; then
     row vault ok "$PROJ/.obsidian · registered as $(basename "$PABS") — ▸vault opens the project, board and all"
   else
     row vault broken "$PROJ is not in Obsidian's vault register — ▸vault opens the nearest registered ancestor instead"

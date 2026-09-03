@@ -155,6 +155,7 @@ import plan as planlib  # noqa: E402
 import render as renderlib  # noqa: E402
 import memos as memoslib  # noqa: E402
 import edit as editlib  # noqa: E402
+import obsidian_register as obsreg  # noqa: E402 — the one register reader
 import transitions as translib  # noqa: E402 — the one writer of `state:`
 import all as alllib  # noqa: E402 — the `all` page's merge
 
@@ -1015,22 +1016,14 @@ class Handler(BaseHTTPRequestHandler):
         2026-09-02, so the prefix is the board's own folder; a board that never
         migrated is still found under its own path, where its vault used to
         root, and its prefix is empty. The id is looked up in Obsidian's own
-        register by exact path, the same lookup the status line does."""
-        cfg = os.path.expanduser("~/Library/Application Support/obsidian/"
-                                 "obsidian.json")
-        if not os.path.exists(cfg):
-            cfg = os.path.join(os.environ.get("XDG_CONFIG_HOME",
-                                              os.path.expanduser("~/.config")),
-                               "obsidian", "obsidian.json")
+        register by exact path, the same lookup the status line does — through
+        @resources/board/obsidian_register.py, which owns where that register
+        is and how a path in it compares."""
         board_path = board_path.rstrip("/")
         project = os.path.dirname(board_path)
         wants = [(project, os.path.basename(board_path) + "/"),
                  (board_path, "")]
-        try:
-            with open(cfg, encoding="utf-8") as fh:
-                vaults = (json.load(fh).get("vaults") or {})
-        except (OSError, ValueError):
-            vaults = {}
+        vaults = obsreg.read()
         for root, prefix in wants:
             for k, v in vaults.items():
                 if os.path.realpath(str(v.get("path", ""))) \

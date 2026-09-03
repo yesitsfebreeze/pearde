@@ -18,8 +18,8 @@
 # Defaults come from here; PEARDE_GRAPH_MODEL / PEARDE_GRAPH_FOLDER override.
 set -uo pipefail
 
-# The skill root, resolved before any cd — `open` reads init.py's vault
-# register writer from resources/board/.
+# The skill root, resolved before any cd — `open` reads the one register
+# writer, obsidian_register.py, out of resources/board/.
 SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 BACKEND=ollama
@@ -55,7 +55,7 @@ case "$cmd" in
   update|query|path|explain|god-nodes)
     command -v graphify >/dev/null 2>&1 || MISSING+=("graphify — pip install graphify") ;;
   open)
-    command -v python3 >/dev/null 2>&1 || MISSING+=("python3 — the vault register is written through init.py")
+    command -v python3 >/dev/null 2>&1 || MISSING+=("python3 — the vault register is written through obsidian_register.py")
     command -v open >/dev/null 2>&1 || command -v xdg-open >/dev/null 2>&1 \
       || MISSING+=("an opener — \`open\` (macOS) or \`xdg-open\` (Linux); the vault URI is printed instead") ;;
 esac
@@ -160,16 +160,19 @@ case "$cmd" in
     # `obsidian://open?path=` only resolves a vault Obsidian has registered —
     # an unregistered folder opens its nearest registered ancestor instead
     # (the board's own vault, which is not this one). So the graph vault is
-    # registered by exact path first, through init.py's own writer, and the
-    # URI names it by id. Obsidian rewrites its register on quit: a
-    # registration made while the app runs is certain after a restart.
+    # registered by exact path first, through the one register writer
+    # (@resources/board/obsidian_register.py), and the URI names it by id.
+    # Obsidian rewrites its register on quit: a registration made while the
+    # app runs is certain after a restart, which is why this one passes
+    # `even_if_running` — the alternative is no link at all until the user
+    # quits an app they did not open for this.
     VAULT_URI=$(python3 -c "
 import os, sys, urllib.parse
 sys.path.insert(0, os.path.join('$SKILL_DIR', 'resources', 'board'))
 vault = os.path.abspath(os.path.join('$GRAPHIFY_OUT', 'obsidian'))
 try:
-    import init
-    _, vid = init.register_vault(vault)
+    import obsidian_register as obsreg
+    _, vid = obsreg.write(vault, even_if_running=True)
 except Exception:
     vid = None
 print('obsidian://open?vault=' + vid if vid

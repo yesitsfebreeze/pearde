@@ -32,6 +32,11 @@
 # only session state on this line, and the only one not read from a file the
 # board owns.
 
+# This script's own directory — resources/. The vault lookup below runs a
+# sibling module out of it, and `DIR` further down is the *project*, from
+# the status JSON, so it cannot serve.
+SELF_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+
 JSON="${PRD_STATUS_JSON:-}"
 [ -z "$JSON" ] && [ ! -t 0 ] && JSON=$(cat)
 
@@ -295,21 +300,20 @@ if [ -n "$BOARD" ]; then
   # `obsidian://open?path=` resolves against the vaults Obsidian has
   # registered — an unregistered folder does not open, it lands in whichever
   # registered vault is its ancestor (the repo root, when the repo is a vault
-  # too). So the id is looked up in obsidian.json by exact path and the URI
-  # names the vault directly, which is unambiguous under nesting. No match —
-  # the project was never registered — falls back to `path=`, `%20` its only
-  # encode. `pearde init` registers it; so does opening it once.
+  # too). So the id is looked up by exact path and the URI names the vault
+  # directly, which is unambiguous under nesting. No match — the project was
+  # never registered — falls back to `path=`, `%20` its only encode.
+  # `pearde init` registers it; so does opening it once.
+  #
+  # The lookup goes through @resources/board/obsidian_register.py: where the
+  # register is, and how a path in it compares, is that module's business and
+  # is not re-derived here. It is the one subprocess this script spawns, and
+  # only when the project actually carries a vault directory.
   if [ -d "${BOARD%/*}/.obsidian" ]; then VAULT="${BOARD%/*}"
   elif [ -d "$BOARD/.obsidian" ]; then VAULT="$BOARD"
   fi
   if [ -n "$VAULT" ]; then
-    OBS_CFG="$HOME/Library/Application Support/obsidian/obsidian.json"
-    [ -f "$OBS_CFG" ] || OBS_CFG="${XDG_CONFIG_HOME:-$HOME/.config}/obsidian/obsidian.json"
-    VID=""
-    [ -f "$OBS_CFG" ] && VID=$(sed 's/": *"/":"/g; s/": *{/":{/g' "$OBS_CFG" \
-      | grep -o '"[0-9a-f]\{8,\}":{"path":"[^"]*"' \
-      | grep -F ":{\"path\":\"$VAULT\"" \
-      | sed -n 's/^"\([0-9a-f]*\)".*/\1/p' | head -1)
+    VID=$(python3 "$SELF_DIR/board/obsidian_register.py" has "$VAULT" 2>/dev/null) || VID=""
     if [ -n "$VID" ]; then
       VL="obsidian://open?vault=$VID"
     else

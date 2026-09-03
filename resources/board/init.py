@@ -51,6 +51,7 @@ import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rul
 import edit as editlib          # noqa: E402 — the one writer of bytes
 import plan as planlib          # noqa: E402 — every read
 import transitions as trlib     # noqa: E402 — the flag parser
+import obsidian_register as obsreg  # noqa: E402 — the one register writer
 
 EXAMPLE = os.path.join(HERE, "example")   # the seed board
 VISION_TEMPLATE = os.path.join(SKILL, "references", "templates", "vision.md")
@@ -262,86 +263,6 @@ def in_git(d):
     except OSError:
         return False
     return p.returncode == 0
-
-
-def obsidian_config():
-    """Obsidian's vault register — the file that decides what
-    `obsidian://open` can resolve. macOS first, then the Linux/XDG path.
-    Returns the path when the app has one, else None: a machine that never
-    ran Obsidian gets no file written."""
-    candidates = [
-        os.path.expanduser("~/Library/Application Support/obsidian/obsidian.json"),
-        os.path.join(os.environ.get("XDG_CONFIG_HOME",
-                                    os.path.expanduser("~/.config")),
-                     "obsidian", "obsidian.json"),
-    ]
-    return next((c for c in candidates if os.path.isfile(c)), None)
-
-
-def obsidian_running():
-    """Is the app holding its vault list in memory right now. macOS names the
-    process `Obsidian`, Linux `obsidian`; neither found (or no pgrep) reads as
-    not running, which is the safe answer — the caller only ever uses it to
-    decide whether to warn."""
-    for name in ("Obsidian", "obsidian"):
-        try:
-            if subprocess.run(["pgrep", "-x", name],
-                              capture_output=True).returncode == 0:
-                return True
-        except OSError:
-            return False
-    return False
-
-
-def register_vault(vault, retire=None):
-    """Step 4c: the register. `obsidian://open` resolves against the vaults
-    Obsidian already knows — an unregistered folder does not open, it silently
-    lands in whichever registered vault is its ancestor. So the project is
-    written into `obsidian.json` here: a fresh 16-hex id, its absolute path, a
-    timestamp. An entry with the same path is kept as it is. The vault's name
-    in Obsidian is the folder's own — the project's — which is the whole
-    reason every board's vault used to be called `.pearde`.
-
-    `retire` is a path whose entry is dropped in the same write: the board's
-    old root, which stopped being a vault the moment this one became one.
-    Dropping it is what stops `▸vault` opening a tree holding nothing but
-    `.obsidian/`. Nothing on disk is touched — Obsidian forgets a vault, it
-    does not delete one.
-
-    **A write only survives while the app is closed.** Obsidian loads this
-    file once at launch and rewrites it *from memory* when it quits — an entry
-    added underneath a running app is not read by that app (the URI answers
-    "Unable to find a vault for the URL") and is then erased on quit. The
-    order that works is: quit, write, launch. `cmd_vault` is that order, and
-    `--wait` does the writing the moment the process goes.
-
-    Returns ("added", id), ("known", id), or (None, None) when Obsidian has
-    no config on this machine."""
-    cfg = obsidian_config()
-    if not cfg:
-        return None, None
-    try:
-        data = json.load(open(cfg, encoding="utf-8"))
-    except (OSError, ValueError):
-        return None, None
-    vaults = data.setdefault("vaults", {})
-    dropped = [vid for vid, entry in vaults.items()
-               if retire and os.path.realpath(str(entry.get("path", "")))
-               == os.path.realpath(retire)
-               and os.path.realpath(retire) != os.path.realpath(vault)]
-    for vid in dropped:
-        del vaults[vid]
-    known = next((vid for vid, entry in vaults.items()
-                  if os.path.realpath(str(entry.get("path", "")))
-                  == os.path.realpath(vault)), None)
-    if known:
-        if dropped:
-            editlib.write_atomic(cfg, json.dumps(data))
-        return "known", known
-    vid = os.urandom(8).hex()
-    vaults[vid] = {"path": vault, "ts": int(time.time() * 1000)}
-    editlib.write_atomic(cfg, json.dumps(data))
-    return "added", vid
 
 
 def unhide_board(d, name=None):
@@ -1169,8 +1090,11 @@ def cmd_init(argv):
                   "after Obsidian loads the vault once")
         if stranded:
             print(f"init: obsidian {stranded}")
-        state, _vid = register_vault(d, retire=board)
-        if state == "added" and obsidian_running():
+        # even_if_running: the entry is written under a live app on purpose
+        # — the next line tells the user it will be erased on quit and what
+        # to run instead. Refusing here would drop that whole branch.
+        state, _vid = obsreg.write(d, retire=board, even_if_running=True)
+        if state == "added" and obsreg.running():
             print(f"init: registered {os.path.basename(d)} with Obsidian — "
                   "but Obsidian is "
                   "running, and it rewrites its vault list from memory when "
@@ -1314,7 +1238,8 @@ def cmd_vault(argv):
     """[<dir>] [--wait] [--open] — put the board in Obsidian's vault register,
     which is what makes `obsidian://open` resolve to it.
 
-    The register (`obsidian.json`) is read once, at launch, and written back
+    The register (@resources/board/obsidian_register.py owns it) is read
+    once, at launch, and written back
     from memory on quit. So an entry added under a running app is invisible to
     it and gone afterwards — the app answers "Unable to find a vault for the
     URL" and then erases the line. This command holds that order: it writes
@@ -1493,10 +1418,11 @@ def cmd_upgrade(argv):
     if board_added:
         print(f"  board-git += {' '.join(board_added)} — the board is its own "
               "repo and was tracking its REST key")
-    state, _vid = register_vault(d, retire=board)
+    # even_if_running as in cmd_init: the branch below is the warning.
+    state, _vid = obsreg.write(d, retire=board, even_if_running=True)
     if state is None:
         print("  register  Obsidian has no config on this machine")
-    elif state == "added" and obsidian_running():
+    elif state == "added" and obsreg.running():
         print("  register  added — but Obsidian is running and rewrites its "
               "vault list from memory on quit, which erases this. "
               "pearde vault --wait --open, then quit it")
@@ -1504,7 +1430,7 @@ def cmd_upgrade(argv):
         print(f"  register  {'added' if state == 'added' else 'already registered'}")
     for verb, line in plant_graph(board):
         print(f"  {verb:<9} {line}")
-    if repaired and obsidian_running():
+    if repaired and obsreg.running():
         print("  note      Obsidian reads community-plugins.json at launch — "
               "restart it, or enable the plugin in its settings, for the "
               "repaired id to take")

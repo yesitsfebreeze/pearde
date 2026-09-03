@@ -465,6 +465,31 @@ def _bare_pipeline(line):
     return [t.strip() for _op, t in segs]
 
 
+_CD_RE = re.compile(r'^(?:cd|pushd)\s+(?:--\s+)?(["\']?)(/\S+?)\1(?:\s|$)')
+
+
+def _hardcoded_root(block, repo):
+    """The repo's own absolute path, when a `cd`/`pushd` in `block` names it
+    literally — else None. `collect` already runs a verify block with `cwd`
+    set to `repo` (`resources/board/collect.py` `repo_of`, itself a walk-up,
+    never this checkout's literal spelling); a block that `cd`s there again
+    has re-decided the same answer by hand, pinned it to one machine's
+    checkout, and — since `guarded_run` fences `cwd` but not what a script
+    does after changing it — taken the one documented way past that fence.
+    A `cd` to anywhere else (a scratch dir, a subdirectory by relative path)
+    is untouched; only the literal repo root, or a path under it, trips
+    this."""
+    if not repo:
+        return None
+    root = os.path.abspath(repo).rstrip("/")
+    for line in _logical_lines(block):
+        m = _CD_RE.match(line)
+        if m and (m.group(2).rstrip("/") == root
+                  or m.group(2).rstrip("/").startswith(root + "/")):
+            return m.group(2)
+    return None
+
+
 def _drains_the_verdict(block):
     """Why this block's last statement carries no verdict of its own, or
     None. A WARNING, not a refusal: piping for display beside a real
@@ -569,10 +594,13 @@ def fenced(section, langs=("sh", "bash")):
     return out
 
 
-def check_spec(path, fm, text, lib, own_feet):
+def check_spec(path, fm, text, lib, own_feet, repo=None):
     """(refusals, warnings, footprint) for one spec — every check the
     contract table lists, in its order. `own_feet` is the PRD's footprint,
-    what stands for a spec that carries none."""
+    what stands for a spec that carries none. `repo` is the PRD's code repo
+    (`plan.prd_repo`, `read_specs`'s own) — passed so a verify block naming
+    it literally, by `cd`, is refused; omitted only by a caller with no PRD
+    to resolve one from, which skips that one check."""
     bad, warn = [], []
     keys = fm_lines(text)
     name = os.path.basename(path)
@@ -632,6 +660,14 @@ def check_spec(path, fm, text, lib, own_feet):
             why = _cannot_fail_why(block)
             if why:
                 bad.append((ver_ln, f"verify block {bi} cannot fail — {why}"))
+                continue
+            hardcoded = _hardcoded_root(block, repo)
+            if hardcoded:
+                bad.append((ver_ln, f"verify block {bi} `cd`s to `{hardcoded}` "
+                            "— collect already runs this block there; "
+                            "naming it again pins the check to one "
+                            "checkout and is the documented way past "
+                            "guarded_run's cwd fence"))
                 continue
             drain = _drains_the_verdict(block)
             if drain:
@@ -705,7 +741,7 @@ def read_specs(prd, lib):
         path = os.path.join(sdir, f)
         text = open(path, encoding="utf-8").read()
         fm, _, _ = plan.parse_prd(path)
-        b, w, fp = check_spec(path, fm, text, lib, own)
+        b, w, fp = check_spec(path, fm, text, lib, own, repo)
         bad += [f"{path}:{ln}: {msg}" for ln, msg in b]
         warn += w
         warn += wide_footprints(repo, f, fp, wide, counts)

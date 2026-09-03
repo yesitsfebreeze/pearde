@@ -54,3 +54,4 @@ One row per verb `pearde` dispatches — what exists, never what to run.
 | `view` | the board's live service: one daemon per machine, watching | — | — | python |
 | `vision` | `pearde vision [board] [--board <path>] [--json\|--next\|--check]` — | — | — | python |
 | `workflow` | the library of how a kind of job is done: read it, check it | — | — | python |
+| `zzdead` | not a real verb | — | — | python |

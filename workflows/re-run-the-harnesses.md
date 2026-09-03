@@ -2,8 +2,8 @@
 atomic: re-run-the-harnesses
 subject: re-run the recorded harnesses and account for every changed count
 date: 2026-08-28
-updated: 2026-09-02
-runs: 83
+updated: 2026-09-03
+runs: 86
 tags:
   - atomic
 ---
@@ -79,3 +79,4 @@ tags:
 | a harness fixture crashes with `ModuleNotFoundError` naming a module this pass added, while the same command is green in the tree you built in | the harness builds its fixture from `git ls-files`, which copies tracked files only: your **modified** file that imports the new module is copied, the **untracked** new module beside it is not | `git add` the new file in the lane before the re-run — an untracked file in a footprint is invisible to every fixture in the set. Reproduce it in one line before and after: `git ls-files -z \| rsync -a --files-from=- --from0 . <scratch>/` then run the gate there |
 | a footprint file of yours is also modified, uncommitted, in the orchestrator's checkout, and the two hunks are on **adjacent** lines | both edits are correct and neither is a conflict with the other's meaning, but a three-way merge cannot keep both automatically — the same adjacency `-U0` hides in a diff | prove it before the merge rather than discovering it in `collect`: clone the checkout to scratch, commit the neighbour's working copy there, `git apply --3way` your own diff, and read whether it conflicts. Name the file, both hunks and the resolution in the report. Do not move your hunk to avoid it — a hunk written to dodge a neighbour's uncommitted line is wrong the moment they land |
 | a block gates on the PRD's slug appearing in a sweep's failing lines, and goes red with the PRD's own probe green | the worker's lane directory is named for the slug, so any neighbour's FAIL line quoting a path inside that lane matches | gate on the **path** of the PRD's own probe — `prds/<prd>/probe/verify.sh` — never on the slug. Measured: two matches for the bare slug against zero for the path, on the same sweep output |
+| a long harness run dies on **exit 144** with no failing line of its own | 144 is 128+16, a signal from outside: another session's `serve.py reap` (or any machine-wide reaper) is killing processes it did not start | `pgrep -fl reap` names the owner and the tree it runs from. Re-take every affected count in the **foreground**; a backgrounded measurement on a board with a live reaper is not evidence. Report the reaper's scoping as a finding against its owner — do not narrow your own set to fit inside its window |

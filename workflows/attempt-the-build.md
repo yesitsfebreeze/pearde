@@ -2,8 +2,10 @@
 atomic: attempt-the-build
 subject: build the contract until it works or hits something undefined
 date: 2026-08-28
-updated: 2026-09-02
-runs: 54
+updated: 2026-09-03
+runs: 57
+tags:
+  - atomic
 ---
 
 # attempt-the-build — the attempt is the analysis
@@ -74,3 +76,4 @@ runs: 54
 | the brief names `probe/run.sh` and only `probe/verify.sh` is on disk | a spec in this PRD's own set contracted the rename, and an earlier pass did it | take the file that exists as the same probe, name both spellings in the report, and check the spec's box against the file rather than against the brief |
 | a harness builds its own repo, commits a base, runs the tool, then asserts `git log --name-only -N` names a file — and the row stays green under a mutation that stops the tool committing anything | the `-N` window reaches back past the tool's own commits into the fixture's base commit, which names that file by construction. The row measures the fixture, not the tool | record each repo's HEAD **before** the run and range the log against it — `git log --name-only --pretty=format: "$HEAD0"..HEAD` — then watch the row go red under the mutant. A count of commits is never the window; the window is the commit the run started from |
 | a fixture that checks the code repo out INSIDE the board refuses with `footprint <p> is in no repo that holds it — looked for <board>/<p>` | `repo_of` resolves a missing `repo:` as the repo *enclosing* the board and never looks below it, so a checkout under the board is invisible and `repo` comes back as the board itself | give the fixture's `prd.md` a `repo: <dir>` key — it is resolved against the board's own root and is how a board says where its code lives. The refusal names the footprint, so the first four reads go to `foot_root`, which is not the function that decided anything |
+| `bash: timeout: command not found` when a sweep wraps each harness | GNU coreutils `timeout` is not on **darwin**; a bare `timeout 300 bash <h>` fails every harness at once and the sweep reads as N reds that never ran | drop the wrapper and run the sweep in the background (`run_in_background`), or `gtimeout` where coreutils is installed. Never read a sweep whose first line is `command not found` as a measurement |

@@ -9,6 +9,7 @@
     read_text(path)                the text, or "" when it cannot be read
     pop_flag(argv, name)           (value, rest) for one `--flag value`
     Collection                     a directory of `<slug>.md` records under the board
+    prd_shape(dir)                 one PRD's (fm, title, body, specs, children, problems)
     run_git(root, *args, ...)      one `git -C root ...`, shaped to each caller's own return-or-raise
     section(text, name, ...)       the body under `## <name>`, shaped to each caller's own match and shape
 
@@ -165,7 +166,15 @@ ISO_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 
 
 def _clean(v):
-    return re.sub(r"\s+#.*$", "", v).strip().strip("\"'")
+    # `^` as well as `\s+`: a value that is ONLY a comment (`est:   # the
+    # weight, only when complexity is absent` — a key's line whose value is
+    # nothing but a trailing note) already had its leading spaces eaten by
+    # the caller's key/value split, so the comment sits at position 0 of
+    # `v` with nothing before it to match `\s+#`. Left unanchored at the
+    # start, that reads as a value rather than an absent one — measured
+    # against @resources/board/prdfile.py `strip_comment`, the reader this
+    # unifies with, which carried the fix first.
+    return re.sub(r"(^|\s+)#.*$", "", v).strip().strip("\"'")
 
 
 def split_frontmatter(text, lists=True):
@@ -222,6 +231,52 @@ def read_text(path, errors="replace"):
         return open(path, encoding="utf-8", errors=errors).read()
     except OSError:
         return ""
+
+
+# ── one PRD's shape ──────────────────────────────────────────────────────────
+
+def prd_shape(dir_path):
+    """One PRD directory read whole: (fm, title, body, specs, children,
+    problems).
+
+    specs is `[(name, fm, title, body), ...]` for every `<name>.md` directly
+    under `specs/`, name order. children is the sorted basenames of every
+    immediate subdirectory that itself holds a `prd.md` — a parked or
+    container child, never a grandchild. problems is every way the shape
+    was short of whole, as one sentence each: `prd.md`'s fence did not
+    close, it closed with no `state:` key, or a spec's fence did not close.
+
+    This is the reading four modules did four ways before: facts and
+    problems only, nothing here decides a transition, a gate or a spec's
+    completeness — that is `plan.dispatchable`'s and `specs.check_spec`'s,
+    unmoved. The board scan's mtime cache sits in front of this, keyed on
+    the file it reads; this is what a cache miss calls."""
+    path = os.path.join(dir_path, "prd.md")
+    fm, title, body = parse_frontmatter(read_text(path))
+    problems = []
+    if fm is None:
+        problems.append(f"{path}: no closed `---` frontmatter fence")
+        fm = {}
+    elif not fm.get("state"):
+        problems.append(f"{path}: no `state:` key")
+
+    specs = []
+    sdir = os.path.join(dir_path, "specs")
+    for f in sorted(os.listdir(sdir)) if os.path.isdir(sdir) else []:
+        if not f.endswith(".md"):
+            continue
+        spath = os.path.join(sdir, f)
+        sfm, stitle, sbody = parse_frontmatter(read_text(spath))
+        if sfm is None:
+            problems.append(f"{spath}: no closed `---` frontmatter fence")
+            sfm = {}
+        specs.append((f[:-3], sfm, stitle, sbody))
+
+    children = sorted(
+        n for n in (os.listdir(dir_path) if os.path.isdir(dir_path) else [])
+        if os.path.isfile(os.path.join(dir_path, n, "prd.md")))
+
+    return fm, title, body, specs, children, problems
 
 
 def atomic_write(path, text):

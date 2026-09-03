@@ -36,6 +36,7 @@ _D = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
                 else os.path.dirname(_D))
 import pearde_path  # noqa: E402 — @resources/pearde_path.py, the one rule
+import common  # noqa: E402 — @resources/common.py, the shared reader; stdlib-only, same tier as pearde_path
 try:
     import quiet  # noqa: E402 — @resources/board/quiet.py, stdlib-only; a broken module denies nothing
 except Exception:
@@ -110,7 +111,6 @@ SCAN = "python3 %s scan" % (pearde_path.script("plan.py") or "plan.py")
 # `resources/<dir>/<mod>.py` matches wherever a module lands: the directory
 # is a wildcard, so a file that moves stays recognised as one of ours.
 TOOLS = re.compile(r"\b(pearde|plan|guard)\.py\b|resources/\w+/\w+\.py")
-STATE_RE = re.compile(r"^state:[ \t]*(.*?)[ \t]*$", re.M)
 
 # A board walked by hand. `find … prd.md`, `grep -r state:`, `ls prds/*/prd.md`
 # — every spelling of the sweep step 1 stopped asking for.
@@ -519,12 +519,12 @@ def another_boards_write(inp, cwd):
 
 
 def fm_state(text):
-    """The `state:` value of a frontmatter block, or None."""
-    if not text.startswith("---"):
-        return None
-    end = text.find("\n---", 3)
-    m = STATE_RE.search(text[3:end] if end > 0 else "")
-    return m.group(1) if m else None
+    """The `state:` value of a frontmatter block, or None — read through
+    @resources/common.py `split_frontmatter`, the one reader every board
+    module now parses a `prd.md` through, so a malformed file reads the
+    same way here as it does to transitions, collect and plan."""
+    fm, _ = common.split_frontmatter(text)
+    return (fm or {}).get("state") or None
 
 
 def after_edit(path, tool, inp):

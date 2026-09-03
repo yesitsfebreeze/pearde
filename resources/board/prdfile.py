@@ -30,6 +30,7 @@ _D = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
                 else os.path.dirname(_D))
 import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
+import common  # noqa: E402 — @resources/common.py, the one frontmatter reader
 import memos as memolib  # noqa: E402 — on the path by the rule
 import questions as qlib  # noqa: E402 — the drill count, one reader with list
 import render as renderlib  # noqa: E402 — on the path by the rule
@@ -37,21 +38,17 @@ import workflows as wflib  # noqa: E402 — on the path by the rule
 from boards import (PASS_FILE, state_dir)  # noqa: E402,F401
 
 
-
-# Frontmatter: match a key by name at any indentation, anywhere in the block.
-# Scalars and simple `- item` lists. Names are unique within one file.
-KEY_RE = re.compile(r"^\s*([A-Za-z][A-Za-z0-9_-]*):\s*(.*?)\s*$")
-ITEM_RE = re.compile(r"^\s*-\s+(.*?)\s*$")
-
-
-def strip_comment(v):
-    # `^` as well as `\s+`: a value that is ONLY a comment is an empty value.
-    # `est:   # the weight, only when complexity is absent` — the template's
-    # own line — parsed to the comment TEXT while the leading run of spaces was
-    # eaten by KEY_RE, so every reader of `est` got a sentence where a duration
-    # was meant. `hours()` read it as 0.0 in silence; `dur()` reports it, which
-    # is how it was found. A `#` inside a word (`repo: a#b`) is still a `#`.
-    return re.sub(r"(^|\s+)#.*$", "", v).strip().strip("\"'")
+# Kept as names: `plan.py` re-exports `strip_comment`, `KEY_RE` and
+# `ITEM_RE` (noqa F401), and `resources/board/specs.py` `fm_lines` matches
+# `plan.KEY_RE` directly. All three are @resources/common.py's now — one
+# frontmatter regex and one comment fix, not a second copy of either.
+# `est:   # the weight, only when complexity is absent` — the template's own
+# line — is why the comment fix exists: the value is nothing but a trailing
+# note, not a sentence, and `hours()` must read it as absent, not as 0.0 in
+# silence.
+strip_comment = common._clean
+KEY_RE = common.KEY_RE
+ITEM_RE = common.ITEM_RE
 
 
 # ── the parse cache ──────────────────────────────────────────────────────────
@@ -140,36 +137,24 @@ def parse_prd(path):
 
 
 def _parse_prd_uncached(path):
+    """(fm, title, body) — the frontmatter read through
+    @resources/common.py `split_frontmatter`, the one reader every board
+    module now shares; what stays here is what a PRD/spec file means beyond
+    that: an empty `key:` block that no `- item` ever filled reads as
+    absent (kept only for `needs`, whose absence and whose empty list are
+    both "nothing owed"), and the title is the body's first `# ` line with
+    a template's `<placeholder>` angle brackets cut off it."""
     text = open(path, encoding="utf-8").read()
-    lines = text.splitlines()
-    fm, body_start = {}, 0
-    if lines and lines[0].strip() == "---":
-        i, cur_list = 1, None
-        while i < len(lines) and lines[i].strip() != "---":
-            line = lines[i]
-            m = KEY_RE.match(line)
-            item = ITEM_RE.match(line)
-            if m:
-                key, val = m.group(1), strip_comment(m.group(2))
-                if val:
-                    fm[key] = val
-                    cur_list = None
-                else:
-                    fm[key] = []
-                    cur_list = key
-            elif item and cur_list is not None:
-                v = strip_comment(item.group(1))
-                if v:
-                    fm[cur_list].append(v)
-            i += 1
-        body_start = i + 1
-    body = "\n".join(lines[body_start:]).strip()
+    fm, body_start = common.split_frontmatter(text)
+    if fm is None:
+        fm, body_start = {}, 0
+    fm = {k: v for k, v in fm.items() if v != [] or k == "needs"}
+    body = "\n".join(text.splitlines()[body_start:]).strip()
     title = None
     for line in body.splitlines():
         if line.startswith("# "):
             title = line[2:].strip().strip("<>").strip()
             break
-    fm = {k: v for k, v in fm.items() if v != [] or k == "needs"}
     return fm, title, body
 
 

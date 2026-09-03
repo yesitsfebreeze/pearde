@@ -2324,7 +2324,17 @@ def collect_one(board, rel, opts, out=print):
             continue
         staged_roots.append(root)
         if p["add"]:
-            git_out(root, "add", "--", *p["add"])
+            # `-f`: every path here already came off `dirty_paths()` —
+            # tracked (modified/deleted), riders, or `--widen`, never a
+            # fresh untracked file `.gitignore` would otherwise hide from
+            # that scan. `git add` still refuses an EXPLICIT pathspec
+            # that resolves inside an ignored directory even when the
+            # path is tracked (`prds/**/probe/` in the board's own
+            # `.gitignore`, and every probe file force-tracked before
+            # that rule existed) — `-f` is what makes the PRD folder's
+            # "added whole, always" promise true for those, not a
+            # widening of what gets swept in.
+            git_out(root, "add", "-f", "--", *p["add"])
         # a shared file is staged as the working file with the inherited
         # hunks reversed — never as a patch with hunks left out, which
         # `git apply` places by a line number that counts the missing ones

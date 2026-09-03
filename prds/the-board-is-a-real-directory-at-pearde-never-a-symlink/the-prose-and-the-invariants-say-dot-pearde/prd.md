@@ -6,6 +6,7 @@ complexity: 17
 blast-radius: mid
 workflow: probe-then-spec
 actual: 0.42h
+commit: d0a8da0 ba10c8b
 ---
 
 # the-prose-and-the-invariants-say-dot-pearde — Every reference page, index row, invariant script and code comment naming the board directory names `.pearde/`, and *Where the board is* reads the new order

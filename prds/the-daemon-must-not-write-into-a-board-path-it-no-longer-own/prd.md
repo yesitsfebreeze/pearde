@@ -6,6 +6,7 @@ complexity: 20
 blast-radius: high
 workflow: probe-then-spec
 actual: 12.51h
+commit: 39c0cab 06743eb
 ---
 
 # the daemon must not write into a board path it no longer owns

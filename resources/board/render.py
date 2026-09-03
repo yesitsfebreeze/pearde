@@ -388,6 +388,7 @@ __CSS__</style>
     ><a href="#view=timeline" data-v="timeline" class="on">plan</a
     ><a href="#view=board" data-v="board">board</a
     ><a href="#view=analytics" data-v="analytics">analytics</a
+    ><a href="#view=health" data-v="health">health</a
     ><a href="#view=asks" data-v="asks">asks<span class="badge" id="askbadge"></span></a
     ><a href="#view=list" data-v="list">list</a
     ><a href="#view=memos" data-v="memos">memos</a
@@ -500,6 +501,10 @@ __CSS__</style>
   <h2 class="sect">the analytics</h2>
   <div id="statsbar"><span id="stats"></span></div>
   <div id="tiles"></div><div id="charts"></div>
+</section>
+<section data-view="health" id="s-health">
+  <h2 class="sect">what resists being worked</h2>
+  <pearde-health id="health"></pearde-health>
 </section>
 <section data-view="asks" id="s-asks">
   <h2 class="sect">waiting on you</h2>

@@ -125,7 +125,7 @@ const file = served ? arg : path.resolve(arg);
     ["live apply hook wired", r.apply, ""],
     ["hold hook still wired", r.hold, ""],
     ["the toolbar built", r.titlebar, ""],
-    ["seven section anchors", r.views === 7, `got ${r.views}`],
+    ["eight section anchors", r.views === 8, `got ${r.views}`],
     ["the canvas is sized", r.canvasPainted, ""],
     ["the gantt drew", r.draws > 20, `${r.draws} draw ops`],
     ["the frontier column built", r.land, ""],
@@ -193,7 +193,8 @@ const file = served ? arg : path.resolve(arg);
     () => !!(window.__PAYLOAD__ && window.__PAYLOAD__.virtual));
   const ORDER = VIRTUAL
     ? ["boards", "timeline", "board", "analytics", "asks", "list", "memos"]
-    : ["timeline", "board", "analytics", "asks", "list", "memos", "report"];
+    : ["timeline", "board", "analytics", "health", "asks", "list", "memos",
+       "report"];
   const FIRST = VIRTUAL ? "boards" : "timeline";
   checks.push(["the sections are in the PRD's order",
                page1.order.join(",") === ORDER.join(","), page1.order.join(" ")]);

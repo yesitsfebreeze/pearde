@@ -3334,7 +3334,8 @@ function drawBoards() {
 
 function drawAll() {
   if (VIRTUAL) drawBoards();
-  drawBoard(); drawList(); drawAsks(); drawAnalytics(); drawMemos();
+  drawBoard(); drawList(); drawAsks(); drawAnalytics(); drawHealth();
+  drawMemos();
   drawReport();
   resize(); retree(); place();
 }
@@ -3458,6 +3459,71 @@ function drawBoard() {
   const el = $("board");
   el.served = EDITABLE;
   el.rows = ALL;
+  el.requestUpdate();
+}
+
+/* ── health: the ranking, decoded ──────────────────────────────────────────
+   `.pearde/health/ranking.md`, worst first, off the same payload as every
+   other section — no second fetch, no watcher of its own. `pearde health
+   score` is the only writer; this reads what it wrote and never rescans the
+   tree. A board with no record renders the one line `not scored`, the
+   `.blank` shape every other empty section already uses.
+
+   Each axis is a value beside the two numbers that are its line: under the
+   first is no problem (`ok`), over the second is the whole problem
+   (`danger`), between is `warn` — the same three-way vocabulary `#list`
+   already spends on state dots. The colour is beside the number, never
+   instead of it: a screen reader gets the same three words the eye gets a
+   hue for.                                                                 */
+const AXIS_LABEL = {lines: "lines", branching: "branching", longest: "longest",
+                    fan_out: "fan out", fan_in: "fan in", links: "links"};
+
+function axisSide(v, band) {
+  if (v == null || !band) return "";
+  const [lo, hi] = band;
+  return v <= lo ? "ok" : v >= hi ? "danger" : "warn";
+}
+
+class PeardeHealth extends LitElement {
+  static properties = { data: {} };
+  createRenderRoot() { return this; }
+
+  cell(axis, a) {
+    if (!a || a.value == null) return html`<td class="dim">—</td>`;
+    const side = axisSide(a.value, a.band);
+    return html`<td class=${side}
+      title=${AXIS_LABEL[axis] + " " + a.value + " — the line runs " +
+              a.band[0] + " to " + a.band[1]}>${a.value}</td>`;
+  }
+
+  row(r) {
+    const under = this.data.floor != null && r.score < this.data.floor;
+    return html`<tr class=${under ? "under" : ""}>
+      <td class="score">${r.score}</td>
+      <td class="file">${r.file}</td>
+      ${Object.keys(AXIS_LABEL).map(a => this.cell(a, r.axes[a]))}
+      <td class="worst">${r.worst.join(", ") || "—"}</td>
+    </tr>`;
+  }
+
+  render() {
+    if (!this.data)
+      return html`<div class="blank">not scored — <code>pearde health
+        score</code> writes the record this reads</div>`;
+    return html`<table><thead><tr>
+      <th>score</th><th>file</th>
+      ${Object.values(AXIS_LABEL).map(l => html`<th>${l}</th>`)}
+      <th>worst</th>
+    </tr></thead><tbody>${this.data.rows.map(r => this.row(r))}</tbody></table>`;
+  }
+}
+if (!customElements.get("pearde-health"))
+  customElements.define("pearde-health", PeardeHealth);
+
+function drawHealth() {
+  const el = $("health");
+  if (!el) return;
+  el.data = DATA.health || null;
   el.requestUpdate();
 }
 
@@ -4788,9 +4854,12 @@ if (VIRTUAL) {
   const np = $("newprd"); if (np) np.remove();
   // the report is one board's state written for a person. Several boards
   // have several of them, and picking one would be a lie about the rest —
-  // the dashboard is what this page says instead
+  // the dashboard is what this page says instead. The ranking is the same
+  // shape of fact: one repo's own `.pearde/health/`, and a merge across
+  // several would be a table of files that do not compete on one scale
   for (const sel of ['#views a[data-v="report"]', "#s-report", "#whatsup",
-                     '#state .act[data-go*="report"]']) {
+                     '#state .act[data-go*="report"]',
+                     '#views a[data-v="health"]', "#s-health"]) {
     const el = document.querySelector(sel); if (el) el.remove();
   }
   // the inspector reads here and writes nowhere: the door out is the row's

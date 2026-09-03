@@ -765,6 +765,25 @@ kbd{font:10.5px ui-monospace,SFMono-Regular,monospace;background:var(--fill);
 #list td .st.warn{color:var(--warn)}
 #list td .st.danger{color:var(--danger)}
 #list .none{padding:26px;text-align:center;color:var(--ink3);font-size:12.5px}
+#health{background:var(--content);border:.5px solid var(--sep);
+  border-radius:var(--r-lg);overflow:auto;box-shadow:var(--shadow)}
+#health table{width:100%;border-collapse:separate;border-spacing:0}
+#health th{position:sticky;top:0;z-index:2;background:var(--glass);
+  backdrop-filter:saturate(180%) blur(20px);
+  -webkit-backdrop-filter:saturate(180%) blur(20px);
+  border-bottom:.5px solid var(--sep);font-size:11px;font-weight:590;
+  color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;
+  padding:9px 10px;text-align:left;white-space:nowrap}
+#health td{padding:6px 10px;border-bottom:.5px solid var(--sep-2);
+  font-variant-numeric:tabular-nums;font-size:12px;white-space:nowrap}
+#health tbody tr:last-child td{border-bottom:none}
+#health tr.under td.score{font-weight:590;color:var(--danger)}
+#health td.file{white-space:normal;font-size:11.5px;color:var(--ink2)}
+#health td.dim{color:var(--ink3)}
+#health td.ok{color:var(--ok)}
+#health td.warn{color:var(--warn)}
+#health td.danger{color:var(--danger)}
+#health td.worst{color:var(--ink3);font-size:11.5px}
 
 /* ── asks: the board waiting on a person, and the place to answer ───────── */
 /* masonry: cards pack under each other at their own height — CSS columns,

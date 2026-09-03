@@ -846,9 +846,64 @@ def read_ranking(board):
             problems.append(f"{rel}: a row whose score is `{c[0]}`")
             continue
         rows.append({"score": sc, "file": c[1], "language": c[2],
+                     "lines": _cell_num(c[3]), "branching": _cell_num(c[4]),
+                     "longest": _cell_num(c[5]), "fan_in": _cell_num(c[6]),
+                     "fan_out": _cell_num(c[7]), "links": _cell_num(c[8]),
+                     "worst": [] if c[9] == "—" else
+                              [w.strip() for w in c[9].split(",")],
                      "why": c[9]})
     fm["rows"] = rows
     return fm, problems
+
+
+def _cell_num(s):
+    """A ranking table cell back to a number, or None — `_val` is the writer,
+    this is its reader."""
+    if s in (None, "", "none"):
+        return None
+    try:
+        return float(s) if "." in s else int(s)
+    except ValueError:
+        return None
+
+
+def axis_band(axis, kind):
+    """(lo, hi) for one axis — the two numbers `norm` treats as the whole
+    problem, at the file's own kind. The scale (`log`/`lin`) is `norm`'s
+    business, not a reader's; a row only needs which side of the line it is
+    on."""
+    t = THRESHOLDS
+    if axis == "lines":
+        return t["lines"][kind][:2]
+    if axis == "branching":
+        return t["branch"][:2]
+    if axis == "longest":
+        return t["longest"][kind][:2]
+    return t[axis][:2]
+
+
+def view_payload(board):
+    """What the view's health section renders: the ranking, worst first,
+    each row's own numbers next to the band that is the line for its kind.
+    None when there is no record yet — the section says `not scored`. Reads
+    `ranking.md` only, the same file `list_ranking` does; a file's other six
+    numbers are on its own note, fetched on click, never here."""
+    rank, _ = read_ranking(board)
+    if rank is None:
+        return None
+    rows = []
+    for r in rank["rows"]:
+        kind = "document" if r["language"] in DOCUMENT else "code"
+        rows.append({
+            "score": r["score"], "file": r["file"], "worst": r["worst"],
+            "axes": {a: {"value": r[a], "band": list(axis_band(a, kind))}
+                     for a in AXES},
+        })
+    try:
+        floor = int(rank.get("floor"))
+    except (TypeError, ValueError):
+        floor = settings(board)["floor"]
+    return {"floor": floor, "rows": rows}
 
 
 def check(board):

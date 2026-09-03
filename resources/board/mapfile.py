@@ -30,6 +30,7 @@ _D = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
                 else os.path.dirname(_D))
 import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
+import health as healthlib  # noqa: E402 — the ranking, read fresh per payload
 import memos as memolib  # noqa: E402 — on the path by the rule
 import questions as qlib  # noqa: E402 — the drill count, one reader with list
 import render as renderlib  # noqa: E402 — on the path by the rule
@@ -256,6 +257,10 @@ def gantt_payload(board, prds, mp, settings):
         "tasks": tasks,
         # what this machine is holding that main has never seen
         "landing": land, "repos": repos,
+        # the ranking, worst first — read fresh off `health/ranking.md` on
+        # every payload, the same file `pearde health list` reads. None on a
+        # board with no health record; the section says `not scored`
+        "health": healthlib.view_payload(board),
     }
 
 

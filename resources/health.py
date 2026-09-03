@@ -574,7 +574,8 @@ def load_graph(board):
             continue
         sf = os.path.normpath(str(sf))
         file_of[nid] = sf
-    links = [l for l in (data.get("links") or []) if isinstance(l, dict)]
+    links = [l for l in (data.get("links") or [])
+             if isinstance(l, dict) and l.get("root") != "kb"]
     return {"commit": commit, "file_of": file_of, "links": links}, None
 
 
@@ -585,7 +586,7 @@ def graph_axes(graph, files):
     known = {f for f in graph["file_of"].values() if f in want}
     if not known or len(known) * 2 < len(want):
         return None, (f"graph paths match {len(known)} of {len(want)} files "
-                      "— built from another root?")
+                      "— stale or partial extract?")
     calls, callers = {f: set() for f in want}, {f: set() for f in want}
     for l in graph["links"]:
         if l.get("relation") not in GRAPH_RELATIONS:

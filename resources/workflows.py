@@ -28,6 +28,7 @@ sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
                 else os.path.dirname(_D))
 import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
 
+import common  # noqa: E402
 import memos  # noqa: E402
 from memos import ISO_RE, parse  # noqa: E402
 
@@ -58,16 +59,7 @@ def _cells(line):
 
 def section(body, name):
     """The lines under `## <name>`, up to the next `##`. None when absent."""
-    out, on = [], False
-    for line in body.splitlines():
-        if line.startswith("## "):
-            if on:
-                break
-            on = line[3:].strip() == name
-            continue
-        if on:
-            out.append(line)
-    return out if on else None
+    return common.section(body, name, lines=True, ci=False)
 
 
 def steps(body):
@@ -93,12 +85,9 @@ def steps(body):
 
 
 def find_board(arg):
-    """@resources/memos.py resolves the board; only the prefix on the failure
-    is ours, so the error names the command that was run."""
-    try:
-        return memos.find_board(arg)
-    except SystemExit as e:
-        sys.exit(str(e).replace("memos:", "workflows:", 1))
+    """@resources/common.py resolves the board; only the prefix on the
+    failure is ours, so the error names the command that was run."""
+    return common.find_board(arg, "workflows")
 
 
 def workflows_dir(board):

@@ -42,13 +42,11 @@ _D = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
                 else os.path.dirname(_D))
 import pearde_path  # noqa: E402,F401 — @resources/pearde_path.py, the one rule
+import common  # noqa: E402
 import plan as planlib  # noqa: E402
 
 # `## Questions`, `## Questions — from the analyst pass`, `## Questions for
 # the human`. The suffix is the pass's own label and is never the contract.
-Q_RE = re.compile(r"^##\s+Questions\b", re.M)
-A_RE = re.compile(r"^##\s+Answers\b", re.M)
-H2_RE = re.compile(r"^##\s+\S", re.M)
 
 # One item inside the pass. Two spellings are live on real boards: `###`
 # heads — `### 1. …`, `### Q1: …` — and numbered items at the top level of the
@@ -106,16 +104,12 @@ def parse(path):
     return fm, COMMENT_RE.sub("", body)
 
 
-def sections(body, pattern):
-    """Every `## <name>` section the pattern matches: (heading, its lines)."""
-    out = []
-    for m in pattern.finditer(body):
-        head_end = body.find("\n", m.start())
-        head_end = len(body) if head_end < 0 else head_end
-        nxt = H2_RE.search(body, head_end)
-        out.append((body[m.start():head_end].strip(),
-                    body[head_end:nxt.start() if nxt else len(body)]))
-    return out
+def sections(body, name):
+    """Every `## <name>` section — matched as a prefix with a word boundary,
+    so `## Questions (pass 1, answered)` still matches `name="Questions"` —
+    up to the next `##`: (heading text, its body)."""
+    return common.section(body, name, all=True, prefix=True, word=True,
+                          heading=True, ci=False)
 
 
 def questions_in(text):
@@ -342,15 +336,15 @@ def check(board):
     slugs = slugs_of(board)
     for rel, path in prds(board):
         fm, body = parse(path)
-        qs = sections(body, Q_RE)
-        ans = sections(body, A_RE)
+        qs = sections(body, "Questions")
+        ans = sections(body, "Answers")
         state = str(fm.get("state", "")).strip()
         mode = str(fm.get("mode", "")).strip()
         closed = state.lower() in CLOSED
 
         for head, text in qs:
             if not text.strip():
-                bad.append(f"{rel}: `{head}` with nothing under it — a heading "
+                bad.append(f"{rel}: `## {head}` with nothing under it — a heading "
                            "that says a pass exists when none does")
                 continue
             if re.search(r"\banswered\b", head, re.I):
@@ -405,10 +399,10 @@ def check(board):
         # missing pass is a live gap, not a record.
         for head, text in ans:
             if not text.strip():
-                bad.append(f"{rel}: `{head}` with nothing under it — "
+                bad.append(f"{rel}: `## {head}` with nothing under it — "
                            "unanswered reads the same as unasked")
             elif not any(t.strip() for _h, t in qs) and not closed:
-                bad.append(f"{rel}: `{head}` with no `## Questions` above it — "
+                bad.append(f"{rel}: `## {head}` with no `## Questions` above it — "
                            "an answer to a question nobody wrote down")
             elif not closed:
                 for qid in unread_answers(text):
@@ -495,9 +489,9 @@ def unanswered(board):
         if str(fm.get("state", "")).strip().lower() in CLOSED:
             continue
         answered = {"Q" + m.group(1).upper()
-                    for _h, atext in sections(body, A_RE)
+                    for _h, atext in sections(body, "Answers")
                     for m in ANSWER_ID_RE.finditer(atext)}
-        for _head, text in sections(body, Q_RE):
+        for _head, text in sections(body, "Questions"):
             if re.search(r"\banswered\b", _head, re.I):
                 continue
             for q in questions_in(text):
@@ -526,7 +520,7 @@ def rows(board):
         open_qs[rel] = open_qs.get(rel, 0) + 1
     for rel, path in prds(board):
         fm, body = parse(path)
-        na = sum(1 for _h, t in sections(body, A_RE) if t.strip())
+        na = sum(1 for _h, t in sections(body, "Answers") if t.strip())
         if open_qs.get(rel, 0) or na:
             yield rel, open_qs.get(rel, 0), na, str(fm.get("state", "-"))
 
@@ -537,49 +531,10 @@ def rows(board):
 # `questions:` prefix and exit 1, as they always have.
 
 
-def die(msg, code=1):
-    print(f"questions: {msg}", file=sys.stderr)
-    sys.exit(code)
-
-
-def board_scanned(d):
-    """The board of `d` that is called something else — one immediate child
-    holding `settings.md`, and a refusal when there are two."""
-    found = planlib.named_boards(d)
-    if len(found) > 1:
-        die(planlib.two_boards(d, found))
-    return found[0] if found else None
-
-
-def board_in(d):
-    """The board inside project dir `d` — the named one, then the scanned one."""
-    return planlib.board_named(d) or board_scanned(d)
-
-
-def board_above(d):
-    """The board `d` belongs to — two passes, a named board winning at any
-    depth over a discovered one nearer the cwd."""
-    return (planlib.walk_up(d, planlib.board_named)
-            or planlib.walk_up(d, board_scanned))
-
-
 def find_board(arg):
-    if arg:
-        p = os.path.abspath(arg)
-        if os.path.basename(p) in planlib.BOARD_DIRS and planlib.is_board_dir(p):
-            return planlib.board_link(p)
-        b = board_in(p)
-        if b:
-            return b
-        # the board named directly, under whatever it is called — asked last,
-        # so a project holding one still resolves to the board inside it
-        if os.path.isfile(os.path.join(p, planlib.SETTINGS)):
-            return p
-        die(f"no {planlib.BOARD_DIR}/ board at {arg}")
-    b = board_above(os.getcwd())
-    if b:
-        return b
-    die(f"no {planlib.BOARD_DIR}/ board found walking up from the cwd")
+    """@resources/common.py resolves the board; only the prefix on the
+    failure is ours, so the error names the command that was run."""
+    return common.find_board(arg, "questions")
 
 
 def main(argv):

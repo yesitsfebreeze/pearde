@@ -25,7 +25,6 @@ import json
 import math
 import os
 import re
-import subprocess
 import sys
 
 _D = os.path.dirname(os.path.abspath(__file__))
@@ -210,12 +209,9 @@ _text = common.read_text
 
 
 def _git(root, *args):
-    try:
-        r = subprocess.run(["git", "-C", root] + list(args),
-                           capture_output=True, text=True, timeout=30)
-    except (OSError, subprocess.TimeoutExpired):
-        return None
-    return r.stdout if r.returncode == 0 else None
+    """`git -C root <*args>`'s stdout, `None` on any failure — @resources/common.py."""
+    return common.run_git(root, *args, timeout=30, check=True, default=None,
+                          stdout=True)
 
 
 def head_commit(root):

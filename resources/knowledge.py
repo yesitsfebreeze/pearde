@@ -172,45 +172,24 @@ CONFIG = {
 
 # --- frontmatter / note parsing ---------------------------------------------
 
-FM_RE = re.compile(r"\A---\n(.*?)\n---\n?", re.DOTALL)
 WIKILINK_RE = re.compile(r"\[\[([^\]|#]+)(?:[|#][^\]]*)?\]\]")
 
 
 def parse_frontmatter(text):
-    """Return (dict-of-keys, body). Lists stay lists; scalars stay strings;
-    list items keep their quotes stripped but nothing else is coerced."""
-    match = FM_RE.match(text)
-    if not match:
+    """Return (dict-of-keys, body). @resources/common.py reads the fence, the
+    keys and the multi-line `- item` lists; the wiki's own inline
+    `key: [a, b]` shorthand is re-read here, and a doubled bracket
+    (`[[a wikilink]]`) stays the string it is."""
+    fm, start = common.split_frontmatter(text, lists=True)
+    if fm is None:
         return {}, text
-    meta, current_key, current_list = {}, None, None
-    for line in match.group(1).split("\n"):
-        if not line.strip() or line.strip().startswith("#"):
-            continue
-        item = re.match(r"^  - \"?(.+?)\"?\s*$", line)
-        if item and current_key is not None:
-            # `current_list` is None under a key that had a scalar value, so
-            # an indented item there is a malformed file, not a list. Skip
-            # the line: one stray dash in one note must not raise out of the
-            # parser and take the whole verb down with it.
-            if current_list is not None:
-                current_list.append(item.group(1))
-            continue
-        pair = re.match(r"^([A-Za-z_][\w-]*):\s*(.*)$", line)
-        if pair:
-            key, value = pair.group(1), pair.group(2)
-            if value == "":
-                current_key, current_list = key, []
-                meta[key] = current_list
-            else:
-                current_key, current_list = key, None
-                if value.startswith("[") and value.endswith("]"):
-                    inner = value[1:-1]
-                    meta[key] = [v.strip().strip('"') for v in inner.split(",") if v.strip()] if inner.strip() else []
-                else:
-                    meta[key] = value.strip().strip('"')
-        else:
-            current_key, current_list = None, None
-    return meta, text[match.end():]
+    for key, value in list(fm.items()):
+        if (isinstance(value, str) and value.startswith("[")
+                and not value.startswith("[[") and value.endswith("]")):
+            inner = value[1:-1]
+            fm[key] = ([v.strip().strip('"') for v in inner.split(",") if v.strip()]
+                       if inner.strip() else [])
+    return fm, "\n".join(text.splitlines()[start:])
 
 
 class Note:

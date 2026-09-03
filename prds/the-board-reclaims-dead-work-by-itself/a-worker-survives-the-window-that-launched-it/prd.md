@@ -5,6 +5,7 @@ priority: 90
 complexity: 38
 blast-radius: mid
 workflow: probe-then-spec
+commit: 7722ba7 155b2f3
 ---
 
 # a worker survives the window that launched it

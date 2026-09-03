@@ -3,8 +3,18 @@
 # count at the end. The board is built in a temp dir and removed at exit;
 # nothing here touches the real board.
 set -u
-HERE="$(cd "$(dirname "$0")" && pwd)"
-REPO="$(cd "$HERE/../../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
+REPO="$ROOT"
 T="$REPO/resources/board/transitions.py"
 D="$(mktemp -d)"
 S="$(mktemp -d)"     # scratch outside the fixture's git repo
@@ -155,9 +165,9 @@ check "  …the line names the qualified PRD" "$([[ "$OUT" == "▸ @example/land
 rm -rf "$M"
 
 echo "COMMANDS"
-check "COMMANDS exposes the nine names" "$(python3 -c "
+check "COMMANDS exposes the ten names" "$(python3 -c "
 import sys; sys.path.insert(0,'$REPO/resources/board'); import transitions as t
-assert sorted(t.COMMANDS)==['add','answer','claim','defer','release','retry','set','sweep','unblock'], sorted(t.COMMANDS)
+assert sorted(t.COMMANDS)==['add','answer','checkpoint','claim','defer','release','retry','set','sweep','unblock'], sorted(t.COMMANDS)
 assert all(callable(f) for f in t.COMMANDS.values())
 "; echo $?)"
 

@@ -8,6 +8,7 @@ needs:
   - a-session-ledger-names-who-holds-what-and-reaps-what-is-gone
 workflow: probe-then-spec
 actual: 9.98h
+commit: 4e311b8
 ---
 
 # board-commands-run-in-the-session-s-tree-not-the-checkout — every board command resolves the running session's worktree as the code repo instead of the board's parent, and a session's commits reach the branch a person reads

@@ -8,6 +8,7 @@ needs:
   - a-session-ledger-names-who-holds-what-and-reaps-what-is-gone
 workflow: probe-then-spec
 actual: 9.44h
+commit: ba69efa a5d2d18
 ---
 
 # no-destructive-git-runs-in-a-tree-the-session-does-not-own — reset --hard`, `checkout --`, `clean` and a real `stash` are refused in any tree the running session does not own — in the board's own code and in a session's own shell

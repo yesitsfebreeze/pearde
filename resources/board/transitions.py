@@ -10,6 +10,7 @@
     transitions.py unblock <prd>
     transitions.py set <prd> <state> [--force] [--worker <worker>]
     transitions.py sweep [--apply]
+    transitions.py checkpoint <prd>
 
 Every command: `--board <path>` names the board (default: walk up from the
 cwd). `--as <id>` is the persona on the progress line, else `PEARDE_AS` from
@@ -45,6 +46,12 @@ no hook sees a command.
 file of the PRD's has moved for `claim-ttl` — and `--apply` moves
 `analyzing → open` and `claimed → failed`, never one `prds/.pass.md`
 names, never an analyst whose specs are on disk.
+
+`sweep` commits what stands in a lane before it drops the worktree, and
+`checkpoint <prd>` is that same commit on demand, on a live claim: it moves
+no state, writes no board file, and leaves the worktree where it is. Both
+are `lanes.commit_all` — the one mechanism that makes a worker's build
+survive the window that launched it.
 
 `COMMANDS` is what the dispatcher discovers. Each entry takes the argument
 list after the command name and returns the exit code.
@@ -998,14 +1005,67 @@ def drop_lane(board, rel, out=print):
     if not root or not laneslib.exists(board, rel):
         return False
     left = laneslib.dirty(board, rel)
+    # The checkpoint, before the worktree goes. `remove --force` takes the
+    # dirt with it, and on 2026-09-03 that cost 44 paths across four lanes:
+    # the worker had built and never committed, and the sweep's own line
+    # said the branch was kept when the branch held nothing of the build.
+    # One commit on `lane/<slug>` turns that line true — a death now costs
+    # the verdict, not the build.
+    sha = None
+    if left:
+        try:
+            sha = laneslib.commit_all(
+                board, rel,
+                f"sweep checkpoint before drop — {rel}, "
+                f"{len(left)} path(s) standing")
+        except laneslib.LaneError as e:
+            # git said no — a locked index, a broken ref. The sweep still
+            # has to release the claim, so the drop happens and is reported
+            # as it was before this line existed.
+            out(f"sweep: {rel} checkpoint failed — {e}")
     try:
         laneslib.remove(board, collectlib.repo_of(prd, board, root), rel)
     except laneslib.LaneError as e:
         out(f"sweep: lane left standing — {e}")
         return False
+    if sha:
+        tail = f" · {len(left)} path(s) committed as {sha}"
+    elif left:
+        tail = f" · {len(left)} uncommitted path(s) dropped"
+    else:
+        tail = ""
     out(f"sweep: {rel} lane removed · branch {laneslib.branch_of(rel)} kept"
-        + (f" · {len(left)} uncommitted path(s) dropped" if left else ""))
+        + tail)
     return True
+
+
+def cmd_checkpoint(board, args, persona):
+    """commit everything standing in a claim's lane to `lane/<slug>` — the work outlives the window"""
+    if len(args.pos) != 1:
+        raise Refused("checkpoint <prd>")
+    import lanes as laneslib
+    prds = planlib.scan(board)
+    rel = resolve(prds, args.pos[0])
+    if not laneslib.exists(board, rel):
+        raise Refused(f"{rel} holds no lane — nothing to checkpoint at "
+                      f"{laneslib.lane_dir(board, rel)}")
+    left = laneslib.dirty(board, rel)
+    # `--dry` is asked BEFORE the clean-lane branch: a dry run answers the
+    # same question either way — how many paths a real run would take —
+    # and answering `nothing standing` to `--dry` would say nothing about
+    # what the command does.
+    if args.dry:
+        print(f"checkpoint: {rel} would commit {len(left)} path(s) to "
+              f"{laneslib.branch_of(rel)}")
+        return 0
+    if not left:
+        print(f"checkpoint: {rel} lane clean, nothing standing")
+        return 0
+    sha = laneslib.commit_all(
+        board, rel, f"checkpoint — {rel}, {persona}, {now()}")
+    print(f"checkpoint: {rel} {len(left)} path(s) committed as {sha} on "
+          f"{laneslib.branch_of(rel)}")
+    return 0
 
 
 # ── the surface ───────────────────────────────────────────────────────────────
@@ -1019,7 +1079,7 @@ Flags = planlib.Flags
 DRY = ("dry",)
 
 # The declaration. `--as` and `--board` are every command's here; `--dry` is
-# every command's that writes — all nine do.
+# every command's that writes — all ten do.
 FLAGS = {
     "add":     Flags(("as", "board", "priority", "body", "parent"), DRY),
     "claim":   Flags(("as", "board"), DRY),
@@ -1030,6 +1090,7 @@ FLAGS = {
     "unblock": Flags(("as", "board"), DRY),
     "set":     Flags(("as", "board", "worker"), ("force",) + DRY),
     "sweep":   Flags(("as", "board"), ("apply",) + DRY),
+    "checkpoint": Flags(("as", "board"), DRY),
 }
 
 
@@ -1106,7 +1167,7 @@ COMMANDS = {name: _command(name, fn) for name, fn in (
     ("add", cmd_add), ("claim", cmd_claim), ("release", cmd_release),
     ("answer", cmd_answer), ("defer", cmd_defer), ("retry", cmd_retry),
     ("unblock", cmd_unblock), ("set", cmd_set),
-    ("sweep", cmd_sweep))}
+    ("sweep", cmd_sweep), ("checkpoint", cmd_checkpoint))}
 
 
 def main(argv):

@@ -58,6 +58,14 @@ DEAD_PAT = re.compile(
     r"insufficient[_ ]quota|429 |402 |rate.?limit", re.I)
 RETRIES = 1     # a dead worker is re-dispatched once; a second death is named
 
+# How often a live worker's lane is committed while it runs. Detaching the
+# child (`start_new_session=True` in `launch`) keeps THIS dispatcher's death
+# from ending it; nothing keeps a worker's own window from ending, and on
+# 2026-09-03 eighteen workers verified alive and growing stopped to the
+# second with their lanes dirty. A commit on a timer is what makes that cost
+# the verdict instead of the build. 0 turns it off.
+CHECKPOINT_S = float(os.environ.get("PEARDE_CHECKPOINT_S", "120"))
+
 
 class Job:
     """One launched pass worker: the row it is working, the process, and the
@@ -72,6 +80,7 @@ class Job:
         self.attempt = attempt
         self.t0 = time.time()
         self.verdict = None      # None while live; "ok"/"dead: …"/"exit N"
+        self.ckpt_t = self.t0    # last lane checkpoint; see `checkpoint`
 
     @property
     def addr(self):
@@ -87,6 +96,30 @@ class Job:
                 return fh.read()[-n:]
         except OSError:
             return ""
+
+    def checkpoint(self, log):
+        """Commit what stands in this worker's lane to `lane/<slug>`, and
+        return the sha. Silent where the PRD has no lane — a worker that
+        writes in the checkout has nothing here to commit — and silent
+        where the lane is clean, because `lanes.commit_all` stages nothing
+        and returns None.
+
+        A git that says no is logged and skipped, never raised: the most
+        likely one is the worker's own git holding the index at this
+        instant, and the next interval retries. A dispatcher that died on
+        its worker's index would cost the whole run to save one commit."""
+        import lanes as laneslib
+        try:
+            sha = laneslib.commit_all(
+                self.row["path"], self.row["rel"],
+                f"run checkpoint — {self.addr}, "
+                f"{time.strftime('%F %T')}")
+        except laneslib.LaneError as e:
+            log(f"ckpt {self.addr} · skipped — {e}")
+            return None
+        if sha:
+            log(f"ckpt {self.addr} · committed as {sha}")
+        return sha
 
     def poll(self):
         """(finished, verdict). A live process is (False, None).
@@ -265,6 +298,20 @@ def dispatch(entries, rows, nslots, ad, dry=False, once=False,
                 dead.append((j.addr, why))
                 moved = True
         live = still
+
+        # ── checkpoint ──────────────────────────────────────────────────────
+        # Every live worker's lane, every CHECKPOINT_S. This is the only
+        # edge that reaches a worker that is still running: the sweep's
+        # commit and `pearde checkpoint` both act on a claim nobody is
+        # writing at that moment, and neither fires while a window is about
+        # to be interrupted.
+        if CHECKPOINT_S > 0:
+            t = time.time()
+            for j in live:
+                if t - j.ckpt_t >= CHECKPOINT_S:
+                    j.checkpoint(log)
+                    j.ckpt_t = t
+
         if moved and tick:
             # a transition is where the progress line is printed on this
             # board, and a dispatch across the machine is no exception

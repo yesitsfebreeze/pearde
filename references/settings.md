@@ -61,7 +61,7 @@ A key missing from the live copy reads at its default.
 **No persona key.** Who is working is session state — `engineer` at the
 start, switched by saying so, gone with the session;
 @references/parts/personas.md says why a persisted one is worse than none.
-A hand-added `persona:` is an unknown key: preserved, read by nothing.
+A hand-added `persona:` is an unknown key: preserved, read by nothing. <!-- claims: ignore -->
 
 ## Read
 

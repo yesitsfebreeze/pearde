@@ -88,7 +88,7 @@ git log --follow -- .pearde/prds/<name>
 
 | rejected | why |
 |---|---|
-| A `pearde archive` command | the board's idiom for a directory `scan` ignores is a naming trick, not an entry in `plan.py`'s prune list — `memos/` and `workflows/` prove the shape. Script the two `git` calls once running them by hand gets old |
+| A `pearde archive` command <!-- claims: ignore --> | the board's idiom for a directory `scan` ignores is a naming trick, not an entry in `plan.py`'s prune list — `memos/` and `workflows/` prove the shape. Script the two `git` calls once running them by hand gets old |
 | Moving the whole directory, `prd.md` and all | still matches `"prd.md" in files` — `scan` keeps walking, `doctor`'s count holds, and the walk cost is unfixed |
 | A tenth `state:` meaning, `state: archived` | still a live directory under `.pearde/prds/` — the walk cost is the size of `.pearde/prds/`, not the spelling of `state:` |
 | Deleting done PRDs | out of scope by instruction, and against practice — `superseded` PRDs are kept for their evidence |

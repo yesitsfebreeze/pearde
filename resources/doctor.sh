@@ -228,6 +228,32 @@ else
   fi
 fi
 
+# ── claims: does everything the documents name still exist? ──────────────────
+# The map check reads paths and the memo check reads memos; neither reads a
+# sentence. So a reference telling a reader to run a command that was renamed
+# away, a settings key nothing honours and a memo slug cited by a module that
+# outlived the memo all pass every other row here — and each one is a reader
+# sent somewhere that is not there. Three claims, one direction: something
+# documented that does not exist. Each miss names `file:line`.
+if ! command -v python3 >/dev/null 2>&1; then
+  row claims broken "references/ present, no python3 to read it"
+  fix "install python3 — claims.py is the only reader of these three claims"
+else
+  CPROBLEMS=$(python3 "$(res claims.py)" check "$START" 2>&1)
+  if [ -z "$CPROBLEMS" ]; then
+    NCV=$(python3 "$(res claims.py)" verbs 2>/dev/null | wc -l | tr -d ' ')
+    NCK=$(python3 "$(res claims.py)" keys 2>/dev/null | wc -l | tr -d ' ')
+    row claims ok "$NCV commands · $NCK keys · every name a document uses exists"
+  else
+    NC=$(echo "$CPROBLEMS" | wc -l | tr -d ' ')
+    row claims broken "$NC drifted name$([ "$NC" = 1 ] || echo s)"
+    echo "$CPROBLEMS" | while IFS= read -r l; do
+      [ -n "$l" ] && note "$l"
+    done
+    fix "rename it to what exists, or mark the mention <!-- claims: ignore --> where the name is meant not to exist"
+  fi
+fi
+
 # ── status line: does it render, for this board ──────────────────────────────
 # Where a status line is wired is the reader's setup and not this repo's
 # business — a config path here would be one agent's, and there is no list of

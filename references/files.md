@@ -136,6 +136,7 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/prose.py | check density — word count, mean sentence length, unbound waste words, banned openers/closers, per file — the only reader of `## Density` |
 | @resources/questions.py | read + check a PRD's question pass — the only reader of that format |
 | @resources/spend.py | what the workers cost — per model, turns, context billed, the first-turn floor, turns over 80K, idle polls and tool-result bytes, read off `~/.claude/projects/*/*/subagents/*.jsonl` since a date |
+| @resources/claims.py | check every name a document uses against the thing that answers it — a `pearde <verb>` against @resources/pearde.py, a settings or frontmatter key against the registry in @resources/board/init.py, a memo slug cited in code against the board's memos |
 | @resources/invariants/ | one script per `kind: invariant` memo — what its `verify:` runs, named for its slug |
 | @resources/invariants/every-artifact-lands-inside-the-board.sh | the tool writes nowhere but a board: no `.state/` outside a `.pearde/`, a driven throwaway project that stays clean, and the guard that still refuses a pass file written beside the board |
 | @resources/invariants/no-colour-group-in-the-vault-preset-is-a-path-query.sh | the vault's graph stays coloured: every `colorGroups` query in the preset is a `tag:` query, and every tag one names is carried by a note on the board — a group matching nothing draws grey and reports no error |

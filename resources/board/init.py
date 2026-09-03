@@ -69,6 +69,28 @@ DOCTOR = pearde_path.script("doctor.sh")
 DEFAULTS = (("language", "English"), ("workers", "0"), ("pipeline", "0"),
             ("weight-default", "50"), ("gantt-day", "8h"), ("happiness", "0"))
 
+# Every settings key this board honours, whether or not `init` writes a
+# default for it. DEFAULTS above is the printed subset — the six a new board
+# opens with; the rest read at a default held by their one reader. This tuple
+# is what says a key is real, and @resources/claims.py checks every key named
+# in references/ against it: without it a renamed key leaves its old name
+# standing in prose forever, since nothing else in the repo reads prose.
+SETTING_KEYS = ("language", "workers", "pipeline", "weight-default",
+                "gantt-day", "happiness", "memos", "workflows", "grammar",
+                "health-floor", "health-weights", "harnesses", "groups",
+                "members", "gate", "context-budget", "transitions-per-pass",
+                "claim-ttl", "footprint-above", "split-above", "specs-above",
+                "name", "machine-ceiling")
+
+# The frontmatter contract, as a set of names — @references/parts/contract.md
+# is its prose and this is what a checker can read. `prd.md` first, then the
+# keys a `specNN.md` adds, then the two files a board keeps beside its PRDs.
+FRONTMATTER_KEYS = ("state", "priority", "complexity", "blast-radius", "est",
+                    "actual", "claim", "repo", "workflow", "needs",
+                    "footprint", "origin", "from",
+                    "vision", "terminals", "edges",
+                    "subject", "date", "updated", "kind", "status", "verify")
+
 # Machine-local per board — regenerable. What this repo's own .gitignore
 # holds for the same names. `.obsidian/` is the vault's config, written at
 # the project root (the vault IS the project) and never shared. `/.pearde`

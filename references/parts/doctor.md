@@ -18,6 +18,7 @@ never reads `off` — the map is either right or wrong.
 |--------------|----------------------------------------|------------------------------------------------------------------|
 | `skills`     | —                                      | a skill file with no `name:`, no `description:`, or a `name:` that disagrees with its file name |
 | `index`      | —                                      | @references/files.md and the tree disagree, or an `@@` keyword is undefined in @index.md |
+| `claims`     | —                                      | a document names a command, a settings or frontmatter key, or a memo that does not exist |
 | `statusline` | —                                      | @resources/statusline.sh renders nothing for this board                       |
 | `board`      | no board                               | off the contract path, or no `language`                          |
 | `members`    | not a master board — no `members:`     | an entry that is not a board on disk, or an empty list           |
@@ -59,6 +60,33 @@ which of the two is on screen.
 @references/files.md: a file on disk with no row, a row naming no file, a scope
 naming no file, an `@@` keyword nobody defined. Not `--fix`-able — which row a
 new file belongs in is a judgement.
+
+## `claims` checks that what a document names still exists
+
+`index` reads paths and `memos` reads memos; neither reads a sentence. So a
+reference telling a reader to run a command that was renamed away, a settings
+key nothing honours, and a memo slug cited by a module that outlived the memo
+all pass every other row here — and each one sends a reader somewhere that is
+not there. `@resources/claims.py check` reads three claims a document makes,
+each against the thing that answers it:
+
+1. a `pearde <verb>` in `references/**/*.md`, against the commands
+   @resources/pearde.py forwards and discovers
+2. a settings or frontmatter `key:`, against `SETTING_KEYS` and
+   `FRONTMATTER_KEYS` in @resources/board/init.py
+3. a `memos/<slug>.md` cited in `resources/**/*.py`, against the board's memos
+
+One direction only. Something documented that does not exist is a defect; a
+command nobody documented is a judgement, and is not reported. A claim is read
+only from a backtick span, a fenced block or a skill's `description:` — the
+three places this repo writes a name it means literally — so a sentence saying
+the pearde board, or asking whether pearde is up to date, stays prose.
+
+Where a document names something on purpose that does not exist — a rejected
+alternative, an example of drift, a key the board deliberately does not honour
+— the line says so with `<!-- claims: ignore -->` on it or on the line above.
+That is the second half of the fix line: rename it to what exists, or mark the
+mention.
 
 ## `questions` reports four silent shapes
 

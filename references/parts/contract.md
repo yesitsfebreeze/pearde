@@ -42,8 +42,8 @@ is yours and no tool touches it.
 | `workflow`   | none — the brief is as it was before workflows existed             |
 
 - Match a key by name, at any indentation, anywhere in the frontmatter — a
-  `time:` map holding `est` reads the same as top level. Names are unique
-  within one file.
+  `time:` map holding `est` reads the same as top level. <!-- claims: ignore -->
+  Names are unique within one file.
 - Writing frontmatter preserves what you did not write — unknown keys, order,
   comments, nesting.
 

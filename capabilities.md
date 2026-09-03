@@ -18,11 +18,13 @@ One row per verb `pearde` dispatches — what exists, never what to run.
 | `example` | `pearde example <dir>` — copy the example board to <dir>. Refuses an | — | — | python |
 | `gantt` | the board, read and ordered | — | — | python |
 | `grammar` | the board's vocabulary: read it, grow it, and check it | — | — | python |
+| `graph` | graphify passes over any folder, Obsidian vault out | — | — | shell |
 | `guard` | the rules in @references/parts/loop.md, enforced | — | — | python |
 | `health` | every tracked file scored 1-100, worst first | — | — | python |
 | `index` | the only reader of either format | — | — | python |
 | `init` | a board that asked nothing — [<dir>] [--language <l>] [--name <n>] | — | — | python |
 | `install` | build one skill folder per file in references/skills/ | — | — | shell |
+| `knowledge` | the research layer, whole. One tool, no dependency | — | — | python |
 | `members` | the board, read and ordered | — | — | python |
 | `memo` | the board's decision records: read them, and check them | — | — | python |
 | `next` | the loop step the pass is on — its decision and the exact command | — | — | python |
@@ -37,6 +39,7 @@ One row per verb `pearde` dispatches — what exists, never what to run.
 | `retry` | `## Failure` becomes history in the body, then `failed → open`. | — | — | python |
 | `run` | dispatch a board, a group or every watched board — `here`, `all`, | — | — | python |
 | `scan` | HAND EDITED | — | — | python |
+| `scout` | not just libraries, but the reference | — | — | shell |
 | `session` | take/list/reap/land/owns — one tree per session | — | — | python |
 | `set` | — | — | — | python |
 | `settings` | <key>=<value> [--board <path>] — write one key of pearde/settings.md, | — | — | python |

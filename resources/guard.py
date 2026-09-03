@@ -54,12 +54,16 @@ GUARD_STATE_ENV = "PEARDE_GUARD_STATE"
 # Duplicated from @resources/board/plan.py's own BOARD_DIR/PRDS_DIR rather
 # than imported — same reason member_dirs() gives for reading settings.md by
 # hand: the guard imports nothing from the planner, so a broken planner
-# never blocks a tool call.
-BOARD_DIR = "pearde"
-# `.pearde` — the hidden name every board carried until 2026-09-02,
-# still found so a board that never migrated keeps working
-# (@references/obsidian.md says why the dot had to go).
-LEGACY_BOARD_DIR = ".pearde"
+# never blocks a tool call. The values are the planner's — a copy that
+# disagrees makes the guard name a different board than `scan` does, and
+# @resources/invariants/the-guard-and-the-planner-name-the-same-board.sh
+# fails the moment the two drift.
+BOARD_DIR = ".pearde"
+# `pearde` — the plain name a board carried between 2026-09-02 and the
+# migration back, still found so a board that never moved keeps working.
+LEGACY_BOARD_DIR = "pearde"
+# Order matters: `board_named` takes the FIRST of these that carries a
+# board, so a project holding both answers with the live name.
 BOARD_DIRS = (BOARD_DIR, LEGACY_BOARD_DIR)
 # The board's directory name is configurable, and a directory holding
 # `settings.md` is how it is configured — @resources/board/plan.py
@@ -225,8 +229,9 @@ def named_boards(d):
 
 
 def board_named(d):
-    """`<d>/pearde`, or `<d>/.pearde` when only that carries a board — the two
-    names the tool knows, the second read through its compat symlink."""
+    """`<d>/.pearde`, or `<d>/pearde` when only that carries a board — the two
+    names the tool knows, in the order @resources/board/plan.py reads them,
+    so the guard and `scan` name the same board from the same cwd."""
     for name in BOARD_DIRS:
         p = os.path.join(d, name)
         if is_board_dir(p):
@@ -1105,8 +1110,12 @@ def guard_status(args):
                          f"{SELF} does not refuse a hand-walked board"))
             return 2
         # the second rule, proved the same way: an Edit of this file from a
-        # board that is not this repo's — a temp one holding an empty .pearde/
-        os.makedirs(os.path.join(tmp, BOARD_DIR))
+        # board that is not this repo's — a temp one holding an empty
+        # `.pearde/prds/`. The `prds/` is what makes it a board: since
+        # `is_board_dir` a bare directory of the right NAME is not one, and a
+        # probe that makes only the name finds no board, is never refused,
+        # and reports this rule broken on a guard that works.
+        os.makedirs(os.path.join(tmp, BOARD_DIR, PRDS_DIR))
         probe = json.dumps({"tool_name": "Edit", "cwd": tmp,
                             "tool_input": {"file_path": SELF,
                                            "old_string": "a", "new_string": "b"}})

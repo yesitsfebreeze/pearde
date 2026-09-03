@@ -84,12 +84,14 @@ def vision_axis(board, prds=None, vis=None):
     """The axis as data, or None when the board declares no terminals.
 
     `depth[rel]` is the longest serial chain from that PRD to a terminal over
-    `needs:` plus `edges:` — a parent is a terminal for its subtree, a done
+    `needs:` alone — a parent is a terminal for its subtree, a done
     PRD on the chain costs no hop — or None when no terminal is reachable:
     off the axis, neither near the vision nor far from it. `reach[rel]` is
     the undone work the PRD stands in front of. `dangling` lists every
-    terminal or edge end that names no PRD — what `doctor`'s `vision` row
-    reports."""
+    problem the vision file states: a terminal or edge end that names no
+    PRD, and an edge whose two ends both resolve but whose `needs:` never
+    declared the hop — what `doctor`'s `vision` row reports. `edges:` is
+    read as a check on `needs:`, never as an ordering of its own."""
     v = read_vision(board) if vis is None else vis
     if not v or not v["terminals"]:
         return None
@@ -111,13 +113,13 @@ def vision_axis(board, prds=None, vis=None):
                 after[t].add(r)
         for c in p["children"]:            # a parent lands after its children
             after[c].add(r)
-    for a, b in v["edges"]:
+    for a, b in v["edges"]:                # an edge checks needs:, never adds a hop
         ra, rb = (resolve_addr(prds, x, board, idx) for x in (a, b))
         bad = [x for x, rx in ((a, ra), (b, rb)) if not rx]
         if bad:
             dangling.append(f"edge {a} -> {b}: {', '.join(bad)} names no PRD")
-        elif ra != rb:
-            after[ra].add(rb)
+        elif ra != rb and rb not in after[ra]:
+            dangling.append(f"the vision says {b} needs {a}; {b} does not")
     depth, reach = {}, {}
 
     def walk(r):

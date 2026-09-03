@@ -16,10 +16,13 @@ Three axes decide what runs next. No axis is a clock.
    within a depth. A PRD off the axis dispatches after all on-axis work, by
    priority. The axis is `.pearde/vision.md`: `terminals:` names the PRDs whose
    completion is the vision, and a PRD's depth is the longest serial chain from
-   the PRD to one terminal, over `needs:` plus `edges:` — a `done` PRD on the
+   the PRD to one terminal, over `needs:` alone — a `done` PRD on the
    chain costs no hop, and a parent lands after its children, so a parent named
    as a terminal puts its subtree on the axis. A live PRD reaching no terminal
-   is off-axis. `scan`'s first line carries `axis: <on> on · <off> off`, a line
+   is off-axis. `edges:` orders nothing: an edge is a check on `needs:`, and an
+   edge whose two ends resolve while neither PRD declares the hop is reported
+   as `the vision says X needs Y; X does not` — one line in X's frontmatter
+   closes it. `scan`'s first line carries `axis: <on> on · <off> off`, a line
    off the axis carries `· off-axis`, and `pearde vision` prints the whole
    axis. A board with no `terminals:` prints none of the above and orders as
    described.

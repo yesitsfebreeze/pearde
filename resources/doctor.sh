@@ -596,9 +596,12 @@ fi
 
 # ── vision: where the board says it is going, and whether the names hold ─────
 # `<board>/vision.md` names the PRDs whose completion is the destination, and the
-# plan orders toward them. A terminal or an edge end that names no PRD is a
-# silent failure: the PRD it meant is off the axis, and the scan just says so
-# in a number. `plan.py vision --check` is the one reader.
+# plan orders toward them over `needs:` alone. Two things break quietly here:
+# a terminal or an edge end that names no PRD — the PRD it meant is off the
+# axis and the scan just says so in a number — and an edge whose two ends
+# both name real PRDs while neither declares the hop as `needs:`, which is a
+# PRD whose own file understates what it waits on. `plan.py vision --check`
+# is the one reader of both.
 if [ -n "$BOARD" ]; then
   if [ ! -f "$BOARD/vision.md" ]; then
     row vision off "no vision.md — the board orders by dependency, weight and priority alone"
@@ -609,11 +612,11 @@ if [ -n "$BOARD" ]; then
       row vision ok "$VOUT"
     else
       NV=$(printf '%s\n' "$VOUT" | grep -c . )
-      row vision broken "$NV name$([ "$NV" = 1 ] || echo s) in vision.md resolve$([ "$NV" = 1 ] && echo s) to no PRD"
+      row vision broken "$NV problem$([ "$NV" = 1 ] || echo s) in vision.md"
       printf '%s\n' "$VOUT" | while IFS= read -r l; do
         [ -n "$l" ] && printf '  %-11s %-7s %s\n' "" "" "$l"
       done
-      fix "name the PRD as needs: would — <prd>, @<member>/<prd>, or @<name>/<prd> for the board's own — or drop the line"
+      fix "spell each name as needs: would — <prd>, @<member>/<prd>, or @<name>/<prd> for the board's own — or drop the line; and where the vision says X needs Y, add that needs: to X's frontmatter, since edges: is read as a check on needs: and never as an ordering of its own"
     fi
   fi
 fi

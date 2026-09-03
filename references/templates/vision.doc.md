@@ -8,17 +8,21 @@ runs that.
 ## Frontmatter
 
 The plan reads only the frontmatter: `vision` prints on the scan, and
-`terminals` plus `edges` place every live PRD by the serial hops between it and
-a terminal. @references/parts/order.md.
+`terminals` places every live PRD by the serial hops between it and a terminal,
+counted over `needs:` alone. `edges` orders nothing — it is a check on those
+`needs:`. @references/parts/order.md.
 
 | key | is |
 |---|---|
 | `vision` | one sentence — the destination |
 | `terminals` | the PRDs whose completion IS the vision. `<prd>`; `@<member>/<prd>` on a master; `@<name>/<prd>` for the master's own. None means no axis: the board orders by dependency, weight and priority alone |
-| `edges` | `"<from> -> <to>"` — a dependency nobody wrote as `needs:`, usually across boards. The same addresses as terminals |
+| `edges` | `"<from> -> <to>"` — a dependency the PRDs cannot see, so usually across boards. The same addresses as terminals. Never an input to the plan: where both ends are this board's own PRDs, the check reports the missing `needs:` instead, so the key stays mostly empty |
 
 A terminal or edge end naming no PRD is reported by the check; name it as
-`needs:` would, or drop the line.
+`needs:` would, or drop the line. An edge whose two ends both name real PRDs
+while neither declares the hop is reported too — `the vision says X needs Y;
+X does not` — and is closed by adding that `needs:` to X, not by editing the
+vision.
 
 ## The body
 

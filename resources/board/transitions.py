@@ -946,6 +946,80 @@ def sweep_rows(board):
     return rows
 
 
+# `s<pid>` is `session.py` `sid()`'s own shape — the one identity the tree
+# already knows how to resolve to a process. A claim's `who` is a worker
+# NAME today (`pearde claim` writes nothing else), so this answers UNKNOWN
+# for every claim on the board until `a-claim-names-the-process-that-holds-
+# it` gives `who` a resolvable shape; the day it does, this starts answering
+# for real with no edit here. Only DEAD is ever safe to act on with nobody
+# watching — ALIVE is a live worker and UNKNOWN is every claim `who` cannot
+# name a process for, which today is all of them.
+CLAIM_ID_RE = re.compile(r"^s(\d+)$")
+
+
+def claim_liveness(who):
+    """(verdict, why) — `session.DEAD`/`ALIVE`/`UNKNOWN`, for a claim's
+    `who` field. The mtime rule (`silent_of`) says a claim has gone quiet;
+    this is the second question an UNATTENDED reclaim has to ask before it
+    acts on that alone — a worker that is merely thinking past `claim-ttl`
+    is silent by the same measure a dead one is."""
+    import session as sessionlib
+    m = CLAIM_ID_RE.match(str(who or "").strip())
+    if not m:
+        return sessionlib.UNKNOWN, "claim names no process — mtime is all there is"
+    pid = int(m.group(1))
+    started = sessionlib.started(pid)
+    if started is None:
+        return sessionlib.UNKNOWN, "ps would not answer"
+    if started == "":
+        return sessionlib.DEAD, f"pid {pid} is gone"
+    return sessionlib.ALIVE, f"pid {pid} running since {started}"
+
+
+def tick_sweep(board, out=print):
+    """What a daemon may do with nobody at a pass to watch it: every row
+    `sweep_rows` already computes, reclaimed only where `claim_liveness`
+    answers DEAD. ALIVE and UNKNOWN — silent past `claim-ttl` or not — are
+    left exactly as `sweep` without `--apply` would leave them; only a
+    confirmed-dead process is ever reclaimed with nobody watching. This is
+    the edge `--apply` is for when a person runs it; unattended, `--apply`'s
+    own mtime-only reach is the regression the contract names.
+
+    The lane is committed before it is dropped: a reclaim with nobody
+    watching is exactly the edge a cancelled worker's dirt must not be lost
+    on. `drop_lane` gains the same commit for the attended path in
+    `a-worker-survives-the-window-that-launched-it` spec01; this call site
+    does not wait on it landing there."""
+    import lanes as laneslib
+    import session as sessionlib
+    reclaimed = 0
+    for rel, state, cl, age, to, why in sweep_rows(board):
+        if to is None:
+            continue
+        verdict, lwhy = claim_liveness((cl or {}).get("who"))
+        if verdict != sessionlib.DEAD:
+            continue
+        held = f"claim {cl['who']} {cl['since']}".rstrip()
+        out(f"{rel} · {state} · {held} · silent {planlib.fmt_age(age)} · "
+            f"{lwhy} — reclaiming without a pass")
+        if to == "failed":
+            path = os.path.join(planlib.scan(board)[rel]["dir"], "prd.md")
+            sha = laneslib.commit_all(
+                board, rel, f"sweep checkpoint before release — {held}, {lwhy}")
+            if sha:
+                out(f"sweep: {rel} uncommitted path(s) committed as {sha}")
+            editlib.append_section(
+                path, "Failure",
+                f"swept {now()} — {held}, silent {planlib.fmt_age(age)}: "
+                f"{lwhy}. Read the worker's output before a retry; partial "
+                f"code stands on branch `{laneslib.branch_of(rel)}`, whose "
+                "worktree this sweep removed — the branch is kept.")
+        transition(board, rel, to, "sweep")
+        drop_lane(board, rel, out)
+        reclaimed += 1
+    return reclaimed
+
+
 def cmd_sweep(board, args, persona):
     """every claim silent past `claim-ttl`; `--apply` moves analyzing → open, claimed → failed"""
     if args.pos:

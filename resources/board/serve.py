@@ -227,6 +227,14 @@ OWNER_PID = int(os.environ.get("PEARDE_SERVE_OWNER") or 0)
 # daemons that predate IDLE_EXIT_S, which are hours or days old, and a daemon
 # that really did die on arrival is ended by IDLE_EXIT_S by itself.
 REAP_GRACE_S = float(os.environ.get("PEARDE_REAP_GRACE_S", "60"))
+# `sweep` fired only when a pass opened, so a ghost claim survived until one
+# happened to; between passes nothing was running to notice. 0 (the default)
+# keeps that off — this asks the running process behind a silent claim, not
+# only its mtime, and a board with claims still shaped `<worker-name>` has
+# no process to ask, so turning this on before then buys nothing and reclaims
+# nothing; it is inert until a claim names a resolvable process. Explicit
+# because it acts with nobody watching, which `sweep --apply` never does.
+SWEEP_S = float(os.environ.get("PEARDE_SWEEP_S", "0"))
 
 # Two reloaders, two stamps. The board hot-reloads its data. The page
 # hot-reloads its own code, and the daemon hot-reloads itself — but they move
@@ -297,6 +305,7 @@ class Board:
         self.last_sync = None
         self.last_error = None
         self.history_day = None
+        self.last_sweep = 0.0    # monotonic — SWEEP_S's own per-board clock
         self.lock = threading.Lock()      # one mirror pass at a time
         self.cond = threading.Condition()  # /wait sleepers
 
@@ -758,6 +767,15 @@ def watch():
                 with b.cond:
                     b.cond.notify_all()
         for b in boards():
+            if SWEEP_S > 0 and time.monotonic() - b.last_sweep >= SWEEP_S:
+                b.last_sweep = time.monotonic()
+                try:
+                    translib.tick_sweep(
+                        b.path,
+                        out=lambda l: print(f"serve: {l}", flush=True))
+                except Exception as e:   # a bad board never stops the watch
+                    print(f"serve: sweep tick on {b.name} raised {e!r}",
+                          flush=True)
             try:
                 d = digest(b.path)
             except OSError:

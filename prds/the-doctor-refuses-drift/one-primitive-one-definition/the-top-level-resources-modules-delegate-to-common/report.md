@@ -221,6 +221,9 @@ New this pass:
   `git status --short` names only the four footprint files. The build
   was re-made from the specs, which carry the replacement text for all
   four functions verbatim. The atomic edit above closes the hole.
+  Written back to the knowledge layer as `[[260903-14c2]]`
+  (`wiki/sources/260903-14c2.md`) — it is an agent-environment fact,
+  not a fact about this repo.
 - **The lane's base commit 1be5d2b is not an ancestor of `main`.** It
   is the tip of
   `lane/…-common-py-gains-a-git-runner-and-a-section-extractor`, this

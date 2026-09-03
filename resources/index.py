@@ -34,6 +34,9 @@ import re
 import subprocess
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from common import read_text  # noqa: E402
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDEX = os.path.join(ROOT, "index.md")            # the scopes
 FILES = os.path.join(ROOT, "references", "files.md")  # the manifest
@@ -54,20 +57,12 @@ KEYWORD_USE = re.compile(r"@@([a-z][a-z0-9-]*)")
 ANCHOR_USE = re.compile(r"(?<!@)@([A-Za-z0-9_][A-Za-z0-9_./-]*\.(?:md|py|sh|txt|toml|yml))")
 
 
-def text(path):
-    try:
-        with open(path, encoding="utf-8") as fh:
-            return fh.read()
-    except OSError:
-        return ""
-
-
 def index_text(root=ROOT):
-    return text(os.path.join(root, "index.md"))
+    return read_text(os.path.join(root, "index.md"))
 
 
 def manifest_text(root=ROOT):
-    return text(os.path.join(root, "references", "files.md"))
+    return read_text(os.path.join(root, "references", "files.md"))
 
 
 def files(root=ROOT):
@@ -179,8 +174,7 @@ def check():
     for path in sorted(disk):
         if os.path.splitext(path)[1] not in TEXT_EXT:
             continue
-        with open(os.path.join(ROOT, path), encoding="utf-8", errors="replace") as fh:
-            body = fh.read()
+        body = read_text(os.path.join(ROOT, path))
         for name in sorted(set(KEYWORD_USE.findall(body))):
             if name not in scopes:
                 problems.append(f"{path} references @@{name} — no such keyword")

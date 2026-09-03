@@ -6,7 +6,6 @@
                                                one line per file, worst first, off the ranking — no rescoring; --under keeps files under n, default the floor
     python3 health.py show  <path> [board]     one file's note
     python3 health.py check [board]            one problem per line; silent when clean
-    python3 health.py init  [board]            make .pearde/health/ and ignore it on the board
 
 A health record is `.pearde/health/`: one note per scored file under
 `files/`, and `ranking.md` worst first. It is not a PRD: no state, never
@@ -17,7 +16,8 @@ name the files in a footprint that sit under the floor.
 @references/health.md is the format. This file is its only reader, so the
 format has one home. A score is a pointer, never a verdict.
 
-Python 3 stdlib only.
+Python 3 stdlib only. The board resolver and the frontmatter reader are
+@resources/common.py's.
 """
 import ast
 import datetime
@@ -28,18 +28,11 @@ import re
 import subprocess
 import sys
 
-BOARD_DIR = "pearde"
-# `.pearde` — the hidden name every board carried until 2026-09-02,
-# still found so a board that never migrated keeps working
-# (@references/obsidian.md says why the dot had to go).
-LEGACY_BOARD_DIR = ".pearde"
-BOARD_DIRS = (BOARD_DIR, LEGACY_BOARD_DIR)
-# The board's directory name is configurable, and a directory holding
-# `settings.md` is how it is configured — @resources/board/plan.py
-# `named_boards`. These names are never a board and are skipped unstatted;
-# everything hidden is skipped by the dot rule.
-SCAN_SKIP = frozenset(("node_modules", "target", "vendor", "__pycache__",
-                       "build", "dist"))
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import common  # noqa: E402
+from common import BOARD_DIRS, ISO_RE  # noqa: E402
+
+PROG = "health"
 OUT_DIR = "health"
 
 NOTE_KEYS = ("health", "file", "language", "score", "lines", "branching",
@@ -126,149 +119,21 @@ FUNC_RE = {
 }
 BRACE_FAMILIES = {"c", "shell", "lua"}
 
-KEY_RE = re.compile(r"^\s*([A-Za-z][A-Za-z0-9_-]*):\s*(.*?)\s*$")
-ISO_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 SEP_RE = re.compile(r"^[\s:|-]+$")
 HEADING_RE = re.compile(r"^#{1,6}\s")
 
 
 # ── reading ──────────────────────────────────────────────────────────────────
 
-def _clean(v):
-    return re.sub(r"\s+#.*$", "", v).strip().strip("\"'")
-
-
 def parse_fm(text):
     """(frontmatter, first body line index). None when the fence is missing or
-    unterminated — the caller reports that, it is not a crash."""
-    lines = text.splitlines()
-    if not lines or lines[0].strip() != "---":
-        return None, 0
-    fm = {}
-    for i, line in enumerate(lines[1:], start=1):
-        if line.strip() == "---":
-            return fm, i + 1
-        if line.lstrip().startswith("#"):
-            continue
-        m = KEY_RE.match(line)
-        if m:
-            fm[m.group(1)] = _clean(m.group(2))
-    return None, 0
-
-
-def is_board_dir(p):
-    """A directory is a board only when it CARRIES one — `settings.md`, or a
-    `prds/`. Duplicated from @resources/board/plan.py for the same reason the
-    two names above are. The name alone is not proof: `pearde` is an ordinary
-    word, and a folder called that beside a real board would shadow it."""
-    return os.path.isdir(p) and (
-        os.path.isfile(os.path.join(p, "settings.md"))
-        or os.path.isdir(os.path.join(p, "prds")))
-
-
-def board_link(p):
-    """A board reached through the `.pearde` compatibility symlink is not
-    called what the link is called — the directory it points at is. One
-    level, resolved beside the link, never `realpath`, so a symlinked
-    ANCESTOR stays spelled the way the caller spelled it. Duplicated from
-    @resources/board/plan.py for the same reason the walk is."""
-    if not os.path.islink(p):
-        return p
-    return os.path.normpath(os.path.join(os.path.dirname(p), os.readlink(p)))
-
-
-def named_boards(d):
-    """Immediate children of `d` carrying `settings.md` — how a board called
-    neither `pearde` nor `.pearde` is found, and the whole of the
-    board-directory configuration: renaming the directory is the only act
-    that configures it. @resources/board/plan.py `named_boards` carries the
-    reasoning. At most two come back, because one is the answer and two is a
-    refusal."""
-    hits, seen = [], set()
-    try:
-        names = sorted(os.listdir(d))
-    except OSError:
-        return hits
-    for name in names:
-        if name.startswith(".") or name in SCAN_SKIP:
-            continue
-        p = os.path.join(d, name)
-        if not os.path.isfile(os.path.join(p, "settings.md")):
-            continue
-        real = os.path.realpath(p)         # a link beside its target is one board
-        if real in seen:
-            continue
-        seen.add(real)
-        hits.append(p)
-        if len(hits) == 2:
-            break
-    return hits
-
-
-def board_named(d):
-    """`<d>/pearde`, or `<d>/.pearde` when only that carries a board — the two
-    names the tool knows, the second read through its compat symlink."""
-    for name in BOARD_DIRS:
-        p = os.path.join(d, name)
-        if is_board_dir(p):
-            return board_link(p)
-    return None
-
-
-def board_scanned(d):
-    """The board of `d` that is called something else — one immediate child
-    holding `settings.md`, and a refusal when there are two."""
-    found = named_boards(d)
-    if len(found) > 1:
-        sys.exit(f"health: two directories under {d} carry a board — "
-                 f"{os.path.basename(found[0])}/ and "
-                 f"{os.path.basename(found[1])}/; a project has one board, "
-                 "so rename or remove one of them")
-    return found[0] if found else None
-
-
-def board_in(d):
-    """The board inside project dir `d` — the named one, then the scanned
-    one. The answer for a directory a caller pointed at deliberately."""
-    return board_named(d) or board_scanned(d)
-
-
-def walk_up(d, find):
-    """`find` applied to `d` and every ancestor, first answer wins."""
-    while True:
-        b = find(d)
-        if b:
-            return b
-        nxt = os.path.dirname(d)
-        if nxt == d:
-            return None
-        d = nxt
-
-
-def board_above(d):
-    """The board `d` belongs to — two passes, a named board winning at any
-    depth over a discovered one nearer the cwd. @resources/board/plan.py
-    `board_above` says why discovery cannot be part of the climb."""
-    return walk_up(d, board_named) or walk_up(d, board_scanned)
+    unterminated — the caller reports that, it is not a crash. Scalars only:
+    a note and the ranking carry no list."""
+    return common.split_frontmatter(text, lists=False)
 
 
 def find_board(arg):
-    if arg:
-        p = os.path.abspath(arg)
-        if os.path.basename(p) in BOARD_DIRS and is_board_dir(p):
-            return board_link(p)
-        b = board_in(p)
-        if b:
-            return b
-        # the board named directly, under whatever it is called — asked last,
-        # so a project holding one still resolves to the board inside it
-        if os.path.isfile(os.path.join(p, "settings.md")):
-            return p
-        sys.exit(f"health: no {BOARD_DIR}/ board at {arg}")
-    b = board_above(os.getcwd())
-    if b:
-        return b
-    sys.exit(f"health: no {BOARD_DIR}/ board found walking up from the cwd")
+    return common.find_board(arg, PROG)
 
 
 def is_board(arg):
@@ -276,9 +141,9 @@ def is_board(arg):
     makes, and none of its refusals. A predicate answers; two boards under
     one project is still a project with a board in it."""
     p = os.path.abspath(arg)
-    return ((os.path.basename(p) in BOARD_DIRS and is_board_dir(p))
-            or any(is_board_dir(os.path.join(p, n)) for n in BOARD_DIRS)
-            or bool(named_boards(p))
+    return ((os.path.basename(p) in BOARD_DIRS and common.is_board_dir(p))
+            or any(common.is_board_dir(os.path.join(p, n)) for n in BOARD_DIRS)
+            or bool(common.named_boards(p))
             or os.path.isfile(os.path.join(p, "settings.md")))
 
 
@@ -338,11 +203,7 @@ def settings(board):
     return out
 
 
-def _text(path):
-    try:
-        return open(path, encoding="utf-8", errors="replace").read()
-    except OSError:
-        return ""
+_text = common.read_text
 
 
 def _git(root, *args):
@@ -416,30 +277,38 @@ def language_of(root, rel):
     return None
 
 
-def skip_reason(root, rel):
+def classify(root, rel):
+    """(why it is skipped, its language) — one of the two is None. Bound
+    once per file: the language is read off the disk (a shebang), so the
+    scorer takes it from here rather than asking twice."""
     parts = rel.split(os.sep)
     if any(p in SKIP_DIRS for p in parts[:-1]):
-        return "vendored or built"
+        return "vendored or built", None
     base = parts[-1]
     if base in SKIP_NAMES:
-        return "lockfile"
+        return "lockfile", None
     low = base.lower()
     if low.endswith((".min.js", ".min.css")):
-        return "minified"
+        return "minified", None
     if os.path.splitext(low)[1] in SKIP_EXT:
-        return "data or asset"
+        return "data or asset", None
     path = os.path.join(root, rel)
     try:
         size = os.path.getsize(path)
     except OSError:
-        return "unreadable"
+        return "unreadable", None
     if size > MAX_BYTES:
-        return "over 2 MB"
+        return "over 2 MB", None
     if is_binary(path):
-        return "binary"
-    if language_of(root, rel) is None:
-        return "no language"
-    return None
+        return "binary", None
+    lang = language_of(root, rel)
+    if lang is None:
+        return "no language", None
+    return None, lang
+
+
+def skip_reason(root, rel):
+    return classify(root, rel)[0]
 
 
 def is_binary(path):
@@ -877,11 +746,7 @@ def ranking_text(recs, meta):
     return "\n".join(fm + [""] + head + [cols, sep] + rows) + "\n"
 
 
-def write_atomic(path, text):
-    tmp = path + ".tmp"
-    with open(tmp, "w", encoding="utf-8") as f:
-        f.write(text)
-    os.replace(tmp, path)
+write_atomic = common.atomic_write
 
 
 def ensure_layout(board):
@@ -1005,9 +870,11 @@ def check(board):
         if f not in tracked:
             problems.append(f"{OUT_DIR}/files/{slug(f)}.md: {f} is no longer tracked "
                             "— `pearde health score` drops it")
-        elif skip_reason(root, f):
+            continue
+        why = skip_reason(root, f)
+        if why:
             problems.append(f"{OUT_DIR}/files/{slug(f)}.md: {f} is now skipped "
-                            f"({skip_reason(root, f)}) — `pearde health score`")
+                            f"({why}) — `pearde health score`")
     if notes and rank is None:
         problems.append(f"{OUT_DIR}/ranking.md missing while files/ holds "
                         f"{len(notes)} notes — `pearde health score`")
@@ -1054,10 +921,12 @@ def score_tree(board, paths=None, out=print):
         subset = sorted(want)
     else:
         subset = tracked
-    scored, skipped = [], 0
+    scored, language, skipped = [], {}, 0
     for f in tracked:
-        if skip_reason(root, f) is None:
+        why, lang = classify(root, f)
+        if why is None:
             scored.append(f)
+            language[f] = lang
         else:
             skipped += 1
     graph, greason = load_graph(board)
@@ -1074,7 +943,7 @@ def score_tree(board, paths=None, out=print):
     for f in scored:
         if f not in subset:
             continue
-        lang = language_of(root, f)
+        lang = language[f]
         m = measure(root, f, lang)
         if m is None:
             skipped += 1
@@ -1142,27 +1011,22 @@ def list_ranking(board, under=None, paths=None, out=print):
 
 
 def main(argv):
-    args = list(argv[1:])
-    under = None
-    if "--under" in args:
-        i = args.index("--under")
-        if i + 1 >= len(args):
-            print("health: --under needs a number", file=sys.stderr)
-            return 2
+    try:
+        under, args = common.pop_flag(argv[1:], "--under")
+    except ValueError:
+        print("health: --under needs a number", file=sys.stderr)
+        return 2
+    if under is not None:
         try:
-            under = int(args[i + 1])
+            under = int(under)
         except ValueError:
-            print(f"health: --under {args[i + 1]} is not a number", file=sys.stderr)
+            print(f"health: --under {under} is not a number", file=sys.stderr)
             return 2
-        args = args[:i] + args[i + 2:]
-    board_arg = None
-    if "--board" in args:
-        i = args.index("--board")
-        if i + 1 >= len(args):
-            print("health: --board needs a path", file=sys.stderr)
-            return 2
-        board_arg = args[i + 1]
-        args = args[:i] + args[i + 2:]
+    try:
+        board_arg, args = common.pop_flag(args, "--board")
+    except ValueError:
+        print("health: --board needs a path", file=sys.stderr)
+        return 2
     cmd = args[0] if args else "check"
     rest = args[1:]
     if board_arg is None and rest and is_board(rest[-1]):
@@ -1197,12 +1061,6 @@ def main(argv):
         for line in problems + notes:
             print(line)
         return 1 if problems else 0
-    if cmd == "init":
-        board = find_board(board_arg)
-        did = ensure_layout(board)
-        print("\n".join(did) if did else
-              f"{os.path.relpath(out_dir(board))}/ already on this board")
-        return 0
     print(__doc__.strip(), file=sys.stderr)
     return 2
 

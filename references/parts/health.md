@@ -88,5 +88,4 @@ python3 @resources/health.py score [path...] [board]   # the record, whole or fo
 python3 @resources/health.py list  [--under <n>] [path...] [board]   # worst first, off the ranking
 python3 @resources/health.py show  <path> [board]      # one note
 python3 @resources/health.py check [board]             # what doctor reports for `health`
-python3 @resources/health.py init  [board]             # the directory and the ignore row
 ```

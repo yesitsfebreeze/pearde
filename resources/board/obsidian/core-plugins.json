@@ -23,12 +23,12 @@
   "file-recovery": true,
   "publish": false,
   "sync": false,
-  "canvas": true,
+  "canvas": false,
   "footnotes": false,
   "properties": true,
-  "daily-notes": true,
+  "daily-notes": false,
   "slash-command": false,
   "bookmarks": true,
-  "bases": true,
+  "bases": false,
   "webviewer": false
 }

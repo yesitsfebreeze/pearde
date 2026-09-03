@@ -33,6 +33,14 @@ import os
 import re
 import sys
 
+# The board resolver and the frontmatter dialect are @resources/board/plan.py's,
+# one directory down. Bound here and read only inside a call: plan imports
+# this file for the drill count, so whichever loads first sees the other
+# half-built, and neither touches the other before main runs.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "board"))
+import plan as planlib  # noqa: E402
+
 # `## Questions`, `## Questions — from the analyst pass`, `## Questions for
 # the human`. The suffix is the pass's own label and is never the contract.
 Q_RE = re.compile(r"^##\s+Questions\b", re.M)
@@ -66,9 +74,6 @@ REC_RE = re.compile(r"recommend", re.I)
 # `needs:` is silently ignored by `plan` — the failure this catches.
 NAME_RE = re.compile(r"^@?[A-Za-z0-9_.-]+(/[A-Za-z0-9_.-]+)*$")
 
-KEY_RE = re.compile(r"^\s*([A-Za-z][A-Za-z0-9_-]*):\s*(.*?)\s*$")
-ITEM_LIST_RE = re.compile(r"^\s*-\s+(.*?)\s*$")
-
 # The nine states are @references/parts/states.md. `question` is the one that
 # means "blocked on the user" by name; anything outside the table is parked,
 # and a parked PRD that names a human is making the same claim without the
@@ -84,54 +89,18 @@ WAITING = ("question", "hitl", "waiting", "blocked-on-user", "user")
 CLOSED = ("done", "deferred", "superseded", "out-of-scope")
 
 
-def strip_comment(v):
-    return re.sub(r"\s+#.*$", "", v).strip().strip("\"'")
-
-
 # A heading inside an HTML comment is not a heading — a PRD may quote one
 # in a comment without claiming it.
 COMMENT_RE = re.compile(r"<!--.*?-->", re.S)
 
 
 def parse(path):
-    """(frontmatter, body). Mirrors @resources/board/plan.py's dialect: a
-    `---` fence, one `key: value` per line, `- item` for lists. Commented-out
-    markdown is dropped from the body before anything reads it.
-
-    Serves off plan.py's parse cache when that module is importable (it is
-    for every caller that reaches here through the board scripts, and the
-    cache is loaded and warm for `scan`'s drill count): the second walk over
-    the board then pays no open and no parse a second time. The comment
-    strip still happens here, on the cached body — that part of the dialect
-    is this reader's own. Anywhere `plan` is not on the path, the read below
-    is the whole story, as before."""
-    try:
-        import plan as planlib     # resources/board/plan.py, when reachable
-    except ImportError:
-        planlib = None
-    if planlib is not None:
-        try:
-            fm, _title, body = planlib.parse_prd(path)
-            return fm, COMMENT_RE.sub("", body)
-        except (OSError, UnicodeDecodeError):
-            pass                   # unreadable through the cache: read below
-    text = open(path, encoding="utf-8", errors="replace").read()
-    lines = text.splitlines()
-    fm, start = {}, 0
-    if lines and lines[0].strip() == "---":
-        i, cur = 1, None
-        while i < len(lines) and lines[i].strip() != "---":
-            m, it = KEY_RE.match(lines[i]), ITEM_LIST_RE.match(lines[i])
-            if m:
-                key, val = m.group(1), strip_comment(m.group(2))
-                fm[key], cur = (val, None) if val else ([], key)
-            elif it and cur is not None:
-                v = strip_comment(it.group(1))
-                if v:
-                    fm[cur].append(v)
-            i += 1
-        start = i + 1
-    return fm, COMMENT_RE.sub("", "\n".join(lines[start:]))
+    """(frontmatter, body) off @resources/board/plan.py's parse cache — one
+    dialect, one reader, and a second walk over the board pays no open and
+    no parse a second time. Commented-out markdown is dropped from the body
+    before anything reads it; that part is this reader's own."""
+    fm, _title, body = planlib.parse_prd(path)
+    return fm, COMMENT_RE.sub("", body)
 
 
 def sections(body, pattern):
@@ -559,136 +528,55 @@ def rows(board):
             yield rel, open_qs.get(rel, 0), na, str(fm.get("state", "-"))
 
 
-# Duplicated from @resources/board/plan.py's own BOARD_DIR rather than
-# imported — same reason @resources/guard.py gives: this reader keeps its
-# own error prefix and does not depend on the planner to resolve a board.
-BOARD_DIR = "pearde"
-# `.pearde` — the hidden name every board carried until 2026-09-02,
-# still found so a board that never migrated keeps working
-# (@references/obsidian.md says why the dot had to go).
-LEGACY_BOARD_DIR = ".pearde"
-BOARD_DIRS = (BOARD_DIR, LEGACY_BOARD_DIR)
-# The board's directory name is configurable, and a directory holding
-# `settings.md` is how it is configured — @resources/board/plan.py
-# `named_boards`. These names are never a board and are skipped unstatted;
-# everything hidden is skipped by the dot rule.
-SCAN_SKIP = frozenset(("node_modules", "target", "vendor", "__pycache__",
-                       "build", "dist"))
+# The resolver is @resources/board/plan.py's — the two board names, the
+# compat symlink, `settings.md` discovery and the two-pass climb are called,
+# not copied. Only the refusals are this reader's own: they carry the
+# `questions:` prefix and exit 1, as they always have.
 
 
-def is_board_dir(p):
-    """A directory is a board only when it CARRIES one — `settings.md`, or a
-    `prds/`. Duplicated from @resources/board/plan.py for the same reason the
-    two names above are. The name alone is not proof: `pearde` is an ordinary
-    word, and a folder called that beside a real board would shadow it."""
-    return os.path.isdir(p) and (
-        os.path.isfile(os.path.join(p, "settings.md"))
-        or os.path.isdir(os.path.join(p, "prds")))
-
-
-def board_link(p):
-    """A board reached through the `.pearde` compatibility symlink is not
-    called what the link is called — the directory it points at is. One
-    level, resolved beside the link, never `realpath`, so a symlinked
-    ANCESTOR stays spelled the way the caller spelled it. Duplicated from
-    @resources/board/plan.py for the same reason the walk is."""
-    if not os.path.islink(p):
-        return p
-    return os.path.normpath(os.path.join(os.path.dirname(p), os.readlink(p)))
-
-
-def named_boards(d):
-    """Immediate children of `d` carrying `settings.md` — how a board called
-    neither `pearde` nor `.pearde` is found, and the whole of the
-    board-directory configuration: renaming the directory is the only act
-    that configures it. @resources/board/plan.py `named_boards` carries the
-    reasoning. At most two come back, because one is the answer and two is a
-    refusal."""
-    hits, seen = [], set()
-    try:
-        names = sorted(os.listdir(d))
-    except OSError:
-        return hits
-    for name in names:
-        if name.startswith(".") or name in SCAN_SKIP:
-            continue
-        p = os.path.join(d, name)
-        if not os.path.isfile(os.path.join(p, "settings.md")):
-            continue
-        real = os.path.realpath(p)         # a link beside its target is one board
-        if real in seen:
-            continue
-        seen.add(real)
-        hits.append(p)
-        if len(hits) == 2:
-            break
-    return hits
-
-
-def board_named(d):
-    """`<d>/pearde`, or `<d>/.pearde` when only that carries a board — the two
-    names the tool knows, the second read through its compat symlink."""
-    for name in BOARD_DIRS:
-        p = os.path.join(d, name)
-        if is_board_dir(p):
-            return board_link(p)
-    return None
+def die(msg, code=1):
+    print(f"questions: {msg}", file=sys.stderr)
+    sys.exit(code)
 
 
 def board_scanned(d):
     """The board of `d` that is called something else — one immediate child
     holding `settings.md`, and a refusal when there are two."""
-    found = named_boards(d)
+    found = planlib.named_boards(d)
     if len(found) > 1:
-        sys.exit(f"questions: two directories under {d} carry a board — "
-                 f"{os.path.basename(found[0])}/ and "
-                 f"{os.path.basename(found[1])}/; a project has one board, "
-                 "so rename or remove one of them")
+        die(planlib.two_boards(d, found))
     return found[0] if found else None
 
 
 def board_in(d):
-    """The board inside project dir `d` — the named one, then the scanned
-    one. The answer for a directory a caller pointed at deliberately."""
-    return board_named(d) or board_scanned(d)
-
-
-def walk_up(d, find):
-    """`find` applied to `d` and every ancestor, first answer wins."""
-    while True:
-        b = find(d)
-        if b:
-            return b
-        nxt = os.path.dirname(d)
-        if nxt == d:
-            return None
-        d = nxt
+    """The board inside project dir `d` — the named one, then the scanned one."""
+    return planlib.board_named(d) or board_scanned(d)
 
 
 def board_above(d):
     """The board `d` belongs to — two passes, a named board winning at any
-    depth over a discovered one nearer the cwd. @resources/board/plan.py
-    `board_above` says why discovery cannot be part of the climb."""
-    return walk_up(d, board_named) or walk_up(d, board_scanned)
+    depth over a discovered one nearer the cwd."""
+    return (planlib.walk_up(d, planlib.board_named)
+            or planlib.walk_up(d, board_scanned))
 
 
 def find_board(arg):
     if arg:
         p = os.path.abspath(arg)
-        if os.path.basename(p) in BOARD_DIRS and is_board_dir(p):
-            return board_link(p)
+        if os.path.basename(p) in planlib.BOARD_DIRS and planlib.is_board_dir(p):
+            return planlib.board_link(p)
         b = board_in(p)
         if b:
             return b
         # the board named directly, under whatever it is called — asked last,
         # so a project holding one still resolves to the board inside it
-        if os.path.isfile(os.path.join(p, "settings.md")):
+        if os.path.isfile(os.path.join(p, planlib.SETTINGS)):
             return p
-        sys.exit(f"questions: no {BOARD_DIR}/ board at {arg}")
+        die(f"no {planlib.BOARD_DIR}/ board at {arg}")
     b = board_above(os.getcwd())
     if b:
         return b
-    sys.exit(f"questions: no {BOARD_DIR}/ board found walking up from the cwd")
+    die(f"no {planlib.BOARD_DIR}/ board found walking up from the cwd")
 
 
 def main(argv):

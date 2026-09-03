@@ -16,7 +16,8 @@ what was decided and what it beat. @references/memo.md is the format. This
 file is its only reader, so the format has one home.
 
 Python 3 stdlib only. @resources/board/plan.py and @resources/board/serve.py
-import `scan` from here rather than growing a second frontmatter parser.
+import `scan` from here rather than growing a second frontmatter parser; the
+parser, the board resolver and the record directory are @resources/common.py's.
 """
 import datetime
 import os
@@ -24,6 +25,11 @@ import re
 import subprocess
 import sys
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import common  # noqa: E402
+from common import ISO_RE  # noqa: E402,F401 — @resources/workflows.py imports it from here
+
+PROG = "memos"
 REQUIRED = ("memo", "kind", "status", "subject", "date")
 OPTIONAL = ("updated", "prds", "supersedes", "superseded_by", "verify",
             "tags")
@@ -34,93 +40,47 @@ STATUSES = ("open", "decided", "superseded")
 SECTIONS = (("invariant", "Invariants"), ("decision", "Decisions"),
             ("note", "Notes"))
 
-# The board's dialect, byte-rule for byte-rule what prd.md uses: a `---`
-# fence, one `key: value` per line, `- item` for lists, `#` comments.
-KEY_RE = re.compile(r"^\s*([A-Za-z][A-Za-z0-9_-]*):\s*(.*?)\s*$")
-ITEM_RE = re.compile(r"^\s*-\s+(.*?)\s*$")
-ISO_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
-
-
-def _clean(v):
-    return re.sub(r"\s+#.*$", "", v).strip().strip("\"'")
-
 
 def parse(path):
-    """(frontmatter, title, body). frontmatter is None when the fence is
-    missing or unterminated — the caller reports that, it is not a crash."""
-    text = open(path, encoding="utf-8").read()
-    lines = text.splitlines()
-    if not lines or lines[0].strip() != "---":
-        return None, "", text
-    fm, key, end = {}, None, None
-    for i, line in enumerate(lines[1:], start=1):
-        if line.strip() == "---":
-            end = i
-            break
-        if line.lstrip().startswith("#"):
-            continue
-        m = ITEM_RE.match(line)
-        if m and key is not None:
-            if not isinstance(fm.get(key), list):
-                fm[key] = []
-            fm[key].append(_clean(m.group(1)))
-            continue
-        m = KEY_RE.match(line)
-        if m:
-            key = m.group(1)
-            v = _clean(m.group(2))
-            fm[key] = v if v else []
-    if end is None:
-        return None, "", text
-    rest = lines[end + 1:]
-    title = ""
-    body = []
-    for line in rest:
-        if not title and line.startswith("# "):
-            title = line[2:].strip()
-            continue
-        body.append(line)
-    return fm, title, "\n".join(body).strip()
+    """(frontmatter, title, body) of the file at `path`, in the board's
+    dialect. frontmatter is None when the fence is missing or unterminated —
+    the caller reports that, it is not a crash."""
+    return common.parse_frontmatter(open(path, encoding="utf-8").read())
+
+
+def find_board(arg):
+    return common.find_board(arg, PROG)
+
+
+def board_above(d):
+    return common.board_above(d, PROG)
+
+
+def collection(board):
+    """The board's memos as a @resources/common.py `Collection`: at
+    `.pearde/memos/` unless `memos:` in .pearde/settings.md points elsewhere
+    — a repo whose decisions already live in another system mirrors that
+    dir read-only instead of moving files another tool owns. External
+    means foreign contract: the strict frontmatter gate applies only to
+    the board's own memos/."""
+    return common.Collection(board, "memos", "memos", REQUIRED, OPTIONAL,
+                             "README.md", noun="memo")
 
 
 def memos_dir(board):
-    """(path, external). `.pearde/memos/` unless `memos:` in .pearde/settings.md
-    points elsewhere — a repo whose decisions already live in another system
-    mirrors that dir read-only instead of moving files another tool owns.
-    External means foreign contract: the strict frontmatter gate applies only
-    to the board's own memos/."""
-    st = os.path.join(board, "settings.md")
-    if os.path.isfile(st):
-        fm, _, _ = parse(st)
-        v = (fm or {}).get("memos")
-        if v and not isinstance(v, list):
-            return os.path.normpath(os.path.join(board, v)), True
-    return os.path.join(board, "memos"), False
+    """(path, external) — what @resources/doctor.sh asks."""
+    c = collection(board)
+    return c.dir, c.external
 
 
 def scan(board):
     """{slug: memo} for every .pearde/memos/*.md. Sorted by date descending, then
     slug — newest decision first, which is the order a reader wants."""
-    d, _ = memos_dir(board)
-    if not os.path.isdir(d):
-        return {}
-    out = {}
-    for f in sorted(os.listdir(d)):
-        if not f.endswith(".md") or f == "README.md":
-            continue
-        path = os.path.join(d, f)
-        fm, title, body = parse(path)
-        slug = f[:-3]
-        out[slug] = {
-            "slug": slug, "path": path, "fm": fm or {},
-            "parsed": fm is not None,
-            "title": title or slug,
-            "body": body,
-            "kind": (fm or {}).get("kind", ""),
-            "status": (fm or {}).get("status", ""),
-            "subject": (fm or {}).get("subject", ""),
-            "date": (fm or {}).get("date", ""),
-        }
+    out = collection(board).scan()
+    for m in out.values():
+        fm = m["fm"]
+        m.update(kind=fm.get("kind", ""), status=fm.get("status", ""),
+                 subject=fm.get("subject", ""), date=fm.get("date", ""))
     return dict(sorted(out.items(),
                        key=lambda kv: (str(kv[1]["date"]), kv[0]), reverse=True))
 
@@ -150,31 +110,21 @@ def check(board):
     An external memo dir is another system's contract: only what is universal
     is checked — the file parses, the required five are present — and its own
     vocabulary (kinds, statuses, extra keys) is left alone."""
+    coll = collection(board)
     memos, bad = scan(board), []
-    d, external = memos_dir(board)
-    if external and not os.path.isdir(d):
-        return [f"settings.md: `memos: …` points at {d}, which does not exist"]
+    if coll.external and not os.path.isdir(coll.dir):
+        return [f"settings.md: `memos: …` points at {coll.dir}, which does not exist"]
     prds = board_prds(board)
     for slug in sorted(memos):
         m, at = memos[slug], f"{slug}.md"
+        bad += coll.check_fence(m)
         if not m["parsed"]:
-            bad.append(f"{at}: no closed `---` frontmatter fence")
             continue
         fm = m["fm"]
-        if external:
-            for k in REQUIRED:
-                if not fm.get(k):
-                    bad.append(f"{at}: missing `{k}:`")
+        if coll.external:
+            bad += coll.check_keys(m, closed=False)
             continue
-        for k in REQUIRED:
-            if not fm.get(k):
-                bad.append(f"{at}: missing `{k}:`")
-        for k in fm:
-            if k not in REQUIRED + OPTIONAL:
-                bad.append(f"{at}: `{k}:` is not a memo key — "
-                           "a misspelled key reads as present")
-        if fm.get("memo") and fm["memo"] != slug:
-            bad.append(f"{at}: `memo: {fm['memo']}` disagrees with the filename")
+        bad += coll.check_keys(m, slug_key="memo")
         if fm.get("kind") and fm["kind"] not in KINDS:
             bad.append(f"{at}: kind `{fm['kind']}` — the set is {'|'.join(KINDS)}")
         ver = fm.get("verify")
@@ -194,13 +144,7 @@ def check(board):
             bad.append(f"{at}: `tags:` is {have or 'missing'}, derived from "
                        f"this memo's own kind and status it is {want} — "
                        "`memos.py retag` writes it")
-        date, upd = str(fm.get("date") or ""), str(fm.get("updated") or "")
-        if date and not ISO_RE.match(date):
-            bad.append(f"{at}: date `{date}` is not ISO 8601 (YYYY-MM-DD)")
-        if upd and not ISO_RE.match(upd):
-            bad.append(f"{at}: updated `{upd}` is not ISO 8601 (YYYY-MM-DD)")
-        elif upd and ISO_RE.match(date or "") and upd < date:
-            bad.append(f"{at}: updated {upd} precedes date {date}")
+        bad += coll.check_dates(m)
         sb = _listed(fm.get("superseded_by"))
         if st == "superseded" and not sb:
             bad.append(f"{at}: status superseded, naming nothing in its place")
@@ -213,8 +157,8 @@ def check(board):
         for name in _listed(fm.get("prds")):
             if name not in prds:
                 bad.append(f"{at}: `prds: {name}` is not a PRD on this board")
-    if not external:
-        idx = os.path.join(d, "README.md")
+    if not coll.external:
+        idx = os.path.join(coll.dir, "README.md")
         have = (open(idx, encoding="utf-8").read()
                 if os.path.isfile(idx) else None)
         if (memos or have is not None) and have != render_index(memos):
@@ -248,19 +192,13 @@ def render_index(memos):
 def write_index(board):
     """Regenerate the index and return its path. Refuses an external
     `memos:` dir — that mirror is read-only, nothing is written there."""
-    d, external = memos_dir(board)
-    if external:
-        print(f"memos: settings.md points `memos:` at {d} — another system's "
-              "records, mirrored read-only; no index is written there",
+    coll = collection(board)
+    if coll.external:
+        print(f"memos: settings.md points `memos:` at {coll.dir} — another "
+              "system's records, mirrored read-only; no index is written there",
               file=sys.stderr)
         sys.exit(1)
-    os.makedirs(d, exist_ok=True)
-    path = os.path.join(d, "README.md")
-    tmp = path + ".tmp"
-    with open(tmp, "w", encoding="utf-8") as f:
-        f.write(render_index(scan(board)))
-    os.replace(tmp, path)
-    return path
+    return coll.write("README.md", render_index(scan(board)))
 
 
 def verify(board, only=None):
@@ -338,39 +276,18 @@ def memo_tags(kind, status):
 
 def retag_text(text, tags):
     """`text` with its `tags:` block rewritten to `tags`, written after
-    `status:` when it has none. Returns (text, changed). Frontmatter only —
-    the fence is the first `---` and the next one, and a body line reading
-    `tags: …` is prose, not a key. A block list and not `[a, b]`: this file's
-    own parser reads `- item` lines and would hand `check` one string with
-    brackets in it, and `prds:` is already written that way."""
-    want = ["tags:"] + [f"  - {t}" for t in tags]
-    lines = text.splitlines()
-    if not lines or lines[0].strip() != "---":
-        return text, False
-    end = next((i for i, l in enumerate(lines[1:], 1) if l.strip() == "---"), None)
-    if end is None:
-        return text, False
-    at = next((i for i in range(1, end) if lines[i].startswith("tags:")), None)
-    if at is not None:
-        stop = at + 1
-        while stop < end and ITEM_RE.match(lines[stop]):
-            stop += 1
-        if lines[at:stop] == want:
-            return text, False
-        lines[at:stop] = want
-    else:
-        after = next((i for i in range(1, end)
-                      if lines[i].startswith("status:")), end - 1)
-        lines[after + 1:after + 1] = want
-    return "\n".join(lines) + ("\n" if text.endswith("\n") else ""), True
+    `status:` when it has none. Returns (text, changed) —
+    @resources/common.py `set_list_key`, bound to the memo's own key;
+    @resources/workflows.py calls it too."""
+    return common.set_list_key(text, "tags", tags, after="status")
 
 
 def retag(board):
     """Rewrite every memo's `tags:` from its own kind and status. Returns the
     slugs it changed. An external memos dir is another system's contract and
     is left alone — the same exemption `check` makes."""
-    d, external = memos_dir(board)
-    if external or not os.path.isdir(d):
+    coll = collection(board)
+    if coll.external or not os.path.isdir(coll.dir):
         return []
     changed = []
     for slug_, m in scan(board).items():
@@ -379,10 +296,7 @@ def retag(board):
         text = open(m["path"], encoding="utf-8").read()
         out, did = retag_text(text, memo_tags(m["kind"], m["status"]))
         if did:
-            tmp = m["path"] + ".tmp"
-            with open(tmp, "w", encoding="utf-8") as f:
-                f.write(out)
-            os.replace(tmp, m["path"])
+            common.atomic_write(m["path"], out)
             changed.append(slug_)
     return sorted(changed)
 
@@ -393,7 +307,9 @@ def add(board, subject, kind="decision"):
     the title line are filled in; every other template line is kept — the
     reader fills the sections, @references/templates/memo.doc.md says how. An invariant gets a
     bare `verify:` line, which fails `check` until the command is written and
-    run — an invariant is filed proven, never on faith. Rewrites the index.
+    run — an invariant is filed proven, never on faith. The `tags:` block is
+    derived from the kind and status just written, the same lines `retag`
+    would produce. Rewrites the index.
     Exits 2 on a subject that slugs to nothing or a kind outside the set, 1
     on a path that exists or a `memos:` dir that is another system's — that
     dir is mirrored read-only, nothing is written there."""
@@ -406,13 +322,13 @@ def add(board, subject, kind="decision"):
     if not sl:
         print(f"memos: `{subject}` slugs to nothing", file=sys.stderr)
         sys.exit(2)
-    d, external = memos_dir(board)
-    if external:
-        print(f"memos: settings.md points `memos:` at {d} — another system's "
-              "records, mirrored read-only; write the memo there",
+    coll = collection(board)
+    if coll.external:
+        print(f"memos: settings.md points `memos:` at {coll.dir} — another "
+              "system's records, mirrored read-only; write the memo there",
               file=sys.stderr)
         sys.exit(1)
-    path = os.path.join(d, sl + ".md")
+    path = os.path.join(coll.dir, sl + ".md")
     if os.path.exists(path):
         print(f"memos: {path} exists", file=sys.stderr)
         sys.exit(1)
@@ -435,158 +351,22 @@ def add(board, subject, kind="decision"):
         elif line.startswith("# <slug> — "):
             line = f"# {sl} — {subject}"
         out.append(line)
-    os.makedirs(d, exist_ok=True)
-    tmp = path + ".tmp"
-    with open(tmp, "w", encoding="utf-8") as f:
-        f.write("\n".join(out) + "\n")
-    os.replace(tmp, path)
-    retag(board)
+    text = "\n".join(out) + "\n"
+    fm, _, _ = common.parse_frontmatter(text)
+    text, _ = retag_text(text, memo_tags(fm.get("kind"), fm.get("status")))
+    coll.write(sl + ".md", text)
     write_index(board)
     return path
 
 
-# Duplicated from @resources/board/plan.py's own BOARD_DIR rather than
-# imported — same reason @resources/guard.py gives: this reader keeps its
-# own error prefix and does not depend on the planner to resolve a board.
-BOARD_DIR = "pearde"
-# `.pearde` — the hidden name every board carried until 2026-09-02,
-# still found so a board that never migrated keeps working
-# (@references/obsidian.md says why the dot had to go).
-LEGACY_BOARD_DIR = ".pearde"
-BOARD_DIRS = (BOARD_DIR, LEGACY_BOARD_DIR)
-# The board's directory name is configurable, and a directory holding
-# `settings.md` is how it is configured — @resources/board/plan.py
-# `named_boards`. These names are never a board and are skipped unstatted;
-# everything hidden is skipped by the dot rule.
-SCAN_SKIP = frozenset(("node_modules", "target", "vendor", "__pycache__",
-                       "build", "dist"))
-
-
-def is_board_dir(p):
-    """A directory is a board only when it CARRIES one — `settings.md`, or a
-    `prds/`. Duplicated from @resources/board/plan.py for the same reason the
-    two names above are. The name alone is not proof: `pearde` is an ordinary
-    word, and a folder called that beside a real board would shadow it."""
-    return os.path.isdir(p) and (
-        os.path.isfile(os.path.join(p, "settings.md"))
-        or os.path.isdir(os.path.join(p, "prds")))
-
-
-def board_link(p):
-    """A board reached through the `.pearde` compatibility symlink is not
-    called what the link is called — the directory it points at is. One
-    level, resolved beside the link, never `realpath`, so a symlinked
-    ANCESTOR stays spelled the way the caller spelled it. Duplicated from
-    @resources/board/plan.py for the same reason the walk is."""
-    if not os.path.islink(p):
-        return p
-    return os.path.normpath(os.path.join(os.path.dirname(p), os.readlink(p)))
-
-
-def named_boards(d):
-    """Immediate children of `d` carrying `settings.md` — how a board called
-    neither `pearde` nor `.pearde` is found, and the whole of the
-    board-directory configuration: renaming the directory is the only act
-    that configures it. @resources/board/plan.py `named_boards` carries the
-    reasoning. At most two come back, because one is the answer and two is a
-    refusal."""
-    hits, seen = [], set()
-    try:
-        names = sorted(os.listdir(d))
-    except OSError:
-        return hits
-    for name in names:
-        if name.startswith(".") or name in SCAN_SKIP:
-            continue
-        p = os.path.join(d, name)
-        if not os.path.isfile(os.path.join(p, "settings.md")):
-            continue
-        real = os.path.realpath(p)         # a link beside its target is one board
-        if real in seen:
-            continue
-        seen.add(real)
-        hits.append(p)
-        if len(hits) == 2:
-            break
-    return hits
-
-
-def board_named(d):
-    """`<d>/pearde`, or `<d>/.pearde` when only that carries a board — the two
-    names the tool knows, the second read through its compat symlink."""
-    for name in BOARD_DIRS:
-        p = os.path.join(d, name)
-        if is_board_dir(p):
-            return board_link(p)
-    return None
-
-
-def board_scanned(d):
-    """The board of `d` that is called something else — one immediate child
-    holding `settings.md`, and a refusal when there are two."""
-    found = named_boards(d)
-    if len(found) > 1:
-        sys.exit(f"memos: two directories under {d} carry a board — "
-                 f"{os.path.basename(found[0])}/ and "
-                 f"{os.path.basename(found[1])}/; a project has one board, "
-                 "so rename or remove one of them")
-    return found[0] if found else None
-
-
-def board_in(d):
-    """The board inside project dir `d` — the named one, then the scanned
-    one. The answer for a directory a caller pointed at deliberately."""
-    return board_named(d) or board_scanned(d)
-
-
-def walk_up(d, find):
-    """`find` applied to `d` and every ancestor, first answer wins."""
-    while True:
-        b = find(d)
-        if b:
-            return b
-        nxt = os.path.dirname(d)
-        if nxt == d:
-            return None
-        d = nxt
-
-
-def board_above(d):
-    """The board `d` belongs to — two passes, a named board winning at any
-    depth over a discovered one nearer the cwd. @resources/board/plan.py
-    `board_above` says why discovery cannot be part of the climb."""
-    return walk_up(d, board_named) or walk_up(d, board_scanned)
-
-
-def find_board(arg):
-    if arg:
-        p = os.path.abspath(arg)
-        if os.path.basename(p) in BOARD_DIRS and is_board_dir(p):
-            return board_link(p)
-        b = board_in(p)
-        if b:
-            return b
-        # the board named directly, under whatever it is called — asked last,
-        # so a project holding one still resolves to the board inside it
-        if os.path.isfile(os.path.join(p, "settings.md")):
-            return p
-        sys.exit(f"memos: no {BOARD_DIR}/ board at {arg}")
-    b = board_above(os.getcwd())
-    if b:
-        return b
-    sys.exit(f"memos: no {BOARD_DIR}/ board found walking up from the cwd")
-
-
 def main(argv):
-    args = argv[1:]
-    kind = "decision"
-    if "--kind" in args:
-        i = args.index("--kind")
-        if i + 1 >= len(args):
-            print("memos: --kind needs a value", file=sys.stderr)
-            return 2
-        kind = args[i + 1]
-        args = args[:i] + args[i + 2:]
+    try:
+        kind, args = common.pop_flag(argv[1:], "--kind")
+    except ValueError:
+        print("memos: --kind needs a value", file=sys.stderr)
+        return 2
+    if kind is None:
+        kind = "decision"
     cmd = args[0] if args else "check"
     if cmd == "add":
         if len(args) < 2 or not args[1].strip():

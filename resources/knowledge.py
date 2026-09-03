@@ -24,7 +24,22 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-import memos  # noqa: E402 — the board resolver, one copy, as workflows.py does
+import common  # noqa: E402 — the board resolver, one copy
+import memos as memos_lib  # noqa: E402 — the memos, read by their own reader
+
+PROG = "knowledge"
+
+
+def _plan():
+    """@resources/board/plan.py, the one reader of a PRD — imported on
+    demand, the way @resources/workflows.py `members` reaches it, since
+    plan.py imports memos.py at its top and this file sits beside memos."""
+    d = os.path.join(os.path.dirname(os.path.abspath(__file__)), "board")
+    if d not in sys.path:
+        sys.path.insert(0, d)
+    import plan  # noqa: E402
+    return plan
+
 
 # --- paths -----------------------------------------------------------------
 
@@ -43,26 +58,24 @@ def default_root(start=None):
     landed in a directory `git worktree remove` deletes.
 
     Climbing from the cwd is how every other board tool answers the same
-    question (@resources/memos.py `board_above`, and @resources/board/plan.py
-    says why discovery cannot be part of the climb). A lane's own `pearde/`
-    holds the shared graphify cache and nothing else, so it carries neither
-    `settings.md` nor `prds/` and `is_board_dir` walks straight past it to
-    the live board two levels up.
+    question (@resources/common.py `board_above`, and @resources/board/plan.py
+    says why discovery cannot be part of the climb). A lane's own board
+    folder holds the shared graphify cache and nothing else, so it carries
+    neither `settings.md` nor `prds/` and `is_board_dir` walks straight past
+    it to the live board two levels up.
 
     The fallback is the checkout with no board above the cwd — a call from
     `/tmp`, a test fixture — where the folder beside this file is the only
     answer there is. `--root` still overrides both.
     """
-    board = memos.board_above(os.path.abspath(start or os.getcwd()))
+    board = common.board_above(os.path.abspath(start or os.getcwd()), PROG)
     if board:
         return Path(board) / "wiki"
     repo = Path(__file__).resolve().parent.parent
-    # `pearde/` since 2026-09-02, `.pearde/` on a board that never
-    # migrated — @references/obsidian.md says why the dot had to go.
-    for name in ("pearde", ".pearde"):
+    for name in common.BOARD_DIRS:
         if (repo / name / "wiki").is_dir():
             return repo / name / "wiki"
-    return repo / "pearde" / "wiki"
+    return repo / common.BOARD_DIR / "wiki"
 
 
 class Store:
@@ -85,37 +98,50 @@ class Store:
             d.mkdir(parents=True, exist_ok=True)
 
     def workflow(self):
-        """WORKFLOW.md frontmatter — the configuration, read on every call."""
-        config = {
-            "active_focus": [],
-            "priority_tags": [],
-            "auto_enqueue": True,
-            "min_sources_per_conclusion": 2,
-            "default_workflow": "default",
-        }
+        """WORKFLOW.md frontmatter — the configuration, read on every call.
+        Each key has a default and a coercion; a one-item list is its item
+        first, so `key: [x]` and `key: x` read the same."""
+        config = {key: default for key, (default, _) in CONFIG.items()}
         try:
             text = self.workflow_md.read_text(encoding="utf-8")
         except OSError:
             return config
         meta = parse_frontmatter(text)[0]
-        for key in config:
+        for key, (_, coerce) in CONFIG.items():
             if key in meta:
                 value = meta[key]
                 if isinstance(value, list) and len(value) == 1:
                     value = value[0]
-                if key != "auto_enqueue" and key != "default_workflow" \
-                        and key != "min_sources_per_conclusion" \
-                        and isinstance(value, str):
-                    value = [v.strip() for v in value.split(",") if v.strip()]
-                if isinstance(value, str) and key == "auto_enqueue":
-                    value = value.strip().lower() in ("true", "yes", "1")
-                if key == "min_sources_per_conclusion":
-                    try:
-                        value = int(value)
-                    except (TypeError, ValueError):
-                        value = 2
-                config[key] = value
+                config[key] = coerce(value)
         return config
+
+
+def _csv(value):
+    if isinstance(value, str):
+        return [v.strip() for v in value.split(",") if v.strip()]
+    return value
+
+
+def _flag(value):
+    if isinstance(value, str):
+        return value.strip().lower() in ("true", "yes", "1")
+    return value
+
+
+def _count(value):
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return 2
+
+
+# key -> (default, coercion) — the whole of what WORKFLOW.md configures
+CONFIG = {
+    "active_focus": ([], _csv),
+    "priority_tags": ([], _csv),
+    "auto_enqueue": (True, _flag),
+    "min_sources_per_conclusion": (2, _count),
+}
 
 
 # --- frontmatter / note parsing ---------------------------------------------
@@ -164,7 +190,6 @@ def parse_frontmatter(text):
 class Note:
     def __init__(self, path):
         self.path = path
-        self.rel = path.relative_to(Path(path.anchor)) if False else path  # set below
         raw = path.read_text(encoding="utf-8")
         self.meta, self.body = parse_frontmatter(raw)
         self.title = self.meta.get("title") or path.stem
@@ -208,24 +233,30 @@ def note_id(when=None):
     return f"{day}-{entropy}"
 
 
-def resolve_slug(store, slug):
+def note_maps(notes):
+    """({stem: note}, {lowercased title: note}) — how a wikilink is looked
+    up, built once per verb and handed to every lookup. Both `resolve_slug`
+    and `build_graph` read these; a later note with the same title wins,
+    as it did when each built its own."""
+    by_stem = {n.path.stem: n for n in notes}
+    by_title = {n.title.strip().lower(): n for n in notes}
+    return by_stem, by_title
+
+
+def resolve_slug(slug, by_stem, by_title):
     """Slug or wikilink target -> Path, or None. Wikilinks are shortest-path:
     any file whose stem or title matches."""
     slug = slug.strip().strip("[[]]")
-    stems = {}
-    titles = {}
-    for note in load_notes(store, ("sources", "conclusions")):
-        stems[note.path.stem] = note.path
-        titles[note.title.strip().lower()] = note.path
-    return stems.get(slug) or stems.get(Path(slug).stem) \
-        or titles.get(slug.lower()) or titles.get(Path(slug).stem.lower())
+    note = (by_stem.get(slug) or by_stem.get(Path(slug).stem)
+            or by_title.get(slug.lower())
+            or by_title.get(Path(slug).stem.lower()))
+    return note.path if note else None
 
 
 # --- verbs -------------------------------------------------------------------
 
 def cmd_remember(store, args):
     store.ensure()
-    config = store.workflow()
     when = dt.date.today()
     body = sys.stdin.read().strip()
     if not body:
@@ -236,7 +267,9 @@ def cmd_remember(store, args):
     if args.folder:
         folder = store.sources / args.folder.strip("/ ")
         if store.absorbed in folder.parents or folder == store.absorbed:
-            print("remember: .absorbed is closed — files live there only by crystalize", file=sys.stderr)
+            print("remember: .absorbed is closed — a source is moved there by hand "
+                  "once a conclusion lists it under `derived_from:`; no verb "
+                  "writes there", file=sys.stderr)
             return 1
     folder.mkdir(parents=True, exist_ok=True)
     target = folder / f"{note_id(when)}.md"
@@ -270,9 +303,10 @@ def cmd_conclude(store, args):
     minimum = config["min_sources_per_conclusion"]
     when = dt.date.today()
     sources = [s.strip().strip("[[]]") for s in (args.sources or "").split(",") if s.strip()]
+    by_stem, by_title = note_maps(load_notes(store))
     resolved, missing = [], []
     for slug in sources:
-        path = resolve_slug(store, slug)
+        path = resolve_slug(slug, by_stem, by_title)
         (resolved if path else missing).append((slug, path))
     if missing:
         print("conclude: unresolved source link(s):", file=sys.stderr)
@@ -389,6 +423,19 @@ def score_note(note, terms, focus, priority_tags):
     return score
 
 
+def _gap(store, config, question, no_enqueue):
+    """What a gap does to the queue: enqueued when the configuration says
+    so; with --no-enqueue only deduped, so an already-pending question is
+    still named and nothing is written."""
+    if config["auto_enqueue"] and not no_enqueue:
+        cmd_enqueue(store, argparse.Namespace(
+            question=[question], priority="med", requested_by="query gap"))
+    elif no_enqueue:
+        cmd_enqueue(store, argparse.Namespace(
+            question=[question], priority="med", requested_by="query gap",
+            _dedupe_only=True))
+
+
 def cmd_query(store, args):
     config = store.workflow()
     question = " ".join(args.question).strip()
@@ -411,21 +458,11 @@ def cmd_query(store, args):
                 print(f"        links: {', '.join(links[:6])}")
     if not hits:
         print("gap: nothing on record for this question")
-        if config["auto_enqueue"] and not args.no_enqueue:
-            cmd_enqueue(store, argparse.Namespace(
-                question=[question], priority="med", requested_by="query gap"))
-        elif args.no_enqueue:
-            cmd_enqueue(store, argparse.Namespace(
-                question=[question], priority="med", requested_by="query gap", _dedupe_only=True))
+        _gap(store, config, question, args.no_enqueue)
         return 2
     if len(strong) < 1:
         print("gap: thin — hits name the topic but no note answers it")
-        if config["auto_enqueue"] and not args.no_enqueue:
-            cmd_enqueue(store, argparse.Namespace(
-                question=[question], priority="med", requested_by="query gap"))
-        elif args.no_enqueue:
-            cmd_enqueue(store, argparse.Namespace(
-                question=[question], priority="med", requested_by="query gap", _dedupe_only=True))
+        _gap(store, config, question, args.no_enqueue)
         return 2
     return 0
 
@@ -435,8 +472,7 @@ def build_graph(store):
     `related:` frontmatter, symmetrized. Provenance per edge says where it
     came from. Writes .graphify/graph.json. Returns (notes, edges)."""
     notes = load_notes(store)
-    by_stem = {n.path.stem: n for n in notes}
-    by_title = {n.title.strip().lower(): n for n in notes}
+    by_stem, by_title = note_maps(notes)
 
     def resolve(link):
         link = link.strip().strip("[[]]").strip()
@@ -517,26 +553,13 @@ def cmd_relink(store, args):
         missing = [s for s in wanted if s not in listed]
         if not missing:
             continue
-        # rebuild the related block inside the frontmatter
-        lines = text.split("\n")
-        out, in_related, done = [], False, False
-        for line in lines:
-            if line.startswith("related:"):
-                in_related = True
-                out.append(line)
-                out += [f'  - "[[{s}]]"' for s in wanted if s not in listed]
-                done = True
-                continue
-            if in_related:
-                if line.startswith("  - "):
-                    continue  # drop the old entries; the wanted set replaces them
-                in_related = False
-            out.append(line)
-        if not done:  # no related block — insert one after the frontmatter opener
-            close = out.index("---", 1)
-            block = ["related:"] + [f'  - "[[{s}]]"' for s in wanted]
-            out = out[:close] + block + out[close:]
-        note.path.write_text("\n".join(out), encoding="utf-8")
+        # the block rewritten whole: the wanted set, then whatever was
+        # listed and resolves to no note — kept, so `doctor` can still
+        # name it as an unresolved link rather than have it vanish
+        items = wanted + [s for s in listed if s not in wanted]
+        text, _ = common.set_list_key(text, "related",
+                                      [f'"[[{s}]]"' for s in items])
+        note.path.write_text(text, encoding="utf-8")
         print(f"  related: {note.path.stem} + {', '.join(missing)}")
     print(f"relink: {graph['note_count']} nodes, {graph['edge_count']} edges "
           f"-> {store.graph_json}")
@@ -618,59 +641,60 @@ def cmd_wiki(store, args):
 def cmd_board(store, args):
     """board/ — one generated note per PRD, the board as a linkable graph.
 
-    Reads the board beside the KB (the parent of the KB folder): every
-    pearde/prds/<name>/prd.md's frontmatter (state, origin, priority, complexity,
-    blast-radius, needs, from, workflow, footprint), the memos, the
-    workflows. Writes <KB>/board/<slug>.md per PRD — frontmatter carries the
-    state fields as Dataview fields, the body carries the wikilinks: needs,
-    fed-by (the computed reverse), derived-from, children, the memos that
-    mention the PRD, the workflow it runs on. Stale pages for PRDs that left
-    the board are removed. Regenerable: edit prd.md, run board again.
+    Reads the board beside the KB (the parent of the KB folder) through its
+    own readers — @resources/board/plan.py `scan` for every prd.md's
+    frontmatter (state, origin, priority, complexity, blast-radius, needs,
+    from, workflow, footprint), @resources/memos.py `scan` for the memos.
+    Writes <KB>/board/<slug>.md per PRD — frontmatter carries the state
+    fields as Dataview fields, the body carries the wikilinks: needs, fed-by
+    (the computed reverse), derived-from, children, the memos that mention
+    the PRD, the workflow it runs on. Stale pages for PRDs that left the
+    board are removed. Regenerable: edit prd.md, run board again.
     """
     store.ensure()
-    board_root = store.root.parent                # <board> — `pearde/`, the KB's parent
+    board_root = store.root.parent                # <board> — the KB's parent
     prds = board_root / "prds"                     # <board>/prds, the PRD tree
     vault_root = board_root.parent                 # the Obsidian vault: the
                                                    # PROJECT, so a vault-relative
-                                                   # path starts `pearde/`
+                                                   # path starts with the board
+
     def scalar(value):
         # prd.md frontmatter carries trailing comments — "open  # open|..." —
         # so cut on the first " #", and treat the empty-list marker as empty
         text = str(value or "").split("#")[0].strip()
         return "" if text in ("[]", '""', "''") else text
 
+    def listed(value):
+        return value if isinstance(value, list) else [value] if value else []
+
     prds_found = {}          # PRD path-as-slug ("parent/child" for nested) -> fields
-    for prd_file in sorted(prds.rglob("prd.md")):
-        if "wiki" in prd_file.relative_to(prds).parts:
+    for slug, prd in _plan().scan(str(board_root)).items():
+        if prd["board"] is not None:      # a member's PRD is its own board's
             continue
-        slug = prd_file.parent.relative_to(prds).as_posix()
-        entry = prd_file.parent
-        meta, body = parse_frontmatter(prd_file.read_text(encoding="utf-8"))
-        title = next((line[2:].strip() for line in body.split("\n")
-                      if line.startswith("# ")), entry.name)
+        meta = prd["fm"]
         prds_found[slug] = {
-            "title": title or entry.name,
+            "title": prd["title"],
             "state": scalar(meta.get("state")),
             "origin": scalar(meta.get("origin")),
             "priority": scalar(meta.get("priority")),
             "complexity": scalar(meta.get("complexity")),
             "blast": scalar(meta.get("blast-radius")),
-            "needs": [scalar(n) for n in meta.get("needs", []) or [] if scalar(n)],
+            "needs": [scalar(n) for n in listed(meta.get("needs")) if scalar(n)],
             "from": scalar(meta.get("from")),
             "workflow": scalar(meta.get("workflow")),
-            "footprint": [scalar(f) for f in meta.get("footprint", []) or [] if scalar(f)],
-            "text": body,
+            "footprint": [scalar(f) for f in listed(meta.get("footprint")) if scalar(f)],
+            "text": prd["body"],
         }
     memos = {}
-    for memo_path in sorted((board_root / "memos").glob("*.md")):
-        memo_raw = memo_path.read_text(encoding="utf-8")
-        memo_meta, memo_body = parse_frontmatter(memo_raw)
-        memos[memo_path.stem] = {
-            "subject": str(memo_meta.get("subject", "")).strip() or memo_path.stem,
-            "kind": str(memo_meta.get("kind", "")).strip(),
-            "status": str(memo_meta.get("status", "")).strip(),
-            "cites": [str(p).strip() for p in memo_meta.get("prds", []) or []],
-            "text": memo_raw,
+    for slug, m in memos_lib.scan(str(board_root)).items():
+        memos[slug] = {
+            "subject": str(m["subject"]).strip() or slug,
+            "kind": str(m["kind"]).strip(),
+            "status": str(m["status"]).strip(),
+            "cites": [str(p).strip() for p in listed(m["fm"].get("prds"))],
+            # the raw file, frontmatter and all: a PRD named in the subject
+            # line still counts as mentioned
+            "text": common.read_text(m["path"]),
         }
     board_dir = store.root / "board"
     board_dir.mkdir(parents=True, exist_ok=True)
@@ -936,12 +960,10 @@ def cmd_index(store, args):
             slug += "-2"
         taken[slug] = path
         slugs[path] = slug
-    link = {path: f"pearde/wiki/index/{slug}" for path, slug in slugs.items()}
-    # the board folder is `pearde/` since 2026-09-02, `.pearde/` where it never
-    # moved — the vault is the project either way, so the note's own address
-    # carries the board's real name in front
-    if board_root.name != "pearde":
-        link = {path: f"{board_root.name}/wiki/index/{slugs[path]}" for path in rows}
+    # the vault is the project, so the note's own address carries the
+    # board's real name in front, whatever the board is called
+    link = {path: f"{board_root.name}/wiki/index/{slug}"
+            for path, slug in slugs.items()}
 
     index_dir = store.root / "index"
     index_dir.mkdir(parents=True, exist_ok=True)
@@ -1008,13 +1030,6 @@ def cmd_index(store, args):
     return 0
 
 
-def memo_text(prds, slug):
-    try:
-        return (prds / "memos" / f"{slug}.md").read_text(encoding="utf-8")
-    except OSError:
-        return ""
-
-
 def cmd_dashboard(store, args):
     """Rewrite Dashboard.md's numbers only — a human edits the queries; this
     prints the plain report. --write regenerates the report file."""
@@ -1052,7 +1067,7 @@ def cmd_dashboard(store, args):
     ]
     if hubs:
         out += ["", "## Hubs (most referenced)", ""]
-        out += [f"- [[{stem} — {count} inbound" for stem, count in hubs]
+        out += [f"- [[{stem}]] — {count} inbound" for stem, count in hubs]
     if orphans:
         out += ["", "## Orphans (no edges in either direction)", ""]
         out += [f"- [[{n.path.stem}]] — {n.title}" for n in orphans]
@@ -1157,7 +1172,7 @@ def stub_wikis(store):
         return out
     live = store.root.resolve()
     for lane in sorted(lanes.iterdir()):
-        for name in ("pearde", ".pearde"):
+        for name in common.BOARD_DIRS:
             w = lane / name / "wiki"
             if not w.is_dir():
                 continue

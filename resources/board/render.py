@@ -291,15 +291,27 @@ def render(payload, board=None, base="", vstamp=None):
     identical data, one hand-off, no fetch on boot."""
     p = enrich(payload)
     data = json.dumps(p, sort_keys=True).replace("</", "<\\/")
+    # the registry rides across on the same hand-off as the payload, so
+    # `view.js` and `viewtest.js` read the sections from the one list that
+    # drew them rather than from a copy of it kept in step by hand
+    sections = json.dumps([{k: v for k, v in s.items() if k != "body"}
+                           for s in SECTIONS], sort_keys=True)
     globs = ('<script>window.__PAYLOAD__ = ' + data + ';'
+             + 'window.__SECTIONS__ = ' + sections + ';'
              + 'window.__REPORTMTIME__ = ' + json.dumps(report_age(board))
              + ';</script>')
+    # the bar and the wrappers are generated before the view is inlined:
+    # `view.js` names `window.__SECTIONS__` in its own source, and a token
+    # substituted after the inlining would rewrite the script that reads it
+    shell = (TEMPLATE
+             .replace("__NAVBAR__", _nav_html())
+             .replace("__SECTIONBODY__", _sections_html()))
     if vstamp is None:
-        html = (TEMPLATE
+        html = (shell
                 .replace("__CSS__", asset("view.css"))
                 .replace("__JS__", asset("view.js")))
     else:
-        html = (TEMPLATE
+        html = (shell
                 .replace("<style>\n__CSS__</style>",
                          f'<link rel="stylesheet" href="{base}/view.css'
                          f'?v={vstamp}">')
@@ -357,78 +369,26 @@ def write(board, payload):
 # task column come free, only the visible rows are ever touched, and gradients
 # and glows cost nothing per frame. Everything else on the page is DOM, because
 # everything else is text you should be able to select.
-TEMPLATE = r"""<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>__TITLE__ — plan</title>
-<link rel="icon" href="data:,">
-<script>/* a chosen theme paints before the first frame, not after it */
-try{var _t=localStorage.getItem("pearde-theme");
-if(_t==="light"||_t==="dark")document.documentElement.dataset.theme=_t;
-}catch(e){}</script>
-<style>
-__CSS__</style>
-</head>
-<body>
-<header id="titlebar">
-  <div class="ident">
-    <span id="face" title="happiness · `pearde be happy` raises it">__FACE__</span>
-    <button id="pick" aria-haspopup="listbox" aria-expanded="false"
-            title="switch board (B)"><h1>__TITLE__</h1><svg id="chev"
-      width="9" height="6" viewBox="0 0 9 6" aria-hidden="true"><path
-      d="M1 1.2 4.5 4.7 8 1.2" fill="none" stroke="currentColor"
-      stroke-width="1.5" stroke-linecap="round"
-      stroke-linejoin="round"/></svg></button>
-    <span id="sub">the plan</span>
-    <div id="picks" role="listbox" aria-label="boards" hidden></div>
-  </div>
-  <nav id="views" aria-label="sections of this page">
-    <span id="segpill" aria-hidden="true"></span>
-    <a href="#view=boards" data-v="boards" id="tab-boards">boards</a
-    ><a href="#view=timeline" data-v="timeline" class="on">plan</a
-    ><a href="#view=board" data-v="board">board</a
-    ><a href="#view=analytics" data-v="analytics">analytics</a
-    ><a href="#view=health" data-v="health">health</a
-    ><a href="#view=asks" data-v="asks">asks<span class="badge" id="askbadge"></span></a
-    ><a href="#view=list" data-v="list">list</a
-    ><a href="#view=memos" data-v="memos">memos</a
-    ><a href="#view=report" data-v="report">report</a>
-  </nav>
-  <div class="right">
-    <button id="ksopen" class="ksbar" title="search everything (⌘K)"
-      ><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"
-      ><circle cx="5" cy="5" r="3.6" fill="none" stroke="currentColor"
-        stroke-width="1.5"/><path d="M7.8 7.8 11 11" stroke="currentColor"
-        stroke-width="1.5" stroke-linecap="round"/></svg
-      ><span>Search</span><kbd>⌘K</kbd></button>
-    <button id="themetog" title="theme — following the system">◐</button>
-    <button id="newprd" class="primary" title="write a PRD (N)">＋ PRD</button>
-  </div>
-</header>
-<button id="statetab" class="edgetab tleft"
-  title="the board's state — the report, the purpose, what wants you (s)"
-  aria-controls="state" aria-expanded="false">
-  <span class="lbl">state</span><b class="tabn hot" id="staten" hidden></b>
-</button>
-<aside id="state" aria-label="the board's state">
-  <div class="shd">
-    <h2>the board</h2>
-    <button id="sclose" title="close (Esc)">✕</button>
-  </div>
-  <div class="sbody">
-    <pearde-now id="now" aria-label="what the board wants now"></pearde-now>
-    <pearde-whatsup id="whatsup" aria-label="what's up"></pearde-whatsup>
-    <div id="purpose"></div>
-    <button class="act" data-go='{"view":"report"}'>the report, in full</button>
-  </div>
-</aside>
-<section data-view="boards" id="s-boards">
+# ── the sections ───────────────────────────────────────────────────────────
+# One list names every section of this page: its id (the `#view=` fragment,
+# the `data-v` the keyboard map clicks and the `data-view` wrapper), the word
+# on the header bar, the band of the enriched payload it draws from, whether
+# it folds behind a `<details class="fold">`, which of the two page shapes
+# carries it (`only`: `"virtual"` is the merged `all` page's, `"real"` is one
+# board's, `None` is both), and the `host` selector whose emptiness proves it
+# never drew. `_nav_html()` and `_sections_html()` below build the bar and the
+# wrappers from it, `window.__SECTIONS__` hands the same rows to `view.js` and
+# `viewtest.js`, and a ninth section is one row here and no edit anywhere else.
+SECTIONS = [
+    {"id": "boards", "title": "boards", "nav_attrs": ' id="tab-boards"',
+     "band": "boards", "folds": False, "only": "virtual", "host": "#boardlist",
+     "body": r'''
   <h2 class="sect">every board this machine watches</h2>
   <pearde-boards id="boardlist"></pearde-boards>
-</section>
-<section data-view="timeline" id="s-timeline" class="on">
+'''},
+    {"id": "timeline", "title": "plan", "nav_attrs": "",
+     "band": "tasks", "folds": False, "only": None, "host": None, "on": True,
+     "body": r'''
 <button id="landtog" class="edgetab tright"
   title="focus — what to collect, what to dispatch, what to land (l)"
   aria-controls="land" aria-expanded="false">
@@ -494,50 +454,151 @@ __CSS__</style>
   <pearde-frontier id="land" aria-label="waiting to land in main"></pearde-frontier>
 </div>
 <div id="note"></div>
-</section>
-<section data-view="board" id="s-board">
+'''},
+    {"id": "board", "title": "board", "nav_attrs": "",
+     "band": "tasks", "folds": False, "only": None, "host": "pearde-board",
+     "body": r'''
   <h2 class="sect">the board</h2>
   <pearde-board id="board"></pearde-board>
-</section>
-<section data-view="analytics" id="s-analytics">
+'''},
+    {"id": "analytics", "title": "analytics", "nav_attrs": "",
+     "band": "tasks", "folds": False, "only": None, "host": "#tiles",
+     "body": r'''
   <h2 class="sect">the analytics</h2>
   <div id="statsbar"><span id="stats"></span></div>
   <div id="tiles"></div><div id="charts"></div>
-</section>
-<section data-view="health" id="s-health">
+'''},
+    {"id": "health", "title": "health", "nav_attrs": "",
+     "band": "health", "folds": False, "only": "real", "host": "pearde-health",
+     "body": r'''
   <h2 class="sect">what resists being worked</h2>
   <pearde-health id="health"></pearde-health>
-</section>
-<section data-view="asks" id="s-asks">
+'''},
+    {"id": "asks", "title": "asks", "nav_attrs": "",
+     "nav_extra": '<span class="badge" id="askbadge"></span>', "band": "asks", "folds": False, "only": None, "host": "#asks",
+     "body": r'''
   <h2 class="sect">waiting on you</h2>
   <div id="askwrap">
   <div id="asks"></div>
   <aside id="answered" aria-label="questions already answered"></aside>
-</div></section>
-<section data-view="list" id="s-list">
-  <details class="fold" id="fold-list">
-    <summary><span class="sect">everything, as a table</span
-      ><span class="n" id="listfoldn"></span></summary>
+</div>'''},
+    {"id": "list", "title": "list", "nav_attrs": "",
+     "band": "tasks", "folds": True, "only": None, "host": "pearde-list",
+     "summary": r'''<span class="sect">everything, as a table</span
+      ><span class="n" id="listfoldn"></span>''',
+     "body": r'''
   <div id="listbar"><input type="search" id="lq" placeholder="filter  /">
     <span class="tokens" id="ltokens"></span>
     <span class="n" id="lcount"></span></div>
   <pearde-list id="list"></pearde-list>
-  </details>
-</section>
-<section data-view="memos" id="s-memos">
-  <details class="fold" id="fold-memos">
-    <summary><span class="sect">decisions on record</span
-      ><span class="n" id="memofoldn"></span></summary>
+'''},
+    {"id": "memos", "title": "memos", "nav_attrs": "",
+     "band": "memos", "folds": True, "only": None, "host": "pearde-memos",
+     "summary": r'''<span class="sect">decisions on record</span
+      ><span class="n" id="memofoldn"></span>''',
+     "body": r'''
     <pearde-memos id="memos"></pearde-memos>
-  </details>
-</section>
-<section data-view="report" id="s-report">
-  <details class="fold" id="fold-report">
-    <summary><span class="sect">the report, in full</span
-      ><span class="n">the first paragraphs of it open this page</span></summary>
+'''},
+    {"id": "report", "title": "report", "nav_attrs": "",
+     "band": "report", "folds": True, "only": "real", "host": "pearde-report",
+     "summary": r'''<span class="sect">the report, in full</span
+      ><span class="n">the first paragraphs of it open this page</span>''',
+     "body": r'''
     <pearde-report id="report"></pearde-report>
-  </details>
-</section>
+'''},
+]
+
+
+def _nav_html():
+    """The header bar. One `<a>` per row, in registry order, closed against
+    the next one — the `</a\n    ><a` seam is deliberate: these are
+    inline-block and a newline between them would be a rendered space."""
+    tags = []
+    for s in SECTIONS:
+        cls = ' class="on"' if s.get("on") else ""
+        tags.append('<a href="#view={0}" data-v="{0}"{1}{2}>{3}{4}</a'.format(
+            s["id"], s["nav_attrs"], cls, s["title"], s.get("nav_extra", "")))
+    return "    " + "\n    >".join(tags) + ">"
+
+
+def _sections_html():
+    """The section wrappers, in the same order and from the same rows. A row
+    with `folds` gets its `<details class="fold">` and its `<summary>` here,
+    which is what makes the fold rule a field rather than a paragraph."""
+    out = []
+    for s in SECTIONS:
+        cls = ' class="on"' if s.get("on") else ""
+        body = s["body"]
+        if s["folds"]:
+            body = ('\n  <details class="fold" id="fold-{0}">\n'
+                    '    <summary>{1}</summary>\n'.format(
+                        s["id"], s.get("summary", ""))
+                    + body.lstrip("\n") + "  </details>\n")
+        out.append('<section data-view="{0}" id="s-{0}"{1}>{2}</section>'.format(
+            s["id"], cls, body))
+    return "\n".join(out)
+
+
+TEMPLATE = r"""<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__ — plan</title>
+<link rel="icon" href="data:,">
+<script>/* a chosen theme paints before the first frame, not after it */
+try{var _t=localStorage.getItem("pearde-theme");
+if(_t==="light"||_t==="dark")document.documentElement.dataset.theme=_t;
+}catch(e){}</script>
+<style>
+__CSS__</style>
+</head>
+<body>
+<header id="titlebar">
+  <div class="ident">
+    <span id="face" title="happiness · `pearde be happy` raises it">__FACE__</span>
+    <button id="pick" aria-haspopup="listbox" aria-expanded="false"
+            title="switch board (B)"><h1>__TITLE__</h1><svg id="chev"
+      width="9" height="6" viewBox="0 0 9 6" aria-hidden="true"><path
+      d="M1 1.2 4.5 4.7 8 1.2" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round"
+      stroke-linejoin="round"/></svg></button>
+    <span id="sub">the plan</span>
+    <div id="picks" role="listbox" aria-label="boards" hidden></div>
+  </div>
+  <nav id="views" aria-label="sections of this page">
+    <span id="segpill" aria-hidden="true"></span>
+__NAVBAR__
+  </nav>
+  <div class="right">
+    <button id="ksopen" class="ksbar" title="search everything (⌘K)"
+      ><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"
+      ><circle cx="5" cy="5" r="3.6" fill="none" stroke="currentColor"
+        stroke-width="1.5"/><path d="M7.8 7.8 11 11" stroke="currentColor"
+        stroke-width="1.5" stroke-linecap="round"/></svg
+      ><span>Search</span><kbd>⌘K</kbd></button>
+    <button id="themetog" title="theme — following the system">◐</button>
+    <button id="newprd" class="primary" title="write a PRD (N)">＋ PRD</button>
+  </div>
+</header>
+<button id="statetab" class="edgetab tleft"
+  title="the board's state — the report, the purpose, what wants you (s)"
+  aria-controls="state" aria-expanded="false">
+  <span class="lbl">state</span><b class="tabn hot" id="staten" hidden></b>
+</button>
+<aside id="state" aria-label="the board's state">
+  <div class="shd">
+    <h2>the board</h2>
+    <button id="sclose" title="close (Esc)">✕</button>
+  </div>
+  <div class="sbody">
+    <pearde-now id="now" aria-label="what the board wants now"></pearde-now>
+    <pearde-whatsup id="whatsup" aria-label="what's up"></pearde-whatsup>
+    <div id="purpose"></div>
+    <button class="act" data-go='{"view":"report"}'>the report, in full</button>
+  </div>
+</aside>
+__SECTIONBODY__
 <div id="newbox"><div class="card2">
   <h3>a new PRD</h3>
   <input type="text" id="ntitle" placeholder="title — what exists when this is done">

@@ -2574,6 +2574,16 @@ const SERVED = !!BOARD_KEY;
    gated on EDITABLE, never on SERVED — the daemon IS there, it is this page
    that has no file. */
 const VIRTUAL = !!DATA.virtual;
+/* The section registry render.py drew this page from, handed over beside the
+   payload. Every id, every `#view=` fragment and every ⌘-digit on this page
+   comes from the bar's own `<a>` elements, and those were generated from
+   these rows — so the keyboard map, the URL fragments and the sections are
+   one table, not three that have to be kept level. `only` says which of the
+   two page shapes carries a section; `host` is the selector that proves it
+   drew. */
+const SECTIONS = window.__SECTIONS__ || [];
+/* the merged page's own landing section — the first row that only it carries */
+const DEFAULT_VIRTUAL = (SECTIONS.find(s => s.only === "virtual") || {}).id;
 const EDITABLE = SERVED && !VIRTUAL;
 const RO_MSG = "all is a display — open the board to change anything";
 
@@ -4877,18 +4887,26 @@ if (!SERVED) $("pick").classList.add("solo");
    that belong to one board and gains the one that names them all. Removed,
    not hidden: a tab nobody can use is still a tab a reader has to rule out,
    and the pill measures the bar it is given. */
+// a section whose row is marked for the other page shape goes — its tab and
+// its wrapper together, from the one table that named both
+for (const s of SECTIONS) {
+  if (!s.only || (s.only === "virtual") === VIRTUAL) continue;
+  const tab = document.querySelector(`#views a[data-v="${s.id}"]`);
+  if (tab) tab.remove();
+  const sec = document.getElementById(`s-${s.id}`);
+  if (sec) sec.remove();
+}
 if (VIRTUAL) {
   document.body.classList.add("virtual");
   $("sub").textContent = "every board";
   const np = $("newprd"); if (np) np.remove();
-  // the report is one board's state written for a person. Several boards
-  // have several of them, and picking one would be a lie about the rest —
-  // the dashboard is what this page says instead. The ranking is the same
-  // shape of fact: one repo's own `.pearde/health/`, and a merge across
-  // several would be a table of files that do not compete on one scale
-  for (const sel of ['#views a[data-v="report"]', "#s-report", "#whatsup",
-                     '#state .act[data-go*="report"]',
-                     '#views a[data-v="health"]', "#s-health"]) {
+  // the report and the ranking went with the registry above — both are marked
+  // `only: "real"` there. Several boards have several reports, and picking one
+  // would be a lie about the rest; the ranking is one repo's own
+  // `.pearde/health/`, and a merge across several would be a table of files
+  // that do not compete on one scale. These two are the report's echoes
+  // outside its section — the prose panel and the door into it
+  for (const sel of ["#whatsup", '#state .act[data-go*="report"]']) {
     const el = document.querySelector(sel); if (el) el.remove();
   }
   // the inspector reads here and writes nowhere: the door out is the row's
@@ -4897,10 +4915,6 @@ if (VIRTUAL) {
   for (const id of ["dgo", "drevert"]) {
     const el = $(id); if (el) el.remove();
   }
-} else {
-  const bt = document.querySelector('#views a[data-v="boards"]');
-  if (bt) bt.remove();
-  const bs = $("s-boards"); if (bs) bs.remove();
 }
 syncToggles();
 drawLegend();
@@ -4917,7 +4931,8 @@ drawAll();           // every section, on the first paint — not one per click
 readHash();
 // the merged page opens on its dashboard: the plan of a dozen boards at once
 // is not the first thing to hand a reader, the state of each of them is
-if (VIRTUAL && !/(^|&)view=/.test(location.hash.slice(1))) setView("boards");
+if (VIRTUAL && DEFAULT_VIRTUAL && !/(^|&)view=/.test(location.hash.slice(1)))
+  setView(DEFAULT_VIRTUAL);
 // the clock ticks for two reasons: the calendar's now-line, and how long a
 // worker has been holding a PRD. Both are read off Date.now(), so both go
 // stale between board changes if nothing repaints. Board changes themselves

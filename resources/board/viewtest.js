@@ -117,6 +117,23 @@ const file = served ? arg : path.resolve(arg);
     };
   });
 
+  // The page hands its own section registry over beside the payload
+  // (render.py's SECTIONS, embedded as window.__SECTIONS__), and every
+  // expectation below about which sections exist, in what order, which one
+  // the page lands on and which selector proves each one drew is read off it
+  // instead of typed out here — so a ninth section is a row in render.py and
+  // no edit in this file. `all` is the same page over every watched board
+  // (references/parts/all.md): it gains the dashboard it opens on and loses
+  // the two things that belong to one board — the report, and every door that
+  // writes. Which sections that is, is the registry's `only` field.
+  const REG = await page.evaluate(() => window.__SECTIONS__ || []);
+  const VIRTUAL = await page.evaluate(
+    () => !!(window.__PAYLOAD__ && window.__PAYLOAD__.virtual));
+  const ORDER = REG.filter(s => !s.only || (s.only === "virtual") === VIRTUAL)
+                   .map(s => s.id);
+  const FIRST = VIRTUAL ? (REG.find(s => s.only === "virtual") || {}).id
+                        : (REG.find(s => s.on) || {}).id;
+
   const checks = [
     ["no page error", errors.length === 0, errors.slice(0, 2).join(" | ")],
     ["Lit is bound, offline", r.lit, ""],
@@ -125,7 +142,8 @@ const file = served ? arg : path.resolve(arg);
     ["live apply hook wired", r.apply, ""],
     ["hold hook still wired", r.hold, ""],
     ["the toolbar built", r.titlebar, ""],
-    ["eight section anchors", r.views === 8, `got ${r.views}`],
+    ["one section anchor per registry row", r.views === ORDER.length,
+     `got ${r.views}, registry says ${ORDER.length}`],
     ["the canvas is sized", r.canvasPainted, ""],
     ["the gantt drew", r.draws > 20, `${r.draws} draw ops`],
     ["the frontier column built", r.land, ""],
@@ -136,7 +154,7 @@ const file = served ? arg : path.resolve(arg);
     ["the inspector exists", r.drawer, ""],
   ];
 
-  // ── seven views, one at a time ──────────────────────────────────────────
+  // ── the registry's views, one at a time ─────────────────────────────────
   // The three things this page is, asserted rather than eyeballed: the
   // sections are in the PRD's order, exactly one is visible on load, every
   // one of them has drawn before anything was clicked, and the page does not
@@ -153,8 +171,10 @@ const file = served ? arg : path.resolve(arg);
       // the box — the check that would have caught the one-draw-per-repaint
       // dispatcher.
       emptyHosts: secs.filter(s => {
-        const host = s.querySelector(
-          "pearde-board,pearde-list,pearde-memos,pearde-report,#asks,#tiles");
+        const row = (window.__SECTIONS__ || []).find(
+          r => r.id === s.dataset.view);
+        if (!row || !row.host) return false;
+        const host = s.querySelector(row.host);
         return host && host.querySelectorAll("*").length === 0;
       }).map(s => s.dataset.view),
       // the timeline's own content — the legend is DOM, the canvas is
@@ -185,18 +205,9 @@ const file = served ? arg : path.resolve(arg);
         'section[data-view="timeline"] #landtog'),
     };
   });
-  // `all` is the same page over every watched board (references/parts/all.md):
-  // it gains the dashboard it opens on and loses the two things that belong
-  // to one board — the report, and every door that writes. Everything else on
-  // this page is asserted the same way, because it IS the same page.
-  const VIRTUAL = await page.evaluate(
-    () => !!(window.__PAYLOAD__ && window.__PAYLOAD__.virtual));
-  const ORDER = VIRTUAL
-    ? ["boards", "timeline", "board", "analytics", "asks", "list", "memos"]
-    : ["timeline", "board", "analytics", "health", "asks", "list", "memos",
-       "report"];
-  const FIRST = VIRTUAL ? "boards" : "timeline";
-  checks.push(["the sections are in the PRD's order",
+  // Everything else on this page is asserted the same way on both shapes,
+  // because it IS the same page.
+  checks.push(["the sections are in the registry's order",
                page1.order.join(",") === ORDER.join(","), page1.order.join(" ")]);
   checks.push(["exactly one section is visible on load",
                page1.visible.length === 1 && page1.visible[0] === FIRST,

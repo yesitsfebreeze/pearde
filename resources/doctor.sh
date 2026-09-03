@@ -483,10 +483,12 @@ if [ -n "$BOARD" ]; then
   # @resources/board/obsidian_register.py and nothing here. Its `status`
   # answers in exactly the four states the branches below report:
   # no-home, not-installed, `registered <id>`, not-registered.
-  # The vault is the PROJECT, not the board: Obsidian skips every path with a
-  # dot-segment, so a board named `.pearde/` shows in no vault at all and a
-  # vault rooted at the board hides the project from the board. The board is
-  # `pearde/` and the project is the vault — this row checks that pair.
+  # The vault is the PROJECT, not the board: a vault rooted at the board hides
+  # the project from the board. Obsidian skips every path with a dot-segment
+  # on its own, so a board named `.pearde/` shows only through a plugin that
+  # unhides dotfiles — `unhide` or `hidden-folders-access` in the project's
+  # community-plugins.json. With one enabled the dot name is no defect and
+  # nothing has to move; without one the row says which plugin, not "move".
   PROJ=$(dirname "$BOARD")
   PABS=$(cd "$PROJ" 2>/dev/null && pwd -P)
   OBSREG=$(res obsidian_register.py)
@@ -497,9 +499,10 @@ if [ -n "$BOARD" ]; then
   # the one thing the `no-home` arm below claims. The row keeps the path in
   # hand rather than working out where it is: that is the module's business.
   OBSCFG=$(python3 "$OBSREG" open 2>/dev/null) || OBSCFG=""
-  if [ "$(basename "$BOARD")" = ".pearde" ] && [ ! -L "$BOARD" ]; then
-    row vault broken "the board is $BOARD — a dot-segment, and Obsidian skips every path holding one, so nothing of it can show in the project's vault"
-    fix "python3 $SKILL_ROOT/resources/pearde.py upgrade $PROJ — moves it to $PROJ/pearde and leaves a .pearde symlink, so every path spelled the old way still resolves"
+  UNHIDE=$(grep -oE '"(unhide|hidden-folders-access)"' "$PROJ/.obsidian/community-plugins.json" 2>/dev/null | head -1 | tr -d '"')
+  if [ "$(basename "$BOARD")" = ".pearde" ] && [ ! -L "$BOARD" ] && [ -z "$UNHIDE" ]; then
+    row vault broken "the board is $BOARD — a dot-segment, and Obsidian skips every path holding one unless a plugin unhides it; neither unhide nor hidden-folders-access is enabled in $PROJ/.obsidian"
+    fix "python3 $SKILL_ROOT/resources/pearde.py vault $PROJ — seeds the preset, hidden-folders-access in it; or enable unhide in Obsidian"
   elif [ ! -d "$PROJ/.obsidian" ]; then
     row vault off "no $PROJ/.obsidian — the status line's ▸vault stays hidden"
     fix "python3 $SKILL_ROOT/resources/pearde.py vault --wait --open $PROJ — seeds $PROJ/.obsidian and registers it (quit Obsidian when it asks: the register is only writable while the app is closed)"
@@ -514,12 +517,7 @@ if [ -n "$BOARD" ]; then
     row vault broken "$PROJ is not in Obsidian's vault register — ▸vault opens the nearest registered ancestor instead"
     fix "python3 $SKILL_ROOT/resources/pearde.py vault --wait --open $PROJ — Obsidian reads the register at launch and rewrites it from memory on quit, so the entry has to be written while it is closed; --wait does that the moment you quit"
     # `--fix` reaches the same writer this fix line names — `register_vault`
-<<<<<<< HEAD
     # under `pearde vault` — never the register file directly. Two refusals come
-||||||| parent of 26ce568 (doctor-repairs-the-register-entry — Doctor repairs the register entry)
-=======
-    # under `pearde vault` — never obsidian.json directly. Two refusals come
->>>>>>> 26ce568 (doctor-repairs-the-register-entry — Doctor repairs the register entry)
     # first, both unwritten: a register already holding more than one entry
     # for this exact project (a hand-edited file, or a stale id from before
     # the writer deduped by realpath) is named rather than picked between,

@@ -6,6 +6,7 @@ complexity: 12
 blast-radius: low
 workflow: probe-then-spec
 actual: 0.68h
+commit: 48540d3 ff74db9
 ---
 
 # pearde vault without --wait

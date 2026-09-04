@@ -5,6 +5,7 @@ priority: 42
 complexity: 12
 blast-radius: low
 workflow: probe-then-spec
+commit: 7f760c2 3f8bfd1
 ---
 
 # One verb set

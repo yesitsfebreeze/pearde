@@ -79,16 +79,26 @@ cd /Users/feb/dev/infra/pearde
 # Green on this tree: every line PASS, exit 0.
 bash resources/invariants/a-master-need-is-the-union-of-its-members.sh
 
-# And it can fail. The whole module is swapped for the committed, pre-union
-# one — a behavioural mutation, not a renamed string.
+# And it can fail, against `scan_roots` reverted to returning only the board —
+# spec02's box in its own words. The revert is made in a scratch copy outside
+# the repo, never against `git archive HEAD`: once this unit is committed HEAD
+# is the union, so it is no baseline, and a HEAD that is broken for any other
+# reason would fail this check for the wrong one.
 D=$(mktemp -d /tmp/rampold.XXXXXX)
-git archive HEAD | tar -x -C "$D"
+cp -R resources "$D/resources"
+python3 - "$D/resources/board/ramp.py" <<'REVERT'
+import sys
+p = sys.argv[1]; s = open(p).read()
+old = '    if not planlib.members(board):\n        return [("", board)]'
+assert s.count(old) == 1, "scan_roots's early return moved — re-aim the revert"
+open(p, "w").write(s.replace(old, '    return [("", board)]', 1))
+REVERT
 RAMP="$D/resources/board/ramp.py" \
   bash resources/invariants/a-master-need-is-the-union-of-its-members.sh \
   >/dev/null 2>&1 && mrc=0 || mrc=$?
 rm -rf "$D"
-if [ "$mrc" = 0 ]; then echo "FAIL the invariant passed against the pre-union ramp.py"; exit 1; fi
-echo "the invariant exits $mrc against the committed ramp.py"
+if [ "$mrc" = 0 ]; then echo "FAIL the invariant passed with scan_roots reverted"; exit 1; fi
+echo "the invariant exits $mrc with scan_roots reverted to the board alone"
 
 # `memos.py check` reads every memo on the board, so a neighbour's malformed
 # one would decide this unit's colour. Same treatment: captured, printed, and

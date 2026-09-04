@@ -7,7 +7,17 @@
 # and runs from a cwd with no prds/ above it; PEARDE_PORT=1 so nothing here
 # can reach a live daemon. Nothing touches the real board.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 PEARDE="$ROOT/resources/pearde.py"
 export PEARDE_AS=engineer
 export PEARDE_PORT=1
@@ -257,7 +267,7 @@ t   "D …no daemon line, no doctor" "! grep -q 'doctor\|http' <<<\"\$OUT\""
 
 # ── E. the real board was never touched ─────────────────────────────────────
 echo "E. the real board"
-t   "E no fixture prd.md under prds/" "[ -z \"$(find "$ROOT/.pearde/prds" -name prd.md -path '*dry-test*' -o -name prd.md -path '*/alpha/*')\" ]"
+t   "E no fixture prd.md under prds/" "[ -z \"$(find "$BOARD/prds" -name prd.md -path '*dry-test*' -o -name prd.md -path '*/alpha/*')\" ]"
 
 echo
 echo "verify: $((pass+fail)) checks · $pass pass · $fail fail"

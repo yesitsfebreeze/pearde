@@ -2,7 +2,17 @@
 # the-skill-tree-is-guarded — a round on another board cannot write the skill
 # through the install. Every call is hook JSON on stdin; PEARDE_GUARD_STATE
 # points at a temp dir, so nothing under resources/board/state/ is touched.
-ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd -P)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd -P)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 GUARD="$ROOT/resources/guard.py"
 D="$(mktemp -d)"; S="$(mktemp -d)"           # fixtures; scratch, outside them
 trap 'rm -rf "$D" "$S"' EXIT
@@ -74,13 +84,13 @@ out=$(hook Write "$D/proj" "$D/proj/.pearde/prds/asking/specs/spec09.md")
 [ -z "$out" ]; ok "P2 a Write under the project's own prds/ passes" $?
 out=$(hook Edit "$ROOT" "$LINK")
 [ -z "$out" ]; ok "P3 the same Edit from a working directory in this repo passes" $?
-out=$(hook Edit "$ROOT/.pearde/prds/memos" "$LINK")
+out=$(hook Edit "$BOARD/prds/memos" "$LINK")
 [ -z "$out" ]; ok "P4 a working directory inside this repo's board passes" $?
 out=$(hook Edit "$D/nowhere" "$LINK")
 [ -z "$out" ]; ok "P5 no board in scope passes — the guard refuses only a round provably another board's" $?
 out=$(hook Edit "$D/nowhere" "$ROOT/references/parts/guard.md")
 [ -z "$out" ]; ok "P6 no board in scope, the real path by name, passes" $?
-out=$(hook Write "$D/proj" "$ROOT/.pearde/prds/memos/from-elsewhere.md")
+out=$(hook Write "$D/proj" "$BOARD/prds/memos/from-elsewhere.md")
 [ -z "$out" ]; ok "P7 a write under this repo's own prds/ from another board passes — filing here is the way in" $?
 out=$(hook Read "$D/proj" "$LINK")
 [ -z "$out" ]; ok "P8 a Read through the link is not this rule's business" $?

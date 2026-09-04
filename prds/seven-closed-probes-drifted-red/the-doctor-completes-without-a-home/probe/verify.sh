@@ -19,14 +19,21 @@
 #
 #   bash .pearde/prds/seven-closed-probes-drifted-red/the-doctor-completes-without-a-home/probe/verify.sh
 set -u
-# walk up to the repo root rather than counting `..` — this harness sits four
-# directories deep under .pearde/prds/ and a miscount reads as seven failures
-cd "$(dirname "$0")" || exit 1
-while [ ! -f "$PWD/resources/doctor.sh" ] && [ "$PWD" != / ]; do cd .. || exit 1; done
-[ -f "$PWD/resources/doctor.sh" ] || { echo "  FAIL  no repo root above $0"; exit 1; }
-ROOT="$PWD"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
+cd "$ROOT" || exit 1
+[ -f "$ROOT/resources/doctor.sh" ] || { echo "  FAIL  no repo root at $ROOT"; exit 1; }
 DOCTOR="$ROOT/resources/doctor.sh"
-VIEWROW="$ROOT/.pearde/prds/the-view-row-names-a-variable-that-exists/probe/verify.sh"
+VIEWROW="$BOARD/prds/the-view-row-names-a-variable-that-exists/probe/verify.sh"
 
 pass=0; fail=0; skip=0
 ok()  { pass=$((pass+1)); echo "  ok    $1"; }
@@ -45,10 +52,10 @@ trap cleanup EXIT
 
 # the fixture board: a .pearde/ with settings and a vault directory, so the
 # vault row reaches its register read instead of stopping at `off`
-BOARD="$D/repo/.pearde"
-mkdir -p "$BOARD/prds" "$BOARD/.obsidian"
-printf 'name: nohome-fixture\nlanguage: English\n' > "$BOARD/settings.md"
-BABS="$(cd "$BOARD" && pwd -P)"
+FIXB="$D/repo/.pearde"
+mkdir -p "$FIXB/prds" "$FIXB/.obsidian"
+printf 'name: nohome-fixture\nlanguage: English\n' > "$FIXB/settings.md"
+BABS="$(cd "$FIXB" && pwd -P)"
 
 # a home that holds an Obsidian register naming this board, and one that
 # holds no Obsidian config at all

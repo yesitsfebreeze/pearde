@@ -37,24 +37,44 @@ run. Do not remove `obsidian-local-rest-api` from a vault that already has it:
 
 ## Acceptance
 
-- [ ] `pearde init <fresh-dir>` creates no `<fresh-dir>/.obsidian` and no file named `.obsidian-api-key` anywhere under the project.
-- [ ] `pearde init` prints one line naming `pearde vault` as the way to get the vault and `knowledge.py dashboard` as the text fallback.
-- [ ] `init` makes no entry in Obsidian's machine-wide vault register — a throwaway board no longer registers itself.
-- [ ] `write_obsidian` returns a three-tuple and every caller unpacks three names; `grep -c "apiKey" resources/board/init.py` is 0.
-- [ ] `OBSIDIAN_PLUGINS` and `resources/board/obsidian/community-plugins.json` each name `dataview` and nothing else.
-- [ ] `pearde upgrade` on a board whose project has no `.obsidian/` creates none, prints `no vault to register`, and its `--dry` says none is written.
-- [ ] `pearde upgrade` on a project that HAS `.obsidian/` still repairs the plugin ids, the ignore filters and the graph groups.
-- [ ] `BOARD_IGNORED` does not name `wiki/.obsidian-api-key`, and no line of `resources/` writes that path.
+- [x] `pearde init <fresh-dir>` creates no `<fresh-dir>/.obsidian` and no file named `.obsidian-api-key` anywhere under the project.
+- [x] `pearde init` prints one line naming `pearde vault` as the way to get the vault and `knowledge.py dashboard` as the text fallback.
+- [x] `init` makes no entry in Obsidian's machine-wide vault register — a throwaway board no longer registers itself.
+- [x] `write_obsidian` returns a three-tuple and every caller unpacks three names; `grep -c "apiKey" resources/board/init.py` is 0.
+- [x] `OBSIDIAN_PLUGINS` and `resources/board/obsidian/community-plugins.json` each name `dataview` and nothing else.
+- [x] `pearde upgrade` on a board whose project has no `.obsidian/` creates none, prints `no vault to register`, and its `--dry` says none is written.
+- [x] `pearde upgrade` on a project that HAS `.obsidian/` still repairs the plugin ids, the ignore filters and the graph groups.
+- [x] `BOARD_IGNORED` does not name `wiki/.obsidian-api-key`, and no line of `resources/` writes that path.
 
 ## Verify and Proof
 
 ```sh
 cd "$(mktemp -d)" && git init -q .
-python3 <repo>/resources/pearde.py init "$PWD" | tee /tmp/init.log
-test ! -e "$PWD/.obsidian" && echo "PASS no vault"
-! find "$PWD" -name '*obsidian-api-key*' | grep . && echo "PASS no key"
-grep -q 'pearde vault' /tmp/init.log && echo "PASS door named"
-python3 <repo>/resources/pearde.py upgrade --dry "$PWD" | grep -q 'no vault here' && echo "PASS upgrade dry"
-grep -c apiKey <repo>/resources/board/init.py
-python3 -c "import ast;ast.parse(open('<repo>/resources/board/init.py').read())"
+python3 /Users/feb/dev/infra/pearde/resources/pearde.py init "$PWD" | tee "$PWD/init.log"
+test ! -e "$PWD/.obsidian"
+echo "PASS no vault"
+if find "$PWD" -name '*obsidian-api-key*' | grep -q .; then echo "FAIL key file"; exit 1; fi
+echo "PASS no key"
+grep -q 'pearde vault' "$PWD/init.log"
+echo "PASS door named"
+out=$(python3 /Users/feb/dev/infra/pearde/resources/pearde.py upgrade --dry "$PWD" 2>&1 || true)
+printf '%s\n' "$out" | grep -q 'no vault here'
+echo "PASS upgrade dry"
+P=$(pwd -P)
+if grep -qF "\"$P\"" "$HOME/Library/Application Support/obsidian/obsidian.json"; then echo "FAIL registered"; exit 1; fi
+echo "PASS not registered"
+mkdir -p "$PWD/.obsidian/plugins/dataview"
+out=$(python3 /Users/feb/dev/infra/pearde/resources/pearde.py upgrade --dry "$PWD" 2>&1 || true)
+printf '%s\n' "$out" | grep -q 'bring the vault and its register current'
+echo "PASS upgrade with vault"
+python3 -c "import sys; sys.path.insert(0, '/Users/feb/dev/infra/pearde/resources/board'); import init
+assert init.OBSIDIAN_PLUGINS == ('dataview',), init.OBSIDIAN_PLUGINS
+r = init.write_obsidian('$P')
+assert len(r) == 3, r
+print('PASS plugins and three-tuple', r)"
+python3 -c "import json; assert json.load(open('/Users/feb/dev/infra/pearde/resources/board/obsidian/community-plugins.json')) == ['dataview']; print('PASS preset list')"
+if sed -n '/^BOARD_IGNORED/,/^BOARD_HEADER/p' /Users/feb/dev/infra/pearde/resources/board/init.py | grep -q 'obsidian-api-key'; then echo "FAIL BOARD_IGNORED"; exit 1; fi
+echo "PASS BOARD_IGNORED clean"
+python3 -c "import ast; ast.parse(open('/Users/feb/dev/infra/pearde/resources/board/init.py').read())"
+echo "PASS init.py parses"
 ```

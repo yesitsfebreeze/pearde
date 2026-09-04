@@ -1,0 +1,15 @@
+PASS  A. one watch entry for one realpath (got 1: ['proj'])
+PASS  A. the second spelling is not a new board (got new=False, name=proj)
+PASS  A. both spellings answer to one name (got 'proj' vs 'proj')
+PASS  B. .state/serve.json was written (got /Users/feb/pearde-probe.y_ebp_5l/proj/pearde/.state/serve.json)
+PASS  B. the marker records the realpath (got /Users/feb/pearde-probe.y_ebp_5l/proj/pearde)
+PASS  C. the second run refuses (got rc=1)
+PASS  C. the refusal says the board is already being dispatched (got pearde run: proj — /Users/feb/pearde-probe.y_ebp_5l/proj/.pearde is already being dispatched by pid 77037, started 2026-09-03T21:39:44 — one physical board at /Users/feb/pearde-probe.y_ebp_5l/proj/pearde; `pearde plan` reads the order without moving it)
+PASS  C. the refusal names the first dispatcher's pid (got 77037)
+PASS  C. the second run printed no order it was not going to work
+PASS  E. the refusal names the physical board the two spellings share (got pearde run: proj — /Users/feb/pearde-probe.y_ebp_5l/proj/.pearde is already being dispatched by pid 77037, started 2026-09-03T21:39:44 — one physical board at /Users/feb/pearde-probe.y_ebp_5l/proj/pearde; `pearde plan` reads the order without moving it)
+    refusal: pearde run: proj — /Users/feb/pearde-probe.y_ebp_5l/proj/.pearde is already being dispatched by pid 77037, started 2026-09-03T21:39:44 — one physical board at /Users/feb/pearde-probe.y_ebp_5l/proj/pearde; `pearde plan` reads the order without moving it
+PASS  D. a run after the first exits is taken, not refused (got dispatched 1 · refused 0 · dead 0)
+PASS  F. an empty entry set is answered, not exited on in silence (got rc=0, said='0 of 0 board(s) · 0 PRDs on the frontier · 0 wave(s)\ndemand 0 at once, unconstrained\n1 slots (at the floor, ceiling 12) · cpu 20.98 of 10 loaded, -13.0 cores under 80% → 0 · mem 19.4 of 32 GiB used, 6.2 GiB under 80% → 61 · busy 96% now (1.5s sample)\n\n\n\n▸ machine: 0 boards · done 0/0 · 0% · derived 0/0 · open 0/0 · 0% · ready 0 · blocked 0 · collect 0 @1 workers · as engineer\n\n\n▸ machine: 0 boards · done 0/0 · 0% · derived 0/0 · open 0/0 · 0% · ready 0 · blocked 0 · collect 0 @1 workers · as engineer\ndispatched 0 · refused 0 · dead 0')
+
+0 claim(s) failed

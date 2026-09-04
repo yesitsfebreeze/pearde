@@ -2,7 +2,17 @@
 # the-loop-is-commands — the probe's harness. One line per assertion, a count
 # at the end. Every fixture is a copy of the example board in a temp dir.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 P="python3 $ROOT/resources/pearde.py"
 GUARD="$ROOT/resources/guard.py"
 TMP="$(mktemp -d)"; trap 'rm -rf "$TMP"' EXIT
@@ -129,6 +139,6 @@ eq "claim outside a git repo still moves the state" "$RC" "0"
 has "  …and says there is no baseline" "$O" "claim: no baseline"
 
 echo "── fixtures"
-eq "no fixture prd.md under prds/" "$(find "$ROOT/.pearde/prds" -path '*/probe/*' -name prd.md | wc -l | tr -d ' ')" "0"
+eq "no fixture prd.md under prds/" "$(find "$BOARD/prds" -path '*/probe/*' -name prd.md | wc -l | tr -d ' ')" "0"
 printf '\n%d checks · %d pass · %d fail\n' "$((pass+fail))" "$pass" "$fail"
 [ "$fail" -eq 0 ]

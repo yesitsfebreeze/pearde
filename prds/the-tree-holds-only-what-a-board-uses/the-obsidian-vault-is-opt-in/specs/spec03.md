@@ -30,18 +30,22 @@ Leave that arm's text exactly as it is; only its position changes here.
 
 ## Acceptance
 
-- [ ] On a board whose project has no `.obsidian/`, `pearde doctor` prints `vault  off` and never `vault  broken`, whatever the board directory is called.
-- [ ] The `off` line says the vault is an optional viewer needing Obsidian and Dataview.
-- [ ] On a project that HAS `.obsidian/` and a board named `.pearde`, the dot-segment `broken` row still prints, with its wording unchanged.
-- [ ] `bash -n resources/doctor.sh` is clean and doctor still prints the same rows in the same order.
+- [x] On a board whose project has no `.obsidian/`, `pearde doctor` prints `vault  off` and never `vault  broken`, whatever the board directory is called.
+- [x] The `off` line says the vault is an optional viewer needing Obsidian and Dataview.
+- [x] On a project that HAS `.obsidian/` and a board named .pearde, the dot-segment `broken` row still prints, with its wording unchanged.
+- [x] `bash -n resources/doctor.sh` is clean and doctor still prints the same rows in the same order.
 
 ## Verify and Proof
 
 ```sh
-bash -n <repo>/resources/doctor.sh
+bash -n /Users/feb/dev/infra/pearde/resources/doctor.sh
 cd "$(mktemp -d)" && git init -q .
-python3 <repo>/resources/pearde.py init "$PWD" >/dev/null
-python3 <repo>/resources/pearde.py doctor "$PWD" | grep '^  vault' | grep -q ' off ' && echo "PASS off"
+python3 /Users/feb/dev/infra/pearde/resources/pearde.py init "$PWD" >/dev/null
+out=$(python3 /Users/feb/dev/infra/pearde/resources/pearde.py doctor "$PWD" 2>&1 || true)
+printf '%s\n' "$out" | grep '^  vault' | grep -q ' off '
+echo "PASS off"
 mkdir -p "$PWD/.obsidian"
-python3 <repo>/resources/pearde.py doctor "$PWD" | grep '^  vault' | grep -q ' broken ' && echo "PASS dot-segment still speaks"
+out=$(python3 /Users/feb/dev/infra/pearde/resources/pearde.py doctor "$PWD" 2>&1 || true)
+printf '%s\n' "$out" | grep '^  vault' | grep -q ' broken '
+echo "PASS dot-segment still speaks"
 ```

@@ -3,10 +3,17 @@
 # not a walk carried as data. Runs against the repo's guard.py with the
 # guard's state in a scratch dir; writes nothing under resources/board/state/.
 set -u
-# the code repo — the nearest ancestor holding resources/guard.py, so the
-# board's depth under it never matters
-ROOT="$(cd "$(dirname "$0")" && pwd)"
-while [ ! -f "$ROOT/resources/guard.py" ] && [ "$ROOT" != "/" ]; do ROOT="$(dirname "$ROOT")"; done
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 GUARD="$ROOT/resources/guard.py"
 D="$(mktemp -d)"; export PEARDE_GUARD_STATE="$D/state"
 pass=0; fail=0

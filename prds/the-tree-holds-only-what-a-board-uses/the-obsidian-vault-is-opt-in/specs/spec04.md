@@ -46,27 +46,35 @@ plugin count this PRD did not set.
 
 ## Acceptance
 
-- [ ] No file under `references/`, `README.md`, `index.md` or `resources/` presents `obsidian-local-rest-api`, port 27124 or `.obsidian-api-key` as something the repo currently ships or reads.
-- [ ] `references/obsidian.md` says the vault is seeded by `pearde vault`, that `init` writes none, and that doctor's row is `off` with no vault.
-- [ ] `references/obsidian.md` carries a section naming what a script reads the board with instead of a port, and every command it names exists.
-- [ ] `README.md` has a row for the vault saying it is an optional viewer needing Obsidian and Dataview, written by `pearde vault` alone.
-- [ ] `references/files.md`'s `init.py` row does not claim `init` seeds a vault or mints a key.
-- [ ] `Dashboard.md` and `knowledge.py dashboard` both name the text fallback, spelled as a command that runs.
-- [ ] `python3 resources/index.py check` reports no new problem beyond the four already on record at `f8968fe`.
+- [x] No file under `references/`, `README.md`, `index.md` or `resources/` presents `obsidian-local-rest-api`, port 27124 or `.obsidian-api-key` as something the repo currently ships or reads.
+- [x] `references/obsidian.md` says the vault is seeded by `pearde vault`, that `init` writes none, and that doctor's row is `off` with no vault.
+- [x] `references/obsidian.md` carries a section naming what a script reads the board with instead of a port, and every command it names exists.
+- [x] `README.md` has a row for the vault saying it is an optional viewer needing Obsidian and Dataview, written by `pearde vault` alone.
+- [x] `references/files.md`'s `init.py` row does not claim `init` seeds a vault or mints a key.
+- [x] `Dashboard.md` and `knowledge.py dashboard` both name the text fallback, spelled as a command that runs.
+- [x] `python3 resources/index.py check` reports no new problem beyond the four already on record at `f8968fe`.
 
 ## Verify and Proof
 
 ```sh
-cd <repo>
+cd /Users/feb/dev/infra/pearde
 # the three names may survive only as history, and only in the three files
 # that carry the note saying the plugin went on 2026-09-03
 test "$(grep -rl '27124\|obsidian-api-key\|local-rest-api' README.md index.md \
     references/ resources/ --include='*.md' --include='*.py' --include='*.sh' \
     --include='*.json' | sort | tr '\n' ' ')" \
-  = "references/obsidian.md resources/board/init.py resources/install.sh " \
-  && echo "PASS only history"
-grep -q 'optional viewer' README.md && echo "PASS readme row"
-grep -q 'One plugin, seeded by' references/obsidian.md && echo "PASS one plugin"
-python3 resources/index.py check
+  = "references/obsidian.md resources/board/init.py resources/install.sh "
+echo "PASS only history"
+grep -q 'optional viewer' README.md
+echo "PASS readme row"
+grep -q 'One plugin, seeded by' references/obsidian.md
+echo "PASS one plugin"
+grep -q 'knowledge.py dashboard' resources/board/knowledge/Dashboard.md
+echo "PASS text fallback named in Dashboard"
+out=$(python3 resources/index.py check 2>&1) && rc=0 || rc=$?
+printf '%s\n' "$out"
+if printf '%s\n' "$out" | grep -vE 'resources/common\.py is on disk|hotreload-test\.js|a-board-s-own-file-commits-in-the-board-repo' | grep -q .; then echo "FAIL new index problem"; exit 1; fi
+echo "PASS index gate — the four on record at f8968fe and no more"
 python3 resources/knowledge.py dashboard | tail -3
+echo "PASS dashboard runs and closes with the text fallback"
 ```

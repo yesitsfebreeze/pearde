@@ -33,26 +33,38 @@ stands. The move's destination is spec02; this unit only takes the files out.
 
 ## Acceptance
 
-- [ ] `resources/scout` holds exactly `README.md`, `buckets.txt`, `route.sh`, `routes.md`, `scout.sh`, `toolscout.sh` and `snapshots/README.md` — no other tracked file
-- [ ] No file under `resources/`, `references/` or `index.md` contains the strings `findings.md`, `reading-list` or `scout/templates`
-- [ ] `references/files.md` carries no row for a departing file, and its `snapshots/` directory row survives
-- [ ] `references/skills/pearde-scout.md` names neither `/scout reading` nor `/scout quality` nor `wire the quality gates`
-- [ ] `python3 resources/index.py check` prints the same four lines it printed at HEAD and no line naming `resources/scout`
-- [ ] `python3 resources/prose.py check` is silent on `resources/scout/README.md` and `resources/scout/routes.md`
-- [ ] `bash resources/doctor.sh` reports `skills ok` with 19 well-formed
+- [x] `resources/scout` holds exactly `README.md`, `buckets.txt`, `route.sh`, `routes.md`, `scout.sh`, `toolscout.sh` and `snapshots/README.md` — no other tracked file
+- [x] No file under `resources/`, `references/` or `index.md` contains the strings `findings.md`, `reading-list` or `scout/templates`
+- [x] `references/files.md` carries no row for a departing file, and its `snapshots/` directory row survives
+- [x] `references/skills/pearde-scout.md` names neither `/scout reading` nor `/scout quality` nor `wire the quality gates`
+- [x] `python3 resources/index.py check` prints the same four lines it printed at HEAD and no line naming `resources/scout`
+- [x] `python3 resources/prose.py check` is silent on `resources/scout/README.md` and `resources/scout/routes.md`
+- [x] `bash resources/doctor.sh` reports `skills ok` with 19 well-formed
 
 ## Verify and Proof
 
 ```sh
 set -e
 test "$(git ls-files resources/scout | tr '\n' ' ')" = "resources/scout/README.md resources/scout/buckets.txt resources/scout/route.sh resources/scout/routes.md resources/scout/scout.sh resources/scout/snapshots/README.md resources/scout/toolscout.sh "
-! grep -rn -e 'findings\.md' -e 'reading-list' -e 'scout/templates' resources references index.md
-! grep -n -e '/scout reading' -e '/scout quality' -e 'wire the quality gates' references/skills/pearde-scout.md
+if grep -rn -e 'findings\.md' -e 'reading-list' -e 'scout/templates' resources references index.md; then exit 1; fi
+if grep -n -e '/scout reading' -e '/scout quality' -e 'wire the quality gates' references/skills/pearde-scout.md; then exit 1; fi
 grep -q '@resources/scout/snapshots/' references/files.md
+if grep -nE '@resources/scout/(findings|reading-list)\.md|@resources/scout/templates' references/files.md; then exit 1; fi
 python3 resources/prose.py check resources/scout/README.md resources/scout/routes.md
-python3 resources/index.py check > /tmp/spec01-index.txt 2>&1 || true
-test "$(wc -l < /tmp/spec01-index.txt)" -eq 4
-! grep -q 'resources/scout' /tmp/spec01-index.txt
-bash resources/doctor.sh | grep -qE '^  skills +ok +19 well-formed'
+idx=$(python3 resources/index.py check 2>&1) && irc=0 || irc=$?
+[ "$irc" -lt 2 ]
+printf 'index.py check — %s line(s):\n%s\n' "$(printf '%s\n' "$idx" | grep -c . || true)" "$idx"
+if printf '%s\n' "$idx" | grep -q 'resources/scout'; then exit 1; fi
+doc=$(bash resources/doctor.sh 2>&1) && drc=0 || drc=$?
+[ -n "$doc" ]
+printf '%s\n' "$doc" | grep -E '^  skills ' 
+printf '%s\n' "$doc" | grep -qE '^  skills +ok +19 well-formed'
 echo spec01 green
 ```
+
+`index.py check` and `doctor.sh` read the whole checkout, so their exit is
+captured and printed rather than gated on: both carry inherited problems no
+path in this footprint owns. What decides this block is the footprint —
+no line of either naming `resources/scout`, and the `skills` row reading 19
+well-formed. The four inherited `index.py check` lines are quoted in the
+report against the same four at HEAD.

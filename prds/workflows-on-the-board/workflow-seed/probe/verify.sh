@@ -8,9 +8,18 @@
 # would become a real PRD, and a probe at the repo root would redden the map
 # check for every later PRD.
 set -u
-cd "$(dirname "$0")/../../../../.." || exit 2
-ROOT=$PWD
-BOARD=$ROOT/.pearde
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
+cd "$ROOT" || exit 2
 WF=$ROOT/resources/workflows.py
 LIB=$BOARD/workflows
 

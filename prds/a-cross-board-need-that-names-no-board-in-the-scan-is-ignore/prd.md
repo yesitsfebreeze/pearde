@@ -1,6 +1,7 @@
 ---
 state: done
 origin: derived
+from: the-whole-machine-is-worked-as-one-board/the-machine-frontier-is-dispatched-in-parallel  # derived only — the PRD whose work surfaced this one
 priority: 70
 complexity: 8
 blast-radius: mid

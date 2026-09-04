@@ -4,8 +4,17 @@
 # the example board in a temp dir; the guard's state dir is a temp dir too
 # (`PEARDE_GUARD_STATE`), never resources/board/state/.
 set -u
-HERE="$(cd "$(dirname "$0")" && pwd)"
-ROOT="$(cd "$HERE/../../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 R="$ROOT/resources"
 D="$(mktemp -d)"; trap 'rm -rf "$D"' EXIT
 pass=0; fail=0
@@ -129,7 +138,7 @@ fi
 echo "## nothing leaked"
 [ -d "$R/board/state/guard" ] && n1=$(ls "$R/board/state/guard" | wc -l | tr -d ' ') || n1=0
 chk "no session file written under resources/board/state" "$n1" "$n0"
-chk "no fixture prd.md under the real board" "$(find "$ROOT/.pearde/prds" -path '*/probe/*' -name prd.md | wc -l | tr -d ' ')" "0"
+chk "no fixture prd.md under the real board" "$(find "$BOARD/prds" -path '*/probe/*' -name prd.md | wc -l | tr -d ' ')" "0"
 
 echo
 echo "$((pass+fail)) checks · $pass pass · $fail fail"

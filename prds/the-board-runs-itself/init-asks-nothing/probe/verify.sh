@@ -9,8 +9,17 @@
 # Fixtures are made under mktemp and removed at exit. One line per assertion,
 # a count at the end.
 set -u
-HERE="$(cd "$(dirname "$0")" && pwd)"
-ROOT="$(cd "$HERE/../../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 PASS=0; FAIL=0
 export GIT_AUTHOR_NAME=probe GIT_AUTHOR_EMAIL=probe@x \
        GIT_COMMITTER_NAME=probe GIT_COMMITTER_EMAIL=probe@x
@@ -44,7 +53,7 @@ PEARDE="$SRV/pearde.py"
 # to empty and measured nothing. `absent` stands in for the missing file so
 # that a run which CREATES the real board's registration is caught too — that
 # is the failure this check exists for, and an empty string could not see it.
-REG="$ROOT/.pearde/.state/serve.json"
+REG="$BOARD/.state/serve.json"
 REG_BEFORE="$( [ -f "$REG" ] && cksum < "$REG" || echo absent )"
 SPARE="$(python3 -c 'import socket; s=socket.socket(); s.bind(("127.0.0.1",0)); print(s.getsockname()[1]); s.close()')"
 export PEARDE_PORT="$SPARE"

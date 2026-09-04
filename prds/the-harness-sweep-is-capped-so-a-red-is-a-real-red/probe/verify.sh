@@ -21,10 +21,20 @@
 # Run as:
 #   bash .pearde/prds/the-harness-sweep-is-capped-so-a-red-is-a-real-red/probe/verify.sh
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 DOCTOR="$ROOT/resources/doctor.sh"
-VIEWROW="$ROOT/.pearde/prds/the-view-row-names-a-variable-that-exists/probe/verify.sh"
-INITSEEDS="$ROOT/.pearde/prds/seven-closed-probes-drifted-red/init-seeds-a-board-doctor-calls-green/probe/verify.sh"
+VIEWROW="$BOARD/prds/the-view-row-names-a-variable-that-exists/probe/verify.sh"
+INITSEEDS="$BOARD/prds/seven-closed-probes-drifted-red/init-seeds-a-board-doctor-calls-green/probe/verify.sh"
 
 PASS=0; FAIL=0; SKIP=0
 ok()   { PASS=$((PASS+1)); echo "  ok    $1"; }
@@ -195,7 +205,7 @@ else
 fi
 
 if grep -q "grep -qE '· 0 fail\$'" \
-     "$ROOT/.pearde/prds/seven-closed-probes-drifted-red/the-doctor-completes-without-a-home/probe/verify.sh"; then
+     "$BOARD/prds/seven-closed-probes-drifted-red/the-doctor-completes-without-a-home/probe/verify.sh"; then
   ok "that reader's anchor is where this check says it is"
 else
   bad "the reader's anchor moved — re-derive what the summary line must end in"
@@ -203,7 +213,7 @@ fi
 
 # one spelling of port_busy per file, and the same spelling everywhere
 SPELL="$(grep -h 'port_busy() {' "$VIEWROW" "$INITSEEDS" \
-         "$ROOT/.pearde/prds/seven-closed-probes-drifted-red/the-doctor-completes-without-a-home/probe/verify.sh" \
+         "$BOARD/prds/seven-closed-probes-drifted-red/the-doctor-completes-without-a-home/probe/verify.sh" \
          2>/dev/null | sort -u | grep -c .)"
 if [ "$SPELL" = 1 ]; then
   ok "all three harnesses share one spelling of port_busy"

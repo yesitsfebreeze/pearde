@@ -59,3 +59,4 @@ health/
 # machine-local — two hold one credential, the rest rebuild
 graphs/
 prds/**/probe/
+wiki/Dashboard.report.md

@@ -281,3 +281,1035 @@
 {"from": "claimed", "prd": "collect-stages-a-shared-file-whole", "t": "2026-09-02 11:57", "to": "done"}
 {"from": "claimed", "prd": "the-four-personas-are-built-from-research", "t": "2026-09-02 12:18", "to": "done"}
 {"calls": 250, "from": null, "prd": "the-master-ramp-measures-its-own-tree-not-its-members", "reads": 4, "refused": 0, "t": "2026-09-02T12:22:27", "to": "open", "tokens": 9386}
+{"calls": 26, "from": null, "prd": "one-command-works-the-busiest-board-on-the-machine-from-any", "reads": 8, "refused": 1, "t": "2026-09-02T12:24:23", "to": "open", "tokens": 13474}
+{"calls": 32, "from": null, "prd": "the-whole-machine-is-worked-as-one-board", "reads": 0, "refused": 0, "t": "2026-09-02T13:09:18", "to": "open", "tokens": 19966}
+{"calls": 2, "from": "open", "prd": "one-command-works-the-busiest-board-on-the-machine-from-any", "reads": 0, "refused": 0, "t": "2026-09-02T13:09:24", "to": "superseded", "tokens": 377}
+{"calls": 8, "from": "open", "prd": "the-whole-machine-is-worked-as-one-board", "reads": 0, "refused": 0, "t": "2026-09-02T13:10:00", "to": "analyzing", "tokens": 2454}
+{"calls": 104, "from": "analyzing", "prd": "the-whole-machine-is-worked-as-one-board", "reads": 5, "refused": 0, "t": "2026-09-02T13:35:51", "to": "open", "tokens": 15131}
+{"calls": 1, "from": "open", "prd": "the-whole-machine-is-worked-as-one-board/the-machine-frontier-is-one-ordered-list", "reads": 0, "refused": 0, "t": "2026-09-02T13:35:56", "to": "analyzing", "tokens": 236}
+{"calls": 53, "from": null, "prd": "every-worker-runs-in-its-own-worktree", "reads": 2, "refused": 0, "t": "2026-09-02T13:41:21", "to": "open", "tokens": 48319}
+{"calls": 57, "from": "analyzing", "prd": "the-whole-machine-is-worked-as-one-board/the-machine-frontier-is-one-ordered-list", "reads": 0, "refused": 0, "t": "2026-09-02T13:47:14", "to": "specced", "tokens": 6878}
+{"calls": 2, "from": "specced", "prd": "the-whole-machine-is-worked-as-one-board/the-machine-frontier-is-one-ordered-list", "reads": 0, "refused": 0, "t": "2026-09-02T13:47:22", "to": "claimed", "tokens": 782}
+{"from": "claimed", "prd": "the-whole-machine-is-worked-as-one-board/the-machine-frontier-is-one-ordered-list", "t": "2026-09-02 14:06", "to": "done"}
+{"calls": 124, "from": "open", "prd": "the-whole-machine-is-worked-as-one-board/the-machine-frontier-is-dispatched-in-parallel", "reads": 4, "refused": 0, "t": "2026-09-02T14:06:59", "to": "analyzing", "tokens": 20243}
+{"calls": 81, "from": "open", "prd": "files-score-their-health-and-the-brief-names-the-unhealthy", "reads": 0, "refused": 0, "t": "2026-09-02T14:24:44", "to": "analyzing", "tokens": 17809}
+{"calls": 0, "from": "open", "prd": "the-master-ramp-measures-its-own-tree-not-its-members", "reads": 0, "refused": 0, "t": "2026-09-02T14:24:45", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-worker-runs-in-its-own-worktree", "reads": 0, "refused": 0, "t": "2026-09-02T14:24:46", "to": "analyzing", "tokens": 0}
+{"from": "claimed", "prd": "leaked-background-services-outlive-their-fixtures", "t": "2026-09-02 14:26", "to": "done"}
+{"calls": 0, "from": "analyzing", "prd": "the-whole-machine-is-worked-as-one-board/the-machine-frontier-is-dispatched-in-parallel", "reads": 0, "refused": 0, "t": "2026-09-02T14:27:43", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "the-whole-machine-is-worked-as-one-board/the-machine-frontier-is-dispatched-in-parallel", "reads": 0, "refused": 0, "t": "2026-09-02T14:27:48", "to": "claimed", "tokens": 0}
+{"calls": 2, "from": "analyzing", "prd": "files-score-their-health-and-the-brief-names-the-unhealthy", "reads": 0, "refused": 0, "t": "2026-09-02T14:32:34", "to": "specced", "tokens": 2792}
+{"calls": 0, "from": "analyzing", "prd": "the-master-ramp-measures-its-own-tree-not-its-members", "reads": 0, "refused": 0, "t": "2026-09-02T14:42:51", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "every-worker-runs-in-its-own-worktree", "reads": 0, "refused": 0, "t": "2026-09-02T14:42:51", "to": "open", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "the-whole-machine-is-worked-as-one-board/the-machine-frontier-is-dispatched-in-parallel", "reads": 0, "refused": 0, "t": "2026-09-02T14:42:51", "to": "blocked", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "the-whole-machine-is-worked-as-one-board/the-machine-frontier-is-dispatched-in-parallel", "reads": 0, "refused": 0, "t": "2026-09-02T14:42:52", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "files-score-their-health-and-the-brief-names-the-unhealthy", "reads": 0, "refused": 0, "t": "2026-09-02T14:42:56", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "the-whole-machine-is-worked-as-one-board/the-machine-frontier-is-dispatched-in-parallel", "reads": 0, "refused": 0, "t": "2026-09-02T14:42:56", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-master-ramp-measures-its-own-tree-not-its-members", "reads": 0, "refused": 0, "t": "2026-09-02T14:42:57", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-worker-runs-in-its-own-worktree", "reads": 0, "refused": 0, "t": "2026-09-02T14:42:57", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-master-ramp-measures-its-own-tree-not-its-members", "reads": 0, "refused": 0, "t": "2026-09-02T14:54:50", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "every-worker-runs-in-its-own-worktree", "reads": 0, "refused": 0, "t": "2026-09-02T14:54:58", "to": "specced", "tokens": 0}
+{"from": "claimed", "prd": "files-score-their-health-and-the-brief-names-the-unhealthy", "t": "2026-09-02 15:19", "to": "done"}
+{"calls": 63, "from": null, "prd": "a-cross-board-need-that-names-no-board-in-the-scan-is-ignore", "reads": 0, "refused": 0, "t": "2026-09-02T15:20:29", "to": "open", "tokens": 32632}
+{"calls": 0, "from": "open", "prd": "a-cross-board-need-that-names-no-board-in-the-scan-is-ignore", "reads": 0, "refused": 0, "t": "2026-09-02T15:20:37", "to": "analyzing", "tokens": 0}
+{"from": "claimed", "prd": "the-whole-machine-is-worked-as-one-board/the-machine-frontier-is-dispatched-in-parallel", "t": "2026-09-02 15:33", "to": "done"}
+{"calls": 0, "from": "analyzing", "prd": "a-cross-board-need-that-names-no-board-in-the-scan-is-ignore", "reads": 0, "refused": 0, "t": "2026-09-02T15:34:00", "to": "specced", "tokens": 0}
+{"from": "open", "prd": "the-whole-machine-is-worked-as-one-board", "t": "2026-09-02 15:34", "to": "done"}
+{"calls": 0, "from": "specced", "prd": "a-cross-board-need-that-names-no-board-in-the-scan-is-ignore", "reads": 0, "refused": 0, "t": "2026-09-02T15:34:13", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "the-master-ramp-measures-its-own-tree-not-its-members", "reads": 0, "refused": 0, "t": "2026-09-02T15:34:13", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "a-cross-board-need-that-names-no-board-in-the-scan-is-ignore", "t": "2026-09-02 15:49", "to": "done"}
+{"from": "claimed", "prd": "the-master-ramp-measures-its-own-tree-not-its-members", "t": "2026-09-02 16:06", "to": "done"}
+{"calls": 0, "from": "specced", "prd": "every-worker-runs-in-its-own-worktree", "reads": 0, "refused": 0, "t": "2026-09-02T16:07:31", "to": "claimed", "tokens": 0}
+{"calls": 20, "from": null, "prd": "every-task-is-a-verb-under-one-skill", "reads": 0, "refused": 0, "t": "2026-09-02T16:34:45", "to": "open", "tokens": 13136}
+{"calls": 1, "from": null, "prd": "the-machine-is-the-run-verb", "reads": 0, "refused": 0, "t": "2026-09-02T16:35:08", "to": "open", "tokens": 194}
+{"calls": 1, "from": null, "prd": "the-skills-fold-into-one-index", "reads": 0, "refused": 0, "t": "2026-09-02T16:35:33", "to": "open", "tokens": 1764}
+{"calls": 16, "from": "open", "prd": "every-task-is-a-verb-under-one-skill/the-machine-is-the-run-verb", "reads": 0, "refused": 0, "t": "2026-09-02T16:45:35", "to": "analyzing", "tokens": 9049}
+{"from": "claimed", "prd": "every-worker-runs-in-its-own-worktree", "t": "2026-09-02 16:46", "to": "done"}
+{"calls": 31, "from": null, "prd": "a-harness-measures-the-tree-its-worker-built-in", "reads": 0, "refused": 0, "t": "2026-09-02T16:51:55", "to": "open", "tokens": 28444}
+{"calls": 6, "from": "open", "prd": "a-harness-measures-the-tree-its-worker-built-in", "reads": 0, "refused": 0, "t": "2026-09-02T16:52:35", "to": "analyzing", "tokens": 4113}
+{"calls": 13, "from": null, "prd": "resources-are-organised-by-responsibility", "reads": 1, "refused": 1, "t": "2026-09-02T16:54:11", "to": "open", "tokens": 6565}
+{"calls": 57, "from": "analyzing", "prd": "every-task-is-a-verb-under-one-skill/the-machine-is-the-run-verb", "reads": 0, "refused": 1, "t": "2026-09-02T17:01:02", "to": "specced", "tokens": 3248}
+{"calls": 3, "from": "specced", "prd": "every-task-is-a-verb-under-one-skill/the-machine-is-the-run-verb", "reads": 0, "refused": 0, "t": "2026-09-02T17:01:09", "to": "claimed", "tokens": 0}
+{"calls": 22, "from": null, "prd": "every-document-is-written-in-the-writer-s-prose", "reads": 0, "refused": 0, "t": "2026-09-02T17:07:01", "to": "open", "tokens": 12786}
+{"calls": 87, "from": null, "prd": "collect-must-not-reset-the-checkout-it-did-not-write", "reads": 0, "refused": 0, "t": "2026-09-02T17:12:45", "to": "open", "tokens": 0}
+{"calls": 5, "from": "claimed", "prd": "every-task-is-a-verb-under-one-skill/the-machine-is-the-run-verb", "reads": 0, "refused": 0, "t": "2026-09-02T17:13:53", "to": "failed", "tokens": 0}
+{"calls": 2, "from": "open", "prd": "collect-must-not-reset-the-checkout-it-did-not-write", "reads": 0, "refused": 0, "t": "2026-09-02T17:14:17", "to": "analyzing", "tokens": 0}
+{"calls": 119, "from": "analyzing", "prd": "a-harness-measures-the-tree-its-worker-built-in", "reads": 2, "refused": 1, "t": "2026-09-02T17:18:11", "to": "specced", "tokens": 65270}
+{"calls": 4, "from": "open", "prd": "every-document-is-written-in-the-writer-s-prose", "reads": 0, "refused": 0, "t": "2026-09-02T17:18:53", "to": "analyzing", "tokens": 0}
+{"calls": 27, "from": "specced", "prd": "a-harness-measures-the-tree-its-worker-built-in", "reads": 1, "refused": 0, "t": "2026-09-02T17:20:37", "to": "claimed", "tokens": 0}
+{"calls": 32, "from": "analyzing", "prd": "collect-must-not-reset-the-checkout-it-did-not-write", "reads": 2, "refused": 0, "t": "2026-09-02T17:23:29", "to": "specced", "tokens": 0}
+{"calls": 2, "from": "specced", "prd": "collect-must-not-reset-the-checkout-it-did-not-write", "reads": 0, "refused": 0, "t": "2026-09-02T17:23:36", "to": "claimed", "tokens": 0}
+{"calls": 24, "from": "analyzing", "prd": "every-document-is-written-in-the-writer-s-prose", "reads": 1, "refused": 0, "t": "2026-09-02T17:25:49", "to": "open", "tokens": 0}
+{"calls": 1, "from": "open", "prd": "every-document-is-written-in-the-writer-s-prose/a-density-checker-and-the-root-docs-are-rewritten", "reads": 0, "refused": 0, "t": "2026-09-02T17:25:54", "to": "analyzing", "tokens": 0}
+{"calls": 155, "from": null, "prd": "a-refused-rebase-must-not-destroy-the-lane-it-was-left-in", "reads": 8, "refused": 0, "t": "2026-09-02T17:38:34", "to": "open", "tokens": 0}
+{"calls": 41, "from": "analyzing", "prd": "every-document-is-written-in-the-writer-s-prose/a-density-checker-and-the-root-docs-are-rewritten", "reads": 0, "refused": 0, "t": "2026-09-02T17:40:46", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "every-document-is-written-in-the-writer-s-prose/a-density-checker-and-the-root-docs-are-rewritten", "reads": 0, "refused": 0, "t": "2026-09-02T17:40:50", "to": "claimed", "tokens": 0}
+{"calls": 11, "from": null, "prd": "the-standard-is-held-to-its-own-standard", "reads": 1, "refused": 0, "t": "2026-09-02T17:41:12", "to": "open", "tokens": 0}
+{"calls": 15, "from": "open", "prd": "a-refused-rebase-must-not-destroy-the-lane-it-was-left-in", "reads": 0, "refused": 1, "t": "2026-09-02T17:41:40", "to": "analyzing", "tokens": 0}
+{"from": "claimed", "prd": "collect-must-not-reset-the-checkout-it-did-not-write", "t": "2026-09-02 17:45", "to": "done"}
+{"calls": 56, "from": null, "prd": "a-verify-block-must-not-destroy-the-checkout-it-runs-in", "reads": 2, "refused": 0, "t": "2026-09-02T17:45:55", "to": "open", "tokens": 0}
+{"calls": 3, "from": "open", "prd": "a-verify-block-must-not-destroy-the-checkout-it-runs-in", "reads": 0, "refused": 0, "t": "2026-09-02T17:46:04", "to": "analyzing", "tokens": 0}
+{"calls": 60, "from": "analyzing", "prd": "a-refused-rebase-must-not-destroy-the-lane-it-was-left-in", "reads": 2, "refused": 2, "t": "2026-09-02T17:49:05", "to": "specced", "tokens": 1203}
+{"calls": 1, "from": "specced", "prd": "a-refused-rebase-must-not-destroy-the-lane-it-was-left-in", "reads": 0, "refused": 0, "t": "2026-09-02T17:49:10", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "every-document-is-written-in-the-writer-s-prose/a-density-checker-and-the-root-docs-are-rewritten", "t": "2026-09-02 18:15", "to": "done"}
+{"calls": 40, "from": "failed", "prd": "every-task-is-a-verb-under-one-skill/the-machine-is-the-run-verb", "reads": 0, "refused": 1, "t": "2026-09-02T18:16:59", "to": "open", "tokens": 106769}
+{"calls": 1, "from": "open", "prd": "every-document-is-written-in-the-writer-s-prose/example-and-knowledge-fixtures-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T18:17:12", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-document-is-written-in-the-writer-s-prose/skills-and-scout-docs-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T18:17:12", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-document-is-written-in-the-writer-s-prose/templates-personas-and-agents-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T18:17:13", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-document-is-written-in-the-writer-s-prose/the-loose-reference-files-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T18:17:13", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T18:17:14", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-document-is-written-in-the-writer-s-prose/the-standard-is-held-to-its-own-standard", "reads": 0, "refused": 0, "t": "2026-09-02T18:17:14", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-task-is-a-verb-under-one-skill/the-machine-is-the-run-verb", "reads": 0, "refused": 0, "t": "2026-09-02T18:17:15", "to": "analyzing", "tokens": 0}
+{"calls": 381, "from": null, "prd": "every-run-session-works-in-a-worktree-of-its-own", "reads": 11, "refused": 3, "t": "2026-09-02T18:22:59", "to": "open", "tokens": 0}
+{"calls": 131, "from": "analyzing", "prd": "every-document-is-written-in-the-writer-s-prose/example-and-knowledge-fixtures-are-rewritten-dense", "reads": 2, "refused": 1, "t": "2026-09-02T18:27:15", "to": "specced", "tokens": 8433}
+{"from": "claimed", "prd": "a-refused-rebase-must-not-destroy-the-lane-it-was-left-in", "t": "2026-09-02 18:31", "to": "done"}
+{"calls": 121, "from": "open", "prd": "every-run-session-works-in-a-worktree-of-its-own", "reads": 0, "refused": 1, "t": "2026-09-02T18:31:33", "to": "analyzing", "tokens": 5684}
+{"calls": 0, "from": "specced", "prd": "every-document-is-written-in-the-writer-s-prose/example-and-knowledge-fixtures-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T18:31:34", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "resources-are-organised-by-responsibility", "reads": 0, "refused": 0, "t": "2026-09-02T18:31:34", "to": "analyzing", "tokens": 0}
+{"calls": 193, "from": null, "prd": "the-daemon-must-not-write-into-a-board-path-it-no-longer-own", "reads": 0, "refused": 1, "t": "2026-09-02T18:35:23", "to": "open", "tokens": 5136}
+{"calls": 17, "from": "open", "prd": "the-daemon-must-not-write-into-a-board-path-it-no-longer-own", "reads": 0, "refused": 0, "t": "2026-09-02T18:35:56", "to": "analyzing", "tokens": 0}
+{"calls": 136, "from": "analyzing", "prd": "every-run-session-works-in-a-worktree-of-its-own", "reads": 0, "refused": 1, "t": "2026-09-02T18:42:28", "to": "open", "tokens": 0}
+{"calls": 1, "from": "analyzing", "prd": "resources-are-organised-by-responsibility", "reads": 0, "refused": 0, "t": "2026-09-02T18:42:31", "to": "open", "tokens": 0}
+{"calls": 2, "from": "open", "prd": "every-run-session-works-in-a-worktree-of-its-own/a-session-ledger-names-who-holds-what-and-reaps-what-is-gone", "reads": 0, "refused": 0, "t": "2026-09-02T18:42:43", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "resources-are-organised-by-responsibility/every-module-finds-its-siblings-by-one-rule", "reads": 0, "refused": 0, "t": "2026-09-02T18:42:48", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "resources-are-organised-by-responsibility/the-largest-module-is-cut-by-responsibility", "reads": 0, "refused": 0, "t": "2026-09-02T18:42:49", "to": "analyzing", "tokens": 0}
+{"calls": 140, "from": "analyzing", "prd": "a-verify-block-must-not-destroy-the-checkout-it-runs-in", "reads": 0, "refused": 2, "t": "2026-09-02T20:01:13", "to": "specced", "tokens": 72175}
+{"calls": 0, "from": "analyzing", "prd": "every-document-is-written-in-the-writer-s-prose/the-standard-is-held-to-its-own-standard", "reads": 0, "refused": 0, "t": "2026-09-02T20:01:13", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "analyzing", "prd": "every-document-is-written-in-the-writer-s-prose/skills-and-scout-docs-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:01:17", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:01:17", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "every-run-session-works-in-a-worktree-of-its-own/a-session-ledger-names-who-holds-what-and-reaps-what-is-gone", "reads": 0, "refused": 0, "t": "2026-09-02T20:01:17", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "resources-are-organised-by-responsibility/every-module-finds-its-siblings-by-one-rule", "reads": 0, "refused": 0, "t": "2026-09-02T20:01:17", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "resources-are-organised-by-responsibility/the-largest-module-is-cut-by-responsibility", "reads": 0, "refused": 0, "t": "2026-09-02T20:01:18", "to": "open", "tokens": 0}
+{"calls": 3, "from": "specced", "prd": "a-verify-block-must-not-destroy-the-checkout-it-runs-in", "reads": 0, "refused": 0, "t": "2026-09-02T20:01:43", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "every-document-is-written-in-the-writer-s-prose/the-standard-is-held-to-its-own-standard", "reads": 0, "refused": 0, "t": "2026-09-02T20:01:44", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-document-is-written-in-the-writer-s-prose/skills-and-scout-docs-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:01:44", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:01:45", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-run-session-works-in-a-worktree-of-its-own/a-session-ledger-names-who-holds-what-and-reaps-what-is-gone", "reads": 0, "refused": 0, "t": "2026-09-02T20:01:45", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "resources-are-organised-by-responsibility/every-module-finds-its-siblings-by-one-rule", "reads": 0, "refused": 0, "t": "2026-09-02T20:01:46", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "resources-are-organised-by-responsibility/the-largest-module-is-cut-by-responsibility", "reads": 0, "refused": 0, "t": "2026-09-02T20:01:47", "to": "analyzing", "tokens": 0}
+{"from": "claimed", "prd": "every-document-is-written-in-the-writer-s-prose/the-standard-is-held-to-its-own-standard", "t": "2026-09-02 20:04", "to": "done"}
+{"calls": 438, "from": "claimed", "prd": "every-document-is-written-in-the-writer-s-prose/example-and-knowledge-fixtures-are-rewritten-dense", "reads": 6, "refused": 1, "t": "2026-09-02T20:10:43", "to": "failed", "tokens": 408}
+{"calls": 7, "from": "analyzing", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:10:55", "to": "open", "tokens": 0}
+{"calls": 2, "from": "open", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense/the-loop-parts-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:11:00", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense/the-worker-parts-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:11:01", "to": "analyzing", "tokens": 0}
+{"calls": 1, "from": "open", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense/the-surface-parts-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:11:01", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense/the-cross-board-parts-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:11:02", "to": "analyzing", "tokens": 0}
+{"calls": 7, "from": "analyzing", "prd": "every-document-is-written-in-the-writer-s-prose/skills-and-scout-docs-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:11:15", "to": "question", "tokens": 0}
+{"calls": 155, "from": "analyzing", "prd": "every-run-session-works-in-a-worktree-of-its-own/a-session-ledger-names-who-holds-what-and-reaps-what-is-gone", "reads": 2, "refused": 1, "t": "2026-09-02T20:14:15", "to": "specced", "tokens": 625}
+{"calls": 3, "from": "specced", "prd": "every-run-session-works-in-a-worktree-of-its-own/a-session-ledger-names-who-holds-what-and-reaps-what-is-gone", "reads": 0, "refused": 0, "t": "2026-09-02T20:14:20", "to": "claimed", "tokens": 0}
+{"calls": 165, "from": "analyzing", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense/the-loop-parts-are-rewritten-dense", "reads": 1, "refused": 0, "t": "2026-09-02T20:20:07", "to": "specced", "tokens": 36}
+{"calls": 0, "from": "specced", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense/the-loop-parts-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:20:07", "to": "claimed", "tokens": 0}
+{"calls": 8, "from": "analyzing", "prd": "resources-are-organised-by-responsibility/every-module-finds-its-siblings-by-one-rule", "reads": 0, "refused": 0, "t": "2026-09-02T20:20:19", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "resources-are-organised-by-responsibility/every-module-finds-its-siblings-by-one-rule", "reads": 0, "refused": 0, "t": "2026-09-02T20:20:19", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "a-verify-block-must-not-destroy-the-checkout-it-runs-in", "t": "2026-09-02 20:21", "to": "done"}
+{"calls": 97, "from": null, "prd": "the-verify-guard-parses-git-s-own-output-before-it-trusts-it", "reads": 7, "refused": 0, "t": "2026-09-02T20:23:10", "to": "open", "tokens": 0}
+{"calls": 19, "from": "open", "prd": "the-verify-guard-parses-git-s-own-output-before-it-trusts-it", "reads": 0, "refused": 1, "t": "2026-09-02T20:23:43", "to": "analyzing", "tokens": 0}
+{"calls": 6, "from": "analyzing", "prd": "resources-are-organised-by-responsibility/the-largest-module-is-cut-by-responsibility", "reads": 0, "refused": 0, "t": "2026-09-02T20:23:49", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense/the-cross-board-parts-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:23:50", "to": "specced", "tokens": 0}
+{"calls": 7, "from": "specced", "prd": "resources-are-organised-by-responsibility/the-largest-module-is-cut-by-responsibility", "reads": 0, "refused": 0, "t": "2026-09-02T20:23:58", "to": "claimed", "tokens": 0}
+{"calls": 3, "from": "specced", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense/the-cross-board-parts-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:23:59", "to": "claimed", "tokens": 0}
+{"calls": 166, "from": "analyzing", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense/the-surface-parts-are-rewritten-dense", "reads": 1, "refused": 0, "t": "2026-09-02T20:29:22", "to": "specced", "tokens": 0}
+{"calls": 17, "from": "analyzing", "prd": "the-daemon-must-not-write-into-a-board-path-it-no-longer-own", "reads": 0, "refused": 0, "t": "2026-09-02T20:38:57", "to": "specced", "tokens": 386}
+{"calls": 1, "from": "analyzing", "prd": "every-document-is-written-in-the-writer-s-prose/templates-personas-and-agents-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:39:00", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "analyzing", "prd": "every-task-is-a-verb-under-one-skill/the-machine-is-the-run-verb", "reads": 0, "refused": 0, "t": "2026-09-02T20:39:03", "to": "specced", "tokens": 0}
+{"calls": 4, "from": "analyzing", "prd": "every-document-is-written-in-the-writer-s-prose/the-loose-reference-files-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:39:21", "to": "specced", "tokens": 0}
+{"calls": 4, "from": "specced", "prd": "the-daemon-must-not-write-into-a-board-path-it-no-longer-own", "reads": 0, "refused": 0, "t": "2026-09-02T20:40:54", "to": "claimed", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "every-document-is-written-in-the-writer-s-prose/templates-personas-and-agents-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:40:56", "to": "claimed", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense/the-surface-parts-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:40:57", "to": "claimed", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "every-task-is-a-verb-under-one-skill/the-machine-is-the-run-verb", "reads": 0, "refused": 0, "t": "2026-09-02T20:40:58", "to": "claimed", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "every-document-is-written-in-the-writer-s-prose/the-loose-reference-files-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:40:59", "to": "claimed", "tokens": 0}
+{"calls": 141, "from": "failed", "prd": "every-document-is-written-in-the-writer-s-prose/example-and-knowledge-fixtures-are-rewritten-dense", "reads": 17, "refused": 1, "t": "2026-09-02T20:42:26", "to": "open", "tokens": 0}
+{"calls": 2, "from": "open", "prd": "every-document-is-written-in-the-writer-s-prose/example-and-knowledge-fixtures-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T20:42:28", "to": "analyzing", "tokens": 0}
+{"calls": 89, "from": null, "prd": "every-handle-the-index-checks-resolves-to-a-file-on-disk", "reads": 0, "refused": 1, "t": "2026-09-02T20:43:26", "to": "open", "tokens": 0}
+{"calls": 4, "from": "open", "prd": "every-handle-the-index-checks-resolves-to-a-file-on-disk", "reads": 0, "refused": 0, "t": "2026-09-02T20:43:29", "to": "deferred", "tokens": 0}
+{"calls": 132, "from": "analyzing", "prd": "the-verify-guard-parses-git-s-own-output-before-it-trusts-it", "reads": 2, "refused": 0, "t": "2026-09-02T20:45:34", "to": "specced", "tokens": 0}
+{"calls": 5, "from": "specced", "prd": "the-verify-guard-parses-git-s-own-output-before-it-trusts-it", "reads": 0, "refused": 0, "t": "2026-09-02T20:45:41", "to": "claimed", "tokens": 0}
+{"calls": 136, "from": "analyzing", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense/the-worker-parts-are-rewritten-dense", "reads": 4, "refused": 2, "t": "2026-09-02T21:02:14", "to": "specced", "tokens": 867}
+{"calls": 55, "from": null, "prd": "collect-stages-the-board-s-gitignore-in-the-outer-repo-which", "reads": 0, "refused": 0, "t": "2026-09-02T21:04:38", "to": "open", "tokens": 0}
+{"calls": 3, "from": "open", "prd": "collect-stages-the-board-s-gitignore-in-the-outer-repo-which", "reads": 0, "refused": 0, "t": "2026-09-02T21:04:41", "to": "deferred", "tokens": 0}
+{"calls": 8, "from": "analyzing", "prd": "every-document-is-written-in-the-writer-s-prose/example-and-knowledge-fixtures-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T21:05:30", "to": "specced", "tokens": 0}
+{"calls": 61, "from": "question", "prd": "every-document-is-written-in-the-writer-s-prose/skills-and-scout-docs-are-rewritten-dense", "reads": 3, "refused": 0, "t": "2026-09-02T21:13:37", "to": "open", "tokens": 0}
+{"calls": 48, "from": null, "prd": "a-verify-block-that-pipes-a-probe-exits-zero-on-a-broken-tre", "reads": 1, "refused": 0, "t": "2026-09-02T21:23:49", "to": "open", "tokens": 275}
+{"calls": 32, "from": null, "prd": "one-copy-per-machine-of-what-every-lane-regenerates", "reads": 0, "refused": 0, "t": "2026-09-02T21:33:31", "to": "open", "tokens": 0}
+{"from": "claimed", "prd": "the-verify-guard-parses-git-s-own-output-before-it-trusts-it", "t": "2026-09-02 21:32", "to": "done"}
+{"calls": 24, "from": null, "prd": "two-harnesses-still-name-a-tree-they-do-not-measure", "reads": 2, "refused": 0, "t": "2026-09-02T21:49:54", "to": "open", "tokens": 0}
+{"calls": 18, "from": "open", "prd": "a-verify-block-that-pipes-a-probe-exits-zero-on-a-broken-tre", "reads": 0, "refused": 0, "t": "2026-09-02T21:59:41", "to": "analyzing", "tokens": 6750}
+{"calls": 0, "from": "open", "prd": "one-copy-per-machine-of-what-every-lane-regenerates", "reads": 0, "refused": 0, "t": "2026-09-02T21:59:42", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "two-harnesses-still-name-a-tree-they-do-not-measure", "reads": 0, "refused": 0, "t": "2026-09-02T21:59:43", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "every-document-is-written-in-the-writer-s-prose/example-and-knowledge-fixtures-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T21:59:44", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-document-is-written-in-the-writer-s-prose/skills-and-scout-docs-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T21:59:44", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense/the-worker-parts-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T21:59:45", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense/the-loop-parts-are-rewritten-dense", "t": "2026-09-02 22:03", "to": "done"}
+{"from": "claimed", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense/the-worker-parts-are-rewritten-dense", "t": "2026-09-02 22:05", "to": "done"}
+{"calls": 310, "from": "analyzing", "prd": "one-copy-per-machine-of-what-every-lane-regenerates", "reads": 5, "refused": 4, "t": "2026-09-02T22:08:11", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "one-copy-per-machine-of-what-every-lane-regenerates", "reads": 0, "refused": 0, "t": "2026-09-02T22:08:16", "to": "claimed", "tokens": 0}
+{"calls": 40, "from": "analyzing", "prd": "every-document-is-written-in-the-writer-s-prose/skills-and-scout-docs-are-rewritten-dense", "reads": 5, "refused": 1, "t": "2026-09-02T22:09:42", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "every-document-is-written-in-the-writer-s-prose/skills-and-scout-docs-are-rewritten-dense", "reads": 0, "refused": 0, "t": "2026-09-02T22:09:42", "to": "claimed", "tokens": 0}
+{"calls": 26, "from": null, "prd": "a-lane-s-wiki-is-a-stub-so-every-worker-s-knowledge-query-re", "reads": 1, "refused": 0, "t": "2026-09-02T22:10:38", "to": "open", "tokens": 0}
+{"calls": 5, "from": "open", "prd": "a-lane-s-wiki-is-a-stub-so-every-worker-s-knowledge-query-re", "reads": 0, "refused": 0, "t": "2026-09-02T22:10:51", "to": "analyzing", "tokens": 0}
+{"calls": 31, "from": "analyzing", "prd": "a-verify-block-that-pipes-a-probe-exits-zero-on-a-broken-tre", "reads": 0, "refused": 0, "t": "2026-09-02T22:12:05", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "a-verify-block-that-pipes-a-probe-exits-zero-on-a-broken-tre", "reads": 0, "refused": 0, "t": "2026-09-02T22:12:05", "to": "claimed", "tokens": 0}
+{"calls": 3, "from": "analyzing", "prd": "two-harnesses-still-name-a-tree-they-do-not-measure", "reads": 0, "refused": 0, "t": "2026-09-02T22:12:14", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "two-harnesses-still-name-a-tree-they-do-not-measure", "reads": 0, "refused": 0, "t": "2026-09-02T22:12:14", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense/the-surface-parts-are-rewritten-dense", "t": "2026-09-02 22:12", "to": "done"}
+{"calls": 84, "from": "deferred", "prd": "collect-stages-the-board-s-gitignore-in-the-outer-repo-which", "reads": 2, "refused": 0, "t": "2026-09-02T22:14:15", "to": "open", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "collect-stages-the-board-s-gitignore-in-the-outer-repo-which", "reads": 0, "refused": 0, "t": "2026-09-02T22:14:16", "to": "analyzing", "tokens": 0}
+{"calls": 439, "from": "analyzing", "prd": "a-lane-s-wiki-is-a-stub-so-every-worker-s-knowledge-query-re", "reads": 7, "refused": 1, "t": "2026-09-02T22:27:17", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "a-lane-s-wiki-is-a-stub-so-every-worker-s-knowledge-query-re", "reads": 0, "refused": 0, "t": "2026-09-02T22:27:17", "to": "claimed", "tokens": 0}
+{"calls": 22, "from": "analyzing", "prd": "collect-stages-the-board-s-gitignore-in-the-outer-repo-which", "reads": 1, "refused": 0, "t": "2026-09-02T22:28:06", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "collect-stages-the-board-s-gitignore-in-the-outer-repo-which", "reads": 0, "refused": 0, "t": "2026-09-02T22:28:07", "to": "claimed", "tokens": 0}
+{"calls": 4, "from": null, "prd": "post-report-crashes-a-collect-between-the-done-write-and-the", "reads": 0, "refused": 0, "t": "2026-09-02T22:28:19", "to": "open", "tokens": 0}
+{"calls": 2, "from": "open", "prd": "post-report-crashes-a-collect-between-the-done-write-and-the", "reads": 1, "refused": 0, "t": "2026-09-02T22:28:22", "to": "analyzing", "tokens": 0}
+{"from": "claimed", "prd": "a-verify-block-that-pipes-a-probe-exits-zero-on-a-broken-tre", "t": "2026-09-02 22:30", "to": "done"}
+{"from": "claimed", "prd": "one-copy-per-machine-of-what-every-lane-regenerates", "t": "2026-09-02 22:37", "to": "done"}
+{"from": "claimed", "prd": "a-lane-s-wiki-is-a-stub-so-every-worker-s-knowledge-query-re", "t": "2026-09-02 22:41", "to": "done"}
+{"calls": 218, "from": "analyzing", "prd": "post-report-crashes-a-collect-between-the-done-write-and-the", "reads": 3, "refused": 1, "t": "2026-09-02T22:43:02", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "post-report-crashes-a-collect-between-the-done-write-and-the", "reads": 0, "refused": 0, "t": "2026-09-02T22:43:02", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "collect-stages-the-board-s-gitignore-in-the-outer-repo-which", "t": "2026-09-02 22:49", "to": "done"}
+{"from": "claimed", "prd": "post-report-crashes-a-collect-between-the-done-write-and-the", "t": "2026-09-02 22:50", "to": "done"}
+{"from": "claimed", "prd": "every-run-session-works-in-a-worktree-of-its-own/a-session-ledger-names-who-holds-what-and-reaps-what-is-gone", "t": "2026-09-02 22:59", "to": "done"}
+{"calls": 109, "from": "open", "prd": "every-run-session-works-in-a-worktree-of-its-own/board-commands-run-in-the-session-s-tree-not-the-checkout", "reads": 2, "refused": 0, "t": "2026-09-02T22:59:18", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-run-session-works-in-a-worktree-of-its-own/no-destructive-git-runs-in-a-tree-the-session-does-not-own", "reads": 0, "refused": 0, "t": "2026-09-02T22:59:19", "to": "analyzing", "tokens": 0}
+{"from": "claimed", "prd": "every-document-is-written-in-the-writer-s-prose/example-and-knowledge-fixtures-are-rewritten-dense", "t": "2026-09-02 23:10", "to": "done"}
+{"from": "claimed", "prd": "every-document-is-written-in-the-writer-s-prose/skills-and-scout-docs-are-rewritten-dense", "t": "2026-09-02 23:15", "to": "done"}
+{"calls": 255, "from": "analyzing", "prd": "every-run-session-works-in-a-worktree-of-its-own/board-commands-run-in-the-session-s-tree-not-the-checkout", "reads": 2, "refused": 2, "t": "2026-09-02T23:16:28", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "every-run-session-works-in-a-worktree-of-its-own/board-commands-run-in-the-session-s-tree-not-the-checkout", "reads": 0, "refused": 0, "t": "2026-09-02T23:16:28", "to": "claimed", "tokens": 0}
+{"calls": 10, "from": null, "prd": "collect-resolves-a-board-path-two-ways-and-both-are-wrong", "reads": 1, "refused": 0, "t": "2026-09-02T23:17:07", "to": "open", "tokens": 0}
+{"calls": 1, "from": "open", "prd": "collect-resolves-a-board-path-two-ways-and-both-are-wrong", "reads": 0, "refused": 0, "t": "2026-09-02T23:17:10", "to": "analyzing", "tokens": 0}
+{"calls": 123, "from": "analyzing", "prd": "every-run-session-works-in-a-worktree-of-its-own/no-destructive-git-runs-in-a-tree-the-session-does-not-own", "reads": 1, "refused": 0, "t": "2026-09-02T23:28:40", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "every-run-session-works-in-a-worktree-of-its-own/no-destructive-git-runs-in-a-tree-the-session-does-not-own", "reads": 0, "refused": 0, "t": "2026-09-02T23:28:40", "to": "claimed", "tokens": 0}
+{"calls": 86, "from": "analyzing", "prd": "collect-resolves-a-board-path-two-ways-and-both-are-wrong", "reads": 2, "refused": 0, "t": "2026-09-02T23:34:16", "to": "specced", "tokens": 0}
+{"calls": 30, "from": "analyzing", "prd": "collect-resolves-a-board-path-two-ways-and-both-are-wrong", "reads": 0, "refused": 0, "t": "2026-09-02T23:37:18", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "collect-resolves-a-board-path-two-ways-and-both-are-wrong", "reads": 0, "refused": 0, "t": "2026-09-02T23:37:19", "to": "claimed", "tokens": 0}
+{"calls": 3, "from": null, "prd": "board-rel-is-a-third-wrong-board-path-resolution", "reads": 0, "refused": 0, "t": "2026-09-02T23:37:30", "to": "open", "tokens": 0}
+{"calls": 148, "from": "open", "prd": "board-rel-is-a-third-wrong-board-path-resolution", "reads": 4, "refused": 0, "t": "2026-09-02T23:58:07", "to": "analyzing", "tokens": 0}
+{"from": "claimed", "prd": "every-run-session-works-in-a-worktree-of-its-own/no-destructive-git-runs-in-a-tree-the-session-does-not-own", "t": "2026-09-03 08:54", "to": "done"}
+{"calls": 221, "from": "analyzing", "prd": "board-rel-is-a-third-wrong-board-path-resolution", "reads": 17, "refused": 1, "t": "2026-09-03T08:56:30", "to": "specced", "tokens": 792}
+{"from": "claimed", "prd": "collect-resolves-a-board-path-two-ways-and-both-are-wrong", "t": "2026-09-03 08:56", "to": "done"}
+{"calls": 270, "from": "specced", "prd": "board-rel-is-a-third-wrong-board-path-resolution", "reads": 20, "refused": 0, "t": "2026-09-03T09:00:53", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "the-daemon-must-not-write-into-a-board-path-it-no-longer-own", "t": "2026-09-03 09:10", "to": "done"}
+{"from": "claimed", "prd": "every-run-session-works-in-a-worktree-of-its-own/board-commands-run-in-the-session-s-tree-not-the-checkout", "t": "2026-09-03 09:14", "to": "done"}
+{"calls": 33, "from": null, "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink", "reads": 2, "refused": 0, "t": "2026-09-03T09:15:32", "to": "open", "tokens": 451}
+{"calls": 4, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink", "reads": 0, "refused": 0, "t": "2026-09-03T09:16:19", "to": "analyzing", "tokens": 0}
+{"calls": 41, "from": null, "prd": "two-board-aliases-for-one-directory-fan-a-run-out-twice", "reads": 2, "refused": 0, "t": "2026-09-03T09:19:15", "to": "open", "tokens": 219}
+{"calls": 3, "from": "open", "prd": "two-board-aliases-for-one-directory-fan-a-run-out-twice", "reads": 0, "refused": 0, "t": "2026-09-03T09:19:20", "to": "deferred", "tokens": 0}
+{"calls": 15, "from": null, "prd": "serve-wait-crashes-on-the-all-board-s-null-path", "reads": 0, "refused": 0, "t": "2026-09-03T09:21:58", "to": "open", "tokens": 0}
+{"calls": 114, "from": "open", "prd": "serve-wait-crashes-on-the-all-board-s-null-path", "reads": 27, "refused": 3, "t": "2026-09-03T09:22:02", "to": "deferred", "tokens": 18109}
+{"calls": 7, "from": null, "prd": "the-writer-persona-is-cited-everywhere-and-has-no-file", "reads": 0, "refused": 0, "t": "2026-09-03T09:22:51", "to": "open", "tokens": 0}
+{"calls": 1, "from": "open", "prd": "the-writer-persona-is-cited-everywhere-and-has-no-file", "reads": 0, "refused": 0, "t": "2026-09-03T09:22:58", "to": "deferred", "tokens": 0}
+{"calls": 409, "from": null, "prd": "the-session-rebase-rollback-asks-refuse-before-it-resets", "reads": 16, "refused": 2, "t": "2026-09-03T09:33:20", "to": "open", "tokens": 872}
+{"calls": 28, "from": null, "prd": "the-untracked-pearde-symlink-stops-being-a-second-board", "reads": 0, "refused": 0, "t": "2026-09-03T09:39:34", "to": "open", "tokens": 0}
+{"from": "open", "prd": "every-run-session-works-in-a-worktree-of-its-own", "t": "2026-09-03 09:42", "to": "done"}
+{"from": "claimed", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense/the-cross-board-parts-are-rewritten-dense", "t": "2026-09-03 09:46", "to": "done"}
+{"from": "claimed", "prd": "every-task-is-a-verb-under-one-skill/the-machine-is-the-run-verb", "t": "2026-09-03 09:48", "to": "done"}
+{"from": "claimed", "prd": "every-document-is-written-in-the-writer-s-prose/the-loose-reference-files-are-rewritten-dense", "t": "2026-09-03 09:50", "to": "done"}
+{"from": "claimed", "prd": "resources-are-organised-by-responsibility/the-largest-module-is-cut-by-responsibility", "t": "2026-09-03 09:52", "to": "done"}
+{"calls": 64, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink", "reads": 0, "refused": 0, "t": "2026-09-03T09:53:51", "to": "open", "tokens": 2753}
+{"calls": 2, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-board-name-is-one-dotted-constant", "reads": 0, "refused": 0, "t": "2026-09-03T09:54:14", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/init-and-upgrade-write-the-dotted-board", "reads": 0, "refused": 0, "t": "2026-09-03T09:54:15", "to": "analyzing", "tokens": 0}
+{"calls": 79, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-board-not-the-project", "reads": 8, "refused": 3, "t": "2026-09-03T09:54:16", "to": "analyzing", "tokens": 66295}
+{"calls": 0, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-prose-and-the-invariants-say-dot-pearde", "reads": 0, "refused": 0, "t": "2026-09-03T09:54:17", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "reads": 0, "refused": 0, "t": "2026-09-03T09:54:18", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-session-rebase-rollback-asks-refuse-before-it-resets", "reads": 0, "refused": 0, "t": "2026-09-03T09:54:19", "to": "analyzing", "tokens": 0}
+{"from": "open", "prd": "every-document-is-written-in-the-writer-s-prose/the-parts-reference-is-rewritten-dense", "t": "2026-09-03 09:54", "to": "done"}
+{"from": "claimed", "prd": "two-harnesses-still-name-a-tree-they-do-not-measure", "t": "2026-09-03 09:55", "to": "done"}
+{"calls": 146, "from": "open", "prd": "the-untracked-pearde-symlink-stops-being-a-second-board", "reads": 0, "refused": 0, "t": "2026-09-03T09:56:29", "to": "analyzing", "tokens": 0}
+{"calls": 10, "from": "analyzing", "prd": "the-untracked-pearde-symlink-stops-being-a-second-board", "reads": 1, "refused": 0, "t": "2026-09-03T09:56:49", "to": "done", "tokens": 0}
+{"calls": 163, "from": "analyzing", "prd": "the-session-rebase-rollback-asks-refuse-before-it-resets", "reads": 5, "refused": 2, "t": "2026-09-03T10:02:06", "to": "specced", "tokens": 0}
+{"calls": 74, "from": null, "prd": "no-work-is-lost-on-the-board", "reads": 0, "refused": 1, "t": "2026-09-03T11:00:47", "to": "open", "tokens": 19308}
+{"calls": 0, "from": null, "prd": "the-board-locks-by-realpath", "reads": 0, "refused": 0, "t": "2026-09-03T11:00:47", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "collect-runs-the-invariants-and-red-refuses", "reads": 0, "refused": 0, "t": "2026-09-03T11:00:48", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "a-conflicted-lane-is-reported-not-stranded", "reads": 0, "refused": 0, "t": "2026-09-03T11:00:48", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "a-lane-rebases-before-collect", "reads": 0, "refused": 0, "t": "2026-09-03T11:00:49", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "the-doctor-refuses-drift", "reads": 0, "refused": 0, "t": "2026-09-03T11:00:49", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "one-primitive-one-definition", "reads": 0, "refused": 0, "t": "2026-09-03T11:00:49", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "every-documented-command-exists", "reads": 0, "refused": 0, "t": "2026-09-03T11:00:49", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "the-second-cleanup-pass", "reads": 0, "refused": 0, "t": "2026-09-03T11:00:50", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "the-board-is-read-once-per-process", "reads": 0, "refused": 0, "t": "2026-09-03T11:00:50", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "the-guard-costs-one-walk-of-prds", "reads": 0, "refused": 0, "t": "2026-09-03T11:00:50", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "the-daemon-caches-one-payload-per-board", "reads": 0, "refused": 0, "t": "2026-09-03T11:00:51", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "doctor-is-sixteen-product-rows", "reads": 0, "refused": 0, "t": "2026-09-03T11:00:51", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "pearde-ships-as-a-product", "reads": 0, "refused": 0, "t": "2026-09-03T11:00:51", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "core-and-dev-are-two-trees", "reads": 0, "refused": 0, "t": "2026-09-03T11:00:51", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "a-stranger-runs-the-board-in-ten-seconds", "reads": 0, "refused": 0, "t": "2026-09-03T11:00:52", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "docs-are-densified-after-they-are-checked", "reads": 0, "refused": 0, "t": "2026-09-03T11:00:52", "to": "open", "tokens": 0}
+{"calls": 2, "from": "deferred", "prd": "two-board-aliases-for-one-directory-fan-a-run-out-twice", "reads": 0, "refused": 0, "t": "2026-09-03T11:01:24", "to": "superseded", "tokens": 0}
+{"calls": 3, "from": null, "prd": "the-tree-holds-only-what-a-board-uses", "reads": 0, "refused": 0, "t": "2026-09-03T11:03:31", "to": "open", "tokens": 3822}
+{"calls": 0, "from": null, "prd": "the-template-twins-fold-into-the-reference", "reads": 0, "refused": 0, "t": "2026-09-03T11:03:31", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "scout-s-research-leaves-the-tree", "reads": 0, "refused": 0, "t": "2026-09-03T11:03:32", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "the-persona-layer-is-one-file", "reads": 0, "refused": 0, "t": "2026-09-03T11:03:32", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "a-board-s-grammar-holds-only-its-own-words", "reads": 0, "refused": 0, "t": "2026-09-03T11:03:32", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "knowledge-s-repo-only-verbs-move-out-of-the-product", "reads": 0, "refused": 0, "t": "2026-09-03T11:03:33", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "tags-are-derived-when-the-vault-is-written", "reads": 0, "refused": 0, "t": "2026-09-03T11:03:33", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "install-fetches-nothing", "reads": 0, "refused": 0, "t": "2026-09-03T11:03:33", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "the-obsidian-vault-is-opt-in", "reads": 0, "refused": 0, "t": "2026-09-03T11:03:33", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "legacy-migrations-retire", "reads": 0, "refused": 0, "t": "2026-09-03T11:03:34", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "ramp-is-a-doctor-row-not-a-gate", "reads": 0, "refused": 0, "t": "2026-09-03T11:03:34", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "the-documented-board-matches-the-code", "reads": 0, "refused": 0, "t": "2026-09-03T11:03:34", "to": "open", "tokens": 0}
+{"calls": 27, "from": "analyzing", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "reads": 0, "refused": 0, "t": "2026-09-03T11:11:38", "to": "open", "tokens": 194}
+{"calls": 0, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-board-name-is-one-dotted-constant", "reads": 0, "refused": 0, "t": "2026-09-03T11:11:38", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-prose-and-the-invariants-say-dot-pearde", "reads": 0, "refused": 0, "t": "2026-09-03T11:11:39", "to": "open", "tokens": 0}
+{"calls": 1, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/init-and-upgrade-write-the-dotted-board", "reads": 0, "refused": 0, "t": "2026-09-03T11:11:51", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-board-not-the-project", "reads": 0, "refused": 0, "t": "2026-09-03T11:11:51", "to": "open", "tokens": 0}
+{"calls": 3, "from": "specced", "prd": "the-session-rebase-rollback-asks-refuse-before-it-resets", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:15", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:15", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-board-name-is-one-dotted-constant", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:16", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/init-and-upgrade-write-the-dotted-board", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:17", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-prose-and-the-invariants-say-dot-pearde", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:17", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-board-not-the-project", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:18", "to": "analyzing", "tokens": 0}
+{"calls": 1, "from": "open", "prd": "no-work-is-lost-on-the-board/the-board-locks-by-realpath", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:24", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:25", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "no-work-is-lost-on-the-board/a-conflicted-lane-is-reported-not-stranded", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:26", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:26", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/the-documented-board-matches-the-code", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:27", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/a-board-s-grammar-holds-only-its-own-words", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:28", "to": "analyzing", "tokens": 0}
+{"calls": 1, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/install-fetches-nothing", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:33", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/ramp-is-a-doctor-row-not-a-gate", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:34", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:35", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:35", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/tags-are-derived-when-the-vault-is-written", "reads": 0, "refused": 0, "t": "2026-09-03T11:12:36", "to": "analyzing", "tokens": 0}
+{"calls": 595, "from": null, "prd": "a-pass-holds-its-turn-until-its-workers-are-in", "reads": 1, "refused": 1, "t": "2026-09-03T11:16:30", "to": "open", "tokens": 848}
+{"calls": 63, "from": "open", "prd": "a-pass-holds-its-turn-until-its-workers-are-in", "reads": 2, "refused": 0, "t": "2026-09-03T11:17:05", "to": "analyzing", "tokens": 0}
+{"calls": 117, "from": "analyzing", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "reads": 0, "refused": 1, "t": "2026-09-03T11:29:51", "to": "open", "tokens": 1233}
+{"calls": 0, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-board-name-is-one-dotted-constant", "reads": 0, "refused": 0, "t": "2026-09-03T11:29:51", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/init-and-upgrade-write-the-dotted-board", "reads": 0, "refused": 0, "t": "2026-09-03T11:29:51", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-prose-and-the-invariants-say-dot-pearde", "reads": 0, "refused": 0, "t": "2026-09-03T11:29:52", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-board-not-the-project", "reads": 0, "refused": 0, "t": "2026-09-03T11:29:52", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "no-work-is-lost-on-the-board/the-board-locks-by-realpath", "reads": 0, "refused": 0, "t": "2026-09-03T11:29:52", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses", "reads": 0, "refused": 0, "t": "2026-09-03T11:29:53", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "no-work-is-lost-on-the-board/a-conflicted-lane-is-reported-not-stranded", "reads": 0, "refused": 0, "t": "2026-09-03T11:29:53", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "reads": 0, "refused": 0, "t": "2026-09-03T11:29:53", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/the-documented-board-matches-the-code", "reads": 0, "refused": 0, "t": "2026-09-03T11:29:53", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/a-board-s-grammar-holds-only-its-own-words", "reads": 0, "refused": 0, "t": "2026-09-03T11:29:54", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/install-fetches-nothing", "reads": 0, "refused": 0, "t": "2026-09-03T11:29:54", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/ramp-is-a-doctor-row-not-a-gate", "reads": 0, "refused": 0, "t": "2026-09-03T11:29:54", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "reads": 0, "refused": 0, "t": "2026-09-03T11:29:55", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "reads": 0, "refused": 0, "t": "2026-09-03T11:29:55", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/tags-are-derived-when-the-vault-is-written", "reads": 0, "refused": 0, "t": "2026-09-03T11:29:55", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "a-pass-holds-its-turn-until-its-workers-are-in", "reads": 0, "refused": 0, "t": "2026-09-03T11:29:55", "to": "open", "tokens": 0}
+{"calls": 10, "from": null, "prd": "the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 0, "refused": 1, "t": "2026-09-03T11:31:52", "to": "open", "tokens": 1085}
+{"calls": 3, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-board-not-the-project", "reads": 0, "refused": 0, "t": "2026-09-03T11:32:14", "to": "superseded", "tokens": 0}
+{"calls": 34, "from": "open", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "reads": 0, "refused": 0, "t": "2026-09-03T11:43:57", "to": "analyzing", "tokens": 2822}
+{"calls": 0, "from": "open", "prd": "no-work-is-lost-on-the-board/the-board-locks-by-realpath", "reads": 0, "refused": 0, "t": "2026-09-03T11:43:59", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/init-and-upgrade-write-the-dotted-board", "reads": 0, "refused": 0, "t": "2026-09-03T11:43:59", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-board-name-is-one-dotted-constant", "reads": 0, "refused": 0, "t": "2026-09-03T11:44:00", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-prose-and-the-invariants-say-dot-pearde", "reads": 0, "refused": 0, "t": "2026-09-03T11:44:01", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 0, "refused": 0, "t": "2026-09-03T11:44:02", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "a-pass-holds-its-turn-until-its-workers-are-in", "reads": 0, "refused": 0, "t": "2026-09-03T11:44:03", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses", "reads": 0, "refused": 0, "t": "2026-09-03T11:44:04", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "no-work-is-lost-on-the-board/a-conflicted-lane-is-reported-not-stranded", "reads": 0, "refused": 0, "t": "2026-09-03T11:44:05", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "reads": 0, "refused": 0, "t": "2026-09-03T11:44:05", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/the-documented-board-matches-the-code", "reads": 0, "refused": 0, "t": "2026-09-03T11:44:06", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/a-board-s-grammar-holds-only-its-own-words", "reads": 0, "refused": 0, "t": "2026-09-03T11:44:07", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/install-fetches-nothing", "reads": 0, "refused": 0, "t": "2026-09-03T11:44:08", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/ramp-is-a-doctor-row-not-a-gate", "reads": 0, "refused": 0, "t": "2026-09-03T11:44:10", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "reads": 0, "refused": 0, "t": "2026-09-03T11:44:12", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "reads": 0, "refused": 0, "t": "2026-09-03T11:44:13", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/tags-are-derived-when-the-vault-is-written", "reads": 0, "refused": 0, "t": "2026-09-03T11:44:14", "to": "analyzing", "tokens": 0}
+{"calls": 855, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/ramp-is-a-doctor-row-not-a-gate", "reads": 2, "refused": 6, "t": "2026-09-03T11:55:17", "to": "specced", "tokens": 10152}
+{"calls": 26, "from": "analyzing", "prd": "a-pass-holds-its-turn-until-its-workers-are-in", "reads": 0, "refused": 0, "t": "2026-09-03T11:56:12", "to": "specced", "tokens": 2318}
+{"calls": 1, "from": "analyzing", "prd": "no-work-is-lost-on-the-board/the-board-locks-by-realpath", "reads": 0, "refused": 0, "t": "2026-09-03T11:56:13", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/install-fetches-nothing", "reads": 0, "refused": 0, "t": "2026-09-03T11:56:14", "to": "specced", "tokens": 0}
+{"calls": 18, "from": "claimed", "prd": "the-session-rebase-rollback-asks-refuse-before-it-resets", "reads": 0, "refused": 2, "t": "2026-09-03T11:56:41", "to": "superseded", "tokens": 331}
+{"calls": 9, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "reads": 0, "refused": 0, "t": "2026-09-03T11:57:05", "to": "specced", "tokens": 2313}
+{"calls": 9, "from": "analyzing", "prd": "no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses", "reads": 2, "refused": 0, "t": "2026-09-03T11:57:20", "to": "specced", "tokens": 449}
+{"calls": 13, "from": null, "prd": "the-board-reclaims-dead-work-by-itself", "reads": 0, "refused": 1, "t": "2026-09-03T11:57:27", "to": "open", "tokens": 0}
+{"calls": 2, "from": null, "prd": "a-claim-names-the-process-that-holds-it", "reads": 0, "refused": 0, "t": "2026-09-03T11:57:32", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "the-sweep-runs-between-passes", "reads": 0, "refused": 0, "t": "2026-09-03T11:57:33", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "a-lane-is-removed-when-its-prd-collects", "reads": 0, "refused": 0, "t": "2026-09-03T11:57:34", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "a-fork-reaches-the-user-when-it-is-written", "reads": 0, "refused": 0, "t": "2026-09-03T11:57:34", "to": "open", "tokens": 0}
+{"calls": 9, "from": null, "prd": "a-worker-survives-the-window-that-launched-it", "reads": 2, "refused": 0, "t": "2026-09-03T11:57:35", "to": "open", "tokens": 632}
+{"calls": 0, "from": "specced", "prd": "no-work-is-lost-on-the-board/the-board-locks-by-realpath", "reads": 0, "refused": 0, "t": "2026-09-03T11:57:35", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "every-document-is-written-in-the-writer-s-prose/templates-personas-and-agents-are-rewritten-dense", "t": "2026-09-03 11:58", "to": "done"}
+{"calls": 18, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/init-and-upgrade-write-the-dotted-board", "reads": 2, "refused": 0, "t": "2026-09-03T11:59:03", "to": "specced", "tokens": 0}
+{"calls": 9, "from": "specced", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/init-and-upgrade-write-the-dotted-board", "reads": 0, "refused": 0, "t": "2026-09-03T12:03:52", "to": "claimed", "tokens": 525}
+{"calls": 4, "from": "open", "prd": "the-board-reclaims-dead-work-by-itself/a-claim-names-the-process-that-holds-it", "reads": 2, "refused": 0, "t": "2026-09-03T12:03:54", "to": "analyzing", "tokens": 220}
+{"calls": 1, "from": "open", "prd": "the-board-reclaims-dead-work-by-itself/a-worker-survives-the-window-that-launched-it", "reads": 0, "refused": 0, "t": "2026-09-03T12:03:55", "to": "analyzing", "tokens": 0}
+{"calls": 204, "from": "open", "prd": "the-board-reclaims-dead-work-by-itself/the-sweep-runs-between-passes", "reads": 2, "refused": 0, "t": "2026-09-03T12:03:57", "to": "analyzing", "tokens": 0}
+{"calls": 1, "from": "open", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "reads": 0, "refused": 0, "t": "2026-09-03T12:03:59", "to": "analyzing", "tokens": 0}
+{"calls": 1, "from": "open", "prd": "the-board-reclaims-dead-work-by-itself/a-fork-reaches-the-user-when-it-is-written", "reads": 0, "refused": 0, "t": "2026-09-03T12:04:01", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/the-template-twins-fold-into-the-reference", "reads": 0, "refused": 0, "t": "2026-09-03T12:04:03", "to": "analyzing", "tokens": 0}
+{"calls": 12, "from": "specced", "prd": "a-pass-holds-its-turn-until-its-workers-are-in", "reads": 2, "refused": 0, "t": "2026-09-03T12:04:14", "to": "claimed", "tokens": 459}
+{"calls": 14, "from": "specced", "prd": "no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses", "reads": 2, "refused": 0, "t": "2026-09-03T12:04:15", "to": "claimed", "tokens": 223}
+{"calls": 42, "from": "specced", "prd": "the-tree-holds-only-what-a-board-uses/install-fetches-nothing", "reads": 2, "refused": 0, "t": "2026-09-03T12:04:16", "to": "claimed", "tokens": 221}
+{"calls": 8, "from": "specced", "prd": "the-tree-holds-only-what-a-board-uses/ramp-is-a-doctor-row-not-a-gate", "reads": 0, "refused": 0, "t": "2026-09-03T12:04:18", "to": "claimed", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "reads": 0, "refused": 0, "t": "2026-09-03T12:04:19", "to": "claimed", "tokens": 0}
+{"from": "open", "prd": "every-document-is-written-in-the-writer-s-prose", "t": "2026-09-03 12:05", "to": "done"}
+{"calls": 12, "from": null, "prd": "a-harness-never-dispatches-the-live-board", "reads": 0, "refused": 0, "t": "2026-09-03T12:06:35", "to": "open", "tokens": 0}
+{"calls": 2, "from": "open", "prd": "a-harness-never-dispatches-the-live-board", "reads": 0, "refused": 0, "t": "2026-09-03T12:07:14", "to": "analyzing", "tokens": 0}
+{"from": "claimed", "prd": "resources-are-organised-by-responsibility/every-module-finds-its-siblings-by-one-rule", "t": "2026-09-03 12:07", "to": "done"}
+{"calls": 20, "from": "open", "prd": "the-doctor-refuses-drift/one-primitive-one-definition", "reads": 0, "refused": 1, "t": "2026-09-03T12:08:40", "to": "analyzing", "tokens": 0}
+{"calls": 1, "from": "open", "prd": "the-doctor-refuses-drift/every-documented-command-exists", "reads": 0, "refused": 0, "t": "2026-09-03T12:08:47", "to": "analyzing", "tokens": 0}
+{"calls": 124, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/legacy-migrations-retire", "reads": 3, "refused": 0, "t": "2026-09-03T12:08:55", "to": "analyzing", "tokens": 632}
+{"calls": 3, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-board-name-is-one-dotted-constant", "reads": 0, "refused": 0, "t": "2026-09-03T12:08:57", "to": "specced", "tokens": 0}
+{"calls": 260, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/the-documented-board-matches-the-code", "reads": 3, "refused": 1, "t": "2026-09-03T12:08:59", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/a-board-s-grammar-holds-only-its-own-words", "reads": 0, "refused": 0, "t": "2026-09-03T12:09:01", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-prose-and-the-invariants-say-dot-pearde", "reads": 0, "refused": 0, "t": "2026-09-03T12:09:03", "to": "specced", "tokens": 0}
+{"calls": 127, "from": "open", "prd": "resources-are-organised-by-responsibility/every-file-sits-under-what-it-is-responsible-for", "reads": 14, "refused": 0, "t": "2026-09-03T12:09:12", "to": "analyzing", "tokens": 0}
+{"calls": 33, "from": null, "prd": "a-verify-block-resolves-the-board-absolutely-not-from-its-cw", "reads": 0, "refused": 0, "t": "2026-09-03T12:16:16", "to": "open", "tokens": 0}
+{"calls": 50, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/tags-are-derived-when-the-vault-is-written", "reads": 0, "refused": 0, "t": "2026-09-03T12:18:48", "to": "specced", "tokens": 0}
+{"calls": 166, "from": "analyzing", "prd": "no-work-is-lost-on-the-board/a-conflicted-lane-is-reported-not-stranded", "reads": 1, "refused": 0, "t": "2026-09-03T12:18:50", "to": "specced", "tokens": 0}
+{"calls": 81, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "reads": 1, "refused": 0, "t": "2026-09-03T12:18:52", "to": "specced", "tokens": 568}
+{"calls": 305, "from": "open", "prd": "a-verify-block-resolves-the-board-absolutely-not-from-its-cw", "reads": 0, "refused": 2, "t": "2026-09-03T12:26:11", "to": "analyzing", "tokens": 0}
+{"from": "claimed", "prd": "the-tree-holds-only-what-a-board-uses/ramp-is-a-doctor-row-not-a-gate", "t": "2026-09-03 12:25", "to": "done"}
+{"calls": 55, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/legacy-migrations-retire", "reads": 4, "refused": 2, "t": "2026-09-03T12:35:59", "to": "specced", "tokens": 2177}
+{"calls": 3, "from": "analyzing", "prd": "the-board-reclaims-dead-work-by-itself/a-worker-survives-the-window-that-launched-it", "reads": 0, "refused": 0, "t": "2026-09-03T12:36:20", "to": "open", "tokens": 0}
+{"calls": 14, "from": "specced", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-board-name-is-one-dotted-constant", "reads": 1, "refused": 0, "t": "2026-09-03T12:36:50", "to": "claimed", "tokens": 0}
+{"calls": 6, "from": "specced", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-prose-and-the-invariants-say-dot-pearde", "reads": 0, "refused": 0, "t": "2026-09-03T12:37:04", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "no-work-is-lost-on-the-board/a-conflicted-lane-is-reported-not-stranded", "reads": 0, "refused": 0, "t": "2026-09-03T12:37:04", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "the-tree-holds-only-what-a-board-uses/the-documented-board-matches-the-code", "reads": 0, "refused": 0, "t": "2026-09-03T12:37:05", "to": "claimed", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "the-tree-holds-only-what-a-board-uses/legacy-migrations-retire", "reads": 0, "refused": 0, "t": "2026-09-03T12:37:06", "to": "claimed", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "the-tree-holds-only-what-a-board-uses/a-board-s-grammar-holds-only-its-own-words", "reads": 0, "refused": 0, "t": "2026-09-03T12:37:07", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "reads": 0, "refused": 0, "t": "2026-09-03T12:37:07", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "the-tree-holds-only-what-a-board-uses/tags-are-derived-when-the-vault-is-written", "reads": 0, "refused": 0, "t": "2026-09-03T12:37:08", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-board-reclaims-dead-work-by-itself/a-worker-survives-the-window-that-launched-it", "reads": 0, "refused": 0, "t": "2026-09-03T12:37:09", "to": "analyzing", "tokens": 0}
+{"from": "claimed", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-prose-and-the-invariants-say-dot-pearde", "t": "2026-09-03 13:02", "to": "done"}
+{"from": "claimed", "prd": "the-tree-holds-only-what-a-board-uses/install-fetches-nothing", "t": "2026-09-03 13:03", "to": "done"}
+{"from": "claimed", "prd": "no-work-is-lost-on-the-board/a-conflicted-lane-is-reported-not-stranded", "t": "2026-09-03 13:04", "to": "done"}
+{"calls": 1143, "from": "analyzing", "prd": "the-doctor-refuses-drift/one-primitive-one-definition", "reads": 27, "refused": 1, "t": "2026-09-03T14:00:10", "to": "question", "tokens": 22733}
+{"calls": 2, "from": "analyzing", "prd": "a-harness-never-dispatches-the-live-board", "reads": 0, "refused": 0, "t": "2026-09-03T14:00:44", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 0, "refused": 0, "t": "2026-09-03T14:00:45", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "reads": 0, "refused": 0, "t": "2026-09-03T14:00:46", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "reads": 0, "refused": 0, "t": "2026-09-03T14:00:46", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-doctor-refuses-drift/every-documented-command-exists", "reads": 0, "refused": 0, "t": "2026-09-03T14:00:47", "to": "specced", "tokens": 0}
+{"calls": 3, "from": "specced", "prd": "a-harness-never-dispatches-the-live-board", "reads": 0, "refused": 0, "t": "2026-09-03T14:01:15", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 0, "refused": 0, "t": "2026-09-03T14:01:16", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "reads": 0, "refused": 0, "t": "2026-09-03T14:01:17", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "reads": 0, "refused": 0, "t": "2026-09-03T14:01:17", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "the-doctor-refuses-drift/every-documented-command-exists", "reads": 0, "refused": 0, "t": "2026-09-03T14:01:18", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "t": "2026-09-03 14:06", "to": "blocked"}
+{"from": "claimed", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "t": "2026-09-03 14:14", "to": "blocked"}
+{"calls": 144, "from": "question", "prd": "the-doctor-refuses-drift/one-primitive-one-definition", "reads": 18, "refused": 3, "t": "2026-09-03T14:37:37", "to": "open", "tokens": 85914}
+{"calls": 6, "from": "blocked", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "reads": 0, "refused": 0, "t": "2026-09-03T14:38:13", "to": "open", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 0, "refused": 0, "t": "2026-09-03T14:38:21", "to": "open", "tokens": 0}
+{"calls": 478, "from": "open", "prd": "the-doctor-refuses-drift/one-primitive-one-definition", "reads": 5, "refused": 4, "t": "2026-09-03T15:02:21", "to": "analyzing", "tokens": 11274}
+{"calls": 0, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 0, "refused": 0, "t": "2026-09-03T15:02:22", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "reads": 0, "refused": 0, "t": "2026-09-03T15:02:23", "to": "analyzing", "tokens": 0}
+{"calls": 147, "from": "analyzing", "prd": "the-doctor-refuses-drift/one-primitive-one-definition", "reads": 6, "refused": 5, "t": "2026-09-03T15:08:54", "to": "open", "tokens": 912}
+{"calls": 2, "from": "open", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/common-py-gains-a-git-runner-and-a-section-extractor", "reads": 0, "refused": 0, "t": "2026-09-03T15:09:03", "to": "analyzing", "tokens": 0}
+{"calls": 18, "from": "analyzing", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "reads": 0, "refused": 0, "t": "2026-09-03T15:09:38", "to": "specced", "tokens": 0}
+{"calls": 11, "from": "specced", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "reads": 1, "refused": 0, "t": "2026-09-03T15:09:56", "to": "claimed", "tokens": 0}
+{"calls": 90, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 4, "refused": 2, "t": "2026-09-03T15:16:34", "to": "specced", "tokens": 382}
+{"calls": 6, "from": "specced", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 0, "refused": 0, "t": "2026-09-03T15:16:58", "to": "claimed", "tokens": 0}
+{"calls": 85, "from": "analyzing", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/common-py-gains-a-git-runner-and-a-section-extractor", "reads": 1, "refused": 2, "t": "2026-09-03T15:22:13", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/common-py-gains-a-git-runner-and-a-section-extractor", "reads": 0, "refused": 0, "t": "2026-09-03T15:22:18", "to": "claimed", "tokens": 0}
+{"calls": 149, "from": "open", "prd": "the-plan-is-parallel-and-only-dispatch-is-capped", "reads": 0, "refused": 4, "t": "2026-09-03T15:32:21", "to": "analyzing", "tokens": 648}
+{"from": "claimed", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "t": "2026-09-03 15:37", "to": "blocked"}
+{"calls": 206, "from": "analyzing", "prd": "the-plan-is-parallel-and-only-dispatch-is-capped", "reads": 8, "refused": 5, "t": "2026-09-03T15:57:10", "to": "specced", "tokens": 788}
+{"calls": 1, "from": "specced", "prd": "the-plan-is-parallel-and-only-dispatch-is-capped", "reads": 0, "refused": 0, "t": "2026-09-03T15:57:20", "to": "claimed", "tokens": 0}
+{"calls": 120, "from": "analyzing", "prd": "a-verify-block-resolves-the-board-absolutely-not-from-its-cw", "reads": 6, "refused": 0, "t": "2026-09-03T16:17:04", "to": "open", "tokens": 2246}
+{"calls": 2, "from": "open", "prd": "a-verify-block-resolves-the-board-absolutely-not-from-its-cw", "reads": 0, "refused": 0, "t": "2026-09-03T16:17:11", "to": "analyzing", "tokens": 0}
+{"calls": 129, "from": "analyzing", "prd": "a-verify-block-resolves-the-board-absolutely-not-from-its-cw", "reads": 2, "refused": 3, "t": "2026-09-03T16:32:52", "to": "specced", "tokens": 293}
+{"calls": 128, "from": "specced", "prd": "a-verify-block-resolves-the-board-absolutely-not-from-its-cw", "reads": 4, "refused": 0, "t": "2026-09-03T16:32:56", "to": "claimed", "tokens": 29829}
+{"calls": 5, "from": null, "prd": "a-session-worktree-lacks-the-pearde-symlink-a-lane-gets", "reads": 0, "refused": 0, "t": "2026-09-03T16:33:30", "to": "open", "tokens": 0}
+{"calls": 4, "from": "open", "prd": "a-session-worktree-lacks-the-pearde-symlink-a-lane-gets", "reads": 0, "refused": 1, "t": "2026-09-03T16:34:08", "to": "deferred", "tokens": 0}
+{"from": "claimed", "prd": "a-verify-block-resolves-the-board-absolutely-not-from-its-cw", "t": "2026-09-03 16:47", "to": "blocked"}
+{"from": "blocked", "prd": "a-verify-block-resolves-the-board-absolutely-not-from-its-cw", "t": "2026-09-03 16:51", "to": "done"}
+{"from": "claimed", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/common-py-gains-a-git-runner-and-a-section-extractor", "t": "2026-09-03 16:53", "to": "done"}
+{"calls": 135, "from": "open", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-core-board-modules-delegate-to-common", "reads": 2, "refused": 1, "t": "2026-09-03T16:53:26", "to": "analyzing", "tokens": 1666}
+{"calls": 0, "from": "open", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-lane-and-repo-modules-delegate-to-common", "reads": 0, "refused": 0, "t": "2026-09-03T16:53:27", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-top-level-resources-modules-delegate-to-common", "reads": 0, "refused": 0, "t": "2026-09-03T16:53:28", "to": "analyzing", "tokens": 0}
+{"calls": 350, "from": "analyzing", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-lane-and-repo-modules-delegate-to-common", "reads": 1, "refused": 4, "t": "2026-09-03T17:07:21", "to": "specced", "tokens": 7397}
+{"calls": 15, "from": "analyzing", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-core-board-modules-delegate-to-common", "reads": 0, "refused": 0, "t": "2026-09-03T17:07:43", "to": "specced", "tokens": 0}
+{"calls": 240, "from": "specced", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-core-board-modules-delegate-to-common", "reads": 4, "refused": 1, "t": "2026-09-03T17:07:48", "to": "claimed", "tokens": 36836}
+{"calls": 0, "from": "specced", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-lane-and-repo-modules-delegate-to-common", "reads": 0, "refused": 0, "t": "2026-09-03T17:07:48", "to": "claimed", "tokens": 0}
+{"calls": 40, "from": "blocked", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 0, "refused": 1, "t": "2026-09-03T17:08:40", "to": "open", "tokens": 0}
+{"calls": 37, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 0, "refused": 1, "t": "2026-09-03T17:09:38", "to": "analyzing", "tokens": 0}
+{"calls": 142, "from": "analyzing", "prd": "the-board-reclaims-dead-work-by-itself/a-worker-survives-the-window-that-launched-it", "reads": 0, "refused": 0, "t": "2026-09-03T17:12:39", "to": "open", "tokens": 12616}
+{"calls": 84, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 1, "refused": 0, "t": "2026-09-03T17:14:27", "to": "open", "tokens": 0}
+{"calls": 8, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 0, "refused": 0, "t": "2026-09-03T17:14:59", "to": "analyzing", "tokens": 111}
+{"calls": 2, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 0, "refused": 0, "t": "2026-09-03T17:15:03", "to": "specced", "tokens": 358}
+{"calls": 1, "from": "specced", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 0, "refused": 0, "t": "2026-09-03T17:15:08", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "t": "2026-09-03 17:15", "to": "blocked"}
+{"calls": 7, "from": "open", "prd": "the-board-reclaims-dead-work-by-itself/a-worker-survives-the-window-that-launched-it", "reads": 0, "refused": 0, "t": "2026-09-03T17:15:52", "to": "analyzing", "tokens": 333}
+{"calls": 18, "from": "analyzing", "prd": "the-board-reclaims-dead-work-by-itself/a-claim-names-the-process-that-holds-it", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:29", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-board-reclaims-dead-work-by-itself/a-fork-reaches-the-user-when-it-is-written", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:29", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:30", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-board-reclaims-dead-work-by-itself/the-sweep-runs-between-passes", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:30", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/the-template-twins-fold-into-the-reference", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:31", "to": "open", "tokens": 0}
+{"calls": 115, "from": null, "prd": "one-board-path-resolver-fewer", "reads": 8, "refused": 3, "t": "2026-09-03T17:16:37", "to": "open", "tokens": 3729}
+{"calls": 53, "from": null, "prd": "one-prd-reading-primitive", "reads": 2, "refused": 0, "t": "2026-09-03T17:16:37", "to": "open", "tokens": 13096}
+{"calls": 0, "from": null, "prd": "the-vision-file-s-edges-fold-into-needs", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:38", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "the-ranking-renders-beside-the-view", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:38", "to": "open", "tokens": 0}
+{"calls": 1, "from": null, "prd": "enforce-pointer-not-verdict", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:39", "to": "open", "tokens": 0}
+{"calls": 1, "from": "open", "prd": "the-board-reclaims-dead-work-by-itself/a-claim-names-the-process-that-holds-it", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:39", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": null, "prd": "the-capability-registry", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:39", "to": "open", "tokens": 43}
+{"calls": 0, "from": null, "prd": "scout-reads-our-own-deltas", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:40", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "the-fire-check", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:40", "to": "open", "tokens": 0}
+{"calls": 4, "from": "open", "prd": "the-board-reclaims-dead-work-by-itself/a-fork-reaches-the-user-when-it-is-written", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:41", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": null, "prd": "suggested-at-the-moment-of-need", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:41", "to": "open", "tokens": 0}
+{"calls": 1, "from": null, "prd": "usage-snapshots-ranked-over-time", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:41", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "the-vault-s-verbs-are-capabilities", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:42", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "one-graph-writer", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:43", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "pending-gets-an-expiry-not-a-decree", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:43", "to": "open", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:43", "to": "analyzing", "tokens": 0}
+{"calls": 1, "from": null, "prd": "the-kb-survives-a-lane", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:44", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "doctor-repairs-the-register-entry", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:44", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "one-register-writer", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:45", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "pearde-vault-without-wait", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:45", "to": "open", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-board-reclaims-dead-work-by-itself/the-sweep-runs-between-passes", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:45", "to": "analyzing", "tokens": 0}
+{"calls": 1, "from": null, "prd": "delta-names-the-missing-day", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:46", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "one-verb-set", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:46", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "a-check-for-the-reading-list", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:47", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "the-daemon-s-liveness-moves-onto-the-board", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:47", "to": "open", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/the-template-twins-fold-into-the-reference", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:48", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": null, "prd": "one-section-registry", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:48", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "write-affordances-on-focus", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:49", "to": "open", "tokens": 0}
+{"calls": 0, "from": null, "prd": "the-promotion-rule", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:49", "to": "open", "tokens": 614}
+{"calls": 1, "from": null, "prd": "runs-meets-the-report-count", "reads": 0, "refused": 0, "t": "2026-09-03T17:16:50", "to": "open", "tokens": 0}
+{"calls": 40, "from": "open", "prd": "the-capability-registry", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:00", "to": "analyzing", "tokens": 49141}
+{"calls": 3, "from": "open", "prd": "doctor-repairs-the-register-entry", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:03", "to": "analyzing", "tokens": 0}
+{"calls": 4, "from": "open", "prd": "one-register-writer", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:05", "to": "analyzing", "tokens": 0}
+{"calls": 3, "from": "open", "prd": "pearde-vault-without-wait", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:07", "to": "analyzing", "tokens": 0}
+{"calls": 5, "from": "open", "prd": "one-section-registry", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:10", "to": "analyzing", "tokens": 0}
+{"calls": 1, "from": "open", "prd": "the-daemon-s-liveness-moves-onto-the-board", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:11", "to": "analyzing", "tokens": 0}
+{"calls": 2, "from": "open", "prd": "write-affordances-on-focus", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:12", "to": "analyzing", "tokens": 0}
+{"calls": 3, "from": "open", "prd": "a-check-for-the-reading-list", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:14", "to": "analyzing", "tokens": 0}
+{"calls": 15, "from": "open", "prd": "delta-names-the-missing-day", "reads": 1, "refused": 0, "t": "2026-09-03T17:18:16", "to": "analyzing", "tokens": 318}
+{"calls": 4, "from": "open", "prd": "one-verb-set", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:18", "to": "analyzing", "tokens": 0}
+{"calls": 6, "from": "open", "prd": "one-graph-writer", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:24", "to": "analyzing", "tokens": 0}
+{"calls": 3, "from": "open", "prd": "pending-gets-an-expiry-not-a-decree", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:27", "to": "analyzing", "tokens": 0}
+{"calls": 7, "from": "open", "prd": "the-kb-survives-a-lane", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:34", "to": "analyzing", "tokens": 0}
+{"calls": 12, "from": "open", "prd": "enforce-pointer-not-verdict", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:44", "to": "analyzing", "tokens": 0}
+{"calls": 6, "from": "open", "prd": "one-board-path-resolver-fewer", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:50", "to": "analyzing", "tokens": 0}
+{"calls": 6, "from": "open", "prd": "one-prd-reading-primitive", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:53", "to": "analyzing", "tokens": 0}
+{"calls": 2, "from": "open", "prd": "the-ranking-renders-beside-the-view", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:57", "to": "analyzing", "tokens": 0}
+{"calls": 3, "from": "open", "prd": "the-vision-file-s-edges-fold-into-needs", "reads": 0, "refused": 0, "t": "2026-09-03T17:18:59", "to": "analyzing", "tokens": 0}
+{"calls": 3, "from": "open", "prd": "runs-meets-the-report-count", "reads": 0, "refused": 0, "t": "2026-09-03T17:19:02", "to": "analyzing", "tokens": 0}
+{"calls": 5, "from": "open", "prd": "the-promotion-rule", "reads": 0, "refused": 0, "t": "2026-09-03T17:19:05", "to": "analyzing", "tokens": 0}
+{"calls": 448, "from": "analyzing", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-top-level-resources-modules-delegate-to-common", "reads": 15, "refused": 16, "t": "2026-09-03T17:21:32", "to": "specced", "tokens": 0}
+{"calls": 16, "from": "specced", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-top-level-resources-modules-delegate-to-common", "reads": 4, "refused": 0, "t": "2026-09-03T17:21:40", "to": "claimed", "tokens": 0}
+{"calls": 419, "from": "analyzing", "prd": "the-board-reclaims-dead-work-by-itself/a-worker-survives-the-window-that-launched-it", "reads": 16, "refused": 4, "t": "2026-09-03T17:27:07", "to": "specced", "tokens": 49792}
+{"from": "claimed", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-core-board-modules-delegate-to-common", "t": "2026-09-03 17:27", "to": "blocked"}
+{"calls": 87, "from": "analyzing", "prd": "a-check-for-the-reading-list", "reads": 3, "refused": 1, "t": "2026-09-03T17:28:10", "to": "specced", "tokens": 49792}
+{"from": "claimed", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-lane-and-repo-modules-delegate-to-common", "t": "2026-09-03 17:28", "to": "blocked"}
+{"calls": 74, "from": "analyzing", "prd": "pearde-vault-without-wait", "reads": 1, "refused": 0, "t": "2026-09-03T17:28:39", "to": "specced", "tokens": 0}
+{"from": "blocked", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-lane-and-repo-modules-delegate-to-common", "t": "2026-09-03 17:28", "to": "blocked"}
+{"calls": 98, "from": "analyzing", "prd": "the-board-reclaims-dead-work-by-itself/a-fork-reaches-the-user-when-it-is-written", "reads": 3, "refused": 1, "t": "2026-09-03T17:29:15", "to": "specced", "tokens": 0}
+{"calls": 36, "from": "blocked", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-lane-and-repo-modules-delegate-to-common", "reads": 3, "refused": 0, "t": "2026-09-03T17:29:33", "to": "specced", "tokens": 0}
+{"calls": 14, "from": "specced", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-lane-and-repo-modules-delegate-to-common", "reads": 0, "refused": 0, "t": "2026-09-03T17:29:38", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-lane-and-repo-modules-delegate-to-common", "t": "2026-09-03 17:29", "to": "blocked"}
+{"calls": 51, "from": "analyzing", "prd": "delta-names-the-missing-day", "reads": 2, "refused": 1, "t": "2026-09-03T17:30:04", "to": "specced", "tokens": 0}
+{"calls": 95, "from": "specced", "prd": "pearde-vault-without-wait", "reads": 3, "refused": 2, "t": "2026-09-03T17:30:56", "to": "open", "tokens": 0}
+{"calls": 6, "from": "open", "prd": "pearde-vault-without-wait", "reads": 0, "refused": 0, "t": "2026-09-03T17:31:00", "to": "analyzing", "tokens": 0}
+{"calls": 12, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/the-template-twins-fold-into-the-reference", "reads": 0, "refused": 0, "t": "2026-09-03T17:31:06", "to": "specced", "tokens": 0}
+{"calls": 21, "from": null, "prd": "a-lanes-own-fast-forward-refuses-on-a-laneless-workers-live", "reads": 0, "refused": 0, "t": "2026-09-03T17:31:17", "to": "open", "tokens": 0}
+{"calls": 35, "from": "analyzing", "prd": "the-capability-registry", "reads": 0, "refused": 2, "t": "2026-09-03T17:31:35", "to": "specced", "tokens": 0}
+{"calls": 17, "from": "open", "prd": "a-lanes-own-fast-forward-refuses-on-a-laneless-workers-live", "reads": 0, "refused": 0, "t": "2026-09-03T17:31:43", "to": "deferred", "tokens": 0}
+{"calls": 17, "from": "specced", "prd": "the-board-reclaims-dead-work-by-itself/a-worker-survives-the-window-that-launched-it", "reads": 0, "refused": 0, "t": "2026-09-03T17:31:55", "to": "claimed", "tokens": 0}
+{"calls": 5, "from": "specced", "prd": "the-board-reclaims-dead-work-by-itself/a-fork-reaches-the-user-when-it-is-written", "reads": 0, "refused": 0, "t": "2026-09-03T17:31:58", "to": "claimed", "tokens": 0}
+{"calls": 3, "from": "specced", "prd": "the-tree-holds-only-what-a-board-uses/the-template-twins-fold-into-the-reference", "reads": 0, "refused": 0, "t": "2026-09-03T17:32:01", "to": "claimed", "tokens": 0}
+{"calls": 6, "from": "specced", "prd": "a-check-for-the-reading-list", "reads": 0, "refused": 0, "t": "2026-09-03T17:32:04", "to": "claimed", "tokens": 0}
+{"calls": 8, "from": "specced", "prd": "delta-names-the-missing-day", "reads": 0, "refused": 0, "t": "2026-09-03T17:32:07", "to": "claimed", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "the-capability-registry", "reads": 0, "refused": 0, "t": "2026-09-03T17:32:10", "to": "claimed", "tokens": 0}
+{"calls": 140, "from": "analyzing", "prd": "doctor-repairs-the-register-entry", "reads": 10, "refused": 0, "t": "2026-09-03T17:33:37", "to": "specced", "tokens": 0}
+{"calls": 13, "from": "analyzing", "prd": "pearde-vault-without-wait", "reads": 0, "refused": 0, "t": "2026-09-03T17:33:47", "to": "specced", "tokens": 0}
+{"calls": 37, "from": "specced", "prd": "doctor-repairs-the-register-entry", "reads": 0, "refused": 0, "t": "2026-09-03T17:34:17", "to": "claimed", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "pearde-vault-without-wait", "reads": 0, "refused": 0, "t": "2026-09-03T17:34:19", "to": "claimed", "tokens": 0}
+{"calls": 8, "from": "analyzing", "prd": "the-daemon-s-liveness-moves-onto-the-board", "reads": 0, "refused": 0, "t": "2026-09-03T17:34:25", "to": "specced", "tokens": 0}
+{"calls": 4, "from": "specced", "prd": "the-daemon-s-liveness-moves-onto-the-board", "reads": 0, "refused": 0, "t": "2026-09-03T17:34:30", "to": "claimed", "tokens": 0}
+{"calls": 273, "from": "analyzing", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "reads": 3, "refused": 6, "t": "2026-09-03T17:36:40", "to": "specced", "tokens": 709}
+{"calls": 9, "from": "specced", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "reads": 0, "refused": 0, "t": "2026-09-03T17:36:46", "to": "claimed", "tokens": 0}
+{"calls": 1, "from": "analyzing", "prd": "one-verb-set", "reads": 0, "refused": 0, "t": "2026-09-03T17:37:06", "to": "specced", "tokens": 1342}
+{"calls": 69, "from": "analyzing", "prd": "the-board-reclaims-dead-work-by-itself/the-sweep-runs-between-passes", "reads": 0, "refused": 0, "t": "2026-09-03T17:37:37", "to": "specced", "tokens": 0}
+{"calls": 14, "from": null, "prd": "a-purge-removes-what-no-claim-holds", "reads": 0, "refused": 0, "t": "2026-09-03T17:38:26", "to": "open", "tokens": 4981}
+{"calls": 130, "from": "analyzing", "prd": "the-kb-survives-a-lane", "reads": 3, "refused": 0, "t": "2026-09-03T17:39:05", "to": "specced", "tokens": 0}
+{"calls": 79, "from": "analyzing", "prd": "pending-gets-an-expiry-not-a-decree", "reads": 0, "refused": 1, "t": "2026-09-03T17:40:18", "to": "specced", "tokens": 0}
+{"calls": 2, "from": "analyzing", "prd": "the-board-reclaims-dead-work-by-itself/a-claim-names-the-process-that-holds-it", "reads": 0, "refused": 0, "t": "2026-09-03T17:40:20", "to": "specced", "tokens": 0}
+{"calls": 42, "from": "analyzing", "prd": "one-graph-writer", "reads": 0, "refused": 0, "t": "2026-09-03T17:40:57", "to": "specced", "tokens": 0}
+{"from": "claimed", "prd": "a-check-for-the-reading-list", "t": "2026-09-03 17:45", "to": "done"}
+{"calls": 122, "from": "analyzing", "prd": "enforce-pointer-not-verdict", "reads": 22, "refused": 5, "t": "2026-09-03T17:45:42", "to": "specced", "tokens": 1505}
+{"calls": 165, "from": "analyzing", "prd": "one-board-path-resolver-fewer", "reads": 3, "refused": 0, "t": "2026-09-03T17:45:47", "to": "specced", "tokens": 927}
+{"calls": 35, "from": "specced", "prd": "one-verb-set", "reads": 0, "refused": 6, "t": "2026-09-03T17:46:17", "to": "claimed", "tokens": 0}
+{"calls": 5, "from": "specced", "prd": "the-board-reclaims-dead-work-by-itself/the-sweep-runs-between-passes", "reads": 0, "refused": 1, "t": "2026-09-03T17:46:19", "to": "claimed", "tokens": 0}
+{"calls": 7, "from": "specced", "prd": "the-kb-survives-a-lane", "reads": 0, "refused": 0, "t": "2026-09-03T17:46:23", "to": "claimed", "tokens": 0}
+{"calls": 8, "from": "specced", "prd": "one-graph-writer", "reads": 0, "refused": 2, "t": "2026-09-03T17:46:27", "to": "claimed", "tokens": 0}
+{"calls": 8, "from": "specced", "prd": "the-board-reclaims-dead-work-by-itself/a-claim-names-the-process-that-holds-it", "reads": 1, "refused": 1, "t": "2026-09-03T17:46:31", "to": "claimed", "tokens": 0}
+{"calls": 18, "from": "specced", "prd": "pending-gets-an-expiry-not-a-decree", "reads": 0, "refused": 0, "t": "2026-09-03T17:46:44", "to": "claimed", "tokens": 0}
+{"calls": 9, "from": "analyzing", "prd": "write-affordances-on-focus", "reads": 0, "refused": 0, "t": "2026-09-03T17:46:49", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "enforce-pointer-not-verdict", "reads": 0, "refused": 0, "t": "2026-09-03T17:46:49", "to": "claimed", "tokens": 0}
+{"calls": 6, "from": "specced", "prd": "one-board-path-resolver-fewer", "reads": 0, "refused": 0, "t": "2026-09-03T17:46:51", "to": "claimed", "tokens": 0}
+{"calls": 234, "from": "analyzing", "prd": "one-register-writer", "reads": 12, "refused": 1, "t": "2026-09-03T17:49:18", "to": "specced", "tokens": 0}
+{"calls": 30, "from": null, "prd": "the-lifecycle-contract-and-purge-reclaims-it", "reads": 5, "refused": 2, "t": "2026-09-03T17:50:54", "to": "open", "tokens": 0}
+{"calls": 268, "from": "analyzing", "prd": "one-section-registry", "reads": 6, "refused": 2, "t": "2026-09-03T17:53:36", "to": "specced", "tokens": 3980}
+{"calls": 30, "from": "analyzing", "prd": "runs-meets-the-report-count", "reads": 0, "refused": 0, "t": "2026-09-03T17:54:00", "to": "question", "tokens": 2044}
+{"calls": 7, "from": "analyzing", "prd": "the-promotion-rule", "reads": 0, "refused": 0, "t": "2026-09-03T17:54:08", "to": "specced", "tokens": 1101}
+{"calls": 239, "from": "analyzing", "prd": "the-vision-file-s-edges-fold-into-needs", "reads": 6, "refused": 0, "t": "2026-09-03T18:00:46", "to": "specced", "tokens": 1599}
+{"from": "claimed", "prd": "the-board-reclaims-dead-work-by-itself/the-sweep-runs-between-passes", "t": "2026-09-03 18:03", "to": "blocked"}
+{"calls": 89, "from": "analyzing", "prd": "the-ranking-renders-beside-the-view", "reads": 2, "refused": 2, "t": "2026-09-03T18:05:55", "to": "specced", "tokens": 0}
+{"calls": 82, "from": "analyzing", "prd": "one-prd-reading-primitive", "reads": 0, "refused": 0, "t": "2026-09-03T18:09:52", "to": "specced", "tokens": 0}
+{"from": "claimed", "prd": "the-board-reclaims-dead-work-by-itself/a-fork-reaches-the-user-when-it-is-written", "t": "2026-09-03 18:13", "to": "done"}
+{"from": "claimed", "prd": "one-verb-set", "t": "2026-09-03 18:14", "to": "blocked"}
+{"from": "claimed", "prd": "pearde-vault-without-wait", "t": "2026-09-03 18:14", "to": "done"}
+{"from": "claimed", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-top-level-resources-modules-delegate-to-common", "t": "2026-09-03 18:17", "to": "done"}
+{"calls": 223, "from": "open", "prd": "the-lifecycle-contract-and-purge-reclaims-it", "reads": 4, "refused": 1, "t": "2026-09-03T18:19:34", "to": "analyzing", "tokens": 258}
+{"calls": 3, "from": "specced", "prd": "one-section-registry", "reads": 0, "refused": 0, "t": "2026-09-03T18:19:38", "to": "claimed", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "one-register-writer", "reads": 0, "refused": 0, "t": "2026-09-03T18:19:40", "to": "claimed", "tokens": 0}
+{"calls": 2, "from": "specced", "prd": "write-affordances-on-focus", "reads": 0, "refused": 0, "t": "2026-09-03T18:19:41", "to": "claimed", "tokens": 0}
+{"calls": 3, "from": "specced", "prd": "one-prd-reading-primitive", "reads": 0, "refused": 0, "t": "2026-09-03T18:19:43", "to": "claimed", "tokens": 0}
+{"calls": 3, "from": "specced", "prd": "the-promotion-rule", "reads": 1, "refused": 0, "t": "2026-09-03T18:19:44", "to": "claimed", "tokens": 0}
+{"calls": 2, "from": "specced", "prd": "the-vision-file-s-edges-fold-into-needs", "reads": 0, "refused": 0, "t": "2026-09-03T18:19:47", "to": "claimed", "tokens": 0}
+{"calls": 3, "from": "specced", "prd": "the-ranking-renders-beside-the-view", "reads": 0, "refused": 0, "t": "2026-09-03T18:19:48", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "doctor-repairs-the-register-entry", "t": "2026-09-03 18:22", "to": "done"}
+{"calls": 72, "from": "question", "prd": "runs-meets-the-report-count", "reads": 0, "refused": 0, "t": "2026-09-03T18:30:08", "to": "open", "tokens": 28919}
+{"from": "claimed", "prd": "the-board-reclaims-dead-work-by-itself/a-worker-survives-the-window-that-launched-it", "t": "2026-09-03 18:34", "to": "blocked"}
+{"calls": 103, "from": "open", "prd": "runs-meets-the-report-count", "reads": 1, "refused": 5, "t": "2026-09-03T18:45:26", "to": "analyzing", "tokens": 25928}
+{"calls": 0, "from": "open", "prd": "every-question-answered-and-the-prd-stays-in-question", "reads": 0, "refused": 0, "t": "2026-09-03T18:45:30", "to": "analyzing", "tokens": 0}
+{"from": "claimed", "prd": "write-affordances-on-focus", "t": "2026-09-03 18:46", "to": "blocked"}
+{"calls": 49, "from": "blocked", "prd": "write-affordances-on-focus", "reads": 3, "refused": 3, "t": "2026-09-03T18:47:30", "to": "specced", "tokens": 2139}
+{"calls": 1, "from": "specced", "prd": "write-affordances-on-focus", "reads": 0, "refused": 0, "t": "2026-09-03T18:47:34", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "one-prd-reading-primitive", "t": "2026-09-03 18:48", "to": "blocked"}
+{"calls": 124, "from": "analyzing", "prd": "runs-meets-the-report-count", "reads": 2, "refused": 1, "t": "2026-09-03T18:51:42", "to": "specced", "tokens": 5187}
+{"calls": 8, "from": "specced", "prd": "runs-meets-the-report-count", "reads": 1, "refused": 0, "t": "2026-09-03T18:52:17", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "write-affordances-on-focus", "t": "2026-09-03 18:55", "to": "done"}
+{"from": "claimed", "prd": "the-daemon-s-liveness-moves-onto-the-board", "t": "2026-09-03 18:57", "to": "done"}
+{"from": "claimed", "prd": "the-vision-file-s-edges-fold-into-needs", "t": "2026-09-03 18:58", "to": "done"}
+{"calls": 82, "from": null, "prd": "a-collect-does-not-stage-a-tracked-but-ignored-probe-file", "reads": 0, "refused": 2, "t": "2026-09-03T18:59:08", "to": "open", "tokens": 6135}
+{"calls": 7, "from": "open", "prd": "a-collect-does-not-stage-a-tracked-but-ignored-probe-file", "reads": 0, "refused": 0, "t": "2026-09-03T18:59:20", "to": "analyzing", "tokens": 0}
+{"calls": 9, "from": "blocked", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-core-board-modules-delegate-to-common", "reads": 0, "refused": 0, "t": "2026-09-03T18:59:50", "to": "specced", "tokens": 0}
+{"calls": 2, "from": "specced", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-core-board-modules-delegate-to-common", "reads": 0, "refused": 0, "t": "2026-09-03T18:59:53", "to": "claimed", "tokens": 0}
+{"calls": 4, "from": "blocked", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-lane-and-repo-modules-delegate-to-common", "reads": 0, "refused": 0, "t": "2026-09-03T19:00:02", "to": "specced", "tokens": 0}
+{"calls": 2, "from": "specced", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-lane-and-repo-modules-delegate-to-common", "reads": 0, "refused": 0, "t": "2026-09-03T19:00:04", "to": "claimed", "tokens": 0}
+{"calls": 11, "from": "analyzing", "prd": "every-question-answered-and-the-prd-stays-in-question", "reads": 0, "refused": 0, "t": "2026-09-03T19:00:30", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "every-question-answered-and-the-prd-stays-in-question", "reads": 0, "refused": 0, "t": "2026-09-03T19:00:32", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "the-plan-is-parallel-and-only-dispatch-is-capped", "t": "2026-09-03 19:05", "to": "done"}
+{"calls": 148, "from": "analyzing", "prd": "a-collect-does-not-stage-a-tracked-but-ignored-probe-file", "reads": 3, "refused": 1, "t": "2026-09-03T19:13:24", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "a-collect-does-not-stage-a-tracked-but-ignored-probe-file", "reads": 0, "refused": 0, "t": "2026-09-03T19:13:26", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "a-collect-does-not-stage-a-tracked-but-ignored-probe-file", "t": "2026-09-03 19:17", "to": "done"}
+{"from": "claimed", "prd": "the-ranking-renders-beside-the-view", "t": "2026-09-03 19:18", "to": "done"}
+{"from": "claimed", "prd": "the-doctor-refuses-drift/every-documented-command-exists", "t": "2026-09-03 19:19", "to": "done"}
+{"from": "claimed", "prd": "every-question-answered-and-the-prd-stays-in-question", "t": "2026-09-03 19:20", "to": "blocked"}
+{"calls": 130, "from": "claimed", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/init-and-upgrade-write-the-dotted-board", "reads": 1, "refused": 0, "t": "2026-09-03T20:03:34", "to": "failed", "tokens": 10474}
+{"from": "claimed", "prd": "delta-names-the-missing-day", "t": "2026-09-03 20:41", "to": "blocked"}
+{"from": "blocked", "prd": "delta-names-the-missing-day", "t": "2026-09-03 20:42", "to": "done"}
+{"from": "claimed", "prd": "one-register-writer", "t": "2026-09-03 20:42", "to": "blocked"}
+{"from": "claimed", "prd": "one-section-registry", "t": "2026-09-03 20:42", "to": "blocked"}
+{"from": "claimed", "prd": "runs-meets-the-report-count", "t": "2026-09-03 20:43", "to": "done"}
+{"from": "claimed", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "t": "2026-09-03 20:48", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-reclaims-dead-work-by-itself/a-worker-survives-the-window-that-launched-it", "t": "2026-09-03 20:48", "to": "done"}
+{"from": "blocked", "prd": "the-board-reclaims-dead-work-by-itself/the-sweep-runs-between-passes", "t": "2026-09-03 20:53", "to": "done"}
+{"from": "blocked", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "t": "2026-09-03 20:53", "to": "blocked"}
+{"calls": 224, "from": null, "prd": "a-collect-stages-a-deleted-footprint-path-as-a-deletion", "reads": 16, "refused": 2, "t": "2026-09-03T20:55:48", "to": "open", "tokens": 268}
+{"calls": 2, "from": "open", "prd": "a-collect-stages-a-deleted-footprint-path-as-a-deletion", "reads": 0, "refused": 0, "t": "2026-09-03T20:56:08", "to": "analyzing", "tokens": 0}
+{"calls": 28, "from": "analyzing", "prd": "resources-are-organised-by-responsibility/every-file-sits-under-what-it-is-responsible-for", "reads": 2, "refused": 0, "t": "2026-09-03T20:58:37", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "analyzing", "prd": "the-lifecycle-contract-and-purge-reclaims-it", "reads": 0, "refused": 0, "t": "2026-09-03T20:58:40", "to": "specced", "tokens": 0}
+{"calls": 20, "from": "claimed", "prd": "a-harness-measures-the-tree-its-worker-built-in", "reads": 0, "refused": 0, "t": "2026-09-03T20:59:00", "to": "failed", "tokens": 2869}
+{"calls": 0, "from": "claimed", "prd": "a-harness-never-dispatches-the-live-board", "reads": 0, "refused": 0, "t": "2026-09-03T20:59:01", "to": "failed", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "a-pass-holds-its-turn-until-its-workers-are-in", "reads": 0, "refused": 0, "t": "2026-09-03T20:59:02", "to": "failed", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "no-work-is-lost-on-the-board/the-board-locks-by-realpath", "reads": 0, "refused": 0, "t": "2026-09-03T20:59:03", "to": "failed", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-board-name-is-one-dotted-constant", "reads": 0, "refused": 0, "t": "2026-09-03T20:59:04", "to": "failed", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "the-board-reclaims-dead-work-by-itself/a-claim-names-the-process-that-holds-it", "reads": 0, "refused": 0, "t": "2026-09-03T20:59:04", "to": "failed", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "the-tree-holds-only-what-a-board-uses/a-board-s-grammar-holds-only-its-own-words", "reads": 0, "refused": 0, "t": "2026-09-03T20:59:05", "to": "failed", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "the-tree-holds-only-what-a-board-uses/the-documented-board-matches-the-code", "reads": 0, "refused": 0, "t": "2026-09-03T20:59:05", "to": "failed", "tokens": 0}
+{"from": "blocked", "prd": "one-prd-reading-primitive", "t": "2026-09-03 21:00", "to": "blocked"}
+{"from": "blocked", "prd": "one-verb-set", "t": "2026-09-03 21:00", "to": "blocked"}
+{"from": "blocked", "prd": "one-register-writer", "t": "2026-09-03 21:00", "to": "blocked"}
+{"from": "blocked", "prd": "one-section-registry", "t": "2026-09-03 21:00", "to": "blocked"}
+{"from": "blocked", "prd": "every-question-answered-and-the-prd-stays-in-question", "t": "2026-09-03 21:00", "to": "blocked"}
+{"calls": 27, "from": "blocked", "prd": "every-question-answered-and-the-prd-stays-in-question", "reads": 0, "refused": 0, "t": "2026-09-03T21:00:21", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "blocked", "prd": "one-prd-reading-primitive", "reads": 0, "refused": 0, "t": "2026-09-03T21:00:25", "to": "specced", "tokens": 0}
+{"calls": 21, "from": "blocked", "prd": "one-verb-set", "reads": 0, "refused": 2, "t": "2026-09-03T21:00:25", "to": "specced", "tokens": 7041}
+{"calls": 0, "from": "blocked", "prd": "one-register-writer", "reads": 0, "refused": 0, "t": "2026-09-03T21:00:26", "to": "specced", "tokens": 60}
+{"calls": 0, "from": "blocked", "prd": "one-section-registry", "reads": 0, "refused": 0, "t": "2026-09-03T21:00:26", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 0, "refused": 0, "t": "2026-09-03T21:00:27", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "reads": 0, "refused": 0, "t": "2026-09-03T21:00:27", "to": "specced", "tokens": 0}
+{"calls": 2, "from": "specced", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "reads": 0, "refused": 0, "t": "2026-09-03T21:00:34", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "t": "2026-09-03 21:00", "to": "blocked"}
+{"calls": 2, "from": "specced", "prd": "one-register-writer", "reads": 0, "refused": 0, "t": "2026-09-03T21:00:42", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "one-section-registry", "reads": 0, "refused": 0, "t": "2026-09-03T21:00:43", "to": "claimed", "tokens": 0}
+{"calls": 6, "from": "specced", "prd": "one-prd-reading-primitive", "reads": 0, "refused": 0, "t": "2026-09-03T21:00:44", "to": "claimed", "tokens": 1032}
+{"calls": 0, "from": "specced", "prd": "one-verb-set", "reads": 0, "refused": 0, "t": "2026-09-03T21:00:45", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 0, "refused": 0, "t": "2026-09-03T21:00:45", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "one-register-writer", "t": "2026-09-03 21:00", "to": "blocked"}
+{"from": "claimed", "prd": "one-section-registry", "t": "2026-09-03 21:00", "to": "blocked"}
+{"calls": 15, "from": "claimed", "prd": "one-board-path-resolver-fewer", "reads": 0, "refused": 0, "t": "2026-09-03T21:01:40", "to": "failed", "tokens": 0}
+{"calls": 19, "from": "claimed", "prd": "one-graph-writer", "reads": 0, "refused": 0, "t": "2026-09-03T21:01:41", "to": "failed", "tokens": 1376}
+{"calls": 0, "from": "claimed", "prd": "pending-gets-an-expiry-not-a-decree", "reads": 0, "refused": 0, "t": "2026-09-03T21:01:41", "to": "failed", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "the-lifecycle-contract-and-purge-reclaims-it", "reads": 0, "refused": 0, "t": "2026-09-03T21:01:49", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "resources-are-organised-by-responsibility/every-file-sits-under-what-it-is-responsible-for", "reads": 0, "refused": 0, "t": "2026-09-03T21:01:50", "to": "claimed", "tokens": 0}
+{"calls": 18, "from": "failed", "prd": "a-harness-never-dispatches-the-live-board", "reads": 0, "refused": 0, "t": "2026-09-03T21:03:04", "to": "open", "tokens": 0}
+{"calls": 0, "from": "failed", "prd": "no-work-is-lost-on-the-board/the-board-locks-by-realpath", "reads": 0, "refused": 0, "t": "2026-09-03T21:03:04", "to": "open", "tokens": 0}
+{"calls": 0, "from": "failed", "prd": "the-board-reclaims-dead-work-by-itself/a-claim-names-the-process-that-holds-it", "reads": 0, "refused": 0, "t": "2026-09-03T21:03:05", "to": "open", "tokens": 0}
+{"calls": 0, "from": "failed", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-board-name-is-one-dotted-constant", "reads": 0, "refused": 0, "t": "2026-09-03T21:03:05", "to": "open", "tokens": 0}
+{"calls": 0, "from": "failed", "prd": "a-pass-holds-its-turn-until-its-workers-are-in", "reads": 0, "refused": 0, "t": "2026-09-03T21:03:06", "to": "open", "tokens": 0}
+{"calls": 31, "from": "failed", "prd": "the-tree-holds-only-what-a-board-uses/a-board-s-grammar-holds-only-its-own-words", "reads": 0, "refused": 0, "t": "2026-09-03T21:03:06", "to": "open", "tokens": 3770}
+{"calls": 0, "from": "failed", "prd": "the-tree-holds-only-what-a-board-uses/the-documented-board-matches-the-code", "reads": 0, "refused": 0, "t": "2026-09-03T21:03:06", "to": "open", "tokens": 0}
+{"calls": 0, "from": "failed", "prd": "one-board-path-resolver-fewer", "reads": 0, "refused": 0, "t": "2026-09-03T21:03:07", "to": "open", "tokens": 0}
+{"calls": 0, "from": "failed", "prd": "one-graph-writer", "reads": 0, "refused": 0, "t": "2026-09-03T21:03:07", "to": "open", "tokens": 0}
+{"calls": 1, "from": "failed", "prd": "pending-gets-an-expiry-not-a-decree", "reads": 0, "refused": 0, "t": "2026-09-03T21:03:08", "to": "open", "tokens": 65}
+{"calls": 1, "from": "failed", "prd": "a-harness-measures-the-tree-its-worker-built-in", "reads": 0, "refused": 0, "t": "2026-09-03T21:03:11", "to": "open", "tokens": 0}
+{"calls": 4, "from": "open", "prd": "a-harness-never-dispatches-the-live-board", "reads": 0, "refused": 0, "t": "2026-09-03T21:03:24", "to": "analyzing", "tokens": 0}
+{"calls": 1, "from": "analyzing", "prd": "a-harness-never-dispatches-the-live-board", "reads": 0, "refused": 0, "t": "2026-09-03T21:03:28", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "a-harness-never-dispatches-the-live-board", "reads": 0, "refused": 0, "t": "2026-09-03T21:03:28", "to": "claimed", "tokens": 0}
+{"calls": 87, "from": null, "prd": "the-module-split-dropped-the-merged-read-plan-all-boards-slo", "reads": 0, "refused": 0, "t": "2026-09-03T21:08:18", "to": "open", "tokens": 0}
+{"calls": 2, "from": "open", "prd": "the-module-split-dropped-the-merged-read-plan-all-boards-slo", "reads": 0, "refused": 0, "t": "2026-09-03T21:08:33", "to": "analyzing", "tokens": 0}
+{"from": "claimed", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-lane-and-repo-modules-delegate-to-common", "t": "2026-09-03 21:10", "to": "done"}
+{"from": "claimed", "prd": "the-promotion-rule", "t": "2026-09-03 21:12", "to": "blocked"}
+{"calls": 55, "from": "blocked", "prd": "the-promotion-rule", "reads": 0, "refused": 0, "t": "2026-09-03T21:13:04", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "the-promotion-rule", "reads": 0, "refused": 0, "t": "2026-09-03T21:13:11", "to": "claimed", "tokens": 0}
+{"calls": 7, "from": "claimed", "prd": "the-capability-registry", "reads": 0, "refused": 0, "t": "2026-09-03T21:13:54", "to": "failed", "tokens": 0}
+{"calls": 1, "from": "failed", "prd": "the-capability-registry", "reads": 0, "refused": 0, "t": "2026-09-03T21:13:59", "to": "open", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "the-capability-registry", "reads": 0, "refused": 0, "t": "2026-09-03T21:14:01", "to": "analyzing", "tokens": 0}
+{"calls": 1, "from": "analyzing", "prd": "the-capability-registry", "reads": 0, "refused": 0, "t": "2026-09-03T21:14:07", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "the-capability-registry", "reads": 0, "refused": 0, "t": "2026-09-03T21:14:08", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "the-promotion-rule", "t": "2026-09-03 21:14", "to": "blocked"}
+{"calls": 1, "from": "blocked", "prd": "the-promotion-rule", "reads": 0, "refused": 0, "t": "2026-09-03T21:14:15", "to": "specced", "tokens": 0}
+{"calls": 135, "from": "specced", "prd": "the-promotion-rule", "reads": 0, "refused": 2, "t": "2026-09-03T21:14:16", "to": "claimed", "tokens": 22916}
+{"calls": 3, "from": "analyzing", "prd": "a-collect-stages-a-deleted-footprint-path-as-a-deletion", "reads": 0, "refused": 0, "t": "2026-09-03T21:14:27", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "a-collect-stages-a-deleted-footprint-path-as-a-deletion", "reads": 0, "refused": 0, "t": "2026-09-03T21:14:31", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "the-capability-registry", "t": "2026-09-03 21:19", "to": "blocked"}
+{"calls": 33, "from": "blocked", "prd": "the-capability-registry", "reads": 0, "refused": 0, "t": "2026-09-03T21:19:33", "to": "specced", "tokens": 7192}
+{"from": "claimed", "prd": "the-promotion-rule", "t": "2026-09-03 21:19", "to": "blocked"}
+{"calls": 59, "from": "specced", "prd": "the-capability-registry", "reads": 1, "refused": 0, "t": "2026-09-03T21:19:43", "to": "claimed", "tokens": 0}
+{"calls": 4, "from": "blocked", "prd": "the-promotion-rule", "reads": 0, "refused": 0, "t": "2026-09-03T21:19:46", "to": "specced", "tokens": 450}
+{"calls": 0, "from": "specced", "prd": "the-promotion-rule", "reads": 0, "refused": 0, "t": "2026-09-03T21:19:48", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "the-promotion-rule", "t": "2026-09-03 21:19", "to": "blocked"}
+{"calls": 13, "from": "failed", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/init-and-upgrade-write-the-dotted-board", "reads": 0, "refused": 0, "t": "2026-09-03T21:20:52", "to": "open", "tokens": 0}
+{"calls": 35, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/init-and-upgrade-write-the-dotted-board", "reads": 0, "refused": 0, "t": "2026-09-03T21:20:53", "to": "analyzing", "tokens": 35146}
+{"calls": 1, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/init-and-upgrade-write-the-dotted-board", "reads": 0, "refused": 0, "t": "2026-09-03T21:20:59", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/init-and-upgrade-write-the-dotted-board", "reads": 0, "refused": 0, "t": "2026-09-03T21:21:00", "to": "claimed", "tokens": 0}
+{"from": "blocked", "prd": "the-promotion-rule", "t": "2026-09-03 21:21", "to": "blocked"}
+{"calls": 17, "from": "blocked", "prd": "the-promotion-rule", "reads": 1, "refused": 0, "t": "2026-09-03T21:22:29", "to": "specced", "tokens": 0}
+{"calls": 12, "from": "specced", "prd": "the-promotion-rule", "reads": 4, "refused": 0, "t": "2026-09-03T21:22:29", "to": "claimed", "tokens": 1982}
+{"calls": 3, "from": "analyzing", "prd": "the-module-split-dropped-the-merged-read-plan-all-boards-slo", "reads": 0, "refused": 0, "t": "2026-09-03T21:23:07", "to": "specced", "tokens": 0}
+{"calls": 15, "from": "specced", "prd": "the-module-split-dropped-the-merged-read-plan-all-boards-slo", "reads": 0, "refused": 1, "t": "2026-09-03T21:23:19", "to": "claimed", "tokens": 1696}
+{"from": "blocked", "prd": "one-register-writer", "t": "2026-09-03 21:23", "to": "blocked"}
+{"from": "blocked", "prd": "one-section-registry", "t": "2026-09-03 21:23", "to": "blocked"}
+{"calls": 2, "from": "open", "prd": "no-work-is-lost-on-the-board/the-board-locks-by-realpath", "reads": 1, "refused": 0, "t": "2026-09-03T21:30:50", "to": "analyzing", "tokens": 214}
+{"from": "blocked", "prd": "one-register-writer", "t": "2026-09-03 21:32", "to": "done"}
+{"calls": 24, "from": "analyzing", "prd": "no-work-is-lost-on-the-board/the-board-locks-by-realpath", "reads": 0, "refused": 0, "t": "2026-09-03T21:32:48", "to": "specced", "tokens": 0}
+{"from": "blocked", "prd": "one-section-registry", "t": "2026-09-03 21:34", "to": "blocked"}
+{"calls": 104, "from": "claimed", "prd": "the-module-split-dropped-the-merged-read-plan-all-boards-slo", "reads": 1, "refused": 0, "t": "2026-09-03T21:35:02", "to": "blocked", "tokens": 0}
+{"from": "blocked", "prd": "the-module-split-dropped-the-merged-read-plan-all-boards-slo", "t": "2026-09-03 21:35", "to": "blocked"}
+{"from": "blocked", "prd": "one-section-registry", "t": "2026-09-03 21:35", "to": "blocked"}
+{"from": "claimed", "prd": "one-verb-set", "t": "2026-09-03 21:35", "to": "blocked"}
+{"from": "claimed", "prd": "one-prd-reading-primitive", "t": "2026-09-03 21:35", "to": "blocked"}
+{"from": "claimed", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "t": "2026-09-03 21:36", "to": "blocked"}
+{"calls": 20, "from": "blocked", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "reads": 0, "refused": 0, "t": "2026-09-03T21:36:39", "to": "specced", "tokens": 0}
+{"calls": 225, "from": "claimed", "prd": "enforce-pointer-not-verdict", "reads": 0, "refused": 0, "t": "2026-09-03T21:37:00", "to": "failed", "tokens": 21175}
+{"calls": 0, "from": "claimed", "prd": "the-kb-survives-a-lane", "reads": 0, "refused": 0, "t": "2026-09-03T21:37:01", "to": "failed", "tokens": 0}
+{"calls": 1, "from": "claimed", "prd": "the-tree-holds-only-what-a-board-uses/legacy-migrations-retire", "reads": 0, "refused": 0, "t": "2026-09-03T21:37:06", "to": "failed", "tokens": 193}
+{"calls": 0, "from": "claimed", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "reads": 0, "refused": 0, "t": "2026-09-03T21:37:07", "to": "failed", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "reads": 0, "refused": 0, "t": "2026-09-03T21:37:08", "to": "failed", "tokens": 0}
+{"calls": 59, "from": "claimed", "prd": "no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses", "reads": 3, "refused": 2, "t": "2026-09-03T21:37:09", "to": "failed", "tokens": 313}
+{"calls": 5, "from": "failed", "prd": "enforce-pointer-not-verdict", "reads": 0, "refused": 0, "t": "2026-09-03T21:37:16", "to": "open", "tokens": 0}
+{"calls": 0, "from": "failed", "prd": "the-kb-survives-a-lane", "reads": 0, "refused": 0, "t": "2026-09-03T21:37:17", "to": "open", "tokens": 0}
+{"calls": 2, "from": "failed", "prd": "the-tree-holds-only-what-a-board-uses/legacy-migrations-retire", "reads": 0, "refused": 1, "t": "2026-09-03T21:37:18", "to": "open", "tokens": 0}
+{"calls": 3, "from": "failed", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "reads": 0, "refused": 0, "t": "2026-09-03T21:37:20", "to": "open", "tokens": 332}
+{"calls": 135, "from": "failed", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "reads": 2, "refused": 12, "t": "2026-09-03T21:37:20", "to": "open", "tokens": 22358}
+{"calls": 0, "from": "failed", "prd": "no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses", "reads": 0, "refused": 0, "t": "2026-09-03T21:37:21", "to": "open", "tokens": 0}
+{"calls": 5, "from": "open", "prd": "enforce-pointer-not-verdict", "reads": 0, "refused": 0, "t": "2026-09-03T21:37:47", "to": "analyzing", "tokens": 0}
+{"calls": 6, "from": "open", "prd": "the-kb-survives-a-lane", "reads": 0, "refused": 0, "t": "2026-09-03T21:37:53", "to": "analyzing", "tokens": 685}
+{"calls": 37, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/legacy-migrations-retire", "reads": 0, "refused": 0, "t": "2026-09-03T21:37:57", "to": "analyzing", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "no-work-is-lost-on-the-board/the-board-locks-by-realpath", "reads": 0, "refused": 0, "t": "2026-09-03T21:37:59", "to": "claimed", "tokens": 118}
+{"calls": 0, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "reads": 0, "refused": 0, "t": "2026-09-03T21:38:01", "to": "analyzing", "tokens": 0}
+{"calls": 1, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "reads": 0, "refused": 0, "t": "2026-09-03T21:38:07", "to": "analyzing", "tokens": 247}
+{"calls": 1, "from": "open", "prd": "no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses", "reads": 0, "refused": 0, "t": "2026-09-03T21:38:10", "to": "analyzing", "tokens": 0}
+{"calls": 4, "from": "analyzing", "prd": "enforce-pointer-not-verdict", "reads": 0, "refused": 0, "t": "2026-09-03T21:38:19", "to": "specced", "tokens": 0}
+{"calls": 11, "from": "analyzing", "prd": "the-kb-survives-a-lane", "reads": 0, "refused": 0, "t": "2026-09-03T21:38:20", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/legacy-migrations-retire", "reads": 0, "refused": 0, "t": "2026-09-03T21:38:21", "to": "specced", "tokens": 0}
+{"calls": 4, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "reads": 0, "refused": 0, "t": "2026-09-03T21:38:22", "to": "specced", "tokens": 446}
+{"calls": 1, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "reads": 0, "refused": 0, "t": "2026-09-03T21:38:23", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses", "reads": 0, "refused": 0, "t": "2026-09-03T21:38:24", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "enforce-pointer-not-verdict", "reads": 0, "refused": 0, "t": "2026-09-03T21:38:29", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "the-kb-survives-a-lane", "reads": 0, "refused": 0, "t": "2026-09-03T21:38:30", "to": "claimed", "tokens": 0}
+{"calls": 2, "from": "specced", "prd": "the-tree-holds-only-what-a-board-uses/legacy-migrations-retire", "reads": 0, "refused": 0, "t": "2026-09-03T21:38:32", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "reads": 0, "refused": 0, "t": "2026-09-03T21:38:33", "to": "claimed", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "reads": 0, "refused": 0, "t": "2026-09-03T21:38:34", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses", "reads": 0, "refused": 0, "t": "2026-09-03T21:38:35", "to": "claimed", "tokens": 0}
+{"from": "blocked", "prd": "the-module-split-dropped-the-merged-read-plan-all-boards-slo", "t": "2026-09-03 21:37", "to": "done"}
+{"calls": 17, "from": "open", "prd": "the-board-reclaims-dead-work-by-itself/a-claim-names-the-process-that-holds-it", "reads": 0, "refused": 0, "t": "2026-09-03T21:39:46", "to": "analyzing", "tokens": 3156}
+{"calls": 13, "from": "open", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-board-name-is-one-dotted-constant", "reads": 0, "refused": 0, "t": "2026-09-03T21:39:48", "to": "analyzing", "tokens": 1751}
+{"calls": 1, "from": "open", "prd": "a-pass-holds-its-turn-until-its-workers-are-in", "reads": 0, "refused": 0, "t": "2026-09-03T21:39:50", "to": "analyzing", "tokens": 65}
+{"calls": 13, "from": "open", "prd": "a-harness-measures-the-tree-its-worker-built-in", "reads": 1, "refused": 0, "t": "2026-09-03T21:39:52", "to": "analyzing", "tokens": 2868}
+{"calls": 17, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/the-documented-board-matches-the-code", "reads": 4, "refused": 0, "t": "2026-09-03T21:39:54", "to": "analyzing", "tokens": 3034}
+{"calls": 5, "from": "open", "prd": "the-tree-holds-only-what-a-board-uses/a-board-s-grammar-holds-only-its-own-words", "reads": 0, "refused": 0, "t": "2026-09-03T21:39:56", "to": "analyzing", "tokens": 522}
+{"calls": 1, "from": "open", "prd": "one-graph-writer", "reads": 0, "refused": 0, "t": "2026-09-03T21:39:57", "to": "analyzing", "tokens": 444}
+{"calls": 22, "from": "open", "prd": "pending-gets-an-expiry-not-a-decree", "reads": 0, "refused": 0, "t": "2026-09-03T21:39:59", "to": "analyzing", "tokens": 25187}
+{"calls": 2, "from": "open", "prd": "one-board-path-resolver-fewer", "reads": 0, "refused": 0, "t": "2026-09-03T21:40:02", "to": "analyzing", "tokens": 120}
+{"calls": 7, "from": "analyzing", "prd": "the-board-reclaims-dead-work-by-itself/a-claim-names-the-process-that-holds-it", "reads": 0, "refused": 0, "t": "2026-09-03T21:40:09", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-board-name-is-one-dotted-constant", "reads": 0, "refused": 0, "t": "2026-09-03T21:40:10", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "a-pass-holds-its-turn-until-its-workers-are-in", "reads": 0, "refused": 0, "t": "2026-09-03T21:40:10", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "analyzing", "prd": "a-harness-measures-the-tree-its-worker-built-in", "reads": 0, "refused": 0, "t": "2026-09-03T21:40:11", "to": "specced", "tokens": 95}
+{"calls": 8, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/the-documented-board-matches-the-code", "reads": 3, "refused": 1, "t": "2026-09-03T21:40:11", "to": "specced", "tokens": 1224}
+{"calls": 0, "from": "analyzing", "prd": "the-tree-holds-only-what-a-board-uses/a-board-s-grammar-holds-only-its-own-words", "reads": 0, "refused": 0, "t": "2026-09-03T21:40:12", "to": "specced", "tokens": 0}
+{"calls": 4, "from": "analyzing", "prd": "one-graph-writer", "reads": 1, "refused": 0, "t": "2026-09-03T21:40:12", "to": "specced", "tokens": 2341}
+{"calls": 1, "from": "analyzing", "prd": "pending-gets-an-expiry-not-a-decree", "reads": 0, "refused": 0, "t": "2026-09-03T21:40:13", "to": "specced", "tokens": 770}
+{"calls": 0, "from": "analyzing", "prd": "one-board-path-resolver-fewer", "reads": 0, "refused": 0, "t": "2026-09-03T21:40:13", "to": "specced", "tokens": 0}
+{"calls": 20, "from": "specced", "prd": "the-board-reclaims-dead-work-by-itself/a-claim-names-the-process-that-holds-it", "reads": 8, "refused": 0, "t": "2026-09-03T21:40:19", "to": "claimed", "tokens": 4523}
+{"calls": 2, "from": "specced", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-board-name-is-one-dotted-constant", "reads": 0, "refused": 0, "t": "2026-09-03T21:40:20", "to": "claimed", "tokens": 1780}
+{"calls": 27, "from": "specced", "prd": "a-pass-holds-its-turn-until-its-workers-are-in", "reads": 1, "refused": 0, "t": "2026-09-03T21:40:21", "to": "claimed", "tokens": 3574}
+{"calls": 1, "from": "specced", "prd": "a-harness-measures-the-tree-its-worker-built-in", "reads": 0, "refused": 0, "t": "2026-09-03T21:40:22", "to": "claimed", "tokens": 104}
+{"calls": 5, "from": "specced", "prd": "the-tree-holds-only-what-a-board-uses/the-documented-board-matches-the-code", "reads": 0, "refused": 0, "t": "2026-09-03T21:40:23", "to": "claimed", "tokens": 1639}
+{"calls": 23, "from": "specced", "prd": "the-tree-holds-only-what-a-board-uses/a-board-s-grammar-holds-only-its-own-words", "reads": 0, "refused": 1, "t": "2026-09-03T21:40:25", "to": "claimed", "tokens": 6653}
+{"calls": 3, "from": "specced", "prd": "one-graph-writer", "reads": 0, "refused": 0, "t": "2026-09-03T21:40:28", "to": "claimed", "tokens": 1216}
+{"calls": 0, "from": "specced", "prd": "pending-gets-an-expiry-not-a-decree", "reads": 0, "refused": 0, "t": "2026-09-03T21:40:30", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "one-board-path-resolver-fewer", "reads": 0, "refused": 0, "t": "2026-09-03T21:40:31", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "the-capability-registry", "t": "2026-09-03 21:41", "to": "blocked"}
+{"calls": 13, "from": "blocked", "prd": "the-capability-registry", "reads": 1, "refused": 0, "t": "2026-09-03T21:42:03", "to": "specced", "tokens": 2476}
+{"calls": 11, "from": "specced", "prd": "the-capability-registry", "reads": 1, "refused": 0, "t": "2026-09-03T21:42:04", "to": "claimed", "tokens": 3007}
+{"from": "blocked", "prd": "one-verb-set", "t": "2026-09-03 21:42", "to": "blocked"}
+{"from": "blocked", "prd": "one-prd-reading-primitive", "t": "2026-09-03 21:42", "to": "blocked"}
+{"calls": 19, "from": "blocked", "prd": "one-verb-set", "reads": 0, "refused": 0, "t": "2026-09-03T21:43:52", "to": "specced", "tokens": 0}
+{"calls": 65, "from": "blocked", "prd": "one-prd-reading-primitive", "reads": 2, "refused": 0, "t": "2026-09-03T21:43:52", "to": "specced", "tokens": 14130}
+{"calls": 0, "from": "blocked", "prd": "one-section-registry", "reads": 0, "refused": 0, "t": "2026-09-03T21:43:53", "to": "specced", "tokens": 0}
+{"from": "claimed", "prd": "the-capability-registry", "t": "2026-09-03 21:47", "to": "blocked"}
+{"calls": 20, "from": "blocked", "prd": "the-capability-registry", "reads": 0, "refused": 0, "t": "2026-09-03T21:47:39", "to": "specced", "tokens": 0}
+{"calls": 46, "from": "specced", "prd": "the-capability-registry", "reads": 6, "refused": 0, "t": "2026-09-03T21:47:47", "to": "claimed", "tokens": 22955}
+{"from": "claimed", "prd": "the-capability-registry", "t": "2026-09-03 21:47", "to": "blocked"}
+{"calls": 5, "from": "blocked", "prd": "the-capability-registry", "reads": 0, "refused": 0, "t": "2026-09-03T21:48:34", "to": "specced", "tokens": 0}
+{"calls": 68, "from": "specced", "prd": "the-capability-registry", "reads": 1, "refused": 0, "t": "2026-09-03T21:48:35", "to": "claimed", "tokens": 18848}
+{"from": "claimed", "prd": "the-promotion-rule", "t": "2026-09-03 21:48", "to": "done"}
+{"from": "claimed", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "t": "2026-09-03 21:54", "to": "blocked"}
+{"from": "blocked", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "t": "2026-09-03 21:55", "to": "blocked"}
+{"calls": 56, "from": "blocked", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "reads": 1, "refused": 1, "t": "2026-09-03T21:55:29", "to": "specced", "tokens": 1233}
+{"calls": 0, "from": "specced", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "reads": 0, "refused": 0, "t": "2026-09-03T21:55:31", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "the-tree-holds-only-what-a-board-uses/the-template-twins-fold-into-the-reference", "t": "2026-09-03 21:56", "to": "blocked"}
+{"from": "claimed", "prd": "enforce-pointer-not-verdict", "t": "2026-09-03 21:56", "to": "blocked"}
+{"from": "claimed", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "t": "2026-09-03 21:56", "to": "blocked"}
+{"from": "claimed", "prd": "no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses", "t": "2026-09-03 21:56", "to": "blocked"}
+{"from": "claimed", "prd": "one-board-path-resolver-fewer", "t": "2026-09-03 21:56", "to": "blocked"}
+{"from": "claimed", "prd": "one-graph-writer", "t": "2026-09-03 21:56", "to": "blocked"}
+{"from": "claimed", "prd": "pending-gets-an-expiry-not-a-decree", "t": "2026-09-03 21:57", "to": "blocked"}
+{"from": "claimed", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "t": "2026-09-03 21:57", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "t": "2026-09-03 21:57", "to": "blocked"}
+{"from": "claimed", "prd": "the-capability-registry", "t": "2026-09-03 21:57", "to": "blocked"}
+{"from": "claimed", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-core-board-modules-delegate-to-common", "t": "2026-09-03 21:57", "to": "blocked"}
+{"from": "claimed", "prd": "the-kb-survives-a-lane", "t": "2026-09-03 21:57", "to": "blocked"}
+{"from": "claimed", "prd": "the-tree-holds-only-what-a-board-uses/legacy-migrations-retire", "t": "2026-09-03 21:57", "to": "blocked"}
+{"from": "claimed", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "t": "2026-09-03 21:57", "to": "blocked"}
+{"from": "claimed", "prd": "the-tree-holds-only-what-a-board-uses/tags-are-derived-when-the-vault-is-written", "t": "2026-09-03 21:57", "to": "blocked"}
+{"from": "claimed", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "t": "2026-09-03 21:57", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-template-twins-fold-into-the-reference", "t": "2026-09-03 21:57", "to": "blocked"}
+{"calls": 30, "from": "blocked", "prd": "one-board-path-resolver-fewer", "reads": 0, "refused": 1, "t": "2026-09-03T22:00:47", "to": "specced", "tokens": 24173}
+{"calls": 0, "from": "blocked", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-core-board-modules-delegate-to-common", "reads": 0, "refused": 0, "t": "2026-09-03T22:00:47", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/tags-are-derived-when-the-vault-is-written", "reads": 0, "refused": 0, "t": "2026-09-03T22:00:48", "to": "specced", "tokens": 0}
+{"calls": 74, "from": null, "prd": "cmd-vault-calls-a-function-that-was-deleted", "reads": 8, "refused": 1, "t": "2026-09-03T22:56:01", "to": "open", "tokens": 28445}
+{"calls": 15, "from": null, "prd": "doctor-walks-machine-local-lanes", "reads": 0, "refused": 0, "t": "2026-09-03T23:03:20", "to": "open", "tokens": 26524}
+{"calls": 3, "from": null, "prd": "a-collect-closes-the-claim-dir-it-measured-against", "reads": 0, "refused": 0, "t": "2026-09-03T23:06:02", "to": "open", "tokens": 6799}
+{"calls": 1, "from": null, "prd": "a-lane-is-declared-at-spec-time-and-only-a-writer-gets-one", "reads": 0, "refused": 0, "t": "2026-09-03T23:06:17", "to": "open", "tokens": 2954}
+{"calls": 27, "from": "specced", "prd": "every-question-answered-and-the-prd-stays-in-question", "reads": 5, "refused": 0, "t": "2026-09-03T23:17:40", "to": "claimed", "tokens": 4423}
+{"calls": 1, "from": "specced", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-core-board-modules-delegate-to-common", "reads": 0, "refused": 0, "t": "2026-09-03T23:17:46", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "a-lane-is-declared-at-spec-time-and-only-a-writer-gets-one", "reads": 0, "refused": 0, "t": "2026-09-03T23:17:50", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "reads": 0, "refused": 0, "t": "2026-09-03T23:17:55", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "a-collect-closes-the-claim-dir-it-measured-against", "reads": 0, "refused": 0, "t": "2026-09-03T23:17:58", "to": "analyzing", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "one-section-registry", "reads": 0, "refused": 0, "t": "2026-09-03T23:18:17", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "one-verb-set", "reads": 0, "refused": 0, "t": "2026-09-03T23:18:18", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "the-tree-holds-only-what-a-board-uses/tags-are-derived-when-the-vault-is-written", "reads": 0, "refused": 0, "t": "2026-09-03T23:18:20", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "one-board-path-resolver-fewer", "reads": 0, "refused": 0, "t": "2026-09-03T23:18:21", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "specced", "prd": "one-prd-reading-primitive", "reads": 0, "refused": 0, "t": "2026-09-03T23:18:22", "to": "claimed", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "cmd-vault-calls-a-function-that-was-deleted", "reads": 0, "refused": 0, "t": "2026-09-03T23:18:23", "to": "analyzing", "tokens": 0}
+{"calls": 0, "from": "open", "prd": "doctor-walks-machine-local-lanes", "reads": 0, "refused": 0, "t": "2026-09-03T23:18:24", "to": "analyzing", "tokens": 0}
+{"from": "blocked", "prd": "one-graph-writer", "t": "2026-09-03 23:39", "to": "blocked"}
+{"calls": 86, "from": "blocked", "prd": "one-graph-writer", "reads": 3, "refused": 0, "t": "2026-09-03T23:39:29", "to": "specced", "tokens": 47761}
+{"calls": 37, "from": "specced", "prd": "one-graph-writer", "reads": 0, "refused": 0, "t": "2026-09-03T23:39:58", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "one-graph-writer", "t": "2026-09-03 23:40", "to": "blocked"}
+{"calls": 47, "from": "claimed", "prd": "every-question-answered-and-the-prd-stays-in-question", "reads": 15, "refused": 1, "t": "2026-09-04T01:42:55", "to": "open", "tokens": 1805}
+{"calls": 24, "from": "open", "prd": "every-question-answered-and-the-prd-stays-in-question", "reads": 2, "refused": 0, "t": "2026-09-04T01:43:42", "to": "analyzing", "tokens": 0}
+{"calls": 64, "from": "analyzing", "prd": "every-question-answered-and-the-prd-stays-in-question", "reads": 16, "refused": 3, "t": "2026-09-04T01:45:25", "to": "open", "tokens": 0}
+{"calls": 14, "from": "open", "prd": "every-question-answered-and-the-prd-stays-in-question", "reads": 4, "refused": 0, "t": "2026-09-04T02:17:50", "to": "analyzing", "tokens": 301}
+{"from": "blocked", "prd": "enforce-pointer-not-verdict", "t": "2026-09-04 02:23", "to": "blocked"}
+{"from": "blocked", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "t": "2026-09-04 02:23", "to": "blocked"}
+{"from": "claimed", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "t": "2026-09-04 02:23", "to": "blocked"}
+{"from": "blocked", "prd": "one-graph-writer", "t": "2026-09-04 02:23", "to": "blocked"}
+{"from": "claimed", "prd": "one-prd-reading-primitive", "t": "2026-09-04 02:23", "to": "blocked"}
+{"from": "claimed", "prd": "one-section-registry", "t": "2026-09-04 02:23", "to": "blocked"}
+{"from": "claimed", "prd": "one-verb-set", "t": "2026-09-04 02:23", "to": "blocked"}
+{"from": "blocked", "prd": "pending-gets-an-expiry-not-a-decree", "t": "2026-09-04 02:23", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "t": "2026-09-04 02:23", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "t": "2026-09-04 02:23", "to": "blocked"}
+{"from": "blocked", "prd": "the-capability-registry", "t": "2026-09-04 02:23", "to": "blocked"}
+{"from": "blocked", "prd": "the-kb-survives-a-lane", "t": "2026-09-04 02:23", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/legacy-migrations-retire", "t": "2026-09-04 02:23", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "t": "2026-09-04 02:23", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "t": "2026-09-04 02:23", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-template-twins-fold-into-the-reference", "t": "2026-09-04 02:24", "to": "blocked"}
+{"from": "claimed", "prd": "a-harness-never-dispatches-the-live-board", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "a-harness-never-dispatches-the-live-board", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "enforce-pointer-not-verdict", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "claimed", "prd": "one-board-path-resolver-fewer", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "one-graph-writer", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "one-prd-reading-primitive", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "one-section-registry", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "one-verb-set", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "pending-gets-an-expiry-not-a-decree", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "the-capability-registry", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "claimed", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-core-board-modules-delegate-to-common", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "the-kb-survives-a-lane", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/legacy-migrations-retire", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "claimed", "prd": "the-tree-holds-only-what-a-board-uses/tags-are-derived-when-the-vault-is-written", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "t": "2026-09-04 02:28", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-template-twins-fold-into-the-reference", "t": "2026-09-04 02:28", "to": "blocked"}
+{"calls": 161, "from": "analyzing", "prd": "every-question-answered-and-the-prd-stays-in-question", "reads": 33, "refused": 0, "t": "2026-09-04T02:31:47", "to": "specced", "tokens": 3691}
+{"calls": 14, "from": null, "prd": "a-lane-goes-when-its-prd-fails-not-only-when-it-collects", "reads": 2, "refused": 0, "t": "2026-09-04T02:32:14", "to": "open", "tokens": 5052}
+{"calls": 75, "from": "specced", "prd": "every-question-answered-and-the-prd-stays-in-question", "reads": 10, "refused": 2, "t": "2026-09-04T02:36:39", "to": "claimed", "tokens": 6756}
+{"from": "blocked", "prd": "enforce-pointer-not-verdict", "t": "2026-09-04 02:38", "to": "blocked"}
+{"from": "claimed", "prd": "every-question-answered-and-the-prd-stays-in-question", "t": "2026-09-04 02:38", "to": "blocked"}
+{"from": "blocked", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "t": "2026-09-04 02:38", "to": "blocked"}
+{"from": "blocked", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "t": "2026-09-04 02:38", "to": "blocked"}
+{"from": "blocked", "prd": "one-graph-writer", "t": "2026-09-04 02:38", "to": "blocked"}
+{"from": "blocked", "prd": "one-prd-reading-primitive", "t": "2026-09-04 02:38", "to": "blocked"}
+{"from": "blocked", "prd": "one-section-registry", "t": "2026-09-04 02:38", "to": "blocked"}
+{"from": "blocked", "prd": "one-verb-set", "t": "2026-09-04 02:38", "to": "blocked"}
+{"from": "blocked", "prd": "pending-gets-an-expiry-not-a-decree", "t": "2026-09-04 02:38", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "t": "2026-09-04 02:38", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "t": "2026-09-04 02:38", "to": "blocked"}
+{"from": "blocked", "prd": "the-capability-registry", "t": "2026-09-04 02:38", "to": "blocked"}
+{"from": "blocked", "prd": "the-kb-survives-a-lane", "t": "2026-09-04 02:38", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/legacy-migrations-retire", "t": "2026-09-04 02:38", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "t": "2026-09-04 02:38", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "t": "2026-09-04 02:38", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-template-twins-fold-into-the-reference", "t": "2026-09-04 02:38", "to": "blocked"}
+{"calls": 16, "from": "open", "prd": "a-lane-goes-when-its-prd-fails-not-only-when-it-collects", "reads": 0, "refused": 1, "t": "2026-09-04T02:39:43", "to": "analyzing", "tokens": 332}
+{"from": "blocked", "prd": "the-kb-survives-a-lane", "t": "2026-09-04 02:40", "to": "blocked"}
+{"calls": 39, "from": "analyzing", "prd": "a-collect-closes-the-claim-dir-it-measured-against", "reads": 0, "refused": 2, "t": "2026-09-04T02:41:43", "to": "open", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "a-collect-stages-a-deleted-footprint-path-as-a-deletion", "reads": 0, "refused": 0, "t": "2026-09-04T02:41:44", "to": "failed", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "a-harness-measures-the-tree-its-worker-built-in", "reads": 0, "refused": 0, "t": "2026-09-04T02:41:44", "to": "failed", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "a-lane-is-declared-at-spec-time-and-only-a-writer-gets-one", "reads": 0, "refused": 0, "t": "2026-09-04T02:41:45", "to": "open", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "a-pass-holds-its-turn-until-its-workers-are-in", "reads": 0, "refused": 0, "t": "2026-09-04T02:41:45", "to": "failed", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "cmd-vault-calls-a-function-that-was-deleted", "reads": 0, "refused": 0, "t": "2026-09-04T02:41:45", "to": "open", "tokens": 0}
+{"calls": 0, "from": "analyzing", "prd": "doctor-walks-machine-local-lanes", "reads": 0, "refused": 0, "t": "2026-09-04T02:41:46", "to": "open", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "no-work-is-lost-on-the-board/the-board-locks-by-realpath", "reads": 0, "refused": 0, "t": "2026-09-04T02:41:46", "to": "failed", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "resources-are-organised-by-responsibility/every-file-sits-under-what-it-is-responsible-for", "reads": 0, "refused": 0, "t": "2026-09-04T02:41:46", "to": "failed", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/init-and-upgrade-write-the-dotted-board", "reads": 0, "refused": 0, "t": "2026-09-04T02:41:47", "to": "failed", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-board-name-is-one-dotted-constant", "reads": 0, "refused": 0, "t": "2026-09-04T02:41:47", "to": "failed", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "the-board-reclaims-dead-work-by-itself/a-claim-names-the-process-that-holds-it", "reads": 0, "refused": 0, "t": "2026-09-04T02:41:48", "to": "failed", "tokens": 0}
+{"calls": 1, "from": "claimed", "prd": "the-lifecycle-contract-and-purge-reclaims-it", "reads": 0, "refused": 0, "t": "2026-09-04T02:41:48", "to": "failed", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "the-tree-holds-only-what-a-board-uses/a-board-s-grammar-holds-only-its-own-words", "reads": 0, "refused": 0, "t": "2026-09-04T02:41:49", "to": "failed", "tokens": 0}
+{"calls": 0, "from": "claimed", "prd": "the-tree-holds-only-what-a-board-uses/the-documented-board-matches-the-code", "reads": 0, "refused": 0, "t": "2026-09-04T02:41:49", "to": "failed", "tokens": 0}
+{"from": "blocked", "prd": "one-section-registry", "t": "2026-09-04 02:42", "to": "blocked"}
+{"from": "blocked", "prd": "one-graph-writer", "t": "2026-09-04 02:42", "to": "blocked"}
+{"from": "blocked", "prd": "pending-gets-an-expiry-not-a-decree", "t": "2026-09-04 02:42", "to": "blocked"}
+{"from": "blocked", "prd": "enforce-pointer-not-verdict", "t": "2026-09-04 02:43", "to": "blocked"}
+{"from": "blocked", "prd": "the-kb-survives-a-lane", "t": "2026-09-04 02:44", "to": "done"}
+{"from": "blocked", "prd": "one-section-registry", "t": "2026-09-04 02:45", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-template-twins-fold-into-the-reference", "t": "2026-09-04 02:45", "to": "blocked"}
+{"from": "blocked", "prd": "enforce-pointer-not-verdict", "t": "2026-09-04 02:46", "to": "blocked"}
+{"from": "blocked", "prd": "every-question-answered-and-the-prd-stays-in-question", "t": "2026-09-04 02:46", "to": "blocked"}
+{"from": "blocked", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "t": "2026-09-04 02:46", "to": "blocked"}
+{"from": "blocked", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "t": "2026-09-04 02:46", "to": "blocked"}
+{"from": "blocked", "prd": "one-graph-writer", "t": "2026-09-04 02:46", "to": "blocked"}
+{"from": "blocked", "prd": "one-prd-reading-primitive", "t": "2026-09-04 02:46", "to": "blocked"}
+{"from": "blocked", "prd": "one-section-registry", "t": "2026-09-04 02:46", "to": "blocked"}
+{"from": "blocked", "prd": "one-verb-set", "t": "2026-09-04 02:46", "to": "blocked"}
+{"from": "blocked", "prd": "pending-gets-an-expiry-not-a-decree", "t": "2026-09-04 02:46", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "t": "2026-09-04 02:46", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "t": "2026-09-04 02:46", "to": "blocked"}
+{"from": "blocked", "prd": "the-capability-registry", "t": "2026-09-04 02:46", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/legacy-migrations-retire", "t": "2026-09-04 02:46", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "t": "2026-09-04 02:46", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "t": "2026-09-04 02:46", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-template-twins-fold-into-the-reference", "t": "2026-09-04 02:47", "to": "blocked"}
+{"from": "blocked", "prd": "enforce-pointer-not-verdict", "t": "2026-09-04 02:47", "to": "blocked"}
+{"from": "blocked", "prd": "every-question-answered-and-the-prd-stays-in-question", "t": "2026-09-04 02:47", "to": "blocked"}
+{"from": "blocked", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "t": "2026-09-04 02:47", "to": "blocked"}
+{"from": "blocked", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "t": "2026-09-04 02:47", "to": "blocked"}
+{"from": "blocked", "prd": "one-graph-writer", "t": "2026-09-04 02:47", "to": "blocked"}
+{"from": "blocked", "prd": "one-prd-reading-primitive", "t": "2026-09-04 02:47", "to": "blocked"}
+{"from": "blocked", "prd": "one-section-registry", "t": "2026-09-04 02:47", "to": "blocked"}
+{"from": "blocked", "prd": "one-verb-set", "t": "2026-09-04 02:47", "to": "blocked"}
+{"from": "blocked", "prd": "pending-gets-an-expiry-not-a-decree", "t": "2026-09-04 02:47", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "t": "2026-09-04 02:47", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "t": "2026-09-04 02:48", "to": "blocked"}
+{"from": "blocked", "prd": "the-capability-registry", "t": "2026-09-04 02:48", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/legacy-migrations-retire", "t": "2026-09-04 02:48", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "t": "2026-09-04 02:48", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "t": "2026-09-04 02:48", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-template-twins-fold-into-the-reference", "t": "2026-09-04 02:48", "to": "blocked"}
+{"from": "blocked", "prd": "one-verb-set", "t": "2026-09-04 02:48", "to": "blocked"}
+{"from": "blocked", "prd": "one-prd-reading-primitive", "t": "2026-09-04 02:48", "to": "blocked"}
+{"from": "blocked", "prd": "enforce-pointer-not-verdict", "t": "2026-09-04 02:49", "to": "blocked"}
+{"from": "blocked", "prd": "pending-gets-an-expiry-not-a-decree", "t": "2026-09-04 02:49", "to": "blocked"}
+{"from": "blocked", "prd": "every-question-answered-and-the-prd-stays-in-question", "t": "2026-09-04 02:49", "to": "blocked"}
+{"from": "blocked", "prd": "the-capability-registry", "t": "2026-09-04 02:49", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "t": "2026-09-04 02:49", "to": "blocked"}
+{"from": "blocked", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "t": "2026-09-04 02:49", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "t": "2026-09-04 02:49", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/legacy-migrations-retire", "t": "2026-09-04 02:49", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "t": "2026-09-04 02:49", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "t": "2026-09-04 02:49", "to": "blocked"}
+{"from": "blocked", "prd": "one-section-registry", "t": "2026-09-04 02:49", "to": "blocked"}
+{"calls": 124, "from": "analyzing", "prd": "a-lane-goes-when-its-prd-fails-not-only-when-it-collects", "reads": 1, "refused": 1, "t": "2026-09-04T02:51:04", "to": "specced", "tokens": 0}
+{"calls": 1, "from": "specced", "prd": "a-lane-goes-when-its-prd-fails-not-only-when-it-collects", "reads": 0, "refused": 0, "t": "2026-09-04T02:51:15", "to": "claimed", "tokens": 0}
+{"calls": 43, "from": "open", "prd": "a-lane-is-declared-at-spec-time-and-only-a-writer-gets-one", "reads": 0, "refused": 1, "t": "2026-09-04T02:54:09", "to": "analyzing", "tokens": 267}
+{"calls": 0, "from": "open", "prd": "a-collect-closes-the-claim-dir-it-measured-against", "reads": 0, "refused": 0, "t": "2026-09-04T02:54:11", "to": "analyzing", "tokens": 0}
+{"calls": 183, "from": "open", "prd": "cmd-vault-calls-a-function-that-was-deleted", "reads": 13, "refused": 3, "t": "2026-09-04T02:54:13", "to": "analyzing", "tokens": 12527}
+{"calls": 0, "from": "open", "prd": "doctor-walks-machine-local-lanes", "reads": 0, "refused": 0, "t": "2026-09-04T02:54:14", "to": "analyzing", "tokens": 663}
+{"from": "blocked", "prd": "every-question-answered-and-the-prd-stays-in-question", "t": "2026-09-04 02:54", "to": "blocked"}
+{"from": "blocked", "prd": "every-question-answered-and-the-prd-stays-in-question", "t": "2026-09-04 02:56", "to": "done"}
+{"from": "blocked", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "t": "2026-09-04 02:56", "to": "blocked"}
+{"from": "blocked", "prd": "one-prd-reading-primitive", "t": "2026-09-04 02:58", "to": "done"}
+{"from": "blocked", "prd": "enforce-pointer-not-verdict", "t": "2026-09-04 02:58", "to": "done"}
+{"calls": 565, "from": "analyzing", "prd": "a-collect-closes-the-claim-dir-it-measured-against", "reads": 11, "refused": 3, "t": "2026-09-04T03:03:51", "to": "specced", "tokens": 0}
+{"calls": 2, "from": "specced", "prd": "a-collect-closes-the-claim-dir-it-measured-against", "reads": 0, "refused": 0, "t": "2026-09-04T03:03:56", "to": "claimed", "tokens": 0}
+{"calls": 57, "from": "analyzing", "prd": "cmd-vault-calls-a-function-that-was-deleted", "reads": 0, "refused": 0, "t": "2026-09-04T03:05:18", "to": "specced", "tokens": 0}
+{"calls": 84, "from": "specced", "prd": "cmd-vault-calls-a-function-that-was-deleted", "reads": 12, "refused": 0, "t": "2026-09-04T03:05:26", "to": "claimed", "tokens": 4058}
+{"calls": 19, "from": "analyzing", "prd": "a-lane-is-declared-at-spec-time-and-only-a-writer-gets-one", "reads": 0, "refused": 0, "t": "2026-09-04T03:05:55", "to": "specced", "tokens": 0}
+{"calls": 8, "from": "specced", "prd": "a-lane-is-declared-at-spec-time-and-only-a-writer-gets-one", "reads": 0, "refused": 0, "t": "2026-09-04T03:06:07", "to": "claimed", "tokens": 0}
+{"calls": 194, "from": "analyzing", "prd": "doctor-walks-machine-local-lanes", "reads": 1, "refused": 1, "t": "2026-09-04T03:11:09", "to": "specced", "tokens": 0}
+{"calls": 9, "from": "specced", "prd": "doctor-walks-machine-local-lanes", "reads": 0, "refused": 1, "t": "2026-09-04T03:11:33", "to": "analyzing", "tokens": 0}
+{"from": "claimed", "prd": "cmd-vault-calls-a-function-that-was-deleted", "t": "2026-09-04 03:12", "to": "done"}
+{"calls": 20, "from": "analyzing", "prd": "doctor-walks-machine-local-lanes", "reads": 0, "refused": 0, "t": "2026-09-04T03:12:24", "to": "specced", "tokens": 0}
+{"from": "blocked", "prd": "one-verb-set", "t": "2026-09-04 03:12", "to": "done"}
+{"calls": 2, "from": "specced", "prd": "doctor-walks-machine-local-lanes", "reads": 0, "refused": 0, "t": "2026-09-04T03:12:41", "to": "claimed", "tokens": 0}
+{"from": "claimed", "prd": "a-collect-closes-the-claim-dir-it-measured-against", "t": "2026-09-04 03:22", "to": "done"}
+{"from": "claimed", "prd": "doctor-walks-machine-local-lanes", "t": "2026-09-04 03:23", "to": "done"}
+{"from": "claimed", "prd": "a-lane-goes-when-its-prd-fails-not-only-when-it-collects", "t": "2026-09-04 03:54", "to": "blocked"}
+{"from": "blocked", "prd": "a-lane-goes-when-its-prd-fails-not-only-when-it-collects", "t": "2026-09-04 03:54", "to": "blocked"}
+{"from": "blocked", "prd": "a-lane-goes-when-its-prd-fails-not-only-when-it-collects", "t": "2026-09-04 03:55", "to": "blocked"}
+{"from": "blocked", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "t": "2026-09-04 04:02", "to": "blocked"}
+{"from": "blocked", "prd": "no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses", "t": "2026-09-04 04:02", "to": "done"}
+{"from": "blocked", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "t": "2026-09-04 04:03", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "t": "2026-09-04 04:03", "to": "blocked"}
+{"from": "blocked", "prd": "the-capability-registry", "t": "2026-09-04 04:03", "to": "blocked"}
+{"from": "blocked", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-core-board-modules-delegate-to-common", "t": "2026-09-04 04:03", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "t": "2026-09-04 04:04", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "t": "2026-09-04 04:04", "to": "blocked"}
+{"from": "blocked", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "t": "2026-09-04 04:05", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "t": "2026-09-04 04:06", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "t": "2026-09-04 04:06", "to": "blocked"}
+{"from": "blocked", "prd": "the-capability-registry", "t": "2026-09-04 04:06", "to": "blocked"}
+{"from": "blocked", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-core-board-modules-delegate-to-common", "t": "2026-09-04 04:06", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "t": "2026-09-04 04:06", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "t": "2026-09-04 04:06", "to": "blocked"}
+{"from": "blocked", "prd": "pending-gets-an-expiry-not-a-decree", "t": "2026-09-04 04:12", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/tags-are-derived-when-the-vault-is-written", "t": "2026-09-04 04:12", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-template-twins-fold-into-the-reference", "t": "2026-09-04 04:12", "to": "blocked"}
+{"from": "blocked", "prd": "a-lane-goes-when-its-prd-fails-not-only-when-it-collects", "t": "2026-09-04 04:18", "to": "blocked"}
+{"from": "blocked", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "t": "2026-09-04 04:18", "to": "blocked"}
+{"from": "blocked", "prd": "one-board-path-resolver-fewer", "t": "2026-09-04 04:18", "to": "blocked"}
+{"from": "blocked", "prd": "pending-gets-an-expiry-not-a-decree", "t": "2026-09-04 04:20", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "t": "2026-09-04 04:20", "to": "blocked"}
+{"from": "blocked", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "t": "2026-09-04 04:20", "to": "blocked"}
+{"from": "blocked", "prd": "the-capability-registry", "t": "2026-09-04 04:20", "to": "blocked"}
+{"from": "blocked", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-core-board-modules-delegate-to-common", "t": "2026-09-04 04:20", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "t": "2026-09-04 04:21", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/tags-are-derived-when-the-vault-is-written", "t": "2026-09-04 04:21", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "t": "2026-09-04 04:21", "to": "blocked"}
+{"from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-template-twins-fold-into-the-reference", "t": "2026-09-04 04:21", "to": "blocked"}
+{"from": "blocked", "prd": "one-section-registry", "t": "2026-09-04 05:03", "to": "done"}
+{"from": "blocked", "prd": "one-section-registry", "t": "2026-09-04 05:03", "to": "done"}
+{"from": "blocked", "prd": "one-board-path-resolver-fewer", "t": "2026-09-04 09:31", "to": "blocked"}
+{"from": "blocked", "prd": "one-graph-writer", "t": "2026-09-04 09:31", "to": "done"}
+{"calls": 40, "from": "blocked", "prd": "a-harness-never-dispatches-the-live-board", "reads": 1, "refused": 1, "t": "2026-09-04T10:07:52", "to": "specced", "tokens": 25587}
+{"calls": 0, "from": "blocked", "prd": "a-lane-goes-when-its-prd-fails-not-only-when-it-collects", "reads": 0, "refused": 0, "t": "2026-09-04T10:07:52", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "every-task-is-a-verb-under-one-skill/the-skills-fold-into-one-index", "reads": 0, "refused": 0, "t": "2026-09-04T10:07:52", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "no-work-is-lost-on-the-board/a-lane-rebases-before-collect", "reads": 0, "refused": 0, "t": "2026-09-04T10:07:53", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "one-board-path-resolver-fewer", "reads": 0, "refused": 0, "t": "2026-09-04T10:07:53", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "pending-gets-an-expiry-not-a-decree", "reads": 0, "refused": 0, "t": "2026-09-04T10:07:53", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind", "reads": 0, "refused": 0, "t": "2026-09-04T10:07:54", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "the-board-reclaims-dead-work-by-itself/a-lane-is-removed-when-its-prd-collects", "reads": 0, "refused": 0, "t": "2026-09-04T10:07:54", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "the-capability-registry", "reads": 0, "refused": 0, "t": "2026-09-04T10:07:54", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "the-doctor-refuses-drift/one-primitive-one-definition/the-core-board-modules-delegate-to-common", "reads": 0, "refused": 0, "t": "2026-09-04T10:07:55", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/legacy-migrations-retire", "reads": 0, "refused": 0, "t": "2026-09-04T10:07:55", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree", "reads": 0, "refused": 0, "t": "2026-09-04T10:07:55", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/tags-are-derived-when-the-vault-is-written", "reads": 0, "refused": 0, "t": "2026-09-04T10:07:56", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-obsidian-vault-is-opt-in", "reads": 0, "refused": 0, "t": "2026-09-04T10:07:56", "to": "specced", "tokens": 0}
+{"calls": 0, "from": "blocked", "prd": "the-tree-holds-only-what-a-board-uses/the-template-twins-fold-into-the-reference", "reads": 0, "refused": 0, "t": "2026-09-04T10:07:56", "to": "specced", "tokens": 0}
+{"from": "claimed", "prd": "a-lane-is-declared-at-spec-time-and-only-a-writer-gets-one", "t": "2026-09-04 10:17", "to": "done"}

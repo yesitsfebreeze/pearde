@@ -6,8 +6,18 @@
 # in a temp dir made at run time; scratch lives in a second temp dir outside it, so the fixture's
 # own `git status` is never dirtied by this harness.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd -P)"
-P="$ROOT/.pearde/prds/workflows-on-the-board/workflow-skill/probe"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd -P)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
+P="$BOARD/prds/workflows-on-the-board/workflow-skill/probe"
 PASS=0; FAIL=0
 ok()  { PASS=$((PASS+1)); printf '  ok   %s\n' "$1"; }
 no()  { FAIL=$((FAIL+1)); printf '  FAIL %s\n' "$1"; }
@@ -54,7 +64,7 @@ cp "$ROOT/.gitignore" "$D/.gitignore" 2>/dev/null
 git -C "$D" init -q 2>/dev/null
 mkdir -p "$D/references/skills"; cp "$S" "$D/references/skills/pearde-workflow.md"
 N=$(ls "$D"/references/skills/*.md | wc -l | tr -d ' ')
-is "the fixture holds fifteen skill files" "$N" "15"
+is "the fixture holds seventeen skill files" "$N" "17"
 
 echo
 echo "== the map check is what makes the registration load-bearing =="
@@ -122,13 +132,13 @@ is "the built SKILL.md links to the repo's skill file" "$LNK" "$D/references/ski
 DOC=$(cd "$D" && bash resources/doctor.sh 2>&1 </dev/null | grep '^ *skills')
 has "doctor reports skills ok"                 "$DOC" "ok"
 has "doctor names pearde-workflow in the row"  "$DOC" "pearde-workflow"
-has "doctor counts fifteen well-formed skills"  "$DOC" "15 well-formed"
+has "doctor counts seventeen well-formed skills"  "$DOC" "17 well-formed"
 
 echo
 echo "== the one committed harness whose literals this contract moves =="
 git -C "$D" add -A >/dev/null 2>&1
 git -C "$D" -c user.email=p@p -c user.name=p commit -qm base >/dev/null 2>&1
-RM=$(bash "$ROOT/.pearde/prds/the-board-runs-itself/readme-in-three-rings/probe/verify.sh" </dev/null 2>&1 | tail -1)
+RM=$(bash "$BOARD/prds/the-board-runs-itself/readme-in-three-rings/probe/verify.sh" </dev/null 2>&1 | tail -1)
 is "readme-in-three-rings holds its baseline once the four literals move" \
    "$RM" "74 checks · 74 pass · 0 fail"
 

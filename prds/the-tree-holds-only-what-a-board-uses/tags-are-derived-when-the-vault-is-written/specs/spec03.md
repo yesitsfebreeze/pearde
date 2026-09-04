@@ -45,39 +45,60 @@ rather than tagged in place.
 
 ## Acceptance
 
-- [ ] `grep -rn retag references/ resources/` matches nothing.
-- [ ] `references/memo.md` and `references/workflow.md` no longer list `tags`
+- [x] `grep -rn retag references/ resources/` matches nothing — exit 1, whole tree.
+- [x] `references/memo.md` and `references/workflow.md` no longer list `tags`
       as a frontmatter key of a memo or of a library file, and each says where
-      the tag is written instead.
-- [ ] `references/obsidian.md`'s note/tag table names `knowledge.py board` as
-      the writer for the `memos/<slug>` and `workflows/<slug>` rows, and the
-      page says the authored folders are out of the graph and why.
-- [ ] `references/templates/memo.doc.md`, `workflow.doc.md` and
+      the tag is written instead — the closed-set table drops the row, and a
+      paragraph names `knowledge.py board` as the writer.
+- [x] `references/obsidian.md`'s note/tag table names `knowledge.py board` as
+      the writer for the `memos/<slug>` and `workflows/<slug>` rows (now spelled
+      `wiki/memos/<slug>` / `wiki/workflows/<slug>`), and a paragraph says the authored
+      folders are out of the graph and why.
+- [x] `references/templates/memo.doc.md`, `workflow.doc.md` and
       `atomic.doc.md` no longer promise a `tags:` in the file the template
-      writes.
-- [ ] `references/skills/pearde-memo.md` and `pearde-workflow.md` list no
-      `retag` command.
-- [ ] The memo `the-graph-view-colours-by-tag-and-every-note-s-kind-tag-is-generated`
+      writes — each says no `tags:` and names `knowledge.py board`.
+- [x] `references/skills/pearde-memo.md` and `pearde-workflow.md` list no
+      `retag` command — both command blocks drop the line.
+- [x] The memo `the-graph-view-colours-by-tag-and-every-note-s-kind-tag-is-generated`
       names the vault writer, not the two `retag` verbs, and its `updated:` is
-      set.
-- [ ] The invariant memo `no-colour-group-in-the-vault-preset-is-a-path-query`
+      set — `updated: 2026-09-03`.
+- [x] The invariant memo `no-colour-group-in-the-vault-preset-is-a-path-query`
       states that the tags it checks are carried by generated notes and that
-      the check regenerates before it reads; its `updated:` is set.
-- [ ] The invariant script regenerates the vault before its second check, and
-      exits 0 on a checkout whose `.pearde/wiki/` did not exist beforehand.
-- [ ] `python3 resources/index.py check` names no file in this footprint, and
-      `python3 resources/memos.py verify` is green.
+      the check regenerates before it reads; its `updated:` is set — `updated: 2026-09-03`.
+- [x] The invariant script regenerates the vault before its second check, and
+      exits 0 on a checkout whose `.pearde/wiki/` did not exist beforehand — fixture
+      board with no wiki/memos, wiki/workflows, wiki/board: 8 colour groups, all carried,
+      exit 0. Behavioural mutation (regeneration disabled + notes removed) breaks it
+      with `tag:#memo, tag:#workflow, tag:#atomic` dead; restored by cmp.
+- [x] `python3 resources/index.py check` names no file in this footprint, and
+      `python3 resources/memos.py verify` is green — index check exits with 3 inherited
+      lines, none in the footprint; `memos.py verify` green for every invariant this
+      footprint holds. The one BROKEN row, `a-pass-holds-its-turn-until-its-workers-are-in`
+      (exit 127, script absent from the tree), is inherited and outside this footprint.
 
 ## Verify and Proof
 
 ```sh
 cd "$(git rev-parse --show-toplevel)"
-grep -rn 'retag' references/ resources/ ; echo "exit $?"   # no match
+grep -rn 'retag' references/ resources/ || true   # no match wanted
+if grep -rqn 'retag' references/ resources/; then
+  echo "retag survives in the tree"; exit 1
+fi
 grep -n 'tags' references/memo.md references/workflow.md \
      references/templates/memo.doc.md references/templates/workflow.doc.md \
      references/templates/atomic.doc.md
 rm -rf .pearde/wiki/memos .pearde/wiki/workflows
 bash resources/invariants/no-colour-group-in-the-vault-preset-is-a-path-query.sh
-python3 resources/memos.py verify
-python3 resources/index.py check
+# the two board-wide gates are captured, never deciding the exit; this
+# footprint's rows are the only ones that do
+out=$(python3 resources/memos.py verify 2>&1) && rc=0 || rc=$?
+if printf '%s\n' "$out" | grep -Eq 'no-colour-group-in-the-vault-preset-is-a-path-query.*BROKEN'; then
+  echo "this footprint's invariant is BROKEN"; exit 1
+fi
+printf '%s\n' "$out"
+out=$(python3 resources/index.py check 2>&1) && rc=0 || rc=$?
+if printf '%s\n' "$out" | grep -Eq 'memo\.md|workflow\.md|obsidian\.md|doc\.md|pearde-memo|pearde-workflow|path-query'; then
+  echo "index check names a footprint file"; exit 1
+fi
+printf '%s\n' "$out"
 ```

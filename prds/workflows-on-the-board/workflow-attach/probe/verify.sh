@@ -12,7 +12,17 @@
 #   bash prds/workflows-on-the-board/workflow-attach/probe/verify.sh
 set -u
 
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 PLAN="$ROOT/resources/board/plan.py"
 WF="$ROOT/resources/workflows.py"
 TMP="$(mktemp -d)"
@@ -238,7 +248,7 @@ doc "contract.md says who may write a spec" references/parts/contract.md 'the-or
 # it was agreed as. Four needles above prove the block is present, and none of
 # them would notice a word changed in the middle of it. This compares them.
 blk() { awk '/^> Follow the workflow/ {on=1} on { if ($0 !~ /^>/) exit; print }' "$1"; }
-BLK_PRD="$(blk "$ROOT/.pearde/prds/workflows-on-the-board/workflow-attach/prd.md")"
+BLK_PRD="$(blk "$BOARD/prds/workflows-on-the-board/workflow-attach/prd.md")"
 BLK_WRK="$(blk "$ROOT/references/parts/workers.md")"
 if [ -z "$BLK_PRD" ] || [ -z "$BLK_WRK" ]; then
   bad "the block is extractable from both files — prd.md $(printf '%s' "$BLK_PRD" | wc -l) lines, workers.md $(printf '%s' "$BLK_WRK" | wc -l) lines"

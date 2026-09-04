@@ -22,7 +22,7 @@ set -u
 # otherwise.
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
 BOARD="$HERE"
-while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ]; do BOARD="$(dirname "$BOARD")"; done
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
 ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 COLLECT="$ROOT/resources/board/collect.py"
 EXAMPLE="$ROOT/resources/board/example"

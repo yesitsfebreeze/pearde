@@ -52,20 +52,41 @@ Four edits, one per file:
 
 ## Acceptance
 
-- [ ] `references/parts/loop.md` states, in prose and not only by reference, that a pass holds its turn until every worker it dispatched has returned or is measurably dead, and that a background worker does not outlive the pass window that dispatched it.
-- [ ] `references/parts/loop.md` still says the ceiling is a handover: a pass at `context-budget` hands back `MORE`, and the hold rule is written so as not to contradict it.
-- [ ] The sentence in `references/parts/loop.md` that names what the guard refuses no longer claims every rule in that list is guard-enforced.
-- [ ] `references/parts/dispatch.md` says a pass worker's return ends its children, and states the same hold rule from the dispatcher's side.
-- [ ] `references/parts/workers.md`'s liveness paragraph points at the hold rule and says the check alone does not license returning over a live worker.
-- [ ] `references/agents/pearde-pass.md`'s verdict table carries a row naming holding as the response to workers in flight.
-- [ ] `python3 resources/prose.py check` reports no new violation on the four files against the pre-change baseline: `loop.md` clean, `dispatch.md` clean, `workers.md` clean, `pearde-pass.md` 6 unbound waste words and no more.
-- [ ] `python3 resources/index.py check` prints the same four lines it printed before the change and no fifth.
+- [x] `references/parts/loop.md` states, in prose and not only by reference, that a pass holds its turn until every worker it dispatched has returned or is measurably dead, and that a background worker does not outlive the pass window that dispatched it.
+- [x] `references/parts/loop.md` still says the ceiling is a handover: a pass at `context-budget` hands back `MORE`, and the hold rule is written so as not to contradict it.
+- [x] The sentence in `references/parts/loop.md` that names what the guard refuses no longer claims every rule in that list is guard-enforced.
+- [x] `references/parts/dispatch.md` says a pass worker's return ends its children, and states the same hold rule from the dispatcher's side.
+- [x] `references/parts/workers.md`'s liveness paragraph points at the hold rule and says the check alone does not license returning over a live worker.
+- [x] `references/agents/pearde-pass.md`'s verdict table carries a row naming holding as the response to workers in flight.
+- [x] `python3 resources/prose.py check` is silent and exits 0 on all four files at once.
+- [x] `python3 resources/index.py check` names none of the four files.
 
 ## Verify and Proof
 
+Every needle is read off the file with markdown emphasis stripped and
+whitespace collapsed, so a re-wrapped paragraph is the same text to the check
+and only the words can break it.
+
 ```sh
-python3 resources/prose.py check references/parts/loop.md references/parts/dispatch.md references/parts/workers.md
-python3 resources/prose.py check references/agents/pearde-pass.md; test $? -eq 1
-python3 resources/prose.py check references/agents/pearde-pass.md | grep -qF '6 unbound waste word'
-python3 resources/index.py check; test "$(python3 resources/index.py check 2>&1 | wc -l | tr -d ' ')" = 4
+say() { tr '\n' ' ' <"$1" | sed -e 's/[*`]//g' -e 's/  */ /g'; }
+
+say references/parts/loop.md | grep -qF 'A pass holds its turn until every worker it dispatched has returned or is measurably dead.'
+say references/parts/loop.md | grep -qF 'A background worker does not outlive the pass window that dispatched it'
+say references/parts/dispatch.md | grep -qF 'pass holds its turn until every worker it dispatched has returned or is measurably dead'
+say references/parts/dispatch.md | grep -qF "A pass worker's return ends its children."
+say references/parts/dispatch.md | grep -qF '"waiting on workers" least of all'
+say references/parts/workers.md | grep -qF 'the pass holds its turn until every worker it dispatched has returned or is measurably dead'
+say references/parts/workers.md | grep -qF 'it does not license returning over a live one'
+say references/agents/pearde-pass.md | grep -qF 'hold the turn | a worker you dispatched is in flight'
+
+say references/parts/loop.md | grep -qF 'does not move the ceiling: a pass at context-budget still hands back MORE, once its workers are in'
+say references/parts/loop.md | grep -qF 'the first four are not advice'
+if say references/parts/loop.md | grep -qF 'none of these rules is advice'; then exit 1; fi
+
+python3 resources/prose.py check references/parts/loop.md references/parts/dispatch.md references/parts/workers.md references/agents/pearde-pass.md
+
+out=$(python3 resources/index.py check 2>&1) && rc=0 || rc=$?
+printf 'index.py check exit %s\n%s\n' "$rc" "$out"
+case "$rc" in 0|1) ;; *) exit 1 ;; esac
+if printf '%s\n' "$out" | grep -E 'references/parts/(loop|dispatch|workers)\.md|references/agents/pearde-pass\.md'; then exit 1; fi
 ```

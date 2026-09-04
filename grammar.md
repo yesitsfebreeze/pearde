@@ -47,6 +47,7 @@ yours, and it is the half that makes this file worth reading.
 | **depth** | the longest serial chain from a PRD to a terminal. Deepest dispatches first |
 | **master board** | a board whose `settings.md` carries `members:`. It plans across other boards and moves no file in them |
 | **member** | a board a master merges. Keeps its own PRDs, settings, memos and view |
+| **group** | a label a board writes on itself, `groups:` in its own `settings.md`. `pearde plan <group>` is the machine frontier over the boards carrying it, `pearde run <group>` moves it. Labels, not a partition: a board may carry several and most carry none |
 | **archive** | `.pearde/prds/archive/<name>.md` — a done PRD flattened to one file. It holds no `prd.md`, so `scan` walks past it |
 
 ## States, and what moves them
@@ -246,10 +247,13 @@ A verdict outside its set is refused with nothing written.
 
 ## The machinery
 
-@references/parts/guard.md · @references/parts/doctor.md · @references/parts/progress.md
+@references/parts/run.md · @references/parts/guard.md · @references/parts/doctor.md · @references/parts/progress.md
 
 | term | is |
 |---|---|
+| **run** | `pearde run [scope]` — the one command that moves. Nothing or `here` is the board at the cwd, `all` every watched board, any other word a group a board declares or a PRD's subtree |
+| **plan** | `pearde plan [scope]` — the same read with nothing moved, plus the windows `boards`, `slots`, `progress`, `groups`. A window and a scope compose in either order |
+| **scope word** | the one bare word after `run` or `plan` saying how wide it reaches. A window verb is never a scope, and a flag's value is never one. An unknown word is refused, never read as empty |
 | **progress line** | the one line printed on every state change, `▸ <prd>: <from> → <to> · …`, computed by the tool from the board after the write |
 | `as <id>` | the persona, last on the progress line and never omitted — the only record a session's persona has |
 | **status line** | the same numbers rendered continuously in the terminal, for a person watching. Nothing the loop reads |
@@ -287,7 +291,9 @@ The pairs a cold reader gets wrong. Each row is one spelling with two meanings.
 | **index** | @index.md, the map of this repo | `memos/README.md`, the generated kind index |
 | **vault** | the board through Obsidian, rooted at `.pearde/` | graphify's own vault under `.pearde/graphify/obsidian/`, deliberately outside it |
 | **weight** | the number the plan sizes a PRD by | never hours. `est` and `actual` stay out of the schedule, which is what makes them honest calibration data |
+| **run** | `pearde run` — the verb that dispatches a board, a group or every watched board | one execution of a workflow or a harness, which `runs:` counts. `resources/board/run.py` holds both: the `run` verb that moves, and the read `plan` calls |
 | **claim** | `claim:`, which worker holds a PRD | a contested assertion in a report, which owes `reproduced`, `refuted` or `unmeasured` |
+| **group** | a `groups:` label on a board, and the subset of the watch set `pearde plan <group>` reads | a **master board** is also called a group of projects — that one is a board with `members:`, on disk, planning across them. A group merges nothing and is written nowhere but the boards that declare it |
 | **container** | a parent `collect` closes | never a runtime container |
 | **parked** | a state outside the nine, scheduled by nothing | not `blocked`, which is live work, and not `failed`, which is an attempt that did not produce the work |
 | **floor** | the smallest window a session was billed for, which `context-budget` is measured over | `health-floor`, the score under which a file is unhealthy |

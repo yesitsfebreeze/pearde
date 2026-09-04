@@ -7,8 +7,17 @@
 # is `done`; `vision` and `example` declare their flags. One line per
 # assertion, a count at the end. Every command carries `--board <copy>`.
 set -u
-HERE="$(cd "$(dirname "$0")" && pwd)"
-ROOT="$(cd "$HERE/../../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 PLAN="$ROOT/resources/board/plan.py"
 COLLECT="$ROOT/resources/board/collect.py"
 TRANS="$ROOT/resources/board/transitions.py"
@@ -29,6 +38,12 @@ lacks(){ if printf '%s' "$2" | grep -qF -- "$3"; then bad "$1" "$2" "without: $3
 TOP="$(mktemp -d)"; SCRATCH="$(mktemp -d)"
 trap 'rm -rf "$TOP" "$SCRATCH"' EXIT
 ERR="$SCRATCH/err"
+# Every scratch index this run makes, in one place of its own. `collect`'s
+# private_index calls tempfile.mkdtemp(prefix="pearde-index-"), which honours
+# TMPDIR — so with this set, E14 can glob a directory only this fixture wrote
+# in. Before it, E14 globbed /tmp machine-wide and any concurrent collect, in
+# any session, decided it: the check was scheduling, not the tree.
+export TMPDIR="$SCRATCH/tmp"; mkdir -p "$TMPDIR"
 
 # a fresh copy of the example, a repo around it, one commit, timestamps fresh
 fixture() {
@@ -174,7 +189,7 @@ has  "E11 the line carries commit and record"               "$OUT" "· record "
 ( cd "$D" && git commit -q -m sibling )
 eq   "E12 the sibling's next plain commit carries only its file" "$(cd "$D" && git show --name-only --format= HEAD)" "README.md"
 has  "E13 …and does not revert the landing"                 "$(cd "$D" && git show HEAD:.pearde/prds/finished/prd.md)" "state: done"
-eq   "E14 no scratch index is left behind"                  "$(ls -d /tmp/pearde-index-* "${TMPDIR:-/tmp}"/pearde-index-* 2>/dev/null | wc -l | tr -d ' ')" "0"
+eq   "E14 no scratch index is left behind"                  "$(ls -d "$TMPDIR"/pearde-index-* 2>/dev/null | wc -l | tr -d ' ')" "0"
 # HEAD moved between read-tree and update-ref: refused, nothing written
 D="$(fixture e2)"
 OUT="$(cd "$D" && python3 - "$D" "$COLLECT" <<'PY' 2>&1
@@ -200,8 +215,8 @@ eq   "E17 …mine.txt is not in HEAD"                         "$(cd "$D" && git 
 
 # ── F. the collect harnesses stop only the daemon they started ───────────────
 echo "F. the collect harnesses stop only the daemon they started"
-KEEPS="$ROOT/.pearde/prds/the-tool-keeps-its-word/collect-keeps-its-word/probe/verify.sh"
-ISA="$ROOT/.pearde/prds/the-board-runs-itself/collect-is-a-command/probe/verify.sh"
+KEEPS="$BOARD/prds/the-tool-keeps-its-word/collect-keeps-its-word/probe/verify.sh"
+ISA="$BOARD/prds/the-board-runs-itself/collect-is-a-command/probe/verify.sh"
 for h in "$KEEPS" "$ISA"; do
   n="$(basename "$(dirname "$(dirname "$h")")")"
   eq "F1 $n: every serve.py stop names its port inline" "$(grep -c 'serve\.py" stop' "$h")" "$(grep -c 'PEARDE_PORT="\$SPARE" python3 "\$SRV/board/serve\.py" stop' "$h")"

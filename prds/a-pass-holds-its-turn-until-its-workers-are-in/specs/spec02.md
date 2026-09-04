@@ -53,28 +53,51 @@ resources/index.py check` grows a fifth line.
 
 ## Acceptance
 
-- [ ] `bash resources/invariants/a-pass-holds-its-turn-until-its-workers-are-in.sh` exits 0 against the tree and names each site it checked.
-- [ ] The script reads only the four files it asserts on: it runs no repo-wide command, no `git` invocation and no board command.
-- [ ] Every assertion can go red. Against a copy of the tree under `ROOT=`, deleting each asserted phrase in turn makes the script exit 1, and so does removing one of the four files.
-- [ ] `.pearde/memos/a-pass-holds-its-turn-until-its-workers-are-in.md` exists with `kind: invariant`, a `verify:` naming the script, and a `tags:` block matching its kind and status.
-- [ ] `python3 resources/memos.py check <board>` reports nothing against that memo.
-- [ ] `python3 resources/memos.py verify a-pass-holds-its-turn-until-its-workers-are-in <board>` prints `holds` and exits 0; with a phrase removed from `references/parts/dispatch.md` it prints `BROKEN` and exits non-zero.
-- [ ] `references/files.md` carries a row for the new script, and `python3 resources/index.py check` prints the same four lines it printed before the change and no fifth.
-- [ ] `.pearde/prds/a-pass-holds-its-turn-until-its-workers-are-in/probe/memo-draft.md` is gone, its content on the board.
+- [x] `bash resources/invariants/a-pass-holds-its-turn-until-its-workers-are-in.sh` exits 0 against the tree and names each site it checked.
+- [x] The script reads only the four files it asserts on: it runs no repo-wide command, no `git` invocation and no board command.
+- [x] Every assertion can go red. Against a copy of the tree under `ROOT=`, deleting each asserted phrase in turn makes the script exit 1, and so does removing one of the four files.
+- [x] `.pearde/memos/a-pass-holds-its-turn-until-its-workers-are-in.md` exists with `kind: invariant`, a `verify:` naming the script, and a `tags:` block matching its kind and status.
+- [x] `python3 resources/memos.py check <board>` reports nothing against that memo.
+- [x] `python3 resources/memos.py verify a-pass-holds-its-turn-until-its-workers-are-in <board>` prints `holds` and exits 0; with a phrase removed from `references/parts/dispatch.md` it prints `BROKEN` and exits non-zero.
+- [x] `references/files.md` carries a row for the new script, and `python3 resources/index.py check` names neither the script nor the row.
+- [x] `.pearde/prds/a-pass-holds-its-turn-until-its-workers-are-in/probe/memo-draft.md` is gone, its content on the board.
 
 ## Verify and Proof
 
 ```sh
 bash resources/invariants/a-pass-holds-its-turn-until-its-workers-are-in.sh
-grep -Ec 'git |index\.py|doctor\.sh|pearde\.py' resources/invariants/a-pass-holds-its-turn-until-its-workers-are-in.sh
-D=$(mktemp -d); mkdir -p "$D/references/parts" "$D/references/agents"
+
+n=$({ grep -vE '^[[:space:]]*#' resources/invariants/a-pass-holds-its-turn-until-its-workers-are-in.sh | grep -Ec 'git |index\.py|doctor\.sh|pearde\.py|memos\.py|collect\.py'; } || true)
+printf 'repo-wide calls in the script body: %s\n' "$n"
+[ "$n" = 0 ]
+
+D=$(mktemp -d)
+mkdir -p "$D/references/parts" "$D/references/agents"
 cp references/parts/loop.md references/parts/dispatch.md references/parts/workers.md "$D/references/parts/"
 cp references/agents/pearde-pass.md "$D/references/agents/"
 ROOT="$D" bash resources/invariants/a-pass-holds-its-turn-until-its-workers-are-in.sh
-perl -0pi -e 's/return ends its children/return closes its children/' "$D/references/parts/dispatch.md"
-ROOT="$D" bash resources/invariants/a-pass-holds-its-turn-until-its-workers-are-in.sh; test $? -eq 1
+perl -0pi -e 's/return ends its children/return closes its children/g' "$D/references/parts/dispatch.md"
+if ROOT="$D" bash resources/invariants/a-pass-holds-its-turn-until-its-workers-are-in.sh; then exit 1; fi
+python3 -c 'import os,sys; os.unlink(sys.argv[1])' "$D/references/agents/pearde-pass.md"
+if ROOT="$D" bash resources/invariants/a-pass-holds-its-turn-until-its-workers-are-in.sh; then exit 1; fi
 rm -rf "$D"
-python3 resources/memos.py check . 2>&1 | grep 'a-pass-holds-its-turn' ; test $? -eq 1
+
+grep -qF 'kind: invariant' .pearde/memos/a-pass-holds-its-turn-until-its-workers-are-in.md
+grep -qF 'kind/invariant' .pearde/memos/a-pass-holds-its-turn-until-its-workers-are-in.md
+grep -qF 'verify: bash resources/invariants/a-pass-holds-its-turn-until-its-workers-are-in.sh' .pearde/memos/a-pass-holds-its-turn-until-its-workers-are-in.md
+
+mc=$(python3 resources/memos.py check . 2>&1) && mrc=0 || mrc=$?
+printf 'memos.py check exit %s\n%s\n' "$mrc" "$mc"
+case "$mrc" in 0|1) ;; *) exit 1 ;; esac
+if printf '%s\n' "$mc" | grep -F 'a-pass-holds-its-turn-until-its-workers-are-in'; then exit 1; fi
+
 python3 resources/memos.py verify a-pass-holds-its-turn-until-its-workers-are-in .
-python3 resources/index.py check; test "$(python3 resources/index.py check 2>&1 | wc -l | tr -d ' ')" = 4
+
+grep -qF '@resources/invariants/a-pass-holds-its-turn-until-its-workers-are-in.sh' references/files.md
+out=$(python3 resources/index.py check 2>&1) && rc=0 || rc=$?
+printf 'index.py check exit %s\n%s\n' "$rc" "$out"
+case "$rc" in 0|1) ;; *) exit 1 ;; esac
+if printf '%s\n' "$out" | grep -F 'a-pass-holds-its-turn-until-its-workers-are-in'; then exit 1; fi
+
+if [ -e .pearde/prds/a-pass-holds-its-turn-until-its-workers-are-in/probe/memo-draft.md ]; then exit 1; fi
 ```

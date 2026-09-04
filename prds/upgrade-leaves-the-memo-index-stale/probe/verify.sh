@@ -32,7 +32,17 @@
 # to write to: a fixture board must never land in this machine's real vault
 # list. Section H asserts both registers are byte-identical afterwards.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 TOP="$(mktemp -d)"
 COPY="$TOP/pearde"
 NOOBS="$TOP/no-obsidian"
@@ -120,7 +130,7 @@ has "C the fresh board's init regenerated its index too" "$FOUT" \
     "init: regenerated memos/README.md, the memo index by kind"
 DF="$(R bash "$DOC" "$FRESH" 2>&1)"
 RN=$(rows "$DF" | wc -l | tr -d ' ')
-eq  "C the row reader read the whole report — 18 rows, not zero" "$RN" "18"
+eq  "C the row reader read the whole report — 19 rows, not zero" "$RN" "19"
 eq  "C no row reads broken on either board" \
     "$( { rows "$DU"; rows "$DF"; } | grep -c ' broken' || true)" "0"
 # `vision` is the ONE row that still differs, and it is a second divergence of

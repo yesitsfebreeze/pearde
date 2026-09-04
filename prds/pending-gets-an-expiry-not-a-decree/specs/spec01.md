@@ -62,29 +62,44 @@ record, not a plan — the acceptance boxes are its receipt.
 
 ## Acceptance
 
-- [ ] `python3 resources/knowledge.py enqueue "<question>"` writes an
+- [x] `python3 resources/knowledge.py enqueue "<question>"` writes an
       `expires:` line into the new pending file's frontmatter.
-- [ ] A pending file whose `expires:` (or, absent that, `date:` +
+      `verify.sh` A: "ok enqueue wrote an expires: line (enqueued:
+      pending/260903-d5c4.md · priority med)".
+- [x] A pending file whose `expires:` (or, absent that, `date:` +
       `pending_expiry_days`) has passed, and carries no truthy `keep:`, is
       moved by the next `query` call to `pending/.expired/` — never
       deleted — and the `query` output names it: `pending: <file> expired
       on <date> — re-enqueue with knowledge.py enqueue`.
-- [ ] `doctor` names a pending file only while it is past its own expiry
+      `verify.sh` C: "ok query's response named the expiry", "ok the
+      expired row moved to pending/.expired/, on disk", "ok the expired
+      row no longer sits in pending/".
+- [x] `doctor` names a pending file only while it is past its own expiry
       and still un-archived; a folder holding only rows still inside their
-      window reports no pending problem.
-- [ ] A pending file with `keep: true` is left alone by both `doctor` and
-      `query`'s archiving, regardless of how far past its `expires:` it is.
-- [ ] `pending_expiry_days: 0` in `WORKFLOW.md` means a row enqueued today
-      is due for archiving the same day.
-- [ ] Re-running `enqueue` on a question whose only pending match has
+      window reports no pending problem. `verify.sh` B/D: "ok doctor named
+      the expired, un-archived row" → "ok doctor's pending check is clean
+      after archiving".
+- [x] A pending file with `keep: true` is left alone by both `doctor` and
+      `query`'s archiving, regardless of how far past its `expires:` it
+      is. `verify.sh` E: "ok doctor left the keep: row alone despite its
+      passed expiry", "ok query did not archive the keep: row".
+- [x] `pending_expiry_days: 0` in `WORKFLOW.md` means a row enqueued today
+      is due for archiving the same day. `verify.sh` F: "ok a
+      pending_expiry_days: 0 row was archived the same day it was
+      enqueued".
+- [x] Re-running `enqueue` on a question whose only pending match has
       already expired writes a fresh row rather than reporting "already
       pending" — the in-flight question is never silently dropped.
+      `verify.sh` G: "ok re-enqueue wrote a fresh live row rather than
+      reporting the stale expired duplicate as already pending", "ok the
+      stale duplicate and the fresh row both sit in pending/ until the
+      next query sweeps the stale one".
 
 ## Verify and Proof
 
 ```sh
 python3 -c "import ast; ast.parse(open('resources/knowledge.py').read())"
-PEARDE_ROOT=<repo-root> bash .pearde/prds/pending-gets-an-expiry-not-a-decree/probe/verify.sh
+PEARDE_ROOT="$PWD" bash .pearde/prds/pending-gets-an-expiry-not-a-decree/probe/verify.sh
 python3 resources/index.py check   # unchanged from baseline: common.py / hotreload-test.js rows only, both pre-existing
 bash resources/doctor.sh           # unchanged from baseline: knowledge/questions rows are pre-existing, unrelated to this footprint
 ```

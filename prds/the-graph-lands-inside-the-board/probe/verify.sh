@@ -1,6 +1,6 @@
 #!/bin/bash
 # Probe for the-graph-lands-inside-the-board. Run from anywhere; verifies
-# resources/graph/graph.sh (in the CODE repo, /Users/feb/dev/infra/pearde)
+# resources/graph/graph.sh (in the CODE repo the runner names)
 # lands its output at .pearde/graphify/, not graphify-out/ at the repo root.
 #
 # Confirmed by analyst pass one (2026-08-31):
@@ -26,7 +26,18 @@
 # small Python file — 0 docs, 0 papers, 0 images — and the sweep pays seconds,
 # not minutes. The real repo's own graph is never rebuilt by a full extract.
 set -u
-REPO=/Users/feb/dev/infra/pearde
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
+REPO="$ROOT"
 SH="$REPO/resources/graph/graph.sh"
 
 PASS=0; FAIL=0
@@ -44,12 +55,12 @@ if bash "$SH" update "$REPO" --force >/dev/null; then
 else
   bad "update exited non-zero"
 fi
-if [ -f "$REPO/.pearde/graphify/graph.json" ]; then
+if [ -f "$BOARD/graphify/graph.json" ]; then
   ok "graph.json under .pearde/graphify"
 else
   bad "no graph.json under .pearde/graphify"
 fi
-marker="$(cat "$REPO/.pearde/graphify/.graphify_root" 2>/dev/null)"
+marker="$(cat "$BOARD/graphify/.graphify_root" 2>/dev/null)"
 if [ "$marker" = "$REPO" ]; then
   ok "update's marker is the repo root"
 else

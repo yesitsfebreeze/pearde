@@ -29,18 +29,35 @@ name. The two are the same edit in two possible homes, never two edits.
 
 ## Acceptance
 
-- [ ] The fetch list holds exactly one row, `dataview`, at its pinned version.
-- [ ] `install.sh --check` names no `obsidian-local-rest-api` row as `ok` or `missing`.
-- [ ] A plugin directory in the preset that no row claims is reported `stale` by `--check` and removed by `--apply` and by `--remove`.
-- [ ] The stale line names the plugin without a trailing slash in its path.
-- [ ] `bash -n resources/install.sh` is clean and the report's other rows are unchanged in count.
+- [x] The fetch list holds exactly one row, `dataview`, at its pinned version.
+- [x] `install.sh --check` names no `obsidian-local-rest-api` row as `ok` or `missing`.
+- [x] A plugin directory in the preset that no row claims is reported `stale` by `--check` and removed by `--apply` and by `--remove`.
+- [x] The stale line names the plugin without a trailing slash in its path.
+- [x] `bash -n resources/install.sh` is clean and the report's other rows are unchanged in count.
 
 ## Verify and Proof
 
 ```sh
-bash -n <repo>/resources/install.sh
-bash <repo>/resources/install.sh --check | grep -E 'dataview|rest'
-mkdir -p <repo>/resources/board/obsidian/plugins/made-up
-bash <repo>/resources/install.sh --check | grep 'made-up' | grep -q stale && echo "PASS stale named"
-rmdir <repo>/resources/board/obsidian/plugins/made-up
+bash -n /Users/feb/dev/infra/pearde/resources/install.sh
+out=$(bash /Users/feb/dev/infra/pearde/resources/install.sh --check 2>&1 || true)
+printf '%s\n' "$out" | grep -E 'dataview|local-rest'
+N=0
+printf '%s\n' "$out" | grep 'local-rest' | grep -qE ' ok | missing ' && N=$((N+1))
+if [ "$N" != 0 ]; then echo "FAIL rest named ok or missing"; exit 1; fi
+echo "PASS rest never ok or missing"
+mkdir -p /Users/feb/dev/infra/pearde/resources/board/obsidian/plugins/made-up
+out=$(bash /Users/feb/dev/infra/pearde/resources/install.sh --check 2>&1 || true)
+printf '%s\n' "$out" | grep 'made-up' | grep -q stale
+echo "PASS stale named"
+out=$(bash /Users/feb/dev/infra/pearde/resources/install.sh --remove /tmp/vaultoptin-dest 2>&1 || true)
+printf '%s\n' "$out" | grep -q 'removed made-up'
+echo "PASS removed by --remove"
+if [ -d /Users/feb/dev/infra/pearde/resources/board/obsidian/plugins/made-up ]; then echo "FAIL still there"; exit 1; fi
+echo "PASS made-up gone"
 ```
+
+`--remove` above runs with a throwaway destination (the flag goes first — the
+installer's arg order is `install.sh --remove <skills-dir>`) so the sweep fires
+while nothing of the install is touched; `obsidian-local-rest-api` in the
+preset goes the same way, on the next real `--apply`/`--remove`. The stale
+line names the plugin by its basename with no trailing slash.

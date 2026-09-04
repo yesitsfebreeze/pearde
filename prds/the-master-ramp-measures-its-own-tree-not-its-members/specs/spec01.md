@@ -76,22 +76,29 @@ cd /Users/feb/dev/infra/pearde
 # `resources/board/ramp.py` and nothing else in the checkout.
 bash .pearde/prds/the-master-ramp-measures-its-own-tree-not-its-members/probe/fixture.sh
 
-# A plain board is byte-identical to the committed ramp.py. A board that is
-# not on this machine errors the same way in both copies, so it compares
-# `same` and decides nothing.
-D=$(mktemp -d /tmp/rampold.XXXXXX)
-git archive HEAD | tar -x -C "$D"
-moved=""
+# A plain board is one unnamed root and its own marker list. This is asserted
+# against the module, not against a `git archive HEAD` export: once this unit
+# is committed HEAD *is* the union, so a diff against it proves nothing, and
+# in the meantime it is decided by whichever sibling has `plan.py` in flight.
 for b in /Users/feb/dev/infra/mitosys/.pearde /Users/feb/dev/infra/model/.pearde \
          /Users/feb/dev/infra/realm/.pearde /Users/feb/dev/infra/shared/.pearde \
          /Users/feb/dev/infra/pearde/.pearde; do
-  a=$(python3 "$D/resources/board/ramp.py" need --board "$b" 2>&1) || true
-  n=$(python3 resources/board/ramp.py need --board "$b" 2>&1) || true
-  if [ "$a" != "$n" ]; then moved="$moved $b"; fi
+  if [ -d "$b" ]; then python3 - "$b" <<'PY'
+import importlib.util, sys
+spec = importlib.util.spec_from_file_location(
+    "ramp_ut", "resources/board/ramp.py")
+m = importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+b = sys.argv[1]
+roots = m.scan_roots(b)
+if roots != [("", b)]:
+    print("FAIL a plain board is not one unnamed root:", b, roots); sys.exit(1)
+rows = [r for r in m.needs(b) if r[0] == "rust"]
+if rows and "×" not in rows[0][2]:
+    print("FAIL a plain board's why is not a marker list:", b, rows[0]); sys.exit(1)
+print("plain:", b)
+PY
+  fi
 done
-rm -rf "$D"
-if [ -n "$moved" ]; then echo "FAIL a plain board moved:$moved"; exit 1; fi
-echo "5 plain boards identical to the committed ramp.py"
 
 # The master on this machine, printed. Its numbers are the member repos', not
 # this footprint's, so they are gated only where the board is actually here.

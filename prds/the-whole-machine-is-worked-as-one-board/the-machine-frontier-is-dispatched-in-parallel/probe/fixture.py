@@ -30,7 +30,7 @@ ROOT = os.environ.get("PEARDE_ROOT", "/Users/feb/dev/infra/pearde")
 sys.path.insert(0, os.path.join(ROOT, "resources"))
 sys.path.insert(0, os.path.join(ROOT, "resources", "board"))
 import dispatch as D             # noqa: E402  the shipped dispatcher
-import machine as mach           # noqa: E402
+import run as mach               # noqa: E402  the frontier read
 
 
 PRD = """---

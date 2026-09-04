@@ -110,3 +110,11 @@ tests?
 **Q2** *(answered 2026-09-02 17:58)* — Break it apart too — the tidy is real rather than cosmetic, accepting it is slower and more can break on the way. plan.py is to be split, not just moved.
 
 **Q3** *(answered 2026-09-02 17:58)* — Keep a copy of the one drawing piece, drop the rest — vendor lit-core, nothing downloaded to use it, and the page tests become optional.
+
+## Children
+
+| child | contract | needs |
+|---|---|---|
+| `every-module-finds-its-siblings-by-one-rule` | One file puts every directory under `resources/` on the import path, one probe finds the repo root by `resources/pearde.py`, discovery walks every directory under `resources/`, and every tool that launches a sibling script finds it rather than spelling `board/` — so a file can move with no second edit anywhere; nothing has moved yet | — |
+| `the-largest-module-is-cut-by-responsibility` | resources/board/plan.py` is several modules beside each other, each named for one thing it is responsible for and none over 700 lines, with every command, caller and harness unchanged from the outside | — |
+| `every-file-sits-under-what-it-is-responsible-for` | Every file under `resources/` sits in a directory named for what the files in it are responsible for, the manifest and the map and the prose and the board's 51 harnesses all name the new paths, nothing is downloaded to run or draw the board, and `index.py check` and `doctor.sh` are green | every-module-finds-its-siblings-by-one-rule, the-largest-module-is-cut-by-responsibility |

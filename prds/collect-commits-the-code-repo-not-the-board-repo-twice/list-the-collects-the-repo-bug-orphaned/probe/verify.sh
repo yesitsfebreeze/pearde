@@ -5,7 +5,18 @@
 # under any board. No daemon is started, so it is safe inside `collect`.
 # The total is pinned: a dropped check fails the run rather than shrinking it.
 set -u
-CODE="$(cd "$(dirname "$0")/../../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
+CODE="$ROOT"
 ORPH="$CODE/resources/board/orphans.py"
 PASS=0; FAIL=0
 ok()  { PASS=$((PASS+1)); echo "  ok   $1"; }
@@ -37,7 +48,7 @@ eq  "--json carries the same rows, and done >= with_footprints" "$JRC" "1"
 
 # the premise the per-branch check rests on: one store, two worktrees
 eq  "the board is a worktree of the code repo's store" \
-    "$(git -C "$CODE/.pearde" rev-parse --git-dir)" "$CODE/.git/worktrees/-pearde"
+    "$(git -C "$BOARD" rev-parse --git-dir)" "$CODE/.git/worktrees/-pearde"
 
 echo "# a misdirected commit, on a fixture"
 

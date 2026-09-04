@@ -6,8 +6,17 @@
 # fresh copy per scenario. Never the real board. One line per assertion, a
 # count at the end.
 set -u
-HERE="$(cd "$(dirname "$0")" && pwd)"
-ROOT="$(cd "$HERE/../../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 COLLECT="$ROOT/resources/board/collect.py"
 PASS=0; FAIL=0
 export PEARDE_PORT=1          # nothing listens there — the daemon is "down"
@@ -148,7 +157,7 @@ eq  "A state done" "$(fm finished state)" "done"
 eq  "A claim cleared" "$(fm finished claim)" ""
 eq  "A the progress line printed once" "$(printf '%s\n' "$OUT" | grep -c '^▸ finished: claimed → done')" "1"
 has "A the line carries the persona last" "$(printf '%s\n' "$OUT" | grep '^▸')" "· as engineer"
-has "A the line says the round file is owed" "$OUT" "round file owed"
+has "A the line says the pass file is owed" "$OUT" "pass file owed"
 has "A the daemon being down is said, not fatal" "$OUT" "daemon down"
 eq  "A transition row appended" "$(grep -c '"to": "done"' "$D/.pearde/.state/transitions.jsonl")" "1"
 MSG="$( cd "$D" && git log -1 --format=%B HEAD~1 )"
@@ -403,8 +412,15 @@ fixture r
 SRV="$TOP/srv/resources"; mkdir -p "$SRV/board"
 cp "$ROOT"/resources/*.py "$SRV/"
 cp "$ROOT"/resources/board/*.py "$ROOT"/resources/board/*.css "$ROOT"/resources/board/*.js "$SRV/board/"
-REG="$ROOT/resources/board/state/serve.json"
-REG_BEFORE="$( [ -f "$REG" ] && cksum < "$REG" )"
+# Re-aimed. There is no machine-wide registry in the install any more: the
+# `every-artifact-lands-inside-the-board` invariant moved it to the board that
+# owns it (serve.py entry_path → `<board>/.state/serve.json`). The old path
+# never existed after that move, so this and its sibling below compared empty
+# to empty and measured nothing. `absent` stands in for the missing file so
+# that a run which CREATES the real board's registration is caught too — that
+# is the failure this check exists for, and an empty string could not see it.
+REG="$BOARD/.state/serve.json"
+REG_BEFORE="$( [ -f "$REG" ] && cksum < "$REG" || echo absent )"
 SPARE="$(python3 -c 'import socket; s=socket.socket(); s.bind(("127.0.0.1",0)); print(s.getsockname()[1]); s.close()')"
 export PEARDE_PORT="$SPARE"
 trap 'PEARDE_PORT="$SPARE" python3 "$SRV/board/serve.py" stop >/dev/null 2>&1; rm -rf "$TOP"' EXIT
@@ -421,8 +437,12 @@ eq  "R done" "$(fm finished state)" "done"
 has "R the daemon knows the fixture" "$(python3 "$SRV/board/serve.py" status 2>&1)" "$D/.pearde"
 PEARDE_PORT="$SPARE" python3 "$SRV/board/serve.py" stop >/dev/null 2>&1
 export PEARDE_PORT=1
-eq  "R the real registry is untouched" "$( [ -f "$REG" ] && cksum < "$REG" )" "$REG_BEFORE"
-eq  "R the copy's registry never learned the fixture" "$(tr -d '[:space:]' < "$SRV/board/state/serve.json" 2>/dev/null)" "[]"
+eq  "R the real board's registration is untouched" "$( [ -f "$REG" ] && cksum < "$REG" || echo absent )" "$REG_BEFORE"
+# Re-aimed from `$SRV/board/state/serve.json` = "[]". That file is the registry
+# the invariant deleted; asking what it holds asks nothing. The claim underneath
+# it survives the move and is now the invariant itself — the copied install is
+# code only, and nothing this run did wrote state beside it.
+eq  "R the copied install holds no registration at all" "$(find "$TOP/srv" -name 'serve.json' | wc -l | tr -d ' ')" "0"
 
 # ── S. the snapshot record, and --dry after it ───────────────────────────────
 echo "S. snapshot"

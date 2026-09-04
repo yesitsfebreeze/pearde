@@ -45,6 +45,10 @@ done
   || { bad "fixture is missing resources/knowledge.py"; echo "verify.sh done, fail=$fail"; exit 1; }
 
 printf '/pearde\n' > "$COPY/.gitignore"
+# the seven undotted boards on this machine: the real directory and the
+# `.pearde` compat symlink beside it — `board_named` reads through the link
+# (`legacy-migrations-retire` spec04 dropped the undotted name as a resolver)
+ln -s pearde "$COPY/.pearde"
 mkdir -p "$COPY/pearde/prds/some-prd" "$COPY/pearde/wiki/sources"
 cat > "$COPY/pearde/settings.md" <<'MD'
 ---
@@ -136,7 +140,7 @@ else
   echo "$old_out" | grep -q '0 notes on record' \
     && ok "pre-fix resolver reports 0 notes from a lane — the check can fail" \
     || bad "pre-fix resolver did not report 0 notes — the control proves nothing: $old_out"
-  [ -d "$OLD/lane/pearde/wiki" ] \
+  [ -d "$OLD/lane/.pearde/wiki" ] \
     && ok "pre-fix resolver created the stub the PRD names" \
     || bad "pre-fix resolver created no stub — the control proves nothing"
 fi

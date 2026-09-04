@@ -26,13 +26,37 @@
 # harness itself — and a stood-down check reports `skip`, which is never
 # counted as a pass.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
-NEIGHBOUR="$ROOT/.pearde/prds/the-board-runs-itself/readme-in-three-rings/probe"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
+NEIGHBOUR="$BOARD/prds/the-board-runs-itself/readme-in-three-rings/probe"
 TOP="$(mktemp -d)"
 COPY="$TOP/pearde"; SKILLS="$TOP/skills"
 REG="$ROOT/resources/board/state/serve.json"
 REG_BEFORE="$( [ -f "$REG" ] && cksum < "$REG" )"
-SPARE="$(python3 -c 'import socket; s=socket.socket(); s.bind(("127.0.0.1",0)); print(s.getsockname()[1]); s.close()')"
+# Picking a spare port by binding 0 and closing the socket is a TOCTOU: the
+# port is free at the moment it is printed and anyone may take it before the
+# board service binds it, which is exactly what a parallel sweep arranges. So
+# the port is re-checked immediately before use and the pick is retried; a
+# port that answers a connect is somebody else's.
+port_busy() { (: < "/dev/tcp/127.0.0.1/$1") >/dev/null 2>&1; }
+pick_spare() { python3 -c 'import socket; s=socket.socket(); s.bind(("127.0.0.1",0)); print(s.getsockname()[1]); s.close()'; }
+SPARE=""
+for _try in 1 2 3 4 5; do
+  _p="$(pick_spare)"
+  [ -n "$_p" ] || continue
+  port_busy "$_p" || { SPARE="$_p"; break; }
+done
+# the EXIT trap is not armed yet, so this arm cleans up after itself
+[ -n "$SPARE" ] || { echo "  FAIL  no free port could be picked in five tries"; rm -rf "$TOP"; exit 1; }
 export PEARDE_PORT="$SPARE" PEARDE_AS=engineer
 cleanup() {
   PEARDE_PORT="$SPARE" python3 "$COPY/resources/board/serve.py" stop >/dev/null 2>&1
@@ -144,7 +168,7 @@ has "E ...naming the machine, not the board" "$(vault "$D2")" \
 # tripwire: an extractor that reads nothing makes the diff below a check
 # that cannot fail — this pins that it read the whole report first
 RN=$(rows "$D1" | wc -l | tr -d ' ')
-eq  "E the row reader read the whole report — 18 rows, not zero" "$RN" "18"
+eq  "E the row reader read the whole report — 20 rows, not zero" "$RN" "20"
 eq  "E no row's verdict moves between the two homes" \
     "$(diff <(rows "$D1") <(rows "$D2") | grep -c '^[<>] ' || true)" "0"
 lacks "E doctor did not trip over an unset name" "$D2" "unbound variable"

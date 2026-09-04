@@ -6,7 +6,17 @@
 # daemon port is dead (PEARDE_PORT=1) so nothing registers. This repo's own
 # .claude/settings.json is never read for a write and never written.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 P="python3 $ROOT/resources/pearde.py"
 G="python3 $ROOT/resources/guard.py"
 T="$(mktemp -d)"
@@ -35,7 +45,7 @@ OUT="$($P guard on "$A" 2>&1)"; RC=$?
 eq  "A on exits 0" "$RC" 0
 eq  "A the file exists" "$( [ -f "$SA" ] && echo yes )" yes
 has "A prints the file" "$OUT" "guard on: $SA"
-eq  "A four + lines" "$(printf '%s\n' "$OUT" | grep -c '^  + ')" 4
+eq  "A five + lines" "$(printf '%s\n' "$OUT" | grep -c '^  + ')" 5
 has "A names the env key" "$OUT" '+ env.MAX_THINKING_TOKENS = "8000"'
 has "A the one sentence" "$OUT" "read after /hooks or a restart"
 eq  "A env key" "$(jq_ "$SA" 'd["env"]["MAX_THINKING_TOKENS"]')" 8000
@@ -62,7 +72,7 @@ eq  "A status is doctor's row" "$OUT" "$ROW"
 OUT="$($P guard off "$A" 2>&1)"; RC=$?
 eq  "A off exits 0" "$RC" 0
 has "A off prints the file" "$OUT" "guard off: $SA"
-eq  "A three - lines" "$(printf '%s\n' "$OUT" | grep -c '^  - ')" 3
+eq  "A four - lines" "$(printf '%s\n' "$OUT" | grep -c '^  - ')" 4
 eq  "A off leaves an empty hooks block" "$(jq_ "$SA" 'd["hooks"]')" "{}"
 eq  "A off leaves the env key" "$(jq_ "$SA" 'd["env"]["MAX_THINKING_TOKENS"]')" 8000
 ROW="$(guardrow "$A")"
@@ -91,7 +101,7 @@ PY
 SUM="$(cksum < "$SB")"
 OUT="$($P guard on "$B" 2>&1)"; RC=$?
 eq  "B on exits 0" "$RC" 0
-eq  "B four + lines" "$(printf '%s\n' "$OUT" | grep -c '^  + ')" 4
+eq  "B five + lines" "$(printf '%s\n' "$OUT" | grep -c '^  + ')" 5
 eq  "B key order kept" "$(jq_ "$SB" '" ".join(d)')" "permissions hooks env zzz"
 eq  "B the foreign PreToolUse entry stays first" "$(jq_ "$SB" '" ".join(e["matcher"] for e in d["hooks"]["PreToolUse"])')" "Bash Bash|Read Edit|Write"
 eq  "B the foreign PostToolUse entry stays" "$(jq_ "$SB" '" ".join(e["matcher"] for e in d["hooks"]["PostToolUse"])')" "Edit|Write Edit|Write"
@@ -101,7 +111,7 @@ eq  "B zzz stays" "$(jq_ "$SB" 'd["zzz"]')" "[1, 2]"
 has "B doctor reads guard ok" "$(guardrow "$B")" "ok      wired in $SB"
 OUT="$($P guard off "$B" 2>&1)"; RC=$?
 eq  "B off exits 0" "$RC" 0
-eq  "B three - lines" "$(printf '%s\n' "$OUT" | grep -c '^  - ')" 3
+eq  "B four - lines" "$(printf '%s\n' "$OUT" | grep -c '^  - ')" 4
 not "B off never names the foreign hook" "$OUT" "echo"
 eq  "B off leaves the cap" "$(jq_ "$SB" 'd["env"]["MAX_THINKING_TOKENS"]')" 8000
 python3 - "$SB" <<'PY'
@@ -116,7 +126,7 @@ echo "── C. a set cap stays; not-JSON is refused untouched"
 C="$(repo c)"; SC="$C/.claude/settings.json"; mkdir -p "$C/.claude"
 printf '{\n  "env": {\n    "MAX_THINKING_TOKENS": "4000"\n  }\n}\n' > "$SC"
 OUT="$($P guard on "$C" 2>&1)"
-eq  "C three + lines — the cap was set" "$(printf '%s\n' "$OUT" | grep -c '^  + ')" 3
+eq  "C four + lines — the cap was set" "$(printf '%s\n' "$OUT" | grep -c '^  + ')" 4
 eq  "C the cap is kept" "$(jq_ "$SC" 'd["env"]["MAX_THINKING_TOKENS"]')" 4000
 has "C doctor reads the kept cap" "$(guardrow "$C")" "MAX_THINKING_TOKENS=4000"
 printf '{ not json\n' > "$SC"; SUM="$(cksum < "$SC")"

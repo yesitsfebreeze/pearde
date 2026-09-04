@@ -14,17 +14,44 @@
 # a real registry, or any real board. Run as:
 #   bash .pearde/prds/the-view-row-names-a-variable-that-exists/probe/verify.sh
 set -u
-cd "$(dirname "$0")/../../../.." || exit 1
-DOCTOR="$PWD/resources/doctor.sh"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane (a worktree at <board>/.lanes/<slug>) and this file is not in it — the
+# board is only ever in the orchestrator's checkout, so a walk up from $0 lands
+# there whatever the worker is building in. BOARD is found by walking to the
+# `.pearde` this harness sits under, which holds at any nesting depth; ROOT is
+# PEARDE_ROOT when the runner set one, and that board's repo otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
+cd "$ROOT" || exit 1
+DOCTOR="$ROOT/resources/doctor.sh"
 
-pass=0; fail=0
+pass=0; fail=0; skip=0
 ok()  { pass=$((pass+1)); echo "  ok    $1"; }
 bad() { fail=$((fail+1)); echo "  FAIL  $1${2:+  — $2}"; }
+# A stood-down check is a skip and is never counted as a pass: in the stood-down
+# mode it cannot fail, so counting it green would be manufactured evidence.
+skp() { skip=$((skip+1)); echo "  skip  $1"; }
 # the view row, out of a full doctor report — never a filename argument
 vrow() { printf '%s' "$1" | grep -E '^ +view ' | head -1; }
+# 8477-8479 are fixed and this harness has no claim on them. Anything already
+# listening — a leaked server, a concurrent run of this same harness, an
+# unrelated process — makes the check below assert against somebody else's
+# socket, which is how this harness turned red under the old uncapped sweep
+# while passing every serial re-run. Busy means skip, never pass and never
+# fail. Same one-liner as the-doctor-completes-without-a-home/probe:244; do
+# not grow a second spelling of it.
+port_busy() { (: < "/dev/tcp/127.0.0.1/$1") >/dev/null 2>&1; }
 
 D="$(mktemp -d /tmp/pearde-viewrow.XXXXXX)"
-SRVPID=""; SRVPID2=""
+# All three are initialised here, before the trap is armed. SRVPID3 used to be
+# first assigned at its own check, two thirds of the way down: any exit before
+# that line ran cleanup under `set -u`, died on the unbound read, skipped the
+# `rm -rf` below it, and left 8477 and 8478 listening for the rest of the
+# session — which made a one-off collision permanent and would have hidden
+# itself behind the sweep's new job cap.
+SRVPID=""; SRVPID2=""; SRVPID3=""
 cleanup() {
   [ -n "$SRVPID" ]  && kill "$SRVPID"  2>/dev/null
   [ -n "$SRVPID2" ] && kill "$SRVPID2" 2>/dev/null
@@ -79,6 +106,10 @@ done
                 || bad "undefined in the view block:$miss"
 
 # 3. a live service on the spelling doctor walks → view ok, no unbound line
+if port_busy 8477; then
+  skp "8477 is held by something else — the same-spelling service check is not asserted here"
+  skp "8477 is held by something else — the unbound-variable check is not asserted here"
+else
 mk_srv 8477 "$D/.pearde" "$D/srv1.py"
 python3 "$D/srv1.py" & SRVPID=$!
 sleep 1
@@ -91,9 +122,13 @@ if printf '%s' "$(vrow "$out")" | grep -qE 'view +ok'; then
 else
   bad "same-spelling service: view should be ok — got: $(vrow "$out")"
 fi
+fi
 
 # 4. the everyday macOS symlink case: shell walks the symlink spelling,
 #    the service holds the physical /private/tmp one. Only PBOARD bridges it.
+if port_busy 8478; then
+  skp "8478 is held by something else — the symlinked-START check is not asserted here"
+else
 mk_srv 8478 "$PHYS/.pearde" "$D/srv2.py"
 python3 "$D/srv2.py" & SRVPID2=$!
 sleep 1
@@ -105,9 +140,13 @@ if printf '%s' "$(vrow "$out")" | grep -qE 'view +ok'; then
 else
   bad "symlink START, physical-spelling service: view should be ok — got: $(vrow "$out")"
 fi
+fi
 
 # 5. the name-extraction arm: the ok line still prints the board's name,
 #    and an unrelated board row in the same /status does not disturb it
+if port_busy 8479; then
+  skp "8479 is held by something else — the name-extraction check is not asserted here"
+else
 mk_srv 8479 "$D/.pearde" "$D/srv3.py"
 python3 "$D/srv3.py" & SRVPID3=$!
 sleep 1
@@ -117,7 +156,11 @@ if printf '%s' "$(vrow "$out")" | grep -qF 'board/nope-fixture'; then
 else
   bad "the name arm should print the registered name — got: $(vrow "$out")"
 fi
+fi
 
-echo "$((pass+fail)) checks · $pass pass · $fail fail"
+# skip sits before fail so the line still ends in "N fail": the-doctor-
+# completes-without-a-home/probe:250 reads this harness's summary with
+# `grep -qE '· 0 fail$'`, and appending the skip count would silently break it.
+echo "$((pass+fail+skip)) checks · $pass pass · $skip skip · $fail fail"
 echo "probe harness complete"
 [ "$fail" -eq 0 ] || exit 1

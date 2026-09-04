@@ -1,0 +1,4 @@
+resources/common.py is on disk with no row in references/files.md
+references/files.md lists @resources/board/hotreload-test.js — not on disk
+@@view names @resources/board/hotreload-test.js — not on disk
+references/parts/commits.md references @pearde/memos/a-board-s-own-file-commits-in-the-board-repo.md — not on disk

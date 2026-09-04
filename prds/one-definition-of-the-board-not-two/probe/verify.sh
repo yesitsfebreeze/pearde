@@ -4,9 +4,16 @@
 # Counts are computed from disk each run — the board is live and moving, so
 # nothing here is a hardcoded snapshot number.
 set -u
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+# BOARD is the `.pearde` this harness sits under — found by walking, so no
+# count of `..` has to match the PRD's nesting depth. ROOT is the tree under
+# test: the runner's when it names one (a worker builds in a lane worktree at
+# <board>/.lanes/<slug>, which holds no board of its own), that board's repo
+# otherwise. The root no longer spells the board: in a lane there is none.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 cd "$ROOT" || exit 1
-BOARD="$ROOT/.pearde"
 
 pass=0; fail=0
 ok()   { pass=$((pass+1)); echo "  ok   $1"; }

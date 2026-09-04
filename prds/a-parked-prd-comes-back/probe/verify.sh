@@ -3,7 +3,17 @@
 # transition names that way out. Runs on a copy of the example board under
 # mktemp; never the real board. One line per assertion, a count at the end.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 D="$(mktemp -d)"; SCR="$(mktemp -d)"; trap 'rm -rf "$D" "$SCR"' EXIT
 export PEARDE_AS=engineer PEARDE_PORT=1
 python3 "$ROOT/resources/board/plan.py" example "$D" >/dev/null
@@ -82,7 +92,7 @@ echo "H. prose"
 has_file() { if grep -qF -- "$3" "$ROOT/$2"; then ok "$1"; else bad "$1"; fi; }
 has_file "states.md: the parked paragraph names the way back" references/parts/states.md 'release <prd> open'
 has_file "handles.md: the defer row names its inverse" references/parts/handles.md 'release <prd> open'
-eq "no fixture prd.md under this PRD's probe" "$(find "$ROOT/.pearde/prds/a-parked-prd-comes-back/probe" -name prd.md | wc -l | tr -d ' ')" 0
+eq "no fixture prd.md under this PRD's probe" "$(find "$BOARD/prds/a-parked-prd-comes-back/probe" -name prd.md | wc -l | tr -d ' ')" 0
 
 echo "$((pass+fail)) checks · $pass pass · $fail fail"
 [ "$fail" -eq 0 ]

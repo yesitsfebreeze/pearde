@@ -9,7 +9,17 @@
 # spare port. Nothing here touches the real board or the live daemon. One
 # line per assertion, one count at the end; exit 1 on any failure.
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 T="$ROOT/resources/board/transitions.py"
 TOP="$(mktemp -d)"; SCR="$(mktemp -d)"
 COPY="$TOP/pearde"; SKILLS="$TOP/skills"; PROJ="$TOP/proj"; HOMED="$TOP/home"
@@ -162,7 +172,7 @@ has "H init.py makes the plugin dir before the key" "$(cat "$ROOT/resources/boar
 
 echo "I. the live daemon and the real board were never touched"
 eq  "I the real registry is untouched" "$( [ -f "$REG" ] && cksum < "$REG" )" "$REG_BEFORE"
-eq  "I no PRD filed on the real board" "$( [ -d "$ROOT/.pearde/prds/a-first-title" ] || [ -d "$ROOT/.pearde/prds/title" ] && echo yes || echo no )" "no"
+eq  "I no PRD filed on the real board" "$( [ -d "$BOARD/prds/a-first-title" ] || [ -d "$BOARD/prds/title" ] && echo yes || echo no )" "no"
 
 echo
 echo "$((PASS+FAIL)) checks · $PASS pass · $FAIL fail"

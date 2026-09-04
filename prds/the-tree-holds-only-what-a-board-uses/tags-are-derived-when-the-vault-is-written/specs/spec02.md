@@ -37,29 +37,36 @@ name the fix ("delete it — the vault writer derives it"), not just the fault.
 
 ## Acceptance
 
-- [ ] `tags` appears in neither `memos.py`'s nor `workflows.py`'s `OPTIONAL`
+- [x] `tags` appears in neither `memos.py`'s nor `workflows.py`'s `OPTIONAL`
       tuple, and neither module defines `retag`, `retag_text`, `memo_tags` or
-      `file_tags`.
-- [ ] `pearde memo retag` and `pearde workflow retag` are gone: both verbs are
+      `file_tags` — `grep -n 'retag\|memo_tags\|file_tags' resources/memos.py resources/workflows.py resources/pearde.py` exits 1.
+- [x] `pearde memo retag` and `pearde workflow retag` are gone: both verbs are
       absent from `pearde.py`'s `FORWARD` map and the CLI reports them as
-      unknown.
-- [ ] `grep -l '^tags:' .pearde/memos/*.md .pearde/workflows/*.md` matches
-      nothing.
-- [ ] `python3 resources/memos.py check` and `python3 resources/workflows.py check`
+      unknown — both exit 2 printing usage.
+- [x] `grep -l '^tags:' .pearde/memos/*.md .pearde/workflows/*.md` matches
+      nothing — `strip-stored-tags.py .pearde` stripped 68 records, second run 0.
+- [x] `python3 resources/memos.py check` and `python3 resources/workflows.py check`
       both exit 0 and print nothing.
-- [ ] A record carrying a stray `tags:` is still reported, and the message
-      names deleting it as the fix.
-- [ ] `python3 resources/memos.py add "<subject>"` writes a memo with no
-      `tags:` key, and `check` is green on it.
+- [x] A record carrying a stray `tags:` is still reported, and the message
+      names deleting it as the fix — fixture memo and workflow both print
+      `` `tags:` is not a memo key — delete it — the vault writer derives it ``, exit 1.
+- [x] `python3 resources/memos.py add "<subject>"` writes a memo with no
+      `tags:` key, and `check` is green on it — fixture: `grep -c '^tags:'` = 0, check green.
 
 ## Verify and Proof
 
 ```sh
 cd "$(git rev-parse --show-toplevel)"
 python3 -m py_compile resources/memos.py resources/workflows.py resources/pearde.py
-grep -n 'retag\|memo_tags\|file_tags' resources/memos.py resources/workflows.py resources/pearde.py   # no output
-grep -l '^tags:' .pearde/memos/*.md .pearde/workflows/*.md ; echo "exit $?"   # no match
+# both greps assert a NO-match, whose own exit is 1 — guarded so the block
+# survives -e on exactly the result that means it passed, and asserted so a
+# match still fails the block
+grep -n 'retag\|memo_tags\|file_tags' resources/memos.py resources/workflows.py resources/pearde.py || true   # no output
+if grep -l '^tags:' .pearde/memos/*.md .pearde/workflows/*.md 2>/dev/null; then
+  echo "an authored record still carries tags:"; exit 1
+fi
 python3 resources/memos.py check   && echo "memos green"
 python3 resources/workflows.py check && echo "workflows green"
-python3 resources/pearde.py memo retag 2>&1 | head -2   # unknown verb
+# the unknown verb is the passing case — its exit 2 is what proves the removal
+{ python3 resources/pearde.py memo retag 2>&1 || true; } | head -2
 ```

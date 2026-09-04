@@ -7,7 +7,17 @@
 # the five lines on a temp dir. `bash verify.sh --no-run` skips that last
 # part (it starts a daemon on a spare port and takes a few seconds).
 set -u
-ROOT="$(cd "$(dirname "$0")/../../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 README="$ROOT/README.md"; STATES="$ROOT/references/parts/states.md"
 S="$(mktemp -d)"; trap 'rm -rf "$S"' EXIT
 PASS=0; FAIL=0
@@ -85,7 +95,17 @@ echo "F. every claim is true to the code"
 python3 "$ROOT/resources/board/plan.py" example "$S/copy" >/dev/null
 has "F add as printed — no --as, no PEARDE_AS — files it as engineer, so the quickstart row says so" "$(env -u PEARDE_AS python3 "$ROOT/resources/board/transitions.py" add "quickstart probe" --board "$S/copy/.pearde" 2>&1)" "· as engineer"
 eq  "F the daemon's default port is 8443" "$(grep -c '127.0.0.1:8443' "$README")" "2"
-eq  "F the skills hold fifteen files — the set grew with the machine" "$(ls "$ROOT/references/skills"/*.md | wc -l | tr -d ' ')" "15"
+# The relation `install` states in its own help — "one skill folder per file
+# in references/skills/" — read off a dry run, never a pinned number. A
+# pinned number here measured the tree rather than the code: this line said
+# `16` and passed only because a neighbouring session had an uncommitted
+# sixteenth skill file in the working tree; on HEAD alone the same code gave
+# 15 and the harness went red with nothing broken.
+DRY="$(python3 "$ROOT/resources/pearde.py" install "$S/dry" 2>&1)"
+eq  "F install builds one folder per references/skills/*.md" \
+    "$(printf '%s\n' "$DRY" | grep -c ' — 5 of 5 links$')" \
+    "$(ls "$ROOT/references/skills"/*.md | wc -l | tr -d ' ')"
+eq  "F ...and the dry run built nothing" "$( [ -d "$S/dry" ] && echo made )" ""
 has "F init's first line names the language" "$(sed -n '/^def cmd_init/,/^def /p' "$ROOT/resources/board/init.py")" 'language {language} — '
 has "F view opens the browser" "$(sed -n '/^def cmd_view/,/^def /p' "$ROOT/resources/pearde.py")" "webbrowser.open"
 has "F the five bands, in the scan's words" "$(python3 "$ROOT/resources/board/plan.py" scan "$S/copy/.pearde" 2>&1)" "gated"
@@ -102,7 +122,7 @@ eq  "G nothing anchors into a README heading" "$(grep -rl 'README.md#' "$ROOT/re
 
 if [ "${1:-}" != "--no-run" ]; then
   echo "H. the five lines, end to end"
-  bash "$ROOT/.pearde/prds/the-board-runs-itself/readme-in-three-rings/probe/quickstart.sh" </dev/null > "$S/qs" 2>&1; RC=$?
+  bash "$BOARD/prds/the-board-runs-itself/readme-in-three-rings/probe/quickstart.sh" </dev/null > "$S/qs" 2>&1; RC=$?
   eq  "H quickstart.sh exits 0" "$RC" "0"
   has "H ...and every check passed" "$(tail -1 "$S/qs")" " 0 fail"
   [ "$RC" = 0 ] || sed 's/^/  /' "$S/qs" | grep '^  FAIL'

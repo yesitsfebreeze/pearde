@@ -1,125 +1,132 @@
-# scout's research leaves the tree — analyst report
+# scout's research leaves the tree — implementer report (redo pass)
 
-Verdict: SPECCED
+Verdict: DONE
 
-Two specs, `complexity` 12 + 8 = 20, under both board limits. `spec01` is
-already green in the lane; `spec02` is proved in a scratch copy of the wiki and
-is what an implementer still has to do.
+Claim: impl-redo-scout-s-rese 2026-09-03 21:38. Second pass on the
+`probe-then-spec` route: the analyst's build and specs stand, the first
+implementer's session was reaped after committing the lane, and this pass
+re-measures and applies the `Fails when` tables to the blocks that already
+stand, without authoring a spec.
 
-- `specs/spec01.md` — `resources/scout` holds only tool files, and every
-  document that named a departing file names its new home
-- `specs/spec02.md` — the 1,847 lines land in the board's wiki as notes and
-  attachments, and the four wiki citations that named the old paths resolve
+## Carried forward from the analyst's pass (by name)
 
-Union of the footprints:
+Every finding in the analyst's `## Findings` above stands as reported and none
+was closed by this pass:
+
+- **The advertised verb goes with the files** — `/scout reading` and
+  `/scout quality` retired with `reading-list.md` and `templates/`.
+- **The board's wiki is the same GitHub repository** — `.pearde/`'s origin is
+  `github.com/yesitsfebreeze/pearde.git`, `pearde` branch; leaving the tree is
+  not leaving the repo. If leaving the repository was the intent, spec02 is the
+  wrong destination and only the author can name the right one.
+- **Frontmatter is what makes the wiki a destination** — a `.md` in
+  `wiki/sources/` with no fence reddens `knowledge.py doctor` with
+  `no frontmatter`; non-markdown files must ride in `attachments/`.
+- **A wrong claim outside this scope** — `references/knowledge.md` says every
+  verb takes "`--root` per board"; `--root` is the wiki directory, not a board.
+  Not fixed; no spec here owns that prose.
+- **A defect outside this scope** — `resources/index.py check` problems at
+  HEAD belonging to some sibling or nobody (see Baseline below: the set has
+  grown from four lines to twelve, still none naming this footprint).
+- **The PRD's arithmetic checks out** — 1,847 lines measured at HEAD.
+
+## Workflow probe-then-spec
+
+| # | atomic | verdict | note |
+|---|--------|---------|------|
+| 1 | read-the-contract | ok | prd.md, both specs, the analyst's report read; `git status --short` recorded in both roots before any edit (code repo: `M resources/board/collect.py`, a sibling's live work, not mine; board repo: state files and other PRDs' files, not mine; lane: clean) |
+| 2 | capture-the-harness-baseline | ok (inherited) | the earlier build is **committed** (lane f116e5f; board repo 3bf5ead), so there is no pre-edit tree to recover; the analyst published counts and the harnesses are deterministic, so per the atomic the inherited baseline was **confirmed** by re-running the same set on the built tree and matching it — named pass: the analyst's, 2026-09-03 |
+| 3 | attempt-the-build | ok (second pass) | entered for both specs as footprint verification only; nothing was built. spec01's build stands in the lane at f116e5f; spec02's build stands in the board repo — its nine files were **committed by a sibling's collect**, 3bf5ead "ramp-is-a-doctor-row-not-a-gate" (2026-09-03 12:27), which took the first implementer's uncommitted wiki files with its own (attempt-the-build `Fails when`, the sibling-committed-the-tree row) |
+| 4 | re-run-the-harnesses | ok | no board harness names any footprint path (`grep -rl --include=verify.sh` over all eight footprint paths over `prds/` — zero files), so the measured set is the repo gate plus both spec blocks; every count equal to the published baseline; flips claimed: none |
+| 5 | write-the-specs | ok (no authoring) | no spec authored; the `Fails when` tables were applied to the standing blocks — both run as `collect` runs them (`bash -e -o pipefail` over the awked fence), one re-aim below, both proved falsifiable |
+
+### Edits
+
+One failure the atomics caused, one edit:
+
+- `specs/spec02.md`, Verify and Proof block, the line backing box 7 — as it
+  stood: `git -C .pearde status --short -- wiki/sources/scout | grep -q 'scout-findings-index-2026-08'`
+  — as it now reads: `git -C .pearde ls-files -- wiki/sources/scout | grep -q 'scout-findings-index-2026-08'`.
+  Reason: the box's words are "the board repo commits its own"; a sibling's
+  collect committed the notes at 3bf5ead, so the literal `status --short`
+  grep can only fail *before* the merge and reads red on the pass state the
+  box names. The re-aim asserts the shape that still meets the box — tracked
+  in the board repo — and is not weaker: the block's own `test -f` lines fail
+  on a deleted working file and the `ls-files` grep fails on an untracked
+  one. Proved both ways: `git -C .pearde ls-files -- wiki/sources/no-such-dir | grep -q …` → rc 1, and the whole block with
+  `scout-findings-index-2026-08.md` moved aside → rc 1; file restored,
+  `cmp` byte-identical. No other line, box or frontmatter key moved, and no
+  other spec file was touched.
+
+## Per-spec status — 7/7 boxes green, both specs
+
+### spec01 — resources/scout holds only tool files (7/7 `[x]`)
+
+Ran in the lane, as `collect` will: `bash -e -o pipefail -c "$(awk …)"` →
+`spec01 green`, rc 0. Output quoted:
 
 ```
-resources/scout
-references/files.md
-references/knowledge.md
-references/plugins.md
-references/skills/pearde-scout.md
-index.md
-.pearde/wiki/sources/scout
-.pearde/wiki/conclusions/scout
+index.py check — 3 line(s):
+resources/common.py is on disk with no row in references/files.md
+references/files.md lists @resources/board/hotreload-test.js — not on disk
+@@view names @resources/board/hotreload-test.js — not on disk
+  skills      ok      19 well-formed · pearde-all pearde-doctor … (19 named)
+spec01 green
 ```
 
-`resources/scout` is named as a directory because spec01 writes 13 of the 16
-paths under it. Both other PRDs whose specs name a path in this union —
-`the-loose-reference-files-are-rewritten-dense` (`references/plugins.md`) and
-`skills-and-scout-docs-are-rewritten-dense` (`resources/scout/*`) — are `done`,
-so nothing live clashes.
+The lane's `index.py check` is down to three inherited lines, none naming
+`resources/scout`. Falsifiable: appending `<!-- see findings.md -->` to
+`resources/scout/routes.md` in the lane → block rc 1; restored, `cmp`
+byte-identical.
 
-## What the build did
+### spec02 — the research lands in the board's wiki (7/7 `[x]`)
 
-Followed `probe-then-spec`. The knowledge query ran first and hit 90 notes, 86
-strong — no gap, so nothing enqueued into `pending/`.
+Ran from the code-repo checkout root (the block reads `.pearde/wiki/…`
+relative and `git show HEAD:resources/scout/...` against checkout HEAD, which
+still holds the departing files): → `spec02 green`, rc 0, with
+`doctor: clean — 114 notes, graph in sync, pending honest` and the query
+returning `scout-findings-index-2026-08` among its hits. All seven
+attachments `cmp` byte-identical to `git show HEAD:resources/scout/...` in
+the code repo. Falsifiable as described under `### Edits`.
 
-The lane already held a first pass: the nine research files staged as deletions,
-`snapshots/README.md` added, and `index.md`, `references/files.md`,
-`references/knowledge.md` and `references/plugins.md` rewritten. That pass left
-the tree inconsistent, and this pass finished it:
+## Baseline (inherited, confirmed)
 
-- `resources/scout/README.md` — four layers cut to two. The `curate` and `wire`
-  layers went with the files they described; the research loop's index two is
-  now `knowledge.py remember` / `conclude` / `enqueue`, matching what the first
-  pass had already written into `references/knowledge.md`.
-- `resources/scout/routes.md` and `resources/scout/buckets.txt` — no longer
-  cite `findings.md`.
-- `references/skills/pearde-scout.md` — the description no longer advertises
-  the reading list, the quality gates, `/scout reading`, `/scout quality` or
-  "wire the quality gates".
+No board harness touches the footprint, so the baseline set is the repo gate —
+`python3 resources/index.py check` + `bash resources/doctor.sh` — plus both
+spec blocks, exactly the set the analyst published.
 
-`python3 resources/index.py check` prints the same four lines it printed before
-the pass, none naming `resources/scout`. `resources/prose.py check` is silent
-on both rewritten scout documents. `doctor.sh` reports the same rows as the
-baseline, `skills ok · 19 well-formed` included.
+- `index.py check` in the **lane**: three lines (above). In the **checkout**:
+  twelve lines — the analyst's four, plus eight that landed since from other
+  sessions' work (`resources/board/obsidian_register.py` with no row; six
+  `@docs/*` rows; `@resources/board/purge.py`; `@@purge` in
+  `references/parts/handles.md`; `@@docs`). None names this footprint; all are
+  inherited and quoted for the next reader. The analyst's own extra finding —
+  `resources/common.py` with no row and the deleted `hotreload-test.js` —
+  still stands in both roots.
+- `doctor.sh` (checkout): `skills ok · 19 well-formed`, `plugins ok`, matching
+  the analyst's baseline; `index broken — 13 problems` and `claims broken — 7
+  drifted names`, all inherited, none naming this footprint. `doctor rc=0`.
+- `knowledge.py --root .pearde/wiki doctor`: `doctor: clean — 114 notes`,
+  as published.
 
-The move itself was run against a scratch copy of `.pearde/wiki`, never the live
-board. `probe/move-to-wiki.sh` is that run, left in the tree: it copies the live
-wiki to a scratch directory, reads the departing files out of git history, writes
-the two research indexes as `sources/scout/` notes and the five configs and two
-TSVs as `sources/scout/attachments/`, rewrites the four citations as wikilinks,
-then relinks. `knowledge.py doctor` goes from one problem to `doctor: clean`, and
-`query "which tool won recursive search over a source tree"` returns the moved
-index among its hits. Re-run it against the lane and it still passes.
+Flips claimed: none. Counts that changed against the published baseline: only
+the inherited `index.py check`/doctor lines above, all naming files outside
+the footprint, all explainable by sibling sessions' landings — not mine.
 
-Spec01's verify block was proved falsifiable: appending `<!-- see findings.md -->`
-to `routes.md` makes it exit non-zero at the second command. Reverted.
+## Health floor
 
-## Findings
+No footprint file is under the health floor; nothing to move. One live
+sibling hunk sits in the code repo (`M resources/board/collect.py`) — not
+mine, not touched. A split outside scope: none observed.
 
-**The advertised verb goes with the files.** `templates/` was the only material
-behind `/scout quality` and "wire the quality gates", and `reading-list.md` the
-only material behind `/scout reading`. Leaving those triggers in a shipped skill
-description after the files go is a claim that cannot be met, so spec01 removes
-them. This is the contract's consequence, not a widening of it — but it does
-retire a verb a user could have been using, and it is worth the person knowing.
+## Knowledge
 
-**The board's wiki is the same GitHub repository.** `.pearde/` is its own git
-repo whose `origin` is `github.com/yesitsfebreeze/pearde.git` — the same remote
-as the code repo, on the `pearde` branch. So the destination this build could
-actually reach takes the research out of the shipped tree but leaves it in the
-same public repository under another branch. The PRD's other option, "a separate
-repo", names no path the build could resolve, and inventing one would have been
-a guess about the author's other project. If leaving the repository was the
-intent rather than leaving the tree, spec02 is the wrong destination and the
-right one is a path only the author can name.
+`python3 resources/knowledge.py remember "an acceptance box asserting git
+status shows the new files goes stale the moment a sibling's collect commits
+the board repo"` → `sources/260903-949d.md · [[260903-949d]]` (provenance:
+this run's spec02 line 91). It landed untracked in the board repo, where the
+board's own commits will take it.
 
-**Measured, about the wiki as a destination.** A `.md` file dropped into
-`wiki/sources/` with no frontmatter reddens `knowledge.py doctor` with
-`<name>: no frontmatter`; the same file with a `type: source` fence is accepted
-and only leaves `graph.json` behind until `relink`. Files under a subdirectory
-that are not `.md` are not scanned at all, which is why the configs and the TSVs
-go to `attachments/` and the two indexes do not.
+## Failure
 
-**Four wiki notes cite paths that are about to vanish.**
-`sources/scout/260831-2cdf.md`, `260831-3e48.md`, `260831-cbe9.md` and
-`conclusions/scout/scout-feeds-knowledge-knowledge-feeds-the-rou.md` each name
-`resources/scout/findings.md` or `reading-list.md`. They live in the board repo,
-not the code repo, which is why spec02 has a board footprint and spec01 does
-not.
-
-**A wrong claim outside this scope.** `references/knowledge.md` says every verb
-takes "`--root` per board". It does not: `--root` is the **wiki** directory —
-`store.root / "sources"`, `store.root / "WORKFLOW.md"` — and argparse rejects it
-after the verb, so `knowledge.py doctor --root <board>` fails twice over, once
-on placement and once on the level. Three probe runs were lost to this. Not
-fixed here; no spec of mine owns that file's prose.
-
-**A defect outside this scope.** `resources/index.py check` carries four
-problems at HEAD that no scout change touches: `resources/common.py` has no row
-in `references/files.md`; `references/files.md` and `@@view` both name
-`@resources/board/hotreload-test.js`, deleted in `b1d3f5d`; and
-`references/parts/commits.md` references a memo that is not on disk. The
-container PRD's `done` wants `index.py check` clean, so these belong to some
-sibling or to nobody.
-
-**The PRD's arithmetic checks out.** The departing files are 1,847 lines at
-HEAD, which is the PRD's "1,900".
-
-## Scores
-
-complexity: 20
-blast-radius: mid
-workflow: probe-then-spec
+None.

@@ -7,7 +7,17 @@
 # Nothing it writes lands under prds/ — a fixture prd.md there would become a
 # real PRD and move the board's counts.
 set -u
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
+# The tree under test is the runner's when it names one. A worker builds in a
+# lane worktree at <board>/.lanes/<slug>, which holds no board of its own, so a
+# walk up from $0 always lands in the orchestrator's checkout and a green box
+# proves a tree holding none of the work. BOARD is the `.pearde` this harness
+# sits under, found by walking, so no count of `..` has to match the PRD's
+# nesting depth; ROOT is PEARDE_ROOT when the runner set one, that board's repo
+# otherwise.
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" && pwd)"
+BOARD="$HERE"
+while [ "$BOARD" != / ] && [ "$(basename "$BOARD")" != .pearde ] && [ "$(basename "$BOARD")" != pearde ]; do BOARD="$(dirname "$BOARD")"; done
+ROOT="${PEARDE_ROOT:-$(dirname "$BOARD")}"
 DOC="$ROOT/resources/doctor.sh"
 DOCMD="$ROOT/references/parts/doctor.md"
 
@@ -201,7 +211,7 @@ git -C "$ROOT" show HEAD:resources/doctor.sh > "$D/base/resources/doctor.sh" 2>/
 # the key is on here, the comparison would time a full sweep against a doctor
 # that has no such row, so it falls back to the fixture.
 T="$ROOT"
-grep -qE '^[[:space:]]*harnesses:[[:space:]]*(on|yes|true)' "$ROOT/.pearde/settings.md" \
+grep -qE '^[[:space:]]*harnesses:[[:space:]]*(on|yes|true)' "$BOARD/settings.md" \
   && { setkey -; T="$D/ex"; }
 if [ -s "$D/base/resources/doctor.sh" ]; then
   t0=$(now); $FRESH bash "$D/base/resources/doctor.sh" "$T" >/dev/null 2>&1; t1=$(now)
@@ -234,7 +244,7 @@ hase "I ...and the row carries its own wall-clock" "$(hrow)" '· [0-9]+s'
 echo
 echo "── J. the census this board's harnesses give ────────────────────────────"
 
-HL=$(find "$ROOT/.pearde/prds" -name verify.sh | sort)
+HL=$(find "$BOARD/prds" -name verify.sh | sort)
 HN=$(printf '%s\n' "$HL" | grep -c .)
 PIN=0; NOPIN=0; NONZERO=0
 for h in $HL; do
@@ -247,7 +257,7 @@ printf '  note census — %s harnesses · %s pin a denominator · %s do not · %
        "$HN" "$PIN" "$NOPIN" "$NONZERO"
 eq "J every harness on this board ends on a test that carries its exit code" "$NONZERO" "$HN"
 eq "J the census enumerates the tree, not a list this harness holds" \
-   "$(printf '%s\n' "$HL" | grep -c "^$ROOT/.pearde/prds/")" "$HN"
+   "$(printf '%s\n' "$HL" | grep -c "^$BOARD/prds/")" "$HN"
 
 echo
 echo "── K. the page says what the row means ──────────────────────────────────"
@@ -264,9 +274,9 @@ echo
 echo "── L. nothing of this probe reached the real board ──────────────────────"
 
 eq "L no fixture prd.md under the real prds/" \
-   "$(find "$ROOT/.pearde/prds" -path '*/the-gate-runs-the-harnesses/probe/*' -name prd.md | wc -l | tr -d ' ')" "0"
+   "$(find "$BOARD/prds" -path '*/the-gate-runs-the-harnesses/probe/*' -name prd.md | wc -l | tr -d ' ')" "0"
 eq "L the real board's transitions log is untouched by this run" \
-   "$(find "$ROOT/.pearde" -newer "$MARK" -name 'transitions.jsonl' | wc -l | tr -d ' ')" "0"
+   "$(find "$BOARD" -newer "$MARK" -name 'transitions.jsonl' | wc -l | tr -d ' ')" "0"
 eq "L index.py check is silent" \
    "$(python3 "$ROOT/resources/index.py" check 2>&1 | wc -l | tr -d ' ')" "0"
 

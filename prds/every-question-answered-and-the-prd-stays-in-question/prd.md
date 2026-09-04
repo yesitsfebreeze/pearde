@@ -1,5 +1,5 @@
 ---
-state: specced
+state: done
 origin: requested
 priority: 78
 complexity: 18
@@ -123,6 +123,12 @@ line; a new one would name it honestly as a repair. Which should it be?
 
 <!-- for the board: option 1 is one row in release's source-state table (question joins analyzing); option 2 is a new verb plus a handles.md row; option 3 keeps the move inside cmd_answer at transitions.py:792 but needs a flag that does not re-answer -->
 
+## Answers
+
+### Q1: How a piece of work leaves the waiting-for-a-person state once nothing is left to answer
+
+**Extend the letting-go command** — the one people already reach for learns this case, so nothing new has to be learned. (recommended)
+
 ## Blocked
 
 **2026-09-03 19:20 — the lane will not rebase**
@@ -140,3 +146,61 @@ Nothing is lost: the worker's commits are on `lane/every-question-answered-and-t
 - `resources/questions.py`
 
 Nothing is lost: the worker's commits are on `lane/every-question-answered-and-the-prd-stays-in-question` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock every-question-answered-and-the-prd-stays-in-question`.
+
+**2026-09-04 02:38 — the lane will not rebase**
+
+`lane/every-question-answered-and-the-prd-stays-in-question` does not land on `session/s62223`; 1 file(s) disagree:
+
+- `resources/questions.py`
+
+Nothing is lost: the worker's commits are on `lane/every-question-answered-and-the-prd-stays-in-question` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock every-question-answered-and-the-prd-stays-in-question`.
+
+**2026-09-04 02:46 — the lane will not rebase**
+
+`lane/every-question-answered-and-the-prd-stays-in-question` does not land on `session/s62223`; 1 file(s) disagree:
+
+- `resources/questions.py`
+
+Nothing is lost: the worker's commits are on `lane/every-question-answered-and-the-prd-stays-in-question` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock every-question-answered-and-the-prd-stays-in-question`.
+
+**2026-09-04 02:47 — the lane will not rebase**
+
+`lane/every-question-answered-and-the-prd-stays-in-question` does not land on `session/s62223`; 1 file(s) disagree:
+
+- `resources/questions.py`
+
+Nothing is lost: the worker's commits are on `lane/every-question-answered-and-the-prd-stays-in-question` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock every-question-answered-and-the-prd-stays-in-question`.
+
+**2026-09-04 02:49 — the lane will not rebase**
+
+`lane/every-question-answered-and-the-prd-stays-in-question` does not land on `session/s85810`; 1 file(s) disagree:
+
+- `resources/questions.py`
+
+Nothing is lost: the worker's commits are on `lane/every-question-answered-and-the-prd-stays-in-question` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock every-question-answered-and-the-prd-stays-in-question`.
+
+**2026-09-04 02:54 — the lane will not rebase**
+
+`lane/every-question-answered-and-the-prd-stays-in-question` does not land on `session/s85810`; 1 file(s) disagree:
+
+- `resources/questions.py`
+
+Nothing is lost: the worker's commits are on `lane/every-question-answered-and-the-prd-stays-in-question` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock every-question-answered-and-the-prd-stays-in-question`.
+
+## Report
+
+spec01: exit 0
+  ok   — release asking open moved a hand-answered question PRD to open
+  ok   — .transitions.jsonl row names why the move was allowed
+  ok   — release still refuses when a question is owed — pearde release: refused — answer: unanswered — Q1
+  ok   — the drill count and release agree — both call the padded-bold answer unread
+  ok   — questions check names the answer shape the gate refuses
+probe: PASS
+
+spec02: exit 0
+  ok   — release asking open moved a hand-answered question PRD to open
+  ok   — .transitions.jsonl row names why the move was allowed
+  ok   — release still refuses when a question is owed — pearde release: refused — answer: unanswered — Q1
+  ok   — the drill count and release agree — both call the padded-bold answer unread
+  ok   — questions check names the answer shape the gate refuses
+probe: PASS

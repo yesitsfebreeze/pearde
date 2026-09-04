@@ -38,16 +38,20 @@ Nothing to build.
 
 ## Acceptance
 
-- [ ] `load_graph` on a merged `graph.json` (repo nodes/links tagged
+- [x] `load_graph` on a merged `graph.json` (repo nodes/links tagged
       `root: repo`, KB nodes/links tagged `root: kb`) returns a `file_of` map
       holding only the repo's `source_file`s, and a `links` list holding only
       the repo's links — no KB id and no KB link survives.
-- [ ] `graph_axes` computed off that filtered graph reports the same
+      `ok    health drops kb nodes/links by root before file_of and the link scan`
+- [x] `graph_axes` computed off that filtered graph reports the same
       `fan_out`/`fan_in` it would have reported against a repo-only file —
       the KB entries change nothing about the count.
-- [ ] The string `"built from another root"` no longer appears anywhere in
+      `ok    fan-in/fan-out compute correctly off the root-filtered links`
+- [x] The string `"built from another root"` no longer appears anywhere in
       `resources/health.py`.
-- [ ] `python3 -m py_compile resources/health.py` — compiles.
+      `ok    the 'built from another root' guess is gone from health.py's wording` (grep -c: 0)
+- [x] `python3 -m py_compile resources/health.py` — compiles.
+      `health.py compiles`
 
 ## Verify and Proof
 

@@ -63,24 +63,30 @@ Nothing to build. `graph.sh` needed no change: it already writes to
 
 ## Acceptance
 
-- [ ] `relink` on a board that already holds a `graphify/graph.json` (as if
+- [x] `relink` on a board that already holds a `graphify/graph.json` (as if
       `graph.sh extract` had just run) writes the KB's nodes and edges into
       that same file, tagged `root: kb`, and the pre-existing nodes/links are
       still there, tagged `root: repo` — no second `graph.json` exists under
       the board afterward.
-- [ ] The repo edges that were on disk before `relink` ran are still on disk
+      `ok    one graph.json, root field per node, no sibling file`
+- [x] The repo edges that were on disk before `relink` ran are still on disk
       after, field for field (`source`, `target`, `relation`, and whatever
       else graphify wrote), with only `root: repo` added — proved by
       comparing the pre-relink file to the post-relink one.
-- [ ] A second `relink` run does not double the KB nodes or the KB edges, and
+      `ok    relink leaves the repo edge intact (merge, not replace)`
+- [x] A second `relink` run does not double the KB nodes or the KB edges, and
       does not touch the repo edge count.
-- [ ] Simulating a fresh `graph.sh extract` (a new native file with an extra
+      `ok    a second relink does not double the edge or the kb nodes`
+- [x] Simulating a fresh `graph.sh extract` (a new native file with an extra
       repo node/edge and a new `built_at_commit`) between two `relink` runs
       carries the new repo edges through on the next `relink` — the merge
       survives an extract in between, not just a bare re-run.
-- [ ] `doctor` on the merged board reports no false "graph.json is behind the
+      `ok    relink after a fresh graph.sh extract carries the new repo edges through`
+- [x] `doctor` on the merged board reports no false "graph.json is behind the
       files" — the KB-vs-node comparison is scoped to `root: kb` nodes only.
-- [ ] `python3 -m py_compile resources/knowledge.py` — compiles.
+      `ok    doctor reports no false staleness against the repo's own (far larger) node set`
+- [x] `python3 -m py_compile resources/knowledge.py` — compiles.
+      `knowledge.py compiles`
 
 ## Verify and Proof
 

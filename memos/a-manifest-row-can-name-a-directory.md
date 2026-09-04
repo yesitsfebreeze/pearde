@@ -9,7 +9,7 @@ tags:
 subject: A growing data directory gets one manifest row for the directory, not one per file
 date: 2026-08-28
 prds:
-  - snapshots-fold-to-one-row
+  - the-board-runs-itself/an-example-board
 ---
 
 # a-manifest-row-can-name-a-directory — one row for the directory, not one per file

@@ -1,0 +1,52 @@
+---
+title: Overview
+description: The tools, scored — worst first, so the next improvement is named
+---
+
+The tools of this repo, each with two pages: what it is, and what it scores.
+
+**The scoring** works like @@health, but over tools instead of files: six
+axes, weighted, one score of 1–10 per axis, a weighted total over 100, and a
+ranking that names the worst first. A score is a **pointer, never a verdict**
+— the good and the bad column say what pulls the tool down, and whether the
+tool changes is the board's call.
+
+| axis | measures | weight |
+|---|---|---|
+| `usability` | what it costs a person to run it: commands to remember, output to decode, setup to keep alive | 25 |
+| `integration` | how it meets the rest — one reader of its format, one resolver of its paths, or a special case every caller carries | 20 |
+| `sensibility` | whether its design still earns its shape — the concept count, the rules only its author holds, the parts you reread every time | 20 |
+| `complexity` | files, branch points, concepts a newcomer must hold before the first useful run | 20 |
+| `reliability` | how it fails — loud and named, or silent and plausible | 10 |
+| `performance` | the wait it adds to the loop it sits in | 5 |
+
+<Cards>
+  <Card title="Board" href="/docs/board" />
+  <Card title="Scout" href="/docs/scout" />
+  <Card title="Obsidian" href="/docs/obsidian" />
+  <Card title="Knowledge" href="/docs/knowledge" />
+  <Card title="View" href="/docs/view" />
+  <Card title="Health" href="/docs/health" />
+  <Card title="Workflows" href="/docs/workflows" />
+  <Card title="The capability index" href="/docs/improvements/integration" description="Second pass — every tool indexed, suggested, and ranked over time" />
+</Cards>
+
+## The ranking
+
+Weighted total over 100, worst first — the next tool to improve is the first
+row. Per-tool detail lives on each tool's score page.
+
+| tool | usability | integration | sensibility | complexity | reliability | performance | total |
+|---|---|---|---|---|---|---|---|
+| obsidian | 4 | 3 | 5 | 4 | 4 | 8 | 45 |
+| view | 6 | 5 | 5 | 5 | 6 | 7 | 55 |
+| scout | 5 | 6 | 6 | 6 | 6 | 7 | 58 |
+| knowledge | 6 | 7 | 6 | 6 | 6 | 8 | 64 |
+| health | 7 | 8 | 7 | 7 | 8 | 8 | 74 |
+| board | 6 | 8 | 7 | 6 | 7 | 8 | 74 |
+| workflows | 8 | 8 | 7 | 8 | 8 | 9 | 79 |
+
+The two worst tools share one root cause: **state that lives outside the
+board's own files** — Obsidian's register and Obsidian's plugin bundles, the
+view's daemon and its port — so a broken one looks exactly like a working
+one and only doctor tells the difference.

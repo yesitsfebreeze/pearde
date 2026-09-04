@@ -1,0 +1,49 @@
+---
+title: Pending gets an expiry, not a decree
+description: Knowledge — sensibility — "pending is not a backlog" fights the folder's own shape
+---
+
+**Tool:** knowledge · **Axis:** sensibility (6 → 7) · **Pulls the score up
+by ~4 points**
+
+## Why now
+
+`pending/` is a priority-tagged queue by shape — files waiting, tagged,
+walked by the loop — and *not a backlog* by decree: "a question never needed
+again is deleted, not drained to zero; stale rows read as work owed, doctor
+naming them". The rule fights the shape. A queue whose entries only ever
+leave by hand-deletion *is* a backlog; the decree makes honest users feel
+like they are doing it wrong, and the doctor row turns the folder into a
+guilt source. A shape whose operating rule is "clean it by hand or feel bad"
+is one concept too many.
+
+## The change
+
+Pending entries gain an expiry in their frontmatter — `expires:` set to a
+date, defaulted from the `WORKFLOW.md` knob (`pending-expiry-days`, 14). The loop's
+ask step reads pending last; an expired entry is *archived in place* — moved
+to `pending/.expired/`, named in the response, never deleted — and `doctor`
+stops naming stale rows as work owed: it names only rows inside the window.
+The decree leaves the reference; the mechanism replaces it.
+
+## Done when
+
+- A pending file with `expires:` past and no `keep:` is moved to
+  `pending/.absorbed/`-style storage by the next `query`, and the answer
+  names it — the question is retrievable, not gone.
+- `doctor`'s pending check counts only unexpired rows; a folder of stale
+  files with none unexpired reads `ok`, not `broken`.
+- `pending-expiry: 0` in `WORKFLOW.md` keeps nothing — the knob, not the
+  rule, decides.
+
+## Fails when
+
+- Expiry deletes a question that was about to be asked. Guard: archive,
+  never delete, and the ask step's `gap:` line says "expired on \<date\> —
+  re-enqueue with `knowledge.py enqueue`" so the death is named.
+
+## What stays out
+
+No auto-research of expired questions — expiry is retirement, not
+rescheduling. The auto_enqueue path already exists for gaps that *should*
+run again.

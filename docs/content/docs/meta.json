@@ -1,0 +1,16 @@
+{
+  "title": "Pearde",
+  "default": "Overview",
+  "pages": [
+    "---Tools---",
+    "board",
+    "scout",
+    "obsidian",
+    "knowledge",
+    "view",
+    "health",
+    "workflows",
+    "---Improvements---",
+    "improvements"
+  ]
+}

@@ -1,0 +1,20 @@
+---
+title: Obsidian
+description: The vault — the board read natively
+---
+
+The board is the vault: Obsidian roots at `.pearde/` and renders what pearde
+writes. Backlinks, link resolution and the graph view are the read layer; the
+knowledge layer's dashboard (`wiki/Dashboard.md`, Dataview) is written for it.
+
+- **The root is `.pearde/`, never the repo root** — Obsidian skips dot-paths
+  before reading any setting, so a repo-root vault sees no board.
+- **The register is written only with Obsidian closed** — Obsidian rewrites
+  `obsidian.json` from memory on quit, so `pearde vault` quits → writes →
+  reopens, and refuses while the app runs.
+- **Two plugins, seeded by `init`**, pinned bundles fetched by `pearde vault`
+  — the one command in the repo that reaches the network.
+- **doctor reads the register back**, from the home passwd gives, never
+  `HOME`.
+
+Scope in @@knowledge and @references/obsidian.md.

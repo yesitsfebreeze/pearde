@@ -1,0 +1,55 @@
+---
+title: The capability registry
+description: Integration — every verb of every tool, one row, generated from the tools and checked by doctor
+---
+
+**Layer:** index · **Tool:** all · **Unblocks:** suggest, usage, rank
+
+## Why now
+
+The machine's capabilities are indexed in three places that answer three
+different questions and none of them the agent's: @index.md maps *files* for
+a human reading the repo, the skills' frontmatter maps *entry points* that
+fire on their description, and `pearde.py` discovers `COMMANDS` in every
+directory under `resources/` at runtime. What is missing is the union, in
+the shape an agent is handed: not "where does this live" but "what can I do
+right now, with what, at what cost". `pearde help` prints docstrings to a
+human; a mid-pass worker is handed a brief, and the brief names files and
+workflows — never the verbs that could do the work.
+
+## The change
+
+One registry file, **generated from the tools, never hand-written**:
+`pearde.py` already walks `resources/` for `COMMANDS`; the generator writes
+one row per verb — name, one-line contract (the docstring's first line),
+reads, writes, cost class (shell / python / network / human) — beside the
+command that owns it. Skills map onto rows; the vault's verbs and the view's
+sections get rows the same way (see the fire check and the vault pages).
+Doctor's `index` row gains a line: a verb on disk with no row, or a row
+naming no verb, is `broken` — the same drift check the manifest already
+runs on files, run on verbs.
+
+## Done when
+
+- `pearde capabilities` prints the registry, one row per verb, and the count
+  equals what `pearde.py` discovers at runtime — provable by diffing the two
+  in one command.
+- A verb added to any tool's `COMMANDS` appears in the registry on the next
+  generation, with no hand edit — the check is adding a stub verb and
+  finding it there.
+- Doctor's new row reads `broken` when a registry row names a verb that no
+  longer exists, the way the index check convicts a dead `@` anchor.
+
+## Fails when
+
+- The registry drifts from the tools the moment someone hand-edits it.
+  Guard: it is **never written by hand** — regeneration is the only write
+  path, and doctor refuses a registry whose mtime is older than the tools
+  it covers, the way `scan`'s mtime cache refuses staleness.
+
+## What stays out
+
+No routing decision in the registry — it says what exists, never what to
+run. Suggestion is the next page's job; the registry is only the inventory,
+and a registry that decides is the second orchestrator this repo refuses to
+grow.

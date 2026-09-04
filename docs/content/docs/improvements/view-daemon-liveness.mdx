@@ -1,0 +1,49 @@
+---
+title: The daemon's liveness moves onto the board
+description: View — integration — a port, a pid and a process-table sweep are state outside the board
+---
+
+**Tool:** view · **Axis:** integration (5 → 7) · **Pulls the score up by
+~6 points**
+
+## Why now
+
+The view daemon is registered nowhere the board owns: its port is an env
+default, its pid sits in the process table, its liveness is judged by a
+sweep (`serve.py reap`) that must distinguish a leak from a daemon a
+`SessionStart` hook just brought up — which is why a grace window, a
+`--pid` narrowing and a shipped grace constant all exist. Three safety rules
+since are each the debt of one window: between `ensure` binding its port and
+the board's first `/register`, the truth lives nowhere but the process
+table.
+
+## The change
+
+The board's own directory learns the daemon: `serve.py ensure` writes
+`.pearde/.state/view.json` — pid, port, started-at, the board it serves —
+and a dead pid (checked through the process table, the one read `reap`
+already does) means the file is stale, so the next `ensure` rewrites it.
+`reap` keeps its sweep for the pre-rule daemons but treats a file-backed
+daemon as *named*: no grace heuristics, no pid narrowing — a daemon with a
+file is known, a daemon without is a candidate, same as today.
+
+## Done when
+
+- After `pearde view`, the board holds `.state/view.json` naming the pid and
+  port `pearde view status` reports; deleting the board directory makes the
+  next `status` say forgotten, as today.
+- `reap --dry-run` never names a daemon whose file reads live.
+- `doctor.sh --harnesses` ends with the same `reap` it runs today — the
+  shipped grace kept — and the harness sweep passes unchanged.
+
+## Fails when
+
+- Two sessions on one board: both write the file, one pid wins. The writer
+  takes the file only under the same lock the state writes take
+  (@@pass), and a loser reads the winner's file rather than overwriting.
+
+## What stays out
+
+No change to the daemon's idle self-termination or the vanished-board
+forgetting — those rules already end the right lives. This page only moves
+*where the truth is kept*.

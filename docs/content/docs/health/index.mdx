@@ -1,0 +1,20 @@
+---
+title: Health
+description: Which files resist being worked on — scored, worst first
+---
+
+Health is the scoring tool: one number per tracked file, 1 to 100, 100
+healthy, worst first on one page — so a monolith is named before a worker
+meets it.
+
+- **Regenerable, never in the history** — `pearde health score` rebuilds the
+  whole record from the tree; the board's `.gitignore` carries `health/`.
+- **Six axes, weighted** — lines, branching, longest function, fan-out,
+  fan-in, links. Thresholds are constants, weights and the floor are knobs in
+  `settings.md`.
+- **A score is a pointer, never a verdict** — the note says where to look and
+  what pulls the file down; whether the file changes is the PRD's call.
+- **The brief names the unhealthy** — a score under `health-floor` appears in
+  the brief a worker is handed, so the worst file is worked, not avoided.
+
+Scope in @@health; the format in @references/health.md.

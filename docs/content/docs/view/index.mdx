@@ -1,0 +1,25 @@
+---
+title: View
+description: The live board — one page, seven sections, hot reload
+---
+
+The view is how a person reads and works the board. `pearde view` starts a
+daemon once per machine and registers the board; from then on
+`http://127.0.0.1:8443/board/<name>` is the board, live — within a second of
+any file change the new payload swaps in where it stands: rows move, scroll
+and selection do not.
+
+- **Seven sections, one at a time** — what's up, timeline, board (kanban,
+  drag a card to write `state:`), analytics, asks, list, memos, report. ⌘1–7
+  switch; the URL names the view.
+- **The now strip** sits above every view: to collect, waiting on you, in
+  flight — three doors into the plan's top bands.
+- **Every board at once is `/board/all`** — read-only end to end, built out
+  of each board's own payload on request.
+- **The daemon ends its own life**: a board vanished from disk is forgotten,
+  a daemon watching nothing stops itself; `serve.py reap` clears the older
+  leaks by process table.
+- **Nothing git-ignored renders** — `.state/` is machine scratch, never a
+  person's read.
+
+Scope in @@view.

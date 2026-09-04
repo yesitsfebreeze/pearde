@@ -1,0 +1,43 @@
+---
+title: The capability index
+description: "Second pass — integration: index every capability, suggest it at the moment of need, rank what got used over time"
+---
+
+The first pass scored the tools as they are. The second pass asks a different
+question: **is every capability of every tool reachable by the agent at the
+moment it applies?** A tool that is written well and never suggested is a
+tool scored 79 on the docs site and 0 in the loop.
+
+The thesis is one loop, pointed at ourselves. Scout runs it against GitHub —
+discover, ask, curate, wire. The same loop, aimed inward:
+
+| step | scout's version | ours |
+|---|---|---|
+| index | `buckets.txt` — what is out there | one capability registry — every verb of every tool, generated, doctor-checked |
+| suggest | a sweep's ranked rows | the loop injects the rows whose reads and writes meet the pass's footprint — at the brief, at session start, never a wall of tools |
+| use | a route call | the suggestion is taken or ignored — either way it is **counted** (the guard already counts calls; this makes the count per capability) |
+| rank | `delta` over star snapshots | `delta` over usage snapshots — one TSV per day, the same pattern, the same pruning |
+
+Every page below is atomic: one change, one verifiable done, one named
+failure. Together they make "every tool used to its best capability" a
+*measured* state instead of an intention — an unused capability is a row
+with a delta of zero, named on a page, the way an unhealthy file is named in
+the brief today.
+
+<Cards>
+  <Card title="The capability registry" href="/docs/improvements/integration-registry" description="every verb, one row, generated and checked" />
+  <Card title="Suggested at the moment of need" href="/docs/improvements/integration-suggest" description="the brief carries the rows the pass can use" />
+  <Card title="Usage snapshots, ranked over time" href="/docs/improvements/integration-usage" description="scout's delta, pointed at ourselves" />
+  <Card title="The fire check" href="/docs/improvements/integration-skill-fire" description="a skill that never fires is a capability that never happened" />
+  <Card title="The vault's verbs are capabilities" href="/docs/improvements/integration-vault-verbs" description="obsidian mid-pass, not only as a vault" />
+  <Card title="Scout reads our own deltas" href="/docs/improvements/integration-scout-self" description="the discovery tool discovers us" />
+</Cards>
+
+## What this pass is not
+
+Not a router, not a model choosing tools, not telemetry for its own sake.
+The registry is data the existing readers read; the suggestion is a section
+the brief already has (the health pointer, the workflow route); the ranking
+is the scout pattern, already proven on external repos. Three mechanisms,
+each one reader of one format — the integration axis applied to the
+integration layer itself.

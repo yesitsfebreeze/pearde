@@ -1,0 +1,25 @@
+---
+title: Obsidian — scored
+description: The vault's axes, worst first
+---
+
+Obsidian score: **45** — the worst tool, and the first to improve. Root
+strength: the board *is* the vault, so backlinks and the graph come free.
+
+| axis | score | what pulls it up | what pulls it down |
+|---|---|---|---|
+| usability | 4 | `pearde vault --open` is one command | the quit → write → launch dance for every register change; Dataview sources break one level off until regenerated; plugins must be re-seeded by hand after a failed pin |
+| integration | 3 | the vault writes only board-shaped files; wikilinks resolve through the board | the register lives in `~/Library/Application Support/obsidian/obsidian.json` — state outside the board, written behind the app's back, the only file doctor reads through passwd resolution |
+| sensibility | 5 | the root-is-`.pearde/` rule is one clean reason, stated once | the vault's settings sit under `resources/board/obsidian/` while its data lives on the board — two homes, one tool |
+| complexity | 4 | the seed is two plugins | the register writer carries the quit-wait-refuse protocol, the passwd fallback and the compat-symlink history; every step is a rule only its author holds |
+| reliability | 4 | doctor's `vault` row reads the register back | an entry written under a running app dies silently on exit; the failure mode (`Unable to find a vault for the URL`) names nothing local |
+| performance | 8 | the vault is read by Obsidian, never by the loop | — |
+
+**Improve in this order:** integration (get the register out of the loop —
+a doctor row that can *repair* the entry, not only read it), usability
+(make `pearde vault` idempotent-safe without `--wait`), complexity (collapse
+the four rules into one register writer with one refusal).
+
+One page each, atomic: [doctor repairs the register](/docs/improvements/obsidian-register-repair) ·
+[vault without --wait](/docs/improvements/obsidian-wait) ·
+[one register writer](/docs/improvements/obsidian-register-writer).

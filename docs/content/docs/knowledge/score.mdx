@@ -1,0 +1,26 @@
+---
+title: Knowledge — scored
+description: Knowledge's axes, worst first
+---
+
+Knowledge score: **64**. Root strength: provenance is enforced, not hoped
+for — a conclusion under two sources is refused, so the KB cannot fill with
+hunches.
+
+| axis | score | what pulls it up | what pulls it down |
+|---|---|---|---|
+| usability | 6 | five verbs, each one call; doctor closes the loop after moves | the verbs write only under the board's wiki — a researcher outside a board has no entry point; `WORKFLOW.md` knobs are read per call but documented only in the reference |
+| integration | 7 | memos wikilink conclusions; scout findings are cited, never copied; the graph maps the repo while relink maps the KB | the vault is gitignored machine-local — one machine's KB is invisible to another without `share` |
+| sensibility | 6 | sources/conclusions/pending split by what a file argues, the cleanest line in the layer | pending is "not a backlog" by decree while its shape is a queue — the rule fights the shape |
+| complexity | 6 | stdlib-only Python, no backend key | graphs/ communities, Dashboard, relink and graphify overlap — four views of one graph, each with its own writer |
+| reliability | 6 | wikilinks that do not resolve are named, not ignored | hand-built wikilinks mean the graph is only as complete as the last `relink`; `doctor` catches it after, not before |
+| performance | 8 | no LLM pass, no backend key | — |
+
+**Improve in this order:** sensibility (retire `pending/` or give it an
+expiry instead of a rule against using it), complexity (one graph writer
+behind both graphify and relink), integration (a `share` path for the KB that
+survives a lane collect).
+
+One page each, atomic: [pending gets an expiry](/docs/improvements/knowledge-pending-expiry) ·
+[one graph writer](/docs/improvements/knowledge-one-graph) ·
+[the KB survives a lane](/docs/improvements/knowledge-share).

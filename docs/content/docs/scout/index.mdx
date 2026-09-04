@@ -1,0 +1,22 @@
+---
+title: Scout
+description: Discovery — what is worth studying, ranking, or wiring in
+---
+
+Scout answers *what is out there and what is worth ours*. Four layers, each
+answering one question:
+
+1. **discover** — `scout.sh sweep|delta|trending`: star snapshots per bucket,
+   diffed against our own history (never the restricted stargazers API).
+2. **ask** — `route.sh <id>` calls one ranking page, findings land in
+   `findings.md` with the axis the winner won on.
+3. **curate** — `reading-list.md` maps what is worth reading to what it
+   teaches a specific tree.
+4. **wire** — the quality gates (`quality.yml`, `deny.toml`, `_typos.toml`,
+   dependabot) that keep a wired tree honest.
+
+Stars are the discovery layer, never the verdict — a 74k-star corpus can beat
+a 243k-star hype repo for improving the product, and `toolscout.sh` reads the
+state column (`ARCHIVED`, days since push, issue load) that hides the dead.
+
+`buckets.txt` is the knob: `name<TAB>query` per line. Scope in @@scout.

@@ -1,0 +1,25 @@
+---
+title: Board — scored
+description: The board's axes, worst first
+---
+
+Board score: **74**. Root strength: the board is files, so every reader —
+scan, guard, doctor, status line, view — resolves it through one primitive
+and the map cannot drift from the tree without doctor naming it.
+
+| axis | score | what pulls it up | what pulls it down |
+|---|---|---|---|
+| usability | 6 | one command per move (`pearde run`, `pearde once`); the progress line names every state change | the state machine is nine states — a newcomer reads three reference pages before the first useful dispatch, and the brief contract is terse by design |
+| integration | 8 | the scan is the one reader of the layout and `plan.dispatchable` is the one gate — claim and scan cannot disagree | board-path resolution is configurable with four rules; every resolver had to learn all four, and three outages came from it |
+| sensibility | 7 | states, order and commits each have one home; the derived-work tripwire closes the loop | the vision file's three keys (vision, terminals, edges) duplicate what `needs:` already says — two orderings to keep honest |
+| complexity | 6 | the layout is flat and one directory deep per PRD | transitions, guard, collect and lanes each carry their own refusal logic; four modules must agree on what a PRD is |
+| reliability | 7 | a conflicted lane is reported, never stranded; collect refuses a shared file it does not hold | collect touches the outer repo's git index — the one place two boards can interleave |
+| performance | 8 | scan parses the board once and caches by mtime | the sweep between passes is bounded but real |
+
+**Improve in this order:** sensibility (fold the vision file's edges into
+`needs:`), complexity (one shared PRD-reading primitive), integration (one
+board-path resolver fewer).
+
+Each is one page, atomic: [the edges fold into needs](/docs/improvements/board-vision-needs) ·
+[one PRD-reading primitive](/docs/improvements/board-prd-primitive) ·
+[one board-path resolver fewer](/docs/improvements/board-path-resolver).

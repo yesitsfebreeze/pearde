@@ -1,0 +1,23 @@
+---
+title: Obsidian
+description: Three improvements, one root cause — state outside the board's files
+---
+
+Obsidian scores 45, the worst on the board. All three improvements attack the
+same defect: the tool's state lives outside the board — in Obsidian's
+register, in fetched plugin bundles — so a broken one reads exactly like a
+working one and only doctor's `vault` row tells the difference.
+
+<Cards>
+  <Card title="Doctor repairs the register entry" href="/docs/improvements/obsidian-register-repair" description="integration — the register is read back but never fixed" />
+  <Card title="pearde vault without --wait" href="/docs/improvements/obsidian-wait" description="usability — the quit-write-launch dance" />
+  <Card title="One register writer" href="/docs/improvements/obsidian-register-writer" description="complexity — four rules, one author" />
+</Cards>
+
+## Why this tool first
+
+Every other tool's failure is visible in the board's own files. Obsidian's is
+not: an entry written under a running app dies on Obsidian's exit, and the
+symptom — `Unable to find a vault for the URL` — names nothing local. Until
+the register is checkable *and* repairable, every vault fix stays a
+superstition.

@@ -1,0 +1,48 @@
+---
+title: One section registry
+description: View — sensibility — seven sections plus all's eighth are held in prose, not in the renderer's contract
+---
+
+**Tool:** view · **Axis:** sensibility (5 → 7) · **Pulls the score up by
+~5 points**
+
+## Why now
+
+The page's shape — seven sections, one visible, the bar in the header, ⌘1–7,
+the fold rules on list/memos/report, the now strip above whichever is open,
+the URL naming it — is stated in the reference and *re-derived* by the
+renderer: every section's show/hide, keyboard and fold state is wired by
+hand, so "the bar is tabs" is true because the code agrees, not because
+anything checks. The fold rule ("three of those fold, every section draws on
+first paint") is the most-read paragraph in the reference and the least
+provably true one in the tree.
+
+## The change
+
+One registry names the sections: id, key, title, the band of the plan it
+reads, `folds:` (yes/no), the URL fragment it answers to. The header bar,
+the keyboard map and the fold summaries render *from* the registry, so a
+ninth section is one row and the fold rule is a field, not a paragraph.
+`viewtest.js` gains one check: every registry row renders, folded or
+hidden, on first paint.
+
+## Done when
+
+- The registry is the only place a section id appears outside its own
+  renderer — `grep -c 'data-view='` over the render tree agrees with the
+  registry's length.
+- Adding a stub row to the registry makes the bar show eight sections with
+  no other edit, and the first-paint check fails until the stub renders.
+- ⌘1–7 and `#view=` routing come from the same table — one mapping, provable
+  by reading it once.
+
+## Fails when
+
+- `all`'s boards section is a *different* registry — it is a different page;
+  forcing one table over both reintroduces the merge `all` deliberately
+  leaves out.
+
+## What stays out
+
+No visual change. The page renders identically; the diff is structure only,
+which is what makes it reviewable in one sitting.

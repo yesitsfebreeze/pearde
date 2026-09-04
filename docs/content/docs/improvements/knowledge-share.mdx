@@ -1,0 +1,48 @@
+---
+title: The KB survives a lane
+description: Knowledge — integration — the wiki is gitignored and machine-local, so a lane's research dies with the lane
+---
+
+**Tool:** knowledge · **Axis:** integration (7 → 8) · **Pulls the score up
+by ~4 points**
+
+## Why now
+
+The KB writes only under `.pearde/wiki/` — gitignored, machine-local. A
+worker running in its own worktree (every worker does) that captures a
+finding or concludes a synthesis writes it into a tree that collect never
+stages: the finding dies with the worktree. `share` regenerates what every
+lane rebuilds — node_modules, the graphify cache, the Obsidian bundles —
+but the KB is not regenerable; it is accumulated judgment, and the one
+directory whose loss is real is the one `share` cannot carry.
+
+## The change
+
+Capture and conclude write through the board's shared directory when they
+run outside the board's own tree — the same rule `collect` uses to move
+board state: the note lands under the git common dir's KB store and is
+symlinked or copied back by the same `share apply` that seeds the regenerable
+dirs. The board's own session (writing in place) is unchanged; only a
+lane-rooted write is re-routed.
+
+## Done when
+
+- A worker in a lane worktree runs `knowledge.py remember <title>` and the
+  note exists in the board's `wiki/sources/` after the lane collects — the
+  check is a collect followed by a board-side `query` that finds it.
+- The same command run on the board itself writes in place, byte-identical
+  to today — no lane, no rerouting.
+- `share apply` after the write finds the note already seeded and does
+  nothing; `share undo` puts the checkout back as it was.
+
+## Fails when
+
+- Two lanes conclude the same question at once — two notes, one slug. The
+  slug collision is resolved the way the board resolves two children with
+  `settings.md`: refuse and name both, never merge by guess.
+
+## What stays out
+
+No un-gitignoring of `wiki/` — machine-local remains true for hand edits and
+the dashboard; only the tool's own writes are re-routed, because a lane
+cannot be trusted to push what git cannot see.

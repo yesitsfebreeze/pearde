@@ -4,6 +4,7 @@ footprint:
   - resources/board/render.py
   - resources/board/view.js
   - resources/board/viewtest.js
+  - .pearde/prds/one-page-that-says-whats-up/probe/verify.sh
 ---
 
 # spec01 — one section registry drives the bar, the sections and the tests
@@ -37,12 +38,18 @@ way `all.py`/`serve.py` build one).
 
 ## Acceptance
 
-- [x] `python3 resources/board/render.py`'s `SECTIONS` list is the only place
-      a section's id is declared for render.py's own markup — `_nav_html()`
-      and `_sections_html()` build the bar and the section wrappers from it,
-      and nothing else in `render.py` spells `"boards"`, `"timeline"`,
-      `"board"`, `"analytics"`, `"asks"`, `"list"`, `"memos"` or `"report"`
-      outside that list.
+- [x] `render.py`'s `SECTIONS` list is the only place a section's id is
+      declared for render.py's own markup — `_nav_html()` and
+      `_sections_html()` build the bar and the section wrappers from it, and
+      with the `SECTIONS` block cut out of the file the only remaining
+      `data-v=`, `data-view=` and `#view=` in it are the two format strings
+      inside those two generators and one line of the registry's own comment.
+      No `<a>` and no `<section>` is typed by hand anywhere. Four section
+      *words* do remain outside the list and none of them declares a section:
+      `p["board"]` (a payload key), `aria-label="boards"` on the board picker,
+      `title="list"` on a mode button, and one `data-go='{"view":"report"}'`
+      door into the report section, which `view.js` removes beside that
+      section on a merged page.
 - [x] `grep -c '<section data-view=' <a rendered page>` equals
       `len(render.SECTIONS)`, and so does the nav bar's `<a href="#view=`
       count — proven in `prds/one-section-registry/probe/verify.sh`, §1.
@@ -68,14 +75,40 @@ way `all.py`/`serve.py` build one).
 - [x] `node resources/board/viewtest.js --example` passes with no change in
       count from before this PRD's build (49/49, matching the pre-edit
       baseline taken on this same tree before any file here was touched).
+- [x] `prds/one-page-that-says-whats-up/probe/verify.sh` is back at its
+      pre-edit count. Four of its checks greped the hand-typed markup out of
+      `render.py`'s **source** — the anchor count, the anchor/section id sets,
+      the toolbar's place inside the timeline section, and the count of
+      folding archives — which the generator removes from that source. Each is
+      re-aimed at the page `render.py` writes (`TEMPLATE` with `_nav_html()`
+      and `_sections_html()` substituted), asserting the same rule one level
+      later, and each still fails on the mutation it exists to catch: a fourth
+      `folds: True` row, a hand-written `<a href="#view=ghost">` put back into
+      `TEMPLATE`, and `#tcontrols` moved out of the timeline section.
 
 ## Verify and Proof
 
 ```sh
-bash prds/one-section-registry/probe/verify.sh
-# with a playwright-core driver reachable (NODE_PATH=<dir with playwright-core>):
-#   10/10 passed, 0 skipped
-# without one, the three viewtest-dependent checks report `skip`, not `FAIL`,
-# and the remaining 7 (the registry/render checks that need no browser) still
-# have to pass.
+# the tree under test: the lane its worker built in when one is named, the
+# code repo otherwise — and the board beside it, which is where the harnesses
+# live. Both resolve from either root, so this block runs the same way by hand
+# and under `collect`.
+ROOT="${PEARDE_ROOT:-$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")}"
+if [ -d "$ROOT/.pearde/prds" ]; then BOARD="$ROOT/.pearde"; else BOARD="$(cd "$ROOT/../.." && pwd)"; fi
+
+# this unit's own harness. With a playwright-core driver on NODE_PATH it
+# prints `10/10 passed, 0 skipped`; without one the three viewtest-dependent
+# checks report `skip`, not `FAIL`, and the remaining seven — the registry and
+# render checks, which need no browser — still have to pass. Its own last line
+# is `[ "$fail" -eq 0 ]`, so its exit is the assertion and no total is nailed
+# down here.
+PEARDE_ROOT="$ROOT" bash "$BOARD/prds/one-section-registry/probe/verify.sh"
+
+# the harness this spec re-aims, back at its own pre-edit count: the four
+# source-greps that the generator obsoleted now read the generated page. Its
+# other failures are inherited (a lane carries no `.pearde/report.md`), so
+# this gates on the four names, not on the harness's total.
+out="$(PEARDE_ROOT="$ROOT" bash "$BOARD/prds/one-page-that-says-whats-up/probe/verify.sh" 2>&1 || true)"
+printf '%s\n' "$out" | tail -1
+if printf '%s\n' "$out" | grep -E '^FAIL: (the plan toolbar is inside|the bar is seven anchors|every anchor has the view|the three archives fold)'; then exit 1; fi
 ```

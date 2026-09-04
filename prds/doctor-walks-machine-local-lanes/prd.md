@@ -6,6 +6,7 @@ complexity: 12
 blast-radius: low
 workflow: probe-then-spec
 actual: 0.18h
+commit: 776a105 e47eefd
 ---
 
 # doctor-walks-machine-local-lanes

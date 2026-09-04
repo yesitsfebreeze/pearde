@@ -1612,6 +1612,18 @@ def baseline(board, rel):
             "gate_lines": set(gate.splitlines()[1:]) if m else set()}
 
 
+def close_claims(board, rel):
+    """Remove this PRD's claim dir — called once a collect has closed it
+    out of `claimed` into a terminal (`done`, `failed`, `blocked`) and any
+    commit that transition writes has landed. The baseline has done its
+    whole job by then: nothing reads a closed PRD's baseline, and a PRD
+    that comes back (`retry`, `unblock`, a re-claim after `release`)
+    snapshots anew. `sweep` and `release` never call this — they leave the
+    dir, so a re-claim after those still finds no stale baseline lying
+    about what was dirty."""
+    shutil.rmtree(claims_dir(board, rel), ignore_errors=True)
+
+
 def owe(board, path):
     """List a board-repo path the tool wrote after the commit it belongs to
     — it rides the next collect."""
@@ -2164,6 +2176,7 @@ def block_conflict(board, rel, prd, pmd, conflict, opts, now, out=print):
     editlib.del_key(pmd, "claim")
     editlib.set_key(pmd, "state", "blocked")
     transition_row(board, rel, prd["state"], "blocked", now)
+    close_claims(board, rel)
     # the exception's own words on the line, so the run still prints what
     # git said and not a second paraphrase of it
     out(progress_line(board, rel, prd["state"], "blocked", opts["as"],
@@ -2303,6 +2316,7 @@ def collect_one(board, rel, opts, out=print):
                     editlib.del_key(pmd, "claim")
                     editlib.set_key(pmd, "state", "failed")
                     transition_row(board, rel, prd["state"], "failed", now)
+                    close_claims(board, rel)
                     out(progress_line(board, rel, prd["state"], "failed",
                                       opts["as"], "pass file owed"))
                     return 1
@@ -2485,6 +2499,7 @@ def collect_one(board, rel, opts, out=print):
 
     # 8 — the line, the row
     transition_row(board, rel, prd["state"], "done", now)
+    close_claims(board, rel)
     extra = " · ".join(x for x in [
         "trusted" if trusted else "", "gate red, known" if known else "",
         f"commit {' '.join(shas)}", *said, put, posted,
@@ -2618,6 +2633,7 @@ def close_container(board, rel, prd, prds, board_root, opts, now, out=print):
                        f"record put back, nothing written: {e}")
         settle_shared(board_root, [pmd_rel])
     transition_row(board, rel, prd["state"], "done", now)
+    close_claims(board, rel)
     extra = " · ".join([f"container, {len(kids)} children",
                         f"commit {sha}", f"record {own}", posted,
                         "pass file owed"])

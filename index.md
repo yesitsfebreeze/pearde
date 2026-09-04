@@ -52,6 +52,7 @@ explains the rest.
 | `@@personas` | who works the **session**, and how one is chosen or made — the roster is @references/personas/INDEX.md, and a persona file is read only when it is worn | @references/parts/personas.md · @references/personas/INDEX.md · @references/parts/progress.md |
 | `@@consult` | putting one problem to one persona, mid-pass | @references/parts/consult.md · @references/parts/workers.md · @resources/board/brief.py · @references/personas/INDEX.md |
 | `@@derived` | work the board found, and its tripwire | @references/parts/derived.md · @references/parts/order.md · @references/templates/prd.md |
+| `@@docs` | the documentation website — the app, its content and its build config | @docs/app/ · @docs/components/ · @docs/lib/ · @docs/content/ · @docs/package.json · @docs/next.config.mjs · @docs/postcss.config.mjs · @docs/tsconfig.json · @docs/.gitignore |
 | `@@commits` | one PRD, one commit, on the transition that lands it | @references/parts/commits.md · @references/parts/states.md · @resources/board/orphans.py |
 | `@@docs` | the documentation website — the app, its content and its build config | @docs/app/ · @docs/components/ · @docs/lib/ · @docs/content/ · @docs/package.json · @docs/next.config.mjs · @docs/postcss.config.mjs · @docs/tsconfig.json · @docs/.gitignore |
 | `@@memos` | recording a decision and checking it | @references/skills/pearde-memo.md · @references/memo.md · @references/parts/memos.md · @references/templates/memo.md · @resources/memos.py · @resources/board/collect.py |

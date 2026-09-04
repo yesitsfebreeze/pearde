@@ -36,6 +36,7 @@
     "health-html-ranking",
     "health-pointer-verdict",
     "workflows-runs-check",
-    "workflows-promotion"
+    "workflows-promotion",
+    "lifecycle-contract"
   ]
 }

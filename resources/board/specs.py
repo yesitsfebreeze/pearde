@@ -855,6 +855,14 @@ def draft_route(board, slug, report, subject, date):
         for p in written:
             os.remove(p)
         raise Refused(str(e))
+    # check AFTER writing: `report_workflow_counts` reads the reports on disk,
+    # and this route's own `## Workflow <slug>` section is in the report that
+    # triggered it. A check before the write compares a zero counter against
+    # one section that already exists, and refuses every first route — measured
+    # 2026-09-03 on `endpoint-tag-follows-store-base`, the first route this
+    # board ever drafted.
+    if wflib.get(board, slug, "workflow").get("kind") == "workflow":
+        wflib.set_runs(board, slug, 1)
     bad = wflib.check(board)
     if bad:
         for p in written:

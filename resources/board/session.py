@@ -320,6 +320,7 @@ def create(board, repo, ident):
         laneslib.git(d, "sparse-checkout", "set", "--no-cone",
                      "/*", "!/" + rel, check=False)
     laneslib.git(d, "checkout")
+    laneslib.link_board(board, repo, d)
     return d
 
 

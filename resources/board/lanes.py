@@ -162,8 +162,33 @@ def create(board, repo, slug, base=None):
         git(d, "sparse-checkout", "set", "--no-cone", "/*", "!/" + rel,
             check=False)
     git(d, "checkout")
+    link_board(board, repo, d)
     link_shared(d)
     return d
+
+
+def link_board(board, repo, tree):
+    """Point the tree's excluded board path at the one real board.
+
+    `create` and `session.take` both sparse-check the board OUT of their
+    worktree, so a spec whose verify block runs `.pearde/prds/<prd>/probe/…`
+    exits 127 there and the collect refuses on a probe that is fine. One
+    symlink back is what a tree needs to run the board's own scripts.
+    Advisory like `link_shared`: a tree that cannot be linked still works
+    for everything that does not read the board."""
+    rel = board_rel(board, repo)
+    if not rel:
+        return None
+    dst = os.path.join(tree, rel)
+    if os.path.lexists(dst):
+        return dst
+    try:
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        os.symlink(os.path.relpath(os.path.abspath(board),
+                                   os.path.dirname(os.path.abspath(dst))), dst)
+    except OSError:
+        return None
+    return dst
 
 
 def link_shared(tree):

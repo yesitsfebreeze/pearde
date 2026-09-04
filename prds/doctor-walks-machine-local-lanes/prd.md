@@ -1,9 +1,10 @@
 ---
-state: open
+state: specced
 origin: requested
 priority: 0
-complexity: 0
-blast-radius:
+complexity: 12
+blast-radius: low
+workflow: probe-then-spec
 ---
 
 # doctor-walks-machine-local-lanes

@@ -36,17 +36,17 @@ What is left is only running the block below on the merged tree.
 
 ## Acceptance
 
-- [ ] `scout.sh` with no argument prints one row per verb (`sweep`, `delta
+- [x] `scout.sh` with no argument prints one row per verb (`sweep`, `delta
   [days]`, `trending`, `tool <query>`, `find`, `reading`, `quality`), and
   exits 0.
-- [ ] `resources/scout/check.sh` exits 0 — the no-argument table and
+- [x] `resources/scout/check.sh` exits 0 — the no-argument table and
   README.md's Commands table agree, row for row.
-- [ ] `toolscout.sh` and `scout.sh tool` produce byte-identical stdout,
+- [x] `toolscout.sh` and `scout.sh tool` produce byte-identical stdout,
   stderr and exit code for the same arguments.
-- [ ] `scout.sh delta` on a window wide enough to produce more than 40
+- [x] `scout.sh delta` on a window wide enough to produce more than 40
   changed rows still exits 0 and its last line names the snapshots it
   diffed.
-- [ ] `scout.sh reading`'s last line names `reading-list.md`; `scout.sh
+- [x] `scout.sh reading`'s last line names `reading-list.md`; `scout.sh
   quality`'s last line names `templates/`.
 
 ## Verify and Proof

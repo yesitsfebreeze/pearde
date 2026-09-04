@@ -781,6 +781,54 @@ if [ -n "${BOARD:-}" ]; then
   fi
 fi
 
+# ── lanes: every machine-local worktree can still find the board ────────────
+# `.lanes/<slug>` is cut with the board's own path excluded from its
+# checkout and a symlink put back in its place (`resources/board/lanes.py`
+# `link_board`) — without it a worker's `.pearde/prds/…` (or whatever this
+# board is called) is `No such file or directory`. A lane cut before that
+# symlink existed, or cut while the claiming process's own repo was a
+# session worktree NESTED inside the board (`board_rel` cannot spell that
+# direction, so the link is silently never made), keeps the exclusion and
+# loses the link — nothing before this row said so; a worker only finds out
+# when a probe it wrote exits 127 inside its own lane.
+if [ -n "${BOARD:-}" ] && [ -d "$BOARD/.lanes" ]; then
+  LPROB=$(python3 -c "
+import sys; sys.path.insert(0, '$DIR/board')
+import lanes
+for p in lanes.check('$BOARD'):
+    print(p)
+" 2>&1)
+  LRC=$?
+  LN=$(echo "$LPROB" | grep -c ': no link to the board')
+  if [ "$LRC" != 0 ]; then
+    row lanes broken "lanes.check could not read $BOARD/.lanes: $(echo "$LPROB" | tail -1)"
+    fix "python3 -c \"import sys; sys.path.insert(0, '$DIR/board'); import lanes; print(lanes.check('$BOARD'))\" — the traceback is the whole story"
+  elif [ "$LN" = 0 ]; then
+    row lanes ok "$(lanes_count=$(find "$BOARD/.lanes" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' '); echo "$lanes_count lane$([ "$lanes_count" = 1 ] || echo s), every one finds the board")"
+  else
+    row lanes broken "$LN of $(find "$BOARD/.lanes" -mindepth 1 -maxdepth 1 -type d | wc -l | tr -d ' ') lane(s) cannot find the board"
+    echo "$LPROB" | while IFS= read -r l; do
+      [ -n "$l" ] && printf '  %-11s %-7s %s\n' "" "" "$l"
+    done
+    if [ "$FIX" = 1 ]; then
+      RELINKED=$(python3 -c "
+import sys; sys.path.insert(0, '$DIR/board')
+import lanes
+board = '$BOARD'
+for p in lanes.check(board):
+    slug = p.split(':', 1)[0]
+    dst = lanes.relink(board, slug)
+    print(f'{slug}: {\"relinked\" if dst else \"refused — something else is already there\"}')
+" 2>&1)
+      echo "$RELINKED" | while IFS= read -r l; do
+        [ -n "$l" ] && did "$l"
+      done
+    else
+      fix "pearde doctor --fix — symlinks the board back in wherever nothing else already answers that name; a lane where something does is named, never overwritten"
+    fi
+  fi
+fi
+
 # ── knowledge: the research layer, whole in one folder ───────────────────────
 # <board>/wiki/ is not a PRD folder and holds no state — the scan walks past
 # it like memos/. What can be wrong is the layer itself: frontmatter the tools

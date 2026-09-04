@@ -386,3 +386,61 @@ def list_lanes(board):
         return []
     return sorted(x for x in os.listdir(d)
                   if os.path.isdir(os.path.join(d, x)))
+
+
+def _finds_board(entry, board):
+    """`entry` (a direct child of a lane) resolves to the live board."""
+    try:
+        return os.path.realpath(entry) == os.path.realpath(board)
+    except OSError:
+        return False
+
+
+def check(board):
+    """One line per lane, on this machine, that cannot reach the live
+    board — `doctor`'s row. `create` sparse-checks the board's own path
+    out of every lane and symlinks it back in (see `link_board`, where
+    that exists); a lane cut before that symlink was added, or cut while
+    the caller's own `repo` was a session worktree NESTED inside the
+    board (`board_rel` answers None there — the board is the session
+    tree's ancestor, not the other way round — so the link is silently
+    never made), keeps the exclusion and loses the link. Either way the
+    lane's own `.pearde/prds/…` (or whatever this board is called) is
+    `No such file or directory`, and nothing before this said so — a
+    worker finds out only when a probe it wrote exits 127 inside it.
+
+    Scans the lane's own top level only: every board this repo has ever
+    named sits directly under a repo root, and a board nested deeper is
+    outside what this check can tell apart from an ordinary subdirectory.
+    """
+    problems = []
+    for slug in list_lanes(board):
+        d = lane_dir(board, slug)
+        if not os.path.exists(os.path.join(d, ".git")):
+            continue                                   # not a worktree
+        try:
+            names = os.listdir(d)
+        except OSError:
+            continue
+        if not any(_finds_board(os.path.join(d, n), board) for n in names):
+            problems.append(f"{slug}: no link to the board")
+    return problems
+
+
+def relink(board, slug):
+    """The repair `doctor --fix` runs for one `check` line: a plain
+    symlink to the board, named after it, at the lane's root — where
+    `link_board` puts it for the ordinary (board sits at the repo root)
+    case. Refuses rather than overwrites when something already answers
+    that name and it is not this link; returns the path made, or None."""
+    d = lane_dir(board, slug)
+    if not os.path.exists(os.path.join(d, ".git")):
+        return None
+    dst = os.path.join(d, os.path.basename(os.path.abspath(board)))
+    if os.path.lexists(dst):
+        return dst if _finds_board(dst, board) else None
+    try:
+        os.symlink(os.path.relpath(os.path.abspath(board), d), dst)
+    except OSError:
+        return None
+    return dst

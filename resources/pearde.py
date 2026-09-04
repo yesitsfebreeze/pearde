@@ -126,7 +126,7 @@ RESERVED = {}
 # Ported: a name here execs into `jd <name> …` when `jd` is on PATH — the
 # Go binary built from ~/dev/harness — unless `--no-shim` is on the line.
 # Empty until a verb is ported; a name lands here the day its parity holds.
-PORTED = set()
+PORTED = {"guard", "kern"}
 
 WIDTH = 80
 

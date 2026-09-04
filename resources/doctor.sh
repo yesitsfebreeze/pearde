@@ -6,6 +6,10 @@
 #   doctor.sh --harnesses [board]
 #                             also run the board's own verify.sh harnesses,
 #                             whatever `harnesses:` in settings.md says
+#   doctor.sh --skills-probe [board]
+#                             run the skill fire check: each skill's
+#                             `fires-on:` line through the same surface an
+#                             agent reads skills from, report fired/declined
 #
 # One part per line: `ok`, `off` (installed nowhere, nothing to repair), or
 # `broken` (installed and not working — the failure that otherwise runs
@@ -50,10 +54,12 @@ res() {
 
 FIX=0
 HFLAG=0
+SFLAG=0
 while [ $# -gt 0 ]; do
   case "${1:-}" in
     --fix)       FIX=1;   shift ;;
     --harnesses) HFLAG=1; shift ;;
+    --skills-probe) SFLAG=1; shift ;;
     *) break ;;
   esac
 done
@@ -1118,6 +1124,33 @@ EOF
     note "$(jd version 2>/dev/null | head -1)"
   else
     note "jd off · not on PATH — the PORTED verbs run their Python"
+  fi
+
+  # ── skills-probe: does each skill's description actually fire for its moment? ──
+  # Doctor checks that frontmatter parses and the name agrees with the file;
+  # it cannot check the description, because "would this fire?" has no oracle.
+  # This is that oracle, and it is opt-in: a model call per skill, so it is
+  # not part of the default report — `--skills-probe`, the way `--harnesses`
+  # is. The corpus lives in the skills themselves (`fires-on:`), so a skill
+  # move carries its probe and every file finds its siblings by one rule.
+  if [ "$SFLAG" = 0 ]; then
+    row skills-probe off "not run — opt in: bash $DIR/doctor.sh --skills-probe $START"
+  else
+    # The probe travels with its PRD, under `probe/`, so find it by walking
+    # the board rather than naming the PRD — doctor knows no PRD by name.
+    SPP=$(find "$BOARD" -path "*/probe/skills-probe.py" -type f 2>/dev/null | head -1)
+    if [ -z "$SPP" ]; then
+      row skills-probe broken "no skills-probe.py under $BOARD — the fire check has not been built"
+      fix "build it: python3 resources/knowledge.py query \"the fire check\""
+    else
+      SP=$(python3 "$SPP" "$SKILL_ROOT" 2>&1); SPRC=$?
+      if [ "$SPRC" = 0 ]; then
+        row skills-probe ok "$(printf '%s\n' "$SP" | tail -1)"
+      else
+        row skills-probe broken "$(printf '%s\n' "$SP" | tail -1)"
+      fi
+      printf '%s\n' "$SP" | while IFS= read -r l; do [ -n "$l" ] && note "$l"; done
+    fi
   fi
 fi
 

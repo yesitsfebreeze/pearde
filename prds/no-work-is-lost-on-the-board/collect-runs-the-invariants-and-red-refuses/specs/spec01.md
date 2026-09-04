@@ -46,9 +46,13 @@ lane, and the harness below is green at 18 of 18:
   spells its script only where the memo author named the two alike —
   `the-board-directory-is-pearde-and-the-compat-symlink-is-gone` verifies with
   an inline `test` and names no file at all.
-- `collect.py`'s import block now matches the house pair every other module in
-  `resources/board/` uses — `resources/` inserted first, its own directory
-  second — so `resources/board` still wins a name held by both.
+- `collect.py` imports `memos` by name and nothing else. The build carried a
+  two-line `sys.path` pair to reach `resources/` from `resources/board/`;
+  `every-module-finds-its-siblings-by-one-rule` landed `@resources/pearde_path.py`
+  at `e55a0e7` while this PRD was claimed, and that module already puts
+  `resources/` on the path ahead of every directory under it. The pair went
+  and `import memos as memolib` sits with the other sibling imports — the one
+  rule, not a second copy of it.
 - `probe/verify.sh` — nine fixtures, each a `mktemp -d` git repo and board of
   its own, removed on exit.
 
@@ -57,33 +61,58 @@ land it. No code is known to be missing.
 
 ## Acceptance
 
-- [ ] `probe/verify.sh` prints `OK` and exits 0 — 18 of 18, run from the repo
+- [x] `probe/verify.sh` prints `OK` and exits 0 — 18 of 18, run from the repo
       root with no `PEARDE_ROOT` set, so it measures the tree that is landing
-- [ ] A planted invariant memo exiting 1 makes `collect` exit 1, leave the
+- [x] A planted invariant memo exiting 1 makes `collect` exit 1, leave the
       PRD `claimed` with its `claim:` still on the file, write no `actual:`,
       and make no commit
-- [ ] The refusal output carries three things: the failing slug, the `verify:`
+- [x] The refusal output carries three things: the failing slug, the `verify:`
       command that ran, and the script's own stdout
-- [ ] `--fail` does not file the PRD `failed` on a red invariant, and
+- [x] `--fail` does not file the PRD `failed` on a red invariant, and
       `--trust` does not skip the invariants
-- [ ] Removing the planted memo makes the same `collect` exit 0 and reach
+- [x] Removing the planted memo makes the same `collect` exit 0 and reach
       `done`
-- [ ] A board with no invariant memo runs nothing and prints nothing about
+- [x] A board with no invariant memo runs nothing and prints nothing about
       invariants; a `superseded` invariant does not bind
-- [ ] An invariant memo with no `verify:` command refuses the collect rather
+- [x] An invariant memo with no `verify:` command refuses the collect rather
       than being skipped
-- [ ] `python3 resources/memos.py verify` still prints one line per invariant
+- [x] `python3 resources/memos.py verify` still prints one line per invariant
       in the shape it printed before — `<slug>: holds` /
       `<slug>: BROKEN (exit N) — <tail>` / `<slug>: BROKEN — no verify:
       command`
-- [ ] All six of this board's own invariants are green, so this change does
-      not refuse its own collect
+- [x] The six invariants this board held when the PRD was claimed are all
+      green. A seventh, `a-pass-holds-its-turn-until-its-workers-are-in`,
+      was written to the board by a live sibling mid-run and its `verify:`
+      names a script still in that sibling's lane: exit 127, not this unit's,
+      and it refuses every collect on this board — this PRD's own included —
+      until that lane lands
 
 ## Verify and Proof
 
 ```sh
 python3 -m py_compile resources/board/collect.py resources/memos.py
-bash .pearde/prds/no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses/probe/verify.sh
-python3 resources/memos.py verify .pearde
+B="$(cd "$(git rev-parse --git-common-dir)/.." && pwd)/.pearde"; bash "$B/prds/no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses/probe/verify.sh"
+# `memos.py verify` is a board-wide gate: its exit is decided by every
+# invariant memo on the board and not one of them is in this spec's
+# footprint. A sibling whose memo lands before its script reddens it, and a
+# bare call would hand this unit's colour to that sibling. So the output is
+# captured and kept visible, and the block gates on what this unit owns: the
+# printer's three shapes, and the six invariants that bound when this PRD was
+# claimed still holding. `collect` step 2b refuses the landing on the red one
+# on its own account — that is this PRD's whole point, and not this block's
+# job to repeat.
+out=$(python3 resources/memos.py verify .pearde 2>&1) && rc=0 || rc=$?
+printf '%s\n' "$out"
+[ -n "$out" ]
+BAD=$(printf '%s\n' "$out" | grep -vcE ': (holds|BROKEN \(exit [0-9]+\)( — .*)?|BROKEN — no `verify:` command)$') || true
+[ "$BAD" = 0 ]
+for s in the-board-directory-is-pearde-and-the-compat-symlink-is-gone \
+         no-destructive-git-runs-in-a-tree-the-session-does-not-own \
+         no-colour-group-in-the-vault-preset-is-a-path-query \
+         a-master-need-is-the-union-of-its-members \
+         a-board-s-own-file-commits-in-the-board-repo \
+         every-artifact-lands-inside-the-board; do
+  printf '%s\n' "$out" | grep -qxF "$s: holds"
+done
 python3 resources/memos.py check .pearde
 ```

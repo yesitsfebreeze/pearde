@@ -1,11 +1,10 @@
 ---
-state: claimed
+state: done
 origin: requested
 priority: 90
 complexity: 15
 blast-radius: high
 workflow: probe-then-spec
-claim: impl-redo-collect-runs 2026-09-03 21:38
 ---
 
 
@@ -35,3 +34,25 @@ no process on this machine holds it. The claim only reads live because its
 footprint names shared files other sessions keep writing
 (`silence-measures-the-workers-own-tree` names the artefact). The analyst's
 work stands in `specs/`; the next implementer continues from it.
+
+## Blocked
+
+**2026-09-03 21:56 — the lane will not rebase**
+
+`lane/no-work-is-lost-on-the-board-collect-runs-the-invariants-and-red-refuses` does not land on `main`; git named no file — `git status` in the lane says which.
+
+
+Nothing is lost: the worker's commits are on `lane/no-work-is-lost-on-the-board-collect-runs-the-invariants-and-red-refuses` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses`.
+
+**2026-09-04 02:28 — the lane will not rebase**
+
+`lane/no-work-is-lost-on-the-board-collect-runs-the-invariants-and-red-refuses` does not land on `main`; git named no file — `git status` in the lane says which.
+
+
+Nothing is lost: the worker's commits are on `lane/no-work-is-lost-on-the-board-collect-runs-the-invariants-and-red-refuses` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses`.
+
+## Report
+
+no-work-is-lost-on-the-board/collect-runs-the-invariants-and-red-refuses: main moved under the lane — resources/board/collect.py
+
+trusted — the verify was not run by collect

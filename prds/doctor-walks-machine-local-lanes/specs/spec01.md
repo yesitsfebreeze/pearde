@@ -44,21 +44,31 @@ fixture, in this lane's checkout:
 
 ## Acceptance
 
-- [ ] `lanes.check(board)` returns one line per lane whose top level holds
+- [x] `lanes.check(board)` returns one line per lane whose top level holds
       no path that resolves to `board`, and returns `[]` when every lane
-      does
-- [ ] `lanes.relink(board, slug)` places a working symlink to `board`
-      named after it at the lane's root and returns that path
-- [ ] `lanes.relink(board, slug)` returns `None` and leaves the tree
+      does — probe 1: `ok: check flags x and y, leaves z alone`,
+      `ok: check(board) now names only y`
+- [x] `lanes.relink(board, slug)` places a working symlink to `board`
+      named after it at the lane's root and returns that path — probe 1:
+      `ok: relink(x) makes a working link`
+- [x] `lanes.relink(board, slug)` returns `None` and leaves the tree
       unchanged when a non-matching file or directory already occupies
-      that name
-- [ ] `bash resources/doctor.sh <board>` prints a `lanes` row: `ok` with
+      that name — probe 1: `ok: relink(y) refuses rather than overwrite
+      real content`
+- [x] `bash resources/doctor.sh <board>` prints a `lanes` row: `ok` with
       the lane count when `check` returns `[]`, else `broken` with one
-      line per name `check` returned
-- [ ] `bash resources/doctor.sh --fix <board>` calls `relink` for every
+      line per name `check` returned — probe 2: `ok: doctor reports 2 of 2
+      lanes broken`, `ok: with nothing in the way, the row goes ok with
+      the lane count`; live board: `lanes  broken  6 of 45 lane(s) cannot
+      find the board`
+- [x] `bash resources/doctor.sh --fix <board>` calls `relink` for every
       name the `lanes` row found broken and prints `relinked` or `refused
       — something else is already there` for each, then a re-run of
-      `doctor.sh` (no `--fix`) shows only the refused ones still broken
+      `doctor.sh` (no `--fix`) shows only the refused ones still broken —
+      probe 2: `ok: --fix relinks x, refuses on y`, `ok: doctor now
+      reports 1 of 2 — x fixed, y still named`
+- [x] the row never reports `ok` when `lanes.check` itself could not run —
+      probe 3: `ok: an unreadable .lanes reports broken, not ok`
 
 ## Verify and Proof
 

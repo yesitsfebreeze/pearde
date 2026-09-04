@@ -5,7 +5,7 @@ priority: 45
 complexity: 18
 blast-radius: mid
 workflow: probe-then-spec
-commit: 6fb70b0 d302062
+commit: 50269f4
 ---
 
 # One section registry

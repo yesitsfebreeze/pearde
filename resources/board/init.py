@@ -1221,11 +1221,11 @@ def wait_for_quit():
     path: the flagless run and `--wait` both call this the moment Obsidian is
     found running, so the flag no longer decides whether the command waits
     — only `--wait` asked for it in words, the flagless run finds out from
-    `obsidian_running()` instead."""
+    `obsreg.running()` instead."""
     print("vault: waiting for Obsidian to quit — the register is only "
           "writable while it is closed. Quit it now (⌘Q)…", flush=True)
     for _ in range(WAIT_TICKS):
-        if not obsidian_running():
+        if not obsreg.running():
             break
         time.sleep(WAIT_TICK)
     else:
@@ -1292,15 +1292,15 @@ def cmd_vault(argv):
         if copied:
             print(f"vault: put {', '.join(copied)} into {d}/.obsidian — "
                   "Obsidian loads a plugin on the next open of the vault")
-    if obsidian_running():
+    if obsreg.running():
         acquire_vault_lock()
         try:
             wait_for_quit()
-            state, vid = register_vault(d, retire=board)
+            state, vid = obsreg.write(d, retire=board)
         finally:
             release_vault_lock()
     else:
-        state, vid = register_vault(d, retire=board)
+        state, vid = obsreg.write(d, retire=board)
     if state is None:
         print("vault: Obsidian has no config on this machine — nothing to "
               "register. The vault directory is there for when it does")

@@ -31,6 +31,22 @@ The memory corner is the ecosystem's biggest star pool and the one to refuse —
 installing one rebuilds outside the board, worse, what
 `resources/knowledge.py` does natively.
 
+## kern is not one of them
+
+kern (`~/dev/zirkle/kern`) is a local memory daemon, not a plugin: one
+knowledge graph per directory, on this machine, reached through the `kern` CLI
+and its MCP tools. The board calls it through @resources/kern.py, wired by
+`pearde guard on` — recall before a turn, capture after it. Two memories, one
+split and no overlap: the knowledge layer holds what the board *researched*,
+with provenance and a conclusion per question; kern holds what the sessions
+*said*, distilled into claims nobody wrote down. A rejected plugin would have
+rebuilt the first. kern is the second, which the board never had.
+
+`.mcp.json` at the repo root registers `kern mcp`, so the same operations the
+hooks call are offered to the session as tools — recall and ingest mid-pass,
+where the hooks only bracket the turn. Nothing to install: the server is the
+`kern` binary, and a machine without it registers a server that never starts.
+
 ## The list is Claude-adapter data
 
 Plugins are Claude-Code-only: `resources/board/adapters/claude.json` carries

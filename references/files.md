@@ -118,6 +118,8 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/update.sh | check every install on this machine and re-link the set — local, global, and the global that is not in force |
 | @resources/doctor.sh | install check + repair |
 | @resources/guard.py | the PreToolUse/PostToolUse hook that enforces the loop |
+| @.mcp.json | the MCP servers a session in this repo gets — `kern mcp`, the memory @resources/kern.py brackets each turn with, offered as tools mid-pass |
+| @resources/kern.py | session memory — `recall` before a turn, `capture` after it, `drain` so the spool becomes memory; the hooks @resources/guard.py `on` writes, fail-open where no `kern` is on PATH |
 | @resources/board/quiet.py | `quiet check` — an idle poll (`echo`/`sleep`/`true` to pass time) and a `cat` of a whole file over 8 KB denied before they run, each naming the cheaper spelling; stdlib only, never raises, called by @resources/guard.py on every Bash tool call |
 | @resources/statusline.sh | continuous progress numbers |
 | @resources/memos.py | read + check memos — the only reader of that format |

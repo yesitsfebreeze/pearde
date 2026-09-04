@@ -933,6 +933,7 @@ def check():
 # itself kept. A file that is not JSON is refused untouched.
 SELF = os.path.realpath(__file__)
 SERVE = pearde_path.script("serve.py") or ""
+KERN = pearde_path.script("kern.py") or ""
 THINK = "8000"
 # (event, matcher, command, the pattern that recognises an entry as ours
 #  however its path is spelled). `SessionStart` carries no matcher: the
@@ -946,7 +947,20 @@ HOOKS = (("PreToolUse", "Bash|Read", f"python3 {SELF} pre", r"guard\.py\s+pre\b"
          ("PostToolUse", "Edit|Write", f"python3 {SELF} post", r"guard\.py\s+post\b"),
          ("SessionStart", None,
           f"python3 {SERVE} ensure >/dev/null 2>&1 || true",
-          r"serve\.py\s+ensure\b"))
+          r"serve\.py\s+ensure\b"),
+         # memory — @resources/kern.py. Recall runs before the turn and its
+         # stdout enters the context; capture and drain say nothing. All three
+         # are fail-open in the script and `|| true` here as well, because a
+         # tree with no kern must cost the session nothing.
+         ("SessionStart", None,
+          f"python3 {KERN} drain >/dev/null 2>&1 || true",
+          r"kern\.py\s+drain\b"),
+         ("UserPromptSubmit", None,
+          f"python3 {KERN} recall 2>/dev/null || true",
+          r"kern\.py\s+recall\b"),
+         ("Stop", None,
+          f"python3 {KERN} capture >/dev/null 2>&1 || true",
+          r"kern\.py\s+capture\b"))
 ROW = "  %-11s %-7s %s"          # doctor.sh's row(), byte for byte
 
 

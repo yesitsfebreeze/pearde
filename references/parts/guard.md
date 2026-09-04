@@ -117,9 +117,9 @@ zero — a broken guard must never be able to block a tool call.
 `pearde guard on [<repo>]` — `<repo>` is the repo the board lives in, by
 default the one above the working directory. It reads
 `<repo>/.claude/settings.json`, creating it when absent, and adds only what
-is missing: `env.MAX_THINKING_TOKENS` when unset, and the four hook entries
+is missing: `env.MAX_THINKING_TOKENS` when unset, and the seven hook entries
 below — three naming this skill's absolute `resources/guard.py`, one naming
-its `resources/board/serve.py`. Every other key stays, in its order; an entry
+its `resources/board/serve.py`, three naming its `resources/kern.py`. Every other key stays, in its order; an entry
 already present is skipped, a second `on` says
 `already wired, nothing changed` and writes nothing, and a non-JSON file is
 refused untouched. It prints the file and each line it added, then the one
@@ -152,6 +152,17 @@ What `on` writes, `<pearde>` being this repo's absolute path:
     "SessionStart": [{
       "hooks": [{ "type": "command",
                   "command": "python3 <pearde>/resources/board/serve.py ensure >/dev/null 2>&1 || true" }]
+    }, {
+      "hooks": [{ "type": "command",
+                  "command": "python3 <pearde>/resources/kern.py drain >/dev/null 2>&1 || true" }]
+    }],
+    "UserPromptSubmit": [{
+      "hooks": [{ "type": "command",
+                  "command": "python3 <pearde>/resources/kern.py recall 2>/dev/null || true" }]
+    }],
+    "Stop": [{
+      "hooks": [{ "type": "command",
+                  "command": "python3 <pearde>/resources/kern.py capture >/dev/null 2>&1 || true" }]
     }]
   }
 }
@@ -172,7 +183,27 @@ cold. Three details are load-bearing.
 
 `doctor`'s `guard` row notes the entry when absent: `no SessionStart
 hook — the view is not brought up on a session start; pearde guard on writes
-it`. `pearde guard off` removes it with the other three.
+it`. `pearde guard off` removes it with the others.
+
+**The three `kern` entries are the session's memory.** @resources/kern.py
+wraps the `kern` CLI: `recall` runs before the turn and prints what this
+project already recorded about the prompt, so it enters the context; `capture`
+runs after it and spools the turn's transcript delta to `<repo>/.kern/intake/`,
+which is the drop dir kern distills into typed claims; `drain` runs at session
+start and asks kern's hub for the endpoint serving this project, starting the
+daemon that watches that spool — without it the deltas are written and never
+become memory, which is how this board came to hold five spooled turns nobody
+could recall.
+
+| detail | why |
+|---|---|
+| `recall` keeps its stderr but drops none of its stdout | a `UserPromptSubmit` hook's stdout is what reaches the turn; the recall is the only one of the three that says anything |
+| every verb is fail-open in the script *and* `\|\| true` here | a tree with no `kern` on PATH, no `.kern/`, or a daemon that will not start must cost the session nothing — a memory is never worth a refused session |
+| a shared `.offsets.json` | the machine-wide `kern` plugin spools the same turns into the same dir; both writers key the offset by session id, so whoever runs first consumes the delta and the other no-ops. No turn is captured twice |
+| opt-in per tree | `capture` writes only where a `.kern/` already exists above the working directory, so the hook never starts remembering a repo nobody asked it to |
+
+`pearde kern check` is the row on demand: the project's store, whether
+anything serves it, and what the spool still owes.
 
 The `state:` refusal is a mechanism exactly where this block is wired and a
 sentence everywhere else. `doctor` reports `guard` as `ok`, `off` or `broken`

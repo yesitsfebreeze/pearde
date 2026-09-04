@@ -8,6 +8,7 @@ One row per verb `pearde` dispatches — what exists, never what to run.
 |---|---|---|---|---|
 | `add` | — | — | — | python |
 | `answer` | — | — | — | python |
+| `be` | be happy — fix what doctor can, measure the whole setup, write it | — | — | python |
 | `brief` | the worker's brief for one PRD, or a consultant's — one command's output | — | — | python |
 | `calibrate` | the board, read and ordered | — | — | python |
 | `capabilities` | the registry of every verb `pearde` dispatches: what | — | — | python |
@@ -25,6 +26,7 @@ One row per verb `pearde` dispatches — what exists, never what to run.
 | `index` | the only reader of either format | — | — | python |
 | `init` | a board that asked nothing — [<dir>] [--language <l>] [--name <n>] | — | — | python |
 | `install` | build one skill folder per file in references/skills/ | — | — | shell |
+| `kern` | kern memory — recall before a turn, capture after it, drain the spool | — | — | python |
 | `knowledge` | the research layer, whole. One tool, no dependency | — | — | python |
 | `members` | the board, read and ordered | — | — | python |
 | `memo` | the board's decision records: read them, and check them | — | — | python |
@@ -40,7 +42,7 @@ One row per verb `pearde` dispatches — what exists, never what to run.
 | `retry` | `## Failure` becomes history in the body, then `failed → open`. | — | — | python |
 | `run` | dispatch a board, a group or every watched board — `here`, `all`, | — | — | python |
 | `scan` | the board, read and ordered | — | — | python |
-| `scout` | not just libraries, but the reference | — | — | shell |
+| `scout` | discover, ask, curate, wire — that used | — | — | shell |
 | `session` | take/list/reap/land/owns — one tree per session | — | — | python |
 | `set` | — | — | — | python |
 | `settings` | <key>=<value> [--board <path>] — write one key of pearde/settings.md, | — | — | python |
@@ -55,4 +57,3 @@ One row per verb `pearde` dispatches — what exists, never what to run.
 | `view` | the board's live service: one daemon per machine, watching | — | — | python |
 | `vision` | `pearde vision [board] [--board <path>] [--json\|--next\|--check]` — | — | — | python |
 | `workflow` | the library of how a kind of job is done: read it, check it | — | — | python |
-| `zzdead` | not a real verb | — | — | python |

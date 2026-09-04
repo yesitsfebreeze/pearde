@@ -84,5 +84,6 @@ is the configuration, re-read every call: `active_focus` biases `query`,
 | scout | `@resources/scout/findings.md` holds a sweep's dated record, never copied here — the note is the takeaway, the sweep the citation |
 | `@@graph` | `@resources/graph/graph.sh extract` maps the repo, semantic passes included; `knowledge.py relink` maps the KB from `.pearde/wiki/` wikilinks — hand-built, never an LLM call |
 | the dashboard | `.pearde/Dashboard.md`, the view a person opens; a pass queries through the tools, never by reading it |
+| kern | the other memory — @resources/kern.py recalls before a turn and spools it after. This layer holds what the board researched and can cite; kern holds what the sessions said. Neither reads the other |
 | the loop | step 7 runs `round` on every pass, not only on a drained board — @references/parts/loop.md |
 | a worker | the brief hands every worker both directions: `query` before it researches, `remember` after it learns — @references/parts/workers.md |

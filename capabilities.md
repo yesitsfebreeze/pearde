@@ -8,6 +8,7 @@ One row per verb `pearde` dispatches — what exists, never what to run.
 |---|---|---|---|---|
 | `add` | — | — | — | python |
 | `answer` | — | — | — | python |
+| `be` | be happy — fix what doctor can, measure the whole setup, write it | — | — | python |
 | `brief` | the worker's brief for one PRD, or a consultant's — one command's output | — | — | python |
 | `calibrate` | the board, read and ordered | — | — | python |
 | `capabilities` | the registry of every verb `pearde` dispatches: what | — | — | python |
@@ -41,7 +42,7 @@ One row per verb `pearde` dispatches — what exists, never what to run.
 | `retry` | `## Failure` becomes history in the body, then `failed → open`. | — | — | python |
 | `run` | dispatch a board, a group or every watched board — `here`, `all`, | — | — | python |
 | `scan` | the board, read and ordered | — | — | python |
-| `scout` | not just libraries, but the reference | — | — | shell |
+| `scout` | discover, ask, curate, wire — that used | — | — | shell |
 | `session` | take/list/reap/land/owns — one tree per session | — | — | python |
 | `set` | — | — | — | python |
 | `settings` | <key>=<value> [--board <path>] — write one key of pearde/settings.md, | — | — | python |

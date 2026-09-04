@@ -5,6 +5,7 @@ priority: 26
 complexity: 22
 blast-radius: mid
 workflow: probe-then-spec
+commit: fe75b91 638b38b
 ---
 
 # One PRD-reading primitive

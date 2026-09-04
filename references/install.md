@@ -125,6 +125,14 @@ Optional, and separate from any skills directory.
 from the working directory to the nearest board and stays silent where none
 is, so wiring it globally is safe.
 
+Beside the board's segment it carries the project's session memory: `kern` when
+a daemon serves this tree's store, `kern ↑<n>` when the spool still owes `<n>`
+deltas, `kern ✗` when a store exists and nothing serves it. The same silence
+rule holds — no `.kern/` above the working directory, or no `kern` on PATH, and
+nothing is printed and no subprocess is spawned. The read goes through
+`@resources/kern.py line`, which bounds it, so a wedged daemon cannot hang a
+line that renders on every prompt.
+
 - Input: the status JSON on stdin, or `$PRD_STATUS_JSON`. Output: one line.
 - Wire `bash @resources/statusline.sh` wherever your setup runs a command for
   its status line. With no such hook, the same numbers on demand are

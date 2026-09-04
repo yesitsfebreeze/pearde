@@ -22,9 +22,12 @@ in scope, no second row.
 | `<persona>` | who is working, as the id |
 | `▸board` | an OSC-8 hyperlink to the live view |
 | `▸vault` | the board as an Obsidian vault |
+| `kern` / `kern ↑1` / `kern ✗` | the project's session memory (@resources/kern.py): serving · serving with `<n>` deltas the spool still owes · a store nothing serves. A tree with no `.kern/`, and a machine with no `kern`, render nothing — never `off` |
 
 `PRD_STATUS_LINK=off` prints the `▸board` and `▸vault` labels bare. Both links
-are optional.
+are optional. The `kern` segment sits last, beside the board's own and never
+in front of it: the board is what this line is for, and the memory is a
+property of the project the board sits in.
 
 ## `+<dr>d` is the remainder, because a total cannot answer its own question
 

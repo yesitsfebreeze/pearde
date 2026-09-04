@@ -337,6 +337,39 @@ if [ -n "$BOARD" ]; then
   fi
 fi
 
+# ── kern segment ────────────────────────────────────────────────────────
+# The project's other memory — @resources/kern.py. It goes BESIDE the board's
+# own segment, never in front: the board is what this line is for, and kern is
+# a property of the project the board sits in.
+#
+# The gate is pure filesystem, so a tree with no kern pays nothing at all: no
+# `kern` on PATH, or no `.kern/` on the way up, and not one subprocess is
+# spawned and not one character is printed. `off` is not rendered — a machine
+# that never opted in is not in a broken state, and a status line that reports
+# every absent tool is a status line nobody reads.
+#
+# The read itself goes through `kern.py line` rather than `kern` directly,
+# because it must be time-bounded and there is no `timeout(1)` on a stock
+# macOS. `kern.py`'s `run()` already wraps every call in `subprocess.run
+# (timeout=...)`, so a wedged daemon costs the prompt RECALL_TIMEOUT, not the
+# session. That module also owns where a store is found; this script does not
+# re-derive it. Second and last subprocess this script spawns, and only when
+# the project actually carries a store.
+if command -v kern >/dev/null 2>&1; then
+  d="$DIR"
+  while [ -n "$d" ] && [ "$d" != "/" ]; do
+    [ -d "$d/.kern" ] && break
+    p=$(dirname "$d"); [ "$p" = "$d" ] && { d=""; break; }; d="$p"
+  done
+  if [ -n "$d" ] && [ -d "$d/.kern" ]; then
+    KERN=$(python3 "$SELF_DIR/kern.py" line "$DIR" 2>/dev/null)
+    if [ -n "$KERN" ]; then
+      [ -n "$BOARD_OUT" ] && BOARD_OUT="$BOARD_OUT \033[38;5;240m·\033[0m "
+      BOARD_OUT="$BOARD_OUT\033[38;5;108m${KERN}\033[0m"
+    fi
+  fi
+fi
+
 # Two lines when there is a board, one when there is none — an empty second
 # line reads as a blank row, not an absence.
 if [ -n "$BOARD_OUT" ]; then

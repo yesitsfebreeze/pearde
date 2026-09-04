@@ -6,6 +6,7 @@ complexity: 18
 blast-radius: mid
 workflow: add-a-contract-key
 actual: 7.19h
+commit: baa2749
 ---
 
 # a lane is declared at spec time and only a writer gets one

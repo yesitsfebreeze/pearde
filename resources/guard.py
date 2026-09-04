@@ -243,11 +243,13 @@ def board_scanned(d):
     """The board of `d` that is called something else — one immediate child
     carrying `settings.md`.
 
-    Two such children is None here and a refusal everywhere else. The guard
-    is a hook on every tool call, not the part of this tool that tells a
-    person to rename a directory: a project it cannot name one board in is a
-    project it has no opinion about, and doctor's `board` row is what reports
-    it. Nothing else consults this, so nothing else is made quiet by it."""
+    Duplicated from @resources/board/plan.py `board_scanned`, read quieter:
+    None here where it refuses. Two such children is None here and a refusal
+    everywhere else. The guard is a hook on every tool call, not the part of
+    this tool that tells a person to rename a directory: a project it cannot
+    name one board in is a project it has no opinion about, and doctor's
+    `board` row is what reports it. Nothing else consults this, so nothing
+    else is made quiet by it."""
     found = named_boards(d)
     return found[0] if len(found) == 1 else None
 
@@ -278,19 +280,7 @@ def board_of(start):
         if m:
             start = f"{m.group(1)}:{m.group(2) or '/'}"
     d = os.path.abspath(start)
-    return walk_up(d, board_named) or walk_up(d, board_scanned)
-
-
-def walk_up(d, find):
-    """`find` applied to `d` and every ancestor, first answer wins."""
-    while True:
-        b = find(d)
-        if b:
-            return b
-        parent = os.path.dirname(d)
-        if parent == d:
-            return None
-        d = parent
+    return common.walk_up(d, board_named) or common.walk_up(d, board_scanned)
 
 
 def prds_dir(board):

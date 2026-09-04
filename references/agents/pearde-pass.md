@@ -36,7 +36,10 @@ once, on your own model; a second death is `BLOCKED`, with the error text.
 workers" reads as a status: the dispatcher reassures the user and the run
 stops. Workers in flight means you are still working — hold the turn with a
 `Monitor` on the reports, never idle calls, and return only when they are in
-or dead.
+or dead. A worker you dispatched is in flight: hold the turn | a worker you
+dispatched is in flight — collect them, dispatch what each unblocked, and hand
+back `MORE` once the board is still. The rule is the hold: a worker you
+dispatched is in flight.
 
 Stop at the first of these, and never later:
 

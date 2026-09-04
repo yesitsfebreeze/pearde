@@ -34,7 +34,12 @@ harness tasks dir must grow, and must hold no `API Error`. One dead worker is
 re-dispatched once, on the orchestrator's own model — never on the fallback
 that just killed it. A second death is `BLOCKED`, with the error text. The same
 check re-runs before any return: a worker stopped without a report is dead, not
-thinking.
+thinking. The liveness check is not the whole rule: a pass holds its turn until
+every worker it dispatched has returned or is measurably dead, and it does not
+license returning over a live one — a background worker does not outlive the
+pass window that dispatched it. The pass holds its turn until every worker it
+dispatched has returned or is measurably dead — the pass holds its turn until
+every worker it dispatched has returned or is measurably dead.
 
 **A report is a file. What comes back is one line.** Every brief ends by saying
 so: the worker writes `.pearde/prds/<prd>/report.md` and returns the verdict,

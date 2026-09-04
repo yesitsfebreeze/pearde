@@ -13,10 +13,15 @@ a `/pearde` session opened at a 50,229-token floor — system prompt, tools,
 CLAUDE.md, the skill — and ended at 200,725, having produced 66k of actual
 content. The window compounded, not the work.
 
-A pass worker's window is thrown away when it returns. The dispatcher's grows
-by one prompt and one line per pass — about 300 tokens — so a run of twenty
-passes ends roughly where it started, and no pass is ever stopped for being
-expensive: the expensive thing returns and the next one opens empty.
+A pass worker's window is thrown away when it returns, and A pass worker's
+return ends its children — every worker it dispatched is in or measurably dead
+before the window goes. The rule from the dispatcher side: a pass worker's
+return ends its children, so the window that ends, ends them. The dispatcher's grows by one prompt and one line per
+pass — about 300 tokens — so a run of twenty passes ends roughly where it
+started, and no pass is ever stopped for being expensive: the expensive thing
+returns and the next one opens empty. A pass holds its turn until every worker
+it dispatched has returned or is measurably dead, and that is the rule from the
+dispatcher's side — the window that ends, ends them.
 
 The board is on disk. `.pearde/.state/pass.md` crosses between passes, written
 by the worker that ends, never by the session that dispatches.

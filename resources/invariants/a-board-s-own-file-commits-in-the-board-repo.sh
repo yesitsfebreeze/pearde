@@ -305,7 +305,13 @@ N=$T/n; mkdir -p "$N"
 nested "$N"
 NC=$N/code; NB=$NC/.pearde
 LANE=$(work "$NC" "$NB") || no "the lane could not be cut: $LANE"
-if [ -e "$NB/.lanes/p1/.pearde/.gitignore" ]; then r=1; else r=0; fi
+# The lane's `.pearde` is a symlink back at the board, so reading through it
+# lands on the board's own `.gitignore` — which is the point: the lane holds
+# no copy of the board's file. `-e` on the symlink path is therefore always
+# true and says nothing; what must hold is that it resolves to the BOARD's
+# `.gitignore` (a lane that held its own copy would resolve elsewhere).
+if [ "$(realpath "$NB/.lanes/p1/.pearde/.gitignore" 2>/dev/null)" \
+    = "$(realpath "$NB/.gitignore" 2>/dev/null)" ]; then r=0; else r=1; fi
 say $r "the lane does not hold the board own file — it is cut without the board"
 
 # both HEADs BEFORE the run: every log needle below reads only what

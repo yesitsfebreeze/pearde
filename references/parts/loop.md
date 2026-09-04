@@ -105,7 +105,11 @@ While two or more of that pass are missing from `## Asked`, `pearde claim`
 refuses `asking N — drill first` on those and names the asker — the PRDs they
 reshape: each asker, its ancestors and descendants, and whatever `needs:` one.
 Everything else dispatches first; the pass goes out when those workers are in,
-reopening the rest. Otherwise every `question` PRD and parked PRD naming a
+reopening the rest. A pass holds its turn until every worker it dispatched has
+returned or is measurably dead. Handing back `MORE` with workers in flight
+burns them, and a worker does not outlive the pass window that dispatched it.
+This does not move the ceiling: a pass at context-budget still hands back
+`MORE`, once its workers are in. Otherwise every `question` PRD and parked PRD naming a
 human goes out, one pass per @references/drill.md, three answers a fork.
 
 **You do not talk to the user; the dispatcher does** — put a pass by writing

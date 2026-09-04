@@ -158,11 +158,24 @@ def create(board, repo, slug, base=None):
             args.append(base)
         git(repo, *args)
     rel = board_rel(board, repo)
-    if rel:
-        git(d, "sparse-checkout", "set", "--no-cone", "/*", "!/" + rel,
-            check=False)
-    git(d, "checkout")
-    link_board(board, repo, d)
+    if rel and os.path.exists(os.path.join(board, ".git")):
+        # Only when the board is its OWN git repo. The exclusion and the
+        # symlink back are how a lane runs a board it does not hold — a
+        # repo that tracks its own `.pearde/` hands every worktree a stale
+        # copy otherwise. A board that is not a repo has nothing to exclude:
+        # its files are not in the code repo's index at all, and symlinking
+        # them in makes them paths "beyond a symbolic link" that `git
+        # rebase` refuses — measured 2026-09-04 on the flat layout in
+        # `a-board-s-own-file-commits-in-the-board-repo`, whose fixture cut
+        # a lane at `.pearde/.lanes/p1` and died
+        # `'.pearde/prds/p1/prd.md' is beyond a symbolic link` before a
+        # single file was staged.
+        git(d, "sparse-checkout", "set", "--no-cone", "/*",
+            "!/" + rel, check=False)
+        git(d, "checkout")
+        link_board(board, repo, d)
+    else:
+        git(d, "checkout")
     link_shared(d)
     return d
 

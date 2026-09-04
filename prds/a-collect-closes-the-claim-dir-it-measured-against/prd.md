@@ -6,6 +6,7 @@ complexity: 4
 blast-radius: mid
 workflow: probe-then-spec
 actual: 0.32h
+commit: b63e442 a11ff0d
 ---
 
 # a collect closes the claim dir it measured against

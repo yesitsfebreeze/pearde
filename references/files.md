@@ -112,7 +112,7 @@ A template is the shape and nothing else — it lands whole in every file writte
 
 ## `resources/` — run
 
-| @resources/pearde.py | the one command — a dispatcher over every script; discovers `COMMANDS` in every directory under `resources/`; `help` from docstrings |
+| @resources/pearde.py | the one command — a dispatcher over every script; discovers `COMMANDS` in every directory under `resources/`; `help` from docstrings; a name in `PORTED` execs into `jd <name>` unless `--no-shim` is on the line |
 | @resources/pearde_path.py | the one rule every module finds its siblings by — `resources/` and every directory under it on `sys.path`, the repo root by `resources/pearde.py`, and a launched sibling found by basename |
 | @resources/common.py | the advisors' shared primitives — `find_board`, the frontmatter reader, the atomic write, `Collection`, the git runner and the section extractor every script imports instead of carrying a copy |
 | @resources/install.sh | build one skill folder of links per file in `references/skills/` |
@@ -143,6 +143,7 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/invariants/the-guard-and-the-planner-name-the-same-board.sh | every copy of `BOARD_DIR`/`LEGACY_BOARD_DIR` under `resources/` spells the same pair in the same order — the copies discovered, never listed — and `board_named` answers with the live name in a project holding both; `RESOURCES=` points the run at another checkout |
 | @resources/invariants/silence-measures-the-workers-own-tree.sh | `silent_of` never reads a footprint path from the shared checkout — the PRD directory plus the lane worktree is the whole liveness set — and a neighbour's fresh write to a shared footprint cannot fake a live worker; the behaviour half runs a dead claim against a freshly-touched shared file; `RESOURCES=` points the run at another checkout |
 | @resources/invariants/no-harness-under-the-board-dispatches-it.sh | the invariant: no harness under any board's `prds/**/probe/` launches a dispatcher. Runs the reader at `.pearde/prds/a-harness-never-dispatches-the-live-board/probe/scan.py` against this board and re-checks the mechanism `run.py all` refuses, `plan slots` prints, and `plan.py` names `read_main` |
+| @resources/invariants/ported-verbs-match.sh | every verb in `PORTED` answers the same stdout and exit code from `pearde --no-shim <verb>` and `jd <verb>` on a fresh example board — `ok`/`drift` per verb, green on an empty set, skipped where no `jd` is on PATH; the argument table per verb lives in the script |
 | @resources/graph/graph.sh | graphify passes — extract, update, query, path, explain, god-nodes, vault open |
 | @resources/knowledge.py | the research loop — query, enqueue, remember, conclude, relink, wiki, board, index, dashboard, doctor — over the board's `wiki/`; `index` writes one note per manifest row so a `@@<keyword>` is answerable from the dashboard |
 | @resources/board/serve.py | the live service |

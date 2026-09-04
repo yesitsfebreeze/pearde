@@ -84,6 +84,10 @@ a command that writes: with it, the command prints the real run's line,
 `dry ·` in front, then `would write:` and every path, and writes nothing. A flag a command does not declare is refused before the
 board is read — `unknown flag --dyr — release takes: --as, --board, --dry`,
 exit 2 — and `pearde <cmd> --help` prints that same list.
+`--no-shim` is the one flag every command takes and none declares: a name in
+@resources/pearde.py `PORTED` execs into `jd <name> …`, the Go port, and
+`--no-shim` runs the Python instead — what the parity invariant
+@resources/invariants/ported-verbs-match.sh diffs the two with.
 
 - `add` is the user asking, so `origin: requested`. Only the orchestrator
   writes `origin: derived`, and only with `from:` — @references/parts/derived.md

@@ -27,12 +27,17 @@ and `doctor` reports that under `skills`.
 The names that arrive with later children are reserved here and answer
 `not yet — <child>` until a module claims them.
 
+A name in `PORTED` execs into `jd <name> …`, the Go binary the port lands
+in; `--no-shim` anywhere on the line runs the Python instead, and
+@resources/invariants/ported-verbs-match.sh diffs the two.
+
 Python 3 stdlib only.
 """
 import glob
 import importlib.util
 import os
 import re
+import shutil
 import subprocess
 import sys
 
@@ -117,6 +122,11 @@ FORWARD = {
 # module. Discovery wins over this table, so a row is never removed by hand
 # when a module lands; it is removed when the child's PRD is `done`.
 RESERVED = {}
+
+# Ported: a name here execs into `jd <name> …` when `jd` is on PATH — the
+# Go binary built from ~/dev/harness — unless `--no-shim` is on the line.
+# Empty until a verb is ported; a name lands here the day its parity holds.
+PORTED = set()
 
 WIDTH = 80
 
@@ -380,7 +390,10 @@ def cmd_view(args):
 # ── main ──────────────────────────────────────────────────────────────────────
 
 def main(argv):
-    args = list(argv[1:])
+    shim = "--no-shim" not in argv[1:]
+    args = [a for a in argv[1:] if a != "--no-shim"]
+    if shim and args and args[0] in PORTED and shutil.which("jd"):
+        os.execvp("jd", ["jd", *args])
     found, problems = discover()
     if not args:
         return forward("scan", [])

@@ -31,6 +31,7 @@ never reads `off` — the map is either right or wrong.
 | `view`       | the service is not running             | the service runs and this board is not registered                |
 | `plan`       | no plan on record yet                  | —                                                                |
 | `harnesses`  | `harnesses:` is not `on` and `--harnesses` was not passed, or the board has no `verify.sh` | a harness exits non-zero — named, with its first `FAIL` line |
+|              | a sub-line under the row names the `jd` version on PATH, or `jd off` — a note, never a status: a box without the Go port is not a sad one | — |
 
 ## No agent is named, so the check holds for any reader
 

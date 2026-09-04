@@ -1111,6 +1111,14 @@ EOF
       note "pin it: [ \"\$((PASS+FAIL))\" = <n> ] || no \"expected <n> checks, ran \$((PASS+FAIL))\""
     fi
   fi
+  # the other harness: `jd`, the Go binary a PORTED verb of pearde.py
+  # execs into. A note under the row, not a row: `be happy` reads every
+  # non-ok row as red, and a box without jd is not a sad one.
+  if command -v jd >/dev/null 2>&1; then
+    note "$(jd version 2>/dev/null | head -1)"
+  else
+    note "jd off · not on PATH — the PORTED verbs run their Python"
+  fi
 fi
 
 # ── jstests: the view's own browser gates, actually run ──────────────────────

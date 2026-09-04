@@ -395,7 +395,10 @@ def transition(board, name, to, persona, worker=None, force=False,
             # and stays there: a dry claim names the worktree and creates
             # none, the same rule every other path on this line follows.
             import lanes as laneslib
-            paths.append(laneslib.lane_dir(board, rel) + os.sep)
+            # `lane: read` cuts no worktree — the dry line says so too, or a
+            # reader sees a path that the real claim would never have made
+            if (p["fm"].get("lane") or "").strip().lower() != "read":
+                paths.append(laneslib.lane_dir(board, rel) + os.sep)
         say_dry(board, line, paths, out)
         return line
     # the gate passed, or was forced: now the writes, one line each
@@ -492,6 +495,12 @@ def cut_lane(board, rel, out=print):
     prd = prds.get(rel)
     root = planlib.repo_root(prd["dir"]) if prd else None
     if not root:
+        return None
+    # `lane: read` means this PRD's work is read-only — a probe, a read, a
+    # measurement. Nothing is written in a worktree, so nothing is cut. The
+    # key is the PRD's own: `claim` honours it, and a worker that never had a
+    # lane falls back to the checkout the same way `create`'s failure does.
+    if (prd.get("fm", {}).get("lane") or "").strip().lower() == "read":
         return None
     repo = collectlib.repo_of(prd, board, root)
     try:

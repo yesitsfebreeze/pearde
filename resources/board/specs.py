@@ -869,10 +869,14 @@ def specced(board, args, persona):
     """validate the specs, sum the weight, set `specced`"""
     blast, workflow = args.opt.get("blast"), args.opt.get("workflow")
     route = args.opt.get("route")
+    lane = args.opt.get("lane")
     check = "check" in args.flags
     prds, rel, prd = find_prd(board, args.pos[0])
     if blast is not None and blast not in BLASTS:
         raise Refused(f"--blast `{blast}` is not one of {'|'.join(BLASTS)}")
+    if lane is not None and lane not in ("write", "read"):
+        raise Refused(f"--lane `{lane}` is not `write` or `read` — the "
+                      "key declares whether this PRD's work is a write")
     lib = library(board, prd)
     if workflow == "none" and route is None:
         raise Refused("`--workflow none` is refused — draft the route as "
@@ -944,6 +948,8 @@ def specced(board, args, persona):
             fm.pop("workflow", None)
         elif workflow:
             fm["workflow"] = workflow
+        if lane is not None:
+            fm["lane"] = lane
         fm.pop("claim", None)
         line = trlib.dry_line(board, prds, rel, frm, "specced", persona)
         trlib.say_dry(board, line, [path, os.path.join(
@@ -958,6 +964,8 @@ def specced(board, args, persona):
         edit.del_key(path, "workflow")
     elif workflow:
         edit.set_key(path, "workflow", workflow)
+    if lane is not None:
+        edit.set_key(path, "lane", lane)
     edit.del_key(path, "claim")
     edit.set_key(path, "state", "specced")
     trlib.record(prd, prd["state"], "specced")
@@ -1131,7 +1139,8 @@ def refine(board, args, persona):
 # The declaration — transitions.py `Args` is the parser, and `--help` prints
 # the same list.
 FLAGS = {
-    "specced": trlib.Flags(("as", "board", "blast", "workflow", "route"),
+    "specced": trlib.Flags(("as", "board", "blast", "workflow", "route",
+                            "lane"),
                            ("check",) + trlib.DRY),
     "refine":  trlib.Flags(("as", "board"), trlib.DRY),
 }

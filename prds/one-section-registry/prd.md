@@ -199,3 +199,17 @@ spec01: exit 0
   ok   viewtest.js's first-paint check catches the un-rendered stub
 10/10 passed, 0 skipped
 29 checks · 29 pass · 0 fail
+
+spec01: exit 0
+  ok   the example board renders
+  ok   registry length (9) == rendered <section data-view=…> count
+  ok   registry length (9) == rendered nav <a> count
+  ok   render.py restored byte-identical after the stub probe
+  ok   the stub row alone raises the section count by one (9 -> 10)
+  ok   the stub tab and section exist with no other file touched
+  ok   viewtest.js --example (real shape): 50/50 passed
+  ok   viewtest.js on a merged (all) page: 50/50 passed
+  ok   render.py restored byte-identical after the viewtest stub run
+  ok   viewtest.js's first-paint check catches the un-rendered stub
+10/10 passed, 0 skipped
+29 checks · 29 pass · 0 fail

@@ -1,11 +1,10 @@
 ---
-state: claimed
+state: specced
 origin: derived
 from: the-board-is-a-real-directory-at-pearde-never-a-symlink/init-and-upgrade-write-the-dotted-board
 priority: 95
 complexity: 32
 blast-radius:
-claim: impl-harness-nodispatch2 2026-09-03 21:03
 ---
 
 
@@ -96,3 +95,19 @@ measured, not projected:
 **failed, retried 2026-09-03 21:03**
 
 swept 2026-09-03 20:59 — claim impl-harness-nodispatch 2026-09-03 14:01, silent 6.7h: no file of this PRD's moved past `claim-ttl`. Read the worker's output before a retry; partial code stands on branch `lane/a-harness-never-dispatches-the-live-board`, whose worktree this sweep removed — the branch is kept.
+
+## Blocked
+
+**2026-09-04 02:28 — the lane will not rebase**
+
+`lane/a-harness-never-dispatches-the-live-board` does not land on `main`; git named no file — `git status` in the lane says which.
+
+
+Nothing is lost: the worker's commits are on `lane/a-harness-never-dispatches-the-live-board` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock a-harness-never-dispatches-the-live-board`.
+
+**2026-09-04 02:28 — the lane will not rebase**
+
+`lane/a-harness-never-dispatches-the-live-board` does not land on `main`; git named no file — `git status` in the lane says which.
+
+
+Nothing is lost: the worker's commits are on `lane/a-harness-never-dispatches-the-live-board` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock a-harness-never-dispatches-the-live-board`.

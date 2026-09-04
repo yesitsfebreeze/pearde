@@ -1,12 +1,11 @@
 ---
-state: claimed
+state: specced
 origin: requested
 priority: 95
 complexity: 38
 blast-radius: mid
 supersedes: the-vault-roots-at-the-board-not-the-project
 workflow: implementer-continue
-claim: impl-the-vault-rox 2026-09-03 21:00
 ---
 
 # the vault roots at the project and obsidian is taught to index the dotted board
@@ -66,5 +65,139 @@ Nothing is lost: the worker's commits are on `lane/the-board-is-a-real-directory
 - `resources/board/init.py`
 - `resources/board/knowledge/Dashboard.md`
 - `resources/board/obsidian/community-plugins.json`
+
+Nothing is lost: the worker's commits are on `lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind`.
+
+**2026-09-03 21:57 — the lane will not rebase**
+
+`lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` does not land on `main`; 7 file(s) disagree:
+
+- `references/files.md`
+- `references/knowledge.md`
+- `references/obsidian.md`
+- `resources/board/init.py`
+- `resources/board/knowledge/Dashboard.md`
+- `resources/board/obsidian/community-plugins.json`
+- `resources/doctor.sh`
+
+Nothing is lost: the worker's commits are on `lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind`.
+
+**2026-09-04 02:23 — the lane will not rebase**
+
+`lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` does not land on `session/s62223`; 7 file(s) disagree:
+
+- `references/files.md`
+- `references/knowledge.md`
+- `references/obsidian.md`
+- `resources/board/init.py`
+- `resources/board/knowledge/Dashboard.md`
+- `resources/board/obsidian/community-plugins.json`
+- `resources/doctor.sh`
+
+Nothing is lost: the worker's commits are on `lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind`.
+
+**2026-09-04 02:28 — the lane will not rebase**
+
+`lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` does not land on `main`; 7 file(s) disagree:
+
+- `references/files.md`
+- `references/knowledge.md`
+- `references/obsidian.md`
+- `resources/board/init.py`
+- `resources/board/knowledge/Dashboard.md`
+- `resources/board/obsidian/community-plugins.json`
+- `resources/doctor.sh`
+
+Nothing is lost: the worker's commits are on `lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind`.
+
+**2026-09-04 02:38 — the lane will not rebase**
+
+`lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` does not land on `session/s62223`; 7 file(s) disagree:
+
+- `references/files.md`
+- `references/knowledge.md`
+- `references/obsidian.md`
+- `resources/board/init.py`
+- `resources/board/knowledge/Dashboard.md`
+- `resources/board/obsidian/community-plugins.json`
+- `resources/doctor.sh`
+
+Nothing is lost: the worker's commits are on `lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind`.
+
+**2026-09-04 02:46 — the lane will not rebase**
+
+`lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` does not land on `session/s62223`; 7 file(s) disagree:
+
+- `references/files.md`
+- `references/knowledge.md`
+- `references/obsidian.md`
+- `resources/board/init.py`
+- `resources/board/knowledge/Dashboard.md`
+- `resources/board/obsidian/community-plugins.json`
+- `resources/doctor.sh`
+
+Nothing is lost: the worker's commits are on `lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind`.
+
+**2026-09-04 02:47 — the lane will not rebase**
+
+`lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` does not land on `session/s62223`; 7 file(s) disagree:
+
+- `references/files.md`
+- `references/knowledge.md`
+- `references/obsidian.md`
+- `resources/board/init.py`
+- `resources/board/knowledge/Dashboard.md`
+- `resources/board/obsidian/community-plugins.json`
+- `resources/doctor.sh`
+
+Nothing is lost: the worker's commits are on `lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind`.
+
+**2026-09-04 02:49 — the lane will not rebase**
+
+`lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` does not land on `session/s85810`; 6 file(s) disagree:
+
+- `references/knowledge.md`
+- `references/obsidian.md`
+- `resources/board/init.py`
+- `resources/board/knowledge/Dashboard.md`
+- `resources/board/obsidian/community-plugins.json`
+- `resources/doctor.sh`
+
+Nothing is lost: the worker's commits are on `lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind`.
+
+**2026-09-04 02:56 — the lane will not rebase**
+
+`lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` does not land on `session/s85810`; 6 file(s) disagree:
+
+- `references/knowledge.md`
+- `references/obsidian.md`
+- `resources/board/init.py`
+- `resources/board/knowledge/Dashboard.md`
+- `resources/board/obsidian/community-plugins.json`
+- `resources/doctor.sh`
+
+Nothing is lost: the worker's commits are on `lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind`.
+
+**2026-09-04 04:03 — the lane will not rebase**
+
+`lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` does not land on `main`; 1 file(s) disagree:
+
+- `resources/board/init.py`
+
+Nothing is lost: the worker's commits are on `lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind`.
+
+**2026-09-04 04:06 — the lane will not rebase**
+
+`lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` does not land on `main`; 1 file(s) disagree:
+
+- `resources/board/init.py`
+
+Nothing is lost: the worker's commits are on `lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind`.
+
+**2026-09-04 04:20 — the lane will not rebase**
+
+`lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` does not land on `main`; 1 file(s) disagree:
+
+- `resources/board/init.py`
 
 Nothing is lost: the worker's commits are on `lane/the-board-is-a-real-directory-at-pearde-never-a-symlink-the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-board-is-a-real-directory-at-pearde-never-a-symlink/the-vault-roots-at-the-project-and-obsidian-is-taught-to-ind`.

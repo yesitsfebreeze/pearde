@@ -1,9 +1,11 @@
 ---
-state: open
+state: done
 origin: requested
 priority: 70
-complexity: 0
-blast-radius:
+complexity: 18
+blast-radius: mid
+workflow: add-a-contract-key
+actual: 7.19h
 ---
 
 # a lane is declared at spec time and only a writer gets one
@@ -41,3 +43,11 @@ claim edge), `resources/board/lanes.py` (`create`), `resources/board/
 brief.py` (`repo_of` — the no-lane fallback is already the read path),
 `resources/board/init.py` (`FRONTMATTER_KEYS`),
 `.pearde/prds/every-worker-runs-in-its-own-worktree/prd.md`.
+
+## Report
+
+spec01: exit 0
+claim: p is `lane: read` — no worktree cut
+▸ p: open → analyzing · done 0/1 · 0% · open 0/1 · 0% · ready 0 · blocked 1 @∞ workers · pass file owed · as engineer
+▸ p: open → analyzing · done 0/1 · 0% · open 0/1 · 0% · ready 0 · blocked 1 @∞ workers · pass file owed · as engineer
+spec01: ok

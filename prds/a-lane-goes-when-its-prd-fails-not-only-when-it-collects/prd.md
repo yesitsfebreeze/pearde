@@ -1,11 +1,10 @@
 ---
-state: claimed
+state: specced
 origin: requested
 priority: 0
 complexity: 14
 blast-radius: mid
 workflow: probe-then-spec
-claim: impl-lane-fails 2026-09-04 02:51
 ---
 
 # a lane goes when its prd fails, not only when it collects
@@ -45,3 +44,33 @@ but not landed — `pearde purge` is `unknown command` on main today.
       not to be retried → `git worktree list` shows no lane and `git branch`
       no `lane/<slug>`.
 - [x] Same without the marker → worktree gone, branch kept.
+
+## Blocked
+
+**2026-09-04 03:54 — the lane will not rebase**
+
+`lane/a-lane-goes-when-its-prd-fails-not-only-when-it-collects` does not land on `main`; git named no file — `git status` in the lane says which.
+
+
+Nothing is lost: the worker's commits are on `lane/a-lane-goes-when-its-prd-fails-not-only-when-it-collects` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock a-lane-goes-when-its-prd-fails-not-only-when-it-collects`.
+
+**2026-09-04 03:54 — the lane will not rebase**
+
+`lane/a-lane-goes-when-its-prd-fails-not-only-when-it-collects` does not land on `main`; git named no file — `git status` in the lane says which.
+
+
+Nothing is lost: the worker's commits are on `lane/a-lane-goes-when-its-prd-fails-not-only-when-it-collects` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock a-lane-goes-when-its-prd-fails-not-only-when-it-collects`.
+
+**2026-09-04 03:55 — the lane will not rebase**
+
+`lane/a-lane-goes-when-its-prd-fails-not-only-when-it-collects` does not land on `main`; git named no file — `git status` in the lane says which.
+
+
+Nothing is lost: the worker's commits are on `lane/a-lane-goes-when-its-prd-fails-not-only-when-it-collects` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock a-lane-goes-when-its-prd-fails-not-only-when-it-collects`.
+
+**2026-09-04 04:18 — the lane will not rebase**
+
+`lane/a-lane-goes-when-its-prd-fails-not-only-when-it-collects` does not land on `main`; git named no file — `git status` in the lane says which.
+
+
+Nothing is lost: the worker's commits are on `lane/a-lane-goes-when-its-prd-fails-not-only-when-it-collects` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock a-lane-goes-when-its-prd-fails-not-only-when-it-collects`.

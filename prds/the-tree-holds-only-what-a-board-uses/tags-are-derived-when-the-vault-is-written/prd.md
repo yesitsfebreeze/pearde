@@ -34,3 +34,34 @@ No gate.
 ## Answers
 
 **Q1** *(answered 2026-09-03 11:42)* — Derive at write — the vault writer computes the tags from each memo's kind; no memo stores tags, and the repair command goes.
+
+## Blocked
+
+**2026-09-03 21:57 — the lane will not rebase**
+
+`lane/the-tree-holds-only-what-a-board-uses-tags-are-derived-when-the-vault-is-written` does not land on `main`; 1 file(s) disagree:
+
+- `references/files.md`
+
+Nothing is lost: the worker's commits are on `lane/the-tree-holds-only-what-a-board-uses-tags-are-derived-when-the-vault-is-written` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-tree-holds-only-what-a-board-uses/tags-are-derived-when-the-vault-is-written`.
+
+**2026-09-04 02:28 — the lane will not rebase**
+
+`lane/the-tree-holds-only-what-a-board-uses-tags-are-derived-when-the-vault-is-written` does not land on `main`; git named no file — `git status` in the lane says which.
+
+
+Nothing is lost: the worker's commits are on `lane/the-tree-holds-only-what-a-board-uses-tags-are-derived-when-the-vault-is-written` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-tree-holds-only-what-a-board-uses/tags-are-derived-when-the-vault-is-written`.
+
+**2026-09-04 04:12 — the lane will not rebase**
+
+`lane/the-tree-holds-only-what-a-board-uses-tags-are-derived-when-the-vault-is-written` does not land on `main`; git named no file — `git status` in the lane says which.
+
+
+Nothing is lost: the worker's commits are on `lane/the-tree-holds-only-what-a-board-uses-tags-are-derived-when-the-vault-is-written` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-tree-holds-only-what-a-board-uses/tags-are-derived-when-the-vault-is-written`.
+
+**2026-09-04 04:21 — the lane will not rebase**
+
+`lane/the-tree-holds-only-what-a-board-uses-tags-are-derived-when-the-vault-is-written` does not land on `main`; git named no file — `git status` in the lane says which.
+
+
+Nothing is lost: the worker's commits are on `lane/the-tree-holds-only-what-a-board-uses-tags-are-derived-when-the-vault-is-written` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-tree-holds-only-what-a-board-uses/tags-are-derived-when-the-vault-is-written`.

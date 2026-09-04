@@ -36,3 +36,43 @@ Nothing is lost: the worker's commits are on `lane/no-work-is-lost-on-the-board-
 - `references/files.md`
 
 Nothing is lost: the worker's commits are on `lane/no-work-is-lost-on-the-board-a-lane-rebases-before-collect` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock no-work-is-lost-on-the-board/a-lane-rebases-before-collect`.
+
+**2026-09-04 02:23 — the lane will not rebase**
+
+`lane/no-work-is-lost-on-the-board-a-lane-rebases-before-collect` does not land on `session/s62223`; 1 file(s) disagree:
+
+- `references/files.md`
+
+Nothing is lost: the worker's commits are on `lane/no-work-is-lost-on-the-board-a-lane-rebases-before-collect` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock no-work-is-lost-on-the-board/a-lane-rebases-before-collect`.
+
+**2026-09-04 02:28 — the lane will not rebase**
+
+`lane/no-work-is-lost-on-the-board-a-lane-rebases-before-collect` does not land on `main`; 1 file(s) disagree:
+
+- `references/files.md`
+
+Nothing is lost: the worker's commits are on `lane/no-work-is-lost-on-the-board-a-lane-rebases-before-collect` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock no-work-is-lost-on-the-board/a-lane-rebases-before-collect`.
+
+**2026-09-04 02:38 — the lane will not rebase**
+
+`lane/no-work-is-lost-on-the-board-a-lane-rebases-before-collect` does not land on `session/s62223`; 1 file(s) disagree:
+
+- `references/files.md`
+
+Nothing is lost: the worker's commits are on `lane/no-work-is-lost-on-the-board-a-lane-rebases-before-collect` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock no-work-is-lost-on-the-board/a-lane-rebases-before-collect`.
+
+**2026-09-04 02:46 — the lane will not rebase**
+
+`lane/no-work-is-lost-on-the-board-a-lane-rebases-before-collect` does not land on `session/s62223`; 1 file(s) disagree:
+
+- `references/files.md`
+
+Nothing is lost: the worker's commits are on `lane/no-work-is-lost-on-the-board-a-lane-rebases-before-collect` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock no-work-is-lost-on-the-board/a-lane-rebases-before-collect`.
+
+**2026-09-04 02:47 — the lane will not rebase**
+
+`lane/no-work-is-lost-on-the-board-a-lane-rebases-before-collect` does not land on `session/s62223`; 1 file(s) disagree:
+
+- `references/files.md`
+
+Nothing is lost: the worker's commits are on `lane/no-work-is-lost-on-the-board-a-lane-rebases-before-collect` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock no-work-is-lost-on-the-board/a-lane-rebases-before-collect`.

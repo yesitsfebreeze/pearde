@@ -1,11 +1,10 @@
 ---
-state: claimed
+state: specced
 origin: requested
 priority: 50
 complexity: 20
 blast-radius: mid
 workflow: probe-then-spec
-claim: impl-redo-scout-s-rese 2026-09-03 21:38
 ---
 
 
@@ -35,3 +34,101 @@ no process on this machine holds it. The claim only reads live because its
 footprint names shared files other sessions keep writing
 (`silence-measures-the-workers-own-tree` names the artefact). The analyst's
 work stands in `specs/`; the next implementer continues from it.
+
+## Blocked
+
+**2026-09-03 21:57 — the lane will not rebase**
+
+`lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` does not land on `main`; 3 file(s) disagree:
+
+- `references/files.md`
+- `references/skills/pearde-scout.md`
+- `resources/scout/README.md`
+
+Nothing is lost: the worker's commits are on `lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree`.
+
+**2026-09-04 02:23 — the lane will not rebase**
+
+`lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` does not land on `session/s62223`; 3 file(s) disagree:
+
+- `references/files.md`
+- `references/skills/pearde-scout.md`
+- `resources/scout/README.md`
+
+Nothing is lost: the worker's commits are on `lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree`.
+
+**2026-09-04 02:28 — the lane will not rebase**
+
+`lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` does not land on `main`; 3 file(s) disagree:
+
+- `references/files.md`
+- `references/skills/pearde-scout.md`
+- `resources/scout/README.md`
+
+Nothing is lost: the worker's commits are on `lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree`.
+
+**2026-09-04 02:38 — the lane will not rebase**
+
+`lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` does not land on `session/s62223`; 3 file(s) disagree:
+
+- `references/files.md`
+- `references/skills/pearde-scout.md`
+- `resources/scout/README.md`
+
+Nothing is lost: the worker's commits are on `lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree`.
+
+**2026-09-04 02:46 — the lane will not rebase**
+
+`lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` does not land on `session/s62223`; 3 file(s) disagree:
+
+- `references/files.md`
+- `references/skills/pearde-scout.md`
+- `resources/scout/README.md`
+
+Nothing is lost: the worker's commits are on `lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree`.
+
+**2026-09-04 02:48 — the lane will not rebase**
+
+`lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` does not land on `session/s62223`; 3 file(s) disagree:
+
+- `references/files.md`
+- `references/skills/pearde-scout.md`
+- `resources/scout/README.md`
+
+Nothing is lost: the worker's commits are on `lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree`.
+
+**2026-09-04 02:49 — the lane will not rebase**
+
+`lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` does not land on `session/s85810`; 2 file(s) disagree:
+
+- `references/skills/pearde-scout.md`
+- `resources/scout/README.md`
+
+Nothing is lost: the worker's commits are on `lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree`.
+
+**2026-09-04 04:04 — the lane will not rebase**
+
+`lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` does not land on `main`; 2 file(s) disagree:
+
+- `references/skills/pearde-scout.md`
+- `resources/scout/README.md`
+
+Nothing is lost: the worker's commits are on `lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree`.
+
+**2026-09-04 04:06 — the lane will not rebase**
+
+`lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` does not land on `main`; 2 file(s) disagree:
+
+- `references/skills/pearde-scout.md`
+- `resources/scout/README.md`
+
+Nothing is lost: the worker's commits are on `lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree`.
+
+**2026-09-04 04:21 — the lane will not rebase**
+
+`lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` does not land on `main`; 2 file(s) disagree:
+
+- `references/skills/pearde-scout.md`
+- `resources/scout/README.md`
+
+Nothing is lost: the worker's commits are on `lane/the-tree-holds-only-what-a-board-uses-scout-s-research-leaves-the-tree` and the checkout never moved. Resolve the conflict in the lane, then `pearde unblock the-tree-holds-only-what-a-board-uses/scout-s-research-leaves-the-tree`.

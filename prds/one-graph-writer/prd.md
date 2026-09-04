@@ -5,6 +5,7 @@ priority: 36
 complexity: 21
 blast-radius: mid
 workflow: probe-then-spec
+commit: 59f4521 70dd955
 ---
 
 

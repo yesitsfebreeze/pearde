@@ -90,7 +90,6 @@ SETTING_KEYS = ("language", "workers", "pipeline", "weight-default",
 FRONTMATTER_KEYS = ("state", "priority", "complexity", "blast-radius", "est",
                     "actual", "claim", "repo", "workflow", "needs",
                     "footprint", "origin", "from", "lane",
-||||||| parent of 56f7ce5 (every-documented-command-exists — every documented command exists)
                     "vision", "terminals", "edges",
                     "subject", "date", "updated", "kind", "status", "verify")
 

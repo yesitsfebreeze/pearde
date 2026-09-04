@@ -65,7 +65,14 @@ Separately, `be` is a real verb with no row.
 
 ## Questions
 
-### Q1: Is the `docs/` fumadocs app committed to this repo, or ignored?
+### Q1: Is the documentation website part of this project, or something each machine builds for itself?
 
-It is on disk, untracked, and fully documented in `references/files.md`. The
-answer decides whether 18 rows and the `@@docs` keyword stay or go.
+A documentation website sits in this project's folder, and the project's own
+list of its files describes eighteen pieces of it. Version control keeps none
+of them. A check that the list matches reality runs inside the acceptance
+tests of a hundred and thirty-six planned jobs, and twelve finished jobs are
+stuck behind its failure.
+
+1. (recommended) Keep it. The website ships with the product, so store it, skip its downloaded libraries, and the eighteen entries become true.
+2. Drop it. Each machine rebuilds the website and nobody edits it by hand, so ignore it and delete the eighteen entries from the list.
+3. Neither yet. Leave the website alone and soften the check: something present but unstored becomes a note, while something genuinely missing stays a failure.

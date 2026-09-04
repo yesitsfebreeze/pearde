@@ -1,9 +1,11 @@
 ---
-state: open
+state: done
 origin: requested
 priority: 65
-complexity: 0
-blast-radius:
+complexity: 4
+blast-radius: mid
+workflow: probe-then-spec
+actual: 0.32h
 ---
 
 # a collect closes the claim dir it measured against
@@ -39,3 +41,14 @@ Pointers: `resources/board/collect.py` (`claims_dir`, `snapshot`,
 `the-lifecycle-contract-and-purge-reclaims-it` PRD, whose five leftover
 classes this is not a sixth of: the dir dies at the transition that used
 it, not in a later sweep.
+
+## Report
+
+spec01: exit 0
+('done', True, 0, False) PASS
+('failed', True, 1, False) PASS
+('blocked', True, 1, False) PASS
+('container', True, 0, False) PASS
+('dry', True, 0, True) PASS
+('transitions untouched', True) PASS
+PASS

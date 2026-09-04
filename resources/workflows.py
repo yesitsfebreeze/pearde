@@ -189,6 +189,41 @@ def retag(board):
     return sorted(changed)
 
 
+def get(board, slug, kind=None):
+    """One entry from the library, or `None` when the slug is absent. `kind`
+    is the key the caller read the slug under — a slug names one file, so the
+    key is informational only, and an unknown slug returns `None` rather than
+    raising. `draft_route` reads the entry it just wrote to confirm the write
+    landed as a workflow, not an atomic."""
+    e = scan(board).get(slug)
+    if e is None:
+        return None
+    if kind is not None and e["kind"] != kind:
+        return None
+    return e
+
+
+_RUNS_RE = re.compile(r"(?m)^runs:\s*[^\n]*\s*$")
+
+
+def set_runs(board, slug, n):
+    """Write `runs: <n>` on the library file for `slug` and re-tag it. The
+    counter is the file's own, so it is rewritten in place — no scan, no
+    re-parse, the one reader that moves it. A slug that is not in the library
+    is a caller error and returns `None` rather than creating a file."""
+    e = scan(board).get(slug)
+    if e is None:
+        return None
+    text = open(e["path"], encoding="utf-8").read()
+    out, did = _RUNS_RE.subn(f"runs: {n}", text, count=1)
+    if not did:
+        out = text.rstrip("\n") + f"\nruns: {n}\n"
+    out, _ = memos.retag_text(out, file_tags(e["kind"]))
+    common.atomic_write(e["path"], out)
+    retag(board)
+    return e["path"]
+
+
 def add(board, slug, kind, subject, body, date):
     """Write `<slug>.md` to the library, shaped like `<kind>.md` in
     @references/templates — the slug key, `subject`, `date` and `runs: 0`

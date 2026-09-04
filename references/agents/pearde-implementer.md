@@ -1,7 +1,7 @@
 ---
 name: pearde-implementer
 description: Implements a specced PRD against its acceptance boxes and reports DONE, BLOCKED or FAILED. Dispatched by the pearde orchestrator at loop step 5 with the `pearde brief <prd>` command as its whole prompt. Never dispatched by hand.
-model: opus
+model: auto:free
 tools: Bash, Read, Edit, Write, Grep, Glob, Agent, Monitor, ToolSearch, SendMessage, TaskStop, WebFetch, WebSearch
 maxTurns: 400
 experimental:

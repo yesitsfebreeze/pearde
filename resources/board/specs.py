@@ -861,8 +861,19 @@ def draft_route(board, slug, report, subject, date):
     # one section that already exists, and refuses every first route — measured
     # 2026-09-03 on `endpoint-tag-follows-store-base`, the first route this
     # board ever drafted.
+    # `runs` is the count of report sections that name this slug, and only
+    # those: a route drafted from a report that followed the workflow carries
+    # `## Workflow <slug>` and counts 1, while a route drafted from a report
+    # that named the slug only in `## Scores` (the analyst never ran it) has
+    # no section and counts 0 — measured 2026-09-04 on
+    # `endpoint-tag-follows-store-base`, whose SPECCED report carried no
+    # `## Workflow` section and whose `runs: 1` then read as "the counter is
+    # behind the evidence" in `workflow check`.
     if wflib.get(board, slug, "workflow").get("kind") == "workflow":
-        wflib.set_runs(board, slug, 1)
+        if re.search(rf"(?m)^## Workflow\s+{re.escape(slug)}\s*$", report):
+            wflib.set_runs(board, slug, 1)
+        else:
+            wflib.set_runs(board, slug, 0)
     bad = wflib.check(board)
     if bad:
         for p in written:

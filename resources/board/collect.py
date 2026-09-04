@@ -85,6 +85,8 @@ import edit as editlib  # noqa: E402 — beside this script
 import transitions as translib  # noqa: E402 — the one printer of the line
 import specs as specslib  # noqa: E402 — SPECCED/REFINE reuse its own gates
 import lanes as laneslib  # noqa: E402 — every other use of it is lazy, but
+import workflows as wflib  # noqa: E402 — @resources/workflows.py, the run
+                             # counter; `collect_one` bumps it per report
 # `except lanes.Conflict` needs the class at the moment the clause is read
 LaneConflict = laneslib.Conflict
 
@@ -391,6 +393,23 @@ def route_report(board, rel, report_path, opts, out=print):
     dry_flag = ["--dry"] if opts.get("dry") else []
     tail = persona_flag + board_flag + dry_flag
     if word == "DONE":
+        # `runs` is the count of report sections that name a workflow slug,
+        # and `collect_one` is the only place a report lands as a section —
+        # `report_workflow_counts` counts `## Workflow <slug>` in `report.md`,
+        # so the counter moves here, before the record is written, where a
+        # `workflow check` after the commit still sees it. A report with no
+        # `## Workflow` section (an analyst's SPECCED that named the slug only
+        # in `## Scores`, or a worker that followed no route) leaves the
+        # counter alone — measured 2026-09-04, when a route drafted from a
+        # section-less report was left at `runs: 1` and read as "the counter
+        # is behind the evidence".
+        for m in re.finditer(r"(?m)^## Workflow\s+(\S+)\s*$", text):
+            slug = m.group(1)
+            e = wflib.scan(board).get(slug)
+            if e and e.get("kind") == "workflow":
+                cur = e.get("runs")
+                cur = int(cur) if str(cur or "").isdigit() else 0
+                wflib.set_runs(board, slug, cur + 1)
         return collect_one(board, rel, opts, out=out)
     if word == "SPECCED":
         blast, lane, workflow = scores_of(text)

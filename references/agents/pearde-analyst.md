@@ -1,7 +1,7 @@
 ---
 name: pearde-analyst
 description: Reads a PRD's contract and writes its specs, or returns a REFINE split table. Dispatched by the pearde orchestrator at loop step 4 with the `pearde brief <prd>` command as its whole prompt. Never dispatched by hand.
-model: sonnet
+model: auto:free
 tools: Bash, Read, Edit, Write, Grep, Glob, Agent, Monitor, ToolSearch, SendMessage, TaskStop, WebFetch, WebSearch
 maxTurns: 300
 experimental:

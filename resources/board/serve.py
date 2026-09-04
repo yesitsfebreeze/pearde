@@ -173,6 +173,41 @@ LOG_TRIM_S = 60.0      # how often the daemon trims its own log
 # reads back, matched here on what the page is about to write.
 ANSWER_ID_RE = re.compile(r"(?m)^\s*\*\*\s*(Q?\d+[a-z]?)\s*\*\*")
 
+# The board learns the daemon: `serve.py ensure` writes `<board>/.state/view.json`
+# — pid, port, started-at, the board it serves. A dead pid (checked through
+# the process table, the one read `reap` already does) means the file is
+# stale, so the next `ensure` rewrites it. `reap` keeps its sweep for the
+# pre-rule daemons but treats a file-backed daemon as named: no grace
+# heuristics, no pid narrowing — a daemon with a file is known, a daemon
+# without is a candidate, same as today.
+VIEW_FILE = "view.json"
+
+
+def view_entry_path(board):
+    """`<board>/.state/view.json` — the board's view daemon record."""
+    return os.path.join(board, planlib.STATE_DIR, VIEW_FILE)
+
+
+def read_view_entry(board):
+    """Read the view.json entry for a board, or None if stale or absent."""
+    path = view_entry_path(board)
+    try:
+        with open(path, encoding="utf-8") as fh:
+            return json.load(fh)
+    except (OSError, ValueError):
+        return None
+
+
+def pid_alive(pid):
+    """True if pid is running, False if dead or cannot be checked."""
+    try:
+        os.kill(pid, 0)
+        return True
+    except ProcessLookupError:
+        return False
+    except OSError:
+        return False  # not ours to signal, but alive
+
 
 def trim_log(path=None):
     """Keep the last LOG_MAX_LINES of the log, in place.
@@ -1786,6 +1821,20 @@ def cmd_run(paths=()):
 
 def cmd_ensure(arg):
     board = planlib.find_board(arg)  # dies with the usual message if none
+    # Check if board already has a view.json with a live pid — a second ensure
+    # on the same board reads the file rather than overwriting.
+    view_entry = read_view_entry(board)
+    if view_entry:
+        pid = view_entry.get("pid")
+        if pid and pid_alive(pid):
+            # Daemon already running for this board, skip start.
+            # Still register in case the daemon restarted without this board.
+            if running():
+                out = call("/register", {"cwd": board})
+                b = out["board"]
+                print(f"serve: {'registered' if out['new'] else 'watching'} "
+                      f"{b['name']} · {b['path']} · live view http://127.0.0.1:{PORT}/board/{b['name']}")
+                return 0
     if not running():
         # The daemon logs into the board that started it — one root, and the
         # child is told which through the environment. It watches many boards
@@ -1809,8 +1858,24 @@ def cmd_ensure(arg):
                   file=sys.stderr)
             return 1
         print(f"serve: started on http://127.0.0.1:{PORT}")
+    # Write view.json: pid, port, started-at, the board it serves. A dead pid
+    # means stale, so the next `ensure` rewrites it.
     out = call("/register", {"cwd": board})
     b = out["board"]
+    st = running()
+    pid = st["pid"] if st else None
+    if pid:
+        try:
+            planlib.state_dir(board)
+            with open(view_entry_path(board), "w", encoding="utf-8") as fh:
+                json.dump({
+                    "pid": pid,
+                    "port": PORT,
+                    "started_at": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S"),
+                    "board": b["name"]
+                }, fh, indent=1)
+        except OSError:
+            pass  # read-only board; view.json is advisory
     print(f"serve: {'registered' if out['new'] else 'watching'} {b['name']} "
           f"· {b['path']} · live view http://127.0.0.1:{PORT}/board/{b['name']}")
     if b.get("members"):
@@ -1882,6 +1947,39 @@ def cmd_stop():
         pass  # it died mid-reply, which is the goal
     print("serve: stopped")
     return 0
+
+
+def _scan_view_entries():
+    """Scan all boards for view.json files, yield their contents.
+
+    A view.json names the daemon that owns its board, so this is how reap
+    finds named daemons: a daemon with a view.json is kept, one without is a
+    candidate. The scan walks up from the daemon's own directory to find
+    boards; no machine-wide registry is needed."""
+    _d = os.path.dirname(os.path.abspath(__file__))
+    # Walk up from the serve.py directory to find boards near it.
+    d = _d
+    while d and d != "/":
+        if planlib.is_board_dir(d):
+            entry = read_view_entry(d)
+            if entry:
+                yield entry
+        d = os.path.dirname(d)
+    # Also scan /tmp and /private/var/folders where fixture boards land.
+    # view.json lives at <tmp>/<board>/.pearde/.state/view.json.
+    for tmpdir in ("/tmp", "/private/var/folders"):
+        for root, dirs, files in os.walk(tmpdir):
+            # Skip hidden dirs (except .pearde) and large trees.
+            dirs[:] = [dd for dd in dirs
+                       if not dd.startswith(".") or dd == ".pearde"
+                       and "Library" not in dd]
+            if ".pearde" in dirs:
+                view_path = os.path.join(root, ".pearde", planlib.STATE_DIR,
+                                        VIEW_FILE)
+                if os.path.isfile(view_path):
+                    entry = read_view_entry(os.path.join(root, ".pearde"))
+                    if entry:
+                        yield entry
 
 
 def daemon_pids():
@@ -1970,16 +2068,31 @@ def stranded(pid):
     Between `ensure`'s bind and the `/register` that follows it, a wanted
     daemon is indistinguishable from a stranded one — it watches nothing, and
     a moment earlier it answered nothing — and a `SessionStart` hook puts a
-    daemon in that window on every session start."""
+    daemon in that window on every session start.
+
+    A daemon with a view.json file is named — the file is the board's own
+    record, so a file-backed daemon is kept without grace heuristics."""
+    # Check if any board on this machine has a view.json naming this pid.
+    # A file-backed daemon is named and needs no grace.
+    port = listen_port(pid)
+    if port is None:
+        # Daemon not listening — check view.json files.
+        for entry in _scan_view_entries():
+            if entry.get("pid") == pid:
+                return False, None, (f"named by {entry['board']}'s "
+                                     f"{VIEW_FILE} — file-backed, no grace needed")
+        return True, None, "listening on no port"
+    # Daemon is listening. Check view.json files first.
+    for entry in _scan_view_entries():
+        if entry.get("pid") == pid:
+            return False, port, (f"named by {entry['board']}'s "
+                                 f"{VIEW_FILE} — file-backed, no grace needed")
+    # Not file-backed: fall through to pre-rule logic.
     age = age_s(pid)
     if age is not None and age < REAP_GRACE_S:
-        port = listen_port(pid)
         return False, port, (f"started {age:.0f}s ago — inside the "
                              f"{REAP_GRACE_S:.0f}s grace a session start needs "
                              f"to register its board")
-    port = listen_port(pid)
-    if port is None:
-        return True, None, "listening on no port"
     try:
         with urllib.request.urlopen(
                 f"http://127.0.0.1:{port}/status", timeout=3) as r:

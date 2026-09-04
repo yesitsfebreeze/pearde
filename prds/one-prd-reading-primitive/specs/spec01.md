@@ -111,12 +111,12 @@ it, ready to apply to `resources/common.py`.
 
 ## Acceptance
 
-- [ ] `common.prd_shape` is defined, callable, and returns `(fm, title, body,
+- [x] `common.prd_shape` is defined, callable, and returns `(fm, title, body,
       specs, children, problems)` for a directory holding `prd.md`.
-- [ ] On a fixture whose `prd.md` has no `state:` key and whose one spec has
+- [x] On a fixture whose `prd.md` has no `state:` key and whose one spec has
       no closed fence, `problems` names both, and `children`/`specs` still
       resolve for the parts of the shape that were well-formed.
-- [ ] `common.split_frontmatter("---\nest:   # a note\n---\n")` reads `est`
+- [x] `common.split_frontmatter("---\nest:   # a note\n---\n")` reads `est`
       as `[]` (absent), not as the comment text.
 
 ## Verify and Proof
@@ -145,4 +145,7 @@ fm2, _ = common.split_frontmatter("---\nest:   # the weight, only when complexit
 assert fm2.get("est") == []
 print("spec01: ok")
 PY
+# Last and bare, on this spec's own footprint file: the reader is defined
+# here, in `common.py`, and not somewhere the import happened to find it.
+if ! grep -q '^def prd_shape' resources/common.py; then exit 1; fi
 ```

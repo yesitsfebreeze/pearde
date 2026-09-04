@@ -1,182 +1,105 @@
 Verdict: DONE
 
-# every-question-answered-and-the-prd-stays-in-question — implementer report
+# every-question-answered-and-the-prd-stays-in-question — report
 
-Lane `.pearde/.lanes/every-question-answered-and-the-prd-stays-in-question`,
-branch `lane/every-question-answered-and-the-prd-stays-in-question`,
-2 files changed, 48 insertions, 31 deletions, uncommitted.
+## What was wrong
 
-Pass one (the probe's code, already in the tree when this run started)
-carried spec01 whole and spec02's `unanswered()` rewrite. Pass two ran every
-verify block against it, reproduced the stall from a pristine copy of the
-tree, closed the one PRD acceptance box neither spec covered (`questions
-check` was silent on the shape the gate refuses), and rewrapped one
-docstring line pass one left at 98 columns.
-
-## Spec boxes
-
-### spec01 — `release` moves a fully-answered `question` PRD to `open`
-
-All five boxes stand, all five re-run this pass. Verify block:
-`bash .../probe/reproduce.sh <lane>` ->
+The PRD's lane was at `lane/every-question-answered-and-the-prd-stays-in-question`,
+but its HEAD commit `768626c` ("Resolve merge conflict: use lane version for
+questions.py") left an **unresolved merge conflict** in
+`resources/questions.py` (lines 501–514). The file did not parse:
 
 ```
-  ok   — release asking open moved a hand-answered question PRD to open
-  ok   — .transitions.jsonl row names why the move was allowed
-  ok   — release still refuses when a question is owed — pearde release: refused — answer: unanswered — Q1
-  ok   — the drill count and release agree — both call the padded-bold answer unread
-  ok   — questions check names the answer shape the gate refuses
-probe: PASS
+$ python3 -c "import ast; ast.parse(open('resources/questions.py').read())"
+SyntaxError: invalid decimal literal
 ```
 
-The real move, on a fresh example board:
+`scan` therefore reported the PRD as `specced · boxes 8/8` — all eight boxes
+already ticked — while the one footprint file the specs touch was a syntax
+error. The implementer could not run a single verify line against it. The
+specs were written from a tree that had already been fixed; the conflict
+resolution commit had merely *recorded* the disagreement instead of settling
+it, and the conflict was in the middle of `unanswered()`.
 
-```
-$ pearde release asking open --board <ex>/.pearde
-▸ asking: question → open · done 2/8 · 15% · open 4/8 · 50% · ready 2 · blocked 4 · collect 1 @1 workers · pass file owed · as engineer
-$ cat <ex>/.pearde/.state/transitions.jsonl
-{"calls": null, "from": "question", "prd": "asking", "reads": null, "refused": null,
- "t": "2026-09-03T19:02:54", "to": "open", "tokens": null, "why": "every question answered"}
-```
+## What I did
 
-`--dry` on the same edge, and the directory after it:
+Resolved the conflict in `resources/questions.py` by taking **both** sides —
+the two were not alternatives, they were two halves of the one fix:
 
-```
-$ pearde release asking open --board <ex>/.pearde --dry
-dry · ▸ asking: question → open · done 2/8 · 15% · … · as engineer
-  would write: .pearde/prds/asking/prd.md · .pearde/.state/transitions.jsonl
-$ ls <ex>/.pearde/.state/
-parse-cache.json          # no transitions.jsonl — nothing was written
-```
+- the **session/s27323** side's call shapes: `sections(body, "Questions")` and
+  `sections(body, "Answers")` (the modernised reader, already in force
+  everywhere else in the file);
+- the **lane HEAD** side's reader for the answered set:
+  `answered = {a["id"] for a in planlib.answers_of({"body": body})}` — the
+  single reader `answer` and `release` already gate on, which is what spec02
+  demands.
 
-`answer` unchanged and still refusing:
+The third side of the conflict (the `||||||| 379bc17` ancestor) was the old
+`sections(body, A_RE)` + `ANSWER_ID_RE` shape. It was discarded, and
+`ANSWER_ID_RE`'s definition had already been removed by the merge — so the
+dead regex the spec names is gone, not left unused.
 
-```
-$ pearde answer asking Q1 "second answer" --board <ex>/.pearde
-pearde answer: refused — answer: Q1 is already answered
-```
+Indentation on the surviving `answered = …` line had been lost in the merge
+markers; restored to the 8-space level the loop body sits at.
 
-### spec02 — the drill count reads `## Answers` the same way `answer` does
+## Per-spec box status
 
-All three boxes stand. The same probe covers boxes 1 and 2; box 3:
+**spec01 — `release` moves a fully-answered `question` PRD to `open`, and says why**
 
-```
-$ python3 resources/questions.py check <fresh example board>/.pearde
-$ echo $?
-0
-```
+- [x] `release <question-prd> open` moves a PRD whose questions are all
+  answered, when the `## Answers` block was written directly rather than by
+  `answer`
+  `bash prds/…/probe/reproduce.sh .` → `release asking open moved a
+  hand-answered question PRD to open`
+- [x] `release <question-prd> open` still refuses when a question is left
+  unanswered, with the same `answer: unanswered — Qn` message `gate_answered`
+  already raises
+  probe → `release still refuses when a question is owed — pearde release:
+  refused — answer: unanswered — Q1`
+- [x] `answer` still refuses to re-answer an already-answered question
+  `pearde answer asking Q1 "overwritten"` → `refused — answer: Q1 is
+  already answered`, exit 1
+- [x] the `.transitions.jsonl` row for this move carries `"why": "every
+  question answered"`
+  probe → `.transitions.jsonl row names why the move was allowed`
+- [x] `release <question-prd> open --dry` prints the move and writes nothing
+  `dry · ▸ asking: question → open …` on a fresh fixture; `state:` frontmatter
+  unchanged (still 1), no `transitions.jsonl` written
 
-## What pass two added
+**spec02 — the drill count reads `## Answers` the same way `answer` does**
 
-PRD acceptance box 4 — "`questions_of()` and the `## Answers` block cannot
-disagree without `questions check` saying so" — did not hold after pass one.
-`unanswered()` had been pointed at `planlib.answers_of`, so the drill count
-and the gate agreed; but `check`'s own accepted-shape pattern in
-`resources/questions.py` was a *third* reader, looser than both:
+- [x] `questions.py list` and `release <prd> open --dry` agree on whether a
+  question is answered, for an answer written in the loose padded-bold shape
+  that previously fooled only the drill count
+  probe → `the drill count and release agree — both call the padded-bold
+  answer unread`
+- [x] a normally-written answer (`**Q1** — …`) is still read as answered by
+  both
+  `questions.py list` → `asking 0 open 1 answered question`; `release …
+  --dry` prints the move
+- [x] `questions.py check` stays clean on a board with no malformed passes
+  (the example board, `resources/board/example`)
+  `python3 resources/questions.py check /Users/feb/dev/infra/pearde/.pearde`
+  → exit 0, no output
 
-```python
-ANSWER_OK_RE = re.compile(r"^\s*\*\*\s*(Q?\d+[a-z]?)\s*\*\*", re.M)
-```
+Probe: **PASS** (5/5 ok). `questions.py check` on the live board: **clean**.
 
-The `\s*` inside the bold accepts `** Q1 **`, which `plan.py`'s
-`ANSWER_LINE_RE` (`^\s*\*\*(Q?\d+[a-z]?)\*\*`) refuses. So a padded answer
-was called fine by `check`, read as unanswered by `unanswered()` and refused
-by `release` — a disagreement that said nothing, which is what the box
-forbids. `ANSWER_OK_RE` is deleted; `unread_answers()` now builds its
-accepted set by matching `planlib.ANSWER_LINE_RE` line by line — the reader
-`answer` and `release` already gate on — so there is one accepted shape on
-the board, not three. `ANSWER_NEARMISS_RE` gained one alternative (`|\*\*`)
-so the padded shape is reported rather than merely uncounted; a well-formed
-line is filtered out by the `q not in ok` test that was already there.
-Measured:
+## What moved
 
-```
-$ python3 resources/questions.py check <board holding `** Q1 **`>
-asking: Q1 is answered in a shape no reader counts — the id closes its own
-bold, `**Q1** — the decision`, and the title comes after it
-$ echo $?
-1
-$ python3 resources/questions.py check <board holding `**Q1** — …`>
-$ echo $?
-0
-```
+- `resources/questions.py` — conflict resolved; `unanswered()` now builds its
+  answered set from `planlib.answers_of`, the one reader `answer` and
+  `release` use.
 
-One assertion was added to the probe for it — the fifth `ok` line above — so
-the new branch has a runnable check and the probe still goes red on the
-pristine tree.
+Nothing else moved. `resources/board/transitions.py` already carried both
+spec01 changes (`"question": ("open",)` in `cmd_release`'s `allowed` table
+with the matching refusal text, and the `"why"` field in `record()`) and was
+not touched.
 
-## The pristine-tree run (PRD box 6)
+## Scope notes
 
-`git stash` is refused in a lane this session does not own, so the baseline
-is an rsync copy of the lane with both footprint files replaced by their
-`HEAD` blobs. Same probe, same command:
-
-```
-  FAIL — release asking open refused a fully-answered question PRD — pearde release: refused — release: asking is `question` — analyzing → refine|question|open, claimed → blocked|failed
-  ok   — release still refuses when a question is owed — …
-  FAIL — the drill count and release still disagree on the padded-bold answer shape
-  FAIL — questions check stayed silent on an answer shape release refuses
-probe: FAIL
-```
-
-Red before, green after, three of the four cases discriminating.
-
-## The gate
-
-`bash resources/doctor.sh` in the lane is row-for-row identical to the run
-before this pass's edits: `index broken (5)`, `vault broken`, `origin broken
-(40 derived · 8 with no from:)`, `memos broken (43)`, `questions broken (3)`
-— all five pre-existing, all outside the footprint. The `questions` three
-are `## Answers` with no `## Questions` above it on three board PRDs: that
-is `check` working, not this change, and the count did not move (3 before,
-3 after).
-
-`--harnesses`: 100 harnesses, 4 green, 62 failed, 541s — a pre-existing
-board condition, not this change. The whole suite cannot be re-run against
-the baseline copy (harnesses rsync from `git ls-files` and the copy has no
-`.git`), so the harnesses that exercise `release`, `answer` or
-`questions.py` were run both ways instead:
-
-```
-transitions-are-commands       lane 66 pass · 8 fail   baseline 66 pass · 8 fail
-two-questions-start-a-drill    lane 23 pass · 2 fail   baseline 23 pass · 2 fail
-a-question-in-plain-words      identical output on both trees
-a-parked-prd-comes-back        lane 44 pass · 0 fail   baseline 44 pass · 0 fail
-the-documented-board-matches   identical failure on both trees
-an-unknown-flag-refuses        lane 183/196            baseline 183/196
-```
-
-No harness moved. `jstests ok · 49/49`.
-
-`references/parts/states.md` already reads correctly for the new edge — the
-`open` row lists `release <prd> open` among the ways it is reached, and the
-`question` row already says `answers written → open` — and
-`references/parts/handles.md:66` already names `release`, so no doc edit was
-owed (spec01 said as much).
-
-## Notes for the board, not fixed here
-
-- **The `answered` column of `questions.py list` is a section count, not an
-  answer count.** `rows()` computes `na = sum(1 for _h, t in sections(body,
-  A_RE) if t.strip())` — the number of non-empty `## Answers` *blocks* — so a
-  PRD with one open question and one malformed answer prints `1 open
-  1 answered`, which reads as a contradiction. It is the display shape the
-  PRD quotes from the manola incident (`questions 0 open · 1 answered`).
-  Pre-existing, outside both specs' boxes, and cosmetic now that the two
-  counts which gate anything agree. Reported, not fixed.
-- **The PRD's frontmatter `footprint` names `resources/board/questions.py`;
-  the file is `resources/questions.py`.** The brief, both specs and the PRD's
-  own pointers all say `resources/questions.py`, and that is the file edited.
-  Frontmatter is not mine to touch.
-- `knowledge.py query "two readers of the same markdown block disagree"` —
-  108 hits, none on point (top hit scored 12, on `set -e` in verify blocks).
-  Nothing was researched outside the repo, so nothing was written back; the
-  finding above is repo-internal and belongs in a memo, not the wiki.
-
-## Health floor
-
-The brief listed no footprint file under the floor. `resources/questions.py`
-lost a dead regex and gained a three-line helper (`qid_of`, the id
-normalization that had been written inline twice); `transitions.py` gained a
-two-line `why` and one rewrapped docstring line. Neither file grew a
-responsibility and nothing was split.
+- The conflict was in the footprint, so resolving it is in scope. It was a
+  merge artefact, not a design disagreement: both sides were already half of
+  the spec's fix.
+- The `serve.py` `ANSWER_ID_RE` (a different regex, in a different module,
+  used by the asks view) is untouched and is not the dead regex spec02
+  names.

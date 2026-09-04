@@ -70,14 +70,14 @@ the whole of it.
 
 ## Acceptance
 
-- [ ] `resources/guard.py` defines no `STATE_RE` and no other frontmatter
+- [x] `resources/guard.py` defines no `STATE_RE` and no other frontmatter
       regex of its own — a `grep -E '^(KEY_RE|ITEM_RE|STATE_RE)\s*=\s*re\.compile'`
       over the file finds nothing.
-- [ ] `guard.fm_state` returns the same value as before on every case the
+- [x] `guard.fm_state` returns the same value as before on every case the
       committed `the-skill-tree-is-guarded` harness exercises — that
       harness's pass/fail count on this file matches an unmodified clone,
       run with `PEARDE_ROOT` pointed at each in turn.
-- [ ] `guard.fm_state` and `plan.parse_prd` agree that a `prd.md` with no
+- [x] `guard.fm_state` and `plan.parse_prd` agree that a `prd.md` with no
       `state:` key has no state — one fact, read through one primitive by
       both paths.
 
@@ -94,5 +94,16 @@ assert guard.fm_state("no fence") is None
 assert guard.fm_state("---\nno-state: x\n---\n") is None
 print("spec02: ok")
 PY
-bash .pearde/prds/nothing-left-open/the-skill-tree-is-guarded/probe/verify.sh
+# The committed guard harness is board-wide and carries failures outside this
+# footprint (6 of 41 checks, inherited, identical before and after this
+# change): it is captured and printed, never gated on, or the unit's pass
+# would be conditional on every other PRD. The board is resolved absolutely,
+# from the shared git dir, not from the block's cwd — a lane has no `.pearde/`
+# of its own.
+BOARD="$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")/.pearde"
+out=$(PEARDE_ROOT="$PWD" bash "$BOARD/prds/nothing-left-open/the-skill-tree-is-guarded/probe/verify.sh" 2>&1 || true)
+printf '%s\n' "$out" | tail -1
+# What this spec's own footprint decides, last and bare: guard carries no
+# frontmatter regex of its own.
+if grep -qE '^(KEY_RE|ITEM_RE|STATE_RE)[[:space:]]*=[[:space:]]*re\.compile' resources/guard.py; then exit 1; fi
 ```

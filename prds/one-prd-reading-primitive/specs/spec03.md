@@ -134,14 +134,14 @@ below is the whole of it.
 
 ## Acceptance
 
-- [ ] `resources/board/prdfile.py` defines no `KEY_RE`/`ITEM_RE` regex of
+- [x] `resources/board/prdfile.py` defines no `KEY_RE`/`ITEM_RE` regex of
       its own — both are `common.KEY_RE`/`common.ITEM_RE` by alias.
-- [ ] `plan.py`, `transitions.py`, `collect.py` and `specs.py` all import
+- [x] `plan.py`, `transitions.py`, `collect.py` and `specs.py` all import
       cleanly, and `plan.KEY_RE` (`specs.py` `fm_lines`'s dependency) still
       resolves.
-- [ ] `python3 resources/board/plan.py scan .pearde` against this repo's own
+- [x] `python3 resources/board/plan.py scan .pearde` against this repo's own
       live board prints byte-identical output before and after the change.
-- [ ] A `prd.md` whose fence opens and never closes now parses to
+- [x] A `prd.md` whose fence opens and never closes now parses to
       `fm == {}` and the whole file as `body` — the same "no closed fence"
       fact `common.prd_shape` and `guard.fm_state` (spec02) already report,
       not the old lenient partial parse.
@@ -154,9 +154,14 @@ import sys; sys.path.insert(0, 'resources'); sys.path.insert(0, 'resources/board
 import plan as planlib, specs, transitions, collect  # noqa: F401
 print('imports ok, plan.KEY_RE =', planlib.KEY_RE)
 "
-python3 resources/board/plan.py scan .pearde | tail -3
-# compared against a scan taken before this spec's edit landed — the pass
-# writing this box quotes both counts side by side, not just this one run.
+# The board is resolved absolutely, from the shared git dir, not from the
+# block's cwd — a lane has no `.pearde/` of its own. The scan is board-wide:
+# captured and printed, never gated on, and compared against a scan taken
+# before this spec's edit landed — the pass writing this box quotes both
+# runs side by side, not just this one.
+BOARD="$(dirname "$(git rev-parse --path-format=absolute --git-common-dir)")/.pearde"
+out=$(python3 resources/board/plan.py scan "$BOARD" 2>&1 || true)
+printf '%s\n' "$out" | tail -3
 python3 - <<'PY'
 import sys, tempfile, os
 sys.path.insert(0, "resources"); sys.path.insert(0, "resources/board")
@@ -167,4 +172,7 @@ fm, title, body = planlib._parse_prd_uncached(p)
 assert fm == {}, fm
 print("spec03: ok")
 PY
+# Last and bare, on this spec's own footprint file: no second frontmatter
+# regex lives here — `KEY_RE` and `ITEM_RE` are `common`'s by alias.
+if grep -qE '^(KEY_RE|ITEM_RE)[[:space:]]*=[[:space:]]*re\.compile' resources/board/prdfile.py; then exit 1; fi
 ```

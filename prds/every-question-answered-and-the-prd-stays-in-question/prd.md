@@ -8,6 +8,7 @@ repo: pearde
 footprint:
   - resources/board/transitions.py
   - resources/questions.py
+commit: a6ff010 e6f570a
 ---
 
 # every-question-answered-and-the-prd-stays-in-question — a `question` PRD whose answers were written by hand has no command that will move it

@@ -89,7 +89,7 @@ SETTING_KEYS = ("language", "workers", "pipeline", "weight-default",
 # keys a `specNN.md` adds, then the two files a board keeps beside its PRDs.
 FRONTMATTER_KEYS = ("state", "priority", "complexity", "blast-radius", "est",
                     "actual", "claim", "repo", "workflow", "needs",
-                    "footprint", "origin", "from",
+                    "footprint", "origin", "from", "lane",
                     "vision", "terminals", "edges",
                     "subject", "date", "updated", "kind", "status", "verify")
 

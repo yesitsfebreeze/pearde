@@ -197,7 +197,9 @@ decides the state, and a `stopped` row does not.
 >   a check can fail, and a verify command. Each spec says what already
 >   stands and what is left to finish. Report the spec list, the PRD's
 >   `complexity` (1-100) and `blast-radius` (`high`|`mid`|`low`) with one
->   line of reasoning each, and the union of the footprints. Name the
+>   line of reasoning each, and the union of the footprints. A PRD whose
+>   worker only reads — never writes a file — is declared `lane: read`; every
+>   other PRD carries no `lane:` line, which reads as `write`. Name the
 >   workflow you followed — `workflow: <slug>`. No file in the library fit:
 >   draft one from the build you just ran, `## Route` below — a report
 >   naming no workflow is not a verdict this board accepts any more. A job
@@ -215,6 +217,9 @@ decides the state, and a `stopped` row does not.
 >   blast-radius: high|mid|low
 >   workflow: <slug>
 >   ```
+>
+>   Add `lane: read` as a fourth line only when the PRD's worker never writes
+>   a file — its absence is `write`, and no PRD needs the line to say so.
 >
 >   No workflow in the library fit: `<slug>` above is the one you are naming
 >   for the first time, and `## Route` follows this block, in the shape of

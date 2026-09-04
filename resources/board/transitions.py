@@ -485,14 +485,23 @@ def say_dry(board, line, paths, out=print):
 
 def cut_lane(board, rel, out=print):
     """The worker's worktree — `lane/<slug>` at `<board>/.lanes/<rel>`, cut
-    on the claim. Returns its path, or None when the board is in no repo.
+    on the claim. Returns its path, or None when the board is in no repo,
+    or when the PRD's own `lane:` frontmatter says its worker never writes.
     A git that says no is printed and the claim stands: a board that cannot
     cut a lane still holds the PRD, and the worker falls back to the
-    checkout — the state machine is not git's to veto."""
+    checkout — the state machine is not git's to veto.
+
+    `lane: read` is declared by the analyst at spec time, on a PRD whose
+    worker only reads — a lane cut for it is disk nobody ever writes to.
+    Absent, or any other value, cuts one: the default is `write`, because
+    every PRD on the board carries an implementer that edits."""
     import lanes as laneslib
     import collect as collectlib
     prds = planlib.scan(board)
     prd = prds.get(rel)
+    if prd and str(prd["fm"].get("lane", "write")).strip() == "read":
+        out(f"claim: {rel} is `lane: read` — no worktree cut")
+        return None
     root = planlib.repo_root(prd["dir"]) if prd else None
     if not root:
         return None

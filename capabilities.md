@@ -24,7 +24,6 @@ One row per verb `pearde` dispatches — what exists, never what to run.
 | `guard` | the rules in @references/parts/loop.md, enforced | — | — | python |
 | `health` | every tracked file scored 1-100, worst first | — | — | python |
 | `index` | the only reader of either format | — | — | python |
-| `init` | a board that asked nothing — [<dir>] [--language <l>] [--name <n>] | — | — | python |
 | `install` | build one skill folder per file in references/skills/ | — | — | shell |
 | `kern` | kern memory — recall before a turn, capture after it, drain the spool | — | — | python |
 | `knowledge` | the research layer, whole. One tool, no dependency | — | — | python |
@@ -45,15 +44,12 @@ One row per verb `pearde` dispatches — what exists, never what to run.
 | `scout` | discover, ask, curate, wire — that used | — | — | shell |
 | `session` | take/list/reap/land/owns — one tree per session | — | — | python |
 | `set` | — | — | — | python |
-| `settings` | <key>=<value> [--board <path>] — write one key of pearde/settings.md, | — | — | python |
 | `share` | one copy per machine of what every lane regenerates | — | — | python |
 | `specced` | validate the specs, sum the weight, set `specced` | — | — | python |
 | `status` | the board, read and ordered | — | — | python |
 | `sweep` | every claim silent past `claim-ttl`; `--apply` moves analyzing → open, claimed → failed | — | — | python |
 | `unblock` | — | — | — | python |
 | `update` | check every install of this repo and bring it current | — | — | shell |
-| `upgrade` | [<dir>] — bring an existing board up to the layout this repo is on. | — | — | python |
-| `vault` | [<dir>] [--wait] [--open] — put the board in Obsidian's vault register, | — | — | python |
 | `view` | the board's live service: one daemon per machine, watching | — | — | python |
 | `vision` | `pearde vision [board] [--board <path>] [--json\|--next\|--check]` — | — | — | python |
 | `workflow` | the library of how a kind of job is done: read it, check it | — | — | python |

@@ -8,6 +8,7 @@
     kern.py drain     SessionStart — make sure something serves this project,
                       so a spooled delta becomes memory instead of a file
     kern.py check     what this board's memory holds and owes, on demand
+    kern.py line      the same, as one status-line segment — or nothing
 
 kern (`kern` on PATH) keeps one knowledge graph per directory and ships no
 session hook of its own: the drop dir is the seam, and the caller writes it.
@@ -35,7 +36,7 @@ _D = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _D if os.path.isfile(os.path.join(_D, "pearde_path.py"))
                 else os.path.dirname(_D))
 
-HITS = 99                 # thoughts recalled per prompt
+HITS = 5                 # thoughts recalled per prompt
 RECALL_TIMEOUT = 4       # seconds — a prompt is not held up for memory
 RECALL_CHARS = 2000      # cap on what one recall injects
 DRAIN_TIMEOUT = 20       # seconds — spawning a daemon re-loads the store
@@ -223,10 +224,7 @@ def check(data):
         print(ROW % ("kern", "off", "no .kern/ above " + os.getcwd()
                      + " — `mkdir .kern` opts this tree in"))
         return 1
-    status, _ = run([b, "status"], root, RECALL_TIMEOUT)
-    serving = "daemon       serving" in status
-    intake, _ = run([b, "intake", "status"], root, RECALL_TIMEOUT)
-    head = intake.strip().split("\n")[0] if intake.strip() else "intake unknown"
+    serving, _, head = read(root, b)
     print(ROW % ("kern", "ok" if serving else "broken",
                  f"{root}/.kern · " + ("served" if serving else "NOT served")))
     print(ROW % ("", "", head))
@@ -237,7 +235,54 @@ def check(data):
     return 0
 
 
-VERBS = {"recall": recall, "capture": capture, "drain": drain, "check": check}
+# ── line ──────────────────────────────────────────────────────────────────────
+def read(root, b):
+    """(served, pending, head) for this store — the one read `check` and `line`
+    share, so neither grows a second copy of it and neither pays for the
+    other's half.
+    Both `run()` calls are bounded, which is the whole reason the status line
+    comes through this module instead of shelling out to `kern` itself: there
+    is no `timeout` on a stock macOS, and a wedged daemon must not hang a
+    prompt that renders on every turn."""
+    status, _ = run([b, "status"], root, RECALL_TIMEOUT)
+    intake, _ = run([b, "intake", "status"], root, RECALL_TIMEOUT)
+    pending = 0
+    for word in intake.split():
+        if word.startswith("pending="):
+            try:
+                pending = int(word.split("=", 1)[1])
+            except ValueError:
+                pending = 0
+            break
+    head = intake.strip().split("\n")[0] if intake.strip() else "intake unknown"
+    return "daemon       serving" in status, pending, head
+
+
+def line(data):
+    """One status-line segment, or nothing at all.
+
+    Silence is the contract: no `kern` on PATH and no `.kern/` in the tree each
+    print nothing and exit 0. A board that is not remembering must not spend a
+    character saying so — but a store that exists and is NOT served is the
+    failure this whole integration was filed about, and that one is shown."""
+    b = binary()
+    if not b:
+        return 0
+    root = root_of(data.get("cwd") or os.getcwd())
+    if not root:
+        return 0
+    served, pending, _ = read(root, b)
+    if not served:
+        print("kern \u2717")
+    elif pending:
+        print(f"kern \u2191{pending}")
+    else:
+        print("kern")
+    return 0
+
+
+VERBS = {"recall": recall, "capture": capture, "drain": drain, "check": check,
+         "line": line}
 
 
 def command(args):
@@ -247,6 +292,10 @@ def command(args):
         print("pearde kern {recall|capture|drain|check}", file=sys.stderr)
         return 1
     data = {}
+    # `line` is called from the status line, which already knows the project
+    # dir and has no hook payload to pipe: `kern.py line <dir>`.
+    if verb == "line":
+        return VERBS[verb]({"cwd": args[1]} if len(args) > 1 else {})
     if verb != "check" and not sys.stdin.isatty():
         try:
             data = json.loads(sys.stdin.read() or "{}")
@@ -260,7 +309,7 @@ def command(args):
         return 0
 
 
-command.flags = "recall | capture | drain | check"
+command.flags = "recall | capture | drain | check | line"
 COMMANDS = {"kern": command}
 
 

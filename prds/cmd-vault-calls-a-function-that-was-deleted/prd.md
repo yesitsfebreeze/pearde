@@ -6,6 +6,7 @@ complexity: 5
 blast-radius: low
 workflow: retarget-a-moved-symbol
 actual: 0.12h
+commit: b0022b9 b4a8e2f
 ---
 
 # cmd-vault-calls-a-function-that-was-deleted

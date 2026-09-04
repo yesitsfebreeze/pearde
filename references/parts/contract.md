@@ -20,6 +20,7 @@ is yours and no tool touches it.
 | `footprint` | user / orchestrator            | the overlap check in step 5, `plan`'s pairwise `after` edges when specs carry none. Paths. Optional |
 | `origin`    | whoever creates the PRD        | the split in the progress line, the tripwire in @references/parts/derived.md. `requested` \| `derived` |
 | `from`      | orchestrator                   | which PRD's work surfaced a `derived` one         |
+| `lane`      | analyst, at spec time           | `pearde claim` — `read` cuts no worktree, the brief names the checkout, `collect` merges nothing for it. `write` \| `read`. Optional |
 
 `specNN.md`:
 
@@ -40,6 +41,7 @@ is yours and no tool touches it.
 | `blast-radius` | `mid`                                                            |
 | `origin`     | `requested` — saying so is the only way to count as derived        |
 | `workflow`   | none — the brief is as it was before workflows existed             |
+| `lane`       | `write` — every PRD on the board today carries an implementer that edits |
 
 - Match a key by name, at any indentation, anywhere in the frontmatter — a
   `time:` map holding `est` reads the same as top level. <!-- claims: ignore -->

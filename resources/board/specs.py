@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """pearde specs — the two transitions a spec set decides.
 
-    specs.py specced <prd> [--blast high|mid|low] [--workflow <slug>] [--route -] [--check] [--dry]
+    specs.py specced <prd> [--blast high|mid|low] [--lane write|read] [--workflow <slug>] [--route -] [--check] [--dry]
     specs.py refine  <prd> [--dry] < report
 
 `specced` reads every `specs/*.md`, refuses naming file and line, refuses a
 set over `split-above` or `specs-above` (`over split-above: 58 > 40 — REFINE
 it`; the two keys of `settings.md`, the PRD's own board's), else writes
-`complexity:` as the sum, `blast-radius:` and `workflow:` from the flags,
-clears `claim:`, sets `specced` and prints the progress line. With no
+`complexity:` as the sum, `blast-radius:`, `lane:` and `workflow:` from the
+flags, clears `claim:`, sets `specced` and prints the progress line. With no
 `--workflow` named and none on the PRD, one distinct `workflow:` across the
 specs is written up onto the PRD instead of being read and dropped — specs
 naming two different slugs write none, and the operator is told which on
@@ -66,6 +66,7 @@ import workflows as wflib  # noqa: E402
 
 Refused = trlib.Refused
 BLASTS = ("high", "mid", "low")
+LANES = ("write", "read")
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9._-]*$")
 FENCE_RE = re.compile(r"^\s*```\s*([A-Za-z0-9_-]*)\s*$")
 # A box that asks the worker to commit — committing is the orchestrator's
@@ -868,11 +869,14 @@ def draft_route(board, slug, report, subject, date):
 def specced(board, args, persona):
     """validate the specs, sum the weight, set `specced`"""
     blast, workflow = args.opt.get("blast"), args.opt.get("workflow")
+    lane = args.opt.get("lane")
     route = args.opt.get("route")
     check = "check" in args.flags
     prds, rel, prd = find_prd(board, args.pos[0])
     if blast is not None and blast not in BLASTS:
         raise Refused(f"--blast `{blast}` is not one of {'|'.join(BLASTS)}")
+    if lane is not None and lane not in LANES:
+        raise Refused(f"--lane `{lane}` is not one of {'|'.join(LANES)}")
     lib = library(board, prd)
     if workflow == "none" and route is None:
         raise Refused("`--workflow none` is refused — draft the route as "
@@ -940,6 +944,8 @@ def specced(board, args, persona):
         fm["complexity"] = str(total)
         if blast is not None:
             fm["blast-radius"] = blast
+        if lane is not None:
+            fm["lane"] = lane
         if workflow == "none":
             fm.pop("workflow", None)
         elif workflow:
@@ -954,6 +960,8 @@ def specced(board, args, persona):
     edit.set_key(path, "complexity", str(total))
     if blast is not None:
         edit.set_key(path, "blast-radius", blast)
+    if lane is not None:
+        edit.set_key(path, "lane", lane)
     if workflow == "none":
         edit.del_key(path, "workflow")
     elif workflow:
@@ -1131,7 +1139,7 @@ def refine(board, args, persona):
 # The declaration — transitions.py `Args` is the parser, and `--help` prints
 # the same list.
 FLAGS = {
-    "specced": trlib.Flags(("as", "board", "blast", "workflow", "route"),
+    "specced": trlib.Flags(("as", "board", "blast", "lane", "workflow", "route"),
                            ("check",) + trlib.DRY),
     "refine":  trlib.Flags(("as", "board"), trlib.DRY),
 }

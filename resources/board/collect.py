@@ -348,12 +348,15 @@ def verdict_of(text):
 
 
 def scores_of(text):
-    """`(blast, workflow)` off the report's `## Scores` block — the values
-    `pearde specced --blast <x> --workflow <slug>` already takes by hand."""
+    """`(blast, lane, workflow)` off the report's `## Scores` block — the
+    values `pearde specced --blast <x> --lane <y> --workflow <slug>` already
+    takes by hand."""
     sec = section(text, "Scores")
     blast = re.search(r"(?im)^blast-radius:\s*(\S+)", sec)
+    lane = re.search(r"(?im)^lane:\s*(\S+)", sec)
     workflow = re.search(r"(?im)^workflow:\s*(\S+)", sec)
     return (blast.group(1).strip() if blast else None,
+            lane.group(1).strip() if lane else None,
             workflow.group(1).strip() if workflow else None)
 
 
@@ -389,10 +392,12 @@ def route_report(board, rel, report_path, opts, out=print):
     if word == "DONE":
         return collect_one(board, rel, opts, out=out)
     if word == "SPECCED":
-        blast, workflow = scores_of(text)
+        blast, lane, workflow = scores_of(text)
         argv = [rel] + tail
         if blast:
             argv += ["--blast", blast]
+        if lane:
+            argv += ["--lane", lane]
         if workflow:
             prds = planlib.scan(board)
             lib = specslib.library(board, prds[rel])

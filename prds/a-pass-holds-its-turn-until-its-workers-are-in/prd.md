@@ -1,12 +1,11 @@
 ---
-state: claimed
+state: failed
 origin: derived
 from: the-board-is-a-real-directory-at-pearde-never-a-symlink
 priority: 90
 complexity: 11
 blast-radius: mid
 workflow: probe-then-spec
-claim: impl-nova2-a-pass-holds 2026-09-03 21:40
 ---
 
 
@@ -33,3 +32,7 @@ What must not change: the liveness check itself, and the ceiling handover. A pas
 **failed, retried 2026-09-03 21:03**
 
 swept 2026-09-03 20:59 — claim impl-pass-holds-6476 2026-09-03 12:04, silent 8.5h: no file of this PRD's moved past `claim-ttl`. Read the worker's output before a retry; partial code stands on branch `lane/a-pass-holds-its-turn-until-its-workers-are-in`, whose worktree this sweep removed — the branch is kept.
+
+## Failure
+
+swept 2026-09-04 02:41 — claim impl-nova2-a-pass-holds 2026-09-03 21:40, silent 4.9h: no file of this PRD's moved past `claim-ttl`. Read the worker's output before a retry; partial code stands on branch `lane/a-pass-holds-its-turn-until-its-workers-are-in`, whose worktree this sweep removed — the branch is kept.

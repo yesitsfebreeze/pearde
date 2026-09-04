@@ -16,6 +16,7 @@
 
 ## Decisions
 
+- [the-claims-and-lanes-and-logs-growing-out-of-hand-what-the-2026-09-03-measurement-found-and-what-already-covers-it](the-claims-and-lanes-and-logs-growing-out-of-hand-what-the-2026-09-03-measurement-found-and-what-already-covers-it.md) — decided · 2026-09-03 — the claims and lanes and logs growing out of hand — what the 2026-09-03 measurement found and what already covers it
 - [the-board-s-prefix-inside-its-own-repo-is-the-empty-string](the-board-s-prefix-inside-its-own-repo-is-the-empty-string.md) — decided · 2026-09-03 — on a board that is its own git repo the board's prefix is the empty string, and one function reads it
 - [the-graph-view-colours-by-tag-and-every-note-s-kind-tag-is-generated](the-graph-view-colours-by-tag-and-every-note-s-kind-tag-is-generated.md) — decided · 2026-09-02 — the vault's graph colours by tag and never by folder, and every note carries a generated kind tag
 - [the-board-assumes-unlimited-agents](the-board-assumes-unlimited-agents.md) — decided · 2026-09-02 — the plan, the pass and the drill assume every dispatchable PRD runs at once; a worker cap is a person's setting, never the plan's clock

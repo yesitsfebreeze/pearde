@@ -7,7 +7,7 @@ weight-default: 20
 gantt-day: 8h
 context-budget: 160k
 groups: private
-happiness: 4
+happiness: 5
 harnesses: off
 ---
 

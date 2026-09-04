@@ -1,5 +1,5 @@
 ---
-state: open
+state: failed
 origin: requested
 priority: 95
 complexity: 20
@@ -44,3 +44,7 @@ it and none of them replaces it.
 **failed, retried 2026-09-03 21:03**
 
 swept 2026-09-03 20:59 — claim impl-claim-pid 2026-09-03 17:46, silent 3.2h: no file of this PRD's moved past `claim-ttl`. Read the worker's output before a retry; partial code stands on branch `lane/the-board-reclaims-dead-work-by-itself-a-claim-names-the-process-that-holds-it`, whose worktree this sweep removed — the branch is kept.
+
+## Failure
+
+swept 2026-09-04 02:41 — claim impl-nova2-a-claim-name 2026-09-03 21:40, silent 4.7h: no file of this PRD's moved past `claim-ttl`. Read the worker's output before a retry; partial code stands on branch `lane/the-board-reclaims-dead-work-by-itself-a-claim-names-the-process-that-holds-it`, whose worktree this sweep removed — the branch is kept.

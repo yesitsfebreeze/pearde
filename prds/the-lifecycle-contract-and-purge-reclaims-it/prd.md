@@ -1,8 +1,8 @@
 ---
-state: open
+state: failed
 origin: requested
 priority: 45
-complexity: 0
+complexity: 24
 blast-radius:
 ---
 
@@ -80,3 +80,7 @@ No new deletion mechanism: `purge` is a schedule over removers that exist.
 The daemon's idle exit, the vanished-board rule and the four destructive
 commands' refusal are untouched — those are the contract's working and
 start halves, and they already end the right lives.
+
+## Failure
+
+swept 2026-09-04 02:41 — claim impl-the-lifecy-r2 2026-09-03 21:01, silent 5.7h: no file of this PRD's moved past `claim-ttl`. Read the worker's output before a retry; partial code stands on branch `lane/the-lifecycle-contract-and-purge-reclaims-it`, whose worktree this sweep removed — the branch is kept.

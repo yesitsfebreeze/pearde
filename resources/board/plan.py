@@ -227,7 +227,8 @@ def cmd_scan(board):
     # this pass can act on now; `in flight` is held by somebody else. A PRD
     # listed twice is a pass that has to work out which line meant it.
     # `bands` is the one computation of it — `cmd_next` reads the same call.
-    collect, red, yours, flight, ready, gated, why = bands
+    b = bands
+    collect, why = b["collect"], b["why"]
     # The drill section, FIRST — above collect, the pressure order's own head:
     # the scan opens on the questions waiting on the user. A question already
     # out — the pass file's `## Asked` carries it — is marked `out`, carried
@@ -242,11 +243,15 @@ def cmd_scan(board):
     for title, group in (
             (f"collect — {len(collect)} finished, waiting to be closed",
              collect),
-            (f"red — {len(red)}, retry first", red),
-            (f"waiting on you — {len(yours)}", yours),
-            (f"in flight — {len(flight)} held by a worker", flight),
-            (f"ready — {len(ready)} dispatchable now, in order", ready),
-            (f"gated — {len(gated)}, as their gates clear", gated)):
+            (f"red — {len(b['red'])}, retry first", b["red"]),
+            (f"refine — {len(b['refine'])} came back REFINE", b["refine"]),
+            (f"waiting on you — {len(b['asks'])} question"
+             + ("" if len(b["asks"]) == 1 else "s"), b["asks"]),
+            (f"in flight — {len(b['flight'])} held by a worker", b["flight"]),
+            (f"ready — {len(b['ready'])} dispatchable now, in order",
+             b["ready"]),
+            (f"gated — {len(b['gated'])}, as their gates clear — a `needs:`,"
+             " a blocked wall, a lane on the same files", b["gated"])):
         if not group:
             continue
         print("\n" + title)
@@ -314,8 +319,9 @@ def cmd_next(argv):
         return
     prds = scan(board)
     r = compute_plan(board, None, warn=False)
-    collect, red, yours, flight, ready, gated, why = \
-        pressure_bands(board, prds, r)
+    b = pressure_bands(board, prds, r)
+    collect, red, refine, asks = b["collect"], b["red"], b["refine"], b["asks"]
+    flight, ready, gated, why = b["flight"], b["ready"], b["gated"], b["why"]
     # Every actionable section prints, in step order — the whole set this
     # turn acts on, with the board assuming unlimited parallel agents. Each
     # section only when non-empty; the first line keeps its shape.
@@ -349,7 +355,6 @@ def cmd_next(argv):
         for x in collect:
             print(f"  pearde collect {x}")
         acted = True
-    refine = [x for x in yours if prds[x]["state"] == "refine"]
     if refine:
         print(f"step 3 · refine — {len(refine)} came back REFINE")
         print("  decision: whether the analyst's `## Split` table is usable;"
@@ -373,6 +378,18 @@ def cmd_next(argv):
             print(f"  pearde retry {x} && pearde claim {x} <worker>")
             print(f"  pearde brief {x} --worker <worker>"
                   f" → dispatch as pearde-{role}")
+        acted = True
+    # A `blocked` PRD waits on other tickets, never on a person: while its
+    # `needs:` are live it sits in `gated` with them; the moment every one
+    # is `done` the gate is cleared and the one command is `unblock`.
+    unblock = [x for x in gated if (why.get(x) or "").startswith("unblock:")]
+    if unblock:
+        print(f"step 6 · unblock — {len(unblock)} blocked with every need"
+              " done")
+        print("  decision: none — the event landed; unblock lands it on"
+              " specced for the next claim")
+        for x in unblock:
+            print(f"  pearde unblock {x}")
         acted = True
     if ready:
         x = ready[0]
@@ -406,10 +423,10 @@ def cmd_next(argv):
         print(f"in flight — {len(flight)} held by workers · nothing to act on")
         print("  next: a worker's line is step 6 — `pearde collect <prd>`")
         return
-    if yours:
-        print("step 8 · drill, then hand back — everything left is blocked"
-              " on a person")
-        for x in yours:
+    if asks:
+        print("step 8 · drill, then hand back — everything left is a"
+              " question for a person")
+        for x in asks:
             print(f"  {x} · {prds[x]['state']}")
         print('  step 7 first: pearde knowledge query'
               ' "<the frontier\'s question>"')
@@ -455,9 +472,9 @@ def cmd_plan(board, workers):
     wf = workflow_marks(board, prds)
 
     def share(x):
-        """`shares <path(s)> with <prd>` for every PRD `x` clashes with — a
-        footprint clash is real and dispatch will serialise it, but it is
-        reported on the row, never a reason `x` is missing from `ready now`."""
+        """`shares <path(s)> with <prd>` for every PRD `x` clashes with. The
+        pair lands one at a time: `clash` holds the loser out of `ready now`
+        while the winner's lane stands, and this names the files."""
         return "; ".join(
             "shares " + ", ".join(overlap_paths(feet[x], feet[d]))
             + " with " + os.path.basename(d)
@@ -488,12 +505,9 @@ def cmd_plan(board, workers):
             print(f"  · {x} [{p['state']}] p{p['fm'].get('priority', 0)}"
                   f" {fw(est[x])} · unblocks {fw(unblocks[x])}"
                   + (f"  ({'; '.join(tags)})" if tags else ""))
-    held = r["held"]
-    # A footprint clash holds nothing here any more — `needs:` and a claim
-    # gate are the only reasons a PRD is not in `ready now`. `after[x]` can
-    # still be true on a row gated for a real reason; the row says so too.
+    held, clash = r["held"], r["clash"]
     gated = [x for x in r["order"]
-             if (needs[x] or x in held) and est[x] > 0]
+             if (needs[x] or x in held or x in clash) and est[x] > 0]
     if gated:
         print("\nthen, as gates clear — dispatch order")
         for x in gated:
@@ -501,6 +515,8 @@ def cmd_plan(board, workers):
             why = []
             if x in held:
                 why.append(held[x])
+            if x in clash:
+                why.append(f"after {clash[x]} (footprint)")
             if needs[x]:
                 why.append("needs " + ", ".join(os.path.basename(d)
                                                 for d in needs[x]))

@@ -812,7 +812,6 @@ kbd{font:10.5px ui-monospace,SFMono-Regular,monospace;background:var(--fill);
 .ask2 .flag{flex:none;font-size:10px;font-weight:620;text-transform:uppercase;
   letter-spacing:.05em;border-radius:99px;padding:2px 8px;
   background:var(--warn-wash);color:var(--warn)}
-.ask2 .flag.blocked{background:var(--danger-wash);color:var(--danger)}
 /* long content never traps the page's scroll: capped and clipped until the
    reader clicks it open — then it takes its height and the page scrolls */
 .ask2 .q{margin:0 14px;padding:10px 12px;background:var(--content-2);

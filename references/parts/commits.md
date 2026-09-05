@@ -63,9 +63,23 @@ returns it to `specced`, and the next `claim` puts a worker on the SAME lane
 — `lanes.create` hands back the standing worktree — whose brief carries the
 failure verbatim and says to rebase, resolve, keep one implementation and
 verify. A red verify on the merged tree is filed the same way, the slug and
-its output under `## Failure`. Two PRDs claimed on one file end here by
-design — the plan orders the pair with an `after … (footprint)` edge, and
-the clash resolves here rather than being refused at `claim`.
+its output under `## Failure`.
+
+**A lane holding work the spec did not claim does not merge.** Everything
+standing in the lane is the worker's — it was cut clean off HEAD — so a
+tracked edit or an untracked file outside the footprint is work no spec
+claimed, and merging the footprint alone is a partial merge: it closed a PRD
+`done` without the untracked package the landed code imported, and main
+stopped compiling. `collect` reads the lane's standing paths before anything
+merges (`laneslib.dirty`, in `land_lane`) and files the PRD `failed`, the
+paths under `## Failure` with the two ways out: widen the footprint in the
+spec, or drop the files. The retry worker does one of them on the same lane.
+
+Two PRDs on one file are dispatched one at a time: the ready band holds the
+second `after <prd> (footprint)` until the first lane lands
+(@references/parts/order.md). A conflict here is therefore the exception —
+a lane cut before the hold, or a worker that wandered — and the retry above
+is its whole cost.
 
 A board with no lane — a claim taken before lanes, a board outside any git
 repo — collects as before: the work is dirt in the checkout, step 4 commits

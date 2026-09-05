@@ -39,6 +39,8 @@ from prdfile import (HOLDING_STATES, LIVE_STATES, body_has_open_box, claim_of, d
 from registry import (board_settings, scan, spec_data)  # noqa: E402,F401
 from needs import (resolve_need, resolve_needs, unscanned_need)  # noqa: E402,F401
 from vision import (axis_depth)  # noqa: E402,F401
+from silence import (prd_repo)  # noqa: E402,F401
+import lanes as laneslib  # noqa: E402 — `unmerged`, the clash hold
 
 
 
@@ -126,13 +128,12 @@ def dispatchable(prd, prds, board=None, holder=None):
             return f"needs: `{d}` names no PRD on this board"
         if prds[t]["state"] != "done":
             return f"needs: {t} is `{prds[t]['state']}`, not done"
-    # The footprint clash is no longer a gate. Every worker works in a lane
-    # of its own (@resources/board/lanes.py), so two PRDs on one file are
-    # two branches, not two writers in one tree: the plan's edge still
-    # orders them — `footprint_clash` is what `compute_plan` reads — and
-    # the collide is resolved at the merge, where a conflict is a red
-    # collect naming the file. Refusing the claim here only serialized what
-    # the plan already serialized, and stalled a board that had lanes.
+    # The footprint clash is not a claim gate: it is the ROUND's hold.
+    # `compute_plan`'s `clash` keeps a PRD out of the ready band while a
+    # lane on the same files is in flight, unmerged, or offered above it
+    # (`after <prd> (footprint)`), and the pair lands one at a time.
+    # Seven harness lanes on board.go and main.go were dispatched together
+    # when nothing held them, and every one conflicted at its collect.
     v = prd["fm"].get("workflow")
     if isinstance(v, list):
         return ("workflow: the key holds one slug — a list is a break, not "
@@ -420,10 +421,35 @@ def compute_plan(board, workers=None, warn=True):
         return max((f(r) for r in g), default=0.0)
     wall_floor = critical_finish(edges)
     wall_ceiling = critical_finish(combined)
+    # One lane per file per round. A PRD is offered only while no other
+    # lane on its files is standing: a worker in one now, commits on an
+    # unmerged `lane/` (a failed retry, a specced PRD whose earlier lane is
+    # still to land), or a PRD offered above it in this order. The loser
+    # of each pair waits in `gated` as `after <prd> (footprint)` — a line,
+    # never a state — and is offered the moment the winner lands. Read by
+    # `pressure_bands` (scan, next) and `plan_frontier` (plan), one hold.
+    # ponytail: O(n²) overlap scan per plan, the same cost `after` pays;
+    # index feet by path if a board ever makes it measurable.
+    flight = {x for x in todo if todo[x]["state"] in ("analyzing", "claimed")}
+    def holds_lane(y):
+        return y in flight or laneslib.unmerged(prd_repo(todo[y]),
+                                                todo[y]["local"])
+    clash, offered = {}, []
+    for x in order:
+        if x in held or needs[x] or todo[x]["state"] not in ("open", "specced"):
+            continue
+        y = (next((y for y in offered if overlap(feet[x], feet[y])), None)
+             or next((y for y in todo if y != x and overlap(feet[x], feet[y])
+                      and holds_lane(y)), None))
+        if y:
+            clash[x] = y
+        else:
+            offered.append(x)
     return {"prds": prds, "todo": todo, "parked": parked, "settings": settings,
             "workers": workers, "needs": needs, "est": est, "feet": feet,
             "boxes": boxes, "collect": sorted(collect), "held": held,
-            "after": after, "schedule": schedule, "order": order,
+            "after": after, "clash": clash, "schedule": schedule,
+            "order": order,
             "unblocks": unblocks, "wall": wall, "wall_floor": wall_floor,
             "wall_ceiling": wall_ceiling, "avg": avg, "peak": peak,
             "prio": {r: prio(r) for r in todo}}
@@ -522,62 +548,61 @@ def workflow_marks(board, prds):
 
 
 def pressure_bands(board, prds, r):
-    """(collect, red, yours, flight, ready, gated, why) — the pressure
-    order's own bands, over the live PRDs `compute_plan` returned in
-    `r["order"]`. One computation, read by `cmd_scan` for the sections it
-    prints and by `cmd_next` for the one it acts on —
-    @references/parts/order.md.
+    """The pressure order's own bands, one dict, over the live PRDs
+    `compute_plan` returned in `r["order"]`. One computation, read by
+    `cmd_scan` for the sections it prints and by `cmd_next` for the ones it
+    acts on — @references/parts/order.md. A PRD in exactly one band:
 
-    Everything above `in flight` is something this pass can act on now;
-    `in flight` is held by somebody else. A PRD in exactly one band, never
-    two. `red` is `failed`: the queue the loop drains first — `retry` puts
-    a worker back on the lane — and not a person's, which is why it is not
-    in `yours`."""
+    - `collect` — finished, a worker still holding it
+    - `red` — `failed`: the queue the loop drains first; `retry` then
+      `claim` puts a worker back on the lane. Not a person's
+    - `refine` — came back REFINE: the pass's own step 3
+    - `asks` — `question`: the ONE band that waits on a person
+    - `flight` — a worker holds it
+    - `ready` — dispatchable now, in order, one lane per file: a PRD whose
+      footprint overlaps one in flight, one with an unmerged lane, or one
+      offered above it this round is `gated` as `after <prd> (footprint)`
+      (`compute_plan`'s `clash`)
+    - `gated` — the rest; `why` says what. `blocked` waits on OTHER tickets
+      — its `needs:` — and lists here, never under asks; with every need
+      done its line reads `unblock:` and `next` prints the command"""
     order = r["order"] if r else []
     collect = list(r["collect"]) if r else []
     needs = r["needs"] if r else {}
-    after = r["after"] if r else {}
+    clash = r["clash"] if r else {}
     rest = [x for x in order if x not in collect]
-    # `blocked` is a wall a person has to take down, not a free PRD. It holds
-    # its worker, so it is not in flight either — filing it under `ready` was
-    # the scan calling a PRD dispatchable that nothing can dispatch.
     red = [x for x in rest if prds[x]["state"] == "failed"]
-    yours = [x for x in rest if prds[x]["state"] in ("question", "blocked",
-                                                     "refine")]
+    refine = [x for x in rest if prds[x]["state"] == "refine"]
+    asks = [x for x in rest if prds[x]["state"] == "question"]
     flight = [x for x in rest if prds[x]["state"] in ("analyzing", "claimed")]
-    free = [x for x in rest if x not in flight and x not in yours
-            and x not in red]
+    free = [x for x in rest if x not in flight and x not in asks
+            and x not in red and x not in refine]
     # `dispatchable` is the one predicate `claim` reads: a PRD it refuses is
     # never listed as ready. A container — children all done, nothing of its
     # own — is already in `collect`: `compute_plan` put it there, the one list
     # `scan`, `plan` and a bare `collect` read.
     why = {x: dispatchable(prds[x], prds, board) for x in free}
+    for x in free:
+        if prds[x]["state"] == "blocked":
+            if not (why[x] or "").startswith("needs:"):
+                why[x] = f"unblock: every need done — pearde unblock {x}"
+        elif x in clash and not why[x] and not needs.get(x):
+            why[x] = (f"after {clash[x]} (footprint) — one lane on those "
+                      "files at a time")
     for x in collect:   # a container's row says why it is here, in its own words
         w = (dispatchable(prds[x], prds, board)
              if prds[x]["state"] in ("open", "specced") else None)
         if (w or "").startswith("container:"):
             why[x] = w
-    # `after` is the footprint-overlap edge and nothing else — `compute_plan`
-    # builds it from `overlap(feet[r], feet[s])` alone, and `cmd_plan` labels
-    # every one of them `(footprint)`. It orders the pair; it no longer holds
-    # the second back. Every worker works in a git worktree of its own
-    # (@resources/board/lanes.py), so two PRDs on one file are two branches
-    # that the merge reconciles — and holding the second here would put back,
-    # one command along, the single-tree serializer `claim`'s gate just gave
-    # up. `needs` still gates: that is a real dependency and no branch fixes
-    # it. The plan's own frontier keeps the edge, so `pearde plan` still says
-    # which of the two goes first.
     ready = [x for x in free if not why[x] and not needs.get(x)]
     gated = [x for x in free if x not in ready]
-    return collect, red, yours, flight, ready, gated, why
+    return {"collect": collect, "red": red, "refine": refine, "asks": asks,
+            "flight": flight, "ready": ready, "gated": gated, "why": why}
 
 def plan_frontier(r):
-    """`plan`'s ready set — every PRD `needs:` does not gate, in dispatch
-    order. A footprint clash offers both PRDs of a pair here together: it is
-    reported on the row, never a reason either one waits — `dispatch` holds
-    the loser of the pair at launch, on the real in-flight set, which is the
-    arrangement the dispatcher was built for. The same list `vision --next`
-    prints alone."""
+    """`plan`'s ready set — every PRD `needs:` does not gate and no lane
+    on its files holds (`clash`), in dispatch order. The same list `vision
+    --next` prints alone."""
     return [x for x in r["order"]
             if not r["needs"][x] and r["est"][x] > 0
-            and x not in r["held"]]
+            and x not in r["held"] and x not in r["clash"]]

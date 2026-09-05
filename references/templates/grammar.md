@@ -89,12 +89,12 @@ and the rules for growing it.
 | **calibrate** | the fit of one machine-wide constant — hours per unit of weight — from every `done` PRD carrying `actual:` across every registered board |
 | `TUNE` | the hand-set margin in `mapfile.py`, 1.618. Tuned hours are weight × the fit × this |
 | **dispatchable** | `plan.dispatchable` — the one predicate `scan`'s ready band and `claim` both read, so what the scan offers is what `claim` takes |
-| **pressure order** | the one ranking of the whole board: to collect, red, waiting on you, in flight, ready now, gated, parked, landed. The cut is between 1 and 2 — above it is this pass's, below it is already somebody's |
+| **pressure order** | the one ranking of the whole board: to collect, red, refine, waiting on you, in flight, ready now, gated, parked, landed. The cut is between 1 and 2 — above it is this pass's, below it is already somebody's |
 | **to collect** | every box closed, a worker still holding it. No dispatch is cheaper |
 | **red** | `failed` — a lane with commits and a `## Failure`; `retry` then `claim` puts a worker back on it, before anything open is dispatched |
-| **waiting on you** | `question`, `blocked`, `refine` — the three that move only when a person moves them |
+| **waiting on you** | `question` — the one state that moves only when a person moves it; `blocked` waits on other tickets under gated, `refine` is the pass's own step |
 | **in flight** | a worker holds it and its boxes are ticking |
-| **ready** | dispatchable this second. Inside the band, biggest door first — that ordering *is* the dispatch order |
+| **ready** | dispatchable this second, one lane per file — a footprint overlapping a lane in flight, unmerged, or offered above it waits in gated as `after <prd> (footprint)`. Inside the band, biggest door first — that ordering *is* the dispatch order |
 | **gated** | the rest of the plan, in schedule order |
 | **landed** | `done`, laid out to the left of now |
 | **critical path** | the chain that sets the finish. Weight cut there moves the vision closer; weight cut anywhere else moves nothing |

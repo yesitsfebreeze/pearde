@@ -28,11 +28,13 @@ container — children all `done`, no specs, no open box of its own, which
 `collect` closes and `claim` refuses (`container:`); `needs:` all `done`;
 `workflow:` resolves.
 
-A footprint overlap with a `claimed` PRD is **not** a gate. Every worker works
-in a git worktree of its own, so two PRDs on one file are two branches: the
-plan orders the pair (`after … (footprint)`), the merge resolves the clash,
-and a real disagreement shows as a red `collect` naming the file. Expect that
-red as the design, not as a break.
+A footprint overlap is not a `claim` gate; it is the round's hold. Every
+worker works in a git worktree of its own, and one lane per file at a time:
+`scan`'s ready band offers a PRD only while no lane on its files is in flight,
+unmerged, or offered above it — the loser reads `after <prd> (footprint)`
+under gated and is offered the moment that lane lands (`compute_plan`'s
+`clash`, read by `scan`, `next` and `plan`). Seven lanes dispatched together
+on two files were seven conflicts at their collects.
 
 `defer <prd>` writes the parked `deferred` below. `set <prd> <state> --force`
 writes any transition and says `forced` on the line — the escape hatch, never
@@ -55,7 +57,10 @@ the path. The view's drag calls the same function forced, and its line says
 - `blocked` — the work is done, and a box it cannot close waits on something
   named. Carries `needs:`, and the body says which boxes are open and what
   closes each. Live work — counted in the progress line and the plan, never
-  blindly retried.
+  blindly retried — and never a person's: it waits on OTHER tickets, so
+  `scan` lists it under gated with its needs, never under `waiting on you`,
+  and `next` prints `pearde unblock` the moment every need is `done`. Only
+  `question` waits on you.
 
 Never reach for `blocked` to avoid a hard `failed`.
 

@@ -163,7 +163,7 @@ A template is the shape and nothing else — it lands whole in every file writte
 | @resources/board/view.css | the page's stylesheet, inlined at render |
 | @resources/board/view.js | the page's script, inlined at render |
 | @resources/board/viewtest.js | the view's gate — a rendered page in a real browser |
-| @resources/board/looptest.sh | the loop's gate — a conflicted lane lands `failed`, `next` retries it before new work, the retry brief carries the failure; real git, `doctor`'s `loop` row |
+| @resources/board/looptest.sh | the loop's gate, real git, `doctor`'s `loop` row — a conflicted lane lands `failed` and `next` retries it before new work with the failure in the brief; a lane holding unclaimed work does not merge; waiting on you is questions and `blocked` gets `unblock`; one lane per file per round |
 | @resources/board/adapters/claude.json | the Start button's default launch target — one JSON per adapter (`{"name","command","prompt"}`, optional `"plugins"` list of suggestions), read live by serve.py; doctor reports missing ones |
 | @resources/board/lit-core.min.js | Lit 3, vendored — the page's component base |
 | @resources/board/all.py | `all` — every watched board merged into one read-only page; no file of its own, the watch set is its whole configuration |

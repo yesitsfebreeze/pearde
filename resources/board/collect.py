@@ -9,6 +9,10 @@ For each PRD named — or every PRD in `scan`'s **collect** section when none
 is — the seven steps of @references/parts/loop.md step 6, in order:
 
   1  the finished condition off both files      `standing()` in plan.py
+  1b the lane lands — first, so the verify measures the merged tree. A
+     lane holding work outside the footprint, or one whose rebase
+     conflicts, does not merge: the PRD is `failed`, `## Failure` names
+     the paths, and `retry` puts a worker back on the same lane
   2  every spec's `## Verify and Proof` block    run in `repo`, output kept
      then the board's `gate:`                    against the claim's baseline
      — a red one is recorded: `## Failure` holds the slug and its output,
@@ -126,6 +130,17 @@ CONTENDING = ("analyzing", "refine", "question", "specced",
 class Stop(Exception):
     """A step said no. The message is what the user reads; nothing after the
     step ran."""
+
+
+class Unclaimed(Exception):
+    """The lane holds standing work — tracked edits or untracked files —
+    outside the footprint. `land_lane` raises it before anything merges;
+    `collect_one` files the PRD `failed` naming the paths. Merging the
+    footprint alone and closing `done` is how a package landed without the
+    directory it imported and main stopped compiling."""
+    def __init__(self, paths):
+        super().__init__("unclaimed work in the lane: " + ", ".join(paths))
+        self.paths = list(paths)
 
 
 # ── argv ──────────────────────────────────────────────────────────────────────
@@ -2079,8 +2094,9 @@ def land_lane(board, rel, prd, repo, opts, out=print):
 
     Scope is the footprint, exactly as step 3's is — the lane is cut clean
     off HEAD, so everything dirty in it is this worker's and no hunk needs
-    splitting, but a worker that wandered outside its footprint is still
-    not committed whole. The paths outside are named and left in the lane.
+    splitting. A worker that wandered outside its footprint raises
+    `Unclaimed` with the paths before anything merges: a footprint-only
+    merge is a partial one, and `collect_one` files it `failed`.
 
     A merge conflict raises `lanes.Conflict` — through, not caught. The
     merge is aborted, so the checkout is where it was and the lane branch
@@ -2117,11 +2133,20 @@ def land_lane(board, rel, prd, repo, opts, out=print):
     if elsewhere:
         out(f"{rel}: in the board's own repo, not the lane's — "
             + ", ".join(sorted(elsewhere)))
+    # Everything standing in the lane is this worker's — the lane was cut
+    # clean off HEAD — so a path outside the footprint is work the spec did
+    # not claim, and a merge of the footprint alone is a partial merge: it
+    # closed `done` on the harness board without the untracked package the
+    # landed code imported. Not merged: `failed`, the paths named, and the
+    # retry worker widens the footprint in the spec or drops the files.
+    # The board's own path is never the lane's (`lanes.exclude_board`);
+    # git lists nothing it ignores.
+    phantom = laneslib.board_rel(board, repo)
     standing = laneslib.dirty(board, rel)
-    outside = [p for p in standing if not inside(p, feet)]
+    outside = sorted(p for p in standing if not inside(p, feet)
+                     and p.rstrip("/") != phantom)
     if outside:
-        out(f"{rel}: outside the footprint, left in the lane — "
-            + ", ".join(sorted(outside)))
+        raise Unclaimed(outside)
     # What moved under the worker's feet, read BEFORE anything merges:
     # `lanes.merge` rebases the lane onto this branch, and from then on the
     # cut point IS this branch's HEAD and the comparison has no answer left
@@ -2160,27 +2185,11 @@ def land_lane(board, rel, prd, repo, opts, out=print):
     return pre, n, moved
 
 
-def fail_conflict(board, rel, prd, pmd, conflict, opts, now, out=print):
-    """A lane that will not rebase becomes a `failed` PRD, and returns 1.
-
-    What it writes is `## Failure` — the section `release failed` gates on
-    and `retry` folds into `## History`, so the next worker's brief carries
-    it verbatim (`brief:retry` in @references/parts/workers.md). The text
-    is the lane branch, the branch it would not land on, and one bullet
-    per file git named on the conflict — git's own list, carried as data
-    from `lanes.Conflict` rather than parsed back out of a sentence. The
-    claim goes, because no worker is working on it; the state goes to
-    `failed`, because `failed → retry → claim` is the edge that puts a
-    worker back on it. Nothing else is touched: the checkout is where
-    `lanes.merge` left it, and the worker's commits are on the lane
-    branch, which `lanes.create` hands the retry worker as it stands.
-
-    `failed` and not `blocked`. `blocked` is a wall a person takes down —
-    a `needs:` gate, an open box waiting on a named event. A rebase
-    conflict is work a worker does: rebase, resolve, keep one
-    implementation, verify. Filing it `blocked` left twelve PRDs "waiting
-    on you" on one board while forty-seven open ones waited behind them.
-    `--dry` never reaches here — `land_lane` returns before it merges."""
+def conflict_text(rel, conflict, now):
+    """`## Failure` for a lane that will not rebase: the lane branch, the
+    branch it would not land on, and one bullet per file git named — git's
+    own list, carried as data from `lanes.Conflict` rather than parsed back
+    out of a sentence."""
     files = sorted(set(conflict.files))
     lines = [f"**{now.strftime('%Y-%m-%d %H:%M')} — the lane will not "
              f"rebase**", "",
@@ -2193,19 +2202,51 @@ def fail_conflict(board, rel, prd, pmd, conflict, opts, now, out=print):
               f"`{conflict.branch}` and the checkout never moved. `pearde "
               f"retry {rel}` puts a worker back on that lane to rebase it "
               f"onto `{conflict.onto}` and resolve."]
-    text = "\n".join(lines)
-    if opts.get("dry"):                 # unreachable today; free if it changes
-        out(f"{rel}: dry — would fail on {conflict.branch}")
+    return "\n".join(lines)
+
+
+def unclaimed_text(rel, br, paths, now):
+    """`## Failure` for a lane holding work the spec did not claim: one
+    bullet per path, and the two ways out."""
+    lines = [f"**{now.strftime('%Y-%m-%d %H:%M')} — the lane holds work the "
+             f"spec did not claim**", "",
+             f"`{br}` has {len(paths)} path(s) standing outside the "
+             "footprint:", ""]
+    lines += [f"- `{p}`" for p in paths]
+    lines += ["", "Nothing merged and nothing lost: the paths stand in the "
+              "lane. Widen the footprint in the spec or drop the files, "
+              f"then `pearde retry {rel}` puts a worker back on that lane."]
+    return "\n".join(lines)
+
+
+def fail_lane(board, rel, prd, pmd, text, why, opts, now, out=print):
+    """A lane that cannot land becomes a `failed` PRD, and returns 1.
+
+    What it writes is `## Failure` — the section `release failed` gates on
+    and `retry` folds into `## History`, so the next worker's brief carries
+    it verbatim (`brief:retry` in @references/parts/workers.md). `text` is
+    that section (`conflict_text`, `unclaimed_text`); `why` is the line's
+    own words — git's, for a conflict. The claim goes, because no worker
+    is working on it; the state goes to `failed`, because `failed → retry
+    → claim` is the edge that puts a worker back on it. Nothing else is
+    touched: the checkout is where `lanes.merge` left it, and the worker's
+    work is in the lane, which `lanes.create` hands the retry worker as it
+    stands.
+
+    `failed` and not `blocked`. `blocked` is a wall that waits on other
+    tickets — a `needs:` gate. A lane that will not land is work a worker
+    does: rebase, resolve, keep one implementation, widen or drop, verify.
+    Filing a conflict `blocked` left twelve PRDs "waiting on you" on one
+    board while forty-seven open ones waited behind them."""
+    if opts.get("dry"):
+        out(f"{rel}: dry — would fail: {why}")
         return 1
     editlib.append_section(pmd, "Failure", text)
     editlib.del_key(pmd, "claim")
     editlib.set_key(pmd, "state", "failed")
     transition_row(board, rel, prd["state"], "failed", now)
     close_claims(board, rel)
-    # the exception's own words on the line, so the run still prints what
-    # git said and not a second paraphrase of it
-    out(progress_line(board, rel, prd["state"], "failed", opts["as"],
-                      str(conflict)))
+    out(progress_line(board, rel, prd["state"], "failed", opts["as"], why))
     return 1
 
 
@@ -2302,7 +2343,14 @@ def collect_one(board, rel, opts, out=print):
     try:
         pre, landed, moved = land_lane(board, rel, prd, repo, opts, out)
     except LaneConflict as e:
-        return fail_conflict(board, rel, prd, pmd, e, opts, now, out)
+        return fail_lane(board, rel, prd, pmd, conflict_text(rel, e, now),
+                         str(e), opts, now, out)
+    except Unclaimed as e:
+        import lanes as laneslib
+        return fail_lane(board, rel, prd, pmd,
+                         unclaimed_text(rel, laneslib.branch_of(rel),
+                                        e.paths, now),
+                         str(e), opts, now, out)
     base = baseline(board, rel)
     _, feet = planlib.spec_data(prd)
     owned = owned_by(prd, board_root, repo, feet, board)

@@ -53,7 +53,7 @@ KEY = "all"
 
 # What a person came for, in the order they came for it. `asks` is the only
 # one that is a person's own queue rather than the board's.
-ASK_STATES = ("question", "blocked")
+ASK_STATES = ("question",)
 
 
 def board_payload(path):

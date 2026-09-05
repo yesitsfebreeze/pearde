@@ -2610,19 +2610,6 @@ let dTask = null, dData = null, dDirty = false;
 window.__pearde_hold = () => dDirty;
 
 // one `## Heading` section out of a body, ending at the next heading
-/* The wall's heading is written by whoever hit it — `## Blocked on a human
-   with a browser` is the same section as `## Blocked`. Matched by prefix, so
-   only the exact-name lookups stay strict. */
-function sectionLike(body, prefix) {
-  const re = new RegExp("^##\\s+" + prefix + "\\b[^\\n]*$", "im");
-  const m = re.exec(body || "");
-  if (!m) return "";
-  const rest = body.slice(m.index + m[0].length);
-  const nxt = rest.search(/^##\s+/m);
-  return (nxt < 0 ? rest : rest.slice(0, nxt))
-    .replace(/<!--[\s\S]*?-->/g, "").trim();
-}
-
 function section(body, name) {
   const re = new RegExp("^##\\s+" + name + "\\s*$", "im");
   const m = re.exec(body || "");
@@ -3096,14 +3083,11 @@ async function reopenOne(rel, qid, state) {
    rewritten. The reply lands under ## Answers and the PRD reopens; the
    orchestrator reads it as "the question was wrong" and owes a new pass in
    the format. */
-async function sendBack(rel, blocked) {
-  return answer(rel, "**pass** *(sent back " + stamp() + ")* — " + (blocked
-    ? "blocked without a stated wall. Write what is in the way and what " +
-      "would clear it, as numbered questions with three prepared answers, " +
-      "the recommended one first."
-    : "not answerable as written. Restate as numbered questions: a fork " +
-      "ending in a question mark, three prepared answers, the recommended " +
-      "one first."));
+async function sendBack(rel) {
+  return answer(rel, "**pass** *(sent back " + stamp() + ")* — " +
+    "not answerable as written. Restate as numbered questions: a fork " +
+    "ending in a question mark, three prepared answers, the recommended " +
+    "one first.");
 }
 
 /* the one write the board is waiting for */
@@ -3230,8 +3214,7 @@ const STATE_ORDER = ["open", "refine", "question", "analyzing", "specced",
                      "claimed", "blocked", "failed", "done"];
 const isLive = r => STATE_ORDER.includes(r.state) && r.state !== "done";
 const liveRows = () => ALL.filter(isLive);
-const askRows = () => ALL.filter(r => r.state === "question" ||
-                                      r.state === "blocked");
+const askRows = () => ALL.filter(r => r.state === "question");
 let view = "timeline";
 let listQ = "", listState = null, listBoard = null;
 let listBy = "prio", listDesc = true;
@@ -3567,15 +3550,15 @@ function drawHealth() {
 }
 
 /* ── asks: the board waiting on a person ──────────────────────────────────
-   `question` means an agent stopped and wants an answer. `blocked` means it
-   hit a wall. Both are the board waiting on you. This is the inbox: the
-   question as written, and the box that answers it — the same two edits
+   `question` means an agent stopped and wants an answer — the one state
+   that waits on you. `blocked` waits on other tickets (its `needs:`) and
+   `failed` on a retry; neither is an ask. This is the inbox: the question
+   as written, and the box that answers it — the same two edits
    (`## Answers`, state back to open) the orchestrator makes when the answer
    is typed at a terminal.                                                  */
 async function drawAsks() {
   drawAnswered();                 // the settled half, beside the open half
   const asks = askRows().sort((p, q) =>
-    (p.state === q.state ? 0 : p.state === "question" ? -1 : 1) ||
     q.prio - p.prio || p.rel.localeCompare(q.rel));
   const el = $("asks");
   if (!asks.length) {
@@ -3587,7 +3570,6 @@ async function drawAsks() {
   }
   el.innerHTML = asks.map(r => {
     const t = byRel.get(r.rel) || {};
-    const blocked = r.state === "blocked";
     return '<div class="ask2" data-rel="' + esc(r.rel) + '">' +
       '<div class="hd" data-go="' + esc(JSON.stringify({prd:r.rel})) + '">' +
       '<div style="flex:1;min-width:0"><div class="ttl">' +
@@ -3600,18 +3582,15 @@ async function drawAsks() {
           (t.downstream ? " · " + t.downstream + " PRD" +
             (t.downstream === 1 ? "" : "s") : "") : "") +
         "</div></div>" +
-      '<span class="flag' + (blocked ? " blocked" : "") + '">' +
-        (blocked ? "blocked" : "question") + "</span></div>" +
+      '<span class="flag">question</span></div>' +
       '<div class="q skel">reading the PRD…</div>' +
       (VIRTUAL
         ? '<div class="foot"><span class="hint">answered where it lives</span>'
           + boardLink(t.rel, "answer on " + rowBoard(t.rel)) + "</div>"
         : SERVED ? '<div class="foot"><textarea placeholder="' +
-        (blocked ? "what unblocks it — this goes in as the answer"
-                 : "the answer, in your words") + '"></textarea>' +
+        'the answer, in your words"></textarea>' +
       '<div class="row2"><button class="act send primary">answer &amp; reopen' +
-      '</button>' + (blocked
-        ? '<button class="act reopen">just reopen</button>' : "") +
+      '</button>' +
       '<button class="act sendback" hidden>send back — rewrite as ' +
       "questions</button>" +
       '<span class="hint">writes ## Answers and reopens the PRD</span>' +
@@ -3621,7 +3600,6 @@ async function drawAsks() {
   }).join("");
   el.querySelectorAll(".ask2").forEach((card, ci) => {
     const rel = card.dataset.rel;
-    const blocked = asks[ci].state === "blocked";
     const box = card.querySelector("textarea");
     const send = card.querySelector(".send");
     if (!SERVED) {
@@ -3640,8 +3618,7 @@ async function drawAsks() {
       fetchPrd(rel).then(d => {
         const q = card.querySelector(".q");
         q.classList.remove("skel");
-        const qtxt = section(d.body, "Questions") ||
-          (blocked ? sectionLike(d.body, "Blocked") : "");
+        const qtxt = section(d.body, "Questions");
         const cardQs = parseQuestions(qtxt);
         if (cardQs) {
           q.style.display = "none";
@@ -3653,30 +3630,23 @@ async function drawAsks() {
           dropAnswered(holder);
           return;
         }
-        q.textContent = qtxt || sectionLike(d.body, "Blocked") ||
-          section(d.body, "Notes") || (d.body || "").slice(0, 700) ||
-          "(the PRD says nothing yet)";
+        q.textContent = qtxt || section(d.body, "Notes") ||
+          (d.body || "").slice(0, 700) || "(the PRD says nothing yet)";
         q.onclick = () => q.classList.toggle("open");
       });
       return;
     }
     // fire serves the fallback foot only — a pass that parses answers one
     // question at a time through its own buttons, never in one submit
-    const fire = async only => {
+    const fire = async () => {
       send.disabled = true;
-      const out = only === "reopen"
-        ? await save(rel, {fm: {state: "open"}})
-        : await answer(rel, box.value);
+      const out = await answer(rel, box.value);
       send.disabled = false;
-      if (out && out.error) { if (only === "reopen") toast(out.error, true); return; }
-      if (only === "reopen") { toast("Reopened"); prdCache.delete(rel);
-                               refresh(); }
+      if (out && out.error) return;
       card.classList.add("gone");
       setTimeout(() => drawAsks(), reduced ? 0 : 280);
     };
     send.onclick = () => fire();
-    const re = card.querySelector(".reopen");
-    if (re) re.onclick = () => fire("reopen");
     bind(box, "keydown", e => {
       if ((e.metaKey || e.ctrlKey) && e.key === "Enter") fire();
     });
@@ -3693,8 +3663,7 @@ async function drawAsks() {
         if (line) line.textContent += " · " + blast + " blast";
       }
       const q = card.querySelector(".q");
-      const qtxt = section(d.body, "Questions") ||
-        (blocked ? sectionLike(d.body, "Blocked") : "");
+      const qtxt = section(d.body, "Questions");
       const cardQs = parseQuestions(qtxt);
       q.classList.remove("skel");
       if (cardQs) {
@@ -3724,25 +3693,20 @@ async function drawAsks() {
         if (foot) foot.style.display = "none";
         return;
       }
-      const txt = qtxt || sectionLike(d.body, "Blocked") ||
-        section(d.body, "Notes") || (d.body || "").slice(0, 700);
+      const txt = qtxt || section(d.body, "Notes") ||
+        (d.body || "").slice(0, 700);
       q.textContent = txt || "(the PRD says nothing yet)";
       // long text must not trap the page's scroll — it opens on a click
       q.onclick = () => q.classList.toggle("open");
       // a card the user cannot act on is not an ask. A question pass that
-      // does not parse, a parked PRD that never asked, a blocked PRD whose
-      // card is the PRD body instead of the wall — each says so, and offers
-      // the reply that sends it back to be written as one
-      const badWhy = blocked
-        ? (qtxt ? "" :
-           "blocked without saying what is in the way — the text below is " +
-           "the PRD itself, not the wall; send it back to have it stated")
-        : (qtxt
-           ? "not written as answerable questions — no fork ending in a " +
-             "question mark with prepared answers; answer in your own " +
-             "words, or send it back"
-           : "parked on you without saying what it is asking — send it " +
-             "back, or answer in your own words");
+      // does not parse, a parked PRD that never asked — each says so, and
+      // offers the reply that sends it back to be written as one
+      const badWhy = qtxt
+        ? "not written as answerable questions — no fork ending in a " +
+          "question mark with prepared answers; answer in your own " +
+          "words, or send it back"
+        : "parked on you without saying what it is asking — send it " +
+          "back, or answer in your own words";
       if (badWhy) {
         const bad = document.createElement("div");
         bad.className = "qbad";
@@ -3753,7 +3717,7 @@ async function drawAsks() {
           sb.hidden = false;
           sb.onclick = async () => {
             sb.disabled = true;
-            const out = await sendBack(rel, blocked);
+            const out = await sendBack(rel);
             sb.disabled = false;
             if (out && out.error) return;
             card.classList.add("gone");
@@ -4268,7 +4232,7 @@ async function openVault() {
    in flight. A zero is dimmed, never absent — the strip is the same shape
    on every board, so the eye learns where to land. Light DOM, styled from
    view.css like every other element here. */
-const WAITING = new Set(["question", "blocked", "refine", "failed"]);
+const WAITING = new Set(["question"]);
 const FLIGHT = new Set(["claimed", "analyzing"]);
 class PeardeNow extends LitElement {
   static properties = { data: {} };
@@ -4521,7 +4485,6 @@ function drawAnalytics() {
   const ready = tasks.filter(t => t.ready).length;
   const collectN = tasks.filter(t => t.collect).length;
   const waiting = ALL.filter(r => r.state === "question").length;
-  const blocked = ALL.filter(r => r.state === "blocked").length;
   const cal = Math.max(...tasks.map(t => t.endDay), 0) * (DATA.dayHours || 8);
   $("tiles").innerHTML =
     tile("done", pct + "%", done.length + " of " +
@@ -4540,9 +4503,9 @@ function drawAnalytics() {
     tile("to collect", collectN, "finished — commit and close",
          {view:"timeline", collect:1, mode:"vision"},
          collectN > 0 ? "got" : "") +
-    tile("waiting on you", waiting + blocked,
-         waiting + " question · " + blocked + " blocked", {view:"asks"},
-         waiting + blocked > 0 ? "hot" : "");
+    tile("waiting on you", waiting,
+         waiting + " question" + (waiting === 1 ? "" : "s"), {view:"asks"},
+         waiting > 0 ? "hot" : "");
 
   // 1 — where the work sits
   const byState = [];

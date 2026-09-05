@@ -383,6 +383,19 @@ def merge(repo, slug, out=None):
     return int(ahead or 0)
 
 
+def unmerged(repo, slug):
+    """True when `lane/<slug>` holds commits the checkout's branch has not
+    got — work standing on this machine that a clashing dispatch would have
+    to merge over. No branch, or every commit merged: False."""
+    br = branch_of(slug)
+    if not repo or git(repo, "rev-parse", "--verify", "--quiet", br,
+                       check=False).returncode != 0:
+        return False
+    n = git(repo, "rev-list", "--count", "HEAD.." + br,
+            check=False).stdout.strip()
+    return n not in ("", "0")
+
+
 def conflicts(repo):
     out = git(repo, "diff", "--name-only", "--diff-filter=U",
               check=False).stdout

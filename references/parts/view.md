@@ -52,7 +52,7 @@ on a folded one opens it.
 | 2 | **timeline**  | what is in front of us — see below                                |
 | 3 | **board**     | what is where — kanban by state; drag a card to write `state:`    |
 | 4 | **analytics** | how this is going — where the work and weight sit, the est/actual records, the machine-wide hours-per-weight fit, weight left over time, and what a transition costs: calls per transition over the last thirty, refusals per session, both off the guard's count (@references/parts/guard.md). Calls are the proxy for tokens, named as such; no guard state at all reads `no guard`, never zero |
-| 5 | **asks**      | what is waiting on *you* — every `question` and `blocked` PRD, packed in a masonry wall, and beside them the answered panel. A pass in `@references/drill.md`'s format renders as picks: the fork, its three prepared answers (the first is the recommendation, pre-selected), an own-answer box, and its own submit — per question, never one submit for the pass. A pass not in the format says so and offers "send back — rewrite as questions". An answered question leaves the cards at once and appears in the panel, newest first, where its `reopen` takes the answer back |
+| 5 | **asks**      | what is waiting on *you* — every `question` PRD, and only those: `blocked` waits on other tickets, `failed` on a retry. Packed in a masonry wall, and beside them the answered panel. A pass in `@references/drill.md`'s format renders as picks: the fork, its three prepared answers (the first is the recommendation, pre-selected), an own-answer box, and its own submit — per question, never one submit for the pass. A pass not in the format says so and offers "send back — rewrite as questions". An answered question leaves the cards at once and appears in the panel, newest first, where its `reopen` takes the answer back |
 | 6 | **list**      | all of it — sortable, filterable, one row per PRD                 |
 | 7 | **memos**     | what the board decided — `.pearde/memos/`, rendered                  |
 | 8 | **report**    | the same file in full, folded — section 1 is its opening. ⌘7 |
@@ -82,8 +82,9 @@ nothing and computes nothing. Registering a board is the whole of joining.
 @references/parts/all.md.
 
 **The now strip is the first thing under the title**, on every view: three
-doors — `to collect N` · `waiting on you N` · `in flight N` — the top three
-bands of @references/parts/order.md, each a click into that set (the timeline
+doors — `to collect N` · `waiting on you N` · `in flight N` — three bands of
+@references/parts/order.md, `waiting on you` counting questions and nothing
+else, each a click into that set (the timeline
 filtered to collect, the list filtered to the `hot` band, the list filtered to
 the `held` band). Zero renders the door dimmed, never absent, so the strip is
 the same shape on every board and the eye learns where to land. When a worker
@@ -282,9 +283,6 @@ person.
   not answerable and falls back to raw text, a free textarea, and a "send
   back — rewrite as questions" button that replies so under `## Answers` and
   reopens the PRD.
-- A `blocked` PRD's wall renders the same way when it is written as a pass.
-  The heading is matched by prefix, so `## Blocked on a human with a browser`
-  is the same section as `## Blocked`.
 - **Each question answers on its own.** `answer Q1` writes that one under
   `## Answers` and leaves the rest of the pass open. The PRD only goes back
   to `open` when nothing in the pass is left unanswered.
@@ -310,11 +308,11 @@ person.
   whole call as failed sent the reader back to `answer Qn`, whose second
   press the service refuses as a duplicate of the line already on disk —
   a pass where nothing but resubmitting appeared to work.
-- The **asks** view is that same pass for every waiting PRD at once. It
+- The **asks** view is that same pass for every `question` PRD at once. It
   renders exactly what the inspector renders — the same picks, the same
   prose, the same per-question buttons — because both build from the same
-  parse. A `blocked` PRD with no `## Blocked` section and no pass is flagged
-  the same way, not dumped as PRD body.
+  parse. A `blocked` PRD is never an ask: it waits on its `needs:`, under
+  gated, and `pearde next` prints `unblock` the moment they are done.
 - **The answered panel** is the right half of that view: every question the
   board has settled, newest answer first, each row the question, the decision
   and the PRD it belongs to — click one to open that PRD. The panel is read

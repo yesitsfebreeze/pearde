@@ -360,8 +360,7 @@ const file = served ? arg : path.resolve(arg);
           dumps: cards.filter(c => c.querySelector(".q") &&
             !c.querySelector(".qq") && !c.querySelector(".qbad") &&
             !/could not read|nothing yet|through the service/
-              .test(c.querySelector(".q").textContent) &&
-            !c.querySelector(".flag.blocked")).length,
+              .test(c.querySelector(".q").textContent)).length,
           // every question answers on its own, and one already written back
           // is not in the inbox at all — it is in the answered panel
           passesMissingSend: [...document.querySelectorAll("#asks .qq")].filter(q =>

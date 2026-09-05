@@ -72,9 +72,11 @@ with candidates and their `npx skills add` lines, and the pass hands back `ASK`
 before it scans. The board installs nothing — @references/parts/ramp.md.
 
 **1 · Scan.** The sections come out in the pressure order of
-@references/parts/order.md — drill, collect, red, waiting on you, in flight,
-ready, gated — and the cut falls after `waiting on you`: above, this pass's;
-below, somebody's. The header names the drill count — `asking N over M PRDs` — and
+@references/parts/order.md — drill, collect, red, refine, waiting on you, in
+flight, ready, gated — and the cut falls after `waiting on you`: above, this
+pass's; below, somebody's. `waiting on you` is questions and nothing else: a
+`blocked` PRD waits on its `needs:` under gated, and `next` prints its
+`unblock` once they are done. The header names the drill count — `asking N over M PRDs` — and
 over one a **drill** section stands first, above *collect*: the pass
 dispatches nothing past it until the drill is put (step 2). Open a file only
 for what the scan does not print, and only to act on it. No
@@ -128,10 +130,12 @@ naming `pearde brief <prd> --worker <name>`, so the brief never enters this
 window. `workers` and `pipeline` in `.pearde/settings.md` are caps a person
 set; `0`, the default, is no cap. `pearde claim` refuses what is not
 dispatchable — held, not a leaf, `needs:` not `done`, a `workflow:` naming
-nothing — and names the gate. A footprint clash is none of those: each worker
-holds a worktree of its own, so the plan orders the pair and the merge resolves
-it; `brief` maps each refusal to a skip word, and a worker's own `brief`
-re-reading its claim is no refusal. `pearde scan` marks the PRD's line `wf <slug>?` when
+nothing — and names the gate. A footprint clash is not `claim`'s refusal but
+the round's hold: `next` never offers a PRD whose files a lane in flight,
+unmerged, or offered above it already holds — it waits under gated as `after
+<prd> (footprint)` and is offered when that lane lands, so one lane writes a
+file at a time; `brief` maps each refusal to a skip word, and a worker's own
+`brief` re-reading its claim is no refusal. `pearde scan` marks the PRD's line `wf <slug>?` when
 its workflow resolves to nothing: fix the slug or remove the key, then claim in
 the same pass. `pearde workflow check` names the file; on a master it
 never reaches a member's PRDs. Run `check` on the board the PRD lives on.

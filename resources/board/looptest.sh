@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# looptest — the loop's flow, measured in real git. Six sections, one
+# looptest — the loop's flow, measured in real git. Seven sections, one
 # fixture each: a copy of resources/board/example under its own `git init`,
 # the lane on `finished` cut by `lanes.create` exactly as `claim` cuts one,
 # the worker's edit standing in it. No faked git state.
@@ -14,6 +14,10 @@
 #        under gated, and `next` says `unblock` once they are done
 #   6    one lane per file per round: a ready PRD sharing a file with a
 #        claimed one is gated `after <prd> (footprint)` until it lands
+#   7    an answer through the view's door stays answered: the daemon's
+#        `/edit`, posted exactly as the page posts it, and then every reader
+#        — `/prd`, `/data`, `/answers`, the file, `scan`, `next`, `questions
+#        list` — reads the same answer; a second press is refused, not written
 #
 # Run: bash resources/board/looptest.sh — exit 0 is green.
 set -u
@@ -148,6 +152,66 @@ lacks "…and next does not offer it" "$(nxt)" "pearde claim big/second"
 collect finished >/dev/null
 eq  "the lane landed" "$(fm finished state)" done
 has "…and the PRD is ready" "$(band 'ready — ' "$(scan)")" "big/second"
+
+echo "7. an answer through the view's door stays answered"
+fixture e no
+# the daemon on a port of its own; the CLI calls below keep PEARDE_PORT=1
+VIEW="$(python3 - "$B" "$PY" <<'PY'
+import json, os, socket, subprocess, sys, time, urllib.error, urllib.request
+b, py = sys.argv[1], sys.argv[2]
+s = socket.socket(); s.bind(("127.0.0.1", 0)); port = s.getsockname()[1]; s.close()
+log = open(os.path.join(b, ".state", "serve.log"), "a")
+daemon = subprocess.Popen([sys.executable, os.path.join(py, "serve.py"), "run"],
+                          env={**os.environ, "PEARDE_PORT": str(port)},
+                          stdout=log, stderr=log)
+
+def call(path, body=None):
+    req = urllib.request.Request(
+        f"http://127.0.0.1:{port}{path}", method="POST" if body else "GET",
+        data=json.dumps(body).encode() if body else None,
+        headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=20) as r:
+            return r.status, json.loads(r.read())
+    except urllib.error.HTTPError as e:
+        return e.code, json.loads(e.read() or b"{}")
+
+try:
+    for _ in range(100):
+        try:
+            call("/status"); break
+        except OSError:
+            time.sleep(0.1)
+    name = call("/register", {"cwd": b})[1]["board"]["name"]
+    line = "**Q1** *(answered 2026-09-05 12:00)* — In memory — a dict per process"
+    # exactly what view.js `answerOne` posts on the last question of a pass
+    edit = {"board": name, "prd": "asking", "append": line,
+            "heading": "Answers", "fm": {"state": "open"}}
+    st, out = call("/edit", edit)
+    print("edit", st, " ".join(out.get("wrote", [])))
+    prd = call(f"/prd?board={name}&rel=asking")[1]
+    print("prd", prd["state"], "answer" if line in prd["body"] else "no answer")
+    rows = call(f"/data?board={name}")[1]["payload"]["all"]
+    print("data", *[r["state"] for r in rows if r["rel"] == "asking"])
+    print("answers", *[f"{a['rel']} {a['id']}" for a in call(f"/answers?board={name}")[1]["answers"]])
+    st, out = call("/edit", edit)
+    print("retry", st, out.get("error", ""))
+finally:
+    daemon.terminate(); daemon.wait(5)
+PY
+)"
+has "the page's write lands: append and state" "$VIEW" "edit 200 append state"
+has "/prd reads the answer back, open" "$VIEW" "prd open answer"
+has "/data reads it open" "$VIEW" "data open"
+has "/answers lists it" "$VIEW" "answers asking Q1"
+has "a second press is refused, not written" "$VIEW" "retry 409 answer: Q1 is already answered"
+eq  "on disk: state open" "$(fm asking state)" open
+eq  "on disk: one answer line" "$(grep -c '^\*\*Q1\*\* \*(answered' "$B/prds/asking/prd.md")" 1
+SCAN="$(scan)"
+lacks "a fresh scan asks nothing" "$SCAN" "waiting on you"
+has "…and offers the PRD" "$(band 'ready — ' "$SCAN")" "asking"
+lacks "next asks nothing" "$(nxt)" "step 2 · answer"
+has "questions list counts it answered" "$( cd "$D" && python3 "$PY/../questions.py" list "$B" 2>&1 )" "0 open   1 answered"
 
 echo
 [ "$FAIL" = 0 ] && echo "looptest: green" || echo "looptest: red"

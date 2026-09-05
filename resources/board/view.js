@@ -3025,9 +3025,9 @@ async function answerOne(rel, text, last) {
   const wrote = wroteOf(out);
   if (!wrote.includes("append")) {
     toast("Not saved — " + (out.error || "the answer did not land"), true);
+    drawAsks();          // the file is the record: redraw off what it holds
     return false;
   }
-  prdCache.delete(rel);
   answersLoaded = null;                    // one more for the answered panel
   // the answer landed; a state the transition refused is a separate sentence.
   // Reporting it as a failed answer sends the reader back to `answer Qn`,
@@ -3067,7 +3067,6 @@ async function reopenOne(rel, qid, state) {
           (out.error || qid + " is not in ## Answers"), true);
     return false;
   }
-  prdCache.delete(rel);
   answersLoaded = null;                 // one less in the answered panel
   toast(out.error
           ? "Reopened " + qid + " — but the PRD did not move: " + out.error
@@ -3102,12 +3101,12 @@ async function answer(rel, text) {
   const wrote = wroteOf(out);
   if (!wrote.includes("append")) {
     toast("Not saved — " + (out.error || "the answer did not land"), true);
+    drawAsks();          // the file is the record: redraw off what it holds
     return out;
   }
   // the answer is on disk. Whether the PRD also moved is the second half, and
   // the reader is told which half refused rather than being sent back to a
   // button that can now only write a duplicate
-  prdCache.delete(rel);
   answersLoaded = null;                    // one more for the answered panel
   toast(out.error ? "Answered — but the PRD did not reopen: " + out.error
                   : "Answered — " + rel.split("/").pop() + " is open again",
@@ -3196,6 +3195,10 @@ const wroteOf = out => (out && out.wrote) || [];
 async function save(rel, payload) {
   if (VIRTUAL) return {error: RO_MSG};
   if (!SERVED) return {error: "no daemon — this file is read-only"};
+  // a write attempt makes the cached body suspect whatever the reply says:
+  // the daemon writes before it replies, and a reply that never came, or a
+  // 409 naming an answer already on disk, both mean the file moved on
+  prdCache.delete(rel);
   try {
     const r = await fetch(API + "/edit", {method: "POST",
       headers: {"Content-Type": "application/json"},
@@ -4790,6 +4793,12 @@ function apply(payload) {
   drawHeader(); drawLegend(); drawSide();
   memosLoaded = null;
   answersLoaded = null;   // a terminal can answer a pass too
+  // …and the PRD bodies the asks cards were drawn from are as old as the
+  // sequence that fetched them. A new sequence is the daemon's word that a
+  // board file moved — an answer typed at a terminal, another session's
+  // dispatcher, an own write whose reply was lost after it had landed — and
+  // a card redrawn off the old body asks a settled question again.
+  prdCache.clear();
   drawAll();
   if (dTask) {                                  // keep the inspector honest
     const t = taskFor(dTask.rel);

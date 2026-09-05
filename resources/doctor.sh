@@ -893,13 +893,14 @@ fi
 # retries it above any new dispatch, the brief carrying the failure; a lane
 # holding work outside the footprint does not merge; `waiting on you` is
 # questions and a `blocked` PRD gets `unblock` when its needs are done; two
-# PRDs on one file are offered one lane at a time.
+# PRDs on one file are offered one lane at a time; an answer written through
+# the view's `/edit` is read back the same by every reader and never twice.
 if [ -z "$(res looptest.sh)" ]; then
   row loop broken "no resources/board/looptest.sh"
 else
   RT=$(bash "$(res looptest.sh)" 2>&1); RRC=$?
   if [ "$RRC" = 0 ]; then
-    row loop ok "$(printf '%s\n' "$RT" | grep -c '^  ok') checks · red retries first · no partial merge · asks are questions · one lane per file"
+    row loop ok "$(printf '%s\n' "$RT" | grep -c '^  ok') checks · red retries first · no partial merge · asks are questions · one lane per file · an answer stays answered"
   else
     row loop broken "$(printf '%s\n' "$RT" | grep '^  FAIL' | head -1)"
     fix "bash $(res looptest.sh)"

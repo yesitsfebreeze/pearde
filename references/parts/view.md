@@ -288,7 +288,11 @@ person.
   to `open` when nothing in the pass is left unanswered.
 - Which questions are already answered is read off `## Answers`, not
   remembered by the page — a redraw, a reload and a second reader all agree,
-  and nothing is answered twice.
+  and nothing is answered twice. The body a card is drawn from is read again
+  on every board sequence and after every write attempt, whatever the reply:
+  a terminal's `answer`, another session's dispatcher, or an own write whose
+  reply was lost after it had landed all move the file, and a card redrawn
+  off the body it fetched before that asks a settled question again.
 - An answer is written as `**Q1** *(answered 2026-08-28 14:22)* — <the
   decision>`. The id opens the line and the decision follows the dash, as
   before; the stamp is what the answered panel orders by. A line written

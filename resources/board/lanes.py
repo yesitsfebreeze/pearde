@@ -112,17 +112,10 @@ def create(board, repo, slug, base=None):
     """Cut `lane/<slug>` off `base` (the repo's HEAD by default) and check
     it out at `<board>/.lanes/<slug>`. Returns the worktree path.
 
-    The lane is materialised WITHOUT the board directory. A repo that
-    tracks its own `.pearde/` hands every worktree a stale copy of the
-    board, and a worker running any board command from its lane resolves
-    to that phantom: measured, `pearde scan` from inside a lane printed
-    `0 PRDs` against a live board holding one — silently, no error. So the
-    worktree is added `--no-checkout`, the board's path is excluded by a
-    `--no-cone` sparse-checkout, and the checkout follows. The excluded
-    path keeps its skip-worktree bit, so a later `git add -A` in the lane
-    does not delete the board from the tree (measured: it did not). A
-    board the repo does not track needs none of this and gets it anyway,
-    where it costs one command and no behaviour.
+    The lane is materialised WITHOUT the board directory — see
+    `exclude_board` for the three layouts and what each gets. The
+    worktree is added `--no-checkout` so the exclusion is in place before
+    the first checkout writes a byte.
 
     The lane's regenerable directories are shared, not rebuilt.
     `link_shared` points `node_modules`, the graphify cache and the
@@ -157,27 +150,53 @@ def create(board, repo, slug, base=None):
         if base:
             args.append(base)
         git(repo, *args)
-    rel = board_rel(board, repo)
-    if rel and os.path.exists(os.path.join(board, ".git")):
-        # Only when the board is its OWN git repo. The exclusion and the
-        # symlink back are how a lane runs a board it does not hold — a
-        # repo that tracks its own `.pearde/` hands every worktree a stale
-        # copy otherwise. A board that is not a repo has nothing to exclude:
-        # its files are not in the code repo's index at all, and symlinking
-        # them in makes them paths "beyond a symbolic link" that `git
-        # rebase` refuses — measured 2026-09-04 on the flat layout in
-        # `a-board-s-own-file-commits-in-the-board-repo`, whose fixture cut
-        # a lane at `.pearde/.lanes/p1` and died
-        # `'.pearde/prds/p1/prd.md' is beyond a symbolic link` before a
-        # single file was staged.
-        git(d, "sparse-checkout", "set", "--no-cone", "/*",
-            "!/" + rel, check=False)
-        git(d, "checkout")
-        link_board(board, repo, d)
-    else:
-        git(d, "checkout")
+    exclude_board(board, repo, d)
     link_shared(d)
     return d
+
+
+def exclude_board(board, repo, tree):
+    """Check `tree` out with the board kept out of it, by layout.
+
+    A repo that holds its own `.pearde/` hands every worktree a stale copy
+    of the board, and a worker running any board command from its tree
+    resolves to that phantom: measured, `pearde scan` from inside a lane
+    printed `0 PRDs` against a live board holding one — silently, no
+    error. Measured again 2026-09-05 on a board the code repo TRACKS: the
+    worker wrote its report and specs into the phantom, the board's own
+    copies landed on `main`, and the lane's rebase then died `untracked
+    working tree files would be overwritten by checkout` — nineteen
+    finished PRDs sat `blocked` on it. So the board's path is excluded by
+    a `--no-cone` sparse-checkout whenever the repo holds it: the excluded
+    entries keep their skip-worktree bit, a later `git add -A` in the tree
+    does not delete the board (measured), and a rebase never writes them.
+
+    Three layouts, three answers:
+    - the board is its OWN git repo (`.pearde/.git`): excluded, and
+      symlinked back so a spec's probe path resolves from the tree —
+      the code repo ignores the board, so nothing in the index is
+      reached through the link.
+    - the code repo TRACKS the board: excluded, NO symlink. Skip-worktree
+      entries under a symlink read as deleted (` D`) and `git rebase`
+      dies `is beyond a symbolic link` on the autostash — measured
+      2026-09-05. The tree has no `.pearde` at all, and a board command
+      run from it climbs to the real board.
+    - neither (a board the repo ignores and that is not a repo): nothing.
+      Its files are not in the index, and symlinking them in makes them
+      paths "beyond a symbolic link" that `git rebase` refuses — measured
+      2026-09-04 on the flat layout in
+      `a-board-s-own-file-commits-in-the-board-repo`.
+    - a board outside the repo: nothing to exclude."""
+    rel = board_rel(board, repo)
+    own = bool(rel) and os.path.exists(os.path.join(board, ".git"))
+    tracked = bool(rel) and bool(git(repo, "ls-files", "--", rel,
+                                     check=False).stdout.strip())
+    if own or tracked:
+        git(tree, "sparse-checkout", "set", "--no-cone", "/*",
+            "!/" + rel, check=False)
+    git(tree, "checkout")
+    if own:
+        link_board(board, repo, tree)
 
 
 def link_board(board, repo, tree):

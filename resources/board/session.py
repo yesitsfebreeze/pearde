@@ -315,12 +315,7 @@ def create(board, repo, ident):
         laneslib.git(repo, "worktree", "add", "--no-checkout", d, br)
     else:
         laneslib.git(repo, "worktree", "add", "--no-checkout", "-b", br, d)
-    rel = laneslib.board_rel(board, repo)
-    if rel:
-        laneslib.git(d, "sparse-checkout", "set", "--no-cone",
-                     "/*", "!/" + rel, check=False)
-    laneslib.git(d, "checkout")
-    laneslib.link_board(board, repo, d)
+    laneslib.exclude_board(board, repo, d)
     return d
 
 

@@ -204,7 +204,7 @@ def split_frontmatter(text, lists=True):
         if m:
             key = m.group(1)
             v = _clean(m.group(2))
-            fm[key] = v if v or not lists else []
+            fm[key] = [] if lists and v in ("", "[]") else v
     return None, 0
 
 

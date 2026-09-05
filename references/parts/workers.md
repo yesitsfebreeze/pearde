@@ -123,6 +123,8 @@ not name, a row nothing uses, or a marker pair missing or unterminated, is the
 | `<board>` | the board whose library holds the slug, for `workflows.py brief` |
 | `<split_above>` | `split-above` in the PRD's own board's `settings.md`, default 40 — @references/settings.md |
 | `<specs_above>` | `specs-above` there, default 6 |
+| `<failure>` | the PRD's `## History` verbatim — every `## Failure` a `retry` folded in, newest last; the retry block prints only when one is there |
+| `<onto>` | the branch the checkout is on — what the lane rebases onto and lands on |
 | `<health>` | `health.py list --under <health-floor>` over the PRD's footprint union, one line per file, worst first, each naming its score, its worst axis and its note's path — or `none under the floor`, or `no health record — pearde health score writes one`. Never "fix this": the score does not reorder this or any other brief. @references/health.md |
 | `<slug>` | the `workflow:` the block is printed for — in the analyst block it is the worker's to write |
 | `<id>` | `--as`, default `engineer`; `--consult <id>` |
@@ -364,12 +366,34 @@ damage.
 > <health>
 <!-- /brief -->
 
+**Retry** — on top of the role, when the PRD came back through `pearde
+retry`: the lane still holds the last worker's commits, and the brief says
+what broke and what to do about it. `## History` is the source; a PRD with
+none prints no block.
+
+<!-- brief:retry -->
+> This PRD failed and you are its retry. The lane `<repo>` holds the last
+> worker's commits and tree — continue from them, never start over. What
+> broke, verbatim from `## History`:
+>
+> <failure>
+>
+> In order: `git -C <repo> rebase <onto>`; resolve every conflict by hand,
+> keeping one implementation — never both; build, run each spec's `## Verify
+> and Proof` block and the repo's gate until green; leave the lane one commit
+> ahead of `<onto>`. Never `rebase --abort`, never `push -f`, never `reset
+> --hard`: the standing commits are the work, and the next collect merges
+> exactly what is on the branch.
+<!-- /brief -->
+
 On return, the same one call as the analyst's: `pearde collect <prd> --report
 <the report's path>`. DONE routes into collect's own seven steps, BLOCKED into
 `release blocked` — the `needs:` key is the gate's to refuse on — and anything
-less into `release failed`, `## Failure` written first by the worker or written
-by `--fail`. Every open box the tool re-checks on its own; the report's word is
-never taken for the verify. What stays the orchestrator's
+less into `release failed`, `## Failure` written first by the worker. A red
+verify at the collect is filed `failed` the same way, the slug and its output
+under `## Failure`, and `retry` puts a worker back on the lane. Every open box
+the tool re-checks on its own; the report's word is never taken for the
+verify. What stays the orchestrator's
 is the belief and the `## Workflow` rows, as above.
 
 Two unclosable boxes, caught at the gate rather than by eye: `pearde specced`

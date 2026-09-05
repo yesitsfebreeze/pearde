@@ -886,6 +886,25 @@ else
   fi
 fi
 
+# ── loop: the flow, measured in real git ─────────────────────────────────────
+# A lane whose rebase conflicts lands `failed` with the files under
+# `## Failure`, `next` prints the retry above any new dispatch, and `retry` →
+# `claim` → `brief` puts a worker back on the same lane with the failure in
+# its brief. looptest.sh builds the conflict in real git and measures it —
+# the one check for the flow @references/parts/states.md describes under
+# `failed`.
+if [ -z "$(res looptest.sh)" ]; then
+  row loop broken "no resources/board/looptest.sh"
+else
+  RT=$(bash "$(res looptest.sh)" 2>&1); RRC=$?
+  if [ "$RRC" = 0 ]; then
+    row loop ok "$(printf '%s\n' "$RT" | grep -c '^  ok') checks · a conflicted lane lands failed, next retries it first, the brief carries the failure"
+  else
+    row loop broken "$(printf '%s\n' "$RT" | grep '^  FAIL' | head -1)"
+    fix "bash $(res looptest.sh)"
+  fi
+fi
+
 # ── questions: what the board says it is waiting on you for ──────────────────
 # A pass that is not asked is indistinguishable from a board with nothing to
 # ask. Both are silent. This row reads the shape of `## Questions` and

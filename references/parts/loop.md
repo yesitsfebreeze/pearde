@@ -72,9 +72,9 @@ with candidates and their `npx skills add` lines, and the pass hands back `ASK`
 before it scans. The board installs nothing — @references/parts/ramp.md.
 
 **1 · Scan.** The sections come out in the pressure order of
-@references/parts/order.md — drill, collect, waiting on you, in flight, ready,
-gated — and the cut falls after `waiting on you`: above, this pass's; below,
-somebody's. The header names the drill count — `asking N over M PRDs` — and
+@references/parts/order.md — drill, collect, red, waiting on you, in flight,
+ready, gated — and the cut falls after `waiting on you`: above, this pass's;
+below, somebody's. The header names the drill count — `asking N over M PRDs` — and
 over one a **drill** section stands first, above *collect*: the pass
 dispatches nothing past it until the drill is put (step 2). Open a file only
 for what the scan does not print, and only to act on it. No
@@ -143,7 +143,12 @@ call whole, nothing written; `--workflow none` is refused, naming `## Route`.
 
 **6 · Collect.** Results are pushed, never polled: a return is collected as it
 lands, and what it unblocks is dispatched in the same turn — the frontier is
-re-read off `scan` after every transition, never batched to the pass's end. A
+re-read off `scan` after every transition, never batched to the pass's end.
+Red is drained before anything open is dispatched: a `failed` PRD — a
+worker's FAILED, a red verify at the collect, a lane that would not rebase —
+goes `pearde retry <prd>` then `pearde claim <prd> <worker>` and the brief
+carries the failure and the lane, `next` prints the pair above step 4 and 5.
+Only a `needs:` gate or a question waits on a person. A
 worker returns one line — @references/parts/workers.md — verdict and report
 file. Act on the line: the tool maps the verdict to its transition, not you —
 `pearde collect <prd> --report <path>` runs SPECCED, REFINE, QUESTION, DONE,

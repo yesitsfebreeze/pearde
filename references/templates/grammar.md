@@ -89,9 +89,10 @@ and the rules for growing it.
 | **calibrate** | the fit of one machine-wide constant — hours per unit of weight — from every `done` PRD carrying `actual:` across every registered board |
 | `TUNE` | the hand-set margin in `mapfile.py`, 1.618. Tuned hours are weight × the fit × this |
 | **dispatchable** | `plan.dispatchable` — the one predicate `scan`'s ready band and `claim` both read, so what the scan offers is what `claim` takes |
-| **pressure order** | the one ranking of the whole board: to collect, waiting on you, in flight, ready now, gated, parked, landed. The cut is between 1 and 2 — above it is this pass's, below it is already somebody's |
+| **pressure order** | the one ranking of the whole board: to collect, red, waiting on you, in flight, ready now, gated, parked, landed. The cut is between 1 and 2 — above it is this pass's, below it is already somebody's |
 | **to collect** | every box closed, a worker still holding it. No dispatch is cheaper |
-| **waiting on you** | `question`, `blocked`, `refine`, `failed` — the four that move only when a person moves them |
+| **red** | `failed` — a lane with commits and a `## Failure`; `retry` then `claim` puts a worker back on it, before anything open is dispatched |
+| **waiting on you** | `question`, `blocked`, `refine` — the three that move only when a person moves them |
 | **in flight** | a worker holds it and its boxes are ticking |
 | **ready** | dispatchable this second. Inside the band, biggest door first — that ordering *is* the dispatch order |
 | **gated** | the rest of the plan, in schedule order |

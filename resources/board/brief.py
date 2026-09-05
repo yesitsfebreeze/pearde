@@ -77,7 +77,8 @@ CLOSE_RE = re.compile(r"^<!--\s*/brief\s*-->\s*$")
 TOKEN_RE = re.compile(r"<[a-z][a-z_/]*>")
 TABLE_ROW_RE = re.compile(r"^\|\s*`(<[^`]+>)`\s*\|")
 ROLES = ("analyst", "implementer")
-BLOCKS = ("workflow", "every", "analyst", "implementer", "consultant")
+BLOCKS = ("workflow", "every", "analyst", "implementer", "retry",
+          "consultant")
 # The marker `collect.verdict_of` looks for, and the tail length two adjacent
 # lines must share before a repeat is a rewrap's leftover and not a cadence.
 VERDICT_MARK = "Verdict:"
@@ -237,23 +238,27 @@ def render(lines, values):
 
 # ── what fills the placeholders ───────────────────────────────────────────────
 
-def repo_of(prd, board):
+def checkout_of(prd, board):
     """`repo:` that is a directory — absolute, or relative to the board's
     repo — is it: the rule @resources/board/collect.py `repo_of` states, read
     from there and not restated. Else the PRD's own board's repo — a
-    member's — else the board's."""
+    member's — else the board's. The checkout a lane lands on."""
     board_root = planlib.repo_root(board) or os.path.dirname(board)
     found = collectlib.repo_of(prd, board, board_root)
     if found == board_root:
         found = planlib.repo_root(prd["board_path"]) or board_root
-    # the lane, when the claim cut one: a worker works in its own worktree
-    # and never in the checkout the orchestrator holds. No lane on disk —
-    # a board outside a repo, or a claim from before lanes — is the
-    # checkout, exactly as before.
+    return found
+
+
+def repo_of(prd, board):
+    """The worker's tree: the lane, when the claim cut one — a worker works
+    in its own worktree and never in the checkout the orchestrator holds.
+    No lane on disk — a board outside a repo, or a claim from before lanes
+    — is the checkout, exactly as before."""
     lane = laneslib.lane_dir(prd["board_path"], prd["local"])
     if os.path.isdir(lane):
         return lane
-    return found
+    return checkout_of(prd, board)
 
 
 def health_of(prd, board):
@@ -429,8 +434,20 @@ def brief_prd(args, out=print):
         head += f" · lane {laneslib.branch_of(prd['local'])}"
     if force:
         head += " · forced"
-    parts = [head, persona] + wf_lines + [
-        render(blocks[role], values), render(blocks["every"], values)]
+    parts = [head, persona] + wf_lines
+    parts.append(render(blocks[role], values))
+    # A retried PRD: `retry` folded its `## Failure` into `## History`, and
+    # the worker put back on the lane reads it verbatim, with the branch to
+    # rebase onto — the one the checkout is on, which is where the lane
+    # would not land or where its verify went red.
+    history = trlib.section(prd["body"], "History")
+    if history and history.strip():
+        onto = laneslib.git(checkout_of(prd, board), "rev-parse",
+                            "--abbrev-ref", "HEAD", check=False).stdout.strip()
+        parts.append(render(blocks["retry"], {
+            "<failure>": history.strip(), "<onto>": onto or "HEAD",
+            "<repo>": values["<repo>"]}))
+    parts.append(render(blocks["every"], values))
     out("\n\n".join(p for p in parts if p))
     return 0
 

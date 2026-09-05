@@ -522,14 +522,17 @@ def workflow_marks(board, prds):
 
 
 def pressure_bands(board, prds, r):
-    """(collect, yours, flight, ready, gated, why) — the pressure order's own
-    bands, over the live PRDs `compute_plan` returned in `r["order"]`. One
-    computation, read by `cmd_scan` for the sections it prints and by
-    `cmd_next` for the one it acts on — @references/parts/order.md.
+    """(collect, red, yours, flight, ready, gated, why) — the pressure
+    order's own bands, over the live PRDs `compute_plan` returned in
+    `r["order"]`. One computation, read by `cmd_scan` for the sections it
+    prints and by `cmd_next` for the one it acts on —
+    @references/parts/order.md.
 
     Everything above `in flight` is something this pass can act on now;
     `in flight` is held by somebody else. A PRD in exactly one band, never
-    two."""
+    two. `red` is `failed`: the queue the loop drains first — `retry` puts
+    a worker back on the lane — and not a person's, which is why it is not
+    in `yours`."""
     order = r["order"] if r else []
     collect = list(r["collect"]) if r else []
     needs = r["needs"] if r else {}
@@ -538,11 +541,12 @@ def pressure_bands(board, prds, r):
     # `blocked` is a wall a person has to take down, not a free PRD. It holds
     # its worker, so it is not in flight either — filing it under `ready` was
     # the scan calling a PRD dispatchable that nothing can dispatch.
+    red = [x for x in rest if prds[x]["state"] == "failed"]
     yours = [x for x in rest if prds[x]["state"] in ("question", "blocked",
-                                                     "refine", "failed")]
-    flight = [x for x in rest if prds[x]["state"] in ("analyzing", "claimed")
-              and x not in yours]
-    free = [x for x in rest if x not in flight and x not in yours]
+                                                     "refine")]
+    flight = [x for x in rest if prds[x]["state"] in ("analyzing", "claimed")]
+    free = [x for x in rest if x not in flight and x not in yours
+            and x not in red]
     # `dispatchable` is the one predicate `claim` reads: a PRD it refuses is
     # never listed as ready. A container — children all done, nothing of its
     # own — is already in `collect`: `compute_plan` put it there, the one list
@@ -565,7 +569,7 @@ def pressure_bands(board, prds, r):
     # which of the two goes first.
     ready = [x for x in free if not why[x] and not needs.get(x)]
     gated = [x for x in free if x not in ready]
-    return collect, yours, flight, ready, gated, why
+    return collect, red, yours, flight, ready, gated, why
 
 def plan_frontier(r):
     """`plan`'s ready set — every PRD `needs:` does not gate, in dispatch

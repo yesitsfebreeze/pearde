@@ -43,7 +43,8 @@ ends:
 | # | band | is |
 |---|------|----|
 | 0 | **to collect** | every acceptance box closed, a worker still holding the PRD. One commit, and a whole frontier can open — no dispatch is cheaper |
-| 1 | **waiting on you** | `question`, `blocked`, `refine`, `failed` — the four that move only when a person moves them |
+| 0b | **red** | `failed` — a lane with commits on it and a `## Failure` saying what broke. `retry` then `claim` puts a worker back on that lane; the loop drains this before it dispatches anything open |
+| 1 | **waiting on you** | `question`, `blocked`, `refine` — the three that move only when a person moves them |
 | 2 | **in flight** | a worker holds the PRD and its boxes are ticking |
 | 3 | **ready now** | dispatchable this second. Inside the band, biggest door first — that ordering IS the dispatch order |
 | 4 | **gated** | the rest of the plan, in schedule order |
@@ -54,7 +55,7 @@ ends:
 on; below lies what somebody already holds. Every band boundary follows from
 the cut.
 
-`plan.py scan` prints its five sections in pressure order, so a pass reads the
+`plan.py scan` prints its six sections in pressure order, so a pass reads the
 board already sorted, and the timeline stacks its rows the same way, so the top
 of the chart and the top of the scan make the same claim. Inside a band the
 three axes above break the tie — earliest start, then critical, then the weight

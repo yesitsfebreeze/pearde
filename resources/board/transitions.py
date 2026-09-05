@@ -312,6 +312,7 @@ EDGES = {
     ("claimed", "failed"): "release",
     ("question", "open"): "answer",
     ("failed", "open"): "retry",
+    ("failed", "specced"): "retry",
     ("blocked", "specced"): "unblock",
 }
 for _s in STATES:
@@ -859,7 +860,9 @@ def cmd_defer(board, args, persona):
 
 
 def cmd_retry(board, args, persona):
-    """`## Failure` becomes history in the body, then `failed → open`."""
+    """`## Failure` becomes history in the body, then `failed → specced`
+    when the specs stand — the next `claim` puts an implementer back on the
+    same lane, and its brief carries the history — else `failed → open`."""
     if len(args.pos) != 1:
         raise Refused("retry <prd>")
     prds = planlib.scan(board)
@@ -869,8 +872,10 @@ def cmd_retry(board, args, persona):
         raise Refused(way_back(rel, prd["state"]))
     if prd["state"] != "failed":
         raise Refused(f"retry: {rel} is `{prd['state']}`, not failed")
+    import specs as specslib
+    to = "specced" if specslib.stand(board, prd) else "open"
     if args.dry:            # the body's `## Failure` → `## History` is on
-        transition(board, rel, "open", persona, dry=True)   # the same file
+        transition(board, rel, to, persona, dry=True)       # the same file
         return 0
     path = os.path.join(prd["dir"], "prd.md")
     text = open(path, encoding="utf-8").read()
@@ -880,10 +885,11 @@ def cmd_retry(board, args, persona):
         failure = m.group(1).strip()
         rest = (tail[:m.start()] + tail[m.end():]).rstrip("\n")
         rest = rest[len("---\n"):] if rest.startswith("---\n") else rest
-        rest += (f"\n\n## History\n\n**failed, retried {now()}**\n\n"
-                 f"{failure}\n") if failure else ""
         editlib.set_body(path, rest)
-    transition(board, rel, "open", persona)
+        if failure:         # into the one `## History`, newest last
+            editlib.append_section(
+                path, "History", f"**failed, retried {now()}**\n\n{failure}")
+    transition(board, rel, to, persona)
     return 0
 
 

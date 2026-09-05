@@ -320,11 +320,12 @@ def merge(repo, slug, out=None):
 
     A conflict — in the rebase or in the merge — raises `Conflict` with the
     files on it, the lane branch left exactly as it was, and the checkout on
-    the commit it was on. The caller reports it: `collect.land_lane` turns it
-    into a `blocked` PRD naming those files, so no lane sits `claimed` with a
-    conflict nobody was told about. A conflict a person can fix by hand is
-    worth more than a rollback that loses which file disagreed, so the files
-    are read before anything is aborted.
+    the commit it was on. The caller reports it: `collect.fail_conflict`
+    turns it into a `failed` PRD naming those files, so no lane sits
+    `claimed` with a conflict nobody was told about, and `retry` puts a
+    worker back on this lane to resolve it. A conflict the next worker can
+    fix is worth more than a rollback that loses which file disagreed, so
+    the files are read before anything is aborted.
 
     A rebase that never gets under way is not a conflict: `git rebase`
     refuses outright when the lane's tree is dirty (exactly what

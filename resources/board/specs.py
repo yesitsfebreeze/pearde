@@ -775,6 +775,18 @@ def limits(board_path):
     return out
 
 
+def stand(board, prd):
+    """True when specs/ holds files and every one passes `check_spec` — what
+    `specced` would accept. `retry` reads it to send a failed PRD back to an
+    implementer on its lane rather than to an analyst; `next` reads it to
+    name which worker the retry dispatches."""
+    try:
+        _, count, bad, *_ = read_specs(prd, library(board, prd))
+    except Refused:
+        return False
+    return bool(count) and not bad
+
+
 def library(board, prd):
     """The workflow library a spec's `workflow:` resolves in — the PRD's own
     board first, then the master's, the order `needs:` resolves in."""

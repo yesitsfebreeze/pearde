@@ -227,7 +227,7 @@ def cmd_scan(board):
     # this pass can act on now; `in flight` is held by somebody else. A PRD
     # listed twice is a pass that has to work out which line meant it.
     # `bands` is the one computation of it — `cmd_next` reads the same call.
-    collect, yours, flight, ready, gated, why = bands
+    collect, red, yours, flight, ready, gated, why = bands
     # The drill section, FIRST — above collect, the pressure order's own head:
     # the scan opens on the questions waiting on the user. A question already
     # out — the pass file's `## Asked` carries it — is marked `out`, carried
@@ -242,6 +242,7 @@ def cmd_scan(board):
     for title, group in (
             (f"collect — {len(collect)} finished, waiting to be closed",
              collect),
+            (f"red — {len(red)}, retry first", red),
             (f"waiting on you — {len(yours)}", yours),
             (f"in flight — {len(flight)} held by a worker", flight),
             (f"ready — {len(ready)} dispatchable now, in order", ready),
@@ -313,7 +314,7 @@ def cmd_next(argv):
         return
     prds = scan(board)
     r = compute_plan(board, None, warn=False)
-    collect, yours, flight, ready, gated, why = \
+    collect, red, yours, flight, ready, gated, why = \
         pressure_bands(board, prds, r)
     # Every actionable section prints, in step order — the whole set this
     # turn acts on, with the board assuming unlimited parallel agents. Each
@@ -356,12 +357,22 @@ def cmd_next(argv):
         for x in refine:
             print(f"  pearde refine {x} < report")
         acted = True
-    failed = [x for x in yours if prds[x]["state"] == "failed"]
-    if failed:
-        print(f"step 6 · collect — {len(failed)} failed")
-        print("  decision: what a failed attempt needs — `## Failure` first")
-        for x in failed:
-            print(f"  pearde release {x} failed")
+    if red:
+        # Repair before new work: a red PRD is a lane with commits on it
+        # and a `## Failure` that says what broke, and `retry` → `claim`
+        # puts a worker back on that lane with the failure in its brief.
+        # It prints above `ready`, so a pass drains the red before it
+        # dispatches anything open.
+        import specs as specslib
+        print(f"step 6 · retry — {len(red)} red, dispatch each")
+        print("  decision: none — the brief carries `## Failure`; a worker"
+              " repairs it on the same lane")
+        for x in red:
+            role = "implementer" if specslib.stand(board, prds[x]) \
+                else "analyst"
+            print(f"  pearde retry {x} && pearde claim {x} <worker>")
+            print(f"  pearde brief {x} --worker <worker>"
+                  f" → dispatch as pearde-{role}")
         acted = True
     if ready:
         x = ready[0]
@@ -466,8 +477,9 @@ def cmd_plan(board, workers):
         print(f"\nready now — {len(frontier)} in parallel, widest door first")
         for x in frontier:
             p = todo[x]
-            hot = p["state"] in ("question", "blocked", "refine", "failed")
-            tags = ["waiting on you"] if hot else [] if feet[x] \
+            hot = p["state"] in ("question", "blocked", "refine")
+            tags = ["waiting on you"] if hot else ["retry"] \
+                if p["state"] == "failed" else [] if feet[x] \
                 else ["unspecced"]
             if after[x]:
                 tags.append(share(x))

@@ -55,16 +55,17 @@ once those paths are clear.
 while the worker ran, `collect` exits non-zero naming every conflicting file,
 aborts both the rebase and the merge, and leaves the checkout on its starting
 commit with nothing staged. The lane branch still holds the work — and the
-PRD is written `blocked`, its `claim:` dropped, with a `## Blocked` section
+PRD is written `failed`, its `claim:` dropped, with a `## Failure` section
 naming the lane branch, the branch it would not land on, and one bullet per
-file git named. Nothing stays `claimed` under a worker that is gone: `pearde
-scan` shows the PRD waiting on a person, and `pearde unblock <prd>` after the
-conflict is resolved in the lane returns it to `specced`. `blocked` and not
-`failed` — the work may be perfect and merely disagree with what landed while
-it ran, and `failed` would dispatch a second worker onto a lane that already
-holds the answer. Two PRDs claimed on one file end here by design — the plan
-orders the pair with an `after … (footprint)` edge, and the clash resolves
-here rather than being refused at `claim`.
+file git named. Nothing stays `claimed` under a worker that is gone, and
+nothing waits on a person: `pearde scan` lists it red, `pearde retry <prd>`
+returns it to `specced`, and the next `claim` puts a worker on the SAME lane
+— `lanes.create` hands back the standing worktree — whose brief carries the
+failure verbatim and says to rebase, resolve, keep one implementation and
+verify. A red verify on the merged tree is filed the same way, the slug and
+its output under `## Failure`. Two PRDs claimed on one file end here by
+design — the plan orders the pair with an `after … (footprint)` edge, and
+the clash resolves here rather than being refused at `claim`.
 
 A board with no lane — a claim taken before lanes, a board outside any git
 repo — collects as before: the work is dirt in the checkout, step 4 commits
@@ -73,9 +74,9 @@ it, and every scope rule below reads that tree.
 | transition          | do                                                              |
 |---------------------|------------------------------------------------------------------|
 | `claimed → done`    | commit                                                           |
-| `claimed → blocked` | commit — the work is done, the open boxes wait on something named. A conflicted lane is the exception: nothing merged, so nothing is committed |
+| `claimed → blocked` | commit — the work is done, the open boxes wait on something named |
 | `blocked → done`    | commit what closing the boxes wrote                              |
-| `claimed → failed`  | nothing. Name the dirty paths in the report, leave them on disk  |
+| `claimed → failed`  | nothing. Name the dirty paths in the report, leave them on disk. A conflicted lane or a red verify at the collect: nothing merged, the lane branch keeps the commits for the retry |
 
 Board state written between transitions — answers, a refine split, a memo —
 rides the next commit.

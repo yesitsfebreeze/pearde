@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """pearde collect — close a finished PRD in one call: verify, commit, done.
 
-    collect [<prd>…] [--dry] [--fail] [--trust] [--widen <path>]…
+    collect [<prd>…] [--dry] [--trust] [--widen <path>]…
             [--also <path> --also-note <text>] [--as <id>] [--board <path>]
     collect --snapshot <prd>          what `claim` records, until it does
 
@@ -11,10 +11,13 @@ is — the seven steps of @references/parts/loop.md step 6, in order:
   1  the finished condition off both files      `standing()` in plan.py
   2  every spec's `## Verify and Proof` block    run in `repo`, output kept
      then the board's `gate:`                    against the claim's baseline
+     — a red one is recorded: `## Failure` holds the slug and its output,
+       the claim goes, the PRD is `failed` and `retry` puts it back on the
+       same lane; only `--dry` leaves the board untouched
   2b every binding invariant memo's `verify:` command, in the board's
      repo root — any non-zero exit refuses the collect whole: the slug and
      its output printed, the lane put back, the PRD left where it was.
-     No baseline, no `--fail`, and `--trust` does not skip it
+     No baseline, and `--trust` does not skip it
   3  the paths: specs' footprints ∪ the PRD's ∪ the PRD dir ∪ `--also`
      — the PRD's own folder is the board's record: added whole, always —
        never by hunk, never a stop
@@ -100,7 +103,7 @@ RIDERS_FILE = "riders"
 # command pearde.py discovers; an undeclared flag is refused with this list,
 # exit 2, before the board is read.
 FLAGS = translib.Flags(("as", "board", "also", "also-note", "widen",
-                        "snapshot", "report"), ("dry", "fail", "trust"),
+                        "snapshot", "report"), ("dry", "trust"),
                        multi=("also", "widen"))
 # The verdict words a report is allowed to carry, and the transition each
 # one runs — @references/parts/loop.md step 6, @references/parts/workers.md
@@ -139,7 +142,7 @@ def parse_args(argv):
             "as": persona or translib.persona_default("collect"),
             "board": a.opt.get("board"), "snapshot": a.opt.get("snapshot"),
             "report": a.opt.get("report")}
-    for k in ("dry", "fail", "trust"):
+    for k in ("dry", "trust"):
         if k in a.flags:
             opts[k] = True
     if opts["also"] and not opts["also_note"]:
@@ -2082,7 +2085,7 @@ def land_lane(board, rel, prd, repo, opts, out=print):
     A merge conflict raises `lanes.Conflict` — through, not caught. The
     merge is aborted, so the checkout is where it was and the lane branch
     still holds the worker's commits; `collect_one` catches it and writes
-    the PRD `blocked` with the files on it. Turning it into a `Stop` here
+    the PRD `failed` with the files on it, for `retry` to put a worker back. Turning it into a `Stop` here
     is what left a conflicted lane `claimed` forever: the run printed one
     line to stderr and the board recorded nothing, so `pearde scan` went
     on showing a worker holding a PRD no worker was working on. Every
@@ -2157,36 +2160,27 @@ def land_lane(board, rel, prd, repo, opts, out=print):
     return pre, n, moved
 
 
-def block_conflict(board, rel, prd, pmd, conflict, opts, now, out=print):
-    """A lane that will not rebase becomes a `blocked` PRD, and returns 1.
+def fail_conflict(board, rel, prd, pmd, conflict, opts, now, out=print):
+    """A lane that will not rebase becomes a `failed` PRD, and returns 1.
 
-    The wall this puts on the board is `## Blocked` — the heading
-    @references/parts/view.md already draws as the wall and `questions.py`
-    already refuses a `blocked` PRD for not having. So the reason a person
-    reads is written in the one place every reader of this board already
-    looks, and nothing new has to learn to render it.
+    What it writes is `## Failure` — the section `release failed` gates on
+    and `retry` folds into `## History`, so the next worker's brief carries
+    it verbatim (`brief:retry` in @references/parts/workers.md). The text
+    is the lane branch, the branch it would not land on, and one bullet
+    per file git named on the conflict — git's own list, carried as data
+    from `lanes.Conflict` rather than parsed back out of a sentence. The
+    claim goes, because no worker is working on it; the state goes to
+    `failed`, because `failed → retry → claim` is the edge that puts a
+    worker back on it. Nothing else is touched: the checkout is where
+    `lanes.merge` left it, and the worker's commits are on the lane
+    branch, which `lanes.create` hands the retry worker as it stands.
 
-    What it writes: the lane branch, the branch it would not land on, and
-    one bullet per file git named on the conflict — git's own list, carried
-    as data from `lanes.Conflict` rather than parsed back out of a sentence.
-    The claim goes, because no worker is working on it; the state goes to
-    `blocked`, because a person has to take the wall down. Nothing else is
-    touched: the checkout is where `lanes.merge` left it, and the worker's
-    commits are on the lane branch, which is why the reason can say so.
-
-    `blocked` and not `failed`. A `failed` PRD is work that did not do what
-    it said; this work may be perfect and merely disagree with what landed
-    while it ran. `failed` also routes to `retry`, which would dispatch a
-    second worker onto a lane that already holds the answer. `unblock` is
-    the edge out, and it lands on `specced` — the PRD is specced work with
-    a lane standing, which is exactly what it was before the collect.
-
-    Unconditional, and not behind `--fail`. `--fail` chooses whether a red
-    VERIFY is recorded, and a bare `collect` leaving that on the board
-    would be a judgement about the code. This is not a judgement: without
-    the write the PRD stays `claimed` with no worker, which is the defect
-    the contract names. `--dry` never reaches here — `land_lane` returns
-    before it merges."""
+    `failed` and not `blocked`. `blocked` is a wall a person takes down —
+    a `needs:` gate, an open box waiting on a named event. A rebase
+    conflict is work a worker does: rebase, resolve, keep one
+    implementation, verify. Filing it `blocked` left twelve PRDs "waiting
+    on you" on one board while forty-seven open ones waited behind them.
+    `--dry` never reaches here — `land_lane` returns before it merges."""
     files = sorted(set(conflict.files))
     lines = [f"**{now.strftime('%Y-%m-%d %H:%M')} — the lane will not "
              f"rebase**", "",
@@ -2196,20 +2190,21 @@ def block_conflict(board, rel, prd, pmd, conflict, opts, now, out=print):
                      "which."), ""]
     lines += [f"- `{f}`" for f in files]
     lines += ["", f"Nothing is lost: the worker's commits are on "
-              f"`{conflict.branch}` and the checkout never moved. Resolve "
-              f"the conflict in the lane, then `pearde unblock {rel}`."]
+              f"`{conflict.branch}` and the checkout never moved. `pearde "
+              f"retry {rel}` puts a worker back on that lane to rebase it "
+              f"onto `{conflict.onto}` and resolve."]
     text = "\n".join(lines)
     if opts.get("dry"):                 # unreachable today; free if it changes
-        out(f"{rel}: dry — would block on {conflict.branch}")
+        out(f"{rel}: dry — would fail on {conflict.branch}")
         return 1
-    editlib.append_section(pmd, "Blocked", text)
+    editlib.append_section(pmd, "Failure", text)
     editlib.del_key(pmd, "claim")
-    editlib.set_key(pmd, "state", "blocked")
-    transition_row(board, rel, prd["state"], "blocked", now)
+    editlib.set_key(pmd, "state", "failed")
+    transition_row(board, rel, prd["state"], "failed", now)
     close_claims(board, rel)
     # the exception's own words on the line, so the run still prints what
     # git said and not a second paraphrase of it
-    out(progress_line(board, rel, prd["state"], "blocked", opts["as"],
+    out(progress_line(board, rel, prd["state"], "failed", opts["as"],
                       str(conflict)))
     return 1
 
@@ -2307,7 +2302,7 @@ def collect_one(board, rel, opts, out=print):
     try:
         pre, landed, moved = land_lane(board, rel, prd, repo, opts, out)
     except LaneConflict as e:
-        return block_conflict(board, rel, prd, pmd, e, opts, now, out)
+        return fail_conflict(board, rel, prd, pmd, e, opts, now, out)
     base = baseline(board, rel)
     _, feet = planlib.spec_data(prd)
     owned = owned_by(prd, board_root, repo, feet, board)
@@ -2341,7 +2336,11 @@ def collect_one(board, rel, opts, out=print):
                 # the lane's code never stands on a red — and nothing else
                 # in this shared checkout is touched putting it back
                 unland(repo, pre, landed, out)
-                if opts.get("fail") and not opts.get("dry"):
+                if not opts.get("dry"):
+                    # recorded, not just printed: a red verify left
+                    # `claimed` with no worker is a PRD nothing dispatches
+                    # and nothing lists as red — `failed` is what `retry`
+                    # drains, and the worker's commits stand on the lane
                     editlib.append_section(pmd, "Failure", text)
                     editlib.del_key(pmd, "claim")
                     editlib.set_key(pmd, "state", "failed")
@@ -2376,9 +2375,9 @@ def collect_one(board, rel, opts, out=print):
     #     it exits 0 while the rule holds, and a rule already broken when
     #     the PRD was claimed is still broken now. Landing on it would be
     #     the board recording that the rule does not bind.
-    #   * `--fail` does not apply. A red verify block is the worker's work
-    #     failing and `--fail` files that as `failed`. A red invariant says
-    #     the BOARD is broken, which is nothing about this PRD — writing
+    #   * not recorded as `failed`. A red verify block is the worker's
+    #     work failing and is filed as `failed`. A red invariant says the
+    #     BOARD is broken, which is nothing about this PRD — writing
     #     `failed` on it would blame the wrong thing and lose the claim.
     #     The contract is "leaves state unchanged", so `Stop` and only Stop.
     #   * `--trust` does not skip them. `--trust` is the orchestrator saying

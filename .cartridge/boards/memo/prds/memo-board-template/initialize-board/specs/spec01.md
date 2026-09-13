@@ -1,14 +1,6 @@
 ---
 complexity: medium
-footprint:
-  - src/context.rs
-  - src/inventory.rs
-  - src/main.rs
-  - src/service.rs
-  - src/board.rs
-  - .cartridge/templates/board
-  - .cartridge/tests/unit/board.rs
-  - .cartridge/docs/board.md
+footprint: ["src/context.rs","src/inventory.rs","src/main.rs","src/service.rs","src/board.rs",".cartridge/templates/board",".cartridge/tests/unit/board.rs",".cartridge/docs/board.md","src/source_search.rs","src/document.rs",".cartridge/tests/unit/source_search.rs"]
 ---
 
 # spec01 — Preview and safely install the owner-shipped board

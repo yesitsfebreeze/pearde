@@ -1,6 +1,6 @@
 ---
 complexity: medium
-footprint: ["src/records.ts","src/service.ts",".cartridge/tests/source-declarations.test.ts",".cartridge/docs/source-declarations.md",".cartridge/tests/records.test.ts"]
+footprint: ["src/records.ts","src/service.ts",".cartridge/tests/source-declarations.test.ts",".cartridge/docs/source-declarations.md",".cartridge/tests/records.test.ts","src/source-records.ts",".cartridge/tests/source-records.test.ts",".cartridge/docs/source-records.md","package.json","bun.lock"]
 ---
 
 # Normalize existing declared board edges before strict descendant checks

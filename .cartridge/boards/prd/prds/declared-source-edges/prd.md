@@ -11,7 +11,7 @@ review-round: 3
 review-status: "passed"
 canonical-scope: declared-source-edges
 needs: []
-commit: "c344629f00bd9afc4b5f993538600fc52e612ab2"
+commit: "0b39c5c52f8ff8bc024d90b30a0d5f0068ca727b"
 ---
 
 # Existing board declarations expose bounded source edges

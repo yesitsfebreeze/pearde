@@ -20,7 +20,7 @@ footprint:
 - .cartridge/tests/unit/proxy/capabilities.rs
 - .cartridge/tests/unit/sync/tests.rs
 - .cartridge/docs/capabilities.md
-commit: "77d5d48085466931669486a16078019b745eb823"
+commit: "07b77ff754ab740a1efb01dfade7e3fc953c204d"
 ---
 
 # Require compatible model capabilities before fallback
@@ -44,3 +44,8 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-router-capability-routing`; maximum five rounds.
+
+## Reverification
+
+Reverify unchanged admission acceptance at the integrated actual-decision revision;
+the earlier 77d5d480 receipt is retained in collection-77d5d480.md.

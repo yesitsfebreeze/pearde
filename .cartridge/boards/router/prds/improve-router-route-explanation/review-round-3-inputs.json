@@ -1,0 +1,8 @@
+{
+  ".cartridge/boards/router/prds/improve-router-route-explanation/prd.md": "f7a125e884ac132977c81a4893b822f1a2211e63e2e1a05b54634041a1f34f3b",
+  ".cartridge/boards/router/prds/improve-router-route-explanation/specs/spec01.md": "bc70cae4421d65b0eb00caf18bc5a65e1e582180453779d5e2e0b91c4a999e52",
+  "../router.ctg/src/catalog.rs": "3dd3acf6da070d28b95311717dcf0e2f52e607c72c4d68c55307afd42a9493cd",
+  "../router.ctg/src/proxy.rs": "cc3f32bbcfeb9e0177112d738fae972b7876d83dd0670e043bf572d414cc94c8",
+  "../router.ctg/src/health.rs": "ad35eb6e7585f6050963c698eb968402c33ef6508a716949722b59197c9822e7",
+  "../router.ctg/src/requirements.rs": "f15d296ea9846601c894d265851074e026e367f2ecacd5a9cb450a503b9ea336"
+}

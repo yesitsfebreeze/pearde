@@ -29,3 +29,19 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — Actual decisions and immutable revision attribution
+
+Reviewer `/root` self-review. Inputs: review-round-3-inputs.json.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Actual fallback currently lacks an attributable decision receipt. |
+| Ownership and reuse | 20 | Reuses completed capability admission and current attempt loop. |
+| Dependencies and slices | 19 | Router owns trace; existing sha2 dependency resolution and one lockfile sync. |
+| Acceptance and baseline | 19 | Real loopback health/fallback/zero-call checks, revision rollback and redaction. |
+| Failure and compatibility | 19 | Opt-in bounded metadata; cancellation and stream-start distinguish processing from delivery. |
+
+**96/100 — PASS**. No blockers. Preflight is an observation, not a promise of the
+next route. SHA-256 identifies sanitized selection semantics, not authorization or
+provider truth. Rounds used: 3/5. Product gates pending.

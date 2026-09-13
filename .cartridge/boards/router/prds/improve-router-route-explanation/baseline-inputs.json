@@ -1,0 +1,8 @@
+{
+  "source_commit": "77d5d48085466931669486a16078019b745eb823",
+  "probe": "\n#[tokio::test]\nasync fn baseline_actual_routing_explanation() {\n let fixture=fixture(Wire::Chat).await;\n let response=fixture.proxy.clone().execute(\"fixture-key\",Wire::Chat,request()).await;\n assert_eq!(response.headers()[\"x-cartridge-route\"],\"fixture@last\");\n assert!(response.headers().contains_key(\"x-cartridge-decision-id\"),\"actual fallback exposes no policy/catalog-bound decision receipt\");\n}\n",
+  "fixture_sha256": "d3024fd3a482dd2df6f92f25e52c2d0a809faed97ddbefcf2e48cedc323c4786",
+  "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/writer-proof cargo test --manifest-path /private/tmp/cartridge-writer-proof/router.ctg/Cargo.toml baseline_actual_routing_explanation -- --nocapture",
+  "expected": "Actual fallback trace names catalog/policy revision, rejections and selected last route",
+  "observed": "Actual fallback selected fixture@last, but assertion failed because x-cartridge-decision-id was absent; retained baseline-log.txt records the expected failure."
+}

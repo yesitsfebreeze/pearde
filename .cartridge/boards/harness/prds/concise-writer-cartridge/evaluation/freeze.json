@@ -1,0 +1,19 @@
+{
+  "frozen_at_utc": "2026-09-13T13:54:32.857015+00:00",
+  "before_candidate_guidance": true,
+  "source_composition_revision": "ae21607ca2f66546204944b380359995db3f619f",
+  "baseline_sources": {
+    "/Users/feb/dev/cartridge/.cartridge/memos/system/register.md": "38fe3a5eef81de095e7aab99751d04f38f9be095fbffee704e4520b5a96ace7f",
+    "/Users/feb/dev/cartridge/.cartridge/memos/routine/unslop.md": "28747a0a306ca59aefa996136f2408b41aca13b77da540b2274e60fb8adf7d2e"
+  },
+  "files": {
+    "fixtures.json": "31dc49595042df1add80582153d8746d9f5945b23682846006c72d3440cb5772",
+    "baseline-guidance.txt": "d5f2110c4732410ba8f43331177bf2b9cf1532a5641166c7da919ca89995d668",
+    "rubric.json": "3f94576b52e4faec8dba7f6ece2aecb266d812cfca6866736a4fe2c419ffa218"
+  },
+  "counts": {
+    "verbose": 12,
+    "concise": 4,
+    "precision": 4
+  }
+}

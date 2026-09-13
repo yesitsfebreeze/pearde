@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "meaning_gate": "Every frozen fact must survive; every question must be correctly answerable. A missing fact or unsupported claim fails regardless of length. Exact protected literals and JSON types are mandatory.",
+  "readability_gate": "Standalone clear sentences; identifiable referents, preserved order and conditions; no dependence on the source conversation. Compare baseline and candidate against the same questions. Explicit requests for detail override default brevity.",
+  "token_metric": "Native Ollama eval_count for a non-thinking completion model, bound to the installed model digest containing its tokenizer. Record prompt_eval_count separately.",
+  "verbose_target": "For each of three paired runs, compute candidate completion tokens / baseline completion tokens for the 12 verbose cases; target median <= 0.5. Report aggregate median as well.",
+  "concise_gate": "Candidate output must not grow; exact preservation of the four already-concise sources is the strongest check. Compare trimmed UTF-8 bytes and words and report provider output tokens separately.",
+  "repetitions": 3,
+  "seeds": [
+    11,
+    29,
+    47
+  ],
+  "settings": {
+    "temperature": 0.2,
+    "num_predict": 1536,
+    "num_ctx": 8192
+  },
+  "model": "granite4:3b",
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "structured_case": "p03 uses the same native JSON-format setting in baseline and candidate.",
+  "failed_criteria": "Record failures and their bounded repair before any claimed pass; preserve all original outputs."
+}

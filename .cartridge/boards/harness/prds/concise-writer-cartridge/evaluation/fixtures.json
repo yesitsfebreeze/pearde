@@ -1,0 +1,163 @@
+{
+  "version": 1,
+  "frozen_before_tuning": true,
+  "common_task": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.",
+  "fixtures": [
+    {
+      "id": "v01", "category": "verbose", "surface": "memo",
+      "task": "Write a standalone handoff memo.",
+      "source": "We have now reached a point where the retry change for the export worker has been implemented, and it is useful to put the present position in writing so that another person can pick up the work. The retry limit was changed from five attempts to three attempts. That is the change that has been made. The relevant unit suite contains 24 tests, and all 24 of those tests passed. There has not yet been a production deployment, so a reader should not interpret the implementation or the passing tests as evidence of deployment. The run that produced the test result is recorded as fixture-run-17. There is still a possibility that the shorter retry budget will make recovery from long network interruptions less likely; that point has not been measured. Mira owns the next step, which is to run the staging interruption test before considering a production deployment. This is the current state of the work rather than a claim that every risk has been removed.",
+      "facts": ["Export retries changed from five attempts to three.", "All 24 unit tests passed.", "Production has not been deployed.", "Evidence is fixture-run-17.", "Long-interruption recovery may worsen and has not been measured.", "Mira must run the staging interruption test before considering deployment."],
+      "questions": ["What changed?", "What verification passed?", "Was production deployed?", "Where is the evidence?", "What uncertainty remains?", "Who does what next, before which decision?"],
+      "protected": ["24", "fixture-run-17", "Mira"]
+    },
+    {
+      "id": "v02", "category": "verbose", "surface": "memo",
+      "task": "Turn this conversation record into a standalone decision memo.",
+      "source": "Nora: We need a record of the decision about the image cache, because somebody reading this later will not have been in this conversation. Leon: The decision is to keep image thumbnails for 14 days. Original uploads are outside this cache and must not be deleted by this change. Nora: That distinction is the part I want to make especially clear. Leon: We are keeping the limit at 2 GiB for each workspace, and the oldest thumbnail is evicted when the limit would otherwise be exceeded. Nora: Did we measure the effect on mobile clients? Leon: No. Mobile bandwidth impact is still unknown. Nora: Then the next step is for Leon to compare a cold mobile session with a warm mobile session. We should make that comparison before enabling the policy outside staging. Leon: Agreed. The decision was recorded in discussion cache-review-4. Nora: Please carry those facts into the memo without requiring its reader to reconstruct this exchange.",
+      "facts": ["Thumbnails expire after 14 days.", "Original uploads must not be deleted.", "The cap is 2 GiB per workspace.", "Eviction removes the oldest thumbnail when necessary.", "Mobile bandwidth impact is unknown.", "Leon compares cold and warm mobile sessions before enabling beyond staging.", "Provenance is cache-review-4."],
+      "questions": ["What expires and when?", "What must survive?", "What is the capacity unit and scope?", "What is the eviction rule?", "What is unmeasured?", "Who verifies what before rollout?", "Which discussion records the decision?"],
+      "protected": ["14", "2 GiB", "Leon", "cache-review-4"]
+    },
+    {
+      "id": "v03", "category": "verbose", "surface": "reply",
+      "task": "Answer the user's request for the current fix status.",
+      "source": "The status of the duplicate notification issue is that the fix has been written, and the implementation now rejects a repeated event ID before a notification is sent. This means that a duplicate with the same event ID no longer causes a second send in the fixture. The fixture delivered the same event 20 times and observed one notification. That is the extent of the evidence so far. Events that have different IDs but represent the same underlying action have not been deduplicated by this change, and it is important to keep that boundary in the response. The test is named replay_same_id. The change is on a local branch and has not been pushed. The next action is to review the behavior for events arriving out of order; no result for that review exists yet. There is no need to give the user a narration of how the code was edited, but the distinction between the tested case and the remaining case must survive.",
+      "facts": ["Repeated event IDs are rejected before sending.", "20 identical events yielded one notification.", "Different IDs for the same action are not deduplicated.", "Evidence is replay_same_id.", "The local branch has not been pushed.", "Out-of-order arrival behavior is the next review and has no result yet."],
+      "questions": ["What does the fix reject?", "What was the measured fixture outcome?", "What case remains unsupported?", "Which test is evidence?", "Was the change pushed?", "What remains to review?"],
+      "protected": ["20", "replay_same_id"]
+    },
+    {
+      "id": "v04", "category": "verbose", "surface": "memo",
+      "task": "Write a standalone incident handoff.",
+      "source": "The incident record concerns the preview service rather than the main application. Between 10:05 and 10:12 UTC, preview requests returned HTTP 503. The main application continued serving requests during that interval. Investigation found that the preview process could not acquire its local lock. The log contained the exact message \"preview lock unavailable\". We have not established who held that lock, so the handoff must not name an owner as though that were known. Restarting the preview process restored previews at 10:12 UTC. That is the observed recovery, not evidence that the lock ownership question has been solved. The supporting log is incident-preview-8. The next step belongs to Oren, who will add lock-owner diagnostics and reproduce the contention in a disposable fixture. The purpose of this handoff is to allow someone who did not see the incident discussion to understand the affected surface, the recovery and the remaining investigation.",
+      "facts": ["Preview returned HTTP 503 from 10:05 to 10:12 UTC.", "The main application kept serving.", "The preview process could not acquire its local lock.", "The exact error was preview lock unavailable.", "The lock holder remains unknown.", "A preview-process restart restored previews at 10:12 UTC.", "Evidence is incident-preview-8.", "Oren adds lock-owner diagnostics and reproduces contention in a disposable fixture."],
+      "questions": ["Which surface failed, when and how?", "Was the main app affected?", "What operation failed?", "What exact error appeared?", "Who held the lock?", "What restored service?", "Where is the evidence?", "Who investigates what next?"],
+      "protected": ["HTTP 503", "10:05", "10:12 UTC", "preview lock unavailable", "incident-preview-8", "Oren"]
+    },
+    {
+      "id": "v05", "category": "verbose", "surface": "memo",
+      "task": "Write a concise standalone API migration note.",
+      "source": "This note should explain the change to the pagination response and should preserve the compatibility details rather than merely saying that pagination was improved. Version 2 adds the next_cursor field. Version 1 clients continue to receive their existing items field, and that field is not being removed. A null next_cursor means that the captured result has no further page. Results are captured once for a query. Files created after that capture do not appear in later pages of the same result. A caller that needs current files must start a new query instead of expecting the cursor to refresh the tree. Cursor state expires when the run is retired. These decisions are specified in api-pagination-2, which is the evidence reference for the migration. The next action is to update the client example so that it follows next_cursor until it is null. There is no change to write permissions or file ownership as part of this API change.",
+      "facts": ["Version 2 adds next_cursor.", "Version 1 items remains available.", "Null next_cursor means no further page.", "A query captures results once; later-created files require a fresh query.", "Cursors expire when the run retires.", "Reference is api-pagination-2.", "Update the client example to follow next_cursor until null.", "Write permissions and file ownership do not change."],
+      "questions": ["What field is added?", "What compatibility is retained?", "What ends pagination?", "How are later-created files discovered?", "When do cursors expire?", "Which specification applies?", "What is the next action?", "Does mutation authority change?"],
+      "protected": ["next_cursor", "items", "api-pagination-2"]
+    },
+    {
+      "id": "v06", "category": "verbose", "surface": "reply",
+      "task": "Answer whether the import is complete.",
+      "source": "The import is not complete, and that should be the first thing the response makes clear. There were 80 records in the source file. Of those, 76 were imported successfully, while four were rejected because they had no external_id. The import did not create placeholder IDs for the rejected records, and it did not silently drop them as though everything had succeeded. The rejected row numbers are listed in import-errors-6.json. Existing records were not overwritten. The user needs to add external_id values to those four rows and submit only those corrected rows. The user should not be told to replay the entire file, because that is not the recommended next action. The successful records are already durable, and the response must not imply that the whole import was rolled back. It would also be inaccurate to say that all records are ready merely because most of them succeeded.",
+      "facts": ["The import is incomplete.", "76 of 80 records imported; four lacked external_id.", "No placeholder IDs were created.", "Rejected row numbers are in import-errors-6.json.", "Existing records were not overwritten.", "Correct external_id on the four rejected rows and submit only those rows.", "The successful records are durable and were not rolled back."],
+      "questions": ["Is it complete?", "How many succeeded and why did the rest fail?", "Were missing IDs fabricated?", "Where are rejected rows listed?", "Were existing records overwritten?", "What should the user resubmit?", "Did successful imports survive?"],
+      "protected": ["76", "80", "external_id", "import-errors-6.json"]
+    },
+    {
+      "id": "v07", "category": "verbose", "surface": "memo",
+      "task": "Write a standalone experiment result.",
+      "source": "We ran a small comparison of the index lookup change, and the result should be recorded with enough context to prevent it from being mistaken for a broader benchmark. The old implementation took a median of 42 ms. The candidate took a median of 31 ms. Both medians came from 30 runs against the same local fixture. The fixture contained 10,000 entries and was already warm before the timed runs began. No cold-start measurement was taken, and no production latency claim follows from these numbers. Peak memory was not measured either. The raw timings are recorded in lookup-fixture-3.csv. The next action is to measure cold-start latency and peak memory before deciding whether to adopt the change. The result is promising in the measured fixture, but the memo must not translate that into an unsupported promise about production or workloads that were not tested.",
+      "facts": ["Old median was 42 ms; candidate median was 31 ms.", "Both used 30 runs of the same local fixture.", "The fixture had 10,000 entries and was warm.", "Cold-start latency and peak memory were not measured.", "These results do not establish production latency.", "Raw timings are lookup-fixture-3.csv.", "Measure cold start and peak memory before the adoption decision."],
+      "questions": ["What were the two medians?", "How many runs and which environment?", "What size and cache condition?", "What remains unmeasured?", "What production claim is supported?", "Where are the raw results?", "What precedes adoption?"],
+      "protected": ["42 ms", "31 ms", "30", "10,000", "lookup-fixture-3.csv"]
+    },
+    {
+      "id": "v08", "category": "verbose", "surface": "memo",
+      "task": "Write a standalone operational instruction from this conversation.",
+      "source": "Priya: We need the handoff to say exactly which environment is safe for this reproduction. Sam: Use the disposable fixture workspace. Do not use the shared production store. Priya: What should the operator run? Sam: First run `fixture seed --count 12`. Then run `fixture verify --read-only`. Keep that order, because verify expects the seeded rows. Priya: What result is expected? Sam: The verification should report `12 rows checked`. If it reports `writer lock held`, stop and keep the fixture for inspection. Do not delete the lock file. Priya: Where do we keep the result? Sam: Save stdout and stderr in fixture-proof-12.txt. Priya: And after that? Sam: Send the recorded result to the next reviewer as part of the handoff. That is an instruction to the operator in the memo, not a claim that anybody has already sent it.",
+      "facts": ["Use a disposable fixture workspace, never the shared production store.", "Run fixture seed --count 12 before fixture verify --read-only.", "Expected output is 12 rows checked.", "On writer lock held, stop and preserve the fixture.", "Do not delete the lock file.", "Save stdout and stderr in fixture-proof-12.txt.", "The operator's next handoff includes the recorded result; it has not already been sent."],
+      "questions": ["Where should this run?", "Which commands, in what order?", "What is expected?", "What happens on the lock error?", "May the lock file be deleted?", "Which streams are saved, where?", "What handoff remains?"],
+      "protected": ["fixture seed --count 12", "fixture verify --read-only", "12 rows checked", "writer lock held", "fixture-proof-12.txt"]
+    },
+    {
+      "id": "v09", "category": "verbose", "surface": "reply",
+      "task": "Reply to a user asking why their saved edit was rejected.",
+      "source": "The save was rejected because the document changed after the version that the user read. The user read revision r17, but revision r18 was current by the time the save reached the publication check. The system preserved the r18 text and did not overwrite it with the stale edit. The rejected edit has not been applied. This was a revision conflict, not a permission denial. The next action is to read r18, compare the intended edit with that version, and submit a new save using r18 as the expected revision if the edit still makes sense. There is no automatic retry. The diagnostic reference is save-check-9. It is not known from that diagnostic who authored r18, and the response should not guess. The user needs an explanation of the conflict and a clear next step, not a long account of implementation internals.",
+      "facts": ["The user read r17 but the publication check found r18.", "The r18 text survived; the stale edit was not applied.", "This is a revision conflict, not a permission denial.", "Read r18, compare the edit, and submit with expected revision r18 only if still appropriate.", "There is no automatic retry.", "Diagnostic is save-check-9.", "The author of r18 is unknown."],
+      "questions": ["Which revisions conflicted?", "Which text survived?", "Was this a permission problem?", "What are the next steps and condition?", "Is a retry automatic?", "Which diagnostic supports the answer?", "Who authored the newer text?"],
+      "protected": ["r17", "r18", "save-check-9"]
+    },
+    {
+      "id": "v10", "category": "verbose", "surface": "memo",
+      "task": "Write a standalone accessibility review result.",
+      "source": "The settings dialog has been reviewed with keyboard navigation, and the result should be stated in terms of what was actually observed. Tab now moves from the name field to the save button and then to the cancel button. Shift+Tab moves through those controls in reverse order. Escape closes the dialog without saving. The review used the fixture settings-keyboard-5 on the desktop layout. The mobile layout was not checked, and screen-reader announcements were not checked. Those omissions do not imply failures, but they also cannot be presented as passing checks. The next action is for Ada to verify the mobile layout and screen-reader announcements. The change does not alter which settings the user is allowed to save. A later reader should be able to tell which interactions were verified, which were not, and who has the remaining work without referring back to this source text.",
+      "facts": ["Tab order is name field, save button, cancel button.", "Shift+Tab reverses that order.", "Escape closes without saving.", "Desktop evidence is settings-keyboard-5.", "Mobile layout and screen-reader announcements were not checked.", "Ada must check both remaining areas.", "Save permissions are unchanged."],
+      "questions": ["What is the forward focus order?", "What does Shift+Tab do?", "What does Escape do?", "Which layout and fixture were tested?", "Which checks remain unknown?", "Who completes them?", "Did permissions change?"],
+      "protected": ["Shift+Tab", "Escape", "settings-keyboard-5", "Ada"]
+    },
+    {
+      "id": "v11", "category": "verbose", "surface": "memo",
+      "task": "Write a standalone retention decision.",
+      "source": "The retention decision applies to generated preview artifacts. It does not apply to the original source documents, and that distinction should not be lost in shortening the note. Preview artifacts become eligible for cleanup after seven days without access. Eligibility is not the same as deletion: the first operation produces a preview of the candidates and does not delete them. A pinned artifact is excluded even if it is older than seven days. Applying cleanup requires the exact candidate revision from the preview; if an artifact changes before apply, that artifact is skipped and reported as changed. There is no automatic replay of skipped deletions. The decision is captured in retention-review-2. The next step is to test a pinned artifact and an artifact changed between preview and apply. No assertion has yet been made that those tests have passed, so the note must keep them as next actions.",
+      "facts": ["Only generated previews are in scope; original source documents are excluded.", "Eligibility begins after seven days without access.", "The first operation previews candidates and deletes nothing.", "Pinned artifacts are excluded regardless of age.", "Apply requires the previewed candidate revision.", "Changed artifacts are skipped and reported; deletions are not automatically replayed.", "Reference is retention-review-2.", "Pinned and between-preview/apply change tests remain to run."],
+      "questions": ["What is and is not retained under this rule?", "When does eligibility start?", "Does preview delete?", "How do pins affect eligibility?", "What revision does apply require?", "What happens to changed artifacts?", "Where is the decision?", "Which tests are still pending?"],
+      "protected": ["retention-review-2"]
+    },
+    {
+      "id": "v12", "category": "verbose", "surface": "reply",
+      "task": "Reply with the current delivery status and remaining blocker.",
+      "source": "The documentation update is ready locally, which is the main status to report. It updates the setup instructions to name the `config_dir` field and removes the obsolete `credentials_path` example. The local documentation link check passed on 18 pages. However, the change has not been published. Publication is blocked because the staging host returned the exact message `certificate expired` when the preview was checked. The expiry problem has not been repaired, and no production request was made as part of this check. The result is recorded in docs-preview-11. The next step is to renew the staging certificate and rerun the preview check before publishing. It would be misleading to collapse ready locally and published into the same status, or to claim that production is unhealthy on the basis of a staging-only observation.",
+      "facts": ["The documentation update is ready locally but not published.", "It documents config_dir and removes the obsolete credentials_path example.", "The local link check passed on 18 pages.", "Staging preview returned certificate expired; it is not repaired.", "No production request was made and production health is not established.", "Evidence is docs-preview-11.", "Renew the staging certificate and recheck before publishing."],
+      "questions": ["What is the delivery status?", "Which configuration names changed?", "What verification passed?", "What blocks publication?", "What is known about production?", "Where is the evidence?", "What must precede publishing?"],
+      "protected": ["config_dir", "credentials_path", "18", "certificate expired", "docs-preview-11"]
+    },
+    {
+      "id": "c01", "category": "concise", "surface": "reply",
+      "task": "Edit only if needed; do not expand an already clear reply.",
+      "source": "The fix is local. All 12 tests pass. Deployment is pending.",
+      "facts": ["The fix is local.", "All 12 tests pass.", "Deployment is pending."],
+      "questions": ["Where is the fix?", "What passed?", "Was it deployed?"], "protected": ["12"]
+    },
+    {
+      "id": "c02", "category": "concise", "surface": "memo",
+      "task": "Edit only if needed; keep this standalone note brief.",
+      "source": "Keep the backup until restore-test-3 passes. Ivo owns the test.",
+      "facts": ["Keep the backup until restore-test-3 passes.", "Ivo owns the test."],
+      "questions": ["When may the backup be released?", "Who owns verification?"], "protected": ["restore-test-3", "Ivo"]
+    },
+    {
+      "id": "c03", "category": "concise", "surface": "reply",
+      "task": "Edit only if needed; preserve the command exactly.",
+      "source": "Run `git status --short`. Do not discard uncommitted changes.",
+      "facts": ["Run git status --short.", "Do not discard uncommitted changes."],
+      "questions": ["What command should run?", "What must not happen?"], "protected": ["git status --short"]
+    },
+    {
+      "id": "c04", "category": "concise", "surface": "memo",
+      "task": "Edit only if needed; preserve uncertainty and provenance.",
+      "source": "fixture-8 measured 9 ms. Production latency remains unknown.",
+      "facts": ["fixture-8 measured 9 ms.", "Production latency is unknown."],
+      "questions": ["Which evidence measured what?", "What does it establish about production?"], "protected": ["fixture-8", "9 ms"]
+    },
+    {
+      "id": "p01", "category": "precision", "surface": "reply",
+      "task": "Write a precise handoff reply. Preserve each quoted command and error exactly.",
+      "source": "The command `archive verify --limit 0.25 --unit GiB` failed with `error: unknown flag --unit`. No archive was changed. Do not rerun with `--force`. The supported replacement command is not known. Ask the archive owner which version supports the unit flag, then update the fixture before retrying. Evidence: archive-probe-2.",
+      "facts": ["archive verify --limit 0.25 --unit GiB failed with error: unknown flag --unit.", "No archive changed.", "Do not rerun with --force.", "The replacement command is unknown.", "Ask the owner about version support, update the fixture, then retry.", "Evidence is archive-probe-2."],
+      "questions": ["What exact command and error occurred?", "Was anything changed?", "Which retry is forbidden?", "Is the replacement command known?", "What sequence precedes retry?", "What is the evidence?"],
+      "protected": ["archive verify --limit 0.25 --unit GiB", "error: unknown flag --unit", "--force", "archive-probe-2"]
+    },
+    {
+      "id": "p02", "category": "precision", "surface": "memo",
+      "task": "Return a standalone Markdown memo. Preserve the frontmatter and fenced executable block exactly; shorten only explanatory prose.",
+      "source": "---\nkind: routine\nname: verify-fixture\nstatus: draft\n---\n\nThis routine is for a disposable fixture only. It has not been approved for a shared store. Keep the commands in the stated order.\n\n```sh\nfixture seed --count 3\nfixture verify --read-only\n```\n\nSuccess means the exact output `3 rows checked`. On any other output, stop and preserve the fixture. The expected result is specified by routine-proof-3; this source does not claim that the routine has already passed.",
+      "facts": ["The exact frontmatter and executable block are retained.", "The routine is only for a disposable fixture and is not approved for a shared store.", "Command order is preserved.", "Success requires 3 rows checked.", "Other output requires stopping and preserving the fixture.", "routine-proof-3 specifies an expected result, not a past test pass."],
+      "questions": ["What metadata and commands are executable authority?", "Where may it run?", "What is the command order?", "What counts as success?", "What happens otherwise?", "Has it already passed?"],
+      "protected": ["---\nkind: routine\nname: verify-fixture\nstatus: draft\n---", "```sh\nfixture seed --count 3\nfixture verify --read-only\n```", "3 rows checked", "routine-proof-3"]
+    },
+    {
+      "id": "p03", "category": "precision", "surface": "reply", "format": "json",
+      "task": "Return only a JSON object with keys status, completed, total, deployed, evidence, next_action. Preserve value types. No Markdown fences.",
+      "source": "Status is partial. Exactly 7 of 9 checks completed. Deployed is the boolean false, not the string \"false\". Evidence is null because no durable receipt was saved. The next action is to rerun the two remaining checks and save the receipt. Do not infer that the completed checks passed: the source says only completed.",
+      "facts": ["status is partial.", "completed is the number 7 and total is the number 9.", "deployed is boolean false.", "evidence is null.", "next_action says to rerun the two remaining checks and save the receipt.", "Completion is not represented as passing."],
+      "questions": ["What is the status?", "What numeric counts are required?", "What is the deployed value and type?", "What is the evidence value?", "What remains to do?", "Does completed mean passed?"],
+      "protected": [], "json_expected": {"status":"partial","completed":7,"total":9,"deployed":false,"evidence":null}
+    },
+    {
+      "id": "p04", "category": "precision", "surface": "reply",
+      "task": "The user explicitly asks for a detailed, ordered explanation. Give the three steps and explain why each is necessary; do not compress them into a fragment.",
+      "source": "First, read the current revision because a stale save may overwrite someone else's edit. Second, compare the requested change with the current text because the original change may already have been applied. Third, save only if the change is still needed, using the current revision as expected_revision. If that save conflicts again, stop and ask for a new decision instead of automatically retrying. These are instructions from edit-protocol-5, not a report that a save happened.",
+      "facts": ["Read the current revision to avoid overwriting another edit.", "Compare the intended change because it may already be applied.", "Save only if needed with current expected_revision.", "On another conflict, stop and ask for a new decision; no automatic retry.", "The source is edit-protocol-5 and no save is claimed."],
+      "questions": ["What is step one and why?", "What is step two and why?", "What is step three and its condition?", "What happens on another conflict?", "Is this a completed action or sourced instruction?"],
+      "protected": ["expected_revision", "edit-protocol-5"]
+    }
+  ]
+}

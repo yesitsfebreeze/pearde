@@ -13,7 +13,7 @@ canonical-scope: improve-gitfs-snapshot-selection
 footprint:
 - src/service.rs
 - .cartridge/tests/unit/snapshot.rs
-commit: "21be1528bff2840b00dcef3e87ece41585df3017"
+commit: "55cc8aae27575ded5950737c46a99aa358b95980"
 ---
 
 # Snapshot exactly the selected owned paths
@@ -45,3 +45,8 @@ all-or-nothing selection validation, missing/directory read errors with partial
 success, unchanged unrelated index/worktree/refs, executable overlay mode,
 stale edit refusal, existing materialization conflict and real-consumer tests.
 The pre-fix runtime probe is retained in baseline.json.
+
+## Reverification after read-only inspection
+
+Inspection changes shared GitFS source. Re-run this unchanged specification
+against the integrated owner commit. Prior receipt is collection-21be1528.md.

@@ -1,25 +1,23 @@
 ---
 repo: /Users/feb/dev/cartridge/gitfs.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: gitfs
-work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+capability-owner: gitfs
+work-kind: rollup
+review-round: 3
+review-status: passed
 canonical-scope: improve-gitfs-reviewable-ship
 needs:
+- '@policy/ship-push-is-an-explicit-policy-operation'
 - '@gitfs/improve-gitfs-readable-diff'
 - '@gitfs/improve-gitfs-snapshot-selection'
 - '@policy/improve-policy-operation-rules'
-footprint:
-- /Users/feb/dev/cartridge/gitfs.ctg/service.rs
-- /Users/feb/dev/cartridge/gitfs.ctg/store.rs
-- /Users/feb/dev/cartridge/gitfs.ctg/ship.rs
-- /Users/feb/dev/cartridge/gitfs.ctg/secrets.rs
-- /Users/feb/dev/cartridge/gitfs.ctg/cartridge.json
+- '@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally'
+- '@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head'
+commit: "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5"
 ---
 
 # Preview and control shipping with accurate attribution
@@ -28,9 +26,9 @@ Split into reviewed-tree commit and remote push/reconciliation specs under one p
 
 ## Acceptance
 
-- [ ] Unrelated staged edits and unowned paths never enter the commit.
-- [ ] Changed tree, failed/timeout required gate and cancellation before commit produce no commit; an explicit message cannot bypass a required gate.
-- [ ] A remote advance refuses push without force; disconnect after a possibly accepted push reconciles the recorded commit/ref rather than replaying or claiming rollback.
+- [x] Unrelated staged edits and unowned paths never enter the commit.
+- [x] Changed tree, failed/timeout required gate and cancellation before commit produce no commit; an explicit message cannot bypass a required gate.
+- [x] A remote advance refuses push without force; disconnect after a possibly accepted push reconciles the recorded commit/ref rather than replaying or claiming rollback.
 
 ## Proof and recovery
 
@@ -42,3 +40,8 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-gitfs-reviewable-ship`; maximum five rounds.
+
+## Owned outcomes
+
+- [reviewed-owned-tree-commits-locally](reviewed-owned-tree-commits-locally/prd.md)
+- [recorded-push-reconciles-the-exact-remote-head](recorded-push-reconciles-the-exact-remote-head/prd.md)

@@ -19,7 +19,7 @@ footprint:
 - src/usage.rs
 - .cartridge/tests/unit/tests.rs
 - .cartridge/docs/usage.md
-commit: "480a093f5f6e2cbfb74e3a34c222f7f89be7e6b6"
+commit: "0c9d4e9bd2bb7fef98dd1bc2f593f314b7a090e2"
 ---
 
 # Account for every internal model round consistently
@@ -43,3 +43,6 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Review history](review.md): round 3 passed at 96/100; acceptance evidence is separate from the plan score.
+
+Reverify unchanged usage accounting at0c9d4e9 after scoped continuation changes;
+prior480a093f receipt retained. Router integration is0a216cb.

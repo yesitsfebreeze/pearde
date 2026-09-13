@@ -46,7 +46,8 @@ test('memory is attributed context and successful mutations publish scoped event
   const answer = value(await call('read', ['one'])); expect(answer.memory.provider).toBe('memory'); expect(answer.memory.authority).toContain('context only');
   expect(calls[0].args.op).toBe('query');
   await service.dispatch({ op: 'call', context: context(), input: { op: 'claim', args: ['one', 'worker'] } }, 'turn-1');
-  expect(events[0].event.type).toBe('command.completed'); expect(events[0].event.refs).toEqual(['one']); expect(events[0].turn).toBe('turn-1'); expect(events[0].event.output).toBeUndefined();
+  const completed = events.find(e => e.event.type === 'command.completed');
+  expect(completed.event.refs).toEqual(['one']); expect(completed.turn).toBe('turn-1'); expect(completed.event.output).toBeUndefined();
 });
 test('only verified evidence enters the durable memory outbox with bounded retry', async () => {
   expect((await service.rememberVerified(board, context(), {})).status).toBe('not_recorded');

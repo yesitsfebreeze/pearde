@@ -61,21 +61,25 @@ export function plan(board: string, workers = 0, scope?: string) {
     let paths: string[] = [], reason = cycles.has(prd.ref) ? 'dependency cycle' : refusal(prd, prds);
     try { paths = feet(prd); if (!paths.length) paths = [codeRepo(prd)]; } catch (error) { reason = String(error); }
     const published = specs(prd);
+    const ownerSlots = Number(document(path.join(prd.board, 'settings.md')).fm.workers ?? slots);
+    if (!Number.isInteger(ownerSlots) || ownerSlots < 1 || ownerSlots > 32) throw Error('invalid member worker limit');
+    const collect = prd.children.length > 0 && !dependencies(prd, prds).refs.some(r => prds.get(r)?.state !== 'done') || published.length > 0 && !openBoxes(prd.text) && published.every(s => !openBoxes(s.text));
     return {
       board: path.basename(board), path: board, rel: prd.ref, owner_path: prd.board, identity: prd.dir,
       addr: prd.ref.startsWith('@') ? prd.ref : '@' + path.basename(board) + '/' + prd.ref,
       state: prd.state, title: prd.title, start: timing.get(prd.ref)!.start, end: timing.get(prd.ref)!.end,
       prio: Number(prd.fm.priority) || 0, est: weight(prd), held: reason,
-      collect: prd.children.length > 0 && !dependencies(prd, prds).refs.some(r => prds.get(r)?.state !== 'done') || published.length > 0 && !openBoxes(prd.text) && published.every(s => !openBoxes(s.text)),
-      feet: paths, dispatchable: !reason, revision: prd.revision,
-      role: prd.children.length ? 'collector' : prd.state === 'open' ? 'analyst' : 'implementer',
+      collect,
+      feet: paths, dispatchable: !reason, revision: prd.revision, owner_slots: Math.min(slots, ownerSlots),
+      role: collect ? 'collector' : prd.state === 'open' ? 'analyst' : 'implementer',
     };
   }).sort((a, b) => a.start - b.start || b.prio - a.prio || a.rel.localeCompare(b.rel));
-  const waves: string[][] = [], waveFeet: string[][] = [];
+  const waves: string[][] = [], waveFeet: string[][] = [], waveOwners: Record<string, number>[] = [];
   for (const row of rows.filter(r => r.dispatchable)) {
-    let index = waves.findIndex((wave, i) => wave.length < slots && !clash(waveFeet[i], row.feet));
-    if (index < 0) { index = waves.length; waves.push([]); waveFeet.push([]); }
+    let index = waves.findIndex((wave, i) => wave.length < slots && (waveOwners[i][row.owner_path] ?? 0) < row.owner_slots && !clash(waveFeet[i], row.feet));
+    if (index < 0) { index = waves.length; waves.push([]); waveFeet.push([]); waveOwners.push({}); }
     waves[index].push(row.addr); waveFeet[index].push(...row.feet);
+    waveOwners[index][row.owner_path] = (waveOwners[index][row.owner_path] ?? 0) + 1;
   }
   if (cycles.size) notes.push('dependency cycle: ' + [...cycles].sort().join(', '));
   return { slots, rows, waves, notes, demand: rows.filter(r => r.dispatchable).length, snapshot: hash(JSON.stringify(snapshot(prds))) };

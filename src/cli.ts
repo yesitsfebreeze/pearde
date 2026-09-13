@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import net from 'node:net';
 import { execute } from './engine';
 import { canonicalBoard } from './records';
 
@@ -24,7 +25,27 @@ export async function main(argv = process.argv.slice(2)) {
   const controller = new AbortController();
   const stop = () => controller.abort(); process.on('SIGTERM', stop); process.on('SIGINT', stop);
   try {
-    const result = await execute(operation, board, args, controller.signal);
+    let eventErrors = 0;
+    let eventError = '';
+    let socket: net.Socket | undefined;
+    const failed = (error: unknown) => { eventErrors++; eventError = String(error).slice(0, 256); };
+    if (process.env.PRD_NATIVE_EVENT_SOCKET) {
+      socket = net.createConnection(process.env.PRD_NATIVE_EVENT_SOCKET);
+      socket.on('error', failed);
+      try { await new Promise<void>((resolve, reject) => { socket!.once('connect', resolve); socket!.once('error', reject); }); } catch {}
+    }
+    const emit = socket ? (event: any) => {
+      const packet = JSON.stringify(event) + '\n';
+      if (socket!.destroyed || socket!.writableLength + Buffer.byteLength(packet) > 65536) { failed('native event channel unavailable or backpressured'); return; }
+      socket!.write(packet);
+    } : undefined;
+    const result = await execute(operation, board, args, controller.signal, emit);
+    if (socket && !socket.destroyed) await new Promise<void>(resolve => {
+      const timer = setTimeout(() => { failed('native event flush timed out'); socket!.destroy(); resolve(); }, 1000);
+      const done = () => { clearTimeout(timer); resolve(); };
+      socket!.once('error', done); socket!.end(done);
+    });
+    if (eventErrors) { result.event_errors = eventErrors; result.event_error = eventError; }
     if (json) console.log(JSON.stringify(result));
     else { if (result.data) console.log(operation === 'read' ? result.data.text : JSON.stringify(result.data, null, 2)); if (result.output) process.stdout.write(result.output); if (result.error) console.error(result.error); }
     return result.exit_code;

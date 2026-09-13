@@ -1,12 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { atomic, codeRepo, hash, members, mutationKeys, scan, specs, withLocks } from './records';
+import { atomic, codeRepo, document, hash, mutationKeys, openBoxes, resolve, scan, specs, withLocks } from './records';
 import { clash, plan } from './planner';
 import { argumentsOf, completionProblem, lane, transition } from './lifecycle';
 import { runProcess } from './process';
 
-export async function coordinate(board: string, args: string[], signal?: AbortSignal) {
+export async function coordinate(board: string, args: string[], signal?: AbortSignal, emit?: (event: any) => void) {
   const { pos, opts } = argumentsOf(args);
   const workers = Number(opts.workers) || 3;
   if (pos.length > 1) throw Error('run accepts at most one PRD scope');
@@ -24,19 +24,23 @@ export async function coordinate(board: string, args: string[], signal?: AbortSi
   signal?.addEventListener('abort', abort, { once: true });
   if (signal?.aborted) abort();
   const deadline = setTimeout(abort, seconds * 1000);
-  const lockPaths = [board, ...members(board).map(([, b]) => b)].map(b => path.join(b, '.state/run-lock.sqlite'));
+  const lockPaths = [board, ...[...scan(board).values()].map(p => p.board)].map(b => path.join(b, '.state/run-lock.sqlite'));
   const completed: string[] = [], failed: { ref: string; reason: string }[] = [], attempts = new Map<string, number>();
-  const active = new Map<string, { feet: string[]; work: Promise<void> }>();
-  const checkpoint = () => atomic(path.join(board, '.state/run.json'), JSON.stringify({ status: controller.signal.aborted ? 'stopped' : active.size ? 'running' : 'idle', scope: scope ?? null, live: [...active.keys()], completed, failed, attempts: Object.fromEntries(attempts), updated_at: new Date().toISOString() }, null, 2) + '\n');
+  const active = new Map<string, { owner: string; feet: string[]; work: Promise<void> }>();
+  const checkpoint = (status?: string) => atomic(path.join(board, '.state/run.json'), JSON.stringify({ status: status ?? (controller.signal.aborted ? 'stopped' : active.size ? 'running' : 'idle'), scope: scope ?? null, live: [...active.keys()], completed, failed, attempts: Object.fromEntries(attempts), updated_at: new Date().toISOString() }, null, 2) + '\n');
   try {
     return await withLocks(lockPaths, async () => {
       let fills = 0;
       for (;;) {
         const frontier = plan(board, workers, scope);
+        emit?.({ type: 'plan.updated', demand: frontier.demand, snapshot: frontier.snapshot });
         let launched = false;
         if (!controller.signal.aborted && (!opts.once || fills === 0)) {
           for (const row of frontier.rows) {
             if (active.size >= workers) break;
+            const ownerLimit = Number(document(path.join(row.owner_path, 'settings.md')).fm.workers ?? workers);
+            if (!Number.isInteger(ownerLimit) || ownerLimit < 1 || ownerLimit > 32) throw Error('invalid member worker limit');
+            if ([...active.values()].filter(a => a.owner === row.owner_path).length >= ownerLimit) continue;
             if (!row.dispatchable || active.has(row.rel) || failed.some(f => f.ref === row.rel) || (attempts.get(row.rel) ?? 0) >= 5 || [...active.values()].some(a => clash(a.feet, row.feet))) continue;
             const worker = 'prd-run-' + randomUUID();
             let fingerprint = '', prompt = '', cwd = '';
@@ -50,6 +54,7 @@ export async function coordinate(board: string, args: string[], signal?: AbortSi
               });
             } catch (error) { failed.push({ ref: row.rel, reason: String(error) }); continue; }
             attempts.set(row.rel, (attempts.get(row.rel) ?? 0) + 1);
+            emit?.({ type: 'worker.started', ref: row.rel, worker, role: row.role });
             const values: Record<string, string> = { board, rel: row.rel, role: row.role, prompt, worker };
             const command = adapter.command.map((part: string) => part.replace(/\{(board|rel|role|prompt|worker)\}/g, (_: string, key: string) => values[key]));
             command[0] = executable;
@@ -57,23 +62,41 @@ export async function coordinate(board: string, args: string[], signal?: AbortSi
               try {
                 const result = await runProcess(command, { cwd, signal: controller.signal, timeout: seconds * 1000, cap: 1048576 });
                 atomic(path.join(board, '.state/run-' + hash(row.rel).slice(0, 16) + '.log'), result.output);
-                const after = scan(board).get(row.rel);
+                let after = scan(board).get(row.rel);
+                if (result.state === 'completed' && after?.state === 'claimed' && String(after.fm.claim).split(/\s/)[0] === worker && !openBoxes(after.text) && specs(after).length && specs(after).every(s => !openBoxes(s.text))) {
+                  await withLocks(mutationKeys(board), async () => {
+                    const current = scan(board).get(row.rel)!;
+                    if (String(current.fm.claim).split(/\s/)[0] !== worker) throw Error('worker claim changed before collection');
+                    await transition('collect', board, [row.rel], controller.signal);
+                  });
+                  after = scan(board).get(row.rel);
+                }
                 let problem = result.state !== 'completed' ? result.state + ': ' + result.output.slice(-2048) : !after ? 'PRD disappeared' : hash(after.text + specs(after).map(s => s.text).join('')) === fingerprint ? 'worker exited without persisted progress' : after.state === 'done' ? completionProblem(after) : after.fm.claim ? 'worker left its claim unresolved' : null;
                 if (problem) failed.push({ ref: row.rel, reason: problem });
                 else if (after!.state === 'done') completed.push(row.rel);
-              } catch (error) { failed.push({ ref: row.rel, reason: String(error) }); }
+                emit?.({ type: 'worker.finished', ref: row.rel, worker, state: problem ? 'failed' : result.state, exit_code: result.exit_code });
+                if (after?.state !== row.state) emit?.({ type: 'transition.applied', ref: row.rel, before: row.state, after: after?.state });
+                if (after?.state === 'done') emit?.({ type: 'verification.completed', ref: row.rel, verified: !problem, commit: after.fm.commit ?? null });
+              } catch (error) { failed.push({ ref: row.rel, reason: String(error) }); emit?.({ type: 'worker.finished', ref: row.rel, worker, state: 'failed', exit_code: null }); }
               finally { active.delete(row.rel); checkpoint(); }
             })();
-            active.set(row.rel, { feet: row.feet, work }); launched = true; checkpoint();
+            active.set(row.rel, { owner: row.owner_path, feet: row.feet, work }); launched = true; checkpoint();
           }
           if (launched) fills++;
         }
         if (!active.size) break;
         await Promise.race([...active.values()].map(a => a.work));
       }
-      checkpoint();
+      const finalGraph = scan(board), selected = scope ? resolve(finalGraph, scope).ref : null;
+      for (const prd of finalGraph.values()) {
+        if (prd.state !== 'done' || selected && prd.ref !== selected && !prd.ref.startsWith(selected + '/')) continue;
+        const reason = completionProblem(prd, finalGraph);
+        if (reason && !failed.some(f => f.ref === prd.ref)) failed.push({ ref: prd.ref, reason });
+      }
       const remaining = plan(board, workers, scope).rows;
-      return { status: controller.signal.aborted ? 'stopped' : failed.length ? 'failed' : remaining.length ? 'blocked' : 'completed', completed, failed, remaining };
+      const status = controller.signal.aborted ? 'stopped' : failed.length ? 'failed' : remaining.length ? 'blocked' : 'completed';
+      checkpoint(status);
+      return { status, completed, failed, remaining, owned: [...attempts.keys()] };
     }, 0);
   } finally { controller.abort(); await Promise.allSettled([...active.values()].map(a => a.work)); clearTimeout(deadline); signal?.removeEventListener('abort', abort); }
 }

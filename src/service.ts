@@ -98,9 +98,15 @@ export class Service {
     if (op === 'run') { if (!this.adapter) throw Error('external run needs trusted config.adapter; use next/brief for host-driven work'); output.push('--adapter', this.adapter); }
     return { op, board, args: output };
   }
-  async execute(op: string, board: string, args: string[], controller: AbortController, timeout: number) {
+  async execute(op: string, board: string, args: string[], controller: AbortController, timeout: number, context?: any, turn?: string) {
     if (controller.signal.aborted || this.closed) return { op, state: 'cancelled', output: '', exit_code: null } as any;
-    const processResult = await runProcess([process.execPath, path.join(ROOT, 'src/cli.ts'), op, '--board', board, '--json', ...args], { cwd: this.root, timeout: timeout * 1000, cap: ['plan', 'scan', 'run'].includes(op) ? 1048576 : this.outputCap, signal: controller.signal, grace: 12_000 });
+    const delivery = { published: 0, unavailable: 0 };
+    const processResult = await runProcess([process.execPath, path.join(ROOT, 'src/cli.ts'), op, '--board', board, '--json', ...args], { cwd: this.root, timeout: timeout * 1000, cap: ['plan', 'scan', 'run'].includes(op) ? 1048576 : this.outputCap, signal: controller.signal, grace: 12_000, onEvent: event => {
+      if (!['plan.updated', 'worker.started', 'worker.finished', 'transition.applied', 'verification.completed'].includes(event.type)) throw Error('unknown native domain event');
+      if (!context || !this.host) { delivery.unavailable++; return; }
+      try { this.host.publish({ ...event, schema_version: 1, operation: op, board: path.basename(board), session: context.session, run: context.run, call: context.call }, turn); delivery.published++; }
+      catch { delivery.unavailable++; }
+    } });
     let outcome: any = { op, board: path.basename(board), ...processResult, effects: processResult.state === 'completed' ? 'see engine output' : 'inspect board before retrying' };
     if (['completed', 'failed'].includes(processResult.state)) {
       try {
@@ -108,16 +114,25 @@ export class Service {
         if (!object(native) || !Number.isInteger(native.exit_code)) throw Error('missing engine envelope');
         outcome.output = native.output ?? ''; outcome.state = native.exit_code ? 'failed' : 'completed';
         for (const field of ['data', 'changed', 'verification', 'error']) if (field in native) outcome[field] = native[field];
+        if (native.event_errors) { delivery.unavailable += Number(native.event_errors); processResult.events = { ...processResult.events!, error: String(native.event_error ?? 'native event delivery failed') }; }
       } catch (error) { outcome.state = 'failed'; outcome.error = 'invalid native engine response: ' + String(error); }
     }
-    if (op !== 'run' && bytes(outcome) > this.outputCap) outcome = { op, board: path.basename(board), state: 'output_limit', output: '', exit_code: outcome.exit_code, truncated: true, effects: 'inspect board before retrying; reduce page limit or read one PRD' };
+    outcome.events = { ...processResult.events, ...delivery };
     return outcome;
+  }
+  result(value: any, error = false) {
+    const answer = result(value, error);
+    if (bytes(answer) <= this.outputCap) return answer;
+    const identifier = id(), file = path.join(this.state, 'responses', identifier + '.json');
+    // Budget the final serialized ToolResult, including JSON string escaping.
+    // Keep proof and diagnostics even when the caller needs a smaller response.
+    atomic(file, JSON.stringify(answer));
+    return result({ state: 'output_limit', truncated: true, response_id: identifier, original_state: typeof value.state === 'string' ? value.state.slice(0, 64) : null, details: 'full ToolResult retained in service responses journal; inspect before retrying' }, true);
   }
   saveJob(job: any) { atomic(path.join(this.state, job.job_id + '.json'), JSON.stringify(job)); }
   publicJob(job: any) {
     if (bytes(job) <= this.outputCap) return { ...job };
-    const { output, data, verification, memory, ...small } = job;
-    return { ...small, output: String(output ?? '').slice(0, this.outputCap / 8), verification_count: verification?.length ?? 0, truncated: true, details: 'full result retained in durable job journal' };
+    return { job_id: job.job_id, state: job.state, op: job.op, board: job.board, exit_code: job.exit_code, started_at: job.started_at, finished_at: job.finished_at, events: job.events, verification_count: job.verification?.length ?? 0, changed_count: job.changed?.length ?? 0, truncated: true, details: 'full result retained in durable job journal' };
   }
   job(op: string, identifier: string, context: any) {
     let job = this.jobs.get(identifier);
@@ -144,7 +159,7 @@ export class Service {
       const entry = JSON.parse(fs.readFileSync(file, 'utf8'));
       if (entry.status !== 'committed' && entry.attempts < 3) {
         entry.attempts++; entry.status = 'pending'; atomic(file, JSON.stringify(entry));
-        try { if (!this.host) throw Error('memory provider unavailable'); const ack = await this.host.request('memory', { op: 'ingest', text: entry.text, sync: true }, turn); if (ack?.status !== 'committed') throw Error('memory did not acknowledge committed status'); entry.status = 'committed'; delete entry.error; }
+        try { if (!this.host) throw Error('memory provider unavailable'); const ack = await this.host.request('memory', { op: 'ingest', text: entry.text, raw: true, sync: true }, turn); if (ack?.status !== 'committed') throw Error('memory did not acknowledge committed status'); entry.status = 'committed'; delete entry.error; }
         catch (error) { entry.error = String(error).slice(0, 512); }
         atomic(file, JSON.stringify(entry));
       }
@@ -181,26 +196,25 @@ export class Service {
       const context = request.context, key = contextKey(context);
       if (!this.cancelled.has(key)) { if (this.cancelled.size >= 4096) throw Error('invocation capacity reached'); this.cancelled.set(key, new AbortController()); }
       const controller = this.cancelled.get(key)!;
-      if (request.op === 'cancel') { controller.abort(); return result({ state: 'cancel_requested' }); }
-      if (controller.signal.aborted || this.closed) return result({ state: 'cancelled' }, true);
+      if (request.op === 'cancel') { controller.abort(); return this.result({ state: 'cancel_requested' }); }
+      if (controller.signal.aborted || this.closed) return this.result({ state: 'cancelled' }, true);
       if (this.started.has(key)) throw Error('invocation already used; inspect status before retrying'); this.started.add(key);
       const { op, board, args } = this.prepare(request.input);
-      if (op === 'status' || op === 'stop') return result(this.job(op, args[0], context));
+      if (op === 'status' || op === 'stop') return this.result(this.job(op, args[0], context));
       if (op === 'run') {
         if ([...this.jobs.values()].filter(j => j.state === 'running').length >= 4 || this.jobs.size >= 128) throw Error('PRD job capacity reached');
         const job = { job_id: id(), session: context.session, instance: this.instance, invocation: key, board: path.basename(board), state: 'running', started_at: Date.now() / 1000 };
         this.jobs.set(job.job_id, job); this.saveJob(job); this.publish(op, board, args, context, job, turn);
-        const work = (async () => { let outcome: any; try { outcome = await this.execute(op, board, args, controller, this.jobTimeout); if (outcome.state === 'completed') outcome.memory = await this.rememberVerified(board, context, outcome, turn); } catch (error) { outcome = { state: 'failed', error: String(error) }; } Object.assign(job, outcome, { finished_at: Date.now() / 1000 }); this.saveJob(job); this.publish(op, board, args, context, outcome, turn); })();
-        this.tasks.add(work); void work.finally(() => this.tasks.delete(work)); return result({ ...job });
+        const work = (async () => { let outcome: any; try { outcome = await this.execute(op, board, args, controller, this.jobTimeout, context, turn); outcome.memory = await this.rememberVerified(board, context, outcome, turn); } catch (error) { outcome = { state: 'failed', error: String(error) }; } Object.assign(job, outcome, { finished_at: Date.now() / 1000 }); this.saveJob(job); this.publish(op, board, args, context, outcome, turn); })();
+        this.tasks.add(work); void work.finally(() => this.tasks.delete(work)); return this.result({ ...job });
       }
-      const work = this.execute(op, board, args, controller, this.timeout); this.tasks.add(work);
+      const work = this.execute(op, board, args, controller, this.timeout, context, turn); this.tasks.add(work);
       let outcome; try { outcome = await work; } finally { this.tasks.delete(work); }
       if (['plan', 'brief', 'read'].includes(op) && outcome.state === 'completed') outcome.memory = await this.recall(board, args, turn);
       if (['add', 'refine', 'specced', 'claim', 'release', 'collect'].includes(op)) outcome.event = this.publish(op, board, args, context, outcome, turn);
       if (op === 'collect' && outcome.state === 'completed') outcome.memory = await this.rememberVerified(board, context, outcome, turn);
-      if (bytes(outcome) > this.outputCap) outcome = { op, state: 'output_limit', output: '', truncated: true, effects: 'command finished; inspect board before retrying' };
-      return result(outcome, outcome.state !== 'completed');
-    } catch (error) { return result({ error: error instanceof Error ? error.message : String(error) }, true); }
+      return this.result(outcome, outcome.state !== 'completed');
+    } catch (error) { return this.result({ error: error instanceof Error ? error.message : String(error) }, true); }
   }
   async close() { this.closed = true; for (const controller of this.cancelled.values()) controller.abort(); await Promise.allSettled([...this.tasks, ...this.deliveries.values()]); }
 }

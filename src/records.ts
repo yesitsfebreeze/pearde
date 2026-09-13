@@ -111,6 +111,11 @@ export function resolve(prds: Map<string, Prd>, name: string, owner?: Prd): Prd 
   const local = owner?.alias && !name.startsWith('@') ? '@' + owner.alias + '/' + name : name;
   if (prds.has(local)) return prds.get(local)!;
   if (prds.has(name)) return prds.get(name)!;
+  if (name.startsWith('@')) {
+    const slash = name.indexOf('/');
+    const own = [...prds.values()].filter(p => !p.alias && path.basename(p.board) === name.slice(1, slash) && p.local === name.slice(slash + 1));
+    if (own.length === 1) return own[0];
+  }
   let matches = [...prds.values()].filter(p => path.basename(p.local) === name && (!owner || p.board === owner.board));
   if (!matches.length && owner) matches = [...prds.values()].filter(p => path.basename(p.local) === name);
   if (matches.length !== 1) throw Error('PRD missing, ambiguous, or outside this graph: ' + name);

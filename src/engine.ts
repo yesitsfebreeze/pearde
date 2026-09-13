@@ -6,7 +6,7 @@ import { argumentsOf, transition, verifiedStatus } from './lifecycle';
 import { coordinate } from './coordinator';
 
 const mutations = new Set(['add', 'claim', 'release', 'specced', 'refine', 'collect', 'defer', 'retry', 'unblock']);
-export async function execute(operation: string, board: string, args: string[] = [], signal?: AbortSignal) {
+export async function execute(operation: string, board: string, args: string[] = [], signal?: AbortSignal, emit?: (event: any) => void) {
   board = canonicalBoard(board);
   const envelope: any = { operation, board, exit_code: 0, output: '', error: '', changed: [], verification: [] };
   const { opts, pos } = argumentsOf(args);
@@ -39,7 +39,7 @@ export async function execute(operation: string, board: string, args: string[] =
       } else if (operation === 'status') {
         const counts: Record<string, number> = {}; for (const p of scan(board).values()) counts[p.state] = (counts[p.state] ?? 0) + 1; envelope.data = counts;
       } else if (operation === 'members') envelope.data = Object.fromEntries(members(board));
-      else if (operation === 'run') { envelope.data = await coordinate(board, args, signal); if (['failed', 'stopped'].includes(envelope.data.status)) envelope.exit_code = 2; }
+      else if (operation === 'run') { envelope.data = await coordinate(board, args, signal, emit); if (['failed', 'stopped'].includes(envelope.data.status)) envelope.exit_code = 2; }
       else if (mutations.has(operation) || operation === 'brief') envelope.output = await transition(operation, board, args, signal);
       else if (operation === 'check') {
         const current = plan(board); const problems = [...current.notes, ...current.rows.filter(r => r.held?.includes('outside this graph')).map(r => r.rel + ': ' + r.held)];
@@ -54,7 +54,13 @@ export async function execute(operation: string, board: string, args: string[] =
     } catch (error) { envelope.exit_code = 2; envelope.error = error instanceof Error ? error.message : String(error); }
     const afterGraph = scan(board), after = snapshot(afterGraph);
     envelope.changed = [...new Set([...Object.keys(before), ...Object.keys(after)])].sort().filter(ref => JSON.stringify(before[ref]) !== JSON.stringify(after[ref])).map(ref => ({ ref, before: before[ref] ?? null, after: after[ref] ?? null }));
-    if (['collect', 'run'].includes(operation) && !envelope.exit_code && !opts.dry) envelope.verification = envelope.changed.filter((c: any) => c.after?.state === 'done').map((c: any) => verifiedStatus(afterGraph.get(c.ref)!));
+    if (operation === 'run') envelope.changed = envelope.changed.filter((change: any) => (envelope.data?.owned ?? []).some((ref: string) => change.ref === ref || change.ref.startsWith(ref + '/')));
+    if (['collect', 'run'].includes(operation) && !opts.dry) envelope.verification = envelope.changed.filter((c: any) => c.after?.state === 'done').map((c: any) => verifiedStatus(afterGraph.get(c.ref)!));
+    if (emit) {
+      if (operation === 'plan') emit({ type: 'plan.updated', operation, demand: envelope.data?.demand ?? 0, snapshot: envelope.data?.snapshot });
+      if (operation !== 'run') for (const change of envelope.changed) emit({ type: 'transition.applied', operation, ref: change.ref, before: change.before?.state, after: change.after?.state });
+      if (operation !== 'run') for (const proof of envelope.verification) emit({ type: 'verification.completed', operation, ref: proof.ref, verified: proof.verified, commit: proof.commit });
+    }
     return envelope;
   };
   return mutations.has(operation) ? withLocks(mutationKeys(board), work) : work();

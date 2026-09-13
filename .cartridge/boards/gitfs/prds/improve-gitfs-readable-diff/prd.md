@@ -13,15 +13,8 @@ canonical-scope: improve-gitfs-readable-diff
 needs:
 - '@policy/improve-policy-operation-rules'
 - '@gitfs/tool-results-interoperate'
-footprint:
-- src/service.rs
-- src/store.rs
-- src/tool_result.rs
-- src/inspection.rs
-- .cartridge/tests/unit/tool_result.rs
-- .cartridge/tests/integration/tool-result.test.ts
-- .cartridge/docs/inspection.md
-commit: "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5"
+footprint: ["src/service.rs","src/store.rs","src/tool_result.rs","src/inspection.rs",".cartridge/tests/unit/tool_result.rs",".cartridge/tests/integration/tool-result.test.ts",".cartridge/docs/inspection.md","Cargo.toml","src/provenance.rs",".cartridge/tests/unit/provenance.rs",".cartridge/tests/integration/change-provenance.test.ts",".cartridge/docs/change-provenance.md"]
+commit: "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36"
 ---
 
 # Inspect session changes without a mutation grant

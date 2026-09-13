@@ -1,14 +1,6 @@
 ---
 complexity: medium
-footprint:
-  - src/push.rs
-  - src/service.rs
-  - src/store.rs
-  - src/tool_result.rs
-  - src/inspection.rs
-  - .cartridge/tests/unit/tool_result.rs
-  - .cartridge/tests/integration/tool-result.test.ts
-  - .cartridge/docs/inspection.md
+footprint: ["src/push.rs","src/service.rs","src/store.rs","src/tool_result.rs","src/inspection.rs",".cartridge/tests/unit/tool_result.rs",".cartridge/tests/integration/tool-result.test.ts",".cartridge/docs/inspection.md","Cargo.toml","src/provenance.rs",".cartridge/tests/unit/provenance.rs",".cartridge/tests/integration/change-provenance.test.ts",".cartridge/docs/change-provenance.md"]
 ---
 
 # spec01 — Inspect base, overlay and disk without a mutation grant

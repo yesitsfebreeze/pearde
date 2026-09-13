@@ -15,7 +15,7 @@ needs:
 footprint:
 - /Users/feb/dev/cartridge/policy.ctg/init.lua
 - /Users/feb/dev/cartridge/policy.ctg/cartridge.json
-commit: "a3f5cffface2b7b2bc9ed26d9e55da0ee0f4be2d"
+commit: "e442bef2c9f07635f9e8b8e1d87a47193841569f"
 ---
 
 # Explain the effective policy without executing a tool
@@ -39,3 +39,5 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-policy-explain`; maximum five rounds.
+
+Push catalog revalidation at e442bef: existing operation-rule and explain acceptance remains unchanged; semantic evaluator revision now reflects the recognized operation catalog.

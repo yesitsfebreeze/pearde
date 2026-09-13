@@ -1,15 +1,16 @@
 ---
 repo: /Users/feb/dev/cartridge/cartridge.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: runtime
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 4
+review-status: accepted
 canonical-scope: the-reload-test-is-not-flaky
+commit: "981c7eb31e8c15156ed3681820536bad4f6cf391"
 ---
 
 # the-reload-test-is-not-flaky
@@ -18,9 +19,9 @@ Reproduce the old failure with controlled barriers around build completion, relo
 
 ## Acceptance
 
-- [ ] The deliberately forced old ordering fails before the fix and passes after synchronization on the same fixture.
-- [ ] A bad rebuild still preserves the prior usable surface and cannot satisfy readiness for the wrong generation.
-- [ ] Twenty repeated runs pass on an unchanged isolated binary and the required current development test entry point includes the regression.
+- [x] The deliberately forced old ordering fails before the fix and passes after synchronization on the same fixture.
+- [x] A bad rebuild still preserves the prior usable surface and cannot satisfy readiness for the wrong generation.
+- [x] Twenty repeated runs pass on an unchanged isolated binary and the required current development test entry point includes the regression.
 
 ## Proof and recovery
 
@@ -31,4 +32,4 @@ Preserve the last usable implementation and durable data on failure; report part
 
 ## Review
 
-[Round 2 agent review](review.md). Inherits round 1 from `the-reload-test-is-not-flaky`; maximum five rounds.
+[Revision-bound agent review](review.md). Inherits round 1 from `the-reload-test-is-not-flaky`; maximum five rounds.

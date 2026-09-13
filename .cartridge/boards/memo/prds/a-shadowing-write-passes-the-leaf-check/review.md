@@ -29,3 +29,17 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — current behavior and missing merged-write proof
+
+Reviewer: Codex self-review. The 48-test baseline passes and current namespace
+validation already separates local uniqueness from owner-qualified identity.
+The older defect is not reproduced. Existing tests write the local shadow without
+supplying shipped records; the new fixture closes that proof gap and ties stale
+revision, duplicate-leaf and owner-write refusals to the same merged view.
+
+Value/scope 19; ownership/reuse 20; dependencies/slices 19; acceptance/baseline 20;
+failure/compatibility 20. **98/100 — PASS for the plan**, no blocking finding.
+The existing canonical parser is the authority; no global duplicate relaxation
+or cross-owner source mutation is proposed. Inputs bound in
+review-round-3-inputs.json. Three rounds used, two remain.

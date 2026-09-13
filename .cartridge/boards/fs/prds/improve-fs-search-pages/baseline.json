@@ -1,0 +1,9 @@
+{
+  "source_revision": "475962d8bcdc9abda8f15c16cd9b553528b8ba05",
+  "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/fs-revision just test fs page_has_a_continuation_for_the_rest",
+  "fixture": "7 actual files, page item cap 2, real rg",
+  "expected": "2 items with continuation",
+  "observed": "2 items; truncated true; no continuation",
+  "exit_code": 101,
+  "log_sha256": "e1de33b8652b0ae944e4c973acb80d8d4d9f16ae88e180cbf8723896b1e9f889"
+}

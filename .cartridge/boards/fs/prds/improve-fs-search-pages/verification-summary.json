@@ -1,0 +1,8 @@
+{
+  "tests": 43,
+  "format_and_clippy": "passed",
+  "logs": {
+    "/tmp/cartridge-fs-search-tests.log": "90345925495964ed6b994a0a7b34059d0c60af886a867401d24c3e641b195b56",
+    "/tmp/cartridge-fs-search-check.log": "5f552e7b8140a3572ee411b461b22dde87fa3870b623a5d99301c25d2cd9ebae"
+  }
+}

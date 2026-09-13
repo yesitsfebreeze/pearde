@@ -29,3 +29,20 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — Captured search pages
+
+Reviewer `/root` self-review. Inputs: review-round-3-inputs.json.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Real seven-file probe confirms unreachable result tail. |
+| Ownership and reuse | 19 | Existing chain refs, service run registry and rg backend; no overlay imports. |
+| Dependencies and slices | 19 | Four fs paths; publication guards retained and reverified after integration. |
+| Acceptance and baseline | 19 | Large real fixture, >200 single-file matches, cursor identities and backend floods. |
+| Failure and compatibility | 19 | Strict output/storage budgets, explicit snapshot consistency, expiry/cancellation and no silent eviction. |
+
+**95/100 — PASS**. No blockers. Run/cwd refs now retain the entire bounded
+capture rather than a truncated page, an intentional additive completeness
+improvement. Backend/storage overflow fails instead of silently truncating.
+Rounds used: 3/5. Implementation verification is pending.

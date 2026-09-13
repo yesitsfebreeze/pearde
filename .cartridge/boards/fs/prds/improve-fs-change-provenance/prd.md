@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/fs.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -11,6 +11,7 @@ review-status: "passed"
 canonical-scope: improve-fs-change-provenance
 needs: ["@sessions/file-change-records-retain-reported-revisions","@fs/improve-fs-change-provenance/direct-file-mutations-report-revisions","@gitfs/overlay-mutations-report-revisions","@runtime/shipped-gitfs-profiles-grant-change-recording"]
 capability-owner: "fs"
+commit: "3a79023311b1a9b30c383ec8c71cf31c20a69ee7"
 ---
 
 # Share change attribution between direct files and overlays
@@ -19,10 +20,10 @@ Touched-file records identify actor, operation, storage target and revisions so 
 
 ## Acceptance
 
-- [ ] Direct edit and overlay edit of the same path produce distinct attributable records and a visible divergence.
-- [ ] External edits and unrelated files never become owned implicitly; legacy touched-file records remain readable.
+- [x] Direct edit and overlay edit of the same path produce distinct attributable records and a visible divergence.
+- [x] External edits and unrelated files never become owned implicitly; legacy touched-file records remain readable.
 
-- [ ] Preserve direct filesystem semantics and keep GitFS overlay ownership distinct. New attribution is additive; never auto-import external edits into a session. Retain guarded write behavior and explicit partial failures.
+- [x] Preserve direct filesystem semantics and keep GitFS overlay ownership distinct. New attribution is additive; never auto-import external edits into a session. Retain guarded write behavior and explicit partial failures.
 
 ## Proof and recovery
 

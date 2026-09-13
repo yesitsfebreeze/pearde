@@ -1,6 +1,7 @@
 ---
 complexity: medium
 footprint:
+  - src/context.rs
   - src/inventory.rs
   - src/main.rs
   - src/service.rs

@@ -1,10 +1,6 @@
 ---
 complexity: medium
-footprint:
-- src/context.rs
-- src/service.rs
-- .cartridge/tests/integration/file-kernel-context.test.ts
-- .cartridge/docs/context.md
+footprint: ["src/context.rs","src/service.rs",".cartridge/tests/integration/file-kernel-context.test.ts",".cartridge/docs/context.md","src/source_search.rs","src/document.rs",".cartridge/tests/unit/source_search.rs"]
 ---
 
 # Add explicitly enabled file/kernel sources to native shared context

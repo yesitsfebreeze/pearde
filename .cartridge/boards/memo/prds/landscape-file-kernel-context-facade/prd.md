@@ -14,7 +14,8 @@ needs:
 - "@landscape/landscape-composes-system-context/live-file-context-contributors/file-kernel-evidence-adapter"
 - "@memo/landscape-context-facade"
 - "@fs/read-only-context-file-snapshots"
-commit: "1ffca32db1d06364b3e35e6cbca4881a1f814f71"
+commit: "a458148fb21f85cabcd9e1ced85c96c581b8e0b2"
+footprint: ["src/context.rs","src/service.rs",".cartridge/tests/integration/file-kernel-context.test.ts",".cartridge/docs/context.md","src/source_search.rs","src/document.rs",".cartridge/tests/unit/source_search.rs"]
 ---
 
 # Expose configured file and kernel evidence through native shared context

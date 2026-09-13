@@ -50,10 +50,10 @@ the existing host boundary; arbitrary context is not newly authenticated.
 
 ## Acceptance
 
-- [ ] Each known direct publication captures actual before/after SHA256, canonical target and a fresh publication_id under the existing guard; equal-content repeated publications are distinct.
-- [ ] Refused/stale/cancelled writes and every read/search/fs.context operation record nothing; no external or unrelated path gains ownership.
-- [ ] Known publication followed by cleanup/observation/recording failure retains evidence and reports partial or uncertain attribution without replay.
-- [ ] Native real-Sessions recording/restart, existing guarded-write tests and read-only context compatibility pass through public gates.
+- [x] Each known direct publication captures actual before/after SHA256, canonical target and a fresh publication_id under the existing guard; equal-content repeated publications are distinct.
+- [x] Refused/stale/cancelled writes and every read/search/fs.context operation record nothing; no external or unrelated path gains ownership.
+- [x] Known publication followed by cleanup/observation/recording failure retains evidence and reports partial or uncertain attribution without replay.
+- [x] Native real-Sessions recording/restart, existing guarded-write tests and read-only context compatibility pass through public gates.
 
 ## Verify and Proof
 

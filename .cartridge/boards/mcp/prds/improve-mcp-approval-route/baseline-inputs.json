@@ -1,0 +1,13 @@
+{
+  "source_commit": "29b20b27b352ccb8df04cbc2ad9e4eefa20e7369",
+  "source_sha256": {
+    "src/main.rs": "fe01cb123c2b24145a59a1608f84d4340369a67c99a687b4e4ec40a31ee66902",
+    "src/service.rs": "e95bbde8f8b6e4566e33705a1e68883cb0c2f4d006a71a9cbc40249dc67c1c48",
+    ".cartridge/tests/unit/tests.rs": "1ab944e749072f498142bc7fe856cc65540f1641cce13882576591b21c8c9438"
+  },
+  "fixture_source": "/private/tmp/cartridge-writer-proof/mcp.ctg/.cartridge/tests/unit/tests.rs",
+  "fixture_sha256": "a585baedfdd2ed745d51d919f6f6584700772824b63d1489870e5d929282be0f",
+  "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/writer-proof cargo test --manifest-path /private/tmp/cartridge-writer-proof/mcp.ctg/Cargo.toml baseline_headless_policy_inspection -- --nocapture",
+  "expected": "Inspection returns decision deny without dispatch",
+  "observed": "Baseline fails: result.decision is null; method is not available (-32601)."
+}

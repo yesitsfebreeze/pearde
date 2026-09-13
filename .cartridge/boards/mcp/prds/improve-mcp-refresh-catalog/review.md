@@ -53,3 +53,7 @@ found a dropped stdio response when the provider is temporarily absent. The
 new runtime leaf owns that two-file repair and inherits four used rounds. MCP
 collection waits for it. Catalog design remains unchanged. No blockers; inputs
 in review-round-4-inputs.json. Rounds used: 4/5.
+
+## Reverification after optional policy diagnostics
+
+MCP service and shared tests changed for @mcp/improve-mcp-approval-route. The catalog contract and discovery behavior are unchanged; default initialization remains the same and the optional diagnostic capability is separately discoverable. Archive the prior receipt and rerun the full 15-test owner gate, including the initialized live catalog replacement fixture. No additional substantive catalog plan revision.

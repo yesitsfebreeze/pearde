@@ -1,0 +1,6 @@
+{
+  ".cartridge/boards/mcp/prds/improve-mcp-approval-route/prd.md": "3010e4c5001c1a4db243dd30f94e24fd377c1094f74929eccac516e42a03f815",
+  ".cartridge/boards/mcp/prds/improve-mcp-approval-route/specs/spec01.md": "be3f9fabe16a9141ae2be12cc3b1d1bf6a87857db7dabcd16ec21579bc2cec05",
+  "../mcp.ctg/src/service.rs": "e95bbde8f8b6e4566e33705a1e68883cb0c2f4d006a71a9cbc40249dc67c1c48",
+  "../policy.ctg/init.lua": "1ef0a54adbb3d561198c865c0215113720663def80d683842d6e8882c8862b29"
+}

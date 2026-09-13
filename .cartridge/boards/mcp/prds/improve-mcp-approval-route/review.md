@@ -29,3 +29,26 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — Optional operation inspection and refusal diagnostics
+
+Reviewer `/root` self-review; input digests in review-round-3-inputs.json.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Baseline proves missing inspection; one headless authorization outcome. |
+| Ownership and reuse | 20 | Reuses completed policy.explain and current exposed-tool registry. |
+| Dependencies and slices | 19 | Policy prerequisites are done; MCP owns optional presentation only. |
+| Acceptance and baseline | 19 | Real stdio profile, forged-authority negatives and replacement mismatch. |
+| Failure and compatibility | 19 | Diagnostic failure cannot turn refusal into dispatch; old clients unchanged. |
+
+**96/100 — PASS**. No blockers. The extension is explicitly optional; configuration
+does not create an interactive approver. Same-revision checks bind explanation to
+a refusal; inspection itself is only a current observation and never a grant.
+Rounds used: 3/5. Product tests remain pending.
+
+Protocol reference: [MCP 2025-06-18 schema](https://github.com/modelcontextprotocol/modelcontextprotocol/blob/main/schema/2025-06-18/schema.ts)
+and [metadata keys](https://modelcontextprotocol.io/specification/2025-06-18/basic).
+Experimental capabilities and a non-reserved metadata key carry this extension.
+
+Proof spelling correction: Bun requires the explicit `./.cartridge/` path to treat the hidden test directory as a path. This changes only command resolution, not the fixture or accepted behavior.

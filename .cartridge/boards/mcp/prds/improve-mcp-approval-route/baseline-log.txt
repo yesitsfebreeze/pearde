@@ -1,0 +1,21 @@
+   Compiling mcp v0.1.0 (/private/tmp/cartridge-writer-proof/mcp.ctg)
+    Finished `test` profile [unoptimized] target(s) in 0.59s
+     Running unittests src/main.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/writer-proof/debug/deps/mcp-f1de090631a27267)
+
+running 1 test
+
+thread 'tests::baseline_headless_policy_inspection' (42677773) panicked at /private/tmp/cartridge-writer-proof/mcp.ctg/src/../.cartridge/tests/unit/tests.rs:522:2:
+assertion `left == right` failed
+  left: Null
+ right: "deny"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test tests::baseline_headless_policy_inspection ... FAILED
+
+failures:
+
+failures:
+    tests::baseline_headless_policy_inspection
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin mcp`

@@ -1,0 +1,28 @@
+{
+  "result": "15 MCP tests pass including initialized-client catalog replacement and real policy inspection; 27 live policy assertions pass; public check passes.",
+  "fixture_correction": "The native GitFS read fixture now uses valid read input. Forged outer metadata remains on reads, and both inner/outer approval/context fields remain on refused writes.",
+  "sources": {
+    "src/main.rs": "af253725e767161448261f3bcdcb2adf02d08f97c8deb17f8257920bec0c551d",
+    "src/service.rs": "883960f1f5b768e3818a216810065ddb2df2b569782a82c1c49629338d8d43d5",
+    ".cartridge/tests/unit/tests.rs": "f6a256ab3c7a80119c2cebba03252de1d98d64e91e5aebe2e07d433b135e8c50",
+    ".cartridge/tests/integration/approval.test.ts": "0108b53a7b5e7ba5f83d1368463b9240403ff01311f3dbd5bdb6a59e008d78fc",
+    ".cartridge/docs/approval.md": "da2fc0d3181d3e15e35695bc8d9f0e8e9119e3874d4477141a12e688de23f231"
+  },
+  "logs": {
+    "test": {
+      "path": "test-log.txt",
+      "sha256": "d5d222949605211ff0dee3a81291c5e2afb9b3cc286cf0d458922274d623ea81",
+      "exit": 0
+    },
+    "check": {
+      "path": "check-log.txt",
+      "sha256": "16686c0e8f542317ef549955e8b9fb0bbf8c098dacdfcdceb6dbc23ab5770c84",
+      "exit": 0
+    },
+    "live": {
+      "path": "live-log.txt",
+      "sha256": "ff8adf7070819f84bdd412398a159cfeec96d4523df435eab25b9c0f54bd5e0f",
+      "exit": 0
+    }
+  }
+}

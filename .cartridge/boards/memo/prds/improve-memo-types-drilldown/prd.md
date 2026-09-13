@@ -13,7 +13,7 @@ canonical-scope: improve-memo-types-drilldown
 footprint:
 - src/service.rs
 - .cartridge/tests/integration/tests.rs
-commit: "5345aaaa3407584825f624edb6cefaff14846b07"
+commit: "4b081453d610af42daac0456750a50bdc719a5fe"
 ---
 
 # Read type declarations individually
@@ -49,3 +49,5 @@ prior648b420f receipt retained. No acceptance scope change.
 
 Reverify unchanged acceptance after the next integrated owner feature; earlier
 0976a3b0 receipt retained. No contract relaxation.
+
+Reverification at4b081453 after native context facade: existing type/board behavior unchanged; service/main source integration changed.

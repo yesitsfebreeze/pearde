@@ -1,13 +1,14 @@
 ---
 complexity: high
 footprint:
-  - src/mailbox.rs
-  - src/main.rs
-  - src/mapping.rs
-  - src/retention.rs
-  - .cartridge/tests/unit/main/retention_tests.rs
-  - .cartridge/tests/integration/retention.test.ts
-  - .cartridge/docs/retention.md
+- src/mailbox.rs
+- src/main.rs
+- src/mapping.rs
+- src/retention.rs
+- .cartridge/tests/unit/main/retention_tests.rs
+- .cartridge/tests/integration/retention.test.ts
+- .cartridge/docs/retention.md
+- src/observations.rs
 ---
 
 # spec01 — Preview and journal guarded session cleanup

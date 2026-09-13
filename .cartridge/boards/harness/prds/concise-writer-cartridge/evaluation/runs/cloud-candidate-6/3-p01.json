@@ -1,0 +1,48 @@
+{
+  "fixture": "p01",
+  "repeat": 3,
+  "category": "precision",
+  "started": "2026-09-13T15:33:20.966Z",
+  "completed": "2026-09-13T15:33:21.518Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the shortest standalone answer that preserves every unique fact. No heading, label, preamble, recap or explanation of what the reader should infer. Combine related facts into complete sentences; mention each fact once. Attach evidence IDs in parentheses. Prefer specific verbs and short clauses. Remove redundant implications, repeated subjects and conversational framing. Aim for 35–45 words for verbose material; meaning wins if more are essential.\n\nPreserve every result, condition, exclusion, uncertainty, owner and next action. Preserve exact numbers, units, names, field names, paths, commands, errors, frontmatter and code blocks. Do not claim an instruction happened or an untested result passed. Check all source facts silently before answering.\n\nAlready concise: copy EXACTLY. Requested JSON: exact keys/types, no surrounding text. Explicitly requested detail: retain ordered steps, reasons and provenance.\n\nExisting memo edits require requested preview and approved revision-checked memo.write. Stop on conflicts; preserve source evidence. Use one normal drafting call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nWrite a precise handoff reply. Preserve each quoted command and error exactly.\n\nSource:\nThe command `archive verify --limit 0.25 --unit GiB` failed with `error: unknown flag --unit`. No archive was changed. Do not rerun with `--force`. The supported replacement command is not known. Ask the archive owner which version supports the unit flag, then update the fixture before retrying. Evidence: archive-probe-2."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T15:33:21.459944919Z",
+    "message": {
+      "role": "assistant",
+      "content": "`archive verify --limit 0.25 --unit GiB` failed with `error: unknown flag --unit`. No archive was changed. Do not rerun with `--force`. The supported replacement command is unknown. Ask the archive owner which version supports the unit flag, then update the fixture before retrying (archive-probe-2)."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 418245123,
+    "prompt_eval_count": 355,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 71
+  },
+  "tokenization": null,
+  "generation_tokens": 71,
+  "output_tokens": 71,
+  "input_tokens": 355,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

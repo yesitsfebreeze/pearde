@@ -1,0 +1,48 @@
+{
+  "fixture": "v07",
+  "repeat": 1,
+  "category": "verbose",
+  "started": "2026-09-13T15:32:40.974Z",
+  "completed": "2026-09-13T15:32:41.717Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the shortest standalone answer that preserves every unique fact. No heading, label, preamble, recap or explanation of what the reader should infer. Combine related facts into complete sentences; mention each fact once. Attach evidence IDs in parentheses. Prefer specific verbs and short clauses. Remove redundant implications, repeated subjects and conversational framing. Aim for 35–45 words for verbose material; meaning wins if more are essential.\n\nPreserve every result, condition, exclusion, uncertainty, owner and next action. Preserve exact numbers, units, names, field names, paths, commands, errors, frontmatter and code blocks. Do not claim an instruction happened or an untested result passed. Check all source facts silently before answering.\n\nAlready concise: copy EXACTLY. Requested JSON: exact keys/types, no surrounding text. Explicitly requested detail: retain ordered steps, reasons and provenance.\n\nExisting memo edits require requested preview and approved revision-checked memo.write. Stop on conflicts; preserve source evidence. Use one normal drafting call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone experiment result.\n\nSource:\nWe ran a small comparison of the index lookup change, and the result should be recorded with enough context to prevent it from being mistaken for a broader benchmark. The old implementation took a median of 42 ms. The candidate took a median of 31 ms. Both medians came from 30 runs against the same local fixture. The fixture contained 10,000 entries and was already warm before the timed runs began. No cold-start measurement was taken, and no production latency claim follows from these numbers. Peak memory was not measured either. The raw timings are recorded in lookup-fixture-3.csv. The next action is to measure cold-start latency and peak memory before deciding whether to adopt the change. The result is promising in the measured fixture, but the memo must not translate that into an unsupported promise about production or workloads that were not tested."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T15:32:41.658982884Z",
+    "message": {
+      "role": "assistant",
+      "content": "Experiment result: Index lookup change comparison (lookup-fixture-3.csv). Old implementation median 42 ms; candidate median 31 ms. Both medians from 30 runs, same local fixture, 10,000 entries, warm before timed runs. No cold-start or peak memory measured; no production latency claim. Next action: measure cold-start latency and peak memory before adoption decision."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 595485006,
+    "prompt_eval_count": 442,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 80
+  },
+  "tokenization": null,
+  "generation_tokens": 80,
+  "output_tokens": 80,
+  "input_tokens": 442,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

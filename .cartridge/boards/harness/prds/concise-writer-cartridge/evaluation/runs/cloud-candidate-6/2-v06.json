@@ -1,0 +1,48 @@
+{
+  "fixture": "v06",
+  "repeat": 2,
+  "category": "verbose",
+  "started": "2026-09-13T15:32:56.809Z",
+  "completed": "2026-09-13T15:32:57.611Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the shortest standalone answer that preserves every unique fact. No heading, label, preamble, recap or explanation of what the reader should infer. Combine related facts into complete sentences; mention each fact once. Attach evidence IDs in parentheses. Prefer specific verbs and short clauses. Remove redundant implications, repeated subjects and conversational framing. Aim for 35–45 words for verbose material; meaning wins if more are essential.\n\nPreserve every result, condition, exclusion, uncertainty, owner and next action. Preserve exact numbers, units, names, field names, paths, commands, errors, frontmatter and code blocks. Do not claim an instruction happened or an untested result passed. Check all source facts silently before answering.\n\nAlready concise: copy EXACTLY. Requested JSON: exact keys/types, no surrounding text. Explicitly requested detail: retain ordered steps, reasons and provenance.\n\nExisting memo edits require requested preview and approved revision-checked memo.write. Stop on conflicts; preserve source evidence. Use one normal drafting call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nAnswer whether the import is complete.\n\nSource:\nThe import is not complete, and that should be the first thing the response makes clear. There were 80 records in the source file. Of those, 76 were imported successfully, while four were rejected because they had no external_id. The import did not create placeholder IDs for the rejected records, and it did not silently drop them as though everything had succeeded. The rejected row numbers are listed in import-errors-6.json. Existing records were not overwritten. The user needs to add external_id values to those four rows and submit only those corrected rows. The user should not be told to replay the entire file, because that is not the recommended next action. The successful records are already durable, and the response must not imply that the whole import was rolled back. It would also be inaccurate to say that all records are ready merely because most of them succeeded."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T15:32:57.554450312Z",
+    "message": {
+      "role": "assistant",
+      "content": "The import is not complete. Of 80 records in the source file, 76 were imported successfully; four were rejected because they had no external_id. No placeholder IDs were created, and rejected records were not silently dropped. Rejected row numbers are in import-errors-6.json. Existing records were not overwritten. Add external_id values to those four rows and submit only those corrected rows—do not replay the entire file. Successful records are durable; the import was not rolled back."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 667079166,
+    "prompt_eval_count": 445,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 100
+  },
+  "tokenization": null,
+  "generation_tokens": 100,
+  "output_tokens": 100,
+  "input_tokens": 445,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

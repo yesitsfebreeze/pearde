@@ -26,3 +26,9 @@ The PRD remains unfinished while its required quality gate fails.
 The alternate installed local model has its own paired baseline and exactly
 pinned settings. Tuning keeps the same frozen fixtures and questions. A model
 that fails is not qualified by a different model passing.
+
+Cloud candidate 6 also fails the frozen reduction gate: per-repeat verbose
+median ratios 0.701, 0.702 and 0.737 (required at most 0.5 each). Its 60 retained
+responses and mechanical audit are recorded; full semantic scoring remains
+uncompleted and no quality qualification is claimed. Candidate 5 remains the
+closest measured variant, but also fails all three reduction medians.

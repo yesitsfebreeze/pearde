@@ -1,0 +1,48 @@
+{
+  "fixture": "v03",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T15:33:09.370Z",
+  "completed": "2026-09-13T15:33:10.061Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the shortest standalone answer that preserves every unique fact. No heading, label, preamble, recap or explanation of what the reader should infer. Combine related facts into complete sentences; mention each fact once. Attach evidence IDs in parentheses. Prefer specific verbs and short clauses. Remove redundant implications, repeated subjects and conversational framing. Aim for 35–45 words for verbose material; meaning wins if more are essential.\n\nPreserve every result, condition, exclusion, uncertainty, owner and next action. Preserve exact numbers, units, names, field names, paths, commands, errors, frontmatter and code blocks. Do not claim an instruction happened or an untested result passed. Check all source facts silently before answering.\n\nAlready concise: copy EXACTLY. Requested JSON: exact keys/types, no surrounding text. Explicitly requested detail: retain ordered steps, reasons and provenance.\n\nExisting memo edits require requested preview and approved revision-checked memo.write. Stop on conflicts; preserve source evidence. Use one normal drafting call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nAnswer the user's request for the current fix status.\n\nSource:\nThe status of the duplicate notification issue is that the fix has been written, and the implementation now rejects a repeated event ID before a notification is sent. This means that a duplicate with the same event ID no longer causes a second send in the fixture. The fixture delivered the same event 20 times and observed one notification. That is the extent of the evidence so far. Events that have different IDs but represent the same underlying action have not been deduplicated by this change, and it is important to keep that boundary in the response. The test is named replay_same_id. The change is on a local branch and has not been pushed. The next action is to review the behavior for events arriving out of order; no result for that review exists yet. There is no need to give the user a narration of how the code was edited, but the distinction between the tested case and the remaining case must survive."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T15:33:10.00352795Z",
+    "message": {
+      "role": "assistant",
+      "content": "The fix is written: the implementation rejects a repeated event ID before a notification is sent, so a duplicate with the same event ID no longer causes a second send. The fixture delivered the same event 20 times and observed one notification (replay_same_id test). Events with different IDs but the same underlying action are not deduplicated. The change is on a local branch, not pushed. Next action: review out-of-order events; no result exists yet."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 552472456,
+    "prompt_eval_count": 458,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 95
+  },
+  "tokenization": null,
+  "generation_tokens": 95,
+  "output_tokens": 95,
+  "input_tokens": 458,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

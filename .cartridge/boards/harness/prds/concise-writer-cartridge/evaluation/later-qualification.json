@@ -61,6 +61,18 @@
       "required_maximum_each": 0.5,
       "missing_literal_cases": 0,
       "concise_growth_cases": 0
+    },
+    {
+      "variant": "cloud-candidate-6",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.7008250825082508,
+        0.7019087938205586,
+        0.7371201833305041
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 0,
+      "concise_growth_cases": 1
     }
   ],
   "limitations": [

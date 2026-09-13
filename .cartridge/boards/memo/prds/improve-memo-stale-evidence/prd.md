@@ -1,19 +1,20 @@
 ---
 repo: /Users/feb/dev/cartridge/memo.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: memo
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: accepted
 canonical-scope: improve-memo-stale-evidence
 footprint:
-- /Users/feb/dev/cartridge/memo.ctg/src/service.rs
-- /Users/feb/dev/cartridge/memo.ctg/src/record.rs
-- /Users/feb/dev/cartridge/memo.ctg/src/resolver.rs
+- src/usage.rs
+- .cartridge/templates/seeds/type/resource.md
+- .cartridge/tests/integration/resolver.rs
+commit: "535915d3315ead89b92811cb70e63dd592d705b1"
 ---
 
 # Distinguish stale source references from current guidance
@@ -22,10 +23,10 @@ Discovery reports missing or changed referenced files and explains freshness wit
 
 ## Acceptance
 
-- [ ] Rename a referenced source in a temporary repository: discovery labels the stale target and preserves its original reference and revision.
-- [ ] A current routine and completed historical work remain separately retrievable; unverified outcomes retain their caller-reported label.
+- [x] Rename a referenced source in a temporary repository: discovery labels the stale target and preserves its original reference and revision.
+- [x] A current routine and completed historical work remain separately retrievable; unverified outcomes retain their caller-reported label.
 
-- [ ] Keep the prior response shape available during migration. Roll back presentation/ranking changes without rewriting authored records or evidence journals.
+- [x] Keep the prior response shape available during migration. Roll back presentation/ranking changes without rewriting authored records or evidence journals.
 
 ## Proof and recovery
 

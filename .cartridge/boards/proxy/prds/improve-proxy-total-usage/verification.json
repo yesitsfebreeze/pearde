@@ -1,0 +1,35 @@
+{
+  "baseline": "Three-round JSON input totals were 20/20/20 instead of 60/60/60; baseline-log.txt retains the failing probe.",
+  "result": "21 proxy tests pass; public proxy check passes; 25 GitFS tests and 4 policy tests pass including real native consumers.",
+  "added_edge": "Immediate client disconnection previously advertised an unarchived ID; a pre-poll drop guard now archives cancellation without dispatch. Regression failed before the fix and passes afterwards.",
+  "source_sha256": {
+    "src/main.rs": "9b64be0fc1bdd690cff7300708cb81ebceac077f000df6608a58f479597e09a6",
+    "src/service.rs": "32a791f77cf226dd52376c70a23fc282641e608edf5fdb153c4295fb1a11b7ff",
+    "src/streaming.rs": "355750df9f19abf87a25e44b9dcc4c85772375bcbe90240757072bdd1bed6896",
+    "src/usage.rs": "88bee3a1ad3b563dd94eff0607d857209a70e9e89183d09f31023546a7af9ec6",
+    ".cartridge/tests/unit/tests.rs": "19e9396e7a9ebdccf9fa07f9d261af35c1dedc432df5aa8c3dc0eab544dd254d",
+    ".cartridge/docs/usage.md": "4a4aaded828076bd8c0a986e5def8a0d934b79e0a9de43499703744b9f2317b1"
+  },
+  "gate_logs": {
+    "proxy-test": {
+      "file": "proxy-test-log.txt",
+      "sha256": "eec81524e11af5f2115b27de4805f29c057dd33732f5c44b06226f359c28ffcf",
+      "exit": 0
+    },
+    "proxy-check": {
+      "file": "proxy-check-log.txt",
+      "sha256": "86fb7a1ea28d212e2a2be69777dfb90e820ef9e5ef4ea63f5f5960520c09c81c",
+      "exit": 0
+    },
+    "gitfs-consumers": {
+      "file": "gitfs-consumers-log.txt",
+      "sha256": "5f3f53da1dc94e5162eec3acf8205f2d54aef5b307a4588c31645e2574d6a479",
+      "exit": 0
+    },
+    "policy-consumers": {
+      "file": "policy-consumers-log.txt",
+      "sha256": "d479ec91deff9bfc6f905f771aacaa0ac4be0f7c9ce0625d779c5402bf335ef8",
+      "exit": 0
+    }
+  }
+}

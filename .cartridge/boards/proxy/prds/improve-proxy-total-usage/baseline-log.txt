@@ -1,0 +1,122 @@
+   Compiling smallvec v1.16.0
+   Compiling futures-core v0.3.34
+   Compiling stable_deref_trait v1.2.1
+   Compiling futures-sink v0.3.34
+   Compiling syn v3.0.5
+   Compiling syn v2.0.119
+   Compiling serde_core v1.0.229
+   Compiling once_cell v1.21.4
+   Compiling http v1.5.0
+   Compiling writeable v0.6.4
+   Compiling litemap v0.8.3
+   Compiling ring v0.17.14
+   Compiling futures-channel v0.3.34
+   Compiling parking_lot_core v0.9.12
+   Compiling tracing-core v0.1.36
+   Compiling icu_properties_data v2.3.0
+   Compiling utf8_iter v1.0.4
+   Compiling percent-encoding v2.3.2
+   Compiling parking_lot v0.12.5
+   Compiling icu_normalizer_data v2.3.0
+   Compiling zeroize v1.9.0
+   Compiling tracing v0.1.44
+   Compiling httparse v1.10.1
+   Compiling tower-service v0.3.3
+   Compiling http-body v1.1.0
+   Compiling rustls-pki-types v1.15.1
+   Compiling getrandom v0.2.17
+   Compiling try-lock v0.2.5
+   Compiling untrusted v0.9.0
+   Compiling want v0.3.1
+   Compiling form_urlencoded v1.2.2
+   Compiling sync_wrapper v1.0.2
+   Compiling atomic-waker v1.1.2
+   Compiling serde_json v1.0.151
+   Compiling httpdate v1.0.3
+   Compiling tower-layer v0.3.3
+   Compiling rustls v0.23.44
+   Compiling ipnet v2.12.2
+   Compiling base64 v0.22.1
+   Compiling subtle v2.6.1
+   Compiling http-body-util v0.1.5
+   Compiling webpki-roots v1.0.9
+   Compiling mime v0.3.17
+   Compiling matchit v0.8.4
+   Compiling tempfile v3.27.0
+   Compiling synstructure v0.13.2
+   Compiling axum-core v0.5.6
+   Compiling zerofrom-derive v0.1.7
+   Compiling yoke-derive v0.8.2
+   Compiling zerofrom v0.1.8
+   Compiling zerovec-derive v0.11.6
+   Compiling displaydoc v0.2.7
+   Compiling tokio-macros v2.7.2
+   Compiling futures-macro v0.3.34
+   Compiling serde_derive v1.0.229
+   Compiling clap_derive v4.6.4
+   Compiling yoke v0.8.3
+   Compiling thiserror-impl v2.0.20
+   Compiling tokio v1.53.1
+   Compiling futures-util v0.3.34
+   Compiling zerotrie v0.2.5
+   Compiling bstr v1.13.1
+   Compiling zerovec v0.11.8
+   Compiling erased-serde v0.4.10
+   Compiling thiserror v2.0.20
+   Compiling serde_path_to_error v0.1.20
+   Compiling clap v4.6.6
+   Compiling rustls-webpki v0.103.15
+   Compiling serde v1.0.229
+   Compiling tinystr v0.8.4
+   Compiling potential_utf v0.1.6
+   Compiling icu_collections v2.3.0
+   Compiling icu_locale_core v2.3.0
+   Compiling futures-executor v0.3.34
+   Compiling icu_provider v2.3.1
+   Compiling futures v0.3.34
+   Compiling icu_normalizer v2.3.0
+   Compiling icu_properties v2.3.0
+   Compiling serde-value v0.7.0
+   Compiling serde_urlencoded v0.7.1
+   Compiling mlua v0.12.1
+   Compiling idna_adapter v1.2.2
+   Compiling idna v1.1.0
+   Compiling url v2.5.8
+   Compiling hyper v1.11.1
+   Compiling tower v0.5.3
+   Compiling tokio-util v0.7.19
+   Compiling tokio-rustls v0.26.5
+   Compiling tower-http v0.6.11
+   Compiling hyper-util v0.1.20
+   Compiling cartridge v0.1.0 (/private/tmp/cartridge-writer-proof/cartridge.ctg)
+   Compiling hyper-rustls v0.27.9
+   Compiling axum v0.8.9
+   Compiling reqwest v0.12.28
+   Compiling router v0.1.0 (/private/tmp/cartridge-writer-proof/router.ctg)
+   Compiling proxy v0.1.0 (/private/tmp/cartridge-writer-proof/proxy.ctg)
+    Finished `test` profile [unoptimized] target(s) in 9.41s
+     Running unittests src/main.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/writer-proof/debug/deps/proxy-f3faefcc3a80baa8)
+
+running 1 test
+wire=Chat usage={"completion_tokens":5,"prompt_tokens":20}
+wire=Anthropic usage={"input_tokens":20,"output_tokens":5}
+wire=Responses usage={"input_tokens":20,"output_tokens":5}
+
+thread 'tests::baseline_probe_three_round_json_usage' (42505395) panicked at /private/tmp/cartridge-writer-proof/proxy.ctg/src/../.cartridge/tests/unit/tests.rs:721:5:
+assertion `left == right` failed
+  left: [20, 20, 20]
+ right: [60, 60, 60]
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test tests::baseline_probe_three_round_json_usage ... FAILED
+
+failures:
+
+failures:
+    tests::baseline_probe_three_round_json_usage
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 14 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p proxy --bin proxy`
+error: recipe `_cargo` failed with exit code 101
+error: recipe `test` failed on line 12 with exit code 101
+error: recipe `test` failed on line 16 with exit code 101

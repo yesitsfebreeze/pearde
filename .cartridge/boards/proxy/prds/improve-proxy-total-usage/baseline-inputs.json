@@ -1,0 +1,12 @@
+{
+  "source_revision": "c233d86436be1bffe85e0d9dcb64831b4e5e5dfb",
+  "files": {
+    "src/service.rs": "cf2362b846117f5a630410948bccb5e4f333d62ea02a1ebdf6abb8c54a29cf12",
+    "src/streaming.rs": "e822356464e350367e91933c4c5b8b27ec84a62ade7a2a306167165f0d00597b",
+    ".cartridge/tests/unit/tests.rs": "1de12e8c54ef43c041ccb1f27e94eca9268f536af296057c7a28d1ccdb91bed6"
+  },
+  "probe": "\n#[tokio::test]\nasync fn baseline_probe_three_round_json_usage() {\n    let mut observed=Vec::new();\n    for wire in [Wire::Chat,Wire::Anthropic,Wire::Responses] {\n        let (service,_)=fixture(vec![response(wire,&[\"cartridge__memo\"]),response(wire,&[\"cartridge__memo\"]),response(wire,&[])],\"allow\");\n        let value=service.request(wire,request(wire)).await.unwrap();\n        let input=if wire==Wire::Chat {\"prompt_tokens\"} else {\"input_tokens\"};\n        eprintln!(\"wire={wire:?} usage={}\",value[\"usage\"]);\n        observed.push(value[\"usage\"][input].as_u64().unwrap());\n    }\n    assert_eq!(observed,vec![60,60,60]);\n}\n",
+  "source_copy": "/private/tmp/cartridge-writer-proof/proxy.ctg",
+  "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/writer-proof just test proxy baseline_probe_three_round_json_usage -- --nocapture",
+  "expected": "All three protocol responses account for three model rounds: 60 input, 15 output tokens."
+}

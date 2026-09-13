@@ -1,0 +1,19 @@
+   Compiling proxy v0.1.0 (/Users/feb/dev/cartridge/proxy.ctg)
+    Finished `dev` profile [unoptimized] target(s) in 1.17s
+    Finished `test` profile [unoptimized] target(s) in 0.11s
+     Running unittests ../policy.rs (.cartridge/empirical/policy-tests/debug/deps/policy_contract_tests-96a47f352e717ad8)
+
+running 4 tests
+test explanation_attributes_rules_routes_and_stable_semantic_revisions ... ok
+test invalid_replacement_keeps_the_previous_policy ... ok
+test operation_rules_have_stable_precedence_and_preserve_legacy_defaults ... ok
+test mcp_proxy_and_native_agent_execute_only_the_allowed_operation ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.76s
+
+   Doc-tests policy_contract_tests
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

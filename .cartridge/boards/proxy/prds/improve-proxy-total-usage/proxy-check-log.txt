@@ -1,0 +1,35 @@
+    Checking futures-sink v0.3.34
+    Checking serde_core v1.0.229
+    Checking tracing v0.1.44
+    Checking ring v0.17.14
+    Checking httpdate v1.0.3
+    Checking mime v0.3.17
+    Checking matchit v0.8.4
+    Checking futures-channel v0.3.34
+    Checking tokio-util v0.7.19
+    Checking axum-core v0.5.6
+    Checking futures-util v0.3.34
+    Checking hyper v1.11.1
+    Checking rustls-webpki v0.103.15
+    Checking rustls v0.23.44
+    Checking serde v1.0.229
+    Checking serde_json v1.0.151
+    Checking bstr v1.13.1
+    Checking erased-serde v0.4.10
+    Checking serde_path_to_error v0.1.20
+    Checking serde-value v0.7.0
+    Checking serde_urlencoded v0.7.1
+    Checking mlua v0.12.1
+    Checking tower v0.5.3
+    Checking hyper-util v0.1.20
+    Checking futures-executor v0.3.34
+    Checking futures v0.3.34
+    Checking tower-http v0.6.11
+    Checking axum v0.8.9
+    Checking tokio-rustls v0.26.5
+    Checking cartridge v0.1.0 (/Users/feb/dev/cartridge/cartridge.ctg)
+    Checking hyper-rustls v0.27.9
+    Checking reqwest v0.12.28
+    Checking router v0.1.0 (/Users/feb/dev/cartridge/router.ctg)
+    Checking proxy v0.1.0 (/Users/feb/dev/cartridge/proxy.ctg)
+    Finished `dev` profile [unoptimized] target(s) in 3.32s

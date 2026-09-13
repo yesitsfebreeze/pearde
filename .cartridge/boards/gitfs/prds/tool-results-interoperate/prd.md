@@ -17,7 +17,7 @@ footprint:
 - src/tool_result.rs
 - .cartridge/tests/unit/tool_result.rs
 - .cartridge/tests/integration/tool-result.test.ts
-commit: "21be1528bff2840b00dcef3e87ece41585df3017"
+commit: "55cc8aae27575ded5950737c46a99aa358b95980"
 ---
 
 # Every currently exposed tool completes through its real consumers
@@ -56,3 +56,8 @@ Cancellation acknowledgments and partial-effect behavior are unchanged.
 The snapshot-selection change 21be1528 touches the producer service footprint.
 Reopened for fresh execution of the unchanged interoperability specification;
 the original proof remains in collection-cf18e856.md. No acceptance is waived.
+
+## Reverification after read-only inspection
+
+Inspection changes shared GitFS source. Re-run this unchanged specification
+against the integrated owner commit. Prior receipt is collection-21be1528.md.

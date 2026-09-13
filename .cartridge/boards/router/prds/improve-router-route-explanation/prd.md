@@ -22,7 +22,7 @@ footprint:
 - .cartridge/tests/unit/proxy/capabilities.rs
 - .cartridge/tests/unit/catalog/capabilities.rs
 - .cartridge/docs/decisions.md
-commit: "07b77ff754ab740a1efb01dfade7e3fc953c204d"
+commit: "0a216cb100ea40aa0535509d44c38b16a009b9cc"
 ---
 
 # Explain why a provider was selected
@@ -46,3 +46,6 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-router-route-explanation`; maximum five rounds.
+
+Reverify unchanged acceptance after0a216cb cost/latency metadata shares source;
+prior07b77ff7 receipt retained. No semantic acceptance change.

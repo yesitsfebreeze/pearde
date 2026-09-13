@@ -29,3 +29,23 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-13
+
+Reviewer: Codex `/root`, self-review under session delegation policy.
+Inputs: [review-round-3-inputs.json](review-round-3-inputs.json).
+Baseline 2364a432 passes existing harness tests. Extending its real-process
+rolling-memory test to require two comparisons fails with “inspection must
+retain both compaction comparisons”: write_summary replaces one plain summary.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 20 | Missing comparison reproduced after two actual compactions. |
+| Ownership and reuse | 19 | Existing summary buffer and canonical transcript; no parallel journal. |
+| Dependencies and slices | 19 | Additive owner-local storage/inspection; existing RPC fixture. |
+| Acceptance and baseline | 19 | Exact prefixes/tails, corrected constraint, legacy and altered-source cases. |
+| Failure and compatibility | 19 | One history write after success, allowlisted usage, zero-router inspection. |
+
+**96/100 — PASS**, no blocking findings, 3/5 rounds used. Full historical
+comparison size grows with the number of summaries, consistent with this
+inspector's existing complete-transcript source view; no silent history eviction.

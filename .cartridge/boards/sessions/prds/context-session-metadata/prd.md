@@ -1,17 +1,19 @@
 ---
 repo: /Users/feb/dev/cartridge/sessions.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: sessions
 work-kind: leaf
-review-round: 2
-review-status: stale-after-owner-split
+review-round: 3
+review-status: "passed"
 canonical-scope: context-session-metadata
 needs:
 - "@sessions/sub-agent-sessions-record-parent-and-mailbox"
+footprint: ["src/main.rs","src/context.rs","src/mailbox.rs","src/roster.rs",".cartridge/tests/unit/main/context_tests.rs",".cartridge/tests/unit/main/roster_tests.rs",".cartridge/tests/integration/context.test.ts",".cartridge/docs/context.md","Cargo.toml"]
+commit: "92240c6ba415f53b2d17971aea185536a6f517bc"
 ---
 
 # Offer scoped session metadata without transcript or agent payload
@@ -20,9 +22,9 @@ One owner-local part of the existing Landscape file/kernel/live context contract
 
 ## Acceptance
 
-- [ ] A trusted session-scoped readonly metadata operation returns stable session/parent/revision/lifecycle identifiers and excludes transcript, mailbox body, agent payload, names/prompts and file lists.
-- [ ] Unknown or out-of-scope session and inactive source produce explicit bounded absence; reads do not advance cursors or update session state.
-- [ ] Owner tests and actual native fixtures prove revision changes, strict field allowlists and existing session behavior.
+- [x] A trusted session-scoped readonly metadata operation returns stable session/parent/revision/lifecycle identifiers and excludes transcript, mailbox body, agent payload, names/prompts and file lists.
+- [x] Unknown or out-of-scope session and inactive source produce explicit bounded absence; reads do not advance cursors or update session state.
+- [x] Owner tests and actual native fixtures prove revision changes, strict field allowlists and existing session behavior.
 
 ## Proof and recovery
 

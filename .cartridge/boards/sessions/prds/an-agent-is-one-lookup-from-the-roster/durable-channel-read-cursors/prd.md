@@ -11,7 +11,7 @@ review-round: 3
 review-status: passed
 canonical-scope: durable-channel-read-cursors
 needs: ["@sessions/the-board-is-channels-of-lines"]
-commit: "c2693a7ca3e23c295b8fe52a664720dde137eedc"
+commit: "a306370f10b78d94365b7832ce22ce8d10c09487"
 ---
 
 # Durable watched-channel delivery cursors

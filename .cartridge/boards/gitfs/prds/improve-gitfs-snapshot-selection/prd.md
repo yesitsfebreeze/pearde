@@ -1,21 +1,19 @@
 ---
 repo: /Users/feb/dev/cartridge/gitfs.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: gitfs
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: accepted
 canonical-scope: improve-gitfs-snapshot-selection
 footprint:
-- /Users/feb/dev/cartridge/gitfs.ctg/service.rs
-- /Users/feb/dev/cartridge/gitfs.ctg/store.rs
-- /Users/feb/dev/cartridge/gitfs.ctg/ship.rs
-- /Users/feb/dev/cartridge/gitfs.ctg/secrets.rs
-- /Users/feb/dev/cartridge/gitfs.ctg/cartridge.json
+- src/service.rs
+- .cartridge/tests/unit/snapshot.rs
+commit: "21be1528bff2840b00dcef3e87ece41585df3017"
 ---
 
 # Snapshot exactly the selected owned paths
@@ -24,10 +22,10 @@ snapshot.paths captures only the caller-selected owned files and reports inacces
 
 ## Acceptance
 
-- [ ] Own A and B, edit both on disk, snapshot only A: overlay B remains unchanged; an empty selection snapshots nothing.
-- [ ] Unowned/invalid paths are rejected, read failures are reported, and guarded edits and materialization conflict tests still pass.
+- [x] Own A and B, edit both on disk, snapshot only A: overlay B remains unchanged; an empty selection snapshots nothing.
+- [x] Unowned/invalid paths are rejected, read failures are reported, and guarded edits and materialization conflict tests still pass.
 
-- [ ] Use temporary Git repos/remotes for checks. Preserve unrelated index/worktree/ref changes. Roll back API additions before applying migrations; committed/pushed mutations require a recorded reconciliation/revert, not an assertion that cancellation undid them.
+- [x] Use temporary Git repos/remotes for checks. Preserve unrelated index/worktree/ref changes. Roll back API additions before applying migrations; committed/pushed mutations require a recorded reconciliation/revert, not an assertion that cancellation undid them.
 
 ## Proof and recovery
 
@@ -39,3 +37,11 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-gitfs-snapshot-selection`; maximum five rounds.
+
+## Verified implementation — 2026-09-13
+
+The 22-test GitFS gate passes, including selected/empty/omitted/duplicate paths,
+all-or-nothing selection validation, missing/directory read errors with partial
+success, unchanged unrelated index/worktree/refs, executable overlay mode,
+stale edit refusal, existing materialization conflict and real-consumer tests.
+The pre-fix runtime probe is retained in baseline.json.

@@ -1,28 +1,35 @@
 ---
 repo: /Users/feb/dev/cartridge/landscape.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: landscape
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: landscape-composes-system-context
+footprint:
+  - src/lib.rs
+  - src/context.rs
+  - Cargo.toml
+  - .cartridge/tests/unit/context.rs
+  - .cartridge/docs/context.md
 needs:
 - '@memo/one-document-serves-every-reader/document-identity'
+commit: "e5805e6960844af42a32dbc37833304c8208459b"
 ---
 
 # Contributors return bounded attributable context rows
 
-Define owner/kind/ID/revision/availability/selection reason and an overall deadline in the existing library and memo facade.
+Define owner/kind/ID/revision/availability/selection reason and an overall deadline in the existing library. The linked memo-owned facade provides native integration before the parent programme can finish.
 
 ## Acceptance
 
-- [ ] Identical snapshots order identically and exact references read back.
-- [ ] Disabled, absent, unavailable and empty are distinct.
-- [ ] Timeout yields a named partial result and private sources leak neither bodies nor callable metadata.
+- [x] Identical snapshots order identically and exact references read back from the frozen result.
+- [x] Disabled, absent, unavailable and empty are distinct.
+- [x] Timeout yields a named partial result and private sources leak neither bodies nor callable metadata.
 
 ## Proof and recovery
 

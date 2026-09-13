@@ -20,7 +20,7 @@ footprint:
 - src/context.rs
 - .cartridge/tests/integration/context.test.ts
 - .cartridge/docs/context.md
-commit: "3251566e6c92439e4a32c5ce8b734e55726801ee"
+commit: "45d5a54ab9da1a798cd9997af9a8c19bed8a1812"
 ---
 
 # The memo facade serves the shared context snapshot
@@ -53,3 +53,5 @@ and reviews remain linked; no review allowance was reset. Substantive facade pla
 requires an independent round3 review before implementation.
 
 Reverification: document identity/projections revalidated at3251566 after executable validation; native context SDK compatibility already passed, shared contributor contract unchanged.
+
+Inventory facade revalidation: unchanged behavior and acceptance at memo 45d5a54; shared native registration is checked with its registered inventory module.

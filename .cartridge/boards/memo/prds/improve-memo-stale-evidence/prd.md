@@ -14,7 +14,7 @@ footprint:
 - src/usage.rs
 - .cartridge/templates/seeds/type/resource.md
 - .cartridge/tests/integration/resolver.rs
-commit: "535915d3315ead89b92811cb70e63dd592d705b1"
+commit: "a458148fb21f85cabcd9e1ced85c96c581b8e0b2"
 ---
 
 # Distinguish stale source references from current guidance

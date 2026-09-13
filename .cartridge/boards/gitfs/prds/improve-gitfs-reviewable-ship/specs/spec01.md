@@ -1,25 +1,6 @@
 ---
 complexity: low
-footprint:
-- .cartridge/docs/inspection.md
-- .cartridge/docs/push.md
-- .cartridge/docs/ship.md
-- .cartridge/tests/integration/recorded-push.test.ts
-- .cartridge/tests/integration/reviewed-ship.test.ts
-- .cartridge/tests/integration/tool-result.test.ts
-- .cartridge/tests/unit/push/tests.rs
-- .cartridge/tests/unit/ship/tests.rs
-- .cartridge/tests/unit/snapshot.rs
-- .cartridge/tests/unit/store/tests.rs
-- .cartridge/tests/unit/tool_result.rs
-- init.lua
-- src/inspection.rs
-- src/main.rs
-- src/push.rs
-- src/service.rs
-- src/ship.rs
-- src/store.rs
-- src/tool_result.rs
+footprint: [".cartridge/docs/inspection.md",".cartridge/docs/push.md",".cartridge/docs/ship.md",".cartridge/tests/integration/recorded-push.test.ts",".cartridge/tests/integration/reviewed-ship.test.ts",".cartridge/tests/integration/tool-result.test.ts",".cartridge/tests/unit/push/tests.rs",".cartridge/tests/unit/ship/tests.rs",".cartridge/tests/unit/snapshot.rs",".cartridge/tests/unit/store/tests.rs",".cartridge/tests/unit/tool_result.rs","init.lua","src/inspection.rs","src/main.rs","src/push.rs","src/service.rs","src/ship.rs","src/store.rs","src/tool_result.rs","Cargo.toml","src/provenance.rs",".cartridge/tests/unit/provenance.rs",".cartridge/tests/integration/change-provenance.test.ts",".cartridge/docs/change-provenance.md"]
 ---
 
 # Verify the integrated reviewed shipping path
@@ -77,11 +58,11 @@ import {feet} from "./src/planner.ts";
 const graph=scan(process.cwd()+"/.cartridge/boards/root");
 const expected={
   "@policy/ship-push-is-an-explicit-policy-operation": "c313a77d300b54994b0eef60a4474efc57376d6db4882e5e5f9c8175f037e49d",
-  "@gitfs/improve-gitfs-readable-diff": "24f1ea5b670c4ad4251838837f85f633f209437c9b5bfc44df8d69dcef483d9b",
-  "@gitfs/improve-gitfs-snapshot-selection": "a3bdd842ca5f317edfbe883ee61fd0ddaff465c81c9d44183aab9e6bc852c8c6",
+  "@gitfs/improve-gitfs-readable-diff": "6ed56a3426a0c5bf5039a2622785a66c6050c7da0b3a3b60aacfd06e437426e7",
+  "@gitfs/improve-gitfs-snapshot-selection": "a904623c7d41d7caaaa08a184595fd9fe8ce76c19e146a804193bc5c544c8cb7",
   "@policy/improve-policy-operation-rules": "4c387100550778313009dff4a94703b2b6232c874fe469f56167f487e05d707d",
-  "@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally": "73b025bce9603f1a750a9597017093fa3980f7e4384dc00317553e85f2430473",
-  "@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head": "3191d544dd1c2260d832f51526baa1c59cee84dc4772c9496ff59507d3c61841"
+  "@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally": "6b251cdfef881e035a048fd8d6fc8be2b7b15e41431ebe4813a2c7df854c5ddd",
+  "@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head": "6733e87f3f84226f8070a1c66b494ca4931f4145bc6281ca1517e3c12f153569"
 };
 const parent=graph.get("@gitfs/improve-gitfs-reviewable-ship");
 if(!parent)throw Error("missing parent");

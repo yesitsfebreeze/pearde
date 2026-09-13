@@ -17,7 +17,7 @@ needs:
 - '@policy/improve-policy-operation-rules'
 - '@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally'
 - '@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head'
-commit: "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5"
+commit: "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36"
 ---
 
 # Preview and control shipping with accurate attribution

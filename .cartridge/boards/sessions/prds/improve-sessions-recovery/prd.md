@@ -17,7 +17,7 @@ footprint:
 - .cartridge/tests/unit/main/repair_tests.rs
 - .cartridge/tests/unit/recovery.rs
 - .cartridge/docs/README.md
-commit: "4dd8518e2f9fb1bf63f191acffe3777d4eec3b5c"
+commit: "181adb20248c6fdb718823919438939de55bdefc"
 ---
 
 # Explain session damage and narrowly repair eligible snapshots
@@ -51,3 +51,6 @@ is caught at the temporary-file commit boundary, preserving newer transcript
 bytes, the original backup and an unchanged in-memory store. Existing backup,
 repeated-repair, canonical-transcript, atomic-write and uncertainty tests pass.
 The shared Cargo lock adds only the existing sha2 dependency to sessions.
+
+Reverify unchanged recovery acceptance after181adb2 client mapping shares src/main.rs;
+prior4dd8518e receipt retained. No semantic acceptance change.

@@ -1,17 +1,23 @@
 ---
 repo: /Users/feb/dev/cartridge/landscape.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: landscape
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: landscape-composes-system-context
+footprint:
+- src/lib.rs
+- src/memory.rs
+- .cartridge/tests/unit/src/memory/tests.rs
+- .cartridge/docs/memory-context.md
 needs:
 - '@landscape/landscape-composes-system-context/context-contributor-contract'
+commit: "c705d648830582e5cf2b4ded267b3c1da4f1eac4"
 ---
 
 # Memory hits resolve to exact source evidence
@@ -20,9 +26,9 @@ Add memory query/readback as a contributor to the shared contract, retaining eng
 
 ## Acceptance
 
-- [ ] A memory-only fact is found and its exact ID resolves.
-- [ ] Unavailable memory respects the total deadline and reports partial status.
-- [ ] Selected hydration obeys the configured count and byte limits.
+- [x] A memory-only fact is found and its exact ID resolves.
+- [x] Unavailable memory respects the total deadline and reports partial status.
+- [x] Selected hydration obeys the configured count and byte limits.
 
 ## Proof and recovery
 
@@ -33,4 +39,4 @@ Preserve the last usable implementation and durable data on failure; report part
 
 ## Review
 
-[Round 2 agent review](review.md). Inherits round 1 from `landscape-composes-system-context`; maximum five rounds.
+[Round 3 independent agent review](review.md). Inherits round 1 from `landscape-composes-system-context`; maximum five rounds.

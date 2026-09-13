@@ -11,7 +11,7 @@ review-round: 3
 review-status: passed
 canonical-scope: reflex-reports-attributed-tool-outcomes
 needs: ["@runtime/native-tool-observation-adapter"]
-commit: "191e2b6cb4291bdcce7a894f98bb2d475361d30f"
+commit: "92240c6ba415f53b2d17971aea185536a6f517bc"
 ---
 
 # reflex-reports-attributed-tool-outcomes

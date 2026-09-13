@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/memory.ctg
-state: "specced"
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -10,6 +10,7 @@ work-kind: leaf
 review-round: 4
 review-status: passed
 canonical-scope: every-mutation-holds-the-store-writer-boundary
+commit: "0a8736c5126781b90b842a5b818f083458b2f740"
 ---
 
 # every-mutation-holds-the-store-writer-boundary

@@ -1,0 +1,13 @@
+{
+  "name": "prd",
+  "entry": "init.lua",
+  "provide": ["prd", "tool.prd"],
+  "needs": ["memory"],
+  "description": "Native planning service for central PRDs, specs, dependency plans, Gantt and worker orchestration, integrated with memory and runtime events.",
+  "commands": {
+    "check": {"argv": ["bun", "run", "check"], "cwd": "."},
+    "test": {"argv": ["bun", "run", "test"], "cwd": "."},
+    "run": {"argv": ["./run"], "cwd": "."},
+    "hello": {"argv": ["./run", "hello"], "cwd": "."}
+  }
+}

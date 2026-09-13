@@ -1,0 +1,32 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/ci-proves-the-supported-terminal-matrix/prd.md",
+    "sha256": "9bb1eef05374f76436f41486d7cb91ebc093ec12891666a539a98500c5dceab4"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2"
+    },
+    {
+      "path": "cartridge.ctg/src/service.rs",
+      "sha256": "f59938cecba7680b0a216e596bf6f1d73ce57f2d9063ff6ee0e93dd1875722d5"
+    },
+    {
+      "path": ".cartridge/memos/work/fresh-checkouts-can-run-the-gates.md",
+      "sha256": "396449ac4b003ff741b4bbfbd10d0bce7741efc8047b4c3abea87cd09c1984dc"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/ci-proves-the-supported-terminal-matrix.md",
+      "sha256": "7247b7330fe892145d993a07a27890af60351ddc0231c4eee0bf9ada0c595824"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "fs.ctg/.cartridge/prds/improve-fs-programme/prd.md",
+    "sha256": "ebf706846295ca15e9ef5cad73947c3bd711615ffa87b5e266cd61392c8ad861"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "fs.ctg/service.rs",
+      "sha256": "48a632f8a0fa10f39c6a522db61ddd1bd07ba2a9dc8bec9646eb73f79094877a"
+    },
+    {
+      "path": "fs.ctg/files.rs",
+      "sha256": "b7399769689f5833936de3fdbe10d7dbcf03a841c4ba98da8f419379324eef0b"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "fs.ctg/.cartridge/prds/improve-fs-change-provenance/prd.md",
+      "sha256": "49c602e352a451bf6b53470aa4e405a6957d2975520d329824931138c5bf8412"
+    },
+    {
+      "path": "fs.ctg/.cartridge/prds/improve-fs-revision-guards/prd.md",
+      "sha256": "bd1033bb98542ebc2795c564c05a25aac0e9910b09a2918f296d775ec43c89ee"
+    },
+    {
+      "path": "fs.ctg/.cartridge/prds/improve-fs-search-pages/prd.md",
+      "sha256": "72119993a292bbbb67d7840168ef6d55ffac192088bf017bb9d662cb2f6a6a01"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-fs-programme.md",
+      "sha256": "9d35064882771cd8fc0600dd0d0a0bdafe06981a486bcf1944e4dd58c64b76cc"
+    }
+  ]
+}

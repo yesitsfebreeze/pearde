@@ -1,0 +1,7 @@
+{
+  "status": "stale-after-migration",
+  "reason": "Board paths, explicit source repositories and shared planning ownership changed. Existing review-inputs.json and scores describe original revisions only.",
+  "historical_inputs_sha256": "6d3a3ffc23cad4cdb4f84cf1b7cd6bd588e8ce2eaa9502573f7d1437cbc7938b",
+  "migration_manifest": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/reports/record-migration/manifest.json",
+  "requires": "Review current plan and mapped source inputs before implementation; retain previous rounds used."
+}

@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "sessions.ctg/.cartridge/prds/an-agent-is-one-lookup-from-the-roster/prd.md",
+    "sha256": "4e150a3d86400779d6a4e24f318a65bd2487df55a735d7ba0b3e314dba852754"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "sessions.ctg/main.rs",
+      "sha256": "0081ec4638811d66bf1b4270eab4909f782b54293597a0ada2f1c9db07d4dc4c"
+    },
+    {
+      "path": ".cartridge/memos/work/the-board-is-channels-of-lines.md",
+      "sha256": "04bb384c2e6ec9705766c6da2de76ac680129866cf0f7a95ed89508d0ff344b8"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/an-agent-is-one-lookup-from-the-roster.md",
+      "sha256": "dada90a9996626820a90cbd800c54de12b38ab8f6dcbf85a76263c22f36927c8"
+    }
+  ]
+}

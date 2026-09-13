@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "mcp.ctg/.cartridge/prds/improve-mcp-tool-readiness/prd.md",
+    "sha256": "c2aae4160a3b83541eefdfa207cd56a566824493d10460ab093c44a23f34b044"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "mcp.ctg/service.rs",
+      "sha256": "ba1e96e09a7b0999e35d213a5e44b1d4d13d6703a495bce19833a0bf5eff6b13"
+    },
+    {
+      "path": "mcp.ctg/tests.rs",
+      "sha256": "7899e41da3af0b9f20e92d642fbd7452f76e65c45084d6b3cc04262d1a0ec06d"
+    },
+    {
+      "path": "mcp.ctg/README.md",
+      "sha256": "87d324fb379a2f1efbcba87b6892e8fc8b304f241557077de3fbc41bcf581df5"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "landscape.ctg/.cartridge/prds/landscape-composes-system-context/context-contributor-contract/prd.md",
+      "sha256": "9d56eadee1a1ee1bc1104808456a82ce340569ba2dbd478e0dd573801b304d93"
+    },
+    {
+      "path": "policy.ctg/.cartridge/prds/improve-policy-explain/prd.md",
+      "sha256": "bffa3cc7fbc8e4fd46c5a1ece6db08f57b07b4e5ae6152744c1f8b42059a0509"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-mcp-tool-readiness.md",
+      "sha256": "a70fb113aef900ad36fc39195d968c984bd1ba4f9fb4bb29195000d86d511c0c"
+    }
+  ]
+}

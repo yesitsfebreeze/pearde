@@ -1,0 +1,36 @@
+{
+  "plan": {
+    "path": "ui.ctg/.cartridge/prds/the-ui-paints-the-grid/prd.md",
+    "sha256": "c7970dec806649620d44eb4ad9314ad4423a8f6271110878ed4cf5a82444bb62"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "ui.ctg/src/chat.ts",
+      "sha256": "c0e5c0177876d2141fd7b3958876e16130d63b6290b4e3db7940aaf204e475e6"
+    },
+    {
+      "path": "ui.ctg/src/modules.ts",
+      "sha256": "628343af0c2a26358c631fb4aca787ec6c087c46c27b4d84d2f231028077fcfa"
+    },
+    {
+      "path": ".cartridge/memos/work/pty-owns-the-terminal-grid.md",
+      "sha256": "d94ebafd7402f0df72ec4bca65357f701b682c7b859ed1b424f40ab818ac0e2d"
+    },
+    {
+      "path": ".cartridge/memos/work/pty-encodes-input.md",
+      "sha256": "e3a8f1a91db22b971cce168f7a88442f769e4fb8c89fd4a1b3b4f3884303a567"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/the-ui-paints-the-grid.md",
+      "sha256": "1bdec94748a95794e0ddad01e4cdea44fbf9b377287ebcc0e5bbc3a0326f7427"
+    }
+  ]
+}

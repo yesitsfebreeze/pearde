@@ -1,0 +1,32 @@
+{
+  "plan": {
+    "path": "memo.ctg/.cartridge/prds/improve-memo-types-drilldown/prd.md",
+    "sha256": "f17a8115fdaf10d06000558534b345e70516b9758523d8fd0d69e528e563d14b"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "memo.ctg/src/service.rs",
+      "sha256": "502410edf0d0dbddbb55184e7f64a6cb738d43da0c7b6498e67b2f53593fa95f"
+    },
+    {
+      "path": "memo.ctg/src/record.rs",
+      "sha256": "c9a0ea2ae5eacd652409cd77f9dac4e90c130587fb581142487e7b695dd31ce1"
+    },
+    {
+      "path": "memo.ctg/src/resolver.rs",
+      "sha256": "f4e6fee916c8f5ed0e09b4522163bf06461698615936eb0fa07a176864ace545"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-memo-types-drilldown.md",
+      "sha256": "b2412922cd3662009d635ea447e63265c0abb4996358ff36aae3043317b930e6"
+    }
+  ]
+}

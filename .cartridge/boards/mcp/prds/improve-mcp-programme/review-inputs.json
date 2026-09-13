@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "mcp.ctg/.cartridge/prds/improve-mcp-programme/prd.md",
+    "sha256": "de09837749ff44633217642d89edacbdcf83dfaf59459955e335e8d7f6b2be25"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "mcp.ctg/service.rs",
+      "sha256": "ba1e96e09a7b0999e35d213a5e44b1d4d13d6703a495bce19833a0bf5eff6b13"
+    },
+    {
+      "path": "mcp.ctg/tests.rs",
+      "sha256": "7899e41da3af0b9f20e92d642fbd7452f76e65c45084d6b3cc04262d1a0ec06d"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "mcp.ctg/.cartridge/prds/improve-mcp-approval-route/prd.md",
+      "sha256": "570202186761774757c2be459bd60879ffb79fd1cafdd7bc5484e4c5cd6773e5"
+    },
+    {
+      "path": "mcp.ctg/.cartridge/prds/improve-mcp-tool-readiness/prd.md",
+      "sha256": "c2aae4160a3b83541eefdfa207cd56a566824493d10460ab093c44a23f34b044"
+    },
+    {
+      "path": "mcp.ctg/.cartridge/prds/improve-mcp-refresh-catalog/prd.md",
+      "sha256": "c3bdfe18f995cf7308e1b23ef8713801867e799e3806b84c4e3e8f851b775caa"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-mcp-programme.md",
+      "sha256": "9ec9d25645193f20c136acef9127a7164c3ea003caeb6e1fc7e033455ebf511e"
+    }
+  ]
+}

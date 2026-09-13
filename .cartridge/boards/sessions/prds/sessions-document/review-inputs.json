@@ -1,0 +1,29 @@
+{
+  "plan": {
+    "path": "sessions.ctg/.cartridge/prds/sessions-document/prd.md",
+    "sha256": "c26ccdb2b9e730b8be6e0cab4d9733ab190f85dc3ab01d74c8c0f9e2afb06ce2"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "sessions.ctg/main.rs",
+      "sha256": "0081ec4638811d66bf1b4270eab4909f782b54293597a0ada2f1c9db07d4dc4c"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "mcp.ctg/.cartridge/prds/clients-share-document-execution/prd.md",
+      "sha256": "087bb3757893e8ae8ef48a2daa2ea57df2ebc325b308edaeea1f96439ce204e5"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/capabilities-live-with-their-owners.md",
+      "sha256": "990147ebe7129477ba49047e365acf0292465529cb96a5c5c1d6b91b6ddc58e6"
+    }
+  ]
+}

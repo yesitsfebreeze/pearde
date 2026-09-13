@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "proxy.ctg/.cartridge/prds/improve-proxy-tool-trace/prd.md",
+    "sha256": "73a6960f01deb99663bc094fbe96721210993e241c575050aee7ee0febfa641d"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "proxy.ctg/service.rs",
+      "sha256": "ffe1dcb0a8a23c0e2a123d856905fb1d6fa367c58f4307e0d782ac5211b678e2"
+    },
+    {
+      "path": "proxy.ctg/streaming.rs",
+      "sha256": "e822356464e350367e91933c4c5b8b27ec84a62ade7a2a306167165f0d00597b"
+    },
+    {
+      "path": "proxy.ctg/wire.rs",
+      "sha256": "bb3aa43d2b3a8cd9992fe8c8e8ecc58f8511f1938fac382cd9f195d166377afa"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "gitfs.ctg/.cartridge/prds/tool-results-interoperate/prd.md",
+      "sha256": "fda95c7661405b24a2d3a0e60a220c1fd5d32b916e9fe430ef3c29a57f1d3579"
+    },
+    {
+      "path": "policy.ctg/.cartridge/prds/improve-policy-explain/prd.md",
+      "sha256": "bffa3cc7fbc8e4fd46c5a1ece6db08f57b07b4e5ae6152744c1f8b42059a0509"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-proxy-tool-trace.md",
+      "sha256": "9fb931db0f3837f331a62914428d19da655369e0e164b5199213f5efb46444aa"
+    }
+  ]
+}

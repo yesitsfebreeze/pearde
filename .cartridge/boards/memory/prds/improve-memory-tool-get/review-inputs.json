@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "path": "memory.ctg/.cartridge/prds/improve-memory-tool-get/prd.md",
+    "sha256": "ca38a5a2da6b0764f65bae82316cbf8706d6f79f5ed7c62454b41c551f73b3eb"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "memory.ctg/src/cartridge.rs",
+      "sha256": "a4eadab071181640f5e23d5b9e605f54faf238157a57c5a9b4f11876726b5414"
+    },
+    {
+      "path": "memory.ctg/AGENTS.md",
+      "sha256": "908d3bbcbbabc7d5d8c4b5738bae00400f4c089fbc3d6f3f4763b001581ed64a"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "memory.ctg/.cartridge/prds/memory-owns-its-tool/memory-adapter-core/prd.md",
+      "sha256": "0de1acd7402ecd282267cf54bae525792c691ff570d901100f233397346cdba2"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-memory-tool-get.md",
+      "sha256": "132d171166497d0c1314f52236b5f359d2d3e3463fbb2e13384d7dd3a6569a12"
+    }
+  ]
+}

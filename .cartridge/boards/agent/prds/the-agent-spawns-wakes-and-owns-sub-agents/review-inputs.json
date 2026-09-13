@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "path": "agent.ctg/.cartridge/prds/the-agent-spawns-wakes-and-owns-sub-agents/prd.md",
+    "sha256": "ef8fc9fa1e74ecb47771c40f0b2e519f1ba999d40e0eb7e024f1635034a812aa"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "agent.ctg/model_loop.rs",
+      "sha256": "4899efb58ddd4eab88227c09412fb3858936b069762b780c055165e33bcee1ef"
+    },
+    {
+      "path": "agent.ctg/run_state.rs",
+      "sha256": "26f0d5b8e50ca56dc139f6f4c522622a62bcb6eab914926e0b8dc500462410ef"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "sessions.ctg/.cartridge/prds/sub-agent-sessions-record-parent-and-mailbox/prd.md",
+      "sha256": "16af08a6617c0f4946b9a537f81ccdad043fabcc34820b1ed4188c6dcc09eac3"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/the-agent-spawns-wakes-and-owns-sub-agents.md",
+      "sha256": "0ece558d3688427cc241d40248e094c89117d1f2142f7d79905afa64275a9726"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/the-reload-test-is-not-flaky/prd.md",
+    "sha256": "9af7a2c76933b0f46753de35302f263aafa75453c1d15fb8dffc0ca0a4afd1fd"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2"
+    },
+    {
+      "path": "cartridge.ctg/src/service.rs",
+      "sha256": "f59938cecba7680b0a216e596bf6f1d73ce57f2d9063ff6ee0e93dd1875722d5"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/the-reload-test-is-not-flaky.md",
+      "sha256": "5f09e1bebd11580ab761ef9e9cb3501d210e4c2d929a92c3df758a84fa7859c1"
+    }
+  ]
+}

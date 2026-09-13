@@ -1,0 +1,578 @@
+{
+  "migration_command": "python3 prd.ctg/.cartridge/scripts/check-records.py --migration",
+  "result": "PASS",
+  "active_original_prds": 182,
+  "reviewed_inventory_prds": 180,
+  "imported_native_work": 385,
+  "imported_native_questions": 1,
+  "moved_files": 1253,
+  "central_memo_yaml_headers_valid": 435,
+  "new_broken_markdown_links": [],
+  "observed_inherited_broken_markdown_links": [
+    {
+      "path": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-tool-trace/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-tool-trace/prd.md",
+      "target": "../../../streaming.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-tool-trace/prd.md",
+      "target": "../../../wire.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-continuation-recovery/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-continuation-recovery/prd.md",
+      "target": "../../../streaming.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-continuation-recovery/prd.md",
+      "target": "../../../wire.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-total-usage/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-total-usage/prd.md",
+      "target": "../../../streaming.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-total-usage/prd.md",
+      "target": "../../../wire.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/proxy/prds/proxy-document-client/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/proxy/prds/proxy-document-client/prd.md",
+      "target": "../../../streaming.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/proxy/prds/proxy-turns-carry-recall-and-reflex-tools/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/proxy/prds/proxy-turns-carry-recall-and-reflex-tools/prd.md",
+      "target": "../../../streaming.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/pty/prds/improve-pty-shell-identity/prd.md",
+      "target": "../../../main.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/pty/prds/improve-pty-shell-identity/prd.md",
+      "target": "../../../tool.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/pty/prds/improve-pty-shell-identity/prd.md",
+      "target": "../../../marks.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/pty/prds/improve-pty-input-ownership/prd.md",
+      "target": "../../../main.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/pty/prds/improve-pty-input-ownership/prd.md",
+      "target": "../../../tool.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/pty/prds/improve-pty-input-ownership/prd.md",
+      "target": "../../../marks.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/pty/prds/improve-pty-command-wait/prd.md",
+      "target": "../../../main.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/pty/prds/improve-pty-command-wait/prd.md",
+      "target": "../../../tool.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/pty/prds/improve-pty-command-wait/prd.md",
+      "target": "../../../marks.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/pty/prds/pty-document/prd.md",
+      "target": "../../../tool.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/pty/prds/pty-document/prd.md",
+      "target": "../../../input.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/improve-tools-worktree-resume/prd.md",
+      "target": "../../../scripts/workspace.py"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/improve-tools-worktree-resume/prd.md",
+      "target": "../../../repositories.json"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/linux-policy/prd.md",
+      "target": "../../../.pearde/prds/the-sandbox/command-adapter/prd.md"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/macos-policy/prd.md",
+      "target": "../../../.pearde/prds/the-sandbox/command-adapter/prd.md"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/improve-tools-bundle-provenance/prd.md",
+      "target": "../../../scripts/workspace.py"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/improve-tools-bundle-provenance/prd.md",
+      "target": "../../../repositories.json"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/launch-authority/prd.md",
+      "target": "../../../.pearde/prds/the-sandbox/command-adapter/prd.md"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/second-harness-composition-proof/prd.md",
+      "target": "../../../src/tests/fixtures"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/second-harness-composition-proof/prd.md",
+      "target": "../../../../harness.ctg/README.md"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/second-harness-composition-proof/prd-round-1.md",
+      "target": "../../../src/tests/fixtures"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/second-harness-composition-proof/prd-round-1.md",
+      "target": "../../../../harness.ctg/README.md"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/improve-tools-preflight/prd.md",
+      "target": "../../../scripts/workspace.py"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/improve-tools-preflight/prd.md",
+      "target": "../../../repositories.json"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/an-event-declares-its-type/prd.md",
+      "target": "../../../model_loop.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/an-event-declares-its-type/prd.md",
+      "target": "../../../run_state.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/a-stalled-step-raises-its-own-event/prd.md",
+      "target": "../../../model_loop.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/a-stalled-step-raises-its-own-event/prd.md",
+      "target": "../../../run_state.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/a-priority-event-unblocks-the-step/prd.md",
+      "target": "../../../model_loop.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/a-priority-event-unblocks-the-step/prd.md",
+      "target": "../../../run_state.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/improve-agent-decision-attribution/prd.md",
+      "target": "../../../model_loop.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/improve-agent-decision-attribution/prd.md",
+      "target": "../../../run_state.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/improve-agent-decision-attribution/prd.md",
+      "target": "../../../context.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/improve-agent-task-baseline/prd.md",
+      "target": "../../../model_loop.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/improve-agent-task-baseline/prd.md",
+      "target": "../../../run_state.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/improve-agent-task-baseline/prd.md",
+      "target": "../../../context.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/the-agent-spawns-wakes-and-owns-sub-agents/prd.md",
+      "target": "../../../model_loop.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/the-agent-spawns-wakes-and-owns-sub-agents/prd.md",
+      "target": "../../../run_state.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/agent-document-client/prd.md",
+      "target": "../../../model_loop.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/agent-document-client/prd.md",
+      "target": "../../../run_state.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/improve-agent-resume-boundaries/prd.md",
+      "target": "../../../model_loop.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/improve-agent-resume-boundaries/prd.md",
+      "target": "../../../run_state.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/improve-agent-resume-boundaries/prd.md",
+      "target": "../../../context.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/a-live-run-accepts-events-from-outside/prd.md",
+      "target": "../../../model_loop.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/agent/prds/a-live-run-accepts-events-from-outside/prd.md",
+      "target": "../../../run_state.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/mcp/prds/improve-mcp-approval-route/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/mcp/prds/improve-mcp-approval-route/prd.md",
+      "target": "../../../tests.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/mcp/prds/improve-mcp-approval-route/prd.md",
+      "target": "../../../README.md"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/mcp/prds/clients-share-document-execution/mcp-document-client/prd.md",
+      "target": "../../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/mcp/prds/clients-share-document-execution/mcp-document-client/prd.md",
+      "target": "../../../../tests.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/mcp/prds/clients-share-document-execution/client-document-contract/prd.md",
+      "target": "../../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/mcp/prds/clients-share-document-execution/client-document-contract/prd.md",
+      "target": "../../../../tests.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/mcp/prds/improve-mcp-tool-readiness/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/mcp/prds/improve-mcp-tool-readiness/prd.md",
+      "target": "../../../tests.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/mcp/prds/improve-mcp-tool-readiness/prd.md",
+      "target": "../../../README.md"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/mcp/prds/improve-mcp-refresh-catalog/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/mcp/prds/improve-mcp-refresh-catalog/prd.md",
+      "target": "../../../tests.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/mcp/prds/improve-mcp-refresh-catalog/prd.md",
+      "target": "../../../README.md"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-snapshot-selection/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-snapshot-selection/prd.md",
+      "target": "../../../store.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-snapshot-selection/prd.md",
+      "target": "../../../ship.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/gitfs-document/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/gitfs-document/prd.md",
+      "target": "../../../store.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/prd.md",
+      "target": "../../../store.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/prd.md",
+      "target": "../../../ship.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-readable-diff/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-readable-diff/prd.md",
+      "target": "../../../store.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-readable-diff/prd.md",
+      "target": "../../../ship.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/tool-results-interoperate/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/tool-results-interoperate/prd.md",
+      "target": "../../../ship.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/tool-results-interoperate/prd.md",
+      "target": "../../../main.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/harness/prds/improve-harness-quality-eval/prd.md",
+      "target": "../../../prompt.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/harness/prds/improve-harness-quality-eval/prd.md",
+      "target": "../../../working.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/harness/prds/improve-harness-quality-eval/prd.md",
+      "target": "../../../inspection.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/harness/prds/concise-writer-cartridge/prd.md",
+      "target": "../../../main.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/harness/prds/improve-harness-compaction-diff/prd.md",
+      "target": "../../../prompt.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/harness/prds/improve-harness-compaction-diff/prd.md",
+      "target": "../../../working.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/harness/prds/improve-harness-compaction-diff/prd.md",
+      "target": "../../../inspection.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/harness/prds/improve-harness-token-accounting/prd.md",
+      "target": "../../../prompt.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/harness/prds/improve-harness-token-accounting/prd.md",
+      "target": "../../../working.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/harness/prds/improve-harness-token-accounting/prd.md",
+      "target": "../../../inspection.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/harness/prds/harness-consumes-landscape/prd.md",
+      "target": "../../../main.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/harness/prds/harness-consumes-landscape/prd.md",
+      "target": "../../../inspection.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/harness/prds/harness-consumes-landscape/prd.md",
+      "target": "../../../working.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/sub-agent-sessions-record-parent-and-mailbox/prd.md",
+      "target": "../../../main.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/a-board-message-is-a-reference-not-a-payload/prd.md",
+      "target": "../../../main.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/the-agents-chat-through-one-tool/prd.md",
+      "target": "../../../main.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/sessions-document/prd.md",
+      "target": "../../../main.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/the-board-log-replays-who-did-what/prd.md",
+      "target": "../../../main.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-recovery/prd.md",
+      "target": "../../../main.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-recovery/prd.md",
+      "target": "../../../README.md"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-client-mapping/prd.md",
+      "target": "../../../main.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-client-mapping/prd.md",
+      "target": "../../../README.md"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/reflex-reports-attributed-tool-outcomes/prd.md",
+      "target": "../../../main.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/an-agent-is-one-lookup-from-the-roster/prd.md",
+      "target": "../../../main.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-retention/prd.md",
+      "target": "../../../main.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-retention/prd.md",
+      "target": "../../../README.md"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/fs/prds/direct-fs-document/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/fs/prds/direct-fs-document/prd.md",
+      "target": "../../../files.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-revision-guards/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-revision-guards/prd.md",
+      "target": "../../../files.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-revision-guards/prd.md",
+      "target": "../../../search.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/prd.md",
+      "target": "../../../files.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/prd.md",
+      "target": "../../../search.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-search-pages/prd.md",
+      "target": "../../../service.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-search-pages/prd.md",
+      "target": "../../../files.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-search-pages/prd.md",
+      "target": "../../../search.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/router/prds/provider-recovery-proves-its-authority-boundary/prd.md",
+      "target": "../../../lib.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/router/prds/provider-recovery-proves-its-authority-boundary/prd.md",
+      "target": "../../../catalog.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/router/prds/improve-router-cost-latency/prd.md",
+      "target": "../../../frontier.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/router/prds/improve-router-cost-latency/prd.md",
+      "target": "../../../catalog.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/router/prds/improve-router-cost-latency/prd.md",
+      "target": "../../../health.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/router/prds/improve-router-capability-routing/prd.md",
+      "target": "../../../frontier.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/router/prds/improve-router-capability-routing/prd.md",
+      "target": "../../../catalog.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/router/prds/improve-router-capability-routing/prd.md",
+      "target": "../../../health.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/router/prds/audit-mine-for-native-memory-integration/prd.md",
+      "target": "../../../lib.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/router/prds/audit-mine-for-native-memory-integration/prd.md",
+      "target": "../../../catalog.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/router/prds/improve-router-route-explanation/prd.md",
+      "target": "../../../frontier.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/router/prds/improve-router-route-explanation/prd.md",
+      "target": "../../../catalog.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/router/prds/improve-router-route-explanation/prd.md",
+      "target": "../../../health.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/router/prds/router-document/prd.md",
+      "target": "../../../lib.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/boards/router/prds/router-document/prd.md",
+      "target": "../../../catalog.rs"
+    },
+    {
+      "path": "prd.ctg/.cartridge/memos/note/memory--work-checkpoint.md",
+      "target": "work-versus-ideas-2026-09-09.md"
+    },
+    {
+      "path": "prd.ctg/.cartridge/memos/work/memory--claude-md-links-resolve-nowhere.md",
+      "target": "system/memo-layout.md"
+    }
+  ],
+  "full_preexisting_broken_links": 179,
+  "scope": "Original18 active boards; upstream-engine historic board excluded because it is not a root member.",
+  "claims": "All original PRD metadata except source repo and stale review marker unchanged. All original native status/state/claim/owner unchanged. No commits or index writes.",
+  "limits": [
+    "Inherited stale Markdown paths are preserved historical source defects, not newly validated product contracts.",
+    "Imported native memos retain their original record model and are not additional copies of the180 reviewed PRD tickets.",
+    "Historical review scores are stale after migration and do not authorize implementation.",
+    "Native service,MCP,memory and event integration is verified by the coordinator separately."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "agent.ctg/.cartridge/prds/an-event-declares-its-type/prd.md",
+    "sha256": "bdb2144527f7c1b80cb14d00c6e5dee5c8bd524d6667869a72638e2d77d8be93"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "agent.ctg/model_loop.rs",
+      "sha256": "4899efb58ddd4eab88227c09412fb3858936b069762b780c055165e33bcee1ef"
+    },
+    {
+      "path": "agent.ctg/run_state.rs",
+      "sha256": "26f0d5b8e50ca56dc139f6f4c522622a62bcb6eab914926e0b8dc500462410ef"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/an-event-declares-its-type.md",
+      "sha256": "74671a402c58dd2fc62d9f799e8965eaca949a20382fc667130d248d47c8b3bc"
+    }
+  ]
+}

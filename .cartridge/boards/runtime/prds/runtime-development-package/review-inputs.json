@@ -1,0 +1,37 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/runtime-development-package/prd.md",
+    "sha256": "c738770c76cdf53aa69a4826b18ab2d1f7c9fa91c4c9242c7eef9981fc5b3b39"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2"
+    },
+    {
+      "path": "cartridge.ctg/src/service.rs",
+      "sha256": "f59938cecba7680b0a216e596bf6f1d73ce57f2d9063ff6ee0e93dd1875722d5"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "memory.ctg/.cartridge/prds/memory-owns-its-tool/memory-adapter-core/prd.md",
+      "sha256": "0de1acd7402ecd282267cf54bae525792c691ff570d901100f233397346cdba2"
+    },
+    {
+      "path": "memo.ctg/.cartridge/prds/one-document-serves-every-reader/document-identity/prd.md",
+      "sha256": "9ac0e861c46e03ed35a6d5b6108c9b78c97a9c897ed4e50982d88081e023266f"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/development-tooling-has-one-home.md",
+      "sha256": "29135b4eab7d6a5fdbaebd508f564c219de7f5df9a20a2920a848d1edd39d9d9"
+    }
+  ]
+}

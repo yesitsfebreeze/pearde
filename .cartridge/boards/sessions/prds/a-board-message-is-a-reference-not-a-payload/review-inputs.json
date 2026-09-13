@@ -1,0 +1,29 @@
+{
+  "plan": {
+    "path": "sessions.ctg/.cartridge/prds/a-board-message-is-a-reference-not-a-payload/prd.md",
+    "sha256": "406ba542dff307f83db6d2314589a42dfb8af703b5f9daeeebf6072a26386f89"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "sessions.ctg/main.rs",
+      "sha256": "0081ec4638811d66bf1b4270eab4909f782b54293597a0ada2f1c9db07d4dc4c"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "sessions.ctg/.cartridge/prds/the-agents-chat-through-one-tool/prd.md",
+      "sha256": "edf6d6810bf31eeb698f05061173650326cb9492a46765161523f06f4a94f8c0"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/a-board-message-is-a-reference-not-a-payload.md",
+      "sha256": "4fc2aa88bf167806c12b9a1f7e5780510ad78d489b14b58f603cd161581f022e"
+    }
+  ]
+}

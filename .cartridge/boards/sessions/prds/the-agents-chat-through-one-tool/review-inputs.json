@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "path": "sessions.ctg/.cartridge/prds/the-agents-chat-through-one-tool/prd.md",
+    "sha256": "edf6d6810bf31eeb698f05061173650326cb9492a46765161523f06f4a94f8c0"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "sessions.ctg/main.rs",
+      "sha256": "0081ec4638811d66bf1b4270eab4909f782b54293597a0ada2f1c9db07d4dc4c"
+    },
+    {
+      "path": ".cartridge/memos/work/the-board-is-channels-of-lines.md",
+      "sha256": "04bb384c2e6ec9705766c6da2de76ac680129866cf0f7a95ed89508d0ff344b8"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "sessions.ctg/.cartridge/prds/an-agent-is-one-lookup-from-the-roster/prd.md",
+      "sha256": "4e150a3d86400779d6a4e24f318a65bd2487df55a735d7ba0b3e314dba852754"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/the-agents-chat-through-one-tool.md",
+      "sha256": "554426cba7cb85bce9162acdb1b07ae5ef7af91896609c708b99e30cd4b7f4ff"
+    }
+  ]
+}

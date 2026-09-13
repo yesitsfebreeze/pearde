@@ -1,0 +1,45 @@
+{
+  "plan": {
+    "path": "memo.ctg/.cartridge/prds/one-document-serves-every-reader/prd.md",
+    "sha256": "a85abdab6e3f27d0a6a4b4d54d9996af433a453600c0b4b8d102fbf0c298b2cc"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "memo.ctg/src/service.rs",
+      "sha256": "502410edf0d0dbddbb55184e7f64a6cb738d43da0c7b6498e67b2f53593fa95f"
+    },
+    {
+      "path": "memo.ctg/src/record.rs",
+      "sha256": "c9a0ea2ae5eacd652409cd77f9dac4e90c130587fb581142487e7b695dd31ce1"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "memo.ctg/.cartridge/prds/one-document-serves-every-reader/document-identity/prd.md",
+      "sha256": "9ac0e861c46e03ed35a6d5b6108c9b78c97a9c897ed4e50982d88081e023266f"
+    },
+    {
+      "path": "memo.ctg/.cartridge/prds/one-document-serves-every-reader/document-projections/prd.md",
+      "sha256": "0b9a4478c4c65d8b748533410251c1ee618830da9b21097978a5dc1e862efb9d"
+    },
+    {
+      "path": "memo.ctg/.cartridge/prds/one-document-serves-every-reader/executable-document-validation/prd.md",
+      "sha256": "504dbf0d5cc5267e37b57d5322d0d5c3f1eea563184151418174ff0cef664714"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/one-document-serves-every-reader.md",
+      "sha256": "da288972051eab3cebe4a12d8f555bc390b0ce629d164dede840929a14155a47"
+    },
+    {
+      "path": ".cartridge/reviews/round-1/a-tool-is-declared-by-its-memo.md",
+      "sha256": "a4e0fb46a8dc7c5697624be44a2c925d5bedefe446628ca463b917fd3bbfce84"
+    }
+  ]
+}

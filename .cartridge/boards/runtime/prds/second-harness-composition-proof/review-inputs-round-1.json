@@ -1,0 +1,35 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/second-harness-composition-proof/prd.md",
+    "sha256": "02fc748bdfb96b9f99ffdf2ab35b8c4c25074286edce8d3d5ea067642aa51195"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": "cartridge.ctg/README.md",
+      "sha256": "468e08e3280b385cc524e68a997d1471a28c5f3e85133387a78fd9a5e3fbae8d"
+    },
+    {
+      "path": "cartridge.ctg/src/sdk.rs",
+      "sha256": "b01b89c4363fe07dd13f3410f16d848763c969d45ce3b757cfcace48cff710a9"
+    },
+    {
+      "path": "cartridge.ctg/.cartridge/default/init.lua",
+      "sha256": "16c0a5ec1c58ca45335a89907622ac2bde70ceb85e88d6c5c0d05398684d8395"
+    },
+    {
+      "path": "harness.ctg/README.md",
+      "sha256": "48c80e7507d2f43b3ea39fddc70dc2c9b167b3401df4fe889ea63097eae7bde9"
+    },
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    }
+  ],
+  "related_plans": [
+    {
+      "path": "cartridge.ctg/.cartridge/prds/cartridges-compose-recursively/prd.md",
+      "sha256": "79bb44f3100e375a70635b5d89fbafdc0b6b901f280fa632447606941bc3876d"
+    }
+  ]
+}

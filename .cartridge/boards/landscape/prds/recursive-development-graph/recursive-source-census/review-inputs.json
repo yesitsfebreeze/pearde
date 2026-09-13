@@ -1,0 +1,37 @@
+{
+  "plan": {
+    "path": "landscape.ctg/.cartridge/prds/recursive-development-graph/recursive-source-census/prd.md",
+    "sha256": "36f14eba1d9b3f9cbe6cf053cc51c2dbb1a31121c3e04bc911bb5fd7441983f1"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "landscape.ctg/src/lib.rs",
+      "sha256": "61ee4df085df093e6901c64fa77fb4cdadbd1e3a9a928fa663bc4b19ef5cc9e1"
+    },
+    {
+      "path": "landscape.ctg/src/surface.rs",
+      "sha256": "a5811c2da414ab3ea0449ef0b8fde5c3da24c1f666b186e841da403c1797a783"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "memo.ctg/.cartridge/prds/memo-board-template/initialize-board/prd.md",
+      "sha256": "7461777d588af0207e6c05ac4054534b6139ff18c39ba7cdebe7075b468623e5"
+    },
+    {
+      "path": "memo.ctg/.cartridge/prds/one-document-serves-every-reader/document-identity/prd.md",
+      "sha256": "9ac0e861c46e03ed35a6d5b6108c9b78c97a9c897ed4e50982d88081e023266f"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/recursive-development-graph.md",
+      "sha256": "7c6fda62b070e70f1ce2276761ad99be78c275d6c4b87a0762184791c893534b"
+    }
+  ]
+}

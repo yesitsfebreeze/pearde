@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "sessions.ctg/.cartridge/prds/the-board-log-replays-who-did-what/prd.md",
+    "sha256": "f30dc9c69e342f79621f5c9297cdc801fbf2c8c0ed04e699688f3158916f2ab8"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "sessions.ctg/main.rs",
+      "sha256": "0081ec4638811d66bf1b4270eab4909f782b54293597a0ada2f1c9db07d4dc4c"
+    },
+    {
+      "path": ".cartridge/memos/work/the-board-is-channels-of-lines.md",
+      "sha256": "04bb384c2e6ec9705766c6da2de76ac680129866cf0f7a95ed89508d0ff344b8"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/the-board-log-replays-who-did-what.md",
+      "sha256": "0e2e588bf8b07c111c6485d1a6f5b737ebce6e23359724c1d9aaff75ad6d96d1"
+    }
+  ]
+}

@@ -1,46 +1,53 @@
 __pycache__/
-.claude/
 *.pyc
 .DS_Store
-.gstack/
-.obsidian/
-.kern/
+.cartridge/.state/
+.cartridge/boards/upstream-engine/
+.cartridge/engine/.claude/
+.cartridge/engine/.gstack/
+.cartridge/engine/.kern/
+.cartridge/engine/.obsidian/
+.cartridge/engine/.pi/
+.cartridge/engine/.mcp.json
+**/.state/
+**/node_modules/
 
+# Durable Cartridge records are tracked; generated state is not.
+/target/
+/dist/
+node_modules/
+/.cartridge/bin/
+/.cartridge/empirical/
+/.cartridge/dev/
+/.cartridge/.state/
+/.cartridge/workspace/target/
+**/.claims/
+**/.lanes/
+**/.sessions/
+/.cartridge/memos/.lock
+/.cartridge/memos/**/.obsidian/
 
-# third-party bundles, fetched by `pearde install --apply` and pinned there.
-# The vault's own settings (data.json, the .json presets) stay tracked.
-resources/board/obsidian/plugins/*/main.js
-resources/board/obsidian/plugins/*/manifest.json
-resources/board/obsidian/plugins/*/styles.css
+# Runtime stores, credentials and derived inventories.
+/.cartridge/credentials/
+/.cartridge/memory/
+/.cartridge/sessions/
+/.cartridge/live-sessions/
+/.cartridge/router/
+/.cartridge/resolver/
+/.cartridge/graphify/
+/.cartridge/graphs/
+/.cartridge/cache/
+/.cartridge/.cache/
+/.cartridge/logs/
+/.cartridge/**/probe/
+/bin/
 
-# machine-local per board — regenerable. `pearde/` since 2026-09-02: a board
-# with a dot in its name shows in no Obsidian vault (@references/obsidian.md),
-# and `.pearde` is the compatibility symlink left where it was.
-# no trailing slash on either: `pearde share` symlinks the graphify
-# cache under the board, and a `dir/` pattern does not match a
-# symlink — git would then report the link on every status. @@share
-/pearde
-/.pearde
+# Local live service database and generated web artifacts
+/.cartridge/live-data/
+/.cartridge/docs/**/.next/
+/.cartridge/docs/**/.source/
+/.cartridge/docs/**/out/
 
-# one-off session measurements, kept beside the work they explain
-/report.md
-/report-*.md
-/handover.md
-
-/board
-
-# machine-local, under a board nested anywhere below the root — regenerable.
-# Both names: `pearde/` is the board since 2026-09-02, `.pearde/` the
-# compatibility symlink and every board not yet upgraded.
-pearde/.state/
-pearde/wiki/
-.pearde/.state/
-.pearde/wiki/
-
-# playwright-core for the js tests, fetched on demand — doctor prints the line
-# no trailing slash: `pearde share` makes this a symlink onto the one
-# copy per machine, and a `dir/` pattern does not match a symlink —
-# git would then report the link on every status. @@share
-resources/board/node_modules
-resources/board/package.json
-resources/board/package-lock.json
+# Mutable overlay and workspace page stores
+/.cartridge/gitfs/
+/.cartridge/workspace-pages/

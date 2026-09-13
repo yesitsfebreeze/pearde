@@ -1,0 +1,32 @@
+{
+  "plan": {
+    "path": "memory.ctg/.cartridge/prds/the-graph-converges/prd.md",
+    "sha256": "a64e37686c9758838ae8368bc0330761c26a472b1551993792221e636e7716b9"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "memory.ctg/src/cartridge.rs",
+      "sha256": "a4eadab071181640f5e23d5b9e605f54faf238157a57c5a9b4f11876726b5414"
+    },
+    {
+      "path": "memory.ctg/src/main.rs",
+      "sha256": "546430209c5873fb75e5b3d59f18a8e3e39d44a1288cb66d351a839f253fb0da"
+    },
+    {
+      "path": "memory.ctg/AGENTS.md",
+      "sha256": "908d3bbcbbabc7d5d8c4b5738bae00400f4c089fbc3d6f3f4763b001581ed64a"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/the-graph-converges.md",
+      "sha256": "c4960afeeeae7bac71d5cede0ee5dba427a509d5df8a3d2b43c038da625069fc"
+    }
+  ]
+}

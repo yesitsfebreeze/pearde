@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "landscape.ctg/.cartridge/prds/improve-memo-compact-landscape/prd.md",
+    "sha256": "1d789f781dd7a9aab6c0d94ea332cc3b601b3759979aca698b98f3f7d255beb9"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "landscape.ctg/src/lib.rs",
+      "sha256": "61ee4df085df093e6901c64fa77fb4cdadbd1e3a9a928fa663bc4b19ef5cc9e1"
+    },
+    {
+      "path": "landscape.ctg/src/surface.rs",
+      "sha256": "a5811c2da414ab3ea0449ef0b8fde5c3da24c1f666b186e841da403c1797a783"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-memo-compact-landscape.md",
+      "sha256": "beaa92e64dde70da001ab020eb75b2624c70566cc0557ac2e6be3ca700a8938a"
+    }
+  ]
+}

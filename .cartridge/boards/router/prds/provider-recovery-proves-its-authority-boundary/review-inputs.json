@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "router.ctg/.cartridge/prds/provider-recovery-proves-its-authority-boundary/prd.md",
+    "sha256": "43229fdf77de1c13c9ebe1479e78c0041dbdb1724173b79918879227c33e157a"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "router.ctg/lib.rs",
+      "sha256": "6e2b8896f071fe835ea2a592f71f5b48c90dc4a427fdb999da5a55e4ed4550b0"
+    },
+    {
+      "path": "router.ctg/catalog.rs",
+      "sha256": "757258f1a030ade401a0e7282097d2e92802397bb2dec7f01dc28d9cd4f2c142"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/provider-recovery-proves-its-authority-boundary.md",
+      "sha256": "7311bafb0fe60b33b21491bf5634ec418c0da456844d1f227b11733774ff5ed5"
+    }
+  ]
+}

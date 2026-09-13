@@ -1,0 +1,32 @@
+{
+  "plan": {
+    "path": ".cartridge/prds/every-enabled-tool-ships-a-contract-probe/prd.md",
+    "sha256": "d400fb9a486845364b4a0120571c4083b32756aeb9fa30c7a76ccfb313ef6b5a"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": ".cartridge/settings.md",
+      "sha256": "014cedf33ae87db016fce1ec5ae38e990bee124960e2c4c650b95b246a1b5281"
+    },
+    {
+      "path": "justfile",
+      "sha256": "6f47aee231555f2f49f80cd587fa2789bf26793516f6ac7e4dda7bb5e26147b9"
+    },
+    {
+      "path": ".cartridge/memos/work/debug-mode-opens-and-closes-from-the-shell.md",
+      "sha256": "2bc07d87dae49c9bdfec1dd122c8dce042fb66a7976095da2dd7934951ec687f"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/every-enabled-tool-ships-a-contract-probe.md",
+      "sha256": "2fc3ee87f5582575d752a880584dff58b004d64232577f869ca8be11e83b5b64"
+    }
+  ]
+}

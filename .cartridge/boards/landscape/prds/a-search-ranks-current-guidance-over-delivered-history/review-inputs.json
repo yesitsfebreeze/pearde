@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "landscape.ctg/.cartridge/prds/a-search-ranks-current-guidance-over-delivered-history/prd.md",
+    "sha256": "7c2d742625d87b5c1776f25bd343a0a6c59492f8c891c84775b36bb984da3ba0"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "landscape.ctg/src/lib.rs",
+      "sha256": "61ee4df085df093e6901c64fa77fb4cdadbd1e3a9a928fa663bc4b19ef5cc9e1"
+    },
+    {
+      "path": "landscape.ctg/src/surface.rs",
+      "sha256": "a5811c2da414ab3ea0449ef0b8fde5c3da24c1f666b186e841da403c1797a783"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/a-search-ranks-current-guidance-over-delivered-history.md",
+      "sha256": "cd5a1abe53dabf63e62c5d3f75d38fcf4da426107f9f1867186ca50dadb6959b"
+    }
+  ]
+}

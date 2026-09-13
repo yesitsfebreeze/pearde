@@ -1,0 +1,49 @@
+{
+  "plan": {
+    "path": "agent.ctg/.cartridge/prds/the-run-is-a-stream-of-typed-events/prd.md",
+    "sha256": "0cc49140625ade43db799bcb2704b98ee808fc61e01321a1c27554bdafaef49b"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "agent.ctg/model_loop.rs",
+      "sha256": "4899efb58ddd4eab88227c09412fb3858936b069762b780c055165e33bcee1ef"
+    },
+    {
+      "path": "agent.ctg/run_state.rs",
+      "sha256": "26f0d5b8e50ca56dc139f6f4c522622a62bcb6eab914926e0b8dc500462410ef"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "agent.ctg/.cartridge/prds/an-event-declares-its-type/prd.md",
+      "sha256": "bdb2144527f7c1b80cb14d00c6e5dee5c8bd524d6667869a72638e2d77d8be93"
+    },
+    {
+      "path": "agent.ctg/.cartridge/prds/a-live-run-accepts-events-from-outside/prd.md",
+      "sha256": "6f73183f5d201d3aa69e78c5084cc53f168efd024077a834d1ef62c32b0c478e"
+    },
+    {
+      "path": "agent.ctg/.cartridge/prds/a-priority-event-unblocks-the-step/prd.md",
+      "sha256": "25cc9fc131c01c6e531055c1c8bac8f46de37ff535242e689cd2fb763c99b2b6"
+    },
+    {
+      "path": "cartridge.ctg/.cartridge/prds/a-listener-subscribes-to-event-types/prd.md",
+      "sha256": "f4fd40f51b1fbcfa8c534e3af16d543fbd644444f10cb394485f748c4b74ef11"
+    },
+    {
+      "path": "agent.ctg/.cartridge/prds/a-stalled-step-raises-its-own-event/prd.md",
+      "sha256": "2eb7e12b1280c715e146aa89f42ac8f6c372621c4dd70b48884c09f072a4d9a7"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/the-run-is-a-stream-of-typed-events.md",
+      "sha256": "f28fe54314433ac5292c441412a2ec84ef8c6e625fb0620eac39850fa790bed4"
+    }
+  ]
+}

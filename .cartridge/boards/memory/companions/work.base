@@ -1,0 +1,34 @@
+filters:
+  and:
+    - kind == "work"
+properties:
+  file.name:
+    displayName: Work
+  status:
+    displayName: Status
+  level:
+    displayName: Level
+  description:
+    displayName: The unit
+views:
+  - type: table
+    name: By status
+    groupBy:
+      property: status
+      direction: ASC
+    sort:
+      - property: level
+        direction: DESC
+  - type: cards
+    name: Open
+    filters:
+      and:
+        - status != "done"
+    sort:
+      - property: level
+        direction: DESC
+  - type: table
+    name: Done
+    filters:
+      and:
+        - status == "done"

@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "path": "agent.ctg/.cartridge/prds/agent-document-client/prd.md",
+    "sha256": "870796dcadf5079dae0250e5b94f60c4cebbfbd3e6c89f83aad5a017360ee71d"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "agent.ctg/model_loop.rs",
+      "sha256": "4899efb58ddd4eab88227c09412fb3858936b069762b780c055165e33bcee1ef"
+    },
+    {
+      "path": "agent.ctg/run_state.rs",
+      "sha256": "26f0d5b8e50ca56dc139f6f4c522622a62bcb6eab914926e0b8dc500462410ef"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "mcp.ctg/.cartridge/prds/clients-share-document-execution/client-document-contract/prd.md",
+      "sha256": "ba2878d207372d9a022350191e78484ce47830293031ae2d620b033df59179be"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/clients-share-document-execution.md",
+      "sha256": "477b9dbaa76fb4c625623164c619b6a2cdc7a5b3d8c6b4cd3ad2af717abe6755"
+    }
+  ]
+}

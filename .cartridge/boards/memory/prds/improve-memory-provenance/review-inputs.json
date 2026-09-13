@@ -1,0 +1,36 @@
+{
+  "plan": {
+    "path": "memory.ctg/.cartridge/prds/improve-memory-provenance/prd.md",
+    "sha256": "89dd05bf7f87739893bf2e9002264dc83f5a6a0eb67976b5cf7954eb33da3e9d"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "memory.ctg/src/cartridge.rs",
+      "sha256": "a4eadab071181640f5e23d5b9e605f54faf238157a57c5a9b4f11876726b5414"
+    },
+    {
+      "path": "memory.ctg/tests/cartridge.rs",
+      "sha256": "b0ba12d2903d3c6a3a1bbb498abc69c38a6a6d7f0415281c767ce32f5131c1fd"
+    },
+    {
+      "path": "memory.ctg/CARTRIDGE.md",
+      "sha256": "e7580b0704219129b2739a2b6095706407f55eab69a467abff7ba8b721be1884"
+    },
+    {
+      "path": "memory.ctg/AGENTS.md",
+      "sha256": "908d3bbcbbabc7d5d8c4b5738bae00400f4c089fbc3d6f3f4763b001581ed64a"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-memory-provenance.md",
+      "sha256": "c58dadbbf970bd886f4781ecb9ef38e876b70682c17eb2bdf501ff74465d0b60"
+    }
+  ]
+}

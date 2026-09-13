@@ -1,0 +1,37 @@
+{
+  "plan": {
+    "path": "ui.ctg/.cartridge/prds/improve-ui-terminal-owner/prd.md",
+    "sha256": "812431d5c2654b506551cc31cd0ccca7fb74372ce5beb1f4894d3a659bdd725f"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "ui.ctg/ui/index.ts",
+      "sha256": "fc30e636295e482706b80ee88695cf125f1e2153dcc7690df24bfb592bad4da9"
+    },
+    {
+      "path": "ui.ctg/ui/palette.tsx",
+      "sha256": "87d5c276be051bf5ab136188b91d6c5900efa31a1a64bbff5aafb1f352d43ba8"
+    },
+    {
+      "path": "ui.ctg/ui/activity.ts",
+      "sha256": "0b74bdb1dd7d52528c2059606fbbefdcde83fabb13313f190fcf9c843e3e2d76"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "pty.ctg/.cartridge/prds/improve-pty-input-ownership/prd.md",
+      "sha256": "1a9f2b5e4109ea1faa102b61bd4353a6dd1c5372c83c5ebaadaeba865cf53dab"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-ui-terminal-owner.md",
+      "sha256": "9dde7f2761e64e17e181ee3e1420d6eb37e84bbe7d08b4ef6dad2a719f450a1c"
+    }
+  ]
+}

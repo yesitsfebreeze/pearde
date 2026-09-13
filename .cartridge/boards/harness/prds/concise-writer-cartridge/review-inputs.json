@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "path": "harness.ctg/.cartridge/prds/concise-writer-cartridge/prd.md",
+    "sha256": "176cb44d32b953c3dfb750f088c26de85ff896483c6c86a028c157df1e7db40e"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": "harness.ctg/main.rs",
+      "sha256": "4875de1eeed82fb80aa0dbebe7f8c721dff8931659112297276b3ffee1de7684"
+    },
+    {
+      "path": "harness.ctg/cartridge.json",
+      "sha256": "6733846b3a6a41521b27e2044b39467660903c5ae2b023b3112f37f435d03168"
+    },
+    {
+      "path": ".cartridge/memos/system/register.md",
+      "sha256": "68a5b8f0017ecde45b7134bf30c41102f3feed9cdba06e3ddf3cd5f74d11d899"
+    },
+    {
+      "path": ".cartridge/memos/decision/the-register-is-chosen-by-surface.md",
+      "sha256": "de15a6a5b5ec5a05f60795e02d05a65a828c0376169e9fecfb587240c464cf3b"
+    },
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    }
+  ],
+  "parent": {
+    "path": "cartridge.ctg/.cartridge/prds/second-harness-composition-proof/prd.md",
+    "sha256": "9d3282d5c2b5aba49c4e188a86c409e1957da37cd1b0dee64fdbd5831b5b07d0"
+  }
+}

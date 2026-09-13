@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/an-ancestry-test-cannot-tell-a-live-lane-from-an-abandoned-one/prd.md",
+    "sha256": "0172f427fc85f41dac1895bd8d30a7a158b5d9fa8f755adeea73c21633edaab8"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2"
+    },
+    {
+      "path": "cartridge.ctg/src/service.rs",
+      "sha256": "f59938cecba7680b0a216e596bf6f1d73ce57f2d9063ff6ee0e93dd1875722d5"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/an-ancestry-test-cannot-tell-a-live-lane-from-an-abandoned-one.md",
+      "sha256": "8bf04edc22f0be871d7d4f891337fc0d073a1e1e4ba72c39dbb526baa73f44ca"
+    }
+  ]
+}

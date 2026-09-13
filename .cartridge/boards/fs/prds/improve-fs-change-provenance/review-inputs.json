@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "fs.ctg/.cartridge/prds/improve-fs-change-provenance/prd.md",
+    "sha256": "49c602e352a451bf6b53470aa4e405a6957d2975520d329824931138c5bf8412"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "fs.ctg/service.rs",
+      "sha256": "48a632f8a0fa10f39c6a522db61ddd1bd07ba2a9dc8bec9646eb73f79094877a"
+    },
+    {
+      "path": "fs.ctg/files.rs",
+      "sha256": "b7399769689f5833936de3fdbe10d7dbcf03a841c4ba98da8f419379324eef0b"
+    },
+    {
+      "path": "fs.ctg/search.rs",
+      "sha256": "cd721ae80c2f5335653749f8635878a63f708241bee5a42c0a3facbd76997a7c"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "gitfs.ctg/.cartridge/prds/improve-gitfs-readable-diff/prd.md",
+      "sha256": "7606db1602f7c9e7e0807a454b8a1946053d5e1a88e4117d82c39452e46f561a"
+    },
+    {
+      "path": "sessions.ctg/.cartridge/prds/improve-sessions-client-mapping/prd.md",
+      "sha256": "acffa18d68f644865130318ae8003f31921b7a874ae4e8a067e8b37cc2ebca7a"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-fs-change-provenance.md",
+      "sha256": "96495702186e03ce3cd465835fb0038a866f2845e3fe17c536fb34be5491dc5c"
+    }
+  ]
+}

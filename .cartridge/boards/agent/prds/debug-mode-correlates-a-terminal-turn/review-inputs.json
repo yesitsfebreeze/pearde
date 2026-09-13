@@ -1,0 +1,37 @@
+{
+  "plan": {
+    "path": "agent.ctg/.cartridge/prds/debug-mode-correlates-a-terminal-turn/prd.md",
+    "sha256": "29a2414944c3ea94390d04747de92ff9f365d95cdabda219d80035c711f8f29d"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "agent.ctg/model_loop.rs",
+      "sha256": "4899efb58ddd4eab88227c09412fb3858936b069762b780c055165e33bcee1ef"
+    },
+    {
+      "path": "agent.ctg/run_state.rs",
+      "sha256": "26f0d5b8e50ca56dc139f6f4c522622a62bcb6eab914926e0b8dc500462410ef"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": ".cartridge/prds/every-enabled-tool-ships-a-contract-probe/prd.md",
+      "sha256": "d400fb9a486845364b4a0120571c4083b32756aeb9fa30c7a76ccfb313ef6b5a"
+    },
+    {
+      "path": ".cartridge/prds/tool-probes-run-and-locate-a-failing-provider/prd.md",
+      "sha256": "7b11f8acbe9ff4843805b7d43b27e0233f61901fb39d1ab28222071c90d03be6"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/debug-mode-correlates-a-terminal-turn.md",
+      "sha256": "84425f4fa287c7f933338d9c4fe967b830627b880f367b4656fd7310bd42b585"
+    }
+  ]
+}

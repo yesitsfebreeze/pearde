@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/plugins-from-memory-toml/prd.md",
+    "sha256": "4b833823ca53b30a8aab381572f4c0df998f7ae30f6f2ba8952b7977503f5b85"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2"
+    },
+    {
+      "path": "cartridge.ctg/src/service.rs",
+      "sha256": "f59938cecba7680b0a216e596bf6f1d73ce57f2d9063ff6ee0e93dd1875722d5"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/plugins-from-memory-toml.md",
+      "sha256": "68b1000e48af6200c9830477a19081994e12b4571f67a7ee00a1608e3d6aadff"
+    }
+  ]
+}

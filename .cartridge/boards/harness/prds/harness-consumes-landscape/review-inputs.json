@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "harness.ctg/.cartridge/prds/harness-consumes-landscape/prd.md",
+    "sha256": "80742bf7674ae717a67c7183a4911e8a2a67d93f689a8178cd415766cf93b4fa"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "harness.ctg/main.rs",
+      "sha256": "4875de1eeed82fb80aa0dbebe7f8c721dff8931659112297276b3ffee1de7684"
+    },
+    {
+      "path": "harness.ctg/inspection.rs",
+      "sha256": "1e8697e78d4cacba3e5aff1c68af6e04d446fe294f4f8240f6cd0c7aab459984"
+    },
+    {
+      "path": "harness.ctg/working.rs",
+      "sha256": "a86270dab73f742ff1be143ece9b6b1d2db2872f18d53d2b6bc55e8e3b709856"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": ".cartridge/prds/memory-document-works-end-to-end/prd.md",
+      "sha256": "b40a1675e621d9f6a0564e8cc785a901bf5d552c3d2706fcc2e16b7eb2bca03e"
+    },
+    {
+      "path": "landscape.ctg/.cartridge/prds/context-quality-is-measured/prd.md",
+      "sha256": "879920070e8ceeaa17f605832ee183b7c4ac66fc82201ed83cde386a1ee49cce"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/harness-consumes-landscape.md",
+      "sha256": "9cdc028bb0f5ec3ad80842228362e76c2b093cbdfe96dd05abd116d3f5076bf7"
+    }
+  ]
+}

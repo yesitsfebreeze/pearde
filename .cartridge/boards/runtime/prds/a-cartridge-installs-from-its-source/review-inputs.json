@@ -1,0 +1,32 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/a-cartridge-installs-from-its-source/prd.md",
+    "sha256": "2c69ec9916b455e61f6ce7c4dfe8e7d3e4e13d7cea9b0436e50f4fa6c0c0208c"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2"
+    },
+    {
+      "path": "cartridge.ctg/src/service.rs",
+      "sha256": "f59938cecba7680b0a216e596bf6f1d73ce57f2d9063ff6ee0e93dd1875722d5"
+    },
+    {
+      "path": ".cartridge/memos/work/a-cartridge-declares-what-it-needs.md",
+      "sha256": "3c7c50b253aed641917dadb9cca041ecaa788d31032c1bbd3c65fe46cf578d6b"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/a-cartridge-installs-from-its-source.md",
+      "sha256": "8c18c94d1aa30987dc01d3e53db241294d6103506ae866d97f16a801ef4e237a"
+    }
+  ]
+}

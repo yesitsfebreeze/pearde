@@ -1,0 +1,93 @@
+{
+  "plan": {
+    "path": ".cartridge/prds/cartridge-improvement-programme/prd.md",
+    "sha256": "0d29ad3dae6614e487e1a8e74189ef55b72d2aa241045fd3be3bec1a558e61b5"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": ".cartridge/settings.md",
+      "sha256": "014cedf33ae87db016fce1ec5ae38e990bee124960e2c4c650b95b246a1b5281"
+    },
+    {
+      "path": "justfile",
+      "sha256": "6f47aee231555f2f49f80cd587fa2789bf26793516f6ac7e4dda7bb5e26147b9"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "gitfs.ctg/.cartridge/prds/tool-results-interoperate/prd.md",
+      "sha256": "fda95c7661405b24a2d3a0e60a220c1fd5d32b916e9fe430ef3c29a57f1d3579"
+    },
+    {
+      "path": "memo.ctg/.cartridge/prds/improve-memo-programme/prd.md",
+      "sha256": "60207c070229b162b0cb0123bb580b1e5e47e4382f874853fca0c78c4464bfb1"
+    },
+    {
+      "path": "memory.ctg/.cartridge/prds/improve-memory-programme/prd.md",
+      "sha256": "4ee53ef60187f8d56b174a42bf4926f031e0ea6cd083f2e184bed560f79f007a"
+    },
+    {
+      "path": "memory.ctg/.cartridge/prds/improve-memory-tool-programme/prd.md",
+      "sha256": "7659c6e5acd2d3a7a26085da06bae47716bdec81dbb5453c85ce50a2f4366f57"
+    },
+    {
+      "path": "gitfs.ctg/.cartridge/prds/improve-gitfs-programme/prd.md",
+      "sha256": "f61aaebb0914f6aa8cd4e457215526f0faa8967f3afca70a695c6c55458157bd"
+    },
+    {
+      "path": "pty.ctg/.cartridge/prds/improve-pty-programme/prd.md",
+      "sha256": "34c893171249b8dd4453948909cdd2dd410fcd73d9c1205aa2ca1bf78e378b09"
+    },
+    {
+      "path": "mcp.ctg/.cartridge/prds/improve-mcp-programme/prd.md",
+      "sha256": "de09837749ff44633217642d89edacbdcf83dfaf59459955e335e8d7f6b2be25"
+    },
+    {
+      "path": "policy.ctg/.cartridge/prds/improve-policy-programme/prd.md",
+      "sha256": "fb697b3b1899519a76c4b4c761e182a65491152a51564e59dcac1f63c7661d7c"
+    },
+    {
+      "path": "sessions.ctg/.cartridge/prds/improve-sessions-programme/prd.md",
+      "sha256": "a7f9014d0719401725ed284e1fc8039350db01cb0f792559d1d4b47b7e127ce3"
+    },
+    {
+      "path": "harness.ctg/.cartridge/prds/improve-harness-programme/prd.md",
+      "sha256": "12ab5c4da91e4afe7fb7b626706934c3699f27f29a5a898d3164503ba49892ce"
+    },
+    {
+      "path": "router.ctg/.cartridge/prds/improve-router-programme/prd.md",
+      "sha256": "8526900459c285417d2e5675169ee8784ef3e3cc16e614fecbd606fd4a0f0888"
+    },
+    {
+      "path": "proxy.ctg/.cartridge/prds/improve-proxy-programme/prd.md",
+      "sha256": "4c4a720501b1e428679bd59f146580d4570cbe4f8b5f820d651b717e0971bbdc"
+    },
+    {
+      "path": "agent.ctg/.cartridge/prds/improve-agent-programme/prd.md",
+      "sha256": "66c7fe709e9fd504347fe26b1ac5f969fe7a64481bfba5b5aa225a05923bb7c3"
+    },
+    {
+      "path": "fs.ctg/.cartridge/prds/improve-fs-programme/prd.md",
+      "sha256": "ebf706846295ca15e9ef5cad73947c3bd711615ffa87b5e266cd61392c8ad861"
+    },
+    {
+      "path": "cartridge.ctg/.cartridge/prds/improve-tools-programme/prd.md",
+      "sha256": "798e0a8bbd33f1f156ccc6ce2052296a31d181df064fe43a83c22770e3212c1f"
+    },
+    {
+      "path": "ui.ctg/.cartridge/prds/improve-ui-programme/prd.md",
+      "sha256": "5db63ddb2a380f937c2e618abfb9efb58281b1db49f3a04f0296ef658211e673"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/cartridge-improvement-programme.md",
+      "sha256": "9112f77a4a25a37518ac6de5a27fabf92399fbd7db0703c292098b3b083a0e0f"
+    }
+  ]
+}

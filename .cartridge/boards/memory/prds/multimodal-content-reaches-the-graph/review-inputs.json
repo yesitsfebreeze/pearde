@@ -1,0 +1,32 @@
+{
+  "plan": {
+    "path": "memory.ctg/.cartridge/prds/multimodal-content-reaches-the-graph/prd.md",
+    "sha256": "4198f9cd6f65874898ca244aafed7069bfb437b1554b507099bb845ca312499e"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "memory.ctg/src/cartridge.rs",
+      "sha256": "a4eadab071181640f5e23d5b9e605f54faf238157a57c5a9b4f11876726b5414"
+    },
+    {
+      "path": "memory.ctg/src/main.rs",
+      "sha256": "546430209c5873fb75e5b3d59f18a8e3e39d44a1288cb66d351a839f253fb0da"
+    },
+    {
+      "path": "memory.ctg/AGENTS.md",
+      "sha256": "908d3bbcbbabc7d5d8c4b5738bae00400f4c089fbc3d6f3f4763b001581ed64a"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/multimodal-content-reaches-the-graph.md",
+      "sha256": "e50fc2f8a605f816a9f7927574a2977b2f54070885044b1b9c1bcc9a4dbc42d7"
+    }
+  ]
+}

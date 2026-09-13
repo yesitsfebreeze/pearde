@@ -1,0 +1,5 @@
+{
+  "name": "Claude",
+  "command": ["claude", "--print", "{prompt}"],
+  "prompt": "Work PRD {rel} as {role}."
+}

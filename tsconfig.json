@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "target": "ESNext", "module": "Preserve", "moduleResolution": "Bundler",
+    "strict": true, "noEmit": true, "skipLibCheck": true, "types": ["bun"]
+  },
+  "include": ["src/**/*.ts", ".cartridge/tests/**/*.ts"]
+}

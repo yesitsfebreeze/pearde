@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/improve-tools-worktree-resume/prd.md",
+    "sha256": "c36e9fe2ae5e4b8255b05bba5431265341d800b2d71ca83a88712e611f054bf1"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/scripts/workspace.py",
+      "sha256": "cec66edef1b966debee047dd7a292493bd9b274afc51615ef9bbd59d3a673695"
+    },
+    {
+      "path": "cartridge.ctg/repositories.json",
+      "sha256": "29ffd5c099660dd6a95512c87a8f019767f120cf02c4d93d3efc917a27a77410"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "cartridge.ctg/.cartridge/prds/improve-tools-preflight/prd.md",
+      "sha256": "f9d52d61c6bdc3ca03eca52f1f39969d1f119aedcb56842b9dfece60290638e2"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-tools-worktree-resume.md",
+      "sha256": "764e07ab84df12e9ed6e7b656c39438d91d6b99f81c8d829ae50b3f3546f7474"
+    }
+  ]
+}

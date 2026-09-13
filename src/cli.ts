@@ -1,0 +1,33 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { execute } from './engine';
+import { canonicalBoard } from './records';
+
+export const ROOT = path.resolve(import.meta.dir, '..');
+export async function main(argv = process.argv.slice(2)) {
+  if (!argv.length || ['help', '--help', '-h'].includes(argv[0])) {
+    console.log('prd — planning, specifications, Gantt and checked execution\n\nscan | plan | gantt | read <id> | brief <id> | next\nadd | refine | specced | claim | release | collect | defer | retry | unblock\nrun --dry | run --adapter <configured-agent> [--workers 3]\ncheck | status | members | boards\n\nUse --board <registered-name-or-path> (default root), --json for the API envelope.'); return 0;
+  }
+  const [operation, ...rest] = argv, args: string[] = [];
+  let selected: string | undefined, json = false;
+  for (let i = 0; i < rest.length; i++) {
+    if (rest[i] === '--json') { json = true; continue; }
+    if (rest[i] === '--board' || rest[i].startsWith('--board=')) {
+      if (selected !== undefined) throw Error('specify --board only once');
+      selected = rest[i].includes('=') ? rest[i].slice(8) : rest[++i];
+      if (!selected) throw Error('--board requires a value');
+    } else args.push(rest[i]);
+  }
+  const boards = path.join(ROOT, '.cartridge/boards');
+  if (operation === 'boards') { console.log(JSON.stringify(Object.fromEntries(fs.readdirSync(boards).filter(name => fs.existsSync(path.join(boards, name, 'settings.md'))).map(name => [name, path.join(boards, name)])), null, 2)); return 0; }
+  const board = canonicalBoard(selected ? fs.existsSync(path.join(boards, selected, 'settings.md')) ? path.join(boards, selected) : selected : path.join(boards, 'root'));
+  const controller = new AbortController();
+  const stop = () => controller.abort(); process.on('SIGTERM', stop); process.on('SIGINT', stop);
+  try {
+    const result = await execute(operation, board, args, controller.signal);
+    if (json) console.log(JSON.stringify(result));
+    else { if (result.data) console.log(operation === 'read' ? result.data.text : JSON.stringify(result.data, null, 2)); if (result.output) process.stdout.write(result.output); if (result.error) console.error(result.error); }
+    return result.exit_code;
+  } finally { process.off('SIGTERM', stop); process.off('SIGINT', stop); }
+}
+if (import.meta.main) { try { process.exitCode = await main(); } catch (error) { console.error('prd: ' + (error instanceof Error ? error.message : error)); process.exitCode = 2; } }

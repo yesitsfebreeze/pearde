@@ -1,0 +1,37 @@
+{
+  "plan": {
+    "path": "memory.ctg/.cartridge/prds/memory-owns-its-tool/memory-adapter-core/prd.md",
+    "sha256": "0de1acd7402ecd282267cf54bae525792c691ff570d901100f233397346cdba2"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "memory.ctg/src/cartridge.rs",
+      "sha256": "a4eadab071181640f5e23d5b9e605f54faf238157a57c5a9b4f11876726b5414"
+    },
+    {
+      "path": "memory.ctg/src/main.rs",
+      "sha256": "546430209c5873fb75e5b3d59f18a8e3e39d44a1288cb66d351a839f253fb0da"
+    },
+    {
+      "path": "memory.ctg/AGENTS.md",
+      "sha256": "908d3bbcbbabc7d5d8c4b5738bae00400f4c089fbc3d6f3f4763b001581ed64a"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "gitfs.ctg/.cartridge/prds/tool-results-interoperate/prd.md",
+      "sha256": "fda95c7661405b24a2d3a0e60a220c1fd5d32b916e9fe430ef3c29a57f1d3579"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/memory-owns-its-tool.md",
+      "sha256": "4725b397890c58624ff423048e24c77dc8863973320aae8be1dc272549d0563a"
+    }
+  ]
+}

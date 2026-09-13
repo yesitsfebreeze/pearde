@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "path": "ui.ctg/.cartridge/prds/the-gutter-is-the-boundary/prd.md",
+    "sha256": "3a58ae40a7e5ae39816b0bb016173fb40a1c2f3dabca44479dccc89c36e8cb7f"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "ui.ctg/src/chat.ts",
+      "sha256": "c0e5c0177876d2141fd7b3958876e16130d63b6290b4e3db7940aaf204e475e6"
+    },
+    {
+      "path": "ui.ctg/src/modules.ts",
+      "sha256": "628343af0c2a26358c631fb4aca787ec6c087c46c27b4d84d2f231028077fcfa"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "ui.ctg/.cartridge/prds/the-gutter-shows-both-sides/prd.md",
+      "sha256": "bd59a8a31522ff7a203b87f8e7445a4e8e09884af8933b7196b3d66e44d148aa"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/the-gutter-is-the-boundary.md",
+      "sha256": "ee9409ad7951f13f0c7d90560c7bef982b00af9a1a35a7860fee2bd0f0498f8e"
+    }
+  ]
+}

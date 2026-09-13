@@ -1,0 +1,36 @@
+{
+  "plan": {
+    "path": "memory.ctg/.cartridge/prds/retrieval-is-a-piece/prd.md",
+    "sha256": "8a208e339bc154c2a325ec24c3fe7e264c2fb840624d93f2fa6f9588fff42f9d"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "memory.ctg/src/cartridge.rs",
+      "sha256": "a4eadab071181640f5e23d5b9e605f54faf238157a57c5a9b4f11876726b5414"
+    },
+    {
+      "path": "memory.ctg/src/main.rs",
+      "sha256": "546430209c5873fb75e5b3d59f18a8e3e39d44a1288cb66d351a839f253fb0da"
+    },
+    {
+      "path": "memory.ctg/AGENTS.md",
+      "sha256": "908d3bbcbbabc7d5d8c4b5738bae00400f4c089fbc3d6f3f4763b001581ed64a"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/retrieval-is-a-piece.md",
+      "sha256": "fababf43af05594484e46d3c9f8217bcce01de3dfc8921421f713fad439e2fc1"
+    },
+    {
+      "path": ".cartridge/reviews/round-1/every-compute-crate-is-a-piece.md",
+      "sha256": "66f82e47b3b7b750dbdacb8592a8d5190ada18d2aa981087959cd5f33be1d484"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "path": "policy.ctg/.cartridge/prds/improve-policy-resource-scope/prd.md",
+    "sha256": "58bf941f5b0246765e358a46cfc09d22cb9c3b9a6e915942959729306e4b7f55"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "policy.ctg/init.lua",
+      "sha256": "3f110afdd4347fbf98333f1dd6a75bf925e30125be23da3649f91628871b9152"
+    },
+    {
+      "path": "policy.ctg/cartridge.json",
+      "sha256": "6e3f934bb1cf22c5c66a1a2ca471f7ac1a36c07f5bb212b6aa6639ac67a6a4ec"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "policy.ctg/.cartridge/prds/improve-policy-operation-rules/prd.md",
+      "sha256": "933b1684f1e88f64e380128cd122596ab799f4082a7f1df59e15f9a528f69a38"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-policy-resource-scope.md",
+      "sha256": "a131cac2559534b395307ff242bb0e8fd53ba7977c257dac3a96f35011b39bfa"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": ".cartridge/prds/memory-document-works-end-to-end/prd.md",
+    "sha256": "b40a1675e621d9f6a0564e8cc785a901bf5d552c3d2706fcc2e16b7eb2bca03e"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": ".cartridge/settings.md",
+      "sha256": "014cedf33ae87db016fce1ec5ae38e990bee124960e2c4c650b95b246a1b5281"
+    },
+    {
+      "path": "justfile",
+      "sha256": "6f47aee231555f2f49f80cd587fa2789bf26793516f6ac7e4dda7bb5e26147b9"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "memory.ctg/.cartridge/prds/memory-owns-its-tool/memory-consumer-parity/prd.md",
+      "sha256": "d9842b199fc7952dfa18b9d4594ba62dbdbd60557a23182d84a6d81635a643d5"
+    },
+    {
+      "path": "landscape.ctg/.cartridge/prds/landscape-composes-system-context/prd.md",
+      "sha256": "5d61b3573313f1fca3a447fea1fdf76032c90d410b0e6b1ed13d2ca1eb2dd76c"
+    },
+    {
+      "path": "cartridge.ctg/.cartridge/prds/one-runner-executes-documents/document-artifact-result/prd.md",
+      "sha256": "ae3b9480e57fb15e5a10e20b8b9ba27dc72b02bd628d0720c036dd16a2494ff9"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/memory-document-works-end-to-end.md",
+      "sha256": "3590a83bc0e23ded9383ffa62501916f7a43e2d2fb21f5d66793aac67f15b7ac"
+    }
+  ]
+}

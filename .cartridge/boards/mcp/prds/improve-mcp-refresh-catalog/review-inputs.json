@@ -1,0 +1,37 @@
+{
+  "plan": {
+    "path": "mcp.ctg/.cartridge/prds/improve-mcp-refresh-catalog/prd.md",
+    "sha256": "c3bdfe18f995cf7308e1b23ef8713801867e799e3806b84c4e3e8f851b775caa"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "mcp.ctg/service.rs",
+      "sha256": "ba1e96e09a7b0999e35d213a5e44b1d4d13d6703a495bce19833a0bf5eff6b13"
+    },
+    {
+      "path": "mcp.ctg/tests.rs",
+      "sha256": "7899e41da3af0b9f20e92d642fbd7452f76e65c45084d6b3cc04262d1a0ec06d"
+    },
+    {
+      "path": "mcp.ctg/README.md",
+      "sha256": "87d324fb379a2f1efbcba87b6892e8fc8b304f241557077de3fbc41bcf581df5"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "gitfs.ctg/.cartridge/prds/tool-results-interoperate/prd.md",
+      "sha256": "fda95c7661405b24a2d3a0e60a220c1fd5d32b916e9fe430ef3c29a57f1d3579"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-mcp-refresh-catalog.md",
+      "sha256": "fb5ec421efa107b82e898f43c65f653801c213e6f179a095c843ef83250ff974"
+    }
+  ]
+}

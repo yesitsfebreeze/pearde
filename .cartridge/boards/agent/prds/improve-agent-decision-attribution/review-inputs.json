@@ -1,0 +1,45 @@
+{
+  "plan": {
+    "path": "agent.ctg/.cartridge/prds/improve-agent-decision-attribution/prd.md",
+    "sha256": "d4e396eb06de1339087762aa0c8324cd3a03cc1652dc1665a08939bc28b77572"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "agent.ctg/model_loop.rs",
+      "sha256": "4899efb58ddd4eab88227c09412fb3858936b069762b780c055165e33bcee1ef"
+    },
+    {
+      "path": "agent.ctg/run_state.rs",
+      "sha256": "26f0d5b8e50ca56dc139f6f4c522622a62bcb6eab914926e0b8dc500462410ef"
+    },
+    {
+      "path": "agent.ctg/context.rs",
+      "sha256": "1ec251dd6ea61be27e56ba081bafab37c8fc2cdaf9fc114bad0567696125f795"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "router.ctg/.cartridge/prds/improve-router-route-explanation/prd.md",
+      "sha256": "290df36b0849b42ca501495fae2c5ba8e53a9a944999affc0cee24bbf5259238"
+    },
+    {
+      "path": "policy.ctg/.cartridge/prds/improve-policy-explain/prd.md",
+      "sha256": "bffa3cc7fbc8e4fd46c5a1ece6db08f57b07b4e5ae6152744c1f8b42059a0509"
+    },
+    {
+      "path": "harness.ctg/.cartridge/prds/improve-harness-compaction-diff/prd.md",
+      "sha256": "b639b7644ff42a6c4a51505d04a91138c433ead7b393b9633bdd1212e4be4be3"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-agent-decision-attribution.md",
+      "sha256": "9903b9e3ba6ccf96d16d8829d63b408c07a4eddc7b56101854582971e58b37ae"
+    }
+  ]
+}

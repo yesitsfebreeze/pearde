@@ -1,0 +1,49 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/cartridges-compose-recursively/prd.md",
+    "sha256": "79bb44f3100e375a70635b5d89fbafdc0b6b901f280fa632447606941bc3876d"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2"
+    },
+    {
+      "path": "cartridge.ctg/src/service.rs",
+      "sha256": "f59938cecba7680b0a216e596bf6f1d73ce57f2d9063ff6ee0e93dd1875722d5"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "cartridge.ctg/.cartridge/prds/the-profile-is-the-root-composer/prd.md",
+      "sha256": "197c6f84e66725909a7d914edf9ab6ee414fc8b79bab0889ac533bd38f67df14"
+    },
+    {
+      "path": "cartridge.ctg/.cartridge/prds/a-key-starts-its-provider-on-demand/prd.md",
+      "sha256": "09a2afce06c334ae73b4fb40a7b61ac833300c8abcbedc9fa28274ced9d10210"
+    },
+    {
+      "path": "cartridge.ctg/.cartridge/prds/a-cartridge-installs-from-its-source/prd.md",
+      "sha256": "2c69ec9916b455e61f6ce7c4dfe8e7d3e4e13d7cea9b0436e50f4fa6c0c0208c"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/cartridges-compose-recursively.md",
+      "sha256": "0138d014b8999a5b73368b2fbf434ec4136291a3857a1f405ca7ab425aaae4e7"
+    },
+    {
+      "path": ".cartridge/reviews/round-1/build-the-composition-pillar.md",
+      "sha256": "b192565dabc9b4d4fa896967bfd89c5b7509b2f7beba8f9ae47f338b88d39de1"
+    },
+    {
+      "path": ".cartridge/reviews/round-1/the-extension-crate.md",
+      "sha256": "6dca0f3d93f308243cc91f77af709b67af7109894f259ada298bf9ebed86feee"
+    }
+  ]
+}

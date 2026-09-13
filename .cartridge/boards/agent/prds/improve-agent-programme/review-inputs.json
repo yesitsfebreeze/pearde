@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "agent.ctg/.cartridge/prds/improve-agent-programme/prd.md",
+    "sha256": "66c7fe709e9fd504347fe26b1ac5f969fe7a64481bfba5b5aa225a05923bb7c3"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "agent.ctg/model_loop.rs",
+      "sha256": "4899efb58ddd4eab88227c09412fb3858936b069762b780c055165e33bcee1ef"
+    },
+    {
+      "path": "agent.ctg/run_state.rs",
+      "sha256": "26f0d5b8e50ca56dc139f6f4c522622a62bcb6eab914926e0b8dc500462410ef"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "agent.ctg/.cartridge/prds/improve-agent-task-baseline/prd.md",
+      "sha256": "50b1571d941e20f0f07a09c8407c07d7de57fae758398a04e280bd6e3800a1cf"
+    },
+    {
+      "path": "agent.ctg/.cartridge/prds/improve-agent-resume-boundaries/prd.md",
+      "sha256": "0ee1180c3809374a8ccec76df6c6bf77ba1a61948325683eff5afe101acc6025"
+    },
+    {
+      "path": "agent.ctg/.cartridge/prds/improve-agent-decision-attribution/prd.md",
+      "sha256": "d4e396eb06de1339087762aa0c8324cd3a03cc1652dc1665a08939bc28b77572"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-agent-programme.md",
+      "sha256": "f9e92ebf54b3dc2cead0147fb83b3ff36355bf32a8e314e91a8079d34c0b88b3"
+    }
+  ]
+}

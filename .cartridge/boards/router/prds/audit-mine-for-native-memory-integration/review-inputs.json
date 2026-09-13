@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "router.ctg/.cartridge/prds/audit-mine-for-native-memory-integration/prd.md",
+    "sha256": "d6773df19387ccf5bea149e4e319f3115a237ce7a49ef19e853ba9d5cd7b93b8"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "router.ctg/lib.rs",
+      "sha256": "6e2b8896f071fe835ea2a592f71f5b48c90dc4a427fdb999da5a55e4ed4550b0"
+    },
+    {
+      "path": "router.ctg/catalog.rs",
+      "sha256": "757258f1a030ade401a0e7282097d2e92802397bb2dec7f01dc28d9cd4f2c142"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/audit-mine-for-native-memory-integration.md",
+      "sha256": "f953313996bf587d5c1c3f92b969f059e65eedfb8a2b189ec84cdb2c53770fd4"
+    }
+  ]
+}

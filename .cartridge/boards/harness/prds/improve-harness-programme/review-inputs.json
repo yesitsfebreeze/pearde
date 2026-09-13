@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "harness.ctg/.cartridge/prds/improve-harness-programme/prd.md",
+    "sha256": "12ab5c4da91e4afe7fb7b626706934c3699f27f29a5a898d3164503ba49892ce"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "harness.ctg/main.rs",
+      "sha256": "4875de1eeed82fb80aa0dbebe7f8c721dff8931659112297276b3ffee1de7684"
+    },
+    {
+      "path": "harness.ctg/working.rs",
+      "sha256": "a86270dab73f742ff1be143ece9b6b1d2db2872f18d53d2b6bc55e8e3b709856"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "harness.ctg/.cartridge/prds/improve-harness-token-accounting/prd.md",
+      "sha256": "d3355a5734c6c118537325afed308786a0c46dacfee686549e452371069445bf"
+    },
+    {
+      "path": "harness.ctg/.cartridge/prds/improve-harness-compaction-diff/prd.md",
+      "sha256": "b639b7644ff42a6c4a51505d04a91138c433ead7b393b9633bdd1212e4be4be3"
+    },
+    {
+      "path": "harness.ctg/.cartridge/prds/improve-harness-quality-eval/prd.md",
+      "sha256": "15d148544b16346aeb0fd45404f48d1ddcaeac19a31fdbc245acb286976e9443"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-harness-programme.md",
+      "sha256": "bed1c74c960217c87091c04ea1945ff0e83400bf954fcb359079103107da8d1e"
+    }
+  ]
+}

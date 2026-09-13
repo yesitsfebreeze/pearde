@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "harness.ctg/.cartridge/prds/improve-harness-quality-eval/prd.md",
+    "sha256": "15d148544b16346aeb0fd45404f48d1ddcaeac19a31fdbc245acb286976e9443"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "harness.ctg/prompt.rs",
+      "sha256": "c1f0a04ebcbcc154cf2a4a336766430e9a15b4ca88883aed853db76077b28726"
+    },
+    {
+      "path": "harness.ctg/working.rs",
+      "sha256": "a86270dab73f742ff1be143ece9b6b1d2db2872f18d53d2b6bc55e8e3b709856"
+    },
+    {
+      "path": "harness.ctg/inspection.rs",
+      "sha256": "1e8697e78d4cacba3e5aff1c68af6e04d446fe294f4f8240f6cd0c7aab459984"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "harness.ctg/.cartridge/prds/improve-harness-compaction-diff/prd.md",
+      "sha256": "b639b7644ff42a6c4a51505d04a91138c433ead7b393b9633bdd1212e4be4be3"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-harness-quality-eval.md",
+      "sha256": "16da9d3db4fa4bbf2679b61865bd044d685d06b7b0bebe615e20490dce7ab4bc"
+    },
+    {
+      "path": ".cartridge/reviews/round-1/long-horizon-recall-benchmark.md",
+      "sha256": "57458fd6c5de067e9eda2ff13e286cf0138607079be1c99f05f1fda7828a0c6c"
+    }
+  ]
+}

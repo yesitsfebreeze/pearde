@@ -1,0 +1,32 @@
+{
+  "plan": {
+    "path": "agent.ctg/.cartridge/prds/improve-agent-task-baseline/prd.md",
+    "sha256": "50b1571d941e20f0f07a09c8407c07d7de57fae758398a04e280bd6e3800a1cf"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "agent.ctg/model_loop.rs",
+      "sha256": "4899efb58ddd4eab88227c09412fb3858936b069762b780c055165e33bcee1ef"
+    },
+    {
+      "path": "agent.ctg/run_state.rs",
+      "sha256": "26f0d5b8e50ca56dc139f6f4c522622a62bcb6eab914926e0b8dc500462410ef"
+    },
+    {
+      "path": "agent.ctg/context.rs",
+      "sha256": "1ec251dd6ea61be27e56ba081bafab37c8fc2cdaf9fc114bad0567696125f795"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-agent-task-baseline.md",
+      "sha256": "5119c64692ee668fa9d3f7148c95d2969d5951d5a5885bc495688fef909af070"
+    }
+  ]
+}

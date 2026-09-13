@@ -1,0 +1,32 @@
+{
+  "plan": {
+    "path": "memory.ctg/.cartridge/prds/the-track-record-is-reachable-across-stores/prd.md",
+    "sha256": "a552c0ced4465cc48193fc56747d273b5236bf477b9c40adbe6ee4222d04109a"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "memory.ctg/src/cartridge.rs",
+      "sha256": "a4eadab071181640f5e23d5b9e605f54faf238157a57c5a9b4f11876726b5414"
+    },
+    {
+      "path": "memory.ctg/src/main.rs",
+      "sha256": "546430209c5873fb75e5b3d59f18a8e3e39d44a1288cb66d351a839f253fb0da"
+    },
+    {
+      "path": "memory.ctg/AGENTS.md",
+      "sha256": "908d3bbcbbabc7d5d8c4b5738bae00400f4c089fbc3d6f3f4763b001581ed64a"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/the-track-record-is-reachable-across-stores.md",
+      "sha256": "5e78b8616a1702df24ef267562d2a143d317a3e09d10e219d475143972c7e5a2"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "plan": {
+    "path": "pty.ctg/.cartridge/prds/improve-pty-command-wait/prd.md",
+    "sha256": "411c208da40e05f38c3781be33a78c14a62be279ab89fe7808aab190519f4f4d"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "pty.ctg/main.rs",
+      "sha256": "2404af76e6704c4ceaf95cc62a869801607514493e9866a01f1f2fa796d79971"
+    },
+    {
+      "path": "pty.ctg/tool.rs",
+      "sha256": "838e879a76585dbf64777043bd912929ba82badb5c38924b89320f655b86c5aa"
+    },
+    {
+      "path": "pty.ctg/marks.rs",
+      "sha256": "768e0ea608af150c679e09ca3b77abd290954a839ee5c6942579dc0ca49c116d"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "pty.ctg/.cartridge/prds/improve-pty-shell-identity/prd.md",
+      "sha256": "e451cfe1364260453d2e09d86b6790a069cb645512a6c612ee83f84100a09cab"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-pty-command-wait.md",
+      "sha256": "002d8a9b69453ea09a39a693a46c5d2d5191b3857626d9593062973bff3df602"
+    }
+  ]
+}

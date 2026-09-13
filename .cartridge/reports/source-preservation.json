@@ -1,0 +1,6 @@
+{
+  "commit": "76c49b60c927d1c4dd688f08ba66cf2e5367493c",
+  "ref": "refs/heads/prd-relocation-inputs",
+  "files": 280,
+  "purpose": "Preserve source contents before retiring legacy dispatcher and integrations; includes incoming edits and in-progress native changes, not a clean upstream baseline"
+}

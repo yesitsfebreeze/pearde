@@ -1,0 +1,32 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/macos-policy/prd.md",
+    "sha256": "8543b4eaadd50ff429bf3ce0c408b9bca51696eb48ded72d6525845b1c390266"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2"
+    },
+    {
+      "path": "cartridge.ctg/src/service.rs",
+      "sha256": "f59938cecba7680b0a216e596bf6f1d73ce57f2d9063ff6ee0e93dd1875722d5"
+    },
+    {
+      "path": "cartridge.ctg/.pearde/prds/the-sandbox/command-adapter/prd.md",
+      "sha256": "b3bc5c99e8d60566196e628812e354d2a6f7d589865061e2dbf41c62ca382a55"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/macos-policy.md",
+      "sha256": "6cab72debd36239e5298bd4efca79caffd0640b2d1c86b0ba26c37b124284d7c"
+    }
+  ]
+}

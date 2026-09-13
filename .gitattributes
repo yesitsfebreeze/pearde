@@ -1,3 +1,0 @@
-# every lane appends rows to the manifest; the additions are the merge, not a conflict
-# ponytail: union keeps both rows, and a duplicate row is what `pearde index check` is for
-references/files.md merge=union

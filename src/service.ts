@@ -1,0 +1,240 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import { randomUUID } from 'node:crypto';
+import { atomic, contained, hash, inside, real, relative } from './records';
+import { ROOT } from './cli';
+import { runProcess } from './process';
+
+const OPS = ['scan', 'plan', 'gantt', 'read', 'brief', 'next', 'add', 'refine', 'specced', 'claim', 'release', 'collect', 'run', 'status', 'stop'];
+const flags: Record<string, Record<string, string>> = {
+  scan: { limit: 'page', offset: 'offset' }, plan: { workers: 'count', limit: 'page', offset: 'offset' }, gantt: {}, read: {}, next: {},
+  brief: { as: 'text', role: 'text', worker: 'text' }, add: { as: 'text', priority: 'integer', parent: 'path', dry: 'switch' },
+  refine: { as: 'text', dry: 'switch' }, specced: { as: 'text', blast: 'text', workflow: 'text', route: 'text', lane: 'text', dry: 'switch', check: 'switch' },
+  claim: { as: 'text', dry: 'switch' }, release: { as: 'text', dry: 'switch' }, collect: { as: 'text', report: 'file', dry: 'switch' },
+  run: { workers: 'count', deadline: 'deadline', dry: 'switch', once: 'switch' },
+};
+const counts: Record<string, number[]> = { scan: [0, 0], plan: [0, 0], gantt: [0, 0], next: [0, 0], read: [1, 1], brief: [1, 1], add: [1, 16], refine: [1, 1], specced: [1, 1], claim: [2, 2], release: [2, 2], collect: [1, 1], run: [0, 1] };
+const object = (v: any) => v !== null && typeof v === 'object' && !Array.isArray(v);
+const bytes = (v: any) => Buffer.byteLength(JSON.stringify(v));
+const id = () => randomUUID().replaceAll('-', '');
+export const result = (value: any, error = false) => ({ content: JSON.stringify(value), error });
+export function describe() {
+  return { name: 'prd', description: 'Plan centralized PRD boards, prepare briefs, and perform checked transitions. Host agents follow the run-board memo. External run requires a trusted configured adapter. status/stop address only this session’s jobs. Memory provides context; PRD records remain authoritative.', input_schema: { type: 'object', additionalProperties: false, required: ['op'], properties: { op: { type: 'string', enum: OPS }, board: { type: 'string', maxLength: 256 }, args: { type: 'array', maxItems: 64, items: { type: 'string', maxLength: 8192 } } } } };
+}
+export function contextKey(context: any) {
+  if (!object(context) || Object.keys(context).sort().join() !== 'call,cwd,run,session') throw Error('call requires trusted session, run, call and cwd context');
+  for (const key of ['session', 'run', 'call']) if (typeof context[key] !== 'string' || !context[key].trim() || context[key].length > 256 || context[key].includes('\0')) throw Error('invalid invocation context');
+  if (typeof context.cwd !== 'string' || !path.isAbsolute(context.cwd) || context.cwd.length > 4096 || context.cwd.includes('\0')) throw Error('context.cwd must be an absolute workspace directory');
+  return JSON.stringify([context.session, context.run, context.call]);
+}
+export class HostBridge {
+  next = 0;
+  pending = new Map<number, { resolve: (data: any) => void; reject: (error: Error) => void; timer: ReturnType<typeof setTimeout> }>();
+  constructor(public send: (message: any) => void) {}
+  accept(message: any) {
+    if (!('reply' in message)) return false;
+    const entry = this.pending.get(message.reply);
+    if (entry) { this.pending.delete(message.reply); clearTimeout(entry.timer); message.error ? entry.reject(Error(String(message.error))) : entry.resolve(message.data); }
+    return true;
+  }
+  request(name: string, args: any, turn?: string, timeout = 3000) {
+    const identifier = ++this.next;
+    return new Promise<any>((resolve, reject) => {
+      const timer = setTimeout(() => { this.pending.delete(identifier); reject(Error('host request timed out; outcome may be unknown')); }, timeout);
+      this.pending.set(identifier, { resolve, reject, timer });
+      try { this.send({ id: identifier, call: name, args, ...(turn ? { turn } : {}) }); }
+      catch (error) { clearTimeout(timer); this.pending.delete(identifier); reject(error); }
+    });
+  }
+  publish(data: any, turn?: string) { this.send({ publish: 'prd', data, ...(turn ? { turn } : {}) }); }
+  close() { for (const entry of this.pending.values()) { clearTimeout(entry.timer); entry.reject(Error('host disconnected')); } this.pending.clear(); }
+}
+export class Service {
+  root: string; boards: string; state: string; defaultBoard: string; timeout: number; jobTimeout: number; outputCap: number; adapter?: string;
+  instance = id(); closed = false;
+  cancelled = new Map<string, AbortController>(); started = new Set<string>(); jobs = new Map<string, any>(); tasks = new Set<Promise<any>>(); deliveries = new Map<string, Promise<any>>();
+  constructor(config: any = {}, public host?: Pick<HostBridge, 'request' | 'publish'>) {
+    const allowed = ['root', 'default_board', 'timeout_seconds', 'max_output_bytes', 'adapter', 'job_timeout_seconds'];
+    if (!object(config) || Object.keys(config).some(k => !allowed.includes(k))) throw Error('unknown PRD configuration');
+    this.root = real(path.resolve(config.root ?? ROOT)); this.boards = real(path.join(this.root, '.cartridge/boards')); this.state = path.join(this.root, '.cartridge/.state/prd-service');
+    this.defaultBoard = config.default_board ?? 'root'; this.timeout = config.timeout_seconds ?? 120; this.jobTimeout = config.job_timeout_seconds ?? 1200; this.outputCap = config.max_output_bytes ?? 65536;
+    for (const [value, low, high] of [[this.timeout, .1, 600], [this.jobTimeout, .1, 86400], [this.outputCap, 1024, 1048576]]) if (typeof value !== 'number' || !Number.isFinite(value) || value < low || value > high) throw Error('invalid PRD execution caps');
+    this.outputCap = Math.floor(this.outputCap); this.adapter = config.adapter;
+    if (this.adapter !== undefined && (typeof this.adapter !== 'string' || !/^[A-Za-z0-9_-]{1,64}$/.test(this.adapter))) throw Error('invalid configured adapter');
+    this.board(this.defaultBoard);
+  }
+  board(name: string) {
+    if (typeof name !== 'string' || !/^[A-Za-z0-9][A-Za-z0-9_.-]{0,255}$/.test(name)) throw Error('board must name a centralized board');
+    const board = contained(this.boards, name);
+    if (!fs.existsSync(path.join(board, 'settings.md'))) throw Error('board is missing');
+    return board;
+  }
+  prepare(request: any) {
+    if (!object(request) || Object.keys(request).some(k => !['op', 'board', 'args'].includes(k))) throw Error('input accepts only op, board and args; context is host-owned');
+    const op = request.op, args = request.args ?? [];
+    if (!OPS.includes(op)) throw Error('unknown PRD operation');
+    if (!Array.isArray(args) || args.length > 64 || args.some(a => typeof a !== 'string' || a.length > 8192 || a.includes('\0')) || args.reduce((n, a) => n + a.length, 0) > 32768) throw Error('invalid or oversized PRD arguments');
+    const board = this.board(request.board ?? this.defaultBoard);
+    if (op === 'status' || op === 'stop') { if (args.length !== 1 || !/^[a-f0-9]{32}$/.test(args[0])) throw Error('status/stop require one job ID'); return { op, board, args }; }
+    const output: string[] = [], pos: string[] = [], seen = new Set<string>();
+    for (let i = 0; i < args.length; i++) {
+      const token = args[i];
+      if (!token.startsWith('-')) { pos.push(token); output.push(token); continue; }
+      const [flag, ...rest] = token.split('='), name = flag.slice(2), kind = token.startsWith('--') ? flags[op][name] : null;
+      if (!kind || seen.has(name)) throw Error(op + ': unsupported or duplicate argument ' + flag); seen.add(name);
+      if (kind === 'switch') { if (rest.length) throw Error('switch takes no value'); output.push(flag); continue; }
+      let value = rest.length ? rest.join('=') : args[++i];
+      if (!value || value.startsWith('-') && kind !== 'integer') throw Error(flag + ' requires a value');
+      if (['integer', 'count', 'deadline', 'page', 'offset'].includes(kind)) {
+        if (!/^-?\d+$/.test(value) || !Number.isSafeInteger(Number(value))) throw Error('expected integer');
+        const number = Number(value), range: Record<string, number[]> = { count: [1, 32], page: [1, 50], offset: [0, 100000], deadline: [1, this.jobTimeout] };
+        if (range[kind] && (number < range[kind][0] || number > range[kind][1])) throw Error(flag + ' is outside its limit');
+      }
+      if (kind === 'path' || kind === 'file') { relative(value); const file = contained(board, value); if (kind === 'file' && !fs.existsSync(file)) throw Error('report must exist under selected board'); }
+      output.push(flag, value);
+    }
+    const [low, high] = counts[op]; if (pos.length < low || pos.length > high) throw Error(op + ' has wrong positional argument count');
+    if (pos.length && op !== 'add') { relative(pos[0]); contained(board, pos[0]); contained(board, 'prds/' + pos[0]); if (op === 'run' && ['all', 'global'].includes(pos[0])) throw Error('run must stay on selected board'); }
+    if (op === 'run') { if (!this.adapter) throw Error('external run needs trusted config.adapter; use next/brief for host-driven work'); output.push('--adapter', this.adapter); }
+    return { op, board, args: output };
+  }
+  async execute(op: string, board: string, args: string[], controller: AbortController, timeout: number) {
+    if (controller.signal.aborted || this.closed) return { op, state: 'cancelled', output: '', exit_code: null } as any;
+    const processResult = await runProcess([process.execPath, path.join(ROOT, 'src/cli.ts'), op, '--board', board, '--json', ...args], { cwd: this.root, timeout: timeout * 1000, cap: ['plan', 'scan', 'run'].includes(op) ? 1048576 : this.outputCap, signal: controller.signal, grace: 12_000 });
+    let outcome: any = { op, board: path.basename(board), ...processResult, effects: processResult.state === 'completed' ? 'see engine output' : 'inspect board before retrying' };
+    if (['completed', 'failed'].includes(processResult.state)) {
+      try {
+        const native = JSON.parse(processResult.output);
+        if (!object(native) || !Number.isInteger(native.exit_code)) throw Error('missing engine envelope');
+        outcome.output = native.output ?? ''; outcome.state = native.exit_code ? 'failed' : 'completed';
+        for (const field of ['data', 'changed', 'verification', 'error']) if (field in native) outcome[field] = native[field];
+      } catch (error) { outcome.state = 'failed'; outcome.error = 'invalid native engine response: ' + String(error); }
+    }
+    if (op !== 'run' && bytes(outcome) > this.outputCap) outcome = { op, board: path.basename(board), state: 'output_limit', output: '', exit_code: outcome.exit_code, truncated: true, effects: 'inspect board before retrying; reduce page limit or read one PRD' };
+    return outcome;
+  }
+  saveJob(job: any) { atomic(path.join(this.state, job.job_id + '.json'), JSON.stringify(job)); }
+  publicJob(job: any) {
+    if (bytes(job) <= this.outputCap) return { ...job };
+    const { output, data, verification, memory, ...small } = job;
+    return { ...small, output: String(output ?? '').slice(0, this.outputCap / 8), verification_count: verification?.length ?? 0, truncated: true, details: 'full result retained in durable job journal' };
+  }
+  job(op: string, identifier: string, context: any) {
+    let job = this.jobs.get(identifier);
+    if (!job) { const file = path.join(this.state, identifier + '.json'); if (!fs.existsSync(file) || fs.statSync(file).size > 2 * 1048576) throw Error('unknown or invalid job'); job = JSON.parse(fs.readFileSync(file, 'utf8')); }
+    if (job.session !== context.session) throw Error('job belongs to another session');
+    if (op === 'stop') { if (!this.jobs.has(identifier)) throw Error('job is not owned by this service instance; no stale PID was signalled'); this.cancelled.get(job.invocation)?.abort(); return { job_id: identifier, state: 'stop_requested' }; }
+    if (job.instance !== this.instance && job.state === 'running') job = { ...job, state: 'interrupted', effects: 'previous service ended; inspect board before retrying' };
+    return this.publicJob(job);
+  }
+  publish(op: string, board: string, args: string[], context: any, outcome: any, turn?: string) {
+    const refs = (outcome.changed ?? []).map((c: any) => c.ref).filter((r: any) => typeof r === 'string');
+    const event = { schema_version: 1, type: 'command.' + outcome.state, operation: op, board: path.basename(board), ref: refs.length === 1 ? refs[0] : args[0]?.startsWith('-') ? null : args[0] ?? null, refs, session: context.session, run: context.run, call: context.call, exit_code: outcome.exit_code ?? null };
+    try { if (!this.host) throw Error('host unavailable'); this.host.publish(event, turn); return { ...event, delivery: 'submitted' }; }
+    catch (error) { return { ...event, delivery: 'unavailable', delivery_error: String(error) }; }
+  }
+  async recall(board: string, args: string[], turn?: string) {
+    const authority = 'context only; PRD record is authoritative';
+    try { if (!this.host) throw Error('memory provider unavailable'); const results = await this.host.request('memory', { op: 'query', text: 'PRD planning board ' + path.basename(board) + ' ' + (args[0] ?? ''), k: 5 }, turn); if (bytes(results) > this.outputCap) throw Error('memory response exceeds output cap'); return { status: 'available', authority, provider: 'memory', results }; }
+    catch (error) { return { status: 'unavailable', authority, error: String(error) }; }
+  }
+  deliverMemory(file: string, turn?: string): Promise<any> {
+    if (this.deliveries.has(file)) return this.deliveries.get(file)!;
+    const work = (async () => {
+      const entry = JSON.parse(fs.readFileSync(file, 'utf8'));
+      if (entry.status !== 'committed' && entry.attempts < 3) {
+        entry.attempts++; entry.status = 'pending'; atomic(file, JSON.stringify(entry));
+        try { if (!this.host) throw Error('memory provider unavailable'); const ack = await this.host.request('memory', { op: 'ingest', text: entry.text, sync: true }, turn); if (ack?.status !== 'committed') throw Error('memory did not acknowledge committed status'); entry.status = 'committed'; delete entry.error; }
+        catch (error) { entry.error = String(error).slice(0, 512); }
+        atomic(file, JSON.stringify(entry));
+      }
+      const { text, session, ...receipt } = entry; return receipt;
+    })().finally(() => this.deliveries.delete(file));
+    this.deliveries.set(file, work); return work;
+  }
+  async rememberVerified(board: string, context: any, outcome: any, turn?: string) {
+    const proof = (Array.isArray(outcome.verification) ? outcome.verification : [outcome.verification]).filter((p: any) => object(p) && p.verified === true);
+    if (!proof.length) return { status: 'not_recorded', reason: 'no verified engine evidence' };
+    const files: string[] = [];
+    for (const item of proof) {
+      const evidence = JSON.stringify(item, Object.keys(item).sort());
+      if (Buffer.byteLength(evidence) > 8192) return { status: 'not_recorded', reason: 'verification evidence exceeds cap' };
+      const text = 'Verified PRD collection on board ' + path.basename(board) + ': ' + evidence, identifier = hash(text), file = path.join(this.state, 'memory-outbox', identifier + '.json');
+      if (!fs.existsSync(file)) atomic(file, JSON.stringify({ id: identifier, status: 'pending', attempts: 0, session: context.session, text })); files.push(file);
+    }
+    const receipts = []; for (const file of files.slice(0, 8)) receipts.push(await this.deliverMemory(file, turn));
+    return files.length === 1 ? receipts[0] : { status: receipts.length === files.length && receipts.every(r => r.status === 'committed') ? 'committed' : 'pending', queued: files.length, attempted: receipts.length, receipts };
+  }
+  async replayMemory() {
+    const directory = path.join(this.state, 'memory-outbox'); if (!fs.existsSync(directory)) return;
+    let attempts = 0;
+    for (const name of fs.readdirSync(directory).filter(n => n.endsWith('.json')).sort()) {
+      if (this.closed || attempts >= 16) break;
+      try { const file = path.join(directory, name), entry = JSON.parse(fs.readFileSync(file, 'utf8')); if (entry.status !== 'committed' && entry.attempts < 3) { attempts++; await this.deliverMemory(file); } } catch {}
+    }
+  }
+  async dispatch(request: any, turn?: string): Promise<any> {
+    try {
+      if (!object(request)) throw Error('expected a tool envelope');
+      if (request.op === 'describe' && Object.keys(request).length === 1) return describe();
+      if (!['call', 'cancel'].includes(request.op) || Object.keys(request).sort().join() !== (request.op === 'call' ? 'context,input,op' : 'context,op')) throw Error('expected describe, call or cancel envelope');
+      const context = request.context, key = contextKey(context);
+      if (!this.cancelled.has(key)) { if (this.cancelled.size >= 4096) throw Error('invocation capacity reached'); this.cancelled.set(key, new AbortController()); }
+      const controller = this.cancelled.get(key)!;
+      if (request.op === 'cancel') { controller.abort(); return result({ state: 'cancel_requested' }); }
+      if (controller.signal.aborted || this.closed) return result({ state: 'cancelled' }, true);
+      if (this.started.has(key)) throw Error('invocation already used; inspect status before retrying'); this.started.add(key);
+      const { op, board, args } = this.prepare(request.input);
+      if (op === 'status' || op === 'stop') return result(this.job(op, args[0], context));
+      if (op === 'run') {
+        if ([...this.jobs.values()].filter(j => j.state === 'running').length >= 4 || this.jobs.size >= 128) throw Error('PRD job capacity reached');
+        const job = { job_id: id(), session: context.session, instance: this.instance, invocation: key, board: path.basename(board), state: 'running', started_at: Date.now() / 1000 };
+        this.jobs.set(job.job_id, job); this.saveJob(job); this.publish(op, board, args, context, job, turn);
+        const work = (async () => { let outcome: any; try { outcome = await this.execute(op, board, args, controller, this.jobTimeout); if (outcome.state === 'completed') outcome.memory = await this.rememberVerified(board, context, outcome, turn); } catch (error) { outcome = { state: 'failed', error: String(error) }; } Object.assign(job, outcome, { finished_at: Date.now() / 1000 }); this.saveJob(job); this.publish(op, board, args, context, outcome, turn); })();
+        this.tasks.add(work); void work.finally(() => this.tasks.delete(work)); return result({ ...job });
+      }
+      const work = this.execute(op, board, args, controller, this.timeout); this.tasks.add(work);
+      let outcome; try { outcome = await work; } finally { this.tasks.delete(work); }
+      if (['plan', 'brief', 'read'].includes(op) && outcome.state === 'completed') outcome.memory = await this.recall(board, args, turn);
+      if (['add', 'refine', 'specced', 'claim', 'release', 'collect'].includes(op)) outcome.event = this.publish(op, board, args, context, outcome, turn);
+      if (op === 'collect' && outcome.state === 'completed') outcome.memory = await this.rememberVerified(board, context, outcome, turn);
+      if (bytes(outcome) > this.outputCap) outcome = { op, state: 'output_limit', output: '', truncated: true, effects: 'command finished; inspect board before retrying' };
+      return result(outcome, outcome.state !== 'completed');
+    } catch (error) { return result({ error: error instanceof Error ? error.message : String(error) }, true); }
+  }
+  async close() { this.closed = true; for (const controller of this.cancelled.values()) controller.abort(); await Promise.allSettled([...this.tasks, ...this.deliveries.values()]); }
+}
+export async function main() {
+  if (process.argv[2] === 'hello') { console.log(JSON.stringify({ inject: ['memory'], provide: ['prd', 'tool.prd'], reload: true })); return; }
+  const send = (v: any) => process.stdout.write(JSON.stringify(v) + '\n'), bridge = new HostBridge(send), tasks = new Set<Promise<any>>();
+  let service: Service | undefined, pending = '', dropping = false, disposed = false;
+  const stop = () => { disposed = true; bridge.close(); void service?.close(); process.stdin.destroy(); };
+  process.on('SIGTERM', stop); process.on('SIGINT', stop);
+  process.stdin.setEncoding('utf8');
+  try {
+    for await (const chunk of process.stdin) {
+      for (const part of String(chunk).split(/(?<=\n)/)) {
+        if (disposed) break;
+        if (!dropping) pending += part;
+        if (Buffer.byteLength(pending) > 262144) { dropping = true; pending = ''; send({ error: 'wire message exceeds input cap' }); }
+        if (!part.endsWith('\n')) continue;
+        if (dropping) { dropping = false; continue; }
+        let message: any;
+        try {
+          message = JSON.parse(pending); pending = '';
+          if (!object(message)) throw Error('wire message must be an object');
+          if (bridge.accept(message)) continue;
+          if (message.dispose === true) { disposed = true; break; }
+          if ('apply' in message) { if (service) throw Error('cartridge is already applied'); service = new Service(message.apply?.config, bridge); send({ provide: 'prd' }); send({ provide: 'tool.prd' }); send({ ready: true }); void service.replayMemory(); }
+          else if (typeof message.reload === 'boolean') send({ reply: message.id ?? 0, data: null });
+          else if (['prd', 'tool.prd'].includes(message.call) && service) {
+            if (tasks.size >= 8 && !['cancel', 'describe'].includes(message.args?.op)) { send({ reply: message.id ?? 0, data: result({ error: 'service is busy' }, true) }); continue; }
+            const work = service.dispatch(message.args, message.turn).then(data => send({ reply: message.id ?? 0, data })); tasks.add(work); void work.finally(() => tasks.delete(work));
+          } else throw Error('unknown host operation or cartridge not applied');
+        } catch (error) { pending = ''; send({ reply: message?.id ?? 0, error: String(error) }); }
+      }
+      if (disposed) break;
+    }
+  } finally { bridge.close(); await service?.close(); await Promise.allSettled(tasks); process.off('SIGTERM', stop); process.off('SIGINT', stop); }
+}
+if (import.meta.main) await main();

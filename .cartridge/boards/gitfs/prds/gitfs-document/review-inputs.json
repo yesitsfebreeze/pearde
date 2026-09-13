@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "path": "gitfs.ctg/.cartridge/prds/gitfs-document/prd.md",
+    "sha256": "74073e13fdd4862323c183ea0ae732065e620bffc99bbfe32ff50e01fcd06d11"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "gitfs.ctg/service.rs",
+      "sha256": "46855a060f5b2391cab1e85ca7c8eb1c6e6b8a49cdadb9e99f79b6513471c7f3"
+    },
+    {
+      "path": "gitfs.ctg/store.rs",
+      "sha256": "15e2521d14ad4839ae93d0f2b1a1477930be40bec3cc0b379408a7d8815a6d27"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "mcp.ctg/.cartridge/prds/clients-share-document-execution/prd.md",
+      "sha256": "087bb3757893e8ae8ef48a2daa2ea57df2ebc325b308edaeea1f96439ce204e5"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/capabilities-live-with-their-owners.md",
+      "sha256": "990147ebe7129477ba49047e365acf0292465529cb96a5c5c1d6b91b6ddc58e6"
+    }
+  ]
+}

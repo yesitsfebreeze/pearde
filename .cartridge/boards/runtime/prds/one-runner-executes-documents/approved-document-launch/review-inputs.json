@@ -1,0 +1,37 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/one-runner-executes-documents/approved-document-launch/prd.md",
+    "sha256": "484fb93a6b62cff8666a28ee92eda1a57dc7f0fcf054366caf2abf73f37259e1"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2"
+    },
+    {
+      "path": "cartridge.ctg/src/service.rs",
+      "sha256": "f59938cecba7680b0a216e596bf6f1d73ce57f2d9063ff6ee0e93dd1875722d5"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "memo.ctg/.cartridge/prds/one-document-serves-every-reader/executable-document-validation/prd.md",
+      "sha256": "504dbf0d5cc5267e37b57d5322d0d5c3f1eea563184151418174ff0cef664714"
+    },
+    {
+      "path": "cartridge.ctg/.cartridge/prds/launch-authority/prd.md",
+      "sha256": "f6839510927f72a597ce2b1d5d9b0a21f5b6b53830bc5aeee5fc413c3481aa34"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/one-runner-executes-documents.md",
+      "sha256": "51d35f31e677cd03aa5d431d7144750c56f629fab1b4700f397af51c170fd993"
+    }
+  ]
+}

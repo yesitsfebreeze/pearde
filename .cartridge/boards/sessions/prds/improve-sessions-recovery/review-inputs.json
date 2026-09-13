@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "sessions.ctg/.cartridge/prds/improve-sessions-recovery/prd.md",
+    "sha256": "3076b8b12f2106ed037ff0b6e861f67223dc8f17fe951dc909f67cad218388bd"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "sessions.ctg/main.rs",
+      "sha256": "0081ec4638811d66bf1b4270eab4909f782b54293597a0ada2f1c9db07d4dc4c"
+    },
+    {
+      "path": "sessions.ctg/README.md",
+      "sha256": "81cba2536db12392022542efc2e21294ef61bd68795b06c32aa5d1f4373103f6"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-sessions-recovery.md",
+      "sha256": "e0ab654db34dab4a11b2fc75d90c18c78baa07d1dd8ea8dc688d45f27161dd5e"
+    }
+  ]
+}

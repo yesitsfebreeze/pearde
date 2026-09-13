@@ -1,0 +1,37 @@
+{
+  "plan": {
+    "path": ".cartridge/prds/the-vision/prd.md",
+    "sha256": "3a0e801214c1d6f96a6c4daa567697ac61fcddbaff7399db11a5155e0a38bfb5"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": ".cartridge/settings.md",
+      "sha256": "014cedf33ae87db016fce1ec5ae38e990bee124960e2c4c650b95b246a1b5281"
+    },
+    {
+      "path": "justfile",
+      "sha256": "6f47aee231555f2f49f80cd587fa2789bf26793516f6ac7e4dda7bb5e26147b9"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": ".cartridge/prds/the-composed-system-proves-the-plan/prd.md",
+      "sha256": "d8aea106a423aaa16851096bbef3f36bdfe1c1f0381092664b9e468f96198da2"
+    },
+    {
+      "path": ".cartridge/prds/cartridge-improvement-programme/prd.md",
+      "sha256": "0d29ad3dae6614e487e1a8e74189ef55b72d2aa241045fd3be3bec1a558e61b5"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/the-vision.md",
+      "sha256": "0b37da5e56902afeadf7db69da1f7c09c7bfaf5d4b92c634cd2827388bf7c223"
+    }
+  ]
+}

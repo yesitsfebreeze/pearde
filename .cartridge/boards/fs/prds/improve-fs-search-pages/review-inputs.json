@@ -1,0 +1,32 @@
+{
+  "plan": {
+    "path": "fs.ctg/.cartridge/prds/improve-fs-search-pages/prd.md",
+    "sha256": "72119993a292bbbb67d7840168ef6d55ffac192088bf017bb9d662cb2f6a6a01"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "fs.ctg/service.rs",
+      "sha256": "48a632f8a0fa10f39c6a522db61ddd1bd07ba2a9dc8bec9646eb73f79094877a"
+    },
+    {
+      "path": "fs.ctg/files.rs",
+      "sha256": "b7399769689f5833936de3fdbe10d7dbcf03a841c4ba98da8f419379324eef0b"
+    },
+    {
+      "path": "fs.ctg/search.rs",
+      "sha256": "cd721ae80c2f5335653749f8635878a63f708241bee5a42c0a3facbd76997a7c"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-fs-search-pages.md",
+      "sha256": "cc64d0ff3863a2da3b8b4d9e2c94dd20ce0d1a9f2062eca446cf9990b9b53aec"
+    }
+  ]
+}

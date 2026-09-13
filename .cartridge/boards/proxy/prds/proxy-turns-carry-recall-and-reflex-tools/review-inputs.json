@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "proxy.ctg/.cartridge/prds/proxy-turns-carry-recall-and-reflex-tools/prd.md",
+    "sha256": "dcbd13b8821f25785e7048591be3387966f73516dad547a222e364599ef11bda"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "proxy.ctg/service.rs",
+      "sha256": "ffe1dcb0a8a23c0e2a123d856905fb1d6fa367c58f4307e0d782ac5211b678e2"
+    },
+    {
+      "path": "proxy.ctg/streaming.rs",
+      "sha256": "e822356464e350367e91933c4c5b8b27ec84a62ade7a2a306167165f0d00597b"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/proxy-turns-carry-recall-and-reflex-tools.md",
+      "sha256": "503a3cc652243b18ee70361fa5756f1f8c21a5915eda61dfc9fff36d69b26514"
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "plan": {
+    "path": "sessions.ctg/.cartridge/prds/improve-sessions-programme/prd.md",
+    "sha256": "a7f9014d0719401725ed284e1fc8039350db01cb0f792559d1d4b47b7e127ce3"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "sessions.ctg/main.rs",
+      "sha256": "0081ec4638811d66bf1b4270eab4909f782b54293597a0ada2f1c9db07d4dc4c"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "sessions.ctg/.cartridge/prds/improve-sessions-client-mapping/prd.md",
+      "sha256": "acffa18d68f644865130318ae8003f31921b7a874ae4e8a067e8b37cc2ebca7a"
+    },
+    {
+      "path": "sessions.ctg/.cartridge/prds/improve-sessions-retention/prd.md",
+      "sha256": "5b8989117149ffdd67ae6e00ea12af0d5b5e1adfcc08d7ffe0939f17f41b5cdc"
+    },
+    {
+      "path": "sessions.ctg/.cartridge/prds/improve-sessions-recovery/prd.md",
+      "sha256": "3076b8b12f2106ed037ff0b6e861f67223dc8f17fe951dc909f67cad218388bd"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-sessions-programme.md",
+      "sha256": "b65b482258152bb1dcd4f98536d30143c45ce3cbae8d13a1e72bc786320b228f"
+    }
+  ]
+}

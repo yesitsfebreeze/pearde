@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "path": "agent.ctg/.cartridge/prds/a-live-run-accepts-events-from-outside/prd.md",
+    "sha256": "6f73183f5d201d3aa69e78c5084cc53f168efd024077a834d1ef62c32b0c478e"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "agent.ctg/model_loop.rs",
+      "sha256": "4899efb58ddd4eab88227c09412fb3858936b069762b780c055165e33bcee1ef"
+    },
+    {
+      "path": "agent.ctg/run_state.rs",
+      "sha256": "26f0d5b8e50ca56dc139f6f4c522622a62bcb6eab914926e0b8dc500462410ef"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "agent.ctg/.cartridge/prds/an-event-declares-its-type/prd.md",
+      "sha256": "bdb2144527f7c1b80cb14d00c6e5dee5c8bd524d6667869a72638e2d77d8be93"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/a-live-run-accepts-events-from-outside.md",
+      "sha256": "d652c083b5975ff12947929313bbdf1455d27114ba2d76645f699acc5623d9df"
+    }
+  ]
+}

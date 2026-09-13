@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/a-plugins-ingests-unwind-with-it/prd.md",
+    "sha256": "e2f02cb729d4860a21572ad89a52781fb31b740641e2d5f918e395505a286b34"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2"
+    },
+    {
+      "path": "cartridge.ctg/src/service.rs",
+      "sha256": "f59938cecba7680b0a216e596bf6f1d73ce57f2d9063ff6ee0e93dd1875722d5"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "cartridge.ctg/.cartridge/prds/disk-adapters-detach-without-forgetting-memory/prd.md",
+      "sha256": "623604ae530e7ed47fd487a6dc1660a3a209bbaa592f3dcceccb7a9e29ea5f4d"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/a-plugins-ingests-unwind-with-it.md",
+      "sha256": "ef052d5dd072ae9e45f4d36c03688db631c1e0ba66bb372a07ed734b79f63902"
+    }
+  ]
+}

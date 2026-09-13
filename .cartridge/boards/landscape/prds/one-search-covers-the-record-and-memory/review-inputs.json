@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "landscape.ctg/.cartridge/prds/one-search-covers-the-record-and-memory/prd.md",
+    "sha256": "3eeaf241e6a79e77c191cb103ce66852ed51bb10f494116dcbfeeb76869f8d54"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "landscape.ctg/src/lib.rs",
+      "sha256": "61ee4df085df093e6901c64fa77fb4cdadbd1e3a9a928fa663bc4b19ef5cc9e1"
+    },
+    {
+      "path": "landscape.ctg/src/surface.rs",
+      "sha256": "a5811c2da414ab3ea0449ef0b8fde5c3da24c1f666b186e841da403c1797a783"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/one-search-covers-the-record-and-memory.md",
+      "sha256": "94daf1594bf776d21dd7bb447836adc3ee6abdaf48575da35dfb04260f19771a"
+    }
+  ]
+}

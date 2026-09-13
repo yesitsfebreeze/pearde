@@ -1,0 +1,15 @@
+filters:
+  and:
+    - file.inFolder("parts")
+    - kind == "question"
+properties:
+  file.name:
+    displayName: Question
+  description:
+    displayName: Topic
+views:
+  - type: table
+    name: Open questions
+    sort:
+      - property: file.mtime
+        direction: DESC

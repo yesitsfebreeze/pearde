@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "path": "landscape.ctg/.cartridge/prds/landscape-composes-system-context/context-contributor-contract/prd.md",
+    "sha256": "9d56eadee1a1ee1bc1104808456a82ce340569ba2dbd478e0dd573801b304d93"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "landscape.ctg/src/lib.rs",
+      "sha256": "61ee4df085df093e6901c64fa77fb4cdadbd1e3a9a928fa663bc4b19ef5cc9e1"
+    },
+    {
+      "path": "landscape.ctg/src/surface.rs",
+      "sha256": "a5811c2da414ab3ea0449ef0b8fde5c3da24c1f666b186e841da403c1797a783"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "memo.ctg/.cartridge/prds/one-document-serves-every-reader/document-identity/prd.md",
+      "sha256": "9ac0e861c46e03ed35a6d5b6108c9b78c97a9c897ed4e50982d88081e023266f"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/landscape-composes-system-context.md",
+      "sha256": "a42df9f537bf0a35558deb445fce5cb9b51b47bde400c3f5e2b51e65b54fd2eb"
+    }
+  ]
+}

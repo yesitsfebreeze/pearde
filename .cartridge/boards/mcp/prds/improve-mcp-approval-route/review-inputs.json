@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "mcp.ctg/.cartridge/prds/improve-mcp-approval-route/prd.md",
+    "sha256": "570202186761774757c2be459bd60879ffb79fd1cafdd7bc5484e4c5cd6773e5"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "mcp.ctg/service.rs",
+      "sha256": "ba1e96e09a7b0999e35d213a5e44b1d4d13d6703a495bce19833a0bf5eff6b13"
+    },
+    {
+      "path": "mcp.ctg/tests.rs",
+      "sha256": "7899e41da3af0b9f20e92d642fbd7452f76e65c45084d6b3cc04262d1a0ec06d"
+    },
+    {
+      "path": "mcp.ctg/README.md",
+      "sha256": "87d324fb379a2f1efbcba87b6892e8fc8b304f241557077de3fbc41bcf581df5"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "policy.ctg/.cartridge/prds/improve-policy-operation-rules/prd.md",
+      "sha256": "933b1684f1e88f64e380128cd122596ab799f4082a7f1df59e15f9a528f69a38"
+    },
+    {
+      "path": "policy.ctg/.cartridge/prds/improve-policy-explain/prd.md",
+      "sha256": "bffa3cc7fbc8e4fd46c5a1ece6db08f57b07b4e5ae6152744c1f8b42059a0509"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-mcp-approval-route.md",
+      "sha256": "bd365bd8dc6a7bb7e0d9fd8dc1192bdba8c43e903a5a1cdcaf0b836d7af1c977"
+    }
+  ]
+}

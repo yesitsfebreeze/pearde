@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "sessions.ctg/.cartridge/prds/improve-sessions-client-mapping/prd.md",
+    "sha256": "acffa18d68f644865130318ae8003f31921b7a874ae4e8a067e8b37cc2ebca7a"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "sessions.ctg/main.rs",
+      "sha256": "0081ec4638811d66bf1b4270eab4909f782b54293597a0ada2f1c9db07d4dc4c"
+    },
+    {
+      "path": "sessions.ctg/README.md",
+      "sha256": "81cba2536db12392022542efc2e21294ef61bd68795b06c32aa5d1f4373103f6"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-sessions-client-mapping.md",
+      "sha256": "f7a40cc9a86d25ddfc7e2d3a0129d8dc731074406c6c3d10e87d1eb7043a44e0"
+    }
+  ]
+}

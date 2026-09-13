@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "memory.ctg/.cartridge/prds/improve-memory-readiness/prd.md",
+    "sha256": "966132eed99e2e51d680efe67ef0ae9402830063d475a7e832ef03932b5345b1"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "memory.ctg/src/cartridge.rs",
+      "sha256": "a4eadab071181640f5e23d5b9e605f54faf238157a57c5a9b4f11876726b5414"
+    },
+    {
+      "path": "memory.ctg/tests/cartridge.rs",
+      "sha256": "b0ba12d2903d3c6a3a1bbb498abc69c38a6a6d7f0415281c767ce32f5131c1fd"
+    },
+    {
+      "path": "memory.ctg/CARTRIDGE.md",
+      "sha256": "e7580b0704219129b2739a2b6095706407f55eab69a467abff7ba8b721be1884"
+    },
+    {
+      "path": "memory.ctg/AGENTS.md",
+      "sha256": "908d3bbcbbabc7d5d8c4b5738bae00400f4c089fbc3d6f3f4763b001581ed64a"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "memory.ctg/.cartridge/prds/improve-memory-owner-access/prd.md",
+      "sha256": "e0ffd1f900e1ca9e86e36376497842cacec38ede6384a2ac47602ad27a6837b4"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-memory-readiness.md",
+      "sha256": "780b2d14a112d91bec0e56c99cb3f4ec3e4a68189242653f0c24b15dd1b157f6"
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "path": "memo.ctg/.cartridge/prds/memo-board-template/board-engine-integration/prd.md",
+    "sha256": "5a163129dea1f5ccca0f8ddca454c25ca21af17d5986b9594b30dc0d14dedfcf"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "memo.ctg/src/service.rs",
+      "sha256": "502410edf0d0dbddbb55184e7f64a6cb738d43da0c7b6498e67b2f53593fa95f"
+    },
+    {
+      "path": "memo.ctg/src/record.rs",
+      "sha256": "c9a0ea2ae5eacd652409cd77f9dac4e90c130587fb581142487e7b695dd31ce1"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "memo.ctg/.cartridge/prds/memo-board-template/initialize-board/prd.md",
+      "sha256": "7461777d588af0207e6c05ac4054534b6139ff18c39ba7cdebe7075b468623e5"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/memo-board-template.md",
+      "sha256": "c317626246b04bbe2811ce3f1ccc3f9e23fb645c43b6065470c8a3c960674e0d"
+    }
+  ]
+}

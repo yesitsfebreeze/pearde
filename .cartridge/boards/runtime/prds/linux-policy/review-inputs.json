@@ -1,0 +1,32 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/linux-policy/prd.md",
+    "sha256": "512b7421188b44e2720aeb816f02d4adde6a316547a9fb13fbf70a53eb358339"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2"
+    },
+    {
+      "path": "cartridge.ctg/src/service.rs",
+      "sha256": "f59938cecba7680b0a216e596bf6f1d73ce57f2d9063ff6ee0e93dd1875722d5"
+    },
+    {
+      "path": "cartridge.ctg/.pearde/prds/the-sandbox/command-adapter/prd.md",
+      "sha256": "b3bc5c99e8d60566196e628812e354d2a6f7d589865061e2dbf41c62ca382a55"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/linux-policy.md",
+      "sha256": "6d3aad5283d8981676c7821ee2d04d5f0a8c005ff2e424be286a69ee010777c0"
+    }
+  ]
+}

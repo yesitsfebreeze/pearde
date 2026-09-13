@@ -1,0 +1,32 @@
+{
+  "plan": {
+    "path": "gitfs.ctg/.cartridge/prds/improve-gitfs-snapshot-selection/prd.md",
+    "sha256": "8f6dda49d532ec4bb8edc7f3029abcf105005b87f9a233e8ed6cf9373889b06d"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "gitfs.ctg/service.rs",
+      "sha256": "46855a060f5b2391cab1e85ca7c8eb1c6e6b8a49cdadb9e99f79b6513471c7f3"
+    },
+    {
+      "path": "gitfs.ctg/store.rs",
+      "sha256": "15e2521d14ad4839ae93d0f2b1a1477930be40bec3cc0b379408a7d8815a6d27"
+    },
+    {
+      "path": "gitfs.ctg/ship.rs",
+      "sha256": "7377b10f400c9fcaed6fc9fe7400ec596055954b61a74f49a8c54ab58f6cd04f"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-gitfs-snapshot-selection.md",
+      "sha256": "8bf56dc6a1daae1c8130b29ed142709ea5a2bef883c67bb7181439de4f7cb6a1"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "router.ctg/.cartridge/prds/improve-router-programme/prd.md",
+    "sha256": "8526900459c285417d2e5675169ee8784ef3e3cc16e614fecbd606fd4a0f0888"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "router.ctg/lib.rs",
+      "sha256": "6e2b8896f071fe835ea2a592f71f5b48c90dc4a427fdb999da5a55e4ed4550b0"
+    },
+    {
+      "path": "router.ctg/catalog.rs",
+      "sha256": "757258f1a030ade401a0e7282097d2e92802397bb2dec7f01dc28d9cd4f2c142"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "router.ctg/.cartridge/prds/improve-router-route-explanation/prd.md",
+      "sha256": "290df36b0849b42ca501495fae2c5ba8e53a9a944999affc0cee24bbf5259238"
+    },
+    {
+      "path": "router.ctg/.cartridge/prds/improve-router-capability-routing/prd.md",
+      "sha256": "17adb951ff7979bb69f9bd22be08499142b3f7580a1a2224eb4093a46c44de42"
+    },
+    {
+      "path": "router.ctg/.cartridge/prds/improve-router-cost-latency/prd.md",
+      "sha256": "0ff782a1af256d15bbb6ac0efd8d549a149f1b75a3295951ef88e83361866120"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-router-programme.md",
+      "sha256": "794d18757c0d98f3b204bfafeb6e24499c3326fe9244aed76e242b47f384cbc0"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "sessions.ctg/.cartridge/prds/the-swarm-talks-on-a-board/prd.md",
+    "sha256": "51f2e674faac5a94567bf85e6b98e1ed6947af299596548e80fc41598f2ed3a3"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "sessions.ctg/main.rs",
+      "sha256": "0081ec4638811d66bf1b4270eab4909f782b54293597a0ada2f1c9db07d4dc4c"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "sessions.ctg/.cartridge/prds/an-agent-is-one-lookup-from-the-roster/prd.md",
+      "sha256": "4e150a3d86400779d6a4e24f318a65bd2487df55a735d7ba0b3e314dba852754"
+    },
+    {
+      "path": "sessions.ctg/.cartridge/prds/the-agents-chat-through-one-tool/prd.md",
+      "sha256": "edf6d6810bf31eeb698f05061173650326cb9492a46765161523f06f4a94f8c0"
+    },
+    {
+      "path": "sessions.ctg/.cartridge/prds/a-board-message-is-a-reference-not-a-payload/prd.md",
+      "sha256": "406ba542dff307f83db6d2314589a42dfb8af703b5f9daeeebf6072a26386f89"
+    },
+    {
+      "path": "sessions.ctg/.cartridge/prds/the-board-log-replays-who-did-what/prd.md",
+      "sha256": "f30dc9c69e342f79621f5c9297cdc801fbf2c8c0ed04e699688f3158916f2ab8"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/the-swarm-talks-on-a-board.md",
+      "sha256": "a70322864d180a5fb897fae09a5f02f5e227bc3368fa927b557f15fa79929c8b"
+    }
+  ]
+}

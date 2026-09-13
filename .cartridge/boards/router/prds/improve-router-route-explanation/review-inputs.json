@@ -1,0 +1,32 @@
+{
+  "plan": {
+    "path": "router.ctg/.cartridge/prds/improve-router-route-explanation/prd.md",
+    "sha256": "290df36b0849b42ca501495fae2c5ba8e53a9a944999affc0cee24bbf5259238"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "router.ctg/frontier.rs",
+      "sha256": "df5adfbd4ef4f1823146020444eff63f9cd312a58721bd572befb40ff54f480f"
+    },
+    {
+      "path": "router.ctg/catalog.rs",
+      "sha256": "757258f1a030ade401a0e7282097d2e92802397bb2dec7f01dc28d9cd4f2c142"
+    },
+    {
+      "path": "router.ctg/health.rs",
+      "sha256": "1440412515cc498583925bc83b85f03f500382b8f4c7b71b64f7d318395da2a2"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-router-route-explanation.md",
+      "sha256": "42e4235505ad8caf8c754fc8e22128a1dcfc83dee65592151b5594d6a23ff015"
+    }
+  ]
+}

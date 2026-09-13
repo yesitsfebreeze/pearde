@@ -1,0 +1,65 @@
+{
+  "plan": {
+    "path": ".cartridge/prds/the-composed-system-proves-the-plan/prd.md",
+    "sha256": "d8aea106a423aaa16851096bbef3f36bdfe1c1f0381092664b9e468f96198da2"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": ".cartridge/settings.md",
+      "sha256": "014cedf33ae87db016fce1ec5ae38e990bee124960e2c4c650b95b246a1b5281"
+    },
+    {
+      "path": "justfile",
+      "sha256": "6f47aee231555f2f49f80cd587fa2789bf26793516f6ac7e4dda7bb5e26147b9"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "memo.ctg/.cartridge/prds/memo-board-template/prd.md",
+      "sha256": "203d7cd5f5c6297586b675c45ec08e90f687fb6720a40590c199f4482fdf4f3e"
+    },
+    {
+      "path": "harness.ctg/.cartridge/prds/harness-consumes-landscape/prd.md",
+      "sha256": "80742bf7674ae717a67c7183a4911e8a2a67d93f689a8178cd415766cf93b4fa"
+    },
+    {
+      "path": "mcp.ctg/.cartridge/prds/clients-share-document-execution/prd.md",
+      "sha256": "087bb3757893e8ae8ef48a2daa2ea57df2ebc325b308edaeea1f96439ce204e5"
+    },
+    {
+      "path": ".cartridge/prds/capabilities-live-with-their-owners/prd.md",
+      "sha256": "e17b6058b626006231cc5590611a9a87d9c2b79d42954c4951bfbfa166e88f87"
+    },
+    {
+      "path": "cartridge.ctg/.cartridge/prds/documents-own-live-processes/prd.md",
+      "sha256": "e9512e8d00b5e397ec141aac9547b90d001666d7e23151899d645f36dea55448"
+    },
+    {
+      "path": "ui.ctg/.cartridge/prds/human-context-is-the-same-document/prd.md",
+      "sha256": "784fc7f20828702865c2d0b5dc3cc0c3677853c90227f103331b87843c5703bf"
+    },
+    {
+      "path": "tools.ctg/.cartridge/prds/development-tooling-has-one-home/prd.md",
+      "sha256": "23e3f56f37db05ccc8882019bec4e1495110ed9f05fb2eb40de0d49a0887a2c9"
+    },
+    {
+      "path": "landscape.ctg/.cartridge/prds/context-quality-is-measured/prd.md",
+      "sha256": "879920070e8ceeaa17f605832ee183b7c4ac66fc82201ed83cde386a1ee49cce"
+    },
+    {
+      "path": "landscape.ctg/.cartridge/prds/recursive-development-graph/prd.md",
+      "sha256": "6ce4e4fbaf95e83b612d09c8c8c5c8c43fa2d3518aa5db1ed0ea16ffa01be3f2"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/the-composed-system-proves-the-plan.md",
+      "sha256": "359d4f868e0c42a3a60c1863ea87cdc82077009a761c1bd2c7b9d2bc74e47d1d"
+    }
+  ]
+}

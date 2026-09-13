@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "path": "agent.ctg/.cartridge/prds/a-stalled-step-raises-its-own-event/prd.md",
+    "sha256": "2eb7e12b1280c715e146aa89f42ac8f6c372621c4dd70b48884c09f072a4d9a7"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "agent.ctg/model_loop.rs",
+      "sha256": "4899efb58ddd4eab88227c09412fb3858936b069762b780c055165e33bcee1ef"
+    },
+    {
+      "path": "agent.ctg/run_state.rs",
+      "sha256": "26f0d5b8e50ca56dc139f6f4c522622a62bcb6eab914926e0b8dc500462410ef"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "cartridge.ctg/.cartridge/prds/a-listener-subscribes-to-event-types/prd.md",
+      "sha256": "f4fd40f51b1fbcfa8c534e3af16d543fbd644444f10cb394485f748c4b74ef11"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/a-stalled-step-raises-its-own-event.md",
+      "sha256": "9b6f694b5f190f7f39d8cd766c828d54bbcc6f7f315bb999fd4e0a219b821c11"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "plan": {
+    "path": "harness.ctg/.cartridge/prds/improve-harness-token-accounting/prd.md",
+    "sha256": "d3355a5734c6c118537325afed308786a0c46dacfee686549e452371069445bf"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "harness.ctg/prompt.rs",
+      "sha256": "c1f0a04ebcbcc154cf2a4a336766430e9a15b4ca88883aed853db76077b28726"
+    },
+    {
+      "path": "harness.ctg/working.rs",
+      "sha256": "a86270dab73f742ff1be143ece9b6b1d2db2872f18d53d2b6bc55e8e3b709856"
+    },
+    {
+      "path": "harness.ctg/inspection.rs",
+      "sha256": "1e8697e78d4cacba3e5aff1c68af6e04d446fe294f4f8240f6cd0c7aab459984"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-harness-token-accounting.md",
+      "sha256": "b9709afdd46b083df01ae430ae58cfeb5ddb13811019c1ece8711f3ff279329d"
+    }
+  ]
+}

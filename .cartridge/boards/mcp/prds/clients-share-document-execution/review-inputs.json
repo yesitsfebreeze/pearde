@@ -1,0 +1,53 @@
+{
+  "plan": {
+    "path": "mcp.ctg/.cartridge/prds/clients-share-document-execution/prd.md",
+    "sha256": "087bb3757893e8ae8ef48a2daa2ea57df2ebc325b308edaeea1f96439ce204e5"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "mcp.ctg/service.rs",
+      "sha256": "ba1e96e09a7b0999e35d213a5e44b1d4d13d6703a495bce19833a0bf5eff6b13"
+    },
+    {
+      "path": "mcp.ctg/tests.rs",
+      "sha256": "7899e41da3af0b9f20e92d642fbd7452f76e65c45084d6b3cc04262d1a0ec06d"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "mcp.ctg/.cartridge/prds/clients-share-document-execution/client-document-contract/prd.md",
+      "sha256": "ba2878d207372d9a022350191e78484ce47830293031ae2d620b033df59179be"
+    },
+    {
+      "path": "agent.ctg/.cartridge/prds/agent-document-client/prd.md",
+      "sha256": "870796dcadf5079dae0250e5b94f60c4cebbfbd3e6c89f83aad5a017360ee71d"
+    },
+    {
+      "path": "mcp.ctg/.cartridge/prds/clients-share-document-execution/mcp-document-client/prd.md",
+      "sha256": "d1bf5a54e04867fcd3589e0158c57cf53a84f12604919550b6ec73604648ccfc"
+    },
+    {
+      "path": "proxy.ctg/.cartridge/prds/proxy-document-client/prd.md",
+      "sha256": "0588e45e29e7b76cf9b79d0cf47a8e44d84831263cab4e445d9470fe8f35bbc9"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/clients-share-document-execution.md",
+      "sha256": "477b9dbaa76fb4c625623164c619b6a2cdc7a5b3d8c6b4cd3ad2af717abe6755"
+    },
+    {
+      "path": ".cartridge/reviews/round-1/an-mcp-server-carries-the-tools.md",
+      "sha256": "dd6b262a720b6ce0f5f9d6f37bc626fb42102f0656122d28f44ebf0f0f0678fe"
+    },
+    {
+      "path": ".cartridge/reviews/round-1/zirkles-tools-serve-any-agent.md",
+      "sha256": "35ea9c0afe2bcb4fd809abe508cc371f35dd12ce24f15ab27131080ecb470fe3"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "gitfs.ctg/.cartridge/prds/improve-gitfs-programme/prd.md",
+    "sha256": "f61aaebb0914f6aa8cd4e457215526f0faa8967f3afca70a695c6c55458157bd"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "gitfs.ctg/service.rs",
+      "sha256": "46855a060f5b2391cab1e85ca7c8eb1c6e6b8a49cdadb9e99f79b6513471c7f3"
+    },
+    {
+      "path": "gitfs.ctg/store.rs",
+      "sha256": "15e2521d14ad4839ae93d0f2b1a1477930be40bec3cc0b379408a7d8815a6d27"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "gitfs.ctg/.cartridge/prds/improve-gitfs-readable-diff/prd.md",
+      "sha256": "7606db1602f7c9e7e0807a454b8a1946053d5e1a88e4117d82c39452e46f561a"
+    },
+    {
+      "path": "gitfs.ctg/.cartridge/prds/improve-gitfs-snapshot-selection/prd.md",
+      "sha256": "8f6dda49d532ec4bb8edc7f3029abcf105005b87f9a233e8ed6cf9373889b06d"
+    },
+    {
+      "path": "gitfs.ctg/.cartridge/prds/improve-gitfs-reviewable-ship/prd.md",
+      "sha256": "6e7f4d4052b4f1e967735ce0e9d56199b9d7f545a56ebb684e0c79fce188c965"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-gitfs-programme.md",
+      "sha256": "529f6f79ab199915ae6b9aa38eb94a0b03349ce6cde2afb11d3213e7ed3b0219"
+    }
+  ]
+}

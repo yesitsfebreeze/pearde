@@ -1,0 +1,7 @@
+{
+  "source": "/Users/feb/dev/infra/pearde",
+  "destination": "/Users/feb/dev/cartridge/prd.ctg",
+  "head": "ae2d5b4075564a3c4c069a6d2b347ab406c749fc",
+  "status": " M capabilities.md\n M references/agents/pearde-analyst.md\n M references/agents/pearde-implementer.md\n M resources/board/brief.py\n M resources/board/plan.py\n M resources/statusline.sh\n?? references/.state/\n?? resources/board/example/.state/\n?? resources/primitives.py\n?? resources/scout/snapshots/2026-09-12.tsv\n",
+  "worktrees": "worktree /Users/feb/dev/infra/pearde\nHEAD ae2d5b4075564a3c4c069a6d2b347ab406c749fc\nbranch refs/heads/main\n\nworktree /Users/feb/dev/infra/pearde/.pearde\nHEAD f0b3ed26eadf9d3be43ec3c2720701a5bc692491\nbranch refs/heads/pearde\n\n"
+}

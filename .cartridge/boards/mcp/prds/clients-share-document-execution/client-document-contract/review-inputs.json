@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "path": "mcp.ctg/.cartridge/prds/clients-share-document-execution/client-document-contract/prd.md",
+    "sha256": "ba2878d207372d9a022350191e78484ce47830293031ae2d620b033df59179be"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "mcp.ctg/service.rs",
+      "sha256": "ba1e96e09a7b0999e35d213a5e44b1d4d13d6703a495bce19833a0bf5eff6b13"
+    },
+    {
+      "path": "mcp.ctg/tests.rs",
+      "sha256": "7899e41da3af0b9f20e92d642fbd7452f76e65c45084d6b3cc04262d1a0ec06d"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": ".cartridge/prds/memory-document-works-end-to-end/prd.md",
+      "sha256": "b40a1675e621d9f6a0564e8cc785a901bf5d552c3d2706fcc2e16b7eb2bca03e"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/clients-share-document-execution.md",
+      "sha256": "477b9dbaa76fb4c625623164c619b6a2cdc7a5b3d8c6b4cd3ad2af717abe6755"
+    }
+  ]
+}

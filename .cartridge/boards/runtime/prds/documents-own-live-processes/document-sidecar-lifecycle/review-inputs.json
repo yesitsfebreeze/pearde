@@ -1,0 +1,33 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/documents-own-live-processes/document-sidecar-lifecycle/prd.md",
+    "sha256": "a2d31078ba62ff7e2838657b234d6f4d58d84ea2de1cfd87154f4c63359c0df8"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2"
+    },
+    {
+      "path": "cartridge.ctg/src/service.rs",
+      "sha256": "f59938cecba7680b0a216e596bf6f1d73ce57f2d9063ff6ee0e93dd1875722d5"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "cartridge.ctg/.cartridge/prds/one-runner-executes-documents/document-command-result/prd.md",
+      "sha256": "0bb79324a08bc2dacf620bf35a22070c60c468006dbc3ba056e1f5a22956587a"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/documents-own-live-processes.md",
+      "sha256": "75f4d40c468a29f7c36d7ca8c32ca4d4111e67422c49c65aa3986eb3b1101404"
+    }
+  ]
+}

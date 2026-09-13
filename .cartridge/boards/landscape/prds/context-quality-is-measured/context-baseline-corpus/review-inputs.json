@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "landscape.ctg/.cartridge/prds/context-quality-is-measured/context-baseline-corpus/prd.md",
+    "sha256": "c1947ff50c520cb875df16177f4bd0ea61a04e6060ac9d1e8977dcaf72e8f979"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "landscape.ctg/src/lib.rs",
+      "sha256": "61ee4df085df093e6901c64fa77fb4cdadbd1e3a9a928fa663bc4b19ef5cc9e1"
+    },
+    {
+      "path": "landscape.ctg/src/surface.rs",
+      "sha256": "a5811c2da414ab3ea0449ef0b8fde5c3da24c1f666b186e841da403c1797a783"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/context-quality-is-measured.md",
+      "sha256": "d4357ac7cf0b610600f4e48d5a080cfa891ac4845efd645d36f379b0a6a928e9"
+    }
+  ]
+}

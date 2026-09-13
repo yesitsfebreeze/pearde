@@ -1,0 +1,24 @@
+{
+  "plan": {
+    "path": "sessions.ctg/.cartridge/prds/sub-agent-sessions-record-parent-and-mailbox/prd.md",
+    "sha256": "16af08a6617c0f4946b9a537f81ccdad043fabcc34820b1ed4188c6dcc09eac3"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "sessions.ctg/main.rs",
+      "sha256": "0081ec4638811d66bf1b4270eab4909f782b54293597a0ada2f1c9db07d4dc4c"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/sub-agent-sessions-record-parent-and-mailbox.md",
+      "sha256": "22dfc8a4263f645872bfc90972d2d6919fe00f3b0f3f92a169e799876f75aa81"
+    }
+  ]
+}

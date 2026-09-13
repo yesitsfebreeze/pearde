@@ -1,0 +1,57 @@
+{
+  "plan": {
+    "path": ".cartridge/prds/capabilities-live-with-their-owners/prd.md",
+    "sha256": "e17b6058b626006231cc5590611a9a87d9c2b79d42954c4951bfbfa166e88f87"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": ".cartridge/settings.md",
+      "sha256": "014cedf33ae87db016fce1ec5ae38e990bee124960e2c4c650b95b246a1b5281"
+    },
+    {
+      "path": "justfile",
+      "sha256": "6f47aee231555f2f49f80cd587fa2789bf26793516f6ac7e4dda7bb5e26147b9"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "memo.ctg/.cartridge/prds/memo-write-document/prd.md",
+      "sha256": "32d3f51d5365ab7d492ac1f80c5a61a52b4c6507d81e34dd206b0d08d4880c7d"
+    },
+    {
+      "path": "fs.ctg/.cartridge/prds/direct-fs-document/prd.md",
+      "sha256": "17a0429c15d84a30e040dd4252c59bc3534cfa30c79f794b0e4ff2a7fb59cab6"
+    },
+    {
+      "path": "gitfs.ctg/.cartridge/prds/gitfs-document/prd.md",
+      "sha256": "74073e13fdd4862323c183ea0ae732065e620bffc99bbfe32ff50e01fcd06d11"
+    },
+    {
+      "path": "pty.ctg/.cartridge/prds/pty-document/prd.md",
+      "sha256": "d94aa0a6d2be69749b80276e5e404a331bffcb8c9647a15984e04531c4043bea"
+    },
+    {
+      "path": "sessions.ctg/.cartridge/prds/sessions-document/prd.md",
+      "sha256": "c26ccdb2b9e730b8be6e0cab4d9733ab190f85dc3ab01d74c8c0f9e2afb06ce2"
+    },
+    {
+      "path": "router.ctg/.cartridge/prds/router-document/prd.md",
+      "sha256": "9dafebd1da986fa067b75e94e43b0d7872fd097b40ff48078ca863e2644ee2fb"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/capabilities-live-with-their-owners.md",
+      "sha256": "990147ebe7129477ba49047e365acf0292465529cb96a5c5c1d6b91b6ddc58e6"
+    },
+    {
+      "path": ".cartridge/reviews/round-1/the-tool-surface-is-search-and-shell.md",
+      "sha256": "34037023dd8f9a7869a9203b0701eb6de964b2a5d8db5c25ba1af4689e8183de"
+    }
+  ]
+}

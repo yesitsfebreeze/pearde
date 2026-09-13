@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "memo.ctg/.cartridge/prds/a-shadowing-write-passes-the-leaf-check/prd.md",
+    "sha256": "41e15d77cb9aa2803a8b17729bf25c849be577532d123be72f0d18b48702941d"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "memo.ctg/src/service.rs",
+      "sha256": "502410edf0d0dbddbb55184e7f64a6cb738d43da0c7b6498e67b2f53593fa95f"
+    },
+    {
+      "path": "memo.ctg/src/record.rs",
+      "sha256": "c9a0ea2ae5eacd652409cd77f9dac4e90c130587fb581142487e7b695dd31ce1"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/a-shadowing-write-passes-the-leaf-check.md",
+      "sha256": "3ded4544bd9ed9360fee05ea137e5756ac5837ee151805bf3058427d92b3a0ff"
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "plan": {
+    "path": "sessions.ctg/.cartridge/prds/reflex-reports-attributed-tool-outcomes/prd.md",
+    "sha256": "6fa86bf1bc37dc3373a966e2180bae5a15a7b3dbea8f54e67a3b4b3e3c3314f5"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "sessions.ctg/main.rs",
+      "sha256": "0081ec4638811d66bf1b4270eab4909f782b54293597a0ada2f1c9db07d4dc4c"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/reflex-reports-attributed-tool-outcomes.md",
+      "sha256": "df0e66923a264f69b43e6403f5a10c4f99988f54a09bfd8e1bf9caf174663c4b"
+    }
+  ]
+}

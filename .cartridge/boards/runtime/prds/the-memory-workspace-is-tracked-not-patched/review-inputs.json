@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/the-memory-workspace-is-tracked-not-patched/prd.md",
+    "sha256": "d617aaf98be6742a24b461f8702c193c17a4cfda06d6cf5edd48c0889463920f"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2"
+    },
+    {
+      "path": "cartridge.ctg/src/service.rs",
+      "sha256": "f59938cecba7680b0a216e596bf6f1d73ce57f2d9063ff6ee0e93dd1875722d5"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/the-memory-workspace-is-tracked-not-patched.md",
+      "sha256": "95dace7797c079783a5767e5a5732ea68ad5d08e80378be7bfa66f3975f26025"
+    }
+  ]
+}

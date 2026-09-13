@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/improve-tools-programme/prd.md",
+    "sha256": "798e0a8bbd33f1f156ccc6ce2052296a31d181df064fe43a83c22770e3212c1f"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2"
+    },
+    {
+      "path": "cartridge.ctg/src/service.rs",
+      "sha256": "f59938cecba7680b0a216e596bf6f1d73ce57f2d9063ff6ee0e93dd1875722d5"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "cartridge.ctg/.cartridge/prds/improve-tools-preflight/prd.md",
+      "sha256": "f9d52d61c6bdc3ca03eca52f1f39969d1f119aedcb56842b9dfece60290638e2"
+    },
+    {
+      "path": "cartridge.ctg/.cartridge/prds/improve-tools-worktree-resume/prd.md",
+      "sha256": "c36e9fe2ae5e4b8255b05bba5431265341d800b2d71ca83a88712e611f054bf1"
+    },
+    {
+      "path": "cartridge.ctg/.cartridge/prds/improve-tools-bundle-provenance/prd.md",
+      "sha256": "56937258c4a40cbd789b05c2113aab7496e93a7b14e23bc7e9ef2f87972d6a31"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-tools-programme.md",
+      "sha256": "b4dc92ae34f045e532f49340bdcd7af6ee121baa0acc9126f88ce358c76c439c"
+    }
+  ]
+}

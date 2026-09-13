@@ -1,0 +1,36 @@
+{
+  "plan": {
+    "path": "gitfs.ctg/.cartridge/prds/tool-results-interoperate/prd.md",
+    "sha256": "fda95c7661405b24a2d3a0e60a220c1fd5d32b916e9fe430ef3c29a57f1d3579"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "gitfs.ctg/service.rs",
+      "sha256": "46855a060f5b2391cab1e85ca7c8eb1c6e6b8a49cdadb9e99f79b6513471c7f3"
+    },
+    {
+      "path": "gitfs.ctg/ship.rs",
+      "sha256": "7377b10f400c9fcaed6fc9fe7400ec596055954b61a74f49a8c54ab58f6cd04f"
+    },
+    {
+      "path": "gitfs.ctg/main.rs",
+      "sha256": "1445a87a13791ff14e1a8b81ca0979dc25103564b7b19f37602b21fd7e0df728"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/tool-results-interoperate.md",
+      "sha256": "7522d3a132a405f17ba19663b0ad8800b1809ac5187c0fe1662a56b228a300d7"
+    },
+    {
+      "path": ".cartridge/reviews/round-1/improve-tool-result-contract.md",
+      "sha256": "a9dc4428c5fe61d5f1b3ba034e2c4eec30233d472d46670aaadcc1a5ba42266a"
+    }
+  ]
+}

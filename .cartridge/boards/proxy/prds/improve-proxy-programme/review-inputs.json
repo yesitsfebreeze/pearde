@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "proxy.ctg/.cartridge/prds/improve-proxy-programme/prd.md",
+    "sha256": "4c4a720501b1e428679bd59f146580d4570cbe4f8b5f820d651b717e0971bbdc"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "proxy.ctg/service.rs",
+      "sha256": "ffe1dcb0a8a23c0e2a123d856905fb1d6fa367c58f4307e0d782ac5211b678e2"
+    },
+    {
+      "path": "proxy.ctg/streaming.rs",
+      "sha256": "e822356464e350367e91933c4c5b8b27ec84a62ade7a2a306167165f0d00597b"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "proxy.ctg/.cartridge/prds/improve-proxy-total-usage/prd.md",
+      "sha256": "92b5c126d2a009435c0cb8f7180e719d2c10ea58ba7e42bf0665ebff1e423c36"
+    },
+    {
+      "path": "proxy.ctg/.cartridge/prds/improve-proxy-tool-trace/prd.md",
+      "sha256": "73a6960f01deb99663bc094fbe96721210993e241c575050aee7ee0febfa641d"
+    },
+    {
+      "path": "proxy.ctg/.cartridge/prds/improve-proxy-continuation-recovery/prd.md",
+      "sha256": "d01f8735b2073e47cb5c37edcfc3c3c021847a991c4bbe076e6f2e4755ee8853"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-proxy-programme.md",
+      "sha256": "3a8665fe410010329356d7c97cb3060e387d41ce52b8af45162f8233f725a66f"
+    }
+  ]
+}

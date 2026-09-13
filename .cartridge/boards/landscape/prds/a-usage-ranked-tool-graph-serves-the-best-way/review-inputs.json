@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "landscape.ctg/.cartridge/prds/a-usage-ranked-tool-graph-serves-the-best-way/prd.md",
+    "sha256": "dade6a643d8f0116bc8926b668e4dc0533b06197e5d8995267093f2d4e82b49c"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "landscape.ctg/src/lib.rs",
+      "sha256": "61ee4df085df093e6901c64fa77fb4cdadbd1e3a9a928fa663bc4b19ef5cc9e1"
+    },
+    {
+      "path": "landscape.ctg/src/surface.rs",
+      "sha256": "a5811c2da414ab3ea0449ef0b8fde5c3da24c1f666b186e841da403c1797a783"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/a-usage-ranked-tool-graph-serves-the-best-way.md",
+      "sha256": "d5e8990205383a80dacd227155115bfd42026f14b89297696e1393e0ebd340be"
+    }
+  ]
+}

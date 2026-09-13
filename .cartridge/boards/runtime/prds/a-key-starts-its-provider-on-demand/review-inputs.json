@@ -1,0 +1,37 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/a-key-starts-its-provider-on-demand/prd.md",
+    "sha256": "09a2afce06c334ae73b4fb40a7b61ac833300c8abcbedc9fa28274ced9d10210"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2"
+    },
+    {
+      "path": "cartridge.ctg/src/service.rs",
+      "sha256": "f59938cecba7680b0a216e596bf6f1d73ce57f2d9063ff6ee0e93dd1875722d5"
+    },
+    {
+      "path": ".cartridge/memos/work/a-cartridge-declares-what-it-needs.md",
+      "sha256": "3c7c50b253aed641917dadb9cca041ecaa788d31032c1bbd3c65fe46cf578d6b"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "cartridge.ctg/.cartridge/prds/the-profile-is-the-root-composer/prd.md",
+      "sha256": "197c6f84e66725909a7d914edf9ab6ee414fc8b79bab0889ac533bd38f67df14"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/a-key-starts-its-provider-on-demand.md",
+      "sha256": "e78cf0ab65d7bdef84417ae313132829ca95c16b77112357a278575b6a28bbec"
+    }
+  ]
+}

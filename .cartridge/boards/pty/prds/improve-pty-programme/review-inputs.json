@@ -1,0 +1,41 @@
+{
+  "plan": {
+    "path": "pty.ctg/.cartridge/prds/improve-pty-programme/prd.md",
+    "sha256": "34c893171249b8dd4453948909cdd2dd410fcd73d9c1205aa2ca1bf78e378b09"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "pty.ctg/tool.rs",
+      "sha256": "838e879a76585dbf64777043bd912929ba82badb5c38924b89320f655b86c5aa"
+    },
+    {
+      "path": "pty.ctg/input.rs",
+      "sha256": "815458134482937ab60575a9fa4416f1f1d8ad7a498eb2e9d1db31d5aae7d28b"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "pty.ctg/.cartridge/prds/improve-pty-shell-identity/prd.md",
+      "sha256": "e451cfe1364260453d2e09d86b6790a069cb645512a6c612ee83f84100a09cab"
+    },
+    {
+      "path": "pty.ctg/.cartridge/prds/improve-pty-input-ownership/prd.md",
+      "sha256": "1a9f2b5e4109ea1faa102b61bd4353a6dd1c5372c83c5ebaadaeba865cf53dab"
+    },
+    {
+      "path": "pty.ctg/.cartridge/prds/improve-pty-command-wait/prd.md",
+      "sha256": "411c208da40e05f38c3781be33a78c14a62be279ab89fe7808aab190519f4f4d"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-pty-programme.md",
+      "sha256": "07745ae2fdd04118801e98eeec0715bee3f164884b9da4ff0e6dd57069bb509c"
+    }
+  ]
+}

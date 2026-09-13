@@ -1,0 +1,28 @@
+{
+  "plan": {
+    "path": "cartridge.ctg/.cartridge/prds/extension-loader-plugin-tree/prd.md",
+    "sha256": "850b6714733d576da34a9bf0b9535f370437980bc00c909953b0abd185a09b15"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2"
+    },
+    {
+      "path": "cartridge.ctg/src/service.rs",
+      "sha256": "f59938cecba7680b0a216e596bf6f1d73ce57f2d9063ff6ee0e93dd1875722d5"
+    }
+  ],
+  "dependencies": [],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/extension-loader-plugin-tree.md",
+      "sha256": "18c0fcb34f87ed0ab98cb3789b088864d31bd25d247aace169095a47cda13031"
+    }
+  ]
+}

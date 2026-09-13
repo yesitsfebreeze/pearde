@@ -1,0 +1,45 @@
+{
+  "plan": {
+    "path": "memory.ctg/.cartridge/prds/improve-memory-tool-programme/prd.md",
+    "sha256": "7659c6e5acd2d3a7a26085da06bae47716bdec81dbb5453c85ce50a2f4366f57"
+  },
+  "specs": [],
+  "contracts": [
+    {
+      "path": ".cartridge/workflows/review-plan.md",
+      "sha256": "caed133aba835ef5f82e14fe8a1feca9c573dee51da889dc2c3031b9007cd8bc"
+    },
+    {
+      "path": "memory.ctg/src/cartridge.rs",
+      "sha256": "a4eadab071181640f5e23d5b9e605f54faf238157a57c5a9b4f11876726b5414"
+    },
+    {
+      "path": "memory.ctg/src/main.rs",
+      "sha256": "546430209c5873fb75e5b3d59f18a8e3e39d44a1288cb66d351a839f253fb0da"
+    },
+    {
+      "path": "memory.ctg/AGENTS.md",
+      "sha256": "908d3bbcbbabc7d5d8c4b5738bae00400f4c089fbc3d6f3f4763b001581ed64a"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "memory.ctg/.cartridge/prds/improve-memory-tool-get/prd.md",
+      "sha256": "ca38a5a2da6b0764f65bae82316cbf8706d6f79f5ed7c62454b41c551f73b3eb"
+    },
+    {
+      "path": "memory.ctg/.cartridge/prds/improve-memory-tool-correct/prd.md",
+      "sha256": "f407938079c5dc05b250b56ceebe06c4bbf4d16bb4908e3e35c21ba00de11915"
+    },
+    {
+      "path": "memory.ctg/.cartridge/prds/improve-memory-tool-errors/prd.md",
+      "sha256": "166f3d30f8412262a92785cb9e0abad3ad67d6c9ce29c328043c7ca42328d003"
+    }
+  ],
+  "source_history": [
+    {
+      "path": ".cartridge/reviews/round-1/improve-memory-tool-programme.md",
+      "sha256": "da373db0814bb2f34676d46f86f831b6fb7e8318277c3de9c280832d7968f0b2"
+    }
+  ]
+}

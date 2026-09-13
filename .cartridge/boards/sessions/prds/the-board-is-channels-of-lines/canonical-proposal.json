@@ -1,0 +1,26 @@
+{
+  "canonical_id": "@sessions/the-board-is-channels-of-lines",
+  "owner": "sessions",
+  "kind": "leaf",
+  "path": "prd.ctg/.cartridge/boards/sessions/prds/the-board-is-channels-of-lines/prd.md",
+  "needs": [
+    "@sessions/sub-agent-sessions-record-parent-and-mailbox"
+  ],
+  "source_alias": "prd.ctg/.cartridge/memos/work/root--the-board-is-channels-of-lines.md",
+  "source_id": "the-board-is-channels-of-lines",
+  "historical_claim_preserved": "sys-38/implementer-the-board-is-channels-of-lines",
+  "historical_state_preserved": "active",
+  "disposition": "add bounded current owner delta; preserve historical source verbatim; no historical completion inferred",
+  "review_round": 1,
+  "review_history_basis": "historical active item excluded from scored round1; no round record found; inherit any discovered history before proceeding",
+  "downstream_needs_candidates": [
+    "@sessions/an-agent-is-one-lookup-from-the-roster",
+    "@sessions/the-agents-chat-through-one-tool",
+    "@sessions/the-board-log-replays-who-did-what"
+  ],
+  "plan_digests": {
+    "prd.md": "8560eda783b1beb80d2e7b10001684f70b7e1edd943815a6332a4313b637b6e9",
+    "specs/spec01.md": "978bbc05b8b21a457dfdffd0d0749551205df7c39abfd347cbbbe88a0182bcfe",
+    "baseline.json": "d601df9fa04f109f6d9407c1428e2cb52bb439d498bea0485f210d67507a7e39"
+  }
+}

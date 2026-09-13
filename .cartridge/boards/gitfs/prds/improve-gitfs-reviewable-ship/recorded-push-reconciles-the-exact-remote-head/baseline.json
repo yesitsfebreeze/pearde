@@ -1,0 +1,40 @@
+{
+  "binary_sha256": "00063116ecff960c7068a9639345cf9bbbe6157e1688d17dd9936d415855c077",
+  "request": {
+    "id": 1,
+    "call": "tool.ship",
+    "args": {
+      "op": "call",
+      "context": {
+        "cwd": "/tmp",
+        "session": "baseline",
+        "run": "r",
+        "call": "c"
+      },
+      "input": {
+        "op": "push",
+        "phase": "preview"
+      }
+    }
+  },
+  "frames": [
+    {
+      "provide": "tool.gitfs"
+    },
+    {
+      "provide": "tool.ship"
+    },
+    {
+      "ready": true
+    },
+    {
+      "data": {
+        "content": "unknown ship op: push",
+        "error": true
+      },
+      "reply": 1
+    }
+  ],
+  "observed": "Native push capability absent: unknown operation rejected before store or remote contact",
+  "source_state": "reviewed local publication implementation, awaiting collection"
+}

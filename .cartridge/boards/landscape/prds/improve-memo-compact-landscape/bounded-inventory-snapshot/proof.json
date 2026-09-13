@@ -1,0 +1,54 @@
+{
+  "source_commit": "3b9f72854c39ddd90128a48bfce2667e387c3fba",
+  "baseline_commit": "c705d648830582e5cf2b4ded267b3c1da4f1eac4",
+  "consumer_commit": "3251566e6c92439e4a32c5ce8b734e55726801ee",
+  "commands": {
+    "environment": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract",
+    "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+    "gates": [
+      {
+        "command": "just test landscape",
+        "exit": 0,
+        "tests_passed": 40,
+        "elapsed_test_seconds": 3.81
+      },
+      {
+        "command": "just check landscape",
+        "exit": 0
+      },
+      {
+        "command": "just test memo",
+        "exit": 0,
+        "tests_passed": 77,
+        "elapsed_test_seconds": 6.48
+      }
+    ]
+  },
+  "acceptance": {
+    "real_git_paths": 10000,
+    "summary_max_serialized_bytes": 16384,
+    "page_max_serialized_bytes": 16384,
+    "reconstruction": "exact sorted owner/path pairs; no duplicates or omissions",
+    "shared_root_pair_limit": "11 owners x10000 names:100000 accepted pairs, final owner capacity/null count",
+    "retained_byte_limit": "84 owners x1000 names x200 bytes:83000 accepted pairs, final owner capacity before pair limit",
+    "nested_roots": "nested owner receives line\\nbreak and two relative to configured root; parent retains nested prefix; shared physical owners remain distinct",
+    "cursor": "identical recapture token changes while source digest stays; changed-filter, stale, malformed, zero/out-of-range offsets rejected",
+    "process": "real Git plus bounded test command timeout, missing executable, nonzero exit, oversized output; raw stderr absent",
+    "readonly": "Git status and source bytes unchanged across capture/paging",
+    "compatibility": "all legacy Landscape/context/memory and77 memo tests pass"
+  },
+  "limits": [
+    "raw host Value already allocated before capture",
+    "temporary bounded subprocess/serialization buffers in addition to retained data",
+    "timeout requests termination without claiming joined blocking work",
+    "cross-root observation is not atomic",
+    "native version2 adapter is a dependent leaf and not yet implemented"
+  ],
+  "sha256": {
+    "src/inventory.rs": "3997af5733630a8828af4f0b50c92273be3b273edfaa67eda95f168d540d0c2f",
+    "src/lib.rs": "d1f75864ff24cd88c38fc9efff6b29e3a12197cd3b9a8c39b7ca0684b0cadb88",
+    "Cargo.toml": "3d0bf028746f3d3ff19688107ee8312dcda8df94d0a46b670a6aa356638bad6b",
+    ".cartridge/tests/unit/src/inventory/tests.rs": "2680dea3bb1da84baaa27ec9167c587e32809e062821ee300c3be4b9380db3a6",
+    ".cartridge/docs/inventory.md": "16a1d1145cb3965829cc7ae89b29cf7b6c1b70576c6f9fe5f8824551c4d4c014"
+  }
+}

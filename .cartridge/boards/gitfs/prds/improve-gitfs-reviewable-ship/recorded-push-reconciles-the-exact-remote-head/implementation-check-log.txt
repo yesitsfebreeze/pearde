@@ -1,0 +1,12 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on build directory
+    Checking ring v0.17.14
+    Checking rustls-webpki v0.103.15
+    Checking rustls v0.23.44
+    Checking tokio-rustls v0.26.5
+    Checking hyper-rustls v0.27.9
+    Checking reqwest v0.12.28
+    Checking gitfs v0.1.0 (/Users/feb/dev/cartridge/gitfs.ctg)
+    Finished `dev` profile [unoptimized] target(s) in 2.22s

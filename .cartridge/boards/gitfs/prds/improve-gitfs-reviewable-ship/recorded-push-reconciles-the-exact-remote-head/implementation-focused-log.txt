@@ -1,0 +1,13 @@
+   Compiling gitfs v0.1.0 (/Users/feb/dev/cartridge/gitfs.ctg)
+    Finished `test` profile [unoptimized] target(s) in 0.86s
+     Running unittests src/main.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/deps/gitfs-4eb57900a7770a88)
+
+running 5 tests
+test push::tests::receipt_looking_prose_or_conflicting_trailers_do_not_authorize_push ... ok
+test push::tests::hook_requires_exactly_one_complete_advertised_update ... ok
+test push::tests::cancelled_command_kills_the_spawned_helper_group ... ok
+test push::tests::command_timeout_and_overflow_are_bounded_and_do_not_expose_stderr ... ok
+test push::tests::durable_attempt_capacity_corruption_and_monotonic_observation ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 33 filtered out; finished in 1.24s
+

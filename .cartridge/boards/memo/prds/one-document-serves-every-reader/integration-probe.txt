@@ -1,0 +1,21 @@
+import pathlib,tempfile,subprocess,json,hashlib
+owner=pathlib.Path('/Users/feb/dev/cartridge/memo.ctg');proof=owner.parent/'prd.ctg/.cartridge/boards/memo/prds/one-document-serves-every-reader';root=pathlib.Path(tempfile.mkdtemp(prefix='memo-document-rollup-'));docs=root/'.cartridge/documents';docs.mkdir(parents=True)
+head='---\nschema: cartridge-document/v1\nkind: tool\ndescription: Shared fixture\ndialect: cartridge-just/v1\nrecipe: show\ninvocation: run\nexecution_base: .\n---\n';main=head+'Readable VERSION_ONE.\n[[details.md#Help]]\n\n```just\nshow name:\n    echo \'{{name}} VERSION_ONE\'\n```\n';detail='---\nschema: cartridge-document/v1\nkind: note\ndescription: Detail\n---\n# Help\nHELP_ONE\n';(docs/'main.md').write_text(main);(docs/'details.md').write_text(detail)
+child=subprocess.Popen([str(owner.parent/'cartridge.ctg/target/tool-result-contract/debug/memo_cartridge')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+def send(v):child.stdin.write(json.dumps(v)+'\n');child.stdin.flush()
+send({'apply':{'name':'memo','config':{}}})
+while not json.loads(child.stdout.readline()).get('ready'):pass
+calls=[];frames=[]
+def call(**extra):
+ ident=len(calls)+1;request={'op':'document','cwd':str(root),**extra};send({'id':ident,'call':'memo','args':request})
+ while True:
+  value=json.loads(child.stdout.readline())
+  if value.get('cartridges'):frames.append(value);send({'reply':value['id'],'data':[]});continue
+  if value.get('reply')==ident:calls.append({'request':request,'response':value});assert 'error' not in value,value;return value['data']
+index=call(action='index',query='Shared fixture');assert index['total']==1
+before=[call(path='.cartridge/documents/main.md',projection=p) for p in ['commands','docs','human']];validated=call(action='validate',path='.cartridge/documents/main.md',argv=['label'])
+revision=hashlib.sha256((docs/'main.md').read_bytes()).hexdigest();assert all(v['revision']==revision for v in [index['items'][0],*before,validated]);assert before[1]['content']==before[2]['content'] and 'HELP_ONE' in before[1]['content'];assert validated['validated'] and not validated['launch_authorized'];assert '[[details.md#Help]]' not in validated['extraction']['stdin'];assert before[0]['commands']['validated'] is False
+(docs/'details.md').write_text(detail.replace('HELP_ONE','HELP_TWO'));changed_link=call(path='.cartridge/documents/main.md',projection='docs');same_commands=call(action='validate',path='.cartridge/documents/main.md',argv=['label']);assert changed_link['revision']==revision and changed_link['projection_revision']!=before[1]['projection_revision'];assert same_commands['validation_revision']==validated['validation_revision']
+(docs/'main.md').write_text(main.replace('Shared fixture','Changed fixture').replace('VERSION_ONE','VERSION_TWO'));changed_index=call(action='index',query='Changed fixture');changed_docs=call(path='.cartridge/documents/main.md',projection='docs');changed_validation=call(action='validate',path='.cartridge/documents/main.md',argv=['label']);assert changed_index['total']==1;assert changed_docs['revision']==changed_validation['revision']==changed_index['items'][0]['revision']!=revision;assert 'VERSION_TWO' in changed_docs['content'] and 'VERSION_TWO' in changed_validation['extraction']['stdin'];assert set(p.name for p in docs.iterdir())=={'main.md','details.md'};assert set(p.name for p in (root/'.cartridge').iterdir())=={'documents'}
+send({'dispose':True});child.communicate(timeout=10)
+result={'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=owner,text=True).strip(),'result':'PASS: one source index/commands/docs/human/validation shares exact primary revision; linked edit changes only readable closure; primary description/prose/recipe edit updates every projection; no new paths','fixture':str(root),'calls':calls,'host_frames':frames,'limitation':'No recipe execution is claimed; descriptor remains launch_authorized:false'};(proof/'integration-proof.json').write_text(json.dumps(result,indent=2)+'\n');(proof/'integration-probe.txt').write_text(pathlib.Path(__file__).read_text());print(result['result'])

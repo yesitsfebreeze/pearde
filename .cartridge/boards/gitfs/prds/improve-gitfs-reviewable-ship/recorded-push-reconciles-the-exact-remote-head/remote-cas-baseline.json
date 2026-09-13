@@ -1,0 +1,12 @@
+{
+  "git_version": "git version 2.50.1 (Apple Git-155)",
+  "old": "d52f3319454807d9cc698b5667615689502ca78d",
+  "new": "b57bef66ebfc8490076f8a5e8f195029452a09bb",
+  "wrong_expected_refused": 1,
+  "wrong_expected_preserved": true,
+  "advertisement_then_remote_advance_refused": 1,
+  "remote_cas_diagnostic": "remote: error: cannot lock ref 'refs/heads/main': is at b57bef66ebfc8490076f8a5e8f195029452a09bb but expected d52f3319454807d9cc698b5667615689502ca78d        \nerror: failed to push some refs to '/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/gitfs-push-probe-wp2nhe4g/remote.git'\n",
+  "ordinary_push_succeeded": 0,
+  "unrelated_seed_unchanged": true,
+  "fixture": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/gitfs-push-probe-wp2nhe4g"
+}

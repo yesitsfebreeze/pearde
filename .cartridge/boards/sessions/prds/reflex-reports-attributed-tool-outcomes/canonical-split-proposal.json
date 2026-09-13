@@ -1,0 +1,31 @@
+{
+  "original": "@sessions/reflex-reports-attributed-tool-outcomes",
+  "disposition": "rollup",
+  "preserve_original_sources_and_review_history": true,
+  "rounds_used": 2,
+  "needs": [
+    "@runtime/native-tool-observation-adapter"
+  ],
+  "children": [
+    "@sessions/reflex-reports-attributed-tool-outcomes/attributed-outcome-report"
+  ],
+  "new_records": [
+    {
+      "id": "@runtime/native-tool-observation-adapter",
+      "owner": "runtime",
+      "kind": "leaf",
+      "source_parent": "@sessions/reflex-reports-attributed-tool-outcomes",
+      "rounds_used": 2
+    },
+    {
+      "id": "@sessions/reflex-reports-attributed-tool-outcomes/attributed-outcome-report",
+      "owner": "sessions",
+      "kind": "leaf",
+      "needs": [
+        "@runtime/native-tool-observation-adapter"
+      ],
+      "source_parent": "@sessions/reflex-reports-attributed-tool-outcomes",
+      "rounds_used": 2
+    }
+  ]
+}

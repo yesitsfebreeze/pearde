@@ -1,0 +1,26 @@
+{
+  "schema": "gitfs-reviewable-rollup/v1",
+  "actual_providers": [
+    "GitFS native",
+    "MCP native",
+    "policy Lua"
+  ],
+  "session": "reviewable-rollup",
+  "base": "69e92182e30094fe407320f40628160a8e4a6366",
+  "local_commit": "0b54468850322c4e7fee35f34acd4c4614c72258",
+  "tree": "6310d0e9f6ae49234a336f0de4117c7f9cd2c967",
+  "local_revision": "91a0ea06653300c8a5c953bce02f89891cc50371556092b59e21364be5e19416",
+  "push_revision": "5cdc74202b8e98aeabefe5750f2042d3c5f0a3fce5935eccc24760a0d5b49908",
+  "push_status": "confirmed",
+  "reconcile_status": "confirmed",
+  "unrelated_staged_excluded": true,
+  "index_unchanged": true,
+  "unselected_snapshot_preserved": true,
+  "unrelated_remote_ref_unchanged": true,
+  "policy_denial_executed": false,
+  "binaries": {
+    "cartridge": "3c107ead7a60caa07a7aa295cb46c7b2a0663a17ca7aa11fc11b45076b9b08c8",
+    "gitfs": "8354b64d6220bd75396cd6f14209382b5f7ea1c0a9dffb2ecdfc1f4c62eaf0c2",
+    "mcp": "95c544648b578cea8be23cc9da24bbcdee1e9c864096839b18da611117e8dbfc"
+  }
+}

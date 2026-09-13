@@ -2309,7 +2309,8 @@
       "needs": [
         "@landscape/landscape-composes-system-context/context-contributor-contract",
         "@landscape/landscape-composes-system-context/memory-context-contributor",
-        "@landscape/landscape-composes-system-context/live-file-context-contributors"
+        "@landscape/landscape-composes-system-context/live-file-context-contributors",
+        "@memo/landscape-context-facade"
       ],
       "words": 97,
       "sha256": "b6fd18fbb45a9eefa1970d69c9eaf8677222db70bf38b8b5b5817ff0ed9f78e4",
@@ -2776,14 +2777,17 @@
       "id": "@gitfs/improve-gitfs-reviewable-ship",
       "path": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/prd.md",
       "owner": "gitfs",
-      "kind": "leaf",
+      "kind": "rollup",
       "sources": [
         "improve-gitfs-reviewable-ship"
       ],
       "needs": [
         "@gitfs/improve-gitfs-readable-diff",
         "@gitfs/improve-gitfs-snapshot-selection",
-        "@policy/improve-policy-operation-rules"
+        "@policy/improve-policy-operation-rules",
+        "@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally",
+        "@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head",
+        "@policy/ship-push-is-an-explicit-policy-operation"
       ],
       "words": 199,
       "sha256": "b74b97c976a4e71e4f7674134c8c1a3a6c6f923b0b69406e862f8cb6d206985e",
@@ -2944,20 +2948,24 @@
       "id": "@landscape/improve-memo-compact-landscape",
       "path": "prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape/prd.md",
       "owner": "landscape",
-      "kind": "leaf",
+      "kind": "rollup",
       "sources": [
         "improve-memo-compact-landscape"
       ],
-      "needs": [],
-      "words": 191,
-      "sha256": "5f984672663be1d010e5a4a4f6f371992c5c70e79df940199a015e268fe31c52",
+      "needs": [
+        "@landscape/improve-memo-compact-landscape/bounded-inventory-snapshot",
+        "@memo/landscape-inventory-facade"
+      ],
+      "words": 275,
+      "sha256": "9d82b580b13e281cfb66413d9b5989cc063db7c7e6cc3b1d09bce17dba2643f5",
       "score": 94,
       "review_result": "PASS",
       "round": 2,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape/review.md",
       "historical_sha256": "1d789f781dd7a9aab6c0d94ea332cc3b601b3759979aca698b98f3f7d255beb9",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-owner-split",
+      "disposition": "split-owner-boundary"
     },
     {
       "id": "@memo/improve-memo-stale-evidence",
@@ -5094,11 +5102,14 @@
       "id": "@sessions/reflex-reports-attributed-tool-outcomes",
       "path": "prd.ctg/.cartridge/boards/sessions/prds/reflex-reports-attributed-tool-outcomes/prd.md",
       "owner": "sessions",
-      "kind": "leaf",
+      "kind": "rollup",
       "sources": [
         "reflex-reports-attributed-tool-outcomes"
       ],
-      "needs": [],
+      "needs": [
+        "@runtime/native-tool-observation-adapter",
+        "@sessions/reflex-reports-attributed-tool-outcomes/attributed-outcome-report"
+      ],
       "words": 189,
       "sha256": "53958e42b5ccc6c9889e4a7335e76937f1e0780b45e580848d94576c4c03dcf9",
       "score": 94,
@@ -5538,27 +5549,6 @@
       "review_binding_status": "stale-after-migration"
     },
     {
-      "id": "@landscape/landscape-composes-system-context/live-file-context-contributors",
-      "path": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/prd.md",
-      "owner": "landscape",
-      "kind": "leaf",
-      "sources": [
-        "landscape-composes-system-context"
-      ],
-      "needs": [
-        "@landscape/landscape-composes-system-context/context-contributor-contract"
-      ],
-      "words": 147,
-      "sha256": "16208cd9689b46d7276698b01decf0265a92c94cbdf2586b19a94244935b6b10",
-      "score": 94,
-      "review_result": "PASS",
-      "round": 2,
-      "max_rounds": 5,
-      "review": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/review.md",
-      "historical_sha256": "4fc465a5039ea5094fdb6d4513364d81433431b457c1766bb776b86eb6302303",
-      "review_binding_status": "stale-after-migration"
-    },
-    {
       "id": "@landscape/context-quality-is-measured/context-baseline-corpus",
       "path": "prd.ctg/.cartridge/boards/landscape/prds/context-quality-is-measured/context-baseline-corpus/prd.md",
       "owner": "landscape",
@@ -5982,6 +5972,355 @@
       "review": "prd.ctg/.cartridge/boards/runtime/prds/mcp-stdio-replies-during-replacement/review.md",
       "review_binding_status": "round-4-inputs",
       "reason": "Observed dropped stdio response while running the initialized MCP client replacement proof."
+    },
+    {
+      "id": "@memo/landscape-context-facade",
+      "path": "prd.ctg/.cartridge/boards/memo/prds/landscape-context-facade/prd.md",
+      "owner": "memo",
+      "kind": "leaf",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [
+        "@landscape/landscape-composes-system-context/context-contributor-contract",
+        "@landscape/landscape-composes-system-context/memory-context-contributor",
+        "@memo/one-document-serves-every-reader/document-projections"
+      ],
+      "words": 278,
+      "sha256": "40bd0ee871953599bd737e79bb516ece5c973ef9c3b94366d596623cd2bb3315",
+      "round": 2,
+      "max_rounds": 5,
+      "review": "prd.ctg/.cartridge/boards/memo/prds/landscape-context-facade/review.md",
+      "review_binding_status": "stale-after-owner-split",
+      "disposition": "split-owner-boundary"
+    },
+    {
+      "id": "@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally",
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally/prd.md",
+      "owner": "gitfs",
+      "kind": "leaf",
+      "sources": [
+        "improve-gitfs-reviewable-ship"
+      ],
+      "needs": [
+        "@gitfs/improve-gitfs-readable-diff",
+        "@gitfs/improve-gitfs-snapshot-selection",
+        "@policy/improve-policy-operation-rules"
+      ],
+      "sha256": "7873268e00e1a2e8120196c4f17e4885f7bb248239dde00972287d9a77dd0cda",
+      "round": 2,
+      "max_rounds": 5,
+      "review": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally/review.md",
+      "review_binding_status": "stale-after-split"
+    },
+    {
+      "id": "@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head",
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head/prd.md",
+      "owner": "gitfs",
+      "kind": "leaf",
+      "sources": [
+        "improve-gitfs-reviewable-ship"
+      ],
+      "needs": [
+        "@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally"
+      ],
+      "sha256": "1031841828c1cafc0d40299f22abe99db429711d6d9afe1f2b82338f1547cf74",
+      "round": 2,
+      "max_rounds": 5,
+      "review": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head/review.md",
+      "review_binding_status": "stale-after-split"
+    },
+    {
+      "id": "@runtime/native-tool-observation-adapter",
+      "owner": "runtime",
+      "kind": "leaf",
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/native-tool-observation-adapter/prd.md",
+      "sources": [
+        "reflex-reports-attributed-tool-outcomes"
+      ],
+      "needs": [
+        "@runtime/startup-eof-retains-exit-status"
+      ],
+      "sha256": "a98883287309abbddf0e8582170d3aac707f27ec9db2acbcfa0565e83a200662",
+      "round": 2,
+      "max_rounds": 5,
+      "review": "prd.ctg/.cartridge/boards/runtime/prds/native-tool-observation-adapter/review.md",
+      "review_binding_status": "stale-after-split"
+    },
+    {
+      "id": "@sessions/reflex-reports-attributed-tool-outcomes/attributed-outcome-report",
+      "owner": "sessions",
+      "kind": "leaf",
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/reflex-reports-attributed-tool-outcomes/attributed-outcome-report/prd.md",
+      "sources": [
+        "reflex-reports-attributed-tool-outcomes"
+      ],
+      "needs": [
+        "@runtime/native-tool-observation-adapter"
+      ],
+      "sha256": "b8e0d4993837ae2a47692be0f30391f27824572a804d789c268a1d07ed2661c0",
+      "round": 2,
+      "max_rounds": 5,
+      "review": "prd.ctg/.cartridge/boards/sessions/prds/reflex-reports-attributed-tool-outcomes/attributed-outcome-report/review.md",
+      "review_binding_status": "stale-after-split"
+    },
+    {
+      "id": "@runtime/startup-eof-retains-exit-status",
+      "owner": "runtime",
+      "kind": "leaf",
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/startup-eof-retains-exit-status/prd.md",
+      "sources": [],
+      "needs": [],
+      "sha256": "c6c3a63561aea0a295ae16264da4e0f158d235a7c71b3d3fa4f663be35c3fc0c",
+      "round": 1,
+      "max_rounds": 5,
+      "review": "prd.ctg/.cartridge/boards/runtime/prds/startup-eof-retains-exit-status/review.md",
+      "review_binding_status": "independent-root-review-passed",
+      "origin": "measured startup EOF/exit race during adapter verification"
+    },
+    {
+      "id": "@landscape/improve-memo-compact-landscape/bounded-inventory-snapshot",
+      "path": "prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape/bounded-inventory-snapshot/prd.md",
+      "owner": "landscape",
+      "kind": "leaf",
+      "sources": [
+        "improve-memo-compact-landscape"
+      ],
+      "needs": [],
+      "words": 193,
+      "sha256": "1f1e0849142b8bf559a999a0b440c19ed4d3f45531b470fd4d63db0773986c54",
+      "round": 2,
+      "max_rounds": 5,
+      "review": "prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape/bounded-inventory-snapshot/review.md",
+      "review_binding_status": "stale-after-owner-split",
+      "disposition": "split-owner-boundary",
+      "score": 94,
+      "review_result": "PASS",
+      "historical_sha256": "1d789f781dd7a9aab6c0d94ea332cc3b601b3759979aca698b98f3f7d255beb9"
+    },
+    {
+      "id": "@memo/landscape-inventory-facade",
+      "path": "prd.ctg/.cartridge/boards/memo/prds/landscape-inventory-facade/prd.md",
+      "owner": "memo",
+      "kind": "leaf",
+      "sources": [
+        "improve-memo-compact-landscape"
+      ],
+      "needs": [
+        "@landscape/improve-memo-compact-landscape/bounded-inventory-snapshot"
+      ],
+      "words": 203,
+      "sha256": "859004d8c90ef281221bf3fd3d0850da6aa5a72e81f693472fed3b44e22948c7",
+      "round": 2,
+      "max_rounds": 5,
+      "review": "prd.ctg/.cartridge/boards/memo/prds/landscape-inventory-facade/review.md",
+      "review_binding_status": "stale-after-owner-split",
+      "disposition": "split-owner-boundary",
+      "score": 94,
+      "review_result": "PASS",
+      "historical_sha256": "1d789f781dd7a9aab6c0d94ea332cc3b601b3759979aca698b98f3f7d255beb9"
+    },
+    {
+      "id": "@sessions/the-board-is-channels-of-lines",
+      "owner": "sessions",
+      "kind": "leaf",
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/the-board-is-channels-of-lines/prd.md",
+      "sources": [
+        "the-board-is-channels-of-lines"
+      ],
+      "needs": [
+        "@sessions/sub-agent-sessions-record-parent-and-mailbox"
+      ],
+      "sha256": "beb6a60793cc6ecb9f22ce51a5e243c31cca84c48f8fc79255f9a98b208cb983",
+      "round": 1,
+      "max_rounds": 5,
+      "review": ".cartridge/boards/sessions/prds/the-board-is-channels-of-lines/review.md",
+      "review_binding_status": "independent-root-review-passed",
+      "disposition": "add bounded current owner delta; preserve historical source verbatim; no historical completion inferred"
+    },
+    {
+      "id": "@policy/ship-push-is-an-explicit-policy-operation",
+      "owner": "policy",
+      "kind": "leaf",
+      "path": "prd.ctg/.cartridge/boards/policy/prds/ship-push-is-an-explicit-policy-operation/prd.md",
+      "needs": [
+        "@policy/improve-policy-operation-rules",
+        "@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head"
+      ],
+      "sources": [
+        "improve-gitfs-reviewable-ship"
+      ],
+      "round": 3,
+      "max_rounds": 5,
+      "sha256": "dfde3215b8834ae571844786a20266ebd680ba9592a9155b1947d6a35e9964e3",
+      "review": "prd.ctg/.cartridge/boards/policy/prds/ship-push-is-an-explicit-policy-operation/review.md",
+      "review_binding_status": "independent-root-review-passed"
+    },
+    {
+      "id": "@landscape/landscape-composes-system-context/live-file-context-contributors",
+      "path": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/prd.md",
+      "owner": "landscape",
+      "kind": "rollup",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [
+        "@memo/landscape-file-kernel-context-facade",
+        "@memo/landscape-live-owner-context-facade"
+      ],
+      "round": 2,
+      "max_rounds": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "stale-after-owner-split",
+      "review": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/review.md",
+      "words": 285,
+      "sha256": "1928b9181eeddff0a800aacfdda9ae25ea8d8af4f570d66408a371dfb20e7a2a"
+    },
+    {
+      "id": "@fs/read-only-context-file-snapshots",
+      "path": "prd.ctg/.cartridge/boards/fs/prds/read-only-context-file-snapshots/prd.md",
+      "owner": "fs",
+      "kind": "leaf",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [],
+      "round": 2,
+      "max_rounds": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "stale-after-owner-split",
+      "review": "prd.ctg/.cartridge/boards/fs/prds/read-only-context-file-snapshots/review.md",
+      "words": 218,
+      "sha256": "72ee261de33bc6af5f6832f99d82da206d98da31e22aafdc2680d408359531fc"
+    },
+    {
+      "id": "@landscape/landscape-composes-system-context/live-file-context-contributors/file-kernel-evidence-adapter",
+      "path": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/file-kernel-evidence-adapter/prd.md",
+      "owner": "landscape",
+      "kind": "leaf",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [
+        "@landscape/landscape-composes-system-context/context-contributor-contract",
+        "@fs/read-only-context-file-snapshots"
+      ],
+      "round": 2,
+      "max_rounds": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "stale-after-owner-split",
+      "review": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/file-kernel-evidence-adapter/review.md",
+      "words": 226,
+      "sha256": "70a5ae7e2ba32a21e9d06e9983bb7aed1abc093f0fb00d922770edeac04d6f23"
+    },
+    {
+      "id": "@memo/landscape-file-kernel-context-facade",
+      "path": "prd.ctg/.cartridge/boards/memo/prds/landscape-file-kernel-context-facade/prd.md",
+      "owner": "memo",
+      "kind": "leaf",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [
+        "@landscape/landscape-composes-system-context/live-file-context-contributors/file-kernel-evidence-adapter",
+        "@memo/landscape-context-facade",
+        "@fs/read-only-context-file-snapshots"
+      ],
+      "round": 2,
+      "max_rounds": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "stale-after-owner-split",
+      "review": "prd.ctg/.cartridge/boards/memo/prds/landscape-file-kernel-context-facade/review.md",
+      "words": 230,
+      "sha256": "93f51943b8da51b6b7b83b8a14b7023c552b30363c424aab68d17ea34a00bc00"
+    },
+    {
+      "id": "@sessions/context-session-metadata",
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/context-session-metadata/prd.md",
+      "owner": "sessions",
+      "kind": "leaf",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [
+        "@sessions/sub-agent-sessions-record-parent-and-mailbox"
+      ],
+      "round": 2,
+      "max_rounds": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "stale-after-owner-split",
+      "review": "prd.ctg/.cartridge/boards/sessions/prds/context-session-metadata/review.md",
+      "words": 222,
+      "sha256": "8cb6c6e062a2491356e94896f28914cc2b6e5012579a87ef8dcb45a6c6f43a77"
+    },
+    {
+      "id": "@pty/context-terminal-metadata",
+      "path": "prd.ctg/.cartridge/boards/pty/prds/context-terminal-metadata/prd.md",
+      "owner": "pty",
+      "kind": "leaf",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [
+        "@pty/improve-pty-shell-identity"
+      ],
+      "round": 2,
+      "max_rounds": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "stale-after-owner-split",
+      "review": "prd.ctg/.cartridge/boards/pty/prds/context-terminal-metadata/review.md",
+      "words": 212,
+      "sha256": "242755cf5d309093543197df92517e5318e2976780f3ec8af9460cdee91f6af4"
+    },
+    {
+      "id": "@landscape/landscape-composes-system-context/live-file-context-contributors/live-owner-evidence-adapters",
+      "path": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/live-owner-evidence-adapters/prd.md",
+      "owner": "landscape",
+      "kind": "leaf",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [
+        "@sessions/context-session-metadata",
+        "@pty/context-terminal-metadata",
+        "@router/improve-router-route-explanation",
+        "@landscape/landscape-composes-system-context/context-contributor-contract"
+      ],
+      "round": 2,
+      "max_rounds": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "stale-after-owner-split",
+      "review": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/live-owner-evidence-adapters/review.md",
+      "words": 220,
+      "sha256": "f838d94d34e17877667fb09d85873a5302984120ab384da5bf858e3d7d5ac525"
+    },
+    {
+      "id": "@memo/landscape-live-owner-context-facade",
+      "path": "prd.ctg/.cartridge/boards/memo/prds/landscape-live-owner-context-facade/prd.md",
+      "owner": "memo",
+      "kind": "leaf",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [
+        "@landscape/landscape-composes-system-context/live-file-context-contributors/live-owner-evidence-adapters",
+        "@memo/landscape-file-kernel-context-facade"
+      ],
+      "round": 2,
+      "max_rounds": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "stale-after-owner-split",
+      "review": "prd.ctg/.cartridge/boards/memo/prds/landscape-live-owner-context-facade/review.md",
+      "words": 218,
+      "sha256": "a1e8bab19e53f845a2ea82589f19fb536b0ef977a0721bf6ca7ce92e1b359b82"
     }
   ],
   "migration_manifest": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/reports/record-migration/manifest.json"

@@ -1,0 +1,4 @@
+    Blocking waiting for file lock on build directory
+    Checking cartridge v0.1.0 (/Users/feb/dev/cartridge/cartridge.ctg)
+    Checking sessions v0.1.0 (/Users/feb/dev/cartridge/sessions.ctg)
+    Finished `dev` profile [unoptimized] target(s) in 2.01s

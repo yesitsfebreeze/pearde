@@ -1,0 +1,26 @@
+{
+  "source_commit": "c705d648830582e5cf2b4ded267b3c1da4f1eac4",
+  "command": [
+    "cargo",
+    "run",
+    "--offline",
+    "--quiet",
+    "--manifest-path",
+    "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/landscape-compact-baseline-gfpomab9/runner/Cargo.toml",
+    "--",
+    "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/landscape-compact-baseline-gfpomab9/fixture"
+  ],
+  "fixture": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/landscape-compact-baseline-gfpomab9/fixture",
+  "input_paths": 10000,
+  "observed": {
+    "bytes": 260311,
+    "cursor": null,
+    "more": false,
+    "snapshot": "8e9a74c86e5ade49be7dd59e92bbb03832e350a059f53ae2b3770faa78cea098",
+    "tracked_paths": 10000
+  },
+  "elapsed_seconds": 2.548480458,
+  "expected": "Versioned default summary at most16384 bytes and explicit bounded inventory pages",
+  "finding": "Legacy view includes10000 tracked paths inside one entry with no path-level paging/omitted counts; response exceeds16KiB",
+  "runner_source": "use serde_json::json;\nfn main(){let root=std::env::args().nth(1).unwrap();let snapshot=json!({\"host_pid\":1,\"profile\":\"fixture\",\"entries\":[{\"id\":\"owner\",\"dir\":root,\"generation\":1,\"state\":\"Active\"}]});let view=landscape::view(snapshot,None,None,5).unwrap();let bytes=serde_json::to_vec(&view).unwrap().len();println!(\"{}\",json!({\"bytes\":bytes,\"tracked_paths\":view[\"entries\"][0][\"tracked\"].as_array().unwrap().len(),\"more\":view[\"more\"],\"cursor\":view[\"cursor\"],\"snapshot\":view[\"snapshot\"]}));}\n"
+}

@@ -1,0 +1,9 @@
+{
+  "source_commit": "a3f5cffface2b7b2bc9ed26d9e55da0ee0f4be2d",
+  "expected": "allow from explicit tools.ship=allow",
+  "actual": "deny: unknown operation ship.push",
+  "exit_code": 101,
+  "probe": "\n#[tokio::test(flavor=\"multi_thread\")]\nasync fn baseline_ship_push_can_be_explicitly_allowed() {\n let (_dir,host)=boot(\"{tools={ship='allow'}}\").await;\n let actual=decision(&host,\"ship\",json!({\"op\":\"push\",\"phase\":\"preview\"})).await;\n assert_eq!(actual,\"allow\",\"recognized push should obey the explicit ship tool grant\");\n}\n",
+  "baseline_log_sha256": "aa2f9092e1b225e36353d4bd4b1a85b5f6fa3ac401f116236dc60df964bbe27e",
+  "command": "cargo test --offline --manifest-path .cartridge/tests/contract/Cargo.toml baseline_ship_push_can_be_explicitly_allowed -- --nocapture"
+}

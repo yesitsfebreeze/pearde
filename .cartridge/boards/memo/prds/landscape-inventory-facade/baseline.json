@@ -1,0 +1,15 @@
+{
+  "source_commit": "3251566e6c92439e4a32c5ce8b734e55726801ee",
+  "request": {
+    "op": "landscape",
+    "version": 2,
+    "action": "summary",
+    "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-inventory-baseline-xrn66h80"
+  },
+  "response": {
+    "error": "unknown field `action`, expected one of `op`, `path`, `body`, `kind`, `limit`, `cursor`, `usage`, `query`, `ref`, `expected_revision`, `event`",
+    "reply": 1
+  },
+  "host_frames": [],
+  "finding": "Native v2 summary is absent; legacy parser rejects additive fields before host calls"
+}

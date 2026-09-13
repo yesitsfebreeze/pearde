@@ -1,0 +1,139 @@
+{
+  "needs": [
+    "@policy/ship-push-is-an-explicit-policy-operation",
+    "@gitfs/improve-gitfs-readable-diff",
+    "@gitfs/improve-gitfs-snapshot-selection",
+    "@policy/improve-policy-operation-rules",
+    "@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally",
+    "@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head"
+  ],
+  "children": [
+    "@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head",
+    "@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally"
+  ],
+  "dependencies": [
+    {
+      "ref": "@policy/ship-push-is-an-explicit-policy-operation",
+      "owner": "/Users/feb/dev/cartridge/policy.ctg",
+      "state": "done",
+      "problem": null,
+      "specs": [
+        {
+          "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/policy/prds/ship-push-is-an-explicit-policy-operation/specs/spec01.md",
+          "sha256": "c313a77d300b54994b0eef60a4474efc57376d6db4882e5e5f9c8175f037e49d"
+        }
+      ],
+      "footprint": [
+        "init.lua",
+        ".cartridge/tests/policy.rs",
+        ".cartridge/tests/contract/Cargo.lock",
+        ".cartridge/docs/policy.md"
+      ]
+    },
+    {
+      "ref": "@gitfs/improve-gitfs-readable-diff",
+      "owner": "/Users/feb/dev/cartridge/gitfs.ctg",
+      "state": "done",
+      "problem": null,
+      "specs": [
+        {
+          "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-readable-diff/specs/spec01.md",
+          "sha256": "24f1ea5b670c4ad4251838837f85f633f209437c9b5bfc44df8d69dcef483d9b"
+        }
+      ],
+      "footprint": [
+        "src/service.rs",
+        "src/store.rs",
+        "src/tool_result.rs",
+        "src/inspection.rs",
+        ".cartridge/tests/unit/tool_result.rs",
+        ".cartridge/tests/integration/tool-result.test.ts",
+        ".cartridge/docs/inspection.md",
+        "src/push.rs"
+      ]
+    },
+    {
+      "ref": "@gitfs/improve-gitfs-snapshot-selection",
+      "owner": "/Users/feb/dev/cartridge/gitfs.ctg",
+      "state": "done",
+      "problem": null,
+      "specs": [
+        {
+          "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-snapshot-selection/specs/spec01.md",
+          "sha256": "a3bdd842ca5f317edfbe883ee61fd0ddaff465c81c9d44183aab9e6bc852c8c6"
+        }
+      ],
+      "footprint": [
+        "src/service.rs",
+        ".cartridge/tests/unit/snapshot.rs"
+      ]
+    },
+    {
+      "ref": "@policy/improve-policy-operation-rules",
+      "owner": "/Users/feb/dev/cartridge/policy.ctg",
+      "state": "done",
+      "problem": "verified source footprint changed after collection",
+      "specs": [
+        {
+          "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/policy/prds/improve-policy-operation-rules/specs/spec01.md",
+          "sha256": "4c387100550778313009dff4a94703b2b6232c874fe469f56167f487e05d707d"
+        }
+      ],
+      "footprint": [
+        "init.lua",
+        ".cartridge/tests",
+        ".cartridge/memos/routine/policy-tests.md",
+        ".cartridge/docs/policy.md"
+      ]
+    },
+    {
+      "ref": "@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally",
+      "owner": "/Users/feb/dev/cartridge/gitfs.ctg",
+      "state": "done",
+      "problem": null,
+      "specs": [
+        {
+          "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally/specs/spec01.md",
+          "sha256": "73b025bce9603f1a750a9597017093fa3980f7e4384dc00317553e85f2430473"
+        }
+      ],
+      "footprint": [
+        "src/ship.rs",
+        "src/store.rs",
+        "src/tool_result.rs",
+        "src/main.rs",
+        ".cartridge/tests/unit/ship/tests.rs",
+        ".cartridge/tests/unit/store/tests.rs",
+        ".cartridge/tests/integration/reviewed-ship.test.ts",
+        ".cartridge/docs/ship.md",
+        "src/push.rs",
+        "init.lua",
+        ".cartridge/tests/integration/tool-result.test.ts"
+      ]
+    },
+    {
+      "ref": "@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head",
+      "owner": "/Users/feb/dev/cartridge/gitfs.ctg",
+      "state": "done",
+      "problem": null,
+      "specs": [
+        {
+          "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head/specs/spec01.md",
+          "sha256": "3191d544dd1c2260d832f51526baa1c59cee84dc4772c9496ff59507d3c61841"
+        }
+      ],
+      "footprint": [
+        "src/main.rs",
+        "src/ship.rs",
+        "src/store.rs",
+        "src/push.rs",
+        "src/tool_result.rs",
+        ".cartridge/tests/unit/push/tests.rs",
+        ".cartridge/tests/integration/recorded-push.test.ts",
+        ".cartridge/docs/push.md"
+      ]
+    }
+  ],
+  "combined_proof": "integration-baseline-log.txt",
+  "composition_proof_sha256": "b8845814d7e60b7492ece92f6d4f60c1269e7f73e4f5ec7054004c3031dcc9d2"
+}

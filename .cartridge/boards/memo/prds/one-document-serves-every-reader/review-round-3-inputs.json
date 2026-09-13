@@ -1,0 +1,24 @@
+{
+  "canonical": "@memo/one-document-serves-every-reader",
+  "round": 3,
+  "sha256": {
+    "prd.md": "381cab320be9a8c3ab1298699c4a8a67b2d84670d2ce86690977a2112dfe6959",
+    "specs/spec01.md": "32d7a951e17eb2a2840e470b703aa8917a5715d6ee7652e155affeeade5e4055",
+    "integration-proof.json": "9d0a621a36f32f630d561d13bd32a6c22e5f7148910dd4f61bbc24bee4dc11dc",
+    "integration-probe.txt": "ac02bef73a906b9f4c89fdb54afd48ae47d9ef5699b81fedafa4f064455eeea6",
+    "document-identity/proof.json": "51742c437fa46e300788ed9b1b1537d85b80e7d3f1d948b0304faa7b12a05d9b",
+    "document-identity/specs/spec01.md": "e6696cba6a1eaca4050becfd8e648c2132ab84cf4239586b1bf7316f1e30f147",
+    "document-identity/review.md": "844198b931e3aff80c85cda7dabf71e4b59527fa41da6e89886ad8b0ebe9e1ae",
+    "document-projections/proof.json": "ccce75a7a02d72bbbf0a0428480054c543c2a22b5609e2e9ce2ba7a5485bb422",
+    "document-projections/specs/spec01.md": "426f9cf49151639be394d79e3efc6f2658a74a944b3157e177b9f61f14889e71",
+    "document-projections/review.md": "2e1524c0d33c20d41cae84b5cfef35e9525a0b4fb3fd536313831e1d49c10f11",
+    "executable-document-validation/proof.json": "e5526556fd89dfb2f80e0ef8bfe9c30143054eca45e42c865871e5d4367b1574",
+    "executable-document-validation/specs/spec01.md": "358035ad53acf9cdebbbf6322105bd667cebe4c2207384b992f618aa0a1d0fcf",
+    "executable-document-validation/review.md": "965f427f4d63fab643b6ace64617449eaac98a46cde4255bba70f840d45d11c8",
+    "document-identity/collection.md": "d7cd896c14e9d982ea9c60c6a418104cbc078a5c94b6baed23a5eec57f14fc76",
+    "document-projections/collection.md": "70f1e5c3607a6248fc79a79658b698fbf175caee2da748f04bfca7d2cf454682",
+    "executable-document-validation/collection.md": "fdc994da1ba7556eeb42b7cb589fe3727be8b7701145e00b2689723e2021da34"
+  },
+  "reviewer": "/root",
+  "score": 96
+}

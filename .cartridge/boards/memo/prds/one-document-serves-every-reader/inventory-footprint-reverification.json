@@ -1,0 +1,7 @@
+{
+  "before_spec_sha256": "32d7a951e17eb2a2840e470b703aa8917a5715d6ee7652e155affeeade5e4055",
+  "after_spec_sha256": "32d7a951e17eb2a2840e470b703aa8917a5715d6ee7652e155affeeade5e4055",
+  "added_source": null,
+  "behavior_acceptance_gates_changed": false,
+  "source": "45d5a54ab9da1a798cd9997af9a8c19bed8a1812"
+}

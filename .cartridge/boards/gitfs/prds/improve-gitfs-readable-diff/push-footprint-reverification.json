@@ -1,0 +1,12 @@
+{
+  "before_spec_sha256": "025587dbf8e4a317b00e38016a42f49322b52f591fa9c9504debbe0d5e99ded8",
+  "after_spec_sha256": "24f1ea5b670c4ad4251838837f85f633f209437c9b5bfc44df8d69dcef483d9b",
+  "added_source": "src/push.rs",
+  "behavior_acceptance_gates_changed": false,
+  "source": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+  "independent_review": {
+    "reviewer": "/root/proxy_continuation",
+    "result": "PASS",
+    "evidence": "Historical before/current after spec hashes match; only src/push.rs footprint added, spec bodies/acceptance/executable gates byte-identical."
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "before_spec_sha256": "67882673d0ff76c8b20ec6ad8e488c5473ea49b6ba9adc9a65c7fb49cdcdf286",
+  "after_spec_sha256": "d2219a0f380bc054173b966b4c4273b330c9f9acb3418f646ead6e7b43731400",
+  "added_source": "src/observations.rs",
+  "behavior_acceptance_gates_changed": false,
+  "source": "2a6a863cf1af0876072f8879050274cfa650a785",
+  "independent_review": {
+    "reviewer": "/root/sessions_mapping",
+    "result": "PASS",
+    "evidence": "Compared a37f820 to 8817c35; five complete spec bodies and executable gates byte-identical; exact footprint hashes match; programme equals dependency footprint union; all five receipts valid at 2a6a863."
+  }
+}

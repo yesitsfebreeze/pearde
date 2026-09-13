@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+../sessions.ctg/.cartridge/tests/integration/observations.test.ts:
+(pass) real runtime evidence is reported by sessions without changing source or transcript [958.49ms]
+(pass) historical unknown counts and verdicts use actual observed descriptor revisions [81.92ms]
+(pass) disabled and missing evidence stay explicit while actual tool execution still succeeds [155.78ms]
+
+ 3 pass
+ 0 fail
+ 55 expect() calls
+Ran 3 tests across 1 file. [1227.00ms]

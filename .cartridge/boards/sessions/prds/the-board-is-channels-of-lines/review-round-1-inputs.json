@@ -1,0 +1,11 @@
+{
+  "canonical_id": "@sessions/the-board-is-channels-of-lines",
+  "reviewer": "/root",
+  "score": 96,
+  "round": 1,
+  "digests": {
+    "prd.md": "961794ea6f684a0b14d8556f15a5bb4060b554df9b05faf989eac39bed957da2",
+    "specs/spec01.md": "978bbc05b8b21a457dfdffd0d0749551205df7c39abfd347cbbbe88a0182bcfe",
+    "baseline.json": "d601df9fa04f109f6d9407c1428e2cb52bb439d498bea0485f210d67507a7e39"
+  }
+}

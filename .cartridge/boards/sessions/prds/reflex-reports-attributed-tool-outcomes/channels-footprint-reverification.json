@@ -1,0 +1,10 @@
+{
+  "before_spec_sha256": "89ee9ef459d6a8f40fe70eaa0217a3bab9868e0878bb2e9ed1fd5835f28adb71",
+  "after_spec_sha256": "5fe007d94d35d41a86b549e564e1cd7dd32996203a6c2564d2a784fe4e506936",
+  "added_sources": [
+    "src/channels.rs",
+    "src/mailbox.rs"
+  ],
+  "behavior_acceptance_gates_changed": false,
+  "source": "423ecd329a98d0e0702a71c9ccb0a33a16cedae6"
+}

@@ -1,0 +1,45 @@
+{
+  "source_commit": "e442bef2c9f07635f9e8b8e1d87a47193841569f",
+  "source_clean": true,
+  "source_paths": [
+    "init.lua",
+    ".cartridge/tests/policy.rs",
+    ".cartridge/tests/contract/Cargo.lock",
+    ".cartridge/docs/policy.md"
+  ],
+  "path_sha256": {
+    "init.lua": "f202a6fce63ff99ce99e5089c6623c2396ce1ed9a4adff11ec09266be2f84bda",
+    ".cartridge/tests/policy.rs": "dbbcd87765ae699e1bf8321526a8d25d798c030a6e68975bdf8496709360f0e6",
+    ".cartridge/tests/contract/Cargo.lock": "076b24e71b6dfbef45f94ab150f0a65edc9fce8f169ed96ce3082c8a4a284dbd",
+    ".cartridge/docs/policy.md": "a9d24458a03d7ef401fb091819044f9cf0416d193435d06b4f62899e51e89081"
+  },
+  "reviewer": "/root",
+  "round": 3,
+  "score": 97,
+  "tests": {
+    "command": "bash .cartridge/tests/run",
+    "passed": 6,
+    "failed": 0,
+    "mcp_push_cases": 21,
+    "actual_consumers": [
+      "MCP process",
+      "proxy process",
+      "native Agent library"
+    ]
+  },
+  "public_check": {
+    "command": "just check policy (from composition root)",
+    "passed": true
+  },
+  "change": "push recognized; existing ask/deny/tool/operation precedence preserved; semantic marker3; invalid replacement retains prior policy",
+  "fixture_compatibility": "Added failing optional memo provider because current proxy requires the facade. No recall or mutation behavior added.",
+  "dependency_lock_change": "One runtime sha2 dependency edge in owner test lockfile, resolved offline.",
+  "dependency_heads": {
+    "gitfs": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+    "proxy": "9ddcc08807a059579c21227ad9d3523d242ddf86",
+    "mcp": "f5a740517bc2668b50cf4f61fe81a1e37bb4cfad",
+    "agent": "a09b593a11ed1e027c823bb632838cc92a09e2eb",
+    "cartridge": "1a5e9867acec1d07cd732c3af2ccf331a0979a61"
+  },
+  "spec_sha256": "c313a77d300b54994b0eef60a4474efc57376d6db4882e5e5f9c8175f037e49d"
+}

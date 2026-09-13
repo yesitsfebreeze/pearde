@@ -1,0 +1,118 @@
+{
+  "source_revision": "2a6a863cf1af0876072f8879050274cfa650a785",
+  "source_files": [
+    {
+      "path": "src/main.rs",
+      "sha256": "b850f3b417e9a90cb6e069d3f92873232388223311dfff6a1fdff90da48951aa"
+    },
+    {
+      "path": "src/observations.rs",
+      "sha256": "f07be68e70494bbf588e41a907a96477236ec16de4a1f5b1511543a61e26e417"
+    },
+    {
+      "path": ".cartridge/tests/unit/main/observation_tests.rs",
+      "sha256": "b46676a060b61392b714005badfec3e226502677fdc8dd040190f92a03cac46f"
+    },
+    {
+      "path": ".cartridge/tests/integration/observations.test.ts",
+      "sha256": "ead875d65915dd6c498a99d833eaa3a318a003be7c9ba8a545f0e8467b2fc903"
+    },
+    {
+      "path": ".cartridge/docs/observations.md",
+      "sha256": "5c2b83003a4b750ae6fffbb77c8b52d56f3ef2d2f8c7eb55675c0e2193e4ce0d"
+    }
+  ],
+  "runtime_revision": "1a5e9867acec1d07cd732c3af2ccf331a0979a61",
+  "runtime_receipt": {
+    "ref": "@runtime/native-tool-observation-adapter",
+    "state": "done",
+    "revision": "0f9c06131215ee796168c5379c16258dbb3ab5ba158342727899c5ffbd5a08ed",
+    "commit": "1a5e9867acec1d07cd732c3af2ccf331a0979a61",
+    "verified": true,
+    "integrated": true,
+    "reason": null,
+    "evidence": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/runtime/prds/native-tool-observation-adapter/collection.md"
+  },
+  "commands": [
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just test sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "60 native tests passed; 51 existing plus 9 observation tests",
+      "log": "proof-test.log"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just check sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "passed",
+      "log": "proof-check.log"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just build sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "passed",
+      "log": "proof-build.log"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" cargo build --manifest-path .cartridge/workspace/Cargo.toml -p cartridge --bin cartridge",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "passed",
+      "log": "proof-runtime-build.log"
+    },
+    {
+      "command": "CARTRIDGE_TEST_BIN=\"$PWD/target/sessions-mapping/debug/cartridge\" SESSIONS_BINARY=\"$PWD/target/sessions-mapping/debug/sessions\" HARNESS_BINARY=\"$PWD/target/sessions-mapping/debug/harness\" bun test ../sessions.ctg/.cartridge/tests/integration/mapping.test.ts ../sessions.ctg/.cartridge/tests/integration/retention.test.ts ../sessions.ctg/.cartridge/tests/integration/mailbox.test.ts ../sessions.ctg/.cartridge/tests/integration/observations.test.ts",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "13 SDK tests passed; 233 assertions; includes actual harness ring and runtime processes",
+      "log": "proof-integration.log"
+    },
+    {
+      "command": "CARTRIDGE_TEST_BIN=\"$PWD/target/sessions-mapping/debug/cartridge\" SESSIONS_BINARY=\"$PWD/target/sessions-mapping/debug/sessions\" bun test ../sessions.ctg/.cartridge/tests/integration/observations.test.ts",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "3 real runtime plus sessions SDK tests passed; 55 assertions",
+      "log": "proof-runtime-integration.log"
+    }
+  ],
+  "logs": {
+    "proof-runtime-build.log": "9ae36bb22d8f0f810a77044760863f70b81405396a32cce477ec08eecd4e6d59",
+    "proof-build.log": "308b92b3b467c6812f6c8236956981f3a799fc6519b202d58042e83b507a4cd4",
+    "proof-check.log": "6a62737d52de67385a20c4ad50737aea6355b5fcea8434632cbecce46a2eb619",
+    "proof-runtime-integration.log": "d7611440d9c8eb72a5b49cdfa74fba60216ecd88b56fb9c34daca4dae278f614",
+    "proof-integration.log": "5aeb70c1781d26c0c73c78ba281f078583ab3ed1f42b2e714b16ce1918fb35f4",
+    "proof-test.log": "265e4441df3dacde7f451a810e3d1a6426db599435f2660dbfd782858aea3793"
+  },
+  "binary_inputs": {
+    "sessions": "2fe2a61c2940b382cb84eb0ad1bd660111b6547a4d28527d43e83754d4239cb0",
+    "cartridge": "7ff18f941756552d3f97f7359f4b424cb83c41ca46b7b0c59e21a9e0e5067a89",
+    "harness": "02862fa5080e7678867b41a97a24c8198965e2e522c379b5d7d8e207c814c4a2"
+  },
+  "external_fixture_inputs": {
+    "cartridge.ctg/.cartridge/tests/integration/observation-fixture.ts": "c22f0767afae49d3621391f5c77a1db0b34b13d382517229531c0095f4b1a80c",
+    "harness.ctg/src/main.rs": "e4c23eeb9da21595c3a5bdea3a2374482f3ab51f1f0eadf95953afbdfa2ea0d8"
+  },
+  "review": {
+    "round": 3,
+    "reviewer": "/root",
+    "score": 96,
+    "status": "passed",
+    "review_input_digests": "review-round-3-inputs.json",
+    "lifecycle_only_changes": "prd state specced and acceptance boxes checked after evidence; no semantic acceptance changes"
+  },
+  "final_plan_digests": {
+    "prd.md": "aba7b44fa608eff5f4c13c2292bcb0d93c84823515450b248bcd33e9ed00b29e",
+    "specs/spec01.md": "6d89f8562edaa675aaee15e2d2bef518c77b0384a89f5bca3d4b06109c6cb8bd"
+  },
+  "limitations": [
+    "Native call evidence only; host actor configuration is provenance, not end-user authentication.",
+    "Host-configured regular file and rotation are bounded best-effort snapshots; metadata checks do not defeat hostile writers or prove an atomic window.",
+    "Lost rows, absent dimensions and external effects after cancellation remain unknown; no productivity/billing estimates.",
+    "Verdicts compare explicit expiry and last observed provider/descriptor, never assert current deployment.",
+    "Cross-owner runtime contract-only changes require manual parent revalidation in addition to receipt checks."
+  ],
+  "shared_receipt_refresh": [
+    "@sessions/improve-sessions-client-mapping",
+    "@sessions/improve-sessions-recovery",
+    "@sessions/improve-sessions-retention",
+    "@sessions/sub-agent-sessions-record-parent-and-mailbox",
+    "@sessions/improve-sessions-programme"
+  ],
+  "transitive_footprint_candidate": "Add src/observations.rs to prior leaf footprints using src/main.rs and include it in programme exact union; coordinator owns these edits."
+}

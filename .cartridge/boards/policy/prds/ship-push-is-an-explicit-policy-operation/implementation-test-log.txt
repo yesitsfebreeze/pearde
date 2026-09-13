@@ -1,0 +1,26 @@
+   Compiling cartridge v0.1.0 (/Users/feb/dev/cartridge/cartridge.ctg)
+   Compiling landscape v0.1.0 (/Users/feb/dev/cartridge/landscape.ctg)
+   Compiling router v0.1.0 (/Users/feb/dev/cartridge/router.ctg)
+   Compiling proxy v0.1.0 (/Users/feb/dev/cartridge/proxy.ctg)
+   Compiling mcp v0.1.0 (/Users/feb/dev/cartridge/mcp.ctg)
+    Finished `dev` profile [unoptimized] target(s) in 6.80s
+   Compiling policy-contract-tests v0.1.0 (/Users/feb/dev/cartridge/policy.ctg/.cartridge/tests/contract)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 2.29s
+     Running unittests ../policy.rs (.cartridge/empirical/policy-tests/debug/deps/policy_contract_tests-e93263ed3af92d92)
+
+running 6 tests
+test invalid_push_replacement_retains_the_explicit_previous_rule ... ok
+test invalid_replacement_keeps_the_previous_policy ... ok
+test explanation_attributes_rules_routes_and_stable_semantic_revisions ... ok
+test operation_rules_have_stable_precedence_and_preserve_legacy_defaults ... ok
+test ship_push_policy_is_explicit_and_mcp_never_dispatches_deny_or_ask ... ok
+test mcp_proxy_and_native_agent_execute_only_the_allowed_operation ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.95s
+
+   Doc-tests policy_contract_tests
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

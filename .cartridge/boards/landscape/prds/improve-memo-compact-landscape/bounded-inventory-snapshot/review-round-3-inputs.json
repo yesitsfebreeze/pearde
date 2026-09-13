@@ -1,0 +1,12 @@
+{
+  "round": 3,
+  "sha256": {
+    "prd.md": "729f4ae3eece4b5a76cd13642b5cad388e32064a2eca2cee28b2b9c1205e1b28",
+    "specs/spec01.md": "362c71b85947f4b2b1e99760ba5c656622b7f9fa119151380aaa1c55c212417c",
+    "baseline.json": "abc202ff924127624bdeb185fe0115e48c4c21d89a32ff05dcdb7489add6e4be",
+    "baseline-probe.txt": "6cf2452bb048fc1003e1e603daa21d8dc9a28e9f3b0e5748cb106158740de52d",
+    "proof.json": "b1129b58d907039f0af6f87db69b80659a226074fcff17b5c794a52bfee50826"
+  },
+  "reviewer": "/root",
+  "score": 96
+}

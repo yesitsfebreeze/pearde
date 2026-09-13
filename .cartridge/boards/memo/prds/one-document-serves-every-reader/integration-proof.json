@@ -1,0 +1,577 @@
+{
+  "source_commit": "45d5a54ab9da1a798cd9997af9a8c19bed8a1812",
+  "result": "PASS: one source index/commands/docs/human/validation shares exact primary revision; linked edit changes only readable closure; primary description/prose/recipe edit updates every projection; no new paths",
+  "fixture": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+  "calls": [
+    {
+      "request": {
+        "op": "document",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "action": "index",
+        "query": "Shared fixture"
+      },
+      "response": {
+        "data": {
+          "directory": ".cartridge/documents",
+          "items": [
+            {
+              "identity": "@workspace/.cartridge/documents/main.md",
+              "metadata": {
+                "description": "Shared fixture",
+                "kind": "tool",
+                "tags": []
+              },
+              "owner": "workspace",
+              "path": ".cartridge/documents/main.md",
+              "revision": "64227a07bfb935080476e6a6ca9770804c3e1e65a5039550d5ebba356dde84b7",
+              "schema": "cartridge-document/v1",
+              "source_path": ".cartridge/documents/main.md"
+            }
+          ],
+          "limit": 128,
+          "owner": "workspace",
+          "schema": "cartridge-document/v1",
+          "total": 1,
+          "truncated": false
+        },
+        "reply": 1
+      }
+    },
+    {
+      "request": {
+        "op": "document",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "path": ".cartridge/documents/main.md",
+        "projection": "commands"
+      },
+      "response": {
+        "data": {
+          "commands": {
+            "blocks": [
+              {
+                "body": "show name:\n    echo '{{name}} VERSION_ONE'\n",
+                "line": 13
+              }
+            ],
+            "diagnostics": [],
+            "validated": false
+          },
+          "complete": true,
+          "diagnostics": [],
+          "hydrated": false,
+          "identity": "@workspace/.cartridge/documents/main.md",
+          "limits": {
+            "content_bytes": 65536,
+            "depth": 4,
+            "diagnostics": 64,
+            "reference_visits": 128,
+            "source_bytes": 16777216,
+            "sources": 32
+          },
+          "metadata": {
+            "description": "Shared fixture",
+            "dialect": "cartridge-just/v1",
+            "execution_base": ".",
+            "invocation": "run",
+            "kind": "tool",
+            "recipe": "show",
+            "schema": "cartridge-document/v1"
+          },
+          "omitted_diagnostics": 0,
+          "owner": "workspace",
+          "path": ".cartridge/documents/main.md",
+          "projection": "commands",
+          "projection_revision": "d7b41134be05cb7556bbc394b4a21684c92a388f442fa56f10336cb8dd51bafd",
+          "revision": "64227a07bfb935080476e6a6ca9770804c3e1e65a5039550d5ebba356dde84b7",
+          "schema": "cartridge-document/v1",
+          "source_path": ".cartridge/documents/main.md",
+          "sources": [
+            {
+              "identity": "@workspace/.cartridge/documents/main.md",
+              "revision": "64227a07bfb935080476e6a6ca9770804c3e1e65a5039550d5ebba356dde84b7"
+            }
+          ],
+          "truncated": false
+        },
+        "reply": 2
+      }
+    },
+    {
+      "request": {
+        "op": "document",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "path": ".cartridge/documents/main.md",
+        "projection": "docs"
+      },
+      "response": {
+        "data": {
+          "complete": true,
+          "content": "Readable VERSION_ONE.\n# Help\nHELP_ONE\n\n\n```just\nshow name:\n    echo '{{name}} VERSION_ONE'\n```\n",
+          "diagnostics": [],
+          "hydrated": true,
+          "identity": "@workspace/.cartridge/documents/main.md",
+          "limits": {
+            "content_bytes": 65536,
+            "depth": 4,
+            "diagnostics": 64,
+            "reference_visits": 128,
+            "source_bytes": 16777216,
+            "sources": 32
+          },
+          "metadata": {
+            "description": "Shared fixture",
+            "dialect": "cartridge-just/v1",
+            "execution_base": ".",
+            "invocation": "run",
+            "kind": "tool",
+            "recipe": "show",
+            "schema": "cartridge-document/v1"
+          },
+          "omitted_diagnostics": 0,
+          "owner": "workspace",
+          "path": ".cartridge/documents/main.md",
+          "projection": "docs",
+          "projection_revision": "62411ddf6c968c63f02eb91193a2dacdd098abf2f8e1ccd98358f943248323d4",
+          "revision": "64227a07bfb935080476e6a6ca9770804c3e1e65a5039550d5ebba356dde84b7",
+          "schema": "cartridge-document/v1",
+          "source_path": ".cartridge/documents/main.md",
+          "sources": [
+            {
+              "identity": "@workspace/.cartridge/documents/details.md",
+              "revision": "49d843acfb1bdaa3ae9ce36a18a37bec96905d5d1639b1c0febdb15f2d6e25eb"
+            },
+            {
+              "identity": "@workspace/.cartridge/documents/main.md",
+              "revision": "64227a07bfb935080476e6a6ca9770804c3e1e65a5039550d5ebba356dde84b7"
+            }
+          ],
+          "truncated": false
+        },
+        "reply": 3
+      }
+    },
+    {
+      "request": {
+        "op": "document",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "path": ".cartridge/documents/main.md",
+        "projection": "human"
+      },
+      "response": {
+        "data": {
+          "complete": true,
+          "content": "Readable VERSION_ONE.\n# Help\nHELP_ONE\n\n\n```just\nshow name:\n    echo '{{name}} VERSION_ONE'\n```\n",
+          "diagnostics": [],
+          "hydrated": true,
+          "identity": "@workspace/.cartridge/documents/main.md",
+          "limits": {
+            "content_bytes": 65536,
+            "depth": 4,
+            "diagnostics": 64,
+            "reference_visits": 128,
+            "source_bytes": 16777216,
+            "sources": 32
+          },
+          "metadata": {
+            "description": "Shared fixture",
+            "dialect": "cartridge-just/v1",
+            "execution_base": ".",
+            "invocation": "run",
+            "kind": "tool",
+            "recipe": "show",
+            "schema": "cartridge-document/v1"
+          },
+          "omitted_diagnostics": 0,
+          "owner": "workspace",
+          "path": ".cartridge/documents/main.md",
+          "projection": "human",
+          "projection_revision": "da5326fb445603a15a7a8b908546bed75147a2373a5e401aa6991a002a946a6f",
+          "revision": "64227a07bfb935080476e6a6ca9770804c3e1e65a5039550d5ebba356dde84b7",
+          "schema": "cartridge-document/v1",
+          "source_path": ".cartridge/documents/main.md",
+          "sources": [
+            {
+              "identity": "@workspace/.cartridge/documents/details.md",
+              "revision": "49d843acfb1bdaa3ae9ce36a18a37bec96905d5d1639b1c0febdb15f2d6e25eb"
+            },
+            {
+              "identity": "@workspace/.cartridge/documents/main.md",
+              "revision": "64227a07bfb935080476e6a6ca9770804c3e1e65a5039550d5ebba356dde84b7"
+            }
+          ],
+          "truncated": false
+        },
+        "reply": 4
+      }
+    },
+    {
+      "request": {
+        "op": "document",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "action": "validate",
+        "path": ".cartridge/documents/main.md",
+        "argv": [
+          "label"
+        ]
+      },
+      "response": {
+        "data": {
+          "action": "validate",
+          "command": {
+            "argv": [
+              "--no-dotenv",
+              "--one",
+              "--justfile",
+              "-",
+              "--working-directory",
+              "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+              "--",
+              "show",
+              "label"
+            ],
+            "program": "just"
+          },
+          "diagnostics": [],
+          "dialect": "cartridge-just/v1",
+          "execution_base": ".",
+          "extraction": {
+            "revision": "9ad8355bd8b2cde0717138a1f1130dec55864f06935188be8fcf413ef8a909f3",
+            "source_map": [
+              14,
+              15
+            ],
+            "stdin": "show name:\n    echo '{{name}} VERSION_ONE'\n"
+          },
+          "identity": "@workspace/.cartridge/documents/main.md",
+          "invocation": "run",
+          "launch_authorized": false,
+          "omitted_diagnostics": 0,
+          "owner": "workspace",
+          "parameters": [
+            "name"
+          ],
+          "parser_version": "1.58.0",
+          "path": ".cartridge/documents/main.md",
+          "recipe": "show",
+          "revision": "64227a07bfb935080476e6a6ca9770804c3e1e65a5039550d5ebba356dde84b7",
+          "schema": "cartridge-document/v1",
+          "source_path": ".cartridge/documents/main.md",
+          "validated": true,
+          "validation_revision": "a51fa57398e938c79ed11794e1ffdb9e17bf545d489e62c9da5efc5bd1111f15"
+        },
+        "reply": 5
+      }
+    },
+    {
+      "request": {
+        "op": "document",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "path": ".cartridge/documents/main.md",
+        "projection": "docs"
+      },
+      "response": {
+        "data": {
+          "complete": true,
+          "content": "Readable VERSION_ONE.\n# Help\nHELP_TWO\n\n\n```just\nshow name:\n    echo '{{name}} VERSION_ONE'\n```\n",
+          "diagnostics": [],
+          "hydrated": true,
+          "identity": "@workspace/.cartridge/documents/main.md",
+          "limits": {
+            "content_bytes": 65536,
+            "depth": 4,
+            "diagnostics": 64,
+            "reference_visits": 128,
+            "source_bytes": 16777216,
+            "sources": 32
+          },
+          "metadata": {
+            "description": "Shared fixture",
+            "dialect": "cartridge-just/v1",
+            "execution_base": ".",
+            "invocation": "run",
+            "kind": "tool",
+            "recipe": "show",
+            "schema": "cartridge-document/v1"
+          },
+          "omitted_diagnostics": 0,
+          "owner": "workspace",
+          "path": ".cartridge/documents/main.md",
+          "projection": "docs",
+          "projection_revision": "ae6ad9a422070ebd25fc79476a9e4b0ac238e57bc4ba6c0d4f77e2be5ea94792",
+          "revision": "64227a07bfb935080476e6a6ca9770804c3e1e65a5039550d5ebba356dde84b7",
+          "schema": "cartridge-document/v1",
+          "source_path": ".cartridge/documents/main.md",
+          "sources": [
+            {
+              "identity": "@workspace/.cartridge/documents/details.md",
+              "revision": "e0466739dddc43194c56a99ccf2a582351a40099f955c4ddd4d6feb9e5af6049"
+            },
+            {
+              "identity": "@workspace/.cartridge/documents/main.md",
+              "revision": "64227a07bfb935080476e6a6ca9770804c3e1e65a5039550d5ebba356dde84b7"
+            }
+          ],
+          "truncated": false
+        },
+        "reply": 6
+      }
+    },
+    {
+      "request": {
+        "op": "document",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "action": "validate",
+        "path": ".cartridge/documents/main.md",
+        "argv": [
+          "label"
+        ]
+      },
+      "response": {
+        "data": {
+          "action": "validate",
+          "command": {
+            "argv": [
+              "--no-dotenv",
+              "--one",
+              "--justfile",
+              "-",
+              "--working-directory",
+              "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+              "--",
+              "show",
+              "label"
+            ],
+            "program": "just"
+          },
+          "diagnostics": [],
+          "dialect": "cartridge-just/v1",
+          "execution_base": ".",
+          "extraction": {
+            "revision": "9ad8355bd8b2cde0717138a1f1130dec55864f06935188be8fcf413ef8a909f3",
+            "source_map": [
+              14,
+              15
+            ],
+            "stdin": "show name:\n    echo '{{name}} VERSION_ONE'\n"
+          },
+          "identity": "@workspace/.cartridge/documents/main.md",
+          "invocation": "run",
+          "launch_authorized": false,
+          "omitted_diagnostics": 0,
+          "owner": "workspace",
+          "parameters": [
+            "name"
+          ],
+          "parser_version": "1.58.0",
+          "path": ".cartridge/documents/main.md",
+          "recipe": "show",
+          "revision": "64227a07bfb935080476e6a6ca9770804c3e1e65a5039550d5ebba356dde84b7",
+          "schema": "cartridge-document/v1",
+          "source_path": ".cartridge/documents/main.md",
+          "validated": true,
+          "validation_revision": "a51fa57398e938c79ed11794e1ffdb9e17bf545d489e62c9da5efc5bd1111f15"
+        },
+        "reply": 7
+      }
+    },
+    {
+      "request": {
+        "op": "document",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "action": "index",
+        "query": "Changed fixture"
+      },
+      "response": {
+        "data": {
+          "directory": ".cartridge/documents",
+          "items": [
+            {
+              "identity": "@workspace/.cartridge/documents/main.md",
+              "metadata": {
+                "description": "Changed fixture",
+                "kind": "tool",
+                "tags": []
+              },
+              "owner": "workspace",
+              "path": ".cartridge/documents/main.md",
+              "revision": "bfe70c62a54130b3d470e6edfb6a30918f5a4419f171e1f37a2503873eda5721",
+              "schema": "cartridge-document/v1",
+              "source_path": ".cartridge/documents/main.md"
+            }
+          ],
+          "limit": 128,
+          "owner": "workspace",
+          "schema": "cartridge-document/v1",
+          "total": 1,
+          "truncated": false
+        },
+        "reply": 8
+      }
+    },
+    {
+      "request": {
+        "op": "document",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "path": ".cartridge/documents/main.md",
+        "projection": "docs"
+      },
+      "response": {
+        "data": {
+          "complete": true,
+          "content": "Readable VERSION_TWO.\n# Help\nHELP_TWO\n\n\n```just\nshow name:\n    echo '{{name}} VERSION_TWO'\n```\n",
+          "diagnostics": [],
+          "hydrated": true,
+          "identity": "@workspace/.cartridge/documents/main.md",
+          "limits": {
+            "content_bytes": 65536,
+            "depth": 4,
+            "diagnostics": 64,
+            "reference_visits": 128,
+            "source_bytes": 16777216,
+            "sources": 32
+          },
+          "metadata": {
+            "description": "Changed fixture",
+            "dialect": "cartridge-just/v1",
+            "execution_base": ".",
+            "invocation": "run",
+            "kind": "tool",
+            "recipe": "show",
+            "schema": "cartridge-document/v1"
+          },
+          "omitted_diagnostics": 0,
+          "owner": "workspace",
+          "path": ".cartridge/documents/main.md",
+          "projection": "docs",
+          "projection_revision": "de5c9844d934992948af5fcc567c39e1b6a5d39d8f5210ed3a6bb8f48e3a7797",
+          "revision": "bfe70c62a54130b3d470e6edfb6a30918f5a4419f171e1f37a2503873eda5721",
+          "schema": "cartridge-document/v1",
+          "source_path": ".cartridge/documents/main.md",
+          "sources": [
+            {
+              "identity": "@workspace/.cartridge/documents/details.md",
+              "revision": "e0466739dddc43194c56a99ccf2a582351a40099f955c4ddd4d6feb9e5af6049"
+            },
+            {
+              "identity": "@workspace/.cartridge/documents/main.md",
+              "revision": "bfe70c62a54130b3d470e6edfb6a30918f5a4419f171e1f37a2503873eda5721"
+            }
+          ],
+          "truncated": false
+        },
+        "reply": 9
+      }
+    },
+    {
+      "request": {
+        "op": "document",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "action": "validate",
+        "path": ".cartridge/documents/main.md",
+        "argv": [
+          "label"
+        ]
+      },
+      "response": {
+        "data": {
+          "action": "validate",
+          "command": {
+            "argv": [
+              "--no-dotenv",
+              "--one",
+              "--justfile",
+              "-",
+              "--working-directory",
+              "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+              "--",
+              "show",
+              "label"
+            ],
+            "program": "just"
+          },
+          "diagnostics": [],
+          "dialect": "cartridge-just/v1",
+          "execution_base": ".",
+          "extraction": {
+            "revision": "894332b8bec39c12ac0f442bd67c51349584b38146fd0e40aa1212b9a0b6c029",
+            "source_map": [
+              14,
+              15
+            ],
+            "stdin": "show name:\n    echo '{{name}} VERSION_TWO'\n"
+          },
+          "identity": "@workspace/.cartridge/documents/main.md",
+          "invocation": "run",
+          "launch_authorized": false,
+          "omitted_diagnostics": 0,
+          "owner": "workspace",
+          "parameters": [
+            "name"
+          ],
+          "parser_version": "1.58.0",
+          "path": ".cartridge/documents/main.md",
+          "recipe": "show",
+          "revision": "bfe70c62a54130b3d470e6edfb6a30918f5a4419f171e1f37a2503873eda5721",
+          "schema": "cartridge-document/v1",
+          "source_path": ".cartridge/documents/main.md",
+          "validated": true,
+          "validation_revision": "9a99e5ddb7bf7f9ee76da0fb1769608671b12752e59c5845198d311eff612155"
+        },
+        "reply": 10
+      }
+    }
+  ],
+  "host_frames": [
+    {
+      "cartridges": true,
+      "id": 1,
+      "turn": "18d4f32245248f18-1"
+    },
+    {
+      "cartridges": true,
+      "id": 2,
+      "turn": "18d4f32245248f18-2"
+    },
+    {
+      "cartridges": true,
+      "id": 3,
+      "turn": "18d4f32245248f18-3"
+    },
+    {
+      "cartridges": true,
+      "id": 4,
+      "turn": "18d4f32245248f18-4"
+    },
+    {
+      "cartridges": true,
+      "id": 5,
+      "turn": "18d4f32245248f18-5"
+    },
+    {
+      "cartridges": true,
+      "id": 6,
+      "turn": "18d4f32245248f18-6"
+    },
+    {
+      "cartridges": true,
+      "id": 7,
+      "turn": "18d4f32245248f18-7"
+    },
+    {
+      "cartridges": true,
+      "id": 8,
+      "turn": "18d4f32245248f18-8"
+    },
+    {
+      "cartridges": true,
+      "id": 9,
+      "turn": "18d4f32245248f18-9"
+    },
+    {
+      "cartridges": true,
+      "id": 10,
+      "turn": "18d4f32245248f18-10"
+    }
+  ],
+  "limitation": "No recipe execution is claimed; descriptor remains launch_authorized:false"
+}

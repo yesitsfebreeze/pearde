@@ -1,0 +1,23 @@
+   Compiling cartridge v0.1.0 (/Users/feb/dev/cartridge/cartridge.ctg)
+   Compiling agent v0.1.0 (/Users/feb/dev/cartridge/agent.ctg)
+   Compiling policy-contract-tests v0.1.0 (/Users/feb/dev/cartridge/policy.ctg/.cartridge/tests/contract)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.41s
+     Running unittests ../policy.rs (.cartridge/empirical/policy-tests/debug/deps/policy_contract_tests-e93263ed3af92d92)
+
+running 1 test
+
+thread 'baseline_ship_push_can_be_explicitly_allowed' (44759203) panicked at ../policy.rs:388:2:
+assertion `left == right` failed: recognized push should obey the explicit ship tool grant
+  left: "deny"
+ right: "allow"
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test baseline_ship_push_can_be_explicitly_allowed ... FAILED
+
+failures:
+
+failures:
+    baseline_ship_push_can_be_explicitly_allowed
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 4 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `--lib`

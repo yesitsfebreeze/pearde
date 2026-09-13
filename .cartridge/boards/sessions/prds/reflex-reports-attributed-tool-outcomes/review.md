@@ -29,3 +29,13 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — /root independent review, 2026-09-13
+
+**96/100 PASS**. Dimensions (value/scope, ownership/reuse, dependencies/slices, acceptance/baseline, failure/compatibility): 19, 20, 20, 19, 18. Source unchanged at review. No blockers.
+
+Findings incorporated: runtime binds capture only to intended Service while its reload read gate is held, so nested calls cannot replace provenance; actual describe shape is handled separately from execution envelopes. Descriptor revisions remain last observed/unknown. Sessions stat checks provide bounded best-effort snapshots, not atomic protection against hostile writers. Parent external runtime contract changes require manual rollup revalidation. Inputs: [review-round-3-inputs.json](review-round-3-inputs.json). No user rating invented; 3/5 rounds used.
+
+## Composed completion evidence
+
+Both reviewed dependencies now validate and the exact real runtime plus sessions SDK gate passes 3 tests /55 assertions. Lifecycle/checklist updates are nonsemantic. Source, final plan and proof log digests are recorded in proof-inputs.json; original round-3 digests and independent96 rating remain preserved.

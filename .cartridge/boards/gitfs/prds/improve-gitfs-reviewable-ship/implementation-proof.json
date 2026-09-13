@@ -1,0 +1,151 @@
+{
+  "source_commit": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+  "source_clean": true,
+  "reviewer": "/root",
+  "review_round": 3,
+  "score": 97,
+  "full_verify_exit": 0,
+  "public_tests": {
+    "passed": 38,
+    "failed": 0
+  },
+  "public_check": "passed",
+  "public_builds": [
+    "gitfs",
+    "mcp",
+    "cartridge"
+  ],
+  "native_suites": {
+    "passed": 9,
+    "failed": 0,
+    "assertions": 544
+  },
+  "dependency_proof": {
+    "source_commit": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+    "records_commit": "2bb5815d1fd2034c65c960f0d3afb0072c8f713b",
+    "footprint": [
+      ".cartridge/docs/inspection.md",
+      ".cartridge/docs/push.md",
+      ".cartridge/docs/ship.md",
+      ".cartridge/tests/integration/recorded-push.test.ts",
+      ".cartridge/tests/integration/reviewed-ship.test.ts",
+      ".cartridge/tests/integration/tool-result.test.ts",
+      ".cartridge/tests/unit/push/tests.rs",
+      ".cartridge/tests/unit/ship/tests.rs",
+      ".cartridge/tests/unit/snapshot.rs",
+      ".cartridge/tests/unit/store/tests.rs",
+      ".cartridge/tests/unit/tool_result.rs",
+      "init.lua",
+      "src/inspection.rs",
+      "src/main.rs",
+      "src/push.rs",
+      "src/service.rs",
+      "src/ship.rs",
+      "src/store.rs",
+      "src/tool_result.rs"
+    ],
+    "dependencies": [
+      {
+        "ref": "@policy/ship-push-is-an-explicit-policy-operation",
+        "source_commit": "e442bef2c9f07635f9e8b8e1d87a47193841569f",
+        "prd_sha256": "b7ac45dab65dc1c5cba9879e544518036409b83c796bb1c7049867056f393c60",
+        "spec_sha256": "c313a77d300b54994b0eef60a4474efc57376d6db4882e5e5f9c8175f037e49d",
+        "review_round": 3,
+        "score": 97,
+        "review_sha256": "d057975798a4944f0332cfbeffbc51be8eea7d3029cdddc07a714497d0ae1053",
+        "collection_sha256": "1648f9cb145c0baf229f4e53260b56ff4bfdd516ef308551bd405c7d6b3656c1"
+      },
+      {
+        "ref": "@gitfs/improve-gitfs-readable-diff",
+        "source_commit": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+        "prd_sha256": "992d5b668b68eb3fd3f7f9a52f2bd4ca35733d1bfb23e8905b0d382c30d76e90",
+        "spec_sha256": "24f1ea5b670c4ad4251838837f85f633f209437c9b5bfc44df8d69dcef483d9b",
+        "review_round": 3,
+        "score": 94,
+        "review_sha256": "e902695dc87b19e2b5e44fc47de8449f7254930647221216911dde9027ba3251",
+        "collection_sha256": "be223f6095f69d968636f2eda71cebd0f931513d91ec9635212a9740b9d44371"
+      },
+      {
+        "ref": "@gitfs/improve-gitfs-snapshot-selection",
+        "source_commit": "55cc8aae27575ded5950737c46a99aa358b95980",
+        "prd_sha256": "0ecb00d188671a383d13a33827b6f9f9de669d886a3b308350850a037dea059d",
+        "spec_sha256": "a3bdd842ca5f317edfbe883ee61fd0ddaff465c81c9d44183aab9e6bc852c8c6",
+        "review_round": 3,
+        "score": 97,
+        "review_sha256": "3d82567f6539d411e6369638b96735abd92727b800188bfa8beb07be05d11d3d",
+        "collection_sha256": "58f30469036f1560cc49b4ecb4e6d33bcfa815a975706654aec83030a163b78d"
+      },
+      {
+        "ref": "@policy/improve-policy-operation-rules",
+        "source_commit": "e442bef2c9f07635f9e8b8e1d87a47193841569f",
+        "prd_sha256": "ff05aeecfbc1ede7603d452dcb2635af3b4b0032f04df971aba3281eb5e69124",
+        "spec_sha256": "4c387100550778313009dff4a94703b2b6232c874fe469f56167f487e05d707d",
+        "review_round": 3,
+        "score": 97,
+        "review_sha256": "ddeebac92d47d82b4c4db0186e24797edc35d789e58fa923a2b9ee5493049296",
+        "collection_sha256": "79e27879d6b8a09e58e723a998a188342c8be26e98a736079108af1d1c2f13e8"
+      },
+      {
+        "ref": "@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally",
+        "source_commit": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+        "prd_sha256": "582d48cc7f602d9db8c9021f1b2ca0a33a28bad996c95fdc75f82a9da570825f",
+        "spec_sha256": "73b025bce9603f1a750a9597017093fa3980f7e4384dc00317553e85f2430473",
+        "review_round": 3,
+        "score": 95,
+        "review_sha256": "459046648d77e82735a3313e7f0594eaaae26d27fa358fda38c81307af961d0b",
+        "collection_sha256": "8fa653fa8abefc492ea70982e508a1adeb671ed3f61951d6b3bde6f208d51ad4"
+      },
+      {
+        "ref": "@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head",
+        "source_commit": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+        "prd_sha256": "99045ee2327c727c81e999fd594e9f099614d10048ace5174219443b9aacf2ca",
+        "spec_sha256": "3191d544dd1c2260d832f51526baa1c59cee84dc4772c9496ff59507d3c61841",
+        "review_round": 3,
+        "score": 96,
+        "review_sha256": "838bc559f5655e3165c2a7458f5da866761ba41af85b65c5ea40986dd7b15116",
+        "collection_sha256": "30e637402c05053a71e944290d6947ca0365a4c3c1eaa720848afb168ef794b6"
+      }
+    ],
+    "composition_proof_sha256": "b8845814d7e60b7492ece92f6d4f60c1269e7f73e4f5ec7054004c3031dcc9d2"
+  },
+  "actual_composition": {
+    "schema": "gitfs-reviewable-rollup/v1",
+    "actual_providers": [
+      "GitFS native",
+      "MCP native",
+      "policy Lua"
+    ],
+    "session": "reviewable-rollup",
+    "base": "58ee76c4a4943f7a53f5d0e60a1cb77e4a803c53",
+    "local_commit": "dca8247e7d28b38113fbacea968f09a22e8fa724",
+    "tree": "6310d0e9f6ae49234a336f0de4117c7f9cd2c967",
+    "local_revision": "1699de71368bf206727e698a0828bd3974ea111602e44ee38fdec0dfc473ba36",
+    "push_revision": "91b4c01f47a0735d69d70d1247938df4b12171717cdb6dfe949776d8eb78fd88",
+    "push_status": "confirmed",
+    "reconcile_status": "confirmed",
+    "unrelated_staged_excluded": true,
+    "index_unchanged": true,
+    "unselected_snapshot_preserved": true,
+    "unrelated_remote_ref_unchanged": true,
+    "policy_denial_executed": false,
+    "binaries": {
+      "cartridge": "3c107ead7a60caa07a7aa295cb46c7b2a0663a17ca7aa11fc11b45076b9b08c8",
+      "gitfs": "8354b64d6220bd75396cd6f14209382b5f7ea1c0a9dffb2ecdfc1f4c62eaf0c2",
+      "mcp": "d1d48482f944205f3d589031fbcbbc7c1699e095fa139792a4ff4c1037a09727"
+    }
+  },
+  "spec_sha256": "ab54d545cb3d4c525ce32d4c62c7b5a82c4233286f751c985036a0cfa9b12b3c",
+  "verify_log_sha256": "7bc9fa1ec7cd0baef801971504bbd2f75a31595f70eb6c2f803cb39e1a59f94f",
+  "source_heads": {
+    "gitfs": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+    "policy": "e442bef2c9f07635f9e8b8e1d87a47193841569f",
+    "mcp": "f5a740517bc2668b50cf4f61fe81a1e37bb4cfad",
+    "proxy": "9ddcc08807a059579c21227ad9d3523d242ddf86",
+    "cartridge": "1a5e9867acec1d07cd732c3af2ccf331a0979a61"
+  },
+  "limitations": [
+    "External needs are verified point-in-time; a contract-only dependency change requires explicit revalidation.",
+    "Unknown remote outcomes are not rollback or permission to replay; exact remote readback confirms.",
+    "Policy explicitly allows the tested operations; no default allow or phase-level policy is implied."
+  ]
+}

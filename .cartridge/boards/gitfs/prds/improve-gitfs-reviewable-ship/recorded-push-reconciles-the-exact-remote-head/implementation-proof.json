@@ -1,0 +1,73 @@
+{
+  "source_commit": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+  "source_paths": [
+    ".cartridge/docs/push.md",
+    ".cartridge/tests/integration/recorded-push.test.ts",
+    ".cartridge/tests/unit/push/tests.rs",
+    "src/main.rs",
+    "src/push.rs",
+    "src/ship.rs",
+    "src/store.rs",
+    "src/tool_result.rs"
+  ],
+  "path_sha256": {
+    ".cartridge/docs/push.md": "af8f84dc0598ed7d96561a01de6b4c234c2561c481ce2ef61e88f22ddd209bd8",
+    ".cartridge/tests/integration/recorded-push.test.ts": "0c6b4e111e2aea72d3736b5df433a6998ced1d076a417179b75e78361da4953a",
+    ".cartridge/tests/unit/push/tests.rs": "defe3762687ac2d873f84e5abf76c2afb4198c50ee6975ddc7ea029076fbb4e2",
+    "src/main.rs": "970c295962aac29ee39c382ed347c9efb6e45a651ee71b46a1861d6f0a5727b7",
+    "src/push.rs": "3222f3a8f656b8066091fe259026cb7a77e8e9d40a2673db48e64fbead7a543c",
+    "src/ship.rs": "4500a127bb18c06a4861ab95df6d60cf0c48efaaf30cdf36fe7c1545d48947e5",
+    "src/store.rs": "390a95bf3a6b52bae4d7595f4ee2eb619094694b43ccc2fb5a9108a65fc03971",
+    "src/tool_result.rs": "570c880fadcb2045556cc2d1f377679913b6ea4fd5c3cfdad859f1b4f494a700"
+  },
+  "source_clean": true,
+  "review": {
+    "round": 3,
+    "reviewer": "/root",
+    "score": 96,
+    "implementation_auditor": "/root/memo_board",
+    "finding": "Terminal review trailers must be parsed as an actual block; fixed with exact emitted suffix and unit/native rejection fixtures."
+  },
+  "gates": {
+    "public_tests": {
+      "passed": 38,
+      "failed": 0,
+      "includes": "real SDK/MCP/proxy consumers"
+    },
+    "public_check": "passed",
+    "public_build": "passed",
+    "focused_tests": {
+      "passed": 5,
+      "failed": 0
+    },
+    "native_sdk": {
+      "passed": 6,
+      "failed": 0,
+      "assertions": 359
+    }
+  },
+  "commands": [
+    "cd ../cartridge.ctg && RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just test gitfs",
+    "cd ../cartridge.ctg && RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just check gitfs",
+    "cd ../cartridge.ctg && RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just build gitfs",
+    "cd ../gitfs.ctg && GITFS_BINARY=../cartridge.ctg/target/tool-result-contract/debug/gitfs bun test ./.cartridge/tests/integration/recorded-push.test.ts"
+  ],
+  "executables": {
+    "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/gitfs": "8354b64d6220bd75396cd6f14209382b5f7ea1c0a9dffb2ecdfc1f4c62eaf0c2",
+    "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/cartridge": "3c107ead7a60caa07a7aa295cb46c7b2a0663a17ca7aa11fc11b45076b9b08c8"
+  },
+  "dependency_heads": {
+    "landscape": "3b9f72854c39ddd90128a48bfce2667e387c3fba",
+    "proxy": "9ddcc08807a059579c21227ad9d3523d242ddf86",
+    "memo": "45d5a54ab9da1a798cd9997af9a8c19bed8a1812",
+    "router": "4ad9cd35dc862ecfe0786612d39913612d93fc45",
+    "cartridge": "1a5e9867acec1d07cd732c3af2ccf331a0979a61"
+  },
+  "limitations": [
+    "Hard bounded128-record store never evicts replay protection; deletion/reconfiguration removes evidence and is outside the guarantee.",
+    "Post-dispatch old/different/unavailable readback remains unknown; no retry override or remote force is offered.",
+    "macOS/Linux process groups and repository identity; hostile filesystem writers or deliberately escaping helpers excluded.",
+    "Configured URL rewrites, mirrored remotes and multiple push URLs refuse explicitly."
+  ],
+  "spec_sha256": "3191d544dd1c2260d832f51526baa1c59cee84dc4772c9496ff59507d3c61841"
+}

@@ -1,0 +1,58 @@
+{
+  "source_commit": "45d5a54ab9da1a798cd9997af9a8c19bed8a1812",
+  "dependency_commit": "3b9f72854c39ddd90128a48bfce2667e387c3fba",
+  "baseline_commit": "3251566e6c92439e4a32c5ce8b734e55726801ee",
+  "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+  "environment": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=$PWD/target/tool-result-contract",
+  "gates": [
+    {
+      "command": "just test memo",
+      "exit": 0,
+      "tests": 77
+    },
+    {
+      "command": "just check memo",
+      "exit": 0
+    },
+    {
+      "command": "bun test ../memo.ctg/.cartridge/tests/integration/inventory.test.ts",
+      "exit": 0,
+      "tests": 3,
+      "assertions": 10183,
+      "elapsed_seconds": 4.35
+    },
+    {
+      "command": "bun test ../memo.ctg/.cartridge/tests/integration/context.test.ts",
+      "exit": 0,
+      "tests": 3,
+      "assertions": 80,
+      "elapsed_seconds": 1.046
+    }
+  ],
+  "observed": {
+    "real_git_paths": 10000,
+    "summary_bytes": 393,
+    "largest_page_bytes": 11731,
+    "initial_capture_host_calls": 1,
+    "paging_host_calls": 0,
+    "host_calls_in_first_test_including_two_explicit_refreshes": 3,
+    "reconstruction": "10000 exact sorted owner/path pairs; no duplicates or omissions",
+    "concurrency": "old slow capture cannot publish after newer success or newer failure; failed/timed-out refresh retains published snapshot",
+    "freshness": "identical refresh and process restart invalidate old token; filter/cursor mismatches explicit",
+    "partial": "usable owner survives failed contributor; disabled distinct and not scanned",
+    "compatibility": "legacy native landscape and model description preserved; context SDK80 assertions pass",
+    "readonly": "unchanged Git status and source content during v2 summary/pages"
+  },
+  "limitations": [
+    "raw host Value allocated/decoded before library bounds",
+    "capture timeout requests termination without claiming joined work",
+    "native-only versioned surface; existing tool request schema unchanged"
+  ],
+  "sha256": {
+    "src/main.rs": "85166c6bb38974396319f5c13c04c1eed6c38cf9b8eb9963732a068a1ea0e63a",
+    "src/service.rs": "9b52677f615b3caa1992ea8b79320d9a6d10446efd362374ed313bcbf79987be",
+    "src/inventory.rs": "69601e09608f1392bd083f22908a7d2616348e7b257b67a98a2cc50108b78651",
+    ".cartridge/docs/inventory.md": "8fe6a22ca0dd12765393102e5f1bc9f2c4185f24786c8c88a12cc4de7f498ab6",
+    ".cartridge/tests/integration/inventory.test.ts": "f5d959f37655db31828a7b92122e22aa5a22488d0f5ee47c818c6679ad20b546"
+  }
+}

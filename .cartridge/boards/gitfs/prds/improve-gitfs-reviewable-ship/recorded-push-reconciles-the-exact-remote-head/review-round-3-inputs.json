@@ -1,0 +1,10 @@
+{
+  "source_commit": "67ef4ac0770de2770f6eee10164467c25dd370f0",
+  "input_digests": {
+    "prd.md": "2f8f46d518b1fa8e39c099a8da2f91cc7bec717deeea44f55c3959bc6dede6cf",
+    "specs/spec01.md": "f396ae8e8bb609a6aa07e7fb3b889f12018552c93787e5f5f75151a42c14fb61",
+    "baseline.json": "949c208cdb85e67f52fe97c0d0dab054ae522fed4961672e211df3caddde0810",
+    "remote-cas-baseline.py": "71722c73a714b009af029fd73f4ce1c9c3b49e6501246f5b0ae7d3eb82467c79",
+    "remote-cas-baseline.json": "8082820245b00a37bf17b6bea0265cc3fd8da00bc66b8318dd54fdbe3addac9f"
+  }
+}

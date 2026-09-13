@@ -1,0 +1,11 @@
+{
+  "source_commit": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+  "input_digests": {
+    "prd.md": "8c83635778ba2186e25a4b0ae78335fbe2c163ead7b2bcc9031b30eed0538b61",
+    "specs/spec01.md": "3334163d24d6635126bcc197ad15342edbd333da44c8e4ba8c50ac758b05e001",
+    "baseline.json": "feb869dd43c9dc8e1dc7272c7b0f71c8549bff64dc5061fbd34f1b598097875c",
+    "rollup-proof.ts": "b8845814d7e60b7492ece92f6d4f60c1269e7f73e4f5ec7054004c3031dcc9d2",
+    "integration-baseline.json": "ecf18ecf3b59ed36469f1d8f324d2549d6135f767b16a7f5e7c85208b833c916",
+    "integration-baseline-log.txt": "c886ea2d825581341be34fabf006209e01f49b3d9d59c7efcda1b3e9055d6121"
+  }
+}

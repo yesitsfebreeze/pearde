@@ -31,3 +31,19 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — independent integrated contract review, 2026-09-13
+
+Reviewer: `/root`, independent of implementing agent `/root/memo_board`.
+Inputs: [review-round-3-inputs.json](review-round-3-inputs.json).
+
+| Dimension | /20 | Finding |
+| --- | ---: | --- |
+| Value and scope | 20 | Preserves the same three-child acceptance. |
+| Ownership and reuse | 19 | Parent adds no source implementation; native shared document path is exercised. |
+| Dependencies and slices | 19 | Three current child receipts bind the same memo source revision. |
+| Acceptance and baseline | 20 | Actual combined native fixture proves exact primary and derived digest separation. |
+| Failure and compatibility | 18 | Conservative validation boundary remains explicit; no runner or full Just claim. |
+
+Agent score: **96/100 — PASS**. Rounds used: 3/5.
+Review refinement completed: executable Verify pins the retained integration probe SHA256 before execution. All child states are done, with current specification digests and collection source 3251566e6c92439e4a32c5ce8b734e55726801ee. No acceptance expansion.

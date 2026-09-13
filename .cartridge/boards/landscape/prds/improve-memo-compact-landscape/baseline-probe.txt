@@ -1,0 +1,12 @@
+from pathlib import Path
+import tempfile,subprocess,json,time
+owner=Path('/Users/feb/dev/cartridge/landscape.ctg');proof=owner.parent/'prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape';root=Path(tempfile.mkdtemp(prefix='landscape-compact-baseline-'));repo=root/'fixture';repo.mkdir();
+for i in range(10000):
+ file=repo/f'group-{i//100:03}'/f'path-{i:05}.md';file.parent.mkdir(exist_ok=True);file.touch()
+subprocess.run(['git','init','-q'],cwd=repo,check=True);subprocess.run(['git','add','.'],cwd=repo,check=True)
+runner=root/'runner';(runner/'src').mkdir(parents=True);(runner/'Cargo.toml').write_text('[package]\nname="landscape_compact_baseline"\nversion="0.0.0"\nedition="2021"\n[workspace]\n[dependencies]\nlandscape={path="/Users/feb/dev/cartridge/landscape.ctg"}\nserde_json="1"\n')
+source='''use serde_json::json;
+fn main(){let root=std::env::args().nth(1).unwrap();let snapshot=json!({"host_pid":1,"profile":"fixture","entries":[{"id":"owner","dir":root,"generation":1,"state":"Active"}]});let view=landscape::view(snapshot,None,None,5).unwrap();let bytes=serde_json::to_vec(&view).unwrap().len();println!("{}",json!({"bytes":bytes,"tracked_paths":view["entries"][0]["tracked"].as_array().unwrap().len(),"more":view["more"],"cursor":view["cursor"],"snapshot":view["snapshot"]}));}
+''';(runner/'src/main.rs').write_text(source)
+env=dict(__import__('os').environ);env.update(RUSTC_WRAPPER='',RUSTC_WORKSPACE_WRAPPER='',CARGO_TARGET_DIR=str(owner.parent/'cartridge.ctg/target/tool-result-contract'))
+start=time.monotonic();cmd=['cargo','run','--offline','--quiet','--manifest-path',str(runner/'Cargo.toml'),'--',str(repo)];run=subprocess.run(cmd,text=True,capture_output=True,env=env,check=True);observed=json.loads(run.stdout);result={'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=owner,text=True).strip(),'command':cmd,'fixture':str(repo),'input_paths':10000,'observed':observed,'elapsed_seconds':time.monotonic()-start,'expected':'Versioned default summary at most16384 bytes and explicit bounded inventory pages','finding':'Legacy view includes10000 tracked paths inside one entry with no path-level paging/omitted counts; response exceeds16KiB','runner_source':source};(proof/'baseline.json').write_text(json.dumps(result,indent=2)+'\n');(proof/'baseline-probe.txt').write_text(Path(__file__).read_text());(proof/'baseline-log.txt').write_text(run.stdout+run.stderr);print(json.dumps(result,indent=2))

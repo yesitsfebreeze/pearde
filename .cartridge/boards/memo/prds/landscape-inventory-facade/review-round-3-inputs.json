@@ -1,0 +1,13 @@
+{
+  "round": 3,
+  "sha256": {
+    "prd.md": "610a4fd14b6928b2a524cf2e2bd8c5801c99ebc0d72bd4cd42e25ecacecaf61f",
+    "specs/spec01.md": "884782253390486e6491ff00a7b2f74252a2f6e2c7f081318d3bb991f08ff5eb",
+    "baseline.json": "3b57d4b836ad59deb95a683547fd3ca39c7dbf42943e326fc63ba647a3fba64a",
+    "baseline-probe.txt": "6f6bedfc4586fb1e5be4c97ece32679497c0414ca64558909d8ed0c37b305dca",
+    "proof.json": "497a45a3aef75962225242a8f87ad812a983794b54c46bd87be07982cd47fb0c"
+  },
+  "reviewer": "/root",
+  "score": 96,
+  "dependency_commit": "3b9f72854c39ddd90128a48bfce2667e387c3fba"
+}

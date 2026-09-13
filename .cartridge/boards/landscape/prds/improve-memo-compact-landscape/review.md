@@ -29,3 +29,19 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — independent combined contract review, 2026-09-13
+
+Reviewer `/root`, independent of `/root/memo_board`. Inputs [review-round-3-inputs.json](review-round-3-inputs.json). Original three acceptance checks and inherited allowance remain unchanged across the explicit owner split.
+
+| Dimension | /20 | Evidence |
+| --- | ---: | --- |
+| Value and scope | 19 | Retains compact summary, complete drilldown and partial readonly outcomes. |
+| Ownership and reuse | 20 | One Landscape capture/page implementation and thin memo native adapter. |
+| Dependencies and slices | 19 | Both reviewed children are collected at the integrated source revisions. |
+| Acceptance and baseline | 20 | Actual10k native fixture measures393-byte summary and11731-byte maximum page; baseline260311bytes. |
+| Failure and compatibility | 18 | Stale/restart/concurrent refresh, partial and bounds are explicit; legacy contract retained. |
+
+Agent score **96/100 — PASS**. Rounds used3/5. Root found unchanged original scope and actual integration proof sufficient. Both child receipts now bind Landscape3b9f728 and memo45d5a54. Parent owns no source implementation; reviewed executable gate pins exact clean source revisions before native SDK.
+
+Publisher compatibility refinement: `specced` refuses an empty footprint. The existing `src/inventory.rs` is now listed as a source binding only; no new parent implementation or acceptance change. Source HEAD and integration gate remain pinned exactly.

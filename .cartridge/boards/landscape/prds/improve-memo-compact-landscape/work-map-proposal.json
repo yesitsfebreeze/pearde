@@ -1,0 +1,71 @@
+{
+  "upsert": [
+    {
+      "id": "@landscape/improve-memo-compact-landscape",
+      "path": "prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape/prd.md",
+      "owner": "landscape",
+      "kind": "rollup",
+      "sources": [
+        "improve-memo-compact-landscape"
+      ],
+      "needs": [
+        "@landscape/improve-memo-compact-landscape/bounded-inventory-snapshot",
+        "@memo/landscape-inventory-facade"
+      ],
+      "words": 275,
+      "sha256": "9d82b580b13e281cfb66413d9b5989cc063db7c7e6cc3b1d09bce17dba2643f5",
+      "round": 2,
+      "max_rounds": 5,
+      "review": "prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape/review.md",
+      "review_binding_status": "stale-after-owner-split",
+      "disposition": "split-owner-boundary",
+      "score": 94,
+      "review_result": "PASS",
+      "historical_sha256": "1d789f781dd7a9aab6c0d94ea332cc3b601b3759979aca698b98f3f7d255beb9"
+    },
+    {
+      "id": "@landscape/improve-memo-compact-landscape/bounded-inventory-snapshot",
+      "path": "prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape/bounded-inventory-snapshot/prd.md",
+      "owner": "landscape",
+      "kind": "leaf",
+      "sources": [
+        "improve-memo-compact-landscape"
+      ],
+      "needs": [],
+      "words": 193,
+      "sha256": "1f1e0849142b8bf559a999a0b440c19ed4d3f45531b470fd4d63db0773986c54",
+      "round": 2,
+      "max_rounds": 5,
+      "review": "prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape/bounded-inventory-snapshot/review.md",
+      "review_binding_status": "stale-after-owner-split",
+      "disposition": "split-owner-boundary",
+      "score": 94,
+      "review_result": "PASS",
+      "historical_sha256": "1d789f781dd7a9aab6c0d94ea332cc3b601b3759979aca698b98f3f7d255beb9"
+    },
+    {
+      "id": "@memo/landscape-inventory-facade",
+      "path": "prd.ctg/.cartridge/boards/memo/prds/landscape-inventory-facade/prd.md",
+      "owner": "memo",
+      "kind": "leaf",
+      "sources": [
+        "improve-memo-compact-landscape"
+      ],
+      "needs": [
+        "@landscape/improve-memo-compact-landscape/bounded-inventory-snapshot"
+      ],
+      "words": 203,
+      "sha256": "859004d8c90ef281221bf3fd3d0850da6aa5a72e81f693472fed3b44e22948c7",
+      "round": 2,
+      "max_rounds": 5,
+      "review": "prd.ctg/.cartridge/boards/memo/prds/landscape-inventory-facade/review.md",
+      "review_binding_status": "stale-after-owner-split",
+      "disposition": "split-owner-boundary",
+      "score": 94,
+      "review_result": "PASS",
+      "historical_sha256": "1d789f781dd7a9aab6c0d94ea332cc3b601b3759979aca698b98f3f7d255beb9"
+    }
+  ],
+  "preserves_original_acceptance": true,
+  "coordinator_merge_only": true
+}

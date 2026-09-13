@@ -1,0 +1,6 @@
+Final public gates at 3b9f72854c39ddd90128a48bfce2667e387c3fba
+From /Users/feb/dev/cartridge/cartridge.ctg with RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=$PWD/target/tool-result-contract
+just test landscape: exit0;40 passed,0 failed;3.81s test runtime
+just check landscape: exit0
+just test memo: exit0;77 passed,0 failed;6.48s test runtime
+Meaningful fixture coverage and limitations are recorded in proof.json. Earlier compilation failure (Arc serialization) was fixed before these final passing gates.

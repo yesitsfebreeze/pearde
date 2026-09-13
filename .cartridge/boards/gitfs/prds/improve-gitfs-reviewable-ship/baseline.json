@@ -1,0 +1,7 @@
+{
+  "source_commit": "55cc8aae27575ded5950737c46a99aa358b95980",
+  "command": "cargo test -p gitfs baseline_stale_reviewed_tree -- --nocapture",
+  "expected": "Unrelated committed path survives stale ship attempt",
+  "observed": "Current commit_ship accepted stale tree with new HEAD parent and deleted an unowned path. Test failed as intended.",
+  "probe": "\n#[test]\nfn baseline_stale_reviewed_tree_must_not_delete_new_trunk_files() {\n let (dir,store)=new_repo();\n store.write_blob(\"s\",Path::new(\"owned.txt\"),b\"owned\\n\",\"100644\").unwrap();\n let (tree,_)=store.preview_ship(\"s\").unwrap();\n std::fs::write(dir.path().join(\"unrelated.txt\"),\"other actor\\n\").unwrap();\n store.git(&[\"add\",\"unrelated.txt\"]).unwrap();\n store.git(&[\"commit\",\"-m\",\"another actor advanced trunk\"]).unwrap();\n store.commit_ship(\"s\",&tree,\"stale reviewed tree\").unwrap();\n assert!(store.git(&[\"show\",\"HEAD:unrelated.txt\"]).is_ok(),\"stale ship deleted an unowned committed path after preview\");\n}\n"
+}

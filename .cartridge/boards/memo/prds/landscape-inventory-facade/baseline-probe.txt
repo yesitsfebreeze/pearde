@@ -1,0 +1,14 @@
+import pathlib,subprocess,json,tempfile
+owner=pathlib.Path('/Users/feb/dev/cartridge/memo.ctg');root=tempfile.mkdtemp(prefix='memo-inventory-baseline-');p=subprocess.Popen([str(owner.parent/'cartridge.ctg/target/tool-result-contract/debug/memo_cartridge')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+def send(x):p.stdin.write(json.dumps(x)+'\n');p.stdin.flush()
+send({'apply':{'name':'memo','config':{}}})
+while not json.loads(p.stdout.readline()).get('ready'):pass
+request={'op':'landscape','version':2,'action':'summary','cwd':root};send({'id':1,'call':'memo','args':request});frames=[]
+while True:
+ f=json.loads(p.stdout.readline())
+ if f.get('reply')==1:break
+ frames.append(f)
+ if 'id' in f:send({'reply':f['id'],'error':'baseline forbids host work'})
+assert 'error' in f,f
+send({'dispose':True});p.communicate(timeout=10)
+print(json.dumps({'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=owner,text=True).strip(),'request':request,'response':f,'host_frames':frames,'finding':'Native v2 summary is absent; legacy parser rejects additive fields before host calls'},indent=2))

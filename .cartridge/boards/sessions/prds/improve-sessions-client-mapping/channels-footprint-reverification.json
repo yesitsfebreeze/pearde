@@ -1,0 +1,9 @@
+{
+  "before_spec_sha256": "8fa78e070f18f5c60fb450a775f49fbf906f668afe47bbfe0c95a6b10f0c500e",
+  "after_spec_sha256": "e5c8339c58392c3f45b8e931d2bdc1b54dc21487fb28f04d8b31906b00f1d6ca",
+  "added_sources": [
+    "src/channels.rs"
+  ],
+  "behavior_acceptance_gates_changed": false,
+  "source": "423ecd329a98d0e0702a71c9ccb0a33a16cedae6"
+}

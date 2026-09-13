@@ -1,0 +1,21 @@
+{
+  "round": 3,
+  "sha256": {
+    "prd.md": "a04ba27cdab56058bf5ac4b79cdcff7dca16673002299c5292ca4c34269299db",
+    "specs/spec01.md": "467639816673d1e5a4cf6d1e7e9b8a13a017567733d0d4ebca26461926f1405b",
+    "original-leaf-prd.md": "5f984672663be1d010e5a4a4f6f371992c5c70e79df940199a015e268fe31c52",
+    "bounded-inventory-snapshot/prd.md": "da58ef657dd455c2e5cb367aa261f56d17cd0289ed1a90957addf031987ad82f",
+    "bounded-inventory-snapshot/specs/spec01.md": "362c71b85947f4b2b1e99760ba5c656622b7f9fa119151380aaa1c55c212417c",
+    "bounded-inventory-snapshot/proof.json": "b1129b58d907039f0af6f87db69b80659a226074fcff17b5c794a52bfee50826",
+    "bounded-inventory-snapshot/collection.md": "2c2c856d561341ccc17d6155353cd58621c3bc80ea02e0f5cbe87fa252044e69"
+  },
+  "memo_inputs": {
+    ".cartridge/boards/memo/prds/landscape-inventory-facade/prd.md": "746ca22a9b2b406e33116eacbd8821c04195e6e69cc39420344034416c7f9ee3",
+    ".cartridge/boards/memo/prds/landscape-inventory-facade/specs/spec01.md": "884782253390486e6491ff00a7b2f74252a2f6e2c7f081318d3bb991f08ff5eb",
+    ".cartridge/boards/memo/prds/landscape-inventory-facade/proof.json": "497a45a3aef75962225242a8f87ad812a983794b54c46bd87be07982cd47fb0c",
+    ".cartridge/boards/memo/prds/landscape-inventory-facade/review.md": "9d92429c25120226f36b5601cedd94a1493cd37596f03275c8afad36fe7b1b68",
+    ".cartridge/boards/memo/prds/landscape-inventory-facade/collection.md": "ed79441fa53adaa25249c72dc2cb73d77a5b462483a8eb074b0c6464f75f411e"
+  },
+  "reviewer": "/root",
+  "score": 96
+}

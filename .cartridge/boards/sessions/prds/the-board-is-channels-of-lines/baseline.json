@@ -1,0 +1,53 @@
+{
+  "source_revision": "2a6a863cf1af0876072f8879050274cfa650a785",
+  "binary_sha256": "2fe2a61c2940b382cb84eb0ad1bd660111b6547a4d28527d43e83754d4239cb0",
+  "probe": "actual sessions SDK subprocess; host apply config uses disposable dir; request/reply each bounded by 10s; no source or user-store mutation",
+  "ready": {
+    "provide": "sessions"
+  },
+  "observed": [
+    {
+      "args": {
+        "op": "channels"
+      },
+      "reply": {
+        "error": "unknown sessions op channels",
+        "reply": 1
+      }
+    },
+    {
+      "args": {
+        "op": "post",
+        "channel": "team",
+        "from": "fixture",
+        "text": "hello"
+      },
+      "reply": {
+        "error": "unknown sessions op post",
+        "reply": 2
+      }
+    },
+    {
+      "args": {
+        "op": "read",
+        "channel": "team",
+        "since": 0,
+        "limit": 5
+      },
+      "reply": {
+        "error": "unknown sessions op read",
+        "reply": 3
+      }
+    }
+  ],
+  "source_inputs": {
+    "src/main.rs": "b850f3b417e9a90cb6e069d3f92873232388223311dfff6a1fdff90da48951aa",
+    "src/mailbox.rs": "b2b0088fb6376a2082d16103308a02516e1c1effba2c15c0995071ca9e52ef74"
+  },
+  "historical_source": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/memos/work/root--the-board-is-channels-of-lines.md",
+  "historical_sha256": "7e21d34d40ee514de2981a5a1ce75c3771adcd73110346735809c3943e93d024",
+  "historical_claim": "sys-38/implementer-the-board-is-channels-of-lines",
+  "historical_state": "active",
+  "review_history": "No scored round located for historical active memo. Round-1 inventory preserves active exclusion; related scopes have their own rounds and do not reset or substitute this identity. Coordinator to confirm before recording first substantive review.",
+  "existing": "Direct mailbox uses recipient snapshot, ordered bounded lines, scoped host credentials and read/ack receipts; no named channel operations/catalogue. Runtime stream channels are ephemeral and not this store."
+}

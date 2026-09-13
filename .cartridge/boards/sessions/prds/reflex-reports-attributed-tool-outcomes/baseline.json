@@ -1,0 +1,80 @@
+{
+  "command": "Inline Python subprocess SDK probe: apply config.dir to disposable TemporaryDirectory; send exact rows below; terminate without user-store access. Source inspection command: rg -n \"diagnostic\\(|tool_started|tool_finished\" across current runtime/agent/session sources.",
+  "binary_sha256": "105a23f1b2a96babeb3f5a7cc7d4e8a4e70ce63a315bec3afec0a60aad11182e",
+  "sources": {
+    "sessions.ctg": {
+      "head": "965108d9c29bce1a41a518917d6c8892e67e42bf",
+      "paths": {
+        "src/main.rs": "a70552ce348041d7ef6d1115153d7e45ef6ea0195840c4cae253a276e8d59cb5"
+      }
+    },
+    "cartridge.ctg": {
+      "head": "a029e785922985ede8539a75b83b265e9e238a96",
+      "paths": {
+        "src/cartridge.rs": "a462bbe09682625db5cf20f30f3d2760f666ec345df369b79ef6d269486d3aa8",
+        "src/turn.rs": "9f8b41ffa5a90a54e402c10508203f7401b5ed5d5bc785b4c3821af37d0535a9",
+        "src/sdk.rs": "362bdce0137610a787a8c1efc5ada84689b45aa88917fe7b87432a9ed45852f3",
+        "src/lua.rs": "e9b1caa126a77d07e479e7bda78ed2f7cccea27d374276563e06926ae0b63177"
+      }
+    },
+    "proxy.ctg": {
+      "head": "439594188097e770fb9993aae379ac9906e0824a",
+      "paths": {
+        "src/service.rs": "cec6334e76baabc91a1c41416d0ded4515ae1ac8884b872cbcb32ac35638cfe4",
+        "src/trace.rs": "9861f9729ae47892f1031f55ad4c7029c471a8a34112e6441f5013946d736fe3"
+      }
+    },
+    "agent.ctg": {
+      "head": "a09b593a11ed1e027c823bb632838cc92a09e2eb",
+      "paths": {
+        "src/lib.rs": "260c749471c3d4ca439046acc170e2c608237621ffb1201ebf3bdac178eba265"
+      }
+    }
+  },
+  "rows": [
+    {
+      "args": {
+        "op": "create",
+        "name": "disposable observation baseline"
+      },
+      "reply": {
+        "data": {
+          "agent": {},
+          "buffers": [],
+          "created": 1789318349,
+          "cwd": "/Users/feb/dev/cartridge",
+          "files": [],
+          "id": "18d4ef8f02f22150-2",
+          "name": "disposable observation baseline",
+          "parent": null,
+          "revision": 0,
+          "transcript": null,
+          "updated": 1789318349
+        },
+        "reply": 1
+      }
+    },
+    {
+      "args": {
+        "op": "reflex_report",
+        "id": "18d4ef8f02f22150-2"
+      },
+      "reply": {
+        "error": "unknown sessions op reflex_report",
+        "reply": 2
+      }
+    },
+    {
+      "args": {
+        "op": "observations",
+        "id": "18d4ef8f02f22150-2"
+      },
+      "reply": {
+        "error": "unknown sessions op observations",
+        "reply": 3
+      }
+    }
+  ],
+  "observed": "sessions has no attributed report/observation operation. Runtime native call boundary knows source cartridge name but emits no tool attempt/completion observations. Existing turn diagnostics are best effort, opt-in and capped with one rotation. Proxy trace knows real outcomes/duration/descriptor but covers only proxy model dispatch. Agent checkpoints retain raw tool results without duration/actor/source-revision fields.",
+  "expected_after": "Actual host-observed mixed native dispatch fixture can be reported without arguments/results; legacy missing attribution/time/status remains unknown. Sessions projection cannot by itself claim actual collection."
+}

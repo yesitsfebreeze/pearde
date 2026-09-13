@@ -1,0 +1,8 @@
+    Finished `test` profile [unoptimized] target(s) in 0.09s
+     Running unittests src/main.rs (target/sessions-mapping/debug/deps/proxy-a653fea2c16f6427)
+
+running 1 test
+test tests::trace_outcomes_do_not_turn_errors_into_success_or_replay ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 32 filtered out; finished in 0.00s
+

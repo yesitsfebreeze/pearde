@@ -1,0 +1,82 @@
+{
+  "source_revision": "2a6a863cf1af0876072f8879050274cfa650a785",
+  "source_files": [
+    {
+      "path": "src/main.rs",
+      "sha256": "b850f3b417e9a90cb6e069d3f92873232388223311dfff6a1fdff90da48951aa"
+    },
+    {
+      "path": "src/observations.rs",
+      "sha256": "f07be68e70494bbf588e41a907a96477236ec16de4a1f5b1511543a61e26e417"
+    },
+    {
+      "path": ".cartridge/tests/unit/main/observation_tests.rs",
+      "sha256": "b46676a060b61392b714005badfec3e226502677fdc8dd040190f92a03cac46f"
+    },
+    {
+      "path": ".cartridge/tests/integration/observations.test.ts",
+      "sha256": "ead875d65915dd6c498a99d833eaa3a318a003be7c9ba8a545f0e8467b2fc903"
+    },
+    {
+      "path": ".cartridge/docs/observations.md",
+      "sha256": "5c2b83003a4b750ae6fffbb77c8b52d56f3ef2d2f8c7eb55675c0e2193e4ce0d"
+    }
+  ],
+  "runtime_revision": "1a5e9867acec1d07cd732c3af2ccf331a0979a61",
+  "dependency_receipts": [
+    {
+      "ref": "@runtime/native-tool-observation-adapter",
+      "state": "done",
+      "revision": "0f9c06131215ee796168c5379c16258dbb3ab5ba158342727899c5ffbd5a08ed",
+      "commit": "1a5e9867acec1d07cd732c3af2ccf331a0979a61",
+      "verified": true,
+      "integrated": true,
+      "reason": null,
+      "evidence": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/runtime/prds/native-tool-observation-adapter/collection.md"
+    },
+    {
+      "ref": "@sessions/reflex-reports-attributed-tool-outcomes/attributed-outcome-report",
+      "state": "done",
+      "revision": "67d767a723ff6e426531e8b38b90d9c210585d4ef70d1f3dcfd2bddf9bb9602e",
+      "commit": "2a6a863cf1af0876072f8879050274cfa650a785",
+      "verified": true,
+      "integrated": true,
+      "reason": null,
+      "evidence": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/reflex-reports-attributed-tool-outcomes/attributed-outcome-report/collection.md"
+    }
+  ],
+  "logs": {
+    "proof-receipts.log": "ecc6c88614a39379fce96ceba9c4a946e4ceacdad7151f0c70f1129cd6bbf013",
+    "proof-integration.log": "bb306b06f3a91c4287852ffa92194c19f1c73c1ab348312baf8abde81e7a92a1"
+  },
+  "commands": [
+    "Both exact Verify shell blocks in specs/spec01.md; receipt checks cwd /Users/feb/dev/cartridge/prd.ctg and integration cwd /Users/feb/dev/cartridge/cartridge.ctg"
+  ],
+  "result": "Both dependency receipts verified; real runtime plus sessions 3 tests passed /55 assertions",
+  "review": {
+    "reviewer": "/root",
+    "round": 3,
+    "score": 96,
+    "semantic_changes": false
+  },
+  "final_plan_digests": {
+    "prd.md": "741945cdcd6e9c5e4294539c06b41a8049213ae7ba6d213fee6a45b0b4153657",
+    "specs/spec01.md": "89ee9ef459d6a8f40fe70eaa0217a3bab9868e0878bb2e9ed1fd5835f28adb71"
+  },
+  "limits": [
+    "Native call evidence only; host actor configuration is provenance, not end-user authentication.",
+    "Host-configured regular file and rotation are bounded best-effort snapshots; metadata checks do not defeat hostile writers or prove an atomic window.",
+    "Lost rows, absent dimensions and external effects after cancellation remain unknown; no productivity/billing estimates.",
+    "Verdicts compare explicit expiry and last observed provider/descriptor, never assert current deployment.",
+    "Cross-owner runtime contract-only changes require manual parent revalidation in addition to receipt checks."
+  ],
+  "binary_inputs": {
+    "sessions": "2fe2a61c2940b382cb84eb0ad1bd660111b6547a4d28527d43e83754d4239cb0",
+    "cartridge": "7ff18f941756552d3f97f7359f4b424cb83c41ca46b7b0c59e21a9e0e5067a89",
+    "harness": "02862fa5080e7678867b41a97a24c8198965e2e522c379b5d7d8e207c814c4a2"
+  },
+  "external_fixture_inputs": {
+    "cartridge.ctg/.cartridge/tests/integration/observation-fixture.ts": "c22f0767afae49d3621391f5c77a1db0b34b13d382517229531c0095f4b1a80c",
+    "harness.ctg/src/main.rs": "e4c23eeb9da21595c3a5bdea3a2374482f3ab51f1f0eadf95953afbdfa2ea0d8"
+  }
+}

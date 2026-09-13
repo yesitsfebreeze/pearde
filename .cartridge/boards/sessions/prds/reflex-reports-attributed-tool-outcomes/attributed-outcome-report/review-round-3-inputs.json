@@ -1,0 +1,15 @@
+{
+  "round": 3,
+  "reviewer": "/root",
+  "score": 96,
+  "dimensions": [
+    19,
+    20,
+    19,
+    19,
+    19
+  ],
+  "status": "passed",
+  "prd_sha256": "660bb7a2984ba9d8dac91e47db3bd2b4802754af78b2e860f6e34429b413e666",
+  "spec_sha256": "2fe3364000d4af3bedc972bd14953092cc97d26744a1b4390d99ea8b453f429a"
+}

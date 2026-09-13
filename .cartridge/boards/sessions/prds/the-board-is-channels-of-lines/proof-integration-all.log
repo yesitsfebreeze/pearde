@@ -1,0 +1,32 @@
+bun test v1.3.14 (0d9b296a)
+
+../sessions.ctg/.cartridge/tests/integration/channels.test.ts:
+(pass) real scoped channel posts order, deduplicate and survive process restart [267.90ms]
+(pass) direct aliases read legacy mailbox lines and share the original append path [75.40ms]
+(pass) bounded catch-up and catalogue never silently skip lines or change direct acknowledgements [356.08ms]
+
+../sessions.ctg/.cartridge/tests/integration/mailbox.test.ts:
+(pass) host credentials and owner lineage reject copied metadata and generic authority rewrites [142.72ms]
+(pass) real concurrent sends retain unique sequence and same message ID is idempotent [282.00ms]
+(pass) read receipts survive restart without acknowledging undelivered or concurrent posts [572.64ms]
+
+../sessions.ctg/.cartridge/tests/integration/retention.test.ts:
+(pass) real SDK previews exact bytes/records and preserves protected sessions across apply/restart/resume [193.08ms]
+(pass) native late protection and durable client references cannot be bypassed with copied candidates [188.63ms]
+(pass) actual harness ring still deletes an unprotected completed turn [1172.32ms]
+(pass) actual harness ring preserves a turn becoming active during ingest [1162.19ms]
+
+../sessions.ctg/.cartridge/tests/integration/mapping.test.ts:
+(pass) real host configuration survives reconnect and copied call metadata cannot cross scopes [94.55ms]
+(pass) missing identity or conversation has one honest connection scope and no reconnect identity [44.17ms]
+(pass) concurrent fresh SDK processes cannot publish two mappings against one revision [23.57ms]
+
+../sessions.ctg/.cartridge/tests/integration/observations.test.ts:
+(pass) real runtime evidence is reported by sessions without changing source or transcript [189.80ms]
+(pass) historical unknown counts and verdicts use actual observed descriptor revisions [47.57ms]
+(pass) disabled and missing evidence stay explicit while actual tool execution still succeeds [67.14ms]
+
+ 16 pass
+ 0 fail
+ 368 expect() calls
+Ran 16 tests across 5 files. [4.90s]

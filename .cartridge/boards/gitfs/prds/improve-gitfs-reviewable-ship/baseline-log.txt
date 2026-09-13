@@ -1,0 +1,21 @@
+   Compiling hyper-rustls v0.27.9
+   Compiling reqwest v0.12.28
+   Compiling gitfs v0.1.0 (/Users/feb/dev/cartridge/gitfs.ctg)
+    Finished `test` profile [unoptimized] target(s) in 1.36s
+     Running unittests src/main.rs (target/tool-result-contract/debug/deps/gitfs-8952c5d566a3c3a9)
+
+running 1 test
+
+thread 'store::tests::baseline_stale_reviewed_tree_must_not_delete_new_trunk_files' (43827107) panicked at /Users/feb/dev/cartridge/gitfs.ctg/src/../.cartridge/tests/unit/store/tests.rs:187:2:
+stale ship deleted an unowned committed path after preview
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test store::tests::baseline_stale_reviewed_tree_must_not_delete_new_trunk_files ... FAILED
+
+failures:
+
+failures:
+    store::tests::baseline_stale_reviewed_tree_must_not_delete_new_trunk_files
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 25 filtered out; finished in 0.22s
+
+error: test failed, to rerun pass `-p gitfs --bin gitfs`

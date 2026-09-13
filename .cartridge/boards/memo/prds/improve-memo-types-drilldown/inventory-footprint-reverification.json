@@ -1,0 +1,7 @@
+{
+  "before_spec_sha256": "bd45c9f9bf2f9e2c153562e0d61f83cd24233fa6cfa3c272f2f8972eec60e591",
+  "after_spec_sha256": "068988b7ef6b20ecd433d0fe43fb205de8b7102952ca45ae907392f4cf85a908",
+  "added_source": "src/inventory.rs",
+  "behavior_acceptance_gates_changed": false,
+  "source": "45d5a54ab9da1a798cd9997af9a8c19bed8a1812"
+}

@@ -1,0 +1,14 @@
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/integration/recorded-push.test.ts:
+(pass) native recorded push requires reviewed exact binding and never replays operation identities [1802.87ms]
+(pass) native push refuses changed remote, nonancestor, ambiguous URLs and rewrite rules [1076.97ms]
+(pass) lost response stays durable unknown across restart; old readback cannot permit replay, exact readback confirms [3228.03ms]
+(pass) native cancellation and overflow keep bounded unknown evidence and do not leak helper stderr [2126.29ms]
+(pass) owned hook refuses an advertised head changed after preview check; durable refusal survives restart [1130.11ms]
+(pass) server CAS refuses advance after the validated advertisement without changing local history [1208.05ms]
+
+ 6 pass
+ 0 fail
+ 359 expect() calls
+Ran 6 tests across 1 file. [10.67s]

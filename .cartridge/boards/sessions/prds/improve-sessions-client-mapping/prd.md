@@ -1,18 +1,22 @@
 ---
 repo: /Users/feb/dev/cartridge/sessions.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: sessions
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: improve-sessions-client-mapping
 footprint:
-- /Users/feb/dev/cartridge/sessions.ctg/main.rs
-- /Users/feb/dev/cartridge/sessions.ctg/README.md
+- src/main.rs
+- src/mapping.rs
+- .cartridge/tests/unit/main/mapping_tests.rs
+- .cartridge/tests/integration/mapping.test.ts
+- .cartridge/docs/client-mapping.md
+commit: "181adb20248c6fdb718823919438939de55bdefc"
 ---
 
 # Map client conversations to cartridge sessions honestly
@@ -21,13 +25,13 @@ Only a host-authenticated connection identity plus an explicitly supplied extern
 
 ## Acceptance
 
-- [ ] The same authenticated client/workspace/external ID resolves its own mapping after reconnect.
-- [ ] Another authenticated client, workspace or profile cannot reuse it by copying metadata; missing IDs remain connection-scoped.
-- [ ] Legacy session files remain readable and mapping writes use revision-checked atomic persistence without rewriting transcripts.
+- [x] The same authenticated client/workspace/external ID resolves its own mapping after reconnect.
+- [x] Another authenticated client, workspace or profile cannot reuse it by copying metadata; missing IDs remain connection-scoped.
+- [x] Legacy session files remain readable and mapping writes use revision-checked atomic persistence without rewriting transcripts.
 
 ## Proof and recovery
 
-Start at [main.rs](../../../main.rs), [README.md](../../../README.md).
+Owner contracts: `sessions.ctg/src/main.rs` and the native SDK host configuration boundary. Baseline at source `4dd8518e2f9fb1bf63f191acffe3777d4eec3b5c`: the real SDK process returns `unknown sessions op mapping`; see [inputs](baseline-inputs.json) and [log](baseline.log).
 
 Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test sessions` from the composed root with the acceptance fixtures. These gates have not run for this plan.
 Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.

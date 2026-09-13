@@ -1,0 +1,8 @@
+{
+  "source_revision": "21be1528bff2840b00dcef3e87ece41585df3017",
+  "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract just test gitfs inspection_baseline",
+  "expected": "diff recognized; read succeeds without creating state",
+  "observed": "diff rejected as unknown; read creates .cartridge/gitfs",
+  "exit_code": 101,
+  "log_sha256": "c398e902cd39e106b7783e4bd9376ab4dc532bb34570d2a65c93885d95b83796"
+}

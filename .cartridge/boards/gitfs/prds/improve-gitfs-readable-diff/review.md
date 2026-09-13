@@ -29,3 +29,18 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — Read-only three-way inspection
+
+Reviewer `/root` self-review. Exact inputs: review-round-3-inputs.json.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Reproduced missing diff and read-created state; read-only inspection has direct utility. |
+| Ownership and reuse | 19 | GitFS owns store/inspection; one known-operation addition remains in policy owner. |
+| Dependencies and slices | 19 | Existing policy and wire gates precede collection; no attribution or migration dependency. |
+| Acceptance and baseline | 19 | Actual MCP plus actual policy; complete repository-byte snapshots and revision drilldown. |
+| Failure and compatibility | 18 | Explicit read caps, stale continuation and conservative conflicts; not atomic filesystem capture. |
+
+**94/100 — PASS**. No blockers. Keep full source cap and patch byte cap distinct;
+no best-effort omission may be advertised as a complete diff. Rounds used: 3/5.

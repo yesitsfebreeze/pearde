@@ -1,0 +1,10 @@
+{
+  "gitfs_tests": 25,
+  "mcp_assertions": 199,
+  "policy_tests": 3,
+  "logs": {
+    "/tmp/cartridge-gitfs-inspection-mcp.log": "fd706fc8c7323dcee7d8a5541d8128c5507cf3904e3de0cf79fe9fd45bebd5b3",
+    "/tmp/cartridge-gitfs-inspection-tests.log": "b9fff9b5492896a619696ebc0455c439e4a16dc78aff03d6217ae4cf360733ab",
+    "/tmp/cartridge-gitfs-inspection-policy.log": "ba57c9a2b44b6f14352a8039ef553a11aff9ecaac6dfe5c9731a71838418195e"
+  }
+}

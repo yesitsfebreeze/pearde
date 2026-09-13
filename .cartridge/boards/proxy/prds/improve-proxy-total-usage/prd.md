@@ -19,7 +19,7 @@ footprint:
 - src/usage.rs
 - .cartridge/tests/unit/tests.rs
 - .cartridge/docs/usage.md
-commit: "439594188097e770fb9993aae379ac9906e0824a"
+commit: "9ddcc08807a059579c21227ad9d3523d242ddf86"
 ---
 
 # Account for every internal model round consistently
@@ -49,3 +49,5 @@ prior480a093f receipt retained. Router integration is0a216cb.
 
 Reverify unchanged acceptance after the next integrated owner feature; earlier
 0c9d4e9b receipt retained. No contract relaxation.
+
+Reverification: recall integration at9ddcc088 changes shared proxy paths. Bind newly imported context/wire modules and dependency declarations without changing behavior acceptance or executable gates.

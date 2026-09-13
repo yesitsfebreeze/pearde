@@ -1,12 +1,16 @@
 ---
 complexity: medium
 footprint:
-  - src/main.rs
-  - src/service.rs
-  - src/streaming.rs
-  - src/usage.rs
-  - .cartridge/tests/unit/tests.rs
-  - .cartridge/docs/usage.md
+- src/main.rs
+- src/service.rs
+- src/streaming.rs
+- src/usage.rs
+- .cartridge/tests/unit/tests.rs
+- .cartridge/docs/usage.md
+- Cargo.toml
+- cartridge.json
+- src/context.rs
+- src/wire.rs
 ---
 
 # spec01 — One bounded usage ledger across JSON and streaming rounds

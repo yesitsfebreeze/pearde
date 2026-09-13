@@ -1,13 +1,6 @@
 ---
 complexity: medium
-footprint:
-  - cartridge.json
-  - src/main.rs
-  - src/context.rs
-  - src/search.rs
-  - src/service.rs
-  - .cartridge/tests/unit/search/tests.rs
-  - .cartridge/docs/search-pages.md
+footprint: ["cartridge.json","src/main.rs","src/context.rs","src/search.rs","src/service.rs",".cartridge/tests/unit/search/tests.rs",".cartridge/docs/search-pages.md","Cargo.toml","src/files.rs"]
 ---
 
 # spec01 — Page a bounded captured search result

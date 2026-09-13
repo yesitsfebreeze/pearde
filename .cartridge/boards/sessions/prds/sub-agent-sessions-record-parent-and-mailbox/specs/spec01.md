@@ -1,6 +1,7 @@
 ---
 complexity: high
 footprint:
+- src/channels.rs
 - src/main.rs
 - src/mailbox.rs
 - .cartridge/tests/unit/main/mailbox_tests.rs

@@ -16,7 +16,7 @@ footprint:
 - .cartridge/tests/unit/main/mailbox_tests.rs
 - .cartridge/tests/integration/mailbox.test.ts
 - .cartridge/docs/mailbox.md
-commit: "2a6a863cf1af0876072f8879050274cfa650a785"
+commit: "423ecd329a98d0e0702a71c9ccb0a33a16cedae6"
 ---
 
 # sub-agent-sessions-record-parent-and-mailbox
@@ -41,3 +41,5 @@ Preserve the last usable implementation and durable data on failure; report part
 [Round 2 agent review](review.md). Inherits round 1 from `sub-agent-sessions-record-parent-and-mailbox`; maximum five rounds.
 
 Reverification: attributed report at2a6a863 adds native main dispatch; bind src/observations.rs as transitive source, retaining previous acceptance and executable gates.
+
+Named channel registration revalidation at 423ecd32: source footprint includes registered channels and its shared mailbox codec; acceptance and behavior gates remain unchanged.

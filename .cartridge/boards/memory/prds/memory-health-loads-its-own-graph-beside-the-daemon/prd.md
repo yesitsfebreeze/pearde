@@ -11,7 +11,7 @@ review-round: 3
 review-status: "passed"
 canonical-scope: memory-health-loads-its-own-graph-beside-the-daemon
 needs: ["@memory/every-mutation-holds-the-store-writer-boundary"]
-commit: "f9759848c56255ee0607587970f58ccc087ade53"
+commit: "0a7c4a1f729c700f52c650ee0c3efc56a136560f"
 ---
 
 # memory-health-loads-its-own-graph-beside-the-daemon

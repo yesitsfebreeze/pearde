@@ -14,7 +14,7 @@ needs:
 - '@gitfs/improve-gitfs-readable-diff'
 - '@gitfs/improve-gitfs-snapshot-selection'
 - '@gitfs/improve-gitfs-reviewable-ship'
-commit: "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5"
+commit: "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36"
 ---
 
 # GitFS and ship improvement plan

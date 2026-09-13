@@ -1,6 +1,6 @@
 ---
-commit: b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5
-spec-digests: {"spec01.md":"09c0650515a23de8f0d4339ae6278c5f4b004e1ba9c9b112c0b15542463b7540"}
+commit: b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36
+spec-digests: {"spec01.md":"b3e6ff37358377c50e74fda5a4bdb9db7622f62972776728688636b6119e8036"}
 child-contracts: {}
 ---
 
@@ -8,27 +8,32 @@ child-contracts: {}
 
 /Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-programme/specs/spec01.md: exit 0
 
-Command SHA-256: cc5f5328a65fe191e537ee7857a35d981b13e9e2dd2e6f5c6791768e23222e6c
+Command SHA-256: b2b52232a860df320cf78b03058c261c2213f9f16acf66924c1f26ab43d6b418
 
 ```text
 {
-  "source_commit": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
-  "records_commit": "cf3d9eb1d1fc17be40c174de54ae8b4897016574",
+  "source_commit": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+  "records_commit": "c2367ca1a048b3e1cf0d2fcb42f1008d7a03bb56",
   "footprint": [
+    ".cartridge/docs/change-provenance.md",
     ".cartridge/docs/inspection.md",
     ".cartridge/docs/push.md",
     ".cartridge/docs/ship.md",
+    ".cartridge/tests/integration/change-provenance.test.ts",
     ".cartridge/tests/integration/recorded-push.test.ts",
     ".cartridge/tests/integration/reviewed-ship.test.ts",
     ".cartridge/tests/integration/tool-result.test.ts",
+    ".cartridge/tests/unit/provenance.rs",
     ".cartridge/tests/unit/push/tests.rs",
     ".cartridge/tests/unit/ship/tests.rs",
     ".cartridge/tests/unit/snapshot.rs",
     ".cartridge/tests/unit/store/tests.rs",
     ".cartridge/tests/unit/tool_result.rs",
+    "Cargo.toml",
     "init.lua",
     "src/inspection.rs",
     "src/main.rs",
+    "src/provenance.rs",
     "src/push.rs",
     "src/service.rs",
     "src/ship.rs",
@@ -38,53 +43,53 @@ Command SHA-256: cc5f5328a65fe191e537ee7857a35d981b13e9e2dd2e6f5c6791768e23222e6
   "dependencies": [
     {
       "ref": "@gitfs/improve-gitfs-readable-diff",
-      "source_commit": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
-      "prd_sha256": "992d5b668b68eb3fd3f7f9a52f2bd4ca35733d1bfb23e8905b0d382c30d76e90",
-      "spec_sha256": "24f1ea5b670c4ad4251838837f85f633f209437c9b5bfc44df8d69dcef483d9b",
+      "source_commit": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+      "prd_sha256": "e0ec8ea766792e75bd2d52023d32fbcb855811bd682f8f0226a1db0fa804c0dc",
+      "spec_sha256": "6ed56a3426a0c5bf5039a2622785a66c6050c7da0b3a3b60aacfd06e437426e7",
       "review_round": 3,
       "score": 94,
       "review_sha256": "e902695dc87b19e2b5e44fc47de8449f7254930647221216911dde9027ba3251",
-      "collection_sha256": "be223f6095f69d968636f2eda71cebd0f931513d91ec9635212a9740b9d44371"
+      "collection_sha256": "34f5f352c4dcd05d7b0845bb24bd95fe57cdf95e645a962a6d0d0c0399485406"
     },
     {
       "ref": "@gitfs/improve-gitfs-snapshot-selection",
-      "source_commit": "55cc8aae27575ded5950737c46a99aa358b95980",
-      "prd_sha256": "0ecb00d188671a383d13a33827b6f9f9de669d886a3b308350850a037dea059d",
-      "spec_sha256": "a3bdd842ca5f317edfbe883ee61fd0ddaff465c81c9d44183aab9e6bc852c8c6",
+      "source_commit": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+      "prd_sha256": "0bcf82b09a990ae76494669bb89e1e0054d492c9466ed46d232a231d7b17d188",
+      "spec_sha256": "a904623c7d41d7caaaa08a184595fd9fe8ce76c19e146a804193bc5c544c8cb7",
       "review_round": 3,
       "score": 97,
       "review_sha256": "3d82567f6539d411e6369638b96735abd92727b800188bfa8beb07be05d11d3d",
-      "collection_sha256": "58f30469036f1560cc49b4ecb4e6d33bcfa815a975706654aec83030a163b78d"
+      "collection_sha256": "f4e047332b71b3baf7617aa10bd91dac7a030f4d3893f5f11077afaf1baba4d7"
     },
     {
       "ref": "@gitfs/improve-gitfs-reviewable-ship",
-      "source_commit": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
-      "prd_sha256": "b11f1b137675ea09397193a0a6d237befa9b55c1836180081624b7c9a31029f6",
-      "spec_sha256": "ab54d545cb3d4c525ce32d4c62c7b5a82c4233286f751c985036a0cfa9b12b3c",
+      "source_commit": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+      "prd_sha256": "c6507ba8164cffabae3235b065196237e0c34063842ed0c39beb5d2195c5d4b8",
+      "spec_sha256": "13ce569a3f7d9eb26dd041bd6488743cdda3bb8bcc708b6a73521c1375ef8c31",
       "review_round": 3,
       "score": 97,
       "review_sha256": "f7cf189148732d19aa6cd857f9d6eade2f486346efe1ddaee4511e4338adad85",
-      "collection_sha256": "e73ca19c7a619497099902f9a070c688b2f60de99750f3532c77fc120bf9e04a"
+      "collection_sha256": "dbba1266bb82ba6da72fe0c6e95c19cd2076d191ac478b03b46fefac6a05177c"
     },
     {
       "ref": "@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally",
-      "source_commit": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
-      "prd_sha256": "582d48cc7f602d9db8c9021f1b2ca0a33a28bad996c95fdc75f82a9da570825f",
-      "spec_sha256": "73b025bce9603f1a750a9597017093fa3980f7e4384dc00317553e85f2430473",
+      "source_commit": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+      "prd_sha256": "c397c6c76f4f334b7eb5515a2a901b98bba02bc1fcaaef114ac17e21f62a3233",
+      "spec_sha256": "6b251cdfef881e035a048fd8d6fc8be2b7b15e41431ebe4813a2c7df854c5ddd",
       "review_round": 3,
       "score": 95,
       "review_sha256": "459046648d77e82735a3313e7f0594eaaae26d27fa358fda38c81307af961d0b",
-      "collection_sha256": "8fa653fa8abefc492ea70982e508a1adeb671ed3f61951d6b3bde6f208d51ad4"
+      "collection_sha256": "253d4cab9798ba93ba189ae645dc4dc5fc1215033fce48548b84df0a2e7a31af"
     },
     {
       "ref": "@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head",
-      "source_commit": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
-      "prd_sha256": "99045ee2327c727c81e999fd594e9f099614d10048ace5174219443b9aacf2ca",
-      "spec_sha256": "3191d544dd1c2260d832f51526baa1c59cee84dc4772c9496ff59507d3c61841",
+      "source_commit": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+      "prd_sha256": "f7fb33f8f5d0d3101c0ba516964d06bd893f39e000170efe4541725625e9d380",
+      "spec_sha256": "6733e87f3f84226f8070a1c66b494ca4931f4145bc6281ca1517e3c12f153569",
       "review_round": 3,
       "score": 96,
       "review_sha256": "838bc559f5655e3165c2a7458f5da866761ba41af85b65c5ea40986dd7b15116",
-      "collection_sha256": "30e637402c05053a71e944290d6947ca0365a4c3c1eaa720848afb168ef794b6"
+      "collection_sha256": "44977c90879b4740183345464d5f809751cf64c2f83bb3d8a31dc0b708a8a7e7"
     },
     {
       "ref": "@policy/improve-policy-operation-rules",
@@ -109,50 +114,59 @@ Command SHA-256: cc5f5328a65fe191e537ee7857a35d981b13e9e2dd2e6f5c6791768e23222e6
   ],
   "composition_proof_sha256": "b8845814d7e60b7492ece92f6d4f60c1269e7f73e4f5ec7054004c3031dcc9d2"
 }
-    Finished `test` profile [unoptimized] target(s) in 0.18s
-     Running unittests src/main.rs (target/tool-result-contract/debug/deps/gitfs-4eb57900a7770a88)
+    Finished `test` profile [unoptimized] target(s) in 0.10s
+     Running unittests src/main.rs (target/tool-result-contract/debug/deps/gitfs-c66fa7605aaad949)
 
-running 38 tests
-test push::tests::receipt_looking_prose_or_conflicting_trailers_do_not_authorize_push ... ok
+running 47 tests
+test provenance::tests::context_is_bounded_and_legacy_missing_coordinates_stay_null ... ok
+test push::tests::cancelled_command_kills_the_spawned_helper_group ... ok
 test push::tests::hook_requires_exactly_one_complete_advertised_update ... ok
-test secrets::tests::template_files_are_skipped_entirely ... ok
-test secrets::tests::has_secret_detects_and_allows_plain ... ok
-test secrets::tests::sensitive_filename_is_flagged_even_with_plain_content ... ok
+test push::tests::receipt_looking_prose_or_conflicting_trailers_do_not_authorize_push ... ok
 test secrets::tests::context_lines_are_not_scanned ... ok
+test secrets::tests::has_secret_detects_and_allows_plain ... ok
+test secrets::tests::placeholder_token_is_ignored ... ok
 test secrets::tests::real_key_on_added_line_finds ... ok
+test secrets::tests::scan_file_matches ... ok
+test secrets::tests::sensitive_filename_is_flagged_even_with_plain_content ... ok
+test secrets::tests::template_files_are_skipped_entirely ... ok
+test push::tests::command_timeout_and_overflow_are_bounded_and_do_not_expose_stderr ... ok
+test provenance::tests::nonregular_or_alias_preimages_are_rejected_without_waiting_for_a_writer ... ok
+test provenance::tests::receipt_validation_rejects_arbitrary_success_or_wrong_publications ... ok
+test provenance::tests::locked_overlay_receipts_pin_old_blob_tip_and_first_parent_without_inventing_overlay ... ok
+test ship::tests::active_cancellation_is_exact_bounded_and_drop_cancels_the_blocking_work ... ok
 test ship::tests::auto_subject_shapes ... ok
 test ship::tests::configured_gate_and_author_are_validated_instead_of_defaulting_invalid_types ... ok
-test ship::tests::active_cancellation_is_exact_bounded_and_drop_cancels_the_blocking_work ... ok
 test ship::tests::gate_prompt_demands_json_only ... ok
 test ship::tests::preview_revision_binds_author_required_gate_timeout_subject_and_force ... ok
 test ship::tests::secret_subject_is_rejected_and_plain_passes ... ok
-test secrets::tests::placeholder_token_is_ignored ... ok
-test secrets::tests::scan_file_matches ... ok
-test store::tests::missing_publication_ack_remains_unknown_after_later_advance_or_failed_readback ... ok
-test push::tests::cancelled_command_kills_the_spawned_helper_group ... ok
-test push::tests::command_timeout_and_overflow_are_bounded_and_do_not_expose_stderr ... ok
-test service::snapshot_tests::read_failures_report_partial_success_and_preserve_failed_overlay ... ok
 test service::snapshot_tests::guarded_edit_still_refuses_stale_content ... ok
+test provenance::tests::metadata_caps_and_unreadable_preimage_never_claim_complete_attribution ... ok
+test service::snapshot_tests::read_failures_report_partial_success_and_preserve_failed_overlay ... ok
+test store::tests::missing_publication_ack_remains_unknown_after_later_advance_or_failed_readback ... ok
+test provenance::tests::materialize_keeps_exact_applied_evidence_and_reports_failed_deletion_and_ledger ... ok
 test push::tests::durable_attempt_capacity_corruption_and_monotonic_observation ... ok
-test store::tests::prepared_head_transaction_holds_the_symbolic_branch_until_decision ... ok
+test service::snapshot_tests::selected_snapshot_records_only_new_commits_and_retains_partial_evidence ... ok
+test provenance::tests::concurrent_same_session_receipts_form_the_actual_locked_commit_chain ... ok
+test service::snapshot_tests::selection_is_exact_empty_is_empty_and_unowned_is_rejected_before_writes ... ok
 test store::tests::materialize_guard ... ok
-test store::tests::unrelated_overlay_sessions_do_not_share_a_mutation_lock ... ok
+test store::tests::roundtrip_and_noop ... ok
+test store::tests::concurrent_reviewed_publications_have_one_winner_and_preserve_worktree_and_index ... ok
 test tool_result::tests::inspection_baseline_diff_is_available ... ok
-test store::tests::multi_path_overlay_survives_rewrite ... ok
+test store::tests::concurrent_overlay_writes_keep_every_path ... ok
 test tool_result::tests::inspection_baseline_read_does_not_create_a_store ... ok
 test tool_result::tests::payloads_are_encoded_once_and_text_stays_literal ... ok
+test store::tests::prepared_head_transaction_holds_the_symbolic_branch_until_decision ... ok
 test tool_result::tests::invalid_inputs_do_not_open_the_store ... ok
-test store::tests::concurrent_reviewed_publications_have_one_winner_and_preserve_worktree_and_index ... ok
-test store::tests::roundtrip_and_noop ... ok
+test store::tests::unrelated_overlay_sessions_do_not_share_a_mutation_lock ... ok
+test store::tests::multi_path_overlay_survives_rewrite ... ok
 test tool_result::tests::inspection_absence_binary_bounds_and_path_failures_are_explicit ... ok
-test store::tests::concurrent_overlay_writes_keep_every_path ... ok
-test service::snapshot_tests::selection_is_exact_empty_is_empty_and_unowned_is_rejected_before_writes ... ok
-test store::tests::ship_trailer_undo_and_no_remote ... ok
 test store::tests::reviewed_publication_refuses_stale_head_without_deleting_new_unowned_files ... ok
+test store::tests::ship_trailer_undo_and_no_remote ... ok
 test store::tests::reviewed_publication_binds_index_overlay_branch_and_repository_identity ... ok
+test provenance::tests::real_bulk_materialization_preserves_effects_after_record_cap_and_late_write_failure ... ok
 test tool_result::tests::real_consumers_share_the_tool_result_contract ... ok
 
-test result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 19.37s
+test result: ok. 47 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 14.21s
 
    Compiling ring v0.17.14
    Compiling rustls v0.23.44
@@ -161,7 +175,7 @@ test result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
     Checking hyper-rustls v0.27.9
     Checking reqwest v0.12.28
     Checking gitfs v0.1.0 (/Users/feb/dev/cartridge/gitfs.ctg)
-    Finished `dev` profile [unoptimized] target(s) in 5.94s
+    Finished `dev` profile [unoptimized] target(s) in 2.85s
    Compiling ring v0.17.14
    Compiling rustls-webpki v0.103.15
    Compiling rustls v0.23.44
@@ -169,28 +183,28 @@ test result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
    Compiling hyper-rustls v0.27.9
    Compiling reqwest v0.12.28
    Compiling gitfs v0.1.0 (/Users/feb/dev/cartridge/gitfs.ctg)
-    Finished `dev` profile [unoptimized] target(s) in 6.46s
-    Finished `dev` profile [unoptimized] target(s) in 0.14s
-    Finished `dev` profile [unoptimized] target(s) in 0.10s
+    Finished `dev` profile [unoptimized] target(s) in 3.26s
+    Finished `dev` profile [unoptimized] target(s) in 0.07s
+    Finished `dev` profile [unoptimized] target(s) in 0.06s
 bun test v1.3.14 (0d9b296a)
 
 ../gitfs.ctg/.cartridge/tests/integration/reviewed-ship.test.ts:
-(pass) native required gate is fail-closed for explicit subjects, body timeout and cancellation; exact success never pushes [4462.31ms]
-(pass) native stale reviews preserve external commits, and concurrent commits publish once without a configured model [1509.29ms]
-(pass) native force never bypasses a gate and oversized required review never silently truncates [1453.75ms]
+(pass) native required gate is fail-closed for explicit subjects, body timeout and cancellation; exact success never pushes [2364.44ms]
+(pass) native stale reviews preserve external commits, and concurrent commits publish once without a configured model [961.80ms]
+(pass) native force never bypasses a gate and oversized required review never silently truncates [939.76ms]
 
 ../gitfs.ctg/.cartridge/tests/integration/recorded-push.test.ts:
-(pass) native recorded push requires reviewed exact binding and never replays operation identities [3376.88ms]
-(pass) native push refuses changed remote, nonancestor, ambiguous URLs and rewrite rules [2620.05ms]
-(pass) lost response stays durable unknown across restart; old readback cannot permit replay, exact readback confirms [4424.05ms]
-(pass) native cancellation and overflow keep bounded unknown evidence and do not leak helper stderr [4464.69ms]
-(pass) owned hook refuses an advertised head changed after preview check; durable refusal survives restart [2173.31ms]
-(pass) server CAS refuses advance after the validated advertisement without changing local history [1721.23ms]
+(pass) native recorded push requires reviewed exact binding and never replays operation identities [1805.29ms]
+(pass) native push refuses changed remote, nonancestor, ambiguous URLs and rewrite rules [1098.29ms]
+(pass) lost response stays durable unknown across restart; old readback cannot permit replay, exact readback confirms [3111.02ms]
+(pass) native cancellation and overflow keep bounded unknown evidence and do not leak helper stderr [2055.36ms]
+(pass) owned hook refuses an advertised head changed after preview check; durable refusal survives restart [1158.97ms]
+(pass) server CAS refuses advance after the validated advertisement without changing local history [1202.23ms]
 
  9 pass
  0 fail
  544 expect() calls
-Ran 9 tests across 2 files. [26.51s]
+Ran 9 tests across 2 files. [14.86s]
 {
   "schema": "gitfs-reviewable-rollup/v1",
   "actual_providers": [
@@ -199,11 +213,11 @@ Ran 9 tests across 2 files. [26.51s]
     "policy Lua"
   ],
   "session": "reviewable-rollup",
-  "base": "449c82cb63ceb26ffae72f368cd6c2d7256291ec",
-  "local_commit": "5f447e301232c4332e8ebb6d756006e910c0280c",
+  "base": "336eca58a8ea4089764ac93a463ffd3fe5d20103",
+  "local_commit": "f6895430ce5805adf2bb0ae76f6a6495a236880c",
   "tree": "6310d0e9f6ae49234a336f0de4117c7f9cd2c967",
-  "local_revision": "f367604d5bb94e52da62ed83ccf3879a00f2c649159632b928473db850870c78",
-  "push_revision": "342e36a7c57d98a9372fc04d15f6c448526ffe0ec08c7a4104247e746850cee1",
+  "local_revision": "b9b8dec57646c66270f401d263a34b7df267d4d502a8ee14ef10bfecd27dbcf6",
+  "push_revision": "baf35add956fa18907cfe900cc2947b15e9ca8780b21d8b6a5152822804abbb3",
   "push_status": "confirmed",
   "reconcile_status": "confirmed",
   "unrelated_staged_excluded": true,
@@ -213,7 +227,7 @@ Ran 9 tests across 2 files. [26.51s]
   "policy_denial_executed": false,
   "binaries": {
     "cartridge": "3c107ead7a60caa07a7aa295cb46c7b2a0663a17ca7aa11fc11b45076b9b08c8",
-    "gitfs": "8354b64d6220bd75396cd6f14209382b5f7ea1c0a9dffb2ecdfc1f4c62eaf0c2",
+    "gitfs": "b095286cae2b0162581dd6bead1657c5a7c6ebc4c0a134403ca72859d04dfb8a",
     "mcp": "d1d48482f944205f3d589031fbcbbc7c1699e095fa139792a4ff4c1037a09727"
   }
 }

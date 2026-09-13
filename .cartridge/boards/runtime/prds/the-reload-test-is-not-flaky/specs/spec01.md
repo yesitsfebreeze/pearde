@@ -1,7 +1,6 @@
 ---
 complexity: small
-footprint:
-  - .cartridge/tests/unit/src/tests/reload.rs
+footprint: [".cartridge/tests/unit/src/tests/reload.rs","src/loader.rs",".cartridge/tests/unit/src/tests/mod.rs",".cartridge/tests/unit/src/tests/composition.rs"]
 ---
 
 # spec01 — Wait for the nested generation before asserting its surface

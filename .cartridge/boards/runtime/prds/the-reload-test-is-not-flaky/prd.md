@@ -10,7 +10,8 @@ work-kind: leaf
 review-round: 4
 review-status: accepted
 canonical-scope: the-reload-test-is-not-flaky
-commit: "981c7eb31e8c15156ed3681820536bad4f6cf391"
+commit: "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df"
+footprint: [".cartridge/tests/unit/src/tests/reload.rs","src/loader.rs",".cartridge/tests/unit/src/tests/mod.rs",".cartridge/tests/unit/src/tests/composition.rs"]
 ---
 
 # the-reload-test-is-not-flaky

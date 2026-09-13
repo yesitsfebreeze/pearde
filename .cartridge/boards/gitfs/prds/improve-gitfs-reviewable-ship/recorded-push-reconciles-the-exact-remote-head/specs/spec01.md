@@ -1,14 +1,6 @@
 ---
 complexity: high
-footprint:
-  - src/main.rs
-  - src/ship.rs
-  - src/store.rs
-  - src/push.rs
-  - src/tool_result.rs
-  - .cartridge/tests/unit/push/tests.rs
-  - .cartridge/tests/integration/recorded-push.test.ts
-  - .cartridge/docs/push.md
+footprint: ["src/main.rs","src/ship.rs","src/store.rs","src/push.rs","src/tool_result.rs",".cartridge/tests/unit/push/tests.rs",".cartridge/tests/integration/recorded-push.test.ts",".cartridge/docs/push.md","Cargo.toml","src/provenance.rs",".cartridge/tests/unit/provenance.rs",".cartridge/tests/integration/change-provenance.test.ts",".cartridge/docs/change-provenance.md"]
 ---
 
 # Record one ordinary push against the exact advertised remote head

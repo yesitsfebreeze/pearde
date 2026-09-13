@@ -12,7 +12,7 @@ review-status: passed
 canonical-scope: improve-gitfs-reviewable-ship
 needs:
 - '@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally'
-commit: "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5"
+commit: "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36"
 ---
 
 # A recorded push reconciles the exact remote head

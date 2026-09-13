@@ -20,7 +20,7 @@ footprint:
 - .cartridge/tests/unit/proxy/capabilities.rs
 - .cartridge/tests/unit/sync/tests.rs
 - .cartridge/docs/capabilities.md
-commit: "0a216cb100ea40aa0535509d44c38b16a009b9cc"
+commit: "4ad9cd35dc862ecfe0786612d39913612d93fc45"
 ---
 
 # Require compatible model capabilities before fallback
@@ -52,3 +52,5 @@ the earlier 77d5d480 receipt is retained in collection-77d5d480.md.
 
 Reverify unchanged acceptance after0a216cb cost/latency metadata shares source;
 prior07b77ff7 receipt retained. No semantic acceptance change.
+
+Reverification after finite recovery integration at4ad9cd3: same admission, decision and cost contracts; shared provider files changed.

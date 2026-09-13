@@ -1,12 +1,6 @@
 ---
 complexity: medium
-footprint:
-- src/context.rs
-- src/main.rs
-- src/service.rs
-- src/inventory.rs
-- .cartridge/tests/integration/inventory.test.ts
-- .cartridge/docs/inventory.md
+footprint: ["src/context.rs","src/main.rs","src/service.rs","src/inventory.rs",".cartridge/tests/integration/inventory.test.ts",".cartridge/docs/inventory.md","src/source_search.rs","src/document.rs",".cartridge/tests/unit/source_search.rs"]
 ---
 
 # Native memo adapter for the shared bounded inventory

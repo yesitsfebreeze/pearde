@@ -12,7 +12,8 @@ review-status: passed
 canonical-scope: landscape-inventory-facade
 needs:
 - "@landscape/improve-memo-compact-landscape/bounded-inventory-snapshot"
-commit: "1ffca32db1d06364b3e35e6cbca4881a1f814f71"
+commit: "a458148fb21f85cabcd9e1ced85c96c581b8e0b2"
+footprint: ["src/context.rs","src/main.rs","src/service.rs","src/inventory.rs",".cartridge/tests/integration/inventory.test.ts",".cartridge/docs/inventory.md","src/source_search.rs","src/document.rs",".cartridge/tests/unit/source_search.rs"]
 ---
 
 # Expose versioned compact Landscape through native memo

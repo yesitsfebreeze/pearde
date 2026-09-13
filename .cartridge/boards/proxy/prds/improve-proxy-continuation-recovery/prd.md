@@ -17,7 +17,7 @@ footprint:
 - src/continuation.rs
 - .cartridge/tests/unit/tests.rs
 - .cartridge/docs/continuations.md
-commit: "439594188097e770fb9993aae379ac9906e0824a"
+commit: "9ddcc08807a059579c21227ad9d3523d242ddf86"
 ---
 
 # Make continuation lifetime and restart recovery explicit
@@ -44,3 +44,5 @@ Preserve the last usable implementation and durable data on failure; report part
 
 Reverify unchanged acceptance after the next integrated owner feature; earlier
 0c9d4e9b receipt retained. No contract relaxation.
+
+Reverification: recall integration at9ddcc088 changes shared proxy paths. Bind newly imported context/wire modules and dependency declarations without changing behavior acceptance or executable gates.

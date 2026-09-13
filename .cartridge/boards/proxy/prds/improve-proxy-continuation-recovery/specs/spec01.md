@@ -7,6 +7,10 @@ footprint:
 - src/continuation.rs
 - .cartridge/tests/unit/tests.rs
 - .cartridge/docs/continuations.md
+- Cargo.toml
+- cartridge.json
+- src/context.rs
+- src/wire.rs
 ---
 
 # Recover synthetic Responses continuation mappings safely

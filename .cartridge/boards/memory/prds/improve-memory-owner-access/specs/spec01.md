@@ -1,19 +1,6 @@
 ---
 complexity: medium
-footprint:
-- .cartridge/tests/integration/e2e/cli_surface.rs
-- Cargo.toml
-- src/cartridge.rs
-- src/transport/src/lib.rs
-- src/transport/src/owner.rs
-- src/transport/src/typed.rs
-- src/transport/src/memory_rpc.rs
-- src/commands/src/commands_health.rs
-- .cartridge/tests/unit/src/cartridge/tests.rs
-- .cartridge/tests/unit/src/transport/src/owner_test.rs
-- .cartridge/tests/unit/src/commands/src/tests/commands_health_owner_test.rs
-- .cartridge/tests/integration/cartridge.rs
-- .cartridge/docs/owner-attachment.md
+footprint: [".cartridge/tests/integration/e2e/cli_surface.rs","Cargo.toml","src/cartridge.rs","src/transport/src/lib.rs","src/transport/src/owner.rs","src/transport/src/typed.rs","src/transport/src/memory_rpc.rs","src/commands/src/commands_health.rs",".cartridge/tests/unit/src/cartridge/tests.rs",".cartridge/tests/unit/src/transport/src/owner_test.rs",".cartridge/tests/unit/src/commands/src/tests/commands_health_owner_test.rs",".cartridge/tests/integration/cartridge.rs",".cartridge/docs/owner-attachment.md","src/cartridge_status.rs",".cartridge/tests/unit/src/cartridge/status_test.rs","src/store/core/src/lock.rs",".cartridge/tests/unit/src/store/core/src/tests/lock_test.rs","src/store/core/Cargo.toml","Cargo.lock","src/rpc/src/server.rs",".cartridge/docs/CARTRIDGE.md"]
 ---
 
 # Attach explicit native readers to the existing Memory owner

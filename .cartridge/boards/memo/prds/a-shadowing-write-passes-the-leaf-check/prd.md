@@ -1,15 +1,16 @@
 ---
 repo: /Users/feb/dev/cartridge/memo.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: memo
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: a-shadowing-write-passes-the-leaf-check
+commit: "648b420fd12e38d7d07e934595e57fdaa74ae51b"
 ---
 
 # a-shadowing-write-passes-the-leaf-check
@@ -18,9 +19,9 @@ Apply intentional workspace shadowing before uniqueness validation, retaining di
 
 ## Acceptance
 
-- [ ] A workspace write shadowing the permitted shipped leaf saves with a new revision and is returned by the legacy unqualified read.
-- [ ] Owner-qualified read still reaches the shipped original; another owner's identical basename is not overwritten or merged.
-- [ ] Two conflicting local definitions, stale expected revision and an unapproved shipped-file write fail without mutation.
+- [x] A workspace write shadowing the permitted shipped leaf saves with a new revision and is returned by the legacy unqualified read.
+- [x] Owner-qualified read still reaches the shipped original; another owner's identical basename is not overwritten or merged.
+- [x] Two conflicting local definitions, stale expected revision and an unapproved shipped-file write fail without mutation.
 
 ## Proof and recovery
 

@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/sessions.ctg
-state: "specced"
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -11,7 +11,7 @@ review-round: 3
 review-status: passed
 canonical-scope: reflex-reports-attributed-tool-outcomes
 needs: ["@runtime/native-tool-observation-adapter"]
-commit: "a306370f10b78d94365b7832ce22ce8d10c09487"
+commit: "191e2b6cb4291bdcce7a894f98bb2d475361d30f"
 ---
 
 # reflex-reports-attributed-tool-outcomes

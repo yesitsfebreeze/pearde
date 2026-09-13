@@ -3,6 +3,7 @@ import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { atomic, contained, hash, inside, real, relative, sourceDeclarations, declarationFailure } from './records';
 import { ROOT } from './cli';
+import { sourceRecords, sourceRecordFailure } from './source-records';
 import { runProcess } from './process';
 
 const OPS = ['scan', 'plan', 'gantt', 'read', 'brief', 'next', 'add', 'refine', 'specced', 'claim', 'release', 'collect', 'run', 'status', 'stop'];
@@ -226,6 +227,15 @@ export class Service {
       void work.finally(() => this.declarationReads.delete(work));
     });
   }
+  async records(request: any) {
+    if (this.closed) return sourceRecordFailure('unavailable');
+    if (!object(request) || request.op !== 'source_records' || Object.keys(request).some(k => !['op', 'board', 'action', 'expected_source_revision', 'path', 'expected_revision', 'deadline_ms'].includes(k))) return sourceRecordFailure('malformed');
+    if (this.declarationReads.size >= 8) return sourceRecordFailure('capacity');
+    const { op, board, deadline_ms, ...selection } = request;
+    return sourceRecords(this.boards, board === undefined ? this.defaultBoard : board, selection as any, deadline_ms === undefined ? 500 : deadline_ms, work => {
+      this.declarationReads.add(work); void work.finally(() => this.declarationReads.delete(work));
+    });
+  }
   async close() { this.closed = true; for (const controller of this.cancelled.values()) controller.abort(); await Promise.allSettled([...this.tasks, ...this.deliveries.values()]); }
 }
 export async function main() {
@@ -253,8 +263,9 @@ export async function main() {
           else if (typeof message.reload === 'boolean') send({ reply: message.id ?? 0, data: null });
           else if (['prd', 'tool.prd'].includes(message.call) && service) {
             const declarations = message.call === 'prd' && message.args?.op === 'source_declarations';
-            if (tasks.size >= 8 && !['cancel', 'describe'].includes(message.args?.op)) { send({ reply: message.id ?? 0, data: declarations ? declarationFailure('capacity') : result({ error: 'service is busy' }, true) }); continue; }
-            const work = (declarations ? service.declarations(message.args) : service.dispatch(message.args, message.turn)).then(data => send({ reply: message.id ?? 0, data })); tasks.add(work); void work.finally(() => tasks.delete(work));
+            const records = message.call === 'prd' && message.args?.op === 'source_records';
+            if (tasks.size >= 8 && !['cancel', 'describe'].includes(message.args?.op)) { send({ reply: message.id ?? 0, data: declarations ? declarationFailure('capacity') : records ? sourceRecordFailure('capacity') : result({ error: 'service is busy' }, true) }); continue; }
+            const work = (declarations ? service.declarations(message.args) : records ? service.records(message.args) : service.dispatch(message.args, message.turn)).then(data => send({ reply: message.id ?? 0, data })); tasks.add(work); void work.finally(() => tasks.delete(work));
           } else throw Error('unknown host operation or cartridge not applied');
         } catch (error) { pending = ''; send({ reply: message?.id ?? 0, error: String(error) }); }
       }

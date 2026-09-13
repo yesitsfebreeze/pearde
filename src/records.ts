@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { createHash, randomUUID } from 'node:crypto';
 import { Database } from 'bun:sqlite';
+import { parseDocument as parseYamlDocument, visit as visitYaml, isScalar } from 'yaml';
 
 export const hash = (value: string | Buffer) => createHash('sha256').update(value).digest('hex');
 export const list = (value: unknown): string[] => value == null ? [] : (Array.isArray(value) ? value : [value]).map(String);
@@ -39,9 +40,19 @@ export function document(file: string) {
   const text = fs.readFileSync(file, 'utf8');
   return parseDocument(text, file);
 }
-function parseDocument(text: string, file: string) {
+export function parseDocument(text: string, file: string, strictPublic = false) {
   const match = /^(?:\uFEFF)?---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(text);
-  const fm = match ? Bun.YAML.parse(match[1]) ?? {} : {};
+  let fm: any = {};
+  if (match && strictPublic) {
+    if (Buffer.byteLength(match[1]) > 16384) throw Error('public frontmatter exceeds limit');
+    const parsed = parseYamlDocument(match[1], { strict: true, uniqueKeys: true, stringKeys: true, logLevel: 'silent' });
+    if (parsed.errors.length || parsed.warnings.length) throw Error('ambiguous public frontmatter');
+    visitYaml(parsed, {
+      Alias() { throw Error('public frontmatter aliases are unsupported'); },
+      Pair(_key, pair) { if (isScalar(pair.key) && pair.key.value === '<<') throw Error('public frontmatter merges are unsupported'); },
+    });
+    fm = parsed.toJS({ maxAliasCount: 0 }) ?? {};
+  } else if (match) fm = Bun.YAML.parse(match[1]) ?? {};
   if (!fm || typeof fm !== 'object' || Array.isArray(fm)) throw Error(file + ': frontmatter must be an object');
   const body = match ? text.slice(match[0].length) : text;
   return { fm: fm as Record<string, any>, text, body, title: /^#\s+(.+)$/m.exec(body)?.[1] ?? path.basename(path.dirname(file)) };
@@ -89,6 +100,34 @@ export function members(board: string): [string, string][] {
     return [name, target];
   });
 }
+export class SourceReadError extends Error {
+  constructor(public status: 'unavailable' | 'malformed' | 'capacity' | 'changed') { super(status); }
+}
+/** Exact bounded bytes from one regular source file; callers own the shared deadline. */
+export async function readSourceFile(file: string, limit: number, check: () => void, consume?: (bytes: number) => void, maxBytes = limit + 1): Promise<Buffer> {
+  check(); const before = await fs.promises.lstat(file); check();
+  if (!before.isFile() || before.isSymbolicLink()) throw new SourceReadError('malformed');
+  if (before.size > limit) throw new SourceReadError('capacity');
+  const handle = await fs.promises.open(file, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW | fs.constants.O_NONBLOCK);
+  try {
+    check(); const opened = await handle.stat(); check();
+    if (!opened.isFile() || opened.dev !== before.dev || opened.ino !== before.ino) throw new SourceReadError('changed');
+    if (opened.size > limit) throw new SourceReadError('capacity');
+    const buffer = Buffer.alloc(Math.min(limit + 1, maxBytes)); let count = 0;
+    while (count < buffer.length) {
+      check(); const read = await handle.read(buffer, count, buffer.length - count, null); consume?.(read.bytesRead); check();
+      if (!read.bytesRead) break;
+      count += read.bytesRead;
+    }
+    if (count > limit) throw new SourceReadError('capacity');
+    const after = await handle.stat(); check(); const current = await fs.promises.lstat(file); check();
+    if (count === buffer.length && after.size > count) throw new SourceReadError('capacity');
+    if (after.size !== count || after.mtimeMs !== opened.mtimeMs || after.ctimeMs !== opened.ctimeMs ||
+        current.dev !== opened.dev || current.ino !== opened.ino || current.size !== after.size ||
+        current.mtimeMs !== after.mtimeMs || current.ctimeMs !== after.ctimeMs) throw new SourceReadError('changed');
+    return buffer.subarray(0, count);
+  } finally { await handle.close(); }
+}
 const DECLARATIONS = 'cartridge-source-declarations/v1' as const;
 type DeclarationStatus = 'unavailable' | 'malformed' | 'capacity' | 'timeout';
 export type SourceDeclarations = { schema: typeof DECLARATIONS; status: DeclarationStatus } | {
@@ -128,25 +167,9 @@ export async function sourceDeclarations(boardsRoot: string, relativeBoard: stri
       if (!inside(scope, root)) throw new DeclarationError('malformed');
       if (!(await fs.promises.stat(root)).isDirectory()) throw new DeclarationError('unavailable'); check();
       const file = path.join(root, 'settings.md');
-      const stat = await fs.promises.lstat(file); check();
-      if (!stat.isFile() || stat.isSymbolicLink()) throw new DeclarationError('malformed');
-      if (stat.size > 65536) throw new DeclarationError('capacity');
-      const handle = await fs.promises.open(file, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW | fs.constants.O_NONBLOCK);
       let data: Buffer;
-      try {
-        check();
-        const opened = await handle.stat(); check();
-        if (!opened.isFile() || opened.dev !== stat.dev || opened.ino !== stat.ino) throw new DeclarationError('unavailable');
-        if (opened.size > 65536) throw new DeclarationError('capacity');
-        const buffer = Buffer.alloc(65537); let count = 0;
-        while (count < buffer.length) {
-          check(); const read = await handle.read(buffer, count, buffer.length - count, null); check();
-          if (!read.bytesRead) break;
-          count += read.bytesRead;
-        }
-        if (count > 65536) throw new DeclarationError('capacity');
-        data = buffer.subarray(0, count);
-      } finally { await handle.close(); }
+      try { data = await readSourceFile(file, 65536, check); }
+      catch (error) { if (error instanceof SourceReadError) throw new DeclarationError(error.status === 'changed' ? 'unavailable' : error.status); throw error; }
       check();
       let locations: [string, string][];
       try { locations = memberLocations(parseDocument(new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(data), file).fm.members ?? [], 64); }

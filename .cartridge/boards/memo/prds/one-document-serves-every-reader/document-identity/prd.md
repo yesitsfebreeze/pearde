@@ -17,7 +17,7 @@ footprint:
 - .cartridge/tests/unit/document.rs
 - .cartridge/tests/fixtures/documents
 - .cartridge/docs/documents.md
-commit: "3251566e6c92439e4a32c5ce8b734e55726801ee"
+commit: "45d5a54ab9da1a798cd9997af9a8c19bed8a1812"
 ---
 
 # Readers agree on document identity and revision
@@ -44,3 +44,5 @@ Preserve the last usable implementation and durable data on failure; report part
 Reverification after document projections76800a2: exact source identity contract unchanged; shared reader/docs changed.
 
 Reverification: executable validation at3251566 adds a separate native action to shared document.rs; frozen identity/projection fixtures and acceptance remain unchanged.
+
+Inventory facade revalidation: unchanged behavior and acceptance at memo 45d5a54; shared native registration is checked with its registered inventory module.

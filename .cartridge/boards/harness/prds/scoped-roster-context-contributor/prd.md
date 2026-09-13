@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/harness.ctg
-state: "specced"
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -11,6 +11,7 @@ review-round: 3
 review-status: passed
 canonical-scope: scoped-roster-context-contributor
 needs: ["@sessions/an-agent-is-one-lookup-from-the-roster/scoped-roster-projection", "@landscape/landscape-composes-system-context/context-contributor-contract"]
+commit: "698a4dc9555a6b3ad8d46dcc5dd3a14463048e70"
 ---
 
 # Render the authenticated roster through Landscape context

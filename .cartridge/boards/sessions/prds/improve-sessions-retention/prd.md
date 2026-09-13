@@ -17,7 +17,7 @@ footprint:
 - .cartridge/tests/unit/main/retention_tests.rs
 - .cartridge/tests/integration/retention.test.ts
 - .cartridge/docs/retention.md
-commit: "b772c6ee4f1ad476995c8c8c07cd02ed2be264fa"
+commit: "965108d9c29bce1a41a518917d6c8892e67e42bf"
 ---
 
 # Preview and apply safe session retention
@@ -40,3 +40,5 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-sessions-retention`; maximum five rounds.
+
+Reverification at965108d9 after mailbox integration. Add the new transitive source module to verification coverage; behavioral acceptance is unchanged.

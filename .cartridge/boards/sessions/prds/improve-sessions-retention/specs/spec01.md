@@ -1,6 +1,7 @@
 ---
 complexity: high
 footprint:
+  - src/mailbox.rs
   - src/main.rs
   - src/mapping.rs
   - src/retention.rs

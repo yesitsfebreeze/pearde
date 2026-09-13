@@ -29,3 +29,29 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-13
+
+Reviewer: `/root` self-review; no delegation authorized. Inputs are bound in
+[review-round-3-inputs.json](review-round-3-inputs.json).
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Baseline reproduces actual loss of newer bytes, with a success response. |
+| Ownership and reuse | 19 | One fs helper reuses observations, locks and touch; independent overlay owner has compatibility proof only. |
+| Dependencies and slices | 20 | No provenance dependency; four owner-local paths, direct checkout after review. |
+| Acceptance and baseline | 19 | Deterministic boundary hook, two-session contention, cancellation and mode assertions. |
+| Failure and compatibility | 18 | Atomic publication, explicit post-commit partial success; final external check/rename race is disclosed, not falsely claimed as CAS. |
+
+Agent score: **95/100 — PASS**. No blocking findings. Keep cross-process CAS
+outside the claim; the controlled external edit occurs during preparation and
+is checked at publication. Baseline failed as intended; implementation gates
+remain pending. Rounds used: 3/5.
+
+## Round 4 — Verification entry-point correction
+
+Self-review `/root`: **95/100 — PASS** (19/19/20/19/18). Collection's
+explicit justfile invocation changed the memo owner directory and failed before
+running tests. The spec now changes to the runtime and uses the already-passing
+public `just test fs` entry point. Product scope and implementation are unchanged.
+No blockers; inputs in review-round-4-inputs.json. Rounds used: 4/5.

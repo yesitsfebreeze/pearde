@@ -1,0 +1,9 @@
+{
+  "source_revision": "1d2bc069b3e157e8fd8ef2172a51f163bf1678aa",
+  "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/fs-revision cargo test --manifest-path ../fs.ctg/Cargo.toml newer_bytes_at_commit_survive_write_and_edit",
+  "instrumentation": "A test-only per-Service hook writes external newer immediately before the existing rename. No production control flow changed. Source restored after probe.",
+  "expected": "conflict; external newer survives; no session touch",
+  "observed": "ours replaced external newer; error:false",
+  "exit_code": 101,
+  "log_sha256": "4a21a0224a347a8aa020015077ea201c8015147972a13677136abab108db370b"
+}

@@ -1,0 +1,10 @@
+{
+  "fs_tests": 34,
+  "gitfs_tests": 22,
+  "fs_check": "formatting and clippy passed",
+  "logs": {
+    "/tmp/cartridge-fs-revision-tests.log": "c2fdbce03000e2e55ac7c91809449134293056d128df2549f6372a60bd42dce3",
+    "/tmp/cartridge-fs-revision-check.log": "1cc767c0487966bdfa99d205f6f40a0bafe45c775625f33d398c54c34bb5e9b9",
+    "/tmp/cartridge-fs-overlay-compatibility.log": "59618db3171833c56fb7593befeb1184e0b76d093cd35a9a58ac809cd6788f4f"
+  }
+}

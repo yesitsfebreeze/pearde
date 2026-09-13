@@ -17,7 +17,7 @@ footprint:
   - .cartridge/tests/unit/main/observation_tests.rs
   - .cartridge/tests/integration/observations.test.ts
   - .cartridge/docs/observations.md
-commit: "2a6a863cf1af0876072f8879050274cfa650a785"
+commit: "423ecd329a98d0e0702a71c9ccb0a33a16cedae6"
 ---
 
 # Attributed outcome report
@@ -38,3 +38,5 @@ Expose a bounded native sessions report over the runtime's existing configured d
 ## Review
 
 [Inherited review and round 3](review.md), two rounds already used; maximum five.
+
+Named channel registration revalidation at 423ecd32: source footprint includes registered channels and its shared mailbox codec; acceptance and behavior gates remain unchanged.

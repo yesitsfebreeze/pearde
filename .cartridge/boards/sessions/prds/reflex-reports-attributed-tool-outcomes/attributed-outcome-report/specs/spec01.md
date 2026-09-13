@@ -1,6 +1,8 @@
 ---
 complexity: medium
 footprint:
+  - src/channels.rs
+  - src/mailbox.rs
   - src/main.rs
   - src/observations.rs
   - .cartridge/tests/unit/main/observation_tests.rs

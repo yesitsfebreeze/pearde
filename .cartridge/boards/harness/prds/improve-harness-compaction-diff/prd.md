@@ -16,7 +16,7 @@ footprint:
 - src/compaction.rs
 - .cartridge/tests/unit/compaction.rs
 - .cartridge/tests/integration/working.rs
-commit: "a282c87798a7dd17462bcaac32f413e90e9c4f73"
+commit: "ca7eeabd38f4eaba69063cf98e2071df694a1dc3"
 ---
 
 # Inspect what each compaction retained and removed
@@ -52,3 +52,9 @@ leaves the router call count unchanged and excludes provider authorization data.
 Legacy metadata gaps and changed-source comparisons have explicit diagnostics.
 Malformed legacy text is retained during regeneration; unknown history versions
 are refused. Historical comparisons grow with the number of retained summaries.
+
+## Reverification — 2026-09-13
+
+Token accounting ca7eeabd changes the shared inspector and working-memory
+fixture. Reopened for the unchanged compaction-history proof; original receipt
+retained in collection-a282c877.md. No acceptance is waived.

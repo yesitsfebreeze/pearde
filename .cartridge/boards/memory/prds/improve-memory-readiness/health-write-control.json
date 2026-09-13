@@ -1,0 +1,188 @@
+[
+  {
+    "run": 0,
+    "exit": null,
+    "sockets": [
+      "memory-143639d9afb4191b.sock"
+    ],
+    "samples": [
+      {
+        "ms": 0.26,
+        "sha": "1bd1104cdc39876b94bb03fd0787c13ef402e18a146681b2f2e876852f14b51e"
+      },
+      {
+        "ms": 176.99,
+        "sha": "2cd8f6f40723d5cc4fe83edfa15f4d3610eea10d2ff6091cc1da9d9d7854d8bc"
+      },
+      {
+        "ms": 181.11,
+        "sha": "b8f43d05a0d1c7aef031f7cd7b9796b74c8ee5b4c66610c728cfb34546ddc655"
+      }
+    ],
+    "health_requests": 0,
+    "model_calls": [
+      "/api/chat",
+      "/api/embed"
+    ]
+  },
+  {
+    "run": 1,
+    "exit": null,
+    "sockets": [
+      "memory-14c6369a0287fc9d.sock"
+    ],
+    "samples": [
+      {
+        "ms": 0.14,
+        "sha": "1bd1104cdc39876b94bb03fd0787c13ef402e18a146681b2f2e876852f14b51e"
+      },
+      {
+        "ms": 172.36,
+        "sha": "9abd7c8c76a6c0264fd7c9a75f6fb2272b53169f928f3a84f009e2d877b6f999"
+      },
+      {
+        "ms": 174.02,
+        "sha": "4a3fb018cb59b313822febe1e65662116ef9efc2e2cf6c0ebc5723a9523241b5"
+      }
+    ],
+    "health_requests": 0,
+    "model_calls": [
+      "/api/chat",
+      "/api/embed",
+      "/api/chat",
+      "/api/embed"
+    ]
+  },
+  {
+    "run": 2,
+    "exit": null,
+    "sockets": [
+      "memory-2b607d7bcccc672f.sock"
+    ],
+    "samples": [
+      {
+        "ms": 0.19,
+        "sha": "1bd1104cdc39876b94bb03fd0787c13ef402e18a146681b2f2e876852f14b51e"
+      },
+      {
+        "ms": 175.28,
+        "sha": "5d3607d07a6163add54ba95afdcca74dc5961a5ab1c7d17e9944cf8c5d0e739b"
+      },
+      {
+        "ms": 179.31,
+        "sha": "3eceb3c72dc03170e8bfd69bd8a25abd22cc384bd0bb04e573e2df2ecfe02273"
+      }
+    ],
+    "health_requests": 0,
+    "model_calls": [
+      "/api/chat",
+      "/api/embed",
+      "/api/chat",
+      "/api/embed",
+      "/api/chat",
+      "/api/embed"
+    ]
+  },
+  {
+    "run": 3,
+    "exit": null,
+    "sockets": [
+      "memory-2022c13745d216a3.sock"
+    ],
+    "samples": [
+      {
+        "ms": 0.28,
+        "sha": "1bd1104cdc39876b94bb03fd0787c13ef402e18a146681b2f2e876852f14b51e"
+      },
+      {
+        "ms": 165.7,
+        "sha": "5d3607d07a6163add54ba95afdcca74dc5961a5ab1c7d17e9944cf8c5d0e739b"
+      },
+      {
+        "ms": 168.39,
+        "sha": "3eceb3c72dc03170e8bfd69bd8a25abd22cc384bd0bb04e573e2df2ecfe02273"
+      }
+    ],
+    "health_requests": 0,
+    "model_calls": [
+      "/api/chat",
+      "/api/embed",
+      "/api/chat",
+      "/api/embed",
+      "/api/chat",
+      "/api/embed",
+      "/api/chat",
+      "/api/embed"
+    ]
+  },
+  {
+    "run": 4,
+    "exit": null,
+    "sockets": [
+      "memory-e4f6c1dd8a7b164a.sock"
+    ],
+    "samples": [
+      {
+        "ms": 0.13,
+        "sha": "1bd1104cdc39876b94bb03fd0787c13ef402e18a146681b2f2e876852f14b51e"
+      },
+      {
+        "ms": 169.73,
+        "sha": "f4693d8e49409175b99a9e6aee6e0016e6498bb510a5fdf7490737efb8018b3b"
+      },
+      {
+        "ms": 172.42,
+        "sha": "6d6351a49311037d50d4ca7c3eb09f26505a9360c4ee7877b016c9b0d62169d3"
+      }
+    ],
+    "health_requests": 0,
+    "model_calls": [
+      "/api/chat",
+      "/api/embed",
+      "/api/chat",
+      "/api/embed",
+      "/api/chat",
+      "/api/embed",
+      "/api/chat",
+      "/api/embed",
+      "/api/chat",
+      "/api/embed"
+    ]
+  },
+  {
+    "run": 5,
+    "exit": null,
+    "sockets": [
+      "memory-5d9ef8cb025fca74.sock"
+    ],
+    "samples": [
+      {
+        "ms": 0.43,
+        "sha": "1bd1104cdc39876b94bb03fd0787c13ef402e18a146681b2f2e876852f14b51e"
+      },
+      {
+        "ms": 168.31,
+        "sha": "9abd7c8c76a6c0264fd7c9a75f6fb2272b53169f928f3a84f009e2d877b6f999"
+      },
+      {
+        "ms": 170.98,
+        "sha": "4a3fb018cb59b313822febe1e65662116ef9efc2e2cf6c0ebc5723a9523241b5"
+      }
+    ],
+    "health_requests": 0,
+    "model_calls": [
+      "/api/chat",
+      "/api/embed",
+      "/api/chat",
+      "/api/embed",
+      "/api/chat",
+      "/api/embed",
+      "/api/chat",
+      "/api/embed",
+      "/api/chat",
+      "/api/embed",
+      "/api/chat",
+      "/api/embed"
+    ]
+  }
+]

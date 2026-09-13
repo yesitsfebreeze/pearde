@@ -15,3 +15,7 @@ Findings incorporated: runtime binds capture only to intended Service while its 
 Implementation binding note: extracted reusable observation-fixture.ts added to declared test footprint; Bun verification path made explicit with ./ so hidden-directory test discovery runs. These organize the same reviewed real fixture and do not change acceptance scope. Checked-state/lifecycle changes are evidence-only. Source proof binds the final footprint; initial reviewed digests remain in review-round-3-inputs.json.
 
 Collection cwd binding: both existing Verify blocks now explicitly enter `/Users/feb/dev/cartridge/cartridge.ctg`, matching the checkout where the reviewed gates were run. Coordinator uses a detached lane only for the clean-tree integration check because unrelated existing runtime changes must remain untouched. Test commands, acceptance and source footprint are unchanged; round 3 95/100 remains applicable. Before/after spec digests and authorization are preserved in [collection-cwd-binding.json](collection-cwd-binding.json). Historical review inputs are retained.
+
+## Composer source revalidation — 2026-09-13
+
+Existing acceptance and executable gates are preserved. [Exact before/after binding](composer-reverification/binding.json) records imported composer dependencies or current-source proof pins at bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df. No new review round or passing collection is claimed by this amendment; the normal collector must rerun the unchanged gates.

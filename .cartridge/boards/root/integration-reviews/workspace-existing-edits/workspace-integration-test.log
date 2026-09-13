@@ -1,0 +1,14 @@
+$ bun test ./.cartridge/tests/*.test.ts
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/pages.test.ts:
+(pass) pages persist, update, and switch without losing the other page [3.12ms]
+(pass) tool refuses path escapes and symbolic links, reports canonical tool errors [0.33ms]
+(pass) widgets preserve typed source references across updates and reject bad metadata before writing [0.91ms]
+(pass) native editors save without navigating, reject stale edits, and preserve source wiring [1.57ms]
+(pass) native data, images and questions are typed and do not execute supplied content [1.34ms]
+
+ 5 pass
+ 0 fail
+ 27 expect() calls
+Ran 5 tests across 1 file. [21.00ms]

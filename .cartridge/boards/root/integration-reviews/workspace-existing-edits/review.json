@@ -1,0 +1,50 @@
+{
+  "reviewer": "/root/sessions_mapping",
+  "scope": "Review and integrate user-authored Workspace edits; no board lifecycle changes.",
+  "base": "e4ce951cd068ee4afe5e4bb69f2607dc9f13ea88",
+  "original_files": {
+    "src/pages.ts": "b5c35b95898870d967b63276fbdfa08089209768e69bef3850d8ea5949d1713a",
+    "src/native.ts": "34e9a971a86a9d9bf659b3479e50661e58052158b128e84a5a4014d1a8453619",
+    ".cartridge/docs/README.md": "ab5acda7f7bdb743efbd24e61de75d15c894ed1593ad2478102544896ab4f2f4",
+    ".cartridge/tests/pages.test.ts": "5568199c99274429a1d98e72935fe1c6e2361fcfba09700c5a048de165e21899"
+  },
+  "original_diff_sha256": "4c3ba4c94f85e2a1960b33ad5a2b0307c0cd43ef7e58459704928f316479f994",
+  "baseline": "bun run test:5pass27assertions; bun run check:PASS",
+  "consumer": "Clean live.ctg contains matching iframe-source/native-editor checks and /api/workspace/content forwarding.",
+  "source_head": "d30e3efef40ff5089029bd42351eee9693164864",
+  "source_clean": true,
+  "final_files": {
+    "src/pages.ts": "b5c35b95898870d967b63276fbdfa08089209768e69bef3850d8ea5949d1713a",
+    "src/native.ts": "34e9a971a86a9d9bf659b3479e50661e58052158b128e84a5a4014d1a8453619",
+    ".cartridge/docs/README.md": "ab5acda7f7bdb743efbd24e61de75d15c894ed1593ad2478102544896ab4f2f4",
+    ".cartridge/tests/pages.test.ts": "3e326d9afd11a9eb308fce705fbb8f6b574cb06dbd5e63710a7af08b7ae45211"
+  },
+  "review_delta": "Only added review change: stale editor assertion now uses exact prior document.updated instead of an artificial document.updated-1. All original product edits preserved.",
+  "decision": "PASS; no blocking demonstrated product defect",
+  "verification": {
+    "bun run test": "5pass27assertions",
+    "bun run check": "PASS",
+    "actual_native_process": {
+      "actual_native_process": "bun src/main.ts",
+      "startup": "workspace and tool.workspace ready",
+      "native_save_update_read": "PASS",
+      "stale_exact_prior_version": "refused",
+      "source_metadata": "preserved",
+      "navigation_revision": "unchanged",
+      "call_count": 7
+    }
+  },
+  "review_notes": [
+    "Native content escapes text and image rendering only accepts raster data URLs.",
+    "All metadata/content validation completes before publishing HTML. Existing source references survive editor updates.",
+    "Clean Live consumer checks message source against matching iframe and native editor metadata before forwarding saves.",
+    "Single Workspace process handles synchronous compare-and-save; no cross-process writer coordination or transactional two-file publication claim is made."
+  ],
+  "live_head_observed": "e038d379936801b60572871821750dd45ca1d9fa",
+  "proof_files": {
+    "workspace-native-integration-probe.py": "708969dc5a34f4fcabdc8195c9c2096cd7c4399eb9f3004c9720f2472031b936",
+    "workspace-native-integration-result.json": "0e90507124b3fb9d95e7c55e6f5c0bcfb0276bdb125a357092081d2a99d1939f",
+    "workspace-integration-test.log": "da15459cc0d0775b60ce67b87309c56746d70f901a1a1c41b570cc5b83b39569",
+    "workspace-integration-check.log": "8366207267355d3e3d5bf3bf6e8c94c5f93f6078c34f08973fa2b38cdda6cc92"
+  }
+}

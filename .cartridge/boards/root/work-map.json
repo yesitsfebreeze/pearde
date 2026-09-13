@@ -15,7 +15,7 @@
       "review": ".cartridge/prds/capabilities-live-with-their-owners/review.md",
       "rounds_used": 2,
       "release_role": "architecture",
-      "current_source_sha256": "e17b6058b626006231cc5590611a9a87d9c2b79d42954c4951bfbfa166e88f87",
+      "current_source_sha256": "fe9fafc26ea1aefef339d55cf9309bf43bc20079bef6bc1d8159caf23983a905",
       "historical_source": ".cartridge/prds/capabilities-live-with-their-owners/prd.md"
     },
     {
@@ -28,7 +28,7 @@
       "review": ".cartridge/prds/memory-document-works-end-to-end/review.md",
       "rounds_used": 2,
       "release_role": "architecture",
-      "current_source_sha256": "b40a1675e621d9f6a0564e8cc785a901bf5d552c3d2706fcc2e16b7eb2bca03e",
+      "current_source_sha256": "b728bb7e7c051bee9168c1697522b6f5642b3df36a0338279f69c48509bd9f01",
       "historical_source": ".cartridge/prds/memory-document-works-end-to-end/prd.md"
     },
     {
@@ -41,7 +41,7 @@
       "review": ".cartridge/prds/the-composed-system-proves-the-plan/review.md",
       "rounds_used": 2,
       "release_role": "architecture",
-      "current_source_sha256": "d8aea106a423aaa16851096bbef3f36bdfe1c1f0381092664b9e468f96198da2",
+      "current_source_sha256": "cacdb47bae46323a3db7fed72c6e4191759b48b0e0b1fc63ae592bb88c356d70",
       "historical_source": ".cartridge/prds/the-composed-system-proves-the-plan/prd.md"
     },
     {
@@ -54,7 +54,7 @@
       "review": "memo.ctg/.cartridge/prds/memo-board-template/review.md",
       "rounds_used": 2,
       "release_role": "architecture",
-      "current_source_sha256": "203d7cd5f5c6297586b675c45ec08e90f687fb6720a40590c199f4482fdf4f3e",
+      "current_source_sha256": "cfc12e1bb2275e5d0f2f773d1d9b909e1dfafcf056bd963d2bb52fca1a556df3",
       "historical_source": "memo.ctg/.cartridge/prds/memo-board-template/prd.md"
     },
     {
@@ -67,7 +67,7 @@
       "review": "memo.ctg/.cartridge/prds/one-document-serves-every-reader/review.md",
       "rounds_used": 2,
       "release_role": "architecture",
-      "current_source_sha256": "a85abdab6e3f27d0a6a4b4d54d9996af433a453600c0b4b8d102fbf0c298b2cc",
+      "current_source_sha256": "69c701ae32fbf6fb3f285fe75352964f3d49d7f81089113df7f5b8710fd05850",
       "historical_source": "memo.ctg/.cartridge/prds/one-document-serves-every-reader/prd.md"
     },
     {
@@ -80,7 +80,7 @@
       "review": "landscape.ctg/.cartridge/prds/landscape-composes-system-context/review.md",
       "rounds_used": 2,
       "release_role": "architecture",
-      "current_source_sha256": "5d61b3573313f1fca3a447fea1fdf76032c90d410b0e6b1ed13d2ca1eb2dd76c",
+      "current_source_sha256": "12cd0475d77e01ec23d9faa06f858e017d6b13b9648a7cf0e4d8775f1d3e97f3",
       "historical_source": "landscape.ctg/.cartridge/prds/landscape-composes-system-context/prd.md"
     },
     {
@@ -93,7 +93,7 @@
       "review": "landscape.ctg/.cartridge/prds/context-quality-is-measured/review.md",
       "rounds_used": 2,
       "release_role": "architecture",
-      "current_source_sha256": "879920070e8ceeaa17f605832ee183b7c4ac66fc82201ed83cde386a1ee49cce",
+      "current_source_sha256": "b7c705f7fb52e7c8bc12b9df527be42dff51850fbad96b1b237030ee1c5c2f54",
       "historical_source": "landscape.ctg/.cartridge/prds/context-quality-is-measured/prd.md"
     },
     {
@@ -106,7 +106,7 @@
       "review": "landscape.ctg/.cartridge/prds/recursive-development-graph/review.md",
       "rounds_used": 2,
       "release_role": "architecture",
-      "current_source_sha256": "6ce4e4fbaf95e83b612d09c8c8c5c8c43fa2d3518aa5db1ed0ea16ffa01be3f2",
+      "current_source_sha256": "8e7dda5850bcf890176bde4f728161b716e214c8d544ff8059715a5e1ef9daee",
       "historical_source": "landscape.ctg/.cartridge/prds/recursive-development-graph/prd.md"
     },
     {
@@ -119,7 +119,7 @@
       "review": "cartridge.ctg/.cartridge/prds/one-runner-executes-documents/review.md",
       "rounds_used": 2,
       "release_role": "architecture",
-      "current_source_sha256": "c1027ff48617cd7b07f6593acfda62f36e1f4d54e6a7ad37e0fb1f44cee0e286",
+      "current_source_sha256": "9f68ca89acfa8822503d66bff46c6a62bea1798199ee7486b3b923ef072c2bc9",
       "historical_source": "cartridge.ctg/.cartridge/prds/one-runner-executes-documents/prd.md"
     },
     {
@@ -132,7 +132,7 @@
       "review": "cartridge.ctg/.cartridge/prds/documents-own-live-processes/review.md",
       "rounds_used": 2,
       "release_role": "architecture",
-      "current_source_sha256": "e9512e8d00b5e397ec141aac9547b90d001666d7e23151899d645f36dea55448",
+      "current_source_sha256": "bbd271850e9364da579739ebee0339b35415b8bdff8846834f323ee117be80d8",
       "historical_source": "cartridge.ctg/.cartridge/prds/documents-own-live-processes/prd.md"
     },
     {
@@ -145,7 +145,7 @@
       "review": "gitfs.ctg/.cartridge/prds/tool-results-interoperate/review.md",
       "rounds_used": 2,
       "release_role": "architecture",
-      "current_source_sha256": "fda95c7661405b24a2d3a0e60a220c1fd5d32b916e9fe430ef3c29a57f1d3579",
+      "current_source_sha256": "a284102ceabf68ab6000f37992c22585feefd1076891db81c7d56acede6f0af0",
       "historical_source": "gitfs.ctg/.cartridge/prds/tool-results-interoperate/prd.md"
     },
     {
@@ -158,7 +158,7 @@
       "review": "memory.ctg/.cartridge/prds/memory-owns-its-tool/review.md",
       "rounds_used": 2,
       "release_role": "architecture",
-      "current_source_sha256": "4725b397890c58624ff423048e24c77dc8863973320aae8be1dc272549d0563a",
+      "current_source_sha256": "af22e2fd953d485598dc1f2a074aba0f68abb640266cf2e261df241049b99354",
       "historical_source": "memory.ctg/.cartridge/prds/memory-owns-its-tool/prd.md"
     },
     {
@@ -171,7 +171,7 @@
       "review": "harness.ctg/.cartridge/prds/harness-consumes-landscape/review.md",
       "rounds_used": 2,
       "release_role": "architecture",
-      "current_source_sha256": "80742bf7674ae717a67c7183a4911e8a2a67d93f689a8178cd415766cf93b4fa",
+      "current_source_sha256": "6f0329999d91cf56cb487114b3a0cfbdd263269a0f9b06886106144495c97b55",
       "historical_source": "harness.ctg/.cartridge/prds/harness-consumes-landscape/prd.md"
     },
     {
@@ -184,7 +184,7 @@
       "review": "mcp.ctg/.cartridge/prds/clients-share-document-execution/review.md",
       "rounds_used": 2,
       "release_role": "architecture",
-      "current_source_sha256": "087bb3757893e8ae8ef48a2daa2ea57df2ebc325b308edaeea1f96439ce204e5",
+      "current_source_sha256": "9f705c42a0315375db1811a41ff0819a97396d211392c0b07d2369b5469f80a9",
       "historical_source": "mcp.ctg/.cartridge/prds/clients-share-document-execution/prd.md"
     },
     {
@@ -197,7 +197,7 @@
       "review": "tools.ctg/.cartridge/prds/development-tooling-has-one-home/review.md",
       "rounds_used": 2,
       "release_role": "architecture",
-      "current_source_sha256": "23e3f56f37db05ccc8882019bec4e1495110ed9f05fb2eb40de0d49a0887a2c9",
+      "current_source_sha256": "06f33c83256d656ef5eab70d8c10dc346c7ac779cef25d1ced9a6c1af25f9b2d",
       "historical_source": "tools.ctg/.cartridge/prds/development-tooling-has-one-home/prd.md"
     },
     {
@@ -210,7 +210,7 @@
       "review": "ui.ctg/.cartridge/prds/human-context-is-the-same-document/review.md",
       "rounds_used": 2,
       "release_role": "architecture",
-      "current_source_sha256": "784fc7f20828702865c2d0b5dc3cc0c3677853c90227f103331b87843c5703bf",
+      "current_source_sha256": "cf570d4652a3ed84585e6e59dd9a49a86bd7400b698fe31a4bdc9c9b26d2a056",
       "historical_source": "ui.ctg/.cartridge/prds/human-context-is-the-same-document/prd.md"
     },
     {
@@ -272,7 +272,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-agent-decision-attribution.md",
-      "current_source_sha256": "9903b9e3ba6ccf96d16d8829d63b408c07a4eddc7b56101854582971e58b37ae",
+      "current_source_sha256": "39426e0576f950b3ae32d2bec81c0954a96ee21fb82af31b2e901d9d01aea749",
       "historical_source": ".cartridge/memos/work/improve-agent-decision-attribution.md"
     },
     {
@@ -286,7 +286,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-agent-resume-boundaries.md",
-      "current_source_sha256": "b264b2a947726a7d2915117e98e20fcce2a9685ee7b033f9a758d6bb20318db7",
+      "current_source_sha256": "6a4c31455df5ed77e09e613c8e7195e0c6390d041db14f3187ef94cce4636314",
       "historical_source": ".cartridge/memos/work/improve-agent-resume-boundaries.md"
     },
     {
@@ -300,7 +300,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-agent-task-baseline.md",
-      "current_source_sha256": "5119c64692ee668fa9d3f7148c95d2969d5951d5a5885bc495688fef909af070",
+      "current_source_sha256": "9a25c3ad37a94561b964f63e75e5ac0f2561c2ed8c851dd7f6128d6fe7a6f499",
       "historical_source": ".cartridge/memos/work/improve-agent-task-baseline.md"
     },
     {
@@ -314,7 +314,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-fs-change-provenance.md",
-      "current_source_sha256": "96495702186e03ce3cd465835fb0038a866f2845e3fe17c536fb34be5491dc5c",
+      "current_source_sha256": "af6e0208d6138de8101f09d59f18afe15fd625d766dd6126e6126a071f6c972f",
       "historical_source": ".cartridge/memos/work/improve-fs-change-provenance.md"
     },
     {
@@ -328,7 +328,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-fs-revision-guards.md",
-      "current_source_sha256": "7790a477496bc505a7732759c2d7360bbf473921ed3c8eb047c6c6829f96c265",
+      "current_source_sha256": "48a7d6e5c09c955852c84538ac744e7777435d9cb1a44d18bc80a91346ec9357",
       "historical_source": ".cartridge/memos/work/improve-fs-revision-guards.md"
     },
     {
@@ -342,7 +342,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-fs-search-pages.md",
-      "current_source_sha256": "cc64d0ff3863a2da3b8b4d9e2c94dd20ce0d1a9f2062eca446cf9990b9b53aec",
+      "current_source_sha256": "b3d1a509d7891fd1f295d805bded03a6012c16f13871a8a37b02a58b182aaa41",
       "historical_source": ".cartridge/memos/work/improve-fs-search-pages.md"
     },
     {
@@ -356,7 +356,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-gitfs-readable-diff.md",
-      "current_source_sha256": "483e9cab1e78b3ec6c62d05ebef134dc93880de13d7cc05e08f23b0849506e68",
+      "current_source_sha256": "c45e24f1a591bf5c30a2053d21e7f5416a4b9c70246eea620e67084de42a41ef",
       "historical_source": ".cartridge/memos/work/improve-gitfs-readable-diff.md"
     },
     {
@@ -370,7 +370,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-gitfs-reviewable-ship.md",
-      "current_source_sha256": "8b4511658c2c154007e763d9f2ab2c68c747f392243276d6b8d9e15df12a50f6",
+      "current_source_sha256": "9d4968fe39fae8be1c37339fd061250c346d3b2dd565c00fc81611badf598262",
       "historical_source": ".cartridge/memos/work/improve-gitfs-reviewable-ship.md"
     },
     {
@@ -384,7 +384,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-gitfs-snapshot-selection.md",
-      "current_source_sha256": "8bf56dc6a1daae1c8130b29ed142709ea5a2bef883c67bb7181439de4f7cb6a1",
+      "current_source_sha256": "bd1e1d8e7e222a5fa8d027f69c4ae26608ce38966a3033bf3ad42800b5d88061",
       "historical_source": ".cartridge/memos/work/improve-gitfs-snapshot-selection.md"
     },
     {
@@ -398,7 +398,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-harness-compaction-diff.md",
-      "current_source_sha256": "add758653da64abf6e583c03ad3b3058b971eab8bff0cae09c98187cd6ae52c2",
+      "current_source_sha256": "3a3e21f5b41cabad5e503f2efc7c5d25acbc3495de9f481e91ec74a635b40f76",
       "historical_source": ".cartridge/memos/work/improve-harness-compaction-diff.md"
     },
     {
@@ -412,7 +412,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-harness-quality-eval.md",
-      "current_source_sha256": "16da9d3db4fa4bbf2679b61865bd044d685d06b7b0bebe615e20490dce7ab4bc",
+      "current_source_sha256": "f03145a7fd3f9fb228a3a0e4e66d21fe5cb9c97b5293c76e38e55303b3453271",
       "historical_source": ".cartridge/memos/work/improve-harness-quality-eval.md"
     },
     {
@@ -426,7 +426,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-harness-token-accounting.md",
-      "current_source_sha256": "b9709afdd46b083df01ae430ae58cfeb5ddb13811019c1ece8711f3ff279329d",
+      "current_source_sha256": "7c0d19f0c6f9306db59f1c0b57ff15e0f8c16e1f2d6b22135b60ea369dccbad9",
       "historical_source": ".cartridge/memos/work/improve-harness-token-accounting.md"
     },
     {
@@ -440,7 +440,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-mcp-approval-route.md",
-      "current_source_sha256": "bd365bd8dc6a7bb7e0d9fd8dc1192bdba8c43e903a5a1cdcaf0b836d7af1c977",
+      "current_source_sha256": "1495318bb41ddbdbb33279bb9cbe7a8184517f7da88b9d1a315316d827b4c7fe",
       "historical_source": ".cartridge/memos/work/improve-mcp-approval-route.md"
     },
     {
@@ -454,7 +454,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-mcp-refresh-catalog.md",
-      "current_source_sha256": "fb5ec421efa107b82e898f43c65f653801c213e6f179a095c843ef83250ff974",
+      "current_source_sha256": "09beb0cd61a62781cbc984f0dc8de728fe41e2f9edd9cb382bfa9452e90d5071",
       "historical_source": ".cartridge/memos/work/improve-mcp-refresh-catalog.md"
     },
     {
@@ -468,7 +468,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-mcp-tool-readiness.md",
-      "current_source_sha256": "a70fb113aef900ad36fc39195d968c984bd1ba4f9fb4bb29195000d86d511c0c",
+      "current_source_sha256": "194ff1ea34c46e543f43bcdd759ce81f70ebfb564300367768bee4c8ec644d21",
       "historical_source": ".cartridge/memos/work/improve-mcp-tool-readiness.md"
     },
     {
@@ -482,7 +482,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-memo-compact-landscape.md",
-      "current_source_sha256": "beaa92e64dde70da001ab020eb75b2624c70566cc0557ac2e6be3ca700a8938a",
+      "current_source_sha256": "63a8efa4b92422f604764fc738f59605c402945a36d71efaae9daffcba288ebb",
       "historical_source": ".cartridge/memos/work/improve-memo-compact-landscape.md"
     },
     {
@@ -496,7 +496,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-memo-stale-evidence.md",
-      "current_source_sha256": "cb9f99eb93ef792b30ae3fa7d8ec3245f4c981e0da6fc84680e0fd119f29272c",
+      "current_source_sha256": "ab2d3b824cd9439b1d15372670e6acd34edd962060c8dba14f5c5226d8622aa0",
       "historical_source": ".cartridge/memos/work/improve-memo-stale-evidence.md"
     },
     {
@@ -510,7 +510,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-memo-types-drilldown.md",
-      "current_source_sha256": "b2412922cd3662009d635ea447e63265c0abb4996358ff36aae3043317b930e6",
+      "current_source_sha256": "434d8b747a58056320d4123d9f14b130909a93e62faf66d03050e39317ba5050",
       "historical_source": ".cartridge/memos/work/improve-memo-types-drilldown.md"
     },
     {
@@ -524,7 +524,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-memory-owner-access.md",
-      "current_source_sha256": "c08792239c4811fc62c4ac20dd4488eb0d6d22ed21f0624ff0a8c8ca58d247a8",
+      "current_source_sha256": "170f2eda9cd2082daca4a7bb628caac42eb448aad4b8202d970fd6e5a196d6a0",
       "historical_source": ".cartridge/memos/work/improve-memory-owner-access.md"
     },
     {
@@ -538,7 +538,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-memory-provenance.md",
-      "current_source_sha256": "c58dadbbf970bd886f4781ecb9ef38e876b70682c17eb2bdf501ff74465d0b60",
+      "current_source_sha256": "b069338eb46599fdbda774607f8c10657ea88f04e63cf0ef454be6e71d092651",
       "historical_source": ".cartridge/memos/work/improve-memory-provenance.md"
     },
     {
@@ -552,7 +552,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-memory-readiness.md",
-      "current_source_sha256": "780b2d14a112d91bec0e56c99cb3f4ec3e4a68189242653f0c24b15dd1b157f6",
+      "current_source_sha256": "34755f41bff8d509eef76421a1d7169fe71abcee1790807c48e7539801d9d6dd",
       "historical_source": ".cartridge/memos/work/improve-memory-readiness.md"
     },
     {
@@ -566,7 +566,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-memory-tool-correct.md",
-      "current_source_sha256": "008a429a749e939f284cb1616c9beee8647becf393921e1d6e68fe425b5566b2",
+      "current_source_sha256": "375b07b1a1f338018c310ce64de2ceec774701efb7cc9ff9bf0dcd3ea46d26a3",
       "historical_source": ".cartridge/memos/work/improve-memory-tool-correct.md"
     },
     {
@@ -580,7 +580,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-memory-tool-errors.md",
-      "current_source_sha256": "9c5e29d3b58783439d35607504ad626d8e1be8cd5e4ea186103b465425727545",
+      "current_source_sha256": "6783d5a02ba248f0063421ecf670784b626752f362df510e90c4c3bddceecd56",
       "historical_source": ".cartridge/memos/work/improve-memory-tool-errors.md"
     },
     {
@@ -594,7 +594,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-memory-tool-get.md",
-      "current_source_sha256": "132d171166497d0c1314f52236b5f359d2d3e3463fbb2e13384d7dd3a6569a12",
+      "current_source_sha256": "6cfb0628ff0ce8b2f82db7e0aee1560addb887338c9fac34cf6e70e732c9a5c4",
       "historical_source": ".cartridge/memos/work/improve-memory-tool-get.md"
     },
     {
@@ -608,7 +608,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-policy-explain.md",
-      "current_source_sha256": "5c3d1b178df26093ebde7819a46083cdc995004d806a27fdcc6906783a54d98b",
+      "current_source_sha256": "bc1b837135d62684739bea9406eb4361c30f74158e8bfa6b1cb890b8b6e562f5",
       "historical_source": ".cartridge/memos/work/improve-policy-explain.md"
     },
     {
@@ -622,7 +622,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-policy-operation-rules.md",
-      "current_source_sha256": "61e52723ee336a7b9a55e23b48146dc6466c44311396b0aba2fde590866d4b75",
+      "current_source_sha256": "8b526842cc37345b44f1b1fd7ec8bc7f30e47a1ea599f9939402ed2061631bab",
       "historical_source": ".cartridge/memos/work/improve-policy-operation-rules.md"
     },
     {
@@ -636,7 +636,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-policy-resource-scope.md",
-      "current_source_sha256": "a131cac2559534b395307ff242bb0e8fd53ba7977c257dac3a96f35011b39bfa",
+      "current_source_sha256": "caf91f82b7145f1c65401e7a9e89d505f24bd9eaee6c84de3fdde155a23adaa7",
       "historical_source": ".cartridge/memos/work/improve-policy-resource-scope.md"
     },
     {
@@ -650,7 +650,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-proxy-continuation-recovery.md",
-      "current_source_sha256": "5e7e9badbcece8bf3a6e0d31eec6138ab657d0069be3889b246c0979bdbda3d1",
+      "current_source_sha256": "f732cf17328c8fb0120cd6d0243a5e068716e2fef636d79d3369dc5d0d0dfea8",
       "historical_source": ".cartridge/memos/work/improve-proxy-continuation-recovery.md"
     },
     {
@@ -664,7 +664,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-proxy-tool-trace.md",
-      "current_source_sha256": "9fb931db0f3837f331a62914428d19da655369e0e164b5199213f5efb46444aa",
+      "current_source_sha256": "7d822f6259827a84917c80fb2d07e650741aedeb7a88902e334324559850dc95",
       "historical_source": ".cartridge/memos/work/improve-proxy-tool-trace.md"
     },
     {
@@ -678,7 +678,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-proxy-total-usage.md",
-      "current_source_sha256": "2aad690b90361d0a090ff1cf9ea0bad0a3cab460fe2740357434d664328eb249",
+      "current_source_sha256": "d786ac6d1a06742cf606c4129ddacc0d4923e4697af9386ffee6a15e1f273cd6",
       "historical_source": ".cartridge/memos/work/improve-proxy-total-usage.md"
     },
     {
@@ -692,7 +692,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-pty-command-wait.md",
-      "current_source_sha256": "002d8a9b69453ea09a39a693a46c5d2d5191b3857626d9593062973bff3df602",
+      "current_source_sha256": "cbaaa120c2e85340be39708b17a20d90c79004ddf8836c6d200882b7688d0a5a",
       "historical_source": ".cartridge/memos/work/improve-pty-command-wait.md"
     },
     {
@@ -706,7 +706,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-pty-input-ownership.md",
-      "current_source_sha256": "cfac8706ae0c61f05fb0afb080020af017df3cce0f383d3db5f5aa91f93a8ab8",
+      "current_source_sha256": "f8073ee54dbe7aee8aee9f2f064157e20644901840655dd9fc3e18543209ca7f",
       "historical_source": ".cartridge/memos/work/improve-pty-input-ownership.md"
     },
     {
@@ -720,7 +720,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-pty-shell-identity.md",
-      "current_source_sha256": "c281e1c88fca68fd1e846c18931d767ec969ff01ee4e3fe3fc3853f8d1877bc2",
+      "current_source_sha256": "57636a535e298e875fe4fa213fc5b837c75e86a932935a43295bd4101eb98238",
       "historical_source": ".cartridge/memos/work/improve-pty-shell-identity.md"
     },
     {
@@ -734,7 +734,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-router-capability-routing.md",
-      "current_source_sha256": "e86b5d2ac113347ab891fcb9cc59e0bc4405179e91dbe3360393f1f029d96ab7",
+      "current_source_sha256": "a2bd195db238092f6f68a733e2146c6685385f4b344c93b859c378a278798de4",
       "historical_source": ".cartridge/memos/work/improve-router-capability-routing.md"
     },
     {
@@ -748,7 +748,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-router-cost-latency.md",
-      "current_source_sha256": "fba4e7d871475e8355df447405d85d845e06181244f55e1b48346f21ecf0e48c",
+      "current_source_sha256": "f59fc890e679fc09dee97da7d60e13b61e14aa2d40222e9f3ede88d208ff074a",
       "historical_source": ".cartridge/memos/work/improve-router-cost-latency.md"
     },
     {
@@ -762,7 +762,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-router-route-explanation.md",
-      "current_source_sha256": "42e4235505ad8caf8c754fc8e22128a1dcfc83dee65592151b5594d6a23ff015",
+      "current_source_sha256": "9bedb8940b802022a3d84976400d95653f24002958c1aaa27cc16a0f8e9bff8c",
       "historical_source": ".cartridge/memos/work/improve-router-route-explanation.md"
     },
     {
@@ -776,7 +776,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-sessions-client-mapping.md",
-      "current_source_sha256": "f7a40cc9a86d25ddfc7e2d3a0129d8dc731074406c6c3d10e87d1eb7043a44e0",
+      "current_source_sha256": "169365463c9c6f787ccee76e235de361682f8677c76430548dc16285d324e8d2",
       "historical_source": ".cartridge/memos/work/improve-sessions-client-mapping.md"
     },
     {
@@ -790,7 +790,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-sessions-recovery.md",
-      "current_source_sha256": "e0ab654db34dab4a11b2fc75d90c18c78baa07d1dd8ea8dc688d45f27161dd5e",
+      "current_source_sha256": "84c8a1bc3be767c2ceddd4c60391505ed1b0dd90b11bf80ef2380d4edd397648",
       "historical_source": ".cartridge/memos/work/improve-sessions-recovery.md"
     },
     {
@@ -804,7 +804,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-sessions-retention.md",
-      "current_source_sha256": "1659ad9e8f8d085e4597dbc0d9b615bc7b97067f3ba86b206c29bc0cb2cc0726",
+      "current_source_sha256": "9df7ac3dc6c4c74e0cf63535262df1a43335411f6c2780142a60eee934409ee3",
       "historical_source": ".cartridge/memos/work/improve-sessions-retention.md"
     },
     {
@@ -818,7 +818,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-tool-result-contract.md",
-      "current_source_sha256": "a9dc4428c5fe61d5f1b3ba034e2c4eec30233d472d46670aaadcc1a5ba42266a",
+      "current_source_sha256": "699b1e0fd5d03424a057c96379fd516bba404e086d27ef342f46f981b0de537a",
       "historical_source": ".cartridge/memos/work/improve-tool-result-contract.md"
     },
     {
@@ -832,7 +832,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-tools-bundle-provenance.md",
-      "current_source_sha256": "4f414937a0fbbee8d9cf79629c41e128a8c7d0ea85f13d5c65da14b85c9c81c3",
+      "current_source_sha256": "cc3da07cf65f3aeb6abf498fe5a172a5c9a9a791aba5907864cb7e36d8197274",
       "historical_source": ".cartridge/memos/work/improve-tools-bundle-provenance.md"
     },
     {
@@ -846,7 +846,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-tools-preflight.md",
-      "current_source_sha256": "63c10efb1d5123dcaaef683759423f5d1fa201d45ed7ced762a51e8e5a093d8d",
+      "current_source_sha256": "08967b28170ac7fabc62eff4c344d443d7e0658bb80bfcc3d8b0ac13ccf16449",
       "historical_source": ".cartridge/memos/work/improve-tools-preflight.md"
     },
     {
@@ -860,7 +860,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-tools-worktree-resume.md",
-      "current_source_sha256": "764e07ab84df12e9ed6e7b656c39438d91d6b99f81c8d829ae50b3f3546f7474",
+      "current_source_sha256": "ba6bb689477aa7b8a30119a14ac9cee8efe6e44c2e2dac242ce36863983d53c7",
       "historical_source": ".cartridge/memos/work/improve-tools-worktree-resume.md"
     },
     {
@@ -874,7 +874,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-ui-run-history.md",
-      "current_source_sha256": "f579e8ca5ccb79d6b843908a8e03fa6737dc8fb68e3cf80a689a97e7c2053ffa",
+      "current_source_sha256": "5069a0e4cc52c6d67e536ae34b05518496430627c040294a8b37af0e8f43d749",
       "historical_source": ".cartridge/memos/work/improve-ui-run-history.md"
     },
     {
@@ -888,7 +888,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-ui-terminal-owner.md",
-      "current_source_sha256": "9dde7f2761e64e17e181ee3e1420d6eb37e84bbe7d08b4ef6dad2a719f450a1c",
+      "current_source_sha256": "28e90b63ac391946afbedaa0c4dc7982bf65abd318c131ccc2d6c2e0aed2c774",
       "historical_source": ".cartridge/memos/work/improve-ui-terminal-owner.md"
     },
     {
@@ -902,7 +902,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-ui-tool-availability.md",
-      "current_source_sha256": "5dd4165a8941bd99586ec66a6d69483c3e00fcb20ed2e036bad34ab41b4335ba",
+      "current_source_sha256": "0c2081f86ba996a3e628b1a1c1d10f676d3d9528e6e5f719a61e66b2b4c68ef2",
       "historical_source": ".cartridge/memos/work/improve-ui-tool-availability.md"
     },
     {
@@ -915,7 +915,7 @@
       "review": ".cartridge/prds/cartridge-improvement-programme/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "9112f77a4a25a37518ac6de5a27fabf92399fbd7db0703c292098b3b083a0e0f",
+      "current_source_sha256": "6f2fc1aab4a8f87a0088f257d9f34b8802a2baea7ac6d957dcae27100942e00a",
       "historical_source": "cartridge.ctg/.cartridge/memos/work/cartridge-improvement-programme.md"
     },
     {
@@ -929,7 +929,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-agent-programme.md",
-      "current_source_sha256": "f9e92ebf54b3dc2cead0147fb83b3ff36355bf32a8e314e91a8079d34c0b88b3",
+      "current_source_sha256": "24220319fb9c0915001f7da75250e492f411eda4ad0e811c50b93361ab2c0c69",
       "historical_source": ".cartridge/memos/work/improve-agent-programme.md"
     },
     {
@@ -943,7 +943,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-fs-programme.md",
-      "current_source_sha256": "9d35064882771cd8fc0600dd0d0a0bdafe06981a486bcf1944e4dd58c64b76cc",
+      "current_source_sha256": "272fb06275b9030c256a056ad447ffa29095150ae5ed7f93a34b6e1f4ad40141",
       "historical_source": ".cartridge/memos/work/improve-fs-programme.md"
     },
     {
@@ -957,7 +957,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-gitfs-programme.md",
-      "current_source_sha256": "529f6f79ab199915ae6b9aa38eb94a0b03349ce6cde2afb11d3213e7ed3b0219",
+      "current_source_sha256": "5daf7f7e290f7261d40a76c327a0183eaf394f2903d5043c53c5acd163737cea",
       "historical_source": ".cartridge/memos/work/improve-gitfs-programme.md"
     },
     {
@@ -971,7 +971,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-harness-programme.md",
-      "current_source_sha256": "bed1c74c960217c87091c04ea1945ff0e83400bf954fcb359079103107da8d1e",
+      "current_source_sha256": "c21802389494cd473417dc1cccdee4103c7804f8437cc85f25d7988dc29a7b5b",
       "historical_source": ".cartridge/memos/work/improve-harness-programme.md"
     },
     {
@@ -985,7 +985,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-mcp-programme.md",
-      "current_source_sha256": "9ec9d25645193f20c136acef9127a7164c3ea003caeb6e1fc7e033455ebf511e",
+      "current_source_sha256": "2e68da152554a747fc55c2b050fda5b9c797a79edbf27306ea374b43112813ed",
       "historical_source": ".cartridge/memos/work/improve-mcp-programme.md"
     },
     {
@@ -999,7 +999,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-memo-programme.md",
-      "current_source_sha256": "225ab7d8e91b247979c99f47185eb1eec9b73594814bd8858d2572e0df1ea1dd",
+      "current_source_sha256": "39423cbc75b2efe631bd99d77d708c805eb42a162a5cc132cce8623cc63f1c79",
       "historical_source": ".cartridge/memos/work/improve-memo-programme.md"
     },
     {
@@ -1013,7 +1013,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-memory-programme.md",
-      "current_source_sha256": "511f427882894fe9824a7b060916f456a85bea419426185d41c7fdd50205ed92",
+      "current_source_sha256": "e15ee1eace6fe9b0e2157cfe221f00c020bb4169b231bc9aab84b880f5d99633",
       "historical_source": ".cartridge/memos/work/improve-memory-programme.md"
     },
     {
@@ -1027,7 +1027,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-memory-tool-programme.md",
-      "current_source_sha256": "da373db0814bb2f34676d46f86f831b6fb7e8318277c3de9c280832d7968f0b2",
+      "current_source_sha256": "1473b790fa4f68577788cecc21aa5bd046bcea561465425f1446d0a89ceeb6cf",
       "historical_source": ".cartridge/memos/work/improve-memory-tool-programme.md"
     },
     {
@@ -1041,7 +1041,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-policy-programme.md",
-      "current_source_sha256": "ac195b43dfd9e23b78890c25e165ba061778793b7c4922f35169a26de248d06b",
+      "current_source_sha256": "87f6c25cc2d0fd7ef4cd6d168c9d2699662f92e7243b5697d2f44f90fed3e2fc",
       "historical_source": ".cartridge/memos/work/improve-policy-programme.md"
     },
     {
@@ -1055,7 +1055,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-proxy-programme.md",
-      "current_source_sha256": "3a8665fe410010329356d7c97cb3060e387d41ce52b8af45162f8233f725a66f",
+      "current_source_sha256": "f19f949ef15ea34df340c853a49cb1ce7be9c6bf198d3f0010d823a9175fb503",
       "historical_source": ".cartridge/memos/work/improve-proxy-programme.md"
     },
     {
@@ -1069,7 +1069,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-pty-programme.md",
-      "current_source_sha256": "07745ae2fdd04118801e98eeec0715bee3f164884b9da4ff0e6dd57069bb509c",
+      "current_source_sha256": "3626d422c29d834d5915cce00217f32cdd585a54a2f463a7c52e6c260adcda77",
       "historical_source": ".cartridge/memos/work/improve-pty-programme.md"
     },
     {
@@ -1083,7 +1083,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-router-programme.md",
-      "current_source_sha256": "794d18757c0d98f3b204bfafeb6e24499c3326fe9244aed76e242b47f384cbc0",
+      "current_source_sha256": "40244682f1a57ede8056d47bb395f7e82399b216dfed2a19915c5891a52c3b8d",
       "historical_source": ".cartridge/memos/work/improve-router-programme.md"
     },
     {
@@ -1097,7 +1097,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-sessions-programme.md",
-      "current_source_sha256": "b65b482258152bb1dcd4f98536d30143c45ce3cbae8d13a1e72bc786320b228f",
+      "current_source_sha256": "86249551faab33b274992505f60e66bf317a107333e8e7d1b06c9041e0aa50a5",
       "historical_source": ".cartridge/memos/work/improve-sessions-programme.md"
     },
     {
@@ -1111,7 +1111,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-tools-programme.md",
-      "current_source_sha256": "b4dc92ae34f045e532f49340bdcd7af6ee121baa0acc9126f88ce358c76c439c",
+      "current_source_sha256": "38e2ae3083c9ef2c2554beb5e4ab834f91c598d9f3eb4c41cc6619e6d0787cfe",
       "historical_source": ".cartridge/memos/work/improve-tools-programme.md"
     },
     {
@@ -1125,7 +1125,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/improve-ui-programme.md",
-      "current_source_sha256": "17f3ace039b161e6c3056da9970146880bb829ee3db2b55a7c2ee5b5e276a4cd",
+      "current_source_sha256": "f79415871bb520573620bed3248024264d8cd6c97c94d20930565a85b574205a",
       "historical_source": ".cartridge/memos/work/improve-ui-programme.md"
     },
     {
@@ -1139,7 +1139,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/a-board-message-is-a-reference-not-a-payload.md",
-      "current_source_sha256": "4fc2aa88bf167806c12b9a1f7e5780510ad78d489b14b58f603cd161581f022e",
+      "current_source_sha256": "479acc8dc133de23223c4cb216aae0050c84a5f7c0462bf8842f4ec6293fa2ce",
       "historical_source": ".cartridge/memos/work/a-board-message-is-a-reference-not-a-payload.md"
     },
     {
@@ -1153,7 +1153,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/a-cartridge-installs-from-its-source.md",
-      "current_source_sha256": "8c18c94d1aa30987dc01d3e53db241294d6103506ae866d97f16a801ef4e237a",
+      "current_source_sha256": "7f19f91237ef597b0424683db8f1d891df1f17b0cfbe6219843daf6ef73cbdea",
       "historical_source": ".cartridge/memos/work/a-cartridge-installs-from-its-source.md"
     },
     {
@@ -1167,7 +1167,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/a-key-starts-its-provider-on-demand.md",
-      "current_source_sha256": "e78cf0ab65d7bdef84417ae313132829ca95c16b77112357a278575b6a28bbec",
+      "current_source_sha256": "afaea28de5f1c5b1434d83e586fe6862deecde4036667176c2b8cb9ec8257460",
       "historical_source": ".cartridge/memos/work/a-key-starts-its-provider-on-demand.md"
     },
     {
@@ -1181,7 +1181,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/a-listener-subscribes-to-event-types.md",
-      "current_source_sha256": "3ba9951a739bf40a0b5ad5b393620e6c4407cd02409d0aa9c693ee53377a52e8",
+      "current_source_sha256": "eb316cba097bf715749a2d7a92c2aec4517bd5e0e00e674a11d3171dfd4909c6",
       "historical_source": ".cartridge/memos/work/a-listener-subscribes-to-event-types.md"
     },
     {
@@ -1195,7 +1195,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/a-live-run-accepts-events-from-outside.md",
-      "current_source_sha256": "d652c083b5975ff12947929313bbdf1455d27114ba2d76645f699acc5623d9df",
+      "current_source_sha256": "c3afdf08aebeee337bd351eb9076a0fcef4c4f7be57821a0ce3488fc2443b02f",
       "historical_source": ".cartridge/memos/work/a-live-run-accepts-events-from-outside.md"
     },
     {
@@ -1209,7 +1209,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/a-priority-event-unblocks-the-step.md",
-      "current_source_sha256": "1db4330f39fd80a1ee22241ac505b40ff96b6d7a0009e1484dff3e65b35e21e0",
+      "current_source_sha256": "07771d2b166945ba09e3014d384debfa8e84351dbcc69426f9b63d63bc7ee147",
       "historical_source": ".cartridge/memos/work/a-priority-event-unblocks-the-step.md"
     },
     {
@@ -1223,7 +1223,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/a-search-ranks-current-guidance-over-delivered-history.md",
-      "current_source_sha256": "cd5a1abe53dabf63e62c5d3f75d38fcf4da426107f9f1867186ca50dadb6959b",
+      "current_source_sha256": "3df87aec4df37bbea9523de669d062c469251d6a10e6e55cb005f341c04e19cd",
       "historical_source": ".cartridge/memos/work/a-search-ranks-current-guidance-over-delivered-history.md"
     },
     {
@@ -1251,7 +1251,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/a-stalled-step-raises-its-own-event.md",
-      "current_source_sha256": "9b6f694b5f190f7f39d8cd766c828d54bbcc6f7f315bb999fd4e0a219b821c11",
+      "current_source_sha256": "fe8316ad102ab22bc98a60b04f25f232b3436c717099028af500f0933ee8d0fc",
       "historical_source": ".cartridge/memos/work/a-stalled-step-raises-its-own-event.md"
     },
     {
@@ -1265,7 +1265,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/a-tool-is-declared-by-its-memo.md",
-      "current_source_sha256": "a4e0fb46a8dc7c5697624be44a2c925d5bedefe446628ca463b917fd3bbfce84",
+      "current_source_sha256": "a3f70c89dcb2a7a03aba5ea0016730e9e8affa467986142f52215bf19f08fea4",
       "historical_source": ".cartridge/memos/work/a-tool-is-declared-by-its-memo.md"
     },
     {
@@ -1279,7 +1279,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/a-usage-ranked-tool-graph-serves-the-best-way.md",
-      "current_source_sha256": "d5e8990205383a80dacd227155115bfd42026f14b89297696e1393e0ebd340be",
+      "current_source_sha256": "63a49faa7c1e5b552a2855385b672b1f14ca1f0997fd49ae923767713d986478",
       "historical_source": ".cartridge/memos/work/a-usage-ranked-tool-graph-serves-the-best-way.md"
     },
     {
@@ -1293,7 +1293,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/an-agent-is-one-lookup-from-the-roster.md",
-      "current_source_sha256": "dada90a9996626820a90cbd800c54de12b38ab8f6dcbf85a76263c22f36927c8",
+      "current_source_sha256": "7e0bb624812293ba92a7ac06ccf68b04fbc569b8b72f7f440c753ee96bc3b0e8",
       "historical_source": ".cartridge/memos/work/an-agent-is-one-lookup-from-the-roster.md"
     },
     {
@@ -1321,7 +1321,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/an-mcp-server-carries-the-tools.md",
-      "current_source_sha256": "dd6b262a720b6ce0f5f9d6f37bc626fb42102f0656122d28f44ebf0f0f0678fe",
+      "current_source_sha256": "bfc13cae295c0ccaf1b70d3d9b07633e14021baf5cc1a0d683d1a55146ef7069",
       "historical_source": ".cartridge/memos/work/an-mcp-server-carries-the-tools.md"
     },
     {
@@ -1335,7 +1335,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/cartridges-compose-recursively.md",
-      "current_source_sha256": "0138d014b8999a5b73368b2fbf434ec4136291a3857a1f405ca7ab425aaae4e7",
+      "current_source_sha256": "904e0878422ed34f65587942d87d9a9b3181ef7b6b8ea9de4448b89536892d59",
       "historical_source": ".cartridge/memos/work/cartridges-compose-recursively.md"
     },
     {
@@ -1349,7 +1349,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/ci-proves-the-supported-terminal-matrix.md",
-      "current_source_sha256": "7247b7330fe892145d993a07a27890af60351ddc0231c4eee0bf9ada0c595824",
+      "current_source_sha256": "0a403d012d1171f193d506706cf393795c44ffacc441bf83033c504e379038e8",
       "historical_source": ".cartridge/memos/work/ci-proves-the-supported-terminal-matrix.md"
     },
     {
@@ -1363,7 +1363,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/copy-mode-interacts-with-the-text.md",
-      "current_source_sha256": "a69c35afd5fcb15ded3d9207833dcfa8c83070caefc5ac2d78b15ee37e1379a8",
+      "current_source_sha256": "ecbf5c877a8bf6e317b5e7c1d5499366577c1d9123150fe3d95d68928b690500",
       "historical_source": ".cartridge/memos/work/copy-mode-interacts-with-the-text.md"
     },
     {
@@ -1377,7 +1377,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/debug-mode-correlates-a-terminal-turn.md",
-      "current_source_sha256": "84425f4fa287c7f933338d9c4fe967b830627b880f367b4656fd7310bd42b585",
+      "current_source_sha256": "b57dc999c77c64bf7885520e16d446e213f7109619b85eac2fdae32defb749e4",
       "historical_source": ".cartridge/memos/work/debug-mode-correlates-a-terminal-turn.md"
     },
     {
@@ -1391,7 +1391,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/every-enabled-tool-ships-a-contract-probe.md",
-      "current_source_sha256": "2fc3ee87f5582575d752a880584dff58b004d64232577f869ca8be11e83b5b64",
+      "current_source_sha256": "d3ac61b1ae4d9af10f1d2ae3a57d97d643c4a12a3b58e32585c811c27bb65bcc",
       "historical_source": ".cartridge/memos/work/every-enabled-tool-ships-a-contract-probe.md"
     },
     {
@@ -1419,7 +1419,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/one-search-covers-the-record-and-memory.md",
-      "current_source_sha256": "94daf1594bf776d21dd7bb447836adc3ee6abdaf48575da35dfb04260f19771a",
+      "current_source_sha256": "f2ecc2c24d70e1d51e8570dcc7f326cfee630da0a70cd0a677ef066718a202a0",
       "historical_source": ".cartridge/memos/work/one-search-covers-the-record-and-memory.md"
     },
     {
@@ -1447,7 +1447,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/runtime-stays-small-and-provable.md",
-      "current_source_sha256": "29b1fe998c5558723bdca1dd2d52b8221417e9a9d059ea989b7a0c04fed3daa7",
+      "current_source_sha256": "17a3814f753fcc7deb3521c3ff4f55faee0a6990d5f58313b80b59438a8479ba",
       "historical_source": ".cartridge/memos/work/runtime-stays-small-and-provable.md"
     },
     {
@@ -1475,7 +1475,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/sub-agents-share-the-terminal.md",
-      "current_source_sha256": "9b2760cf64c0e69d2793aa4599a4135a875774fb20e79dd008df8b9e9bd06914",
+      "current_source_sha256": "ab7a7e1e3f413125a8ea9aac53906bd8dc4169a6edd8a2398786c971560bb2bc",
       "historical_source": ".cartridge/memos/work/sub-agents-share-the-terminal.md"
     },
     {
@@ -1489,7 +1489,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/the-agent-spawns-wakes-and-owns-sub-agents.md",
-      "current_source_sha256": "0ece558d3688427cc241d40248e094c89117d1f2142f7d79905afa64275a9726",
+      "current_source_sha256": "febe36bb91ea39334716e6f45e11339a776866bb0b622b735dc9394b1504c581",
       "historical_source": ".cartridge/memos/work/the-agent-spawns-wakes-and-owns-sub-agents.md"
     },
     {
@@ -1503,7 +1503,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/the-agents-chat-through-one-tool.md",
-      "current_source_sha256": "554426cba7cb85bce9162acdb1b07ae5ef7af91896609c708b99e30cd4b7f4ff",
+      "current_source_sha256": "902155a2216b73a64865b9246343efadc57ebea4c0a15b0734f26fd31287059d",
       "historical_source": ".cartridge/memos/work/the-agents-chat-through-one-tool.md"
     },
     {
@@ -1517,7 +1517,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/the-board-log-replays-who-did-what.md",
-      "current_source_sha256": "0e2e588bf8b07c111c6485d1a6f5b737ebce6e23359724c1d9aaff75ad6d96d1",
+      "current_source_sha256": "ff43ee86becde3d1bc45686987831a856f60f6b704c2de186e9403ebdde1e55a",
       "historical_source": ".cartridge/memos/work/the-board-log-replays-who-did-what.md"
     },
     {
@@ -1531,7 +1531,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/the-context-inspector-opens-from-the-chat-editor.md",
-      "current_source_sha256": "6b7583cd7503db5d8c0bc3331ddb4ba8ef8892fbe5e82d2713e3e449b5c0ba7c",
+      "current_source_sha256": "ea021f5b644e392a71964e580db81aedc650fd5da520bbdd59efe5bb43a2a660",
       "historical_source": ".cartridge/memos/work/the-context-inspector-opens-from-the-chat-editor.md"
     },
     {
@@ -1545,7 +1545,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/the-embedded-terminal-is-gone.md",
-      "current_source_sha256": "ec97a6ef3be83e18ca8218e5d6376a60298e30972fe1dfaa9b95a60c26200510",
+      "current_source_sha256": "1f6bb7ff9526a5d3c71955303ad770d455fa7f109a44687522c5e95b02fb1f3c",
       "historical_source": ".cartridge/memos/work/the-embedded-terminal-is-gone.md"
     },
     {
@@ -1559,7 +1559,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/the-gutter-is-the-boundary.md",
-      "current_source_sha256": "ee9409ad7951f13f0c7d90560c7bef982b00af9a1a35a7860fee2bd0f0498f8e",
+      "current_source_sha256": "f5a091dd371c8f2639279c88f2ae8d41462564bfd6d36080de0566856d41b106",
       "historical_source": ".cartridge/memos/work/the-gutter-is-the-boundary.md"
     },
     {
@@ -1573,7 +1573,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/the-gutter-shows-both-sides.md",
-      "current_source_sha256": "b30da22feefac133fbafd10f2542e7e03980740cffbea82569ef0b1f988338f3",
+      "current_source_sha256": "d0a27a5d2b9e01b34b0fea97f34b4430ffbb754aad941b4274ab12b2bb4cbc40",
       "historical_source": ".cartridge/memos/work/the-gutter-shows-both-sides.md"
     },
     {
@@ -1587,7 +1587,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/the-inline-agent.md",
-      "current_source_sha256": "287d31f87683514eb9b15c8c1932d22d60ed87569f1cee64960229575a258fab",
+      "current_source_sha256": "4a163d99b13162e870c4b1d53eaec8c4b8b9621b5480bda9221d9e9f89c3726b",
       "historical_source": ".cartridge/memos/work/the-inline-agent.md"
     },
     {
@@ -1601,7 +1601,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/the-memory-workspace-is-tracked-not-patched.md",
-      "current_source_sha256": "95dace7797c079783a5767e5a5732ea68ad5d08e80378be7bfa66f3975f26025",
+      "current_source_sha256": "115f4df769d010d0b47fc53b76e6eb9672526ba091f70beb7a93d67a2a17d5a5",
       "historical_source": ".cartridge/memos/work/the-memory-workspace-is-tracked-not-patched.md"
     },
     {
@@ -1615,7 +1615,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/the-panel-switches-to-a-sub-agent.md",
-      "current_source_sha256": "d51bd59fb2f251f11e85d55f55163eab114760e86ef67a5a0d38eee8095722d9",
+      "current_source_sha256": "63dc8f5a7b99f99793d9a01adde998a5e219ee8422ec0debb325f38953af9f63",
       "historical_source": ".cartridge/memos/work/the-panel-switches-to-a-sub-agent.md"
     },
     {
@@ -1629,7 +1629,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/the-profile-is-the-root-composer.md",
-      "current_source_sha256": "d798fc50c0147ccf65045de28421772e1f18dbcfcc68c8eaf0b0659235ac4b56",
+      "current_source_sha256": "2248435c6458dece5edf31f2b3774fdff5fcea3f0128ea67b7c3eadc337c6abf",
       "historical_source": ".cartridge/memos/work/the-profile-is-the-root-composer.md"
     },
     {
@@ -1657,7 +1657,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/the-run-is-a-stream-of-typed-events.md",
-      "current_source_sha256": "f28fe54314433ac5292c441412a2ec84ef8c6e625fb0620eac39850fa790bed4",
+      "current_source_sha256": "1d8fcb5485d2460ddbedd422bd4079456604f3a29a9d286319932ea7539d5191",
       "historical_source": ".cartridge/memos/work/the-run-is-a-stream-of-typed-events.md"
     },
     {
@@ -1671,7 +1671,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/the-swarm-talks-on-a-board.md",
-      "current_source_sha256": "a70322864d180a5fb897fae09a5f02f5e227bc3368fa927b557f15fa79929c8b",
+      "current_source_sha256": "d69e547235414ebd838d1beb9fbd432088e5ee929d8b23e230649a21bf3a3205",
       "historical_source": ".cartridge/memos/work/the-swarm-talks-on-a-board.md"
     },
     {
@@ -1685,7 +1685,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/the-tool-surface-is-search-and-shell.md",
-      "current_source_sha256": "34037023dd8f9a7869a9203b0701eb6de964b2a5d8db5c25ba1af4689e8183de",
+      "current_source_sha256": "4b0dd944271333fe6677aec4d95568d0cdcfd4924b20ba4ea8f5c36dec8ce19e",
       "historical_source": ".cartridge/memos/work/the-tool-surface-is-search-and-shell.md"
     },
     {
@@ -1699,7 +1699,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/the-ui-paints-the-grid.md",
-      "current_source_sha256": "1bdec94748a95794e0ddad01e4cdea44fbf9b377287ebcc0e5bbc3a0326f7427",
+      "current_source_sha256": "21522e5554d79089406c957853d899feb50e571380906ef7b62c80869feadd70",
       "historical_source": ".cartridge/memos/work/the-ui-paints-the-grid.md"
     },
     {
@@ -1713,7 +1713,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/the-vision.md",
-      "current_source_sha256": "0b37da5e56902afeadf7db69da1f7c09c7bfaf5d4b92c634cd2827388bf7c223",
+      "current_source_sha256": "b824cc60872c70367ba84c886fcefebdbb8f8f173f891df40f9aa9e1311004dd",
       "historical_source": ".cartridge/memos/work/the-vision.md"
     },
     {
@@ -1727,7 +1727,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/tool-probes-run-and-locate-a-failing-provider.md",
-      "current_source_sha256": "0f63fdfb10dda11fc2aef9e7a8a0dff3fd2cd711a9291a6a32775a11c51b05fc",
+      "current_source_sha256": "e9025e9edd1b928b51d48404100d51e9df827a2031183768058f34ea361d0bbe",
       "historical_source": ".cartridge/memos/work/tool-probes-run-and-locate-a-failing-provider.md"
     },
     {
@@ -1741,7 +1741,7 @@
       "rounds_used": 2,
       "release_role": "independent follow-up",
       "original_source": "cartridge.ctg/.cartridge/memos/work/zirkles-tools-serve-any-agent.md",
-      "current_source_sha256": "35ea9c0afe2bcb4fd809abe508cc371f35dd12ce24f15ab27131080ecb470fe3",
+      "current_source_sha256": "38cba585d299b5efccb93cb8f5730602c2e2dae1820a5d1d8fe970e63a7bd7f9",
       "historical_source": ".cartridge/memos/work/zirkles-tools-serve-any-agent.md"
     },
     {
@@ -1754,7 +1754,7 @@
       "review": "cartridge.ctg/.cartridge/prds/a-lanes-build-can-hand-back-a-siblings-binary/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "557d654bd9bb8943ad9a23290b00adbff178819b829a7d13a90b0a3c2738b5b1",
+      "current_source_sha256": "a6a7f6f3202e8fafa88e636412965b8970c0fd05cbd2695cdcfa83575b1b0f87",
       "historical_source": "memory.ctg/.cartridge/memos/work/a-lanes-build-can-hand-back-a-siblings-binary.md"
     },
     {
@@ -1767,7 +1767,7 @@
       "review": "cartridge.ctg/.cartridge/prds/a-plugins-ingests-unwind-with-it/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "ef052d5dd072ae9e45f4d36c03688db631c1e0ba66bb372a07ed734b79f63902",
+      "current_source_sha256": "112aeaf2cf8f88a566424cfc855a10ba8ab57d5f847a1ce2761eab63db2a5b48",
       "historical_source": "memory.ctg/.cartridge/memos/work/a-plugins-ingests-unwind-with-it.md"
     },
     {
@@ -1780,7 +1780,7 @@
       "review": "cartridge.ctg/.cartridge/prds/an-ancestry-test-cannot-tell-a-live-lane-from-an-abandoned-one/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "8bf04edc22f0be871d7d4f891337fc0d073a1e1e4ba72c39dbb526baa73f44ca",
+      "current_source_sha256": "f68aef567aae9ee3fa5b3bd3c7837959c7b2f3358f1f26f4f02047a8e8a65978",
       "historical_source": "memory.ctg/.cartridge/memos/work/an-ancestry-test-cannot-tell-a-live-lane-from-an-abandoned-one.md"
     },
     {
@@ -1793,7 +1793,7 @@
       "review": "router.ctg/.cartridge/prds/audit-mine-for-native-memory-integration/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "f953313996bf587d5c1c3f92b969f059e65eedfb8a2b189ec84cdb2c53770fd4",
+      "current_source_sha256": "05d1ae9a2ff584732581394df5f285bcd1ba23c892973fc2b70c10bb468df07d",
       "historical_source": "memory.ctg/.cartridge/memos/work/audit-mine-for-native-memory-integration.md"
     },
     {
@@ -1806,7 +1806,7 @@
       "review": "cartridge.ctg/.cartridge/prds/cartridges-compose-recursively/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "b192565dabc9b4d4fa896967bfd89c5b7509b2f7beba8f9ae47f338b88d39de1",
+      "current_source_sha256": "32694965e31c72b315ebd8665aae4738cd2f78f1dd8b9cc2a25ad0dec74c3159",
       "historical_source": "memory.ctg/.cartridge/memos/work/build-the-composition-pillar.md"
     },
     {
@@ -1819,7 +1819,7 @@
       "review": "memory.ctg/.cartridge/prds/degrade-corrects-the-retrieval-path-it-names/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "af2bdbc8350ba6e8b42f5397965665dc6b12596a31653da336586a9143abd850",
+      "current_source_sha256": "387d13efe5dbd04e0b95e093ed28431fd7b73068c1e9fe275cdbd5ae8d0835ad",
       "historical_source": "memory.ctg/.cartridge/memos/work/degrade-corrects-the-retrieval-path-it-names.md"
     },
     {
@@ -1832,7 +1832,7 @@
       "review": "cartridge.ctg/.cartridge/prds/disk-adapters-detach-without-forgetting-memory/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "9ee37273d150bc16c0d5759ee04c5ada3eac1c62d118285d2471d6aacbbc1e6f",
+      "current_source_sha256": "77151b45998395a32e644c5cbc7c32e34dad5304d08635fbb0dee03dfaca644e",
       "historical_source": "memory.ctg/.cartridge/memos/work/disk-adapters-detach-without-forgetting-memory.md"
     },
     {
@@ -1845,7 +1845,7 @@
       "review": "memory.ctg/.cartridge/prds/retrieval-is-a-piece/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "66f82e47b3b7b750dbdacb8592a8d5190ada18d2aa981087959cd5f33be1d484",
+      "current_source_sha256": "d13470397b7b49721d74c5307887dc84e305bee1e693b4d2ef0c9dd34cfc3705",
       "historical_source": "memory.ctg/.cartridge/memos/work/every-compute-crate-is-a-piece.md"
     },
     {
@@ -1858,7 +1858,7 @@
       "review": "memory.ctg/.cartridge/prds/every-mutation-holds-the-store-writer-boundary/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "c0f6a9798f18b1ded938d5452f7a3fb160175afbad1f3e3ca9aeb63006ffbd15",
+      "current_source_sha256": "4855ba6490acdd3e932336f53a45b9b48502cc299d601591cf5c8205fcd150cc",
       "historical_source": "memory.ctg/.cartridge/memos/work/every-mutation-holds-the-store-writer-boundary.md"
     },
     {
@@ -1871,7 +1871,7 @@
       "review": "cartridge.ctg/.cartridge/prds/extension-inspect/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "a3368808d5844ef316c1b8fdbd358b9482414239101208b473b55edb1ecbf32e",
+      "current_source_sha256": "ebd0ab2eb2f52087e31b3f441c082955ed13f4510caaed7d71e37b97fc40da56",
       "historical_source": "memory.ctg/.cartridge/memos/work/extension-inspect.md"
     },
     {
@@ -1884,7 +1884,7 @@
       "review": "cartridge.ctg/.cartridge/prds/extension-loader-plugin-tree/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "18c0fcb34f87ed0ab98cb3789b088864d31bd25d247aace169095a47cda13031",
+      "current_source_sha256": "c3302afa8a142f474ae6b6d40e3ddf386094cc193b0347bfe8fe684eb1488108",
       "historical_source": "memory.ctg/.cartridge/memos/work/extension-loader-plugin-tree.md"
     },
     {
@@ -1897,7 +1897,7 @@
       "review": "memory.ctg/.cartridge/prds/keep-the-tree-and-record-true/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "0b997373bc55d7cadfce5aab697149748c3bb3686ead153f1ff24a1dccd16cd0",
+      "current_source_sha256": "5e6c74e6728967314134bb9edddd50cdcca3386c8a0af94f8132f0f7488b2b16",
       "historical_source": "memory.ctg/.cartridge/memos/work/keep-the-tree-and-record-true.md"
     },
     {
@@ -1910,7 +1910,7 @@
       "review": "memory.ctg/.cartridge/prds/memory-daemon-boots-a-root-context/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "2ba98937bc64f94ef1879a193a88c4e3057e2172b8885327e85e669d5754614d",
+      "current_source_sha256": "b648f33340fc42b9726c6ed15dc97a5b60d58610d05489eb3cc60917f0a95f7e",
       "historical_source": "memory.ctg/.cartridge/memos/work/memory-boots-as-a-plugin-tree.md"
     },
     {
@@ -1923,7 +1923,7 @@
       "review": "memory.ctg/.cartridge/prds/memory-daemon-boots-a-root-context/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "55bd769b3b4154bf2cb4d7976d29a8326c249e7037e7385486253354b6c68be8",
+      "current_source_sha256": "6e1e711bec195692f26c72ee84ccb5f8da4179a08b8cccd39e3cb1ca6f742d27",
       "historical_source": "memory.ctg/.cartridge/memos/work/memory-daemon-boots-a-root-context.md"
     },
     {
@@ -1936,7 +1936,7 @@
       "review": "memory.ctg/.cartridge/prds/memory-health-loads-its-own-graph-beside-the-daemon/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "6a93de6044979576b76fdae946af8baf2a573ac346ff46094c43ef6ccb233d56",
+      "current_source_sha256": "9b2ab50aa0e23cb424f21c55788b3710046a02788ff0ba70df2d1f9e130a240f",
       "historical_source": "memory.ctg/.cartridge/memos/work/memory-health-loads-its-own-graph-beside-the-daemon.md"
     },
     {
@@ -1949,7 +1949,7 @@
       "review": "memory.ctg/.cartridge/prds/memory-integration-assessment/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "353b371e6c2406ec317406d00274cf32773757ab9211c5c2c3e037893756815c",
+      "current_source_sha256": "aed72c9ba3ec0b268032d3ecde76d91ae1de0cb8a50d71d7cdae786ea1793743",
       "historical_source": "memory.ctg/.cartridge/memos/work/memory-integration-assessment.md"
     },
     {
@@ -1962,7 +1962,7 @@
       "review": "memory.ctg/.cartridge/prds/memory-signals-become-events/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "54836684cd706f28a08bf16865eea0547b89c133c1fc81e1d6f9335f07461825",
+      "current_source_sha256": "e9bccf73d4db006514c5912a6d213bcde4ec983fee6b21685d47f609b77f8310",
       "historical_source": "memory.ctg/.cartridge/memos/work/memory-signals-become-events.md"
     },
     {
@@ -1988,7 +1988,7 @@
       "review": "memory.ctg/.cartridge/prds/parked-memory-remains-recallable/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "4377d15088d909157c49941adc6ff426b8e85182cdf361f5c36011a208bf33ba",
+      "current_source_sha256": "d0433a26aed7d13465e9da37a3570bb40996c01cef226cd30a50bc9543c3962c",
       "historical_source": "memory.ctg/.cartridge/memos/work/parked-memory-remains-recallable.md"
     },
     {
@@ -2001,7 +2001,7 @@
       "review": "cartridge.ctg/.cartridge/prds/plugins-from-memory-toml/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "68b1000e48af6200c9830477a19081994e12b4571f67a7ee00a1608e3d6aadff",
+      "current_source_sha256": "646f3f9777391bcbbb9645da05b9db439998ad1b749ab4d5471c1e0767a4aa37",
       "historical_source": "memory.ctg/.cartridge/memos/work/plugins-from-memory-toml.md"
     },
     {
@@ -2027,7 +2027,7 @@
       "review": "proxy.ctg/.cartridge/prds/proxy-turns-carry-recall-and-reflex-tools/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "503a3cc652243b18ee70361fa5756f1f8c21a5915eda61dfc9fff36d69b26514",
+      "current_source_sha256": "d89172edab5b555a725297788639c1025e7731e700a8da6894b775fd09a1d858",
       "historical_source": "memory.ctg/.cartridge/memos/work/proxy-turns-carry-recall-and-reflex-tools.md"
     },
     {
@@ -2053,7 +2053,7 @@
       "review": "memory.ctg/.cartridge/prds/retrieval-is-a-piece/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "fababf43af05594484e46d3c9f8217bcce01de3dfc8921421f713fad439e2fc1",
+      "current_source_sha256": "6e579992298e9cfdbe97c943fb7f2995a3d4ff471b0155ac9db6d6bd2c25c852",
       "historical_source": "memory.ctg/.cartridge/memos/work/retrieval-is-a-piece.md"
     },
     {
@@ -2066,7 +2066,7 @@
       "review": "cartridge.ctg/.cartridge/prds/semantic-tool-recovery-retires-failed-generations/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "4a7154ea8de52d393f063e81102a4a8396a3607b7acd38a391407c991378efe7",
+      "current_source_sha256": "1ee9ad9d51c736ea9daab81d64b147bcbe068d97be85a19565c5cb0c6c189024",
       "historical_source": "memory.ctg/.cartridge/memos/work/semantic-tool-recovery-retires-failed-generations.md"
     },
     {
@@ -2079,7 +2079,7 @@
       "review": "memory.ctg/.cartridge/prds/the-agent-surface-is-usable/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "5d994ec952663a508b5ccba80af991ed316bbdec5df42a24ee384a5eadf848de",
+      "current_source_sha256": "4464f8c7a046b7c6b327f5e56936b5ac79e91e761f48356faf2a32c1f79141c0",
       "historical_source": "memory.ctg/.cartridge/memos/work/the-agent-surface-is-usable.md"
     },
     {
@@ -2092,7 +2092,7 @@
       "review": "memory.ctg/.cartridge/prds/the-exit-flag-tests-race-each-other/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "4fd17f283d252b81418e083a33e7aa7a9f152f727c96c850963ce61587877242",
+      "current_source_sha256": "7432e0c897c2370a80a89035e2e6a8f164c34247ce4d03e4864129875c62fd89",
       "historical_source": "memory.ctg/.cartridge/memos/work/the-exit-flag-tests-race-each-other.md"
     },
     {
@@ -2105,7 +2105,7 @@
       "review": "cartridge.ctg/.cartridge/prds/cartridges-compose-recursively/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "6dca0f3d93f308243cc91f77af709b67af7109894f259ada298bf9ebed86feee",
+      "current_source_sha256": "a9d6f886afb9d12721955630f5477631115580a6f76b074fe588e920412c7307",
       "historical_source": "memory.ctg/.cartridge/memos/work/the-extension-crate.md"
     },
     {
@@ -2118,7 +2118,7 @@
       "review": "memory.ctg/.cartridge/prds/the-graph-converges/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "c4960afeeeae7bac71d5cede0ee5dba427a509d5df8a3d2b43c038da625069fc",
+      "current_source_sha256": "49521f69a4e695e8a763a4abefc1417d37dc33f2f3f5aced230fb3b1c898f710",
       "historical_source": "memory.ctg/.cartridge/memos/work/the-graph-converges.md"
     },
     {
@@ -2144,7 +2144,7 @@
       "review": "memory.ctg/.cartridge/prds/memory-integration-assessment/review.md",
       "rounds_used": 2,
       "release_role": "independent follow-up",
-      "current_source_sha256": "6df08bba37e57e74ced208ea26b5d607f81e94160b3212260f14a0a6dcc037da",
+      "current_source_sha256": "d1fe7c28351425929a9d976cbd19ca2df0355ad9e130703229b14c8c34b3a3d5",
       "historical_source": "memory.ctg/.cartridge/memos/work/the-vision.md"
     },
     {
@@ -2198,7 +2198,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/root/prds/capabilities-live-with-their-owners/review.md",
       "historical_sha256": "e17b6058b626006231cc5590611a9a87d9c2b79d42954c4951bfbfa166e88f87",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "memory-document-works-end-to-end",
@@ -2221,7 +2222,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/root/prds/memory-document-works-end-to-end/review.md",
       "historical_sha256": "b40a1675e621d9f6a0564e8cc785a901bf5d552c3d2706fcc2e16b7eb2bca03e",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "the-composed-system-proves-the-plan",
@@ -2250,7 +2252,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/root/prds/the-composed-system-proves-the-plan/review.md",
       "historical_sha256": "d8aea106a423aaa16851096bbef3f36bdfe1c1f0381092664b9e468f96198da2",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memo/memo-board-template",
@@ -2264,15 +2267,16 @@
         "@memo/memo-board-template/initialize-board",
         "@memo/memo-board-template/board-engine-integration"
       ],
-      "words": 89,
+      "words": 134,
       "sha256": "cfc12e1bb2275e5d0f2f773d1d9b909e1dfafcf056bd963d2bb52fca1a556df3",
-      "score": 97,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/memo-board-template/review.md",
       "historical_sha256": "203d7cd5f5c6297586b675c45ec08e90f687fb6720a40590c199f4482fdf4f3e",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@memo/one-document-serves-every-reader",
@@ -2288,7 +2292,7 @@
         "@memo/one-document-serves-every-reader/document-projections",
         "@memo/one-document-serves-every-reader/executable-document-validation"
       ],
-      "words": 95,
+      "words": 113,
       "sha256": "69c701ae32fbf6fb3f285fe75352964f3d49d7f81089113df7f5b8710fd05850",
       "score": 96,
       "review_result": "PASS",
@@ -2296,7 +2300,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/one-document-serves-every-reader/review.md",
       "historical_sha256": "a85abdab6e3f27d0a6a4b4d54d9996af433a453600c0b4b8d102fbf0c298b2cc",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@landscape/landscape-composes-system-context",
@@ -2312,7 +2317,7 @@
         "@landscape/landscape-composes-system-context/live-file-context-contributors",
         "@memo/landscape-context-facade"
       ],
-      "words": 97,
+      "words": 101,
       "sha256": "12cd0475d77e01ec23d9faa06f858e017d6b13b9648a7cf0e4d8775f1d3e97f3",
       "score": 94,
       "review_result": "PASS",
@@ -2320,7 +2325,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/review.md",
       "historical_sha256": "5d61b3573313f1fca3a447fea1fdf76032c90d410b0e6b1ed13d2ca1eb2dd76c",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@landscape/context-quality-is-measured",
@@ -2342,7 +2348,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/context-quality-is-measured/review.md",
       "historical_sha256": "879920070e8ceeaa17f605832ee183b7c4ac66fc82201ed83cde386a1ee49cce",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@landscape/recursive-development-graph",
@@ -2365,7 +2372,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/review.md",
       "historical_sha256": "6ce4e4fbaf95e83b612d09c8c8c5c8c43fa2d3518aa5db1ed0ea16ffa01be3f2",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/one-runner-executes-documents",
@@ -2388,7 +2396,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/one-runner-executes-documents/review.md",
       "historical_sha256": "c1027ff48617cd7b07f6593acfda62f36e1f4d54e6a7ad37e0fb1f44cee0e286",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/documents-own-live-processes",
@@ -2410,7 +2419,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/documents-own-live-processes/review.md",
       "historical_sha256": "e9512e8d00b5e397ec141aac9547b90d001666d7e23151899d645f36dea55448",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@gitfs/tool-results-interoperate",
@@ -2422,15 +2432,16 @@
         "improve-tool-result-contract"
       ],
       "needs": [],
-      "words": 226,
-      "sha256": "bf01a38a0c3880ffd0ae7d6496b4c5b925fdfeebbc6a8784936f76aeda894259",
-      "score": 96,
+      "words": 371,
+      "sha256": "a284102ceabf68ab6000f37992c22585feefd1076891db81c7d56acede6f0af0",
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/gitfs/prds/tool-results-interoperate/review.md",
       "historical_sha256": "fda95c7661405b24a2d3a0e60a220c1fd5d32b916e9fe430ef3c29a57f1d3579",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "accepted",
+      "state": "done"
     },
     {
       "id": "@memory/memory-owns-its-tool",
@@ -2453,7 +2464,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/memory-owns-its-tool/review.md",
       "historical_sha256": "79bf2fd54287c865c4dadac5c90580841e7bf490e29e12c29ca8ac62ed2d943a",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@harness/harness-consumes-landscape",
@@ -2475,7 +2487,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/harness/prds/harness-consumes-landscape/review.md",
       "historical_sha256": "80742bf7674ae717a67c7183a4911e8a2a67d93f689a8178cd415766cf93b4fa",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@mcp/clients-share-document-execution",
@@ -2501,7 +2514,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/mcp/prds/clients-share-document-execution/review.md",
       "historical_sha256": "087bb3757893e8ae8ef48a2daa2ea57df2ebc325b308edaeea1f96439ce204e5",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@tools/development-tooling-has-one-home",
@@ -2523,7 +2537,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/tools/prds/development-tooling-has-one-home/review.md",
       "historical_sha256": "23e3f56f37db05ccc8882019bec4e1495110ed9f05fb2eb40de0d49a0887a2c9",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@ui/human-context-is-the-same-document",
@@ -2545,7 +2560,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/ui/prds/human-context-is-the-same-document/review.md",
       "historical_sha256": "784fc7f20828702865c2d0b5dc3cc0c3677853c90227f103331b87843c5703bf",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/the-sandbox",
@@ -2568,7 +2584,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/the-sandbox/review.md",
       "historical_sha256": "3f4c61972eaae9fa952df42c17b504faa83fee12f1525d457b5d9047f01933a7",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/launch-authority",
@@ -2587,7 +2604,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/launch-authority/review.md",
       "historical_sha256": "f6839510927f72a597ce2b1d5d9b0a21f5b6b53830bc5aeee5fc413c3481aa34",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/linux-policy",
@@ -2606,7 +2624,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/linux-policy/review.md",
       "historical_sha256": "512b7421188b44e2720aeb816f02d4adde6a316547a9fb13fbf70a53eb358339",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/macos-policy",
@@ -2625,7 +2644,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/macos-policy/review.md",
       "historical_sha256": "8543b4eaadd50ff429bf3ce0c408b9bca51696eb48ded72d6525845b1c390266",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@agent/improve-agent-decision-attribution",
@@ -2648,7 +2668,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/agent/prds/improve-agent-decision-attribution/review.md",
       "historical_sha256": "d4e396eb06de1339087762aa0c8324cd3a03cc1652dc1665a08939bc28b77572",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@agent/improve-agent-resume-boundaries",
@@ -2670,7 +2691,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/agent/prds/improve-agent-resume-boundaries/review.md",
       "historical_sha256": "0ee1180c3809374a8ccec76df6c6bf77ba1a61948325683eff5afe101acc6025",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@agent/improve-agent-task-baseline",
@@ -2689,7 +2711,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/agent/prds/improve-agent-task-baseline/review.md",
       "historical_sha256": "50b1571d941e20f0f07a09c8407c07d7de57fae758398a04e280bd6e3800a1cf",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@fs/improve-fs-change-provenance",
@@ -2705,15 +2728,16 @@
         "@gitfs/overlay-mutations-report-revisions",
         "@runtime/shipped-gitfs-profiles-grant-change-recording"
       ],
-      "words": 182,
-      "sha256": "3ddcb5ccb00167899b50b3fe88742829b30a49b8b04ce59f33a86552043972af",
+      "words": 179,
+      "sha256": "1c5f48fd2abad4fd4b2d9e472e997b9a6097d44ee9ac29debd07c838e578ba2f",
       "score": 95,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/review.md",
       "historical_sha256": "49c602e352a451bf6b53470aa4e405a6957d2975520d329824931138c5bf8412",
-      "review_binding_status": "current-review"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@fs/improve-fs-revision-guards",
@@ -2724,15 +2748,16 @@
         "improve-fs-revision-guards"
       ],
       "needs": [],
-      "words": 196,
-      "sha256": "f2f0c8a5fde7e520bf1f03fc5232c33f668bf1f01916ca243486ae0f6087b795",
+      "words": 354,
+      "sha256": "cdacea0193df104b21f7c2e4d7c90c047773e0f704e6054dd6d1884f1b9a5d4f",
       "score": 95,
       "review_result": "PASS",
       "round": 4,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-revision-guards/review.md",
       "historical_sha256": "bd1033bb98542ebc2795c564c05a25aac0e9910b09a2918f296d775ec43c89ee",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@fs/improve-fs-search-pages",
@@ -2743,15 +2768,16 @@
         "improve-fs-search-pages"
       ],
       "needs": [],
-      "words": 182,
-      "sha256": "919abd2234498a4f1dfd2e95195f38993ca961ab910fb2fbe01700f9fa9c18eb",
-      "score": 95,
+      "words": 307,
+      "sha256": "59c4d9e6d08a45a2c9b4d3fd681b0aa8cdd0feb1726e1dc6712161d86c2e15a9",
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-search-pages/review.md",
       "historical_sha256": "72119993a292bbbb67d7840168ef6d55ffac192088bf017bb9d662cb2f6a6a01",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@gitfs/improve-gitfs-readable-diff",
@@ -2765,15 +2791,16 @@
         "@policy/improve-policy-operation-rules",
         "@gitfs/tool-results-interoperate"
       ],
-      "words": 183,
-      "sha256": "992d5b668b68eb3fd3f7f9a52f2bd4ca35733d1bfb23e8905b0d382c30d76e90",
+      "words": 316,
+      "sha256": "e0ec8ea766792e75bd2d52023d32fbcb855811bd682f8f0226a1db0fa804c0dc",
       "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-readable-diff/review.md",
       "historical_sha256": "7606db1602f7c9e7e0807a454b8a1946053d5e1a88e4117d82c39452e46f561a",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@gitfs/improve-gitfs-reviewable-ship",
@@ -2791,15 +2818,16 @@
         "@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally",
         "@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head"
       ],
-      "words": 199,
-      "sha256": "b11f1b137675ea09397193a0a6d237befa9b55c1836180081624b7c9a31029f6",
-      "score": 97,
+      "words": 203,
+      "sha256": "c6507ba8164cffabae3235b065196237e0c34063842ed0c39beb5d2195c5d4b8",
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/review.md",
       "historical_sha256": "6e7f4d4052b4f1e967735ce0e9d56199b9d7f545a56ebb684e0c79fce188c965",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@gitfs/improve-gitfs-snapshot-selection",
@@ -2810,15 +2838,16 @@
         "improve-gitfs-snapshot-selection"
       ],
       "needs": [],
-      "words": 186,
-      "sha256": "0ecb00d188671a383d13a33827b6f9f9de669d886a3b308350850a037dea059d",
-      "score": 97,
+      "words": 251,
+      "sha256": "0bcf82b09a990ae76494669bb89e1e0054d492c9466ed46d232a231d7b17d188",
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-snapshot-selection/review.md",
       "historical_sha256": "8f6dda49d532ec4bb8edc7f3029abcf105005b87f9a233e8ed6cf9373889b06d",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "accepted",
+      "state": "done"
     },
     {
       "id": "@harness/improve-harness-compaction-diff",
@@ -2829,15 +2858,16 @@
         "improve-harness-compaction-diff"
       ],
       "needs": [],
-      "words": 188,
+      "words": 309,
       "sha256": "283249b6d035753316b1877dd14defbe357789cd229893856c01f8239a4622d2",
-      "score": 96,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/harness/prds/improve-harness-compaction-diff/review.md",
       "historical_sha256": "b639b7644ff42a6c4a51505d04a91138c433ead7b393b9633bdd1212e4be4be3",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "accepted",
+      "state": "done"
     },
     {
       "id": "@harness/improve-harness-quality-eval",
@@ -2859,7 +2889,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/harness/prds/improve-harness-quality-eval/review.md",
       "historical_sha256": "15d148544b16346aeb0fd45404f48d1ddcaeac19a31fdbc245acb286976e9443",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@harness/improve-harness-token-accounting",
@@ -2870,15 +2901,16 @@
         "improve-harness-token-accounting"
       ],
       "needs": [],
-      "words": 186,
+      "words": 242,
       "sha256": "c85126f77d8bcd7988eba73aab2174b25642765672dc45c6e1ec552d7e849803",
-      "score": 96,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/harness/prds/improve-harness-token-accounting/review.md",
       "historical_sha256": "d3355a5734c6c118537325afed308786a0c46dacfee686549e452371069445bf",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "accepted",
+      "state": "done"
     },
     {
       "id": "@mcp/improve-mcp-approval-route",
@@ -2892,15 +2924,16 @@
         "@policy/improve-policy-operation-rules",
         "@policy/improve-policy-explain"
       ],
-      "words": 188,
+      "words": 191,
       "sha256": "bb59e284506dedcdc63578ca001f14a95c11a3725ce872d537ebb11f25b5ee8e",
-      "score": 96,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/mcp/prds/improve-mcp-approval-route/review.md",
       "historical_sha256": "570202186761774757c2be459bd60879ffb79fd1cafdd7bc5484e4c5cd6773e5",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@mcp/improve-mcp-refresh-catalog",
@@ -2914,15 +2947,16 @@
         "@runtime/mcp-stdio-replies-during-replacement",
         "@gitfs/tool-results-interoperate"
       ],
-      "words": 184,
+      "words": 320,
       "sha256": "cf94a80c1f71e1027749d45a46e6dabe37e33c56676a01892d528877d687ee03",
-      "score": 96,
+      "score": 94,
       "review_result": "PASS",
       "round": 4,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/mcp/prds/improve-mcp-refresh-catalog/review.md",
       "historical_sha256": "c3bdfe18f995cf7308e1b23ef8713801867e799e3806b84c4e3e8f851b775caa",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@mcp/improve-mcp-tool-readiness",
@@ -2944,7 +2978,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/mcp/prds/improve-mcp-tool-readiness/review.md",
       "historical_sha256": "c2aae4160a3b83541eefdfa207cd56a566824493d10460ab093c44a23f34b044",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@landscape/improve-memo-compact-landscape",
@@ -2958,16 +2993,17 @@
         "@landscape/improve-memo-compact-landscape/bounded-inventory-snapshot",
         "@memo/landscape-inventory-facade"
       ],
-      "words": 275,
-      "sha256": "72aafd9aa6cf8f930f41760f84e5d4c7fd77303973b1aac78ca0159dced8e964",
-      "score": 96,
+      "words": 243,
+      "sha256": "fad59c617d946ed2c12f6b097b2d7cb0ef72444d1aeabc504ecdca248a4ece59",
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape/review.md",
       "historical_sha256": "1d789f781dd7a9aab6c0d94ea332cc3b601b3759979aca698b98f3f7d255beb9",
-      "review_binding_status": "current-review-with-recorded-proof-refinements",
-      "disposition": "split-owner-boundary"
+      "review_binding_status": "passed",
+      "disposition": "split-owner-boundary",
+      "state": "done"
     },
     {
       "id": "@memo/improve-memo-stale-evidence",
@@ -2978,15 +3014,16 @@
         "improve-memo-stale-evidence"
       ],
       "needs": [],
-      "words": 178,
+      "words": 175,
       "sha256": "1627a25ea77b389d4f1d8b85f8ec0013fdc71e430aae9afe5539e0b05f878446",
-      "score": 96,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/improve-memo-stale-evidence/review.md",
       "historical_sha256": "5404ab0cd07aa1e5b6b0e49e8ab136efd1559be8225cabafef251100c47d86bf",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "accepted",
+      "state": "done"
     },
     {
       "id": "@memo/improve-memo-types-drilldown",
@@ -2997,15 +3034,16 @@
         "improve-memo-types-drilldown"
       ],
       "needs": [],
-      "words": 164,
+      "words": 261,
       "sha256": "17bf1a1a59c8caf30761cdad2ae57b24205995c132102efa4e5ac1d6f623c66e",
-      "score": 97,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/improve-memo-types-drilldown/review.md",
       "historical_sha256": "f17a8115fdaf10d06000558534b345e70516b9758523d8fd0d69e528e563d14b",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "accepted",
+      "state": "done"
     },
     {
       "id": "@memory/improve-memory-owner-access",
@@ -3015,16 +3053,19 @@
       "sources": [
         "improve-memory-owner-access"
       ],
-      "needs": [],
-      "words": 200,
-      "sha256": "465d7fc61cc073df61c29d11311a6ab55ca63083273732ea4d33e92ef1f5a0fa",
-      "score": 94,
+      "needs": [
+        "@memory/memory-health-loads-its-own-graph-beside-the-daemon"
+      ],
+      "words": 219,
+      "sha256": "8bc9b61d6aa01d252f03747de35d66e852dbe1862de959a512766f7f74c212d7",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/improve-memory-owner-access/review.md",
       "historical_sha256": "e0ffd1f900e1ca9e86e36376497842cacec38ede6384a2ac47602ad27a6837b4",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@memory/improve-memory-provenance",
@@ -3034,16 +3075,19 @@
       "sources": [
         "improve-memory-provenance"
       ],
-      "needs": [],
+      "needs": [
+        "@memory/improve-memory-readiness"
+      ],
       "words": 197,
-      "sha256": "09600426b1c79c5388d5dc99e048162304a7d1c8e59c8b30f1375f68ae6e7c5b",
+      "sha256": "c346c05a201a5f66e9190d1bf7194c503365b29e34a0d46d29b61313717c0593",
       "score": 94,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/improve-memory-provenance/review.md",
       "historical_sha256": "89dd05bf7f87739893bf2e9002264dc83f5a6a0eb67976b5cf7954eb33da3e9d",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "passed",
+      "state": "specced"
     },
     {
       "id": "@memory/improve-memory-readiness",
@@ -3056,15 +3100,16 @@
       "needs": [
         "@memory/improve-memory-owner-access"
       ],
-      "words": 197,
-      "sha256": "0bbc9fa34ed80ea41d1685e587a8d9c3cd99127a0a7121ee8a231bc566c07132",
-      "score": 94,
+      "words": 202,
+      "sha256": "b1d81de9804f7d5325bebe028cfbe814ec35a1ff253f1a5ee5d8e95e38cf6520",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/improve-memory-readiness/review.md",
       "historical_sha256": "966132eed99e2e51d680efe67ef0ae9402830063d475a7e832ef03932b5345b1",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@memory/improve-memory-tool-correct",
@@ -3085,7 +3130,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/improve-memory-tool-correct/review.md",
       "historical_sha256": "f407938079c5dc05b250b56ceebe06c4bbf4d16bb4908e3e35c21ba00de11915",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/improve-memory-tool-errors",
@@ -3106,7 +3152,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/improve-memory-tool-errors/review.md",
       "historical_sha256": "166f3d30f8412262a92785cb9e0abad3ad67d6c9ce29c328043c7ca42328d003",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/improve-memory-tool-get",
@@ -3127,7 +3174,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/improve-memory-tool-get/review.md",
       "historical_sha256": "ca38a5a2da6b0764f65bae82316cbf8706d6f79f5ed7c62454b41c551f73b3eb",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@policy/improve-policy-explain",
@@ -3140,15 +3188,16 @@
       "needs": [
         "@policy/improve-policy-operation-rules"
       ],
-      "words": 181,
+      "words": 199,
       "sha256": "661c75a76f9c9e8cba3ee2e906fedc9650c2402412ce7e0fac236f178b4d1fc1",
-      "score": 96,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/policy/prds/improve-policy-explain/review.md",
       "historical_sha256": "bffa3cc7fbc8e4fd46c5a1ece6db08f57b07b4e5ae6152744c1f8b42059a0509",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@policy/improve-policy-operation-rules",
@@ -3159,15 +3208,16 @@
         "improve-policy-operation-rules"
       ],
       "needs": [],
-      "words": 188,
+      "words": 361,
       "sha256": "ff05aeecfbc1ede7603d452dcb2635af3b4b0032f04df971aba3281eb5e69124",
-      "score": 97,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/policy/prds/improve-policy-operation-rules/review.md",
       "historical_sha256": "933b1684f1e88f64e380128cd122596ab799f4082a7f1df59e15f9a528f69a38",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "accepted",
+      "state": "done"
     },
     {
       "id": "@policy/improve-policy-resource-scope",
@@ -3188,7 +3238,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/policy/prds/improve-policy-resource-scope/review.md",
       "historical_sha256": "58bf941f5b0246765e358a46cfc09d22cb9c3b9a6e915942959729306e4b7f55",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@proxy/improve-proxy-continuation-recovery",
@@ -3199,15 +3250,16 @@
         "improve-proxy-continuation-recovery"
       ],
       "needs": [],
-      "words": 187,
+      "words": 228,
       "sha256": "71790d0a58cb50c53829414d270e026996ecd6b9fdd31b90f27c124f1dc3fb8e",
-      "score": 95,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-continuation-recovery/review.md",
       "historical_sha256": "d01f8735b2073e47cb5c37edcfc3c3c021847a991c4bbe076e6f2e4755ee8853",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@proxy/improve-proxy-tool-trace",
@@ -3222,15 +3274,16 @@
         "@policy/improve-policy-explain",
         "@proxy/improve-proxy-continuation-recovery"
       ],
-      "words": 189,
+      "words": 212,
       "sha256": "3a97d54f54fb1e70deec5c4d919124a3a9bf73b6c798a9ae36d65f0594593a5d",
-      "score": 96,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-tool-trace/review.md",
       "historical_sha256": "73a6960f01deb99663bc094fbe96721210993e241c575050aee7ee0febfa641d",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@proxy/improve-proxy-total-usage",
@@ -3243,15 +3296,16 @@
       "needs": [
         "@gitfs/tool-results-interoperate"
       ],
-      "words": 182,
+      "words": 241,
       "sha256": "d3e9fd43af350df3ae8c9c168b86ad8adf1a30dde5d10e80352d6380d2a05201",
-      "score": 96,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-total-usage/review.md",
       "historical_sha256": "92b5c126d2a009435c0cb8f7180e719d2c10ea58ba7e42bf0665ebff1e423c36",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@pty/improve-pty-command-wait",
@@ -3272,7 +3326,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/pty/prds/improve-pty-command-wait/review.md",
       "historical_sha256": "411c208da40e05f38c3781be33a78c14a62be279ab89fe7808aab190519f4f4d",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@pty/improve-pty-input-ownership",
@@ -3293,7 +3348,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/pty/prds/improve-pty-input-ownership/review.md",
       "historical_sha256": "1a9f2b5e4109ea1faa102b61bd4353a6dd1c5372c83c5ebaadaeba865cf53dab",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@pty/improve-pty-shell-identity",
@@ -3304,15 +3360,16 @@
         "improve-pty-shell-identity"
       ],
       "needs": [],
-      "words": 178,
-      "sha256": "466ee0425cb8be477b3dac59aa0b894c5000d5c290e7d47bda72e7e8bbaf85b4",
-      "score": 94,
+      "words": 175,
+      "sha256": "7cfef8bd05109dfe4a7e4392e85878cbb5f81a6a263934440c59658db3ee0585",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/pty/prds/improve-pty-shell-identity/review.md",
       "historical_sha256": "e451cfe1364260453d2e09d86b6790a069cb645512a6c612ee83f84100a09cab",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@router/improve-router-capability-routing",
@@ -3323,15 +3380,16 @@
         "improve-router-capability-routing"
       ],
       "needs": [],
-      "words": 186,
+      "words": 238,
       "sha256": "e156eec7043d84a2a9917030fd6b24d2a5593a0fcbcf7763667dcffa513c49e3",
-      "score": 95,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/router/prds/improve-router-capability-routing/review.md",
       "historical_sha256": "17adb951ff7979bb69f9bd22be08499142b3f7580a1a2224eb4093a46c44de42",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@router/improve-router-cost-latency",
@@ -3344,15 +3402,16 @@
       "needs": [
         "@router/improve-router-route-explanation"
       ],
-      "words": 181,
+      "words": 194,
       "sha256": "db4bdf575b19a73be75a77de830be12c87deb95b1508ede5fbf4d732d11efc8b",
-      "score": 96,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/router/prds/improve-router-cost-latency/review.md",
       "historical_sha256": "0ff782a1af256d15bbb6ac0efd8d549a149f1b75a3295951ef88e83361866120",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@router/improve-router-route-explanation",
@@ -3365,15 +3424,16 @@
       "needs": [
         "@router/improve-router-capability-routing"
       ],
-      "words": 176,
+      "words": 204,
       "sha256": "28f78dd0f0072401f68eb8417f277f1e683c96ef90aa4e55ae7c47a35f3acda8",
-      "score": 96,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/router/prds/improve-router-route-explanation/review.md",
       "historical_sha256": "290df36b0849b42ca501495fae2c5ba8e53a9a944999affc0cee24bbf5259238",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@sessions/improve-sessions-client-mapping",
@@ -3384,15 +3444,16 @@
         "improve-sessions-client-mapping"
       ],
       "needs": [],
-      "words": 189,
-      "sha256": "7ab9e3f5bec5776afc360d81feda9b5b14e976e6a2c4b86838871e3c544b9f3f",
-      "score": 96,
+      "words": 284,
+      "sha256": "a2d7d336d02eac81875c6e2bbec066953e103e885ea72eeb061976190a178e30",
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-client-mapping/review.md",
       "historical_sha256": "acffa18d68f644865130318ae8003f31921b7a874ae4e8a067e8b37cc2ebca7a",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@sessions/improve-sessions-recovery",
@@ -3403,15 +3464,16 @@
         "improve-sessions-recovery"
       ],
       "needs": [],
-      "words": 187,
-      "sha256": "797cf4900afabc7d127ef2bb6e3c30b59fde9d78638da16a52c938fd58c35267",
-      "score": 96,
+      "words": 352,
+      "sha256": "272b6f98c44ccafcac8acb4fd5a61ad7c35c4550f02fad5445a07622ff749a56",
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-recovery/review.md",
       "historical_sha256": "3076b8b12f2106ed037ff0b6e861f67223dc8f17fe951dc909f67cad218388bd",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "accepted",
+      "state": "done"
     },
     {
       "id": "@sessions/improve-sessions-retention",
@@ -3422,15 +3484,16 @@
         "improve-sessions-retention"
       ],
       "needs": [],
-      "words": 191,
-      "sha256": "a02f5c6b8d6daffca92881c60d88fa4202b4428ecf75c7ac98465e3cfb362073",
-      "score": 95,
+      "words": 281,
+      "sha256": "28810be220a5bc8f9b61d439ee00489e816804616ad9f4b7d3ff53b7f899b064",
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-retention/review.md",
       "historical_sha256": "5b8989117149ffdd67ae6e00ea12af0d5b5e1adfcc08d7ffe0939f17f41b5cdc",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@runtime/improve-tools-bundle-provenance",
@@ -3451,7 +3514,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/improve-tools-bundle-provenance/review.md",
       "historical_sha256": "56937258c4a40cbd789b05c2113aab7496e93a7b14e23bc7e9ef2f87972d6a31",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/improve-tools-preflight",
@@ -3470,7 +3534,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/improve-tools-preflight/review.md",
       "historical_sha256": "f9d52d61c6bdc3ca03eca52f1f39969d1f119aedcb56842b9dfece60290638e2",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/improve-tools-worktree-resume",
@@ -3491,7 +3556,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/improve-tools-worktree-resume/review.md",
       "historical_sha256": "c36e9fe2ae5e4b8255b05bba5431265341d800b2d71ca83a88712e611f054bf1",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@ui/improve-ui-run-history",
@@ -3512,7 +3578,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/ui/prds/improve-ui-run-history/review.md",
       "historical_sha256": "69e4eb960022a6d12ea065245ec31cd7c77357c231616f822fc656dc2201a703",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@ui/improve-ui-terminal-owner",
@@ -3533,7 +3600,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/ui/prds/improve-ui-terminal-owner/review.md",
       "historical_sha256": "812431d5c2654b506551cc31cd0ccca7fb74372ce5beb1f4894d3a659bdd725f",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@ui/improve-ui-tool-availability",
@@ -3554,7 +3622,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/ui/prds/improve-ui-tool-availability/review.md",
       "historical_sha256": "0774c2b769c31f2ba6a1cac1177af0432d6cb89cd1749b6ec185970e38f49437",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "cartridge-improvement-programme",
@@ -3590,7 +3659,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/root/prds/cartridge-improvement-programme/review.md",
       "historical_sha256": "0d29ad3dae6614e487e1a8e74189ef55b72d2aa241045fd3be3bec1a558e61b5",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@agent/improve-agent-programme",
@@ -3613,7 +3683,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/agent/prds/improve-agent-programme/review.md",
       "historical_sha256": "66c7fe709e9fd504347fe26b1ac5f969fe7a64481bfba5b5aa225a05923bb7c3",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@fs/improve-fs-programme",
@@ -3628,15 +3699,16 @@
         "@fs/improve-fs-revision-guards",
         "@fs/improve-fs-search-pages"
       ],
-      "words": 92,
-      "sha256": "1761d499dedbf73dd991798940d71b1e85d5589bbe29218b4ab2489b88478ff5",
-      "score": 94,
+      "words": 90,
+      "sha256": "451202c377dd1112c44f16ca5034db5fa62ae2de2a844530e3bc55f123138469",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-programme/review.md",
       "historical_sha256": "ebf706846295ca15e9ef5cad73947c3bd711615ffa87b5e266cd61392c8ad861",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@gitfs/improve-gitfs-programme",
@@ -3651,15 +3723,16 @@
         "@gitfs/improve-gitfs-snapshot-selection",
         "@gitfs/improve-gitfs-reviewable-ship"
       ],
-      "words": 89,
-      "sha256": "4d6572ff2c046f2657d27573c05b153af075208823546ab2e1a9b31236d723d1",
-      "score": 97,
+      "words": 87,
+      "sha256": "c627888bf5ecfc46dc04e357159eda31b279aad3e15970f6a937f213e26f9a65",
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-programme/review.md",
       "historical_sha256": "f61aaebb0914f6aa8cd4e457215526f0faa8967f3afca70a695c6c55458157bd",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@harness/improve-harness-programme",
@@ -3682,7 +3755,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/harness/prds/improve-harness-programme/review.md",
       "historical_sha256": "12ab5c4da91e4afe7fb7b626706934c3699f27f29a5a898d3164503ba49892ce",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@mcp/improve-mcp-programme",
@@ -3705,7 +3779,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/mcp/prds/improve-mcp-programme/review.md",
       "historical_sha256": "de09837749ff44633217642d89edacbdcf83dfaf59459955e335e8d7f6b2be25",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memo/improve-memo-programme",
@@ -3728,7 +3803,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/improve-memo-programme/review.md",
       "historical_sha256": "60207c070229b162b0cb0123bb580b1e5e47e4382f874853fca0c78c4464bfb1",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/improve-memory-programme",
@@ -3751,7 +3827,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/improve-memory-programme/review.md",
       "historical_sha256": "4ee53ef60187f8d56b174a42bf4926f031e0ea6cd083f2e184bed560f79f007a",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/improve-memory-tool-programme",
@@ -3774,7 +3851,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/improve-memory-tool-programme/review.md",
       "historical_sha256": "7659c6e5acd2d3a7a26085da06bae47716bdec81dbb5453c85ce50a2f4366f57",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@policy/improve-policy-programme",
@@ -3797,7 +3875,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/policy/prds/improve-policy-programme/review.md",
       "historical_sha256": "fb697b3b1899519a76c4b4c761e182a65491152a51564e59dcac1f63c7661d7c",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@proxy/improve-proxy-programme",
@@ -3812,15 +3891,16 @@
         "@proxy/improve-proxy-tool-trace",
         "@proxy/improve-proxy-continuation-recovery"
       ],
-      "words": 89,
+      "words": 132,
       "sha256": "e1d6db6c6d6c1320b8f0d7e5d947db70643fb5d7302f7c9651b0693c54bb347b",
-      "score": 97,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-programme/review.md",
       "historical_sha256": "4c4a720501b1e428679bd59f146580d4570cbe4f8b5f820d651b717e0971bbdc",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@pty/improve-pty-programme",
@@ -3843,7 +3923,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/pty/prds/improve-pty-programme/review.md",
       "historical_sha256": "34c893171249b8dd4453948909cdd2dd410fcd73d9c1205aa2ca1bf78e378b09",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@router/improve-router-programme",
@@ -3858,15 +3939,16 @@
         "@router/improve-router-capability-routing",
         "@router/improve-router-cost-latency"
       ],
-      "words": 86,
+      "words": 84,
       "sha256": "f42e4fd4bc9cc656f6a6fb366a7e235c15bb301434cde5bfcca6c798e57261d7",
-      "score": 97,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/router/prds/improve-router-programme/review.md",
       "historical_sha256": "8526900459c285417d2e5675169ee8784ef3e3cc16e614fecbd606fd4a0f0888",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@sessions/improve-sessions-programme",
@@ -3881,15 +3963,16 @@
         "@sessions/improve-sessions-retention",
         "@sessions/improve-sessions-recovery"
       ],
-      "words": 88,
-      "sha256": "c1e921bfed49314cdfbe4617030b9611311ecca436bfc64ad9229a369ac1434c",
-      "score": 97,
+      "words": 170,
+      "sha256": "20c62e5318fb7b8dde05e7638b30468dc385cbc6782cd1169df38205a33525c0",
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-programme/review.md",
       "historical_sha256": "a7f9014d0719401725ed284e1fc8039350db01cb0f792559d1d4b47b7e127ce3",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@runtime/improve-tools-programme",
@@ -3912,7 +3995,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/improve-tools-programme/review.md",
       "historical_sha256": "798e0a8bbd33f1f156ccc6ce2052296a31d181df064fe43a83c22770e3212c1f",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@ui/improve-ui-programme",
@@ -3935,7 +4019,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/ui/prds/improve-ui-programme/review.md",
       "historical_sha256": "5db63ddb2a380f937c2e618abfb9efb58281b1db49f3a04f0296ef658211e673",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@sessions/a-board-message-is-a-reference-not-a-payload",
@@ -3956,7 +4041,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/a-board-message-is-a-reference-not-a-payload/review.md",
       "historical_sha256": "406ba542dff307f83db6d2314589a42dfb8af703b5f9daeeebf6072a26386f89",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/a-cartridge-installs-from-its-source",
@@ -3975,7 +4061,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/a-cartridge-installs-from-its-source/review.md",
       "historical_sha256": "2c69ec9916b455e61f6ce7c4dfe8e7d3e4e13d7cea9b0436e50f4fa6c0c0208c",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/a-key-starts-its-provider-on-demand",
@@ -3996,7 +4083,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/a-key-starts-its-provider-on-demand/review.md",
       "historical_sha256": "09a2afce06c334ae73b4fb40a7b61ac833300c8abcbedc9fa28274ced9d10210",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/a-listener-subscribes-to-event-types",
@@ -4017,7 +4105,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/a-listener-subscribes-to-event-types/review.md",
       "historical_sha256": "f4fd40f51b1fbcfa8c534e3af16d543fbd644444f10cb394485f748c4b74ef11",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@agent/a-live-run-accepts-events-from-outside",
@@ -4038,7 +4127,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/agent/prds/a-live-run-accepts-events-from-outside/review.md",
       "historical_sha256": "6f73183f5d201d3aa69e78c5084cc53f168efd024077a834d1ef62c32b0c478e",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@agent/a-priority-event-unblocks-the-step",
@@ -4059,7 +4149,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/agent/prds/a-priority-event-unblocks-the-step/review.md",
       "historical_sha256": "25cc9fc131c01c6e531055c1c8bac8f46de37ff535242e689cd2fb763c99b2b6",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@landscape/a-search-ranks-current-guidance-over-delivered-history",
@@ -4078,7 +4169,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/a-search-ranks-current-guidance-over-delivered-history/review.md",
       "historical_sha256": "7c2d742625d87b5c1776f25bd343a0a6c59492f8c891c84775b36bb984da3ba0",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memo/a-shadowing-write-passes-the-leaf-check",
@@ -4089,15 +4181,16 @@
         "a-shadowing-write-passes-the-leaf-check"
       ],
       "needs": [],
-      "words": 189,
+      "words": 186,
       "sha256": "b2c360348828dacf3347e3711f9050a6fea4e0f1b317f76f5e59a3c6a28ed2dd",
-      "score": 98,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/a-shadowing-write-passes-the-leaf-check/review.md",
       "historical_sha256": "41e15d77cb9aa2803a8b17729bf25c849be577532d123be72f0d18b48702941d",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@agent/a-stalled-step-raises-its-own-event",
@@ -4118,7 +4211,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/agent/prds/a-stalled-step-raises-its-own-event/review.md",
       "historical_sha256": "2eb7e12b1280c715e146aa89f42ac8f6c372621c4dd70b48884c09f072a4d9a7",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@landscape/a-usage-ranked-tool-graph-serves-the-best-way",
@@ -4137,7 +4231,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/a-usage-ranked-tool-graph-serves-the-best-way/review.md",
       "historical_sha256": "dade6a643d8f0116bc8926b668e4dc0533b06197e5d8995267093f2d4e82b49c",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@agent/an-event-declares-its-type",
@@ -4156,7 +4251,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/agent/prds/an-event-declares-its-type/review.md",
       "historical_sha256": "bdb2144527f7c1b80cb14d00c6e5dee5c8bd524d6667869a72638e2d77d8be93",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/cartridges-compose-recursively",
@@ -4181,7 +4277,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/cartridges-compose-recursively/review.md",
       "historical_sha256": "79bb44f3100e375a70635b5d89fbafdc0b6b901f280fa632447606941bc3876d",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/ci-proves-the-supported-terminal-matrix",
@@ -4200,7 +4297,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/ci-proves-the-supported-terminal-matrix/review.md",
       "historical_sha256": "9bb1eef05374f76436f41486d7cb91ebc093ec12891666a539a98500c5dceab4",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@ui/copy-mode-interacts-with-the-text",
@@ -4221,7 +4319,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/ui/prds/copy-mode-interacts-with-the-text/review.md",
       "historical_sha256": "02df5a5eff0b5a864fc67aec02a30bd196806a971b05520ff715fb8eab188706",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@agent/debug-mode-correlates-a-terminal-turn",
@@ -4243,7 +4342,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/agent/prds/debug-mode-correlates-a-terminal-turn/review.md",
       "historical_sha256": "29a2414944c3ea94390d04747de92ff9f365d95cdabda219d80035c711f8f29d",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "every-enabled-tool-ships-a-contract-probe",
@@ -4262,7 +4362,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/root/prds/every-enabled-tool-ships-a-contract-probe/review.md",
       "historical_sha256": "d400fb9a486845364b4a0120571c4083b32756aeb9fa30c7a76ccfb313ef6b5a",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@landscape/one-search-covers-the-record-and-memory",
@@ -4281,7 +4382,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/one-search-covers-the-record-and-memory/review.md",
       "historical_sha256": "3eeaf241e6a79e77c191cb103ce66852ed51bb10f494116dcbfeeb76869f8d54",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/per-cartridge-versioned-test-runner",
@@ -4300,7 +4402,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/per-cartridge-versioned-test-runner/review.md",
       "historical_sha256": "7e8643cce13327795ac6a978ae56760666a2072a314e58dc336f07e9db36d4d7",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/runtime-stays-small-and-provable",
@@ -4323,7 +4426,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/runtime-stays-small-and-provable/review.md",
       "historical_sha256": "cbb419bf197afff3a0f925a41d3e23446e0c0541cbe7375c681ead280d0f19b2",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@sessions/sub-agent-sessions-record-parent-and-mailbox",
@@ -4334,15 +4438,16 @@
         "sub-agent-sessions-record-parent-and-mailbox"
       ],
       "needs": [],
-      "words": 184,
-      "sha256": "ee8f73772c19af947f2443c095f1bb631b974f814f991d52cfc4c00bd1c41458",
-      "score": 95,
+      "words": 259,
+      "sha256": "0cae70252ceb806419945e234c7f8a45dcc6aaab37d619015b17878d00be59a5",
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/sub-agent-sessions-record-parent-and-mailbox/review.md",
       "historical_sha256": "16af08a6617c0f4946b9a537f81ccdad043fabcc34820b1ed4188c6dcc09eac3",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@agent/sub-agents-share-the-terminal",
@@ -4367,7 +4472,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/agent/prds/sub-agents-share-the-terminal/review.md",
       "historical_sha256": "54581885c026c8a3f13de3200f7225b6eeaee8eb8af0dd4609a9a73ffb81da2f",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@agent/the-agent-spawns-wakes-and-owns-sub-agents",
@@ -4388,7 +4494,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/agent/prds/the-agent-spawns-wakes-and-owns-sub-agents/review.md",
       "historical_sha256": "ef8fc9fa1e74ecb47771c40f0b2e519f1ba999d40e0eb7e024f1635034a812aa",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@sessions/the-agents-chat-through-one-tool",
@@ -4409,7 +4516,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/the-agents-chat-through-one-tool/review.md",
       "historical_sha256": "edf6d6810bf31eeb698f05061173650326cb9492a46765161523f06f4a94f8c0",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@sessions/the-board-log-replays-who-did-what",
@@ -4428,7 +4536,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/the-board-log-replays-who-did-what/review.md",
       "historical_sha256": "f30dc9c69e342f79621f5c9297cdc801fbf2c8c0ed04e699688f3158916f2ab8",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@ui/the-embedded-terminal-is-gone",
@@ -4449,7 +4558,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/ui/prds/the-embedded-terminal-is-gone/review.md",
       "historical_sha256": "aba7e3af3a3c9caa0a8ec70b9e9f923a48e76e189304580e3c971c319be30617",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@ui/the-gutter-is-the-boundary",
@@ -4470,7 +4580,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/ui/prds/the-gutter-is-the-boundary/review.md",
       "historical_sha256": "3a58ae40a7e5ae39816b0bb016173fb40a1c2f3dabca44479dccc89c36e8cb7f",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@ui/the-gutter-shows-both-sides",
@@ -4491,7 +4602,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/ui/prds/the-gutter-shows-both-sides/review.md",
       "historical_sha256": "bd59a8a31522ff7a203b87f8e7445a4e8e09884af8933b7196b3d66e44d148aa",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@ui/the-inline-agent",
@@ -4515,7 +4627,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/ui/prds/the-inline-agent/review.md",
       "historical_sha256": "517cbcd336d36e3311261052bb37b930ea7e7cd3d4f01ec5642c9d2bd799c362",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/the-memory-workspace-is-tracked-not-patched",
@@ -4526,15 +4639,16 @@
         "the-memory-workspace-is-tracked-not-patched"
       ],
       "needs": [],
-      "words": 186,
+      "words": 183,
       "sha256": "75d973d7c29eac489f55ab1df12a9422d625e8a6af7c1d0990ed68083e82dee6",
-      "score": 97,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/the-memory-workspace-is-tracked-not-patched/review.md",
       "historical_sha256": "d617aaf98be6742a24b461f8702c193c17a4cfda06d6cf5edd48c0889463920f",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "accepted",
+      "state": "done"
     },
     {
       "id": "@ui/the-panel-switches-to-a-sub-agent",
@@ -4555,7 +4669,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/ui/prds/the-panel-switches-to-a-sub-agent/review.md",
       "historical_sha256": "4b4dd20d37ca1cc05ea636a12d9d8c09668fb6bc27df94fcb0d095a689826976",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/the-profile-is-the-root-composer",
@@ -4566,15 +4681,16 @@
         "the-profile-is-the-root-composer"
       ],
       "needs": [],
-      "words": 201,
-      "sha256": "b2bfb3df6afac684ae54f5b88b534e4c08dec8086ba0ff4c7c21bf1f337fd3a1",
-      "score": 93,
+      "words": 274,
+      "sha256": "ef2989eea79b73917c7ac2dec6c3342d05ccd618aaccb2c55eab62d8bb341540",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/the-profile-is-the-root-composer/review.md",
       "historical_sha256": "197c6f84e66725909a7d914edf9ab6ee414fc8b79bab0889ac533bd38f67df14",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@runtime/the-reload-test-is-not-flaky",
@@ -4585,15 +4701,16 @@
         "the-reload-test-is-not-flaky"
       ],
       "needs": [],
-      "words": 185,
-      "sha256": "a0a93a223adc054a17ec46c17de90708970221ef5b1803dafdb6a8ac8a6c1574",
+      "words": 181,
+      "sha256": "88e5fa9d236fe0bdcd055265d05106b54cb074948712499a6068ae44c87da6b4",
       "score": 96,
       "review_result": "PASS",
       "round": 4,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/the-reload-test-is-not-flaky/review.md",
       "historical_sha256": "9af7a2c76933b0f46753de35302f263aafa75453c1d15fb8dffc0ca0a4afd1fd",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "accepted",
+      "state": "done"
     },
     {
       "id": "@agent/the-run-is-a-stream-of-typed-events",
@@ -4618,7 +4735,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/agent/prds/the-run-is-a-stream-of-typed-events/review.md",
       "historical_sha256": "0cc49140625ade43db799bcb2704b98ee808fc61e01321a1c27554bdafaef49b",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@sessions/the-swarm-talks-on-a-board",
@@ -4642,7 +4760,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/the-swarm-talks-on-a-board/review.md",
       "historical_sha256": "51f2e674faac5a94567bf85e6b98e1ed6947af299596548e80fc41598f2ed3a3",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@ui/the-ui-paints-the-grid",
@@ -4661,7 +4780,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/ui/prds/the-ui-paints-the-grid/review.md",
       "historical_sha256": "c7970dec806649620d44eb4ad9314ad4423a8f6271110878ed4cf5a82444bb62",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "the-vision",
@@ -4683,7 +4803,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/root/prds/the-vision/review.md",
       "historical_sha256": "3a0e801214c1d6f96a6c4daa567697ac61fcddbaff7399db11a5155e0a38bfb5",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "tool-probes-run-and-locate-a-failing-provider",
@@ -4704,7 +4825,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/root/prds/tool-probes-run-and-locate-a-failing-provider/review.md",
       "historical_sha256": "7b11f8acbe9ff4843805b7d43b27e0233f61901fb39d1ab28222071c90d03be6",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/a-lanes-build-can-hand-back-a-siblings-binary",
@@ -4715,15 +4837,16 @@
         "a-lanes-build-can-hand-back-a-siblings-binary"
       ],
       "needs": [],
-      "words": 219,
+      "words": 216,
       "sha256": "2be8268d3df0aac00a0f509e56df5c71e5913929683d2dbca0a72fe080673b03",
-      "score": 96,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/a-lanes-build-can-hand-back-a-siblings-binary/review.md",
       "historical_sha256": "959d8c7fd9482537ee289e35efc773d7e914ddab12d73df8aa0b09bc3f0eb146",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "accepted",
+      "state": "done"
     },
     {
       "id": "@runtime/a-plugins-ingests-unwind-with-it",
@@ -4744,7 +4867,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/a-plugins-ingests-unwind-with-it/review.md",
       "historical_sha256": "e2f02cb729d4860a21572ad89a52781fb31b740641e2d5f918e395505a286b34",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/an-ancestry-test-cannot-tell-a-live-lane-from-an-abandoned-one",
@@ -4763,7 +4887,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/an-ancestry-test-cannot-tell-a-live-lane-from-an-abandoned-one/review.md",
       "historical_sha256": "0172f427fc85f41dac1895bd8d30a7a158b5d9fa8f755adeea73c21633edaab8",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@router/audit-mine-for-native-memory-integration",
@@ -4774,15 +4899,16 @@
         "audit-mine-for-native-memory-integration"
       ],
       "needs": [],
-      "words": 195,
+      "words": 192,
       "sha256": "4a2b4724e7c2a8e3ba164bac4263438d0c9517d3fd0acfc63249a9e9aee65a70",
-      "score": 96,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/router/prds/audit-mine-for-native-memory-integration/review.md",
       "historical_sha256": "d6773df19387ccf5bea149e4e319f3115a237ce7a49ef19e853ba9d5cd7b93b8",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@memory/degrade-corrects-the-retrieval-path-it-names",
@@ -4801,7 +4927,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/degrade-corrects-the-retrieval-path-it-names/review.md",
       "historical_sha256": "a0eabdc7acb907fa513ffde2ff9c309d52fb3ffd99688bc4bb8a2e665029c40b",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/disk-adapters-detach-without-forgetting-memory",
@@ -4820,7 +4947,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/disk-adapters-detach-without-forgetting-memory/review.md",
       "historical_sha256": "623604ae530e7ed47fd487a6dc1660a3a209bbaa592f3dcceccb7a9e29ea5f4d",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/every-mutation-holds-the-store-writer-boundary",
@@ -4831,15 +4959,16 @@
         "every-mutation-holds-the-store-writer-boundary"
       ],
       "needs": [],
-      "words": 207,
-      "sha256": "8c80355af1769372b996be40c2f35ae09e9aef943ed9906720138a2b57d9a072",
-      "score": 96,
+      "words": 204,
+      "sha256": "c8a3eb3461c33c9642ee3837ae4a56772d9ad3293ef49a1661d3afb1b3a0e023",
+      "score": 94,
       "review_result": "PASS",
       "round": 4,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/every-mutation-holds-the-store-writer-boundary/review.md",
       "historical_sha256": "c9c83ae85d40fc3ff96e3f7aef073ba3b53ac0de969c1d5f40859e853b9fb148",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@runtime/extension-inspect",
@@ -4860,7 +4989,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/extension-inspect/review.md",
       "historical_sha256": "02b783e0ab1e2702077bb9bd1c4104c55ba71e32581ff75444cde28654c65fd5",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/extension-loader-plugin-tree",
@@ -4879,7 +5009,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/extension-loader-plugin-tree/review.md",
       "historical_sha256": "850b6714733d576da34a9bf0b9535f370437980bc00c909953b0abd185a09b15",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/keep-the-tree-and-record-true",
@@ -4902,7 +5033,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/keep-the-tree-and-record-true/review.md",
       "historical_sha256": "9e4f506ea5233cbc2851c398753f474a7faa188ce80bd60c38ea99965911a5d2",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/memory-daemon-boots-a-root-context",
@@ -4922,7 +5054,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/memory-daemon-boots-a-root-context/review.md",
       "historical_sha256": "d986d5b96e083955d744f261ff018b1c818dc7532e04c3b1c51a3d2056f85d9b",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/memory-health-loads-its-own-graph-beside-the-daemon",
@@ -4932,16 +5065,19 @@
       "sources": [
         "memory-health-loads-its-own-graph-beside-the-daemon"
       ],
-      "needs": [],
-      "words": 202,
-      "sha256": "b29c30371425f1d4cc84d1549b82157168877bab7ec7b538028f32819a5c4552",
-      "score": 94,
+      "needs": [
+        "@memory/every-mutation-holds-the-store-writer-boundary"
+      ],
+      "words": 199,
+      "sha256": "3ebd257acd99f70f3814a8c2f2845a7398a1c2eb33644f238702f3750c8e61f2",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/memory-health-loads-its-own-graph-beside-the-daemon/review.md",
       "historical_sha256": "79b6ab2fa69028eb447920ae0e6e9f967bdfc3ff5ff29859082e0cf91e0f786d",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@memory/memory-integration-assessment",
@@ -4966,7 +5102,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/memory-integration-assessment/review.md",
       "historical_sha256": "da9d51198c6efcd27f2e9ad915c0b6454d271b47d01be6f176bde94b01cc5ff7",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/memory-signals-become-events",
@@ -4985,7 +5122,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/memory-signals-become-events/review.md",
       "historical_sha256": "0a8248af1285afff698abd7791e6035126c85fc57d638d8718d2b9cbc282b9d7",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/multimodal-content-reaches-the-graph",
@@ -5004,7 +5142,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/multimodal-content-reaches-the-graph/review.md",
       "historical_sha256": "4198f9cd6f65874898ca244aafed7069bfb437b1554b507099bb845ca312499e",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/parked-memory-remains-recallable",
@@ -5025,7 +5164,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/parked-memory-remains-recallable/review.md",
       "historical_sha256": "ffd2ecc09de67330b599ed1ac67d5c397df558345b30f9be0a994367120f8a60",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/plugins-from-memory-toml",
@@ -5044,7 +5184,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/plugins-from-memory-toml/review.md",
       "historical_sha256": "4b833823ca53b30a8aab381572f4c0df998f7ae30f6f2ba8952b7977503f5b85",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@router/provider-recovery-proves-its-authority-boundary",
@@ -5055,15 +5196,16 @@
         "provider-recovery-proves-its-authority-boundary"
       ],
       "needs": [],
-      "words": 193,
+      "words": 192,
       "sha256": "a62bd3eb76354fa384d363e8d6671485b690795f38e976396e7a083916e8e6d2",
-      "score": 95,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/router/prds/provider-recovery-proves-its-authority-boundary/review.md",
       "historical_sha256": "43229fdf77de1c13c9ebe1479e78c0041dbdb1724173b79918879227c33e157a",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@proxy/proxy-turns-carry-recall-and-reflex-tools",
@@ -5078,15 +5220,16 @@
         "@landscape/landscape-composes-system-context/memory-context-contributor",
         "@memo/landscape-context-facade"
       ],
-      "words": 185,
+      "words": 183,
       "sha256": "ddbbdbfef4b2fe4295f2ad451a23b067cc05e3e8eaa4c1ebccc7b28962b849bb",
-      "score": 95,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/proxy/prds/proxy-turns-carry-recall-and-reflex-tools/review.md",
       "historical_sha256": "dcbd13b8821f25785e7048591be3387966f73516dad547a222e364599ef11bda",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@sessions/reflex-reports-attributed-tool-outcomes",
@@ -5099,15 +5242,16 @@
       "needs": [
         "@runtime/native-tool-observation-adapter"
       ],
-      "words": 189,
-      "sha256": "5169e5bbed44b2223ac5dee8ca5bb278cb31b827ab564d25995fd5bf945e7d36",
-      "score": 96,
+      "words": 252,
+      "sha256": "b661b634eeb2f19cadf0bcd157052b04b145eb32722867e55f1ff4650b075c12",
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/reflex-reports-attributed-tool-outcomes/review.md",
       "historical_sha256": "6fa86bf1bc37dc3373a966e2180bae5a15a7b3dbea8f54e67a3b4b3e3c3314f5",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@memory/retrieval-is-a-piece",
@@ -5127,7 +5271,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/retrieval-is-a-piece/review.md",
       "historical_sha256": "8a208e339bc154c2a325ec24c3fe7e264c2fb840624d93f2fa6f9588fff42f9d",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/semantic-tool-recovery-retires-failed-generations",
@@ -5146,7 +5291,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/semantic-tool-recovery-retires-failed-generations/review.md",
       "historical_sha256": "7b28436ee4a1a36b8b1227b5e6d3ff46c6cf4b2e56343b02faafb8db5f246671",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/the-agent-surface-is-usable",
@@ -5170,7 +5316,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/the-agent-surface-is-usable/review.md",
       "historical_sha256": "f6dbb84c8c4bfc67c045152e6bf9fc6c6366cac30d7d1de4b615590a7a8b019f",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/the-exit-flag-tests-race-each-other",
@@ -5181,15 +5328,16 @@
         "the-exit-flag-tests-race-each-other"
       ],
       "needs": [],
-      "words": 188,
-      "sha256": "6b9e5948aa6d971ae3cc3afc05e4d3f6d1f1dd99f8f2e8ab3e2f7b10b6cbbfd4",
-      "score": 97,
+      "words": 287,
+      "sha256": "e15a9fb06d1300a308a8ac9430e5ce144a331652214537cf75326d9df5314b58",
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/the-exit-flag-tests-race-each-other/review.md",
       "historical_sha256": "23f53ea83cf52484bc25b1e45fbb72dc86763392ebac3b7e03740f6ba81426b7",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "accepted",
+      "state": "done"
     },
     {
       "id": "@memory/the-graph-converges",
@@ -5208,7 +5356,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/the-graph-converges/review.md",
       "historical_sha256": "a64e37686c9758838ae8368bc0330761c26a472b1551993792221e636e7716b9",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/the-track-record-is-reachable-across-stores",
@@ -5227,7 +5376,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/the-track-record-is-reachable-across-stores/review.md",
       "historical_sha256": "a552c0ced4465cc48193fc56747d273b5236bf477b9c40adbe6ee4222d04109a",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/memory-002",
@@ -5246,7 +5396,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/memory-002/review.md",
       "historical_sha256": "3a9c69cd3e2718ceb4db224a941dd2b2ab6cfa3c23ce43cd7f50a0f11cbfa869",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/memory-004",
@@ -5265,7 +5416,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/memory-004/review.md",
       "historical_sha256": "457f075910ba49a98184fe2f0e3e9773a87a903797a01ac4eccae0e5c77e9a12",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memo/memo-write-document",
@@ -5286,7 +5438,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/memo-write-document/review.md",
       "historical_sha256": "32d3f51d5365ab7d492ac1f80c5a61a52b4c6507d81e34dd206b0d08d4880c7d",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@fs/direct-fs-document",
@@ -5307,7 +5460,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/fs/prds/direct-fs-document/review.md",
       "historical_sha256": "17a0429c15d84a30e040dd4252c59bc3534cfa30c79f794b0e4ff2a7fb59cab6",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@gitfs/gitfs-document",
@@ -5328,7 +5482,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/gitfs/prds/gitfs-document/review.md",
       "historical_sha256": "74073e13fdd4862323c183ea0ae732065e620bffc99bbfe32ff50e01fcd06d11",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@pty/pty-document",
@@ -5350,7 +5505,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/pty/prds/pty-document/review.md",
       "historical_sha256": "d94aa0a6d2be69749b80276e5e404a331bffcb8c9647a15984e04531c4043bea",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@sessions/sessions-document",
@@ -5371,7 +5527,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/sessions-document/review.md",
       "historical_sha256": "c26ccdb2b9e730b8be6e0cab4d9733ab190f85dc3ab01d74c8c0f9e2afb06ce2",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@router/router-document",
@@ -5392,7 +5549,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/router/prds/router-document/review.md",
       "historical_sha256": "9dafebd1da986fa067b75e94e43b0d7872fd097b40ff48078ca863e2644ee2fb",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memo/memo-board-template/initialize-board",
@@ -5403,15 +5561,16 @@
         "memo-board-template"
       ],
       "needs": [],
-      "words": 138,
+      "words": 201,
       "sha256": "cbdf0853b143b15ab5878d617b0dc24184ee116eb2cd71f669f6be1e081bae4e",
-      "score": 96,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/memo-board-template/initialize-board/review.md",
       "historical_sha256": "7461777d588af0207e6c05ac4054534b6139ff18c39ba7cdebe7075b468623e5",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@memo/memo-board-template/board-engine-integration",
@@ -5424,15 +5583,16 @@
       "needs": [
         "@memo/memo-board-template/initialize-board"
       ],
-      "words": 152,
+      "words": 162,
       "sha256": "f13e0c9d75371dc02bbd7593deb484c98eb523f670cb99fbbef31759f458187d",
-      "score": 95,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/memo-board-template/board-engine-integration/review.md",
       "historical_sha256": "5a163129dea1f5ccca0f8ddca454c25ca21af17d5986b9594b30dc0d14dedfcf",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@memo/one-document-serves-every-reader/document-identity",
@@ -5443,15 +5603,16 @@
         "one-document-serves-every-reader"
       ],
       "needs": [],
-      "words": 151,
+      "words": 199,
       "sha256": "0129ed0477512078e76a68034777f1f1a496718a806bb5c88d77a88e6d024d4b",
-      "score": 95,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/one-document-serves-every-reader/document-identity/review.md",
       "historical_sha256": "9ac0e861c46e03ed35a6d5b6108c9b78c97a9c897ed4e50982d88081e023266f",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@memo/one-document-serves-every-reader/document-projections",
@@ -5464,15 +5625,16 @@
       "needs": [
         "@memo/one-document-serves-every-reader/document-identity"
       ],
-      "words": 149,
+      "words": 188,
       "sha256": "f65639b0350c3582f909df1f198cb9466631c68640f018699c008e242d86208c",
-      "score": 96,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/one-document-serves-every-reader/document-projections/review.md",
       "historical_sha256": "0b9a4478c4c65d8b748533410251c1ee618830da9b21097978a5dc1e862efb9d",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@memo/one-document-serves-every-reader/executable-document-validation",
@@ -5485,15 +5647,16 @@
       "needs": [
         "@memo/one-document-serves-every-reader/document-identity"
       ],
-      "words": 156,
+      "words": 175,
       "sha256": "93c259180e80ad7f260ae430e896d4c1113e6356a436b1be25fa0947988cbdab",
-      "score": 95,
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/one-document-serves-every-reader/executable-document-validation/review.md",
       "historical_sha256": "504dbf0d5cc5267e37b57d5322d0d5c3f1eea563184151418174ff0cef664714",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@landscape/landscape-composes-system-context/context-contributor-contract",
@@ -5506,15 +5669,16 @@
       "needs": [
         "@memo/one-document-serves-every-reader/document-identity"
       ],
-      "words": 147,
-      "sha256": "1a7bcab85bc9f7648216390b4fbf8e3e96c7f1f39cb75fd58d4f3d8e81029d35",
-      "score": 95,
+      "words": 189,
+      "sha256": "f19a0a96716f1372795c90ddbee362890a25256e827a325b1e3ae0715e631e41",
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/context-contributor-contract/review.md",
       "historical_sha256": "9d56eadee1a1ee1bc1104808456a82ce340569ba2dbd478e0dd573801b304d93",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@landscape/landscape-composes-system-context/memory-context-contributor",
@@ -5527,15 +5691,16 @@
       "needs": [
         "@landscape/landscape-composes-system-context/context-contributor-contract"
       ],
-      "words": 145,
-      "sha256": "da24e5fe3dc51cecc19903323fca9725fcc9174e0a24a51e1dc3b76def78da9d",
-      "score": 96,
+      "words": 161,
+      "sha256": "8828c796da831ed87205e38c36c8290b1f16a641057d19650b426b7c754bd15c",
+      "score": 94,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/memory-context-contributor/review.md",
       "historical_sha256": "1a9d695a0853d6456cde4262b8ffa81cd2af07a056c08a0c06131ce407f32f25",
-      "review_binding_status": "current-review-with-recorded-proof-refinements"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@landscape/context-quality-is-measured/context-baseline-corpus",
@@ -5554,7 +5719,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/context-quality-is-measured/context-baseline-corpus/review.md",
       "historical_sha256": "c1947ff50c520cb875df16177f4bd0ea61a04e6060ac9d1e8977dcaf72e8f979",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@landscape/context-quality-is-measured/context-comparison-gate",
@@ -5576,7 +5742,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/context-quality-is-measured/context-comparison-gate/review.md",
       "historical_sha256": "e45bb38fe257857019dd9763ccbb660fbe127827bc4ccb27d6805051900452c6",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@landscape/recursive-development-graph/recursive-source-census",
@@ -5591,36 +5758,39 @@
         "@memo/one-document-serves-every-reader/document-identity",
         "@prd/declared-source-edges"
       ],
-      "words": 139,
-      "sha256": "215c2c67176667f9e19a9d8589da45efed6247325f5a49cd4f67243849e5c203",
+      "words": 136,
+      "sha256": "c7b9df48b8bf663d27ad670171cd9dd1c01f726e2f9a0f150533fa5223808aaa",
       "score": 95,
       "review_result": "PASS",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-source-census/review.md",
       "historical_sha256": "36f14eba1d9b3f9cbe6cf053cc51c2dbb1a31121c3e04bc911bb5fd7441983f1",
-      "review_binding_status": "current-review"
+      "review_binding_status": "passed",
+      "state": "done"
     },
     {
       "id": "@landscape/recursive-development-graph/recursive-root-search",
       "path": "prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-root-search/prd.md",
       "owner": "landscape",
-      "kind": "leaf",
+      "kind": "rollup",
       "sources": [
         "recursive-development-graph"
       ],
       "needs": [
-        "@landscape/recursive-development-graph/recursive-source-census"
+        "@landscape/recursive-development-graph/recursive-root-search/source-record-search",
+        "@memo/recursive-source-search-facade"
       ],
-      "words": 146,
-      "sha256": "25a00842a7dce39efd3cfb9bcb953a399335e51687a69d3d083aa30f4580ad0b",
-      "score": 94,
+      "words": 126,
+      "sha256": "b66c0119f514c3b3d5997a4c9433e7dd9df1b68bb0214b6ad4b24bbc58b561de",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-root-search/review.md",
       "historical_sha256": "7b873904baab02920c78e72544fbc68e01d85d83dce581c7dce054abcfece72b",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "passed",
+      "state": "specced"
     },
     {
       "id": "@landscape/recursive-development-graph/recursive-source-refresh",
@@ -5641,7 +5811,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-source-refresh/review.md",
       "historical_sha256": "5d45956f1c0d62d196ee610976a7ce12050d5175659b980cbcbc00f86438a392",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/one-runner-executes-documents/approved-document-launch",
@@ -5663,7 +5834,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/one-runner-executes-documents/approved-document-launch/review.md",
       "historical_sha256": "484fb93a6b62cff8666a28ee92eda1a57dc7f0fcf054366caf2abf73f37259e1",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/one-runner-executes-documents/document-command-result",
@@ -5685,7 +5857,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/one-runner-executes-documents/document-command-result/review.md",
       "historical_sha256": "0bb79324a08bc2dacf620bf35a22070c60c468006dbc3ba056e1f5a22956587a",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/one-runner-executes-documents/document-artifact-result",
@@ -5706,7 +5879,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/one-runner-executes-documents/document-artifact-result/review.md",
       "historical_sha256": "ae3b9480e57fb15e5a10e20b8b9ba27dc72b02bd628d0720c036dd16a2494ff9",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/documents-own-live-processes/document-sidecar-lifecycle",
@@ -5727,7 +5901,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/documents-own-live-processes/document-sidecar-lifecycle/review.md",
       "historical_sha256": "a2d31078ba62ff7e2838657b234d6f4d58d84ea2de1cfd87154f4c63359c0df8",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/documents-own-live-processes/document-event-activation",
@@ -5748,7 +5923,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/documents-own-live-processes/document-event-activation/review.md",
       "historical_sha256": "7ade8edd725133ab0646a67e5369c0d1ca00c207693be6ec02bc98aaa43dc65d",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/memory-owns-its-tool/memory-adapter-core",
@@ -5769,7 +5945,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/memory-owns-its-tool/memory-adapter-core/review.md",
       "historical_sha256": "0de1acd7402ecd282267cf54bae525792c691ff570d901100f233397346cdba2",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/memory-owns-its-tool/memory-consumer-parity",
@@ -5792,7 +5969,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/memory-owns-its-tool/memory-consumer-parity/review.md",
       "historical_sha256": "d9842b199fc7952dfa18b9d4594ba62dbdbd60557a23182d84a6d81635a643d5",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@memory/memory-owns-its-tool/memory-wrapper-retirement",
@@ -5813,7 +5991,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/memory-owns-its-tool/memory-wrapper-retirement/review.md",
       "historical_sha256": "93d7c0a674f9a3c375dd74b1fb98ea61bac7c27dbea10b9b0b876eb8a222966b",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@mcp/clients-share-document-execution/client-document-contract",
@@ -5834,7 +6013,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/mcp/prds/clients-share-document-execution/client-document-contract/review.md",
       "historical_sha256": "ba2878d207372d9a022350191e78484ce47830293031ae2d620b033df59179be",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@agent/agent-document-client",
@@ -5855,7 +6035,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/agent/prds/agent-document-client/review.md",
       "historical_sha256": "870796dcadf5079dae0250e5b94f60c4cebbfbd3e6c89f83aad5a017360ee71d",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@mcp/clients-share-document-execution/mcp-document-client",
@@ -5876,7 +6057,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/mcp/prds/clients-share-document-execution/mcp-document-client/review.md",
       "historical_sha256": "d1bf5a54e04867fcd3589e0158c57cf53a84f12604919550b6ec73604648ccfc",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@proxy/proxy-document-client",
@@ -5897,7 +6079,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/proxy/prds/proxy-document-client/review.md",
       "historical_sha256": "0588e45e29e7b76cf9b79d0cf47a8e44d84831263cab4e445d9470fe8f35bbc9",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/runtime-development-package",
@@ -5919,7 +6102,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/runtime-development-package/review.md",
       "historical_sha256": "c738770c76cdf53aa69a4826b18ab2d1f7c9fa91c4c9242c7eef9981fc5b3b39",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/development-clean-checkout",
@@ -5943,7 +6127,8 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/development-clean-checkout/review.md",
       "historical_sha256": "7590d7275b65561841c67ec0189af797fb063cd20d168d144c3e6e2863b6a8ab",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "stale-after-migration",
+      "state": "open"
     },
     {
       "id": "@runtime/mcp-stdio-replies-during-replacement",
@@ -5954,14 +6139,16 @@
         "improve-mcp-refresh-catalog"
       ],
       "needs": [],
-      "sha256": "6692244d2db00173a3f176af73d53efa4127f3b64dd32f1c3a86914c7160586b",
+      "sha256": "e2c840146c64df6b0a866601be2797463c4af82e961df12a630861cbf3b32c6c",
       "score": 96,
       "review_result": "PASS",
       "round": 4,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/mcp-stdio-replies-during-replacement/review.md",
-      "review_binding_status": "round-4-inputs",
-      "reason": "Observed dropped stdio response while running the initialized MCP client replacement proof."
+      "review_binding_status": "passed",
+      "reason": "Observed dropped stdio response while running the initialized MCP client replacement proof.",
+      "state": "done",
+      "words": 235
     },
     {
       "id": "@memo/landscape-context-facade",
@@ -5976,15 +6163,16 @@
         "@landscape/landscape-composes-system-context/memory-context-contributor",
         "@memo/one-document-serves-every-reader/document-projections"
       ],
-      "words": 278,
+      "words": 270,
       "sha256": "8d69093349322e3703cb82bc924e16cabe1e1e2800fb6e2d11bdb58bee9b3597",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/landscape-context-facade/review.md",
-      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "review_binding_status": "passed",
       "disposition": "split-owner-boundary",
       "score": 96,
-      "review_result": "PASS"
+      "review_result": "PASS",
+      "state": "done"
     },
     {
       "id": "@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally",
@@ -5999,13 +6187,15 @@
         "@gitfs/improve-gitfs-snapshot-selection",
         "@policy/improve-policy-operation-rules"
       ],
-      "sha256": "582d48cc7f602d9db8c9021f1b2ca0a33a28bad996c95fdc75f82a9da570825f",
+      "sha256": "c397c6c76f4f334b7eb5515a2a901b98bba02bc1fcaaef114ac17e21f62a3233",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally/review.md",
-      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "review_binding_status": "passed",
       "score": 95,
-      "review_result": "PASS"
+      "review_result": "PASS",
+      "state": "done",
+      "words": 216
     },
     {
       "id": "@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head",
@@ -6018,13 +6208,15 @@
       "needs": [
         "@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally"
       ],
-      "sha256": "99045ee2327c727c81e999fd594e9f099614d10048ace5174219443b9aacf2ca",
+      "sha256": "f7fb33f8f5d0d3101c0ba516964d06bd893f39e000170efe4541725625e9d380",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head/review.md",
-      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "review_binding_status": "passed",
       "score": 96,
-      "review_result": "PASS"
+      "review_result": "PASS",
+      "state": "done",
+      "words": 170
     },
     {
       "id": "@runtime/native-tool-observation-adapter",
@@ -6037,11 +6229,13 @@
       "needs": [
         "@runtime/startup-eof-retains-exit-status"
       ],
-      "sha256": "0f9c06131215ee796168c5379c16258dbb3ab5ba158342727899c5ffbd5a08ed",
-      "round": 2,
+      "sha256": "fd4c3a815900b84f27891381fb7eaa7e87111a83771c71193467159b029601e3",
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/native-tool-observation-adapter/review.md",
-      "review_binding_status": "stale-after-split"
+      "review_binding_status": "passed",
+      "state": "done",
+      "words": 213
     },
     {
       "id": "@sessions/reflex-reports-attributed-tool-outcomes/attributed-outcome-report",
@@ -6054,11 +6248,13 @@
       "needs": [
         "@runtime/native-tool-observation-adapter"
       ],
-      "sha256": "9ac6ab0f77c29b05cd4afdc42c3c66d2266b3adb19e2cea9dfd465148415862f",
-      "round": 2,
+      "sha256": "831bf4ffeace8573ef38748326f299e003ff79a1b57fa3ab631acd9afd85f0f8",
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/reflex-reports-attributed-tool-outcomes/attributed-outcome-report/review.md",
-      "review_binding_status": "stale-after-split"
+      "review_binding_status": "passed",
+      "state": "done",
+      "words": 220
     },
     {
       "id": "@runtime/startup-eof-retains-exit-status",
@@ -6067,14 +6263,16 @@
       "path": "prd.ctg/.cartridge/boards/runtime/prds/startup-eof-retains-exit-status/prd.md",
       "sources": [],
       "needs": [],
-      "sha256": "ab148a8530e5c28e895f6da6a98e711a421f90b3dc8ff1dc0f54f26f8c10cf2b",
+      "sha256": "9034d184653cc2a0e1f2b52c9c53d50c6b2c7fcd710043e0310650640b738275",
       "round": 1,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/startup-eof-retains-exit-status/review.md",
-      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "review_binding_status": "passed",
       "origin": "measured startup EOF/exit race during adapter verification",
       "score": 96,
-      "review_result": "PASS"
+      "review_result": "PASS",
+      "state": "done",
+      "words": 244
     },
     {
       "id": "@landscape/improve-memo-compact-landscape/bounded-inventory-snapshot",
@@ -6085,16 +6283,17 @@
         "improve-memo-compact-landscape"
       ],
       "needs": [],
-      "words": 193,
-      "sha256": "abe34b499d4c0ac009af71d1b5e24f9b011c25ce9c0333e5f1ea91b51ec87134",
+      "words": 166,
+      "sha256": "8a990e4be13076e3906acd23080666c80b397b68435f51d47e4f3b11acc99aeb",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape/bounded-inventory-snapshot/review.md",
-      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "review_binding_status": "passed",
       "disposition": "split-owner-boundary",
       "score": 96,
       "review_result": "PASS",
-      "historical_sha256": "1d789f781dd7a9aab6c0d94ea332cc3b601b3759979aca698b98f3f7d255beb9"
+      "historical_sha256": "1d789f781dd7a9aab6c0d94ea332cc3b601b3759979aca698b98f3f7d255beb9",
+      "state": "done"
     },
     {
       "id": "@memo/landscape-inventory-facade",
@@ -6107,16 +6306,17 @@
       "needs": [
         "@landscape/improve-memo-compact-landscape/bounded-inventory-snapshot"
       ],
-      "words": 203,
+      "words": 173,
       "sha256": "8a947bed01671c57f4012600eefbfc7a7b8d042284b83511d8368a45ecea9457",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/landscape-inventory-facade/review.md",
-      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "review_binding_status": "passed",
       "disposition": "split-owner-boundary",
       "score": 96,
       "review_result": "PASS",
-      "historical_sha256": "1d789f781dd7a9aab6c0d94ea332cc3b601b3759979aca698b98f3f7d255beb9"
+      "historical_sha256": "1d789f781dd7a9aab6c0d94ea332cc3b601b3759979aca698b98f3f7d255beb9",
+      "state": "done"
     },
     {
       "id": "@sessions/the-board-is-channels-of-lines",
@@ -6129,14 +6329,16 @@
       "needs": [
         "@sessions/sub-agent-sessions-record-parent-and-mailbox"
       ],
-      "sha256": "0c49f7d1bffc25eeac730bd70929bc77b47dd3488356014b304f9432446b8484",
+      "sha256": "85569ded1b56ffa65baafd50d0e76e006d33e5f7718f45fea5e1fa90463196f1",
       "round": 1,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/the-board-is-channels-of-lines/review.md",
-      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "review_binding_status": "passed",
       "disposition": "add bounded current owner delta; preserve historical source verbatim; no historical completion inferred",
       "score": 96,
-      "review_result": "PASS"
+      "review_result": "PASS",
+      "state": "done",
+      "words": 268
     },
     {
       "id": "@policy/ship-push-is-an-explicit-policy-operation",
@@ -6154,9 +6356,11 @@
       "max_rounds": 5,
       "sha256": "b7ac45dab65dc1c5cba9879e544518036409b83c796bb1c7049867056f393c60",
       "review": "prd.ctg/.cartridge/boards/policy/prds/ship-push-is-an-explicit-policy-operation/review.md",
-      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "review_binding_status": "passed",
       "score": 97,
-      "review_result": "PASS"
+      "review_result": "PASS",
+      "state": "done",
+      "words": 157
     },
     {
       "id": "@landscape/landscape-composes-system-context/live-file-context-contributors",
@@ -6174,10 +6378,11 @@
       "max_rounds": 5,
       "score": 94,
       "review_result": "PASS",
-      "review_binding_status": "stale-after-owner-split",
+      "review_binding_status": "stale-after-migration",
       "review": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/review.md",
-      "words": 285,
-      "sha256": "1928b9181eeddff0a800aacfdda9ae25ea8d8af4f570d66408a371dfb20e7a2a"
+      "words": 256,
+      "sha256": "1928b9181eeddff0a800aacfdda9ae25ea8d8af4f570d66408a371dfb20e7a2a",
+      "state": "open"
     },
     {
       "id": "@fs/read-only-context-file-snapshots",
@@ -6192,10 +6397,11 @@
       "max_rounds": 5,
       "score": 96,
       "review_result": "PASS",
-      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "review_binding_status": "passed",
       "review": "prd.ctg/.cartridge/boards/fs/prds/read-only-context-file-snapshots/review.md",
-      "words": 218,
-      "sha256": "b1d85e8de446814d9a3e9576f1f112fbda4015f5ec6f51583ebd9982fbe3e8d6"
+      "words": 191,
+      "sha256": "9fad82a0bef4de3d42ff3879c7f35ea2d68474d24959d11b0d6c21d0456a3c7b",
+      "state": "done"
     },
     {
       "id": "@landscape/landscape-composes-system-context/live-file-context-contributors/file-kernel-evidence-adapter",
@@ -6213,10 +6419,11 @@
       "max_rounds": 5,
       "score": 96,
       "review_result": "PASS",
-      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "review_binding_status": "passed",
       "review": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/file-kernel-evidence-adapter/review.md",
-      "words": 226,
-      "sha256": "b1091acf798de810446a7819b55d7ee6126be60405ed05bda895cc000a52e94f"
+      "words": 194,
+      "sha256": "fa5b9baa82bf081d751b814757beb617e6136bc4875cd9ec2be0e441b3a92935",
+      "state": "done"
     },
     {
       "id": "@memo/landscape-file-kernel-context-facade",
@@ -6235,10 +6442,11 @@
       "max_rounds": 5,
       "score": 95,
       "review_result": "PASS",
-      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "review_binding_status": "passed",
       "review": "prd.ctg/.cartridge/boards/memo/prds/landscape-file-kernel-context-facade/review.md",
-      "words": 230,
-      "sha256": "b35929cf63e62aec8f8e8ee89be8fbdcff50fa22ece6d381231172ba30a39b18"
+      "words": 196,
+      "sha256": "b35929cf63e62aec8f8e8ee89be8fbdcff50fa22ece6d381231172ba30a39b18",
+      "state": "done"
     },
     {
       "id": "@sessions/context-session-metadata",
@@ -6251,14 +6459,15 @@
       "needs": [
         "@sessions/sub-agent-sessions-record-parent-and-mailbox"
       ],
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
-      "score": 94,
+      "score": 96,
       "review_result": "PASS",
-      "review_binding_status": "stale-after-owner-split",
+      "review_binding_status": "passed",
       "review": "prd.ctg/.cartridge/boards/sessions/prds/context-session-metadata/review.md",
-      "words": 222,
-      "sha256": "8cb6c6e062a2491356e94896f28914cc2b6e5012579a87ef8dcb45a6c6f43a77"
+      "words": 192,
+      "sha256": "84d13627fb05a663869c69db1fa066bdc6653bf09b102ace26d50fe6986bf0c9",
+      "state": "done"
     },
     {
       "id": "@pty/context-terminal-metadata",
@@ -6271,14 +6480,15 @@
       "needs": [
         "@pty/improve-pty-shell-identity"
       ],
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
-      "score": 94,
+      "score": 95,
       "review_result": "PASS",
-      "review_binding_status": "stale-after-owner-split",
+      "review_binding_status": "passed",
       "review": "prd.ctg/.cartridge/boards/pty/prds/context-terminal-metadata/review.md",
-      "words": 212,
-      "sha256": "242755cf5d309093543197df92517e5318e2976780f3ec8af9460cdee91f6af4"
+      "words": 185,
+      "sha256": "1d964c97e7eeffe9386c4b69220bf043395a290b12fc8f18836189673e02206d",
+      "state": "specced"
     },
     {
       "id": "@landscape/landscape-composes-system-context/live-file-context-contributors/live-owner-evidence-adapters",
@@ -6300,8 +6510,9 @@
       "review_result": "PASS",
       "review_binding_status": "stale-after-owner-split",
       "review": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/live-owner-evidence-adapters/review.md",
-      "words": 220,
-      "sha256": "f838d94d34e17877667fb09d85873a5302984120ab384da5bf858e3d7d5ac525"
+      "words": 187,
+      "sha256": "f838d94d34e17877667fb09d85873a5302984120ab384da5bf858e3d7d5ac525",
+      "state": "open"
     },
     {
       "id": "@memo/landscape-live-owner-context-facade",
@@ -6321,8 +6532,9 @@
       "review_result": "PASS",
       "review_binding_status": "stale-after-owner-split",
       "review": "prd.ctg/.cartridge/boards/memo/prds/landscape-live-owner-context-facade/review.md",
-      "words": 218,
-      "sha256": "a1e8bab19e53f845a2ea82589f19fb536b0ef977a0721bf6ca7ce92e1b359b82"
+      "words": 189,
+      "sha256": "a1e8bab19e53f845a2ea82589f19fb536b0ef977a0721bf6ca7ce92e1b359b82",
+      "state": "open"
     },
     {
       "id": "@sessions/an-agent-is-one-lookup-from-the-roster/durable-channel-read-cursors",
@@ -6335,13 +6547,15 @@
       "sources": [
         "an-agent-is-one-lookup-from-the-roster"
       ],
-      "sha256": "b355ec3c7542cbb5f45a951941efe9dd77505d884564202c431ed8cc831ab35c",
+      "sha256": "c39585553a121975006f7b9bce43ac347edc92c97ab64cf08f8f6dd02cad81bc",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/an-agent-is-one-lookup-from-the-roster/durable-channel-read-cursors/review.md",
-      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "review_binding_status": "passed",
       "score": 96,
-      "review_result": "PASS"
+      "review_result": "PASS",
+      "state": "done",
+      "words": 159
     },
     {
       "id": "@sessions/an-agent-is-one-lookup-from-the-roster/scoped-roster-projection",
@@ -6354,13 +6568,15 @@
       "sources": [
         "an-agent-is-one-lookup-from-the-roster"
       ],
-      "sha256": "ea70c0d57c1272af8cd90b90b106abc03e5ac2b649310b3edefbf9ad0d42f638",
+      "sha256": "2a908af715bf5b4607dec3dfb86d8a9e4fd055320a063220f2b1f316f9e4332d",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/an-agent-is-one-lookup-from-the-roster/scoped-roster-projection/review.md",
-      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "review_binding_status": "passed",
       "score": 96,
-      "review_result": "PASS"
+      "review_result": "PASS",
+      "state": "done",
+      "words": 162
     },
     {
       "id": "@harness/scoped-roster-context-contributor",
@@ -6374,13 +6590,15 @@
       "sources": [
         "an-agent-is-one-lookup-from-the-roster"
       ],
-      "sha256": "50c6ca63f9aaec1b4615099151926ce80db4a638e0219772396110e62d04e001",
+      "sha256": "84c1012b689a076f2a382ea8c5bafa2ddbaaf7b748a4d0c2a727af24d9facf2f",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/harness/prds/scoped-roster-context-contributor/review.md",
-      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "review_binding_status": "passed",
       "score": 95,
-      "review_result": "PASS"
+      "review_result": "PASS",
+      "state": "done",
+      "words": 186
     },
     {
       "id": "@sessions/an-agent-is-one-lookup-from-the-roster",
@@ -6393,13 +6611,15 @@
       "sources": [
         "an-agent-is-one-lookup-from-the-roster"
       ],
-      "sha256": "675904caa2f52c9b5f5671ba7cc1f6a3a9ef97325368c0b008854d2af70986c4",
+      "sha256": "a02667c023f7772975c8e7ab106ff50bd8375dbbf0f2c213ee114a6fb03703c5",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/an-agent-is-one-lookup-from-the-roster/review.md",
-      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "review_binding_status": "passed",
       "score": 96,
-      "review_result": "PASS"
+      "review_result": "PASS",
+      "state": "done",
+      "words": 257
     },
     {
       "id": "@prd/declared-source-edges",
@@ -6411,12 +6631,14 @@
       "max_rounds": 5,
       "needs": [],
       "path": "prd.ctg/.cartridge/boards/prd/prds/declared-source-edges/prd.md",
-      "sha256": "ffb7d40e1d757e2cf52d58d3223faac0081d40be7bda5646ffe188cb3fbfd8b4",
+      "sha256": "50c3d99fa40d37a80dcda0430940c3c7647d6188cfb237a56fd50d6d51594bfc",
       "round": 3,
       "review": "prd.ctg/.cartridge/boards/prd/prds/declared-source-edges/review.md",
-      "review_binding_status": "current-review",
+      "review_binding_status": "passed",
       "score": 96,
-      "review_result": "PASS"
+      "review_result": "PASS",
+      "state": "done",
+      "words": 219
     },
     {
       "id": "@sessions/file-change-records-retain-reported-revisions",
@@ -6430,12 +6652,14 @@
         "@sessions/improve-sessions-client-mapping"
       ],
       "path": "prd.ctg/.cartridge/boards/sessions/prds/file-change-records-retain-reported-revisions/prd.md",
-      "sha256": "560ec93d79b842097e2abf736a038fa49ac70919f63f76a2952ed35f29a7a578",
+      "sha256": "8bc317ff09911541672a00cb358c6aa64837f2da857fef2f9c18d9a6a004936a",
       "round": 3,
       "score": 96,
       "review_result": "PASS",
-      "review_binding_status": "current-review",
-      "review": "prd.ctg/.cartridge/boards/sessions/prds/file-change-records-retain-reported-revisions/review.md"
+      "review_binding_status": "passed",
+      "review": "prd.ctg/.cartridge/boards/sessions/prds/file-change-records-retain-reported-revisions/review.md",
+      "state": "done",
+      "words": 210
     },
     {
       "id": "@fs/improve-fs-change-provenance/direct-file-mutations-report-revisions",
@@ -6450,12 +6674,14 @@
         "@fs/improve-fs-revision-guards"
       ],
       "path": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/direct-file-mutations-report-revisions/prd.md",
-      "sha256": "522601d499358355f9f0b0730696f6376c8d5b22229752e6168995ddf5cf0228",
+      "sha256": "874c31414a7d236a4021b8f40661e54ae1d7391cb288c3b53b31533f077bc705",
       "round": 3,
       "score": 95,
       "review_result": "PASS",
-      "review_binding_status": "current-review",
-      "review": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/direct-file-mutations-report-revisions/review.md"
+      "review_binding_status": "passed",
+      "review": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/direct-file-mutations-report-revisions/review.md",
+      "state": "done",
+      "words": 171
     },
     {
       "id": "@gitfs/overlay-mutations-report-revisions",
@@ -6470,12 +6696,14 @@
         "@gitfs/improve-gitfs-readable-diff"
       ],
       "path": "prd.ctg/.cartridge/boards/gitfs/prds/overlay-mutations-report-revisions/prd.md",
-      "sha256": "10ffe20b1256adbeb364889a782eb9444188ef80c9b89b60f1582adfda92ffa4",
+      "sha256": "917a66a3cbb21cb3a4cf6b8e3594e6ddd967e23e2aadb9dbabc1b499fa929775",
       "round": 3,
       "score": 94,
       "review_result": "PASS",
-      "review_binding_status": "current-review",
-      "review": "prd.ctg/.cartridge/boards/gitfs/prds/overlay-mutations-report-revisions/review.md"
+      "review_binding_status": "passed",
+      "review": "prd.ctg/.cartridge/boards/gitfs/prds/overlay-mutations-report-revisions/review.md",
+      "state": "done",
+      "words": 175
     },
     {
       "id": "@runtime/shipped-gitfs-profiles-grant-change-recording",
@@ -6490,12 +6718,14 @@
         "@sessions/file-change-records-retain-reported-revisions"
       ],
       "path": "prd.ctg/.cartridge/boards/runtime/prds/shipped-gitfs-profiles-grant-change-recording/prd.md",
-      "sha256": "a74fcbb1d92bf17467d4190dbf078e75454a277d2357557628799abc6bb59944",
+      "sha256": "45067b0b6e40bb01f798a71ea07ec8d9118a52cfb18e27d384a82220cc8b1635",
       "round": 3,
       "score": 96,
       "review_result": "PASS",
-      "review_binding_status": "current-review",
-      "review": "prd.ctg/.cartridge/boards/runtime/prds/shipped-gitfs-profiles-grant-change-recording/review.md"
+      "review_binding_status": "passed",
+      "review": "prd.ctg/.cartridge/boards/runtime/prds/shipped-gitfs-profiles-grant-change-recording/review.md",
+      "state": "done",
+      "words": 173
     },
     {
       "id": "@runtime/second-harness-composition-proof",
@@ -6507,13 +6737,16 @@
       "max_rounds": 5,
       "round": 2,
       "score": 94,
-      "review_result": "STALE",
+      "review_result": "PASS",
       "path": "prd.ctg/.cartridge/boards/runtime/prds/second-harness-composition-proof/prd.md",
       "needs": [
         "@harness/concise-writer-cartridge"
       ],
       "sha256": "fe150e1547d37a796820adea7bfeb2451788a3fea9e82fc02d5a937e481b79ce",
-      "review": "prd.ctg/.cartridge/boards/runtime/prds/second-harness-composition-proof/review.md"
+      "review": "prd.ctg/.cartridge/boards/runtime/prds/second-harness-composition-proof/review.md",
+      "state": "open",
+      "words": 352,
+      "review_binding_status": "stale-after-migration"
     },
     {
       "id": "@harness/concise-writer-cartridge",
@@ -6529,7 +6762,76 @@
       "path": "prd.ctg/.cartridge/boards/harness/prds/concise-writer-cartridge/prd.md",
       "needs": [],
       "sha256": "8f352f22db4cec2ae1891559466a2395bef82586cb6b262cf426327670b1e592",
-      "review": "prd.ctg/.cartridge/boards/harness/prds/concise-writer-cartridge/review.md"
+      "review": "prd.ctg/.cartridge/boards/harness/prds/concise-writer-cartridge/review.md",
+      "state": "claimed",
+      "words": 358,
+      "review_binding_status": "passed"
+    },
+    {
+      "id": "@prd/public-source-records",
+      "owner": "prd",
+      "kind": "leaf",
+      "sources": [
+        "recursive-development-graph"
+      ],
+      "max_rounds": 5,
+      "needs": [
+        "@prd/declared-source-edges"
+      ],
+      "path": "prd.ctg/.cartridge/boards/prd/prds/public-source-records/prd.md",
+      "sha256": "972cb704036c4cba4c497c944dcde797513213fc0c24af0c8f0b5e339f0283b3",
+      "round": 4,
+      "review": "prd.ctg/.cartridge/boards/prd/prds/public-source-records/review.md",
+      "review_binding_status": "passed",
+      "score": 95,
+      "review_result": "PASS",
+      "state": "done",
+      "words": 157
+    },
+    {
+      "id": "@landscape/recursive-development-graph/recursive-root-search/source-record-search",
+      "owner": "landscape",
+      "kind": "leaf",
+      "sources": [
+        "recursive-development-graph"
+      ],
+      "max_rounds": 5,
+      "needs": [
+        "@landscape/recursive-development-graph/recursive-source-census",
+        "@prd/public-source-records"
+      ],
+      "path": "prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-root-search/source-record-search/prd.md",
+      "sha256": "eecae80006887164cde8122c1b6777f19b923669a14e0c34f5dc067a51bc7f4c",
+      "round": 3,
+      "review": "prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-root-search/source-record-search/review.md",
+      "review_binding_status": "passed",
+      "score": 95,
+      "review_result": "PASS",
+      "state": "done",
+      "words": 164
+    },
+    {
+      "id": "@memo/recursive-source-search-facade",
+      "owner": "memo",
+      "kind": "leaf",
+      "sources": [
+        "recursive-development-graph"
+      ],
+      "max_rounds": 5,
+      "needs": [
+        "@landscape/recursive-development-graph/recursive-root-search/source-record-search",
+        "@prd/public-source-records",
+        "@memo/one-document-serves-every-reader/document-projections"
+      ],
+      "path": "prd.ctg/.cartridge/boards/memo/prds/recursive-source-search-facade/prd.md",
+      "sha256": "ef092db14dc0ec60d0758870a53bad41300aa8c31a73e65ecee10f03de180218",
+      "round": 3,
+      "review": "prd.ctg/.cartridge/boards/memo/prds/recursive-source-search-facade/review.md",
+      "review_binding_status": "passed",
+      "score": 94,
+      "review_result": "PASS",
+      "state": "specced",
+      "words": 188
     }
   ],
   "migration_manifest": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/reports/record-migration/manifest.json"

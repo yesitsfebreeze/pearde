@@ -1,0 +1,48 @@
+{
+  "fixture": "v11",
+  "repeat": 2,
+  "category": "verbose",
+  "started": "2026-09-13T20:35:50.725Z",
+  "completed": "2026-09-13T20:35:52.677Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a precise copy editor. Return the deliverable only.\n\nFor verbose input, write one compact paragraph. Aim for 30 words. Add words only for a unique fact, and keep the total below 60 words unless exact required literals alone make that impossible. Prefer two or three sentences, with several related facts per sentence. Pack facts into short complete sentences with shared subjects and semicolons. Use ordinary verbs, omit rhetorical setup, and state each fact once. No heading, label, introduction, recap, bullet list, or explanation of the editing. A handoff memo is a self-contained paragraph, not a template.\n\nSynthesize facts rather than paraphrasing sentences. Combine a pending check with its unmeasured status: \"Kai still must measure queue safety before release\" says both what remains unknown and who does what next. State changed behavior directly: \"The handler rejects duplicate IDs\" already says the fix exists. Drop repeated descriptions of that same behavior. A preview that deletes nothing already establishes that eligibility is not deletion. Keep the concrete fact once.\n\nDensity example: \"Unreleased, the patch cuts the batch size from eight to four; 16 checks pass (batch-proof-6). Long-job safety remains unmeasured and may worsen. Jules must test long jobs in staging before release.\" This example carries change, test count, evidence, delivery state, risk, uncertainty, owner, next action and prerequisite in 36 words. Use that density, not its subject or facts. Prefer short subject-verb clauses; combine duplicated context so each noun phrase is stated once.\n\nKeep every unique fact, condition, exclusion, uncertainty, owner, evidence reference and next action. Unchanged permissions and excluded scope are facts too. Never infer extra prerequisites, such as requiring a pending check before release unless the source actually says so. Never invent a cause or say planned work happened. Keep technical literals byte for byte: names, numbers, units, identifiers, commands, errors, paths, frontmatter and executable blocks. Use clear referents. Silently check all source facts, then tighten the words rather than dropping meaning.\n\nIf the source is already concise, return it exactly, without any change. Requested JSON must have exactly the required keys and types, with no wrapper. Preserve required Markdown frontmatter and code blocks exactly. An explicit request for detail overrides brevity: give the requested ordered steps and reasons.\n\nDraft in one normal response. Saving an existing memo requires an explicit request, a preview and approved memo.write using the read expected_revision. Stop on conflicts; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone retention decision.\n\nSource:\nThe retention decision applies to generated preview artifacts. It does not apply to the original source documents, and that distinction should not be lost in shortening the note. Preview artifacts become eligible for cleanup after seven days without access. Eligibility is not the same as deletion: the first operation produces a preview of the candidates and does not delete them. A pinned artifact is excluded even if it is older than seven days. Applying cleanup requires the exact candidate revision from the preview; if an artifact changes before apply, that artifact is skipped and reported as changed. There is no automatic replay of skipped deletions. The decision is captured in retention-review-2. The next step is to test a pinned artifact and an artifact changed between preview and apply. No assertion has yet been made that those tests have passed, so the note must keep them as next actions."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T20:35:52.622853926Z",
+    "message": {
+      "role": "assistant",
+      "content": "Retention applies to generated preview artifacts, not original source documents. Artifacts are eligible for cleanup after seven days without access; eligibility only previews candidates, not deletion. Pinned artifacts are excluded regardless of age. Apply requires the exact preview revision; changed artifacts are skipped and reported, with no automatic replay. Decision captured in retention-review-2. Next: test a pinned artifact and one changed between preview and apply; no assertion these tests passed."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 1506317442,
+    "prompt_eval_count": 763,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 92
+  },
+  "tokenization": null,
+  "generation_tokens": 92,
+  "output_tokens": 92,
+  "input_tokens": 763,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

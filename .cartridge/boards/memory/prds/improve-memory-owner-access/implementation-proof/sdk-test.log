@@ -1,0 +1,11 @@
+   Compiling memory v2.0.0 (/private/tmp/memory-health-work/memory.ctg)
+    Finished `test` profile [unoptimized] target(s) in 2.15s
+     Running .cartridge/tests/integration/cartridge.rs (/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/cartridge-de79cd2429893ec2)
+
+running 3 tests
+test owner_attachment_native_rejects_mutations_and_nested_routing_before_connect ... ok
+test owner_attachment_native_crash_mid_read_is_not_replayed_and_dispose_is_bounded ... ok
+test owner_attachment_two_cartridges_query_daemon_alias_and_survive_peer_disposal ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 4 filtered out; finished in 2.68s
+

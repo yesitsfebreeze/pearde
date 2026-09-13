@@ -1,0 +1,10 @@
+   Compiling memory v2.0.0 (/private/tmp/memory-health-work/memory.ctg)
+    Finished `test` profile [unoptimized] target(s) in 1.35s
+     Running .cartridge/tests/integration/e2e/main.rs (/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/e2e-bd7bd2400b4f22b6)
+
+running 2 tests
+test focus_routing::pulse_fails_loudly_with_no_daemon ... ok
+test focus_routing::pulse_reaches_the_daemons_tick_queue ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 90 filtered out; finished in 1.18s
+

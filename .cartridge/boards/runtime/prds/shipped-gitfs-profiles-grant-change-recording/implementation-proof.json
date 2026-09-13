@@ -1,0 +1,171 @@
+{
+  "source_commit": "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b",
+  "candidate": [
+    {
+      "path": ".cartridge/default/init.lua",
+      "original_sha256": "edcd7283de63cd0c413d1294079e692e71fc9c7efd65ca3cae4ec5d5fd420ab3",
+      "candidate_sha256": "5151957cc4fb6744f55153479354432769dcbac86504d981f3206bd68a764247",
+      "reverse_restores_original": true
+    },
+    {
+      "path": ".cartridge/live/init.lua",
+      "original_sha256": "1563bfb6ea2e4cbff714aa963c704c23aef89bae6162c052c0317fc63dea0ca2",
+      "candidate_sha256": "a91c8f688ffca713fb7ac740e7aee54e8ad6bdc2a70b13483468d618c1ff44c8",
+      "reverse_restores_original": true
+    },
+    {
+      "path": ".cartridge/mcp/init.lua",
+      "original_sha256": "f9b4af2e97d3e40a9e84f1c62183207ed8c1ce5102c5707b3b1a265486f7e113",
+      "candidate_sha256": "0cec1686596bec89c3e4ac164b37600b44e302243cb6391d5652ea85c324ef9a",
+      "reverse_restores_original": true
+    }
+  ],
+  "original_snapshot": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/runtime-grant-review-owhoftgi/snapshot.json",
+  "staged_patch_sha256": "565e4783569f11fba963561b67f7f43e1cc913d468dc52c8e0d7b69c3e7b9fba",
+  "preservation": "Original profile bytes restored exactly by reversing only new GitFS Sessions grant. Existing runtime/Live/PTY/UI/Agent edits were separately reviewed and committed; only Live documented8task limit plus regression changed from original snapshots.",
+  "gates": [
+    {
+      "command": "just test runtime",
+      "result": "165 Rust tests and 4 memo tests / 47 assertions",
+      "log": "/tmp/runtime-grant-runtime-test.log",
+      "sha256": "59d2f454a57d5b372605da4404d3990175a246ca5b78556b4518c1a3ada39750"
+    },
+    {
+      "command": "just check runtime",
+      "result": "PASS",
+      "log": "/tmp/runtime-grant-runtime-check.log",
+      "sha256": "24329f1ecaa917abcce1076e8e75ba4ce957851dd14d96661b528472da5d8525"
+    },
+    {
+      "command": "just build fs",
+      "result": "PASS",
+      "log": "/tmp/runtime-grant-fs-build.log",
+      "sha256": "3fe980a0f9709b0a2d093ea2a65202e1e589d4893ac71be4272c165923b9e527"
+    },
+    {
+      "command": "just build gitfs",
+      "result": "PASS",
+      "log": "/tmp/runtime-grant-gitfs-build.log",
+      "sha256": "1094a36867300c1838cdc4ee40efe961d83bac574665f8ee57a40d5b1e88698c"
+    },
+    {
+      "command": "just build sessions",
+      "result": "PASS",
+      "log": "/tmp/runtime-grant-sessions-build.log",
+      "sha256": "1094a36867300c1838cdc4ee40efe961d83bac574665f8ee57a40d5b1e88698c"
+    },
+    {
+      "command": "cargo build --manifest-path Cargo.toml --bin cartridge",
+      "result": "PASS",
+      "log": "/tmp/runtime-grant-runtime-build.log",
+      "sha256": "9ddcb7a97f3589835ba8f354c41d25b0a805bd5f85ddbccaff009e6f6dc7236c"
+    },
+    {
+      "command": "PROVENANCE_EXPECT_SHIPPED_GRANTS=1 FS_BINARY=$CARGO_TARGET_DIR/debug/fs GITFS_BINARY=$CARGO_TARGET_DIR/debug/gitfs SESSIONS_BINARY=$CARGO_TARGET_DIR/debug/sessions bun test ../fs.ctg/.cartridge/tests/integration/change-provenance.test.ts ../gitfs.ctg/.cartridge/tests/integration/change-provenance.test.ts",
+      "result": "5 tests / 171 assertions",
+      "log": "/tmp/runtime-grant-native.log",
+      "sha256": "de6442791df89865f164cdfa81df2c4035d4f943289c5127ba350fd545977df1"
+    }
+  ],
+  "dependencies": {
+    "fs": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+    "gitfs": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+    "sessions": "191e2b6cb4291bdcce7a894f98bb2d475361d30f"
+  },
+  "binaries": {
+    "cartridge": {
+      "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/cartridge",
+      "sha256": "3c107ead7a60caa07a7aa295cb46c7b2a0663a17ca7aa11fc11b45076b9b08c8"
+    },
+    "fs": {
+      "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/fs",
+      "sha256": "59632efdef07d4d2253496a3e69791ea5b002370b188878ec2fecddbbf63d8ef"
+    },
+    "gitfs": {
+      "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/gitfs",
+      "sha256": "b095286cae2b0162581dd6bead1657c5a7c6ebc4c0a134403ca72859d04dfb8a"
+    },
+    "sessions": {
+      "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/sessions",
+      "sha256": "dfb46cff10f156771a1340023f3fd3fd61c02ece619a32d6695eba4dedd4baf6"
+    },
+    "agent": {
+      "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/agent",
+      "sha256": "59bc6c1a3648a8a55de2635f37b4ab17a660df2a7e1882321a2df90a47a8b04d"
+    },
+    "pty": {
+      "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/pty",
+      "sha256": "524892239a3260daea1b82dd752f602eec1d30682abb3081d3245edbff56b081"
+    }
+  },
+  "limitations": [
+    "Standalone missing Sessions profile tested; declared provider startup failure follows existing runtime lifecycle.",
+    "Preexisting untracked runtime MCP session record and newly observed Agent audit probe left untouched; no operational data committed."
+  ],
+  "environment": {
+    "RUSTC_WRAPPER": "",
+    "RUSTC_WORKSPACE_WRAPPER": "",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_TARGET_DIR": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract"
+  },
+  "grant_commit": "d722803b3c0497ba80a164a7d685e5e3fd84d9ba",
+  "integrated_owners": {
+    "cartridge": "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b",
+    "pty": "cacd7e13fb012029fd6923ce59bbeffcdeb67c5a",
+    "ui": "b879067da1ca2e095d20b4648d74448ffd55395f",
+    "agent": "461039896a17ed81b3fb296944da8d982efa8397",
+    "live": "e038d379936801b60572871821750dd45ca1d9fa",
+    "harness": "698a4dc9555a6b3ad8d46dcc5dd3a14463048e70",
+    "memory": "439bea56749d6a7361d6c1afb7d1a43bb46c7e9f"
+  },
+  "additional_compatibility": [
+    {
+      "log": "/tmp/runtime-grant-profile-smoke.log",
+      "sha256": "0a733351a402882af2ae7c0d827092e4101a0439b9c9391113f5e616c6cb0d70",
+      "result": "3tests17assertions"
+    },
+    {
+      "log": "/tmp/runtime-grant-pty-test.log",
+      "sha256": "2457028fa92c88f4f88c82fd8464e0e1a3b4240d9351a82d11df3d190d269ab5",
+      "result": "25tests"
+    },
+    {
+      "log": "/tmp/runtime-grant-pty-check.log",
+      "sha256": "7d131dae7e0978abd4a9f98d907ce7fa151a936cb38642e53218981b452ff3f7",
+      "result": "PASS"
+    },
+    {
+      "log": "/tmp/runtime-grant-ui-full.log",
+      "sha256": "1a44483707bd25bf0a15e053c9e480182f55e0a9bc3e139822cd41cc1634715d",
+      "result": "40tests250assertions"
+    },
+    {
+      "log": "/tmp/runtime-grant-ui-check.log",
+      "sha256": "b2e92930f4432b7a5ec6e2af13cd0e0c527d579c374a889fd79e2aeff32e886e",
+      "result": "PASS"
+    },
+    {
+      "log": "/tmp/runtime-grant-agent-test.log",
+      "sha256": "4e29c0c331aa905948b2b1ec77630da361686d5aebf078f0da7f525d79b14ce6",
+      "result": "34tests"
+    },
+    {
+      "log": "/tmp/runtime-grant-agent-check.log",
+      "sha256": "75d677f497a72b34e656de4420f38e68d55be3604af8449d904b65bced199710",
+      "result": "PASS"
+    },
+    {
+      "log": "/tmp/runtime-grant-live-fixed-full.log",
+      "sha256": "7e47700b9207f665e21afa9316573041fbcadddb553f6b70f40caa3177c74b12",
+      "result": "54tests4667assertions"
+    },
+    {
+      "log": "/tmp/runtime-grant-live-fixed-check.log",
+      "sha256": "8366207267355d3e3d5bf3bf6e8c94c5f93f6078c34f08973fa2b38cdda6cc92",
+      "result": "PASS"
+    }
+  ],
+  "unchanged_tested_bytes": "All source changes were present during recorded passing gates; subsequent commits only moved those exact tested bytes into source history. Runtime source remained byte-identical during dependency commits."
+}

@@ -1,0 +1,28 @@
+{
+  "kind": "imported-composer-footprint",
+  "source": "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df",
+  "previous_runtime_source": "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b",
+  "review_round_preserved": 1,
+  "review_status_preserved": "passed",
+  "acceptance_unchanged": true,
+  "collection_before_sha256": "201733ed8342c8758ff4308893f71947b1597e83b89d82bfac141d9153ee1732",
+  "changes": [
+    {
+      "file": "specs/spec01.md",
+      "before_sha256": "f8738ec4445e43453fe85260f7cde87892b9794e197a3838be8f30ae373a75e1",
+      "after_sha256": "98f1a580aeeb9c6deba4376020d11bd6712116e2f21df2319c3d034df9d06612"
+    },
+    {
+      "file": "prd.md",
+      "before_sha256": "ab148a8530e5c28e895f6da6a98e711a421f90b3dc8ff1dc0f54f26f8c10cf2b",
+      "after_sha256": "99c647ca3c0a9ba7fffc850e4badd3d63765bee8416099b8052d67aae79a85c5"
+    },
+    {
+      "file": "review.md",
+      "before_sha256": "f2ff3cc05d7979a4c924192ab584db4eb88adbaec162aca3e9e742cdd3f31868",
+      "after_sha256": "927d664ac193cfd0ff0701daa10448e5bd97563af5ff3b57211425d52b0ced2c"
+    }
+  ],
+  "reason": "Full runtime gate imports new fixture; native/nested startup shares Host composition.",
+  "executable_commands_unchanged": true
+}

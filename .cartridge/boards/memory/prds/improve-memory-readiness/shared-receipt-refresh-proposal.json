@@ -1,0 +1,35 @@
+{
+  "every-mutation-holds-the-store-writer-boundary": {
+    "source": "a124fd30d59bcd06062b5464810188a0288e461e",
+    "spec_sha256_before": "a7c27f7e8407e2bdb660e32a5e6022c5091b5e4c7dd4e2189e871f6ba485b9cb",
+    "additive_footprint_paths": [],
+    "acceptance_unchanged": true,
+    "reason": "Pulse fixture strengthened to observe actual serving PID before single-shot pulse; direct store-core dependency edges complete older exit-flag receipt."
+  },
+  "memory-health-loads-its-own-graph-beside-the-daemon": {
+    "source": "a124fd30d59bcd06062b5464810188a0288e461e",
+    "spec_sha256_before": "f26624d38ee86a6ce2307fa594054157fefab7d697163014ebb3b95ea66b4750",
+    "additive_footprint_paths": [],
+    "acceptance_unchanged": true,
+    "reason": "Pulse fixture strengthened to observe actual serving PID before single-shot pulse; direct store-core dependency edges complete older exit-flag receipt."
+  },
+  "improve-memory-owner-access": {
+    "source": "a124fd30d59bcd06062b5464810188a0288e461e",
+    "spec_sha256_before": "f66b76c50bf233322f71cffacb573c5957ed8b1377d4c308d5e5e780f923781c",
+    "additive_footprint_paths": [
+      ".cartridge/tests/integration/e2e/focus_routing.rs"
+    ],
+    "acceptance_unchanged": true,
+    "reason": "Pulse fixture strengthened to observe actual serving PID before single-shot pulse; direct store-core dependency edges complete older exit-flag receipt."
+  },
+  "the-exit-flag-tests-race-each-other": {
+    "source": "a124fd30d59bcd06062b5464810188a0288e461e",
+    "spec_sha256_before": "86b14c10ac42f521dc2054c79268b8cc4bf7694bf87db0b7272f60ca42aca406",
+    "additive_footprint_paths": [
+      "src/store/core/Cargo.toml",
+      "Cargo.lock"
+    ],
+    "acceptance_unchanged": true,
+    "reason": "Pulse fixture strengthened to observe actual serving PID before single-shot pulse; direct store-core dependency edges complete older exit-flag receipt."
+  }
+}

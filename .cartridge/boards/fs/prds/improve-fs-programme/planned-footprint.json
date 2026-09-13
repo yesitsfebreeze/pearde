@@ -1,0 +1,15 @@
+[
+  ".cartridge/docs/change-provenance.md",
+  ".cartridge/docs/revision-guards.md",
+  ".cartridge/docs/search-pages.md",
+  ".cartridge/tests/integration/change-provenance.test.ts",
+  ".cartridge/tests/unit/search/tests.rs",
+  ".cartridge/tests/unit/service/tests.rs",
+  "Cargo.toml",
+  "cartridge.json",
+  "src/context.rs",
+  "src/files.rs",
+  "src/main.rs",
+  "src/search.rs",
+  "src/service.rs"
+]

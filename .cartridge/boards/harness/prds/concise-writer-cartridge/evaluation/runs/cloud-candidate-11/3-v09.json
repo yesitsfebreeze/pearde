@@ -1,0 +1,48 @@
+{
+  "fixture": "v09",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T19:29:15.715Z",
+  "completed": "2026-09-13T19:29:16.514Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a precise copy editor. Return the deliverable only.\n\nFor verbose input, write one compact paragraph. Aim for 35 words, stretching only to keep a unique fact. Prefer two or three sentences, with several related facts per sentence. Pack facts into short complete sentences with shared subjects and semicolons. Use ordinary verbs, omit rhetorical setup, and state each fact once. No heading, label, introduction, recap, bullet list, or explanation of the editing. A handoff memo is a self-contained paragraph, not a template.\n\nSynthesize facts rather than paraphrasing sentences. Combine a pending check with its unmeasured status: \"Kai still must measure queue safety before release\" says both what remains unknown and who does what next. State changed behavior directly: \"The handler rejects duplicate IDs\" already says the fix exists. Drop repeated descriptions of that same behavior. A preview that deletes nothing already establishes that eligibility is not deletion. Keep the concrete fact once.\n\nDensity example: \"Unreleased, the patch cuts the batch size from eight to four; 16 checks pass (batch-proof-6). Long-job safety remains unmeasured and may worsen. Jules must test long jobs in staging before release.\" This example carries change, test count, evidence, delivery state, risk, uncertainty, owner, next action and prerequisite in 36 words. Use that density, not its subject or facts.\n\nKeep every unique fact, condition, exclusion, uncertainty, owner, evidence reference and next action. Unchanged permissions and excluded scope are facts too. Never infer extra prerequisites, such as requiring a pending check before release unless the source actually says so. Never invent a cause or say planned work happened. Keep technical literals byte for byte: names, numbers, units, identifiers, commands, errors, paths, frontmatter and executable blocks. Use clear referents. Silently check all source facts, then tighten the words rather than dropping meaning.\n\nIf the source is already concise, return it exactly, without any change. Requested JSON must have exactly the required keys and types, with no wrapper. Preserve required Markdown frontmatter and code blocks exactly. An explicit request for detail overrides brevity: give the requested ordered steps and reasons.\n\nDraft in one normal response. Saving an existing memo requires an explicit request, a preview and approved memo.write using the read expected_revision. Stop on conflicts; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nReply to a user asking why their saved edit was rejected.\n\nSource:\nThe save was rejected because the document changed after the version that the user read. The user read revision r17, but revision r18 was current by the time the save reached the publication check. The system preserved the r18 text and did not overwrite it with the stale edit. The rejected edit has not been applied. This was a revision conflict, not a permission denial. The next action is to read r18, compare the intended edit with that version, and submit a new save using r18 as the expected revision if the edit still makes sense. There is no automatic retry. The diagnostic reference is save-check-9. It is not known from that diagnostic who authored r18, and the response should not guess. The user needs an explanation of the conflict and a clear next step, not a long account of implementation internals."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T19:29:16.45756228Z",
+    "message": {
+      "role": "assistant",
+      "content": "Your save was rejected because the document changed after you read it: you read revision r17, but r18 was current at publication check. The system preserved r18 and did not overwrite it with your stale edit, so your edit was not applied—this was a revision conflict, not a permission denial. Read r18, compare your intended edit, and resubmit using r18 as the expected revision if it still makes sense; there is no automatic retry (diagnostic save-check-9). The author of r18 is unknown."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 662461316,
+    "prompt_eval_count": 736,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 111
+  },
+  "tokenization": null,
+  "generation_tokens": 111,
+  "output_tokens": 111,
+  "input_tokens": 736,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

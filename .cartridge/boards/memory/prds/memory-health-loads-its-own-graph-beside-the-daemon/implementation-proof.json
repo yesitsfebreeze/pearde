@@ -1,0 +1,83 @@
+{
+  "canonical": "@memory/memory-health-loads-its-own-graph-beside-the-daemon",
+  "source": "439bea56749d6a7361d6c1afb7d1a43bb46c7e9f",
+  "base": "0a8736c5126781b90b842a5b818f083458b2f740",
+  "worktree": "/tmp/memory-health-work/memory.ctg",
+  "actual_owner_clean": true,
+  "review_round": 3,
+  "independent_reviewer": "/root",
+  "review_score": 95,
+  "spec_refinements": "implementation-footprint-refinement.json",
+  "checked_criteria": {
+    "prd.md": {
+      "before_sha256": "070b80682907cf7d2946c1d69df5839d360293e2ad72db2743df53a7d0d19395",
+      "after_sha256": "833544e5bb9b75f34ca43e2155b01d97c6709b3d9ccf0f860ca45a3cdbce33b4",
+      "criteria_checked": 3
+    },
+    "specs/spec01.md": {
+      "before_sha256": "c7c4e7c407f03f22a414c29a3feff403517a11a2df16cb37f0af004e8e24938e",
+      "after_sha256": "ae58673cef26d06ca0d7ea952dbb2267491e0618445138748846929413e95f5d",
+      "criteria_checked": 6
+    }
+  },
+  "source_sha256": {
+    ".cartridge/docs/health-owner.md": "4b5e26034e1a3d6948c70df3daa5cccd653d39b3666cddfae654b78ff5831016",
+    ".cartridge/tests/integration/e2e/cli_surface.rs": "bdd451b49a9ee77a761b1322a08983e5978ea6edddc9a27c76c2da59f15ee25d",
+    ".cartridge/tests/integration/e2e/focus_routing.rs": "cd7e5f059bd250218734fe7a31f910bad2a5ca0fcd942db664bba8c32f74bfa3",
+    ".cartridge/tests/integration/e2e/health_surface.rs": "23cb21808c91e213862ee8b080d82b5c5559ffce4324ccf65367d1a3a2126189",
+    ".cartridge/tests/unit/src/commands/src/tests/commands_admin_test.rs": "1c77c49c1bb0cfdbbb59b592234b60350a9020f67a0a002d011524db5f32e154",
+    ".cartridge/tests/unit/src/commands/src/tests/commands_health_owner_test.rs": "8ecfead0a3d897d7c35cca5ae6cc8dad422280284b105a1b9578f674f4a11a55",
+    ".cartridge/tests/unit/src/store/core/src/health_test.rs": "1b868d5ee9874803f860d39ec16d0c64a2849909e87d1b0d97666ea9a24a2ad0",
+    ".cartridge/tests/unit/src/store/core/src/tests/legacy_test.rs": "cd712d82b985070c9b94af5e72c7258d7d8510b50939adcb5142280efebf36ee",
+    "src/commands/src/commands_health.rs": "513e1dab76d28a53809acd06d632d607ead09f45bbdcb58e9203c7e706de0748",
+    "src/commands/src/lib.rs": "3548a8787e085dbdecc422652249b3dbe93e48a82a4954a230a364a3f0c7fb03",
+    "src/health/Cargo.toml": "3c081ba9eb84b521f417045b652cfe71ce6ba1279bb558473584a7cade0104bf",
+    "src/health/src/lib.rs": "e21fc4f396b460e89f86409ef514e10b730b9fffd9e3ec51d5c30b415a402be5",
+    "src/store/core/src/cold.rs": "a3a22eb2b8f455e2a788632d6b4477d71c516ccf1475b4c8f6bad89005644238",
+    "src/store/core/src/health.rs": "c92790709fd324d979a531e0ff76cf438d6dbf2e6a0bb80c16a01953bbc1a49a",
+    "src/store/core/src/lib.rs": "ea9abafed31323272dba6250d779ce18c835665e5f8554ad57445503af9396be"
+  },
+  "gate_environment": {
+    "RUSTC_WRAPPER": "",
+    "RUSTC_WORKSPACE_WRAPPER": "",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_TARGET_DIR": "/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary"
+  },
+  "gates": {
+    "just test": "1378 passed,17 skipped; all documentation tests passed",
+    "just check": "passed after final served-byte assertion addition",
+    "cargo test -p commands health_owner": "5 passed, includes canonical aliases/wrong stores/missing PID/regular file/decoded malformed and invalid JSON, stale/timeout/EOF and panic local loader",
+    "cargo test -p store_core health_snapshot": "5 passed, including retainedv13 row fields and byte preservation",
+    "cargo test -p memory --test e2e health_owner": "2 passed after public suite, validates added served database/writer-lock bytes and inode plus existing local readonly proof; products unchanged after public suite"
+  },
+  "fixture_latency_ms": {
+    "local": 982.651458,
+    "served": 22.414167
+  },
+  "fixture_adaptations": [
+    "Two focus-routing tests explicitly create their disposable empty database rather than relying on health initialization; existing mutation/count assertions retained.",
+    "Existing health-surface wrong-config proof now checks incompatible/no fallback and uses valid-owner instrumented/realCLI parity proof for zero local loads.",
+    "Daemon-degradation test asserts changed-store refusal then restores correct config before retaining exact observed degradation counts.",
+    "Unserved health gauge fixture explicitly creates its empty database.",
+    "Frozen v13 mirror assertion uses retained statements field because current text() reads chunks; no decoder change."
+  ],
+  "limitations": [
+    "RPC deadline does not preempt synchronous filesystem calls or cancel daemon work after client drop.",
+    "Local hot persisted snapshot can differ from dirty/unloaded daemon resident state; equality proved for identical seeded snapshot.",
+    "READ_ONLY uses normal LMDB lock-file coordination; same-process differently configured preopened environment may refuse.",
+    "Legacy nonessential health fields remain tolerant; missing PID or store identity is explicitly incompatible."
+  ],
+  "logs_sha256": {
+    "public-test-pass.log": "7b87c6b0c066d060973be18f75a3697dfadeab630324ddfaa11ca3d985fb0327",
+    "public-check-pass.log": "be6e3127e43953f5658eb4c61173ca729bfc6e38de42d7b02c23e62e09ba8d7c",
+    "cli-final.log": "af2cec2d3fb6303a69c992d27d0ec1baa61d2892e5788cdc42ed05c1db897bad",
+    "owner-final.log": "3a38da0cf73a29d39c134db540f545defb8cbe6a5306a112d9730aa7b29cd3ee",
+    "store-final.log": "5054799d0868302f493074f445b785c1ea1848f3aee74fa743ea198092acdf07",
+    "full-test.log": "3989d0ce29432e4b32f2d19a702e94f884619f9fa33814482c344ce6f5cefc64",
+    "full-test-final.log": "f7d72053f9c13a603a1fe99815306d335992398583ef49f288926e65f9cc11c5",
+    "full-test-complete.log": "cb33e1480b0879d6f14124af5bbbf281e56a888efb82cd6cd186ec416cb2da0b"
+  },
+  "recorded_at_utc": "2026-09-13T19:41:10.337853+00:00"
+}

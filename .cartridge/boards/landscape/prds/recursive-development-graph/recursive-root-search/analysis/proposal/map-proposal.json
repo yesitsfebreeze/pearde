@@ -1,0 +1,48 @@
+{
+  "proposal_only": true,
+  "used_rounds": 2,
+  "max_rounds": 5,
+  "records": [
+    {
+      "id": "@prd/public-source-records",
+      "owner": "prd",
+      "kind": "leaf",
+      "needs": [
+        "@prd/declared-source-edges"
+      ],
+      "inherit_rounds_from": "@landscape/recursive-development-graph/recursive-root-search"
+    },
+    {
+      "id": "@landscape/recursive-development-graph/recursive-root-search/source-record-search",
+      "owner": "landscape",
+      "kind": "leaf",
+      "needs": [
+        "@landscape/recursive-development-graph/recursive-source-census",
+        "@prd/public-source-records"
+      ],
+      "inherit_rounds_from": "@landscape/recursive-development-graph/recursive-root-search"
+    },
+    {
+      "id": "@memo/recursive-source-search-facade",
+      "owner": "memo",
+      "kind": "leaf",
+      "needs": [
+        "@landscape/recursive-development-graph/recursive-root-search/source-record-search",
+        "@prd/public-source-records",
+        "@memo/one-document-serves-every-reader/document-projections"
+      ],
+      "inherit_rounds_from": "@landscape/recursive-development-graph/recursive-root-search"
+    },
+    {
+      "id": "@landscape/recursive-development-graph/recursive-root-search",
+      "owner": "landscape",
+      "kind": "rollup",
+      "needs": [
+        "@landscape/recursive-development-graph/recursive-root-search/source-record-search",
+        "@memo/recursive-source-search-facade"
+      ],
+      "preserve_original_acceptance": true,
+      "used_rounds": 2
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "fixture": "p03",
+  "repeat": 3,
+  "category": "precision",
+  "started": "2026-09-13T20:42:59.276Z",
+  "completed": "2026-09-13T20:42:59.781Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a precise copy editor. Return the deliverable only.\n\nFor verbose input, write one compact paragraph. Aim for 35 words, stretching only to keep a unique fact. Prefer two or three sentences, with several related facts per sentence. Pack facts into short complete sentences with shared subjects and semicolons. Use ordinary verbs, omit rhetorical setup, and state each fact once. No heading, label, introduction, recap, bullet list, or explanation of the editing. A handoff memo is a self-contained paragraph, not a template.\n\nSynthesize facts rather than paraphrasing sentences. Combine a pending check with its unmeasured status: \"Kai still must measure queue safety before release\" says both what remains unknown and who does what next. State changed behavior directly: \"The handler rejects duplicate IDs\" already says the fix exists. Drop repeated descriptions of that same behavior. A preview that deletes nothing already establishes that eligibility is not deletion. Keep the concrete fact once.\n\nDensity example: \"The lab sensor now samples every two seconds; all 11 checks pass (sensor-test-6). It remains uninstalled, and outdoor accuracy is unmeasured. Nia will test rain exposure.\" Use that density, not its subject or facts. Preserve unknowns without repeating them as separate disclaimers.\n\nKeep every unique fact, condition, exclusion, uncertainty, owner, evidence reference and next action. Unchanged permissions and excluded scope are facts too. Never infer extra prerequisites, such as requiring a pending check before release unless the source actually says so. Never invent a cause or say planned work happened. Keep technical literals byte for byte: names, numbers, units, identifiers, commands, errors, paths, frontmatter and executable blocks. Use clear referents. Silently check all source facts, then tighten the words rather than dropping meaning.\n\nIf the source is already concise, return it exactly, without any change. Requested JSON must have exactly the required keys and types, with no wrapper. Preserve required Markdown frontmatter and code blocks exactly. An explicit request for detail overrides brevity: give the requested ordered steps and reasons.\n\nDraft in one normal response. Saving an existing memo requires an explicit request, a preview and approved memo.write using the read expected_revision. Stop on conflicts; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nReturn only a JSON object with keys status, completed, total, deployed, evidence, next_action. Preserve value types. No Markdown fences.\n\nSource:\nStatus is partial. Exactly 7 of 9 checks completed. Deployed is the boolean false, not the string \"false\". Evidence is null because no durable receipt was saved. The next action is to rerun the two remaining checks and save the receipt. Do not infer that the completed checks passed: the source says only completed."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": false,
+    "format": "json"
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T20:42:59.72432303Z",
+    "message": {
+      "role": "assistant",
+      "content": "{\"status\":\"partial\",\"completed\":7,\"total\":9,\"deployed\":false,\"evidence\":null,\"next_action\":\"rerun the two remaining checks and save the receipt\"}"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 366750201,
+    "prompt_eval_count": 631,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 37
+  },
+  "tokenization": null,
+  "generation_tokens": 37,
+  "output_tokens": 37,
+  "input_tokens": 631,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

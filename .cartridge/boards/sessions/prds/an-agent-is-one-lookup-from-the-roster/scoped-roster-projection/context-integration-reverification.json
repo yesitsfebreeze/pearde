@@ -1,0 +1,13 @@
+{
+  "source": "92240c6ba415f53b2d17971aea185536a6f517bc",
+  "previous": "191e2b6cb4291bdcce7a894f98bb2d475361d30f",
+  "reason": "Bind newly imported context module and executable native/unit contract; shared phase extraction preserves roster output. Existing acceptance and executable gates are unchanged apart from exact Sessions source pin.",
+  "behavior_acceptance_changed": false,
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/an-agent-is-one-lookup-from-the-roster/scoped-roster-projection/specs/spec01.md",
+      "before_sha256": "1bf728915908008fdbfed5a44e3c7d92107323c8ed440e0bfe0daf631dd87599",
+      "after_sha256": "638d30119d9dca080e358b2d1602cf4fd8f65b377e0f49b98274055cb8513d81"
+    }
+  ]
+}

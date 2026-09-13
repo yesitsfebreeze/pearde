@@ -1,0 +1,49 @@
+{
+  "reviewer": "/root/sessions_mapping",
+  "canonical": "@prd/public-source-records",
+  "round": 4,
+  "max_rounds": 5,
+  "score": 95,
+  "result": "PASS",
+  "dimensions": {
+    "value_scope": 20,
+    "ownership_reuse": 19,
+    "dependencies_slices": 18,
+    "acceptance_evidence": 19,
+    "failure_compatibility": 19
+  },
+  "reviewed_amendment": {
+    "public_mode": "opt-in strict AST parse inside existing parseDocument; default trusted Bun parser unchanged",
+    "dependency": "pin exact yaml@2 package and lock; add package.json and bun.lock footprint",
+    "options": {
+      "strict": true,
+      "uniqueKeys": true,
+      "stringKeys": true,
+      "logLevel": "silent"
+    },
+    "header_cap_bytes": 16384,
+    "before_conversion": "reject every parser error and warning; AST visitor rejects every Alias and every scalar mapping key equal to <<, including quoted keys",
+    "conversion": {
+      "maxAliasCount": 0
+    },
+    "errors": "static malformed without source excerpts/logging",
+    "tests": [
+      "plain duplicate private/visibility",
+      "quoted duplicate private/visibility",
+      "escaped duplicate privacy key",
+      "flow mapping duplicate privacy key",
+      "inline merge private",
+      "alias forms",
+      "custom/unresolved tags",
+      "valid quoted and flow public mappings"
+    ],
+    "compatibility": "same body/title parsing and exact-byte revision; no DTO or acceptance changes; trusted planner keeps existing grammar"
+  },
+  "amendment_sha256": "25932479e70f6ff12facece45310a34e77de24a914993dd6bba484941e4dadd7",
+  "baseline": "Actual sourceRecords index exposed PRIVATE_TITLE and private path for duplicate private:true/private:false and visibility:private/visibility:public; Bun parser is last-wins. Owner confirmed regression.",
+  "evidence": "independent-privacy-probe.ts",
+  "primary_docs": "https://eemeli.org/yaml/",
+  "primary_doc_findings": "parseDocument returns Document errors/warnings; uniqueKeys/strict/stringKeys parse options and maxAliasCount ToJS option; aliases and merges explicitly rejected by reviewed AST guard",
+  "blocking_findings": [],
+  "implementation_followup": "Run listed negative and positive public fixtures plus full legacy parser/native gates. Root binds installed spec/dependency digests and records lifecycle; review concerns the exact amendment above, not a claim that tests have passed."
+}

@@ -1,0 +1,12 @@
+{
+  "source": "33e0418fa82966772c38ec8191d02a158b2cb56d",
+  "reason": "Bind imported census module and tests; refresh exact clean owner pin after additive integration. Existing acceptance and executable public/native gates unchanged.",
+  "behavior_acceptance_changed": false,
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape/bounded-inventory-snapshot/specs/spec01.md",
+      "before_sha256": "6b7e66f3de3cccb99a03027b968dddce16be8b5147cbb3ecfef8cccc1c9dd5cf",
+      "after_sha256": "ef469483da766cdd77bf5767ddcabab5038fb9aa06080b2fd9a35f5f19b86ccb"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "fixture": "v03",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T19:29:10.854Z",
+  "completed": "2026-09-13T19:29:11.513Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a precise copy editor. Return the deliverable only.\n\nFor verbose input, write one compact paragraph. Aim for 35 words, stretching only to keep a unique fact. Prefer two or three sentences, with several related facts per sentence. Pack facts into short complete sentences with shared subjects and semicolons. Use ordinary verbs, omit rhetorical setup, and state each fact once. No heading, label, introduction, recap, bullet list, or explanation of the editing. A handoff memo is a self-contained paragraph, not a template.\n\nSynthesize facts rather than paraphrasing sentences. Combine a pending check with its unmeasured status: \"Kai still must measure queue safety before release\" says both what remains unknown and who does what next. State changed behavior directly: \"The handler rejects duplicate IDs\" already says the fix exists. Drop repeated descriptions of that same behavior. A preview that deletes nothing already establishes that eligibility is not deletion. Keep the concrete fact once.\n\nDensity example: \"Unreleased, the patch cuts the batch size from eight to four; 16 checks pass (batch-proof-6). Long-job safety remains unmeasured and may worsen. Jules must test long jobs in staging before release.\" This example carries change, test count, evidence, delivery state, risk, uncertainty, owner, next action and prerequisite in 36 words. Use that density, not its subject or facts.\n\nKeep every unique fact, condition, exclusion, uncertainty, owner, evidence reference and next action. Unchanged permissions and excluded scope are facts too. Never infer extra prerequisites, such as requiring a pending check before release unless the source actually says so. Never invent a cause or say planned work happened. Keep technical literals byte for byte: names, numbers, units, identifiers, commands, errors, paths, frontmatter and executable blocks. Use clear referents. Silently check all source facts, then tighten the words rather than dropping meaning.\n\nIf the source is already concise, return it exactly, without any change. Requested JSON must have exactly the required keys and types, with no wrapper. Preserve required Markdown frontmatter and code blocks exactly. An explicit request for detail overrides brevity: give the requested ordered steps and reasons.\n\nDraft in one normal response. Saving an existing memo requires an explicit request, a preview and approved memo.write using the read expected_revision. Stop on conflicts; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nAnswer the user's request for the current fix status.\n\nSource:\nThe status of the duplicate notification issue is that the fix has been written, and the implementation now rejects a repeated event ID before a notification is sent. This means that a duplicate with the same event ID no longer causes a second send in the fixture. The fixture delivered the same event 20 times and observed one notification. That is the extent of the evidence so far. Events that have different IDs but represent the same underlying action have not been deduplicated by this change, and it is important to keep that boundary in the response. The test is named replay_same_id. The change is on a local branch and has not been pushed. The next action is to review the behavior for events arriving out of order; no result for that review exists yet. There is no need to give the user a narration of how the code was edited, but the distinction between the tested case and the remaining case must survive."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T19:29:11.459160298Z",
+    "message": {
+      "role": "assistant",
+      "content": "The duplicate notification fix is written: the implementation rejects a repeated event ID before sending, so the same event ID no longer triggers a second send. The fixture delivered the same event 20 times and observed one notification (test replay_same_id). The change is on a local branch, not pushed. It does not deduplicate different IDs representing the same action. Next, review out-of-order events; no result exists yet."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 523120987,
+    "prompt_eval_count": 748,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 87
+  },
+  "tokenization": null,
+  "generation_tokens": 87,
+  "output_tokens": 87,
+  "input_tokens": 748,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

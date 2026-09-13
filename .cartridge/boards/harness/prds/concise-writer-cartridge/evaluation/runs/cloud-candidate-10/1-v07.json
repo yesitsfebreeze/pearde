@@ -1,0 +1,48 @@
+{
+  "fixture": "v07",
+  "repeat": 1,
+  "category": "verbose",
+  "started": "2026-09-13T19:26:04.200Z",
+  "completed": "2026-09-13T19:26:05.036Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a precise copy editor. Return the deliverable only.\n\nFor verbose input, write one compact paragraph. Aim for 40 words, stretching only to keep a unique fact. Pack facts into short complete sentences with shared subjects and semicolons. Use ordinary verbs, omit rhetorical setup, and state each fact once. No heading, label, introduction, recap, bullet list, or explanation of the editing. A handoff memo is a self-contained paragraph, not a template.\n\nSynthesize facts rather than paraphrasing sentences. Combine a pending check with its unmeasured status: \"Kai still must measure queue safety before release\" says both what remains unknown and who does what next. State changed behavior directly: \"The handler rejects duplicate IDs\" already says the fix exists. Drop repeated descriptions of that same behavior. A preview that deletes nothing already establishes that eligibility is not deletion. Keep the concrete fact once.\n\nDensity example: \"Unreleased, the patch cuts the batch size from eight to four; 16 checks pass (batch-proof-6). Long-job safety remains unmeasured and may worsen. Jules must test long jobs in staging before release.\" This example carries change, test count, evidence, delivery state, risk, uncertainty, owner, next action and prerequisite in 36 words. Use that density, not its subject or facts.\n\nKeep every unique fact, condition, exclusion, uncertainty, owner, evidence reference and next action. Never invent a cause or say planned work happened. Keep technical literals byte for byte: names, numbers, units, identifiers, commands, errors, paths, frontmatter and executable blocks. Use clear referents. Silently check all source facts, then tighten the words rather than dropping meaning.\n\nIf the source is already concise, return it exactly, without any change. Requested JSON must have exactly the required keys and types, with no wrapper. Preserve required Markdown frontmatter and code blocks exactly. An explicit request for detail overrides brevity: give the requested ordered steps and reasons.\n\nDraft in one normal response. Saving an existing memo requires an explicit request, a preview and approved memo.write using the read expected_revision. Stop on conflicts; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone experiment result.\n\nSource:\nWe ran a small comparison of the index lookup change, and the result should be recorded with enough context to prevent it from being mistaken for a broader benchmark. The old implementation took a median of 42 ms. The candidate took a median of 31 ms. Both medians came from 30 runs against the same local fixture. The fixture contained 10,000 entries and was already warm before the timed runs began. No cold-start measurement was taken, and no production latency claim follows from these numbers. Peak memory was not measured either. The raw timings are recorded in lookup-fixture-3.csv. The next action is to measure cold-start latency and peak memory before deciding whether to adopt the change. The result is promising in the measured fixture, but the memo must not translate that into an unsupported promise about production or workloads that were not tested."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T19:26:04.980253493Z",
+    "message": {
+      "role": "assistant",
+      "content": "In a 30-run local comparison on a warm 10,000-entry fixture, the index lookup candidate's median latency was 31 ms versus 42 ms for the old implementation; raw timings are in lookup-fixture-3.csv. Cold-start latency and peak memory were unmeasured, so no production claim follows. Next, measure both before adoption."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 697855690,
+    "prompt_eval_count": 688,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 73
+  },
+  "tokenization": null,
+  "generation_tokens": 73,
+  "output_tokens": 73,
+  "input_tokens": 688,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

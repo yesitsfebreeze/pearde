@@ -1,0 +1,15 @@
+{
+  "reviewer": "/root",
+  "round": 3,
+  "decision": "PASS",
+  "scope": "Executable binding of the approved95/100 plan; no product scope change",
+  "runtime": {
+    "before_spec_sha256": "87a0b5ba0c3937ec9552b6d047f357e9d45ab176de2c28cc3940b13a2f7ed885",
+    "after_spec_sha256": "87a0b5ba0c3937ec9552b6d047f357e9d45ab176de2c28cc3940b13a2f7ed885",
+    "commit": "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b"
+  },
+  "checker_sha256": "ecaaa4e83b14321a6d4b6c44e2d2b82035c3632d285ab0cf32122379bc54f12f",
+  "bindings_before_sha256": "3f64cdb5ae814e57ac6b586902b3bd74b83cd7c3ac99dcbac5f50139fdad5905",
+  "bindings_after_sha256": "3f64cdb5ae814e57ac6b586902b3bd74b83cd7c3ac99dcbac5f50139fdad5905",
+  "spec_sha256": "1e5d1682ed71da93a5f42bcb5f41d9cb8121574a824795facf567850d248758b"
+}

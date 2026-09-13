@@ -1,0 +1,9 @@
+{
+  "actual_native_process": "bun src/main.ts",
+  "startup": "workspace and tool.workspace ready",
+  "native_save_update_read": "PASS",
+  "stale_exact_prior_version": "refused",
+  "source_metadata": "preserved",
+  "navigation_revision": "unchanged",
+  "call_count": 7
+}

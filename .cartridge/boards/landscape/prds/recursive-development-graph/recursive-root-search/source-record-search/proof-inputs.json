@@ -1,0 +1,94 @@
+{
+  "source_head": "422c521aed170a4d098505c73469a1a59dccf49d",
+  "source_clean": true,
+  "source_files": {
+    "src/lib.rs": "93487521f941a925a6b6301797008e7c137a8504aafd7a62c2f05bab80df78b7",
+    "src/source_search.rs": "c8dff2148e5ba2bd80e6a525fd7e74711dafd2a0fe0e818396bc41034098e83e",
+    ".cartridge/tests/unit/source_search.rs": "fc4528f8ed08810fb6dae31c3ad171ad2fc32d23b0e548ca19eb71a148b962b0",
+    ".cartridge/docs/source-search.md": "7bce919a503de49949c6a3bc092a6f5498481ba42c9a069715a92a3c82abfb4e"
+  },
+  "review": {
+    "round": 3,
+    "score": 95,
+    "reviewer": "/root",
+    "source_audit": "Independent /root source audit found no blocker beyond length-before-trim; corrected before final gates. Authority, privacy/hash validation, conservative budgets, per-source failures, deadline/cap behavior and Graph ranking equivalence reviewed."
+  },
+  "checklist_refinement": {
+    "before": {
+      "prd.md": "defe89352b00790d6a3dacc3d397831ae84c23dda63451031053648f19af965c",
+      "specs/spec01.md": "54df1fae3fca04d8a2de92b4c4f3941449ed67955b803d6dec8e6bc2931955f8"
+    },
+    "after": {
+      "prd.md": "fb953ebd968bd9129e42dfc25b57a548c0cfa26e357d04943617fe4011be15d8",
+      "specs/spec01.md": "d8e4bb0e34843099887a6aaecaae9387bb1cc98d32f2afbf3f0de23abb350ff9"
+    },
+    "change": "Acceptance markers only; no requirements or gates changed."
+  },
+  "dependencies": {
+    "prd_verified_source": "e4fd4346",
+    "prd_implementation_commit": "0b39c5c",
+    "prd_head_observed": "6444f7ddfdabc14a4b559fe56d3bc07bab2ad1a2",
+    "prd_files": {
+      "src/records.ts": "c8491c11d80db97eb58ec31589836a24655a713c937c322efbdda596b2e86085",
+      "src/source-records.ts": "e8947d91f3ffe5abb810b7d73a96d64185841d249cd6fe4f7041bbb1b88956a0",
+      "src/service.ts": "324af922c0f202fc26f56f077ea9304c7f3c49ec8a236d61b77b56930853b151",
+      "package.json": "021b3a075c52c5d18a7ed2574a8c877e78a527bc9e6672eaeac11cb9bf940abe",
+      "bun.lock": "83d0b4d57feae9c98706d646708238c589bf72e9ff838ead39d99be09e0e0c93"
+    },
+    "census_pin_source": "1109ab9e8cff8bd9061a426567d453d613589d39",
+    "memo_head": "1ffca32db1d06364b3e35e6cbca4881a1f814f71",
+    "runtime_head_observed": "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b",
+    "runtime_binary_path": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/cartridge",
+    "runtime_binary_sha256": "5ddb457b00d8237ba48d8091ffda76dc31cf89bddba115f5c00b92ab5d8d669e",
+    "runtime_binding_note": "Exact executable fingerprint captured immediately after native tests and before releasing binary hold to proxy_continuation; observed source HEAD is not asserted to be executable build identity."
+  },
+  "commands": [
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "env": {
+        "RUSTC_WRAPPER": "",
+        "RUSTC_WORKSPACE_WRAPPER": "",
+        "CARGO_TARGET_DIR": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract"
+      },
+      "command": "just test landscape",
+      "exit": 0,
+      "result": "67 passed, including 11 source-search tests",
+      "log": "proof/test-landscape.log"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "env": {
+        "RUSTC_WRAPPER": "",
+        "RUSTC_WORKSPACE_WRAPPER": "",
+        "CARGO_TARGET_DIR": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract"
+      },
+      "command": "just check landscape",
+      "exit": 0,
+      "result": "passed",
+      "log": "proof/check-landscape.log"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "env": {
+        "RUSTC_WRAPPER": "",
+        "RUSTC_WORKSPACE_WRAPPER": "",
+        "CARGO_TARGET_DIR": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract"
+      },
+      "command": "just test memo",
+      "exit": 0,
+      "result": "77 passed",
+      "log": "proof/test-memo.log"
+    }
+  ],
+  "initial_failure": "Paused-clock test expected precisely30ms but Tokio timer tick woke31ms. Clock starts after fixture setup; final assertion allows30\u201331ms and still requires exactly3 callbacks, one retained completed hit, timeout state and dropped pending future. Initial failure retained. Initial transient is_err_or compile spelling was fixed before first focused source-search suite; coordinator retained interrupted FS gate evidence.",
+  "transitive_refresh_additions": [
+    "src/source_search.rs",
+    ".cartridge/tests/unit/source_search.rs"
+  ],
+  "logs": {
+    "proof/test-landscape.log": "d7dc06fdb36177a09f86b52782cf5b6274feb18052699beb5cf29da539b7aef0",
+    "proof/test-memo.log": "98c73156c2372a00cb0094443b88e1358d0a0b64ce3dcceea14e3a3b00da96d3",
+    "proof/check-landscape.log": "e83be4633068cd09925242b8300827f24a8d0f8c0c343fb91835185f1d36f774",
+    "proof/timer-granularity-initial-failure.log": "7244b06a17704c75cb11ba235c9cf1c82eca81a0587007253742857985567d1d"
+  }
+}

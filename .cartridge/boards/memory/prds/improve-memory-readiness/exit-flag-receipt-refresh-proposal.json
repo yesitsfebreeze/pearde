@@ -1,0 +1,15 @@
+{
+  "canonical_id": "@memory/the-exit-flag-tests-race-each-other",
+  "classification": "Nonsemantic source dependency footprint refresh",
+  "acceptance_unchanged": true,
+  "reason": "Existing lock.rs now imports same-file handles and Unix libc constants. Existing lock test path already in original footprint; direct store_core manifest and lockfile edges must be bound. Preserve original exit-status and patient-lock tests, inherited reviews and mutation proof.",
+  "additive_footprint_paths": [
+    "src/store/core/Cargo.toml",
+    "Cargo.lock"
+  ],
+  "before": {
+    "prd.md": "6b9e5948aa6d971ae3cc3afc05e4d3f6d1f1dd99f8f2e8ab3e2f7b10b6cbbfd4",
+    "specs/spec01.md": "86b14c10ac42f521dc2054c79268b8cc4bf7694bf87db0b7272f60ca42aca406"
+  },
+  "coordinator_only": true
+}

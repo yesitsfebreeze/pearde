@@ -1,0 +1,30 @@
+{
+  "source": "191e2b6cb4291bdcce7a894f98bb2d475361d30f",
+  "binary": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/sessions",
+  "command": "bun baseline-probe.ts",
+  "fixture": "Disposable actual native Sessions process; seeded private name/agent/transcript, restarted with owner credential binding",
+  "metadata": {
+    "error": "unknown sessions op context_metadata",
+    "reply": 1
+  },
+  "roster_fields": [
+    "activity_duration_seconds",
+    "created",
+    "direct_unread",
+    "id",
+    "name",
+    "named",
+    "parent",
+    "parent_cycle",
+    "phase",
+    "run",
+    "session_age_seconds",
+    "session_revision",
+    "step",
+    "updated"
+  ],
+  "roster_contains_private_name": true,
+  "get_contains_private_agent": true,
+  "snapshot_unchanged": true,
+  "conclusion": "No bounded payload-free session context operation exists; roster includes name and run identifiers, while get includes agent payload. Existing parent/revision/phase and credential scope machinery can be reused."
+}

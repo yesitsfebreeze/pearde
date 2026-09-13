@@ -1,0 +1,49 @@
+{
+  "author": "/root/memo_board",
+  "reviewer": "/root",
+  "round": 3,
+  "classification": "Nonsemantic verification repair; acceptance unchanged",
+  "reviewer_accepted": true,
+  "source_before": "0a7c4a1f729c700f52c650ee0c3efc56a136560f",
+  "cause": "Fixture start_daemon only waits for a socket pathname, not a ready listener. Deterministic real CLI control binds Unix socket without listen: pathname exists but pulse gets ConnectionRefused; same socket accepts after listen. Original daemon stderr was discarded, so original incident cannot distinguish this scheduling gap from early process exit. Both require observing the actual launched PID before invoking pulse.",
+  "change": "Only pulse success fixture waits boundedly for existing graph-free ready output naming launched PID; pulse remains single-shot with original exact strength and successful exit assertions. Separate absent-owner failure test unchanged. No production source change.",
+  "source_path": ".cartridge/tests/integration/e2e/focus_routing.rs",
+  "source_sha256_after": "eb1260240cf21925d58dcf161ad0f5370924e8984c072b3cbffa0e16cc7ffd0b",
+  "changes": [
+    {
+      "path": "specs/spec01.md",
+      "before_sha256": "20b2f25a3981a193291ae04321319a8576ddd00f63b01359526c242cca159785",
+      "after_sha256": "aeeb0eb70418f333cd1de29c1b9fb4d7d7da5919f9ae30ffc75c9f9d7d2b257f"
+    },
+    {
+      "path": "prd.md",
+      "before_sha256": "80693f51f4b0ffc2310eed37458b4bdfc3ea6c6f3cc2ff146c2bc9d341e6f541",
+      "after_sha256": "5da62f40708d08db0b8963fa328e90bd0f8f54660ad461beabaaa0af06d5fb5a"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "implementation-proof/collector-pulse-failure.json",
+      "sha256": "e7c1a2afccff3accbc4437ff66b38f18112d4eaae8b71eb1306367751b863476"
+    },
+    {
+      "path": "implementation-proof/pulse-listener-control.txt",
+      "sha256": "3d114718fcd1bfd7b2b9222dc63fe840645f40e82c8159d1768014a8692d983e"
+    },
+    {
+      "path": "implementation-proof/pulse-listener-control.json",
+      "sha256": "93e8b869868b1bf5ce6ad148ed3ab82e9981dcb2734cf088d1ca96de5807cea8"
+    },
+    {
+      "path": "implementation-proof/pulse-fixture-test.log",
+      "sha256": "d6c400217a5ec81cef94ec81f5e93b27566e233c06dea0e046496e817c4d070f"
+    }
+  ],
+  "source_after": "a124fd30d59bcd06062b5464810188a0288e461e",
+  "public_gates": {
+    "tests_passed": 1402,
+    "skipped": 17,
+    "docs": "all 27 groups,1 executable pass",
+    "check": "pass"
+  }
+}

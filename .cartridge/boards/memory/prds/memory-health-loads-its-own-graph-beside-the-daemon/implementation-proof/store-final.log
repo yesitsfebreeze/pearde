@@ -1,0 +1,13 @@
+   Compiling store_core v2.0.0 (/private/tmp/memory-health-work/memory.ctg/src/store/core)
+    Finished `test` profile [unoptimized] target(s) in 0.91s
+     Running unittests src/lib.rs (/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/store_core-f8ab0d41e21a8f11)
+
+running 5 tests
+test health::tests::health_snapshot_accepts_legacy_table_without_migration ... ok
+test health::tests::health_snapshot_empty_and_corrupt_stamp_do_not_repair ... ok
+test legacy::legacy_tests::health_snapshot_retains_v13_rows_without_migrating_durable_bytes ... ok
+test health::tests::health_snapshot_missing_corrupt_and_missing_root_are_explicit ... ok
+test health::tests::health_snapshot_preserves_data_stamp_and_writer_claim ... ok
+
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 71 filtered out; finished in 0.17s
+

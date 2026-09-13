@@ -1,0 +1,24 @@
+{
+  "source_commit": "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b",
+  "compile": [
+    "rustc",
+    "--edition=2021",
+    "/tmp/composer-baseline.rs",
+    "-L",
+    "dependency=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/deps",
+    "--extern",
+    "cartridge=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/deps/libcartridge-a1dcf0148516ceb8.rlib",
+    "--extern",
+    "tokio=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/deps/libtokio-e5685ec7079ac28b.rlib",
+    "--extern",
+    "serde_json=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/deps/libserde_json-f4f6ecfc5822d586.rlib",
+    "-o",
+    "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/composer-baseline-oby7opa7/probe"
+  ],
+  "run": [
+    "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/composer-baseline-oby7opa7/probe",
+    "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/composer-baseline-oby7opa7/fixtures"
+  ],
+  "binary_sha256": "8710e37e93d12bef12b91a27c41d423fd8d0a381f53970c3af906edf336e0f69",
+  "linked_runtime_rlib_sha256": "814df9d07b23b5689f00367ccd13cec0b2b450bed3123d54d98c65e20a3b6567"
+}

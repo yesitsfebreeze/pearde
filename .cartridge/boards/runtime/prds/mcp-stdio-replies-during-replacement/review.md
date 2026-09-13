@@ -14,3 +14,7 @@ Reviewer: `/root` self-review. Inputs: review-round-4-inputs.json.
 
 **96/100 — PASS**. No blockers. Rounds used: 4/5. No new protocol revision or
 notification capability is introduced.
+
+## Composer source revalidation — 2026-09-13
+
+Existing acceptance and executable gates are preserved. [Exact before/after binding](composer-reverification/binding.json) records imported composer dependencies or current-source proof pins at bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df. No new review round or passing collection is claimed by this amendment; the normal collector must rerun the unchanged gates.

@@ -1,0 +1,27 @@
+{
+  "coordinator_only": true,
+  "canonical": "@memory/improve-memory-readiness",
+  "preserve_original_acceptance": true,
+  "inherited_rounds": 2,
+  "required_dependency": "@memory/improve-memory-owner-access",
+  "fix_typo": "capability-capability-owner -> capability-owner",
+  "footprint": [
+    "src/cartridge.rs",
+    "src/cartridge_status.rs",
+    "src/commands/src/memory.rs",
+    "src/transport/src/owner.rs",
+    "src/transport/src/memory_rpc.rs",
+    "src/store/core/src/lock.rs",
+    "src/rpc/src/server.rs",
+    ".cartridge/tests/unit/src/cartridge/status_test.rs",
+    ".cartridge/tests/unit/src/cartridge/tests.rs",
+    ".cartridge/tests/unit/src/store/core/src/tests/lock_test.rs",
+    ".cartridge/tests/unit/src/transport/src/owner_test.rs",
+    ".cartridge/tests/integration/cartridge.rs",
+    ".cartridge/docs/owner-attachment.md",
+    ".cartridge/docs/CARTRIDGE.md"
+  ],
+  "baseline": "baseline.json",
+  "spec": "specs/spec01.md",
+  "reason": "Replace migrated stale absolute paths with explicit current native/transport/store observer and maintained fixtures; preserve additive native status outcome and original acceptance."
+}

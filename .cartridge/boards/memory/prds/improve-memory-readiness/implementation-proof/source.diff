@@ -1,0 +1,1503 @@
+diff --git a/.cartridge/docs/CARTRIDGE.md b/.cartridge/docs/CARTRIDGE.md
+index 82eb2e4..41d2bab 100644
+--- a/.cartridge/docs/CARTRIDGE.md
++++ b/.cartridge/docs/CARTRIDGE.md
+@@ -47,10 +47,12 @@ memory = {
+ ## Service
+ 
+ Requests are objects with `op` and the existing Memory operation arguments.
+-Responses are the original engine JSON; failures use the SDK error channel.
++Engine responses retain their original JSON; failures use the SDK error channel.
++Additive native `status` returns a bounded readiness observation; see
++[owner attachment and readiness](owner-attachment.md).
+ Supported operations: `query`, `search`, `get`, `log`, `events`, `report`, `ingest`,
+ `link`, `forget`, `forget_by_source`, `degrade`, `move`, `promote`, `health`,
+-`ready`, `focus`, `claim_kind`, `pulse`, `gc`, `audit`, and `queue_drain`.
++`ready`, `status`, `focus`, `claim_kind`, `pulse`, `gc`, `audit`, and `queue_drain`.
+ `get` requires `id` and uses Memory's query-by-ID path. Provenance and diagnostic
+ fields are passed through. The service does not synthesize answers or automatically
+ ingest conversations. Explicit submission and optional configured watchers remain
+@@ -59,8 +61,9 @@ durable queue retains accepted work across shutdowns.
+ 
+ ## Replacement and persistence
+ 
+-Apply validates configuration without opening the database. The first service
+-call acquires the writer lock and strictly loads the store. This lets Cile prepare
++Apply validates configuration without opening the database. In local-owner mode,
++the first non-status service call acquires the writer lock and strictly loads the store.
++Status never initializes an engine; explicit attached readers keep using their owner. This lets Cile prepare
+ a replacement while the old generation still owns the writer. Calls serialize
+ inside each cartridge; Cile drains admitted calls before replacement. A competing
+ process receives a writer-lock error and may call again after ownership is released.
+diff --git a/.cartridge/docs/owner-attachment.md b/.cartridge/docs/owner-attachment.md
+index b15d248..e77eeec 100644
+--- a/.cartridge/docs/owner-attachment.md
++++ b/.cartridge/docs/owner-attachment.md
+@@ -46,3 +46,44 @@ owner. Other attached readers remain usable. Remove `owner` to restore the
+ existing local-owner behavior, including exclusive-writer refusal while another
+ process owns that store. No persisted format, profile or daemon protocol changes
+ are required.
++
++## Readiness without starting an engine
++
++Use `{"op":"status"}` for cached native readiness, or
++`{"op":"status","probe":true,"timeout_ms":2000}` for an explicit observation.
++The timeout is 1–60000 milliseconds; attached probes also respect the configured
++owner timeout. Other fields are rejected. Existing `ready` and `health` retain
++their previous responses and may initialize an engine in local-owner mode.
++
++Status always distinguishes `registered:true` from store, exact-ID read,
++semantic-query and model availability. `view`, `observation` and `age_ms` name
++whether the response came from a cache, an operation or a probe, and how old it
++is. Cached requests perform no filesystem, socket or model I/O. There is no
++background readiness polling.
++
++A local probe samples an existing regular writer lock without creating or
++rewriting it. A held lock reports `unavailable`, `writer_busy`, `retryable:true`.
++A missing/free lock reports `starting`, `local_uninitialized`; it does not prove
++a usable store or start an engine. Initialization and lock sampling exclude one
++another. An initialized engine supplies its existing graph-free readiness view.
++Attached probes verify store/PID identity and ask `ready` on that same transport.
++They never fall back to local ownership.
++
++A successful real semantic query by this caller establishes observed semantic
++readiness for 30 seconds on that owner PID. A recent failed semantic request with an available transport is
++`degraded`; transport failures are `unavailable` and clear semantic evidence.
++Older evidence or a successor PID is `unknown`. Exact-ID route
++readiness can be observed independently of embedding availability. Probing does
++not refresh the semantic evidence timestamp. The existing RPC query parser and
++filter validation exclude invalid requests from this evidence; registry-dependent
++claim-kind filters conservatively remain unobserved. Model availability stays `unknown`
++and `actively_probed:false`; exposed failure counters are historical observations.
++A recent successful query is not a promise that the next query will succeed.
++
++Only one status probe can run per service. Concurrent probes return
++`starting/probe_in_progress`, while cached requests remain responsive. A timed-out
++filesystem worker retains admission until it actually exits, so timeouts cannot
++launch an unbounded queue of blocking probes. Status does not claim to cancel a
++blocked filesystem syscall or work already running on an owner. Disposal retains
++its existing call-drain semantics. Responses contain static reasons and bounded
++counters, never credentials, paths, writer labels, query text or raw backend errors.
+diff --git a/.cartridge/tests/integration/cartridge.rs b/.cartridge/tests/integration/cartridge.rs
+index 5f05c89..307f4ea 100644
+--- a/.cartridge/tests/integration/cartridge.rs
++++ b/.cartridge/tests/integration/cartridge.rs
+@@ -363,6 +363,12 @@ async fn owner_attachment_two_cartridges_query_daemon_alias_and_survive_peer_dis
+ 		interrupted.contains(&format!("owner pid {pid}")),
+ 		"{interrupted}"
+ 	);
++	let unavailable = second.request(json!({"op":"status"})).await.unwrap();
++	assert_eq!(unavailable["state"], "unavailable");
++	assert_eq!(unavailable["reason"], "disconnected");
++	assert_eq!(unavailable["store"]["pid"], pid);
++	assert_eq!(unavailable["query"]["exact_id"], "unavailable");
++
+ 	let err = second
+ 		.request(json!({"op":"get","id":id}))
+ 		.await
+@@ -507,3 +513,391 @@ async fn owner_attachment_native_crash_mid_read_is_not_replayed_and_dispose_is_b
+ 	owner.await.unwrap();
+ 	assert!(!root.path().join("writer.lock").exists());
+ }
++
++#[cfg(unix)]
++#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
++async fn readiness_status_local_registration_contention_and_recovery_start_no_writer() {
++	use std::os::unix::fs::MetadataExt;
++	let root = tempfile::tempdir().unwrap();
++	let dir = root.path().join("store");
++	let (url, http) =
++		test_support::spawn_http(test_support::fixed_vec_embed_app(vec![1., 0., 0.])).await;
++	let cfg = settings(&dir, &url);
++	let mut first = Process::start(cfg.clone()).await;
++	let initial = first.request(json!({"op":"status"})).await.unwrap();
++	assert_eq!(initial["registered"], true);
++	assert_eq!(initial["state"], "unknown");
++	assert_eq!(initial["view"], "cached");
++	assert!(!dir.exists());
++	let start = first
++		.request(json!({"op":"status","probe":true}))
++		.await
++		.unwrap();
++	assert_eq!(start["state"], "starting");
++	assert_eq!(start["query"]["semantic"], "unknown");
++	assert!(!dir.exists());
++	let seeded = first
++		.request(json!({"op":"ingest","text":"The release is CEDARQUARTZ.","raw":true,"sync":true}))
++		.await
++		.unwrap();
++	assert!(seeded["doc_id"].is_string());
++	let lock = std::fs::read(dir.join("writer.lock")).unwrap();
++	let inode = std::fs::metadata(dir.join("writer.lock")).unwrap().ino();
++	let mut second = Process::start(cfg).await;
++	let busy = second
++		.request(json!({"op":"status","probe":true}))
++		.await
++		.unwrap();
++	assert_eq!(busy["registered"], true);
++	assert_eq!(busy["state"], "unavailable");
++	assert_eq!(busy["reason"], "writer_busy");
++	assert_eq!(busy["retryable"], true);
++	assert_eq!(std::fs::read(dir.join("writer.lock")).unwrap(), lock);
++	assert_eq!(
++		std::fs::metadata(dir.join("writer.lock")).unwrap().ino(),
++		inode
++	);
++	first.stop().await;
++	let after = second
++		.request(json!({"op":"status","probe":true}))
++		.await
++		.unwrap();
++	assert_eq!(after["state"], "starting");
++	assert_eq!(after["reason"], "local_uninitialized");
++	assert_eq!(std::fs::read(dir.join("writer.lock")).unwrap(), lock);
++	assert_eq!(
++		std::fs::metadata(dir.join("writer.lock")).unwrap().ino(),
++		inode
++	);
++	let query = second
++		.request(json!({"op":"query","text":"release name","k":3}))
++		.await
++		.unwrap();
++	assert!(query.to_string().contains("CEDARQUARTZ"));
++	let observed = second.request(json!({"op":"status"})).await.unwrap();
++	assert_eq!(observed["state"], "ready");
++	assert_eq!(observed["observation"], "operation");
++	assert_eq!(observed["models"]["actively_probed"], false);
++	tokio::time::sleep(Duration::from_millis(25)).await;
++	let probed = second
++		.request(json!({"op":"status","probe":true}))
++		.await
++		.unwrap();
++	assert_eq!(probed["state"], "ready");
++	assert!(probed["query"]["age_ms"].as_u64().unwrap() >= 20);
++	assert_eq!(probed["models"]["availability"], "unknown");
++	for invalid in [
++		json!({"op":"query","text":"release name","k":"bad"}),
++		json!({"op":"query","text":"release name","since":"bad"}),
++		json!({"op":"query","text":"release name","kind":"bad"}),
++		json!({"op":"query","text":"release name","claim_kind":"unknown"}),
++	] {
++		assert!(second.request(invalid).await.is_err());
++		let current = second.request(json!({"op":"status"})).await.unwrap();
++		assert_eq!(current["state"], "ready");
++		assert!(
++			current["query"]["age_ms"].as_u64().unwrap() >= probed["query"]["age_ms"].as_u64().unwrap()
++		);
++	}
++
++	// The old ready/health contracts remain available.
++	assert_eq!(
++		second.request(json!({"op":"ready"})).await.unwrap()["ok"],
++		true
++	);
++	assert_eq!(
++		second.request(json!({"op":"health"})).await.unwrap()["entities"],
++		1
++	);
++	second.stop().await;
++	http.abort();
++	let _ = http.await;
++}
++
++#[cfg(unix)]
++#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
++async fn readiness_status_attached_real_owner_restart_invalidates_query_evidence() {
++	let root = tempfile::Builder::new()
++		.prefix("ready-owner-")
++		.tempdir_in("/tmp")
++		.unwrap();
++	let dir = root.path().join("store");
++	let calls = std::sync::Arc::new(std::sync::atomic::AtomicUsize::new(0));
++	let observed = calls.clone();
++	let app = axum::Router::new().route(
++		"/api/embed",
++		axum::routing::post(move |body: axum::Json<Value>| {
++			let observed = observed.clone();
++			async move {
++				observed.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
++				let n = body["input"].as_array().map_or(1, Vec::len);
++				axum::Json(json!({"embeddings":vec![vec![1.,0.,0.];n]}))
++			}
++		}),
++	);
++	let (url, http) = test_support::spawn_http(app).await;
++	let mut seed = Process::start(settings(&dir, &url)).await;
++	seed
++		.request(json!({"op":"ingest","text":"The release is CEDARQUARTZ.","raw":true,"sync":true}))
++		.await
++		.unwrap();
++	seed.stop().await;
++	let (mut daemon, endpoint) = owner_attachment_daemon(root.path(), &url).await;
++	let pid = daemon.id().unwrap();
++	let cfg = json!({"dir":dir,"owner":{"endpoint":endpoint.display(),"timeout_ms":500}});
++	let mut first = Process::start(cfg.clone()).await;
++	let mut second = Process::start(cfg).await;
++	let before = calls.load(std::sync::atomic::Ordering::SeqCst);
++	for client in [&mut first, &mut second] {
++		let status = client
++			.request(json!({"op":"status","probe":true}))
++			.await
++			.unwrap();
++		assert_eq!(status["store"]["state"], "ready");
++		assert_eq!(status["store"]["pid"], pid);
++		assert_eq!(status["query"]["semantic"], "unknown");
++		assert_eq!(status["query"]["exact_id"], "ready");
++	}
++	assert_eq!(
++		calls.load(std::sync::atomic::Ordering::SeqCst),
++		before,
++		"status must not call model"
++	);
++	second
++		.request(json!({"op":"query","text":"release","k":3}))
++		.await
++		.unwrap();
++	assert_eq!(
++		second.request(json!({"op":"status"})).await.unwrap()["state"],
++		"ready"
++	);
++	assert!(second
++		.request(json!({"op":"query","text":"release","k":"bad"}))
++		.await
++		.is_err());
++	assert_eq!(
++		second.request(json!({"op":"status"})).await.unwrap()["state"],
++		"ready"
++	);
++
++	first.stop().await;
++	assert!(daemon.try_wait().unwrap().is_none());
++	daemon.kill().await.unwrap();
++	daemon.wait().await.unwrap();
++	let down = second
++		.request(json!({"op":"status","probe":true}))
++		.await
++		.unwrap();
++	assert_eq!(down["state"], "unavailable");
++	assert_eq!(down["retryable"], true);
++	let (mut successor, _) = owner_attachment_daemon(root.path(), &url).await;
++	let new_pid = successor.id().unwrap();
++	assert_ne!(pid, new_pid);
++	let recovered = second
++		.request(json!({"op":"status","probe":true}))
++		.await
++		.unwrap();
++	assert_eq!(recovered["store"]["pid"], new_pid);
++	assert_eq!(recovered["query"]["semantic"], "unknown");
++	assert_eq!(recovered["query"]["exact_id"], "ready");
++	second
++		.request(json!({"op":"query","text":"release","k":3}))
++		.await
++		.unwrap();
++	assert_eq!(
++		second.request(json!({"op":"status"})).await.unwrap()["state"],
++		"ready"
++	);
++	second.stop().await;
++	assert!(successor.try_wait().unwrap().is_none());
++	successor.kill().await.unwrap();
++	successor.wait().await.unwrap();
++	http.abort();
++	let _ = http.await;
++}
++
++#[cfg(unix)]
++#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
++async fn readiness_status_native_faults_and_credentials_are_named_without_store_effects() {
++	for mode in [
++		"malformed_health",
++		"wrong_store",
++		"malformed_ready",
++		"wrong_pid",
++		"draining",
++		"credentials",
++	] {
++		let root = tempfile::Builder::new()
++			.prefix("ready-fault-")
++			.tempdir_in("/tmp")
++			.unwrap();
++		let dir = root.path().join("store");
++		std::fs::create_dir(&dir).unwrap();
++		let lock = dir.join("writer.lock");
++		std::fs::write(&lock, "fixture-secret-holder").unwrap();
++		let socket = root.path().join("owner.sock");
++		let listener = tokio::net::UnixListener::bind(&socket).unwrap();
++		let owner_dir = dir.clone();
++		let task = tokio::spawn(async move {
++			let (stream, _) = listener.accept().await.unwrap();
++			let (read, mut write) = stream.into_split();
++			let mut lines = BufReader::new(read).lines();
++			let frame: Value = serde_json::from_str(&lines.next_line().await.unwrap().unwrap()).unwrap();
++			assert_eq!(frame["method"], "health");
++			let health = match mode {
++				"malformed_health" => Value::Null,
++				"wrong_store" => json!({"ok":true,"pid":55,"data_dir":"/"}),
++				_ => json!({"ok":true,"pid":55,"data_dir":owner_dir}),
++			};
++			write
++				.write_all(format!("{}\n", json!({"id":frame["id"],"result":health})).as_bytes())
++				.await
++				.unwrap();
++			if let Some(line) = lines.next_line().await.unwrap() {
++				let frame: Value = serde_json::from_str(&line).unwrap();
++				assert_eq!(frame["params"]["req"]["name"], "ready");
++				let ready = match mode {
++					"malformed_ready" => json!({"ok":true,"pid":55}),
++					"wrong_pid" => json!({"ok":true,"pid":56,"draining":false}),
++					_ => {
++						json!({"ok":true,"pid":55,"draining":mode=="draining","llm_complete_failed":2,"last_llm_complete_failure":"https://user:fixture-secret@example.invalid/raw"})
++					}
++				};
++				write
++					.write_all(
++						format!(
++							"{}\n",
++							json!({"id":frame["id"],"result":{"error":"","value":ready}})
++						)
++						.as_bytes(),
++					)
++					.await
++					.unwrap();
++			}
++			assert!(
++				tokio::time::timeout(Duration::from_millis(100), listener.accept())
++					.await
++					.is_err(),
++				"cached/invalid requests cannot reconnect"
++			);
++		});
++		let mut client =
++			Process::start(json!({"dir":dir,"owner":{"endpoint":socket,"timeout_ms":1000}})).await;
++		let value = client
++			.request(json!({"op":"status","probe":true}))
++			.await
++			.unwrap();
++		assert_eq!(value["registered"], true);
++		assert!(!value.to_string().contains("fixture-secret"));
++		let expected = match mode {
++			"wrong_store" => "wrong_store",
++			"draining" => "draining",
++			"credentials" => "semantic_query_not_observed_recently",
++			_ => "malformed",
++		};
++		assert_eq!(value["reason"], expected, "{mode}: {value}");
++		for request in [
++			json!({"op":"status","endpoint":"fixture-secret"}),
++			json!({"op":"status","probe":true,"timeout_ms":0}),
++			json!({"op":"status","probe":"yes"}),
++			json!({"op":"status","owner":{"op":"ingest"}}),
++		] {
++			assert!(client.request(request).await.is_err());
++		}
++		assert_eq!(
++			client.request(json!({"op":"status"})).await.unwrap()["view"],
++			"cached"
++		);
++		assert_eq!(
++			std::fs::read_to_string(&lock).unwrap(),
++			"fixture-secret-holder"
++		);
++		assert!(!dir.join("data.mdb").exists());
++		assert!(socket.exists());
++		task.await.unwrap();
++		client.stop().await;
++	}
++}
++
++#[cfg(unix)]
++#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
++async fn readiness_status_blocked_probe_keeps_cache_responsive_and_never_retries() {
++	let root = tempfile::Builder::new()
++		.prefix("ready-deadline-")
++		.tempdir_in("/tmp")
++		.unwrap();
++	let socket = root.path().join("owner.sock");
++	let listener = tokio::net::UnixListener::bind(&socket).unwrap();
++	let (entered, wait) = tokio::sync::oneshot::channel();
++	let server = tokio::spawn(async move {
++		let (stream, _) = listener.accept().await.unwrap();
++		let mut lines = BufReader::new(stream).lines();
++		let _: Value = serde_json::from_str(&lines.next_line().await.unwrap().unwrap()).unwrap();
++		entered.send(()).unwrap();
++		assert!(lines.next_line().await.unwrap().is_none());
++		assert!(
++			tokio::time::timeout(Duration::from_millis(100), listener.accept())
++				.await
++				.is_err()
++		);
++	});
++	let missing = root.path().join("missing");
++	let mut client =
++		Process::start(json!({"dir":missing,"owner":{"endpoint":socket,"timeout_ms":300}})).await;
++	let start = tokio::time::Instant::now();
++	client
++		.send(json!({"id":101,"call":"memory","args":{"op":"status","probe":true}}))
++		.await;
++	wait.await.unwrap();
++	client
++		.send(json!({"id":102,"call":"memory","args":{"op":"status"}}))
++		.await;
++	let cached = client.read().await;
++	assert_eq!(cached["reply"], 102);
++	assert_eq!(cached["data"]["view"], "cached");
++	client
++		.send(json!({"id":103,"call":"memory","args":{"op":"status","probe":true}}))
++		.await;
++	let ongoing = client.read().await;
++	assert_eq!(ongoing["reply"], 103);
++	assert_eq!(ongoing["data"]["reason"], "probe_in_progress");
++	let expired = client.read().await;
++	assert_eq!(expired["reply"], 101);
++	assert_eq!(expired["data"]["reason"], "timeout");
++	assert!(start.elapsed() < Duration::from_secs(2));
++	assert!(!missing.exists());
++	assert!(socket.exists());
++	server.await.unwrap();
++	client.stop().await;
++}
++
++#[cfg(unix)]
++#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
++async fn readiness_status_credential_config_and_absent_owner_never_load_store() {
++	let root = tempfile::Builder::new()
++		.prefix("ready-secret-")
++		.tempdir_in("/tmp")
++		.unwrap();
++	let dir = root.path().join("fixture-secret-store");
++	let mut local = Process::start(settings(&dir, "http://user:fixture-secret@127.0.0.1:1")).await;
++	for request in [json!({"op":"status"}), json!({"op":"status","probe":true})] {
++		let report = local.request(request).await.unwrap();
++		assert!(!report.to_string().contains("fixture-secret"));
++		assert_ne!(report["state"], "ready");
++		assert!(!dir.exists());
++	}
++	local.stop().await;
++	let socket = root.path().join("fixture-secret-missing.sock");
++	let mut attached =
++		Process::start(json!({"dir":dir,"owner":{"endpoint":socket,"timeout_ms":100}})).await;
++	let status = attached
++		.request(json!({"op":"status","probe":true}))
++		.await
++		.unwrap();
++	assert_eq!(status["reason"], "absent");
++	assert_eq!(status["retryable"], true);
++	assert!(!status.to_string().contains("fixture-secret"));
++	assert!(!dir.exists());
++	assert!(!socket.exists());
++	attached.stop().await;
++}
+diff --git a/.cartridge/tests/integration/e2e/cli_surface.rs b/.cartridge/tests/integration/e2e/cli_surface.rs
+index a8c64bc..2548790 100644
+--- a/.cartridge/tests/integration/e2e/cli_surface.rs
++++ b/.cartridge/tests/integration/e2e/cli_surface.rs
+@@ -253,6 +253,10 @@ fn health_owner_real_cli_snapshot_parity_readonly_and_restart() {
+ 				id: "edge".into(),
+ 				from: "a".into(),
+ 				to: "b".into(),
++				// Boot schedules enrichment for empty text. Empty reason.url still
++				// inherits embed.url, so seed a settled edge to isolate health reads
++				// from independent Enrich -> Persist maintenance. Counts stay the same.
++				text: "Existing fixture relationship".into(),
+ 				..Default::default()
+ 			},
+ 		);
+diff --git a/.cartridge/tests/unit/src/cartridge/status_test.rs b/.cartridge/tests/unit/src/cartridge/status_test.rs
+new file mode 100644
+index 0000000..fb4d526
+--- /dev/null
++++ b/.cartridge/tests/unit/src/cartridge/status_test.rs
+@@ -0,0 +1,224 @@
++use super::*;
++fn config() -> ServiceConfig {
++	super::super::service_configuration(json!({"dir":"not-opened-by-status"})).unwrap()
++}
++#[tokio::test(start_paused = true)]
++async fn readiness_status_cache_and_probe_do_not_refresh_semantic_age() {
++	let tracker = Tracker::new();
++	let cfg = config();
++	let empty = tracker.status(&cfg, &json!({"op":"status"})).await.unwrap();
++	assert_eq!(empty["registered"], true);
++	assert_eq!(empty["state"], "unknown");
++	assert!(empty["age_ms"].is_null());
++	let ticket = tracker.begin_query("query", &json!({"text":"private query"}));
++	tracker.record_query(ticket, Some(42), true);
++	tokio::time::advance(Duration::from_secs(20)).await;
++	let ticket = tracker.begin();
++	tracker.publish(
++		ticket,
++		Snapshot::new("ready", "observed_owner", false, Some(42)),
++	);
++	let view = tracker.render(&cfg, "cached", None);
++	assert_eq!(view["state"], "ready");
++	assert_eq!(view["age_ms"], 0);
++	assert_eq!(view["query"]["age_ms"], 20000);
++	assert_eq!(view["models"]["availability"], "unknown");
++	assert_eq!(view["models"]["actively_probed"], false);
++	assert!(!view.to_string().contains("private query"));
++	tokio::time::advance(Duration::from_secs(11)).await;
++	assert_eq!(
++		tracker.render(&cfg, "cached", None)["query"]["semantic"],
++		"unknown"
++	);
++}
++#[test]
++fn readiness_status_successor_and_late_completions_do_not_restore_old_readiness() {
++	let tracker = Tracker::new();
++	let cfg = config();
++	let ticket = tracker.begin_query("query", &json!({"text":"hello"}));
++	tracker.record_query(ticket, Some(42), true);
++	let old_query = tracker.begin_query("query", &json!({"text":"old"}));
++	let newest = tracker.begin();
++	tracker.publish(
++		newest,
++		Snapshot::new("ready", "observed_owner", false, Some(43)),
++	);
++	tracker.record_query(old_query, Some(42), true);
++	let view = tracker.render(&cfg, "cached", None);
++	assert_eq!(view["store"]["pid"], 43);
++	assert_eq!(view["query"]["semantic"], "unknown");
++	let old_probe = tracker.begin();
++	let query = tracker.begin_query("query", &json!({"text":"new"}));
++	tracker.record_query(query, Some(43), false);
++	tracker.publish(
++		old_probe,
++		Snapshot::new("ready", "observed_owner", false, Some(42)),
++	);
++	assert_eq!(tracker.render(&cfg, "cached", None)["state"], "degraded");
++	for args in [
++		json!({"id":"x","text":"ignored"}),
++		json!({"text":""}),
++		json!({}),
++	] {
++		assert!(tracker.begin_query("query", &args).is_none());
++	}
++	assert!(tracker
++		.begin_query("search", &json!({"text":"x"}))
++		.is_none());
++}
++#[test]
++fn readiness_status_strict_options_and_static_counter_projection() {
++	for request in [
++		json!({"probe":"yes"}),
++		json!({"probe":true,"timeout_ms":0}),
++		json!({"probe":true,"timeout_ms":60001}),
++		json!({"timeout_ms":3}),
++		json!({"probe":true,"owner":"secret"}),
++		json!({"endpoint":"secret"}),
++	] {
++		assert!(options(&request).is_err());
++	}
++	let input = json!({"ok":true,"pid":9,"draining":false,"llm_complete_failed":2,"llm_embed_wedges":1,"last_llm_complete_failure":"https://user:credential@example.test/private"});
++	let snapshot = ready_snapshot(&input, 9);
++	let tracker = Tracker::new();
++	let view = tracker.render(&config(), "probe", Some(snapshot));
++	assert!(!view.to_string().contains("credential"));
++	assert_eq!(view["models"]["observed_complete_failures"], 2);
++	assert_eq!(view["query"]["semantic"], "unknown");
++	for input in [
++		json!({"ok":true,"pid":9}),
++		json!({"ok":true,"pid":8,"draining":false}),
++		json!({"ok":true,"pid":9,"draining":false,"llm_embed_wedges":"secret"}),
++	] {
++		assert_eq!(ready_snapshot(&input, 9).reason, "malformed");
++	}
++	assert_eq!(
++		ready_snapshot(&json!({"ok":true,"pid":9,"draining":true}), 9).reason,
++		"draining"
++	);
++}
++
++#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
++async fn readiness_status_timed_out_worker_keeps_admission_until_it_really_exits() {
++	let tracker = Tracker::new();
++	let cfg = config();
++	let permit = tracker.permit.clone().try_acquire_owned().unwrap();
++	let calls = CALLS.read().await;
++	let initialization = INITIALIZATION.lock().await;
++	let (release, wait) = std::sync::mpsc::channel();
++	let (entered_tx, entered_rx) = tokio::sync::oneshot::channel();
++	let pending = tokio::spawn(blocking_snapshot(
++		Instant::now() + Duration::from_millis(100),
++		permit,
++		calls,
++		initialization,
++		move || {
++			entered_tx.send(()).unwrap();
++			wait.recv_timeout(Duration::from_secs(5)).unwrap();
++			Snapshot::new("ready", "late_result", false, Some(99))
++		},
++	));
++	entered_rx.await.unwrap();
++	let cached = tracker.status(&cfg, &json!({"op":"status"})).await.unwrap();
++	assert_eq!(cached["state"], "unknown");
++	assert_eq!(
++		tracker
++			.status(&cfg, &json!({"op":"status","probe":true}))
++			.await
++			.unwrap()["reason"],
++		"probe_in_progress"
++	);
++	assert_eq!(pending.await.unwrap().reason, "timeout");
++	assert!(tracker.permit.clone().try_acquire_owned().is_err());
++	assert!(CALLS.try_write().is_err());
++	assert!(INITIALIZATION.try_lock().is_err());
++	release.send(()).unwrap();
++	tokio::time::timeout(Duration::from_secs(2), async {
++		let _permit = tracker.permit.acquire().await.unwrap();
++	})
++	.await
++	.unwrap();
++	assert_eq!(
++		tracker.status(&cfg, &json!({"op":"status"})).await.unwrap()["state"],
++		"unknown"
++	);
++}
++
++#[test]
++fn readiness_status_transport_failures_never_claim_store_or_exact_readiness() {
++	let tracker = Tracker::new();
++	let cfg = config();
++	for (reason, retryable) in [
++		("disconnected", true),
++		("timeout", true),
++		("malformed", false),
++		("wrong_store", false),
++		("incompatible", false),
++		("absent", true),
++		("stale", true),
++		("refused", false),
++	] {
++		let ticket = tracker.begin_query("query", &json!({"text":"valid"}));
++		tracker.record_query(ticket, Some(71), true);
++		let ticket = tracker.begin_query("query", &json!({"text":"uncertain"}));
++		tracker.record_owner_query(
++			ticket,
++			&Err(transport::owner::OwnerError {
++				status: reason,
++				retryable,
++				reason: "raw secret",
++				pid: Some(71),
++			}),
++		);
++		let report = tracker.render(&cfg, "cached", None);
++		assert_eq!(report["state"], "unavailable");
++		assert_eq!(report["store"]["state"], "unavailable");
++		assert_eq!(report["query"]["exact_id"], "unavailable");
++		assert_eq!(report["reason"], reason);
++		assert_eq!(report["retryable"], retryable);
++		assert_eq!(report["store"]["pid"], 71);
++		assert!(!report.to_string().contains("raw secret"));
++		let probe = tracker.begin();
++		tracker.publish(
++			probe,
++			Snapshot::new("ready", "observed_owner", false, Some(71)),
++		);
++		assert_eq!(
++			tracker.render(&cfg, "probe", None)["query"]["semantic"],
++			"unknown"
++		);
++	}
++	let ticket = tracker.begin_query("query", &json!({"text":"valid"}));
++	tracker.record_owner_query(
++		ticket,
++		&Err(transport::owner::OwnerError {
++			status: "operation_failed",
++			retryable: false,
++			reason: "secret",
++			pid: Some(71),
++		}),
++	);
++	assert_eq!(tracker.render(&cfg, "cached", None)["state"], "degraded");
++}
++#[test]
++fn readiness_status_uses_rpc_argument_validation_before_observing_queries() {
++	let tracker = Tracker::new();
++	let cfg = config();
++	let valid = json!({"text":"valid","k":2});
++	let ticket = tracker.begin_query("query", &valid);
++	tracker.record_query(ticket, Some(71), true);
++	for invalid in [
++		json!({"text":"x","k":"bad"}),
++		json!({"text":"x","k":-1}),
++		json!({"text":"x","since":"bad"}),
++		json!({"text":"x","kind":"bad"}),
++		json!({"text":"x","scheme":"bad"}),
++		json!({"text":"x","ids":["selected-id"]}),
++		json!({"text":"x","claim_kind":"dynamic"}),
++	] {
++		let ticket = tracker.begin_query("query", &invalid);
++		assert!(ticket.is_none(), "{invalid}");
++		tracker.record_query(ticket, Some(71), false);
++		assert_eq!(tracker.render(&cfg, "cached", None)["state"], "ready");
++	}
++}
+diff --git a/.cartridge/tests/unit/src/store/core/src/tests/lock_test.rs b/.cartridge/tests/unit/src/store/core/src/tests/lock_test.rs
+index f009e5a..3f60865 100644
+--- a/.cartridge/tests/unit/src/store/core/src/tests/lock_test.rs
++++ b/.cartridge/tests/unit/src/store/core/src/tests/lock_test.rs
+@@ -161,3 +161,70 @@ fn inherited_description_requires_the_bounded_retry() {
+ 	assert!(waited, "a retry must follow the observed WouldBlock");
+ 	result.expect("bounded retry acquires after the inherited description closes");
+ }
++
++#[test]
++fn readiness_status_lock_sample_preserves_absence_bytes_and_held_lock() {
++	let root = tempfile::tempdir().unwrap();
++	let dir = root.path().join("missing");
++	assert_eq!(observe(&dir), Availability::Missing);
++	assert!(!dir.exists());
++	std::fs::create_dir(&dir).unwrap();
++	let path = dir.join(LOCK_FILE);
++	std::fs::write(&path, "secret holder label").unwrap();
++	assert_eq!(observe(&dir), Availability::Free);
++	assert_eq!(
++		std::fs::read_to_string(&path).unwrap(),
++		"secret holder label"
++	);
++	let writer = acquire(dir.to_str().unwrap(), "fixture").unwrap();
++	let label = std::fs::read(&path).unwrap();
++	assert_eq!(observe(&dir), Availability::Held);
++	assert_eq!(std::fs::read(&path).unwrap(), label);
++	assert!(acquire(dir.to_str().unwrap(), "contender").is_err());
++	drop(writer);
++	assert_eq!(observe(&dir), Availability::Free);
++}
++#[cfg(unix)]
++#[test]
++fn readiness_status_lock_rejects_fifo_symlink_and_replacement_before_locking() {
++	let root = tempfile::tempdir().unwrap();
++	let target = root.path().join("target");
++	std::fs::create_dir(&target).unwrap();
++	let held = acquire(target.to_str().unwrap(), "target").unwrap();
++	let dir = root.path().join("probe");
++	std::fs::create_dir(&dir).unwrap();
++	let path = dir.join(LOCK_FILE);
++	std::os::unix::fs::symlink(target.join(LOCK_FILE), &path).unwrap();
++	assert_eq!(observe(&dir), Availability::Unreadable);
++	std::fs::remove_file(&path).unwrap();
++	assert!(std::process::Command::new("mkfifo")
++		.arg(&path)
++		.status()
++		.unwrap()
++		.success());
++	assert_eq!(observe(&dir), Availability::Unreadable);
++	std::fs::remove_file(&path).unwrap();
++	std::fs::write(&path, "original").unwrap();
++	assert_eq!(
++		observe_with(&dir, || {
++			std::fs::remove_file(&path).unwrap();
++			assert!(std::process::Command::new("mkfifo")
++				.arg(&path)
++				.status()
++				.unwrap()
++				.success());
++		}),
++		Availability::Unreadable
++	);
++	std::fs::remove_file(&path).unwrap();
++	std::fs::write(&path, "original").unwrap();
++	assert_eq!(
++		observe_with(&dir, || {
++			std::fs::remove_file(&path).unwrap();
++			std::os::unix::fs::symlink(target.join(LOCK_FILE), &path).unwrap();
++		}),
++		Availability::Unreadable
++	);
++	assert!(acquire(target.to_str().unwrap(), "contender").is_err());
++	drop(held);
++}
+diff --git a/.cartridge/tests/unit/src/transport/src/owner_test.rs b/.cartridge/tests/unit/src/transport/src/owner_test.rs
+index 16cf29c..c3a965e 100644
+--- a/.cartridge/tests/unit/src/transport/src/owner_test.rs
++++ b/.cartridge/tests/unit/src/transport/src/owner_test.rs
+@@ -300,3 +300,28 @@ async fn owner_attachment_absent_stale_and_operation_failure_are_explicit() {
+ 	assert_eq!(err.pid, Some(20));
+ 	task.await.unwrap();
+ }
++
++#[tokio::test]
++async fn readiness_status_read_metadata_is_from_the_same_verified_channel() {
++	let (root, endpoint) = fixture();
++	let task = serve(
++		&endpoint,
++		root.path().into(),
++		json!({"ok":true,"pid":77}),
++		json!({"error":"","value":{"answer":"value only"}}),
++		Duration::ZERO,
++	)
++	.await;
++	let read = read_observed(
++		&endpoint,
++		root.path(),
++		Duration::from_secs(1),
++		"query",
++		json!({"text":"x"}),
++	)
++	.await
++	.unwrap();
++	assert_eq!(read.pid, 77);
++	assert_eq!(read.value, json!({"answer":"value only"}));
++	assert_eq!(task.await.unwrap().len(), 2);
++}
+diff --git a/Cargo.lock b/Cargo.lock
+index e324740..591109f 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2627,7 +2627,9 @@ dependencies = [
+  "base",
+  "bincode 2.0.1",
+  "heed",
++ "libc",
+  "math",
++ "same-file",
+  "serde",
+  "serde_json",
+  "tempfile",
+diff --git a/src/cartridge.rs b/src/cartridge.rs
+index 9bab97b..88c2c91 100644
+--- a/src/cartridge.rs
++++ b/src/cartridge.rs
+@@ -1,11 +1,14 @@
+ //! Cartridge's durable memory service. Stdout belongs exclusively to the SDK.
+ use ::cartridge::sdk::{Cartridge, Result};
+ use serde_json::{json, Value};
+-use tokio::sync::{OnceCell, RwLock};
++use tokio::sync::{Mutex, OnceCell, RwLock};
++#[path = "cartridge_status.rs"]
++mod status;
+ 
+ static ENGINE: OnceCell<commands::memory::Engine> = OnceCell::const_new();
+ // Reads admit independent requests; shutdown alone drains the service.
+ static CALLS: RwLock<()> = RwLock::const_new(());
++static INITIALIZATION: Mutex<()> = Mutex::const_new(());
+ 
+ #[derive(Clone)]
+ enum ServiceConfig {
+@@ -180,6 +183,7 @@ async fn main() {
+ 		.provide(&["memory"])
+ 		.run(|host, value| async move {
+ 			let cfg = service_configuration(value)?;
++			let status = status::Tracker::new();
+ 			host.on_dispose(|| async {
+ 				let calls = CALLS.write().await;
+ 				let _ = tokio::task::spawn_blocking(move || {
+@@ -192,7 +196,11 @@ async fn main() {
+ 			});
+ 			host.provide("memory", move |request| {
+ 				let cfg = cfg.clone();
++				let status = status.clone();
+ 				async move {
++					if request.get("op").and_then(Value::as_str) == Some("status") {
++						return status.status(&cfg, &request).await;
++					}
+ 					if matches!(&cfg, ServiceConfig::Attached { .. }) {
+ 						let op = request.get("op").and_then(Value::as_str).unwrap_or("");
+ 						transport::owner::validate_read(if op == "get" { "query" } else { op }, &json!({}))
+@@ -206,28 +214,50 @@ async fn main() {
+ 					} = &cfg
+ 					{
+ 						transport::owner::validate_read(&op, &args).map_err(|e| e.to_string())?;
++						let ticket = status.begin_query(&op, &args);
+ 						let _calls = CALLS.read().await;
+-						return transport::owner::read(endpoint, dir, *timeout, &op, args)
+-							.await
+-							.map_err(|e| e.to_string());
++						let result = transport::owner::read_observed(endpoint, dir, *timeout, &op, args).await;
++						status.record_owner_query(ticket, &result);
++						return result.map(|read| read.value).map_err(|e| e.to_string());
+ 					}
+ 					let ServiceConfig::Local(cfg) = cfg else {
+ 						unreachable!()
+ 					};
++					let ticket = status.begin_query(&op, &args);
+ 					let calls = CALLS.read().await;
++					// Exclude the observational lock sample until the cell is published.
++					let initialization = if ENGINE.get().is_none() {
++						Some(std::sync::Arc::new(INITIALIZATION.lock().await))
++					} else {
++						None
++					};
++					let worker_initialization = initialization.clone();
+ 					let engine = ENGINE
+ 						.get_or_try_init(|| async move {
+-							tokio::task::spawn_blocking(move || commands::memory::Engine::open(*cfg))
+-								.await
+-								.map_err(|e| e.to_string())?
++							let (result, _guard) = tokio::task::spawn_blocking(move || {
++								(commands::memory::Engine::open(*cfg), worker_initialization)
++							})
++							.await
++							.map_err(|e| e.to_string())?;
++							result
+ 						})
+-						.await?;
+-					tokio::task::spawn_blocking(move || {
++						.await;
++					drop(initialization);
++					let engine = match engine {
++						Ok(engine) => engine,
++						Err(error) => {
++							status.record_query(ticket, None, false);
++							return Err(error);
++						}
++					};
++					let result = tokio::task::spawn_blocking(move || {
+ 						let _calls = calls;
+ 						engine.server.invoke(&op, &args)
+ 					})
+ 					.await
+-					.map_err(|e| e.to_string())?
++					.map_err(|e| e.to_string())?;
++					status.record_query(ticket, Some(u64::from(std::process::id())), result.is_ok());
++					result
+ 				}
+ 			});
+ 			Ok(())
+diff --git a/src/cartridge_status.rs b/src/cartridge_status.rs
+new file mode 100644
+index 0000000..4964d72
+--- /dev/null
++++ b/src/cartridge_status.rs
+@@ -0,0 +1,337 @@
++//! Bounded observations for the native service. This module never opens an engine.
++use super::{ServiceConfig, CALLS, ENGINE, INITIALIZATION};
++use serde_json::{json, Value};
++use std::sync::{Arc, Mutex};
++use std::time::Duration;
++use tokio::sync::Semaphore;
++use tokio::time::Instant;
++
++const QUERY_FRESHNESS: Duration = Duration::from_secs(30);
++#[derive(Clone)]
++struct Snapshot {
++	at: Instant,
++	origin: &'static str,
++	store: &'static str,
++	reason: &'static str,
++	retryable: bool,
++	pid: Option<u64>,
++	complete_failures: u64,
++	embed_wedges: u64,
++}
++impl Snapshot {
++	fn new(store: &'static str, reason: &'static str, retryable: bool, pid: Option<u64>) -> Self {
++		Self {
++			at: Instant::now(),
++			origin: "probe",
++			store,
++			reason,
++			retryable,
++			pid,
++			complete_failures: 0,
++			embed_wedges: 0,
++		}
++	}
++	fn unavailable(reason: &'static str, retryable: bool, pid: Option<u64>) -> Self {
++		Self::new("unavailable", reason, retryable, pid)
++	}
++}
++#[derive(Clone)]
++struct Semantic {
++	at: Instant,
++	pid: u64,
++	success: bool,
++}
++#[derive(Default)]
++struct Cache {
++	ticket: u64,
++	snapshot: Option<Snapshot>,
++	semantic: Option<Semantic>,
++}
++pub struct Tracker {
++	cache: Mutex<Cache>,
++	permit: Arc<Semaphore>,
++}
++impl Tracker {
++	pub fn new() -> Arc<Self> {
++		Arc::new(Self {
++			cache: Mutex::new(Cache::default()),
++			permit: Arc::new(Semaphore::new(1)),
++		})
++	}
++	pub fn begin_query(&self, op: &str, args: &Value) -> Option<u64> {
++		(op == "query" && rpc::server::semantic_query_observation_eligible(args)).then(|| self.begin())
++	}
++	pub fn record_owner_query(
++		&self,
++		ticket: Option<u64>,
++		result: &Result<transport::owner::ObservedRead, transport::owner::OwnerError>,
++	) {
++		match result {
++			Ok(read) => self.record_query(ticket, Some(read.pid), true),
++			Err(error) if error.status == "operation_failed" && error.pid.is_some() => {
++				self.record_query(ticket, error.pid, false)
++			}
++			Err(error) => {
++				let Some(ticket) = ticket else {
++					return;
++				};
++				let mut cache = self.cache.lock().unwrap();
++				if cache.ticket != ticket {
++					return;
++				}
++				cache.semantic = None;
++				let mut snapshot = Snapshot::unavailable(error.status, error.retryable, error.pid);
++				snapshot.origin = "operation";
++				cache.snapshot = Some(snapshot);
++			}
++		}
++	}
++
++	fn begin(&self) -> u64 {
++		let mut cache = self.cache.lock().unwrap();
++		cache.ticket = cache.ticket.saturating_add(1);
++		cache.ticket
++	}
++	pub fn record_query(&self, ticket: Option<u64>, pid: Option<u64>, success: bool) {
++		let Some(ticket) = ticket else {
++			return;
++		};
++		let mut cache = self.cache.lock().unwrap();
++		if ticket != cache.ticket {
++			return;
++		}
++		let mut snapshot = match pid {
++			Some(pid) => {
++				cache.semantic = Some(Semantic {
++					at: Instant::now(),
++					pid,
++					success,
++				});
++				Snapshot::new("ready", "observed_owner", false, Some(pid))
++			}
++			None => Snapshot::unavailable("owner_unavailable", true, None),
++		};
++		snapshot.origin = "operation";
++		cache.snapshot = Some(snapshot);
++	}
++	fn publish(&self, ticket: u64, snapshot: Snapshot) {
++		let mut cache = self.cache.lock().unwrap();
++		if cache.ticket == ticket {
++			cache.snapshot = Some(snapshot);
++		}
++	}
++	fn render(
++		&self,
++		cfg: &ServiceConfig,
++		view: &'static str,
++		replacement: Option<Snapshot>,
++	) -> Value {
++		let (snapshot, semantic) = {
++			let cache = self.cache.lock().unwrap();
++			(
++				replacement.or_else(|| cache.snapshot.clone()),
++				cache.semantic.clone(),
++			)
++		};
++		let mode = if matches!(cfg, ServiceConfig::Local(_)) {
++			"local"
++		} else {
++			"attached"
++		};
++		let Some(snapshot) = snapshot else {
++			return json!({"schema":"memory.status.v1","registered":true,"mode":mode,"view":view,
++    "observation":"none","age_ms":null,"state":"unknown","reason":"not_observed","retryable":true,
++    "store":{"state":"unknown","pid":null},"query":{"exact_id":"unknown","semantic":"unknown","age_ms":null},
++    "models":{"availability":"unknown","actively_probed":false,"observed_complete_failures":0,"observed_embed_wedges":0}});
++		};
++		let semantic = semantic.filter(|e| Some(e.pid) == snapshot.pid);
++		let semantic_age = semantic.as_ref().map(|e| millis(e.at.elapsed()));
++		let semantic_state = if snapshot.store != "ready" {
++			if matches!(snapshot.store, "unavailable" | "contended") {
++				"unavailable"
++			} else {
++				"unknown"
++			}
++		} else {
++			match semantic
++				.as_ref()
++				.filter(|e| e.at.elapsed() <= QUERY_FRESHNESS)
++			{
++				Some(e) if e.success => "ready",
++				Some(_) => "degraded",
++				None => "unknown",
++			}
++		};
++		let (state, reason, retryable) = match snapshot.store {
++			"ready" => match semantic_state {
++				"ready" => ("ready", "recent_semantic_query_success", false),
++				"degraded" => ("degraded", "last_query_failed", true),
++				_ => ("unknown", "semantic_query_not_observed_recently", true),
++			},
++			"uninitialized" | "starting" => ("starting", snapshot.reason, true),
++			_ => ("unavailable", snapshot.reason, snapshot.retryable),
++		};
++		json!({"schema":"memory.status.v1","registered":true,"mode":mode,"view":view,
++   "observation":snapshot.origin,"age_ms":millis(snapshot.at.elapsed()),"state":state,"reason":reason,"retryable":retryable,
++   "store":{"state":snapshot.store,"pid":snapshot.pid},
++   "query":{"exact_id":if snapshot.store == "ready" {"ready"} else {semantic_state},"semantic":semantic_state,"age_ms":semantic_age},
++   "models":{"availability":"unknown","actively_probed":false,
++    "observed_complete_failures":snapshot.complete_failures,"observed_embed_wedges":snapshot.embed_wedges}})
++	}
++	pub async fn status(
++		self: &Arc<Self>,
++		cfg: &ServiceConfig,
++		request: &Value,
++	) -> Result<Value, String> {
++		let (probe, timeout) = options(request)?;
++		if !probe {
++			return Ok(self.render(cfg, "cached", None));
++		}
++		let timeout = match cfg {
++			ServiceConfig::Attached { timeout: cap, .. } => timeout.min(*cap),
++			_ => timeout,
++		};
++		let deadline = Instant::now() + timeout;
++		let Ok(permit) = self.permit.clone().try_acquire_owned() else {
++			return Ok(self.render(
++				cfg,
++				"probe",
++				Some(Snapshot::new("starting", "probe_in_progress", true, None)),
++			));
++		};
++		let ticket = self.begin();
++		let snapshot = match tokio::time::timeout_at(deadline, CALLS.read()).await {
++			Err(_) => Snapshot::unavailable("timeout", true, None),
++			Ok(calls) => match cfg {
++				ServiceConfig::Attached { dir, endpoint, .. } => {
++					let result = transport::owner::read_observed(
++						endpoint,
++						dir,
++						deadline.saturating_duration_since(Instant::now()),
++						"ready",
++						json!({}),
++					)
++					.await;
++					// Same transport is dropped before the call/permit guards.
++					drop(calls);
++					drop(permit);
++					match result {
++						Ok(read) => ready_snapshot(&read.value, read.pid),
++						Err(error) => Snapshot::unavailable(error.status, error.retryable, error.pid),
++					}
++				}
++				ServiceConfig::Local(local) => match INITIALIZATION.try_lock() {
++					Err(_) => Snapshot::new("starting", "engine_initializing", true, None),
++					Ok(initialization) => {
++						let dir = std::path::PathBuf::from(&local.data_dir);
++						blocking_snapshot(
++							deadline,
++							permit,
++							calls,
++							initialization,
++							move || match ENGINE.get() {
++								Some(engine) => match engine.server.invoke("ready", &json!({})) {
++									Ok(value) => ready_snapshot(&value, u64::from(std::process::id())),
++									Err(_) => Snapshot::unavailable(
++										"owner_unavailable",
++										true,
++										Some(u64::from(std::process::id())),
++									),
++								},
++								None => match store::lock::observe(&dir) {
++									store::lock::Availability::Free | store::lock::Availability::Missing => {
++										Snapshot::new("uninitialized", "local_uninitialized", true, None)
++									}
++									store::lock::Availability::Held => {
++										Snapshot::new("contended", "writer_busy", true, None)
++									}
++									store::lock::Availability::Unreadable => {
++										Snapshot::unavailable("lock_unreadable", false, None)
++									}
++								},
++							},
++						)
++						.await
++					}
++				},
++			},
++		};
++		self.publish(ticket, snapshot);
++		Ok(self.render(cfg, "probe", None))
++	}
++}
++async fn blocking_snapshot(
++	deadline: Instant,
++	permit: tokio::sync::OwnedSemaphorePermit,
++	calls: tokio::sync::RwLockReadGuard<'static, ()>,
++	initialization: tokio::sync::MutexGuard<'static, ()>,
++	work: impl FnOnce() -> Snapshot + Send + 'static,
++) -> Snapshot {
++	let worker = tokio::task::spawn_blocking(move || {
++		let (_permit, _calls, _initialization) = (permit, calls, initialization);
++		work()
++	});
++	match tokio::time::timeout_at(deadline, worker).await {
++		Ok(Ok(snapshot)) => snapshot,
++		Ok(Err(_)) => Snapshot::unavailable("probe_failed", true, None),
++		Err(_) => Snapshot::unavailable("timeout", true, None),
++	}
++}
++
++fn millis(duration: Duration) -> u64 {
++	duration.as_millis().min(u128::from(u64::MAX)) as u64
++}
++fn options(value: &Value) -> Result<(bool, Duration), String> {
++	let fields = value.as_object().ok_or("invalid status request")?;
++	if fields
++		.keys()
++		.any(|key| !matches!(key.as_str(), "op" | "probe" | "timeout_ms"))
++	{
++		return Err("unknown status field".into());
++	}
++	let probe = match fields.get("probe") {
++		None => false,
++		Some(v) => v.as_bool().ok_or("status probe must be boolean")?,
++	};
++	let timeout = match fields.get("timeout_ms") {
++		Some(_) if !probe => return Err("status timeout_ms requires probe=true".into()),
++		Some(v) => v
++			.as_u64()
++			.filter(|n| (1..=60000).contains(n))
++			.ok_or("status timeout_ms must be 1..60000")?,
++		None => 2000,
++	};
++	Ok((probe, Duration::from_millis(timeout)))
++}
++fn ready_snapshot(value: &Value, pid: u64) -> Snapshot {
++	let malformed = || Snapshot::unavailable("malformed", false, Some(pid));
++	if pid == 0
++		|| value.get("pid").and_then(Value::as_u64) != Some(pid)
++		|| value.get("ok").and_then(Value::as_bool) != Some(true)
++	{
++		return malformed();
++	}
++	let Some(draining) = value.get("draining").and_then(Value::as_bool) else {
++		return malformed();
++	};
++	if draining {
++		return Snapshot::unavailable("draining", true, Some(pid));
++	}
++	let mut snapshot = Snapshot::new("ready", "observed_owner", false, Some(pid));
++	for (key, target) in [
++		("llm_complete_failed", &mut snapshot.complete_failures),
++		("llm_embed_wedges", &mut snapshot.embed_wedges),
++	] {
++		if let Some(value) = value.get(key) {
++			let Some(n) = value.as_u64() else {
++				return malformed();
++			};
++			*target = n;
++		}
++	}
++	snapshot
++}
++
++#[cfg(test)]
++#[path = "../.cartridge/tests/unit/src/cartridge/status_test.rs"]
++mod tests;
+diff --git a/src/rpc/src/server.rs b/src/rpc/src/server.rs
+index 247a670..317697f 100644
+--- a/src/rpc/src/server.rs
++++ b/src/rpc/src/server.rs
+@@ -508,6 +508,20 @@ struct QueryArgs {
+ 	filters: Filters,
+ }
+ 
++/// Whether native readiness can classify a semantic request without duplicating
++/// this operation's grammar or reading the graph. Registry-dependent claim-kind
++/// filters remain unobserved because rejection cannot be classified statelessly.
++pub fn semantic_query_observation_eligible(args: &serde_json::Value) -> bool {
++	let Ok(p) = serde_json::from_value::<QueryArgs>(args.clone()) else {
++		return false;
++	};
++	!p.text.trim().is_empty()
++		&& p.id.is_empty()
++		&& p.ids.is_empty()
++		&& p.filters.claim_kind.is_empty()
++		&& build_query_options(&p).is_ok()
++}
++
+ fn build_projection(p: &QueryArgs) -> Projection {
+ 	let d = Projection::default();
+ 	Projection {
+diff --git a/src/store/core/Cargo.toml b/src/store/core/Cargo.toml
+index 4e4271b..431dee7 100644
+--- a/src/store/core/Cargo.toml
++++ b/src/store/core/Cargo.toml
+@@ -19,6 +19,10 @@ bincode.workspace = true
+ tracing.workspace = true
+ thiserror.workspace = true
+ zstd = "0.13"
++same-file = "1"
++
++[target.'cfg(unix)'.dependencies]
++libc = "0.2"
+ 
+ [dev-dependencies]
+ tempfile = "3"
+diff --git a/src/store/core/src/lock.rs b/src/store/core/src/lock.rs
+index f658ebb..79f36ca 100644
+--- a/src/store/core/src/lock.rs
++++ b/src/store/core/src/lock.rs
+@@ -145,6 +145,82 @@ pub fn holder(data_dir: &str) -> Option<String> {
+ 	}
+ }
+ 
++/// A momentary observation, never authorization to mutate or open a graph.
++#[derive(Clone, Copy, Debug, PartialEq, Eq)]
++pub enum Availability {
++	Missing,
++	Free,
++	Held,
++	Unreadable,
++}
++
++/// Sample only an existing regular lock inode. Callers must exclude their own
++/// writer initialization and never call this while already owning that store.
++pub fn observe(data_dir: &Path) -> Availability {
++	observe_with(data_dir, || {})
++}
++fn observe_with(data_dir: &Path, before_open: impl FnOnce()) -> Availability {
++	let path = data_dir.join(LOCK_FILE);
++	let metadata = match std::fs::symlink_metadata(&path) {
++		Ok(metadata) if metadata.is_file() => metadata,
++		Err(error) if error.kind() == std::io::ErrorKind::NotFound => return Availability::Missing,
++		_ => return Availability::Unreadable,
++	};
++	before_open();
++	let open = || {
++		let mut options = OpenOptions::new();
++		options.read(true);
++		#[cfg(unix)]
++		{
++			use std::os::unix::fs::OpenOptionsExt;
++			options.custom_flags(libc::O_NOFOLLOW | libc::O_NONBLOCK);
++		}
++		#[cfg(windows)]
++		{
++			use std::os::windows::fs::OpenOptionsExt;
++			// FILE_FLAG_OPEN_REPARSE_POINT: inspect the link itself, never its target.
++			options.custom_flags(0x00200000);
++		}
++		options.open(&path)
++	};
++	let checked = || -> std::io::Result<File> {
++		let file = open()?;
++		let opened = file.metadata()?;
++		if !opened.is_file() {
++			return Err(std::io::Error::other("not regular"));
++		}
++		#[cfg(unix)]
++		{
++			use std::os::unix::fs::MetadataExt;
++			if (metadata.dev(), metadata.ino()) != (opened.dev(), opened.ino()) {
++				return Err(std::io::Error::other("identity changed"));
++			}
++		}
++		#[cfg(windows)]
++		{
++			use std::os::windows::fs::MetadataExt;
++			if opened.file_attributes() & 0x400 != 0 {
++				return Err(std::io::Error::other("reparse point"));
++			}
++		}
++		let second = open()?;
++		if !second.metadata()?.is_file()
++			|| same_file::Handle::from_file(file.try_clone()?)? != same_file::Handle::from_file(second)?
++		{
++			return Err(std::io::Error::other("identity changed"));
++		}
++		Ok(file)
++	};
++	let Ok(file) = checked() else {
++		return Availability::Unreadable;
++	};
++	match file.try_lock() {
++		Ok(()) => Availability::Free,
++		Err(std::fs::TryLockError::WouldBlock) => Availability::Held,
++		Err(_) => Availability::Unreadable,
++	}
++}
++
+ fn read_holder(path: &Path) -> Option<String> {
+ 	let mut s = String::new();
+ 	File::open(path).ok()?.read_to_string(&mut s).ok()?;
+diff --git a/src/transport/src/owner.rs b/src/transport/src/owner.rs
+index 45f4141..264796e 100644
+--- a/src/transport/src/owner.rs
++++ b/src/transport/src/owner.rs
+@@ -140,6 +140,13 @@ fn rpc_failure(error: RpcError, pid: Option<u64>) -> OwnerError {
+ 
+ /// One deadline and client cover connect, identity and exactly one allowed read.
+ /// Dropping the client after timeout does not cancel work on the owner.
++/// Value and generation observed on one verified transport.
++#[derive(Debug)]
++pub struct ObservedRead {
++	pub value: Value,
++	pub pid: u64,
++}
++
+ pub async fn read(
+ 	endpoint: &Endpoint,
+ 	expected: &Path,
+@@ -147,6 +154,18 @@ pub async fn read(
+ 	operation: &str,
+ 	args: Value,
+ ) -> Result<Value, OwnerError> {
++	read_observed(endpoint, expected, timeout, operation, args)
++		.await
++		.map(|read| read.value)
++}
++
++pub async fn read_observed(
++	endpoint: &Endpoint,
++	expected: &Path,
++	timeout: Duration,
++	operation: &str,
++	args: Value,
++) -> Result<ObservedRead, OwnerError> {
+ 	validate_read(operation, &args)?;
+ 	let mut pid = None;
+ 	let exchange = async {
+@@ -183,14 +202,19 @@ pub async fn read(
+ 			.map_err(|e| failure(e.status, false, e.reason, None))?;
+ 		pid = Some(health.pid);
+ 		if operation == "health" {
+-			return serde_json::to_value(health).map_err(|_| {
+-				failure(
+-					"malformed",
+-					false,
+-					"owner health cannot be represented",
+-					pid,
+-				)
+-			});
++			return serde_json::to_value(health)
++				.map(|value| ObservedRead {
++					value,
++					pid: pid.expect("validated identity"),
++				})
++				.map_err(|_| {
++					failure(
++						"malformed",
++						false,
++						"owner health cannot be represented",
++						pid,
++					)
++				});
+ 		}
+ 		let reply = client
+ 			.invoke(InvokeReq {
+@@ -207,7 +231,10 @@ pub async fn read(
+ 				pid,
+ 			));
+ 		}
+-		Ok(reply.value)
++		Ok(ObservedRead {
++			value: reply.value,
++			pid: health.pid,
++		})
+ 	};
+ 	tokio::time::timeout(timeout, exchange).await.map_err(|_| {
+ 		failure(

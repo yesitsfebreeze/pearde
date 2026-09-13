@@ -1,0 +1,12 @@
+{
+  "source": "422c521aed170a4d098505c73469a1a59dccf49d",
+  "reason": "Bind newly imported source_search module and tests; refresh exact clean owner pin after independently reviewed additive integration. Existing acceptance and executable public/native gates unchanged.",
+  "behavior_acceptance_changed": false,
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape/bounded-inventory-snapshot/specs/spec01.md",
+      "before_sha256": "ef469483da766cdd77bf5767ddcabab5038fb9aa06080b2fd9a35f5f19b86ccb",
+      "after_sha256": "728d72520618acf12d0a6558a8af248cceb728b19ea7ef0b0b4980edec69c5f3"
+    }
+  ]
+}

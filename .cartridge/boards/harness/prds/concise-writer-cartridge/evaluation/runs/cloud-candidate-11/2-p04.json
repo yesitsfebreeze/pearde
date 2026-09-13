@@ -1,0 +1,48 @@
+{
+  "fixture": "p04",
+  "repeat": 2,
+  "category": "precision",
+  "started": "2026-09-13T19:29:08.613Z",
+  "completed": "2026-09-13T19:29:09.198Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a precise copy editor. Return the deliverable only.\n\nFor verbose input, write one compact paragraph. Aim for 35 words, stretching only to keep a unique fact. Prefer two or three sentences, with several related facts per sentence. Pack facts into short complete sentences with shared subjects and semicolons. Use ordinary verbs, omit rhetorical setup, and state each fact once. No heading, label, introduction, recap, bullet list, or explanation of the editing. A handoff memo is a self-contained paragraph, not a template.\n\nSynthesize facts rather than paraphrasing sentences. Combine a pending check with its unmeasured status: \"Kai still must measure queue safety before release\" says both what remains unknown and who does what next. State changed behavior directly: \"The handler rejects duplicate IDs\" already says the fix exists. Drop repeated descriptions of that same behavior. A preview that deletes nothing already establishes that eligibility is not deletion. Keep the concrete fact once.\n\nDensity example: \"Unreleased, the patch cuts the batch size from eight to four; 16 checks pass (batch-proof-6). Long-job safety remains unmeasured and may worsen. Jules must test long jobs in staging before release.\" This example carries change, test count, evidence, delivery state, risk, uncertainty, owner, next action and prerequisite in 36 words. Use that density, not its subject or facts.\n\nKeep every unique fact, condition, exclusion, uncertainty, owner, evidence reference and next action. Unchanged permissions and excluded scope are facts too. Never infer extra prerequisites, such as requiring a pending check before release unless the source actually says so. Never invent a cause or say planned work happened. Keep technical literals byte for byte: names, numbers, units, identifiers, commands, errors, paths, frontmatter and executable blocks. Use clear referents. Silently check all source facts, then tighten the words rather than dropping meaning.\n\nIf the source is already concise, return it exactly, without any change. Requested JSON must have exactly the required keys and types, with no wrapper. Preserve required Markdown frontmatter and code blocks exactly. An explicit request for detail overrides brevity: give the requested ordered steps and reasons.\n\nDraft in one normal response. Saving an existing memo requires an explicit request, a preview and approved memo.write using the read expected_revision. Stop on conflicts; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nThe user explicitly asks for a detailed, ordered explanation. Give the three steps and explain why each is necessary; do not compress them into a fragment.\n\nSource:\nFirst, read the current revision because a stale save may overwrite someone else's edit. Second, compare the requested change with the current text because the original change may already have been applied. Third, save only if the change is still needed, using the current revision as expected_revision. If that save conflicts again, stop and ask for a new decision instead of automatically retrying. These are instructions from edit-protocol-5, not a report that a save happened."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T19:29:09.143926808Z",
+    "message": {
+      "role": "assistant",
+      "content": "First, read the current revision because a stale save may overwrite someone else's edit. Second, compare the requested change with the current text because the original change may already have been applied. Third, save only if the change is still needed, using the current revision as expected_revision. If that save conflicts again, stop and ask for a new decision instead of automatically retrying. These are instructions from edit-protocol-5, not a report that a save happened."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 447322962,
+    "prompt_eval_count": 679,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 96
+  },
+  "tokenization": null,
+  "generation_tokens": 96,
+  "output_tokens": 96,
+  "input_tokens": 679,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

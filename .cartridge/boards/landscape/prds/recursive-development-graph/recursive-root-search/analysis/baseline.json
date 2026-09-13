@@ -1,0 +1,46 @@
+{
+  "measured_before_spec": true,
+  "heads": {
+    "landscape.ctg": "33e0418fa82966772c38ec8191d02a158b2cb56d",
+    "memo.ctg": "1ffca32db1d06364b3e35e6cbca4881a1f814f71",
+    "prd.ctg": "b5a17c9ec14c286924530cd5975a3c9ea8df248c"
+  },
+  "inputs_sha256": {
+    "landscape.ctg/src/lib.rs": "47f8a477d93758cfb79975a7de5356aabcb051d1faae9be929c3e619fc114216",
+    "landscape.ctg/src/census.rs": "fb70ec81db1357d3139e174b40f805bbfb675462188f144dfcbaaaf0af2a3964",
+    "landscape.ctg/src/surface.rs": "bff64821b6a9ea147937e0b7f0060f82bdc4daa16b1be865aa983603d6c9332f",
+    "memo.ctg/src/document.rs": "27bf670fddd9e95d32b65c04c125f350c543ff481d68e259f90164e0b40d1ec5",
+    "memo.ctg/src/service.rs": "2843d9a750e6965d08347e5b02a4d306cd254e8e4876a341ac5dd7edcc91d637",
+    "prd.ctg/src/records.ts": "08d8c1728e772cdb9875ebad12c6863fdfe1164f4b8a8caa46e786f8cea19cd0",
+    "prd.ctg/src/service.ts": "1903fd1276c8227a46711c8df57571d74b704dc8f11836e2f79aa75084a49a65",
+    "cartridge.ctg/target/tool-result-contract/debug/memo_cartridge": "f500ad0bdf71b362daebd46d90e2a8a33264f186dbed579c5c48062f4de74cb4"
+  },
+  "artifacts_sha256": {
+    "baseline.ts": "252c1f59a487afa09de5209c9e1b6bed96df5ef92ca925cdca875a17e2c370f0",
+    "baseline.rs": "00d391c282fff95cc0759c5473dcfc69e0f15024636446eb60efbb188a1f4aa9",
+    "baseline-rust-Cargo.toml": "163ae841a859fc65bd80c2487dc496d38019a136208320f88d355976c7916c91",
+    "baseline-output.json": "336bfc34638bd42c42efb06853978b68634dcb2dc53cf82110e224959ace90ac",
+    "baseline-rust-output.json": "3118fd78e45e2dc38f934b2b3f3c6d1626b3558b1f6526f8dea7a4894ca6a32a",
+    "baseline-rust-stderr.log": "8387ffa7a16f8dae75f2cd2264303d2f4d08977357ee7b61d38a7dd4f1c93af4",
+    "baseline-stderr.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "commands": [
+    "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=runtime/target/tool-result-contract just build memo (runtime cwd)",
+    "bun analysis/baseline.ts DISPOSABLE_FIXTURE_ROOT",
+    "cargo run --offline --manifest-path DISPOSABLE_PROBE/Cargo.toml -- DISPOSABLE_FIXTURE_ROOT (same target directory)"
+  ],
+  "exit_codes": [
+    0,
+    0,
+    0
+  ],
+  "findings": [
+    "Census now observes3 hierarchical owners, but current surface compose/search finds only explicitly supplied ROOTAMBER; BASEBERYL and PLUGINCOBALT have0 hits.",
+    "PRD trusted scan returns private:true, visibility:private, and visibility:internal titles/body. Existing parser has no public projection filter.",
+    "Existing document(file) replacement-decodes invalid UTF8, so its decoded-text digest differs from exact source-byte SHA.",
+    "Freshly built actual Memo native API rejects board prds paths outside owner/.cartridge and rejects hierarchical owner root/base/plugin.",
+    "No bounded sourceRecords helper/native declaration-record route exists; existing native memo landscape graph path builds only host entries+descriptors+record::survey memos.",
+    "All fixture source bytes unchanged by baseline reads."
+  ],
+  "implication": "Reuse PRD parser through additive bounded public record index/exact-read owner route; retain trusted existing scanner. Landscape can join typed census/address with normalized records. To meet actual root invocation acceptance, an explicit Memo native facade is required; a library-only search cannot complete the original mixed user path."
+}

@@ -1,0 +1,99 @@
+{
+  "source": "0a8736c5126781b90b842a5b818f083458b2f740",
+  "binary_sha256": "62bc1284086a479254b67ba628efc20a4d8918905a50558cbb97a2ffaddc34c5",
+  "results": [
+    {
+      "case": "wrong_store",
+      "command": [
+        "/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory",
+        "health"
+      ],
+      "elapsed_seconds": 0.0058,
+      "external_1_5s_deadline_exceeded": false,
+      "exit": 0,
+      "stdout": "build:       (unstamped: older than this field, or an unreadable executable)\ndata_dir:    /private/tmp/mh-ctfhs1rt/different-data\nfocuses:     (none)\nmemories:       2 (cap off, largest 0 entities, gini 0.00)\nthoughts:    777 (unnamed: 0)\nreasons:     9\nclaim kinds: 0\nembed:       (unstamped) (dim 0)\nevicted:     0 cold rows dropped\ntick:        queue 0 | done 0 | avg 0 ms\ndegraded:    0 panics | 0 failures | 0 shed by a full queue | 0 refused GNN trainings | 0 supersede chains past hop budget | 0 failed memory writes\ningest:      queue 0\ncrossings:   0 blocking bridges in flight of 0 runtime workers\nconvergence: gini 0.00\npreset:      \nheat:        half-life 0s\nrecency:     half-life 0s\nretrieval:   rrf_k 0, global 0\n  content { content 0, reason 0, edge 0 }\n  reason  { content 0, reason 0, edge 0 }\n  hybrid  { content 0, reason 0, edge 0 }\n  seed_k 0, mmr false, lexical false, pagerank false\nsource_trust: (none)\ndedup: 0\n",
+      "stderr": "",
+      "requests": [
+        {
+          "id": 1,
+          "method": "health",
+          "params": {}
+        }
+      ],
+      "local_data_created": false,
+      "endpoint_preserved": true
+    },
+    {
+      "case": "malformed",
+      "command": [
+        "/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory",
+        "health"
+      ],
+      "elapsed_seconds": 0.0104,
+      "external_1_5s_deadline_exceeded": false,
+      "exit": 0,
+      "stdout": "build:       /Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory (2026-09-13 19:11)\ndata_dir:    /private/tmp/mh-zhk3szn0/store/data\nfocuses:     (none)\nmemories:       1 (cap 128, largest 0 entities, gini 0.00)\nthoughts:    0 (unnamed: 1)\nreasons:     0\nclaim kinds: 0\nembed:       (unstamped) (dim 0)\nevicted:     0 cold rows dropped\ntick:        (no daemon serving this directory)\n  memory:[unnamed]  thoughts:0  reasons:0\n",
+      "stderr": "",
+      "requests": [
+        {
+          "id": 1,
+          "method": "health",
+          "params": {}
+        }
+      ],
+      "local_data_created": true,
+      "endpoint_preserved": true
+    },
+    {
+      "case": "stalled",
+      "command": [
+        "/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory",
+        "health"
+      ],
+      "elapsed_seconds": 1.5034,
+      "external_1_5s_deadline_exceeded": true,
+      "exit": null,
+      "stdout": "b''",
+      "stderr": "b''",
+      "requests": [
+        {
+          "id": 1,
+          "method": "health",
+          "params": {}
+        }
+      ],
+      "local_data_created": false,
+      "endpoint_preserved": true
+    },
+    {
+      "case": "absent",
+      "command": [
+        "/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory",
+        "health"
+      ],
+      "elapsed_seconds": 0.0122,
+      "external_1_5s_deadline_exceeded": false,
+      "exit": 0,
+      "stdout": "build:       /Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory (2026-09-13 19:11)\ndata_dir:    /private/tmp/mh-1tmpmpnc/store/data\nfocuses:     (none)\nmemories:       1 (cap 128, largest 0 entities, gini 0.00)\nthoughts:    0 (unnamed: 1)\nreasons:     0\nclaim kinds: 0\nembed:       (unstamped) (dim 0)\nevicted:     0 cold rows dropped\ntick:        (no daemon serving this directory)\n  memory:[unnamed]  thoughts:0  reasons:0\n",
+      "stderr": "",
+      "requests": [],
+      "local_data_created": true,
+      "endpoint_preserved": false
+    },
+    {
+      "case": "stale",
+      "command": [
+        "/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory",
+        "health"
+      ],
+      "elapsed_seconds": 0.0124,
+      "external_1_5s_deadline_exceeded": false,
+      "exit": 0,
+      "stdout": "build:       /Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory (2026-09-13 19:11)\ndata_dir:    /private/tmp/mh-ebfdoz67/store/data\nfocuses:     (none)\nmemories:       1 (cap 128, largest 0 entities, gini 0.00)\nthoughts:    0 (unnamed: 1)\nreasons:     0\nclaim kinds: 0\nembed:       (unstamped) (dim 0)\nevicted:     0 cold rows dropped\ntick:        (no daemon serving this directory)\n  memory:[unnamed]  thoughts:0  reasons:0\n",
+      "stderr": "",
+      "requests": [],
+      "local_data_created": true,
+      "endpoint_preserved": true
+    }
+  ]
+}

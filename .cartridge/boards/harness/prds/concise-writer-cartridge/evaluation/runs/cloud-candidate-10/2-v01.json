@@ -1,0 +1,48 @@
+{
+  "fixture": "v01",
+  "repeat": 2,
+  "category": "verbose",
+  "started": "2026-09-13T19:26:14.041Z",
+  "completed": "2026-09-13T19:26:14.848Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a precise copy editor. Return the deliverable only.\n\nFor verbose input, write one compact paragraph. Aim for 40 words, stretching only to keep a unique fact. Pack facts into short complete sentences with shared subjects and semicolons. Use ordinary verbs, omit rhetorical setup, and state each fact once. No heading, label, introduction, recap, bullet list, or explanation of the editing. A handoff memo is a self-contained paragraph, not a template.\n\nSynthesize facts rather than paraphrasing sentences. Combine a pending check with its unmeasured status: \"Kai still must measure queue safety before release\" says both what remains unknown and who does what next. State changed behavior directly: \"The handler rejects duplicate IDs\" already says the fix exists. Drop repeated descriptions of that same behavior. A preview that deletes nothing already establishes that eligibility is not deletion. Keep the concrete fact once.\n\nDensity example: \"Unreleased, the patch cuts the batch size from eight to four; 16 checks pass (batch-proof-6). Long-job safety remains unmeasured and may worsen. Jules must test long jobs in staging before release.\" This example carries change, test count, evidence, delivery state, risk, uncertainty, owner, next action and prerequisite in 36 words. Use that density, not its subject or facts.\n\nKeep every unique fact, condition, exclusion, uncertainty, owner, evidence reference and next action. Never invent a cause or say planned work happened. Keep technical literals byte for byte: names, numbers, units, identifiers, commands, errors, paths, frontmatter and executable blocks. Use clear referents. Silently check all source facts, then tighten the words rather than dropping meaning.\n\nIf the source is already concise, return it exactly, without any change. Requested JSON must have exactly the required keys and types, with no wrapper. Preserve required Markdown frontmatter and code blocks exactly. An explicit request for detail overrides brevity: give the requested ordered steps and reasons.\n\nDraft in one normal response. Saving an existing memo requires an explicit request, a preview and approved memo.write using the read expected_revision. Stop on conflicts; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone handoff memo.\n\nSource:\nWe have now reached a point where the retry change for the export worker has been implemented, and it is useful to put the present position in writing so that another person can pick up the work. The retry limit was changed from five attempts to three attempts. That is the change that has been made. The relevant unit suite contains 24 tests, and all 24 of those tests passed. There has not yet been a production deployment, so a reader should not interpret the implementation or the passing tests as evidence of deployment. The run that produced the test result is recorded as fixture-run-17. There is still a possibility that the shorter retry budget will make recovery from long network interruptions less likely; that point has not been measured. Mira owns the next step, which is to run the staging interruption test before considering a production deployment. This is the current state of the work rather than a claim that every risk has been removed."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T19:26:14.79028425Z",
+    "message": {
+      "role": "assistant",
+      "content": "The export worker retry limit is now three attempts, down from five; all 24 unit tests pass (fixture-run-17). No production deployment has occurred. Shorter retries may reduce recovery from long network interruptions, but this remains unmeasured. Mira must run the staging interruption test before considering production deployment."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 671004051,
+    "prompt_eval_count": 705,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 65
+  },
+  "tokenization": null,
+  "generation_tokens": 65,
+  "output_tokens": 65,
+  "input_tokens": 705,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

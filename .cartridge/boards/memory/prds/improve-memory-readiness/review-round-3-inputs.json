@@ -1,0 +1,42 @@
+{
+  "author": "/root/memo_board",
+  "reviewer": "pending independent root review",
+  "round": 3,
+  "inherited_rounds": 2,
+  "result": "pending",
+  "source": "f9759848c56255ee0607587970f58ccc087ade53",
+  "files": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/improve-memory-readiness/prd.md",
+      "sha256": "0bbc9fa34ed80ea41d1685e587a8d9c3cd99127a0a7121ee8a231bc566c07132"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/improve-memory-readiness/specs/spec01.md",
+      "sha256": "ec8c2d56e93a0df91b88659d474a5afd8f3856ce5773232cef60505ad9984ddc"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/improve-memory-readiness/baseline.json",
+      "sha256": "e8c73dc789a645e69243b876bd3291edbbb9b2b41af92c5ed2bf349e4a9d3da2"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/improve-memory-readiness/baseline-results.json",
+      "sha256": "523a2119674740cc4f33dfe3b52a27313a3500025022c837d5b5503c6ef326bc"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/improve-memory-readiness/baseline-probe.txt",
+      "sha256": "6265d0963ff65f4804b521b4ab91235f4904548f0986ab18d48ab50c6ba276bf"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/improve-memory-readiness/review.md",
+      "sha256": "3e8ffe5468482296631c05cf3412cde73a7b1b9c33a29bcd6c0d93a065dcdfc9"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/improve-memory-owner-access/specs/spec01.md",
+      "sha256": "1a77443b9f71cac9ee7bc0e1bd23fce9be16f9e0448e63e0da3ea251dc962bfe"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/improve-memory-owner-access/implementation-proof.json",
+      "sha256": "b107cc0bbc68f2b65a6b4a25649a47abee8a1ce67c10004ad11f33d119b741fa"
+    }
+  ]
+}

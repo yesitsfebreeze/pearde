@@ -1,0 +1,12 @@
+{
+  "canonical": "@pty/improve-pty-shell-identity",
+  "source": "cacd7e13fb012029fd6923ce59bbeffcdeb67c5a",
+  "review_round": 3,
+  "inherited_rounds": 2,
+  "max_rounds": 5,
+  "prd_sha256": "466ee0425cb8be477b3dac59aa0b894c5000d5c290e7d47bda72e7e8bbaf85b4",
+  "spec_sha256": "560b4619ac03f28c6b9342c24184293d5dbd4045fb031996c3c1210487ad8d7d",
+  "baseline_sha256": "562cd62cc20f63b9d2a481e53abfc76ceac82cfb08c408adf0c5b6006ede1738",
+  "native_baseline_sha256": "111897d8a8989d1ad6f466f3dc9a165fb29a1953ebebed2691f993342af34198",
+  "scope": "Seven owner-only paths; canonical starting-path/capability-owner typo correction belongs root lifecycle/map update; no product or shared-map edits."
+}

@@ -1,0 +1,8 @@
+{
+  "source": "698a4dc9555a6b3ad8d46dcc5dd3a14463048e70",
+  "sessions": "92240c6ba415f53b2d17971aea185536a6f517bc",
+  "landscape": "422c521aed170a4d098505c73469a1a59dccf49d",
+  "spec_before_sha256": "8be112993524f0ec97280f9f34490a5c452c9528e47b0ba8391b7da861db8062",
+  "spec_after_sha256": "fb74dd1d9dc23b9f4654ee9c6a83692effaae6bf24788b73b86908bfd5100671",
+  "reason": "Identical isolated consumer and native gates against current integrated Sessions; no acceptance or helper change"
+}

@@ -1,0 +1,8 @@
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets -- -D warnings
+    Checking health v0.1.0 (/private/tmp/memory-health-work/memory.ctg/src/health)
+    Checking store_core v2.0.0 (/private/tmp/memory-health-work/memory.ctg/src/store/core)
+    Checking rpc v2.0.0 (/private/tmp/memory-health-work/memory.ctg/src/rpc)
+    Checking commands v2.0.0 (/private/tmp/memory-health-work/memory.ctg/src/commands)
+    Checking memory v2.0.0 (/private/tmp/memory-health-work/memory.ctg)
+    Finished `dev` profile [unoptimized] target(s) in 2.02s

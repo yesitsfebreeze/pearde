@@ -1,0 +1,29 @@
+{
+  "reviewer": "/root/sessions_mapping",
+  "author": "/root/memo_board",
+  "coordinator": "/root",
+  "round": 3,
+  "score": 96,
+  "result": "PASS",
+  "baseline_source": "439bea56749d6a7361d6c1afb7d1a43bb46c7e9f",
+  "original_prd_sha256": "465d7fc61cc073df61c29d11311a6ab55ca63083273732ea4d33e92ef1f5a0fa",
+  "files": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/improve-memory-owner-access/prd.md",
+      "sha256": "c815fc57c5cc557e0866678b286314143d2f3b3f77fb4e9aaceda5271fdcfa23"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/improve-memory-owner-access/specs/spec01.md",
+      "sha256": "72006581d368c74d516b0dcf3ae4549b933d9a5b1d6544214a316fbb03ea9720"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/improve-memory-owner-access/baseline.json",
+      "sha256": "ce3787cab56057d118d3975129b48ce96f41a38dc2825f46e49591055fbe1424"
+    }
+  ],
+  "implementation_checks": [
+    "InvokeReq.name derives solely from validated outer allowlist.",
+    "Reject nested operation/endpoint substitution before connection.",
+    "Retain CALLS guard/client lifetime through handshake, read and drop."
+  ]
+}

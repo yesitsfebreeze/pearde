@@ -1,0 +1,28 @@
+{
+  "kind": "imported-composer-footprint",
+  "source": "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df",
+  "previous_runtime_source": "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b",
+  "review_round_preserved": 3,
+  "review_status_preserved": "passed",
+  "acceptance_unchanged": true,
+  "collection_before_sha256": "87ec8b7c621c7bc5a6e701192a6b91303021a9b1a0aec62e168e72d68cd57b18",
+  "changes": [
+    {
+      "file": "specs/spec01.md",
+      "before_sha256": "87a0b5ba0c3937ec9552b6d047f357e9d45ab176de2c28cc3940b13a2f7ed885",
+      "after_sha256": "588cfb528eab818b0851b2f28ef2ad922a553640762b0fbe47907c8e2701ea52"
+    },
+    {
+      "file": "prd.md",
+      "before_sha256": "39f513d89d0a5f2fda4953bb73224423383d43dd888e71e9840884cd0609eb0a",
+      "after_sha256": "a193a6822a67e66e99ab0210eafe21d7f5a8ec743cc276c2f489be9ab288406f"
+    },
+    {
+      "file": "review.md",
+      "before_sha256": "b3c8b3aa4dd1fe32707f18e4874dd98879de56901f25e39025ff93ce72b79480",
+      "after_sha256": "53d633436c43c4c51c82adc3189f50bd40d83c5c252f89e82e0062d960642c48"
+    }
+  ],
+  "reason": "Full runtime and actual native profile fixtures import/use the changed composer; external FS rollups require its receipt pinned to current Runtime HEAD.",
+  "executable_commands_unchanged": true
+}

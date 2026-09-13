@@ -1,0 +1,84 @@
+{
+  "source_head": "33e0418fa82966772c38ec8191d02a158b2cb56d",
+  "source_clean": true,
+  "source_files": {
+    "src/lib.rs": "47f8a477d93758cfb79975a7de5356aabcb051d1faae9be929c3e619fc114216",
+    "src/census.rs": "fb70ec81db1357d3139e174b40f805bbfb675462188f144dfcbaaaf0af2a3964",
+    ".cartridge/tests/unit/census.rs": "0cf0c2572deccc111481b5dc799db98208e33de73ed8b618defc4723a70562c6",
+    ".cartridge/docs/source-census.md": "0438596d10e41c873e91c7c2b379874639eeb03d4ea2a44f2d79a5d93be8a5e0"
+  },
+  "review": {
+    "round": 3,
+    "score": 95,
+    "reviewer": "/root",
+    "source_audit": "independent /root source review: no blocker; shared deadline, bounds, identities, immutable views, source/runtime separation checked"
+  },
+  "checklist_refinement": {
+    "before": {
+      "prd.md": "d71b3c5c576fc5e81cdef8397c507b5b5b660bb06195c4f2b10f5884a9330ced",
+      "specs/spec01.md": "482da6256b5a8ee1d0a29ed3b8bd519cbe54e65be61ce5401e185efd90e09480"
+    },
+    "after": {
+      "prd.md": "1df924cc7c6feef893f098610349fef15177a04c6e2680b77468f6ff7bce1da3",
+      "specs/spec01.md": "1058f2aaa8c7db65b4dedb144fb23b92a15590a269acf8406a2e41912066f84e"
+    },
+    "change": "acceptance markers only; no contract or gate changes"
+  },
+  "dependencies": {
+    "prd_head_observed": "39ce90231a857da66b5cb90b0eee3be35dc04f25",
+    "prd_adapter_code_commit": "35e6786",
+    "prd_adapter_verified_source": "c344629",
+    "prd_records_sha256": "08d8c1728e772cdb9875ebad12c6863fdfe1164f4b8a8caa46e786f8cea19cd0",
+    "prd_service_sha256": "1903fd1276c8227a46711c8df57571d74b704dc8f11836e2f79aa75084a49a65",
+    "memo_head": "1ffca32db1d06364b3e35e6cbca4881a1f814f71",
+    "runtime_head_observed": "1a5e9867acec1d07cd732c3af2ccf331a0979a61",
+    "runtime_binary_path": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/cartridge",
+    "runtime_binary_sha256": "3c107ead7a60caa07a7aa295cb46c7b2a0663a17ca7aa11fc11b45076b9b08c8",
+    "runtime_binding_note": "Exact executable fingerprint used by actual native capability fixture; observed checkout HEAD is not asserted to be executable build identity."
+  },
+  "commands": [
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "env": {
+        "RUSTC_WRAPPER": "",
+        "RUSTC_WORKSPACE_WRAPPER": "",
+        "CARGO_TARGET_DIR": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract"
+      },
+      "command": "just test landscape",
+      "exit": 0,
+      "result": "56 passed, including9 census tests",
+      "log": "proof/test-landscape.log"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "env": {
+        "RUSTC_WRAPPER": "",
+        "RUSTC_WORKSPACE_WRAPPER": "",
+        "CARGO_TARGET_DIR": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract"
+      },
+      "command": "just check landscape",
+      "exit": 0,
+      "result": "passed",
+      "log": "proof/check-landscape.log"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "env": {
+        "RUSTC_WRAPPER": "",
+        "RUSTC_WORKSPACE_WRAPPER": "",
+        "CARGO_TARGET_DIR": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract"
+      },
+      "command": "just test memo",
+      "exit": 0,
+      "result": "77 passed",
+      "log": "proof/test-memo.log"
+    }
+  ],
+  "initial_failure": "check reported6 cloned_ref_to_slice_refs lints in test setup; corrected to slice::from_ref, final check and all affected public tests pass",
+  "logs": {
+    "proof/test-landscape.log": "bb939153665f8c5b6c24a5a494245c25d325c6e068e2b4c957ec35d07ec9140f",
+    "proof/check-landscape.log": "eee94d6196aab346a90dd6f512e3586ddf046b0d00d811365990abc65c741ac8",
+    "proof/test-memo.log": "d61797fcac8d2a3548857353d61b56c6c6cac329e156be8d563aea65c69ee040",
+    "proof/initial-check-failure.log": "2ac8cf512a7621f2e91bbde92b1c567b0591d9120507d50204e8f26c19b72b86"
+  }
+}

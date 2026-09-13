@@ -1,0 +1,12 @@
+{
+  "source": "33e0418fa82966772c38ec8191d02a158b2cb56d",
+  "reason": "Bind imported census module and tests; refresh exact clean owner pin after additive integration. Existing acceptance and executable public/native gates unchanged.",
+  "behavior_acceptance_changed": false,
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/context-contributor-contract/specs/spec01.md",
+      "before_sha256": "62f18e649889ee2d1e9a36d9ff119fb40f4a57ff7ede149a38d84adf54613808",
+      "after_sha256": "5f80f2175d0c4bd47ef439795a4ceddcf089bed0b5dc0e42447aea1234de068b"
+    }
+  ]
+}

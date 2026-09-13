@@ -1,0 +1,28 @@
+{
+  "author": "/root/memo_board",
+  "acknowledged_by": "/root",
+  "semantic_acceptance_changed": false,
+  "review_round": 3,
+  "cause": "The real daemon startup Cluster task enqueues Enrich for an empty Reason.text. Empty raw reason.url inherits embed.url via Config::reason_url(), so the previous fixture setting never disabled reasoning. Successful fake-model Enrich enqueues Persist independently of health.",
+  "control": "Six actual-daemon runs reconstructed disposable store bytes from the failed assertion; each made zero health requests, called /api/chat and /api/embed, and changed data.mdb 165-181ms after socket creation. model_calls arrays are cumulative across runs. Control script reads the retained failed-log right array; adjust public-test.log path to retained public-test-health-fixture-failure.log when replaying.",
+  "fixture_refinement": "Seed same edge with nonempty already-enriched text. Preserve entity/reason/memory counts, all original data.mdb/writer.lock byte and inode assertions, local/daemon parity, stale endpoint refusal and successor PID checks. No product health code changes.",
+  "changes": [
+    {
+      "path": "specs/spec01.md",
+      "before_sha256": "5881df79cd74650df4017550ee0dcbe2f4c430de68930f4c8c279cec4463c8b4",
+      "after_sha256": "2eb9df1fde36bcc7cd41dbcbd5969392ccd15665f496c1a5aca3c93aa03ff032"
+    },
+    {
+      "path": "prd.md",
+      "before_sha256": "86726edf72c55c060ece92976b750fc566aff7c1677bb4f39fcbb3c1420f1750",
+      "after_sha256": "c515eda23e98aa1dd98464106597ab0e63de3a3b95ec7f31e4eeaa984303aa2b"
+    }
+  ],
+  "proof_sha256": {
+    "public-test-health-fixture-failure.log": "36f46071ada52b8f34937f6016baea2340697eb90ffb218874fbbaf776e5909e",
+    "health-write-control.txt": "12a879f164c64dc253754b35cefacfa3adbcda22eae2f365294744bbf1c1e20d",
+    "health-write-control.json": "cd91666eef579293b7cb4049bc4faf5d97bf9fa345f1626c14412d0b05a67b36"
+  },
+  "source_fixture_before_sha256": "4ba0cbb7eb50f0941de9c95dc77cfc63bcd413e84727a52bf97f5ce638b28bc0",
+  "source_fixture_after_sha256": "2b92ff48ca18706a679016d085ac69fbc4303e54081b0ffae432ce3f9d904550"
+}

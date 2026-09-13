@@ -1,0 +1,20 @@
+{
+  "canonical": "@memory/memory-health-loads-its-own-graph-beside-the-daemon",
+  "source": "0a8736c5126781b90b842a5b818f083458b2f740",
+  "command": "python3 /tmp/memory-health-baseline/probe.py",
+  "observed": "Actual CLI accepts wrong-store counts, silently initializes local store after malformed/absent/stale endpoint, and waits beyond external1.5s cutoff on a stalled reply. Existing daemon-first order itself is already implemented.",
+  "expected": "Identity-checked bounded health; no local snapshot after a serving/refusing/stale endpoint; absent listener may inspect existing store without creation.",
+  "proof_sha256": "103908c082bda195e7967135f413647c60590c3219442ab6801e64e146ae748d",
+  "probe_sha256": "fbb070af7145753c3ffef0616513b53dd3aa301d82357ad297adcada6eedf333",
+  "source_sha256": {
+    "src/commands/src/commands_health.rs": "4591a25a5d6529c32f8205fdfa7deb089b11cfe3d8e8a57edfb225ae71728f6e",
+    "src/commands/src/lib.rs": "6cb21153060470ef15304ebaee712b99c2ca7b7d89fdef88c8fcb90b8511bac8",
+    "src/transport/src/typed.rs": "38a688cc0b40ff3b5e45285c50d3e7f14d9a22dd88ab8402ee480ab17a2a933f",
+    "src/transport/src/memory_rpc.rs": "3bfad6d2eb9783f29cb3866a77936a0a8ccb839eac917ad0db8185c0dc4942f7",
+    "src/rpc/src/server.rs": "edaf6d3a92f46b79365ef989bd51fd28be0905834eff07e15104f385ff509aef",
+    "src/store/core/src/cold.rs": "1710841e4dc9f9170a656dd84493efdcb5419799f15131d4ad39cb22df2186da",
+    "src/store/core/src/lib.rs": "e2dbdfcdeab3c2608817efebc42339b3e2e0d9054d0d0711dd383425cee6a983",
+    "src/health/src/lib.rs": "80d7409ecb9e4ae8aff75d8b9ea410b2b77cd929927443e310fdbf09c3d348d2",
+    "src/bootstrap/src/lib.rs": "0ba79509e21637ad847ba4db4b35cf48436bfea5d2385032d592b515814a11a6"
+  }
+}

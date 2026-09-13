@@ -1,0 +1,57 @@
+{
+  "source": "439bea56749d6a7361d6c1afb7d1a43bb46c7e9f",
+  "binary_sha256": "a3b3c3c67aa588308e16e488f55b9fbb8c6ff75f474fee29d4c365a87a192033",
+  "first_ingest": {
+    "data": {
+      "conf": 0.5,
+      "doc_id": "67320aba733c647f379e9be2446b6f63f1a8cba1329f627b21c90c93295cf09b",
+      "embedded_chunks": 1,
+      "failed_chunks": 0,
+      "id_kind": "document",
+      "kind": 1,
+      "message": "1 chunks placed",
+      "permanent_failures": 0,
+      "status": "committed",
+      "total_chunks": 1,
+      "transient_failures": 0
+    },
+    "reply": 1
+  },
+  "owner_query": {
+    "data": {
+      "chains": "",
+      "entities": [
+        {
+          "cold": false,
+          "conf": 0.5714285714285714,
+          "conf_uncertainty": 0.05442176870748299,
+          "id": "67320aba733c647f379e9be2446b6f63f1a8cba1329f627b21c90c93295cf09b",
+          "invalidated_at": null,
+          "kind": "document",
+          "scheme": "inline",
+          "score": 0.8381438340206497,
+          "source": {
+            "object_id": "",
+            "scheme": "inline",
+            "section": "",
+            "url": ""
+          },
+          "status": "active",
+          "superseded_by": "",
+          "text": "The source census release name is CEDARQUARTZ.",
+          "valid_from": null,
+          "valid_to": null,
+          "valid_until": null
+        }
+      ]
+    },
+    "reply": 2
+  },
+  "second_client_query": {
+    "error": "another memory writer holds this data dir (cartridge memory pid 49669)",
+    "reply": 1
+  },
+  "second_elapsed_ms": 101.162,
+  "same_writer_label_preserved": true,
+  "second_client_uses_canonical_alias": true
+}

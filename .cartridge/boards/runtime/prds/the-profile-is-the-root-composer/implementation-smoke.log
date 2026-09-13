@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/integration/smoke.test.ts:
+(pass) policy: real isolated protocol [602.69ms]
+(pass) mcp: real isolated protocol [247.04ms]
+(pass) proxy: real isolated protocol [109.26ms]
+
+ 3 pass
+ 0 fail
+ 17 expect() calls
+Ran 3 tests across 1 file. [971.00ms]

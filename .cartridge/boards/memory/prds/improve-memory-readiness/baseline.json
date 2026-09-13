@@ -1,0 +1,20 @@
+{
+  "canonical": "@memory/improve-memory-readiness",
+  "source": "f9759848c56255ee0607587970f58ccc087ade53",
+  "command": "python3 baseline-probe.txt",
+  "source_held": true,
+  "observed": "Actual native SDK registration precedes storage. Existing ready creates store and writer in9.338ms; second registered native local client returns writer refusal in101.604ms. status is unknown (local) or readonly_attachment (attached). After first disposal, second ready opens a new writer; attached missing-owner ready is bounded and creates no store.",
+  "expected": "Additive status distinguishes registration from observed store/query/model readiness; cached views do no I/O and explicit bounded probes never start a writer. Recovery is freshly observable by the same caller.",
+  "results_sha256": "523a2119674740cc4f33dfe3b52a27313a3500025022c837d5b5503c6ef326bc",
+  "probe_sha256": "6265d0963ff65f4804b521b4ab91235f4904548f0986ab18d48ab50c6ba276bf",
+  "original_prd_sha256": "0bbc9fa34ed80ea41d1685e587a8d9c3cd99127a0a7121ee8a231bc566c07132",
+  "source_sha256": {
+    "src/cartridge.rs": "89d3ea7655521849f696fcb825f66af25f425edab2eb65a3b9d3a1752a335fad",
+    "src/commands/src/memory.rs": "f4da43ff4af6400d7701781c8e85c68dd88bf4e48924c1cbc1267cf6368d4950",
+    "src/transport/src/owner.rs": "9f85b431d1a76049ec385db8c1acd5c0576ce239f4dbe4c43aff6f84793d4607",
+    "src/transport/src/memory_rpc.rs": "3bfad6d2eb9783f29cb3866a77936a0a8ccb839eac917ad0db8185c0dc4942f7",
+    "src/store/core/src/lock.rs": "f67d90b2461000303f8615adb2398d8ab201b671459b1d98d94a073befb281c3",
+    "src/rpc/src/server.rs": "edaf6d3a92f46b79365ef989bd51fd28be0905834eff07e15104f385ff509aef",
+    ".cartridge/tests/integration/cartridge.rs": "e753f6ae785a12e78b30893abf8b6d63c10ec4a2edb6d7bd8b981f737673e4f0"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "fixture": "p02",
+  "repeat": 2,
+  "category": "precision",
+  "started": "2026-09-13T19:23:33.285Z",
+  "completed": "2026-09-13T19:23:34.922Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a precise copy editor. Return the deliverable only.\n\nFor verbose input, write one compact paragraph. Aim for 40 words, stretching only to keep a unique fact. Pack facts into short complete sentences with shared subjects and semicolons. Use ordinary verbs, omit rhetorical setup, and state each fact once. No heading, label, introduction, recap, bullet list, or explanation of the editing. A handoff memo is a self-contained paragraph, not a template.\n\nDensity example: \"Unreleased, the patch cuts the batch size from eight to four; 16 checks pass (batch-proof-6). Long-job safety remains unmeasured and may worsen. Jules must test long jobs in staging before release.\" This example carries change, test count, evidence, delivery state, risk, uncertainty, owner, next action and prerequisite in 36 words. Use that density, not its subject or facts.\n\nKeep every unique fact, condition, exclusion, uncertainty, owner, evidence reference and next action. Never invent a cause or say planned work happened. Keep technical literals byte for byte: names, numbers, units, identifiers, commands, errors, paths, frontmatter and executable blocks. Use clear referents. Silently check all source facts, then tighten the words rather than dropping meaning.\n\nIf the source is already concise, return it exactly, without any change. Requested JSON must have exactly the required keys and types, with no wrapper. Preserve required Markdown frontmatter and code blocks exactly. An explicit request for detail overrides brevity: give the requested ordered steps and reasons.\n\nDraft in one normal response. Saving an existing memo requires an explicit request, a preview and approved memo.write using the read expected_revision. Stop on conflicts; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nReturn a standalone Markdown memo. Preserve the frontmatter and fenced executable block exactly; shorten only explanatory prose.\n\nSource:\n---\nkind: routine\nname: verify-fixture\nstatus: draft\n---\n\nThis routine is for a disposable fixture only. It has not been approved for a shared store. Keep the commands in the stated order.\n\n```sh\nfixture seed --count 3\nfixture verify --read-only\n```\n\nSuccess means the exact output `3 rows checked`. On any other output, stop and preserve the fixture. The expected result is specified by routine-proof-3; this source does not claim that the routine has already passed."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T19:23:34.867356478Z",
+    "message": {
+      "role": "assistant",
+      "content": "---\nkind: routine\nname: verify-fixture\nstatus: draft\n---\n\nThis routine is for a disposable fixture only; it is not approved for a shared store. Keep the commands in the stated order.\n\n```sh\nfixture seed --count 3\nfixture verify --read-only\n```\n\nSuccess means the exact output `3 rows checked`. On any other output, stop and preserve the fixture. The expected result is specified by routine-proof-3; this source does not claim that the routine has already passed."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 1474279893,
+    "prompt_eval_count": 553,
+    "prompt_eval_cached_count": 416,
+    "eval_count": 106
+  },
+  "tokenization": null,
+  "generation_tokens": 106,
+  "output_tokens": 106,
+  "input_tokens": 553,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

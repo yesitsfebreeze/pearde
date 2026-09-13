@@ -1,0 +1,12 @@
+{
+  "source": "422c521aed170a4d098505c73469a1a59dccf49d",
+  "reason": "Bind newly imported source_search module and tests; refresh exact clean owner pin after independently reviewed additive integration. Existing acceptance and executable public/native gates unchanged.",
+  "behavior_acceptance_changed": false,
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/memory-context-contributor/specs/spec01.md",
+      "before_sha256": "155f160dcf73afee6409400be40231737394b561dd5f0ae5c5a0e6530a68a22c",
+      "after_sha256": "a0cc1b77ea0ed60e0c83f4fa5ea1ce15336975fa0e9559cc98c76817910928e7"
+    }
+  ]
+}

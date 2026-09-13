@@ -1,0 +1,13 @@
+{
+  "source": "92240c6ba415f53b2d17971aea185536a6f517bc",
+  "previous": "191e2b6cb4291bdcce7a894f98bb2d475361d30f",
+  "reason": "Bind newly imported context module and executable native/unit contract; shared phase extraction preserves roster output. Existing acceptance and executable gates are unchanged apart from exact Sessions source pin.",
+  "behavior_acceptance_changed": false,
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/file-change-records-retain-reported-revisions/specs/spec01.md",
+      "before_sha256": "7d0403c1823ba82837ddae2bffc6a8eb6337ff408250e909d9f00984ad707a84",
+      "after_sha256": "451e40c25cd45b7985aaf6c54117d26e768313e860ec6b5c0f2a555a5e2cacce"
+    }
+  ]
+}

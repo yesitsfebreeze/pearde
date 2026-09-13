@@ -73,6 +73,156 @@
       "required_maximum_each": 0.5,
       "missing_literal_cases": 0,
       "concise_growth_cases": 1
+    },
+    {
+      "variant": "cloud-candidate-7",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.7004065040650407,
+        0.7585858585858586,
+        0.6603979711275849
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 0,
+      "concise_growth_cases": 2
+    },
+    {
+      "variant": "cloud-candidate-8",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.9,
+        0.7928921568627451,
+        0.8102536997885835
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 0,
+      "concise_growth_cases": 5
+    },
+    {
+      "variant": "cloud-candidate-9",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.5805882352941176,
+        0.5318181818181819,
+        0.5696760274974404
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 0,
+      "concise_growth_cases": 0
+    },
+    {
+      "variant": "cloud-candidate-10",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.5874999999999999,
+        0.47073863636363633,
+        0.5128342034488214
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 0,
+      "concise_growth_cases": 0
+    },
+    {
+      "variant": "cloud-candidate-11",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.5156862745098039,
+        0.5005050505050505,
+        0.49553348637588585
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 0,
+      "concise_growth_cases": 0
+    },
+    {
+      "variant": "cloud-candidate-12",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.568744616709733,
+        0.4664614898989899,
+        0.49823819591261453
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 1,
+      "concise_growth_cases": 0
+    },
+    {
+      "variant": "cloud-candidate-13",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.5096078431372548,
+        0.5076546717171717,
+        0.5126497533474277
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 0,
+      "concise_growth_cases": 0,
+      "semantic_qualification": "Not qualified; mechanical per-repeat gate failed. Full semantic review is not claimed."
+    },
+    {
+      "variant": "cloud-candidate-14",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.5510185185185186,
+        0.5457221989480054,
+        0.5245243128964059
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 0,
+      "concise_growth_cases": 0,
+      "semantic_qualification": "Not qualified; mechanical per-repeat gate failed. Full semantic review is not claimed."
+    },
+    {
+      "variant": "cloud-candidate-15",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.7916666666666667,
+        0.6524266331958639,
+        0.6729552286030691
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 0,
+      "concise_growth_cases": 3,
+      "semantic_qualification": "Not qualified; mechanical gate failed"
+    },
+    {
+      "variant": "cloud-candidate-16",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.5814285714285714,
+        0.49262626262626263,
+        0.5077852081046013
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 0,
+      "concise_growth_cases": 0,
+      "semantic_qualification": "Not qualified; mechanical per-repeat gate failed"
+    },
+    {
+      "variant": "cloud-candidate-17",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.5487037037037037,
+        0.48328598484848484,
+        0.5192758758359117
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 3,
+      "concise_growth_cases": 1,
+      "semantic_qualification": "Not qualified; mechanical per-repeat gate failed. Full semantic review is not claimed."
+    },
+    {
+      "variant": "cloud-candidate-18",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.6747619047619047,
+        0.5899408284023668,
+        0.6351835600409537
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 0,
+      "concise_growth_cases": 0,
+      "semantic_qualification": "Not qualified; mechanical per-repeat gate failed; full semantic review not claimed"
     }
   ],
   "limitations": [

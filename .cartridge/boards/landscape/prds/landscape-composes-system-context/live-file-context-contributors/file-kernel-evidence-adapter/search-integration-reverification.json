@@ -1,0 +1,12 @@
+{
+  "source": "422c521aed170a4d098505c73469a1a59dccf49d",
+  "reason": "Bind newly imported source_search module and tests; refresh exact clean owner pin after independently reviewed additive integration. Existing acceptance and executable public/native gates unchanged.",
+  "behavior_acceptance_changed": false,
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/file-kernel-evidence-adapter/specs/spec01.md",
+      "before_sha256": "d1bb7a5d19cf44a910071472f3d2c92240d8d672318826796bc267edeb98287d",
+      "after_sha256": "33315eefdf1d9deda27311b7d1c71e965dc507f7c4d0cbc95e9eb6a09ff0be4d"
+    }
+  ]
+}

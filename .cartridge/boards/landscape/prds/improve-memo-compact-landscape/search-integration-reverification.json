@@ -1,0 +1,12 @@
+{
+  "source": "422c521aed170a4d098505c73469a1a59dccf49d",
+  "reason": "Bind newly imported source_search module and tests; refresh exact clean owner pin after independently reviewed additive integration. Existing acceptance and executable public/native gates unchanged.",
+  "behavior_acceptance_changed": false,
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape/specs/spec01.md",
+      "before_sha256": "51270eafe95be02087793f897974fe8df28e2efc32ca444ae13f63e106fa60bb",
+      "after_sha256": "8af1d8251451756c2484014008197ab21262db5d5ea49a13c62feaecefd8a45c"
+    }
+  ]
+}

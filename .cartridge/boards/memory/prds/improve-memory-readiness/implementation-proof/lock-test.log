@@ -1,0 +1,10 @@
+   Compiling store_core v2.0.0 (/private/tmp/memory-health-work/memory.ctg/src/store/core)
+    Finished `test` profile [unoptimized] target(s) in 1.29s
+     Running unittests src/lib.rs (/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/store_core-bdfdd87cbf601c3d)
+
+running 2 tests
+test lock::lock_tests::readiness_status_lock_sample_preserves_absence_bytes_and_held_lock ... ok
+test lock::lock_tests::readiness_status_lock_rejects_fifo_symlink_and_replacement_before_locking ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 76 filtered out; finished in 0.11s
+

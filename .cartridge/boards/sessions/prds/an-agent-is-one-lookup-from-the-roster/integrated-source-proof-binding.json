@@ -1,0 +1,9 @@
+{
+  "harness": "698a4dc9555a6b3ad8d46dcc5dd3a14463048e70",
+  "sessions": "191e2b6cb4291bdcce7a894f98bb2d475361d30f",
+  "landscape": "33e0418fa82966772c38ec8191d02a158b2cb56d",
+  "spec_before_sha256": "3ece948a0e8ec5229f8fb51867f21d1fab1a15aee4ea5572e427f2869e98b74a",
+  "spec_after_sha256": "c19ef9f20bd930132dd6b994fe2d9c0ed3bd7ed0384cfcedf843068951fd3494",
+  "behavior_acceptance_changed": false,
+  "reason": "Bind final integrated owner and verified Sessions dependency. Parent footprint is refreshed exact two-child union; original acceptance preserved and remains unchecked until verification."
+}

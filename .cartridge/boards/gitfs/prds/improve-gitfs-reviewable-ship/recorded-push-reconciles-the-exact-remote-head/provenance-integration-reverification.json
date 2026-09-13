@@ -1,0 +1,12 @@
+{
+  "source": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+  "behavior_acceptance_changed": false,
+  "reason": "Bind new imported producer module/dependency and its tests; refresh exact prerequisite spec hashes after these footprint-only additions. Original public/native/composition checks retained.",
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head/specs/spec01.md",
+      "before_sha256": "3191d544dd1c2260d832f51526baa1c59cee84dc4772c9496ff59507d3c61841",
+      "after_sha256": "6733e87f3f84226f8070a1c66b494ca4931f4145bc6281ca1517e3c12f153569"
+    }
+  ]
+}

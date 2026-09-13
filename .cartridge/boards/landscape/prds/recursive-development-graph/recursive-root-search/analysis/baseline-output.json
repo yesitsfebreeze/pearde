@@ -1,0 +1,131 @@
+{
+  "source_records_export": "undefined",
+  "declared_roots": [
+    {
+      "schema": "cartridge-source-declarations/v1",
+      "status": "available",
+      "root": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-search-baseline-mjlpirky/.cartridge/boards/root",
+      "revision": "da7ba46d9f609e336bc770f2b313d4f24319ef8201075a368264b3afe43deed9",
+      "children": [
+        {
+          "name": "base",
+          "root": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-search-baseline-mjlpirky/.cartridge/boards/root/base",
+          "kind": "board"
+        }
+      ]
+    },
+    {
+      "schema": "cartridge-source-declarations/v1",
+      "status": "available",
+      "root": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-search-baseline-mjlpirky/.cartridge/boards/root/base",
+      "revision": "ee13d5287b3e90da51374031a4acf62980dbda5ac17d95eb53dd6056c8a39e9b",
+      "children": [
+        {
+          "name": "plugin",
+          "root": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-search-baseline-mjlpirky/.cartridge/boards/root/base/plugin",
+          "kind": "board"
+        }
+      ]
+    },
+    {
+      "schema": "cartridge-source-declarations/v1",
+      "status": "available",
+      "root": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-search-baseline-mjlpirky/.cartridge/boards/root/base/plugin",
+      "revision": "61b2b9ff5b24ea58d37306a04d7b00c9dfa745dbde724772e4ebd2c65ae10dfb",
+      "children": []
+    }
+  ],
+  "scanned_refs": [
+    "same",
+    "@base/invalid-utf8",
+    "@base/private-flag",
+    "@base/private-visibility",
+    "@base/same",
+    "@base/unknown-visibility",
+    "@base/plugin/same"
+  ],
+  "private_rows_returned_by_trusted_planning_scan": [
+    {
+      "ref": "@base/private-flag",
+      "title": "PRIVATE_TITLE_private-flag",
+      "body": "# PRIVATE_TITLE_private-flag\nPRIVATE_BODY_private-flag\n",
+      "private": true
+    },
+    {
+      "ref": "@base/private-visibility",
+      "title": "PRIVATE_TITLE_private-visibility",
+      "body": "# PRIVATE_TITLE_private-visibility\nPRIVATE_BODY_private-visibility\n",
+      "visibility": "private"
+    },
+    {
+      "ref": "@base/unknown-visibility",
+      "title": "PRIVATE_TITLE_unknown-visibility",
+      "body": "# PRIVATE_TITLE_unknown-visibility\nPRIVATE_BODY_unknown-visibility\n",
+      "visibility": "internal"
+    }
+  ],
+  "invalid_utf8": {
+    "body": "# A\n�\n",
+    "exact_bytes_sha256": "e483f3f52d88293f32e2437da48fc37ecb6626782adf6215bcc7d741a4fa628d",
+    "decoded_text_sha256": "4ca8936eea65a6e6288b2b7969e21ae45bea5748fe3e583488dbdd9a5c670766"
+  },
+  "memo_native_results": [
+    {
+      "args": {
+        "op": "document",
+        "action": "index",
+        "cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-search-baseline-mjlpirky/.cartridge/boards/root",
+        "directory": "prds"
+      },
+      "answer": {
+        "error": "document path must stay inside the owner's .cartridge directory",
+        "reply": 1
+      }
+    },
+    {
+      "args": {
+        "op": "document",
+        "action": "read",
+        "cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-search-baseline-mjlpirky/.cartridge/boards/root",
+        "path": "prds/same/prd.md"
+      },
+      "answer": {
+        "error": "document path must stay inside the owner's .cartridge directory",
+        "reply": 2
+      }
+    },
+    {
+      "args": {
+        "op": "document",
+        "action": "read",
+        "cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-search-baseline-mjlpirky/.cartridge/boards/root",
+        "owner": "root/base/plugin",
+        "path": ".cartridge/documents/same.md"
+      },
+      "answer": {
+        "error": "invalid document owner name",
+        "reply": 3
+      }
+    }
+  ],
+  "memo_callbacks": [
+    {
+      "cartridges": true,
+      "id": 1,
+      "turn": "18d4f87b6c7cf948-1"
+    },
+    {
+      "cartridges": true,
+      "id": 2,
+      "turn": "18d4f87b6c7cf948-2"
+    },
+    {
+      "cartridges": true,
+      "id": 3,
+      "turn": "18d4f87b6c7cf948-3"
+    }
+  ],
+  "memo_exit": 0,
+  "memo_stderr": "",
+  "source_bytes_unchanged": true
+}

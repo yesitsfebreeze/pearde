@@ -1,0 +1,216 @@
+{
+  "source_commit": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+  "receipt_checker": {
+    "source_commit": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+    "records_commit": "5cd3008b5607b52f669bc1d16fa6c4298a7d005a",
+    "footprint": [
+      ".cartridge/docs/change-provenance.md",
+      ".cartridge/tests/integration/change-provenance.test.ts",
+      ".cartridge/tests/unit/service/tests.rs",
+      "Cargo.toml",
+      "src/files.rs",
+      "src/main.rs",
+      "src/service.rs"
+    ],
+    "dependencies": [
+      {
+        "ref": "@fs/improve-fs-change-provenance/direct-file-mutations-report-revisions",
+        "source_commit": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+        "prd_sha256": "874c31414a7d236a4021b8f40661e54ae1d7391cb288c3b53b31533f077bc705",
+        "spec_sha256": "7f555535bc670f5f6b81eba76005ef6527b1861aa1bbde12366a336ece545235",
+        "review_round": 3,
+        "score": 95,
+        "review_sha256": "55978d3381f6065e7932d4b634d6def9cbb66da2eb78079fbdd961b5ba605c9e",
+        "collection_sha256": "4c8da549485588cf1af071bc902a54cbf8fb89c93f1f9a8c325226ae3b17f0b2"
+      },
+      {
+        "ref": "@fs/improve-fs-revision-guards",
+        "source_commit": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+        "prd_sha256": "cdacea0193df104b21f7c2e4d7c90c047773e0f704e6054dd6d1884f1b9a5d4f",
+        "spec_sha256": "78fe6d4d246cd3242bb1d3350cad68982c04e2fd9ba14fb5e1c9b6b23f5c6692",
+        "review_round": 4,
+        "score": 95,
+        "review_sha256": "9cbf0ed11fed360d61e23ef5f8e569b46b4ae3dffaedc4bf86e8da9cc871adf1",
+        "collection_sha256": "7d09eca0a9d3ada87633965f6f06c63fdc8a143b564af7e5bc47e2a2f3a1f131"
+      },
+      {
+        "ref": "@gitfs/improve-gitfs-readable-diff",
+        "source_commit": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+        "prd_sha256": "e0ec8ea766792e75bd2d52023d32fbcb855811bd682f8f0226a1db0fa804c0dc",
+        "spec_sha256": "6ed56a3426a0c5bf5039a2622785a66c6050c7da0b3a3b60aacfd06e437426e7",
+        "review_round": 3,
+        "score": 94,
+        "review_sha256": "e902695dc87b19e2b5e44fc47de8449f7254930647221216911dde9027ba3251",
+        "collection_sha256": "34f5f352c4dcd05d7b0845bb24bd95fe57cdf95e645a962a6d0d0c0399485406"
+      },
+      {
+        "ref": "@gitfs/overlay-mutations-report-revisions",
+        "source_commit": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+        "prd_sha256": "917a66a3cbb21cb3a4cf6b8e3594e6ddd967e23e2aadb9dbabc1b499fa929775",
+        "spec_sha256": "05db280989830d7933859d5d87e2796d0513ed4147e3976883604e1536a8963a",
+        "review_round": 3,
+        "score": 94,
+        "review_sha256": "6ff5b446a04451a7deda8d3516938ed4638d4ba667575be2200156b7ccc68df5",
+        "collection_sha256": "71666fa28c495ada609941e8cf9a649201eb624c02cdfd96f520bf49a8dc3763"
+      },
+      {
+        "ref": "@gitfs/tool-results-interoperate",
+        "source_commit": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+        "prd_sha256": "a284102ceabf68ab6000f37992c22585feefd1076891db81c7d56acede6f0af0",
+        "spec_sha256": "87b2a12e71d8a7eab761833e18236315866bf8e5cfbe470738c90cc6a3de9cb4",
+        "review_round": 3,
+        "score": 96,
+        "review_sha256": "0e016083c728e357a89a6b6b810b0bdf05949739f4f4aa608afcaeb091fc25e5",
+        "collection_sha256": "6518ff6407b4bcc34a1b25781d056d246bc4b81d418be63fe10b36ab72eed922"
+      },
+      {
+        "ref": "@policy/improve-policy-operation-rules",
+        "source_commit": "e442bef2c9f07635f9e8b8e1d87a47193841569f",
+        "prd_sha256": "ff05aeecfbc1ede7603d452dcb2635af3b4b0032f04df971aba3281eb5e69124",
+        "spec_sha256": "4c387100550778313009dff4a94703b2b6232c874fe469f56167f487e05d707d",
+        "review_round": 3,
+        "score": 97,
+        "review_sha256": "ddeebac92d47d82b4c4db0186e24797edc35d789e58fa923a2b9ee5493049296",
+        "collection_sha256": "79e27879d6b8a09e58e723a998a188342c8be26e98a736079108af1d1c2f13e8"
+      },
+      {
+        "ref": "@runtime/shipped-gitfs-profiles-grant-change-recording",
+        "source_commit": "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b",
+        "prd_sha256": "39f513d89d0a5f2fda4953bb73224423383d43dd888e71e9840884cd0609eb0a",
+        "spec_sha256": "87a0b5ba0c3937ec9552b6d047f357e9d45ab176de2c28cc3940b13a2f7ed885",
+        "review_round": 3,
+        "score": 96,
+        "review_sha256": "b3c8b3aa4dd1fe32707f18e4874dd98879de56901f25e39025ff93ce72b79480",
+        "collection_sha256": "87ec8b7c621c7bc5a6e701192a6b91303021a9b1a0aec62e168e72d68cd57b18"
+      },
+      {
+        "ref": "@sessions/file-change-records-retain-reported-revisions",
+        "source_commit": "191e2b6cb4291bdcce7a894f98bb2d475361d30f",
+        "prd_sha256": "560ec93d79b842097e2abf736a038fa49ac70919f63f76a2952ed35f29a7a578",
+        "spec_sha256": "7d0403c1823ba82837ddae2bffc6a8eb6337ff408250e909d9f00984ad707a84",
+        "review_round": 3,
+        "score": 96,
+        "review_sha256": "7b69e2d01c9c7048df611b8b3d608febabc676707bd963f2623d209384445218",
+        "collection_sha256": "72afa5e21e3319929b3362f1fd0c6a4b61800489d8bb685d3471f10386b2c1ad"
+      },
+      {
+        "ref": "@sessions/improve-sessions-client-mapping",
+        "source_commit": "191e2b6cb4291bdcce7a894f98bb2d475361d30f",
+        "prd_sha256": "7ab9e3f5bec5776afc360d81feda9b5b14e976e6a2c4b86838871e3c544b9f3f",
+        "spec_sha256": "8bcedb4cf0eed743beb8bff4a5c9d4455e401035671e8787a8dda0700c1db87f",
+        "review_round": 3,
+        "score": 96,
+        "review_sha256": "4e4e69a466fdedaa7f85b57d8be6cec826086d8c7605f2b227f1bf34866848ee",
+        "collection_sha256": "84fa7f44b40082d4febff6bf1bb87ac4937ab032043e1d761a4d408ff94f1c27"
+      }
+    ],
+    "fixtures": {
+      "/Users/feb/dev/cartridge/fs.ctg/.cartridge/tests/integration/context.test.ts": "5239eacb5463d1a6e032c0c6cd22ff370458d574621ac3a5ec486de4244b1264",
+      "/Users/feb/dev/cartridge/fs.ctg/.cartridge/tests/integration/change-provenance.test.ts": "fd336db0d75f54db3b6a01ca5fb5700437e2d0fd455d4ea1c266163edb7f4173",
+      "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/integration/change-provenance.test.ts": "db018e5ea32233f4ca8c4ff3e1bc0dbab59b5a85c3510f93c1eebc7af9f7e9a5",
+      "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/integration/tool-result.test.ts": "1c7d95e7cb20545b2dd3d67196dfdd096ad67b1fbad281f285ba0ca6e5016033",
+      "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/integration/reviewed-ship.test.ts": "2cd16fcb495650e8266fb5cdf660e868f656b547768e4777dd1e9c996fc806f9",
+      "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/integration/recorded-push.test.ts": "0c6b4e111e2aea72d3736b5df433a6998ced1d076a417179b75e78361da4953a",
+      "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/integration/change-records.test.ts": "56611256a47d763dd4ebe014e7b82f122888a483009f182c33df4812a8eaee42"
+    }
+  },
+  "gates": [
+    {
+      "command": "just test fs",
+      "result": "PASS 51 Rust tests",
+      "log": "/tmp/fs-provenance-parent-fs-test.log",
+      "sha256": "623828b32797b5c833adc9dae236931a351687e6251031718a3cc08f4e46e5fe"
+    },
+    {
+      "command": "just check fs",
+      "result": "PASS",
+      "log": "/tmp/fs-provenance-parent-fs-check.log",
+      "sha256": "60752725ea6f194f20ebc7150276eef9d351f09c52a8c6e784e05f6a10ca45df"
+    },
+    {
+      "command": "just build fs",
+      "result": "PASS",
+      "log": "/tmp/fs-provenance-parent-fs-build.log",
+      "sha256": "1094a36867300c1838cdc4ee40efe961d83bac574665f8ee57a40d5b1e88698c"
+    },
+    {
+      "command": "just test gitfs",
+      "result": "PASS 47 Rust tests",
+      "log": "/tmp/fs-provenance-parent-gitfs-test.log",
+      "sha256": "170753867b44478cba7ae524729fe9817713dce2520f312bb4cdea3293593741"
+    },
+    {
+      "command": "just check gitfs",
+      "result": "PASS",
+      "log": "/tmp/fs-provenance-parent-gitfs-check.log",
+      "sha256": "79fd394a8910bbcc6153be11cb91e99a8a9633546ece8bf7633797853a99eca4"
+    },
+    {
+      "command": "just build gitfs",
+      "result": "PASS",
+      "log": "/tmp/fs-provenance-parent-gitfs-build.log",
+      "sha256": "e5cc565ff516811b326761edf29b7f36fc48baf8ea731ac9479d2f89e00915cc"
+    },
+    {
+      "command": "just test sessions",
+      "result": "PASS 89 Rust tests",
+      "log": "/tmp/fs-provenance-parent-sessions-test.log",
+      "sha256": "9901bc6a90f967500ecb2856679ef7738f27e03a1412a37ee0f7461c4a1c477a"
+    },
+    {
+      "command": "just check sessions",
+      "result": "PASS",
+      "log": "/tmp/fs-provenance-parent-sessions-check.log",
+      "sha256": "dda7980e8da1041233b9bd7cd86f479320cbe44ef953019bb06c5f1c023ea622"
+    },
+    {
+      "command": "just build sessions",
+      "result": "PASS",
+      "log": "/tmp/fs-provenance-parent-sessions-build.log",
+      "sha256": "801a953b82f15ee337fafe2b184a548a439ba2523cd9d2e5de193b75a631f91e"
+    },
+    {
+      "command": "just test runtime",
+      "result": "PASS 165 Rust tests +4 memo tests/47assertions",
+      "log": "/tmp/fs-provenance-parent-runtime-test.log",
+      "sha256": "6c4959fdcc40fa3cdea8b50e6e286569913d0f32152aa7fe796cffe2cbf33372"
+    },
+    {
+      "command": "just check runtime",
+      "result": "PASS",
+      "log": "/tmp/fs-provenance-parent-runtime-check.log",
+      "sha256": "3a510225634e86e691a9dbe7fee85bb8cc34e3b54ef8a61a4ee20e1a5eb56c94"
+    },
+    {
+      "command": "cargo build --manifest-path Cargo.toml --bin cartridge",
+      "result": "PASS",
+      "log": "/tmp/fs-provenance-parent-runtime-build.log",
+      "sha256": "63bd8a3ac13f8b1c160887cdaf9b30715b07e638d60df463cb8815f661518191"
+    },
+    {
+      "command": "Maintained seven fixture paths from spec with PROVENANCE_EXPECT_SHIPPED_GRANTS=1 and actual FS/GitFS/Sessions binaries",
+      "result": "22 tests /1250 assertions PASS",
+      "log": "/tmp/fs-provenance-parent-native.log",
+      "sha256": "eec404c0ec7e5378f1c7b014789f9ce2d3a16979d4377d853fd67e8bf62fba30"
+    }
+  ],
+  "binaries": {
+    "cartridge": {
+      "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/cartridge",
+      "sha256": "3c107ead7a60caa07a7aa295cb46c7b2a0663a17ca7aa11fc11b45076b9b08c8"
+    },
+    "fs": {
+      "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/fs",
+      "sha256": "59632efdef07d4d2253496a3e69791ea5b002370b188878ec2fecddbbf63d8ef"
+    },
+    "gitfs": {
+      "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/gitfs",
+      "sha256": "b095286cae2b0162581dd6bead1657c5a7c6ebc4c0a134403ca72859d04dfb8a"
+    },
+    "sessions": {
+      "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/sessions",
+      "sha256": "dfb46cff10f156771a1340023f3fd3fd61c02ece619a32d6695eba4dedd4baf6"
+    }
+  },
+  "limits": "Reported invocation attribution only; distinct direct/overlay ownership; evidence append separate from publication; no replay/rollback/implicit ownership; uncooperative OS writer race and unknown recording on cancellation remain explicit."
+}

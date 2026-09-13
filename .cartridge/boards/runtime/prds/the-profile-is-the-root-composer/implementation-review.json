@@ -1,0 +1,15 @@
+{
+  "reviewer": "/root",
+  "author": "/root/proxy_continuation",
+  "status": "PASS",
+  "base": "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b",
+  "spec_sha256": "185c4b3eeeb42dea2391e3da8a9348e87dd9fd5805fd904e8c9ddd90775cf31d",
+  "file_sha256": {
+    "src/loader.rs": "d46f8c8d11962f77c40ea2776b834b008781fd29f590052c0735b14b0e991565",
+    ".cartridge/tests/unit/src/tests/mod.rs": "2c5b619ec85633c5d2eff142ff337f9989b1cc3ed9ca6a00e84b94d08fb3c09e",
+    ".cartridge/tests/unit/src/tests/composition.rs": "f8de39484cb79cf24f0086a5464a6c1d4a501dcc76df1be799836cffeb8d4bf5",
+    ".cartridge/docs/composition.md": "647dc79169b45edd6c216d35cd0abff8759380fa0794ba70762fcf36c1257a79"
+  },
+  "findings": "No blocking finding. Shared transaction preserves prepare/cancel/drain/stage/switch order; synchronous publish precedes reload finish/gate release/disposal, exact new UID and root errors preserved, nested rebuild/context and initial-failure async behavior documented/tested.",
+  "provenance": "Independent source review delivered by parent /root in collaboration message after reading the final four-path diff and focused tests."
+}

@@ -1,0 +1,19 @@
+{
+  "round": 3,
+  "author": "/root/memo_board",
+  "acknowledged_by": "/root",
+  "semantic_acceptance_changed": false,
+  "reason": "Implement independently reviewed opened-file identity and nofollow/nonblocking checks via libc constants and same-file handles already present in lockfile; bind direct store_core manifest/lock edges. Coordinate local existing-lock sampling with lazy Engine initialization so status never samples this process own writer.",
+  "changes": [
+    {
+      "path": "specs/spec01.md",
+      "before_sha256": "ec8c2d56e93a0df91b88659d474a5afd8f3856ce5773232cef60505ad9984ddc",
+      "after_sha256": "5881df79cd74650df4017550ee0dcbe2f4c430de68930f4c8c279cec4463c8b4"
+    },
+    {
+      "path": "prd.md",
+      "before_sha256": "74ea9c2b3fac61ea37369bbcb71401b693316b2ac53710e018ce22965f194bca",
+      "after_sha256": "86726edf72c55c060ece92976b750fc566aff7c1677bb4f39fcbb3c1420f1750"
+    }
+  ]
+}

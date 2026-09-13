@@ -1,0 +1,13 @@
+{
+  "source": "92240c6ba415f53b2d17971aea185536a6f517bc",
+  "previous": "191e2b6cb4291bdcce7a894f98bb2d475361d30f",
+  "reason": "Bind newly imported context module and executable native/unit contract; shared phase extraction preserves roster output. Existing acceptance and executable gates are unchanged apart from exact Sessions source pin.",
+  "behavior_acceptance_changed": false,
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/sub-agent-sessions-record-parent-and-mailbox/specs/spec01.md",
+      "before_sha256": "40481f1b0ad3c8ac3b0a9de54d92c1eb0f8b022d68fc2efda016f343a7f62dd8",
+      "after_sha256": "ae6708fd90a080fce1cc2df2b9087ab264ebe287517035b410f545f3d50d772b"
+    }
+  ]
+}

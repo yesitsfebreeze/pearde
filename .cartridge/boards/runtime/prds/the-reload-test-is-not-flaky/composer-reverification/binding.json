@@ -1,0 +1,28 @@
+{
+  "kind": "imported-composer-footprint",
+  "source": "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df",
+  "previous_runtime_source": "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b",
+  "review_round_preserved": 4,
+  "review_status_preserved": "accepted",
+  "acceptance_unchanged": true,
+  "collection_before_sha256": "ddb0f4ede1f6dddab79b0fc6d146e40ff6f802ae61a4cd54cbb1237d961e2d6c",
+  "changes": [
+    {
+      "file": "specs/spec01.md",
+      "before_sha256": "c7a7eb804cafa85a70c522cb3c64f952a7301f3c40b7069dd797b133870c9e4c",
+      "after_sha256": "d94b88a3fd3b6badc48e5a2962fcecfdd2c36bde8512bc4da409b0770e8d7f20"
+    },
+    {
+      "file": "prd.md",
+      "before_sha256": "a0a93a223adc054a17ec46c17de90708970221ef5b1803dafdb6a8ac8a6c1574",
+      "after_sha256": "c907f41bc5cc348bcd8d55c17556564e002faa91d08f946b496e4d6251073d91"
+    },
+    {
+      "file": "review.md",
+      "before_sha256": "7e51378c47b8a5c7fef59dd5efa17b963be2fc19fbe2156e70bffd04525ae524",
+      "after_sha256": "8049256479e35163edab5d0820158d1a72a57f4262660d51423a7d0a8de41534"
+    }
+  ],
+  "reason": "Reload fixture invokes Host replacement and imports the modified test module/new composition fixture.",
+  "executable_commands_unchanged": true
+}

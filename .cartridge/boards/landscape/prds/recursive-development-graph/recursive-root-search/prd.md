@@ -1,36 +1,23 @@
 ---
 repo: /Users/feb/dev/cartridge/landscape.ctg
-state: open
+state: "specced"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: landscape
-work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+work-kind: rollup
+review-round: 3
+review-status: "passed"
 canonical-scope: recursive-development-graph
-needs:
-- '@landscape/recursive-development-graph/recursive-source-census'
+needs: ["@landscape/recursive-development-graph/recursive-root-search/source-record-search", "@memo/recursive-source-search-facade"]
 ---
-
 # Root search reads every permitted descendant record
 
 Join the bounded census into root search and exact readback, preserving source-only versus callable availability.
-
-## Acceptance
 
 - [ ] Root search finds distinct facts from all three fixture levels.
 - [ ] Inactive documentation never becomes a callable service.
 - [ ] Exact reads resolve the selected owner rather than another matching basename.
 
-## Proof and recovery
-
-Start at [lib.rs](../../../../../../../landscape.ctg/src/lib.rs), [surface.rs](../../../../../../../landscape.ctg/src/surface.rs).
-
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test landscape` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
-
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `recursive-development-graph`; maximum five rounds.
+Original acceptance is preserved verbatim. Owner leaves implement the public PRD projection, Landscape search/read logic and actual Memo native route; this parent retains the mixed end-to-end proof. It inherits the existing two rounds and cannot complete from the library fixture alone. All leaf receipts and their current source footprints must be valid before composed validation. No records are copied, deleted, rewritten or activated by this feature.

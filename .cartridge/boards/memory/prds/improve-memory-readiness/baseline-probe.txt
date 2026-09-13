@@ -1,0 +1,52 @@
+import pathlib,os,tempfile,subprocess,json,select,time,hashlib,threading,http.server
+binary=pathlib.Path('/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory_cartridge')
+class Embedding(http.server.BaseHTTPRequestHandler):
+ def do_POST(self):
+  body=json.loads(self.rfile.read(int(self.headers['Content-Length']))); inputs=body.get('input',['x']); inputs=[inputs] if isinstance(inputs,str) else inputs
+  data=json.dumps({'embeddings':[[1.,0.,0.] for _ in inputs],'data':[{'embedding':[1.,0.,0.],'index':i} for i,_ in enumerate(inputs)]}).encode(); self.send_response(200); self.send_header('Content-Type','application/json'); self.send_header('Content-Length',str(len(data))); self.end_headers(); self.wfile.write(data)
+ def log_message(self,*args): pass
+class Client:
+ def __init__(self,cfg):
+  self.p=subprocess.Popen([str(binary)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE);self.buf=b'';self.seq=0;self.send({'apply':{'config':cfg}})
+  while True:
+   response=self.read()
+   if response.get('ready')==True: break
+   assert 'error' not in response,response
+ def send(self,v):self.p.stdin.write(json.dumps(v).encode()+b'\n');self.p.stdin.flush()
+ def read(self):
+  end=time.monotonic()+8
+  while b'\n' not in self.buf:
+   assert select.select([self.p.stdout],[],[],max(0,end-time.monotonic()))[0],'SDK deadline'
+   data=os.read(self.p.stdout.fileno(),65536);assert data,'SDK EOF';self.buf+=data
+  line,self.buf=self.buf.split(b'\n',1);return json.loads(line)
+ def call(self,args):
+  self.seq+=1;self.send({'id':self.seq,'call':'memory','args':args})
+  while True:
+   v=self.read()
+   if v.get('reply')==self.seq:return v
+ def stop(self):
+  if self.p.poll() is None:
+   self.send({'dispose':True})
+   try:self.p.wait(timeout=8)
+   except subprocess.TimeoutExpired:self.p.kill();self.p.wait()
+
+source="f9759848c56255ee0607587970f58ccc087ade53"
+results={"source":source,"binary_sha256":hashlib.sha256(binary.read_bytes()).hexdigest(),"cases":[]}
+server=http.server.ThreadingHTTPServer(('127.0.0.1',0),Embedding); thread=threading.Thread(target=server.serve_forever);thread.start()
+try:
+ with tempfile.TemporaryDirectory(prefix="memory-ready-") as tmp:
+  root=pathlib.Path(tmp); clients=[]
+  try:
+   dir=root/'fresh';cfg={'dir':str(dir),'embed':{'url':f'http://127.0.0.1:{server.server_port}','model':'fixture'},'reason':{'url':''},'tick':{'interval_secs':0},'queue':{'enabled':False}}
+   first=Client(cfg);clients.append(first);before=dir.exists();t=time.monotonic();ready=first.call({'op':'ready'})
+   results['cases'].append({'case':'registered_fresh_local_ready','registered':True,'dir_before_status':before,'reply':ready,'elapsed_ms':round((time.monotonic()-t)*1000,3),'dir_after_status':dir.exists(),'writer_label_after':(dir/'writer.lock').read_text()})
+   second=Client(cfg);clients.append(second);t=time.monotonic();second_ready=second.call({'op':'ready'})
+   results['cases'].append({'case':'registered_second_local_contends','registered':True,'reply':second_ready,'elapsed_ms':round((time.monotonic()-t)*1000,3),'status_operation':second.call({'op':'status'})})
+   first.stop();clients.remove(first);t=time.monotonic();recovered=second.call({'op':'ready'})
+   results['cases'].append({'case':'same_second_client_after_owner_disposal','registered':True,'reply':recovered,'elapsed_ms':round((time.monotonic()-t)*1000,3),'writer_label_after':(dir/'writer.lock').read_text()})
+   attached=Client({'dir':str(root/'not-created'),'owner':{'endpoint':str(root/'absent.sock'),'timeout_ms':100}});clients.append(attached);t=time.monotonic();reply=attached.call({'op':'ready'})
+   results['cases'].append({'case':'attached_absent_owner','registered':True,'reply':reply,'elapsed_ms':round((time.monotonic()-t)*1000,3),'dir_created':(root/'not-created').exists(),'status_operation':attached.call({'op':'status'})})
+  finally:
+   for client in reversed(clients):client.stop()
+finally:server.shutdown();thread.join();server.server_close()
+print(json.dumps(results,indent=2))

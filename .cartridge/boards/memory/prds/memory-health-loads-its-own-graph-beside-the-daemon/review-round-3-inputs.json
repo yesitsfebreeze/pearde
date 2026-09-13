@@ -1,0 +1,30 @@
+{
+  "reviewer": "/root",
+  "independent_author": "/root/memo_board",
+  "round": 3,
+  "score": 95,
+  "result": "PASS",
+  "files": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/memory-health-loads-its-own-graph-beside-the-daemon/prd.md",
+      "sha256": "cc3660a3d0014f24949834c2a8910279e65241faae8975c7d8c54645bb0c99c9"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/memory-health-loads-its-own-graph-beside-the-daemon/specs/spec01.md",
+      "sha256": "a61a34b1717c6daee8518ebf5af9431cad7ea2591e5e6fe6d6f9b7043f1d9989"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/memory-health-loads-its-own-graph-beside-the-daemon/baseline.json",
+      "sha256": "0eb3d9d9fa4cfca25a55feafa2e103b2e4cd2707a4296539d62e35167d53947a"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/memory.ctg/src/commands/src/commands_health.rs",
+      "sha256": "4591a25a5d6529c32f8205fdfa7deb089b11cfe3d8e8a57edfb225ae71728f6e"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/memory.ctg/src/store/core/src/cold.rs",
+      "sha256": "1710841e4dc9f9170a656dd84493efdcb5419799f15131d4ad39cb22df2186da"
+    }
+  ],
+  "dependency": "@memory/every-mutation-holds-the-store-writer-boundary"
+}

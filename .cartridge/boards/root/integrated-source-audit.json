@@ -1,23 +1,94 @@
 {
-  "scope": "All currently marked done records; source footprints and receipt contracts checked by completionProblem",
+  "date": "2026-09-13",
+  "scope": "Whole root board. Counts distinguish recorded lifecycle state from current source/receipt validation; no incomplete work is declared finished.",
+  "total": 211,
+  "states": {
+    "open": 124,
+    "done": 82,
+    "claimed": 1,
+    "specced": 4
+  },
   "stale_receipts": [
     {
-      "ref": "@harness/improve-harness-compaction-diff",
+      "ref": "@memo/improve-memo-types-drilldown",
       "reason": "verified source footprint changed after collection"
     },
     {
-      "ref": "@harness/improve-harness-token-accounting",
+      "ref": "@memo/landscape-context-facade",
       "reason": "verified source footprint changed after collection"
+    },
+    {
+      "ref": "@memo/landscape-file-kernel-context-facade",
+      "reason": "verified source footprint changed after collection"
+    },
+    {
+      "ref": "@memo/landscape-inventory-facade",
+      "reason": "verified source footprint changed after collection"
+    },
+    {
+      "ref": "@memo/memo-board-template/initialize-board",
+      "reason": "verified source footprint changed after collection"
+    },
+    {
+      "ref": "@memo/memo-board-template",
+      "reason": "@memo/memo-board-template/initialize-board: verified source footprint changed after collection"
+    },
+    {
+      "ref": "@memo/one-document-serves-every-reader/document-identity",
+      "reason": "verified source footprint changed after collection"
+    },
+    {
+      "ref": "@memo/one-document-serves-every-reader/document-projections",
+      "reason": "verified source footprint changed after collection"
+    },
+    {
+      "ref": "@memo/one-document-serves-every-reader/executable-document-validation",
+      "reason": "verified source footprint changed after collection"
+    },
+    {
+      "ref": "@memo/one-document-serves-every-reader",
+      "reason": "@memo/one-document-serves-every-reader/document-identity: verified source footprint changed after collection"
     }
   ],
-  "pending_memory_source": "4c0c8244ac9850ba2b215877c012ce4010a1e32d",
-  "pending_memory_reason": "Verified isolated fix; original CLI/Cargo.lock have unrelated uncommitted changes. Owner clarification pending.",
   "latest_integrated_sources": {
-    "fs": "d4a4239ccce02bc0e647e9ad80892995f48b317f",
-    "landscape": "62185289d148017c74986b618456a72bab620228",
-    "memo": "1ffca32db1d06364b3e35e6cbca4881a1f814f71",
-    "sessions": "a306370f10b78d94365b7832ce22ce8d10c09487",
-    "gitfs": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
-    "policy": "e442bef2c9f07635f9e8b8e1d87a47193841569f"
-  }
+    "root": "c04f166361b25f4469eb67cf46a607f65c29b26b",
+    "agent": "461039896a17ed81b3fb296944da8d982efa8397",
+    "runtime": "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df",
+    "fs": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+    "gitfs": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+    "harness": "698a4dc9555a6b3ad8d46dcc5dd3a14463048e70",
+    "landscape": "422c521aed170a4d098505c73469a1a59dccf49d",
+    "mcp": "f5a740517bc2668b50cf4f61fe81a1e37bb4cfad",
+    "memo": "a458148fb21f85cabcd9e1ced85c96c581b8e0b2",
+    "memory": "a124fd30d59bcd06062b5464810188a0288e461e",
+    "policy": "e442bef2c9f07635f9e8b8e1d87a47193841569f",
+    "proxy": "9ddcc08807a059579c21227ad9d3523d242ddf86",
+    "pty": "e8e6b319b03dcc9e1dea66b4fd3a0f6b83ab2d47",
+    "router": "4ad9cd35dc862ecfe0786612d39913612d93fc45",
+    "sessions": "92240c6ba415f53b2d17971aea185536a6f517bc",
+    "tools": "62546896b771dcba67211ea1ac73fc29a7aa44dd",
+    "ui": "b879067da1ca2e095d20b4648d74448ffd55395f",
+    "prd": "9942a23639d0fa75cb91b92d13849e7de4f5722b"
+  },
+  "existing_edits": {
+    "authorization": "User explicitly authorized reviewing and integrating existing edits.",
+    "status": "Reviewed and integrated in owner commits; composition gitlink checkpoint pending current proof batch.",
+    "memory": "Graph CLI and writer boundary integrated0a8736c; readiness and pulse fixture repair integrated and collecteda124fd3.",
+    "workspace": "Original pages/native/docs/test edits reviewed and committed d30e3ef.",
+    "preserved_untracked": [
+      "cartridge.ctg/.cartridge/mcp-sessions/18d4e0d1ffa2e5f0-1.json",
+      "agent.ctg/.audit-probe.txt"
+    ]
+  },
+  "active_work": {
+    "memo": "Recursive source-search facade; actual Runtime/Memo/PRD fixture passed; final review and public gates in progress.",
+    "memory": "Readiness and repaired pulse/exit-flag receipts collecteda124fd3; provenance implementation active in isolated worktree.",
+    "pty": "Shell identity collectede8e6b31; context metadata implementation released after independent plan review.",
+    "root": "Independent reviews, exact Runtime/Sessions/FS proof bindings, integration checkpoint."
+  },
+  "limitations": [
+    "The stale_receipts list names previously completed records that currently need revalidation after shared edits.",
+    "FS rollups are being rebound to collected Runtime bd3b5e7 and Sessions92240c6 with unchanged acceptance and executable gates.",
+    "Writer native integration exists but no candidate has passed the frozen product-quality gates; it remains unfinished."
+  ]
 }

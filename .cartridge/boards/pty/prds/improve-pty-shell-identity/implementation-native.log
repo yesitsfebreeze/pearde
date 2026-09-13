@@ -1,0 +1,23 @@
+   Compiling pty v0.1.0 (/Users/feb/dev/cartridge/pty.ctg)
+    Finished `test` profile [unoptimized] target(s) in 0.55s
+     Running .cartridge/tests/integration/process.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/deps/process-c29dd5693a225f96)
+
+running 2 tests
+identity fixture nu: initial readiness
+test identity_and_shell_survive_real_ui_replacement_and_rollback ... ok
+identity fixture nu: exit readiness
+identity fixture nu: restart readiness
+identity fixture zsh: initial readiness
+identity fixture zsh: exit readiness
+identity fixture zsh: restart readiness
+identity fixture bash: initial readiness
+identity fixture bash: exit readiness
+identity fixture bash: restart readiness
+identity fixture sh: initial readiness
+identity fixture sh: exit readiness
+identity fixture pending-wrapper: initial readiness
+identity fixture pending-wrapper: exit readiness
+test identity_is_explicit_for_real_shells_and_unknown_fallback ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 8 filtered out; finished in 0.86s
+

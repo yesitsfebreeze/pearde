@@ -1,0 +1,14 @@
+import pathlib,tempfile,os,subprocess,json,re,socket
+binary='/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory'
+with tempfile.TemporaryDirectory(prefix='mpulse-',dir='/tmp') as tmp:
+ root=pathlib.Path(tmp);cwd=root/'p';cwd.mkdir();rt=root/'r';rt.mkdir();conf=root/'c';conf.mkdir();(cwd/'.memory').mkdir()
+ (cwd/'.memory/memory.toml').write_text('[embed]\nurl="http://127.0.0.1:1"\nmodel="fixture"\n[queue]\nenabled=false\n')
+ env=dict(os.environ,XDG_RUNTIME_DIR=str(rt),XDG_CONFIG_HOME=str(conf),XDG_STATE_HOME=str(conf/'state'))
+ def pulse():
+  p=subprocess.run([binary,'pulse','--strength','0.5'],cwd=cwd,env=env,capture_output=True,text=True,timeout=3);return {'exit':p.returncode,'out':p.stdout,'err':p.stderr}
+ absent=pulse();path=re.search(r'no listener at (.*?) for root',absent['err']).group(1)
+ server=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);server.bind(path)
+ exists_before_listen=pathlib.Path(path).exists();bound=pulse()
+ server.listen(1);client=socket.socket(socket.AF_UNIX,socket.SOCK_STREAM);client.settimeout(1);client.connect(path);accepted,_=server.accept();accepted.close();client.close();server.close()
+ result={'source':'0a7c4a1f729c700f52c650ee0c3efc56a136560f','socket_exists_before_listen':exists_before_listen,'absent':absent,'bound_not_listening':bound,'same_bound_socket_connects_after_listen':True,'scope':'Deterministic counterexample to await_socket file-existence readiness assumption; original discarded daemon stderr cannot distinguish startup scheduling from early daemon exit.'}
+ print(json.dumps(result,indent=2))

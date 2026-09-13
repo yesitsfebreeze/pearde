@@ -1,0 +1,4 @@
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets -- -D warnings
+    Checking memory v2.0.0 (/private/tmp/memory-health-work/memory.ctg)
+    Finished `dev` profile [unoptimized] target(s) in 0.80s

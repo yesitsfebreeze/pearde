@@ -1,0 +1,20 @@
+   Compiling memory v2.0.0 (/private/tmp/memory-health-work/memory.ctg)
+    Finished `test` profile [unoptimized] target(s) in 1.73s
+     Running .cartridge/tests/integration/cartridge.rs (/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/cartridge-97f0384d11373406)
+
+running 12 tests
+test hello_declares_memory_without_loading_configuration ... ok
+test readiness_status_credential_config_and_absent_owner_never_load_store ... ok
+test corrupt_store_is_refused_without_rewriting_it ... ok
+test owner_attachment_native_rejects_mutations_and_nested_routing_before_connect ... ok
+test owner_attachment_native_crash_mid_read_is_not_replayed_and_dispose_is_bounded ... ok
+test readiness_status_local_registration_contention_and_recovery_start_no_writer ... ok
+test host_replacement_preserves_memory_and_rejects_bad_configuration ... ok
+test memory_persists_and_replacement_does_not_open_a_second_writer ... ok
+test readiness_status_blocked_probe_keeps_cache_responsive_and_never_retries ... ok
+test readiness_status_native_faults_and_credentials_are_named_without_store_effects ... ok
+test readiness_status_attached_real_owner_restart_invalidates_query_evidence ... ok
+test owner_attachment_two_cartridges_query_daemon_alias_and_survive_peer_disposal ... ok
+
+test result: ok. 12 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.91s
+

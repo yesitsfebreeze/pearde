@@ -1,0 +1,42 @@
+{
+  "source": "f9759848c56255ee0607587970f58ccc087ade53",
+  "coordinator_only": true,
+  "refresh": [
+    {
+      "leaf": "@memory/every-mutation-holds-the-store-writer-boundary",
+      "changed_paths_already_bound": [
+        ".cartridge/tests/integration/e2e/cli_surface.rs",
+        "src/commands/src/commands_health.rs"
+      ],
+      "proposed_added_paths": [
+        ".cartridge/docs/owner-attachment.md",
+        ".cartridge/tests/integration/cartridge.rs",
+        ".cartridge/tests/unit/src/cartridge/tests.rs",
+        ".cartridge/tests/unit/src/transport/src/owner_test.rs",
+        "Cargo.toml",
+        "src/cartridge.rs",
+        "src/transport/src/lib.rs",
+        "src/transport/src/owner.rs"
+      ],
+      "reason": "New shared transport identity helper is directly imported by CLI health, native attachment bypasses local writer initialization, and maintained native/health fixtures prove shared ownership semantics. Bind exact changed source and proof paths; acceptance and gate commands unchanged."
+    },
+    {
+      "leaf": "@memory/memory-health-loads-its-own-graph-beside-the-daemon",
+      "changed_paths_already_bound": [
+        ".cartridge/tests/integration/e2e/cli_surface.rs",
+        "src/commands/src/commands_health.rs"
+      ],
+      "proposed_added_paths": [
+        ".cartridge/docs/owner-attachment.md",
+        ".cartridge/tests/integration/cartridge.rs",
+        ".cartridge/tests/unit/src/cartridge/tests.rs",
+        ".cartridge/tests/unit/src/transport/src/owner_test.rs",
+        "Cargo.toml",
+        "src/cartridge.rs",
+        "src/transport/src/lib.rs",
+        "src/transport/src/owner.rs"
+      ],
+      "reason": "New shared transport identity helper is directly imported by CLI health, native attachment bypasses local writer initialization, and maintained native/health fixtures prove shared ownership semantics. Bind exact changed source and proof paths; acceptance and gate commands unchanged."
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "source": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+  "behavior_acceptance_changed": false,
+  "reason": "Imported publisher/service and Sessions library manifest bound after producer integration; unchanged guards/search/readonly context gates rerun.",
+  "bindings": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/fs/prds/improve-fs-search-pages/specs/spec01.md",
+      "before": "d23c270b0908a6a7ec06e665d3a4d909cd9608df24c8587fdfc1de871590fca6",
+      "after": "8a6cbf888240ed84069b1dd80c8b73e407357fcf01393fc852239c813a7a6d4d"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "base": "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b",
+  "source": "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df",
+  "method": "fast-forward after tracked-clean/exact-head check",
+  "preserved_untracked_sha256": {
+    ".cartridge/mcp-sessions/18d4e0d1ffa2e5f0-1.json": "c07397c1ec0b51780ffe2acd9d757a333606f499e6755aa98bccd37873b1e05d"
+  }
+}

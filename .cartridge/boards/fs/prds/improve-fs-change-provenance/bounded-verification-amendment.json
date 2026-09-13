@@ -1,0 +1,22 @@
+{
+  "reason": "Engine120second per-command-block timeout; same checks split into seven bounded logical blocks.",
+  "before_spec_sha256": "4f40f260f0340431d8691774d5ba71a0f2274daa766e9ae09a831581bf7482f8",
+  "after_spec_sha256": "0995591014a02ea39caff602ed90e46b6ab9f42c363ad83e982a227b673a7d7a",
+  "identical_action_commands": [
+    "bun .cartridge/boards/fs/prds/improve-fs-change-provenance/rollup-check.ts",
+    "just test fs",
+    "just check fs",
+    "just test gitfs",
+    "just check gitfs",
+    "just test sessions",
+    "just check sessions",
+    "just test runtime",
+    "just check runtime",
+    "just build fs",
+    "just build gitfs",
+    "just build sessions",
+    "cargo build --manifest-path Cargo.toml --bin cartridge",
+    "bun test ../fs.ctg/.cartridge/tests/integration/context.test.ts ../fs.ctg/.cartridge/tests/integration/change-provenance.test.ts ../gitfs.ctg/.cartridge/tests/integration/change-provenance.test.ts ../gitfs.ctg/.cartridge/tests/integration/tool-result.test.ts ../gitfs.ctg/.cartridge/tests/integration/reviewed-ship.test.ts ../gitfs.ctg/.cartridge/tests/integration/recorded-push.test.ts ../sessions.ctg/.cartridge/tests/integration/change-records.test.ts"
+  ],
+  "blocks": 7
+}

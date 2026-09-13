@@ -1,0 +1,18 @@
+{
+  "reviewer": "/root",
+  "status": "PASS",
+  "base": "cacd7e13fb012029fd6923ce59bbeffcdeb67c5a",
+  "source": "e8e6b319b03dcc9e1dea66b4fd3a0f6b83ab2d47",
+  "file_sha256": {
+    ".cartridge/docs/shell-identity.md": "b26556f616d57edf6d5ae91db9790b97d3bc170cea6e931f6b13ae35b1feca8f",
+    ".cartridge/tests/integration/process.rs": "33f0a620a4b81919773f9b387617d802acaa02bd9298efc4522c2da41cda234c",
+    ".cartridge/tests/unit/identity/tests.rs": "36f47c8c95a0f2890cdcbae6285d4cb8091e4909e4e7e2d0b3d2f0e1c5bd37ce",
+    "src/identity.rs": "87fb97542c036fa9d1c4e9f68ca879d36866d8b998c48ad9b3b810525e75e3bf",
+    "src/main.rs": "eff1836e859a96668b77fdb32c4c22e0429471739d304939788b93d4d4b4e769",
+    "src/marks.rs": "2e9b5158a8824332eaf9de01a46c890132e858bc6756f4051515672ea8a99833",
+    "src/tool.rs": "a01331e5a2a6eb5e1fee351f5192121001f9682072b19a9db0c03fe8e65c3b03"
+  },
+  "findings": "Identity/source labels, parser allowlist, additive outputs, sequential identity locks and unique shim generation reservation correct; no blocking code findings.",
+  "resolved_documentation": "Latest invalid/relative OSC7 observation yields unknown cwd rather than retaining earlier valid cwd; relative but representable metadata does not set truncated. Wording now exact.",
+  "followup_fixture": "Added deterministic current unit: remove first bootstrap directory and prove candidate directory still retains .zshenv/.zshrc, matching observed native Zsh restart regression."
+}

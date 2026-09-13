@@ -1,0 +1,22 @@
+{
+  "before_spec_sha256": "a61a34b1717c6daee8518ebf5af9431cad7ea2591e5e6fe6d6f9b7043f1d9989",
+  "after_spec_sha256": "78ab7b616cc19cbe68df42c57ddbe488479662881191d34671d12dd0fda700da",
+  "added": [
+    "src/health/Cargo.toml",
+    ".cartridge/tests/integration/e2e/health_surface.rs",
+    ".cartridge/tests/unit/src/store/core/src/tests/legacy_test.rs"
+  ],
+  "review_round": 3,
+  "acceptance_unchanged": true,
+  "coordinator_acknowledgment": "Root approved maintaining old e2e identity with incompatible/no-fallback assertions when config changes, retaining separate valid-owner zero-loader/parity proof. Cargo promotes existing base dependency for shared pure aggregation; frozen legacy mirror is reused for readonly v13 proof; no decoder edits.",
+  "source_base": "0a8736c5126781b90b842a5b818f083458b2f740",
+  "second_refinement": {
+    "before_spec_sha256": "78ab7b616cc19cbe68df42c57ddbe488479662881191d34671d12dd0fda700da",
+    "after_spec_sha256": "c7c4e7c407f03f22a414c29a3feff403517a11a2df16cb37f0af004e8e24938e",
+    "added": [
+      ".cartridge/tests/integration/e2e/focus_routing.rs"
+    ],
+    "reason": "Two retained focus-routing fixtures implicitly initialized missing databases through health; now setup explicitly opens their disposable empty LMDB stores. All mutation and count assertions retained; no production focus routing edits.",
+    "failing_log": "full-test.log"
+  }
+}

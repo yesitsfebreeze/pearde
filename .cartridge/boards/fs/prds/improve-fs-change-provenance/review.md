@@ -43,3 +43,7 @@ Independent reviewer /root; proposal author /root/proxy_continuation. [Exact inp
 | Failure and compatibility | 19 | Observed identity only, optional recording, partial outcomes and legacy behavior are explicit. |
 
 Agent score: **95/100 — PASS**. No blocking plan findings. Product tests remain required. Rounds used 3/5; parent executable receipt binding is deferred until children collect.
+
+## Composer source revalidation — 2026-09-13
+
+Existing acceptance and executable gates are preserved. [Exact before/after binding](composer-reverification/binding.json) records imported composer dependencies or current-source proof pins at bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df. No new review round or passing collection is claimed by this amendment; the normal collector must rerun the unchanged gates.

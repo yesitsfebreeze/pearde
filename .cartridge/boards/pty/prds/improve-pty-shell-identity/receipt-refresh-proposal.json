@@ -1,0 +1,50 @@
+{
+  "source": "e8e6b319b03dcc9e1dea66b4fd3a0f6b83ab2d47",
+  "existing_done": [],
+  "records": [
+    {
+      "ref": "@pty/context-terminal-metadata",
+      "state": "open",
+      "revision": "242755cf5d309093543197df92517e5318e2976780f3ec8af9460cdee91f6af4",
+      "commit": null,
+      "problem": null
+    },
+    {
+      "ref": "@pty/improve-pty-command-wait",
+      "state": "open",
+      "revision": "b3c886d0854dcedf6982c14949ea8e37f0b262676720e03014e2396409e55389",
+      "commit": null,
+      "problem": null
+    },
+    {
+      "ref": "@pty/improve-pty-input-ownership",
+      "state": "open",
+      "revision": "13376de73ba5c4ba9f05d15b74f57e759117e9ec0221beee6ac9787025631e90",
+      "commit": null,
+      "problem": null
+    },
+    {
+      "ref": "@pty/improve-pty-programme",
+      "state": "open",
+      "revision": "7a732f8b419724cb759c1c6a6a6a273572038280ee9dd1db0efd86eabc58224d",
+      "commit": null,
+      "problem": null
+    },
+    {
+      "ref": "@pty/improve-pty-shell-identity",
+      "state": "specced",
+      "revision": "9f0e83e26c4b423077245dc3560e5e0e30a93b078334c70725ccd5ed322f3265",
+      "commit": null,
+      "problem": null
+    },
+    {
+      "ref": "@pty/pty-document",
+      "state": "open",
+      "revision": "287948baaaa04578699f9f43322ca3174999288f682e041949fb4884986eee2d",
+      "commit": null,
+      "problem": null
+    }
+  ],
+  "proposal": "No existing done PTY receipts need refresh: shell identity is the first source-bound completion and remains pending collection. Leave all other open records/acceptance/review rounds unchanged.",
+  "future": "After the separate context module lands, explicitly refresh the newly collected identity receipt to include imported context module/test dependencies if needed; not authorized or applied in this proposal."
+}

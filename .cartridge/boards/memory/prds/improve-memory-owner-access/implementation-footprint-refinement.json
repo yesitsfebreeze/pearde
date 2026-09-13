@@ -1,0 +1,18 @@
+{
+  "author": "/root/memo_board",
+  "review_round": 3,
+  "semantic_scope_changed": false,
+  "reason": "Promote the existing workspace transport dev dependency to a native binary dependency for the reviewed attachment API; no new external crate, wire change or acceptance change. Bind Cargo.toml to both footprints.",
+  "changes": [
+    {
+      "path": "specs/spec01.md",
+      "before_sha256": "72006581d368c74d516b0dcf3ae4549b933d9a5b1d6544214a316fbb03ea9720",
+      "after_sha256": "3d4651ab792266ee2ce50c286b8ecca98903681d848c3320168b75727a4de89a"
+    },
+    {
+      "path": "prd.md",
+      "before_sha256": "c815fc57c5cc557e0866678b286314143d2f3b3f77fb4e9aaceda5271fdcfa23",
+      "after_sha256": "ace8e3639ca1e1b6a681c8407fde39aad2ce73ce67a2eaf8b6cf9ab26e7a78e9"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+[
+  {
+    "actual_uid": 9,
+    "after": {
+      "pty": "one-pty",
+      "router": "one-router",
+      "version": 2
+    },
+    "counter_visible_at_root": true,
+    "dependent_unchanged": true,
+    "depth": 0,
+    "failed_candidate_reply": "Ok(9)",
+    "initial": {
+      "pty": "one-pty",
+      "router": "one-router",
+      "version": 1
+    },
+    "old_uid": 4,
+    "retained": {
+      "pty": "one-pty",
+      "router": "one-router",
+      "version": 2
+    },
+    "returned": "Ok(4)",
+    "shared_applications": 1,
+    "shared_unchanged": true
+  },
+  {
+    "actual_uid": 12,
+    "after": {
+      "pty": "one-pty",
+      "router": "one-router",
+      "version": 2
+    },
+    "counter_visible_at_root": true,
+    "dependent_unchanged": true,
+    "depth": 1,
+    "failed_candidate_reply": "Err(\"runtime error: [string \\\"/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mk...\\\"]:1: candidate rejected\\nstack traceback:\\n\\t[C]: in function 'error'\\n\\t[string \\\"/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mk...\\\"]:1: in function <[string \\\"/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mk...\\\"]:1>\")",
+    "initial": {
+      "pty": "one-pty",
+      "router": "one-router",
+      "version": 1
+    },
+    "old_uid": 5,
+    "retained": {
+      "pty": "one-pty",
+      "router": "one-router",
+      "version": 2
+    },
+    "returned": "Ok(12)",
+    "shared_applications": 1,
+    "shared_unchanged": true
+  }
+]

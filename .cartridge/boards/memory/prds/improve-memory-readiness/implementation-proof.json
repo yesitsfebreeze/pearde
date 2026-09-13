@@ -1,0 +1,181 @@
+{
+  "author": "/root/memo_board",
+  "source": "a124fd30d59bcd06062b5464810188a0288e461e",
+  "base": "f9759848c56255ee0607587970f58ccc087ade53",
+  "isolated_branch": "work/prd-memory-readiness",
+  "isolated_checkout": "/tmp/memory-health-work/memory.ctg",
+  "owner_checkout_fast_forwarded": true,
+  "independent_source_review": {
+    "reviewer": "/root",
+    "result": "PASS",
+    "resolved_findings": [
+      "Attached transport timeout/disconnect/malformed preserves typed OwnerError status/retryability and clears semantic evidence, even after validated PID. Only backend operation_failed retains available transport with semantic degraded.",
+      "Semantic readiness admission reuses RPC QueryArgs and build_query_options validation. Invalid types/options/time/kind selectors leave existing cache unchanged. Claim-kind registry-dependent validation is conservatively unobserved.",
+      "Local lock probe holds initializer gate; worker owns permit/CALLS/gate until actual exit after timeout. No cache mutex across I/O."
+    ],
+    "final_source": "a124fd30d59bcd06062b5464810188a0288e461e",
+    "integration_authorized_by": "/root",
+    "followup": "Root accepted narrow pulse verification repair before edit; same source/acceptance, independently demonstrated pathname-before-listen gap. Full gates pass after repair."
+  },
+  "runtime_source": "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df",
+  "gates": [
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary just test",
+      "cwd": "/tmp/memory-health-work/memory.ctg",
+      "exit_code": 0,
+      "tests_passed": 1402,
+      "existing_skipped": 17,
+      "documentation_tests": "all 27 crate groups passed; one executable documentation test"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary just check",
+      "cwd": "/tmp/memory-health-work/memory.ctg",
+      "exit_code": 0
+    }
+  ],
+  "acceptance_evidence": [
+    "Fresh actual SDK registration cached unknown makes no store. Explicit missing/free local probe starting, no writer. Held writer reports unavailable/retryable; same caller observes released owner then normal query initializes and establishes recent semantic readiness.",
+    "Two actual attached clients use real daemon with zero model calls for status; query establishes recent evidence, probe does not reset semantic age, invalid queries preserve cache. Actual owner crash during blocked semantic query records disconnected and unavailable exact-ID route; successor PID invalidates old evidence.",
+    "Deterministic paused-clock and worker tests prove 30-second semantic freshness, monotonic newest-started tickets, cached response while blocked probe, one in-flight permit retained beyond timeout, and no raw backend/config secrets.",
+    "Same-channel PID metadata preserves read() behavior. Missing/wrong-store/malformed/draining/timeout static outcomes; lock missing/regular/held/symlink/FIFO/replacement fixtures preserve bytes/inode and avoid creating files.",
+    "Existing Graph, writer, legacy format, health readonly, attachment and native lifecycle regressions passed. Startup Enrich/Persist interference in existing health fixture independently reproduced with zero health calls and removed by seeding a settled edge, preserving every byte/lock/parity/restart assertion."
+  ],
+  "limitations": [
+    "Executable process/Unix socket and nofollow/FIFO checks ran on macOS; Windows opened-handle/reparse logic not executed here.",
+    "Status is a timestamped observation, not a guarantee. Semantic readiness requires recent successful dispatched query; cached query may use no model, so model availability remains unknown. Registry-dependent claim_kind queries intentionally do not update semantic observations.",
+    "Filesystem syscall cancellation is not promised: timed-out blocking probe retains admission until it actually exits. Attached deadline bounds asynchronous RPC waits, not a synchronous canonicalization stall or work already accepted by owner.",
+    "Local free-lock sample is advisory only; it never authorizes mutation. Existing ready/health behavior and persistent formats remain unchanged."
+  ],
+  "logs": [
+    {
+      "path": "implementation-proof/sdk-test.log",
+      "sha256": "541accaf083c90f1eca3d6da11ad6bf705b03cb4f9c481037c9f9e5146d7a170",
+      "binding": "focused evidence; final public gates cover final source"
+    },
+    {
+      "path": "implementation-proof/unit-test.log",
+      "sha256": "ab2d83a7a1ecad4090823a72910ac1df85cf293aa80b5f68f1446a59ff225a6f",
+      "binding": "focused evidence; final public gates cover final source"
+    },
+    {
+      "path": "implementation-proof/lock-test.log",
+      "sha256": "c860c94cc0a8c3ec067689625768dfafcde0e3880802cd996d391fabc7df624b",
+      "binding": "focused evidence; final public gates cover final source"
+    },
+    {
+      "path": "implementation-proof/transport-test.log",
+      "sha256": "c835b0319379fcd4ffe39bacdb1921c70a57a50cbfa92a6ec429c2ad1ab4ebb2",
+      "binding": "focused evidence; final public gates cover final source"
+    },
+    {
+      "path": "implementation-proof/health-fixture-test.log",
+      "sha256": "8a35814544da7f29a266e23dc97d53e8bd240ca09fe2eda9ab96155a905077ee",
+      "binding": "focused evidence; final public gates cover final source"
+    },
+    {
+      "path": "implementation-proof/fmt-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "binding": "focused evidence; final public gates cover final source"
+    },
+    {
+      "path": "implementation-proof/public-test-after-pulse.log",
+      "sha256": "f9d6633974bb88388bd55b5fed78176700b59eb069bca4a1841babf2eab6aab2",
+      "binding": "final source public gates"
+    },
+    {
+      "path": "implementation-proof/public-check-after-pulse.log",
+      "sha256": "661ca256e8a5da3cad4f0c0a4e364a7354edbfa301918ca74fea2cc0ccb98701",
+      "binding": "final source public gates"
+    },
+    {
+      "path": "implementation-proof/pulse-fixture-test.log",
+      "sha256": "d6c400217a5ec81cef94ec81f5e93b27566e233c06dea0e046496e817c4d070f",
+      "binding": "focused fixture proof"
+    }
+  ],
+  "source_files": [
+    {
+      "path": ".cartridge/docs/CARTRIDGE.md",
+      "sha256": "75506856dca3e65168bbd134b204ab6b02b54cdd587732b65a8b896e1ecdb5d9"
+    },
+    {
+      "path": ".cartridge/docs/owner-attachment.md",
+      "sha256": "878c581bb029e3e86672e51f03a75964577e63823d49a557987d1f8ac524e9ae"
+    },
+    {
+      "path": ".cartridge/tests/integration/cartridge.rs",
+      "sha256": "8ed780c0c87d7f570d648ce2a3ca5b50b950f90bbcf41fe78012941dda003441"
+    },
+    {
+      "path": ".cartridge/tests/integration/e2e/cli_surface.rs",
+      "sha256": "2b92ff48ca18706a679016d085ac69fbc4303e54081b0ffae432ce3f9d904550"
+    },
+    {
+      "path": ".cartridge/tests/unit/src/cartridge/status_test.rs",
+      "sha256": "166e49fe5b2f3507629da9b3b3fc3098a016e3c10fab6b15e15ef8616b8361c0"
+    },
+    {
+      "path": ".cartridge/tests/unit/src/store/core/src/tests/lock_test.rs",
+      "sha256": "000419e57175c6e6d836efbb82f188b7ada42db250e2879c5d1ecbeb988f9ccf"
+    },
+    {
+      "path": ".cartridge/tests/unit/src/transport/src/owner_test.rs",
+      "sha256": "6af33661c8f11526f389df7ac88071ea17a26f113f2ddebb3920661a5cc4db17"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "901b931b2b67c88e2671457875a0ed5ca79a379a7ca58b95c848538ccbb2678a"
+    },
+    {
+      "path": "src/cartridge.rs",
+      "sha256": "89793da4c6d3ab6c87c3601fc0df01b3b24eae9f554a6e24d9494fb5a5c41ca4"
+    },
+    {
+      "path": "src/cartridge_status.rs",
+      "sha256": "a4d98b0dfb1550e75bfdfea59ac3114bf954861ed4ccd91c1ed93a9e60242325"
+    },
+    {
+      "path": "src/rpc/src/server.rs",
+      "sha256": "735d6c6b0eba6f8760f4e9bedded8f8dac615c80aa6acb305d3fe726abd6c68a"
+    },
+    {
+      "path": "src/store/core/Cargo.toml",
+      "sha256": "fd2f8794fe48afd21b11df226088b3ef7194d44ec9697685b120548ba6852188"
+    },
+    {
+      "path": "src/store/core/src/lock.rs",
+      "sha256": "669a725c6fef1fe5bf36e6a92e31bc59f89eee54a698104bb3f52688af07bb84"
+    },
+    {
+      "path": "src/transport/src/owner.rs",
+      "sha256": "fb4330f8034f5fc641b108d1a2a7800a4b773da481e50648fd2c0eaaf2f1873b"
+    },
+    {
+      "path": ".cartridge/tests/integration/e2e/focus_routing.rs",
+      "sha256": "eb1260240cf21925d58dcf161ad0f5370924e8984c072b3cbffa0e16cc7ffd0b"
+    }
+  ],
+  "final_checklist_changes": [
+    {
+      "path": "specs/spec01.md",
+      "before_sha256": "2eb9df1fde36bcc7cd41dbcbd5969392ccd15665f496c1a5aca3c93aa03ff032",
+      "after_sha256": "20b2f25a3981a193291ae04321319a8576ddd00f63b01359526c242cca159785"
+    },
+    {
+      "path": "prd.md",
+      "before_sha256": "c515eda23e98aa1dd98464106597ab0e63de3a3b95ec7f31e4eeaa984303aa2b",
+      "after_sha256": "80693f51f4b0ffc2310eed37458b4bdfc3ea6c6f3cc2ff146c2bc9d341e6f541"
+    }
+  ],
+  "fixture_refinement": "health-fixture-refinement.json",
+  "owner_clean": true,
+  "source_diff": {
+    "path": "implementation-proof/source-a124fd3.diff",
+    "sha256": "dd65b9f2a133cbf19daa0b4e9b1e1f16e9cc75a896bd5c9308dd28a62117f8de"
+  },
+  "prior_source_proof": {
+    "path": "implementation-proof/source-0a7c4a1-proof.json",
+    "sha256": "589595d2e220094f829f556a7e1ae10663c4fe81bfc61c1986f57112596fe32c"
+  },
+  "pulse_fixture_refinement": "pulse-fixture-refinement.json"
+}

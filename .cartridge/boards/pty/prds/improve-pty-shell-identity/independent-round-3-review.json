@@ -1,0 +1,35 @@
+{
+  "canonical": "@pty/improve-pty-shell-identity",
+  "reviewer": "/root",
+  "round": 3,
+  "max_rounds": 5,
+  "score": 95,
+  "dimensions": {
+    "value_scope": 19,
+    "ownership_reuse": 20,
+    "dependencies_slices": 18,
+    "acceptance_baseline": 19,
+    "failure_compatibility": 19
+  },
+  "result": "PASS",
+  "inputs": {
+    "canonical": "@pty/improve-pty-shell-identity",
+    "source": "cacd7e13fb012029fd6923ce59bbeffcdeb67c5a",
+    "review_round": 3,
+    "inherited_rounds": 2,
+    "max_rounds": 5,
+    "prd_sha256": "466ee0425cb8be477b3dac59aa0b894c5000d5c290e7d47bda72e7e8bbaf85b4",
+    "spec_sha256": "560b4619ac03f28c6b9342c24184293d5dbd4045fb031996c3c1210487ad8d7d",
+    "baseline_sha256": "562cd62cc20f63b9d2a481e53abfc76ceac82cfb08c408adf0c5b6006ede1738",
+    "native_baseline_sha256": "111897d8a8989d1ad6f466f3dc9a165fb29a1953ebebed2691f993342af34198",
+    "scope": "Seven owner-only paths; canonical starting-path/capability-owner typo correction belongs root lifecycle/map update; no product or shared-map edits."
+  },
+  "blocking_findings": [],
+  "evidence": [
+    "Four actual native shells demonstrate missing identity/current environment metadata; no user PTY touched",
+    "Existing bootstrap/OSC and shared Shell retained; configured executable separated from forgeable reported dialect and current cwd",
+    "Bounded allowlisted marker/UTF8 metadata, no new probing commands or waits on reads",
+    "Additive raw/tool projection with existing frame/cursor/error contracts retained",
+    "Actual Host UI-consumer replacement/rollback and exact shell/history checks preserve resource ownership; explicit restart remains separate"
+  ]
+}

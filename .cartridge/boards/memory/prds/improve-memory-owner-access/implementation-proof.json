@@ -1,0 +1,133 @@
+{
+  "author": "/root/memo_board",
+  "source": "f9759848c56255ee0607587970f58ccc087ade53",
+  "base": "439bea56749d6a7361d6c1afb7d1a43bb46c7e9f",
+  "isolated_branch": "work/prd-memory-owner-attachment",
+  "isolated_checkout": "/tmp/memory-health-work/memory.ctg",
+  "owner_checkout_fast_forwarded": true,
+  "owner_clean": true,
+  "independent_source_review": {
+    "reviewer": "/root",
+    "result": "PASS",
+    "findings": "No blocker. Validated outer allowlist/nested routing precede connect; one client covers identity and read; attached branch never initializes ENGINE; disposal leaves owner alive."
+  },
+  "gates": [
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary just test",
+      "cwd": "isolated_checkout",
+      "exit_code": 0,
+      "tests_passed": 1388,
+      "existing_skipped": 17,
+      "documentation_tests": "27 crate groups, 1 executable documentation test passed"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary just check",
+      "cwd": "isolated_checkout",
+      "exit_code": 0
+    }
+  ],
+  "acceptance_evidence": [
+    "Real daemon owns seeded store; two SDK readers (one canonical alias) retrieve identical fact, keep lock bytes/inode and owner PID; default owner lifecycle regressions pass.",
+    "Mutation/admin/unknown and nested endpoint/op rejected with readonly_attachment and zero listener accepts. No missing store created; disposal preserves endpoint.",
+    "Typed transport fixtures prove one health handshake + one allowed operation on same connection, canonical aliases, wrong/missing/non-directory identities, malformed/not-ok reply, stale/absent endpoint, sanitized operation errors, one total deadline and retained PID.",
+    "Actual daemon killed while query blocks in disposable HTTP embedding fixture; waiting reader returns disconnected and observed PID. Same client later validates fresh successor and reads. Disposing first client leaves daemon and second client usable. Separate dropped-transport fixture asserts no second connection/replay and bounded client disposal.",
+    "Health CLI shared identity extraction preserves all no-local-fallback and byte/lock assertions; Graph/current and legacy format/writer/configured-endpoint suites pass. No persisted format or protocol change."
+  ],
+  "limitations": [
+    "Windows local named-pipe configuration supported using existing transport; executable process/Unix socket tests ran on macOS.",
+    "Readonly refers to explicit attachment operations; existing owner query access/heat telemetry remains under owner writer claim.",
+    "Deadline bounds asynchronous RPC wait, not synchronous canonicalization stalls or cancellation of work already accepted by owner."
+  ],
+  "logs": [
+    {
+      "path": "implementation-proof/public-test.log",
+      "sha256": "b15727c0a660a9990ab5594596cea48c09d6ab0049c65cf776fbfee95477f8f8",
+      "binding": "final source"
+    },
+    {
+      "path": "implementation-proof/public-check.log",
+      "sha256": "bc74883bdabc7b6d84f859de2ccdeb5447dd553279d1cb0beeb4971d25ab49e1",
+      "binding": "final source"
+    },
+    {
+      "path": "implementation-proof/public-test-failed-fixtures.log",
+      "sha256": "0a4a6c28912bde51c13ccaf6562aa8c7f0147caaacd1270f35db613302278339",
+      "binding": "retained intermediate diagnosis/focused proof; final public gates exercise final fixtures"
+    },
+    {
+      "path": "implementation-proof/health-regression.log",
+      "sha256": "751ff4a28f35740bfc62f367d22b17c954058bd15302e00b091e3042dc170bd7",
+      "binding": "retained intermediate diagnosis/focused proof; final public gates exercise final fixtures"
+    },
+    {
+      "path": "implementation-proof/sdk-test.log",
+      "sha256": "875ce0857cf6d4b7dea5c548061fa7feb31ee8c3b83756e59311fa4a1189d3d7",
+      "binding": "retained intermediate diagnosis/focused proof; final public gates exercise final fixtures"
+    },
+    {
+      "path": "implementation-proof/transport-test.log",
+      "sha256": "3f83856f7de8354324b263983e7e98ba936a5cc6a48738e91e21d8e076b08dec",
+      "binding": "retained intermediate diagnosis/focused proof; final public gates exercise final fixtures"
+    },
+    {
+      "path": "implementation-proof/native-test.log",
+      "sha256": "5b42bf701e3a3aae19cd0aa2706519a36b1016e8e3a61f9330a6484d858f0404",
+      "binding": "retained intermediate diagnosis/focused proof; final public gates exercise final fixtures"
+    }
+  ],
+  "source_files": [
+    {
+      "path": ".cartridge/docs/owner-attachment.md",
+      "sha256": "bcb19ffa5c0dc9898bfa303c932c8b945f67660e0156911d0d3227ce1eb30a5b"
+    },
+    {
+      "path": ".cartridge/tests/integration/cartridge.rs",
+      "sha256": "e753f6ae785a12e78b30893abf8b6d63c10ec4a2edb6d7bd8b981f737673e4f0"
+    },
+    {
+      "path": ".cartridge/tests/integration/e2e/cli_surface.rs",
+      "sha256": "4ba0cbb7eb50f0941de9c95dc77cfc63bcd413e84727a52bf97f5ce638b28bc0"
+    },
+    {
+      "path": ".cartridge/tests/unit/src/cartridge/tests.rs",
+      "sha256": "4d58e340f40687d9065db288663ad28ae7a45be321ffd99200159b8240335baf"
+    },
+    {
+      "path": ".cartridge/tests/unit/src/transport/src/owner_test.rs",
+      "sha256": "1f9e651ecb6ad12980e5a9228f441c2911eeb6c1b2e863269b59944d6b1de579"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "912342f5f2db61796d8922d525da627948e1178e403aa009a14fbf137cb12c0e"
+    },
+    {
+      "path": "src/cartridge.rs",
+      "sha256": "89d3ea7655521849f696fcb825f66af25f425edab2eb65a3b9d3a1752a335fad"
+    },
+    {
+      "path": "src/commands/src/commands_health.rs",
+      "sha256": "33024763a94c40d26a84c96362e1096db77491382191b1f389e9b0d660ce7525"
+    },
+    {
+      "path": "src/transport/src/lib.rs",
+      "sha256": "996dcb1e6123c3efc5fa0ed1104adbf9cb4dd062ce598176228aa25a923668e2"
+    },
+    {
+      "path": "src/transport/src/owner.rs",
+      "sha256": "9f85b431d1a76049ec385db8c1acd5c0576ce239f4dbe4c43aff6f84793d4607"
+    }
+  ],
+  "final_checklist_changes": [
+    {
+      "path": "specs/spec01.md",
+      "before_sha256": "d6789216dd4e942dc7a271597557093b94572464b1f0cd3aa6f398692bfd4d7e",
+      "after_sha256": "1a77443b9f71cac9ee7bc0e1bd23fce9be16f9e0448e63e0da3ea251dc962bfe"
+    },
+    {
+      "path": "prd.md",
+      "before_sha256": "8929ab59567b2d3bbcdadc5f071e2cf8aaca9e591d598e32da5564284243f26a",
+      "after_sha256": "16c61d9e1b0754f3c7cba9bb350a3e09b054fc7edb0d9a18e29035f5de1ae2a0"
+    }
+  ],
+  "final_spec_sha256": "1a77443b9f71cac9ee7bc0e1bd23fce9be16f9e0448e63e0da3ea251dc962bfe"
+}

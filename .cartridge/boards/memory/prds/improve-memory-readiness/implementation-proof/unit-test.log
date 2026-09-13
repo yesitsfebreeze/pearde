@@ -1,0 +1,16 @@
+   Compiling rpc v2.0.0 (/private/tmp/memory-health-work/memory.ctg/src/rpc)
+   Compiling commands v2.0.0 (/private/tmp/memory-health-work/memory.ctg/src/commands)
+   Compiling memory v2.0.0 (/private/tmp/memory-health-work/memory.ctg)
+    Finished `test` profile [unoptimized] target(s) in 2.97s
+     Running unittests src/cartridge.rs (/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/memory_cartridge-5f1703ddc958cd17)
+
+running 6 tests
+test status::tests::readiness_status_successor_and_late_completions_do_not_restore_old_readiness ... ok
+test status::tests::readiness_status_strict_options_and_static_counter_projection ... ok
+test status::tests::readiness_status_cache_and_probe_do_not_refresh_semantic_age ... ok
+test status::tests::readiness_status_uses_rpc_argument_validation_before_observing_queries ... ok
+test status::tests::readiness_status_transport_failures_never_claim_store_or_exact_readiness ... ok
+test status::tests::readiness_status_timed_out_worker_keeps_admission_until_it_really_exits ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 3 filtered out; finished in 0.10s
+

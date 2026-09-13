@@ -1,0 +1,7 @@
+{
+  "source": "a124fd30d59bcd06062b5464810188a0288e461e",
+  "spec_before_sha256": "f66b76c50bf233322f71cffacb573c5957ed8b1377d4c308d5e5e780f923781c",
+  "spec_after_sha256": "a7c7175e25c6951d64e1a432288ec0cdb321b8e7a4ec845ac7e5dc48a8276979",
+  "reason": "Pulse fixture strengthened to observe actual serving PID before single-shot pulse; direct store-core dependency edges complete older exit-flag receipt.",
+  "behavior_acceptance_changed": false
+}

@@ -1,0 +1,16 @@
+{
+  "source": "0a7c4a1f729c700f52c650ee0c3efc56a136560f",
+  "socket_exists_before_listen": true,
+  "absent": {
+    "exit": 1,
+    "out": "",
+    "err": "memory pulse: no listener at /tmp/mpulse-ohx_i0ff/r/memory-3ed8931b2f30b4db.sock for root /private/tmp/mpulse-ohx_i0ff/p: the socket is absent (No such file or directory (os error 2)); a daemon may still be starting (it binds after bootstrap) or none serves this root\n  `memory ready` answers once a daemon serves this root; look for a daemon process before starting another\n"
+  },
+  "bound_not_listening": {
+    "exit": 1,
+    "out": "",
+    "err": "memory pulse: connection refused at /tmp/mpulse-ohx_i0ff/r/memory-3ed8931b2f30b4db.sock for root /private/tmp/mpulse-ohx_i0ff/p: the socket is present but nothing accepts (Connection refused (os error 61)); a daemon may have exited without unlinking it, or is not yet serving \u2014 a daemon process is not a listener\n  `memory ready` answers once a daemon serves this root; look for a daemon process before starting another\n"
+  },
+  "same_bound_socket_connects_after_listen": true,
+  "scope": "Deterministic counterexample to await_socket file-existence readiness assumption; original discarded daemon stderr cannot distinguish startup scheduling from early daemon exit."
+}

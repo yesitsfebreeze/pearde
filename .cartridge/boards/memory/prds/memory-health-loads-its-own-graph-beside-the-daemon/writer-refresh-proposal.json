@@ -1,0 +1,17 @@
+{
+  "source": "439bea56749d6a7361d6c1afb7d1a43bb46c7e9f",
+  "receipt": "@memory/every-mutation-holds-the-store-writer-boundary",
+  "add_changed_source_and_gate_dependencies": [
+    ".cartridge/docs/health-owner.md",
+    ".cartridge/tests/integration/e2e/focus_routing.rs",
+    ".cartridge/tests/integration/e2e/health_surface.rs",
+    ".cartridge/tests/unit/src/commands/src/tests/commands_health_owner_test.rs",
+    ".cartridge/tests/unit/src/store/core/src/health_test.rs",
+    ".cartridge/tests/unit/src/store/core/src/tests/legacy_test.rs",
+    "src/health/Cargo.toml",
+    "src/health/src/lib.rs",
+    "src/store/core/src/health.rs"
+  ],
+  "reason": "Existing writer footprint already binds modified commands/lib/health, store_core/lib/cold, CLI/admin/legacy tests in part. Union with these paths captures new readonly module and its transitive pure aggregation/direct base Cargo edge, plus proof fixtures/doc introduced by health. No writer acceptance change.",
+  "coordinator_only": true
+}

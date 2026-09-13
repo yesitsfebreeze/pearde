@@ -1,0 +1,7 @@
+{
+  "removed_owned_disposable_directories": [
+    "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-search-baseline-mjlpirky",
+    "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-search-probe-8tyw4bn4"
+  ],
+  "reproduction": "create a new temporary directory, run baseline.ts then the preserved Cargo/source probe; outputs and exact input hashes retained"
+}

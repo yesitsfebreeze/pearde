@@ -1,0 +1,63 @@
+{
+  "reviewer": "/root/sessions_mapping",
+  "findings": [
+    {
+      "case": "duplicate privacy keys",
+      "before": "index exposed PRIVATE_TITLE and private path as public",
+      "after": "strict public parser excludes both rows; no metadata returned",
+      "probe": "independent-privacy-probe.ts"
+    },
+    {
+      "case": "opendir completes after response deadline",
+      "before": "initial source had check outside try; corrected by coordinator before first executable probe",
+      "after": "opened handle closes after tracked actual work settles",
+      "probe": "independent-privacy-probe.ts"
+    },
+    {
+      "case": "growing file capacity failure bypasses aggregate accounting",
+      "before": {
+        "files_opened": 10,
+        "record_bytes_read": 10485770,
+        "cap": 8388608
+      },
+      "after": {
+        "files_opened": 8,
+        "record_bytes_read": 8323052,
+        "whole_operation_cap_including_authority_reads": 8388608,
+        "final_authority_bytes_reserved": 65536
+      },
+      "probe": "independent-budget-probe.ts"
+    },
+    {
+      "case": "read final serialization exceeds deadline",
+      "before": "injected60ms serialization with30ms deadline returns available after66\u201375ms",
+      "probe": "independent-deadline-probe.ts",
+      "after": "Injected 60 ms serialization with 30 ms deadline returns timeout at approximately 66 ms; synchronous work cannot be preempted, but no late success is returned."
+    },
+    {
+      "case": "granted hidden board selector mismatch",
+      "before": "sourceDeclarations(.hidden) available, sourceRecords(.hidden) malformed",
+      "probe": "independent-deadline-probe.ts",
+      "after": "Both declarations and records accept the explicitly granted .hidden board; hidden record-path components remain excluded."
+    }
+  ],
+  "no_source_edits": true,
+  "decision": "PASS; no remaining source blocker",
+  "verification": {
+    "focused_tests": 23,
+    "assertions": 215,
+    "failures": 0,
+    "typecheck": "bun run check: PASS",
+    "independent_probes": "All three retained executable probes rerun successfully against this snapshot."
+  },
+  "source_sha256": {
+    "src/source-records.ts": "e8947d91f3ffe5abb810b7d73a96d64185841d249cd6fe4f7041bbb1b88956a0",
+    "src/records.ts": "c8491c11d80db97eb58ec31589836a24655a713c937c322efbdda596b2e86085",
+    "src/service.ts": "324af922c0f202fc26f56f077ea9304c7f3c49ec8a236d61b77b56930853b151",
+    "package.json": "021b3a075c52c5d18a7ed2574a8c877e78a527bc9e6672eaeac11cb9bf940abe",
+    "bun.lock": "83d0b4d57feae9c98706d646708238c589bf72e9ff838ead39d99be09e0e0c93",
+    ".cartridge/tests/source-records.test.ts": "9bb15c370c1a20ac6a7c54a8618b003b1eb62816ffcadecbb334720f0077a0a4",
+    ".cartridge/tests/source-declarations.test.ts": "871ba1428c6521813025f43b9d6989235355cd581bc297c58cbf8172a8393632",
+    ".cartridge/docs/source-records.md": "92f17cfcc0f9de710424292a44bbf18ea1c54ae0cb195cd2caa426657c3f1a50"
+  }
+}

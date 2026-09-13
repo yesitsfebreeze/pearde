@@ -1,0 +1,80 @@
+{
+  "source": "e8e6b319b03dcc9e1dea66b4fd3a0f6b83ab2d47",
+  "base": "cacd7e13fb012029fd6923ce59bbeffcdeb67c5a",
+  "runtime_source": "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df",
+  "reviewed_spec_sha256": "560b4619ac03f28c6b9342c24184293d5dbd4045fb031996c3c1210487ad8d7d",
+  "source_files": {
+    ".cartridge/docs/shell-identity.md": "b26556f616d57edf6d5ae91db9790b97d3bc170cea6e931f6b13ae35b1feca8f",
+    ".cartridge/tests/integration/process.rs": "33f0a620a4b81919773f9b387617d802acaa02bd9298efc4522c2da41cda234c",
+    ".cartridge/tests/unit/identity/tests.rs": "36f47c8c95a0f2890cdcbae6285d4cb8091e4909e4e7e2d0b3d2f0e1c5bd37ce",
+    "src/identity.rs": "87fb97542c036fa9d1c4e9f68ca879d36866d8b998c48ad9b3b810525e75e3bf",
+    "src/main.rs": "eff1836e859a96668b77fdb32c4c22e0429471739d304939788b93d4d4b4e769",
+    "src/marks.rs": "2e9b5158a8824332eaf9de01a46c890132e858bc6756f4051515672ea8a99833",
+    "src/tool.rs": "a01331e5a2a6eb5e1fee351f5192121001f9682072b19a9db0c03fe8e65c3b03"
+  },
+  "binary": {
+    "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/pty",
+    "sha256": "e50e8b9f55ae410e0edcf56cdfbaf3d7f6a47d981ed55e3bc9ae9589689a542c"
+  },
+  "gates": {
+    "just test pty": {
+      "exit_code": 0,
+      "unit_tests": 20,
+      "native_process_tests": 10
+    },
+    "just check pty": {
+      "exit_code": 0,
+      "format": "passed",
+      "clippy": "passed"
+    },
+    "cargo test --test process identity_ -- --nocapture": {
+      "exit_code": 0,
+      "tests": 2,
+      "actual_cases": [
+        "nu",
+        "zsh",
+        "bash",
+        "sh",
+        "pending-wrapper",
+        "UI replace/reject/rollback"
+      ]
+    }
+  },
+  "logs": {
+    "public-test": {
+      "file": "implementation-public-test.log",
+      "sha256": "1060059fb97f9af934fdf10fca03330e5bb39ed189850f7cb99cb3c10859e458"
+    },
+    "public-check": {
+      "file": "implementation-public-check.log",
+      "sha256": "7c83b7c4103d5d78b2321595a2d072567e45d42c572322815ba4a4cc8b5e4453"
+    },
+    "native": {
+      "file": "implementation-native.log",
+      "sha256": "4965ac140769dce32454abfb6b7ec7a1054fc85343c73fa48e1ad4e745f6dc16"
+    },
+    "restart-before": {
+      "file": "implementation-restart-before.log",
+      "sha256": "c7c967e576aee6fc9f0b2d69a9691039f71468cc50b5041fe9efe0a3edd2440f"
+    }
+  },
+  "review": {
+    "file": "implementation-review.json",
+    "sha256": "af0bd134ffda895b8a29b3f9bfd46b177197eb1036e4242a8e3f01556f9b10ae"
+  },
+  "observations": [
+    "Configured executable and basename dialect stay separate from untrusted bounded terminal-reported dialect; supported adapters require matching report plus prompt; unsupported/contradictory reports remain unknown.",
+    "All existing PTY read surfaces and tool-call result envelopes include additive identity, preserving legacy content/error strings, frame/cursor behavior and startup environment fields.",
+    "Four real shell cases execute in isolated child environments; mandatory Nu/Zsh/Bash are not silently skipped, unsupported sh and pending wrapper retain literal input and screen output.",
+    "UI consumer versions1->2->rejected3->1 preserve PTY active node, shell PID, variable and command history; explicit attachment to live shell preserves it.",
+    "Supported-shell exit/restart returns fresh cwd/integration; old Zsh shared-shim cleanup race reproduced before fix, then unique bounded atomic per-Shell directory reservation passes native and deterministic unit proof."
+  ],
+  "limits": [
+    "Terminal markers remain forgeable observations, not executable authentication or input authority.",
+    "Current invalid cwd becomes unknown; initial cwd never masquerades as current cwd.",
+    "Grid and exit observations use sequential locks and are not one global atomic snapshot.",
+    "Context metadata, command wait and input ownership remain separate outcomes."
+  ],
+  "changes_outside_approved_footprint": false,
+  "live_user_terminal_touched": false
+}

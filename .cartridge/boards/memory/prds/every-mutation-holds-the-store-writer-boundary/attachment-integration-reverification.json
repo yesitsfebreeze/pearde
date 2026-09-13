@@ -1,0 +1,7 @@
+{
+  "source_commit": "f9759848c56255ee0607587970f58ccc087ade53",
+  "reason": "New shared transport identity helper is directly imported by CLI health, native attachment bypasses local writer initialization, and maintained native/health fixtures prove shared ownership semantics. Bind exact changed source and proof paths; acceptance and gate commands unchanged.",
+  "spec_before_sha256": "75d70b01714f4cbe5b223c2ba9d84fb1c48cd6b295860d8f2dee7abeb22768a1",
+  "spec_after_sha256": "07129539e0ec830b03185f14cdfa45dfd9c5fe8facbab254a0a2b572310e2123",
+  "behavior_acceptance_changed": false
+}

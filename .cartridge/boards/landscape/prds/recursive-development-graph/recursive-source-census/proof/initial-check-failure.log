@@ -1,0 +1,55 @@
+    Checking landscape v0.1.0 (/Users/feb/dev/cartridge/landscape.ctg)
+error: unnecessary use of `clone` to create a slice from a reference
+   --> /Users/feb/dev/cartridge/landscape.ctg/src/../.cartridge/tests/unit/census.rs:113:22
+    |
+113 |     let first = capture(&[mount.clone()], limits(), |kind, dir| {
+    |                         ^^^^^^^^^^^^^^^^ help: try: `std::slice::from_ref(&mount)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cloned_ref_to_slice_refs
+    = note: `-D clippy::cloned-ref-to-slice-refs` implied by `-D warnings`
+    = help: to override `-D warnings` add `#[allow(clippy::cloned_ref_to_slice_refs)]`
+
+error: unnecessary use of `clone` to create a slice from a reference
+   --> /Users/feb/dev/cartridge/landscape.ctg/src/../.cartridge/tests/unit/census.rs:142:25
+    |
+142 |     let repeated = capture(&[mount.clone()], limits(), |_, dir| {
+    |                            ^^^^^^^^^^^^^^^^ help: try: `std::slice::from_ref(&mount)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cloned_ref_to_slice_refs
+
+error: unnecessary use of `clone` to create a slice from a reference
+   --> /Users/feb/dev/cartridge/landscape.ctg/src/../.cartridge/tests/unit/census.rs:154:23
+    |
+154 |     let second = capture(&[mount.clone()], limits(), |_, dir| {
+    |                          ^^^^^^^^^^^^^^^^ help: try: `std::slice::from_ref(&mount)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cloned_ref_to_slice_refs
+
+error: unnecessary use of `clone` to create a slice from a reference
+   --> /Users/feb/dev/cartridge/landscape.ctg/src/../.cartridge/tests/unit/census.rs:291:23
+    |
+291 |     let census = capture(&[mount.clone()], limits(), |_, dir| {
+    |                          ^^^^^^^^^^^^^^^^ help: try: `std::slice::from_ref(&mount)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cloned_ref_to_slice_refs
+
+error: unnecessary use of `clone` to create a slice from a reference
+   --> /Users/feb/dev/cartridge/landscape.ctg/src/../.cartridge/tests/unit/census.rs:416:24
+    |
+416 |         let result = capture(&[mount.clone()], limits(), |_, _| {
+    |                              ^^^^^^^^^^^^^^^^ help: try: `std::slice::from_ref(&mount)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cloned_ref_to_slice_refs
+
+error: unnecessary use of `clone` to create a slice from a reference
+   --> /Users/feb/dev/cartridge/landscape.ctg/src/../.cartridge/tests/unit/census.rs:480:24
+    |
+480 |         let result = capture(&[mount.clone()], limit, |_, dir| {
+    |                              ^^^^^^^^^^^^^^^^ help: try: `std::slice::from_ref(&mount)`
+    |
+    = help: for further information visit https://rust-lang.github.io/rust-clippy/rust-1.98.0/index.html#cloned_ref_to_slice_refs
+
+error: could not compile `landscape` (lib test) due to 6 previous errors
+error: recipe `_cargo` failed with exit code 101
+error: recipe `check` failed on line 9 with exit code 101
+error: recipe `check` failed on line 13 with exit code 101

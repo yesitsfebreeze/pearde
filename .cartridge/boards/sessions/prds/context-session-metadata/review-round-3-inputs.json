@@ -1,0 +1,22 @@
+{
+  "canonical": "@sessions/context-session-metadata",
+  "review_round": 3,
+  "inherited_rounds": 2,
+  "max_rounds": 5,
+  "baseline_source": "191e2b6cb4291bdcce7a894f98bb2d475361d30f",
+  "prd_sha256": "8cb6c6e062a2491356e94896f28914cc2b6e5012579a87ef8dcb45a6c6f43a77",
+  "spec_sha256": "9d590191cea1f59257442d21b970c1c6e080df386e7abfe48a4ba069681c00b8",
+  "baseline_sha256": "d99b56c0cd3d8168a32582ec11f55512d8afa5f712775d2e3f7df4276cbfd233",
+  "dependency": "@sessions/sub-agent-sessions-record-parent-and-mailbox",
+  "footprint": [
+    "src/main.rs",
+    "src/context.rs",
+    "src/mailbox.rs",
+    "src/roster.rs",
+    ".cartridge/tests/unit/main/context_tests.rs",
+    ".cartridge/tests/unit/main/roster_tests.rs",
+    ".cartridge/tests/integration/context.test.ts",
+    ".cartridge/docs/context.md",
+    "Cargo.toml"
+  ]
+}

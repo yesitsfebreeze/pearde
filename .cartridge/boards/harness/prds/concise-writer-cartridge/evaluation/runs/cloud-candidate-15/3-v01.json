@@ -1,0 +1,48 @@
+{
+  "fixture": "v01",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T20:23:59.070Z",
+  "completed": "2026-09-13T20:23:59.817Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a precise editor. Return only the requested deliverable.\n\nCompress verbose source into one short, self-contained paragraph. Preserve all unique facts but write them only once, in plain, grammatical sentences. Use shared subjects and semicolons to combine related facts. Remove category labels, introductions, conclusions and repeated noun phrases. Never start with \"Decision memo\", \"Incident handoff\", \"Status\", or \"Next\". A requested memo needs its facts, not a heading or template.\n\nUse compact verbs: keeps, rejects, skips, expires, passed, remains. Prefer \"unpublished\" to \"has not yet been published\". Include evidence in parentheses directly beside the supported fact. Combine instructions with their conditions and reasons; avoid a separate sentence repeating a condition already expressed. A pending measurement already means its outcome is unknown; retain any specific risk separately. State unchanged scope once. For verbose input aim for roughly one third of the source's words, then remove another redundant phrase if possible without losing a fact.\n\nKeep every substantive detail: affected object, action, counts and units, timeframe, exclusions, unchanged permissions, evidence, unknown identities or outcomes, specific risk, owner, next action and its actual prerequisites. Read the whole source before writing. Never invent a cause, result, owner, or prerequisite. In particular, a pending check is not automatically a pre-release requirement. Technical literals, names, identifiers, commands, errors and file paths must remain byte-for-byte exact. Keep clear referents and enough grammar for someone who has not read the source. Do not add quotation marks or code formatting to ordinary prose. Preserve existing code and formatting where required.\n\nSilently verify that a reader can recover every unique source fact and uncertainty from your draft; restore any missing fact, then tighten surrounding words. Do not narrate this check.\n\nIf the source is already concise, return it exactly. Requested JSON must have exactly the required keys and value types, with no wrapper. Preserve required Markdown frontmatter and executable blocks exactly. An explicit request for detail overrides brevity: give the requested ordered steps and reasons.\n\nDraft in one normal response. Saving an existing memo requires an explicit request, a preview and approved memo.write using the read expected_revision. Stop on conflicts; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone handoff memo.\n\nSource:\nWe have now reached a point where the retry change for the export worker has been implemented, and it is useful to put the present position in writing so that another person can pick up the work. The retry limit was changed from five attempts to three attempts. That is the change that has been made. The relevant unit suite contains 24 tests, and all 24 of those tests passed. There has not yet been a production deployment, so a reader should not interpret the implementation or the passing tests as evidence of deployment. The run that produced the test result is recorded as fixture-run-17. There is still a possibility that the shorter retry budget will make recovery from long network interruptions less likely; that point has not been measured. Mira owns the next step, which is to run the staging interruption test before considering a production deployment. This is the current state of the work rather than a claim that every risk has been removed."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T20:23:59.763713057Z",
+    "message": {
+      "role": "assistant",
+      "content": "The export worker retry change is implemented, with the retry limit reduced from five attempts to three. All 24 tests in the relevant unit suite passed (fixture-run-17), but there has been no production deployment, so the implementation and test results do not indicate deployment. The shorter retry budget may make recovery from long network interruptions less likely, though this has not been measured. Mira owns the next step: run the staging interruption test before considering a production deployment."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 611897149,
+    "prompt_eval_count": 724,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 97
+  },
+  "tokenization": null,
+  "generation_tokens": 97,
+  "output_tokens": 97,
+  "input_tokens": 724,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

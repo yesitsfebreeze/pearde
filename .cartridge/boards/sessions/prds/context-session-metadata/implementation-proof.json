@@ -1,0 +1,37 @@
+{
+  "source": "92240c6ba415f53b2d17971aea185536a6f517bc",
+  "runtime": "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df",
+  "independent_source_review": {
+    "reviewer": "/root/proxy_continuation",
+    "result": "PASS",
+    "findings": [],
+    "checks": [
+      "Strict bounded request and existing authenticated scope before lookup",
+      "Matching actor/target/parent key and stored ID; no fallback or parent leak",
+      "Exact minimal owned projection and stable digest outside read guard",
+      "Native dispatch returns changed=None; no IO/cursor/channel mutations or events",
+      "Actual native strict DTO/private bytes, restart/stale revision, unchanged bytes/mtime/events/cursors, malformed inbox/channel preservation"
+    ]
+  },
+  "files": {
+    "src/main.rs": "5951c1ea3306d1ee5b35a76bb9d707706b9819e70ab503e6f4a73950f31021cd",
+    "src/roster.rs": "5c2b2f37d9716e1de665ebcfd7170e8f931f92d1ae1c74f42943de071b141022",
+    "src/context.rs": "e208a0b2f940fff11e54c582b5044f7a474d9380d98b8f0ac34434ff6958534c",
+    ".cartridge/tests/unit/main/context_tests.rs": "b923fcd909f2b8ea3bdfc13d67f8f82f3adaeef1a99a4651c3f0a0721696e791",
+    ".cartridge/tests/integration/context.test.ts": "d80a40fbfeb0d4dc3358992d8679dee9006f14ca2280d3e7092e0a3fb1c6d940",
+    ".cartridge/docs/context.md": "2d302f27c19e483ac0ae8663ae5f6cdb040a040ebeb13342832528a9550822b6"
+  },
+  "gates": {
+    "just test sessions": {
+      "passed": 92,
+      "failed": 0,
+      "includes": "Three new unit/native-driver tests; native driver executes two actual SDK tests"
+    },
+    "just check sessions": "PASS"
+  },
+  "logs": [
+    "proof/public-test.log",
+    "proof/public-check.log"
+  ],
+  "proof_refinement": "First native run correctly refused deleting a referenced parent (existing guard). Final fixture asserts that refusal, then removes only the disposable stopped parent snapshot and restarts to observe missing-parent/inactive-actor behavior. No production deletion semantics changed."
+}

@@ -1,0 +1,28 @@
+{
+  "kind": "imported-composer-footprint",
+  "source": "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df",
+  "previous_runtime_source": "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b",
+  "review_round_preserved": 4,
+  "review_status_preserved": "passed",
+  "acceptance_unchanged": true,
+  "collection_before_sha256": "7235bc136004e11a06606370cb3ea614b48b2174a29da86f23a05afa44ac4258",
+  "changes": [
+    {
+      "file": "specs/spec01.md",
+      "before_sha256": "7b8372bf3c1654c1d9ebeeaf11a511645e5a2341dc46ba54346f0eeefa4f9687",
+      "after_sha256": "23998938bd06cca0fa742fa7d9270a38e7aca4d4947a2c5b2b83410abce502ae"
+    },
+    {
+      "file": "prd.md",
+      "before_sha256": "6692244d2db00173a3f176af73d53efa4127f3b64dd32f1c3a86914c7160586b",
+      "after_sha256": "02748369a859e31f356f898c3b6737b803461d7b3b7ac64f4f8f02a2e741edee"
+    },
+    {
+      "file": "review.md",
+      "before_sha256": "86836aa208b654c1a58c3c6f4f19e70990104f908488b496909ed9b2b6f2cead",
+      "after_sha256": "4f86360253420abd082c0ef1e27ef0257fd124b6fc768c02e3a2a9f42e5b01d3"
+    }
+  ],
+  "reason": "Binary bridge imports Host; its focused reply-selector tests remain unchanged. This rerun alone does not claim the dependent MCP live-fixture obligation was rerun.",
+  "executable_commands_unchanged": true
+}

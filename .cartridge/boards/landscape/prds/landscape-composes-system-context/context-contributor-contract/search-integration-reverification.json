@@ -1,0 +1,12 @@
+{
+  "source": "422c521aed170a4d098505c73469a1a59dccf49d",
+  "reason": "Bind newly imported source_search module and tests; refresh exact clean owner pin after independently reviewed additive integration. Existing acceptance and executable public/native gates unchanged.",
+  "behavior_acceptance_changed": false,
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/context-contributor-contract/specs/spec01.md",
+      "before_sha256": "5f80f2175d0c4bd47ef439795a4ceddcf089bed0b5dc0e42447aea1234de068b",
+      "after_sha256": "ee1f21285bd149ffd36426302222b6931aeb363c01b55be3b8e8b90d69244f5e"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "fixture": "v04",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T20:24:01.651Z",
+  "completed": "2026-09-13T20:24:02.495Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a precise editor. Return only the requested deliverable.\n\nCompress verbose source into one short, self-contained paragraph. Preserve all unique facts but write them only once, in plain, grammatical sentences. Use shared subjects and semicolons to combine related facts. Remove category labels, introductions, conclusions and repeated noun phrases. Never start with \"Decision memo\", \"Incident handoff\", \"Status\", or \"Next\". A requested memo needs its facts, not a heading or template.\n\nUse compact verbs: keeps, rejects, skips, expires, passed, remains. Prefer \"unpublished\" to \"has not yet been published\". Include evidence in parentheses directly beside the supported fact. Combine instructions with their conditions and reasons; avoid a separate sentence repeating a condition already expressed. A pending measurement already means its outcome is unknown; retain any specific risk separately. State unchanged scope once. For verbose input aim for roughly one third of the source's words, then remove another redundant phrase if possible without losing a fact.\n\nKeep every substantive detail: affected object, action, counts and units, timeframe, exclusions, unchanged permissions, evidence, unknown identities or outcomes, specific risk, owner, next action and its actual prerequisites. Read the whole source before writing. Never invent a cause, result, owner, or prerequisite. In particular, a pending check is not automatically a pre-release requirement. Technical literals, names, identifiers, commands, errors and file paths must remain byte-for-byte exact. Keep clear referents and enough grammar for someone who has not read the source. Do not add quotation marks or code formatting to ordinary prose. Preserve existing code and formatting where required.\n\nSilently verify that a reader can recover every unique source fact and uncertainty from your draft; restore any missing fact, then tighten surrounding words. Do not narrate this check.\n\nIf the source is already concise, return it exactly. Requested JSON must have exactly the required keys and value types, with no wrapper. Preserve required Markdown frontmatter and executable blocks exactly. An explicit request for detail overrides brevity: give the requested ordered steps and reasons.\n\nDraft in one normal response. Saving an existing memo requires an explicit request, a preview and approved memo.write using the read expected_revision. Stop on conflicts; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone incident handoff.\n\nSource:\nThe incident record concerns the preview service rather than the main application. Between 10:05 and 10:12 UTC, preview requests returned HTTP 503. The main application continued serving requests during that interval. Investigation found that the preview process could not acquire its local lock. The log contained the exact message \"preview lock unavailable\". We have not established who held that lock, so the handoff must not name an owner as though that were known. Restarting the preview process restored previews at 10:12 UTC. That is the observed recovery, not evidence that the lock ownership question has been solved. The supporting log is incident-preview-8. The next step belongs to Oren, who will add lock-owner diagnostics and reproduce the contention in a disposable fixture. The purpose of this handoff is to allow someone who did not see the incident discussion to understand the affected surface, the recovery and the remaining investigation."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T20:24:02.439327887Z",
+    "message": {
+      "role": "assistant",
+      "content": "Incident handoff: Between 10:05 and 10:12 UTC, preview requests returned HTTP 503 while the main application continued serving requests. The preview process could not acquire its local lock, with the log containing the exact message \"preview lock unavailable\"; the lock holder remains unidentified. Restarting the preview process restored previews at 10:12 UTC, but this observed recovery does not resolve the lock ownership question. The supporting log is incident-preview-8. Oren will add lock-owner diagnostics and reproduce the contention in a disposable fixture."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 679847654,
+    "prompt_eval_count": 724,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 116
+  },
+  "tokenization": null,
+  "generation_tokens": 116,
+  "output_tokens": 116,
+  "input_tokens": 724,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

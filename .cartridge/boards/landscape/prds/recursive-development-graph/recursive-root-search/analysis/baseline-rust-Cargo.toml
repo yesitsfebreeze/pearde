@@ -1,0 +1,9 @@
+[package]
+name = "recursive-search-baseline"
+version = "0.0.0"
+edition = "2021"
+[workspace]
+[dependencies]
+landscape = { path = "/Users/feb/dev/cartridge/landscape.ctg" }
+serde_json = "1"
+tokio = { version = "1.53", features = ["macros", "rt"] }

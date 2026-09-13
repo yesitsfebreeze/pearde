@@ -1,0 +1,90 @@
+{
+  "source": "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df",
+  "base": "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b",
+  "reviewed_spec_sha256": "185c4b3eeeb42dea2391e3da8a9348e87dd9fd5805fd904e8c9ddd90775cf31d",
+  "source_files": {
+    "src/loader.rs": "d46f8c8d11962f77c40ea2776b834b008781fd29f590052c0735b14b0e991565",
+    ".cartridge/tests/unit/src/tests/mod.rs": "2c5b619ec85633c5d2eff142ff337f9989b1cc3ed9ca6a00e84b94d08fb3c09e",
+    ".cartridge/tests/unit/src/tests/composition.rs": "f8de39484cb79cf24f0086a5464a6c1d4a501dcc76df1be799836cffeb8d4bf5",
+    ".cartridge/docs/composition.md": "647dc79169b45edd6c216d35cd0abff8759380fa0794ba70762fcf36c1257a79"
+  },
+  "independent_audit": {
+    "path": "implementation-review.json",
+    "sha256": "c35c3d24cf51670c78521a2b1d5873bec9597f56fe38ed5536d41a42996626ff"
+  },
+  "integration": {
+    "path": "source-integration.json",
+    "sha256": "8f4940c4d343decd9089bca84e8a89561f41c487615113995eed410b6f71531e"
+  },
+  "binary": {
+    "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/cartridge",
+    "sha256": "2f290d1e9755a7a03e65ad5593ec1417e6f11291fe1e868f3581f69008fbaeab"
+  },
+  "gates": {
+    "focused": {
+      "command": "just test runtime composition",
+      "exit_code": 0,
+      "log": "implementation-focused.log",
+      "sha256": "1c96b27af2028317db59b4a7ad5737722bbc340cb3281d474fa84c6caf107e4b"
+    },
+    "test": {
+      "command": "just test runtime",
+      "exit_code": 0,
+      "log": "implementation-test.log",
+      "sha256": "c461b7b507d3a9bafa6a18d48fe89b99ec2de7c8deae16f240adf0cf515becd8"
+    },
+    "check": {
+      "command": "just check runtime",
+      "exit_code": 0,
+      "log": "implementation-check.log",
+      "sha256": "34bfe85f5a1390e8e9d54f712141c9e63893b80a48f538871ddb8b3ee9bdfba5"
+    },
+    "build": {
+      "command": "cargo build --manifest-path Cargo.toml --bin cartridge",
+      "exit_code": 0,
+      "log": "implementation-build.log",
+      "sha256": "9ddcb7a97f3589835ba8f354c41d25b0a805bd5f85ddbccaff009e6f6dc7236c"
+    },
+    "smoke": {
+      "command": "bun test ./.cartridge/tests/integration/smoke.test.ts",
+      "exit_code": 0,
+      "log": "implementation-smoke.log",
+      "sha256": "74e0a8c9342cd69eae24b579a1bdc2ae0c59a9ae9106c79dfd6c873b8960d87e"
+    }
+  },
+  "counts": {
+    "rust_library": 165,
+    "rust_binary": 2,
+    "memo": 4,
+    "memo_assertions": 47,
+    "smoke": 3,
+    "smoke_assertions": 17
+  },
+  "call_site_map": {
+    "profile": "replace_node/reconcile/replace_changed/request_reload -> replace_entry -> replace_entry_inner -> replace_active",
+    "nested": "replace_node/request_reload -> swap_node -> replace_active",
+    "creation": "existing load_component and runtime Ctx primitives preserved",
+    "bookkeeping": "replace_entry_inner supplies synchronous loaded-slot/fiber/source-stamp publication callback before shared reload finish/gate release/old disposal"
+  },
+  "observations": [
+    "One fixture parameterized depth0/1 preserves configuration and stable consumer references through versions1,2,3; returns actual active UIDs and retires old handles.",
+    "Both depths reject apply error after provide and changed provided-key candidate with Err while retaining old value; corrected version5 succeeds.",
+    "Explicit nested private counter stays unavailable from root; intercepted router metadata retained; shared router/PTY apply once; outer/root dependent and shared-provider handles unchanged.",
+    "Unchanged root source bytes do not cause a further replacement after source-stamp publication.",
+    "Initially failed profile entry returns the newly spawned current handle on recovery and retains ordinary separately observable async readiness."
+  ],
+  "limitations": [
+    "Historical bank/checkpoint/automatic child source-watch record remains independent and is not declared complete.",
+    "Initial-failure recovery does not claim active-candidate synchronous readiness.",
+    "Legacy nested key sharing remains unless explicit isolation is requested."
+  ],
+  "verification_note": "First isolated full run used a stale shared-target binary with only163 library tests and was excluded. Owned source timestamps invalidated; serial final isolated and actual public gates both include165 library tests and both new fixtures. No source content changed during invalidation.",
+  "environment": {
+    "RUSTC_WRAPPER": "",
+    "RUSTC_WORKSPACE_WRAPPER": "",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_TARGET_DIR": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract"
+  }
+}

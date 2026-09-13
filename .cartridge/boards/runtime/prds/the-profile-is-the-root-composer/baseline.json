@@ -1,0 +1,136 @@
+{
+  "source_commit": "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b",
+  "source_sha256": {
+    "src/loader.rs": "2be4017b529a096087b17d59fe1b17edf5693ad444b9758b63e302724c35b737",
+    "src/context.rs": "4fae8449a668c6b73ed3a1ba8d02ae098488b9c85f8a1e02740b7f4d160dbc27",
+    "src/lua.rs": "e9b1caa126a77d07e479e7bda78ed2f7cccea27d374276563e06926ae0b63177",
+    "src/runtime.rs": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2",
+    ".cartridge/tests/unit/src/tests/reload.rs": "3f681027f8aba4e58b255afab783ae73424402372f5f33ccc8762e4a623a7a5b",
+    ".cartridge/tests/unit/src/tests/wire.rs": "86c43966f7ac33f3bce9e373cbf646acb4e95dd18600768a9c8c0cd32b42c35a"
+  },
+  "observed": [
+    {
+      "actual_uid": 9,
+      "after": {
+        "pty": "one-pty",
+        "router": "one-router",
+        "version": 2
+      },
+      "counter_visible_at_root": true,
+      "dependent_unchanged": true,
+      "depth": 0,
+      "failed_candidate_reply": "Ok(9)",
+      "initial": {
+        "pty": "one-pty",
+        "router": "one-router",
+        "version": 1
+      },
+      "old_uid": 4,
+      "retained": {
+        "pty": "one-pty",
+        "router": "one-router",
+        "version": 2
+      },
+      "returned": "Ok(4)",
+      "shared_applications": 1,
+      "shared_unchanged": true
+    },
+    {
+      "actual_uid": 12,
+      "after": {
+        "pty": "one-pty",
+        "router": "one-router",
+        "version": 2
+      },
+      "counter_visible_at_root": true,
+      "dependent_unchanged": true,
+      "depth": 1,
+      "failed_candidate_reply": "Err(\"runtime error: [string \\\"/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mk...\\\"]:1: candidate rejected\\nstack traceback:\\n\\t[C]: in function 'error'\\n\\t[string \\\"/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mk...\\\"]:1: in function <[string \\\"/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mk...\\\"]:1>\")",
+      "initial": {
+        "pty": "one-pty",
+        "router": "one-router",
+        "version": 1
+      },
+      "old_uid": 5,
+      "retained": {
+        "pty": "one-pty",
+        "router": "one-router",
+        "version": 2
+      },
+      "returned": "Ok(12)",
+      "shared_applications": 1,
+      "shared_unchanged": true
+    }
+  ],
+  "observed_gaps": [
+    "The public root replace_node reply retains disposed UID after successful replacement; nested reply names active replacement.",
+    "The public root replace_node reply returns Ok after candidate rejection; nested returns Err.",
+    "replace_entry and swap_node duplicate process preparation, service drain, isolated candidate publication, atomic switch, rejection cleanup and transaction completion."
+  ],
+  "preserved": [
+    "Existing root and nested service references follow successful replacement and preserve old value after rejection.",
+    "Existing dependent and shared provider generations remain unchanged; one shared provider application.",
+    "Explicit ctx isolation remains the privacy mechanism for legacy Lua primitive composition; no implicit change to sharing is proposed."
+  ],
+  "historical_prerequisite": {
+    "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/memos/work/root--a-nested-cartridge-is-a-first-class-entry.md",
+    "sha256": "5b05a6ad9c628dc8fbe50d438cbe4750aa3f34dc8d98e603c9836cfe29e72cca",
+    "status": "active/unchecked historical memo; no canonical alias entry in work-map.sources found",
+    "resolution": "Current in-scope child lifecycle proven by source-bound baseline and maintained native fixtures. No claim that the separate historical bank/checkpoint/automatic source-watch programme is complete; no new sibling scope is inferred or implemented."
+  },
+  "baseline_commands": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/runtime/prds/the-profile-is-the-root-composer/baseline-command.json",
+  "explicit_private_observation": [
+    {
+      "actual_uid": 9,
+      "after": {
+        "pty": "one-pty",
+        "router": "one-router",
+        "version": 2
+      },
+      "counter_visible_at_root": true,
+      "dependent_unchanged": true,
+      "depth": 0,
+      "failed_candidate_reply": "Ok(9)",
+      "initial": {
+        "pty": "one-pty",
+        "router": "one-router",
+        "version": 1
+      },
+      "old_uid": 4,
+      "retained": {
+        "pty": "one-pty",
+        "router": "one-router",
+        "version": 2
+      },
+      "returned": "Ok(4)",
+      "shared_applications": 1,
+      "shared_unchanged": true
+    },
+    {
+      "actual_uid": 12,
+      "after": {
+        "pty": "one-pty",
+        "router": "one-router",
+        "version": 2
+      },
+      "counter_visible_at_root": false,
+      "dependent_unchanged": true,
+      "depth": 1,
+      "failed_candidate_reply": "Err(\"runtime error: [string \\\"/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mk...\\\"]:1: candidate rejected\\nstack traceback:\\n\\t[C]: in function 'error'\\n\\t[string \\\"/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mk...\\\"]:1: in function <[string \\\"/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mk...\\\"]:1>\")",
+      "initial": {
+        "pty": "one-pty",
+        "router": "one-router",
+        "version": 1
+      },
+      "old_uid": 7,
+      "retained": {
+        "pty": "one-pty",
+        "router": "one-router",
+        "version": 2
+      },
+      "returned": "Ok(12)",
+      "shared_applications": 1,
+      "shared_unchanged": true
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "source": "f9759848c56255ee0607587970f58ccc087ade53",
+  "binary_sha256": "207d33d173560a78728b9d8f7b2966f80e9a25dfcff4a50780999a7933c75964",
+  "cases": [
+    {
+      "case": "registered_fresh_local_ready",
+      "registered": true,
+      "dir_before_status": false,
+      "reply": {
+        "data": {
+          "build_id": "2c791d2ec49a26fc",
+          "build_stamp": "/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory_cartridge (2026-09-13 20:01)",
+          "config_id": "981eaf848da00261",
+          "crossings_in_flight": 0,
+          "draining": false,
+          "idle_ms": 1,
+          "ingest_queue_depth": 0,
+          "last_llm_complete_failure": "",
+          "llm_complete_failed": 0,
+          "llm_embed_wedges": 0,
+          "llm_shutdown_refused": 0,
+          "ok": true,
+          "pid": 97623,
+          "uptime_ms": 9,
+          "watchdog_restarts": 0,
+          "worker_threads": 10
+        },
+        "reply": 1
+      },
+      "elapsed_ms": 9.338,
+      "dir_after_status": true,
+      "writer_label_after": "cartridge memory pid 97623"
+    },
+    {
+      "case": "registered_second_local_contends",
+      "registered": true,
+      "reply": {
+        "error": "another memory writer holds this data dir (cartridge memory pid 97623)",
+        "reply": 1
+      },
+      "elapsed_ms": 101.604,
+      "status_operation": {
+        "error": "unknown memory operation: status",
+        "reply": 2
+      }
+    },
+    {
+      "case": "same_second_client_after_owner_disposal",
+      "registered": true,
+      "reply": {
+        "data": {
+          "build_id": "2c791d2ec49a26fc",
+          "build_stamp": "/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory_cartridge (2026-09-13 20:01)",
+          "config_id": "981eaf848da00261",
+          "crossings_in_flight": 0,
+          "draining": false,
+          "idle_ms": 0,
+          "ingest_queue_depth": 0,
+          "last_llm_complete_failure": "",
+          "llm_complete_failed": 0,
+          "llm_embed_wedges": 0,
+          "llm_shutdown_refused": 0,
+          "ok": true,
+          "pid": 97636,
+          "uptime_ms": 1,
+          "watchdog_restarts": 0,
+          "worker_threads": 10
+        },
+        "reply": 3
+      },
+      "elapsed_ms": 1.925,
+      "writer_label_after": "cartridge memory pid 97636"
+    },
+    {
+      "case": "attached_absent_owner",
+      "registered": true,
+      "reply": {
+        "error": "status=absent retryable=true: owner endpoint is absent; no local fallback",
+        "reply": 1
+      },
+      "elapsed_ms": 1.332,
+      "dir_created": false,
+      "status_operation": {
+        "error": "status=readonly_attachment retryable=false: operation is not allowed on an attached reader",
+        "reply": 2
+      }
+    }
+  ]
+}

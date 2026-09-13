@@ -1,0 +1,149 @@
+{
+  "source": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+  "recorded_at": "2026-09-13T19:43:07.240823+00:00",
+  "source_clean": true,
+  "changed_paths": [
+    ".cartridge/docs/change-provenance.md",
+    ".cartridge/tests/integration/change-provenance.test.ts",
+    ".cartridge/tests/unit/provenance.rs",
+    ".cartridge/tests/unit/snapshot.rs",
+    "Cargo.toml",
+    "src/main.rs",
+    "src/provenance.rs",
+    "src/service.rs",
+    "src/store.rs"
+  ],
+  "review": {
+    "reviewer": "/root",
+    "round": 3,
+    "score": 94,
+    "implementation_review": "No blocker after inspecting provenance/store/service/main: pinned mutation inputs, metadata caps, known/unknown materialization outcomes, exact grants and post-lock callback match scope."
+  },
+  "spec_sha256": "05db280989830d7933859d5d87e2796d0513ed4147e3976883604e1536a8963a",
+  "footprint": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "79c9cd3c8bcfd8687b4b0739436b7c22669e9c39191c86a76da9b368c337957d"
+    },
+    {
+      "path": "src/main.rs",
+      "sha256": "a7db643afd7b3b6c1c3712cc7e36e99454ae2588baec5717f36b080df55e89d5"
+    },
+    {
+      "path": "src/service.rs",
+      "sha256": "2b689e96addd25bfe99ee6ee026300cf5d5296f313696fd2b2581080ce8b87b0"
+    },
+    {
+      "path": "src/store.rs",
+      "sha256": "64408ec6a2c6f5f66c861fde1e74598926aaec5ce2a0f73d40306e10d60a84fb"
+    },
+    {
+      "path": "src/provenance.rs",
+      "sha256": "d84b956d041480683017f28023fcbd11d7665e2019b23e3793d61784467ea268"
+    },
+    {
+      "path": ".cartridge/tests/unit/provenance.rs",
+      "sha256": "d573984a6b3de685fdc87ca8b5f6e6b9525b58b4c9823aef094e8d0344c6ab94"
+    },
+    {
+      "path": ".cartridge/tests/unit/snapshot.rs",
+      "sha256": "6340e5d802035ff2b32c3737542545fe9eadd4d4c5c3be68963288c73fee6e93"
+    },
+    {
+      "path": ".cartridge/tests/unit/store/tests.rs",
+      "sha256": "9312577bf3a569acd3be691acce2e445f33262960340e060b172aad35042c0c5"
+    },
+    {
+      "path": ".cartridge/tests/integration/change-provenance.test.ts",
+      "sha256": "db018e5ea32233f4ca8c4ff3e1bc0dbab59b5a85c3510f93c1eebc7af9f7e9a5"
+    },
+    {
+      "path": ".cartridge/docs/change-provenance.md",
+      "sha256": "6b1c09ca4a21568f2d83c05c90db6196389ac3dc8870e3fa182a4245629a972f"
+    }
+  ],
+  "gates": [
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract just test gitfs",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "exit": 0,
+      "result": "47 passed",
+      "log": "/tmp/gitfs-provenance-public-test.log",
+      "sha256": "1f7b73aa701b100564ce430a0faa866eb0a5f209af5030ccc5029d70a332bb3a"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract just check gitfs",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "exit": 0,
+      "result": "passed",
+      "log": "/tmp/gitfs-provenance-public-check.log",
+      "sha256": "fbab104688cee5eed246c4c33ff918b56c06982e06fdef49cd4cf4340db41c9c"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract just build gitfs",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "exit": 0,
+      "result": "passed",
+      "log": "/tmp/gitfs-provenance-public-build.log",
+      "sha256": "e771b51a3913508a8a3ccbdfc033e1b52a3288e85aa3486eae073a8f3e2c7d71"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract GITFS_BINARY=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/gitfs SESSIONS_BINARY=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/sessions bun test ./.cartridge/tests/integration/change-provenance.test.ts",
+      "cwd": "/Users/feb/dev/cartridge/gitfs.ctg",
+      "exit": 0,
+      "result": "3 passed, 98 assertions",
+      "log": "/tmp/gitfs-provenance-native.log",
+      "sha256": "ab90886d282882ff3a32359adffed6776f66f6b26927fe7cb0da21bf74e78f81"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract GITFS_BINARY=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/gitfs SESSIONS_BINARY=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/sessions bun test ./.cartridge/tests/integration/tool-result.test.ts ./.cartridge/tests/integration/reviewed-ship.test.ts ./.cartridge/tests/integration/recorded-push.test.ts",
+      "cwd": "/Users/feb/dev/cartridge/gitfs.ctg",
+      "exit": 0,
+      "result": "11 passed, 931 assertions",
+      "log": "/tmp/gitfs-provenance-compatibility.log",
+      "sha256": "d8c7ed34f47fea5fd690e865f6bc9aeb5b96808e5c9919a02adaabb37e7460cd"
+    }
+  ],
+  "binaries": {
+    "gitfs": {
+      "sha256": "b095286cae2b0162581dd6bead1657c5a7c6ebc4c0a134403ca72859d04dfb8a"
+    },
+    "sessions": {
+      "sha256": "dfb46cff10f156771a1340023f3fd3fd61c02ece619a32d6695eba4dedd4baf6"
+    },
+    "fs": {
+      "sha256": "59632efdef07d4d2253496a3e69791ea5b002370b188878ec2fecddbbf63d8ef"
+    },
+    "cartridge": {
+      "sha256": "3c107ead7a60caa07a7aa295cb46c7b2a0663a17ca7aa11fc11b45076b9b08c8"
+    }
+  },
+  "dependencies": {
+    "sessions_source": "191e2b6cb4291bdcce7a894f98bb2d475361d30f",
+    "fs_source": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7"
+  },
+  "proof_scope": [
+    "Real Host runs actual FS/GitFS/Sessions and proves distinct direct/overlay records, visible divergence, operation tags, exact pinned commit/blob references and restart.",
+    "Real standalone Host omits Sessions and its grant; GitFS mutation remains usable with unavailable attribution.",
+    "Negative SDK fixture supplies only failure responses, proves initialization error within2seconds and partial/unknown recording without mutation replay.",
+    "Actual bulk materialization applies65 paths despite64-record cap, retains64 records+1omitted, and preserves those effects across a later failed path.",
+    "Existing tool consumers, policy enforcement, reviewed local commit and exact recorded-push/no-replay fixtures passed."
+  ],
+  "resolved_failures": [
+    "Initial discovery-failure fixture waited for process exit although SDK emits an explicit initialization-error frame and awaits host shutdown. Fixed fixture to assert that actual error frame within deadline; final3/98 passed.",
+    "Initial unit helper attempted to access private Git command function; uses ordinary Git commands against disposable fixture instead, preserving production visibility."
+  ],
+  "limitations": [
+    "Attribution is provider-reported, never authentication or ownership.",
+    "Capture and Sessions append are separate; failed or lost responses can leave recording unknown.",
+    "64 records/256KiB retained per operation; unsafe preimages or uncertain writes counted explicitly.",
+    "Existing external-writer/materialization races and partial cancellation remain; no rollback, retry or delivery journal.",
+    "Older Sessions writers must not mutate upgraded snapshots; current runtime binary identity is pinned without claiming unrelated dirty runtime sources rebuilt."
+  ],
+  "coordinator_actions": [
+    "Collect source and refresh earlier GitFS source-overlapping receipts; source held stable.",
+    "Retain exact already-resolved GitFS-to-Sessions/libc shared Cargo.lock edges under runtime grants leaf.",
+    "Runtime grant leaf must run native fixture with PROVENANCE_EXPECT_SHIPPED_GRANTS=1; it asserts all3 shipped GitFS entries have exact Sessions grant.",
+    "Bind parent rollup executable prerequisite receipts and current owner footprint unions once all children refreshed."
+  ]
+}

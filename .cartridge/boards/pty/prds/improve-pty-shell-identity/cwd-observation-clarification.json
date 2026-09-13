@@ -1,0 +1,11 @@
+{
+  "action": "Applied by root after independent source review",
+  "source": "e8e6b319b03dcc9e1dea66b4fd3a0f6b83ab2d47",
+  "spec_before_sha256": "560b4619ac03f28c6b9342c24184293d5dbd4045fb031996c3c1210487ad8d7d",
+  "spec_after_sha256": "11a1d90b6f7ed127cc058c5b12e77e996ef117b47aca24a033fa36f6f79afbeb",
+  "before": "cwd is the last valid bounded absolute cwd reported by existing OSC7, or null;\ncwd_source is terminal_marker or unknown.",
+  "after": "cwd is the latest OSC7 observation if it is bounded and absolute, or null when\nthat latest observation is invalid or absent; no previous directory is retained.\ncwd_source is terminal_marker or unknown.",
+  "reason": "Clarify existing implemented and independently audited observation semantics: latest invalid cwd becomes unknown rather than retaining stale previous cwd. No code, acceptance, gate or footprint change.",
+  "classification": "Nonsemantic wording clarification; same acceptance, gates, footprint and implemented observation behavior",
+  "review_round_preserved": 3
+}

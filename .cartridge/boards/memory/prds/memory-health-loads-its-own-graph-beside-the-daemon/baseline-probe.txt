@@ -1,0 +1,35 @@
+import os,pathlib,tempfile,socket,threading,subprocess,json,time,hashlib
+binary=pathlib.Path('/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory')
+out=[]
+for case in ['wrong_store','malformed','stalled','absent','stale']:
+ with tempfile.TemporaryDirectory(prefix='mh-',dir='/tmp') as tmp:
+  root=pathlib.Path(tmp).resolve(); base=root/'store'; base.mkdir(); runtime=root/'run'; runtime.mkdir(mode=0o700)
+  h=0xcbf29ce484222325
+  for b in str(base).encode(): h=((h^b)*0x100000001b3)&0xffffffffffffffff
+  endpoint=runtime/f'memory-{h:016x}.sock'; request=[]; stop=threading.Event(); server=None
+  if case!='absent':
+   server=socket.socket(socket.AF_UNIX); server.bind(str(endpoint)); server.listen(); server.settimeout(4)
+   if case=='stale': server.close(); server=None
+  def respond():
+   try:
+    connection,_=server.accept()
+    with connection:
+     data=connection.makefile('rb').readline(); frame=json.loads(data); request.append(frame)
+     if case=='stalled': stop.wait(4); return
+     result={'ok':True,'data_dir':str(root/'different-data'),'entities':777,'memories':2,'reasons':9} if case=='wrong_store' else None
+     connection.sendall((json.dumps({'id':frame['id'],'result':result})+'\n').encode())
+   except Exception as e: request.append({'fixture_error':str(e)})
+  worker=threading.Thread(target=respond) if server else None
+  if worker: worker.start()
+  env=os.environ.copy(); env['MEMORY_DIR']=str(base); env['XDG_RUNTIME_DIR']=str(runtime)
+  started=time.monotonic(); timedout=False
+  try:
+   result=subprocess.run([str(binary),'health'],cwd=root,env=env,capture_output=True,text=True,timeout=1.5); code=result.returncode; stdout=result.stdout; stderr=result.stderr
+  except subprocess.TimeoutExpired as e: timedout=True; code=None; stdout=str(e.stdout or b''); stderr=str(e.stderr or b'')
+  finally:
+   stop.set()
+   if worker: worker.join(5)
+   if server: server.close()
+  out.append({'case':case,'command':[str(binary),'health'],'elapsed_seconds':round(time.monotonic()-started,4),'external_1_5s_deadline_exceeded':timedout,'exit':code,'stdout':stdout,'stderr':stderr,'requests':request,'local_data_created':(base/'data').exists(),'endpoint_preserved':endpoint.exists()})
+result={'source':'0a8736c5126781b90b842a5b818f083458b2f740','binary_sha256':hashlib.sha256(binary.read_bytes()).hexdigest(),'results':out}
+print(json.dumps(result,indent=2))

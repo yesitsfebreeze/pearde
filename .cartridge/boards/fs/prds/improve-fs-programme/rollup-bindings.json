@@ -1,0 +1,95 @@
+{
+  "parent": "@fs/improve-fs-programme",
+  "direct": [
+    "@fs/improve-fs-change-provenance",
+    "@fs/improve-fs-revision-guards",
+    "@fs/improve-fs-search-pages"
+  ],
+  "contracts": {
+    "@fs/improve-fs-change-provenance": {
+      "spec_sha256": "989a4c774c063cbd1fbc14a7cda17c37b29fadad66268e2067f0dfdceb9b3c68",
+      "source_commit": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+      "needs": [
+        "@fs/improve-fs-change-provenance/direct-file-mutations-report-revisions",
+        "@gitfs/overlay-mutations-report-revisions",
+        "@runtime/shipped-gitfs-profiles-grant-change-recording",
+        "@sessions/file-change-records-retain-reported-revisions"
+      ]
+    },
+    "@fs/improve-fs-change-provenance/direct-file-mutations-report-revisions": {
+      "spec_sha256": "7f555535bc670f5f6b81eba76005ef6527b1861aa1bbde12366a336ece545235",
+      "source_commit": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+      "needs": [
+        "@fs/improve-fs-revision-guards",
+        "@sessions/file-change-records-retain-reported-revisions"
+      ]
+    },
+    "@fs/improve-fs-revision-guards": {
+      "spec_sha256": "78fe6d4d246cd3242bb1d3350cad68982c04e2fd9ba14fb5e1c9b6b23f5c6692",
+      "source_commit": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+      "needs": []
+    },
+    "@fs/improve-fs-search-pages": {
+      "spec_sha256": "8a6cbf888240ed84069b1dd80c8b73e407357fcf01393fc852239c813a7a6d4d",
+      "source_commit": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+      "needs": []
+    },
+    "@gitfs/improve-gitfs-readable-diff": {
+      "spec_sha256": "6ed56a3426a0c5bf5039a2622785a66c6050c7da0b3a3b60aacfd06e437426e7",
+      "source_commit": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+      "needs": [
+        "@gitfs/tool-results-interoperate",
+        "@policy/improve-policy-operation-rules"
+      ]
+    },
+    "@gitfs/overlay-mutations-report-revisions": {
+      "spec_sha256": "05db280989830d7933859d5d87e2796d0513ed4147e3976883604e1536a8963a",
+      "source_commit": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+      "needs": [
+        "@gitfs/improve-gitfs-readable-diff",
+        "@sessions/file-change-records-retain-reported-revisions"
+      ]
+    },
+    "@gitfs/tool-results-interoperate": {
+      "spec_sha256": "87b2a12e71d8a7eab761833e18236315866bf8e5cfbe470738c90cc6a3de9cb4",
+      "source_commit": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+      "needs": []
+    },
+    "@policy/improve-policy-operation-rules": {
+      "spec_sha256": "4c387100550778313009dff4a94703b2b6232c874fe469f56167f487e05d707d",
+      "source_commit": "e442bef2c9f07635f9e8b8e1d87a47193841569f",
+      "needs": []
+    },
+    "@runtime/shipped-gitfs-profiles-grant-change-recording": {
+      "spec_sha256": "588cfb528eab818b0851b2f28ef2ad922a553640762b0fbe47907c8e2701ea52",
+      "source_commit": "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df",
+      "needs": [
+        "@gitfs/overlay-mutations-report-revisions",
+        "@sessions/file-change-records-retain-reported-revisions"
+      ]
+    },
+    "@sessions/file-change-records-retain-reported-revisions": {
+      "spec_sha256": "451e40c25cd45b7985aaf6c54117d26e768313e860ec6b5c0f2a555a5e2cacce",
+      "source_commit": "92240c6ba415f53b2d17971aea185536a6f517bc",
+      "needs": [
+        "@sessions/improve-sessions-client-mapping"
+      ]
+    },
+    "@sessions/improve-sessions-client-mapping": {
+      "spec_sha256": "1932efa0850b4ba5c0457eba108b7d85a5a94dffa41b3e5c9b08a58ddced0a85",
+      "source_commit": "92240c6ba415f53b2d17971aea185536a6f517bc",
+      "needs": []
+    }
+  },
+  "fixtures": {
+    "/Users/feb/dev/cartridge/fs.ctg/.cartridge/tests/integration/context.test.ts": "5239eacb5463d1a6e032c0c6cd22ff370458d574621ac3a5ec486de4244b1264",
+    "/Users/feb/dev/cartridge/fs.ctg/.cartridge/tests/integration/change-provenance.test.ts": "fd336db0d75f54db3b6a01ca5fb5700437e2d0fd455d4ea1c266163edb7f4173",
+    "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/integration/change-provenance.test.ts": "db018e5ea32233f4ca8c4ff3e1bc0dbab59b5a85c3510f93c1eebc7af9f7e9a5",
+    "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/integration/tool-result.test.ts": "1c7d95e7cb20545b2dd3d67196dfdd096ad67b1fbad281f285ba0ca6e5016033",
+    "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/integration/reviewed-ship.test.ts": "2cd16fcb495650e8266fb5cdf660e868f656b547768e4777dd1e9c996fc806f9",
+    "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/integration/recorded-push.test.ts": "0c6b4e111e2aea72d3736b5df433a6998ced1d076a417179b75e78361da4953a",
+    "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/integration/change-records.test.ts": "56611256a47d763dd4ebe014e7b82f122888a483009f182c33df4812a8eaee42",
+    "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/rollup-check.ts": "ecaaa4e83b14321a6d4b6c44e2d2b82035c3632d285ab0cf32122379bc54f12f",
+    "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/rollup-bindings.json": "9593f3a0e231b98951659073d3ef58fc6e8b2b923c14bf23b70c191e7d5066e5"
+  }
+}

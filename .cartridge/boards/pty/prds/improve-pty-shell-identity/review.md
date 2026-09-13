@@ -29,3 +29,11 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Independent round 3 — PASS 95/100
+
+Reviewer /root; dimensions19/20/18/19/19. Spec 560b4619ac03f28c6b9342c24184293d5dbd4045fb031996c3c1210487ad8d7d and actual baselinecacd7e13. No blocking findings. Configured identity and forgeable terminal evidence stay separate, existing OSC/bootstrap and shared Shell are reused, additive observations preserve tool strings/frame cursors, and real disposable Host/shell fixtures prove lifecycle continuity. Seven-path scope excludes wait/input-lease/context changes. Exact input binding and deductions: independent-round-3-review.json.
+
+## Implementation review and wording clarification
+
+Root independently reviewed the seven source paths at e8e6b319b03dcc9e1dea66b4fd3a0f6b83ab2d47 and the real-shell/UI continuity proof. Public30tests/check passed. Exact source digests are in implementation-review.json. Cwd wording now explicitly says latest observation if valid, null otherwise; [before/after binding](cwd-observation-clarification.json) preserves the original acceptance, executable gates and round3 review. Collection reruns those gates.

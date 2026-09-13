@@ -1,0 +1,13 @@
+{
+  "source": "92240c6ba415f53b2d17971aea185536a6f517bc",
+  "previous": "191e2b6cb4291bdcce7a894f98bb2d475361d30f",
+  "reason": "Bind newly imported context module and executable native/unit contract; shared phase extraction preserves roster output. Existing acceptance and executable gates are unchanged apart from exact Sessions source pin.",
+  "behavior_acceptance_changed": false,
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/an-agent-is-one-lookup-from-the-roster/durable-channel-read-cursors/specs/spec01.md",
+      "before_sha256": "ea6f5aa34f5ef900e986f0b324266e9cc542caf2a21acd946cc17d25a5afad90",
+      "after_sha256": "f2ff095180325ee908f31c2119ad964030342629e86286c6fa721381b167bace"
+    }
+  ]
+}

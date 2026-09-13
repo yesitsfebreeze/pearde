@@ -1,0 +1,93 @@
+{
+  "observation": "All FS product leaves integrated at3a790; provenance parent awaits runtime grant receipt and integration proof; programme is a no-code rollup.",
+  "records_commit": "4d7ed044972a017b2c20f1cc3a66a7e60f26dc09",
+  "records": [
+    {
+      "ref": "@fs/improve-fs-programme",
+      "state": "open",
+      "needs": [
+        "@fs/improve-fs-change-provenance",
+        "@fs/improve-fs-revision-guards",
+        "@fs/improve-fs-search-pages"
+      ],
+      "source": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+      "completion_problem": "PRD is not done",
+      "specs": [],
+      "footprint": []
+    },
+    {
+      "ref": "@fs/improve-fs-change-provenance",
+      "state": "open",
+      "needs": [
+        "@sessions/file-change-records-retain-reported-revisions",
+        "@fs/improve-fs-change-provenance/direct-file-mutations-report-revisions",
+        "@gitfs/overlay-mutations-report-revisions",
+        "@runtime/shipped-gitfs-profiles-grant-change-recording"
+      ],
+      "source": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+      "completion_problem": "PRD is not done",
+      "specs": [
+        {
+          "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/specs/spec01.md",
+          "sha256": "361acb587e4f466046046259ad1b64608ce18957990871113b73a1a8f00b3456"
+        }
+      ],
+      "footprint": [
+        "Cargo.toml",
+        "src/main.rs",
+        "src/service.rs",
+        "src/files.rs",
+        ".cartridge/tests/unit/service/tests.rs",
+        ".cartridge/tests/integration/change-provenance.test.ts",
+        ".cartridge/docs/change-provenance.md"
+      ]
+    },
+    {
+      "ref": "@fs/improve-fs-revision-guards",
+      "state": "done",
+      "needs": [],
+      "source": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+      "completion_problem": null,
+      "specs": [
+        {
+          "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/fs/prds/improve-fs-revision-guards/specs/spec01.md",
+          "sha256": "78fe6d4d246cd3242bb1d3350cad68982c04e2fd9ba14fb5e1c9b6b23f5c6692"
+        }
+      ],
+      "footprint": [
+        "src/main.rs",
+        "src/context.rs",
+        "src/files.rs",
+        "src/service.rs",
+        ".cartridge/tests/unit/service/tests.rs",
+        ".cartridge/docs/revision-guards.md",
+        "Cargo.toml",
+        "cartridge.json"
+      ]
+    },
+    {
+      "ref": "@fs/improve-fs-search-pages",
+      "state": "done",
+      "needs": [],
+      "source": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+      "completion_problem": null,
+      "specs": [
+        {
+          "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/fs/prds/improve-fs-search-pages/specs/spec01.md",
+          "sha256": "8a6cbf888240ed84069b1dd80c8b73e407357fcf01393fc852239c813a7a6d4d"
+        }
+      ],
+      "footprint": [
+        "src/main.rs",
+        "src/context.rs",
+        "src/search.rs",
+        "src/service.rs",
+        ".cartridge/tests/unit/search/tests.rs",
+        ".cartridge/docs/search-pages.md",
+        "Cargo.toml",
+        "src/files.rs",
+        "cartridge.json"
+      ]
+    }
+  ]
+}

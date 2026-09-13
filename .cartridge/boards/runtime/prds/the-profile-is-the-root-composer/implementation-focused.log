@@ -1,0 +1,54 @@
+   Compiling cartridge v0.1.0 (/Users/feb/dev/cartridge/cartridge.ctg)
+    Finished `test` profile [unoptimized] target(s) in 4.81s
+     Running unittests src/lib.rs (target/tool-result-contract/debug/deps/cartridge-41093d4bbf807d0f)
+
+running 3 tests
+test tests::composition::failed_initial_profile_entry_recovers_with_its_current_handle ... ok
+test tests::composition::replacement_has_one_contract_at_root_and_nested_depth ... ok
+test tests::process::ordinary_lua_composition_can_load_a_process_wrapper ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 162 filtered out; finished in 0.78s
+
+     Running unittests src/main.rs (target/tool-result-contract/debug/deps/cartridge-bfe1ba4daa6e9908)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running unittests .cartridge/tests/unit/src/tests/fixtures/chain_fixture.rs (target/tool-result-contract/debug/examples/chain_fixture-352252d61bd6755b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests .cartridge/tests/unit/src/tests/fixtures/lua_fixture.rs (target/tool-result-contract/debug/examples/lua_fixture-e8ce3e540cfc5bdc)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests .cartridge/tests/unit/src/tests/fixtures/nested_fixture.rs (target/tool-result-contract/debug/examples/nested_fixture-edd2fe45942c6858)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests .cartridge/tests/unit/src/tests/fixtures/rpc_fixture.rs (target/tool-result-contract/debug/examples/rpc_fixture-8e172d8aaafa386c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/integration/memo-run.test.ts:
+(pass) memo recipes preserve argument boundaries and propagate failure [55.44ms]
+(pass) memo runner refuses missing, repeated and unterminated executable blocks [29.95ms]
+(pass) nested PRD lanes resolve their own memo owner [18.33ms]
+lane-build-evidence [{"lane":"alpha","mode":"safe","temperature":"cold","ms":953.4119999999999,"source":{"commit":"b6c135f4114178e57c313dd4ab58392a7982809a","tree":"9a08268bb20ac8730ac543ea7d92cc6e8d3bf9f9","digest":"d12a11572ff645ddd6ef8218e56d6a7f0424bb428b02cf77089b7be92751f0f2"},"binary_sha256":"621c63cda4141929dcc27bacc90bf3ef4c9d9819e41b3f3222381c4bdb1e3471","expected":"alpha","observed":"alpha","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"},{"lane":"alpha","mode":"safe","temperature":"warm","ms":415.6479999999999,"source":{"commit":"b6c135f4114178e57c313dd4ab58392a7982809a","tree":"9a08268bb20ac8730ac543ea7d92cc6e8d3bf9f9","digest":"d12a11572ff645ddd6ef8218e56d6a7f0424bb428b02cf77089b7be92751f0f2"},"binary_sha256":"621c63cda4141929dcc27bacc90bf3ef4c9d9819e41b3f3222381c4bdb1e3471","expected":"alpha","observed":"alpha","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"},{"lane":"bravo","mode":"safe","temperature":"cold","ms":749.4940409999999,"source":{"commit":"2ba96e8d77d46cc3718875209dd35d30aa94a928","tree":"f6ae5de5148108d3fb163edb0b16f3b83e9b7e84","digest":"101fc091b5b3c98b8c6c6948f7c20f06809f26890f2ff7a0bd65d1caca571ba9"},"binary_sha256":"febb286887708a068c11f7fead75a49e73f7d2ee84646d9029e7e0109abf4166","expected":"bravo","observed":"bravo","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"},{"lane":"bravo","mode":"safe","temperature":"warm","ms":424.198042,"source":{"commit":"2ba96e8d77d46cc3718875209dd35d30aa94a928","tree":"f6ae5de5148108d3fb163edb0b16f3b83e9b7e84","digest":"101fc091b5b3c98b8c6c6948f7c20f06809f26890f2ff7a0bd65d1caca571ba9"},"binary_sha256":"febb286887708a068c11f7fead75a49e73f7d2ee84646d9029e7e0109abf4166","expected":"bravo","observed":"bravo","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"}]
+(pass) divergent lanes execute their own cold and warm builds without inherited caches [2773.25ms]
+
+ 4 pass
+ 0 fail
+ 47 expect() calls
+Ran 4 tests across 1 file. [2.89s]

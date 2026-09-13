@@ -1,0 +1,12 @@
+{
+  "source": "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36",
+  "behavior_acceptance_changed": false,
+  "reason": "Bind new imported producer module/dependency and its tests; refresh exact prerequisite spec hashes after these footprint-only additions. Original public/native/composition checks retained.",
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally/specs/spec01.md",
+      "before_sha256": "73b025bce9603f1a750a9597017093fa3980f7e4384dc00317553e85f2430473",
+      "after_sha256": "6b251cdfef881e035a048fd8d6fc8be2b7b15e41431ebe4813a2c7df854c5ddd"
+    }
+  ]
+}

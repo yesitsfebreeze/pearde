@@ -1,0 +1,113 @@
+{
+  "source": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+  "recorded_at": "2026-09-13T19:25:03.065445+00:00",
+  "source_clean": true,
+  "review": {
+    "reviewer": "/root",
+    "round": 3,
+    "score": 95,
+    "implementation_review": "No blocker; reviewed typed publication/partial result, guard lifetime, deadline and receipt matching."
+  },
+  "spec_sha256": "7f555535bc670f5f6b81eba76005ef6527b1861aa1bbde12366a336ece545235",
+  "footprint": [
+    {
+      "path": ".cartridge/docs/change-provenance.md",
+      "sha256": "9e703d14a800059ede88aa0b568253b2261f19ca28be862e5efaedb40554b702"
+    },
+    {
+      "path": ".cartridge/tests/integration/change-provenance.test.ts",
+      "sha256": "fd336db0d75f54db3b6a01ca5fb5700437e2d0fd455d4ea1c266163edb7f4173"
+    },
+    {
+      "path": ".cartridge/tests/unit/service/tests.rs",
+      "sha256": "ad1f50a050288590625a213886d572134301b027caadd780119089c20ad383e2"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "fe8716bbef9bac60cfcfa68afb2e034c789bbcc628346d236efde58d2d178611"
+    },
+    {
+      "path": "src/files.rs",
+      "sha256": "a41ddeba9f94c34c239c727c1fff051384b61c08f25b1a013098e4bf2bfd3b2a"
+    },
+    {
+      "path": "src/main.rs",
+      "sha256": "e824b9a5186326bac01e781094a3bb50d453a73702f06efe170d530c7ce660a9"
+    },
+    {
+      "path": "src/service.rs",
+      "sha256": "ce1d75831459a4dbd08c8bee761cf4aca63d80fffd03a3f24856ec599d6ed7e5"
+    }
+  ],
+  "gates": [
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract just test fs",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "exit": 0,
+      "result": "51 passed",
+      "log": "/tmp/fs-change-provenance-public-test.log",
+      "sha256": "6ec5c00662316cea95b3e098b45e0adb0a2d9299c05e3aa2a6f7cfe51c0d94ee"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract just check fs",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "exit": 0,
+      "result": "passed",
+      "log": "/tmp/fs-change-provenance-public-check.log",
+      "sha256": "e9a141ca87d7e32b16fcce7b0fb96aa709a47f87cc12a384eae77f26653e1bb3"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract just build fs",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "exit": 0,
+      "result": "passed",
+      "log": "/tmp/fs-change-provenance-build.log",
+      "sha256": "a9e4902bb802911741ede69800a877787f221ea5003474e077f5d263f336cbb0"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract FS_BINARY=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/fs SESSIONS_BINARY=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/sessions bun test ./.cartridge/tests/integration/change-provenance.test.ts",
+      "cwd": "/Users/feb/dev/cartridge/fs.ctg",
+      "exit": 0,
+      "result": "2 passed, 64 assertions",
+      "log": "/tmp/fs-change-provenance-native.log",
+      "sha256": "3dc8484295a3966e6e9f9684ad62cd3a3b091c94fc13e31f20356f0bf02334d6"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract FS_BINARY=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/fs SESSIONS_BINARY=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/sessions bun test ./.cartridge/tests/integration/context.test.ts",
+      "cwd": "/Users/feb/dev/cartridge/fs.ctg",
+      "exit": 0,
+      "result": "2 passed, 56 assertions",
+      "log": "/tmp/fs-change-provenance-context.log",
+      "sha256": "b8e3f3d27f568f0958b552e2654b26bafd48f694efe8465cf46c616f6c0ba4b0"
+    }
+  ],
+  "binaries": {
+    "fs": {
+      "sha256": "59632efdef07d4d2253496a3e69791ea5b002370b188878ec2fecddbbf63d8ef"
+    },
+    "sessions": {
+      "sha256": "dfb46cff10f156771a1340023f3fd3fd61c02ece619a32d6695eba4dedd4baf6"
+    },
+    "cartridge": {
+      "sha256": "3c107ead7a60caa07a7aa295cb46c7b2a0663a17ca7aa11fc11b45076b9b08c8"
+    }
+  },
+  "dependencies": {
+    "sessions_source": "191e2b6cb4291bdcce7a894f98bb2d475361d30f"
+  },
+  "proof_scope": "Positive fixture uses actual Host and actual FS/Sessions processes, creates and restarts a persisted session, validates guarded before/after bytes and distinct IDs, checks external/read/search/context zero records and unchanged Git HEAD/index/no GitFS references. Negative SDK fixture only supplies faulty recorder responses to prove partial/unknown handling.",
+  "resolved_failures": [
+    "New repeated-publication unit fixture originally reused an already registered call ID; corrected fixture to issue distinct valid invocation calls, preserving existing duplicate-call refusal. All51 tests then passed."
+  ],
+  "limitations": [
+    "Invocation coordinates are reported metadata, not authenticated client identity or authorization.",
+    "Recording and file publication are separate; timeout/disconnect may leave attribution unknown. No retry or rollback.",
+    "Existing final external-writer check is not OS-level compare-and-swap.",
+    "Current runtime binary is identity-pinned; no assertion that unrelated dirty runtime sources were rebuilt."
+  ],
+  "coordinator_actions": [
+    "Collect this source and refresh earlier FS receipt footprints as needed (main/service/files/Cargo).",
+    "Retain exact fs-to-sessions shared dependency edge in runtime grant leaf.",
+    "Root owns profile changes and parent receipt-pinned integration proof."
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "source": "33e0418fa82966772c38ec8191d02a158b2cb56d",
+  "reason": "Bind imported census module and tests; refresh exact clean owner pin after additive integration. Existing acceptance and executable public/native gates unchanged.",
+  "behavior_acceptance_changed": false,
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape/specs/spec01.md",
+      "before_sha256": "6aeb4e525964949fe3d3170f3ca4694f30c806c3db5fcc1a26a589add3fb9870",
+      "after_sha256": "51270eafe95be02087793f897974fe8df28e2efc32ca444ae13f63e106fa60bb"
+    }
+  ]
+}

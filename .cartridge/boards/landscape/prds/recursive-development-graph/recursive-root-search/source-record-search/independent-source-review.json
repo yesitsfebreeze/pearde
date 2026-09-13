@@ -1,0 +1,14 @@
+{
+  "reviewer": "/root",
+  "result": "PASS",
+  "source": "422c521aed170a4d098505c73469a1a59dccf49d",
+  "findings": [],
+  "checked": [
+    "Exact canonical owner/source/path/reference validation, public visibility and content byte hash before rank",
+    "Conservative declared-plus-read byte budget, array/scalar caps, rejected body debit and bounded result",
+    "Graph scoring reuse and structured deterministic tie-break",
+    "Absolute shared deadline, no detached work/retry, query size checked before trim",
+    "No provider activation or mutation; actual PRD helper/native and poisoned source fixture; original APIs preserved"
+  ],
+  "proof": "proof-inputs.json"
+}

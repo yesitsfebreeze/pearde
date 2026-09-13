@@ -1,0 +1,7 @@
+{
+  "source": "0a7c4a1f729c700f52c650ee0c3efc56a136560f",
+  "spec_before_sha256": "07129539e0ec830b03185f14cdfa45dfd9c5fe8facbab254a0a2b572310e2123",
+  "spec_after_sha256": "a7c27f7e8407e2bdb660e32a5e6022c5091b5e4c7dd4e2189e871f6ba485b9cb",
+  "reason": "Native service now imports readiness module and tests; store lock observer adds already-resolved dependency edges; RPC shared query validation and native docs changed. Existing shared source paths and tests must reverify at final source. Acceptance unchanged.",
+  "behavior_acceptance_changed": false
+}

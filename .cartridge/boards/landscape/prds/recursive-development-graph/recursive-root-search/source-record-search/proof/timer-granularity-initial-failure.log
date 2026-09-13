@@ -1,0 +1,33 @@
+   Compiling landscape v0.1.0 (/Users/feb/dev/cartridge/landscape.ctg)
+    Finished `test` profile [unoptimized] target(s) in 1.91s
+     Running unittests src/lib.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/deps/landscape-1841d9637182d43e)
+
+running 10 tests
+test source_search::tests::rejected_body_bytes_and_partial_index_omissions_remain_visible_to_limits ... ok
+test source_search::tests::malformed_indexes_never_select_a_record_or_copy_private_diagnostics ... ok
+test source_search::tests::read_evidence_is_revalidated_before_ranking_and_attempts_include_rejections ... ok
+test source_search::tests::absolute_deadline_spans_stages_and_drops_only_pending_callback ... FAILED
+test source_search::tests::exact_reference_has_no_owner_basename_or_stale_revision_fallback ... ok
+test source_search::tests::partial_sources_and_aliases_preserve_completed_hits_without_duplicate_calls ... ok
+test source_search::tests::full_text_ranking_is_independent_of_preview_and_returns_only_compact_public_hits ... ok
+test source_search::tests::all_count_input_and_serialized_output_limits_are_explicit ... ok
+test source_search::tests::actual_prd_helper_three_level_bytes_and_fresh_edits_remain_source_owned ... ok
+test source_search::tests::actual_native_owner_search_and_selected_read_never_activate_discovered_sources ... ok
+
+failures:
+
+---- source_search::tests::absolute_deadline_spans_stages_and_drops_only_pending_callback stdout ----
+
+thread 'source_search::tests::absolute_deadline_spans_stages_and_drops_only_pending_callback' (46936304) panicked at /Users/feb/dev/cartridge/landscape.ctg/src/../.cartridge/tests/unit/source_search.rs:488:5:
+assertion `left == right` failed
+  left: 31ms
+ right: 30ms
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+
+failures:
+    source_search::tests::absolute_deadline_spans_stages_and_drops_only_pending_callback
+
+test result: FAILED. 9 passed; 1 failed; 0 ignored; 0 measured; 56 filtered out; finished in 1.00s
+
+error: test failed, to rerun pass `-p landscape --lib`

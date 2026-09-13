@@ -1,0 +1,38 @@
+   Compiling bitflags v2.13.1
+   Compiling futures-macro v0.3.33
+   Compiling tokio v1.53.1
+   Compiling tracing v0.1.44
+   Compiling serde v1.0.229
+   Compiling sync_wrapper v1.0.2
+   Compiling transport-macros v2.0.0 (/private/tmp/memory-health-work/memory.ctg/src/transport/macros)
+   Compiling notify-types v2.1.0
+   Compiling rustix v1.1.4
+   Compiling axum-core v0.5.6
+   Compiling notify v8.2.0
+   Compiling futures-util v0.3.33
+   Compiling tempfile v3.27.0
+   Compiling serde_urlencoded v0.7.1
+   Compiling futures-executor v0.3.33
+   Compiling futures v0.3.33
+   Compiling hyper v1.11.0
+   Compiling tower v0.5.3
+   Compiling util v2.0.0 (/private/tmp/memory-health-work/memory.ctg/src/util)
+   Compiling tokio-util v0.7.19
+   Compiling base v2.0.0 (/private/tmp/memory-health-work/memory.ctg/src/base)
+   Compiling hyper-util v0.1.20
+   Compiling axum v0.8.9
+   Compiling test_support v2.0.0 (/private/tmp/memory-health-work/memory.ctg/.cartridge/tests/support)
+   Compiling transport v2.0.0 (/private/tmp/memory-health-work/memory.ctg/src/transport)
+    Finished `test` profile [unoptimized] target(s) in 5.79s
+     Running unittests src/lib.rs (/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/transport-3cd82fd9ae3a9c09)
+
+running 6 tests
+test owner::tests::owner_attachment_mutations_and_nested_routing_never_connect ... ok
+test owner::tests::owner_attachment_health_uses_handshake_without_second_operation ... ok
+test owner::tests::owner_attachment_same_connection_identity_then_read ... ok
+test owner::tests::owner_attachment_absent_stale_and_operation_failure_are_explicit ... ok
+test owner::tests::owner_attachment_wrong_missing_malformed_identity_stops_before_invoke ... ok
+test owner::tests::owner_attachment_one_total_deadline_retains_observed_pid ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 39 filtered out; finished in 0.15s
+

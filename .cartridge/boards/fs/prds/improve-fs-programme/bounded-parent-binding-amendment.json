@@ -1,0 +1,30 @@
+{
+  "reason": "Engine120second per-command-block timeout; same checks split into seven bounded logical blocks.",
+  "before_spec_sha256": "4f40f260f0340431d8691774d5ba71a0f2274daa766e9ae09a831581bf7482f8",
+  "after_spec_sha256": "0995591014a02ea39caff602ed90e46b6ab9f42c363ad83e982a227b673a7d7a",
+  "identical_action_commands": [
+    "bun .cartridge/boards/fs/prds/improve-fs-change-provenance/rollup-check.ts",
+    "just test fs",
+    "just check fs",
+    "just test gitfs",
+    "just check gitfs",
+    "just test sessions",
+    "just check sessions",
+    "just test runtime",
+    "just check runtime",
+    "just build fs",
+    "just build gitfs",
+    "just build sessions",
+    "cargo build --manifest-path Cargo.toml --bin cartridge",
+    "bun test ../fs.ctg/.cartridge/tests/integration/context.test.ts ../fs.ctg/.cartridge/tests/integration/change-provenance.test.ts ../gitfs.ctg/.cartridge/tests/integration/change-provenance.test.ts ../gitfs.ctg/.cartridge/tests/integration/tool-result.test.ts ../gitfs.ctg/.cartridge/tests/integration/reviewed-ship.test.ts ../gitfs.ctg/.cartridge/tests/integration/recorded-push.test.ts ../sessions.ctg/.cartridge/tests/integration/change-records.test.ts"
+  ],
+  "blocks": 7,
+  "programme": {
+    "before_parent_pin": "4f40f260f0340431d8691774d5ba71a0f2274daa766e9ae09a831581bf7482f8",
+    "after_parent_pin": "0995591014a02ea39caff602ed90e46b6ab9f42c363ad83e982a227b673a7d7a",
+    "before_bindings_sha256": "020c54f7797c78e99d5a9bfb227ec3dd7e4de57d8941454e9a92c79c77a7de6f",
+    "after_bindings_sha256": "08b0aa8789753ae01a0c5d71c54b7a1e5292f9cd97eafe1e22699592e899a5cd",
+    "before_spec_sha256": "bbae05d53316dc7eb50c57da1badead20730e3a395535eacb3748d21c140620a",
+    "after_spec_sha256": "7c6006e4820f738e3104bb2cf102ffdcc58755ebda3978eb70d71a1a958f5f19"
+  }
+}

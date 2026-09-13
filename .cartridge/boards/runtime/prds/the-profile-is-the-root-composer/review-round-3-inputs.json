@@ -1,0 +1,16 @@
+{
+  "round": 3,
+  "proposal_author": "/root/proxy_continuation",
+  "source_commit": "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b",
+  "inputs": {
+    "prd.md": "b2bfb3df6afac684ae54f5b88b534e4c08dec8086ba0ff4c7c21bf1f337fd3a1",
+    "review.md": "c5f6a86c0ca72c353e680a98dcdfc32ccb7736b5fcb8758ae6fff04ce1453317",
+    "baseline.json": "b6c789d1d11b7deda6cdd6bfe85cc99de54f3264d4f87fef864d97d78357700c",
+    "baseline-native.json": "f6e496fcd747880d7c8cb620e5c9e30bd5c451b9fd6dccf2733bfd4b19d482bd",
+    "baseline-probe.rs": "38e70bb0f61e686c95754c4dba2aa93643980494f031503a5dbdf554e86a95ca",
+    "specs/spec01.md": "185c4b3eeeb42dea2391e3da8a9348e87dd9fd5805fd904e8c9ddd90775cf31d",
+    "baseline-private-native.json": "75387dd87e7846e400bdaaa970cc34f257eb2096a56e04a97bac4a6c1101bd8c",
+    "baseline-private-probe.rs": "d721c49edb1296e8b0f9e5985db15a5606bb08fda1da158f650070b65290de75",
+    "baseline-private-command.json": "77fcc3762337cd17ab51bf09706a151d67aa34a52f41b615fdceb507e6012aaf"
+  }
+}

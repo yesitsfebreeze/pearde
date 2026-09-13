@@ -73,3 +73,7 @@ Acceptance checkbox changes record observed results and do not alter the reviewe
 contract. Collection must rerun the declared proof after integration, including
 the public development entry point. The generation helper rejects failed/retired
 fibers rather than treating settlement alone as success.
+
+## Composer source revalidation — 2026-09-13
+
+Existing acceptance and executable gates are preserved. [Exact before/after binding](composer-reverification/binding.json) records imported composer dependencies or current-source proof pins at bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df. No new review round or passing collection is claimed by this amendment; the normal collector must rerun the unchanged gates.

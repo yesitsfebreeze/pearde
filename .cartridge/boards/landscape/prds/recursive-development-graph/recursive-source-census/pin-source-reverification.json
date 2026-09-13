@@ -1,0 +1,6 @@
+{
+  "source_commit": "1109ab9e8cff8bd9061a426567d453d613589d39",
+  "reason": "Exactly two test source pin literals refreshed to independently reviewed PRD public record integration; no source behavior, acceptance, assertions or gate change.",
+  "spec_sha256": "1058f2aaa8c7db65b4dedb144fb23b92a15590a269acf8406a2e41912066f84e",
+  "proof": "prd-public-records-pin-refresh.json"
+}

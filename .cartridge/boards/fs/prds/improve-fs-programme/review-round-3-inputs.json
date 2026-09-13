@@ -1,0 +1,11 @@
+{
+  "round": 3,
+  "proposal_author": "/root/proxy_continuation",
+  "inputs": {
+    "prd.md": "1761d499dedbf73dd991798940d71b1e85d5589bbe29218b4ab2489b88478ff5",
+    "baseline.json": "cb50cc54723b6566ff6a0dff1c57134de0f547fb196da53307bc34bf9475fc95",
+    "specs/spec01.md": "bbae05d53316dc7eb50c57da1badead20730e3a395535eacb3748d21c140620a",
+    "rollup-check.ts": "33e1325caa5b1d2a00a65aa9d3bae1c567c634eadf98e185b4d9e46cc14e1ecb",
+    "rollup-bindings.json": "020c54f7797c78e99d5a9bfb227ec3dd7e4de57d8941454e9a92c79c77a7de6f"
+  }
+}

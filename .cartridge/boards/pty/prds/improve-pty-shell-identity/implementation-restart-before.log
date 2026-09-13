@@ -1,0 +1,25 @@
+   Compiling pty v0.1.0 (/Users/feb/dev/cartridge/pty.ctg)
+    Finished `test` profile [unoptimized] target(s) in 0.60s
+     Running .cartridge/tests/integration/process.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/deps/process-c29dd5693a225f96)
+
+running 1 test
+identity fixture nu: initial readiness
+identity fixture nu: exit readiness
+identity fixture nu: restart readiness
+identity fixture zsh: initial readiness
+identity fixture zsh: exit readiness
+identity fixture zsh: restart readiness
+
+thread 'identity_is_explicit_for_real_shells_and_unknown_fallback' (47512495) panicked at /Users/feb/dev/cartridge/pty.ctg/.cartridge/tests/integration/process.rs:635:6:
+identity observation deadline: Elapsed(())
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test identity_is_explicit_for_real_shells_and_unknown_fallback ... FAILED
+
+failures:
+
+failures:
+    identity_is_explicit_for_real_shells_and_unknown_fallback
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 9 filtered out; finished in 8.46s
+
+error: test failed, to rerun pass `--test process`

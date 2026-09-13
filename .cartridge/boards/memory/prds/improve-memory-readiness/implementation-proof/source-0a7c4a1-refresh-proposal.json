@@ -1,0 +1,43 @@
+{
+  "every-mutation-holds-the-store-writer-boundary": {
+    "source": "0a7c4a1f729c700f52c650ee0c3efc56a136560f",
+    "spec_sha256_before": "07129539e0ec830b03185f14cdfa45dfd9c5fe8facbab254a0a2b572310e2123",
+    "additive_footprint_paths": [
+      "src/cartridge_status.rs",
+      ".cartridge/tests/unit/src/cartridge/status_test.rs",
+      "src/store/core/src/lock.rs",
+      ".cartridge/tests/unit/src/store/core/src/tests/lock_test.rs",
+      ".cartridge/docs/CARTRIDGE.md"
+    ],
+    "reason": "Native service now imports readiness module and tests; store lock observer adds already-resolved dependency edges; RPC shared query validation and native docs changed. Existing shared source paths and tests must reverify at final source. Acceptance unchanged."
+  },
+  "memory-health-loads-its-own-graph-beside-the-daemon": {
+    "source": "0a7c4a1f729c700f52c650ee0c3efc56a136560f",
+    "spec_sha256_before": "a11d64f09d4ffeab6a0d79f2917e8f065a5b22ae18c16dc81daba372f158562f",
+    "additive_footprint_paths": [
+      "src/cartridge_status.rs",
+      ".cartridge/tests/unit/src/cartridge/status_test.rs",
+      "src/store/core/src/lock.rs",
+      ".cartridge/tests/unit/src/store/core/src/tests/lock_test.rs",
+      "src/store/core/Cargo.toml",
+      "Cargo.lock",
+      ".cartridge/docs/CARTRIDGE.md"
+    ],
+    "reason": "Native service now imports readiness module and tests; store lock observer adds already-resolved dependency edges; RPC shared query validation and native docs changed. Existing shared source paths and tests must reverify at final source. Acceptance unchanged."
+  },
+  "improve-memory-owner-access": {
+    "source": "0a7c4a1f729c700f52c650ee0c3efc56a136560f",
+    "spec_sha256_before": "1a77443b9f71cac9ee7bc0e1bd23fce9be16f9e0448e63e0da3ea251dc962bfe",
+    "additive_footprint_paths": [
+      "src/cartridge_status.rs",
+      ".cartridge/tests/unit/src/cartridge/status_test.rs",
+      "src/store/core/src/lock.rs",
+      ".cartridge/tests/unit/src/store/core/src/tests/lock_test.rs",
+      "src/store/core/Cargo.toml",
+      "Cargo.lock",
+      "src/rpc/src/server.rs",
+      ".cartridge/docs/CARTRIDGE.md"
+    ],
+    "reason": "Native service now imports readiness module and tests; store lock observer adds already-resolved dependency edges; RPC shared query validation and native docs changed. Existing shared source paths and tests must reverify at final source. Acceptance unchanged."
+  }
+}

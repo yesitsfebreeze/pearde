@@ -1,0 +1,33 @@
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/source-records.test.ts:
+(pass) each board indexes only local records and exact reads preserve BOM CRLF and selected owner [22.03ms]
+(pass) private and invalid visibility disappear without path title text or count; trusted scan retains them [38.23ms]
+(pass) malformed UTF8 headers and duplicate visibility never become public exact text [18.57ms]
+(pass) selectors source revision and record revision refuse changed or foreign input [5.48ms]
+(pass) symlinks special files and late directory changes are explicit without outside reads [11.62ms]
+(pass) file header public count aggregate and directory entry caps bound partial output [124.73ms]
+(pass) response deadline retains all shared live I/O slots and closes delayed handles [36.78ms]
+(pass) actual Host indexes and exactly reads all three source owners without Memory events spill or tool exposure [472.28ms]
+(pass) strict public YAML rejects escaped flow alias merge and tagged ambiguity while trusted planning stays compatible [40.08ms]
+(pass) failed growing reads debit actual bytes and cannot multiply the aggregate budget [19.34ms]
+(pass) directory entry and depth limits are explicit and late opendir closes after timeout [441.06ms]
+(pass) board selectors match declarations while hidden record paths remain excluded [5.55ms]
+(pass) final exact-read serialization checks the same absolute deadline [68.68ms]
+
+.cartridge/tests/source-declarations.test.ts:
+(pass) real grammar retains hierarchical scanner identities and exports exact immutable declaration bytes [12.19ms]
+(pass) missing descendants, backlinks and repeated mounts remain declarations without weakening strict scan [10.22ms]
+(pass) selectors, exact configured authority and settings inode rules reject escapes and nonregular files [9.13ms]
+(pass) malformed grammar and bounded declarations fail explicitly, with no child scan [15.14ms]
+(pass) deadline covers filesystem work and static failures do not expose paths [22.95ms]
+(pass) YAML alias member lists stop at the edge cap before expanding repeated maps [6.06ms]
+(pass) service native method bypasses tool execution, callbacks, journals and spills [7.24ms]
+(pass) a FIFO swapped in after metadata inspection cannot strand the settings open [6.86ms]
+(pass) timed out native reads retain their capacity slots until actual IO settles [11.87ms]
+(pass) actual Host invokes native declarations without Memory or event effects and tool exposure [441.22ms]
+
+ 23 pass
+ 0 fail
+ 215 expect() calls
+Ran 23 tests across 2 files. [1.88s]

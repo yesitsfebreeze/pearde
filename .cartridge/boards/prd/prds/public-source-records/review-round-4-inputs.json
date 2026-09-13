@@ -1,0 +1,30 @@
+{
+  "reviewer": "/root/sessions_mapping",
+  "author": "/root",
+  "score": 95,
+  "round": 4,
+  "result": "PASS",
+  "spec_before_sha256": "28074e5176cd6ea83e27e47a881973df61f22e02fad82721c129d9ca421ae4d5",
+  "files": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/prd/prds/public-source-records/prd.md",
+      "sha256": "20c64b48f2ef2deda3502dfa6e275b78343986f7e25bf6a19d88e7b467dc4859"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/prd/prds/public-source-records/specs/spec01.md",
+      "sha256": "311334ca40ff92777532108c38b03159aa4ef939f6b07f751624526cb70122bb"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/prd/prds/public-source-records/independent-round-4-review.json",
+      "sha256": "ed4efe01784d198a4f9a49fa082f7130f0e6a710a0d65eb875e2afcad9c127c8"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/package.json",
+      "sha256": "021b3a075c52c5d18a7ed2574a8c877e78a527bc9e6672eaeac11cb9bf940abe"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/bun.lock",
+      "sha256": "83d0b4d57feae9c98706d646708238c589bf72e9ff838ead39d99be09e0e0c93"
+    }
+  ]
+}

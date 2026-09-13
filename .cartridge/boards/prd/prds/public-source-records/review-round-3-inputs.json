@@ -1,0 +1,59 @@
+{
+  "reviewer": "/root",
+  "author": "/root/sessions_mapping",
+  "round": 3,
+  "result": "PASS",
+  "score": 96,
+  "proposal_inputs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-root-search/analysis/baseline.json",
+      "sha256": "10637d19dfbc1090305612461d7ad48a45d9c4a3c9efa9666f1dd2e89001f57e"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-root-search/analysis/proposal/prd-records/prd-draft.md",
+      "sha256": "e224166edd0a390439ef2776bf89bd1357b0ef186546c6a80595242906df3ef6"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-root-search/analysis/proposal/prd-records/spec-draft.md",
+      "sha256": "28074e5176cd6ea83e27e47a881973df61f22e02fad82721c129d9ca421ae4d5"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-root-search/analysis/proposal/memo-facade/prd-draft.md",
+      "sha256": "6ee214a22f1713dc17251b145b85a3ca5ec5a9d014195f8e1ad689d05be1f819"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-root-search/analysis/proposal/memo-facade/spec-draft.md",
+      "sha256": "ccfd11c1b381bb8ba9a9e06f773926d6ccc6295412c4fa5619c5261ddd5e64c7"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-root-search/analysis/proposal/landscape-search/prd-draft.md",
+      "sha256": "ccb9ad89590b024d719322b1e801513df2195edd86bf86e4de0a1b9548b9e8a8"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-root-search/analysis/proposal/landscape-search/spec-draft.md",
+      "sha256": "54df1fae3fca04d8a2de92b4c4f3941449ed67955b803d6dec8e6bc2931955f8"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-root-search/analysis/proposal/parent/prd-draft.md",
+      "sha256": "ce9a04c929ccfe64d6bfa97d32703b286086484d6eaac58ab3856ab3c8048c38"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-root-search/analysis/proposal/parent/spec-draft.md",
+      "sha256": "8aad89fe58a2ca3360f681d05a6e1308e86187652a81e401014027d1faedf07b"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-root-search/analysis/proposal/map-proposal.json",
+      "sha256": "a391871e0d121623499f21911c12f8e1e18cda43cbf682cce3319e48164c5562"
+    }
+  ],
+  "installed_inputs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/prd/prds/public-source-records/prd.md",
+      "sha256": "b07eeee10d49cd27de20c7718496d7b29e4f4ea8703acd336e14217878e8f304"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/prd/prds/public-source-records/specs/spec01.md",
+      "sha256": "28074e5176cd6ea83e27e47a881973df61f22e02fad82721c129d9ca421ae4d5"
+    }
+  ]
+}

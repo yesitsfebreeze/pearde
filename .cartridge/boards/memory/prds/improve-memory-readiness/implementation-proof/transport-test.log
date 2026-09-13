@@ -1,0 +1,9 @@
+   Compiling transport v2.0.0 (/private/tmp/memory-health-work/memory.ctg/src/transport)
+    Finished `test` profile [unoptimized] target(s) in 1.11s
+     Running unittests src/lib.rs (/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/transport-3cd82fd9ae3a9c09)
+
+running 1 test
+test owner::tests::readiness_status_read_metadata_is_from_the_same_verified_channel ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 45 filtered out; finished in 0.01s
+

@@ -1,0 +1,57 @@
+{
+  "source_commit": "0b39c5c52f8ff8bc024d90b30a0d5f0068ca727b",
+  "public": {
+    "passed": 77,
+    "skipped": 3,
+    "assertions": 5517,
+    "reason_skips": "Separate Memory/MCP fixtures need their own explicit runtime environments; both required native source adapter fixtures ran."
+  },
+  "focused": {
+    "passed": 23,
+    "assertions": 215
+  },
+  "check": "bun run check passed",
+  "independent_review": "independent-source-review-evidence.json",
+  "source_files": [
+    {
+      "path": "src/records.ts",
+      "sha256": "c8491c11d80db97eb58ec31589836a24655a713c937c322efbdda596b2e86085"
+    },
+    {
+      "path": "src/source-records.ts",
+      "sha256": "e8947d91f3ffe5abb810b7d73a96d64185841d249cd6fe4f7041bbb1b88956a0"
+    },
+    {
+      "path": "src/service.ts",
+      "sha256": "324af922c0f202fc26f56f077ea9304c7f3c49ec8a236d61b77b56930853b151"
+    },
+    {
+      "path": ".cartridge/tests/source-records.test.ts",
+      "sha256": "9bb15c370c1a20ac6a7c54a8618b003b1eb62816ffcadecbb334720f0077a0a4"
+    },
+    {
+      "path": ".cartridge/docs/source-records.md",
+      "sha256": "92f17cfcc0f9de710424292a44bbf18ea1c54ae0cb195cd2caa426657c3f1a50"
+    },
+    {
+      "path": "package.json",
+      "sha256": "021b3a075c52c5d18a7ed2574a8c877e78a527bc9e6672eaeac11cb9bf940abe"
+    },
+    {
+      "path": "bun.lock",
+      "sha256": "83d0b4d57feae9c98706d646708238c589bf72e9ff838ead39d99be09e0e0c93"
+    }
+  ],
+  "changes": [
+    {
+      "path": "prd.md",
+      "before_sha256": "20c64b48f2ef2deda3502dfa6e275b78343986f7e25bf6a19d88e7b467dc4859",
+      "after_sha256": "e65c576c673cf1da58855b9f0a5e57e9ded006b51bedef10c241cbdb2c421caa"
+    },
+    {
+      "path": "specs/spec01.md",
+      "before_sha256": "311334ca40ff92777532108c38b03159aa4ef939f6b07f751624526cb70122bb",
+      "after_sha256": "9cd1f231fb2ee9c5df523af30c18eae7918c7f1ef0a81f7b3f90132560ce1f05"
+    }
+  ]
+}

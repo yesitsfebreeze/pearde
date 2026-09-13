@@ -1,0 +1,28 @@
+{
+  "kind": "imported-composer-footprint",
+  "source": "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df",
+  "previous_runtime_source": "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b",
+  "review_round_preserved": 3,
+  "review_status_preserved": "passed",
+  "acceptance_unchanged": true,
+  "collection_before_sha256": "ae10aa75edfa505b113cd54be1c0b8f3e5461358c37989a14a56454c48f43c99",
+  "changes": [
+    {
+      "file": "specs/spec01.md",
+      "before_sha256": "1e1416307cc077d6fd289ad35666a63b4e539fc876b86f4d0397684acbfdb3af",
+      "after_sha256": "782aa9417aa76d2e3e1563c2791fb564bb658fb84bef0e43d1fcf35f522581b6"
+    },
+    {
+      "file": "prd.md",
+      "before_sha256": "0f9c06131215ee796168c5379c16258dbb3ab5ba158342727899c5ffbd5a08ed",
+      "after_sha256": "22101f96ce2ca55e9ffa1f955157cb13b28b6e8a00ea50a6b96ccf02e55a62fe"
+    },
+    {
+      "file": "review.md",
+      "before_sha256": "d9309916c538c9322eb6d68772d6486f2387ca8a14adc0f03a6ba54cae18a566",
+      "after_sha256": "c2be50e87c263797387b7d58acd2aac9914402aaf0586131511d5fbf33d61033"
+    }
+  ],
+  "reason": "Full runtime gate imports new fixture; observation generation proof invokes provider replacement through Host.",
+  "executable_commands_unchanged": true
+}

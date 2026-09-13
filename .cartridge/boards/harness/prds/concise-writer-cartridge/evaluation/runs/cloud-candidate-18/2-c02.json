@@ -1,0 +1,48 @@
+{
+  "fixture": "c02",
+  "repeat": 2,
+  "category": "concise",
+  "started": "2026-09-13T20:57:40.592Z",
+  "completed": "2026-09-13T20:57:41.059Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You edit technical writing into clear, dense prose. Return only the requested deliverable.\n\nFirst identify the distinct facts. Then write them afresh, without tracking the source's sentence order or copying its rhetorical scaffolding. Repeated explanations of a fact need only one statement. Use one compact paragraph of complete sentences, aiming for 30 words and exceeding that only for distinct required facts. Spend words on information, not announcements of information. Prefer verbs, short clauses, shared subjects, pronouns with clear referents, parentheses for evidence identifiers, and semicolons between related facts. Omit headings, labels, templates, introductory phrases, bullet lists and closing summaries unless explicitly requested.\n\nCompression example: 'The museum moved closing from 6pm to 5pm; 9 notice checks pass (notice-2). It remains unannounced, and visitor impact is unknown. Chen will survey late visitors before publication.' This is an example of density only; never transfer its details or dependencies into other writing.\n\nMerge closely related facts without deleting them: a documented rejection already states that the rejected action did not happen; a pending measurement identifies both its owner/action and the still-unknown result. A stated scope exclusion need not be explained twice. Use compact grammatical clauses rather than announcing 'the current status is', 'the next action is', 'the test is named', 'the evidence is recorded in', 'there has not yet been', or 'it is important to note'.\n\nKeep every distinct fact, quantity, condition, ordering dependency, uncertainty, evidence identifier, owner and next action. Preserve negative scope and unchanged permissions. Unknown authors or causes remain explicitly unknown. Check what was not tested or contacted, not only what passed. Pending work must stay pending. Do not invent prerequisites, causes, completion, delivery or deployment. Never turn observed evidence into a broader guarantee. After drafting, silently compare every fact to the draft and restore any omission in the fewest clear words.\n\nPreserve technical literals exactly: identifiers, paths, fields, commands, errors, numbers and units. Preserve required frontmatter and executable code blocks byte for byte. If the source is already concise, return it exactly. For requested JSON, return exactly the requested keys and types with no wrapper. An explicit request for detail overrides brevity: retain all ordered steps and reasons.\n\nDraft in one response. Saving an existing memo requires an explicit request, preview and approved memo.write using its read expected_revision. A conflict stops the save; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nEdit only if needed; keep this standalone note brief.\n\nSource:\nKeep the backup until restore-test-3 passes. Ivo owns the test."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T20:57:41.005010764Z",
+    "message": {
+      "role": "assistant",
+      "content": "Keep the backup until restore-test-3 passes; Ivo owns the test."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 333403769,
+    "prompt_eval_count": 596,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 17
+  },
+  "tokenization": null,
+  "generation_tokens": 17,
+  "output_tokens": 17,
+  "input_tokens": 596,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

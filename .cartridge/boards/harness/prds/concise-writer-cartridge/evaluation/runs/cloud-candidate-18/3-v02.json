@@ -1,0 +1,48 @@
+{
+  "fixture": "v02",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T20:57:45.351Z",
+  "completed": "2026-09-13T20:57:46.042Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You edit technical writing into clear, dense prose. Return only the requested deliverable.\n\nFirst identify the distinct facts. Then write them afresh, without tracking the source's sentence order or copying its rhetorical scaffolding. Repeated explanations of a fact need only one statement. Use one compact paragraph of complete sentences, aiming for 30 words and exceeding that only for distinct required facts. Spend words on information, not announcements of information. Prefer verbs, short clauses, shared subjects, pronouns with clear referents, parentheses for evidence identifiers, and semicolons between related facts. Omit headings, labels, templates, introductory phrases, bullet lists and closing summaries unless explicitly requested.\n\nCompression example: 'The museum moved closing from 6pm to 5pm; 9 notice checks pass (notice-2). It remains unannounced, and visitor impact is unknown. Chen will survey late visitors before publication.' This is an example of density only; never transfer its details or dependencies into other writing.\n\nMerge closely related facts without deleting them: a documented rejection already states that the rejected action did not happen; a pending measurement identifies both its owner/action and the still-unknown result. A stated scope exclusion need not be explained twice. Use compact grammatical clauses rather than announcing 'the current status is', 'the next action is', 'the test is named', 'the evidence is recorded in', 'there has not yet been', or 'it is important to note'.\n\nKeep every distinct fact, quantity, condition, ordering dependency, uncertainty, evidence identifier, owner and next action. Preserve negative scope and unchanged permissions. Unknown authors or causes remain explicitly unknown. Check what was not tested or contacted, not only what passed. Pending work must stay pending. Do not invent prerequisites, causes, completion, delivery or deployment. Never turn observed evidence into a broader guarantee. After drafting, silently compare every fact to the draft and restore any omission in the fewest clear words.\n\nPreserve technical literals exactly: identifiers, paths, fields, commands, errors, numbers and units. Preserve required frontmatter and executable code blocks byte for byte. If the source is already concise, return it exactly. For requested JSON, return exactly the requested keys and types with no wrapper. An explicit request for detail overrides brevity: retain all ordered steps and reasons.\n\nDraft in one response. Saving an existing memo requires an explicit request, preview and approved memo.write using its read expected_revision. A conflict stops the save; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nTurn this conversation record into a standalone decision memo.\n\nSource:\nNora: We need a record of the decision about the image cache, because somebody reading this later will not have been in this conversation. Leon: The decision is to keep image thumbnails for 14 days. Original uploads are outside this cache and must not be deleted by this change. Nora: That distinction is the part I want to make especially clear. Leon: We are keeping the limit at 2 GiB for each workspace, and the oldest thumbnail is evicted when the limit would otherwise be exceeded. Nora: Did we measure the effect on mobile clients? Leon: No. Mobile bandwidth impact is still unknown. Nora: Then the next step is for Leon to compare a cold mobile session with a warm mobile session. We should make that comparison before enabling the policy outside staging. Leon: Agreed. The decision was recorded in discussion cache-review-4. Nora: Please carry those facts into the memo without requiring its reader to reconstruct this exchange."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T20:57:45.98675255Z",
+    "message": {
+      "role": "assistant",
+      "content": "Decision memo: image thumbnail cache policy. Thumbnails are retained for 14 days; original uploads are excluded from this cache and must not be deleted by this change. Each workspace cache limit remains 2 GiB; when the limit would be exceeded, the oldest thumbnail is evicted. Mobile bandwidth impact is unknown; no measurement was taken. Before enabling the policy outside staging, Leon will compare a cold mobile session with a warm mobile session. Decision recorded in discussion cache-review-4."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 555463681,
+    "prompt_eval_count": 773,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 101
+  },
+  "tokenization": null,
+  "generation_tokens": 101,
+  "output_tokens": 101,
+  "input_tokens": 773,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

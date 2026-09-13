@@ -1,0 +1,24 @@
+{
+  "author": "/root/memo_board",
+  "acknowledged_by": "/root",
+  "review_round": 3,
+  "semantic_scope_changed": false,
+  "acceptance_changed": false,
+  "reason": "First public gate found inherited nonblocking accepted socket (macOS WouldBlock) and unrelated daemon startup reason tasks racing data.mdb byte assertion. Set only fixture stream blocking, explicit bounded reply deadlines, and disable reason endpoint for health-only readonly fixture. Preserve all data/lock/count/PID/restart assertions.",
+  "source_path": ".cartridge/tests/integration/e2e/cli_surface.rs",
+  "before_sha256": "bdd451b49a9ee77a761b1322a08983e5978ea6edddc9a27c76c2da59f15ee25d",
+  "after_sha256": "4ba0cbb7eb50f0941de9c95dc77cfc63bcd413e84727a52bf97f5ce638b28bc0",
+  "plan_changes": [
+    {
+      "path": "specs/spec01.md",
+      "before_sha256": "3d4651ab792266ee2ce50c286b8ecca98903681d848c3320168b75727a4de89a",
+      "after_sha256": "d6789216dd4e942dc7a271597557093b94572464b1f0cd3aa6f398692bfd4d7e"
+    },
+    {
+      "path": "prd.md",
+      "before_sha256": "ace8e3639ca1e1b6a681c8407fde39aad2ce73ce67a2eaf8b6cf9ab26e7a78e9",
+      "after_sha256": "8929ab59567b2d3bbcdadc5f071e2cf8aaca9e591d598e32da5564284243f26a"
+    }
+  ],
+  "failed_gate_sha256": "0a4a6c28912bde51c13ccaf6562aa8c7f0147caaacd1270f35db613302278339"
+}

@@ -52,7 +52,7 @@ bun - <<'TS'
 import fs from "node:fs";
 import {createHash} from "node:crypto";
 const base=".cartridge/boards/fs/prds/improve-fs-change-provenance/";
-for(const [file,digest] of Object.entries({"rollup-check.ts":"ecaaa4e83b14321a6d4b6c44e2d2b82035c3632d285ab0cf32122379bc54f12f","rollup-bindings.json":"3f64cdb5ae814e57ac6b586902b3bd74b83cd7c3ac99dcbac5f50139fdad5905"}))
+for(const [file,digest] of Object.entries({"rollup-check.ts":"ecaaa4e83b14321a6d4b6c44e2d2b82035c3632d285ab0cf32122379bc54f12f","rollup-bindings.json":"9593f3a0e231b98951659073d3ef58fc6e8b2b923c14bf23b70c191e7d5066e5"}))
  if(createHash("sha256").update(fs.readFileSync(base+file)).digest("hex")!==digest)throw Error("rollup executable input changed: "+file);
 TS
 bun .cartridge/boards/fs/prds/improve-fs-change-provenance/rollup-check.ts

@@ -8,6 +8,10 @@ footprint:
 - src/trace.rs
 - .cartridge/tests/unit/tests.rs
 - .cartridge/docs/traces.md
+- Cargo.toml
+- cartridge.json
+- src/context.rs
+- src/wire.rs
 ---
 
 # Inspect bounded internal tool traces by authenticated request identity

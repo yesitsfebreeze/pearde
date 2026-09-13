@@ -29,3 +29,34 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-13
+
+Reviewer: Codex `/root`, self-review under session delegation policy.
+Inputs: [review-round-3-inputs.json](review-round-3-inputs.json).
+Baseline owner suite `just test memo` passes. Source inspection shows `index`
+already returns compact kind descriptions and qualified declaration paths, and
+`read` returns one full declaration with its revision. The remaining gap is
+that tool guidance recommends the bulk `types` response first. The spec reuses
+index/read and adds a contract fixture; no redundant operation or kind selector.
+Existing record validation still scans bounded records internally, so the claim
+is selective response bodies rather than reduced filesystem I/O.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Avoid loading every declaration into the caller's context. |
+| Ownership and reuse | 20 | Existing index/read retain owner resolution and ambiguity semantics. |
+| Dependencies and slices | 20 | Two memo-owned files; no external prerequisites. |
+| Acceptance and baseline | 19 | Full suite baseline and exact legacy/individual response comparison. |
+| Failure and compatibility | 19 | Unknown read error, legacy types shape, stale writes, no record migration. |
+
+**97/100 — PASS**, no blocking findings, 3/5 rounds used. Source is clean; use
+collection's supported direct-checkout path to preserve this package's sibling
+Cargo workspace dependency layout.
+
+Validation: `just test memo` passes all 45 tests (44 baseline plus the focused
+index/read/legacy contract). The fixture compares each full declaration to the
+unchanged legacy response, checks compact metadata omits text/body, and verifies
+unknown declarations fail. Existing tests cover revision-guarded writes,
+cancellation, shipped-kind ambiguity and qualified reads. No persisted authored
+record is rewritten by the implementation. Checkbox changes record these results.

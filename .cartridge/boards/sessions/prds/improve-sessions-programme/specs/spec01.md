@@ -1,21 +1,22 @@
 ---
 complexity: low
 footprint:
-  - src/mailbox.rs
-  - .cartridge/docs/README.md
-  - .cartridge/docs/client-mapping.md
-  - .cartridge/docs/retention.md
-  - .cartridge/tests/integration/mapping.test.ts
-  - .cartridge/tests/integration/retention.test.ts
-  - .cartridge/tests/unit/main/mapping_tests.rs
-  - .cartridge/tests/unit/main/repair_tests.rs
-  - .cartridge/tests/unit/main/retention_tests.rs
-  - .cartridge/tests/unit/recovery.rs
-  - Cargo.toml
-  - src/main.rs
-  - src/mapping.rs
-  - src/recovery.rs
-  - src/retention.rs
+- src/mailbox.rs
+- .cartridge/docs/README.md
+- .cartridge/docs/client-mapping.md
+- .cartridge/docs/retention.md
+- .cartridge/tests/integration/mapping.test.ts
+- .cartridge/tests/integration/retention.test.ts
+- .cartridge/tests/unit/main/mapping_tests.rs
+- .cartridge/tests/unit/main/repair_tests.rs
+- .cartridge/tests/unit/main/retention_tests.rs
+- .cartridge/tests/unit/recovery.rs
+- Cargo.toml
+- src/main.rs
+- src/mapping.rs
+- src/recovery.rs
+- src/retention.rs
+- src/observations.rs
 ---
 
 # spec01 — Verify integrated sessions improvements

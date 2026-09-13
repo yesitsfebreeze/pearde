@@ -15,7 +15,7 @@ footprint:
 - src/service.rs
 - .cartridge/tests/unit/service/tests.rs
 - .cartridge/docs/revision-guards.md
-commit: "475962d8bcdc9abda8f15c16cd9b553528b8ba05"
+commit: "6a8dec3cc259968a6bcd3aa1b507321268f88b7e"
 ---
 
 # Use consistent stale-write checks for filesystem mutations
@@ -56,3 +56,9 @@ The controlled lost-write probe now passes. Public `just test fs` passes all
 passes 22 tests, including real consumer interoperability, stale overlay edit,
 materialization guard, selection and partial-error coverage. Source files remain
 inside the reviewed footprint. See [verification-summary.json](verification-summary.json).
+
+## Reverification after search paging
+
+Search paging changes shared service.rs. The unchanged publication proof is
+re-run against the integrated owner commit; its initial receipt is retained in
+collection-475962d8.md. Product acceptance and specification are unchanged.

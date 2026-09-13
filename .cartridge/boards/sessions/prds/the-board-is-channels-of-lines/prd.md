@@ -11,7 +11,7 @@ review-round: 1
 review-status: passed
 canonical-scope: the-board-is-channels-of-lines
 needs: ["@sessions/sub-agent-sessions-record-parent-and-mailbox"]
-commit: "191e2b6cb4291bdcce7a894f98bb2d475361d30f"
+commit: "92240c6ba415f53b2d17971aea185536a6f517bc"
 ---
 
 # Durable scoped channels over the mailbox line primitive

@@ -16,7 +16,7 @@ footprint:
 - .cartridge/tests/unit/main/mailbox_tests.rs
 - .cartridge/tests/integration/mailbox.test.ts
 - .cartridge/docs/mailbox.md
-commit: "965108d9c29bce1a41a518917d6c8892e67e42bf"
+commit: "2a6a863cf1af0876072f8879050274cfa650a785"
 ---
 
 # sub-agent-sessions-record-parent-and-mailbox
@@ -39,3 +39,5 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `sub-agent-sessions-record-parent-and-mailbox`; maximum five rounds.
+
+Reverification: attributed report at2a6a863 adds native main dispatch; bind src/observations.rs as transitive source, retaining previous acceptance and executable gates.

@@ -1,11 +1,12 @@
 ---
 complexity: high
 footprint:
-  - src/main.rs
-  - src/mailbox.rs
-  - .cartridge/tests/unit/main/mailbox_tests.rs
-  - .cartridge/tests/integration/mailbox.test.ts
-  - .cartridge/docs/mailbox.md
+- src/main.rs
+- src/mailbox.rs
+- .cartridge/tests/unit/main/mailbox_tests.rs
+- .cartridge/tests/integration/mailbox.test.ts
+- .cartridge/docs/mailbox.md
+- src/observations.rs
 ---
 
 # spec01 — Authenticate direct mailboxes and acknowledge delivered batches

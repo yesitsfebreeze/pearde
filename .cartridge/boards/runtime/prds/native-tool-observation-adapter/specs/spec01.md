@@ -1,16 +1,6 @@
 ---
 complexity: medium
-footprint:
-  - Cargo.toml
-  - src/lib.rs
-  - src/cartridge.rs
-  - src/service.rs
-  - src/turn.rs
-  - src/observation.rs
-  - .cartridge/tests/unit/observation.rs
-  - .cartridge/tests/integration/tool-observations.test.ts
-  - .cartridge/tests/integration/observation-fixture.ts
-  - .cartridge/docs/tool-observations.md
+footprint: ["Cargo.toml","src/lib.rs","src/cartridge.rs","src/service.rs","src/turn.rs","src/observation.rs",".cartridge/tests/unit/observation.rs",".cartridge/tests/integration/tool-observations.test.ts",".cartridge/tests/integration/observation-fixture.ts",".cartridge/docs/tool-observations.md","src/loader.rs",".cartridge/tests/unit/src/tests/mod.rs",".cartridge/tests/unit/src/tests/composition.rs"]
 ---
 
 # Observe native tool calls at dispatch

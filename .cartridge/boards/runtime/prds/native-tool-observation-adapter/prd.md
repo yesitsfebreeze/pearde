@@ -12,18 +12,8 @@ work-kind: leaf
 review-round: 3
 review-status: passed
 canonical-scope: native-tool-observation-adapter
-footprint:
-  - Cargo.toml
-  - src/lib.rs
-  - src/cartridge.rs
-  - src/service.rs
-  - src/turn.rs
-  - src/observation.rs
-  - .cartridge/tests/unit/observation.rs
-  - .cartridge/tests/integration/tool-observations.test.ts
-  - .cartridge/tests/integration/observation-fixture.ts
-  - .cartridge/docs/tool-observations.md
-commit: "1a5e9867acec1d07cd732c3af2ccf331a0979a61"
+footprint: ["Cargo.toml","src/lib.rs","src/cartridge.rs","src/service.rs","src/turn.rs","src/observation.rs",".cartridge/tests/unit/observation.rs",".cartridge/tests/integration/tool-observations.test.ts",".cartridge/tests/integration/observation-fixture.ts",".cartridge/docs/tool-observations.md","src/loader.rs",".cartridge/tests/unit/src/tests/mod.rs",".cartridge/tests/unit/src/tests/composition.rs"]
+commit: "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df"
 ---
 
 # Native tool observation adapter

@@ -17,7 +17,7 @@ footprint:
 - .cartridge/tests/unit/main/repair_tests.rs
 - .cartridge/tests/unit/recovery.rs
 - .cartridge/docs/README.md
-commit: "b772c6ee4f1ad476995c8c8c07cd02ed2be264fa"
+commit: "965108d9c29bce1a41a518917d6c8892e67e42bf"
 ---
 
 # Explain session damage and narrowly repair eligible snapshots
@@ -57,3 +57,5 @@ prior4dd8518e receipt retained. No semantic acceptance change.
 
 Reverify unchanged acceptance after the next integrated owner feature; earlier
 181adb20 receipt retained. No contract relaxation.
+
+Reverification at965108d9 after mailbox integration. Add the new transitive source module to verification coverage; behavioral acceptance is unchanged.

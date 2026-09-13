@@ -1,6 +1,7 @@
 ---
 complexity: medium
 footprint:
+  - src/mailbox.rs
   - Cargo.toml
   - src/main.rs
   - src/recovery.rs

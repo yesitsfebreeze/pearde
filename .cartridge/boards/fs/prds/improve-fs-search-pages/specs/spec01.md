@@ -1,6 +1,8 @@
 ---
 complexity: medium
 footprint:
+  - src/main.rs
+  - src/context.rs
   - src/search.rs
   - src/service.rs
   - .cartridge/tests/unit/search/tests.rs
@@ -39,9 +41,16 @@ Do not evict a cursor silently. Mutations remain outside this change.
 
 ```sh
 cd ../cartridge.ctg
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/fs-revision" just test fs
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" just test fs
 ```
 
 Run `just check fs` through the same public runtime entry point. Query-time
 changes may produce a mixed-time scan; this is documented, never called an
 atomic filesystem snapshot. New queries are the explicit refresh operation.
+
+```sh
+set -eu
+cd /Users/feb/dev/cartridge/cartridge.ctg
+export RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract"
+just check fs
+```

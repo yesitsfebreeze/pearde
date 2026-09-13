@@ -11,11 +11,13 @@ review-round: 3
 review-status: passed
 canonical-scope: improve-fs-search-pages
 footprint:
+- src/main.rs
+- src/context.rs
 - src/search.rs
 - src/service.rs
 - .cartridge/tests/unit/search/tests.rs
 - .cartridge/docs/search-pages.md
-commit: "6a8dec3cc259968a6bcd3aa1b507321268f88b7e"
+commit: "de1406682a33c5b12cb472787178e2570e5ed0f8"
 ---
 
 # Bound and continue file search without losing result identity

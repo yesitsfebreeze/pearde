@@ -1,20 +1,21 @@
 ---
 repo: /Users/feb/dev/cartridge/fs.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: fs
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: improve-fs-search-pages
 footprint:
-- /Users/feb/dev/cartridge/fs.ctg/service.rs
-- /Users/feb/dev/cartridge/fs.ctg/files.rs
-- /Users/feb/dev/cartridge/fs.ctg/search.rs
-- /Users/feb/dev/cartridge/fs.ctg/service/tests.rs
+- src/search.rs
+- src/service.rs
+- .cartridge/tests/unit/search/tests.rs
+- .cartridge/docs/search-pages.md
+commit: "6a8dec3cc259968a6bcd3aa1b507321268f88b7e"
 ---
 
 # Bound and continue file search without losing result identity
@@ -23,10 +24,10 @@ Large filesystem searches return bounded results with stable continuation behavi
 
 ## Acceptance
 
-- [ ] A large fixture paginates all matching paths without duplicates or silent omissions under the documented consistency model.
-- [ ] Tree changes, invalid/expired cursors and cancellation produce explicit outcomes; a bounded result never masquerades as complete.
+- [x] A large fixture paginates all matching paths without duplicates or silent omissions under the documented consistency model.
+- [x] Tree changes, invalid/expired cursors and cancellation produce explicit outcomes; a bounded result never masquerades as complete.
 
-- [ ] Preserve direct filesystem semantics and keep GitFS overlay ownership distinct. New attribution is additive; never auto-import external edits into a session. Retain guarded write behavior and explicit partial failures.
+- [x] Preserve direct filesystem semantics and keep GitFS overlay ownership distinct. New attribution is additive; never auto-import external edits into a session. Retain guarded write behavior and explicit partial failures.
 
 ## Proof and recovery
 
@@ -38,3 +39,20 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-fs-search-pages`; maximum five rounds.
+
+## Current analysis
+
+[Baseline](baseline.json): seven real files yield two items without continuation.
+Capture bounded results once, then page the captured result without rerunning
+rg. This is a result snapshot, not an atomic tree snapshot. Changes after capture
+do not alter its pages; every page explicitly says tree changes are not
+revalidated and directs callers to start a new search for current state.
+Oversized backend output or snapshot storage fails explicitly; it never claims
+a complete partial scan. Keep fs mutation guards and GitFS ownership unchanged.
+
+## Verified result
+
+Public `just test fs` passes 43 tests, including 1,101 real paths, a newline
+filename, 301 matches in one file, replay/refresh/expiry/cancellation, full refs,
+backend floods, snapshot exhaustion and all mutation guards. Public
+`just check fs` passes formatting and clippy. See verification-summary.json.

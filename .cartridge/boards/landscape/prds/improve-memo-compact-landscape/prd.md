@@ -13,7 +13,7 @@ canonical-scope: improve-memo-compact-landscape
 needs:
 - "@landscape/improve-memo-compact-landscape/bounded-inventory-snapshot"
 - "@memo/landscape-inventory-facade"
-commit: "33e0418fa82966772c38ec8191d02a158b2cb56d"
+commit: "422c521aed170a4d098505c73469a1a59dccf49d"
 ---
 
 # Bound landscape discovery and offer inventory drilldown

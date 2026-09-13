@@ -1,20 +1,21 @@
 ---
 repo: /Users/feb/dev/cartridge/policy.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: policy
+capability-owner: policy
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: improve-policy-explain
 needs:
 - '@policy/improve-policy-operation-rules'
 footprint:
 - /Users/feb/dev/cartridge/policy.ctg/init.lua
 - /Users/feb/dev/cartridge/policy.ctg/cartridge.json
+commit: "a3f5cffface2b7b2bc9ed26d9e55da0ee0f4be2d"
 ---
 
 # Explain the effective policy without executing a tool
@@ -23,10 +24,10 @@ A read-only explanation returns the rule, operation, decision and available auth
 
 ## Acceptance
 
-- [ ] For every allow/ask/deny fixture, explanation and dispatch decisions agree at the same policy revision.
-- [ ] Explain never invokes the target or creates an approval; unknown and malformed requests return explicit diagnostics.
+- [x] For every allow/ask/deny fixture, explanation and dispatch decisions agree at the same policy revision.
+- [x] Explain never invokes the target or creates an approval; unknown and malformed requests return explicit diagnostics.
 
-- [ ] Parse old profiles unchanged and make new rules opt-in except explicit tested read-only defaults. Reject invalid configuration atomically and retain the prior valid policy. Policy remains separate from runtime sandbox containment.
+- [x] Parse old profiles unchanged and make new rules opt-in except explicit tested read-only defaults. Reject invalid configuration atomically and retain the prior valid policy. Policy remains separate from runtime sandbox containment.
 
 ## Proof and recovery
 

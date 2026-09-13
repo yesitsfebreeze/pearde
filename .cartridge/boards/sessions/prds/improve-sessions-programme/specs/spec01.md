@@ -1,6 +1,7 @@
 ---
 complexity: low
 footprint:
+- src/channels.rs
 - src/mailbox.rs
 - .cartridge/docs/README.md
 - .cartridge/docs/client-mapping.md

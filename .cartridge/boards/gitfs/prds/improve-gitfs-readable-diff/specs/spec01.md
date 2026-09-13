@@ -1,6 +1,7 @@
 ---
 complexity: medium
 footprint:
+  - src/push.rs
   - src/service.rs
   - src/store.rs
   - src/tool_result.rs

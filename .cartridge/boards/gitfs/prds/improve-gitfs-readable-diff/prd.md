@@ -21,7 +21,7 @@ footprint:
 - .cartridge/tests/unit/tool_result.rs
 - .cartridge/tests/integration/tool-result.test.ts
 - .cartridge/docs/inspection.md
-commit: "55cc8aae27575ded5950737c46a99aa358b95980"
+commit: "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5"
 ---
 
 # Inspect session changes without a mutation grant
@@ -62,3 +62,5 @@ mutation operations are denied, refs/indexes/worktree bytes are unchanged, large
 UTF-8 pages reconstruct exactly, and changed disk bytes reject continuation.
 The public GitFS suite passes 25 tests, formatting/clippy passes, and the public
 policy suite passes three contract tests plus documentation checks.
+
+Recorded-push revalidation at b4b95bb: shared native registration and new registered module are bound; original acceptance and executable gates are unchanged.

@@ -13,7 +13,7 @@ canonical-scope: improve-memo-types-drilldown
 footprint:
 - src/service.rs
 - .cartridge/tests/integration/tests.rs
-commit: "5ecbf9e4ed34561dd75bcacfb98340ec28ee006a"
+commit: "648b420fd12e38d7d07e934595e57fdaa74ae51b"
 ---
 
 # Read type declarations individually
@@ -37,3 +37,9 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-memo-types-drilldown`; maximum five rounds.
+
+## Reverification after merged shadowing proof
+
+The shared integration test file gained the shadowing fixture at 648b420. The
+types/index/read contract is unchanged. Re-run the public memo gate and retain
+the previous receipt in collection-5ecbf9e4.md.

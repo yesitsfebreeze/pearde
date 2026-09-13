@@ -1,6 +1,6 @@
 ---
 complexity: high
-footprint: ["src/roster.rs","src/channels.rs","src/mailbox.rs","src/main.rs","src/mapping.rs","src/retention.rs",".cartridge/tests/unit/main/retention_tests.rs",".cartridge/tests/integration/retention.test.ts",".cartridge/docs/retention.md","src/observations.rs","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
+footprint: ["src/roster.rs","src/channels.rs","src/mailbox.rs","src/main.rs","src/mapping.rs","src/retention.rs",".cartridge/tests/unit/main/retention_tests.rs",".cartridge/tests/integration/retention.test.ts",".cartridge/docs/retention.md","src/observations.rs","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs","src/context.rs",".cartridge/tests/unit/main/context_tests.rs",".cartridge/tests/integration/context.test.ts"]
 ---
 
 # spec01 — Preview and journal guarded session cleanup

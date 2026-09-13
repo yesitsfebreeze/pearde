@@ -29,3 +29,27 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — Coherent discovery and a live client
+
+Reviewer `/root` self-review. Inputs: review-round-3-inputs.json.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Deterministic baseline exposes mixed descriptor generations. |
+| Ownership and reuse | 20 | Existing version queries, registry and composition; no transport fork. |
+| Dependencies and slices | 19 | Four MCP paths; existing policy/wire tests retained. |
+| Acceptance and baseline | 19 | Causal descriptor race plus one real initialized stdio client and failed replacement. |
+| Failure and compatibility | 19 | Three attempts, no partial publication, older-runtime fallback and truthful notification capability. |
+
+**96/100 — PASS**. No blockers. This is coherent discovery, not an atomic lock
+across discovery and all future calls; providers continue to validate inputs.
+Rounds used: 3/5. Product gates remain pending.
+
+## Round 4 — Correlated runtime failure dependency
+
+Self-review **96/100 — PASS** (19/20/19/19/19). Actual live-client testing
+found a dropped stdio response when the provider is temporarily absent. The
+new runtime leaf owns that two-file repair and inherits four used rounds. MCP
+collection waits for it. Catalog design remains unchanged. No blockers; inputs
+in review-round-4-inputs.json. Rounds used: 4/5.

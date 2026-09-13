@@ -2905,7 +2905,8 @@
         "improve-mcp-refresh-catalog"
       ],
       "needs": [
-        "@gitfs/tool-results-interoperate"
+        "@gitfs/tool-results-interoperate",
+        "@runtime/mcp-stdio-replies-during-replacement"
       ],
       "words": 184,
       "sha256": "66860865495f1d99c369aafd92af4165363afcf444a6635f8033d3963a365800",
@@ -5963,6 +5964,24 @@
       "review": "prd.ctg/.cartridge/boards/runtime/prds/development-clean-checkout/review.md",
       "historical_sha256": "7590d7275b65561841c67ec0189af797fb063cd20d168d144c3e6e2863b6a8ab",
       "review_binding_status": "stale-after-migration"
+    },
+    {
+      "id": "@runtime/mcp-stdio-replies-during-replacement",
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/mcp-stdio-replies-during-replacement/prd.md",
+      "owner": "runtime",
+      "kind": "leaf",
+      "sources": [
+        "improve-mcp-refresh-catalog"
+      ],
+      "needs": [],
+      "sha256": "348bde39eb5135e390c449adff3baf71b5b6584b88bf9e0584d33ac019a9f9b2",
+      "score": 96,
+      "review_result": "PASS",
+      "round": 4,
+      "max_rounds": 5,
+      "review": "prd.ctg/.cartridge/boards/runtime/prds/mcp-stdio-replies-during-replacement/review.md",
+      "review_binding_status": "round-4-inputs",
+      "reason": "Observed dropped stdio response while running the initialized MCP client replacement proof."
     }
   ],
   "migration_manifest": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/reports/record-migration/manifest.json"

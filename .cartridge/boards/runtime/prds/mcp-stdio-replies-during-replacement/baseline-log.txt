@@ -1,0 +1,19 @@
+bun test v1.3.14 (0d9b296a)
+
+../mcp.ctg/.cartridge/tests/integration/refresh.test.ts:
+52 |   })();
+53 |   const errors = (async () => { for await (const chunk of child.stderr) diagnostic = (diagnostic + new TextDecoder().decode(chunk)).slice(-16_384); })();
+54 |   function request(method: string, params: unknown = {}) {
+55 |     const id = sequence++;
+56 |     return new Promise<any>((resolve, reject) => {
+57 |       const timer = setTimeout(() => { pending.delete(id); reject(new Error(`MCP timeout for ${method}: ${diagnostic}`)); }, 10_000);
+                                                                           ^
+error: MCP timeout for tools/list: mcp: `mcp` is not provided
+
+      at <anonymous> (/Users/feb/dev/cartridge/mcp.ctg/.cartridge/tests/integration/refresh.test.ts:57:71)
+(fail) one initialized stdio client re-lists replaced, added and removed tools and survives rejected replacement [13134.65ms]
+
+ 0 pass
+ 1 fail
+ 12 expect() calls
+Ran 1 test across 1 file. [13.14s]

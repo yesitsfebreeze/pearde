@@ -1,0 +1,8 @@
+{
+  "source_revision": "00714a8e5b2fa2e80a79f5fe07309c296867b52d",
+  "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract just test mcp discovery_does_not_publish_mixed_generations",
+  "expected": "one coherent generation after replacement during describe",
+  "observed": "one response lists a generation-1 descriptor and a generation-2 descriptor",
+  "exit_code": 101,
+  "log_sha256": "3409f69b519b3572f2f17a99ab621b6c462a23f678d21517c8f0bf6a1c4e1b4b"
+}

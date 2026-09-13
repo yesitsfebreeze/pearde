@@ -1,0 +1,10 @@
+{
+  "mcp_tests": 12,
+  "live_client": "one initialized stdio connection survives valid replacement, rejection, addition and removal",
+  "runtime_dependency": "f71b762fd839e6a2644f16565b1de10edf967c9e",
+  "logs": {
+    "/tmp/cartridge-mcp-refresh-tests.log": "7926134e2708e7d2576dd1d135adb91ab348d8ae07b18e83fa7147a4aff0aa6c",
+    "/tmp/cartridge-mcp-refresh-check.log": "ce8d49cc9f6861993285be6090ef446cb8c10725c350968b6a06d926fbaf0990",
+    "/tmp/cartridge-mcp-refresh-with-bridge.log": "7c99df06ea8fb812620a358ecd6598088dbec57c8987d132aeb42ad074ce2962"
+  }
+}

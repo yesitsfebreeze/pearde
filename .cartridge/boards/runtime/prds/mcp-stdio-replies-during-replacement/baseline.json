@@ -1,0 +1,7 @@
+{
+  "command": "bun test ../mcp.ctg/.cartridge/tests/integration/refresh.test.ts",
+  "source_runtime_revision": "6cb4456",
+  "expected": "correlated error or current catalog during replacement",
+  "observed": "10-second request timeout; stderr mcp: `mcp` is not provided",
+  "log_sha256": "ca26db8789443ccd21e0558802973a609168203f741c4c89493cfe825d354fce"
+}

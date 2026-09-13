@@ -1,0 +1,12 @@
+{
+  "tests": 2,
+  "mutation": "disabling bridge error response fails unchanged correlation test",
+  "live_mcp_assertions": 14,
+  "live_mcp_test_sha256": "c5861cea131b1a64a425c422a784ba6269fdb2a4f2f86f8408fb2578ff21016c",
+  "logs": {
+    "/tmp/cartridge-runtime-mcp-bridge-tests.log": "803a3f69ffaf379023f3ffae3cb9ca5c3d5337f5977ac3ced0a3a44fabf58048",
+    "/tmp/cartridge-runtime-mcp-bridge-check.log": "c05015f4374ef95f720e28256ac8c64a0ce1c874cb7a5e0a9e9f6729fa9dec9e",
+    "/tmp/cartridge-runtime-mcp-bridge-mutation.log": "792602942a38b33260b69adaeedc428ef853461e886bfff59e1768b7087bc252",
+    "/tmp/cartridge-mcp-refresh-with-bridge.log": "7c99df06ea8fb812620a358ecd6598088dbec57c8987d132aeb42ad074ce2962"
+  }
+}

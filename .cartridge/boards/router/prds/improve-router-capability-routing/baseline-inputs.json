@@ -1,0 +1,13 @@
+{
+  "source_commit": "d5ce66987edb32fd1ee80c030877d0a88b80b7d1",
+  "source_sha256": {
+    "src/catalog.rs": "757258f1a030ade401a0e7282097d2e92802397bb2dec7f01dc28d9cd4f2c142"
+  },
+  "probe": "\n#[cfg(test)]\nmod capability_baseline {\n    use super::*;\n    #[test]\n    fn named_and_local_routes_must_not_bypass_capabilities() {\n        let models=serde_json::from_value(json!({\"plain\":{\"hops\":{\"ollama\":\"plain\"},\"chain\":[\"ollama\"],\"tier\":\"free\",\"context\":8000,\"caps\":{\"tools\":false,\"input\":[\"text\"]}}})).unwrap();\n        let providers=vec![Provider{name:\"ollama\".into(),kind:\"ollama\".into(),base:\"http://127.0.0.1:1\".into(),key:String::new(),free:true,oauth:None,num_ctx:None}];\n        let catalog=Catalog::new(models,providers).unwrap();\n        let body=json!({\"messages\":[{\"role\":\"user\",\"content\":[{\"type\":\"image_url\",\"image_url\":{\"url\":\"fixture-image\"}}]}],\"tools\":[{\"type\":\"function\",\"function\":{\"name\":\"check\",\"parameters\":{\"type\":\"object\"}}}]});\n        let actual=[(\"plain\",false),(\"plain\",true),(\"auto\",false)].map(|(name,strict)|catalog.candidates(name,&body,strict).len());\n        assert_eq!(actual,[0,0,0],\"named, strict and local-last-resort routes must all meet required tools/vision support\");\n    }\n}\n",
+  "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/writer-proof cargo test --manifest-path /private/tmp/cartridge-writer-proof/router.ctg/Cargo.toml capability_baseline -- --nocapture",
+  "expected": [
+    0,
+    0,
+    0
+  ]
+}

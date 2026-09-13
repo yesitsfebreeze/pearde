@@ -29,3 +29,25 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — Uniform admission and per-hop evidence
+
+Reviewer `/root` self-review. Inputs: review-round-3-inputs.json.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Baseline confirms all three bypasses; prevents incompatible fallback. |
+| Ownership and reuse | 19 | Existing routing/translation path owns admission; one new pure gate. |
+| Dependencies and slices | 19 | No external provider or policy ownership change; context estimates explicitly limited. |
+| Acceptance and baseline | 19 | Source-identical failing probe plus actual loopback failover and zero-call exclusions. |
+| Failure and compatibility | 19 | Unknown/expired evidence fails; configured declarations remain distinguishable; no automatic replay added. |
+
+**95/100 — PASS**. No blockers. Stricter admission intentionally refuses formerly
+unchecked pinned/local routes. A declared capability is not labelled empirical
+verification; context estimates remain heuristic. Common conversion is retained,
+and unsupported advanced conversion fails rather than silently dropping intent.
+Rounds used: 3/5. Product gates pending.
+
+## Implementation proof
+
+The accepted admission contract passes 23 router tests and the public check, with 21 proxy and 15 MCP compatibility tests. Source hashes and complete logs are in verification.json. Additional failure checks show that existing health adaptations cannot strip required fields, and re-reading a subscription cache cannot establish a new live observation. These implement the accepted preservation/evidence requirements without expanding into the separate health/explanation/recovery PRDs.

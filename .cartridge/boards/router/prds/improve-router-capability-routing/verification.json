@@ -1,0 +1,43 @@
+{
+  "result": "23 router tests, 21 proxy tests and 15 MCP tests pass; public router check passes.",
+  "baseline": "Named, strict and local-last routes returned [1,1,1] incompatible candidates; acceptance now requires zero in each case.",
+  "recovery": "Existing health adaptations are retained on disk, but cannot remove required fields during execution. No retries or live inventory/model calls were added by verification.",
+  "limitations": [
+    "Context size is a byte-based heuristic plus an explicit bound/output budget, not exact tokenization.",
+    "Configured/bundled/subscription declarations are not labelled fresh remote verification.",
+    "This detailed route report describes capability admission, not actual health selection; the separate route-explanation PRD remains open."
+  ],
+  "source_sha256": {
+    "src/main.rs": "e62b30ad6462ed1cf5e86090bccd5bf9b7f6e0e407d696cdbea8890be64c3525",
+    "src/catalog.rs": "3dd3acf6da070d28b95311717dcf0e2f52e607c72c4d68c55307afd42a9493cd",
+    "src/requirements.rs": "f15d296ea9846601c894d265851074e026e367f2ecacd5a9cb450a503b9ea336",
+    "src/proxy.rs": "cc3f32bbcfeb9e0177112d738fae972b7876d83dd0670e043bf572d414cc94c8",
+    "src/sync.rs": "c8cf2a80dc0df8caf04fa5c9c94fb5d2059031acd2bdf535836099bc3d3075d3",
+    ".cartridge/tests/unit/catalog/capabilities.rs": "2854489381a7a90d6be3b30514aa2f1913277e7443c9cb4f08fe29050a175c30",
+    ".cartridge/tests/unit/proxy/capabilities.rs": "acec79ec854ccc655085bd085f6868df4d420bf1f03037856746b989cd432b73",
+    ".cartridge/tests/unit/sync/tests.rs": "8260bcc86bf9e377c2ee4eb9445b12db6f3fa1aeb1392e72e66e2cd9b0c08ed9",
+    ".cartridge/docs/capabilities.md": "41079cb4b688881def398bc783c7abfb94267fd34f0112a42d44beb923225838"
+  },
+  "logs": {
+    "test": {
+      "path": "test-log.txt",
+      "sha256": "f5a2e9c7c246e0c796a13afd411a697fd87740d3951e3580333454b94daed05c",
+      "exit": 0
+    },
+    "check": {
+      "path": "check-log.txt",
+      "sha256": "ff6d0a9b32ac10b1afaa5af4e15dee2706f059525948ff1b81382c4d344c7415",
+      "exit": 0
+    },
+    "proxy": {
+      "path": "proxy-log.txt",
+      "sha256": "5f4ff495a0d2832c1f528d10ad4a6ad4c3b88d2bd60dc17626ea39ec7d68cb25",
+      "exit": 0
+    },
+    "mcp": {
+      "path": "mcp-log.txt",
+      "sha256": "d9e3385b183bb459387a52922634e8d6e0b60703fbf2966a4ef8fe4a5a7cfd7f",
+      "exit": 0
+    }
+  }
+}

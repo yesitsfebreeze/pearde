@@ -1,0 +1,8 @@
+{
+  ".cartridge/boards/router/prds/improve-router-capability-routing/prd.md": "7543b58ada4a13653185c6b8dfaca987ff8a052d83c73b58a94813f00fe6d403",
+  ".cartridge/boards/router/prds/improve-router-capability-routing/specs/spec01.md": "7af6ea3e81e49a23a7c713e2e8f7cdf7502a127b3b47424a6b4b8e19e5712c8f",
+  "../router.ctg/src/catalog.rs": "757258f1a030ade401a0e7282097d2e92802397bb2dec7f01dc28d9cd4f2c142",
+  "../router.ctg/src/proxy.rs": "f845604a1c2bf5f91d52a38702573e501fc102ad9e58626190d5bc254069a65a",
+  "../router.ctg/src/sync.rs": "7adf41a596514045277507afb73731b4e70609be1d09872aefe6feb258b1a635",
+  "../router.ctg/src/protocol.rs": "2e0367193ffb669ddde6fb6d7b4c0a9a40fbce407ccb2cd66f077ae28e17b398"
+}

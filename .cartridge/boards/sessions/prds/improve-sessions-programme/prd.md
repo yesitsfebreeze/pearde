@@ -1,29 +1,30 @@
 ---
 repo: /Users/feb/dev/cartridge/sessions.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: sessions
+capability-owner: sessions
 work-kind: rollup
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: improve-sessions-programme
 needs:
 - '@sessions/improve-sessions-client-mapping'
 - '@sessions/improve-sessions-retention'
 - '@sessions/improve-sessions-recovery'
+commit: "b772c6ee4f1ad476995c8c8c07cd02ed2be264fa"
 ---
 
 # Sessions improvement plan
 
-Coordinate the linked owner outcomes and record their combined evidence; claim a leaf for implementation.
+Coordinate the three linked owner outcomes at one integrated source revision. The [baseline](baseline.json) shows retention collected at `b772c6e`, while mapping and recovery receipts require refresh after their shared source changed. This rollup adds executable combined verification and no source implementation.
 
 ## Acceptance
 
-- [ ] Each linked leaf passes its own review and observable acceptance.
-- [ ] Record tested mitigations and remaining limitations at the integrated revisions.
+- [x] Each linked leaf passes its own review and observable acceptance.
+- [x] Record tested mitigations and remaining limitations at the integrated revisions.
 
 ## Work items
 

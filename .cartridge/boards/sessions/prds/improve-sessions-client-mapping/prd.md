@@ -16,7 +16,7 @@ footprint:
 - .cartridge/tests/unit/main/mapping_tests.rs
 - .cartridge/tests/integration/mapping.test.ts
 - .cartridge/docs/client-mapping.md
-commit: "181adb20248c6fdb718823919438939de55bdefc"
+commit: "b772c6ee4f1ad476995c8c8c07cd02ed2be264fa"
 ---
 
 # Map client conversations to cartridge sessions honestly
@@ -39,3 +39,6 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-sessions-client-mapping`; maximum five rounds.
+
+Reverify unchanged acceptance after the next integrated owner feature; earlier
+181adb20 receipt retained. No contract relaxation.

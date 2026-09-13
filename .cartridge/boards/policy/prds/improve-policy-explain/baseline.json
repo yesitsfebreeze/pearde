@@ -1,0 +1,18 @@
+{
+  "source_revision": "36c770e5008a35c69dae3ed7be9308237d6bd083",
+  "source_sha256": "afaf3dbdf413c179b6816810bae398b41ce15788d028deb4b6bdd2f68829e851",
+  "command": [
+    "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/cartridge",
+    "--dir",
+    "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-policy-explain-bvo95u29",
+    "--profile",
+    "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-policy-explain-bvo95u29",
+    "run",
+    "policy.explain",
+    "{\"tool\": \"gitfs\", \"input\": {\"op\": \"read\"}, \"context\": {\"session\": \"fixture\"}}"
+  ],
+  "expected": "Read-only explanation identifies operation rule and allow decision without invoking target.",
+  "exit": 1,
+  "stdout": "",
+  "stderr": ""
+}

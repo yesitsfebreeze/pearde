@@ -29,3 +29,18 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — executable explanation boundary
+
+Reviewer: Codex self-review. Baseline native CLI confirms `policy.explain` is
+unavailable; existing policy has one pure rule closure and native consumer
+fixtures. Reuse that closure and identify selected rule provenance rather than
+adding a second authorization engine. Availability of interactive approval is a
+trusted caller fact, not something policy can infer from a decision; absent
+metadata is explicitly unknown. No target or approval service is injected.
+Semantic revision includes normalized rules and a named evaluator version; it is
+not a cryptographic source digest or authorization receipt.
+
+Value/scope 19, ownership/reuse 20, dependencies/slices 19, acceptance/baseline 19,
+failure/compatibility 19: **96/100 — PASS for the plan**, no blocking findings.
+Inputs bound in review-round-3-inputs.json. Three rounds used, two remain.

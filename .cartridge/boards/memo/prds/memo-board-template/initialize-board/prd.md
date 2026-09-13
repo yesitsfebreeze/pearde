@@ -17,7 +17,7 @@ footprint:
 - .cartridge/templates/board
 - .cartridge/tests/unit/board.rs
 - .cartridge/docs/board.md
-commit: "5345aaaa3407584825f624edb6cefaff14846b07"
+commit: "4b081453d610af42daac0456750a50bdc719a5fe"
 ---
 
 # Preview and install a board without overwriting edits
@@ -46,3 +46,5 @@ the pinned engine entry; earlier0976a3b0 receipt retained.
 
 Reverify unchanged acceptance after the next integrated owner feature; earlier
 154bde9d receipt retained. No contract relaxation.
+
+Reverification at4b081453 after native context facade: existing type/board behavior unchanged; service/main source integration changed.

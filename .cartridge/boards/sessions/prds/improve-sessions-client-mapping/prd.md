@@ -16,7 +16,7 @@ footprint:
 - .cartridge/tests/unit/main/mapping_tests.rs
 - .cartridge/tests/integration/mapping.test.ts
 - .cartridge/docs/client-mapping.md
-commit: "2a6a863cf1af0876072f8879050274cfa650a785"
+commit: "423ecd329a98d0e0702a71c9ccb0a33a16cedae6"
 ---
 
 # Map client conversations to cartridge sessions honestly
@@ -46,3 +46,5 @@ Reverify unchanged acceptance after the next integrated owner feature; earlier
 Reverification at965108d9 after mailbox integration. Add the new transitive source module to verification coverage; behavioral acceptance is unchanged.
 
 Reverification: attributed report at2a6a863 adds native main dispatch; bind src/observations.rs as transitive source, retaining previous acceptance and executable gates.
+
+Named channel registration revalidation at 423ecd32: source footprint includes registered channels and its shared mailbox codec; acceptance and behavior gates remain unchanged.

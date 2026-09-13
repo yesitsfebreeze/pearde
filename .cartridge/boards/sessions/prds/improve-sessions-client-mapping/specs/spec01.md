@@ -1,6 +1,7 @@
 ---
 complexity: medium
 footprint:
+- src/channels.rs
 - src/mailbox.rs
 - src/main.rs
 - src/mapping.rs

@@ -1,0 +1,43 @@
+{
+  "source_revision": "0c9d4e9bd2bb7fef98dd1bc2f593f314b7a090e2",
+  "source_clean": true,
+  "paths": {
+    "src/main.rs": "d4020c32e14ceb46444fb7c33803da3585d51a77fe4bf157994f5b3ec2e19a06",
+    "src/service.rs": "26b6e2ec4997595033bd49ba0cfd3e2272fb8c12c06b3d374f243dc2e57eec18",
+    "src/streaming.rs": "7d21cb22318c460e9ccb140defe21570ffbefe05a348afa8bf24610de1650c8c",
+    "src/continuation.rs": "9a658c80b8fc10a1e4ea73f6cd0273ce51c98e214e76c075633a7e459fdc809b",
+    ".cartridge/tests/unit/tests.rs": "4a55b3e794d6ebf423e0116b215e04ec803ea85b4760729db848db88abfa94ce",
+    ".cartridge/docs/continuations.md": "d63eaa91d3f18ce23a3691018cf2b60a360a0f3c5bfe9ca385657859481a04ac"
+  },
+  "public_gates": [
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/proxy-continuation\" just test proxy",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "25 passed, 0 failed",
+      "log": "test-log.txt"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/proxy-continuation\" just check proxy",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "passed",
+      "log": "check-log.txt"
+    }
+  ],
+  "provenance_note": "These gates tested final product code. Source commit then added one assertion for an unknown current-instance ID to an already-passing test; coordinator will run final source-bound public gates before collection. Router dependencies were being edited concurrently; final integrated router SHA/gates remain coordinator work.",
+  "router_at_gates": {
+    "head": "07b77ff754ab740a1efb01dfade7e3fc953c204d",
+    "dirty_paths": [
+      "src/catalog.rs",
+      "src/main.rs"
+    ]
+  },
+  "limitations": [
+    "Mappings and recent expiry diagnostics are bounded and process-local; no durable history.",
+    "A shared HTTP key denotes one principal; separate clients require distinct profile-configured environment-backed keys.",
+    "The exact route identifier is pinned; router configuration remains authoritative for that identifier.",
+    "Native provider IDs retain existing provider semantics."
+  ],
+  "receipt_revalidation": [
+    "@proxy/improve-proxy-total-usage: shared main/service/streaming/tests changed; rerun public proxy and existing GitFS/policy interoperability gates per prior spec."
+  ]
+}

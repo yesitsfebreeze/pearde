@@ -1,0 +1,32 @@
+    Updating crates.io index
+     Locking 112 packages to latest compatible versions
+      Adding generic-array v0.14.7 (available: v0.14.9)
+      Adding sha2 v0.10.9 (available: v0.11.0)
+   Compiling cc v1.4.6
+   Compiling rustix v1.1.4
+   Compiling landscape v0.1.0 (/Users/feb/dev/cartridge/landscape.ctg)
+   Compiling luajit-src v210.7.3+1ee778a
+   Compiling lua-src v551.0.2
+   Compiling tempfile v3.27.0
+   Compiling mlua-sys v0.12.0
+   Compiling mlua v0.12.1
+   Compiling cartridge v0.1.0 (/Users/feb/dev/cartridge/cartridge.ctg)
+   Compiling memo_cartridge v0.1.0 (/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-board-baseline-8ws8ll90/memo.ctg)
+    Finished `test` profile [unoptimized] target(s) in 7.98s
+     Running unittests src/main.rs (target/tool-result-contract/debug/deps/memo_cartridge-0eb98c12077be62b)
+
+running 1 test
+
+thread 'service::tests::baseline_board_preview' (43098169) panicked at src/../.cartridge/tests/integration/tests.rs:1186:2:
+board preview unavailable: Err("unknown field `action`, expected one of `op`, `path`, `body`, `kind`, `limit`, `cursor`, `usage`, `query`, `ref`, `expected_revision`, `event`")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test service::tests::baseline_board_preview ... FAILED
+
+failures:
+
+failures:
+    service::tests::baseline_board_preview
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 49 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--bin memo_cartridge`

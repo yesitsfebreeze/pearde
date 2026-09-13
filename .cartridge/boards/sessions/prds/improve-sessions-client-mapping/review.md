@@ -29,3 +29,22 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-13
+
+Independent reviewer: Codex `/root`, implementation by `/root/sessions_mapping`.
+Inputs: [review-round-3-inputs.json](review-round-3-inputs.json).
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | One reconnect mapping outcome with explicit shared-profile limitation. |
+| Ownership and reuse | 20 | Host configuration supplies authority; sessions owns references and existing creation. |
+| Dependencies and slices | 19 | Owner-local native operations; no invented transport authentication. |
+| Acceptance and baseline | 19 | Real SDK baseline, reconnect/forgery fixtures and concurrent fresh-process CAS. |
+| Failure and compatibility | 19 | Separate bounded index, locked atomic publication, explicit orphan recovery and unchanged transcripts. |
+
+**96/100 — PASS**, no blocking findings, 3/5 rounds used.
+Reviewer implementation requirements within the accepted scope: OS lock covers
+empty-session creation through index publication; reject target traversal/symlink
+escapes; test concurrent fresh processes, not only one-process mutex.
+Plan rating is not an implementation test result or user rating.

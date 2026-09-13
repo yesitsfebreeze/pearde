@@ -29,3 +29,21 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — Attributed cost and latency observations
+
+Independent reviewer `/root/memo_board`; exact inputs in review-round-3-inputs.json.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Actual fallback currently lacks attributable duration and cost observations. |
+| Ownership and reuse | 20 | Reuses router attempt loop and bounded decision archive. |
+| Dependencies and slices | 19 | Existing decision dependency complete; additive owner-only metadata. |
+| Acceptance and baseline | 19 | Recorded failing loopback baseline, raw usage and deterministic fallback fixtures. |
+| Failure and compatibility | 19 | Unknown versus zero, partial subtotal, cancellation and immutable handoff scope. |
+
+**96/100 — PASS**. No blockers. Implementation checks: label stale prices explicitly
+(age over 24 hours is stale, never asserted fresh provider pricing); overflow and
+non-finite arithmetic stays unknown; cancelled active attempt is counted at most
+once. Estimates subtract output budget from the existing total context heuristic
+before applying input rates. Rounds used: 3/5. Product gates pending.

@@ -1,0 +1,8 @@
+{
+  ".cartridge/boards/router/prds/improve-router-cost-latency/prd.md": "3c959905d27d40a67cb00bf4fd4eac30684a91c68b109e848aef4e8812fa84c5",
+  ".cartridge/boards/router/prds/improve-router-cost-latency/specs/spec01.md": "df030ff271acf383a58c36287293b186b53e7367f3e7010a356117c255878d3f",
+  "../router.ctg/src/decision.rs": "77b0c85ef9013177176b7ed3fd3c76a03c87f247e0d24df44f8eaf7ba47c7e56",
+  "../router.ctg/src/proxy.rs": "314e74eba33061b6b096c6a38edbe3773f614f5e2a45c37341b3c545c8d28486",
+  "../router.ctg/src/catalog.rs": "3dd3acf6da070d28b95311717dcf0e2f52e607c72c4d68c55307afd42a9493cd",
+  "../router.ctg/src/protocol.rs": "2e0367193ffb669ddde6fb6d7b4c0a9a40fbce407ccb2cd66f077ae28e17b398"
+}

@@ -1,0 +1,11 @@
+{
+  "source_revision": "4dd8518e2f9fb1bf63f191acffe3777d4eec3b5c",
+  "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just build sessions; launch target/sessions-mapping/debug/sessions over SDK JSON-lines in a disposable session directory, apply {config:{dir}}, call sessions {op:mapping,external_conversation:conversation-7,clientInfo:{name:copied-client}}",
+  "binary_sha256": "21c45baba030be8008691af0398c2a94301e76813df09d3c20d430285c4fae67",
+  "expected": "Clearly labelled connection scope and revision from mapping lookup; no invented durable identity.",
+  "observed": {
+    "error": "unknown sessions op mapping",
+    "reply": 1
+  },
+  "result": "Missing mapping operation; native sessions reports unknown sessions op mapping."
+}

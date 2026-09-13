@@ -1,0 +1,32 @@
+    Blocking waiting for file lock on build directory
+    Finished `test` profile [unoptimized] target(s) in 1.45s
+     Running unittests src/main.rs (target/tool-result-contract/debug/deps/mcp-907608fff523f450)
+
+running 15 tests
+test tests::discovery_does_not_publish_mixed_generations ... ok
+test tests::an_ask_refusal_names_the_operation_and_the_missing_channel ... ok
+test tests::granted_calls_land_in_the_observation_journal_with_caller_and_turn ... ok
+test tests::a_broken_line_and_an_unknown_method_answer_without_dropping_the_connection ... ok
+test tests::an_empty_profile_exposes_no_tools_and_an_unknown_one_is_refused ... ok
+test tests::a_client_initializes_lists_the_profiles_tools_and_calls_one ... ok
+test tests::cancelling_a_call_reaches_the_tool_under_that_calls_own_identity ... ok
+test tests::descriptors_are_cached_until_the_service_version_changes ... ok
+test tests::diagnostic_inspection_is_optional_scoped_and_cannot_grant_authority ... ok
+test tests::quiet_defaults_do_not_write_an_automatic_observation_journal ... ok
+test tests::persistent_discovery_churn_is_bounded_and_stable_errors_keep_old_cache_for_rollback ... ok
+test tests::unavailable_or_changed_explanations_never_replace_refusal_with_allow ... ok
+test tests::a_denied_call_and_a_failing_tool_are_results_the_client_continues_from ... ok
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/integration/approval.test.ts:
+test tests::initialized_live_client_observes_catalog_replacements ... ok
+(pass) a real headless profile explains operation rules and ignores forged approval [5678.69ms]
+
+ 1 pass
+ 0 fail
+ 27 expect() calls
+Ran 1 test across 1 file. [5.69s]
+test tests::initialized_live_client_inspects_real_policy_without_granting_writes ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.69s
+

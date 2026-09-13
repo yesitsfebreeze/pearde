@@ -1,0 +1,40 @@
+{
+  "source_commit": "0976a3b0035c67bbb828063a1def17a1f5297d14",
+  "commands": [
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just test memo",
+      "result": "56 passed, 0 failed; 7 new board fixtures; test-log.txt"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just check memo",
+      "result": "passed format and cargo check; check-log.txt"
+    }
+  ],
+  "source_sha256": {
+    "src/main.rs": "d0c8441c72d1e122739f25033de05e1714b7d3e5fa28ddc366d26b7d855b7707",
+    "src/service.rs": "42910e4c2ebb83f17012d87fba7d3e60e70e51bec61019b7404ad809f1ea3577",
+    "src/board.rs": "3274f38957948772a8bfb854092ad3066d9987c8cba3f95049637fbaddafbca4",
+    ".cartridge/tests/unit/board.rs": "7a133113066f0b00de063a84b7aee960dbc6fc5ce1e8c2f8b40bb636aac62b78",
+    ".cartridge/docs/board.md": "e1a0f0fbe871853beabbe4e18d9007ab0859603fd2b7be112a0502a0ba025592",
+    ".cartridge/templates/board/README.md": "bdce8a18a0457843033ae61dabe30cbb97ee135310315bf5e8a11eb4f219421c",
+    ".cartridge/templates/board/grammar.md": "ef86eb03e8768cecdcf76cd628ddd7b016b3809433feec6361245ba9346a0d48",
+    ".cartridge/templates/board/settings.md": "e9b3f7db6a313634ea2ee19812368bc4203f332db58eda7b2e7532b4254e54d0",
+    ".cartridge/templates/board/templates/prd.md": "e20927f1ca4fe61c5d14b38057e4e8d78370d1b791b8f3f40a824308cce6a5cc",
+    ".cartridge/templates/board/templates/spec.md": "2f25baed0471daf9a5cf4d65383f8de5a14d1817e4610ffec9076d0fa8e1e824",
+    ".cartridge/templates/board/workflows/analyze.md": "3b13c5694e5bec9dee9491856b501410de51ad7ecda92dc544ef9952841f041e",
+    ".cartridge/templates/board/workflows/develop.md": "18a6b3ee42ae3e07d1c29502a7cffea7cd16d287dbef30d2f006387a899a5174",
+    ".cartridge/templates/board/workflows/verify.md": "2ab105f4e225bb89054bf863b9c00c789cee0edaf920502b67d87cc66537e10a"
+  },
+  "limits": [
+    "Native host operation only; the model tool cannot install.",
+    "No all-or-nothing multi-file transaction; partial created paths retained and explicit retry required.",
+    "Await cancellation requests cooperative stop without claiming worker join.",
+    "External engine installation, version pin and transition behavior belong to the dependent integration leaf.",
+    "Host owns canonical cwd and directory ancestors; adversarial ancestor replacement is outside this boundary."
+  ],
+  "receipt_impacts": [
+    "improve-memo-types-drilldown shares src/service.rs and needs receipt refresh; shadowing and stale-evidence footprints unchanged."
+  ]
+}

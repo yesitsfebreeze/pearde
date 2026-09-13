@@ -1,0 +1,8 @@
+{
+  "source_revision": "648b420fd12e38d7d07e934595e57fdaa74ae51b",
+  "fixture": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-board-baseline-8ws8ll90/memo.ctg",
+  "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract cargo test --manifest-path /var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-board-baseline-8ws8ll90/memo.ctg/Cargo.toml baseline_board_preview -- --nocapture",
+  "expected": "Successful native board preview with no filesystem effects",
+  "observed": "Failed: unknown field action. Native board preview is absent; fixture leaves no board.",
+  "harness_changes": "Standalone manifest with absolute existing dependencies and one appended service test; source otherwise byte-identical."
+}

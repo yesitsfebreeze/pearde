@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+../sessions.ctg/.cartridge/tests/integration/mapping.test.ts:
+(pass) real host configuration survives reconnect and copied call metadata cannot cross scopes [422.83ms]
+(pass) missing identity or conversation has one honest connection scope and no reconnect identity [42.61ms]
+(pass) concurrent fresh SDK processes cannot publish two mappings against one revision [22.33ms]
+
+ 3 pass
+ 0 fail
+ 48 expect() calls
+Ran 3 tests across 1 file. [499.00ms]

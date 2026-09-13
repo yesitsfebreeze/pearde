@@ -1,0 +1,63 @@
+{
+  "source_revision": "181adb20248c6fdb718823919438939de55bdefc",
+  "source_files": [
+    {
+      "path": "src/main.rs",
+      "sha256": "5ede804ce496a2b63a6bd0de5728a913ce617b2e77c6cff2b72d27291d888b9b"
+    },
+    {
+      "path": "src/mapping.rs",
+      "sha256": "70dc30a046ccdfbb87aa6bd5698c8eac431c2f68f604462668aeec212d5d74c2"
+    },
+    {
+      "path": ".cartridge/docs/client-mapping.md",
+      "sha256": "4c195e767ce7aa7f64aaf8bb36411c6832a8b9179b951e165fd01efe41076dc5"
+    },
+    {
+      "path": ".cartridge/tests/unit/main/mapping_tests.rs",
+      "sha256": "255bc5245fdf45fb81627b9d0212a63bfa51c2b0794e5a395bfaf1c2398910d2"
+    },
+    {
+      "path": ".cartridge/tests/integration/mapping.test.ts",
+      "sha256": "d8253cede757c915a1cb6032b293425d23effdb4010dda50d64cf486928af89d"
+    }
+  ],
+  "commands": [
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just test sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "32 passed; 0 failed; 25 existing + 7 mapping tests",
+      "log": "proof-test.log"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just check sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "passed",
+      "log": "proof-check.log"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just build sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "passed",
+      "log": "proof-build.log"
+    },
+    {
+      "command": "SESSIONS_BINARY=\"$PWD/target/sessions-mapping/debug/sessions\" bun test ../sessions.ctg/.cartridge/tests/integration/mapping.test.ts",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "3 passed; 0 failed; 48 assertions; actual SDK subprocesses",
+      "log": "proof-integration.log"
+    }
+  ],
+  "limitations": [
+    "Durable principal/workspace/profile come only from host SDK config; no transport authentication or general sessions authorization is added. Existing shared profiles without context remain scoped to service instance.",
+    "OS lock protects mapping index across processes; existing transcript writes retain their existing single active writer requirement.",
+    "Post-rename directory sync failure reports uncertainty and created_session, not a definite orphan. No automatic replay or deletion."
+  ],
+  "repairs_during_verification": [
+    "Public clippy exposed existing recovery-hook type complexity; factored test-only RepairHook alias without changing behavior.",
+    "Failure test distinguishes pre-rename orphan_session from post-rename uncertain created_session; final gates pass."
+  ],
+  "shared_receipt_refresh": [
+    "@sessions/improve-sessions-recovery (src/main.rs footprint changed)"
+  ]
+}

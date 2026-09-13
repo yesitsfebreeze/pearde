@@ -1,0 +1,8 @@
+{
+  "source_commit": "07b77ff754ab740a1efb01dfade7e3fc953c204d",
+  "probe": "\n#[tokio::test]\nasync fn baseline_cost_latency_observation() {\nlet fixture=fixture(Wire::Chat).await;let mut body=request();body[\"cartridge_explain\"]=json!(true);\nlet value=fixture.proxy.clone().request(Wire::Chat,body).await.unwrap();\nassert!(value[\"cartridge_routing\"][\"attempt_observations\"].is_array(),\"actual fallback receipt has no attributable latency or cost observations\");\n}\n",
+  "probe_sha256": "20512ef37bdb2729d5189dfc22c3a98fac31e4e07cefa1821fc67acec60f7b9b",
+  "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/writer-proof cargo test --manifest-path /private/tmp/cartridge-writer-proof/router.ctg/Cargo.toml baseline_cost_latency_observation -- --nocapture",
+  "expected": "Actual fallback attempts expose attributed durations, pricing source/age and known versus unknown usage/cost",
+  "observed": "Expected assertion failed: actual fallback has no attempt_observations; see baseline-log.txt."
+}

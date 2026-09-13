@@ -1,6 +1,7 @@
 ---
 complexity: medium
 footprint:
+- src/roster.rs
 - src/channels.rs
 - src/mailbox.rs
 - Cargo.toml

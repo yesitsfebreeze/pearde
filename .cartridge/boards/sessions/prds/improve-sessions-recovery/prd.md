@@ -11,13 +11,14 @@ review-round: 3
 review-status: accepted
 canonical-scope: improve-sessions-recovery
 footprint:
+- src/roster.rs
 - Cargo.toml
 - src/main.rs
 - src/recovery.rs
 - .cartridge/tests/unit/main/repair_tests.rs
 - .cartridge/tests/unit/recovery.rs
 - .cartridge/docs/README.md
-commit: "423ecd329a98d0e0702a71c9ccb0a33a16cedae6"
+commit: "a306370f10b78d94365b7832ce22ce8d10c09487"
 ---
 
 # Explain session damage and narrowly repair eligible snapshots

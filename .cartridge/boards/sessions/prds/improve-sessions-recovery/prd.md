@@ -17,7 +17,7 @@ footprint:
 - .cartridge/tests/unit/main/repair_tests.rs
 - .cartridge/tests/unit/recovery.rs
 - .cartridge/docs/README.md
-commit: "181adb20248c6fdb718823919438939de55bdefc"
+commit: "b772c6ee4f1ad476995c8c8c07cd02ed2be264fa"
 ---
 
 # Explain session damage and narrowly repair eligible snapshots
@@ -54,3 +54,6 @@ The shared Cargo lock adds only the existing sha2 dependency to sessions.
 
 Reverify unchanged recovery acceptance after181adb2 client mapping shares src/main.rs;
 prior4dd8518e receipt retained. No semantic acceptance change.
+
+Reverify unchanged acceptance after the next integrated owner feature; earlier
+181adb20 receipt retained. No contract relaxation.

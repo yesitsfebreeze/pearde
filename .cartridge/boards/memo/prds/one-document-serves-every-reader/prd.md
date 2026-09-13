@@ -14,7 +14,7 @@ needs:
 - '@memo/one-document-serves-every-reader/document-identity'
 - '@memo/one-document-serves-every-reader/document-projections'
 - '@memo/one-document-serves-every-reader/executable-document-validation'
-commit: "3251566e6c92439e4a32c5ce8b734e55726801ee"
+commit: "45d5a54ab9da1a798cd9997af9a8c19bed8a1812"
 ---
 
 # One Markdown document supplies discovery, commands, and readable guidance
@@ -35,3 +35,5 @@ Coordinate the linked outcomes. Claim and implement a leaf; this parent records 
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `one-document-serves-every-reader`, `a-tool-is-declared-by-its-memo`; maximum five rounds.
+
+Inventory facade revalidation: unchanged behavior and acceptance at memo 45d5a54; shared native registration is checked with its registered inventory module.

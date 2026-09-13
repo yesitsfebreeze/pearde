@@ -29,3 +29,22 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-13
+
+Reviewer: Codex `/root`, self-review under session delegation policy.
+Inputs: [review-round-3-inputs.json](review-round-3-inputs.json).
+Baseline a282c877 passes the harness gate. The real-process inspector regression
+fails at “inspection must label a token estimate”; only byte accounting exists.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Adds requested inspection without coupling to capability routing. |
+| Ownership and reuse | 20 | Existing serialized Wire and journal metrics; no tokenizer dependency. |
+| Dependencies and slices | 19 | Local accounting module and inspector only. |
+| Acceptance and baseline | 19 | Multilingual/schema/exchange fixtures and real no-model inspection. |
+| Failure and compatibility | 19 | High uncertainty is explicit, bytes enforce limits, usage remains historical. |
+
+**96/100 — PASS**, no blocking findings, 3/5 rounds used. This heuristic is not
+an exact tokenizer or a promised upper bound; resolved provider framing remains
+unknown until a later request is actually assembled and measured.

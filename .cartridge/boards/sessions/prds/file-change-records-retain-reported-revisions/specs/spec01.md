@@ -1,14 +1,6 @@
 ---
 complexity: medium
-footprint:
-- Cargo.toml
-- src/lib.rs
-- src/change_record.rs
-- src/changes.rs
-- src/main.rs
-- .cartridge/tests/unit/main/change_records_tests.rs
-- .cartridge/tests/integration/change-records.test.ts
-- .cartridge/docs/change-records.md
+footprint: ["Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs","src/main.rs",".cartridge/tests/unit/main/change_records_tests.rs",".cartridge/tests/integration/change-records.test.ts",".cartridge/docs/change-records.md","src/context.rs",".cartridge/tests/unit/main/context_tests.rs",".cartridge/tests/integration/context.test.ts"]
 ---
 
 # Sessions owns change evidence, never file ownership

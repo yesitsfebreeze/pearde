@@ -17,7 +17,7 @@ footprint:
 - src/service.rs
 - .cartridge/tests/unit/service/tests.rs
 - .cartridge/docs/revision-guards.md
-commit: "de1406682a33c5b12cb472787178e2570e5ed0f8"
+commit: "d4a4239ccce02bc0e647e9ad80892995f48b317f"
 ---
 
 # Use consistent stale-write checks for filesystem mutations

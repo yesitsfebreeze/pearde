@@ -10,10 +10,8 @@ work-kind: leaf
 review-round: 3
 review-status: accepted
 canonical-scope: improve-gitfs-snapshot-selection
-footprint:
-- src/service.rs
-- .cartridge/tests/unit/snapshot.rs
-commit: "55cc8aae27575ded5950737c46a99aa358b95980"
+footprint: ["src/service.rs",".cartridge/tests/unit/snapshot.rs","Cargo.toml","src/provenance.rs",".cartridge/tests/unit/provenance.rs",".cartridge/tests/integration/change-provenance.test.ts",".cartridge/docs/change-provenance.md"]
+commit: "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36"
 ---
 
 # Snapshot exactly the selected owned paths

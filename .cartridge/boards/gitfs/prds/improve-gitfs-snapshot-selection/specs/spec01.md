@@ -1,8 +1,6 @@
 ---
 complexity: small
-footprint:
-  - src/service.rs
-  - .cartridge/tests/unit/snapshot.rs
+footprint: ["src/service.rs",".cartridge/tests/unit/snapshot.rs","Cargo.toml","src/provenance.rs",".cartridge/tests/unit/provenance.rs",".cartridge/tests/integration/change-provenance.test.ts",".cartridge/docs/change-provenance.md"]
 ---
 
 # spec01 — Snapshot selected owned paths with explicit partial failures

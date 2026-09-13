@@ -1,21 +1,28 @@
 ---
 repo: /Users/feb/dev/cartridge/router.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: router
+capability-owner: router
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: improve-router-route-explanation
+needs:
+- '@router/improve-router-capability-routing'
 footprint:
-- /Users/feb/dev/cartridge/router.ctg/frontier.rs
-- /Users/feb/dev/cartridge/router.ctg/catalog.rs
-- /Users/feb/dev/cartridge/router.ctg/health.rs
-- /Users/feb/dev/cartridge/router.ctg/protocol.rs
-- /Users/feb/dev/cartridge/router.ctg/settings.rs
+- Cargo.toml
+- src/main.rs
+- src/catalog.rs
+- src/requirements.rs
+- src/proxy.rs
+- src/decision.rs
+- .cartridge/tests/unit/proxy/capabilities.rs
+- .cartridge/tests/unit/catalog/capabilities.rs
+- .cartridge/docs/decisions.md
+commit: "07b77ff754ab740a1efb01dfade7e3fc953c204d"
 ---
 
 # Explain why a provider was selected
@@ -24,10 +31,10 @@ Each routing decision exposes chosen model, candidates, rejection reasons and th
 
 ## Acceptance
 
-- [ ] Fixture candidates rejected for health, capacity and capability have distinct reasons; the selected model matches execution.
-- [ ] Explanations omit tokens, headers and credential values and retain actual fallback identity.
+- [x] Fixture candidates rejected for health, capacity and capability have distinct reasons; the selected model matches execution.
+- [x] Explanations omit tokens, headers and credential values and retain actual fallback identity.
 
-- [ ] Retain local credential ownership and avoid live provider calls in ordinary tests. New metadata is additive; routing requirements fail explicitly rather than silently downgrade. Roll back rules while preserving actual-attempt traces.
+- [x] Retain local credential ownership and avoid live provider calls in ordinary tests. New metadata is additive; routing requirements fail explicitly rather than silently downgrade. Roll back rules while preserving actual-attempt traces.
 
 ## Proof and recovery
 

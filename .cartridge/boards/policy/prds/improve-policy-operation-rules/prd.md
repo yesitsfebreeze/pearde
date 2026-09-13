@@ -15,7 +15,7 @@ footprint:
 - .cartridge/tests
 - .cartridge/memos/routine/policy-tests.md
 - .cartridge/docs/policy.md
-commit: "bdef8e6a151772a41883ff63512ec546ca690bb9"
+commit: "36c770e5008a35c69dae3ed7be9308237d6bd083"
 ---
 
 # Authorize individual operations with stable precedence
@@ -47,3 +47,11 @@ covers 18 cases; four invalid replacements preserve the previous policy. MCP,
 proxy and native Agent fixtures execute the allowed read exactly once and the
 denied write zero times. Existing defaults stay unchanged and the complete
 configuration is validated before publication. No model request is made.
+
+## Reverification for GitFS inspection
+
+GitFS introduces a read-only diff operation. Its reviewed inspection spec adds
+diff to this owner's known-operation set without changing policy defaults or
+precedence. The unchanged policy gate passed, and the real GitFS MCP proof
+permits diff while denying every mutation. Recollect this owner's proof against
+the one-line operation registration; prior receipt is collection-bdef8e6a.md.

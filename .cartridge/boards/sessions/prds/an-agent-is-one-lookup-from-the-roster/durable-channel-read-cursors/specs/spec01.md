@@ -1,6 +1,6 @@
 ---
 complexity: medium
-footprint: ["src/roster.rs","src/main.rs","src/mailbox.rs","src/channels.rs",".cartridge/tests/unit/main/channel_cursor_tests.rs",".cartridge/tests/integration/channel-cursors.test.ts",".cartridge/docs/channel-cursors.md","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
+footprint: ["src/roster.rs","src/main.rs","src/mailbox.rs","src/channels.rs",".cartridge/tests/unit/main/channel_cursor_tests.rs",".cartridge/tests/integration/channel-cursors.test.ts",".cartridge/docs/channel-cursors.md","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs","src/context.rs",".cartridge/tests/unit/main/context_tests.rs",".cartridge/tests/integration/context.test.ts"]
 ---
 
 # Acknowledge only the named-channel batch delivered to this actor

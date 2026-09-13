@@ -1,10 +1,6 @@
 ---
 complexity: medium
-footprint:
-- src/lib.rs
-- src/file_kernel.rs
-- .cartridge/tests/unit/file_kernel.rs
-- .cartridge/docs/file-kernel-context.md
+footprint: ["src/lib.rs","src/file_kernel.rs",".cartridge/tests/unit/file_kernel.rs",".cartridge/docs/file-kernel-context.md","src/census.rs",".cartridge/tests/unit/census.rs"]
 ---
 
 # Exact file and kernel adapters reuse the canonical collector

@@ -13,7 +13,7 @@ canonical-scope: landscape-composes-system-context/live-file-context-contributor
 needs:
 - "@landscape/landscape-composes-system-context/context-contributor-contract"
 - "@fs/read-only-context-file-snapshots"
-commit: "62185289d148017c74986b618456a72bab620228"
+commit: "33e0418fa82966772c38ec8191d02a158b2cb56d"
 ---
 
 # File and kernel evidence use one attributed shared row contract

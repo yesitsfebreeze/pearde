@@ -17,7 +17,7 @@ footprint:
 - .cartridge/docs/memory-context.md
 needs:
 - '@landscape/landscape-composes-system-context/context-contributor-contract'
-commit: "c705d648830582e5cf2b4ded267b3c1da4f1eac4"
+commit: "3b9f72854c39ddd90128a48bfce2667e387c3fba"
 ---
 
 # Memory hits resolve to exact source evidence
@@ -40,3 +40,5 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 3 independent agent review](review.md). Inherits round 1 from `landscape-composes-system-context`; maximum five rounds.
+
+Inventory registration revalidation: unchanged acceptance and verification at Landscape 3b9f728; source footprint additionally binds the registered inventory module.

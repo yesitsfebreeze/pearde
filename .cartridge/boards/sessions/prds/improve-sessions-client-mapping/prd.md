@@ -11,12 +11,13 @@ review-round: 3
 review-status: passed
 canonical-scope: improve-sessions-client-mapping
 footprint:
+- src/roster.rs
 - src/main.rs
 - src/mapping.rs
 - .cartridge/tests/unit/main/mapping_tests.rs
 - .cartridge/tests/integration/mapping.test.ts
 - .cartridge/docs/client-mapping.md
-commit: "423ecd329a98d0e0702a71c9ccb0a33a16cedae6"
+commit: "a306370f10b78d94365b7832ce22ce8d10c09487"
 ---
 
 # Map client conversations to cartridge sessions honestly

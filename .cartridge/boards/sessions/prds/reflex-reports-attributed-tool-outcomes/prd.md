@@ -11,7 +11,7 @@ review-round: 3
 review-status: passed
 canonical-scope: reflex-reports-attributed-tool-outcomes
 needs: ["@runtime/native-tool-observation-adapter"]
-commit: "2a6a863cf1af0876072f8879050274cfa650a785"
+commit: "423ecd329a98d0e0702a71c9ccb0a33a16cedae6"
 ---
 
 # reflex-reports-attributed-tool-outcomes
@@ -36,3 +36,5 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `reflex-reports-attributed-tool-outcomes`; maximum five rounds.
+
+Named channel registration revalidation at 423ecd32: source footprint includes registered channels and its shared mailbox codec; acceptance and behavior gates remain unchanged.

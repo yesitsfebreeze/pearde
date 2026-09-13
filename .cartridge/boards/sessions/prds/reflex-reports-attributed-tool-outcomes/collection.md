@@ -1,7 +1,7 @@
 ---
-commit: 2a6a863cf1af0876072f8879050274cfa650a785
-spec-digests: {"spec01.md":"89ee9ef459d6a8f40fe70eaa0217a3bab9868e0878bb2e9ed1fd5835f28adb71"}
-child-contracts: {".cartridge/boards/sessions/prds/reflex-reports-attributed-tool-outcomes/attributed-outcome-report/prd.md":"c4769895804fc941cbd343ea39d874b5dd52d7d8553965c6742b778beaf0d07d"}
+commit: 423ecd329a98d0e0702a71c9ccb0a33a16cedae6
+spec-digests: {"spec01.md":"5fe007d94d35d41a86b549e564e1cd7dd32996203a6c2564d2a784fe4e506936"}
+child-contracts: {".cartridge/boards/sessions/prds/reflex-reports-attributed-tool-outcomes/attributed-outcome-report/prd.md":"663ba1a6cad42ab5db3040cd036325108eda7ff9052c11002aa0a66346f5ade1"}
 ---
 
 # Collection
@@ -12,7 +12,7 @@ Command SHA-256: 2dbe6249c94963e2b12b52eb044bfda242778e2dab4ef1743a571230925bdc2
 
 ```text
 @runtime/native-tool-observation-adapter verified at 1a5e9867acec1d07cd732c3af2ccf331a0979a61
-@sessions/reflex-reports-attributed-tool-outcomes/attributed-outcome-report verified at 2a6a863cf1af0876072f8879050274cfa650a785
+@sessions/reflex-reports-attributed-tool-outcomes/attributed-outcome-report verified at 423ecd329a98d0e0702a71c9ccb0a33a16cedae6
 
 ```
 
@@ -24,13 +24,13 @@ Command SHA-256: 33bd9a2c422255048f401be2807c8bc7d5f6189f85da8ef3d48aa61bc225da5
 bun test v1.3.14 (0d9b296a)
 
 ../sessions.ctg/.cartridge/tests/integration/observations.test.ts:
-(pass) real runtime evidence is reported by sessions without changing source or transcript [518.06ms]
-(pass) historical unknown counts and verdicts use actual observed descriptor revisions [78.09ms]
-(pass) disabled and missing evidence stay explicit while actual tool execution still succeeds [91.47ms]
+(pass) real runtime evidence is reported by sessions without changing source or transcript [271.73ms]
+(pass) historical unknown counts and verdicts use actual observed descriptor revisions [58.60ms]
+(pass) disabled and missing evidence stay explicit while actual tool execution still succeeds [74.06ms]
 
  3 pass
  0 fail
  55 expect() calls
-Ran 3 tests across 1 file. [700.00ms]
+Ran 3 tests across 1 file. [416.00ms]
 
 ```

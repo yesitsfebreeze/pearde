@@ -1,12 +1,6 @@
 ---
 complexity: medium
-footprint:
-- src/file_kernel.rs
-- src/lib.rs
-- src/inventory.rs
-- Cargo.toml
-- .cartridge/tests/unit/src/inventory/tests.rs
-- .cartridge/docs/inventory.md
+footprint: ["src/file_kernel.rs","src/lib.rs","src/inventory.rs","Cargo.toml",".cartridge/tests/unit/src/inventory/tests.rs",".cartridge/docs/inventory.md","src/census.rs",".cartridge/tests/unit/census.rs"]
 ---
 
 # Frozen bounded inventory, additive library API

@@ -1,17 +1,6 @@
 ---
 complexity: high
-footprint:
-  - src/push.rs
-  - src/ship.rs
-  - src/store.rs
-  - src/tool_result.rs
-  - src/main.rs
-  - init.lua
-  - .cartridge/tests/unit/ship/tests.rs
-  - .cartridge/tests/unit/store/tests.rs
-  - .cartridge/tests/integration/reviewed-ship.test.ts
-  - .cartridge/tests/integration/tool-result.test.ts
-  - .cartridge/docs/ship.md
+footprint: ["src/push.rs","src/ship.rs","src/store.rs","src/tool_result.rs","src/main.rs","init.lua",".cartridge/tests/unit/ship/tests.rs",".cartridge/tests/unit/store/tests.rs",".cartridge/tests/integration/reviewed-ship.test.ts",".cartridge/tests/integration/tool-result.test.ts",".cartridge/docs/ship.md","Cargo.toml","src/provenance.rs",".cartridge/tests/unit/provenance.rs",".cartridge/tests/integration/change-provenance.test.ts",".cartridge/docs/change-provenance.md"]
 ---
 
 # Preview and publish one exact owned tree

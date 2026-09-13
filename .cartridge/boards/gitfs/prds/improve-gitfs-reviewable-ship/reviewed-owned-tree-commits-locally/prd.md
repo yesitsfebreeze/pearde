@@ -14,16 +14,8 @@ needs:
 - '@gitfs/improve-gitfs-readable-diff'
 - '@gitfs/improve-gitfs-snapshot-selection'
 - '@policy/improve-policy-operation-rules'
-footprint:
-- src/ship.rs
-- src/store.rs
-- src/tool_result.rs
-- src/main.rs
-- .cartridge/tests/unit/ship/tests.rs
-- .cartridge/tests/unit/store/tests.rs
-- .cartridge/tests/integration/reviewed-ship.test.ts
-- .cartridge/docs/ship.md
-commit: "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5"
+footprint: ["src/ship.rs","src/store.rs","src/tool_result.rs","src/main.rs",".cartridge/tests/unit/ship/tests.rs",".cartridge/tests/unit/store/tests.rs",".cartridge/tests/integration/reviewed-ship.test.ts",".cartridge/docs/ship.md","Cargo.toml","src/provenance.rs",".cartridge/tests/unit/provenance.rs",".cartridge/tests/integration/change-provenance.test.ts",".cartridge/docs/change-provenance.md"]
+commit: "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36"
 ---
 
 # A reviewed owned tree commits locally

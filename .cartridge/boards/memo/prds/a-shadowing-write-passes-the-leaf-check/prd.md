@@ -10,7 +10,7 @@ work-kind: leaf
 review-round: 3
 review-status: passed
 canonical-scope: a-shadowing-write-passes-the-leaf-check
-commit: "648b420fd12e38d7d07e934595e57fdaa74ae51b"
+commit: "a458148fb21f85cabcd9e1ced85c96c581b8e0b2"
 ---
 
 # a-shadowing-write-passes-the-leaf-check

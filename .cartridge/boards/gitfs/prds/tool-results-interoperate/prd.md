@@ -10,14 +10,8 @@ work-kind: leaf
 review-round: 3
 review-status: accepted
 canonical-scope: tool-results-interoperate
-footprint:
-- src/main.rs
-- src/service.rs
-- src/ship.rs
-- src/tool_result.rs
-- .cartridge/tests/unit/tool_result.rs
-- .cartridge/tests/integration/tool-result.test.ts
-commit: "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5"
+footprint: ["src/main.rs","src/service.rs","src/ship.rs","src/tool_result.rs",".cartridge/tests/unit/tool_result.rs",".cartridge/tests/integration/tool-result.test.ts","Cargo.toml","src/provenance.rs",".cartridge/tests/unit/provenance.rs",".cartridge/tests/integration/change-provenance.test.ts",".cartridge/docs/change-provenance.md"]
+commit: "b8f27c6f1c07888bfc6e5d09f45a8751e8ca7b36"
 ---
 
 # Every currently exposed tool completes through its real consumers

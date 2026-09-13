@@ -1,13 +1,6 @@
 ---
 complexity: medium
-footprint:
-  - src/push.rs
-  - src/main.rs
-  - src/service.rs
-  - src/ship.rs
-  - src/tool_result.rs
-  - .cartridge/tests/unit/tool_result.rs
-  - .cartridge/tests/integration/tool-result.test.ts
+footprint: ["src/push.rs","src/main.rs","src/service.rs","src/ship.rs","src/tool_result.rs",".cartridge/tests/unit/tool_result.rs",".cartridge/tests/integration/tool-result.test.ts","Cargo.toml","src/provenance.rs",".cartridge/tests/unit/provenance.rs",".cartridge/tests/integration/change-provenance.test.ts",".cartridge/docs/change-provenance.md"]
 ---
 
 # spec01 — Produce the existing ToolResult contract once

@@ -10,8 +10,8 @@ work-kind: leaf
 review-round: 3
 review-status: passed
 canonical-scope: sub-agent-sessions-record-parent-and-mailbox
-footprint: ["src/roster.rs","src/main.rs","src/mailbox.rs",".cartridge/tests/unit/main/mailbox_tests.rs",".cartridge/tests/integration/mailbox.test.ts",".cartridge/docs/mailbox.md","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
-commit: "191e2b6cb4291bdcce7a894f98bb2d475361d30f"
+footprint: ["src/roster.rs","src/channels.rs","src/main.rs","src/mailbox.rs",".cartridge/tests/unit/main/mailbox_tests.rs",".cartridge/tests/integration/mailbox.test.ts",".cartridge/docs/mailbox.md","src/observations.rs","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs","src/context.rs",".cartridge/tests/unit/main/context_tests.rs",".cartridge/tests/integration/context.test.ts"]
+commit: "92240c6ba415f53b2d17971aea185536a6f517bc"
 ---
 
 # sub-agent-sessions-record-parent-and-mailbox

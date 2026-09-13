@@ -10,7 +10,7 @@ work-kind: leaf
 review-round: 3
 review-status: passed
 canonical-scope: improve-memo-compact-landscape/bounded-inventory-snapshot
-commit: "33e0418fa82966772c38ec8191d02a158b2cb56d"
+commit: "422c521aed170a4d098505c73469a1a59dccf49d"
 ---
 
 # Capture one bounded inventory snapshot and page exact owner paths

@@ -17,7 +17,7 @@ footprint:
 - .cartridge/tests/unit/document.rs
 - .cartridge/tests/fixtures/documents
 - .cartridge/docs/documents.md
-commit: "76800a23d90202645a2eca7d4ee5dcdca3951998"
+commit: "3251566e6c92439e4a32c5ce8b734e55726801ee"
 ---
 
 # Readers agree on document identity and revision
@@ -42,3 +42,5 @@ Preserve the last usable implementation and durable data on failure; report part
 [Round 2 agent review](review.md). Inherits round 1 from `one-document-serves-every-reader`; maximum five rounds.
 
 Reverification after document projections76800a2: exact source identity contract unchanged; shared reader/docs changed.
+
+Reverification: executable validation at3251566 adds a separate native action to shared document.rs; frozen identity/projection fixtures and acceptance remain unchanged.

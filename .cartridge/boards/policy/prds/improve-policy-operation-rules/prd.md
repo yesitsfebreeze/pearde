@@ -15,7 +15,7 @@ footprint:
 - .cartridge/tests
 - .cartridge/memos/routine/policy-tests.md
 - .cartridge/docs/policy.md
-commit: "36c770e5008a35c69dae3ed7be9308237d6bd083"
+commit: "a3f5cffface2b7b2bc9ed26d9e55da0ee0f4be2d"
 ---
 
 # Authorize individual operations with stable precedence
@@ -55,3 +55,9 @@ diff to this owner's known-operation set without changing policy defaults or
 precedence. The unchanged policy gate passed, and the real GitFS MCP proof
 permits diff while denying every mutation. Recollect this owner's proof against
 the one-line operation registration; prior receipt is collection-bdef8e6a.md.
+
+## Reverification after policy explanations
+
+The shared evaluator now also serves read-only explanations at a3f5cff. The
+operation-rule contract is unchanged; rerun the expanded parity and actual
+consumer gates against the integrated source. Prior receipt is preserved.

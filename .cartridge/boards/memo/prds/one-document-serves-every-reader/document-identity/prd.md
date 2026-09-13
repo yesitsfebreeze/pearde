@@ -1,15 +1,23 @@
 ---
 repo: /Users/feb/dev/cartridge/memo.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: memo
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: one-document-serves-every-reader
+footprint:
+- src/main.rs
+- src/service.rs
+- src/document.rs
+- .cartridge/tests/unit/document.rs
+- .cartridge/tests/fixtures/documents
+- .cartridge/docs/documents.md
+commit: "5345aaaa3407584825f624edb6cefaff14846b07"
 ---
 
 # Readers agree on document identity and revision
@@ -18,9 +26,9 @@ Define cartridge-document/v1 identity from canonical owner/path and SHA-256 of e
 
 ## Acceptance
 
-- [ ] Commands, docs and human projections return the same source digest.
-- [ ] Duplicate owner/alias identities refuse with source locations.
-- [ ] Body-only words never become metadata matches and existing native memo APIs remain compatible.
+- [x] Commands, docs and human projections return the same source digest.
+- [x] Duplicate owner/alias identities refuse with source locations.
+- [x] Body-only words never become metadata matches and existing native memo APIs remain compatible.
 
 ## Proof and recovery
 

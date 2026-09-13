@@ -29,3 +29,25 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-13
+
+Reviewer: Codex `/root`, self-review under session delegation policy.
+Inputs: [review-round-3-inputs.json](review-round-3-inputs.json).
+Baseline 700f1a98 passes 22 session tests. The legacy-repair fixture fails its
+new recovery-report check: no such read operation is implemented. Existing
+repair validates empty data, creates an exclusive backup and saves atomically,
+but carries no inspected revision and never rechecks bytes before replacement.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 20 | Distinct recovery diagnosis and stale repair protection. |
+| Ownership and reuse | 19 | Existing repair, backup and atomic publish boundaries. |
+| Dependencies and slices | 19 | Sessions implementation plus existing composition lock update. |
+| Acceptance and baseline | 19 | Read-only report matrix, stale request, deterministic changed-source boundary. |
+| Failure and compatibility | 19 | No broad migration; original bytes and backup survive refusal/failure. |
+
+**96/100 — PASS**, no blocking findings, 3/5 rounds used. Repair callers must
+first inspect and supply expected_revision; loading stays read-only. Arbitrary
+external writes outside the existing session ownership protocol are not locked
+by a byte comparison; the boundary limitation is explicit in the spec.

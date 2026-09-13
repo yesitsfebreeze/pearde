@@ -1,0 +1,7 @@
+{
+  "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/the-exit-flag-tests-race-each-other/prd.md": "8ac20385c5567ab4d92bd036f5d76121819b5f1d40c3b3767af93103596fab7d",
+  "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/the-exit-flag-tests-race-each-other/specs/spec01.md": "336f6f51856058bb8e0efa3c50d79a2df716c010cf51978fdd3f8f72136e891d",
+  "/Users/feb/dev/cartridge/memory.ctg/src/commands/Cargo.toml": "682cdccff26cbfa5541d0504c452f57a4a8d93deaa06384825d1f957d2611c52",
+  "/Users/feb/dev/cartridge/memory.ctg/src/store/core/src/lock.rs": "bdc5b88a2d91a0ab269a26a718f6ed885be3247467d43d761f1790801a073f46",
+  "/Users/feb/dev/cartridge/memory.ctg/.cartridge/tests/unit/src/commands/tests/exit_status.rs": "a31588773fddafcd952f3900dc447141a37f004760a119e38752dc2f607168cf"
+}

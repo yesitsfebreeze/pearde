@@ -1,0 +1,192 @@
+[
+  {
+    "run": 1,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "commands",
+      "--test",
+      "exit_status"
+    ],
+    "elapsed_s": 2.341,
+    "exit": 0
+  },
+  {
+    "run": 1,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "store_core",
+      "inherited_description_requires_the_bounded_retry"
+    ],
+    "elapsed_s": 1.092,
+    "exit": 0
+  },
+  {
+    "run": 1,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "commands",
+      "--lib",
+      "a_handover_with_no_listener_frees_the_store_and_returns"
+    ],
+    "elapsed_s": 7.502,
+    "exit": 0
+  },
+  {
+    "run": 2,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "commands",
+      "--test",
+      "exit_status"
+    ],
+    "elapsed_s": 21.864,
+    "exit": 0
+  },
+  {
+    "run": 2,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "store_core",
+      "inherited_description_requires_the_bounded_retry"
+    ],
+    "elapsed_s": 0.131,
+    "exit": 0
+  },
+  {
+    "run": 2,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "commands",
+      "--lib",
+      "a_handover_with_no_listener_frees_the_store_and_returns"
+    ],
+    "elapsed_s": 0.172,
+    "exit": 0
+  },
+  {
+    "run": 3,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "commands",
+      "--test",
+      "exit_status"
+    ],
+    "elapsed_s": 0.164,
+    "exit": 0
+  },
+  {
+    "run": 3,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "store_core",
+      "inherited_description_requires_the_bounded_retry"
+    ],
+    "elapsed_s": 0.12,
+    "exit": 0
+  },
+  {
+    "run": 3,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "commands",
+      "--lib",
+      "a_handover_with_no_listener_frees_the_store_and_returns"
+    ],
+    "elapsed_s": 0.16,
+    "exit": 0
+  },
+  {
+    "run": 4,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "commands",
+      "--test",
+      "exit_status"
+    ],
+    "elapsed_s": 0.16,
+    "exit": 0
+  },
+  {
+    "run": 4,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "store_core",
+      "inherited_description_requires_the_bounded_retry"
+    ],
+    "elapsed_s": 0.112,
+    "exit": 0
+  },
+  {
+    "run": 4,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "commands",
+      "--lib",
+      "a_handover_with_no_listener_frees_the_store_and_returns"
+    ],
+    "elapsed_s": 0.159,
+    "exit": 0
+  },
+  {
+    "run": 5,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "commands",
+      "--test",
+      "exit_status"
+    ],
+    "elapsed_s": 0.157,
+    "exit": 0
+  },
+  {
+    "run": 5,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "store_core",
+      "inherited_description_requires_the_bounded_retry"
+    ],
+    "elapsed_s": 0.11,
+    "exit": 0
+  },
+  {
+    "run": 5,
+    "command": [
+      "cargo",
+      "test",
+      "-p",
+      "commands",
+      "--lib",
+      "a_handover_with_no_listener_frees_the_store_and_returns"
+    ],
+    "elapsed_s": 0.159,
+    "exit": 0
+  }
+]

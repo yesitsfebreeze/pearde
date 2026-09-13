@@ -1,0 +1,26 @@
+{
+  "mutation-exit": {
+    "sha256": "a0c61e5ea357b961ed5970c68c5752103be193b37590e91a183a79d5c9a32e8f",
+    "log": "cartridge-memory-mutation-exit.log"
+  },
+  "mutation-lock": {
+    "sha256": "7d38fdcbf5aa98d757129b7e7eaf3ea592d25e2cafa7455ca6035cf7b1a248df",
+    "log": "cartridge-memory-mutation-lock.log"
+  },
+  "full-check": {
+    "sha256": "28c1a14b60ad5c944db82761b56d05d0a794a4e0ab8d278be3351ede2c1f474e",
+    "log": "cartridge-memory-full-check.log"
+  },
+  "full-test": {
+    "sha256": "876334c71ea23fc5b61ad8b3dac98d3d52a07812291e1b2bb5e671b230eb182d",
+    "log": "cartridge-memory-full-test.log"
+  },
+  "full_nextest": {
+    "passed": 1339,
+    "skipped": 17
+  },
+  "mutation_checks": {
+    "exit": 101,
+    "lock": 101
+  }
+}

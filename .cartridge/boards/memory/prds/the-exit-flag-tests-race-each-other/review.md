@@ -29,3 +29,25 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-13
+
+Reviewer: Codex `/root`, self-review under session delegation policy.
+Inputs: [review-round-3-inputs.json](review-round-3-inputs.json).
+Current commands Cargo listing contains 111 unit tests and no exit integration
+target, despite the historical file remaining on disk. A disposable child-held
+flock probe returns WouldBlock after the parent releases its handle, then acquires
+immediately after the child exits. The current no-listener handover fixture is
+.cartridge/tests/unit/src/commands/src/commands_serve/watchdog_handover_tests.rs;
+its lock is already protected by store_core's bounded inherited-fd retry.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 20 | Restores missing gate and proves the identified handover mechanism. |
+| Ownership and reuse | 20 | Reuses the existing exit test and lock patience implementation. |
+| Dependencies and slices | 19 | Commands manifest, lock wait seam and owner test only. |
+| Acceptance and baseline | 19 | Controlled descriptor lifetime plus two mutation tests and five stable runs. |
+| Failure and compatibility | 19 | No global flag reset, no new retry allowance, true holders still refuse. |
+
+**97/100 — PASS**, no blocking findings, 3/5 rounds used. Follow memory's
+AGENTS instructions with an isolated worktree and run the full project gates.

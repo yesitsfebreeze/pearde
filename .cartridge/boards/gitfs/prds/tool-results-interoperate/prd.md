@@ -1,20 +1,23 @@
 ---
 repo: /Users/feb/dev/cartridge/gitfs.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: gitfs
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: accepted
 canonical-scope: tool-results-interoperate
 footprint:
-- /Users/feb/dev/cartridge/gitfs.ctg/service.rs
-- /Users/feb/dev/cartridge/gitfs.ctg/ship.rs
-- /Users/feb/dev/cartridge/gitfs.ctg/main.rs
-- /Users/feb/dev/cartridge/gitfs.ctg/cartridge.json
+- src/main.rs
+- src/service.rs
+- src/ship.rs
+- src/tool_result.rs
+- .cartridge/tests/unit/tool_result.rs
+- .cartridge/tests/integration/tool-result.test.ts
+commit: "cf18e85679a6d0ac353f0655c7808132958aea94"
 ---
 
 # Every currently exposed tool completes through its real consumers
@@ -23,9 +26,9 @@ This PRD owns the immediate interoperability fix; the older improve-tool-result-
 
 ## Acceptance
 
-- [ ] Real direct, MCP and proxy GitFS read/ship scan return equivalent decoded payloads; a string that itself contains JSON is not double-normalized.
-- [ ] Invalid request input and policy refusal cause zero backend calls. A malformed response discovered after a fixture mutation reports an explicit failed/unknown outcome and causes no retry or follow-on mutation.
-- [ ] Native agent resumes after ordinary tool failure, while cancellation and partial effects retain the original invocation identity.
+- [x] Real direct, MCP and proxy GitFS read/ship scan return equivalent decoded payloads; a string that itself contains JSON is not double-normalized.
+- [x] Invalid request input and policy refusal cause zero backend calls. A malformed response discovered after a fixture mutation reports an explicit failed/unknown outcome and causes no retry or follow-on mutation.
+- [x] Native agent resumes after ordinary tool failure, while cancellation and partial effects retain the original invocation identity.
 
 ## Proof and recovery
 
@@ -37,3 +40,13 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `tool-results-interoperate`, `improve-tool-result-contract`; maximum five rounds.
+
+## Verified implementation — 2026-09-13
+
+`cargo test --manifest-path ../gitfs.ctg/Cargo.toml -p gitfs` passed all 19 tests.
+The real daemon/socket fixture passed 188 assertions through direct SDK, MCP and
+proxy read/scan, zero-effect rejection, malformed-result no-replay and ordinary
+error recovery. The fixture isolates its compiler target and disables wrappers;
+the first shared-target run exposed read-only cached artifacts and was rejected.
+The native agent ordinary-error and exact-cancellation gates both passed.
+Cancellation acknowledgments and partial-effect behavior are unchanged.

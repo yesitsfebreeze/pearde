@@ -1,11 +1,6 @@
 ---
 complexity: medium
-footprint:
-  - src/main.rs
-  - src/inspection.rs
-  - src/compaction.rs
-  - .cartridge/tests/unit/compaction.rs
-  - .cartridge/tests/integration/working.rs
+footprint: ["src/main.rs","src/inspection.rs","src/compaction.rs",".cartridge/tests/unit/compaction.rs",".cartridge/tests/integration/working.rs","Cargo.toml","src/roster.rs",".cartridge/tests/unit/main/tests.rs",".cartridge/tests/unit/inspection_tests.rs",".cartridge/tests/unit/accounting.rs",".cartridge/tests/unit/working_tests.rs",".cartridge/tests/unit/roster_tests.rs",".cartridge/tests/integration/roster.test.ts",".cartridge/docs/roster.md"]
 ---
 
 # spec01 — Retain compaction comparisons in the existing summary buffer

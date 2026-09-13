@@ -37,6 +37,9 @@ export function atomic(file: string, value: string) {
 export function document(file: string) {
   if (fs.statSync(file).size > 1024 * 1024) throw Error('record exceeds the 1 MiB read limit');
   const text = fs.readFileSync(file, 'utf8');
+  return parseDocument(text, file);
+}
+function parseDocument(text: string, file: string) {
   const match = /^(?:\uFEFF)?---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(text);
   const fm = match ? Bun.YAML.parse(match[1]) ?? {} : {};
   if (!fm || typeof fm !== 'object' || Array.isArray(fm)) throw Error(file + ': frontmatter must be an object');
@@ -62,17 +65,112 @@ export function canonicalBoard(board: string) {
   if (!fs.existsSync(path.join(result, 'settings.md'))) throw Error('no planning board at ' + result);
   return result;
 }
-export function members(board: string): [string, string][] {
-  const raw = document(path.join(board, 'settings.md')).fm.members ?? [];
-  const entries = Array.isArray(raw) ? raw.flatMap(item => typeof item === 'object' && item ? Object.entries(item) : []) : Object.entries(raw);
+function memberLocations(raw: any, limit = Infinity): [string, string][] {
+  function* entries(): Generator<[string, unknown]> {
+    for (const item of Array.isArray(raw) ? raw : [raw]) {
+      if (Array.isArray(raw) && (typeof item !== 'object' || !item)) continue;
+      for (const name of Object.keys(item)) yield [name, item[name]];
+    }
+  }
   const names = new Set();
-  return entries.map(([name, location]) => {
+  const result: [string, string][] = [];
+  for (const [name, location] of entries()) {
+    if (result.length >= limit) throw new DeclarationError('capacity');
     if (!/^[A-Za-z0-9][A-Za-z0-9_.-]*$/.test(name) || names.has(name) || typeof location !== 'string') throw Error('invalid or duplicate member board');
     names.add(name);
+    result.push([name, location]);
+  }
+  return result;
+}
+export function members(board: string): [string, string][] {
+  return memberLocations(document(path.join(board, 'settings.md')).fm.members ?? []).map(([name, location]) => {
     const target = canonicalBoard(path.resolve(board, location));
     if (!inside(path.dirname(board), target)) throw Error('member escapes centralized boards');
     return [name, target];
   });
+}
+const DECLARATIONS = 'cartridge-source-declarations/v1' as const;
+type DeclarationStatus = 'unavailable' | 'malformed' | 'capacity' | 'timeout';
+export type SourceDeclarations = { schema: typeof DECLARATIONS; status: DeclarationStatus } | {
+  schema: typeof DECLARATIONS; status: 'available'; root: string; revision: string;
+  children: { name: string; root: string; kind: 'board' }[];
+};
+export const declarationFailure = (status: DeclarationStatus): SourceDeclarations => ({ schema: DECLARATIONS, status });
+class DeclarationError extends Error {
+  constructor(public status: DeclarationStatus) { super(status); }
+}
+/** Read declared edges without scanning descendants, acquiring locks or publishing effects. */
+export async function sourceDeclarations(boardsRoot: string, relativeBoard: string, deadlineMs = 500,
+  track?: (work: Promise<SourceDeclarations>) => void): Promise<SourceDeclarations> {
+  if (typeof relativeBoard !== 'string' || !relativeBoard || Buffer.byteLength(relativeBoard) > 512 ||
+      relativeBoard.includes('\\') || relativeBoard.includes('\0') || path.isAbsolute(relativeBoard) ||
+      relativeBoard.split('/').length > 32 || relativeBoard.split('/').some(p => !p || p === '.' || p === '..') ||
+      !Number.isInteger(deadlineMs) || deadlineMs < 1 || deadlineMs > 2000) return declarationFailure('malformed');
+  const deadline = performance.now() + deadlineMs;
+  const check = () => { if (performance.now() >= deadline) throw new DeclarationError('timeout'); };
+  const cap = (text: string, limit: number) => { if (Buffer.byteLength(text) > limit) throw new DeclarationError('capacity'); };
+  // Resolve missing suffixes, but never treat a dangling symlink as a missing ordinary path.
+  async function destination(file: string): Promise<string> {
+    check();
+    try { await fs.promises.lstat(file); }
+    catch (error: any) {
+      if (error.code !== 'ENOENT') throw error;
+      const parent = path.dirname(file);
+      if (parent === file) throw error;
+      return path.join(await destination(parent), path.basename(file));
+    }
+    return fs.promises.realpath(file);
+  }
+  const work = (async (): Promise<SourceDeclarations> => {
+    try {
+      const scope = await fs.promises.realpath(boardsRoot); check();
+      const root = await fs.promises.realpath(path.resolve(scope, relativeBoard)); check(); cap(root, 4096);
+      if (!inside(scope, root)) throw new DeclarationError('malformed');
+      if (!(await fs.promises.stat(root)).isDirectory()) throw new DeclarationError('unavailable'); check();
+      const file = path.join(root, 'settings.md');
+      const stat = await fs.promises.lstat(file); check();
+      if (!stat.isFile() || stat.isSymbolicLink()) throw new DeclarationError('malformed');
+      if (stat.size > 65536) throw new DeclarationError('capacity');
+      const handle = await fs.promises.open(file, fs.constants.O_RDONLY | fs.constants.O_NOFOLLOW | fs.constants.O_NONBLOCK);
+      let data: Buffer;
+      try {
+        check();
+        const opened = await handle.stat(); check();
+        if (!opened.isFile() || opened.dev !== stat.dev || opened.ino !== stat.ino) throw new DeclarationError('unavailable');
+        if (opened.size > 65536) throw new DeclarationError('capacity');
+        const buffer = Buffer.alloc(65537); let count = 0;
+        while (count < buffer.length) {
+          check(); const read = await handle.read(buffer, count, buffer.length - count, null); check();
+          if (!read.bytesRead) break;
+          count += read.bytesRead;
+        }
+        if (count > 65536) throw new DeclarationError('capacity');
+        data = buffer.subarray(0, count);
+      } finally { await handle.close(); }
+      check();
+      let locations: [string, string][];
+      try { locations = memberLocations(parseDocument(new TextDecoder('utf-8', { fatal: true, ignoreBOM: true }).decode(data), file).fm.members ?? [], 64); }
+      catch (error) { throw error instanceof DeclarationError ? error : new DeclarationError('malformed'); }
+      const children: { name: string; root: string; kind: 'board' }[] = [];
+      for (const [name, location] of locations.sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)) {
+        check(); cap(name, 64); cap(location, 4096);
+        if (location.includes('\0')) throw new DeclarationError('malformed');
+        const lexical = path.resolve(root, location); cap(lexical, 4096);
+        if (!inside(scope, lexical) || !inside(path.dirname(root), lexical)) throw new DeclarationError('malformed');
+        const target = await destination(lexical); check(); cap(target, 4096);
+        if (!inside(scope, target) || !inside(path.dirname(root), target)) throw new DeclarationError('malformed');
+        children.push({ name, root: target, kind: 'board' });
+      }
+      const answer: SourceDeclarations = { schema: DECLARATIONS, status: 'available', root, revision: hash(data), children };
+      cap(JSON.stringify(answer), 262144); check(); return answer;
+    } catch (error) { return declarationFailure(error instanceof DeclarationError ? error.status : 'unavailable'); }
+  })();
+  // A native caller keeps this actual IO lifetime in its capacity accounting,
+  // even when the response deadline wins before an already-issued OS call ends.
+  track?.(work);
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  try { return await Promise.race([work, new Promise<SourceDeclarations>(resolve => { timer = setTimeout(() => resolve(declarationFailure('timeout')), deadlineMs); })]); }
+  finally { clearTimeout(timer); }
 }
 export type Prd = ReturnType<typeof document> & { ref: string; local: string; alias: string; board: string; file: string; dir: string; state: string; revision: string; children: string[] };
 export function scan(board: string): Map<string, Prd> {

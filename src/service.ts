@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { atomic, contained, hash, inside, real, relative } from './records';
+import { atomic, contained, hash, inside, real, relative, sourceDeclarations, declarationFailure } from './records';
 import { ROOT } from './cli';
 import { runProcess } from './process';
 
@@ -52,6 +52,7 @@ export class HostBridge {
 export class Service {
   root: string; boards: string; state: string; defaultBoard: string; timeout: number; jobTimeout: number; outputCap: number; adapter?: string;
   instance = id(); closed = false;
+  declarationReads = new Set<Promise<unknown>>();
   cancelled = new Map<string, AbortController>(); started = new Set<string>(); jobs = new Map<string, any>(); tasks = new Set<Promise<any>>(); deliveries = new Map<string, Promise<any>>();
   constructor(config: any = {}, public host?: Pick<HostBridge, 'request' | 'publish'>) {
     const allowed = ['root', 'default_board', 'timeout_seconds', 'max_output_bytes', 'adapter', 'job_timeout_seconds'];
@@ -216,6 +217,15 @@ export class Service {
       return this.result(outcome, outcome.state !== 'completed');
     } catch (error) { return this.result({ error: error instanceof Error ? error.message : String(error) }, true); }
   }
+  async declarations(request: any) {
+    if (this.closed) return declarationFailure('unavailable');
+    if (!object(request) || request.op !== 'source_declarations' || Object.keys(request).some(k => !['op', 'board', 'deadline_ms'].includes(k))) return declarationFailure('malformed');
+    if (this.declarationReads.size >= 8) return declarationFailure('capacity');
+    return sourceDeclarations(this.boards, request.board === undefined ? this.defaultBoard : request.board, request.deadline_ms === undefined ? 500 : request.deadline_ms, work => {
+      this.declarationReads.add(work);
+      void work.finally(() => this.declarationReads.delete(work));
+    });
+  }
   async close() { this.closed = true; for (const controller of this.cancelled.values()) controller.abort(); await Promise.allSettled([...this.tasks, ...this.deliveries.values()]); }
 }
 export async function main() {
@@ -242,8 +252,9 @@ export async function main() {
           if ('apply' in message) { if (service) throw Error('cartridge is already applied'); service = new Service(message.apply?.config, bridge); send({ provide: 'prd' }); send({ provide: 'tool.prd' }); send({ ready: true }); void service.replayMemory(); }
           else if (typeof message.reload === 'boolean') send({ reply: message.id ?? 0, data: null });
           else if (['prd', 'tool.prd'].includes(message.call) && service) {
-            if (tasks.size >= 8 && !['cancel', 'describe'].includes(message.args?.op)) { send({ reply: message.id ?? 0, data: result({ error: 'service is busy' }, true) }); continue; }
-            const work = service.dispatch(message.args, message.turn).then(data => send({ reply: message.id ?? 0, data })); tasks.add(work); void work.finally(() => tasks.delete(work));
+            const declarations = message.call === 'prd' && message.args?.op === 'source_declarations';
+            if (tasks.size >= 8 && !['cancel', 'describe'].includes(message.args?.op)) { send({ reply: message.id ?? 0, data: declarations ? declarationFailure('capacity') : result({ error: 'service is busy' }, true) }); continue; }
+            const work = (declarations ? service.declarations(message.args) : service.dispatch(message.args, message.turn)).then(data => send({ reply: message.id ?? 0, data })); tasks.add(work); void work.finally(() => tasks.delete(work));
           } else throw Error('unknown host operation or cartridge not applied');
         } catch (error) { pending = ''; send({ reply: message?.id ?? 0, error: String(error) }); }
       }

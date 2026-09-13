@@ -1,18 +1,19 @@
 ---
 repo: /Users/feb/dev/cartridge/landscape.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: landscape
-work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+work-kind: rollup
+review-round: 3
+review-status: passed
 canonical-scope: improve-memo-compact-landscape
-footprint:
-- /Users/feb/dev/cartridge/landscape.ctg/src/lib.rs
-- /Users/feb/dev/cartridge/landscape.ctg/src/surface.rs
+needs:
+- "@landscape/improve-memo-compact-landscape/bounded-inventory-snapshot"
+- "@memo/landscape-inventory-facade"
+commit: "3b9f72854c39ddd90128a48bfce2667e387c3fba"
 ---
 
 # Bound landscape discovery and offer inventory drilldown
@@ -21,9 +22,9 @@ Attach this bounded projection contract to Landscape composition, retaining the 
 
 ## Acceptance
 
-- [ ] A 10,000-path fixture yields a default summary of at most 16 KiB with omitted counts; explicit pages reconstruct every permitted path exactly once.
-- [ ] Snapshot replacement invalidates a cursor explicitly and cannot silently mix generations.
-- [ ] Contributor failure produces partial status; changing presentation never rewrites source memos or observation history.
+- [x] A 10,000-path fixture yields a default summary of at most 16 KiB with omitted counts; explicit pages reconstruct every permitted path exactly once.
+- [x] Snapshot replacement invalidates a cursor explicitly and cannot silently mix generations.
+- [x] Contributor failure produces partial status; changing presentation never rewrites source memos or observation history.
 
 ## Proof and recovery
 
@@ -35,3 +36,7 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-memo-compact-landscape`; maximum five rounds.
+
+## Owner split
+
+The [Landscape snapshot library](bounded-inventory-snapshot/prd.md) owns collection, bounds and paging. The [memo native adapter](../../../memo/prds/landscape-inventory-facade/prd.md) owns the additive deployed request version and cache lifecycle. The original acceptance above and inherited two review rounds remain unchanged; [original leaf](original-leaf-prd.md) preserves the pre-split contract. This rollup collects only after both children and their combined native proof pass.

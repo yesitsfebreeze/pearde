@@ -11,6 +11,10 @@ footprint:
 - .cartridge/docs/usage.md
 - .cartridge/docs/continuations.md
 - .cartridge/docs/traces.md
+- Cargo.toml
+- cartridge.json
+- src/context.rs
+- src/wire.rs
 ---
 
 # Verify the integrated proxy improvement programme
@@ -52,9 +56,9 @@ import {completionProblem} from "./src/lifecycle.ts";
 import {feet} from "./src/planner.ts";
 const graph=scan(process.cwd()+"/.cartridge/boards/root");
 const expected={
-  "@proxy/improve-proxy-total-usage":"96812da0fe910323008b349f169b21112150ee4521bdbf1d45882989ac50536d",
-  "@proxy/improve-proxy-tool-trace":"45929b354c59a0f88ba5721a20e557442fefc126204fffbb8ad1cae3075a9489",
-  "@proxy/improve-proxy-continuation-recovery":"be8993e5f72e4e9893ee65b85dc8c44f44684d5e1363bb027b5499bd51a24974"
+  "@proxy/improve-proxy-total-usage":"d352e4dd49e0dc9547cf7bae2f5e9603df2145d4bc50a7fbca2032d2796b73c0",
+  "@proxy/improve-proxy-tool-trace":"098dcdd949a8e71002438f17bbd0638922934b95cd68b8807a32c6602774ca1e",
+  "@proxy/improve-proxy-continuation-recovery":"e47b432ca4747609f5d62a90decd713ee630747f01f7d9285d0b13af1930e172"
 };
 const parent=graph.get("@proxy/improve-proxy-programme");
 if(!parent) throw Error("missing canonical rollup");

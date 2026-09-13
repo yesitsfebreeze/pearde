@@ -25,7 +25,7 @@ footprint:
 - .cartridge/docs/usage.md
 - .cartridge/docs/continuations.md
 - .cartridge/docs/traces.md
-commit: "439594188097e770fb9993aae379ac9906e0824a"
+commit: "9ddcc08807a059579c21227ad9d3523d242ddf86"
 ---
 
 # Proxy improvement plan
@@ -46,3 +46,5 @@ Coordinate the three linked outcomes at one integrated source revision. No new f
 ## Review
 
 [Round 3 independent agent review](review.md). Inherits round 1 from `improve-proxy-programme`; maximum five rounds.
+
+Reverification: recall integration at9ddcc088 changes shared proxy paths. Bind newly imported context/wire modules and dependency declarations without changing behavior acceptance or executable gates.

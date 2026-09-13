@@ -1,20 +1,21 @@
 ---
 repo: /Users/feb/dev/cartridge/fs.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: fs
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 4
+review-status: passed
 canonical-scope: improve-fs-revision-guards
 footprint:
-- /Users/feb/dev/cartridge/fs.ctg/service.rs
-- /Users/feb/dev/cartridge/fs.ctg/files.rs
-- /Users/feb/dev/cartridge/fs.ctg/search.rs
-- /Users/feb/dev/cartridge/fs.ctg/service/tests.rs
+- src/files.rs
+- src/service.rs
+- .cartridge/tests/unit/service/tests.rs
+- .cartridge/docs/revision-guards.md
+commit: "475962d8bcdc9abda8f15c16cd9b553528b8ba05"
 ---
 
 # Use consistent stale-write checks for filesystem mutations
@@ -23,9 +24,9 @@ Remove improve-fs-change-provenance from the proposed hard needs: basic stale-wr
 
 ## Acceptance
 
-- [ ] A deterministic barrier changes the file after validation but before commit; newer bytes survive and the stale writer receives a conflict.
-- [ ] Two writers with the same expected revision cannot both overwrite successfully.
-- [ ] Direct and overlay APIs preserve executable modes, path validation, cancellation and explicitly reported partial success without importing external ownership.
+- [x] A deterministic barrier changes the file after validation but before commit; newer bytes survive and the stale writer receives a conflict.
+- [x] Two writers with the same expected revision cannot both overwrite successfully.
+- [x] Direct and overlay APIs preserve executable modes, path validation, cancellation and explicitly reported partial success without importing external ownership.
 
 ## Proof and recovery
 
@@ -37,3 +38,21 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-fs-revision-guards`; maximum five rounds.
+
+## Current analysis
+
+[Baseline](baseline.json) reproduces lost newer bytes at publication. The owner is
+fs; gitfs remains a separate overlay owner and its existing compatibility gate
+is retained. Two writers are tested through the shared fs service and existing
+per-target serialization. Ordinary filesystem rename is not an atomic
+compare-and-swap against uncooperative external processes: the final check
+detects changes during preparation, with the remaining check/rename window
+explicitly documented. No external ownership or automatic retry is introduced.
+
+## Verified result
+
+The controlled lost-write probe now passes. Public `just test fs` passes all
+34 tests; `just check fs` passes formatting and clippy. Public `just test gitfs`
+passes 22 tests, including real consumer interoperability, stale overlay edit,
+materialization guard, selection and partial-error coverage. Source files remain
+inside the reviewed footprint. See [verification-summary.json](verification-summary.json).

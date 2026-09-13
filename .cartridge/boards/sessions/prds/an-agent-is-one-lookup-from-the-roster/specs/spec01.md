@@ -1,6 +1,6 @@
 ---
 complexity: low
-footprint: ["src/roster.rs","src/main.rs","src/mailbox.rs","src/channels.rs",".cartridge/tests/unit/main/channel_cursor_tests.rs",".cartridge/tests/integration/channel-cursors.test.ts",".cartridge/docs/channel-cursors.md","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs",".cartridge/tests/unit/main/roster_tests.rs",".cartridge/tests/integration/roster.test.ts",".cartridge/docs/roster.md"]
+footprint: ["src/roster.rs","src/main.rs","src/mailbox.rs","src/channels.rs",".cartridge/tests/unit/main/channel_cursor_tests.rs",".cartridge/tests/integration/channel-cursors.test.ts",".cartridge/docs/channel-cursors.md","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs",".cartridge/tests/unit/main/roster_tests.rs",".cartridge/tests/integration/roster.test.ts",".cartridge/docs/roster.md","src/context.rs",".cartridge/tests/unit/main/context_tests.rs",".cartridge/tests/integration/context.test.ts"]
 ---
 
 # Verify one scoped roster from durable delivery state to composed context
@@ -23,7 +23,7 @@ bun -e 'for (const ref of ["@sessions/an-agent-is-one-lookup-from-the-roster/dur
 ```
 
 ```sh
-bun /Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/harness/prds/scoped-roster-context-contributor/verify-isolated.ts --committed /Users/feb/dev/cartridge/harness.ctg --sessions-revision 191e2b6cb4291bdcce7a894f98bb2d475361d30f
+bun /Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/harness/prds/scoped-roster-context-contributor/verify-isolated.ts --committed /Users/feb/dev/cartridge/harness.ctg --sessions-revision 92240c6ba415f53b2d17971aea185536a6f517bc
 ```
 
 The committed mode materializes the current committed harness owner into the disposable composition including the independently reviewed existing summary fallback edits, records its source commit/file hashes, and runs the same public gates and actual SDK fixture as the child. Receipt validity must hold before invoking it. The owner integration records preserve and verify those existing edits. Runtime/Landscape external contract changes require manual rollup revalidation in addition to engine receipt checks. The sessions footprint is the exact two-child union; external harness/Landscape paths are validated through their owner receipts and input digests.

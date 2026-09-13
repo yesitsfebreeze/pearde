@@ -1,15 +1,6 @@
 ---
 complexity: medium
-footprint:
-- src/roster.rs
-- src/channels.rs
-- src/mailbox.rs
-- src/main.rs
-- src/mapping.rs
-- .cartridge/tests/unit/main/mapping_tests.rs
-- .cartridge/tests/integration/mapping.test.ts
-- .cartridge/docs/client-mapping.md
-- src/observations.rs
+footprint: ["src/roster.rs","src/channels.rs","src/mailbox.rs","src/main.rs","src/mapping.rs",".cartridge/tests/unit/main/mapping_tests.rs",".cartridge/tests/integration/mapping.test.ts",".cartridge/docs/client-mapping.md","src/observations.rs","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
 ---
 
 # spec01 — Resolve client conversations using host-owned scope
@@ -53,13 +44,13 @@ index to 8 MiB and 10,000 entries.
 
 ```sh
 cd ../cartridge.ctg
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/sessions-mapping" just test sessions
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" just test sessions
 ```
 
 ```sh
 cd ../cartridge.ctg
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/sessions-mapping" just build sessions
-SESSIONS_BINARY="$PWD/target/sessions-mapping/debug/sessions" bun test ../sessions.ctg/.cartridge/tests/integration/mapping.test.ts
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" just build sessions
+SESSIONS_BINARY="$PWD/target/tool-result-contract/debug/sessions" bun test ../sessions.ctg/.cartridge/tests/integration/mapping.test.ts
 ```
 
 Run public `just check sessions`. All fixtures use disposable directories and

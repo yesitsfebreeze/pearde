@@ -1,6 +1,7 @@
 ---
 complexity: medium
 footprint:
+  - src/roster.rs
   - src/main.rs
   - src/mailbox.rs
   - src/channels.rs

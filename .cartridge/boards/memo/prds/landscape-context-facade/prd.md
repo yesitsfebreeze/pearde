@@ -20,7 +20,7 @@ footprint:
 - src/context.rs
 - .cartridge/tests/integration/context.test.ts
 - .cartridge/docs/context.md
-commit: "4b081453d610af42daac0456750a50bdc719a5fe"
+commit: "3251566e6c92439e4a32c5ce8b734e55726801ee"
 ---
 
 # The memo facade serves the shared context snapshot
@@ -51,3 +51,5 @@ Split from @landscape/landscape-composes-system-context/context-contributor-cont
 at its owner boundary, preserving inherited rounds1–2 and maximum5. Source history
 and reviews remain linked; no review allowance was reset. Substantive facade plan
 requires an independent round3 review before implementation.
+
+Reverification: document identity/projections revalidated at3251566 after executable validation; native context SDK compatibility already passed, shared contributor contract unchanged.

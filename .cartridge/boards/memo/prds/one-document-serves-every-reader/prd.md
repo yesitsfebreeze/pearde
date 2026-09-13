@@ -14,7 +14,7 @@ needs:
 - '@memo/one-document-serves-every-reader/document-identity'
 - '@memo/one-document-serves-every-reader/document-projections'
 - '@memo/one-document-serves-every-reader/executable-document-validation'
-commit: "45d5a54ab9da1a798cd9997af9a8c19bed8a1812"
+commit: "1ffca32db1d06364b3e35e6cbca4881a1f814f71"
 ---
 
 # One Markdown document supplies discovery, commands, and readable guidance

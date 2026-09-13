@@ -9,7 +9,8 @@ review-status: "passed"
 needs:
 - '@gitfs/overlay-mutations-report-revisions'
 - '@sessions/file-change-records-retain-reported-revisions'
-commit: "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b"
+commit: "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df"
+footprint: [".cartridge/default/init.lua",".cartridge/live/init.lua",".cartridge/mcp/init.lua",".cartridge/workspace/Cargo.lock","src/loader.rs",".cartridge/tests/unit/src/tests/mod.rs",".cartridge/tests/unit/src/tests/composition.rs"]
 ---
 
 # Grant change recording in the shipped GitFS profiles

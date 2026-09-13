@@ -1,6 +1,6 @@
 ---
-commit: 8e514eace6b88d4ef4e55aa5f031e539ab28eb5b
-spec-digests: {"spec01.md":"87a0b5ba0c3937ec9552b6d047f357e9d45ab176de2c28cc3940b13a2f7ed885"}
+commit: bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df
+spec-digests: {"spec01.md":"588cfb528eab818b0851b2f28ef2ad922a553640762b0fbe47907c8e2701ea52"}
 child-contracts: {}
 ---
 
@@ -11,56 +11,59 @@ child-contracts: {}
 Command SHA-256: d871cf97d22c625b075690c1a416023c9a663c0bafe6be0f229dbfd105ab8cd5
 
 ```text
-    Finished `test` profile [unoptimized] target(s) in 0.11s
+   Compiling cartridge v0.1.0 (/Users/feb/dev/cartridge/cartridge.ctg)
+    Finished `test` profile [unoptimized] target(s) in 0.42s
      Running unittests src/lib.rs (target/tool-result-contract/debug/deps/cartridge-41093d4bbf807d0f)
 
-running 163 tests
+running 165 tests
 test observation::tests::outcomes_never_treat_transport_or_cancellation_as_known_effect_completion ... ok
 test process::tests::an_unterminated_startup_frame_cannot_exceed_its_budget ... ok
-test observation::tests::invalid_host_config_and_poisoned_cache_do_not_create_authority_or_fail_outcomes ... ok
 test observation::tests::dropping_live_invocation_records_unknown_without_retry ... ok
+test observation::tests::invalid_host_config_and_poisoned_cache_do_not_create_authority_or_fail_outcomes ... ok
+test sandbox::tests::an_empty_command_is_refused_before_launch ... ok
 test observation::tests::attribution_is_host_configuration_and_discovery_is_distinct ... ok
 test sandbox::tests::a_net_grant_turns_the_network_on_and_an_empty_one_leaves_it_off ... ok
 test observation::tests::intended_service_capture_ignores_nested_services_and_resumes_become_unknown ... ok
-test sandbox::tests::an_empty_command_is_refused_before_launch ... ok
 test sandbox::tests::a_write_grant_names_the_canonicalized_path_and_implies_the_read ... ok
 test sandbox::tests::an_empty_grant_builds_no_allowance_beyond_the_runtime ... ok
-test sandbox::tests::a_script_names_its_interpreter ... ok
 test sdk::tests::older_hosts_use_uncached_descriptions_without_an_unknown_wire_request ... ok
-test observation::tests::actual_descriptor_shapes_are_hashed_and_invalid_oversized_descriptors_are_unknown ... ok
 test sandbox::tests::an_exec_grant_that_resolves_builds_a_literal_and_one_that_does_not_builds_nothing ... ok
+test sandbox::tests::a_script_names_its_interpreter ... ok
 test service::version_tests::descriptors_invalidate_on_switch_and_recreation ... ok
 test sdk::tests::reload_registration_dispatches_boolean_values_for_prepare_and_cancel ... ok
+test observation::tests::actual_descriptor_shapes_are_hashed_and_invalid_oversized_descriptors_are_unknown ... ok
 test sdk::tests::slow_stream_handlers_have_bounded_queues_and_receive_a_gap ... ok
 test socket::tests::explicit_unsubscribe_removes_idle_pump_once ... ok
 test socket::tests::idle_disconnect_unsubscribes_without_a_future_publish ... ok
-test socket::tests::writer_failure_cancels_a_pending_call_and_unsubscribes ... ok
 test tests::bridge::bridge_manifest_rejects_paths_outside_the_cartridge ... ok
+test socket::tests::writer_failure_cancels_a_pending_call_and_unsubscribes ... ok
 test socket::tests::disconnect_cleans_subscriptions_while_host_owned_reconcile_waits ... ok
 test tests::bridge::process_scripts_resolve_relative_to_the_cartridge ... ok
-test tests::cartridges::a_glob_injects_every_matching_key_the_other_entries_provide ... ok
 test tests::cartridges::a_changed_file_swaps_the_fiber_and_a_broken_one_keeps_it ... ok
 test tests::bridge::bridge_status_tracks_active_generations_and_scopes_backend_calls ... ok
+test tests::cartridges::a_glob_injects_every_matching_key_the_other_entries_provide ... ok
 test tests::cartridges::config_lua_overrides_entries_and_manifest_resolves_providers ... ok
 test tests::cartridges::reconcile_adds_removes_and_revises_by_id ... ok
 test tests::cartridges::yields_are_boundaries_and_access_is_enforced ... ok
-test socket::tests::a_write_half_close_still_receives_its_pending_reply ... ok
+test process::tests::excessive_discovery_output_is_killed_and_reaped ... ok
+test tests::composition::failed_initial_profile_entry_recovers_with_its_current_handle ... ok
+test tests::composition::replacement_has_one_contract_at_root_and_nested_depth ... ok
+test tests::cartridges::yolo_overrides_cartridge_config_only_for_automatic_services ... ok
 test tests::contracts::a_broken_integration_check_fails_closed_with_its_error ... ok
 test tests::contracts::a_broken_selftest_fails_closed_and_names_the_cartridge ... ok
-test process::tests::excessive_discovery_output_is_killed_and_reaped ... ok
-test tests::contracts::a_clashed_need_stops_the_run_before_it_loads ... ok
 test tests::contracts::a_cartridge_declaring_nothing_is_never_called ... ok
+test tests::contracts::a_clashed_need_stops_the_run_before_it_loads ... ok
 test tests::contracts::a_need_that_binds_to_nothing_is_named_instead_of_run ... ok
 test tests::contracts::a_failing_contract_names_the_path_the_obligation_and_the_key ... ok
 test tests::contracts::an_unknown_cartridge_is_named_rather_than_run ... ok
 test tests::contracts::a_nested_cartridge_is_verified_by_its_path_from_the_root ... ok
 test tests::contracts::declared_contracts_run_after_apply_and_pass ... ok
 test tests::contracts::one_cartridge_is_verified_without_a_profile ... ok
-test tests::contracts::one_obligation_may_be_declared_alone ... ok
 test tests::contracts::the_providers_a_need_binds_to_are_reached_but_never_graded ... ok
-test tests::folders::folder_manifest_names_the_component_and_reloads_its_entry ... ok
+test tests::contracts::one_obligation_may_be_declared_alone ... ok
+test socket::tests::a_write_half_close_still_receives_its_pending_reply ... ok
 test tests::folders::malformed_manifests_fail_without_evaluating_entries ... ok
-test tests::cartridges::yolo_overrides_cartridge_config_only_for_automatic_services ... ok
+test tests::folders::folder_manifest_names_the_component_and_reloads_its_entry ... ok
 test tests::foreground::foreground_call_returns_the_service_value_and_disposes_the_profile ... ok
 test tests::foreground::foreground_missing_or_failed_service_still_disposes ... ok
 test tests::landscape::landscape_distinguishes_provider_states_and_refreshes_committed_generations ... ok
@@ -77,14 +80,14 @@ test tests::ledger::two_entries_of_one_scope_offering_one_key_is_a_clash ... ok
 test tests::lifecycle::a_cycle_stays_inactive ... ok
 test tests::lifecycle::a_raising_step_fails_the_fiber_with_nothing_installed ... ok
 test tests::lifecycle::a_replaced_provider_reloads_its_dependents ... ok
-test process::tests::excessive_discovery_stderr_is_also_bounded ... ok
+test sdk::tests::cancelling_nested_startup_kills_and_reaps_its_child ... ok
 test tests::lifecycle::a_target_change_stops_the_iterator_at_the_boundary ... ok
 test tests::lifecycle::access_is_enforced_at_the_point_of_use ... ok
 test tests::lifecycle::dependents_are_drained_before_any_provider_inverse ... ok
-test tests::folders::watcher_reloads_a_folder_when_its_manifest_changes ... ok
+test tests::lifecycle::disposing_a_parent_retires_its_children ... ok
 test tests::lifecycle::disposing_an_effect_that_never_yields_finishes ... ok
 test tests::lifecycle::effects_revert_in_lifo_order ... ok
-test tests::lifecycle::disposing_a_parent_retires_its_children ... ok
+test tests::lifecycle::isolated_realms_bind_independently ... ok
 test tests::lifecycle::listeners_fire_in_order_and_bail_stops ... ok
 test tests::lifecycle::user_values_and_callbacks_are_dropped_outside_the_registry_lock ... ok
 test tests::manifest::a_blank_grant_path_is_refused_like_a_blank_key ... ok
@@ -97,16 +100,16 @@ test tests::manifest::an_empty_document_requests_nothing ... ok
 test tests::manifest::an_export_that_names_nothing_inside_is_refused ... ok
 test tests::manifest::an_unreadable_document_asks_for_nothing_knowable_not_for_nothing ... ok
 test tests::manifest::documented_commands_are_data_and_keep_the_manifest_strict ... ok
-test tests::lifecycle::isolated_realms_bind_independently ... ok
 test tests::manifest::malformed_declarations_are_refused_without_evaluating_the_entry ... ok
 test tests::manifest::probe_nesting_is_not_discovered ... ok
 test tests::manifest::the_capability_request_is_on_the_same_document ... ok
 test tests::manifest::the_document_declares_what_it_provides_and_needs ... ok
 test tests::manifest::the_document_overrides_what_the_entry_declares ... ok
 test tests::manifest::two_subtrees_may_provide_the_same_key ... ok
+test tests::folders::watcher_reloads_a_folder_when_its_manifest_changes ... ok
 test tests::node::the_document_carries_the_cartridges_own_config ... ok
+test process::tests::excessive_discovery_stderr_is_also_bounded ... ok
 test tests::lifecycle::disposing_an_apply_that_never_yields_finishes_and_runs_prior_inverses ... ok
-test sdk::tests::cancelling_nested_startup_kills_and_reaps_its_child ... ok
 test tests::process::closed_links_release_pending_and_reject_new_requests ... ok
 test tests::process::disabled_processes_never_run_hello_apply_or_replace ... ok
 test sandbox::tests::the_asynchronous_spawn_enforces_the_same_empty_grant ... ok
@@ -137,20 +140,20 @@ test process::tests::hung_discovery_is_killed_and_reaped ... ok
 test tests::resolver::an_unbound_key_refuses_the_launch ... ok
 test tests::resolver::layered_shared_dependencies_are_completed_once_in_bottom_up_order ... ok
 test tests::resolver::a_reentry_into_an_uninstalled_node_launches_nothing ... ok
-15708
-{"nodes":["db","store","tool"],"socket":"/tmp/cartridge-38cd65609d1ca592-feb.sock","up":"tool.run"}
-test tests::resolver::a_chain_node_whose_binary_does_not_exist_refuses_the_ask ... ok
+62281
+{"nodes":["db","store","tool"],"socket":"/tmp/cartridge-4bea6630aac05207-feb.sock","up":"tool.run"}
 test tests::resolver::the_launch_refuses_a_cycle_the_ledger_holds ... ok
+test tests::resolver::a_chain_node_whose_binary_does_not_exist_refuses_the_ask ... ok
 test tests::cartridges::local_list_resolves_wrappers_without_starting_a_daemon_or_applying_cartridges ... ok
-test tests::rpc_contract::rust_sdk_and_lua_share_json_and_bidirectional_contracts ... ok
 test tests::rpc_contract::rust_sdk_eof_rejects_another_inflight_call ... ok
-test tests::socket::a_client_round_trips_through_a_cartridge ... ok
-test tests::stream::a_failing_listener_publishes_an_error_event_on_its_channel ... ok
+test tests::rpc_contract::rust_sdk_and_lua_share_json_and_bidirectional_contracts ... ok
 test tests::socket::one_turn_id_crosses_the_socket_the_host_a_cartridge_and_lua ... ok
+test tests::stream::a_failing_listener_publishes_an_error_event_on_its_channel ... ok
 test tests::socket::socket_calls_a_lua_wrapped_sdk_process_with_correlated_errors ... ok
 test tests::stream::a_full_replay_and_gap_leave_the_subscription_live ... ok
-test tests::stream::a_lua_cartridge_watches_a_channel_a_socket_client_publishes_to ... ok
 test tests::stream::a_lua_cartridge_publishes_and_a_late_watcher_replays_the_log ... ok
+test tests::socket::a_client_round_trips_through_a_cartridge ... ok
+test tests::stream::a_lua_cartridge_watches_a_channel_a_socket_client_publishes_to ... ok
 test tests::stream::a_queue_nobody_reads_ends_at_the_next_publish ... ok
 test tests::stream::a_slow_subscriber_gets_a_gap_and_closes_without_blocking_publishers ... ok
 test tests::stream::a_subscriber_receives_everything_published_to_its_channel_in_order ... ok
@@ -173,15 +176,15 @@ test turn::tests::redaction_reaches_objects_inside_nested_arrays ... ok
 test turn::tests::the_sink_stays_bounded_by_rotating_one_generation ... ok
 test tests::wire::a_daemon_reload_carries_down_to_the_child_that_declared_it ... ok
 test tests::wire::a_child_key_the_sub_host_never_declared_stays_private ... ok
-test tests::wire::a_child_that_declared_no_reload_still_answers_null ... ok
 test tests::wire::a_nested_bridge_call_resolves_against_the_daemons_profile_grant ... ok
-test tests::process::a_child_that_stays_alive_without_ready_times_out_and_is_reaped ... ok
+test tests::wire::a_child_that_declared_no_reload_still_answers_null ... ok
 test tests::wire::a_child_that_never_becomes_ready_fails_the_spawn_where_it_failed ... ok
+test tests::process::a_child_that_stays_alive_without_ready_times_out_and_is_reaped ... ok
 test tests::process::watches_reload_wrappers_binaries_and_new_executable_directories_once ... ok
 test tests::folders::recorded_memory_layout_uses_the_separate_submodule ... ok
 test tests::wire::stdout_closed_live_children_obey_each_host_deadline_and_are_reaped ... ok
 
-test result: ok. 163 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 15.04s
+test result: ok. 165 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 14.46s
 
      Running unittests src/main.rs (target/tool-result-contract/debug/deps/cartridge-bfe1ba4daa6e9908)
 
@@ -218,35 +221,40 @@ test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fini
 bun test v1.3.14 (0d9b296a)
 
 .cartridge/tests/integration/memo-run.test.ts:
-(pass) memo recipes preserve argument boundaries and propagate failure [55.79ms]
-(pass) memo runner refuses missing, repeated and unterminated executable blocks [34.04ms]
-(pass) nested PRD lanes resolve their own memo owner [18.76ms]
-lane-build-evidence [{"lane":"alpha","mode":"safe","temperature":"cold","ms":1023.345417,"source":{"commit":"aa5e751fad579dd94d5511c37a410cd703827543","tree":"9a08268bb20ac8730ac543ea7d92cc6e8d3bf9f9","digest":"d12a11572ff645ddd6ef8218e56d6a7f0424bb428b02cf77089b7be92751f0f2"},"binary_sha256":"621c63cda4141929dcc27bacc90bf3ef4c9d9819e41b3f3222381c4bdb1e3471","expected":"alpha","observed":"alpha","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"},{"lane":"alpha","mode":"safe","temperature":"warm","ms":465.54441700000007,"source":{"commit":"aa5e751fad579dd94d5511c37a410cd703827543","tree":"9a08268bb20ac8730ac543ea7d92cc6e8d3bf9f9","digest":"d12a11572ff645ddd6ef8218e56d6a7f0424bb428b02cf77089b7be92751f0f2"},"binary_sha256":"621c63cda4141929dcc27bacc90bf3ef4c9d9819e41b3f3222381c4bdb1e3471","expected":"alpha","observed":"alpha","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"},{"lane":"bravo","mode":"safe","temperature":"cold","ms":701.419042,"source":{"commit":"76089c3f87515c381452aab6a6b5d3b7b68488d5","tree":"f6ae5de5148108d3fb163edb0b16f3b83e9b7e84","digest":"101fc091b5b3c98b8c6c6948f7c20f06809f26890f2ff7a0bd65d1caca571ba9"},"binary_sha256":"febb286887708a068c11f7fead75a49e73f7d2ee84646d9029e7e0109abf4166","expected":"bravo","observed":"bravo","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"},{"lane":"bravo","mode":"safe","temperature":"warm","ms":405.93045800000027,"source":{"commit":"76089c3f87515c381452aab6a6b5d3b7b68488d5","tree":"f6ae5de5148108d3fb163edb0b16f3b83e9b7e84","digest":"101fc091b5b3c98b8c6c6948f7c20f06809f26890f2ff7a0bd65d1caca571ba9"},"binary_sha256":"febb286887708a068c11f7fead75a49e73f7d2ee84646d9029e7e0109abf4166","expected":"bravo","observed":"bravo","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"}]
-(pass) divergent lanes execute their own cold and warm builds without inherited caches [2815.06ms]
+(pass) memo recipes preserve argument boundaries and propagate failure [80.47ms]
+(pass) memo runner refuses missing, repeated and unterminated executable blocks [45.05ms]
+(pass) nested PRD lanes resolve their own memo owner [18.53ms]
+lane-build-evidence [{"lane":"alpha","mode":"safe","temperature":"cold","ms":748.1067079999999,"source":{"commit":"179f8671b5e6ea64509599f049756d57d54e25fe","tree":"9a08268bb20ac8730ac543ea7d92cc6e8d3bf9f9","digest":"d12a11572ff645ddd6ef8218e56d6a7f0424bb428b02cf77089b7be92751f0f2"},"binary_sha256":"621c63cda4141929dcc27bacc90bf3ef4c9d9819e41b3f3222381c4bdb1e3471","expected":"alpha","observed":"alpha","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"},{"lane":"alpha","mode":"safe","temperature":"warm","ms":385.40141700000004,"source":{"commit":"179f8671b5e6ea64509599f049756d57d54e25fe","tree":"9a08268bb20ac8730ac543ea7d92cc6e8d3bf9f9","digest":"d12a11572ff645ddd6ef8218e56d6a7f0424bb428b02cf77089b7be92751f0f2"},"binary_sha256":"621c63cda4141929dcc27bacc90bf3ef4c9d9819e41b3f3222381c4bdb1e3471","expected":"alpha","observed":"alpha","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"},{"lane":"bravo","mode":"safe","temperature":"cold","ms":843.8749160000002,"source":{"commit":"83a6c2f5e9f6d1bce3e3a4d802f98fb19d5e7391","tree":"f6ae5de5148108d3fb163edb0b16f3b83e9b7e84","digest":"101fc091b5b3c98b8c6c6948f7c20f06809f26890f2ff7a0bd65d1caca571ba9"},"binary_sha256":"febb286887708a068c11f7fead75a49e73f7d2ee84646d9029e7e0109abf4166","expected":"bravo","observed":"bravo","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"},{"lane":"bravo","mode":"safe","temperature":"warm","ms":361.300792,"source":{"commit":"83a6c2f5e9f6d1bce3e3a4d802f98fb19d5e7391","tree":"f6ae5de5148108d3fb163edb0b16f3b83e9b7e84","digest":"101fc091b5b3c98b8c6c6948f7c20f06809f26890f2ff7a0bd65d1caca571ba9"},"binary_sha256":"febb286887708a068c11f7fead75a49e73f7d2ee84646d9029e7e0109abf4166","expected":"bravo","observed":"bravo","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"}]
+(pass) divergent lanes execute their own cold and warm builds without inherited caches [2590.84ms]
 
  4 pass
  0 fail
  47 expect() calls
-Ran 4 tests across 1 file. [2.94s]
-    Finished `dev` profile [unoptimized] target(s) in 0.08s
-    Finished `dev` profile [unoptimized] target(s) in 0.10s
-    Finished `dev` profile [unoptimized] target(s) in 0.11s
-    Finished `dev` profile [unoptimized] target(s) in 0.11s
+Ran 4 tests across 1 file. [2.75s]
+    Checking cartridge v0.1.0 (/Users/feb/dev/cartridge/cartridge.ctg)
+    Finished `dev` profile [unoptimized] target(s) in 1.78s
+   Compiling fs v0.1.0 (/Users/feb/dev/cartridge/fs.ctg)
+    Finished `dev` profile [unoptimized] target(s) in 1.17s
+   Compiling cartridge v0.1.0 (/Users/feb/dev/cartridge/cartridge.ctg)
+   Compiling sessions v0.1.0 (/Users/feb/dev/cartridge/sessions.ctg)
+   Compiling gitfs v0.1.0 (/Users/feb/dev/cartridge/gitfs.ctg)
+    Finished `dev` profile [unoptimized] target(s) in 3.03s
+    Finished `dev` profile [unoptimized] target(s) in 0.09s
     Finished `dev` profile [unoptimized] target(s) in 0.07s
 bun test v1.3.14 (0d9b296a)
 
 ../fs.ctg/.cartridge/tests/integration/change-provenance.test.ts:
-(pass) real Host composes FS and Sessions for exact publication records and restart without GitFS ownership [1268.86ms]
-(pass) native malformed refused and timed-out recorders report partial publication without retry [2032.39ms]
+(pass) real Host composes FS and Sessions for exact publication records and restart without GitFS ownership [1534.40ms]
+(pass) native malformed refused and timed-out recorders report partial publication without retry [2026.92ms]
 
 ../gitfs.ctg/.cartridge/tests/integration/change-provenance.test.ts:
-(pass) real Host direct and overlay evidence preserves divergence, operation tags, restart and explicit ownership [1730.28ms]
-(pass) actual standalone profile omits Sessions and keeps GitFS mutations available with honest unavailable attribution [250.23ms]
-(pass) failed grant discovery never silently disables recording and failed recorders preserve committed effects without replay [4645.54ms]
+(pass) real Host direct and overlay evidence preserves divergence, operation tags, restart and explicit ownership [887.72ms]
+(pass) actual standalone profile omits Sessions and keeps GitFS mutations available with honest unavailable attribution [206.70ms]
+(pass) failed grant discovery never silently disables recording and failed recorders preserve committed effects without replay [4550.05ms]
 
  5 pass
  0 fail
  171 expect() calls
-Ran 5 tests across 2 files. [9.94s]
+Ran 5 tests across 2 files. [9.22s]
 
 ```

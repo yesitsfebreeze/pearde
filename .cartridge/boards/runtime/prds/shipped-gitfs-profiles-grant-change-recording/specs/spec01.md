@@ -1,10 +1,6 @@
 ---
 complexity: low
-footprint:
-- .cartridge/default/init.lua
-- .cartridge/live/init.lua
-- .cartridge/mcp/init.lua
-- .cartridge/workspace/Cargo.lock
+footprint: [".cartridge/default/init.lua",".cartridge/live/init.lua",".cartridge/mcp/init.lua",".cartridge/workspace/Cargo.lock","src/loader.rs",".cartridge/tests/unit/src/tests/mod.rs",".cartridge/tests/unit/src/tests/composition.rs"]
 ---
 
 # Compose the existing producer and recorder explicitly

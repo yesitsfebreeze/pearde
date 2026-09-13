@@ -17,7 +17,7 @@ footprint:
 - .cartridge/templates/board
 - .cartridge/tests/unit/board.rs
 - .cartridge/docs/board.md
-commit: "0976a3b0035c67bbb828063a1def17a1f5297d14"
+commit: "154bde9d8f97fb1c015fe34cf62ae79b153e6feb"
 ---
 
 # Preview and install a board without overwriting edits
@@ -40,3 +40,6 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `memo-board-template`; maximum five rounds.
+
+Reverify unchanged preview/install safety at154bde9 after template version2 adds
+the pinned engine entry; earlier0976a3b0 receipt retained.

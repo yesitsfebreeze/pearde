@@ -1,28 +1,35 @@
 ---
 repo: /Users/feb/dev/cartridge/memo.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: memo
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: memo-board-template
+footprint:
+- src/board.rs
+- .cartridge/templates/board
+- .cartridge/tests/unit/board.rs
+- .cartridge/tests/integration/board-engine.test.ts
+- .cartridge/docs/board.md
 needs:
 - '@memo/memo-board-template/initialize-board'
+commit: "154bde9d8f97fb1c015fe34cf62ae79b153e6feb"
 ---
 
 # The generated board uses the pinned Pearde workflow
 
-Connect the generated template to the existing external engine and its full planner entry; keep engine ownership external.
+Connect the generated template to the maintained native PRD engine and its full planner entry; keep engine ownership external to memo. The current PRD docs supersede the retired external Pearde CLI.
 
 ## Acceptance
 
-- [ ] A generated fixture resolves cross-board dependencies and exposes the ready frontier.
-- [ ] Invalid transitions and overlapping claims are refused.
-- [ ] The same fixture works from a second checkout path without developer-home assumptions.
+- [x] A generated fixture resolves cross-board dependencies and exposes the ready frontier.
+- [x] Invalid transitions and overlapping claims are refused.
+- [x] The same fixture works from a second checkout path without developer-home assumptions.
 
 ## Proof and recovery
 

@@ -15,7 +15,7 @@ footprint:
 - .cartridge/tests
 - .cartridge/memos/routine/policy-tests.md
 - .cartridge/docs/policy.md
-commit: "a3f5cffface2b7b2bc9ed26d9e55da0ee0f4be2d"
+commit: "e442bef2c9f07635f9e8b8e1d87a47193841569f"
 ---
 
 # Authorize individual operations with stable precedence
@@ -61,3 +61,5 @@ the one-line operation registration; prior receipt is collection-bdef8e6a.md.
 The shared evaluator now also serves read-only explanations at a3f5cff. The
 operation-rule contract is unchanged; rerun the expanded parity and actual
 consumer gates against the integrated source. Prior receipt is preserved.
+
+Push catalog revalidation at e442bef: existing operation-rule and explain acceptance remains unchanged; semantic evaluator revision now reflects the recognized operation catalog.

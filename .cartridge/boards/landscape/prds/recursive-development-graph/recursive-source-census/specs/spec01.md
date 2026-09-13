@@ -23,9 +23,9 @@ Census revision hashes canonical observed rows, owner/declaration revisions and 
 
 ## Acceptance
 
-- [ ] A real three-level declared board fixture, normalized by the actual PRD owner helper, yields three hierarchical owners and distinct addresses for same-named on-disk PRDs; explicit source-only cartridge mounts are identifiable without provider invocation.
-- [ ] Backlinks, repeated mounts, internal and escaping symlinks, conflicting aliases, malformed callback/root/revision and depth/count/byte/deadline limits terminate explicitly and preserve usable sibling rows.
-- [ ] Deleted/unreadable descendants have named status on the next capture; changed declaration revision updates only its observed row/overall census revision; no record bytes or provider state is changed.
+- [x] A real three-level declared board fixture, normalized by the actual PRD owner helper, yields three hierarchical owners and distinct addresses for same-named on-disk PRDs; explicit source-only cartridge mounts are identifiable without provider invocation.
+- [x] Backlinks, repeated mounts, internal and escaping symlinks, conflicting aliases, malformed callback/root/revision and depth/count/byte/deadline limits terminate explicitly and preserve usable sibling rows.
+- [x] Deleted/unreadable descendants have named status on the next capture; changed declaration revision updates only its observed row/overall census revision; no record bytes or provider state is changed.
 
 ## Verify and proof
 

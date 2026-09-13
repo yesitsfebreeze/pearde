@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/landscape.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -11,6 +11,7 @@ review-round: 3
 review-status: "passed"
 canonical-scope: recursive-development-graph
 needs: ["@memo/memo-board-template/initialize-board","@memo/one-document-serves-every-reader/document-identity","@prd/declared-source-edges"]
+commit: "33e0418fa82966772c38ec8191d02a158b2cb56d"
 ---
 
 # Declared descendants have distinct source identities
@@ -19,9 +20,9 @@ Traverse declared board/cartridge roots without launching providers; identify ea
 
 ## Acceptance
 
-- [ ] A three-level fixture preserves same-named records under different owners.
-- [ ] Backlinks, repeated mounts and symlinks terminate within depth/count/byte bounds.
-- [ ] Unreadable or deleted descendants have explicit status.
+- [x] A three-level fixture preserves same-named records under different owners.
+- [x] Backlinks, repeated mounts and symlinks terminate within depth/count/byte bounds.
+- [x] Unreadable or deleted descendants have explicit status.
 
 ## Proof and recovery
 

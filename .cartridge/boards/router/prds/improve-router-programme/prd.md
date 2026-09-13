@@ -1,19 +1,36 @@
 ---
 repo: /Users/feb/dev/cartridge/router.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: router
 work-kind: rollup
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: improve-router-programme
+footprint:
+  - .cartridge/docs/capabilities.md
+  - .cartridge/docs/cost-latency.md
+  - .cartridge/docs/decisions.md
+  - .cartridge/tests/unit/catalog/capabilities.rs
+  - .cartridge/tests/unit/proxy/capabilities.rs
+  - .cartridge/tests/unit/sync/tests.rs
+  - .cartridge/tests/unit/telemetry.rs
+  - Cargo.toml
+  - src/catalog.rs
+  - src/decision.rs
+  - src/main.rs
+  - src/proxy.rs
+  - src/requirements.rs
+  - src/sync.rs
+  - src/telemetry.rs
 needs:
 - '@router/improve-router-route-explanation'
 - '@router/improve-router-capability-routing'
 - '@router/improve-router-cost-latency'
+commit: "4ad9cd35dc862ecfe0786612d39913612d93fc45"
 ---
 
 # Router improvement plan
@@ -22,8 +39,8 @@ Coordinate the linked owner outcomes and record their combined evidence; claim a
 
 ## Acceptance
 
-- [ ] Each linked leaf passes its own review and observable acceptance.
-- [ ] Record tested mitigations and remaining limitations at the integrated revisions.
+- [x] Each linked leaf passes its own review and observable acceptance.
+- [x] Record tested mitigations and remaining limitations at the integrated revisions.
 
 ## Work items
 

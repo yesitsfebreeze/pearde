@@ -17,7 +17,7 @@ footprint:
 - .cartridge/tests/unit/document.rs
 - .cartridge/tests/fixtures/documents
 - .cartridge/docs/documents.md
-commit: "5345aaaa3407584825f624edb6cefaff14846b07"
+commit: "76800a23d90202645a2eca7d4ee5dcdca3951998"
 ---
 
 # Readers agree on document identity and revision
@@ -40,3 +40,5 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `one-document-serves-every-reader`; maximum five rounds.
+
+Reverification after document projections76800a2: exact source identity contract unchanged; shared reader/docs changed.

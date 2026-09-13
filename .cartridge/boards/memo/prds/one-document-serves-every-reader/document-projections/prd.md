@@ -18,7 +18,7 @@ footprint:
 - .cartridge/docs/documents.md
 needs:
 - '@memo/one-document-serves-every-reader/document-identity'
-commit: "3251566e6c92439e4a32c5ce8b734e55726801ee"
+commit: "45d5a54ab9da1a798cd9997af9a8c19bed8a1812"
 ---
 
 # Readable projections hydrate bounded linked prose
@@ -43,3 +43,5 @@ Preserve the last usable implementation and durable data on failure; report part
 [Round 2 agent review](review.md). Inherits round 1 from `one-document-serves-every-reader`; maximum five rounds.
 
 Reverification: executable validation at3251566 adds a separate native action to shared document.rs; frozen identity/projection fixtures and acceptance remain unchanged.
+
+Inventory facade revalidation: unchanged behavior and acceptance at memo 45d5a54; shared native registration is checked with its registered inventory module.

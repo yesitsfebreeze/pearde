@@ -1,12 +1,6 @@
 ---
 complexity: medium
-footprint:
-- src/file_kernel.rs
-- src/inventory.rs
-- src/lib.rs
-- src/memory.rs
-- .cartridge/tests/unit/src/memory/tests.rs
-- .cartridge/docs/memory-context.md
+footprint: ["src/file_kernel.rs","src/inventory.rs","src/lib.rs","src/memory.rs",".cartridge/tests/unit/src/memory/tests.rs",".cartridge/docs/memory-context.md","src/census.rs",".cartridge/tests/unit/census.rs"]
 ---
 
 # Memory contributes exact observed evidence to the shared context

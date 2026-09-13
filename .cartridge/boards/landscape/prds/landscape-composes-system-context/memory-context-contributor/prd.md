@@ -10,15 +10,10 @@ work-kind: leaf
 review-round: 3
 review-status: passed
 canonical-scope: landscape-composes-system-context
-footprint:
-- src/file_kernel.rs
-- src/lib.rs
-- src/memory.rs
-- .cartridge/tests/unit/src/memory/tests.rs
-- .cartridge/docs/memory-context.md
+footprint: ["src/file_kernel.rs","src/lib.rs","src/memory.rs",".cartridge/tests/unit/src/memory/tests.rs",".cartridge/docs/memory-context.md","src/census.rs",".cartridge/tests/unit/census.rs"]
 needs:
 - '@landscape/landscape-composes-system-context/context-contributor-contract'
-commit: "62185289d148017c74986b618456a72bab620228"
+commit: "33e0418fa82966772c38ec8191d02a158b2cb56d"
 ---
 
 # Memory hits resolve to exact source evidence

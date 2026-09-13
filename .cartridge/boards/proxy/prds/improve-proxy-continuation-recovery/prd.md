@@ -17,7 +17,7 @@ footprint:
 - src/continuation.rs
 - .cartridge/tests/unit/tests.rs
 - .cartridge/docs/continuations.md
-commit: "0c9d4e9bd2bb7fef98dd1bc2f593f314b7a090e2"
+commit: "439594188097e770fb9993aae379ac9906e0824a"
 ---
 
 # Make continuation lifetime and restart recovery explicit
@@ -41,3 +41,6 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-proxy-continuation-recovery`; maximum five rounds.
+
+Reverify unchanged acceptance after the next integrated owner feature; earlier
+0c9d4e9b receipt retained. No contract relaxation.

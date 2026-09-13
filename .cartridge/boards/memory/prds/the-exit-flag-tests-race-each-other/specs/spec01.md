@@ -1,9 +1,6 @@
 ---
 complexity: small
-footprint:
-  - src/commands/Cargo.toml
-  - src/store/core/src/lock.rs
-  - .cartridge/tests/unit/src/store/core/src/tests/lock_test.rs
+footprint: ["src/commands/Cargo.toml","src/store/core/src/lock.rs",".cartridge/tests/unit/src/store/core/src/tests/lock_test.rs","src/store/core/Cargo.toml","Cargo.lock"]
 ---
 
 # spec01 — Restore isolated exit proof and causally exercise handover locking

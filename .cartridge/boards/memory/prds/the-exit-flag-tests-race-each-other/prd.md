@@ -10,11 +10,8 @@ work-kind: leaf
 review-round: 3
 review-status: accepted
 canonical-scope: the-exit-flag-tests-race-each-other
-footprint:
-- src/commands/Cargo.toml
-- src/store/core/src/lock.rs
-- .cartridge/tests/unit/src/store/core/src/tests/lock_test.rs
-commit: "09bfaaefdcbe2fb3705bece2fcc643c9a95da478"
+footprint: ["src/commands/Cargo.toml","src/store/core/src/lock.rs",".cartridge/tests/unit/src/store/core/src/tests/lock_test.rs","src/store/core/Cargo.toml","Cargo.lock"]
+commit: "a124fd30d59bcd06062b5464810188a0288e461e"
 ---
 
 # the-exit-flag-tests-race-each-other

@@ -10,7 +10,7 @@ work-kind: leaf
 review-round: 4
 review-status: passed
 canonical-scope: every-mutation-holds-the-store-writer-boundary
-commit: "0a8736c5126781b90b842a5b818f083458b2f740"
+commit: "439bea56749d6a7361d6c1afb7d1a43bb46c7e9f"
 ---
 
 # every-mutation-holds-the-store-writer-boundary

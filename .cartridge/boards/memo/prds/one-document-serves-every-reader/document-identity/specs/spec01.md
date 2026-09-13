@@ -1,14 +1,6 @@
 ---
 complexity: medium
-footprint:
-  - src/context.rs
-  - src/inventory.rs
-  - src/main.rs
-  - src/service.rs
-  - src/document.rs
-  - .cartridge/tests/unit/document.rs
-  - .cartridge/tests/fixtures/documents
-  - .cartridge/docs/documents.md
+footprint: ["src/context.rs","src/inventory.rs","src/main.rs","src/service.rs","src/document.rs",".cartridge/tests/unit/document.rs",".cartridge/tests/fixtures/documents",".cartridge/docs/documents.md","src/source_search.rs",".cartridge/tests/unit/source_search.rs"]
 ---
 
 # spec01 — One opt-in document snapshot has one owner, path and revision

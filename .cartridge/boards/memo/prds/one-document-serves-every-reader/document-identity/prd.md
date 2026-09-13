@@ -10,14 +10,8 @@ work-kind: leaf
 review-round: 3
 review-status: passed
 canonical-scope: one-document-serves-every-reader
-footprint:
-- src/main.rs
-- src/service.rs
-- src/document.rs
-- .cartridge/tests/unit/document.rs
-- .cartridge/tests/fixtures/documents
-- .cartridge/docs/documents.md
-commit: "1ffca32db1d06364b3e35e6cbca4881a1f814f71"
+footprint: ["src/context.rs","src/inventory.rs","src/main.rs","src/service.rs","src/document.rs",".cartridge/tests/unit/document.rs",".cartridge/tests/fixtures/documents",".cartridge/docs/documents.md","src/source_search.rs",".cartridge/tests/unit/source_search.rs"]
+commit: "a458148fb21f85cabcd9e1ced85c96c581b8e0b2"
 ---
 
 # Readers agree on document identity and revision

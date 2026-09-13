@@ -20,7 +20,7 @@ footprint:
 - src/context.rs
 - .cartridge/tests/integration/context.test.ts
 - .cartridge/docs/context.md
-commit: "45d5a54ab9da1a798cd9997af9a8c19bed8a1812"
+commit: "1ffca32db1d06364b3e35e6cbca4881a1f814f71"
 ---
 
 # The memo facade serves the shared context snapshot

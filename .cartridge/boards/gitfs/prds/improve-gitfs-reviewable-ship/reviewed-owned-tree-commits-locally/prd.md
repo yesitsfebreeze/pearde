@@ -23,7 +23,7 @@ footprint:
 - .cartridge/tests/unit/store/tests.rs
 - .cartridge/tests/integration/reviewed-ship.test.ts
 - .cartridge/docs/ship.md
-commit: "67ef4ac0770de2770f6eee10164467c25dd370f0"
+commit: "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5"
 ---
 
 # A reviewed owned tree commits locally
@@ -48,3 +48,5 @@ Use disposable repositories and synthetic gates. Preserve the original parent
 baseline, acceptance and inherited rounds1–2; maximum5 rounds apply to each child.
 Concrete specs and independent round3 review precede source changes. Historical
 parent review is [retained](../review.md); splitting does not reset its allowance.
+
+Recorded-push revalidation at b4b95bb: shared native registration and new registered module are bound; original acceptance and executable gates are unchanged.

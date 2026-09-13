@@ -1,6 +1,7 @@
 ---
 complexity: high
 footprint:
+  - src/push.rs
   - src/ship.rs
   - src/store.rs
   - src/tool_result.rs

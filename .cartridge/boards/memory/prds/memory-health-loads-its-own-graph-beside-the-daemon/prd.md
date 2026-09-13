@@ -1,15 +1,17 @@
 ---
 repo: /Users/feb/dev/cartridge/memory.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: memory
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: "passed"
 canonical-scope: memory-health-loads-its-own-graph-beside-the-daemon
+needs: ["@memory/every-mutation-holds-the-store-writer-boundary"]
+commit: "439bea56749d6a7361d6c1afb7d1a43bb46c7e9f"
 ---
 
 # memory-health-loads-its-own-graph-beside-the-daemon
@@ -18,9 +20,9 @@ Resolve the canonical store owner first and use its bounded health RPC when comp
 
 ## Acceptance
 
-- [ ] Served and unserved fixtures report equivalent entity/thought/reason counts for the same snapshot.
-- [ ] The served path performs zero local graph loads and finishes within its configured RPC deadline; a fixed small local fixture records latency separately from an arbitrary machine-wide promise.
-- [ ] Wrong-store endpoint, timeout and owner restart produce explicit status/retryability without deleting locks or starting another writer.
+- [x] Served and unserved fixtures report equivalent entity/thought/reason counts for the same snapshot.
+- [x] The served path performs zero local graph loads and finishes within its configured RPC deadline; a fixed small local fixture records latency separately from an arbitrary machine-wide promise.
+- [x] Wrong-store endpoint, timeout and owner restart produce explicit status/retryability without deleting locks or starting another writer.
 
 ## Proof and recovery
 

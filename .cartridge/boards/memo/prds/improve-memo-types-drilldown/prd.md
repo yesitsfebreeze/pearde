@@ -10,10 +10,8 @@ work-kind: leaf
 review-round: 3
 review-status: accepted
 canonical-scope: improve-memo-types-drilldown
-footprint:
-- src/service.rs
-- .cartridge/tests/integration/tests.rs
-commit: "1ffca32db1d06364b3e35e6cbca4881a1f814f71"
+footprint: ["src/context.rs","src/inventory.rs","src/service.rs",".cartridge/tests/integration/tests.rs","src/source_search.rs","src/document.rs",".cartridge/tests/unit/source_search.rs"]
+commit: "a458148fb21f85cabcd9e1ced85c96c581b8e0b2"
 ---
 
 # Read type declarations individually

@@ -1,10 +1,6 @@
 ---
 complexity: small
-footprint:
-  - src/context.rs
-  - src/inventory.rs
-  - src/service.rs
-  - .cartridge/tests/integration/tests.rs
+footprint: ["src/context.rs","src/inventory.rs","src/service.rs",".cartridge/tests/integration/tests.rs","src/source_search.rs","src/document.rs",".cartridge/tests/unit/source_search.rs"]
 ---
 
 # spec01 — Discover declarations through the existing index and read operations

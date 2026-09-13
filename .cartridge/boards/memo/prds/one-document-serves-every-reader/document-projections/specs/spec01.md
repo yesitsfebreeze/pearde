@@ -1,11 +1,6 @@
 ---
 complexity: medium
-footprint:
-  - src/document.rs
-  - src/projection.rs
-  - .cartridge/tests/unit/projection.rs
-  - .cartridge/tests/fixtures/projections
-  - .cartridge/docs/documents.md
+footprint: ["src/document.rs","src/projection.rs",".cartridge/tests/unit/projection.rs",".cartridge/tests/fixtures/projections",".cartridge/docs/documents.md","src/source_search.rs",".cartridge/tests/unit/source_search.rs"]
 ---
 
 # spec01 — Bound readable linked prose to an explicit source closure

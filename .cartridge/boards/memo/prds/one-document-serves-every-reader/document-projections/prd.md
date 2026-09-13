@@ -10,15 +10,10 @@ work-kind: leaf
 review-round: 3
 review-status: passed
 canonical-scope: one-document-serves-every-reader
-footprint:
-- src/document.rs
-- src/projection.rs
-- .cartridge/tests/unit/projection.rs
-- .cartridge/tests/fixtures/projections
-- .cartridge/docs/documents.md
+footprint: ["src/document.rs","src/projection.rs",".cartridge/tests/unit/projection.rs",".cartridge/tests/fixtures/projections",".cartridge/docs/documents.md","src/source_search.rs",".cartridge/tests/unit/source_search.rs"]
 needs:
 - '@memo/one-document-serves-every-reader/document-identity'
-commit: "45d5a54ab9da1a798cd9997af9a8c19bed8a1812"
+commit: "a458148fb21f85cabcd9e1ced85c96c581b8e0b2"
 ---
 
 # Readable projections hydrate bounded linked prose

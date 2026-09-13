@@ -29,3 +29,23 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-13
+
+Reviewer: Codex `/root`, self-review under session delegation policy.
+Inputs: [review-round-3-inputs.json](review-round-3-inputs.json).
+The baseline runtime probe with operations.gitfs.read=allow/write=deny exits 1;
+the current source explicitly rejects config fields other than tools/default.
+It cannot express the requested policy without allowing every GitFS operation.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 20 | Express read-only access without broad write permission. |
+| Ownership and reuse | 20 | Existing pure Lua policy and the same consumer calls. |
+| Dependencies and slices | 19 | Policy-owned tests invoke native consumers; no consumer changes. |
+| Acceptance and baseline | 19 | Rule matrix, actual consumer mutation counter, invalid reload preservation. |
+| Failure and compatibility | 19 | Explicit deny wins, unknown operations fail closed, legacy defaults retained. |
+
+**97/100 — PASS**, no blocking findings, 3/5 rounds used. The native Agent
+fixture uses its public driver/tool path directly, so no inference endpoint is
+needed to verify policy, approval and dispatch behavior.

@@ -1,13 +1,14 @@
 ---
 complexity: medium
 footprint:
-  - src/mailbox.rs
-  - Cargo.toml
-  - src/main.rs
-  - src/recovery.rs
-  - .cartridge/tests/unit/main/repair_tests.rs
-  - .cartridge/tests/unit/recovery.rs
-  - .cartridge/docs/README.md
+- src/mailbox.rs
+- Cargo.toml
+- src/main.rs
+- src/recovery.rs
+- .cartridge/tests/unit/main/repair_tests.rs
+- .cartridge/tests/unit/recovery.rs
+- .cartridge/docs/README.md
+- src/observations.rs
 ---
 
 # spec01 — Inspect recovery state and guard the narrow legacy repair

@@ -14,7 +14,7 @@ needs:
 - '@sessions/improve-sessions-client-mapping'
 - '@sessions/improve-sessions-retention'
 - '@sessions/improve-sessions-recovery'
-commit: "b772c6ee4f1ad476995c8c8c07cd02ed2be264fa"
+commit: "965108d9c29bce1a41a518917d6c8892e67e42bf"
 ---
 
 # Sessions improvement plan
@@ -35,3 +35,5 @@ Coordinate the three linked owner outcomes at one integrated source revision. Th
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-sessions-programme`; maximum five rounds.
+
+Reverification at965108d9 after mailbox integration. Add the new transitive source module to verification coverage; behavioral acceptance is unchanged.

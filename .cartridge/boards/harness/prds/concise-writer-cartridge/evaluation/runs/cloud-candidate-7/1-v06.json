@@ -1,0 +1,48 @@
+{
+  "fixture": "v06",
+  "repeat": 1,
+  "category": "verbose",
+  "started": "2026-09-13T17:35:21.702Z",
+  "completed": "2026-09-13T17:35:23.155Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write only the finished deliverable, in plain complete sentences. Compress verbose material aggressively: aim for two sentences and about 30 words, then add only the words needed to preserve otherwise missing facts. This is a drafting target, never permission to omit meaning. Use shared subjects, coordinated verbs, compact subordinate clauses and parenthetical evidence references. Every clause must contribute a distinct fact. Delete setup, repetition, reader advice, headings, labels, generic cautions and conclusions.\n\nDistinguish a source fact from commentary about that fact. Preserve all unique results, scope limits, uncertainty, conditions, ordering, names, ownership, evidence and next actions. State each once. A concrete phrase can carry several facts: \"Unreleased, the patch passes 8 tests (run-42); Noor must check restart recovery before release.\" Do not then repeat that tests do not prove deployment. Preserve the actual uncertainty rather than adding generic warnings. Do not invent a cause, result, action or recommendation.\n\nTechnical literals remain exact: numbers, units, identifiers, paths, commands, quoted errors, field names, frontmatter and executable blocks. Do not abbreviate protected names. The reader must recover every substantive fact and answer every obvious status or handoff question from this deliverable alone. Make two silent passes: restore missing meaning, then remove redundant wording without removing facts. Prefer short ordinary words; avoid telegraphic fragments.\n\nFor an already concise, clear source, return the source byte for byte. For requested JSON or another exact format, output only the required structure with unchanged keys and types. Explicitly requested detail overrides brevity: retain all requested steps, reasons, conditions and provenance.\n\nDraft in the normal single model response. Editing an existing memo requires an explicit request, a preview, and approved saving through validated memo.write with the read expected_revision. Preserve newer text on conflicts and do not retry. Keep the source transcript and linked evidence intact.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nAnswer whether the import is complete.\n\nSource:\nThe import is not complete, and that should be the first thing the response makes clear. There were 80 records in the source file. Of those, 76 were imported successfully, while four were rejected because they had no external_id. The import did not create placeholder IDs for the rejected records, and it did not silently drop them as though everything had succeeded. The rejected row numbers are listed in import-errors-6.json. Existing records were not overwritten. The user needs to add external_id values to those four rows and submit only those corrected rows. The user should not be told to replay the entire file, because that is not the recommended next action. The successful records are already durable, and the response must not imply that the whole import was rolled back. It would also be inaccurate to say that all records are ready merely because most of them succeeded."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T17:35:23.103080413Z",
+    "message": {
+      "role": "assistant",
+      "content": "The import is not complete. Of the 80 records in the source file, 76 were imported successfully, while four were rejected because they lacked an external_id; no placeholder IDs were created, and existing records were not overwritten. The rejected row numbers are listed in import-errors-6.json. Add external_id values to those four rows and submit only the corrected rows; do not replay the entire file, as the successful records are already durable."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 1317117237,
+    "prompt_eval_count": 634,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 92
+  },
+  "tokenization": null,
+  "generation_tokens": 92,
+  "output_tokens": 92,
+  "input_tokens": 634,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

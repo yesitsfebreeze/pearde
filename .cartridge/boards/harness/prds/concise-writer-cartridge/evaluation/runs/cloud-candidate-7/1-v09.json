@@ -1,0 +1,48 @@
+{
+  "fixture": "v09",
+  "repeat": 1,
+  "category": "verbose",
+  "started": "2026-09-13T17:35:24.600Z",
+  "completed": "2026-09-13T17:35:25.497Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write only the finished deliverable, in plain complete sentences. Compress verbose material aggressively: aim for two sentences and about 30 words, then add only the words needed to preserve otherwise missing facts. This is a drafting target, never permission to omit meaning. Use shared subjects, coordinated verbs, compact subordinate clauses and parenthetical evidence references. Every clause must contribute a distinct fact. Delete setup, repetition, reader advice, headings, labels, generic cautions and conclusions.\n\nDistinguish a source fact from commentary about that fact. Preserve all unique results, scope limits, uncertainty, conditions, ordering, names, ownership, evidence and next actions. State each once. A concrete phrase can carry several facts: \"Unreleased, the patch passes 8 tests (run-42); Noor must check restart recovery before release.\" Do not then repeat that tests do not prove deployment. Preserve the actual uncertainty rather than adding generic warnings. Do not invent a cause, result, action or recommendation.\n\nTechnical literals remain exact: numbers, units, identifiers, paths, commands, quoted errors, field names, frontmatter and executable blocks. Do not abbreviate protected names. The reader must recover every substantive fact and answer every obvious status or handoff question from this deliverable alone. Make two silent passes: restore missing meaning, then remove redundant wording without removing facts. Prefer short ordinary words; avoid telegraphic fragments.\n\nFor an already concise, clear source, return the source byte for byte. For requested JSON or another exact format, output only the required structure with unchanged keys and types. Explicitly requested detail overrides brevity: retain all requested steps, reasons, conditions and provenance.\n\nDraft in the normal single model response. Editing an existing memo requires an explicit request, a preview, and approved saving through validated memo.write with the read expected_revision. Preserve newer text on conflicts and do not retry. Keep the source transcript and linked evidence intact.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nReply to a user asking why their saved edit was rejected.\n\nSource:\nThe save was rejected because the document changed after the version that the user read. The user read revision r17, but revision r18 was current by the time the save reached the publication check. The system preserved the r18 text and did not overwrite it with the stale edit. The rejected edit has not been applied. This was a revision conflict, not a permission denial. The next action is to read r18, compare the intended edit with that version, and submit a new save using r18 as the expected revision if the edit still makes sense. There is no automatic retry. The diagnostic reference is save-check-9. It is not known from that diagnostic who authored r18, and the response should not guess. The user needs an explanation of the conflict and a clear next step, not a long account of implementation internals."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T17:35:25.44969711Z",
+    "message": {
+      "role": "assistant",
+      "content": "Your save was rejected because the document changed after you read it: you read revision r17, but r18 was current when your save reached the publication check, so the system preserved r18 and did not apply your edit (diagnostic save-check-9). This was a revision conflict, not a permission denial; there is no automatic retry, and the author of r18 is unknown. Next, read r18, compare your intended edit against it, and if the edit still makes sense, submit a new save using r18 as the expected revision."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 764965824,
+    "prompt_eval_count": 635,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 113
+  },
+  "tokenization": null,
+  "generation_tokens": 113,
+  "output_tokens": 113,
+  "input_tokens": 635,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

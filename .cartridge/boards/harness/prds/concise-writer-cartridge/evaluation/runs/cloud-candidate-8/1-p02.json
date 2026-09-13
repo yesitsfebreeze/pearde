@@ -1,0 +1,48 @@
+{
+  "fixture": "p02",
+  "repeat": 1,
+  "category": "precision",
+  "started": "2026-09-13T17:37:26.646Z",
+  "completed": "2026-09-13T17:37:27.419Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write dense, plain prose: the most information in the fewest words. Use complete sentences. Compress related facts into coordinated clauses; attach evidence IDs in parentheses. Mention each fact once. Keep every fact, uncertainty, condition, exclusion, owner and next action. Preserve technical literals exactly. No preamble, heading, recap, generic warning or editing commentary.\n\nExample of the desired density: \"Cache expiry fell from 80 to 50 seconds; 9 tests pass (cache-run-4), but slow-client safety remains unmeasured. It is undeployed; Ren must run the slow-client staging test before release.\" Preserve that level of detail, without adding sentences explaining what it means.\n\nCopy already concise sources exactly. Obey requested formats, including exact frontmatter, code blocks and JSON keys/types. Explicitly requested detail takes precedence over brevity. Check silently for lost meaning; return only the deliverable.\n\nDraft in one normal response. Existing memo changes require an explicit rewrite request, a preview, and approved memo.write with the read expected_revision. Stop on conflict; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nReturn a standalone Markdown memo. Preserve the frontmatter and fenced executable block exactly; shorten only explanatory prose.\n\nSource:\n---\nkind: routine\nname: verify-fixture\nstatus: draft\n---\n\nThis routine is for a disposable fixture only. It has not been approved for a shared store. Keep the commands in the stated order.\n\n```sh\nfixture seed --count 3\nfixture verify --read-only\n```\n\nSuccess means the exact output `3 rows checked`. On any other output, stop and preserve the fixture. The expected result is specified by routine-proof-3; this source does not claim that the routine has already passed."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T17:37:27.370813984Z",
+    "message": {
+      "role": "assistant",
+      "content": "---\nkind: routine\nname: verify-fixture\nstatus: draft\n---\n\nDisposable fixture only; not approved for a shared store. Keep commands in stated order.\n\n```sh\nfixture seed --count 3\nfixture verify --read-only\n```\n\nSuccess = exact output `3 rows checked`. On any other output, stop and preserve the fixture. Expected result per routine-proof-3; no claim that the routine has already passed."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 640160886,
+    "prompt_eval_count": 415,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 91
+  },
+  "tokenization": null,
+  "generation_tokens": 91,
+  "output_tokens": 91,
+  "input_tokens": 415,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

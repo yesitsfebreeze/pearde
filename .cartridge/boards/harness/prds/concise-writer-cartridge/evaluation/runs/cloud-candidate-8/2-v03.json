@@ -1,0 +1,48 @@
+{
+  "fixture": "v03",
+  "repeat": 2,
+  "category": "verbose",
+  "started": "2026-09-13T17:37:30.578Z",
+  "completed": "2026-09-13T17:37:31.329Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write dense, plain prose: the most information in the fewest words. Use complete sentences. Compress related facts into coordinated clauses; attach evidence IDs in parentheses. Mention each fact once. Keep every fact, uncertainty, condition, exclusion, owner and next action. Preserve technical literals exactly. No preamble, heading, recap, generic warning or editing commentary.\n\nExample of the desired density: \"Cache expiry fell from 80 to 50 seconds; 9 tests pass (cache-run-4), but slow-client safety remains unmeasured. It is undeployed; Ren must run the slow-client staging test before release.\" Preserve that level of detail, without adding sentences explaining what it means.\n\nCopy already concise sources exactly. Obey requested formats, including exact frontmatter, code blocks and JSON keys/types. Explicitly requested detail takes precedence over brevity. Check silently for lost meaning; return only the deliverable.\n\nDraft in one normal response. Existing memo changes require an explicit rewrite request, a preview, and approved memo.write with the read expected_revision. Stop on conflict; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nAnswer the user's request for the current fix status.\n\nSource:\nThe status of the duplicate notification issue is that the fix has been written, and the implementation now rejects a repeated event ID before a notification is sent. This means that a duplicate with the same event ID no longer causes a second send in the fixture. The fixture delivered the same event 20 times and observed one notification. That is the extent of the evidence so far. Events that have different IDs but represent the same underlying action have not been deduplicated by this change, and it is important to keep that boundary in the response. The test is named replay_same_id. The change is on a local branch and has not been pushed. The next action is to review the behavior for events arriving out of order; no result for that review exists yet. There is no need to give the user a narration of how the code was edited, but the distinction between the tested case and the remaining case must survive."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T17:37:31.277381112Z",
+    "message": {
+      "role": "assistant",
+      "content": "The fix is written: the implementation now rejects a repeated event ID before a notification is sent, so a duplicate with the same event ID no longer causes a second send. The fixture delivered the same event 20 times and observed one notification (test replay_same_id). That is the extent of the evidence so far. Events with different IDs but the same underlying action are not deduplicated by this change. The change is on a local branch and has not been pushed. Next action: review behavior for events arriving out of order; no result exists yet."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 612385436,
+    "prompt_eval_count": 478,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 113
+  },
+  "tokenization": null,
+  "generation_tokens": 113,
+  "output_tokens": 113,
+  "input_tokens": 478,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

@@ -1,0 +1,48 @@
+{
+  "fixture": "v12",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T17:37:58.590Z",
+  "completed": "2026-09-13T17:37:59.293Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write dense, plain prose: the most information in the fewest words. Use complete sentences. Compress related facts into coordinated clauses; attach evidence IDs in parentheses. Mention each fact once. Keep every fact, uncertainty, condition, exclusion, owner and next action. Preserve technical literals exactly. No preamble, heading, recap, generic warning or editing commentary.\n\nExample of the desired density: \"Cache expiry fell from 80 to 50 seconds; 9 tests pass (cache-run-4), but slow-client safety remains unmeasured. It is undeployed; Ren must run the slow-client staging test before release.\" Preserve that level of detail, without adding sentences explaining what it means.\n\nCopy already concise sources exactly. Obey requested formats, including exact frontmatter, code blocks and JSON keys/types. Explicitly requested detail takes precedence over brevity. Check silently for lost meaning; return only the deliverable.\n\nDraft in one normal response. Existing memo changes require an explicit rewrite request, a preview, and approved memo.write with the read expected_revision. Stop on conflict; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nReply with the current delivery status and remaining blocker.\n\nSource:\nThe documentation update is ready locally, which is the main status to report. It updates the setup instructions to name the `config_dir` field and removes the obsolete `credentials_path` example. The local documentation link check passed on 18 pages. However, the change has not been published. Publication is blocked because the staging host returned the exact message `certificate expired` when the preview was checked. The expiry problem has not been repaired, and no production request was made as part of this check. The result is recorded in docs-preview-11. The next step is to renew the staging certificate and rerun the preview check before publishing. It would be misleading to collapse ready locally and published into the same status, or to claim that production is unhealthy on the basis of a staging-only observation."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T17:37:59.24366884Z",
+    "message": {
+      "role": "assistant",
+      "content": "The documentation update is ready locally: setup instructions now name the `config_dir` field and remove the obsolete `credentials_path` example; the local link check passed on 18 pages (docs-preview-11). It is not published. The blocker is the staging host returning exactly `certificate expired` on the preview check; the expiry is unrepaired, and no production request was made. Next step: renew the staging certificate and rerun the preview check before publishing."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 567664990,
+    "prompt_eval_count": 454,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 96
+  },
+  "tokenization": null,
+  "generation_tokens": 96,
+  "output_tokens": 96,
+  "input_tokens": 454,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

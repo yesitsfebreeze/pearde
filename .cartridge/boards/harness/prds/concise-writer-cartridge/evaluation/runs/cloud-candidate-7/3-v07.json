@@ -1,0 +1,48 @@
+{
+  "fixture": "v07",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T17:35:52.322Z",
+  "completed": "2026-09-13T17:35:53.369Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write only the finished deliverable, in plain complete sentences. Compress verbose material aggressively: aim for two sentences and about 30 words, then add only the words needed to preserve otherwise missing facts. This is a drafting target, never permission to omit meaning. Use shared subjects, coordinated verbs, compact subordinate clauses and parenthetical evidence references. Every clause must contribute a distinct fact. Delete setup, repetition, reader advice, headings, labels, generic cautions and conclusions.\n\nDistinguish a source fact from commentary about that fact. Preserve all unique results, scope limits, uncertainty, conditions, ordering, names, ownership, evidence and next actions. State each once. A concrete phrase can carry several facts: \"Unreleased, the patch passes 8 tests (run-42); Noor must check restart recovery before release.\" Do not then repeat that tests do not prove deployment. Preserve the actual uncertainty rather than adding generic warnings. Do not invent a cause, result, action or recommendation.\n\nTechnical literals remain exact: numbers, units, identifiers, paths, commands, quoted errors, field names, frontmatter and executable blocks. Do not abbreviate protected names. The reader must recover every substantive fact and answer every obvious status or handoff question from this deliverable alone. Make two silent passes: restore missing meaning, then remove redundant wording without removing facts. Prefer short ordinary words; avoid telegraphic fragments.\n\nFor an already concise, clear source, return the source byte for byte. For requested JSON or another exact format, output only the required structure with unchanged keys and types. Explicitly requested detail overrides brevity: retain all requested steps, reasons, conditions and provenance.\n\nDraft in the normal single model response. Editing an existing memo requires an explicit request, a preview, and approved saving through validated memo.write with the read expected_revision. Preserve newer text on conflicts and do not retry. Keep the source transcript and linked evidence intact.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone experiment result.\n\nSource:\nWe ran a small comparison of the index lookup change, and the result should be recorded with enough context to prevent it from being mistaken for a broader benchmark. The old implementation took a median of 42 ms. The candidate took a median of 31 ms. Both medians came from 30 runs against the same local fixture. The fixture contained 10,000 entries and was already warm before the timed runs began. No cold-start measurement was taken, and no production latency claim follows from these numbers. Peak memory was not measured either. The raw timings are recorded in lookup-fixture-3.csv. The next action is to measure cold-start latency and peak memory before deciding whether to adopt the change. The result is promising in the measured fixture, but the memo must not translate that into an unsupported promise about production or workloads that were not tested."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T17:35:53.321205391Z",
+    "message": {
+      "role": "assistant",
+      "content": "Experiment result: In a small comparison of the index lookup change, the old implementation had a median of 42 ms and the candidate had a median of 31 ms, both from 30 runs against the same local fixture (10,000 entries, already warm). No cold-start or peak memory measurements were taken, so no production latency claim follows; raw timings are in lookup-fixture-3.csv. Next action: measure cold-start latency and peak memory before deciding whether to adopt the change."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 914130255,
+    "prompt_eval_count": 631,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 101
+  },
+  "tokenization": null,
+  "generation_tokens": 101,
+  "output_tokens": 101,
+  "input_tokens": 631,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

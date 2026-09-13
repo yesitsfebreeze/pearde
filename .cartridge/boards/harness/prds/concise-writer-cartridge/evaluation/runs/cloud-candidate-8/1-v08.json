@@ -1,0 +1,48 @@
+{
+  "fixture": "v08",
+  "repeat": 1,
+  "category": "verbose",
+  "started": "2026-09-13T17:37:20.598Z",
+  "completed": "2026-09-13T17:37:21.206Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write dense, plain prose: the most information in the fewest words. Use complete sentences. Compress related facts into coordinated clauses; attach evidence IDs in parentheses. Mention each fact once. Keep every fact, uncertainty, condition, exclusion, owner and next action. Preserve technical literals exactly. No preamble, heading, recap, generic warning or editing commentary.\n\nExample of the desired density: \"Cache expiry fell from 80 to 50 seconds; 9 tests pass (cache-run-4), but slow-client safety remains unmeasured. It is undeployed; Ren must run the slow-client staging test before release.\" Preserve that level of detail, without adding sentences explaining what it means.\n\nCopy already concise sources exactly. Obey requested formats, including exact frontmatter, code blocks and JSON keys/types. Explicitly requested detail takes precedence over brevity. Check silently for lost meaning; return only the deliverable.\n\nDraft in one normal response. Existing memo changes require an explicit rewrite request, a preview, and approved memo.write with the read expected_revision. Stop on conflict; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone operational instruction from this conversation.\n\nSource:\nPriya: We need the handoff to say exactly which environment is safe for this reproduction. Sam: Use the disposable fixture workspace. Do not use the shared production store. Priya: What should the operator run? Sam: First run `fixture seed --count 12`. Then run `fixture verify --read-only`. Keep that order, because verify expects the seeded rows. Priya: What result is expected? Sam: The verification should report `12 rows checked`. If it reports `writer lock held`, stop and keep the fixture for inspection. Do not delete the lock file. Priya: Where do we keep the result? Sam: Save stdout and stderr in fixture-proof-12.txt. Priya: And after that? Sam: Send the recorded result to the next reviewer as part of the handoff. That is an instruction to the operator in the memo, not a claim that anybody has already sent it."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T17:37:21.153945232Z",
+    "message": {
+      "role": "assistant",
+      "content": "Use the disposable fixture workspace for this reproduction; do not use the shared production store. Run `fixture seed --count 12`, then run `fixture verify --read-only`, in that order, because verify expects the seeded rows. The verification should report `12 rows checked`. If it reports `writer lock held`, stop and keep the fixture for inspection; do not delete the lock file. Save stdout and stderr in fixture-proof-12.txt. Send the recorded result to the next reviewer as part of the handoff."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 470805651,
+    "prompt_eval_count": 482,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 108
+  },
+  "tokenization": null,
+  "generation_tokens": 108,
+  "output_tokens": 108,
+  "input_tokens": 482,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

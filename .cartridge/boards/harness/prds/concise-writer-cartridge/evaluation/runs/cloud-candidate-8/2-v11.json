@@ -1,0 +1,48 @@
+{
+  "fixture": "v11",
+  "repeat": 2,
+  "category": "verbose",
+  "started": "2026-09-13T17:37:38.192Z",
+  "completed": "2026-09-13T17:37:39.099Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write dense, plain prose: the most information in the fewest words. Use complete sentences. Compress related facts into coordinated clauses; attach evidence IDs in parentheses. Mention each fact once. Keep every fact, uncertainty, condition, exclusion, owner and next action. Preserve technical literals exactly. No preamble, heading, recap, generic warning or editing commentary.\n\nExample of the desired density: \"Cache expiry fell from 80 to 50 seconds; 9 tests pass (cache-run-4), but slow-client safety remains unmeasured. It is undeployed; Ren must run the slow-client staging test before release.\" Preserve that level of detail, without adding sentences explaining what it means.\n\nCopy already concise sources exactly. Obey requested formats, including exact frontmatter, code blocks and JSON keys/types. Explicitly requested detail takes precedence over brevity. Check silently for lost meaning; return only the deliverable.\n\nDraft in one normal response. Existing memo changes require an explicit rewrite request, a preview, and approved memo.write with the read expected_revision. Stop on conflict; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone retention decision.\n\nSource:\nThe retention decision applies to generated preview artifacts. It does not apply to the original source documents, and that distinction should not be lost in shortening the note. Preview artifacts become eligible for cleanup after seven days without access. Eligibility is not the same as deletion: the first operation produces a preview of the candidates and does not delete them. A pinned artifact is excluded even if it is older than seven days. Applying cleanup requires the exact candidate revision from the preview; if an artifact changes before apply, that artifact is skipped and reported as changed. There is no automatic replay of skipped deletions. The decision is captured in retention-review-2. The next step is to test a pinned artifact and an artifact changed between preview and apply. No assertion has yet been made that those tests have passed, so the note must keep them as next actions."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T17:37:39.050083294Z",
+    "message": {
+      "role": "assistant",
+      "content": "retention-review-2: Generated preview artifacts are eligible for cleanup after seven days without access; eligibility is not deletion, and the first operation only previews candidates. Pinned artifacts are excluded even if older than seven days. Applying cleanup requires the exact candidate revision from the preview; if an artifact changes before apply, it is skipped and reported as changed, with no automatic replay of skipped deletions. This decision does not apply to original source documents. Next actions: test a pinned artifact and an artifact changed between preview and apply; no assertion has been made that those tests have passed."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 771904112,
+    "prompt_eval_count": 456,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 117
+  },
+  "tokenization": null,
+  "generation_tokens": 117,
+  "output_tokens": 117,
+  "input_tokens": 456,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

@@ -1,0 +1,48 @@
+{
+  "fixture": "v10",
+  "repeat": 1,
+  "category": "verbose",
+  "started": "2026-09-13T17:37:21.991Z",
+  "completed": "2026-09-13T17:37:22.620Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write dense, plain prose: the most information in the fewest words. Use complete sentences. Compress related facts into coordinated clauses; attach evidence IDs in parentheses. Mention each fact once. Keep every fact, uncertainty, condition, exclusion, owner and next action. Preserve technical literals exactly. No preamble, heading, recap, generic warning or editing commentary.\n\nExample of the desired density: \"Cache expiry fell from 80 to 50 seconds; 9 tests pass (cache-run-4), but slow-client safety remains unmeasured. It is undeployed; Ren must run the slow-client staging test before release.\" Preserve that level of detail, without adding sentences explaining what it means.\n\nCopy already concise sources exactly. Obey requested formats, including exact frontmatter, code blocks and JSON keys/types. Explicitly requested detail takes precedence over brevity. Check silently for lost meaning; return only the deliverable.\n\nDraft in one normal response. Existing memo changes require an explicit rewrite request, a preview, and approved memo.write with the read expected_revision. Stop on conflict; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone accessibility review result.\n\nSource:\nThe settings dialog has been reviewed with keyboard navigation, and the result should be stated in terms of what was actually observed. Tab now moves from the name field to the save button and then to the cancel button. Shift+Tab moves through those controls in reverse order. Escape closes the dialog without saving. The review used the fixture settings-keyboard-5 on the desktop layout. The mobile layout was not checked, and screen-reader announcements were not checked. Those omissions do not imply failures, but they also cannot be presented as passing checks. The next action is for Ada to verify the mobile layout and screen-reader announcements. The change does not alter which settings the user is allowed to save. A later reader should be able to tell which interactions were verified, which were not, and who has the remaining work without referring back to this source text."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T17:37:22.57104329Z",
+    "message": {
+      "role": "assistant",
+      "content": "Accessibility review result for the settings dialog (fixture settings-keyboard-5, desktop layout): Tab moves from the name field to the save button, then to the cancel button; Shift+Tab reverses that order; Escape closes the dialog without saving. The change does not alter which settings the user is allowed to save. Mobile layout and screen-reader announcements were not checked; those omissions are not failures but cannot be presented as passing checks. Ada must verify the mobile layout and screen-reader announcements."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 494395200,
+    "prompt_eval_count": 461,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 102
+  },
+  "tokenization": null,
+  "generation_tokens": 102,
+  "output_tokens": 102,
+  "input_tokens": 461,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

@@ -1,0 +1,48 @@
+{
+  "fixture": "v12",
+  "repeat": 1,
+  "category": "verbose",
+  "started": "2026-09-13T17:35:27.298Z",
+  "completed": "2026-09-13T17:35:28.058Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write only the finished deliverable, in plain complete sentences. Compress verbose material aggressively: aim for two sentences and about 30 words, then add only the words needed to preserve otherwise missing facts. This is a drafting target, never permission to omit meaning. Use shared subjects, coordinated verbs, compact subordinate clauses and parenthetical evidence references. Every clause must contribute a distinct fact. Delete setup, repetition, reader advice, headings, labels, generic cautions and conclusions.\n\nDistinguish a source fact from commentary about that fact. Preserve all unique results, scope limits, uncertainty, conditions, ordering, names, ownership, evidence and next actions. State each once. A concrete phrase can carry several facts: \"Unreleased, the patch passes 8 tests (run-42); Noor must check restart recovery before release.\" Do not then repeat that tests do not prove deployment. Preserve the actual uncertainty rather than adding generic warnings. Do not invent a cause, result, action or recommendation.\n\nTechnical literals remain exact: numbers, units, identifiers, paths, commands, quoted errors, field names, frontmatter and executable blocks. Do not abbreviate protected names. The reader must recover every substantive fact and answer every obvious status or handoff question from this deliverable alone. Make two silent passes: restore missing meaning, then remove redundant wording without removing facts. Prefer short ordinary words; avoid telegraphic fragments.\n\nFor an already concise, clear source, return the source byte for byte. For requested JSON or another exact format, output only the required structure with unchanged keys and types. Explicitly requested detail overrides brevity: retain all requested steps, reasons, conditions and provenance.\n\nDraft in the normal single model response. Editing an existing memo requires an explicit request, a preview, and approved saving through validated memo.write with the read expected_revision. Preserve newer text on conflicts and do not retry. Keep the source transcript and linked evidence intact.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nReply with the current delivery status and remaining blocker.\n\nSource:\nThe documentation update is ready locally, which is the main status to report. It updates the setup instructions to name the `config_dir` field and removes the obsolete `credentials_path` example. The local documentation link check passed on 18 pages. However, the change has not been published. Publication is blocked because the staging host returned the exact message `certificate expired` when the preview was checked. The expiry problem has not been repaired, and no production request was made as part of this check. The result is recorded in docs-preview-11. The next step is to renew the staging certificate and rerun the preview check before publishing. It would be misleading to collapse ready locally and published into the same status, or to claim that production is unhealthy on the basis of a staging-only observation."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T17:35:28.010017868Z",
+    "message": {
+      "role": "assistant",
+      "content": "The documentation update is ready locally, with setup instructions naming the `config_dir` field and removing the obsolete `credentials_path` example; the local link check passed on 18 pages. Publication remains blocked because the staging host returned the exact message `certificate expired` during the preview check, and the expiry problem is not yet repaired (result recorded in docs-preview-11). No production request was made; the next step is to renew the staging certificate and rerun the preview check before publishing."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 624870009,
+    "prompt_eval_count": 623,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 101
+  },
+  "tokenization": null,
+  "generation_tokens": 101,
+  "output_tokens": 101,
+  "input_tokens": 623,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

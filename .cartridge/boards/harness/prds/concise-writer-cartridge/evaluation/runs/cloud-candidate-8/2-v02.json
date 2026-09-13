@@ -1,0 +1,48 @@
+{
+  "fixture": "v02",
+  "repeat": 2,
+  "category": "verbose",
+  "started": "2026-09-13T17:37:29.893Z",
+  "completed": "2026-09-13T17:37:30.578Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write dense, plain prose: the most information in the fewest words. Use complete sentences. Compress related facts into coordinated clauses; attach evidence IDs in parentheses. Mention each fact once. Keep every fact, uncertainty, condition, exclusion, owner and next action. Preserve technical literals exactly. No preamble, heading, recap, generic warning or editing commentary.\n\nExample of the desired density: \"Cache expiry fell from 80 to 50 seconds; 9 tests pass (cache-run-4), but slow-client safety remains unmeasured. It is undeployed; Ren must run the slow-client staging test before release.\" Preserve that level of detail, without adding sentences explaining what it means.\n\nCopy already concise sources exactly. Obey requested formats, including exact frontmatter, code blocks and JSON keys/types. Explicitly requested detail takes precedence over brevity. Check silently for lost meaning; return only the deliverable.\n\nDraft in one normal response. Existing memo changes require an explicit rewrite request, a preview, and approved memo.write with the read expected_revision. Stop on conflict; preserve newer text and source evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nTurn this conversation record into a standalone decision memo.\n\nSource:\nNora: We need a record of the decision about the image cache, because somebody reading this later will not have been in this conversation. Leon: The decision is to keep image thumbnails for 14 days. Original uploads are outside this cache and must not be deleted by this change. Nora: That distinction is the part I want to make especially clear. Leon: We are keeping the limit at 2 GiB for each workspace, and the oldest thumbnail is evicted when the limit would otherwise be exceeded. Nora: Did we measure the effect on mobile clients? Leon: No. Mobile bandwidth impact is still unknown. Nora: Then the next step is for Leon to compare a cold mobile session with a warm mobile session. We should make that comparison before enabling the policy outside staging. Leon: Agreed. The decision was recorded in discussion cache-review-4. Nora: Please carry those facts into the memo without requiring its reader to reconstruct this exchange."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T17:37:30.529727016Z",
+    "message": {
+      "role": "assistant",
+      "content": "# Decision Memo: Image Thumbnail Cache Policy\n\n**Decision:** Keep image thumbnails for 14 days. Original uploads are outside this cache and must not be deleted by this change. The cache limit remains 2 GiB per workspace; the oldest thumbnail is evicted when the limit would otherwise be exceeded.\n\n**Uncertainty:** Mobile bandwidth impact is unknown; no measurement has been performed.\n\n**Next Action:** Leon must compare a cold mobile session with a warm mobile session before enabling the policy outside staging.\n\n**Provenance:** Decision recorded in discussion cache-review-4."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 548220310,
+    "prompt_eval_count": 488,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 121
+  },
+  "tokenization": null,
+  "generation_tokens": 121,
+  "output_tokens": 121,
+  "input_tokens": 488,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

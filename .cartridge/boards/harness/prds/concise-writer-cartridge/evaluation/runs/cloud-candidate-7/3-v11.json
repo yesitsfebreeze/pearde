@@ -1,0 +1,48 @@
+{
+  "fixture": "v11",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T17:35:55.863Z",
+  "completed": "2026-09-13T17:35:56.692Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write only the finished deliverable, in plain complete sentences. Compress verbose material aggressively: aim for two sentences and about 30 words, then add only the words needed to preserve otherwise missing facts. This is a drafting target, never permission to omit meaning. Use shared subjects, coordinated verbs, compact subordinate clauses and parenthetical evidence references. Every clause must contribute a distinct fact. Delete setup, repetition, reader advice, headings, labels, generic cautions and conclusions.\n\nDistinguish a source fact from commentary about that fact. Preserve all unique results, scope limits, uncertainty, conditions, ordering, names, ownership, evidence and next actions. State each once. A concrete phrase can carry several facts: \"Unreleased, the patch passes 8 tests (run-42); Noor must check restart recovery before release.\" Do not then repeat that tests do not prove deployment. Preserve the actual uncertainty rather than adding generic warnings. Do not invent a cause, result, action or recommendation.\n\nTechnical literals remain exact: numbers, units, identifiers, paths, commands, quoted errors, field names, frontmatter and executable blocks. Do not abbreviate protected names. The reader must recover every substantive fact and answer every obvious status or handoff question from this deliverable alone. Make two silent passes: restore missing meaning, then remove redundant wording without removing facts. Prefer short ordinary words; avoid telegraphic fragments.\n\nFor an already concise, clear source, return the source byte for byte. For requested JSON or another exact format, output only the required structure with unchanged keys and types. Explicitly requested detail overrides brevity: retain all requested steps, reasons, conditions and provenance.\n\nDraft in the normal single model response. Editing an existing memo requires an explicit request, a preview, and approved saving through validated memo.write with the read expected_revision. Preserve newer text on conflicts and do not retry. Keep the source transcript and linked evidence intact.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone retention decision.\n\nSource:\nThe retention decision applies to generated preview artifacts. It does not apply to the original source documents, and that distinction should not be lost in shortening the note. Preview artifacts become eligible for cleanup after seven days without access. Eligibility is not the same as deletion: the first operation produces a preview of the candidates and does not delete them. A pinned artifact is excluded even if it is older than seven days. Applying cleanup requires the exact candidate revision from the preview; if an artifact changes before apply, that artifact is skipped and reported as changed. There is no automatic replay of skipped deletions. The decision is captured in retention-review-2. The next step is to test a pinned artifact and an artifact changed between preview and apply. No assertion has yet been made that those tests have passed, so the note must keep them as next actions."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T17:35:56.644076117Z",
+    "message": {
+      "role": "assistant",
+      "content": "Retention decision (retention-review-2): generated preview artifacts, not original source documents, become eligible for cleanup after seven days without access; eligibility only previews candidates, and pinned artifacts are excluded regardless of age. Applying cleanup requires the exact candidate revision from the preview; artifacts changed before apply are skipped and reported as changed, with no automatic replay. Next actions: test a pinned artifact and an artifact changed between preview and apply; no assertion yet that those tests have passed."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 692103715,
+    "prompt_eval_count": 625,
+    "prompt_eval_cached_count": 449,
+    "eval_count": 97
+  },
+  "tokenization": null,
+  "generation_tokens": 97,
+  "output_tokens": 97,
+  "input_tokens": 625,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

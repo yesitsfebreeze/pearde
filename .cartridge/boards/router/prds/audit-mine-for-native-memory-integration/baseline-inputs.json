@@ -1,0 +1,32 @@
+{
+  "source_commits": {
+    "router": "0a216cb100ea40aa0535509d44c38b16a009b9cc",
+    "memory": "09bfaaefdcbe2fb3705bece2fcc643c9a95da478"
+  },
+  "command": "git show <pinned-revision>:<listed-path> into disposable fixture; exact source contract assertions",
+  "expected": "Current endpoint-only Memory and separate router differ from historical native-mine proposal",
+  "observed": {
+    "memory_excludes_model_routing": true,
+    "memory_workspace_has_no_mine": true,
+    "memory_source_has_no_mine": true,
+    "configured_endpoint_client": true,
+    "startup_uses_configured_reason": true,
+    "router_has_login": true,
+    "router_has_actual_attempt_loop": true,
+    "router_has_explicit_paths": true
+  },
+  "source_digests": {
+    "memory/.cartridge/docs/AGENTS.md": "42669bc52fc99fb56866e45432de59a724f0d9c9cfadb0a4286e37001d9aca69",
+    "memory/Cargo.toml": "c95226fd544d7908661ea58137a44ad38307dbad215cb4b64bea7620697875ad",
+    "memory/src/commands/src/lib.rs": "2101cbe271634560bc50ed73f09ed1cdb7fb458833c63886f20ab3257706d4af",
+    "memory/src/commands/src/commands_serve.rs": "253315071d033bedb84300d4d1339b4493f43d6ac67444d676e8d4037c0bb613",
+    "memory/src/llm/src/llm.rs": "753970050a5fdab58eae71cfad92d5936b0f6d1caae6acbb3cdd53a082810c6f",
+    "router/src/main.rs": "2f0ce16e0db2baa7d6dd84c53d339112bbccc7f9b974aebc5f2949a5aa1815c9",
+    "router/src/proxy.rs": "491fc134131fe3b40d34d83e7d210bfced0eb683bc1eab29fafc6d5d0a73476d",
+    "router/src/auth.rs": "a7c6332e33137626632834c87c1de344c510a6869b0994aea4504115eb0696b6",
+    "router/src/settings.rs": "4d1d81d5b3b8ab2ed39d828af06c2d1eb289d50078c70c5e67eeaec3c64214e2"
+  },
+  "historical_proposal_sha256": "05d1ae9a2ff584732581394df5f285bcd1ba23c892973fc2b70c10bb468df07d",
+  "historical_commits": "2a66abc6 and dotfiles e12b8c7 preserved as historical text claims; not available/verified in imported Memory git objects",
+  "scope": "No daemon, credentials, live provider, installation or user data accessed. Memory dirty working tree excluded by pinned git-object reads."
+}

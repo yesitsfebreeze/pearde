@@ -29,3 +29,40 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-13
+
+Independent reviewer: `/root`. Concrete inputs are bound in
+[review-round-3-inputs.json](review-round-3-inputs.json). The actual native-process
+baseline shows generation and explicit direct engine planning already work, but
+no generated adapter or engine pin exists. Current maintained PRD authority
+supersedes obsolete external-CLI wording without transferring engine ownership.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | A portable generated board entry exposes existing full planning. |
+| Ownership and reuse | 20 | No duplicated engine or lifecycle; native PRD remains the authority. |
+| Dependencies and slices | 18 | Prerequisite collected; exact pin intentionally couples updates to review. |
+| Acceptance and baseline | 19 | Actual source baseline and two-location process fixtures. |
+| Failure and compatibility | 19 | Pin mismatch, board override and actual transition failures remain explicit. |
+
+**95/100 — PASS**, no blocking findings; 3/5 rounds used. Implementation checks:
+name the explicit reviewed pin upgrade path (no automatic refresh), test signal
+and exit propagation, and reject alternate `--board=...` overrides. This is an
+agent plan score, not a user rating or a product measurement.
+
+### Implementation evidence
+
+Owner source `154bde9d8f97fb1c015fe34cf62ae79b153e6feb` passes 56 owner tests
+and public format/check. The actual native SDK plus pinned engine integration
+fixture passes 113 assertions at two project/engine locations, including a path
+with spaces. It proves ready/dependency-held rows, invalid transition and overlap
+refusal, failed verification preserving source HEAD, legacy-board preservation,
+workflow/grammar checks, board override/malformed pin/missing/tampered/symlinked
+engine refusal, and SIGTERM/SIGINT propagation with owned worker exit.
+
+The first integration run correctly rejected a test fixture missing its acceptance
+heading. Adding that heading allowed the intended failing verification to run;
+the corrected retained fixture proves the failure is preserved. See proof.json
+and the three linked log files. Checkbox updates record observations only; the
+reviewed contract is unchanged. Collection remains coordinator work.

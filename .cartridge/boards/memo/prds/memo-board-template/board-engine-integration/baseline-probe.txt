@@ -1,0 +1,17 @@
+import pathlib,tempfile,subprocess,json,hashlib
+owner=pathlib.Path('/Users/feb/dev/cartridge/memo.ctg'); engine=owner.parent/'prd.ctg'; fixture=pathlib.Path(tempfile.mkdtemp(prefix='memo-board-engine-baseline-'));binary=owner.parent/'cartridge.ctg/target/tool-result-contract/debug/memo_cartridge'
+child=subprocess.Popen([str(binary)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+def send(v): child.stdin.write(json.dumps(v)+'\n');child.stdin.flush()
+send({'apply':{'name':'memo','config':{}}})
+while True:
+ value=json.loads(child.stdout.readline())
+ if value.get('ready'):break
+send({'id':1,'call':'memo','args':{'op':'board','cwd':str(fixture),'action':'install'}})
+while True:
+ value=json.loads(child.stdout.readline())
+ if value.get('reply')==1:break
+send({'dispose':True});child.communicate(timeout=10)
+board=fixture/'.cartridge/boards/root'; outcome=subprocess.run(['bun',str(engine/'src/cli.ts'),'plan','--board',str(board),'--json'],text=True,capture_output=True)
+proof=engine/'.cartridge/boards/memo/prds/memo-board-template/board-engine-integration'
+result={'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=owner,text=True).strip(),'engine_source_commit':subprocess.check_output(['git','log','-1','--format=%H','--','src'],cwd=engine,text=True).strip(),'command':'python3 /tmp/memo-board-engine-baseline.py (retained source baseline-probe.txt)','fixture':str(fixture),'native_install':value,'direct_engine_plan':{'exit_code':outcome.returncode,'stdout':outcome.stdout,'stderr':outcome.stderr},'expected':'Generated board exposes an explicit portable entry to its pinned maintained PRD engine','observed':'Native generation succeeds and existing maintained engine plan works when called directly with explicit --board. Generated board has neither engine pin manifest nor invocation adapter; external Pearde CLI is no longer maintained authority.'}
+(proof/'baseline-inputs.json').write_text(json.dumps(result,indent=2)+'\n');(proof/'baseline-probe.txt').write_text(pathlib.Path('/tmp/memo-board-engine-baseline.py').read_text());print(json.dumps({k:v for k,v in result.items() if k not in ['native_install']},indent=2))

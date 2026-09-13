@@ -1,0 +1,27 @@
+{
+  "source_revisions": {
+    "router": {
+      "relative_path": "../router.ctg",
+      "revision": "0a216cb100ea40aa0535509d44c38b16a009b9cc"
+    },
+    "memory": {
+      "relative_path": "../memory.ctg",
+      "revision": "09bfaaefdcbe2fb3705bece2fcc643c9a95da478"
+    },
+    "prd": {
+      "relative_path": "../prd.ctg",
+      "revision": "7a73d945409bb260c54f056c01de3122966d55d1"
+    }
+  },
+  "disposition_groups": 29,
+  "original_lines_covered": 364,
+  "tests": 3,
+  "assertions": 10,
+  "scope": "Documentation/source validation only; no new product/runtime/deployment claim",
+  "commands": [
+    "bun test ./.cartridge/tests/integration/routing-handoff.test.ts"
+  ],
+  "artifacts": {
+    "../router.ctg/.cartridge/docs/routing-handoff.json": "2d11259faf62a3c3e3540f5f536ec6169fc671cbe8c8651a5b723baac56127ab"
+  }
+}

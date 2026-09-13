@@ -1,0 +1,92 @@
+{
+  "source_commit": "0976a3b0035c67bbb828063a1def17a1f5297d14",
+  "engine_source_commit": "a018740011f204fedf5909e8eba0bdcdb2a70749",
+  "command": "python3 /tmp/memo-board-engine-baseline.py (retained source baseline-probe.txt)",
+  "fixture": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-board-engine-baseline-bsp78cqq",
+  "native_install": {
+    "data": {
+      "action": "install",
+      "board": ".cartridge/boards/root",
+      "complete": true,
+      "created": [
+        "settings.md",
+        "grammar.md",
+        "README.md",
+        "templates/prd.md",
+        "templates/spec.md",
+        "workflows/develop.md",
+        "workflows/analyze.md",
+        "workflows/verify.md"
+      ],
+      "error": null,
+      "files": [
+        {
+          "body": "---\nname: root\nlanguage: English\nrepo: ../../..\nrequire-repo: true\nworkflows: workflows\ngrammar: grammar.md\nmembers: []\n---\n\nThis board owns PRDs under prds/. Source changes belong to the project three\nlevels above. Always pass this board path explicitly to the configured engine.\n",
+          "path": "settings.md",
+          "reason": null,
+          "sha256": "03112866b072a7d9fda7f2d9f578b3bc27991916c04f8c26a4a70ff9676591c6",
+          "status": "created"
+        },
+        {
+          "body": "---\ngrammar: project\nsubject: Project development vocabulary\n---\n\nA PRD owns one observable outcome. A spec defines an implementable change and\nits proof. A board records dependencies, claims and authoritative PRD state.\n",
+          "path": "grammar.md",
+          "reason": null,
+          "sha256": "ef86eb03e8768cecdcf76cd628ddd7b016b3809433feec6361245ba9346a0d48",
+          "status": "created"
+        },
+        {
+          "body": "# Project board\n\nThis owner-shipped template declares settings, document templates and workflows.\nCreate authored work under prds/<name>/prd.md with the PRD template. Templates\nare examples, not active work. Do not copy state into another record.\n\nConfigure the external PRD engine and always select this board explicitly.\nEngine installation and its pinned integration contract are separate from\ninitialization. This template contains no engine implementation.\n\nPreview initialization before applying it. Existing identical files are kept;\nedited files are reported and preserved. A partial install is recoverable by\nan explicit retry after inspecting the preview. No existing files are replaced,\nincluding old staging files left by a process crash.\n",
+          "path": "README.md",
+          "reason": null,
+          "sha256": "bdce8a18a0457843033ae61dabe30cbb97ee135310315bf5e8a11eb4f219421c",
+          "status": "created"
+        },
+        {
+          "body": "---\nstate: open\norigin: requested\npriority: 0\nblast-radius: mid\nworkflow: develop\nwork-kind: leaf\n---\n\n# One observable outcome\n\nDescribe the current problem and the resulting behavior. Inherit the source\nrepository from board settings, or declare an explicit owner repository.\n\n## Acceptance\n\n- [ ] The desired behavior has observed proof.\n- [ ] Invalid input and failure preserve existing work.\n- [ ] Recovery is explicit and reproducible.\n\n## Proof and recovery\n\nRecord the source revision and disposable baseline before writing specs.\nDocument the exact verification command and recovery boundary.\n",
+          "path": "templates/prd.md",
+          "reason": null,
+          "sha256": "e20927f1ca4fe61c5d14b38057e4e8d78370d1b791b8f3f40a824308cce6a5cc",
+          "status": "created"
+        },
+        {
+          "body": "---\ncomplexity: small\nfootprint: []\n---\n\n# One implementable change\n\nReplace the empty footprint with actual owner-relative source paths.\n\n## Acceptance\n\n- [ ] One observable requirement is satisfied.\n\n## Verify and Proof\n\nAdd a shell block with a probed verification command before implementation.\n",
+          "path": "templates/spec.md",
+          "reason": null,
+          "sha256": "2f25baed0471daf9a5cf4d65383f8de5a14d1817e4610ffec9076d0fa8e1e824",
+          "status": "created"
+        },
+        {
+          "body": "---\nworkflow: develop\nsubject: Develop and verify one bounded outcome\n---\n\n## Use when\n\nA dependency-ready PRD names this workflow.\n\n## Steps\n\n| # | atomic | why | on failure |\n| --- | --- | --- | --- |\n| 1 | `analyze` | Baseline and bounded specs establish what must change. | `stop` |\n| 2 | `verify` | Implementation and recovery match observed proof. | `stop` |\n",
+          "path": "workflows/develop.md",
+          "reason": null,
+          "sha256": "18a6b3ee42ae3e07d1c29502a7cffea7cd16d287dbef30d2f006387a899a5174",
+          "status": "created"
+        },
+        {
+          "body": "---\natomic: analyze\nsubject: Establish a baseline and bounded specs\n---\n\n## Do\n\nRead owner instructions and dependencies. Probe the behavior in a disposable\nfixture. Record source revision, exact command and observed result. Write\nspecs with narrow footprints, observable acceptance and executable proof.\n\n## Done when\n\nThe baseline and specs are recorded and dependencies resolve.\n\n## Fails when\n\n| seen | means | do |\n| --- | --- | --- |\n| Missing baseline or owner | Work is not yet executable. | Stop and resolve it. |\n",
+          "path": "workflows/analyze.md",
+          "reason": null,
+          "sha256": "3b13c5694e5bec9dee9491856b501410de51ad7ecda92dc544ef9952841f041e",
+          "status": "created"
+        },
+        {
+          "body": "---\natomic: verify\nsubject: Implement and prove the accepted specs\n---\n\n## Do\n\nImplement the accepted specs. Run the declared tests and recovery fixtures.\nPreserve failed evidence. Record source revisions and exact verification results.\nUse the configured engine's checked transitions to integrate verified work.\n\n## Done when\n\nEvery acceptance has observed proof at the integrated source revision.\n\n## Fails when\n\n| seen | means | do |\n| --- | --- | --- |\n| A verification fails | Completion is not established. | Preserve work and repair it. |\n",
+          "path": "workflows/verify.md",
+          "reason": null,
+          "sha256": "2ab105f4e225bb89054bf863b9c00c789cee0edaf920502b67d87cc66537e10a",
+          "status": "created"
+        }
+      ],
+      "template": "memo-board",
+      "version": "1"
+    },
+    "reply": 1
+  },
+  "direct_engine_plan": {
+    "exit_code": 0,
+    "stdout": "{\"operation\":\"plan\",\"board\":\"/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-board-engine-baseline-bsp78cqq/.cartridge/boards/root\",\"exit_code\":0,\"output\":\"\",\"error\":\"\",\"changed\":[],\"verification\":[],\"data\":{\"slots\":3,\"rows\":[],\"waves\":[],\"notes\":[],\"demand\":0,\"snapshot\":\"44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a\",\"total\":0,\"limit\":20,\"offset\":0,\"next_offset\":null}}\n",
+    "stderr": ""
+  },
+  "expected": "Generated board exposes an explicit portable entry to its pinned maintained PRD engine",
+  "observed": "Native generation succeeds and existing maintained engine plan works when called directly with explicit --board. Generated board has neither engine pin manifest nor invocation adapter; external Pearde CLI is no longer maintained authority."
+}

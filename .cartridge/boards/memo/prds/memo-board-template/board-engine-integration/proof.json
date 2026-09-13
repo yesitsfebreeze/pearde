@@ -1,0 +1,63 @@
+{
+  "source_commit": "154bde9d8f97fb1c015fe34cf62ae79b153e6feb",
+  "engine_pin": {
+    "schema_version": 1,
+    "engine": "cartridge-prd",
+    "source_revision": "a018740011f204fedf5909e8eba0bdcdb2a70749",
+    "runtime": "Bun (verified 1.3.14)",
+    "files": {
+      "bun.lock": "48b965a813af5a0580ec23c95e2bff2cb0e232fba975bcf03dcab87538b65b63",
+      "package.json": "d5d36a925f1170736c441bb4a1d3bfb2ef08203825385bb29b2ff89aab5672dc",
+      "src/cli.ts": "438cf72a6a6d70f98e9d337e6b1100aab5247bafcfecaf0926f792066b10d9ed",
+      "src/coordinator.ts": "8341a5331d76c476e495b3528faff58236aef9c9d299dcac6b1cf64562a0a83c",
+      "src/engine.ts": "ed3ce2e3816c42ecc919da8ad908ecd40cbda8993a04efdee0274f99fd9a5c97",
+      "src/lifecycle.ts": "8522f11d6c56bbb5b7487931c23594801953cc8a915af0657fa219d55717be16",
+      "src/planner.ts": "fd60f4c7603e212279d47bf1bc37a30e7f2b28d2865b9cc3cbb175317807fcfe",
+      "src/process.ts": "0be4a5778d856b96eb6603e5aba9c98e462109f21d0a18e84a5d9e9cf697c518",
+      "src/records.ts": "7f60038af768a68ee51f7755a232efd1c60e2e6c6c06598b3b43e5c6faf6f4ed",
+      "src/service.ts": "1e7ad44209ed7aeb14ea3e43fd346ab2c7662b0500184e5df1348a53e40ec096"
+    }
+  },
+  "commands": [
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just test memo",
+      "result": "56 passed, 0 failed; test-log.txt"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just check memo",
+      "result": "passed format and cargo check; check-log.txt"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/memo.ctg",
+      "command": "bun test ./.cartridge/tests/integration/board-engine.test.ts",
+      "result": "1 passed, 0 failed, 113 assertions; actual native SDK process and two project/engine paths; integration-log.txt"
+    }
+  ],
+  "source_sha256": {
+    "src/board.rs": "35f1a79a8d700b4542f6ab0de447678790428094ce6d1c696c48a741588e460e",
+    ".cartridge/tests/unit/board.rs": "8e4e6d6b7d86f0739453cc2e418ea0d12750dcc3a25500859fac326deaf08c24",
+    ".cartridge/tests/integration/board-engine.test.ts": "71fdcfb6533ba614c314a0cfab1fef2dbe9146f7383c5b2469501e81a9d02dbc",
+    ".cartridge/docs/board.md": "973f645e2820f04b0fbf69d9148407f27d605797ea54191dbe8a334bad654a15",
+    ".cartridge/templates/board/README.md": "d3435761dab5b82eef529e83402df317005a6c2e291390f96a820d55418dbbd3",
+    ".cartridge/templates/board/engine.json": "78f3fe21c286ab8798a42efe3664036d8fd0f334841b2b30b974f1c6ad3a3fff",
+    ".cartridge/templates/board/grammar.md": "ef86eb03e8768cecdcf76cd628ddd7b016b3809433feec6361245ba9346a0d48",
+    ".cartridge/templates/board/prd.ts": "3266380d6e5d0bf38a214a939aa96a9da2751087fddd96e51cc9fd2614212cdc",
+    ".cartridge/templates/board/settings.md": "e9b3f7db6a313634ea2ee19812368bc4203f332db58eda7b2e7532b4254e54d0",
+    ".cartridge/templates/board/templates/prd.md": "e20927f1ca4fe61c5d14b38057e4e8d78370d1b791b8f3f40a824308cce6a5cc",
+    ".cartridge/templates/board/templates/spec.md": "2f25baed0471daf9a5cf4d65383f8de5a14d1817e4610ffec9076d0fa8e1e824",
+    ".cartridge/templates/board/workflows/analyze.md": "3b13c5694e5bec9dee9491856b501410de51ad7ecda92dc544ef9952841f041e",
+    ".cartridge/templates/board/workflows/develop.md": "18a6b3ee42ae3e07d1c29502a7cffea7cd16d287dbef30d2f006387a899a5174",
+    ".cartridge/templates/board/workflows/verify.md": "2ab105f4e225bb89054bf863b9c00c789cee0edaf920502b67d87cc66537e10a"
+  },
+  "limits": [
+    "Requires explicit externally maintained engine checkout matching shipped content pin; no automatic install or pin refresh.",
+    "Template v2 additions preserve initial-collision refusal on authored/v1 boards; upgrades require explicit review.",
+    "Maintained native PRD engine supersedes historical installed Pearde CLI; tests prove the current maintained contract."
+  ],
+  "receipt_impacts": [
+    "initialize-board overlaps template, board.rs, board test and docs; refresh its collection at this source commit.",
+    "types-drilldown, shadowing and stale-evidence footprints unchanged by this second source commit."
+  ]
+}

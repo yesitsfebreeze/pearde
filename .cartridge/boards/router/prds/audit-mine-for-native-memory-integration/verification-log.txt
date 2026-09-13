@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/integration/routing-handoff.test.ts:
+(pass) every original behavior group has an attributable disposition and valid pinned evidence [270.83ms]
+(pass) pinned Memory startup, ingestion and query use configured endpoints without a mine tree [5.95ms]
+(pass) coverage and source negative controls fail rather than certify missing evidence [103.97ms]
+
+ 3 pass
+ 0 fail
+ 10 expect() calls
+Ran 3 tests across 1 file. [392.00ms]

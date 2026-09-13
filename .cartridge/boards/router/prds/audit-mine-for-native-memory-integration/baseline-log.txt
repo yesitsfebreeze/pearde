@@ -1,0 +1,11 @@
+{
+  "memory_excludes_model_routing": true,
+  "memory_workspace_has_no_mine": true,
+  "memory_source_has_no_mine": true,
+  "configured_endpoint_client": true,
+  "startup_uses_configured_reason": true,
+  "router_has_login": true,
+  "router_has_actual_attempt_loop": true,
+  "router_has_explicit_paths": true
+}
+All source contract assertions passed; absent current reconciliation remains the deliverable.

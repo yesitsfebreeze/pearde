@@ -1,0 +1,9 @@
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/integration/board-engine.test.ts:
+(pass) actual generated boards use the pinned full engine at two locations and preserve failures [2685.02ms]
+
+ 1 pass
+ 0 fail
+ 113 expect() calls
+Ran 1 test across 1 file. [2.69s]

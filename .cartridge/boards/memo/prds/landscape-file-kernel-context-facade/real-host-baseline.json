@@ -1,0 +1,91 @@
+{
+  "runtime_binary": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/cartridge",
+  "manifest_sha256": "bb57649d3260db35524b4715bd61ce6bc76d134b151c9202f9cdd6e74da19014",
+  "manifest": {
+    "name": "fs",
+    "entry": "init.lua",
+    "source": "https://github.com/yesitsfebreeze/fs.ctg",
+    "provide": [
+      "tool.read",
+      "tool.write",
+      "tool.edit",
+      "tool.search",
+      "tool.glob",
+      "tool.grep"
+    ],
+    "needs": [
+      "sessions"
+    ],
+    "description": "Provides file read, write, edit, search, glob, and grep tools; records touched files through sessions.",
+    "commands": {
+      "build": {
+        "argv": [
+          "just",
+          "--justfile",
+          "../cartridge.ctg/justfile",
+          "build",
+          "fs"
+        ],
+        "cwd": "."
+      },
+      "check": {
+        "argv": [
+          "just",
+          "--justfile",
+          "../cartridge.ctg/justfile",
+          "check",
+          "fs"
+        ],
+        "cwd": "."
+      },
+      "test": {
+        "argv": [
+          "just",
+          "--justfile",
+          "../cartridge.ctg/justfile",
+          "test",
+          "fs"
+        ],
+        "cwd": "."
+      },
+      "run": {
+        "argv": [
+          "just",
+          "--justfile",
+          "../cartridge.ctg/justfile",
+          "process",
+          "fs"
+        ],
+        "cwd": ".",
+        "description": "Foreground SDK JSON-lines process; use hello to inspect capabilities."
+      },
+      "hello": {
+        "argv": [
+          "just",
+          "--justfile",
+          "../cartridge.ctg/justfile",
+          "process",
+          "fs",
+          "hello"
+        ],
+        "cwd": "."
+      }
+    }
+  },
+  "cases": [
+    {
+      "present": true,
+      "exit": 1,
+      "stdout": "",
+      "stderr": "",
+      "profile": "return {{id=\"memo\",path=\"memo\",inject={\"fs.context\"}},{id=\"alpha\",path=\"alpha\"},{id=\"sessions\",path=\"sessions.lua\"},{id=\"fs\",path=\"fs\"}}"
+    },
+    {
+      "present": false,
+      "exit": 0,
+      "stdout": "{\"complete\":false,\"deadline_exceeded\":false,\"limits\":{\"deadline_ms\":500,\"max_bytes\":16384,\"max_rows\":16},\"revision\":\"88998e7472c51dde3a625d0fd1eaaa6f978e289786cbabcfc5650ba22c5383f8\",\"rows\":[{\"reference\":{\"id\":\"@runtime/kernel/alpha\",\"kind\":\"kernel\",\"owner\":\"runtime\",\"revision\":\"26f8caac18d77d98e85abe9205742f7a494e7284f2100dd2c57dafffe465bb20\",\"revision_kind\":\"observed_projection\"},\"selection_reason\":\"kernel owner/capability match; observed public metadata\",\"source\":\"{\\\"generation\\\":2,\\\"id\\\":\\\"alpha\\\",\\\"provide\\\":[\\\"native.fixture\\\"],\\\"state\\\":\\\"Active\\\"}\",\"text\":\"{\\\"generation\\\":2,\\\"id\\\":\\\"alpha\\\",\\\"provide\\\":[\\\"native.fixture\\\"],\\\"state\\\":\\\"Active\\\"}\"}],\"schema\":\"cartridge-context/v1\",\"sources\":[{\"contributor\":\"documents\",\"state\":\"disabled\"},{\"contributor\":\"files\",\"state\":\"absent\"},{\"contributor\":\"kernel\",\"state\":\"available\"},{\"contributor\":\"memory\",\"state\":\"disabled\"}],\"truncated\":false}\n",
+      "stderr": "",
+      "profile": "return {{id=\"memo\",path=\"memo\",inject={}},{id=\"alpha\",path=\"alpha\"}}"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "reviewer": "/root",
+  "round": 3,
+  "score": 95,
+  "dimensions": [
+    19,
+    20,
+    19,
+    19,
+    18
+  ],
+  "digests": {
+    "prd.md": "df4ef197359c84b81b37ff3397001d468d72dff58986d2ea3d63108d1535fd81",
+    "specs/spec01.md": "84448715ee4592a6a48bb657563d0763ac86c23e987798fe6e095b89b7f1fa5c"
+  },
+  "clarifications": "Typed namespace case/identity aliases excluded; existing tighter FS caps retained; source-byte references do not claim historical physical-root identity; kernel capability keys bounded128 bytes.",
+  "reviewed_digests": {
+    "prd.md": "e38ffd088a7264238f7a2a484aac181b822711a3c93981591b68ece1e9636b02",
+    "specs/spec01.md": "a0be8b31a10ac9f16ec580a27b7229f4ec204c311b8563b3a779f15e031bd5d4"
+  },
+  "completion_update": "Acceptance checkboxes only; reviewed implementation contract unchanged.",
+  "before_real_host_proof_digests": {
+    "prd.md": "df4ef197359c84b81b37ff3397001d468d72dff58986d2ea3d63108d1535fd81",
+    "specs/spec01.md": "4265e98c9663637339515ea87ff3475d51a93f90b8e357ea4b5808350ccaa659"
+  },
+  "real_host_proof_refinement": {
+    "script_sha256": "b277295be8e149b5a7480236642ae52f9fff4b68508df297eba474ea33c7062a",
+    "before_spec_sha256": "4265e98c9663637339515ea87ff3475d51a93f90b8e357ea4b5808350ccaa659",
+    "scope": "Additional actual composed-host executable proof and clarification that an optional profile omits both FS and grant; no acceptance change.",
+    "coordinator_acknowledgement": {
+      "reviewer": "/root",
+      "acknowledged_spec_sha256": "84448715ee4592a6a48bb657563d0763ac86c23e987798fe6e095b89b7f1fa5c",
+      "acknowledged_probe_sha256": "b277295be8e149b5a7480236642ae52f9fff4b68508df297eba474ea33c7062a",
+      "before_spec_sha256": "4265e98c9663637339515ea87ff3475d51a93f90b8e357ea4b5808350ccaa659",
+      "after_spec_sha256": "84448715ee4592a6a48bb657563d0763ac86c23e987798fe6e095b89b7f1fa5c",
+      "finding": "Stronger executable proof of the reviewed optional contract; source and acceptance unchanged; omission means no FS and no exact grant. No new review round."
+    }
+  }
+}

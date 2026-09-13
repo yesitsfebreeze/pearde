@@ -1,0 +1,21 @@
+bun test v1.3.14 (0d9b296a)
+
+../sessions.ctg/.cartridge/tests/integration/channel-cursors.test.ts:
+(pass) actual SDK persists watches and receipts while later posts remain unread [146.93ms]
+(pass) concurrent readers supersede receipts only for their authenticated actor [136.63ms]
+(pass) bounded reads, empty reads and unwatch preserve data with explicit redelivery [175.87ms]
+
+../sessions.ctg/.cartridge/tests/integration/channels.test.ts:
+(pass) real scoped channel posts order, deduplicate and survive process restart [251.88ms]
+(pass) direct aliases read legacy mailbox lines and share the original append path [86.58ms]
+(pass) bounded catch-up and catalogue never silently skip lines or change direct acknowledgements [205.60ms]
+
+../sessions.ctg/.cartridge/tests/integration/mailbox.test.ts:
+(pass) host credentials and owner lineage reject copied metadata and generic authority rewrites [78.27ms]
+(pass) real concurrent sends retain unique sequence and same message ID is idempotent [164.84ms]
+(pass) read receipts survive restart without acknowledging undelivered or concurrent posts [282.34ms]
+
+ 9 pass
+ 0 fail
+ 310 expect() calls
+Ran 9 tests across 3 files. [1.54s]

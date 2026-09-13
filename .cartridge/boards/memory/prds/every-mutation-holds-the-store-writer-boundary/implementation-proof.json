@@ -1,0 +1,34 @@
+{
+  "source": "4c0c8244ac9850ba2b215877c012ce4010a1e32d",
+  "branch": "work/prd-memory-writer-boundary",
+  "public_tests": {
+    "passed": 1357,
+    "skipped": 17,
+    "documentation_tests": "passed"
+  },
+  "public_check": "passed",
+  "focused_boundary_tests": 14,
+  "operator_rpc_tests": 4,
+  "operator_no_replay_test": "passed",
+  "unchanged_lifecycle_canary": {
+    "passed": 2
+  },
+  "independent_implementation_review": "/root/proxy_continuation: no blockers after parent-directory compression compatibility retained",
+  "integration": {
+    "state": "pending-unrelated-working-edits",
+    "attempt": "prd collect passed lane verification but git ff merge refused",
+    "files": [
+      "Cargo.lock",
+      "src/commands/src/lib.rs"
+    ],
+    "main_head_unchanged": "09bfaaefdcbe2fb3705bece2fcc643c9a95da478",
+    "user_clarification": "Ownership of concurrent Graph CLI edits requested; no edits moved, committed or removed."
+  },
+  "logs": {
+    "full-test-log.txt": "ff790f034883acf1de3b8977e43096617cd88aa53124f7e68dbffd8f74153a09",
+    "full-check-log.txt": "6829929b2f1b247ca5c9f4de7b4d5982dc6a9114ba1219ebf83aa3c649c19b1c",
+    "operator-rpc-log.txt": "2763870593042bf2913dab32481fe1050f58f44ca2c687c2a81be023fedfdf4c",
+    "operator-lifecycle-log.txt": "d78eab02ab90b108cb01b58140321dff0b7a1ef0218ff98b6411d299a94a702a",
+    "writer-boundary-log.txt": "301a5755bf6337156bd45cfd8183d3d29960bdc534a370da2a6866db933c3098"
+  }
+}

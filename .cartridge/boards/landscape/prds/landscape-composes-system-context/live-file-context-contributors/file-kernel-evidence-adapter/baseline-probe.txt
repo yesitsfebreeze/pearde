@@ -1,0 +1,22 @@
+from pathlib import Path
+import tempfile,subprocess,json,os
+root=Path('/Users/feb/dev/cartridge');proof=root/'prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors';fixture=Path(tempfile.mkdtemp(prefix='live-file-baseline-'));repo=fixture/'files';repo.mkdir();(repo/'fixture.rs').write_text('VERSION_ONE\n');subprocess.run(['git','init','-q',str(repo)],check=True);subprocess.run(['git','-C',str(repo),'add','.'],check=True)
+runner=fixture/'runner';(runner/'src').mkdir(parents=True)
+(runner/'Cargo.toml').write_text('[package]\nname="live_file_context_baseline"\nversion="0.0.0"\nedition="2024"\n[dependencies]\nlandscape={path="/Users/feb/dev/cartridge/landscape.ctg"}\nserde_json="1"\ntokio={version="1.53",features=["macros","rt","time"]}\n')
+source='''use serde_json::json;
+#[tokio::main(flavor="current_thread")]
+async fn main(){let root=std::env::args().nth(1).unwrap();let raw=json!({"entries":[{"id":"fixture","dir":root,"generation":7,"state":"Active","provide":["tool.fixture"]}]});let a=landscape::inventory::capture(raw.clone(),tokio::time::Instant::now()+std::time::Duration::from_secs(2)).await.unwrap();std::fs::write(std::path::Path::new(&root).join("fixture.rs"),"VERSION_TWO\\n").unwrap();let b=landscape::inventory::capture(raw,tokio::time::Instant::now()+std::time::Duration::from_secs(2)).await.unwrap();println!("{}",json!({"before":a.summary(),"after":b.summary(),"file_page":b.page(None,None,100).unwrap(),"file_edit_changes_inventory_source_revision":a.source_revision()!=b.source_revision()}));}
+''';(runner/'src/main.rs').write_text(source)
+env={**os.environ,'RUSTC_WRAPPER':'','RUSTC_WORKSPACE_WRAPPER':'','CARGO_TARGET_DIR':str(root/'cartridge.ctg/target/tool-result-contract')};command=['cargo','run','--offline','--quiet','--manifest-path',str(runner/'Cargo.toml'),'--',str(repo)];run=subprocess.run(command,env=env,text=True,capture_output=True,check=True);observed=json.loads(run.stdout)
+p=subprocess.Popen([str(root/'cartridge.ctg/target/tool-result-contract/debug/memo_cartridge')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+def send(x):p.stdin.write(json.dumps(x)+'\n');p.stdin.flush()
+send({'apply':{'name':'memo','config':{}}})
+while not json.loads(p.stdout.readline()).get('ready'):pass
+request={'op':'context','action':'prepare','cwd':str(repo),'query':'fixture','documents':False,'memory':False,'files':True,'kernel':True};send({'id':1,'call':'memo','args':request});frames=[]
+while True:
+ f=json.loads(p.stdout.readline())
+ if f.get('reply')==1:break
+ frames.append(f)
+ if 'id' in f:send({'reply':f['id'],'error':'baseline denies unrelated callback'})
+send({'dispose':True});p.communicate(timeout=10)
+result={'landscape_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root/'landscape.ctg',text=True).strip(),'memo_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root/'memo.ctg',text=True).strip(),'fixture':str(fixture),'command':command,'runner_source':source,'library_observed':observed,'native_request':request,'native_response':f,'host_frames':frames,'finding':'Inventory names and generation metadata exist, but a file body edit preserves inventory source_revision and no kernel capability row is emitted. Native shared context refuses file/kernel contributor options before host calls.'};(proof/'baseline.json').write_text(json.dumps(result,indent=2)+'\n');(proof/'baseline-log.txt').write_text(run.stderr+run.stdout+'\n'+json.dumps(f)+'\n');(proof/'baseline-probe.txt').write_text(Path(__file__).read_text());print(result['finding']);print(json.dumps({'file_edit_changed_inventory_revision':observed['file_edit_changes_inventory_source_revision'],'native_response':f}))

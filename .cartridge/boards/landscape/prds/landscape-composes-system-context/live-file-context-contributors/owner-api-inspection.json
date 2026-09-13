@@ -1,0 +1,47 @@
+{
+  "files": {
+    "fs.ctg/src/main.rs": {
+      "sha256": "f1833a330ccff99c12791ad118dc262f391b8b7b17e98ae977a4cf041b9d67cb",
+      "source_commit": "6a8dec3cc259968a6bcd3aa1b507321268f88b7e"
+    },
+    "fs.ctg/src/service.rs": {
+      "sha256": "40d56829741c86c4f7c45d74b8bf5526ea399b54617145e3f98b1f796d2bfaba",
+      "source_commit": "6a8dec3cc259968a6bcd3aa1b507321268f88b7e"
+    },
+    "sessions.ctg/src/main.rs": {
+      "sha256": "6e5a47da1470802ca678dacdd6546404e52aaba0b1c4b273ffe8e36798f1fd13",
+      "source_commit": "2a6a863cf1af0876072f8879050274cfa650a785"
+    },
+    "pty.ctg/src/main.rs": {
+      "sha256": "cf86aa2d900d6f1e622f25382890ab8f23a8309101e46bb33a6edb82fbaa6a3c",
+      "source_commit": "7c1af4ace396c931334bb58aa2150e14b6ceeb67"
+    },
+    "router.ctg/src/main.rs": {
+      "sha256": "2f0ce16e0db2baa7d6dd84c53d339112bbccc7f9b974aebc5f2949a5aa1815c9",
+      "source_commit": "4ad9cd35dc862ecfe0786612d39913612d93fc45"
+    },
+    "live.ctg/src/context.ts": {
+      "sha256": "32006f260f6287309f4de0b6b911e6a1afe3f06c865496548ade4705dce709ed",
+      "source_commit": "15ad5533d434d772dd0db9cf8deee6e47e186e0a"
+    },
+    "memo.ctg/src/context.rs": {
+      "sha256": "725dca7da578a760ea4ddef9c1bdabec483890c43852aa33646d6866430b211d",
+      "source_commit": "45d5a54ab9da1a798cd9997af9a8c19bed8a1812"
+    },
+    "landscape.ctg/src/inventory.rs": {
+      "sha256": "3997af5733630a8828af4f0b50c92273be3b273edfaa67eda95f168d540d0c2f",
+      "source_commit": "3b9f72854c39ddd90128a48bfce2667e387c3fba"
+    }
+  },
+  "observed_owner_boundaries": [
+    "fs native provides only tool operations. tool.read registers an invocation and observes its digest internally; it returns line-numbered/truncated text without a complete source reference. Sessions touch is called only when Outcome.changed is Some (mutations), not on read.",
+    "sessions list returns complete Session records including agent/files/mailbox metadata; no private/scope filter in that list path.",
+    "pty readonly read/commands/screen/viewport/frame contain terminal output or command data; no metadata-only status operation.",
+    "router routes projects route id/model/provider/context/tier; status includes connection and health state.",
+    "live context aggregates agent tools and memo graph/landscape then tasks/ring; it is a context consumer, not a bounded evidence contributor.",
+    "memo shared context currently implements documents and memory only.",
+    "inventory currently joins tracked names and generation/state only, without file-body freshness or capability keys."
+  ],
+  "pending_design": "Coordinate explicit owner adapters and native facade split; preserve source authority/privacy and avoid broad state scrapes. No source edits performed.",
+  "correction": "Earlier initial inspection inferred reads invoked configured touch; full call-path inspection proves reads have changed:None and do not call sessions touch."
+}

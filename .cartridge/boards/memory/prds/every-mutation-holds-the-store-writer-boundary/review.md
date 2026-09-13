@@ -29,3 +29,15 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — independent /root/proxy_continuation review — PASS 96/100
+
+Dimensions: value/scope19, ownership/reuse20, dependencies/slices19, acceptance/baseline19, failure/compatibility19. Reviewed retained failing baseline and concrete spec against actual with_graph, guarded flush, link, clean, register, hub, queue, lock, daemon and native paths at09bfaaef. Existing lock inode is authoritative; explicit stale refusal removes resurrection without new merge semantics. Deterministic dual-store claims and preserved cleanup inode close concrete gaps. No blocking plan findings.
+
+Implementation checks: unnamed-promote's ID-resolution load belongs inside the shared claim; defer success printing until persistence succeeds; dual-store tests distinguish a first legitimately acquired claim label from an actual held-lock loser. These clarify existing acceptance without changing it. Three rounds used; no user rating invented.
+
+## Round 4 — independent /root/proxy_continuation review — PASS 96/100
+
+Dimensions: value/scope19, ownership/reuse20, dependencies/slices19, acceptance/baseline19, failure/compatibility19. Reviewed the source-bound amendment after the unchanged lifecycle canary exposed live CLI ingestion compatibility and the mutation census found unclaimed compression. The private operator RPC preserves existing provenance through the daemon owner; source/destination compression claims and immediate persistence-error returns complete the same invariant. No blocking plan findings.
+
+Implementation checks: reject nested unknown Source fields; preserve shutdown admission and asynchronous worker crossing semantics; refuse explicit endpoint overrides while an owner is live or compare against its actual configuration. These enforce the reviewed strictness and compatibility contract. Four rounds used; no acceptance weakened or user score invented.

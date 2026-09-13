@@ -1,0 +1,45 @@
+   Compiling rpc v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/every-mutation-holds-the-store-writer-boundary/src/rpc)
+   Compiling commands v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/every-mutation-holds-the-store-writer-boundary/src/commands)
+   Compiling memory v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/every-mutation-holds-the-store-writer-boundary)
+    Finished `test` profile [unoptimized] target(s) in 2.71s
+     Running .cartridge/tests/integration/e2e/main.rs (/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/e2e-0c38da2e5a1bd4b6)
+
+running 2 tests
+canary binary: /Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory
+test lifecycle_canary::a_health_only_takeover_does_not_pass_the_verdict ... ok
+canary isolation          ok        2 ms  pid 63147 restarts 0  runtime /tmp/memory-test-63145-1789324619965380000 socket /tmp/memory-test-63145-1789324619965380000/memory-68cb2d865dc90ff2.sock lock /var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/.tmpNUMGOy/proj/.memory/data/writer.lock
+canary round 1
+canary ready              ok        1 ms  pid 63147 restarts 0  
+canary ingest             ok       95 ms  pid 63147 restarts 0  code 0: ingested Ada keeps her bicycle in the garden shed behind the house (status=committed chunks=1)
+canary committed-on-disk  ok       75 ms  pid 63147 restarts 0  
+canary visible-routed     ok       25 ms  pid 63147 restarts 0  
+canary get-by-prefix      ok       50 ms  pid 63147 restarts 0  prefix "8df848481359" code 0: ID:     8df84848135988a105c23950259c0c9b0298dce726011accc4d1b3b7387b72b9
+canary query              ok       25 ms  pid 63147 restarts 0  code 0: 1. [0.9890] 8df848481359  Ada keeps her bicycle in the garden shed behind the house
+canary get                ok       25 ms  pid 63147 restarts 0  code 0: ID:     8df84848135988a105c23950259c0c9b0298dce726011accc4d1b3b7387b72b9
+canary report             ok       25 ms  pid 63147 restarts 0  code 0:        3  fact
+[daemon stderr --daemon] 2026-09-13T18:37:05.505334Z ERROR memory.ingest: ingest job failed doc_id=0a47bd89320acd09eb7839e7ebdda352d3325f06dcc87ec10e94e1db1d322e2a status="failed" total=0 embedded=0 failed=0 first_failure=distill/transient: HTTP error: error sending request for url (http://127.0.0.1:65191/api/chat)
+[daemon stderr --daemon] 2026-09-13T18:37:05.513164Z  WARN memory.ingest.direct: direct ingest failed; leaving payload for retry path=/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/.tmpNUMGOy/proj/.memory/ingest-queue/direct/hung-transcript.txt.json status="failed"
+canary distill-hang       ok     4082 ms  pid 63147 restarts 0  code 0: drained 0 of 1 pending; 1 still queued (1 stuck)
+canary ready-during-hang  ok     4083 ms  pid 63147 restarts 0  ready answered in 0 ms
+canary health             ok       24 ms  pid 63147 restarts 0  build:       /Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory (2026-09-13 18:36)
+[daemon stderr --daemon] 2026-09-13T18:37:06.049967Z  WARN memory.llm: blocking call refused: the process is shutting down and this future would poll a dead driver (further refusals counted, not logged) total_refused=1
+[daemon stderr --daemon] shutting down...
+[daemon stderr --daemon] done
+canary drain-refuses      ok      529 ms  pid 63147 restarts 0  shutdown answered in 25 ms; in-flight query code 1: memory query: shutting down: the daemon refused this request, retry against a fresh one
+canary orderly-flush      ok      529 ms  pid 63147 restarts 0  5 stderr lines
+canary ready-after-exit   ok       25 ms  no generation  code 0: build:       /Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory (2026-09-13 18:36)
+canary fallback-after-exit ok       21 ms  no generation  code 0: 1. [1.0533] 8df848481359  Ada keeps her bicycle in the garden shed behind the house
+canary restart            ok      103 ms  pid 63742 restarts 0  
+canary query              ok       25 ms  pid 63742 restarts 0  code 0: 1. [1.0533] 8df848481359  Ada keeps her bicycle in the garden shed behind the house
+canary get                ok       25 ms  pid 63742 restarts 0  code 0: ID:     8df84848135988a105c23950259c0c9b0298dce726011accc4d1b3b7387b72b9
+canary report             ok       22 ms  pid 63742 restarts 0  code 0:        3  fact
+canary takeover           ok        5 ms  pid 63759 restarts 1  expected restarts 1; listener adopted true
+canary query              ok       25 ms  pid 63759 restarts 1  code 0: 1. [1.0533] 8df848481359  Ada keeps her bicycle in the garden shed behind the house
+canary get                ok       24 ms  pid 63759 restarts 1  code 0: ID:     8df84848135988a105c23950259c0c9b0298dce726011accc4d1b3b7387b72b9
+canary report             ok       25 ms  pid 63759 restarts 1  code 0:        3  fact
+[successor stderr] shutting down...
+[successor stderr] done
+test lifecycle_canary::the_installed_generation_survives_hang_drain_and_takeover ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 87 filtered out; finished in 6.70s
+

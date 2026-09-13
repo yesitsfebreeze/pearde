@@ -1,0 +1,17 @@
+{
+  "round": 3,
+  "status": "pending independent review",
+  "inherited_rounds": 2,
+  "inputs": {
+    "sessions/prds/an-agent-is-one-lookup-from-the-roster/prd.md": "d9561b55fe16e243ffeb7cfeea7e17242c1e49386ba995b11263e4ed8c3cda71",
+    "sessions/prds/an-agent-is-one-lookup-from-the-roster/specs/spec01.md": "3ece948a0e8ec5229f8fb51867f21d1fab1a15aee4ea5572e427f2869e98b74a",
+    "sessions/prds/an-agent-is-one-lookup-from-the-roster/baseline.json": "369079fc2568425d31e36ec39ba5108df8c031e368cb26d05e0c7e79b20dd09a",
+    "sessions/prds/an-agent-is-one-lookup-from-the-roster/durable-channel-read-cursors/prd.md": "80be3fef367685c1587e60eb6329f1e55bbcb5f2cfe5dcf2aba522a3613f32ea",
+    "sessions/prds/an-agent-is-one-lookup-from-the-roster/durable-channel-read-cursors/specs/spec01.md": "e68e2e95ccdd5e5a7778ab97e3801eecd909cce67507e4fc8650ebf758da595f",
+    "sessions/prds/an-agent-is-one-lookup-from-the-roster/scoped-roster-projection/prd.md": "f7c75158f266d2f469212eeb4bbbea7eb44c2c41dd40fa3fb1bdeff78b9e7d0a",
+    "sessions/prds/an-agent-is-one-lookup-from-the-roster/scoped-roster-projection/specs/spec01.md": "98e79fe5132a8856dfdf8a417bad3ce443e1fe79c870f91f46330e31868661f5",
+    "harness/prds/scoped-roster-context-contributor/prd.md": "c43902944ea878964ae80b2aaad8fd9c8fee4b4e9d7a04e8eaca6dbc600cdd82",
+    "harness/prds/scoped-roster-context-contributor/specs/spec01.md": "c757580c5c86ede13c91c5b9be214c538ad8374e40f59601d8a30464750115d1"
+  },
+  "source_hold": "No source changes after channels423ecd3; harness implementation must use isolated committed source."
+}

@@ -1,0 +1,45 @@
+{
+  "source_commit": "6a8dec3cc259968a6bcd3aa1b507321268f88b7e",
+  "command": "cargo build --manifest-path ../fs.ctg/Cargo.toml -p fs; native SDK subprocess at target/tool-result-contract/debug/fs",
+  "fixture": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/fs-context-baseline-1s7qq7vw",
+  "source_sha256": "f8e0f1568dd9254c3262d199d5dcfc9ff6d4855e18ec53a7176f9eab948ed93e",
+  "calls": [
+    {
+      "key": "tool.read",
+      "args": {
+        "op": "call",
+        "context": {
+          "session": "fixture",
+          "run": "run",
+          "call": "read",
+          "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/fs-context-baseline-1s7qq7vw"
+        },
+        "input": {
+          "path": "fixture.txt"
+        }
+      },
+      "response": {
+        "data": {
+          "content": "1:first\r\n2:second\r\n",
+          "error": false
+        },
+        "reply": 1
+      }
+    },
+    {
+      "key": "fs.context",
+      "args": {
+        "op": "read",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/fs-context-baseline-1s7qq7vw",
+        "path": "fixture.txt"
+      },
+      "response": {
+        "error": "no handler for fs.context",
+        "reply": 2
+      }
+    }
+  ],
+  "host_frames": [],
+  "source_unchanged": true,
+  "finding": "Existing tool.read returns rendered line numbers without exact-byte revision; no sessions touch occurs. Native fs.context is not provided."
+}

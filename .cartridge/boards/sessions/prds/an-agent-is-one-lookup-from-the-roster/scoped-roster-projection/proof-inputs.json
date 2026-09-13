@@ -1,0 +1,90 @@
+{
+  "source_revision": "a306370f10b78d94365b7832ce22ce8d10c09487",
+  "source_files": [
+    {
+      "path": "src/main.rs",
+      "sha256": "dfe9e3bd28fdfc8a29ff35572152790644baaac124c510a3d7078d6b72d14e2d"
+    },
+    {
+      "path": "src/mailbox.rs",
+      "sha256": "ed8119babe71b1d1039eee80fb67a7f6f7672dacc890fd4ca08925c7a92bd535"
+    },
+    {
+      "path": "src/channels.rs",
+      "sha256": "0c933b11fc49ab3e8c522b2592dc22d0dfb4c33240bd52e78aca65fa6fa2eb07"
+    },
+    {
+      "path": "src/roster.rs",
+      "sha256": "a44b325ca8b220b6a3e46a5ae26730aba4f28e6b74976d1aca48d4a37565acd4"
+    },
+    {
+      "path": ".cartridge/tests/unit/main/roster_tests.rs",
+      "sha256": "3671c6ac761ed55c8d0fc203018a97236219feeae97ae300f8b0eeb98f46618e"
+    },
+    {
+      "path": ".cartridge/tests/integration/roster.test.ts",
+      "sha256": "f0841d783827be61e7604387b803a21a74155c8b7c35fab1a1cd4a0e855f3880"
+    },
+    {
+      "path": ".cartridge/docs/roster.md",
+      "sha256": "f3d3922cc2f2f897f8354f24f74fbb062258cf27ffd1ab254626822b9ac09e94"
+    }
+  ],
+  "commands": [
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just test sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "log": "proof-test.log",
+      "result": "82 native tests passed"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just check sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "log": "proof-check.log",
+      "result": "passed"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just build sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "log": "proof-build.log",
+      "result": "passed"
+    },
+    {
+      "command": "SESSIONS_BINARY=\"$PWD/target/sessions-mapping/debug/sessions\" bun test ../sessions.ctg/.cartridge/tests/integration/roster.test.ts ../sessions.ctg/.cartridge/tests/integration/channel-cursors.test.ts ../sessions.ctg/.cartridge/tests/integration/channels.test.ts ../sessions.ctg/.cartridge/tests/integration/mailbox.test.ts",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "log": "proof-integration.log",
+      "result": "12 actual SDK tests passed; 473 assertions"
+    },
+    {
+      "command": "CARTRIDGE_TEST_BIN=\"$PWD/target/sessions-mapping/debug/cartridge\" SESSIONS_BINARY=\"$PWD/target/sessions-mapping/debug/sessions\" HARNESS_BINARY=\"$PWD/target/sessions-mapping/debug/harness\" bun test ../sessions.ctg/.cartridge/tests/integration/roster.test.ts ../sessions.ctg/.cartridge/tests/integration/channel-cursors.test.ts ../sessions.ctg/.cartridge/tests/integration/channels.test.ts ../sessions.ctg/.cartridge/tests/integration/mailbox.test.ts ../sessions.ctg/.cartridge/tests/integration/retention.test.ts ../sessions.ctg/.cartridge/tests/integration/mapping.test.ts ../sessions.ctg/.cartridge/tests/integration/observations.test.ts",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "log": "proof-integration-all.log",
+      "result": "22 actual SDK tests passed; 611 assertions"
+    }
+  ],
+  "logs": {
+    "proof-build.log": "26a9c40e1236af5166190dd8f30749791b44e5463ad3907aea5b6e81473cbacb",
+    "proof-check.log": "b43ef58086d900d71cc46f553df08f6f0219722289b98090d0d442df618489df",
+    "proof-integration-all.log": "372d1f99579e77219fa119aea0cdb0ed9e8f04d6e48168b4b31a2002c7be51e8",
+    "proof-integration.log": "715306b661941530069ba80cbe3d87908af5d1a2fcc3f80b367c4c77c8e9d997",
+    "proof-test.log": "f6bb3e792bbc49114437ed0ceff50bd03fa337225b9a17bc5170c5c4f966477c"
+  },
+  "binary_inputs": {
+    "sessions": "6bd8f110b915e75ff992e09f20c0a6799811ca50e4472172123755f0747aeae9",
+    "harness": "8641220268a85928aeaf08d4b954465ec369a674b4f7352900c465d2ddf506db",
+    "cartridge": "7ff18f941756552d3f97f7359f4b424cb83c41ca46b7b0c59e21a9e0e5067a89"
+  },
+  "review": {
+    "round": 3,
+    "reviewer": "/root",
+    "score": 96,
+    "status": "passed",
+    "semantic_acceptance_changes": false
+  },
+  "final_plan_digests": {
+    "prd.md": "2194b6804a7b8966baf2ff0c81395dd63e962e9e672a2fa3df42f3b1881e54f2",
+    "specs/spec01.md": "0aa04d3afe72ad3d1bcbc33b77f1ce2389d77e4ad7add623ce4a7073eca9d1d6"
+  },
+  "baseline": "../baseline.json (actual absent roster SDK operation at423ecd3; inherited original rounds1\u20132)",
+  "dependency_refresh": "Coordinator adds src/roster.rs to older main.rs footprints and refreshes cursor/channel plus prior Sessions receipts before collecting."
+}

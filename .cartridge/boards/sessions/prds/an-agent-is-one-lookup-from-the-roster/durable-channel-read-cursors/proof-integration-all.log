@@ -1,0 +1,37 @@
+bun test v1.3.14 (0d9b296a)
+
+../sessions.ctg/.cartridge/tests/integration/channel-cursors.test.ts:
+(pass) actual SDK persists watches and receipts while later posts remain unread [140.64ms]
+(pass) concurrent readers supersede receipts only for their authenticated actor [133.24ms]
+(pass) bounded reads, empty reads and unwatch preserve data with explicit redelivery [167.99ms]
+
+../sessions.ctg/.cartridge/tests/integration/channels.test.ts:
+(pass) real scoped channel posts order, deduplicate and survive process restart [289.98ms]
+(pass) direct aliases read legacy mailbox lines and share the original append path [96.05ms]
+(pass) bounded catch-up and catalogue never silently skip lines or change direct acknowledgements [211.27ms]
+
+../sessions.ctg/.cartridge/tests/integration/mailbox.test.ts:
+(pass) host credentials and owner lineage reject copied metadata and generic authority rewrites [83.30ms]
+(pass) real concurrent sends retain unique sequence and same message ID is idempotent [176.30ms]
+(pass) read receipts survive restart without acknowledging undelivered or concurrent posts [286.82ms]
+
+../sessions.ctg/.cartridge/tests/integration/retention.test.ts:
+(pass) real SDK previews exact bytes/records and preserves protected sessions across apply/restart/resume [105.22ms]
+(pass) native late protection and durable client references cannot be bypassed with copied candidates [90.17ms]
+(pass) actual harness ring still deletes an unprotected completed turn [1154.66ms]
+(pass) actual harness ring preserves a turn becoming active during ingest [1165.29ms]
+
+../sessions.ctg/.cartridge/tests/integration/mapping.test.ts:
+(pass) real host configuration survives reconnect and copied call metadata cannot cross scopes [119.34ms]
+(pass) missing identity or conversation has one honest connection scope and no reconnect identity [53.89ms]
+(pass) concurrent fresh SDK processes cannot publish two mappings against one revision [24.24ms]
+
+../sessions.ctg/.cartridge/tests/integration/observations.test.ts:
+(pass) real runtime evidence is reported by sessions without changing source or transcript [185.08ms]
+(pass) historical unknown counts and verdicts use actual observed descriptor revisions [40.73ms]
+(pass) disabled and missing evidence stay explicit while actual tool execution still succeeds [61.75ms]
+
+ 19 pass
+ 0 fail
+ 448 expect() calls
+Ran 19 tests across 6 files. [4.61s]

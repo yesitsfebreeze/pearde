@@ -1,0 +1,6 @@
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets -- -D warnings
+    Checking rpc v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/every-mutation-holds-the-store-writer-boundary/src/rpc)
+    Checking memory v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/every-mutation-holds-the-store-writer-boundary)
+    Checking commands v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/every-mutation-holds-the-store-writer-boundary/src/commands)
+    Finished `dev` profile [unoptimized] target(s) in 3.04s

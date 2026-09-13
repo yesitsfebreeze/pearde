@@ -1,0 +1,5 @@
+{
+  "before_spec_sha256": "803b923b48dfab1896fcd2ba9ad2df37f42852fe751b0aa97d260d7dd20795f1",
+  "after_spec_sha256": "970081c8176339f66ef6164826615beb4170d79891b5051279e67ac20bc52484",
+  "refinement": "Run unchanged public gates from verifier supplied source cwd, valid before and after lane integration. Keep full public test output in a retained log and print its tail/hash to respect 64KiB collector output bound. Passing acceptance checked after1357 tests/check; no scope reduction."
+}

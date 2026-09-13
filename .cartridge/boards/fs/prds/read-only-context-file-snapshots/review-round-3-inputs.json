@@ -1,0 +1,18 @@
+{
+  "reviewer": "/root",
+  "round": 3,
+  "score": 96,
+  "dimensions": [
+    19,
+    20,
+    19,
+    20,
+    18
+  ],
+  "digests": {
+    "prd.md": "2f4331694aa5c559d0a6d6de5419f20ff2e3e743b31322c670848f4a803a6d50",
+    "specs/spec01.md": "cd7054eeac80661075cc0db7dfa52f93f231307bade9285c41283d25869a8e1c",
+    "proof.json": "99cb2fb244146d51d0f462c8c53d5d9d36b246b63173d81476af8019367d1af1"
+  },
+  "clarifications": "Typed namespace case/identity aliases excluded; existing tighter FS caps retained; source-byte references do not claim historical physical-root identity; kernel capability keys bounded128 bytes."
+}

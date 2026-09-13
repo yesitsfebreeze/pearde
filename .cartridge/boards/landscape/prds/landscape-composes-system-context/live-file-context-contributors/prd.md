@@ -6,12 +6,14 @@ priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: landscape
-work-kind: leaf
+work-kind: rollup
 review-round: 2
 review-status: stale-after-migration
-canonical-scope: landscape-composes-system-context
+canonical-scope: landscape-composes-system-context/live-file-context-contributors
 needs:
-- '@landscape/landscape-composes-system-context/context-contributor-contract'
+- "@memo/landscape-file-kernel-context-facade"
+- "@memo/landscape-live-owner-context-facade"
+
 ---
 
 # File and live context retain owner and freshness
@@ -34,3 +36,9 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `landscape-composes-system-context`; maximum five rounds.
+
+## Owner split and freshness interpretation
+
+The original three acceptance checks above remain preserved. Current shared context uses exact references/readback and Prepared revision, not cursors. Per coordinator review, source edits must invalidate affected exact readback/prepared revisions; frozen inventory cursors retain their separate observed-name snapshot contract. No speculative paging is introduced.
+
+FS owns exact readonly file snapshots; Landscape owns shared file/kernel adapters; memo owns native integration. Historical session and terminal metadata become explicit owner prerequisites, and existing @router/improve-router-route-explanation supplies the router capability boundary. Separate Landscape and memo follow-ups integrate those sources; this parent remains open until those live-source outcomes also pass. See work-map-proposal.json. No duplicate router work item is added.

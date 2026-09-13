@@ -2265,14 +2265,14 @@
         "@memo/memo-board-template/board-engine-integration"
       ],
       "words": 89,
-      "sha256": "ce10819a95ad5414ab631efd96acbf29f0abad333de50fb9c4c34751550bd0e7",
-      "score": 94,
+      "sha256": "cfc12e1bb2275e5d0f2f773d1d9b909e1dfafcf056bd963d2bb52fca1a556df3",
+      "score": 97,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/memo-board-template/review.md",
       "historical_sha256": "203d7cd5f5c6297586b675c45ec08e90f687fb6720a40590c199f4482fdf4f3e",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@memo/one-document-serves-every-reader",
@@ -2289,14 +2289,14 @@
         "@memo/one-document-serves-every-reader/executable-document-validation"
       ],
       "words": 95,
-      "sha256": "51240fd93a03f6b96b9cb24aed9997afa60b84b665919fbe7fb983f43e7c4504",
-      "score": 94,
+      "sha256": "69c701ae32fbf6fb3f285fe75352964f3d49d7f81089113df7f5b8710fd05850",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/one-document-serves-every-reader/review.md",
       "historical_sha256": "a85abdab6e3f27d0a6a4b4d54d9996af433a453600c0b4b8d102fbf0c298b2cc",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@landscape/landscape-composes-system-context",
@@ -2423,14 +2423,14 @@
       ],
       "needs": [],
       "words": 226,
-      "sha256": "fbb785e7a9671f81778d0ac5c4052c41184a5d010111622c0c849eba1625a970",
-      "score": 94,
+      "sha256": "bf01a38a0c3880ffd0ae7d6496b4c5b925fdfeebbc6a8784936f76aeda894259",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/gitfs/prds/tool-results-interoperate/review.md",
       "historical_sha256": "fda95c7661405b24a2d3a0e60a220c1fd5d32b916e9fe430ef3c29a57f1d3579",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@memory/memory-owns-its-tool",
@@ -2723,14 +2723,14 @@
       ],
       "needs": [],
       "words": 196,
-      "sha256": "1785e6b6b8826bb3b725be1d4123146c3c44614c7ab7ed2eecdbf57d373f71fe",
-      "score": 94,
+      "sha256": "f2f0c8a5fde7e520bf1f03fc5232c33f668bf1f01916ca243486ae0f6087b795",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 4,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-revision-guards/review.md",
       "historical_sha256": "bd1033bb98542ebc2795c564c05a25aac0e9910b09a2918f296d775ec43c89ee",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@fs/improve-fs-search-pages",
@@ -2742,14 +2742,14 @@
       ],
       "needs": [],
       "words": 182,
-      "sha256": "55446ccee73661b70c791cf0ad8af19f604d1da06e728219c925239ef4093eb4",
-      "score": 94,
+      "sha256": "919abd2234498a4f1dfd2e95195f38993ca961ab910fb2fbe01700f9fa9c18eb",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-search-pages/review.md",
       "historical_sha256": "72119993a292bbbb67d7840168ef6d55ffac192088bf017bb9d662cb2f6a6a01",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@gitfs/improve-gitfs-readable-diff",
@@ -2764,14 +2764,14 @@
         "@gitfs/tool-results-interoperate"
       ],
       "words": 183,
-      "sha256": "cb0cb9262d95d43663e55cc9608388e814976a80d2f439ca0fb812112054b11a",
+      "sha256": "992d5b668b68eb3fd3f7f9a52f2bd4ca35733d1bfb23e8905b0d382c30d76e90",
       "score": 94,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-readable-diff/review.md",
       "historical_sha256": "7606db1602f7c9e7e0807a454b8a1946053d5e1a88e4117d82c39452e46f561a",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@gitfs/improve-gitfs-reviewable-ship",
@@ -2790,14 +2790,14 @@
         "@policy/ship-push-is-an-explicit-policy-operation"
       ],
       "words": 199,
-      "sha256": "b74b97c976a4e71e4f7674134c8c1a3a6c6f923b0b69406e862f8cb6d206985e",
-      "score": 94,
+      "sha256": "b11f1b137675ea09397193a0a6d237befa9b55c1836180081624b7c9a31029f6",
+      "score": 97,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/review.md",
       "historical_sha256": "6e7f4d4052b4f1e967735ce0e9d56199b9d7f545a56ebb684e0c79fce188c965",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@gitfs/improve-gitfs-snapshot-selection",
@@ -2809,14 +2809,14 @@
       ],
       "needs": [],
       "words": 186,
-      "sha256": "8d8f49266db05b532edcadabc19a5f5b617e98cc43b466f293c6ae8cb35db58d",
-      "score": 94,
+      "sha256": "0ecb00d188671a383d13a33827b6f9f9de669d886a3b308350850a037dea059d",
+      "score": 97,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-snapshot-selection/review.md",
       "historical_sha256": "8f6dda49d532ec4bb8edc7f3029abcf105005b87f9a233e8ed6cf9373889b06d",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@harness/improve-harness-compaction-diff",
@@ -2828,14 +2828,14 @@
       ],
       "needs": [],
       "words": 188,
-      "sha256": "794ac3c141ea3b1acb11ec603d77d8fbfcd3db4948018354637727cae5ce179a",
-      "score": 94,
+      "sha256": "5b6fe9862205790a05738c3fc7a91cb949126d558c9166abffdcf790749c4758",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/harness/prds/improve-harness-compaction-diff/review.md",
       "historical_sha256": "b639b7644ff42a6c4a51505d04a91138c433ead7b393b9633bdd1212e4be4be3",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@harness/improve-harness-quality-eval",
@@ -2869,14 +2869,14 @@
       ],
       "needs": [],
       "words": 186,
-      "sha256": "5ddbf427f9a6d387e50b12b71a9916cd86684c2c7d995168413c84ce9279f1e7",
-      "score": 94,
+      "sha256": "af6aaf221810d4440509bb44ac251ff953de053ec098117a43949434f748633c",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/harness/prds/improve-harness-token-accounting/review.md",
       "historical_sha256": "d3355a5734c6c118537325afed308786a0c46dacfee686549e452371069445bf",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@mcp/improve-mcp-approval-route",
@@ -2891,14 +2891,14 @@
         "@policy/improve-policy-explain"
       ],
       "words": 188,
-      "sha256": "44e4e66f290ec58b8c3f6e38c4df24f0df047d66d2eb22afd0b3bdfda9cfd3c7",
-      "score": 94,
+      "sha256": "bb59e284506dedcdc63578ca001f14a95c11a3725ce872d537ebb11f25b5ee8e",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/mcp/prds/improve-mcp-approval-route/review.md",
       "historical_sha256": "570202186761774757c2be459bd60879ffb79fd1cafdd7bc5484e4c5cd6773e5",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@mcp/improve-mcp-refresh-catalog",
@@ -2913,14 +2913,14 @@
         "@runtime/mcp-stdio-replies-during-replacement"
       ],
       "words": 184,
-      "sha256": "66860865495f1d99c369aafd92af4165363afcf444a6635f8033d3963a365800",
-      "score": 94,
+      "sha256": "cf94a80c1f71e1027749d45a46e6dabe37e33c56676a01892d528877d687ee03",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 4,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/mcp/prds/improve-mcp-refresh-catalog/review.md",
       "historical_sha256": "c3bdfe18f995cf7308e1b23ef8713801867e799e3806b84c4e3e8f851b775caa",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@mcp/improve-mcp-tool-readiness",
@@ -2957,14 +2957,14 @@
         "@memo/landscape-inventory-facade"
       ],
       "words": 275,
-      "sha256": "9d82b580b13e281cfb66413d9b5989cc063db7c7e6cc3b1d09bce17dba2643f5",
-      "score": 94,
+      "sha256": "72aafd9aa6cf8f930f41760f84e5d4c7fd77303973b1aac78ca0159dced8e964",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape/review.md",
       "historical_sha256": "1d789f781dd7a9aab6c0d94ea332cc3b601b3759979aca698b98f3f7d255beb9",
-      "review_binding_status": "stale-after-owner-split",
+      "review_binding_status": "current-review-with-recorded-proof-refinements",
       "disposition": "split-owner-boundary"
     },
     {
@@ -2977,14 +2977,14 @@
       ],
       "needs": [],
       "words": 178,
-      "sha256": "abadfd4083b7f46f8ae668ab1486e899250c1bfaccaaef13fcf10101b618be65",
-      "score": 94,
+      "sha256": "1627a25ea77b389d4f1d8b85f8ec0013fdc71e430aae9afe5539e0b05f878446",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/improve-memo-stale-evidence/review.md",
       "historical_sha256": "5404ab0cd07aa1e5b6b0e49e8ab136efd1559be8225cabafef251100c47d86bf",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@memo/improve-memo-types-drilldown",
@@ -2996,14 +2996,14 @@
       ],
       "needs": [],
       "words": 164,
-      "sha256": "9c70b70bb8ca73ad33f11632b149ab40ac0aa1e9f1f97f70a7a5c1d02030ca97",
-      "score": 94,
+      "sha256": "17bf1a1a59c8caf30761cdad2ae57b24205995c132102efa4e5ac1d6f623c66e",
+      "score": 97,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/improve-memo-types-drilldown/review.md",
       "historical_sha256": "f17a8115fdaf10d06000558534b345e70516b9758523d8fd0d69e528e563d14b",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@memory/improve-memory-owner-access",
@@ -3139,14 +3139,14 @@
         "@policy/improve-policy-operation-rules"
       ],
       "words": 181,
-      "sha256": "dafb72ebc13d0b0989f83c6050a0c4c147dd40b7a6e0648ed5d190641b65c9c2",
-      "score": 94,
+      "sha256": "661c75a76f9c9e8cba3ee2e906fedc9650c2402412ce7e0fac236f178b4d1fc1",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/policy/prds/improve-policy-explain/review.md",
       "historical_sha256": "bffa3cc7fbc8e4fd46c5a1ece6db08f57b07b4e5ae6152744c1f8b42059a0509",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@policy/improve-policy-operation-rules",
@@ -3158,14 +3158,14 @@
       ],
       "needs": [],
       "words": 188,
-      "sha256": "fa649abbc94f3a288c3eb2d2971599a1cfd2e37888d360d69e2fc44c406edfcf",
-      "score": 94,
+      "sha256": "ff05aeecfbc1ede7603d452dcb2635af3b4b0032f04df971aba3281eb5e69124",
+      "score": 97,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/policy/prds/improve-policy-operation-rules/review.md",
       "historical_sha256": "933b1684f1e88f64e380128cd122596ab799f4082a7f1df59e15f9a528f69a38",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@policy/improve-policy-resource-scope",
@@ -3198,14 +3198,14 @@
       ],
       "needs": [],
       "words": 187,
-      "sha256": "fdae4e38429a7d4865a1a3f60be26dc8cb31bdae95c7353e460335b2c9037159",
-      "score": 94,
+      "sha256": "71790d0a58cb50c53829414d270e026996ecd6b9fdd31b90f27c124f1dc3fb8e",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-continuation-recovery/review.md",
       "historical_sha256": "d01f8735b2073e47cb5c37edcfc3c3c021847a991c4bbe076e6f2e4755ee8853",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@proxy/improve-proxy-tool-trace",
@@ -3220,14 +3220,14 @@
         "@policy/improve-policy-explain"
       ],
       "words": 189,
-      "sha256": "d76a60c975628b7d09edd7b33de819c0e231ce9cd823997949470b95cfa5cc25",
-      "score": 94,
+      "sha256": "3a97d54f54fb1e70deec5c4d919124a3a9bf73b6c798a9ae36d65f0594593a5d",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-tool-trace/review.md",
       "historical_sha256": "73a6960f01deb99663bc094fbe96721210993e241c575050aee7ee0febfa641d",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@proxy/improve-proxy-total-usage",
@@ -3241,14 +3241,14 @@
         "@gitfs/tool-results-interoperate"
       ],
       "words": 182,
-      "sha256": "0a9a3b56a3c511937d7622ffb4062fe066d5ea7d7db92905034bfc76e34335f5",
-      "score": 94,
+      "sha256": "d3e9fd43af350df3ae8c9c168b86ad8adf1a30dde5d10e80352d6380d2a05201",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-total-usage/review.md",
       "historical_sha256": "92b5c126d2a009435c0cb8f7180e719d2c10ea58ba7e42bf0665ebff1e423c36",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@pty/improve-pty-command-wait",
@@ -3321,14 +3321,14 @@
       ],
       "needs": [],
       "words": 186,
-      "sha256": "2230861f60804b01eaa0d377d52d87d04b6fcf4d9576f43c51983d559bb56306",
-      "score": 94,
+      "sha256": "e156eec7043d84a2a9917030fd6b24d2a5593a0fcbcf7763667dcffa513c49e3",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/router/prds/improve-router-capability-routing/review.md",
       "historical_sha256": "17adb951ff7979bb69f9bd22be08499142b3f7580a1a2224eb4093a46c44de42",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@router/improve-router-cost-latency",
@@ -3342,14 +3342,14 @@
         "@router/improve-router-route-explanation"
       ],
       "words": 181,
-      "sha256": "fb762340553093b788279c56e51643821152e3480ec6a68b3404a6316b2f746c",
-      "score": 94,
+      "sha256": "db4bdf575b19a73be75a77de830be12c87deb95b1508ede5fbf4d732d11efc8b",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/router/prds/improve-router-cost-latency/review.md",
       "historical_sha256": "0ff782a1af256d15bbb6ac0efd8d549a149f1b75a3295951ef88e83361866120",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@router/improve-router-route-explanation",
@@ -3361,14 +3361,14 @@
       ],
       "needs": [],
       "words": 176,
-      "sha256": "8c5efdfa82db8e6406abb57b89d5fb55c5b958a66bf2bccbb85beffb57f0e2e1",
-      "score": 94,
+      "sha256": "28f78dd0f0072401f68eb8417f277f1e683c96ef90aa4e55ae7c47a35f3acda8",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/router/prds/improve-router-route-explanation/review.md",
       "historical_sha256": "290df36b0849b42ca501495fae2c5ba8e53a9a944999affc0cee24bbf5259238",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@sessions/improve-sessions-client-mapping",
@@ -3380,14 +3380,14 @@
       ],
       "needs": [],
       "words": 189,
-      "sha256": "c9a5c90237d5d41dbacdb9735ef42dca50fd5f90be275468c359557aff077a82",
-      "score": 94,
+      "sha256": "85be97ff149b90d851df5fc6b273388195daa7be289f2b92497990558e4daa34",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-client-mapping/review.md",
       "historical_sha256": "acffa18d68f644865130318ae8003f31921b7a874ae4e8a067e8b37cc2ebca7a",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@sessions/improve-sessions-recovery",
@@ -3399,14 +3399,14 @@
       ],
       "needs": [],
       "words": 187,
-      "sha256": "e7f05fb0f3f87fad1b6b42a39e5317ed71d33e7b02f6339133d9b0be70ddae95",
-      "score": 94,
+      "sha256": "f11a7a4624bc64b691d1e488ac762292abc713cc6f0f86364095adafadee9da5",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-recovery/review.md",
       "historical_sha256": "3076b8b12f2106ed037ff0b6e861f67223dc8f17fe951dc909f67cad218388bd",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@sessions/improve-sessions-retention",
@@ -3418,14 +3418,14 @@
       ],
       "needs": [],
       "words": 191,
-      "sha256": "749ed13c55b6780e51f6f5b26df7efc1c9cc41152900e25c004dcee878e72028",
-      "score": 94,
+      "sha256": "754dc5938fa0987e8883481b81dac5167694fdbdbdd34d4ae12f84120c4ede30",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-retention/review.md",
       "historical_sha256": "5b8989117149ffdd67ae6e00ea12af0d5b5e1adfcc08d7ffe0939f17f41b5cdc",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@runtime/improve-tools-bundle-provenance",
@@ -3647,14 +3647,14 @@
         "@gitfs/improve-gitfs-reviewable-ship"
       ],
       "words": 89,
-      "sha256": "58b584ed7315dd0b64043c42a8f4bf5a1276b1087b280aedf7f890b4eb53270f",
-      "score": 94,
+      "sha256": "4d6572ff2c046f2657d27573c05b153af075208823546ab2e1a9b31236d723d1",
+      "score": 97,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-programme/review.md",
       "historical_sha256": "f61aaebb0914f6aa8cd4e457215526f0faa8967f3afca70a695c6c55458157bd",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@harness/improve-harness-programme",
@@ -3808,14 +3808,14 @@
         "@proxy/improve-proxy-continuation-recovery"
       ],
       "words": 89,
-      "sha256": "ec340219f43a38f69c60dd20f775db0d1a6525e31e17a291ab60eb2fb178ce0f",
-      "score": 94,
+      "sha256": "e1d6db6c6d6c1320b8f0d7e5d947db70643fb5d7302f7c9651b0693c54bb347b",
+      "score": 97,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-programme/review.md",
       "historical_sha256": "4c4a720501b1e428679bd59f146580d4570cbe4f8b5f820d651b717e0971bbdc",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@pty/improve-pty-programme",
@@ -3854,14 +3854,14 @@
         "@router/improve-router-cost-latency"
       ],
       "words": 86,
-      "sha256": "f5f378beba73701da9c18542e0b30600029c24046f4a4459ae13164802bf0d93",
-      "score": 94,
+      "sha256": "f42e4fd4bc9cc656f6a6fb366a7e235c15bb301434cde5bfcca6c798e57261d7",
+      "score": 97,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/router/prds/improve-router-programme/review.md",
       "historical_sha256": "8526900459c285417d2e5675169ee8784ef3e3cc16e614fecbd606fd4a0f0888",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@sessions/improve-sessions-programme",
@@ -3877,14 +3877,14 @@
         "@sessions/improve-sessions-recovery"
       ],
       "words": 88,
-      "sha256": "4a400e77a259fb5d5d641d198ebb6be2b25b47d785b64057f428e17ca4e447f1",
-      "score": 94,
+      "sha256": "ac492187610e8557dd0e584d078497ea823372af76f89c6240de641c099749d9",
+      "score": 97,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-programme/review.md",
       "historical_sha256": "a7f9014d0719401725ed284e1fc8039350db01cb0f792559d1d4b47b7e127ce3",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@runtime/improve-tools-programme",
@@ -4085,14 +4085,14 @@
       ],
       "needs": [],
       "words": 189,
-      "sha256": "5caaf4d576c4ecf27c1d79f933f41e1ea83db7fbe1a5500632e76f98339aa3a8",
-      "score": 94,
+      "sha256": "b2c360348828dacf3347e3711f9050a6fea4e0f1b317f76f5e59a3c6a28ed2dd",
+      "score": 98,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/a-shadowing-write-passes-the-leaf-check/review.md",
       "historical_sha256": "41e15d77cb9aa2803a8b17729bf25c849be577532d123be72f0d18b48702941d",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@agent/a-stalled-step-raises-its-own-event",
@@ -4132,25 +4132,6 @@
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/a-usage-ranked-tool-graph-serves-the-best-way/review.md",
       "historical_sha256": "dade6a643d8f0116bc8926b668e4dc0533b06197e5d8995267093f2d4e82b49c",
-      "review_binding_status": "stale-after-migration"
-    },
-    {
-      "id": "@sessions/an-agent-is-one-lookup-from-the-roster",
-      "path": "prd.ctg/.cartridge/boards/sessions/prds/an-agent-is-one-lookup-from-the-roster/prd.md",
-      "owner": "sessions",
-      "kind": "leaf",
-      "sources": [
-        "an-agent-is-one-lookup-from-the-roster"
-      ],
-      "needs": [],
-      "words": 201,
-      "sha256": "35ea6697c50b8f39d20aeef8fa8b308440fce31560e1ef13d85344d1a32daed2",
-      "score": 93,
-      "review_result": "PASS",
-      "round": 2,
-      "max_rounds": 5,
-      "review": "prd.ctg/.cartridge/boards/sessions/prds/an-agent-is-one-lookup-from-the-roster/review.md",
-      "historical_sha256": "4e150a3d86400779d6a4e24f318a65bd2487df55a735d7ba0b3e314dba852754",
       "review_binding_status": "stale-after-migration"
     },
     {
@@ -4349,14 +4330,14 @@
       ],
       "needs": [],
       "words": 184,
-      "sha256": "262ac3313975f0f05ff025ef9e6e278cc315e476aa31f8299105a2600be69066",
-      "score": 94,
+      "sha256": "c600ad1a3fbf18c2e8412d65984c02855cc67b3494b64e633ed25dc44ea0ef26",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/sub-agent-sessions-record-parent-and-mailbox/review.md",
       "historical_sha256": "16af08a6617c0f4946b9a537f81ccdad043fabcc34820b1ed4188c6dcc09eac3",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@agent/sub-agents-share-the-terminal",
@@ -4541,14 +4522,14 @@
       ],
       "needs": [],
       "words": 186,
-      "sha256": "42f10195db2b1331576a9dee2d7daf26a4ec1a6e706c9b1b2e4ac3ee7675a034",
-      "score": 94,
+      "sha256": "75d973d7c29eac489f55ab1df12a9422d625e8a6af7c1d0990ed68083e82dee6",
+      "score": 97,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/the-memory-workspace-is-tracked-not-patched/review.md",
       "historical_sha256": "d617aaf98be6742a24b461f8702c193c17a4cfda06d6cf5edd48c0889463920f",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@ui/the-panel-switches-to-a-sub-agent",
@@ -4600,14 +4581,14 @@
       ],
       "needs": [],
       "words": 185,
-      "sha256": "aa52f3a4f7982ccc8d78850522b7dca480b6e825bb9a8df086023b51b3e8605a",
-      "score": 94,
+      "sha256": "a0a93a223adc054a17ec46c17de90708970221ef5b1803dafdb6a8ac8a6c1574",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 4,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/the-reload-test-is-not-flaky/review.md",
       "historical_sha256": "9af7a2c76933b0f46753de35302f263aafa75453c1d15fb8dffc0ca0a4afd1fd",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@agent/the-run-is-a-stream-of-typed-events",
@@ -4730,14 +4711,14 @@
       ],
       "needs": [],
       "words": 219,
-      "sha256": "f2d0c164561053390a36aed490e071abbaa384e7bbbb43c75582b03227f537c7",
-      "score": 94,
+      "sha256": "2be8268d3df0aac00a0f509e56df5c71e5913929683d2dbca0a72fe080673b03",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/a-lanes-build-can-hand-back-a-siblings-binary/review.md",
       "historical_sha256": "959d8c7fd9482537ee289e35efc773d7e914ddab12d73df8aa0b09bc3f0eb146",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@runtime/a-plugins-ingests-unwind-with-it",
@@ -4789,14 +4770,14 @@
       ],
       "needs": [],
       "words": 195,
-      "sha256": "2816d7e4b0b2525e6d2361515fad2ba5054ee935aea99fda3bb17381aefc556d",
-      "score": 94,
+      "sha256": "4a2b4724e7c2a8e3ba164bac4263438d0c9517d3fd0acfc63249a9e9aee65a70",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/router/prds/audit-mine-for-native-memory-integration/review.md",
       "historical_sha256": "d6773df19387ccf5bea149e4e319f3115a237ce7a49ef19e853ba9d5cd7b93b8",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@memory/degrade-corrects-the-retrieval-path-it-names",
@@ -4846,14 +4827,14 @@
       ],
       "needs": [],
       "words": 207,
-      "sha256": "99952dca3d0e8829bf73f52fb0eab5904eb2b2642b9674db9c97b732edcea9e4",
-      "score": 94,
+      "sha256": "8c80355af1769372b996be40c2f35ae09e9aef943ed9906720138a2b57d9a072",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 4,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/every-mutation-holds-the-store-writer-boundary/review.md",
       "historical_sha256": "c9c83ae85d40fc3ff96e3f7aef073ba3b53ac0de969c1d5f40859e853b9fb148",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@runtime/extension-inspect",
@@ -5070,14 +5051,14 @@
       ],
       "needs": [],
       "words": 193,
-      "sha256": "0e65c99a663f3eb4facf0d38f13b97307d550addd0823e300e54ccdb6c101534",
-      "score": 94,
+      "sha256": "a62bd3eb76354fa384d363e8d6671485b690795f38e976396e7a083916e8e6d2",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/router/prds/provider-recovery-proves-its-authority-boundary/review.md",
       "historical_sha256": "43229fdf77de1c13c9ebe1479e78c0041dbdb1724173b79918879227c33e157a",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@proxy/proxy-turns-carry-recall-and-reflex-tools",
@@ -5089,14 +5070,14 @@
       ],
       "needs": [],
       "words": 185,
-      "sha256": "9e8172e407bc32e258bf63b44ad0c64ce4417d6a73f4d0c69cd4061d6d3bb55c",
-      "score": 94,
+      "sha256": "ddbbdbfef4b2fe4295f2ad451a23b067cc05e3e8eaa4c1ebccc7b28962b849bb",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/proxy/prds/proxy-turns-carry-recall-and-reflex-tools/review.md",
       "historical_sha256": "dcbd13b8821f25785e7048591be3387966f73516dad547a222e364599ef11bda",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@sessions/reflex-reports-attributed-tool-outcomes",
@@ -5111,14 +5092,14 @@
         "@sessions/reflex-reports-attributed-tool-outcomes/attributed-outcome-report"
       ],
       "words": 189,
-      "sha256": "53958e42b5ccc6c9889e4a7335e76937f1e0780b45e580848d94576c4c03dcf9",
-      "score": 94,
+      "sha256": "62ff1f67269c45e21d6d874bf5381c8f7d67a32a5ff1d83eee756d4528386bd6",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/reflex-reports-attributed-tool-outcomes/review.md",
       "historical_sha256": "6fa86bf1bc37dc3373a966e2180bae5a15a7b3dbea8f54e67a3b4b3e3c3314f5",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@memory/retrieval-is-a-piece",
@@ -5193,14 +5174,14 @@
       ],
       "needs": [],
       "words": 188,
-      "sha256": "6e696225084fcb9a8b018781bec4bb0ddf47c98244b4bd2e445e1b947494578f",
-      "score": 94,
+      "sha256": "6b9e5948aa6d971ae3cc3afc05e4d3f6d1f1dd99f8f2e8ab3e2f7b10b6cbbfd4",
+      "score": 97,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memory/prds/the-exit-flag-tests-race-each-other/review.md",
       "historical_sha256": "23f53ea83cf52484bc25b1e45fbb72dc86763392ebac3b7e03740f6ba81426b7",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@memory/the-graph-converges",
@@ -5415,14 +5396,14 @@
       ],
       "needs": [],
       "words": 138,
-      "sha256": "0d787ac19455fc84c76b09f3671ab8bb36c9a64c93d04a3b449d85ac67a7d5ad",
-      "score": 94,
+      "sha256": "cbdf0853b143b15ab5878d617b0dc24184ee116eb2cd71f669f6be1e081bae4e",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/memo-board-template/initialize-board/review.md",
       "historical_sha256": "7461777d588af0207e6c05ac4054534b6139ff18c39ba7cdebe7075b468623e5",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@memo/memo-board-template/board-engine-integration",
@@ -5436,14 +5417,14 @@
         "@memo/memo-board-template/initialize-board"
       ],
       "words": 152,
-      "sha256": "7aec7924021dc513bb33e23fb85544a39275d6a30245d7a3bb5af41ca0b05fbd",
-      "score": 94,
+      "sha256": "f13e0c9d75371dc02bbd7593deb484c98eb523f670cb99fbbef31759f458187d",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/memo-board-template/board-engine-integration/review.md",
       "historical_sha256": "5a163129dea1f5ccca0f8ddca454c25ca21af17d5986b9594b30dc0d14dedfcf",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@memo/one-document-serves-every-reader/document-identity",
@@ -5455,14 +5436,14 @@
       ],
       "needs": [],
       "words": 151,
-      "sha256": "c98f311a07d378126e2636348e5fe70c7418cff058784689ffaf328b781cc373",
-      "score": 94,
+      "sha256": "0129ed0477512078e76a68034777f1f1a496718a806bb5c88d77a88e6d024d4b",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/one-document-serves-every-reader/document-identity/review.md",
       "historical_sha256": "9ac0e861c46e03ed35a6d5b6108c9b78c97a9c897ed4e50982d88081e023266f",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@memo/one-document-serves-every-reader/document-projections",
@@ -5476,14 +5457,14 @@
         "@memo/one-document-serves-every-reader/document-identity"
       ],
       "words": 149,
-      "sha256": "1e846b7b0bc076e19edd326200ef47ff0563153e0f34b047483a8d3abd7a9187",
-      "score": 94,
+      "sha256": "f65639b0350c3582f909df1f198cb9466631c68640f018699c008e242d86208c",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/one-document-serves-every-reader/document-projections/review.md",
       "historical_sha256": "0b9a4478c4c65d8b748533410251c1ee618830da9b21097978a5dc1e862efb9d",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@memo/one-document-serves-every-reader/executable-document-validation",
@@ -5497,14 +5478,14 @@
         "@memo/one-document-serves-every-reader/document-identity"
       ],
       "words": 156,
-      "sha256": "8beb41b289678eb2b7b3ebf1630c5daa9a4ed087b22fae25e3fe8797877bceef",
-      "score": 94,
+      "sha256": "93c259180e80ad7f260ae430e896d4c1113e6356a436b1be25fa0947988cbdab",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/one-document-serves-every-reader/executable-document-validation/review.md",
       "historical_sha256": "504dbf0d5cc5267e37b57d5322d0d5c3f1eea563184151418174ff0cef664714",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@landscape/landscape-composes-system-context/context-contributor-contract",
@@ -5518,14 +5499,14 @@
         "@memo/one-document-serves-every-reader/document-identity"
       ],
       "words": 147,
-      "sha256": "ae1d27558c4e94f1f5f5ac16c7518d70701eb945eec18e36b80e5c23538652a7",
-      "score": 94,
+      "sha256": "1a7bcab85bc9f7648216390b4fbf8e3e96c7f1f39cb75fd58d4f3d8e81029d35",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/context-contributor-contract/review.md",
       "historical_sha256": "9d56eadee1a1ee1bc1104808456a82ce340569ba2dbd478e0dd573801b304d93",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@landscape/landscape-composes-system-context/memory-context-contributor",
@@ -5539,14 +5520,14 @@
         "@landscape/landscape-composes-system-context/context-contributor-contract"
       ],
       "words": 145,
-      "sha256": "0dbb2187610c451e0e73284f8dbd33f29d9bf61a4594185b0b7e7df83d2ed467",
-      "score": 94,
+      "sha256": "da24e5fe3dc51cecc19903323fca9725fcc9174e0a24a51e1dc3b76def78da9d",
+      "score": 96,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/memory-context-contributor/review.md",
       "historical_sha256": "1a9d695a0853d6456cde4262b8ffa81cd2af07a056c08a0c06131ce407f32f25",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review-with-recorded-proof-refinements"
     },
     {
       "id": "@landscape/context-quality-is-measured/context-baseline-corpus",
@@ -5987,12 +5968,14 @@
         "@memo/one-document-serves-every-reader/document-projections"
       ],
       "words": 278,
-      "sha256": "40bd0ee871953599bd737e79bb516ece5c973ef9c3b94366d596623cd2bb3315",
-      "round": 2,
+      "sha256": "8d69093349322e3703cb82bc924e16cabe1e1e2800fb6e2d11bdb58bee9b3597",
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/landscape-context-facade/review.md",
-      "review_binding_status": "stale-after-owner-split",
-      "disposition": "split-owner-boundary"
+      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "disposition": "split-owner-boundary",
+      "score": 96,
+      "review_result": "PASS"
     },
     {
       "id": "@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally",
@@ -6007,11 +5990,13 @@
         "@gitfs/improve-gitfs-snapshot-selection",
         "@policy/improve-policy-operation-rules"
       ],
-      "sha256": "7873268e00e1a2e8120196c4f17e4885f7bb248239dde00972287d9a77dd0cda",
-      "round": 2,
+      "sha256": "582d48cc7f602d9db8c9021f1b2ca0a33a28bad996c95fdc75f82a9da570825f",
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally/review.md",
-      "review_binding_status": "stale-after-split"
+      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "score": 95,
+      "review_result": "PASS"
     },
     {
       "id": "@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head",
@@ -6024,11 +6009,13 @@
       "needs": [
         "@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally"
       ],
-      "sha256": "1031841828c1cafc0d40299f22abe99db429711d6d9afe1f2b82338f1547cf74",
-      "round": 2,
+      "sha256": "99045ee2327c727c81e999fd594e9f099614d10048ace5174219443b9aacf2ca",
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/gitfs/prds/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head/review.md",
-      "review_binding_status": "stale-after-split"
+      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "score": 96,
+      "review_result": "PASS"
     },
     {
       "id": "@runtime/native-tool-observation-adapter",
@@ -6071,12 +6058,14 @@
       "path": "prd.ctg/.cartridge/boards/runtime/prds/startup-eof-retains-exit-status/prd.md",
       "sources": [],
       "needs": [],
-      "sha256": "c6c3a63561aea0a295ae16264da4e0f158d235a7c71b3d3fa4f663be35c3fc0c",
+      "sha256": "ab148a8530e5c28e895f6da6a98e711a421f90b3dc8ff1dc0f54f26f8c10cf2b",
       "round": 1,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/startup-eof-retains-exit-status/review.md",
-      "review_binding_status": "independent-root-review-passed",
-      "origin": "measured startup EOF/exit race during adapter verification"
+      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "origin": "measured startup EOF/exit race during adapter verification",
+      "score": 96,
+      "review_result": "PASS"
     },
     {
       "id": "@landscape/improve-memo-compact-landscape/bounded-inventory-snapshot",
@@ -6088,13 +6077,13 @@
       ],
       "needs": [],
       "words": 193,
-      "sha256": "1f1e0849142b8bf559a999a0b440c19ed4d3f45531b470fd4d63db0773986c54",
-      "round": 2,
+      "sha256": "abe34b499d4c0ac009af71d1b5e24f9b011c25ce9c0333e5f1ea91b51ec87134",
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/improve-memo-compact-landscape/bounded-inventory-snapshot/review.md",
-      "review_binding_status": "stale-after-owner-split",
+      "review_binding_status": "current-review-with-recorded-proof-refinements",
       "disposition": "split-owner-boundary",
-      "score": 94,
+      "score": 96,
       "review_result": "PASS",
       "historical_sha256": "1d789f781dd7a9aab6c0d94ea332cc3b601b3759979aca698b98f3f7d255beb9"
     },
@@ -6110,13 +6099,13 @@
         "@landscape/improve-memo-compact-landscape/bounded-inventory-snapshot"
       ],
       "words": 203,
-      "sha256": "859004d8c90ef281221bf3fd3d0850da6aa5a72e81f693472fed3b44e22948c7",
-      "round": 2,
+      "sha256": "8a947bed01671c57f4012600eefbfc7a7b8d042284b83511d8368a45ecea9457",
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/memo/prds/landscape-inventory-facade/review.md",
-      "review_binding_status": "stale-after-owner-split",
+      "review_binding_status": "current-review-with-recorded-proof-refinements",
       "disposition": "split-owner-boundary",
-      "score": 94,
+      "score": 96,
       "review_result": "PASS",
       "historical_sha256": "1d789f781dd7a9aab6c0d94ea332cc3b601b3759979aca698b98f3f7d255beb9"
     },
@@ -6131,12 +6120,14 @@
       "needs": [
         "@sessions/sub-agent-sessions-record-parent-and-mailbox"
       ],
-      "sha256": "beb6a60793cc6ecb9f22ce51a5e243c31cca84c48f8fc79255f9a98b208cb983",
+      "sha256": "6829008101e75df9a7da551b0fee7ce00f22f788118c54fd96f304ba35b66ffe",
       "round": 1,
       "max_rounds": 5,
       "review": ".cartridge/boards/sessions/prds/the-board-is-channels-of-lines/review.md",
-      "review_binding_status": "independent-root-review-passed",
-      "disposition": "add bounded current owner delta; preserve historical source verbatim; no historical completion inferred"
+      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "disposition": "add bounded current owner delta; preserve historical source verbatim; no historical completion inferred",
+      "score": 96,
+      "review_result": "PASS"
     },
     {
       "id": "@policy/ship-push-is-an-explicit-policy-operation",
@@ -6152,9 +6143,11 @@
       ],
       "round": 3,
       "max_rounds": 5,
-      "sha256": "dfde3215b8834ae571844786a20266ebd680ba9592a9155b1947d6a35e9964e3",
+      "sha256": "b7ac45dab65dc1c5cba9879e544518036409b83c796bb1c7049867056f393c60",
       "review": "prd.ctg/.cartridge/boards/policy/prds/ship-push-is-an-explicit-policy-operation/review.md",
-      "review_binding_status": "independent-root-review-passed"
+      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "score": 97,
+      "review_result": "PASS"
     },
     {
       "id": "@landscape/landscape-composes-system-context/live-file-context-contributors",
@@ -6186,14 +6179,14 @@
         "landscape-composes-system-context"
       ],
       "needs": [],
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
-      "score": 94,
+      "score": 96,
       "review_result": "PASS",
-      "review_binding_status": "stale-after-owner-split",
+      "review_binding_status": "current-review-with-recorded-proof-refinements",
       "review": "prd.ctg/.cartridge/boards/fs/prds/read-only-context-file-snapshots/review.md",
       "words": 218,
-      "sha256": "72ee261de33bc6af5f6832f99d82da206d98da31e22aafdc2680d408359531fc"
+      "sha256": "b1d85e8de446814d9a3e9576f1f112fbda4015f5ec6f51583ebd9982fbe3e8d6"
     },
     {
       "id": "@landscape/landscape-composes-system-context/live-file-context-contributors/file-kernel-evidence-adapter",
@@ -6207,14 +6200,14 @@
         "@landscape/landscape-composes-system-context/context-contributor-contract",
         "@fs/read-only-context-file-snapshots"
       ],
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
-      "score": 94,
+      "score": 96,
       "review_result": "PASS",
-      "review_binding_status": "stale-after-owner-split",
+      "review_binding_status": "current-review-with-recorded-proof-refinements",
       "review": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/file-kernel-evidence-adapter/review.md",
       "words": 226,
-      "sha256": "70a5ae7e2ba32a21e9d06e9983bb7aed1abc093f0fb00d922770edeac04d6f23"
+      "sha256": "b1091acf798de810446a7819b55d7ee6126be60405ed05bda895cc000a52e94f"
     },
     {
       "id": "@memo/landscape-file-kernel-context-facade",
@@ -6229,14 +6222,14 @@
         "@memo/landscape-context-facade",
         "@fs/read-only-context-file-snapshots"
       ],
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
-      "score": 94,
+      "score": 95,
       "review_result": "PASS",
-      "review_binding_status": "stale-after-owner-split",
+      "review_binding_status": "current-review-with-recorded-proof-refinements",
       "review": "prd.ctg/.cartridge/boards/memo/prds/landscape-file-kernel-context-facade/review.md",
       "words": 230,
-      "sha256": "93f51943b8da51b6b7b83b8a14b7023c552b30363c424aab68d17ea34a00bc00"
+      "sha256": "b35929cf63e62aec8f8e8ee89be8fbdcff50fa22ece6d381231172ba30a39b18"
     },
     {
       "id": "@sessions/context-session-metadata",
@@ -6321,6 +6314,83 @@
       "review": "prd.ctg/.cartridge/boards/memo/prds/landscape-live-owner-context-facade/review.md",
       "words": 218,
       "sha256": "a1e8bab19e53f845a2ea82589f19fb536b0ef977a0721bf6ca7ce92e1b359b82"
+    },
+    {
+      "id": "@sessions/an-agent-is-one-lookup-from-the-roster/durable-channel-read-cursors",
+      "owner": "sessions",
+      "needs": [
+        "@sessions/the-board-is-channels-of-lines"
+      ],
+      "kind": "leaf",
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/an-agent-is-one-lookup-from-the-roster/durable-channel-read-cursors/prd.md",
+      "sources": [
+        "an-agent-is-one-lookup-from-the-roster"
+      ],
+      "sha256": "85676e550379b9d98dfa75ee084c203ff7c5f5fbee8a701852dfafde0237a425",
+      "round": 3,
+      "max_rounds": 5,
+      "review": "prd.ctg/.cartridge/boards/sessions/prds/an-agent-is-one-lookup-from-the-roster/durable-channel-read-cursors/review.md",
+      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "score": 96,
+      "review_result": "PASS"
+    },
+    {
+      "id": "@sessions/an-agent-is-one-lookup-from-the-roster/scoped-roster-projection",
+      "owner": "sessions",
+      "needs": [
+        "@sessions/an-agent-is-one-lookup-from-the-roster/durable-channel-read-cursors"
+      ],
+      "kind": "leaf",
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/an-agent-is-one-lookup-from-the-roster/scoped-roster-projection/prd.md",
+      "sources": [
+        "an-agent-is-one-lookup-from-the-roster"
+      ],
+      "sha256": "b9198a55aeb528a5695d66d4af06015b16aa5bb8affb690f6815db289113dfe5",
+      "round": 3,
+      "max_rounds": 5,
+      "review": "prd.ctg/.cartridge/boards/sessions/prds/an-agent-is-one-lookup-from-the-roster/scoped-roster-projection/review.md",
+      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "score": 96,
+      "review_result": "PASS"
+    },
+    {
+      "id": "@harness/scoped-roster-context-contributor",
+      "owner": "harness",
+      "needs": [
+        "@sessions/an-agent-is-one-lookup-from-the-roster/scoped-roster-projection",
+        "@landscape/landscape-composes-system-context/context-contributor-contract"
+      ],
+      "kind": "leaf",
+      "path": "prd.ctg/.cartridge/boards/harness/prds/scoped-roster-context-contributor/prd.md",
+      "sources": [
+        "an-agent-is-one-lookup-from-the-roster"
+      ],
+      "sha256": "a340ee41abfc541b7a2985677bd5b8c45292eb765532d7787c8f06e45373b865",
+      "round": 3,
+      "max_rounds": 5,
+      "review": "prd.ctg/.cartridge/boards/harness/prds/scoped-roster-context-contributor/review.md",
+      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "score": 95,
+      "review_result": "PASS"
+    },
+    {
+      "id": "@sessions/an-agent-is-one-lookup-from-the-roster",
+      "owner": "sessions",
+      "needs": [
+        "@harness/scoped-roster-context-contributor"
+      ],
+      "kind": "rollup",
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/an-agent-is-one-lookup-from-the-roster/prd.md",
+      "sources": [
+        "an-agent-is-one-lookup-from-the-roster"
+      ],
+      "sha256": "675904caa2f52c9b5f5671ba7cc1f6a3a9ef97325368c0b008854d2af70986c4",
+      "round": 3,
+      "max_rounds": 5,
+      "review": "prd.ctg/.cartridge/boards/sessions/prds/an-agent-is-one-lookup-from-the-roster/review.md",
+      "review_binding_status": "current-review-with-recorded-proof-refinements",
+      "score": 96,
+      "review_result": "PASS"
     }
   ],
   "migration_manifest": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/reports/record-migration/manifest.json"

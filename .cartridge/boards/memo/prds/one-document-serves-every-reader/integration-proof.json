@@ -1,12 +1,12 @@
 {
-  "source_commit": "45d5a54ab9da1a798cd9997af9a8c19bed8a1812",
+  "source_commit": "1ffca32db1d06364b3e35e6cbca4881a1f814f71",
   "result": "PASS: one source index/commands/docs/human/validation shares exact primary revision; linked edit changes only readable closure; primary description/prose/recipe edit updates every projection; no new paths",
-  "fixture": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+  "fixture": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-tm0rhaiz",
   "calls": [
     {
       "request": {
         "op": "document",
-        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-tm0rhaiz",
         "action": "index",
         "query": "Shared fixture"
       },
@@ -40,7 +40,7 @@
     {
       "request": {
         "op": "document",
-        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-tm0rhaiz",
         "path": ".cartridge/documents/main.md",
         "projection": "commands"
       },
@@ -99,7 +99,7 @@
     {
       "request": {
         "op": "document",
-        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-tm0rhaiz",
         "path": ".cartridge/documents/main.md",
         "projection": "docs"
       },
@@ -153,7 +153,7 @@
     {
       "request": {
         "op": "document",
-        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-tm0rhaiz",
         "path": ".cartridge/documents/main.md",
         "projection": "human"
       },
@@ -207,7 +207,7 @@
     {
       "request": {
         "op": "document",
-        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-tm0rhaiz",
         "action": "validate",
         "path": ".cartridge/documents/main.md",
         "argv": [
@@ -224,7 +224,7 @@
               "--justfile",
               "-",
               "--working-directory",
-              "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+              "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-tm0rhaiz",
               "--",
               "show",
               "label"
@@ -257,7 +257,7 @@
           "schema": "cartridge-document/v1",
           "source_path": ".cartridge/documents/main.md",
           "validated": true,
-          "validation_revision": "a51fa57398e938c79ed11794e1ffdb9e17bf545d489e62c9da5efc5bd1111f15"
+          "validation_revision": "a5c941c0802a17a8bc217805554bae61dc4d74c7152eb69165e9d2343db37799"
         },
         "reply": 5
       }
@@ -265,7 +265,7 @@
     {
       "request": {
         "op": "document",
-        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-tm0rhaiz",
         "path": ".cartridge/documents/main.md",
         "projection": "docs"
       },
@@ -319,7 +319,7 @@
     {
       "request": {
         "op": "document",
-        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-tm0rhaiz",
         "action": "validate",
         "path": ".cartridge/documents/main.md",
         "argv": [
@@ -336,7 +336,7 @@
               "--justfile",
               "-",
               "--working-directory",
-              "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+              "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-tm0rhaiz",
               "--",
               "show",
               "label"
@@ -369,7 +369,7 @@
           "schema": "cartridge-document/v1",
           "source_path": ".cartridge/documents/main.md",
           "validated": true,
-          "validation_revision": "a51fa57398e938c79ed11794e1ffdb9e17bf545d489e62c9da5efc5bd1111f15"
+          "validation_revision": "a5c941c0802a17a8bc217805554bae61dc4d74c7152eb69165e9d2343db37799"
         },
         "reply": 7
       }
@@ -377,7 +377,7 @@
     {
       "request": {
         "op": "document",
-        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-tm0rhaiz",
         "action": "index",
         "query": "Changed fixture"
       },
@@ -411,7 +411,7 @@
     {
       "request": {
         "op": "document",
-        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-tm0rhaiz",
         "path": ".cartridge/documents/main.md",
         "projection": "docs"
       },
@@ -465,7 +465,7 @@
     {
       "request": {
         "op": "document",
-        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+        "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-tm0rhaiz",
         "action": "validate",
         "path": ".cartridge/documents/main.md",
         "argv": [
@@ -482,7 +482,7 @@
               "--justfile",
               "-",
               "--working-directory",
-              "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-riq0epqu",
+              "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-rollup-tm0rhaiz",
               "--",
               "show",
               "label"
@@ -515,7 +515,7 @@
           "schema": "cartridge-document/v1",
           "source_path": ".cartridge/documents/main.md",
           "validated": true,
-          "validation_revision": "9a99e5ddb7bf7f9ee76da0fb1769608671b12752e59c5845198d311eff612155"
+          "validation_revision": "48148316d4c05d8a686fafa14a2a6962b9bfdc954f45be8f719d422e2eb7054f"
         },
         "reply": 10
       }
@@ -525,52 +525,52 @@
     {
       "cartridges": true,
       "id": 1,
-      "turn": "18d4f32245248f18-1"
+      "turn": "18d4f5ea7eb4efc8-1"
     },
     {
       "cartridges": true,
       "id": 2,
-      "turn": "18d4f32245248f18-2"
+      "turn": "18d4f5ea7eb4efc8-2"
     },
     {
       "cartridges": true,
       "id": 3,
-      "turn": "18d4f32245248f18-3"
+      "turn": "18d4f5ea7eb4efc8-3"
     },
     {
       "cartridges": true,
       "id": 4,
-      "turn": "18d4f32245248f18-4"
+      "turn": "18d4f5ea7eb4efc8-4"
     },
     {
       "cartridges": true,
       "id": 5,
-      "turn": "18d4f32245248f18-5"
+      "turn": "18d4f5ea7eb4efc8-5"
     },
     {
       "cartridges": true,
       "id": 6,
-      "turn": "18d4f32245248f18-6"
+      "turn": "18d4f5ea7eb4efc8-6"
     },
     {
       "cartridges": true,
       "id": 7,
-      "turn": "18d4f32245248f18-7"
+      "turn": "18d4f5ea7eb4efc8-7"
     },
     {
       "cartridges": true,
       "id": 8,
-      "turn": "18d4f32245248f18-8"
+      "turn": "18d4f5ea7eb4efc8-8"
     },
     {
       "cartridges": true,
       "id": 9,
-      "turn": "18d4f32245248f18-9"
+      "turn": "18d4f5ea7eb4efc8-9"
     },
     {
       "cartridges": true,
       "id": 10,
-      "turn": "18d4f32245248f18-10"
+      "turn": "18d4f5ea7eb4efc8-10"
     }
   ],
   "limitation": "No recipe execution is claimed; descriptor remains launch_authorized:false"

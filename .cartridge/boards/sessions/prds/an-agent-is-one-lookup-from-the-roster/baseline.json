@@ -1,0 +1,63 @@
+{
+  "sessions_source": "423ecd329a98d0e0702a71c9ccb0a33a16cedae6",
+  "harness_source": "ca7eeabd38f4eaba69063cf98e2071df694a1dc3",
+  "landscape_source": "3b9f72854c39ddd90128a48bfce2667e387c3fba",
+  "sessions_binary_sha256": "a3d1d5e6147628115c1ae73cd66a2ebc586cde9c70fc2bcf6c75cdf3a313c6c8",
+  "probe": "real SDK with20 disposable sessions; host credential frozen at startup; readiness and replies awaited; no user-data mutation",
+  "observed": [
+    {
+      "op": "roster",
+      "reply": {
+        "error": "unknown sessions op roster",
+        "reply": 1
+      }
+    },
+    {
+      "op": "channel_watch",
+      "reply": {
+        "error": "unknown sessions op channel_watch",
+        "reply": 2
+      }
+    },
+    {
+      "op": "channel_read",
+      "reply": {
+        "error": "unknown sessions op channel_read",
+        "reply": 3
+      }
+    },
+    {
+      "op": "channel_ack",
+      "reply": {
+        "error": "unknown sessions op channel_ack",
+        "reply": 4
+      }
+    }
+  ],
+  "list_baseline": {
+    "rows": 20,
+    "serialized_bytes": 4224,
+    "native_boundary": "existing unscoped list is host-trusted; no new roster auth inferred from it"
+  },
+  "source_inputs": {
+    "sessions.ctg/src/main.rs": "6e5a47da1470802ca678dacdd6546404e52aaba0b1c4b273ffe8e36798f1fd13",
+    "sessions.ctg/src/mailbox.rs": "acb9d640a60b34ccb41ffdaf0e456148feae6750b42005996e67639c57135476",
+    "sessions.ctg/src/channels.rs": "695c55203222edf62ec33ecac6e8ee2a403bac4261b6190649daad8ab1391c14",
+    "harness.ctg/src/main.rs": "e4c23eeb9da21595c3a5bdea3a2374482f3ab51f1f0eadf95953afbdfa2ea0d8",
+    "harness.ctg/Cargo.toml": "644ca9a3da7e8180795ee9f4135d44fd992308632cb4cb2903064687c5ba825e",
+    "landscape.ctg/src/context.rs": "1f111cddc66eb6f9c1c8d5fa16fce86d470c748ea6e39ed6fef48f09c500f1fa"
+  },
+  "missing": "No roster operation, watched-channel registry, or named durable read/ack cursors. Harness Config rejects board/swarm unknown fields and Frame lacks swarm; environment/terminal pattern exists. Landscape context::collect provides bounded evidence collector reusable in harness without second roster storage.",
+  "harness_config_probe": {
+    "config": {
+      "board": "sessions"
+    },
+    "stdout": "{\"error\":\"harness config: unknown field `board`, expected one of `system`, `max_bytes`, `output_headroom`, `clock`, `router`, `environment`, `terminal`, `keep_turns`, `compact_after_messages`, `compact_after_bytes`, `summary_max_bytes`, `summary_timeout_secs`, `ring_keep`, `ring_sweep`, `memory`\"}\n",
+    "stderr": "",
+    "exit": -15,
+    "binary_sha256": "8641220268a85928aeaf08d4b954465ec369a674b4f7352900c465d2ddf506db",
+    "boundary": "Existing binary includes separately recorded original harness working changes; board Config contract also confirmed absent at committed ca7eeabd. New adapter development will use isolated committed harness worktree.",
+    "protocol": "stdin kept open while SDK apply was processed; collected output up to3s"
+  },
+  "harness_committed_main_sha256": "276154e9c4bcc6759c4f43fd8d489e51528c2b2a9f39469cdde120fa5910415d"
+}

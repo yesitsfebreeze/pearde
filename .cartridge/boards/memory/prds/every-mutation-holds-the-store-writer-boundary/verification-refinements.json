@@ -1,0 +1,8 @@
+{
+  "before_spec_sha256": "23ab5dd65bf642fa17c8816b174dd2bb14b51b21dc6176309b11a48305008372",
+  "after_spec_sha256": "6d4e8b80d7910fcbdbc2566da255a44b73a60ded5773bdaa31a3ec8a5dff40be",
+  "acceptance_changed": false,
+  "test_scope_changed": false,
+  "added_source": ".cartridge/tests/integration/e2e/lifecycle.rs",
+  "reason": "Existing clean lifecycle test must assert already reviewed retained writer.lock instead of obsolete directory deletion; full public debug build exhausted disk, so disable debug symbols/incremental while retaining all tests/checks."
+}

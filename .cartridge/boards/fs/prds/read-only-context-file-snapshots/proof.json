@@ -1,0 +1,53 @@
+{
+  "source_commit": "de1406682a33c5b12cb472787178e2570e5ed0f8",
+  "baseline_commit": "6a8dec3cc259968a6bcd3aa1b507321268f88b7e",
+  "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+  "environment": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=$PWD/target/tool-result-contract",
+  "gates": [
+    {
+      "command": "just test fs",
+      "exit": 0,
+      "tests": 47,
+      "elapsed_test_seconds": 1.12
+    },
+    {
+      "command": "just check fs",
+      "exit": 0
+    },
+    {
+      "command": "bun test ../fs.ctg/.cartridge/tests/integration/context.test.ts",
+      "exit": 0,
+      "tests": 2,
+      "assertions": 56,
+      "elapsed_seconds": 1.089
+    }
+  ],
+  "observed": {
+    "native_key": "fs.context",
+    "host_callbacks_during_native_and_legacy_reads": 0,
+    "source_bytes": "full LF/CRLF/BOM/trailing-newline/empty UTF8 preserved and SHA256 exact",
+    "max_source_bytes": 8192,
+    "tighter_configured_read_cap_tested": 128,
+    "escaped_wrapper_max_bytes": 65536,
+    "stale_expected_revision": "changed with no body or digest replacement",
+    "same_byte_file_replacement": "same revision and available",
+    "typed_namespace_exclusion": "ASCII case aliases plus physical reserved-directory identity; symlink alias from reserved namespace to ordinary storage still excluded",
+    "case_insensitive_volume_lookup_supported": true,
+    "replacement_during_read": "unavailable changed_during_read, no body",
+    "deadline": "10ms native deadline with80ms blocked test hook returns timeout; explicitly no joined worker claim",
+    "filesystem_changes": "no content mutations or additional files from native reads; native worker creates no observation/session calls"
+  },
+  "limitations": [
+    "local macOS/Linux stable file identities; unsupported identity fails unavailable",
+    "not a capability sandbox against malicious filesystem writers racing and restoring checked identities",
+    "source SHA binds bytes at current logical owner/path, not historical physical root/inode/generation",
+    "timed-out blocking I/O may remain in flight until its cooperative check"
+  ],
+  "sha256": {
+    "src/main.rs": "c5b16ee706cb657107b6ed4604b1632716ec3b7ffe5e5e5db536a3da5d7cee99",
+    "src/context.rs": "6b49e59d0356a2759eb1be5ec6a98582563c3918da6ea2af610d6294e7e250b0",
+    ".cartridge/tests/unit/context.rs": "51050abb6411553d2f9478035a72e626f1282a8f6e043eb0652387267740d8b8",
+    ".cartridge/tests/integration/context.test.ts": "5239eacb5463d1a6e032c0c6cd22ff370458d574621ac3a5ec486de4244b1264",
+    ".cartridge/docs/context.md": "9f8404b2dfb6122fffc8f34734410b061f754c9e2564e4175028bf993995522d"
+  }
+}

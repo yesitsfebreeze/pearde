@@ -1,0 +1,10 @@
+{
+  "source": "1ffca32db1d06364b3e35e6cbca4881a1f814f71",
+  "behavior_acceptance_changed": false,
+  "specs": {
+    "spec01.md": {
+      "before": "042cdcea6d4a769f20ea4e7fa82aed9cea05a92d29de1732d05312a6763e0c20",
+      "after": "042cdcea6d4a769f20ea4e7fa82aed9cea05a92d29de1732d05312a6763e0c20"
+    }
+  }
+}

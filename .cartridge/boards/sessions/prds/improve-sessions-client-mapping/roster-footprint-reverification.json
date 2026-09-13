@@ -1,0 +1,9 @@
+{
+  "before_spec_sha256": "e5c8339c58392c3f45b8e931d2bdc1b54dc21487fb28f04d8b31906b00f1d6ca",
+  "after_spec_sha256": "3cc1b9a838594f6ff5769cf0068d0229a80d664d64b864cc724eec7989e729ef",
+  "added_sources": [
+    "src/roster.rs"
+  ],
+  "behavior_acceptance_gates_changed": false,
+  "source": "a306370f10b78d94365b7832ce22ce8d10c09487"
+}

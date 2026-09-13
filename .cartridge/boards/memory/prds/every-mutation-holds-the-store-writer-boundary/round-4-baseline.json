@@ -1,0 +1,9 @@
+{
+  "source": "09bfaaefdcbe2fb3705bece2fcc643c9a95da478 plus current reviewed lane diff",
+  "public_result": "1347/1348 passed, lifecycle canary failed because CLI ingest refused the active daemon claim",
+  "log": "/tmp/memory-writer-public-test.log",
+  "census_gap": "Commands::Compress uses exists check before unclaimed destination write",
+  "reviewer": "/root/proxy_continuation",
+  "previous_spec_sha256": "6d4e8b80d7910fcbdbc2566da255a44b73a60ded5773bdaa31a3ec8a5dff40be",
+  "candidate_spec_sha256": "c3f28977cbe9ad2f7ee2555b4d105a145109868f270bbdd9d6aff15fc1cfc0d8"
+}

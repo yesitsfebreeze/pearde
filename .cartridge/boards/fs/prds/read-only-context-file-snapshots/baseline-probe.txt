@@ -1,0 +1,17 @@
+from pathlib import Path
+import subprocess,tempfile,json,hashlib
+root=Path('/Users/feb/dev/cartridge');proof=root/'prd.ctg/.cartridge/boards/fs/prds/read-only-context-file-snapshots';proof.mkdir(exist_ok=True);cwd=Path(tempfile.mkdtemp(prefix='fs-context-baseline-'));body=b'first\r\nsecond\r\n';(cwd/'fixture.txt').write_bytes(body)
+p=subprocess.Popen([str(root/'cartridge.ctg/target/tool-result-contract/debug/fs')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+def send(x):p.stdin.write(json.dumps(x)+'\n');p.stdin.flush()
+send({'apply':{'name':'fs','config':{}}})
+while not json.loads(p.stdout.readline()).get('ready'):pass
+frames=[];calls=[]
+for i,key,args in [(1,'tool.read',{'op':'call','context':{'session':'fixture','run':'run','call':'read','cwd':str(cwd)},'input':{'path':'fixture.txt'}}),(2,'fs.context',{'op':'read','cwd':str(cwd),'path':'fixture.txt'})]:
+ send({'id':i,'call':key,'args':args})
+ while True:
+  f=json.loads(p.stdout.readline())
+  if f.get('reply')==i:calls.append({'key':key,'args':args,'response':f});break
+  frames.append(f)
+  if 'id' in f:send({'reply':f['id'],'error':'baseline forbids unrelated calls'})
+send({'dispose':True});p.communicate(timeout=10)
+result={'source_commit':subprocess.check_output(['git','rev-parse','HEAD'],cwd=root/'fs.ctg',text=True).strip(),'command':'cargo build --manifest-path ../fs.ctg/Cargo.toml -p fs; native SDK subprocess at target/tool-result-contract/debug/fs','fixture':str(cwd),'source_sha256':hashlib.sha256(body).hexdigest(),'calls':calls,'host_frames':frames,'source_unchanged':(cwd/'fixture.txt').read_bytes()==body,'finding':'Existing tool.read returns rendered line numbers without exact-byte revision; no sessions touch occurs. Native fs.context is not provided.'};(proof/'baseline.json').write_text(json.dumps(result,indent=2)+'\n');(proof/'baseline-probe.txt').write_text(Path(__file__).read_text());print(json.dumps(result,indent=2))

@@ -1,0 +1,12 @@
+   Compiling rpc v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/every-mutation-holds-the-store-writer-boundary/src/rpc)
+    Finished `test` profile [unoptimized] target(s) in 3.21s
+     Running unittests src/lib.rs (/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/rpc-65b55920fdf36e15)
+
+running 4 tests
+test cli::tests::writer_boundary_operator_shutdown_refuses_before_enqueue ... ok
+test cli::tests::writer_boundary_operator_request_is_strict_and_bound_to_its_store ... ok
+test cli::tests::writer_boundary_operator_stale_persistence_cannot_report_commit ... ok
+test cli::tests::writer_boundary_operator_socket_preserves_provenance_expiry_and_persistence ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 91 filtered out; finished in 0.24s
+

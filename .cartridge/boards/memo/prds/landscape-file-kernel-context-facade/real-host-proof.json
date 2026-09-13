@@ -1,0 +1,94 @@
+{
+  "runtime_binary": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/cartridge",
+  "manifest_sha256": "68502209e955e716f485eb2b774e12564915d71676dc17451142163c98ae9202",
+  "manifest": {
+    "name": "fs",
+    "entry": "init.lua",
+    "source": "https://github.com/yesitsfebreeze/fs.ctg",
+    "provide": [
+      "fs.context",
+      "tool.read",
+      "tool.write",
+      "tool.edit",
+      "tool.search",
+      "tool.glob",
+      "tool.grep"
+    ],
+    "needs": [
+      "sessions"
+    ],
+    "description": "Provides file read, write, edit, search, glob, and grep tools; records touched files through sessions.",
+    "commands": {
+      "build": {
+        "argv": [
+          "just",
+          "--justfile",
+          "../cartridge.ctg/justfile",
+          "build",
+          "fs"
+        ],
+        "cwd": "."
+      },
+      "check": {
+        "argv": [
+          "just",
+          "--justfile",
+          "../cartridge.ctg/justfile",
+          "check",
+          "fs"
+        ],
+        "cwd": "."
+      },
+      "test": {
+        "argv": [
+          "just",
+          "--justfile",
+          "../cartridge.ctg/justfile",
+          "test",
+          "fs"
+        ],
+        "cwd": "."
+      },
+      "run": {
+        "argv": [
+          "just",
+          "--justfile",
+          "../cartridge.ctg/justfile",
+          "process",
+          "fs"
+        ],
+        "cwd": ".",
+        "description": "Foreground SDK JSON-lines process; use hello to inspect capabilities."
+      },
+      "hello": {
+        "argv": [
+          "just",
+          "--justfile",
+          "../cartridge.ctg/justfile",
+          "process",
+          "fs",
+          "hello"
+        ],
+        "cwd": "."
+      }
+    }
+  },
+  "cases": [
+    {
+      "present": true,
+      "exit": 0,
+      "stdout": "{\"complete\":true,\"deadline_exceeded\":false,\"limits\":{\"deadline_ms\":500,\"max_bytes\":16384,\"max_rows\":16},\"revision\":\"1efab06bb106b34cbbe7bdb08424ee6ddfe53f5540006502ce88766e19f63afa\",\"rows\":[{\"reference\":{\"id\":\"@alpha/fixture.txt\",\"kind\":\"file\",\"owner\":\"alpha\",\"revision\":\"9974f5c368e5b474e4ea7aca00768bd5bbf8c78ff347a1a4949beea58a17ac3f\",\"revision_kind\":\"source_bytes\"},\"selection_reason\":\"public file owner/path match; exact source bytes\",\"source\":\"{\\\"owner\\\":\\\"alpha\\\",\\\"path\\\":\\\"fixture.txt\\\"}\",\"text\":\"FULL\\r\\nREAL_HOST\\r\\n\"},{\"reference\":{\"id\":\"@runtime/kernel/alpha\",\"kind\":\"kernel\",\"owner\":\"runtime\",\"revision\":\"26f8caac18d77d98e85abe9205742f7a494e7284f2100dd2c57dafffe465bb20\",\"revision_kind\":\"observed_projection\"},\"selection_reason\":\"kernel owner/capability match; observed public metadata\",\"source\":\"{\\\"generation\\\":2,\\\"id\\\":\\\"alpha\\\",\\\"provide\\\":[\\\"native.fixture\\\"],\\\"state\\\":\\\"Active\\\"}\",\"text\":\"{\\\"generation\\\":2,\\\"id\\\":\\\"alpha\\\",\\\"provide\\\":[\\\"native.fixture\\\"],\\\"state\\\":\\\"Active\\\"}\"}],\"schema\":\"cartridge-context/v1\",\"sources\":[{\"contributor\":\"documents\",\"state\":\"disabled\"},{\"contributor\":\"files\",\"state\":\"available\"},{\"contributor\":\"kernel\",\"state\":\"available\"},{\"contributor\":\"memory\",\"state\":\"disabled\"}],\"truncated\":false}\n",
+      "stderr": "",
+      "profile": "return {{id=\"memo\",path=\"memo\",inject={\"fs.context\"}},{id=\"alpha\",path=\"alpha\"},{id=\"sessions\",path=\"sessions.lua\"},{id=\"fs\",path=\"fs\"}}"
+    },
+    {
+      "present": false,
+      "exit": 0,
+      "stdout": "{\"complete\":false,\"deadline_exceeded\":false,\"limits\":{\"deadline_ms\":500,\"max_bytes\":16384,\"max_rows\":16},\"revision\":\"88998e7472c51dde3a625d0fd1eaaa6f978e289786cbabcfc5650ba22c5383f8\",\"rows\":[{\"reference\":{\"id\":\"@runtime/kernel/alpha\",\"kind\":\"kernel\",\"owner\":\"runtime\",\"revision\":\"26f8caac18d77d98e85abe9205742f7a494e7284f2100dd2c57dafffe465bb20\",\"revision_kind\":\"observed_projection\"},\"selection_reason\":\"kernel owner/capability match; observed public metadata\",\"source\":\"{\\\"generation\\\":2,\\\"id\\\":\\\"alpha\\\",\\\"provide\\\":[\\\"native.fixture\\\"],\\\"state\\\":\\\"Active\\\"}\",\"text\":\"{\\\"generation\\\":2,\\\"id\\\":\\\"alpha\\\",\\\"provide\\\":[\\\"native.fixture\\\"],\\\"state\\\":\\\"Active\\\"}\"}],\"schema\":\"cartridge-context/v1\",\"sources\":[{\"contributor\":\"documents\",\"state\":\"disabled\"},{\"contributor\":\"files\",\"state\":\"absent\"},{\"contributor\":\"kernel\",\"state\":\"available\"},{\"contributor\":\"memory\",\"state\":\"disabled\"}],\"truncated\":false}\n",
+      "stderr": "",
+      "profile": "return {{id=\"memo\",path=\"memo\",inject={}},{id=\"alpha\",path=\"alpha\"}}"
+    }
+  ],
+  "assertions": "Real Host present grant loads FS/Memo and returns exact bytes + kernel; omitted FS/grant keeps Memo loaded with files absent/kernel available; source bytes and directory entries unchanged.",
+  "assertion_count": 10
+}

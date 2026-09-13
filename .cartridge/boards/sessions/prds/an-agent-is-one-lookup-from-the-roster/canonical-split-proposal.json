@@ -1,0 +1,33 @@
+{
+  "original": "@sessions/an-agent-is-one-lookup-from-the-roster",
+  "disposition": "rollup preserving original acceptance/source alias and two inherited rounds",
+  "children": [
+    {
+      "id": "@sessions/an-agent-is-one-lookup-from-the-roster/durable-channel-read-cursors",
+      "owner": "sessions",
+      "needs": [
+        "@sessions/the-board-is-channels-of-lines"
+      ]
+    },
+    {
+      "id": "@sessions/an-agent-is-one-lookup-from-the-roster/scoped-roster-projection",
+      "owner": "sessions",
+      "needs": [
+        "@sessions/an-agent-is-one-lookup-from-the-roster/durable-channel-read-cursors"
+      ]
+    }
+  ],
+  "external_need": {
+    "id": "@harness/scoped-roster-context-contributor",
+    "owner": "harness",
+    "needs": [
+      "@sessions/an-agent-is-one-lookup-from-the-roster/scoped-roster-projection",
+      "@landscape/landscape-composes-system-context/context-contributor-contract"
+    ]
+  },
+  "related_existing": "@harness/harness-consumes-landscape remains broader downstream; optional adapter is not a duplicate completion of native/proxy/quality acceptance",
+  "future_consumer": "@sessions/the-agents-chat-through-one-tool can reuse cursor/watch persistence without claiming durable wake now",
+  "review_round": 3,
+  "all_inherit_used_rounds": 2,
+  "historical_claims_changed": false
+}

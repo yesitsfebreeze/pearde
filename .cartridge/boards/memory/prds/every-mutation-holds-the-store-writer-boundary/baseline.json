@@ -1,0 +1,9 @@
+{
+  "source": "09bfaaefdcbe2fb3705bece2fcc643c9a95da478",
+  "isolated_branch": "work/prd-memory-writer-boundary",
+  "command": "cargo test -p commands baseline_with_graph_refuses -- --nocapture",
+  "observed": "FAILED: with_graph entered mutation while another writer held this store",
+  "test_duration_seconds": 0.03,
+  "baseline_log_sha256": "c7f3ff4e8c716fd1eb8a4d5d36e7c5dbdc8d6102a6a3f0f5721e1f4a1ef569ae",
+  "scope": "isolated temporary store only; original memory working tree preserved"
+}

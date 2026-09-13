@@ -1,0 +1,95 @@
+{
+  "landscape_commit": "3b9f72854c39ddd90128a48bfce2667e387c3fba",
+  "memo_commit": "45d5a54ab9da1a798cd9997af9a8c19bed8a1812",
+  "fixture": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/live-file-baseline-_u48305s",
+  "command": [
+    "cargo",
+    "run",
+    "--offline",
+    "--quiet",
+    "--manifest-path",
+    "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/live-file-baseline-_u48305s/runner/Cargo.toml",
+    "--",
+    "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/live-file-baseline-_u48305s/files"
+  ],
+  "runner_source": "use serde_json::json;\n#[tokio::main(flavor=\"current_thread\")]\nasync fn main(){let root=std::env::args().nth(1).unwrap();let raw=json!({\"entries\":[{\"id\":\"fixture\",\"dir\":root,\"generation\":7,\"state\":\"Active\",\"provide\":[\"tool.fixture\"]}]});let a=landscape::inventory::capture(raw.clone(),tokio::time::Instant::now()+std::time::Duration::from_secs(2)).await.unwrap();std::fs::write(std::path::Path::new(&root).join(\"fixture.rs\"),\"VERSION_TWO\\n\").unwrap();let b=landscape::inventory::capture(raw,tokio::time::Instant::now()+std::time::Duration::from_secs(2)).await.unwrap();println!(\"{}\",json!({\"before\":a.summary(),\"after\":b.summary(),\"file_page\":b.page(None,None,100).unwrap(),\"file_edit_changes_inventory_source_revision\":a.source_revision()!=b.source_revision()}));}\n",
+  "library_observed": {
+    "after": {
+      "known_paths": 1,
+      "omitted_owners": 0,
+      "omitted_paths": 1,
+      "owners": [
+        {
+          "generation": 7,
+          "owner": "fixture",
+          "path_count": 1,
+          "state": "Active",
+          "status": "ok"
+        }
+      ],
+      "owners_total": 1,
+      "snapshot": "7ff7dd0c7523432c1703e3ac2c9492ea8c0e9775bb59ca21c983f86ac7d4365f",
+      "source_revision": "a6d56d0567524ab767bd47b7ff6dd0851593f7aa7d4653f70397b36eed0defe9",
+      "status": "complete",
+      "unavailable_owners": 0,
+      "version": 2
+    },
+    "before": {
+      "known_paths": 1,
+      "omitted_owners": 0,
+      "omitted_paths": 1,
+      "owners": [
+        {
+          "generation": 7,
+          "owner": "fixture",
+          "path_count": 1,
+          "state": "Active",
+          "status": "ok"
+        }
+      ],
+      "owners_total": 1,
+      "snapshot": "37f98deaa61931773212f781111adb81c06ae0d274b7b215387e93a693ef5c3e",
+      "source_revision": "a6d56d0567524ab767bd47b7ff6dd0851593f7aa7d4653f70397b36eed0defe9",
+      "status": "complete",
+      "unavailable_owners": 0,
+      "version": 2
+    },
+    "file_edit_changes_inventory_source_revision": false,
+    "file_page": {
+      "cursor": null,
+      "items": [
+        {
+          "owner": "fixture",
+          "path": "fixture.rs"
+        }
+      ],
+      "known_paths": 1,
+      "more": false,
+      "omitted_statuses": 0,
+      "owner": null,
+      "remaining": 0,
+      "returned": 1,
+      "snapshot": "7ff7dd0c7523432c1703e3ac2c9492ea8c0e9775bb59ca21c983f86ac7d4365f",
+      "source_revision": "a6d56d0567524ab767bd47b7ff6dd0851593f7aa7d4653f70397b36eed0defe9",
+      "status": "complete",
+      "unavailable": [],
+      "version": 2
+    }
+  },
+  "native_request": {
+    "op": "context",
+    "action": "prepare",
+    "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/live-file-baseline-_u48305s/files",
+    "query": "fixture",
+    "documents": false,
+    "memory": false,
+    "files": true,
+    "kernel": true
+  },
+  "native_response": {
+    "error": "invalid context request",
+    "reply": 1
+  },
+  "host_frames": [],
+  "finding": "Inventory names and generation metadata exist, but a file body edit preserves inventory source_revision and no kernel capability row is emitted. Native shared context refuses file/kernel contributor options before host calls."
+}

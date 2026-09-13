@@ -1,0 +1,25 @@
+{
+  "source_head": "09bfaaefdcbe2fb3705bece2fcc643c9a95da478",
+  "unrelated_working_files": {
+    ".cartridge/tests/unit/src/commands/src/tests/commands_admin_test.rs": "e3ba9c0ef403749ce7c2e5e6181d66f05eae1c5367f83edc2f2fa13e186bebec",
+    ".cartridge/tests/unit/src/retrieval/piece/src/tests/retrieval_score_test.rs": "a0b1985abac50ca76ada561e6c633d1d99bcc3b80b1d9a4936c885c63e399e28",
+    ".cartridge/tests/unit/src/store/core/src/cold/memory_contract_tests.rs": "27fff4fefaa8c379020aa3a26ab223aed2c10a1f7a78ca00eae965ddb1edb120",
+    ".cartridge/tests/unit/src/transport/src/tests/memory_rpc_test.rs": "f3d22bf2cc9b3c28c6fcfde74165a8cabc7268896a2426b6877d8c733a214cf0",
+    "Cargo.lock": "c73048e32b356f1c30a02e75bbfe30abce7a06216827deac421984dbed819da3",
+    "src/commands/src/commands_health.rs": "cc7d7cb3828c921f6028d976cf5c13dea02feebe99d49e8cc6032d48fa05fc0d",
+    "src/commands/src/lib.rs": "fab02565ada7a95592853067697eb8f77e8ed30e2ffa45de98aae8642a2615c2",
+    "src/config/src/config.rs": "395808ca6ca32f625d5370fc0cac78ffe5e1d4faac69cb561fb1162a09a21387",
+    "src/retrieval/piece/src/retrieval_query.rs": "dfa0349ac099b72f5996495f49fa83b073e9a47759be3a4d4a47c07d4ccc760c",
+    "src/retrieval/piece/src/retrieval_score.rs": "ce4d84ca4d54375a9b962380f8d00067632ea2c9252ff254d16e8e2a1c776de8",
+    "src/rpc/src/server.rs": "d18dab5298f3744e7eb02a212c2daaff5778f4c1f46818e73b527360f7a7464b",
+    "src/store/core/Cargo.toml": "3c3a171a0c7d4c0dc2d792549291c66474018cc5fddfc7b212a4296fd422fefd",
+    "src/store/core/src/cold.rs": "1bc68574b3db62f998fe3781dd4e8d6998c16dfa17c77d7357734af5cb6b4d94",
+    "src/store/core/src/lib.rs": "e2dbdfcdeab3c2608817efebc42339b3e2e0d9054d0d0711dd383425cee6a983",
+    "src/transport/src/memory_rpc.rs": "2eb3c3037df524bbf0748616199261e9822dd9cdb190e4fd48e580f242004340"
+  },
+  "overlapping_declared_files": [
+    "src/commands/src/lib.rs",
+    "Cargo.lock"
+  ],
+  "note": "Preserve ongoing Graph CLI/cold graph-view and earlier unrelated work. This snapshot is observational; it authorizes no inclusion or removal."
+}

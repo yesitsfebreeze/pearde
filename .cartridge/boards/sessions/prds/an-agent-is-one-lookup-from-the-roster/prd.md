@@ -1,15 +1,16 @@
 ---
 repo: /Users/feb/dev/cartridge/sessions.ctg
-state: open
+state: "specced"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: sessions
-work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+work-kind: rollup
+review-round: 3
+review-status: passed
 canonical-scope: an-agent-is-one-lookup-from-the-roster
+needs: ["@harness/scoped-roster-context-contributor"]
 ---
 
 # an-agent-is-one-lookup-from-the-roster
@@ -34,3 +35,7 @@ External evidence prerequisites: [the-board-is-channels-of-lines](../../../../me
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `an-agent-is-one-lookup-from-the-roster`; maximum five rounds.
+
+## Owner split
+
+The [durable named-channel cursor child](durable-channel-read-cursors/prd.md) supplies authenticated delivery progress; the [scoped roster child](scoped-roster-projection/prd.md) reads existing session/channel metadata; the [harness adapter](../../../harness/prds/scoped-roster-context-contributor/prd.md) renders it through the existing Landscape collector. Original acceptance above and rounds1–2 remain unchanged; [pre-split leaf](original-leaf-prd.md) preserves the prior contract. Missing activity duration remains unknown. This parent requires actual composed prompt evidence and all dependency receipts.

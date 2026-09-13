@@ -1,0 +1,46 @@
+{
+  "source_commit": "62185289d148017c74986b618456a72bab620228",
+  "baseline_commit": "3b9f72854c39ddd90128a48bfce2667e387c3fba",
+  "dependency_fs_commit": "de1406682a33c5b12cb472787178e2570e5ed0f8",
+  "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+  "environment": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=$PWD/target/tool-result-contract",
+  "gates": [
+    {
+      "command": "just test landscape",
+      "exit": 0,
+      "tests": 47
+    },
+    {
+      "command": "just check landscape",
+      "exit": 0
+    },
+    {
+      "command": "just test memo",
+      "exit": 0,
+      "tests": 77
+    }
+  ],
+  "observed": {
+    "file_source": "actual tempfile bytes preserve BOM, CRLF and trailing newline; empty/LF/CRLF direct fixtures",
+    "same_byte_replacement": "exact same logical reference remains available",
+    "edit_readback": "Changed with no alternative lookup; current allowlist removal Unavailable",
+    "kernel_projection": "only public active id/generation/state/provide; arbitrary SECRET metadata and private rows excluded",
+    "freshness": "file edits/kernel generation or keys change affected references and Prepared revision; unrelated kernel reference stable",
+    "caps": "allowlist128; query1024; nomination max_rows; file8192; host128; keys64x128; projection4096; serialized Prepared4096 test",
+    "failures": "missing/malformed/failed slots Partial, no slot refill; unsupported snapshot Unavailable, never false Empty",
+    "deadline": "10ms shared collector drops hanging file future while keeping two kernel rows; disabled/absent Tasks not polled",
+    "provider_activation": 0
+  },
+  "limitations": [
+    "Native FS and memo multi-binary wiring is deferred to reviewed dependent memo leaf, not claimed by library tests.",
+    "Caller binds trusted current owner root, optional capability grant and single operation deadline.",
+    "Source-byte file reference does not encode historical root identity or generation.",
+    "Library never changes frozen inventory cursor behavior."
+  ],
+  "sha256": {
+    "src/lib.rs": "72f4ec026e9e3a9fdec90847b42d20a2783c1144719ae43985b21451c43f7c6b",
+    "src/file_kernel.rs": "b3c7544c54e162fd0c26c2bfaf64b677ee18d5cc0610b4302a8c886219032436",
+    ".cartridge/tests/unit/file_kernel.rs": "f873c041a825194ae5c4321712a7ec06a769e703919860bebc7d57ea08185b36",
+    ".cartridge/docs/file-kernel-context.md": "bd475847d87807e921826f7a7d3067df66b7300c4b672afae859f5ed1363f1f6"
+  }
+}

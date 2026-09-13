@@ -1,0 +1,6 @@
+{
+  "before": "c3f28977cbe9ad2f7ee2555b4d105a145109868f270bbdd9d6aff15fc1cfc0d8",
+  "after": "803b923b48dfab1896fcd2ba9ad2df37f42852fe751b0aa97d260d7dd20795f1",
+  "added_path": ".cartridge/tests/unit/src/commands/src/tests/commands_operator_ingest_test.rs",
+  "reason": "Maintain the already reviewed refused/malformed/lost-reply no-offline-replay proof through an isolated endpoint seam. No behavior or acceptance change."
+}

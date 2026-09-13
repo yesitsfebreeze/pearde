@@ -1,14 +1,14 @@
 ---
 repo: /Users/feb/dev/cartridge/memory.ctg
-state: open
+state: "specced"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: memory
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 4
+review-status: passed
 canonical-scope: every-mutation-holds-the-store-writer-boundary
 ---
 
@@ -18,9 +18,9 @@ Enumerate every current graph mutation entry point from CLI, daemon, cartridge a
 
 ## Acceptance
 
-- [ ] Two competing processes released at a barrier cannot both commit to one store; the loser changes no bytes.
-- [ ] A stale local snapshot cannot resurrect a row removed by the owner, including after a crash/restart boundary.
-- [ ] Tests cover each enumerated mutation entry or a shared proven boundary, with exact current commands and source revisions; read-only operations remain usable under their existing contract.
+- [x] Two competing processes released at a barrier cannot both commit to one store; the loser changes no bytes.
+- [x] A stale local snapshot cannot resurrect a row removed by the owner, including after a crash/restart boundary.
+- [x] Tests cover each enumerated mutation entry or a shared proven boundary, with exact current commands and source revisions; read-only operations remain usable under their existing contract.
 
 ## Proof and recovery
 

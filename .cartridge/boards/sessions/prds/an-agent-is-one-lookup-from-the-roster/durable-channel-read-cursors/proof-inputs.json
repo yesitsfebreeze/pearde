@@ -1,0 +1,94 @@
+{
+  "source_revision": "c2693a7ca3e23c295b8fe52a664720dde137eedc",
+  "source_files": [
+    {
+      "path": "src/main.rs",
+      "sha256": "31404c63045524bbe967e363a0bfa5f152487103708570e783cee1f5f6642031"
+    },
+    {
+      "path": "src/mailbox.rs",
+      "sha256": "d5a1b91794388042d38ba163d809bd6edce9ae26fcc8aa2189df638a71de8f0b"
+    },
+    {
+      "path": "src/channels.rs",
+      "sha256": "2d05f26fd7ed702dcb92009aee7698c453f234fe8d519b612c11ae9ef0605e33"
+    },
+    {
+      "path": ".cartridge/tests/unit/main/channel_cursor_tests.rs",
+      "sha256": "3790dab99a481058ffd0075a77c1a578208dfad98ffebf39fd8661c43c7361ae"
+    },
+    {
+      "path": ".cartridge/tests/integration/channel-cursors.test.ts",
+      "sha256": "3e77da11a4a11ae80f57f5e875042dc1d38ddd28363f92241faa17d2e6a426aa"
+    },
+    {
+      "path": ".cartridge/docs/channel-cursors.md",
+      "sha256": "88c33f81d2788a8f23d42f7be2ea589ff7e119a356aa8ea8ce9064fa478efade"
+    }
+  ],
+  "commands": [
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just test sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "log": "proof-test.log",
+      "result": "78 native tests passed;70 previous plus8 cursor tests"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just check sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "log": "proof-check.log",
+      "result": "passed"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just build sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "log": "proof-build.log",
+      "result": "passed"
+    },
+    {
+      "command": "SESSIONS_BINARY=\"$PWD/target/sessions-mapping/debug/sessions\" bun test ../sessions.ctg/.cartridge/tests/integration/channel-cursors.test.ts ../sessions.ctg/.cartridge/tests/integration/channels.test.ts ../sessions.ctg/.cartridge/tests/integration/mailbox.test.ts",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "log": "proof-integration.log",
+      "result": "9 actual SDK tests passed;310 assertions"
+    },
+    {
+      "command": "CARTRIDGE_TEST_BIN=\"$PWD/target/sessions-mapping/debug/cartridge\" SESSIONS_BINARY=\"$PWD/target/sessions-mapping/debug/sessions\" HARNESS_BINARY=\"$PWD/target/sessions-mapping/debug/harness\" bun test ../sessions.ctg/.cartridge/tests/integration/channel-cursors.test.ts ../sessions.ctg/.cartridge/tests/integration/channels.test.ts ../sessions.ctg/.cartridge/tests/integration/mailbox.test.ts ../sessions.ctg/.cartridge/tests/integration/retention.test.ts ../sessions.ctg/.cartridge/tests/integration/mapping.test.ts ../sessions.ctg/.cartridge/tests/integration/observations.test.ts",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "log": "proof-integration-all.log",
+      "result": "19 actual SDK tests passed;448 assertions"
+    }
+  ],
+  "logs": {
+    "proof-build.log": "57ac05fa60b41e7d5767d409b77345127a099719fc3fb8dc7d28c19c7f72eb63",
+    "proof-check.log": "24f94d09ce6c59bf1127bdf634a2504f17459ecc946235c1640494fc5dbcf033",
+    "proof-integration.log": "5bfca3c7fea7af6e39f07c850feda1d1560ad5b38d3cd6b4a32c5eb9945dae5a",
+    "proof-test.log": "e32cde2f101e982476156ea0fd9c4145a8643482623286fd3306164c991ab627",
+    "proof-integration-all.log": "f60df76e7a1da0e0a34e15237e21e7fc1de517b4babf1cadbe833488b11d19e9"
+  },
+  "binary_inputs": {
+    "sessions": "80b9e2759e8faff31d937b5009beb36cb48e54336b2478f5b7d1a0afb436e9ee",
+    "harness": "8641220268a85928aeaf08d4b954465ec369a674b4f7352900c465d2ddf506db",
+    "cartridge": "7ff18f941756552d3f97f7359f4b424cb83c41ca46b7b0c59e21a9e0e5067a89"
+  },
+  "review": {
+    "round": 3,
+    "reviewer": "/root",
+    "score": 96,
+    "status": "passed",
+    "semantic_acceptance_changes": false
+  },
+  "final_plan_digests": {
+    "prd.md": "00c1b67476d624bde0a16b8da785342b65df95a3213d5940eee15ab877c4d16a",
+    "specs/spec01.md": "1c0cb4b9845bd6feb5fd13f33b5c9d025b33742ccfae30a5f39eed272c5387f7"
+  },
+  "baseline": "../baseline.json (actual absent cursor SDK operations at423ecd3; inherited original rounds1\u20132)",
+  "dependency_refresh": "Coordinator must refresh channels/mailbox and other changed shared-source receipts before collecting this child. No new transitive module; existing main/mailbox/channels source declarations cover changes.",
+  "limitations": [
+    "One active writer per store; no new cross-process lock or hostile filesystem guarantee.",
+    "Named watch records subscription intent only; no model or wake scheduling.",
+    "Read persists a pending receipt without acknowledgement; a newer read supersedes it.",
+    "Unwatch explicitly removes progress and rewatch starts0; retire actors only after handling owned watches.",
+    "Version1 snapshots without readers remain readable; older binaries may refuse newer registry fields, preserving them rather than discarding progress.",
+    "Uncertain directory-sync acknowledgement may be visible; fresh reads reconcile cursor and old receipts can conflict."
+  ]
+}

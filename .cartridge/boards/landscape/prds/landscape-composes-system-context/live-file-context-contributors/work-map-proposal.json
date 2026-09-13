@@ -1,0 +1,174 @@
+{
+  "upsert": [
+    {
+      "id": "@landscape/landscape-composes-system-context/live-file-context-contributors",
+      "path": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/prd.md",
+      "owner": "landscape",
+      "kind": "rollup",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [
+        "@memo/landscape-file-kernel-context-facade",
+        "@memo/landscape-live-owner-context-facade"
+      ],
+      "round": 2,
+      "max_rounds": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "stale-after-owner-split",
+      "review": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/review.md",
+      "words": 285,
+      "sha256": "1928b9181eeddff0a800aacfdda9ae25ea8d8af4f570d66408a371dfb20e7a2a"
+    },
+    {
+      "id": "@fs/read-only-context-file-snapshots",
+      "path": "prd.ctg/.cartridge/boards/fs/prds/read-only-context-file-snapshots/prd.md",
+      "owner": "fs",
+      "kind": "leaf",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [],
+      "round": 2,
+      "max_rounds": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "stale-after-owner-split",
+      "review": "prd.ctg/.cartridge/boards/fs/prds/read-only-context-file-snapshots/review.md",
+      "words": 218,
+      "sha256": "72ee261de33bc6af5f6832f99d82da206d98da31e22aafdc2680d408359531fc"
+    },
+    {
+      "id": "@landscape/landscape-composes-system-context/live-file-context-contributors/file-kernel-evidence-adapter",
+      "path": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/file-kernel-evidence-adapter/prd.md",
+      "owner": "landscape",
+      "kind": "leaf",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [
+        "@landscape/landscape-composes-system-context/context-contributor-contract",
+        "@fs/read-only-context-file-snapshots"
+      ],
+      "round": 2,
+      "max_rounds": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "stale-after-owner-split",
+      "review": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/file-kernel-evidence-adapter/review.md",
+      "words": 226,
+      "sha256": "70a5ae7e2ba32a21e9d06e9983bb7aed1abc093f0fb00d922770edeac04d6f23"
+    },
+    {
+      "id": "@memo/landscape-file-kernel-context-facade",
+      "path": "prd.ctg/.cartridge/boards/memo/prds/landscape-file-kernel-context-facade/prd.md",
+      "owner": "memo",
+      "kind": "leaf",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [
+        "@landscape/landscape-composes-system-context/live-file-context-contributors/file-kernel-evidence-adapter",
+        "@memo/landscape-context-facade",
+        "@fs/read-only-context-file-snapshots"
+      ],
+      "round": 2,
+      "max_rounds": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "stale-after-owner-split",
+      "review": "prd.ctg/.cartridge/boards/memo/prds/landscape-file-kernel-context-facade/review.md",
+      "words": 230,
+      "sha256": "93f51943b8da51b6b7b83b8a14b7023c552b30363c424aab68d17ea34a00bc00"
+    },
+    {
+      "id": "@sessions/context-session-metadata",
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/context-session-metadata/prd.md",
+      "owner": "sessions",
+      "kind": "leaf",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [
+        "@sessions/sub-agent-sessions-record-parent-and-mailbox"
+      ],
+      "round": 2,
+      "max_rounds": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "stale-after-owner-split",
+      "review": "prd.ctg/.cartridge/boards/sessions/prds/context-session-metadata/review.md",
+      "words": 222,
+      "sha256": "8cb6c6e062a2491356e94896f28914cc2b6e5012579a87ef8dcb45a6c6f43a77"
+    },
+    {
+      "id": "@pty/context-terminal-metadata",
+      "path": "prd.ctg/.cartridge/boards/pty/prds/context-terminal-metadata/prd.md",
+      "owner": "pty",
+      "kind": "leaf",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [
+        "@pty/improve-pty-shell-identity"
+      ],
+      "round": 2,
+      "max_rounds": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "stale-after-owner-split",
+      "review": "prd.ctg/.cartridge/boards/pty/prds/context-terminal-metadata/review.md",
+      "words": 212,
+      "sha256": "242755cf5d309093543197df92517e5318e2976780f3ec8af9460cdee91f6af4"
+    },
+    {
+      "id": "@landscape/landscape-composes-system-context/live-file-context-contributors/live-owner-evidence-adapters",
+      "path": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/live-owner-evidence-adapters/prd.md",
+      "owner": "landscape",
+      "kind": "leaf",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [
+        "@sessions/context-session-metadata",
+        "@pty/context-terminal-metadata",
+        "@router/improve-router-route-explanation",
+        "@landscape/landscape-composes-system-context/context-contributor-contract"
+      ],
+      "round": 2,
+      "max_rounds": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "stale-after-owner-split",
+      "review": "prd.ctg/.cartridge/boards/landscape/prds/landscape-composes-system-context/live-file-context-contributors/live-owner-evidence-adapters/review.md",
+      "words": 220,
+      "sha256": "f838d94d34e17877667fb09d85873a5302984120ab384da5bf858e3d7d5ac525"
+    },
+    {
+      "id": "@memo/landscape-live-owner-context-facade",
+      "path": "prd.ctg/.cartridge/boards/memo/prds/landscape-live-owner-context-facade/prd.md",
+      "owner": "memo",
+      "kind": "leaf",
+      "sources": [
+        "landscape-composes-system-context"
+      ],
+      "needs": [
+        "@landscape/landscape-composes-system-context/live-file-context-contributors/live-owner-evidence-adapters",
+        "@memo/landscape-file-kernel-context-facade"
+      ],
+      "round": 2,
+      "max_rounds": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "stale-after-owner-split",
+      "review": "prd.ctg/.cartridge/boards/memo/prds/landscape-live-owner-context-facade/review.md",
+      "words": 218,
+      "sha256": "a1e8bab19e53f845a2ea82589f19fb536b0ef977a0721bf6ca7ce92e1b359b82"
+    }
+  ],
+  "coordinator_merge_only": true,
+  "source_hold": true,
+  "reuse_existing_router_contract": "@router/improve-router-route-explanation",
+  "historical_live_scope_remains_required": true
+}

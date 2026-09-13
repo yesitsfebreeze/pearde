@@ -1,0 +1,16 @@
+{
+  "reviewer": "/root",
+  "round": 3,
+  "score": 96,
+  "dimensions": [
+    19,
+    20,
+    20,
+    19,
+    18
+  ],
+  "digests": {
+    "prd.md": "0a71eb1cd9765a80a5228346a2a68bd7bd4bb894df0ab759168ecb8ad0120b01",
+    "specs/spec01.md": "3ece948a0e8ec5229f8fb51867f21d1fab1a15aee4ea5572e427f2869e98b74a"
+  }
+}

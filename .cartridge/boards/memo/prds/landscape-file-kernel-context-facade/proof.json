@@ -1,0 +1,89 @@
+{
+  "source_commit": "1ffca32db1d06364b3e35e6cbca4881a1f814f71",
+  "baseline_commit": "45d5a54ab9da1a798cd9997af9a8c19bed8a1812",
+  "dependency_commits": {
+    "fs": "d4a4239ccce02bc0e647e9ad80892995f48b317f",
+    "landscape": "62185289d148017c74986b618456a72bab620228"
+  },
+  "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+  "environment": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=$PWD/target/tool-result-contract",
+  "gates": [
+    {
+      "command": "just test memo",
+      "exit": 0,
+      "tests": 77
+    },
+    {
+      "command": "just check memo",
+      "exit": 0
+    },
+    {
+      "command": "bun test ../memo.ctg/.cartridge/tests/integration/file-kernel-context.test.ts",
+      "exit": 0,
+      "tests": 3,
+      "assertions": 91
+    },
+    {
+      "command": "bun test ../memo.ctg/.cartridge/tests/integration/context.test.ts",
+      "exit": 0,
+      "tests": 3,
+      "assertions": 80
+    },
+    {
+      "command": "bun test ../memo.ctg/.cartridge/tests/integration/inventory.test.ts",
+      "exit": 0,
+      "tests": 3,
+      "assertions": 10183
+    },
+    {
+      "command": "cargo build -p cartridge",
+      "exit": 0
+    },
+    {
+      "command": "python3 real-host-proof.py",
+      "exit": 0,
+      "assertions": 10
+    }
+  ],
+  "observed": {
+    "native_processes": [
+      "actual memo_cartridge",
+      "actual fs"
+    ],
+    "composition": "SDK harness proves four-source behavior; additional real Host proof loads shipped FS/Memo manifests/init.lua and actual native binaries for explicit present and omitted FS/grant profiles.",
+    "prepared_rows": 6,
+    "prepared_kinds": [
+      "file",
+      "kernel",
+      "document",
+      "memory"
+    ],
+    "shared_landscape_calls_per_prepare": 1,
+    "filesystem_host_callbacks_during_reads": 0,
+    "file_bytes": "full CRLF text with exact SHA256; two owners same leaf name stay separate",
+    "same_byte_owner_root_replacement": "same reference Available",
+    "changed_readback": "file edits/kernel generation Changed; removed file/owner/config permission Unavailable; inactive/duplicate owner makes no FS call",
+    "privacy": "typed path case aliases rejected at configuration; actual physical owner root inside typed documents refused by FS; private kernel config excluded",
+    "failure": "missing FS grant Absent, disabled Tasks make no discovery/calls; one failed landscape reply cached for both tasks; hanging file preserves kernel evidence",
+    "deadline": "70ms prepare includes staged45ms discovery +45ms FS callback; file Timeout and kernel Available; exact read40ms timeout",
+    "capacity": "6000-byte exact read with4096 wrapper cap yields Unavailable/capacity, no altered digest; prepare capped4096",
+    "compatibility": "legacy native docs/memory and frozen10k inventory all pass; model tool excludes context operation",
+    "no_writes": "file hashes unchanged after initial full preparation/readback; no FS tool observations/session callbacks",
+    "real_host_present": "exit0 complete=true exact CRLF file+kernel rows",
+    "real_host_omitted": "exit0 files Absent and kernel Available"
+  },
+  "limitations": [
+    "Ordinary runtime service-call bookkeeping remains; zero observations means FS tool observations and session touches.",
+    "File references bind current logical owner/path and full bytes, not historical root identity or generation.",
+    "Raw host/backend allocation occurs before bounded adapter inspection.",
+    "No session/terminal/router metadata is claimed; parent retains explicit required follow-up owner leaves."
+  ],
+  "sha256": {
+    "src/context.rs": "49a94dad8a8b8113dabbeba34b5775eccb6697f30c4726363e3deb61098cd4bf",
+    "src/service.rs": "2843d9a750e6965d08347e5b02a4d306cd254e8e4876a341ac5dd7edcc91d637",
+    ".cartridge/docs/context.md": "c87c9dbac011d45ee67e2d913f694b8fcf7663b817afbefe36a30a6eae8a3838",
+    ".cartridge/tests/integration/file-kernel-context.test.ts": "9e4c9393ef7bbd96ed77f54c98303d1752cd18f29119be6f0a54ac217dc1d04a"
+  },
+  "real_host_probe_sha256": "b277295be8e149b5a7480236642ae52f9fff4b68508df297eba474ea33c7062a",
+  "real_host_manifest_sha256": "68502209e955e716f485eb2b774e12564915d71676dc17451142163c98ae9202"
+}

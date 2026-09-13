@@ -1,0 +1,11 @@
+{
+  "before_spec_sha256": "55d24ba0854ba24963ac89b83687aedb0b737e73536d190dd8dbd0d6e99b2fea",
+  "after_spec_sha256": "829e2fe6b1eff2bf1f47fbeb22fb84703a5284dd85284a5c58e299cd014fa94d",
+  "added_sources": [
+    "src/main.rs",
+    "src/context.rs"
+  ],
+  "behavior_acceptance_changed": false,
+  "verification_refinement": "Existing public check and GitFS compatibility requirements are now executable fenced gates; same tests use current shared cache.",
+  "source": "de1406682a33c5b12cb472787178e2570e5ed0f8"
+}

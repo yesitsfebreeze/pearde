@@ -1,0 +1,19 @@
+{
+  "canonical_id": "@memory/every-mutation-holds-the-store-writer-boundary",
+  "reviewer": "/root/proxy_continuation",
+  "round": 4,
+  "score": 96,
+  "dimensions": [
+    19,
+    20,
+    19,
+    19,
+    19
+  ],
+  "digests": {
+    "prd.md": "b73d6512f08d2153072d56775fa33aadbca16d699bf247ec67309d73f0a02513",
+    "specs/spec01.md": "c3f28977cbe9ad2f7ee2555b4d105a145109868f270bbdd9d6aff15fc1cfc0d8",
+    "round-3-spec.md": "6d4e8b80d7910fcbdbc2566da255a44b73a60ded5773bdaa31a3ec8a5dff40be",
+    "round-4-baseline.json": "91a98370c14e7d230da30f2ed49fd8839251f7d50152d519a339d817583eae9b"
+  }
+}

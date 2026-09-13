@@ -1,0 +1,6 @@
+Source de1406682a33c5b12cb472787178e2570e5ed0f8
+just test fs:47 passed,0 failed;1.12s
+just check fs:exit0
+Native context SDK:2 passed,0 failed;56 assertions;1.089s
+Case-insensitive lookup on fixture volume: True
+Earlier public check flagged test-hook type complexity; a named test-only alias fixed it before these final passing gates.

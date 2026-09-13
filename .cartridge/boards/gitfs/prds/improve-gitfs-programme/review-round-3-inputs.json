@@ -1,0 +1,20 @@
+{
+  "reviewer": "/root/proxy_continuation",
+  "round": 3,
+  "score": 97,
+  "dimensions": [
+    19,
+    20,
+    20,
+    20,
+    18
+  ],
+  "reviewed_spec_sha256": "1359faa15abe00740f6d9c052e06ac3928575ecf25903cfa3563e201427c221b",
+  "final_spec_sha256": "09c0650515a23de8f0d4339ae6278c5f4b004e1ba9c9b112c0b15542463b7540",
+  "corrections": "Receipt wording, owner metadata, and checkboxes after passing unchanged gates; no behavior or scope changes.",
+  "digests": {
+    "prd.md": "16309fb941e1d6a466392bc459a48e017603795453a24b55174daba3f5452971",
+    "baseline.json": "ea29df8110627dccac7809d8e5dc16e9d9a8706d68ee943578fe68197b56552d",
+    "review.md": "b64650f6e2f9a5c2b1b04be0484f6494840c19bfb5ce9b8bb40819ce1f49f426"
+  }
+}

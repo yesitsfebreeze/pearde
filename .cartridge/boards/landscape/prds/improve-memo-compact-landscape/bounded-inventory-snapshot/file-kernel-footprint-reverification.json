@@ -1,0 +1,9 @@
+{
+  "before_spec_sha256": "362c71b85947f4b2b1e99760ba5c656622b7f9fa119151380aaa1c55c212417c",
+  "after_spec_sha256": "6b7e66f3de3cccb99a03027b968dddce16be8b5147cbb3ecfef8cccc1c9dd5cf",
+  "added_sources": [
+    "src/file_kernel.rs"
+  ],
+  "behavior_acceptance_gates_changed": false,
+  "source": "62185289d148017c74986b618456a72bab620228"
+}

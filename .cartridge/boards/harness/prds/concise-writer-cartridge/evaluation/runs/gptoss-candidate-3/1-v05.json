@@ -1,0 +1,79 @@
+{
+  "fixture": "v05",
+  "repeat": 1,
+  "category": "verbose",
+  "started": "2026-09-13T14:36:56.428Z",
+  "completed": "2026-09-13T14:38:54.774Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the deliverable. Use short, plain, complete sentences. Lead with the answer. A memo is a short standalone paragraph, not a form: add no heading, subject line, label, preface or conclusion. Say each fact once. Aim for 60–80 words from a long source, but keep all facts even if that needs more words.\n\nMeaning comes before length. Preserve every unique source fact: results, limits, exclusions, unknowns, evidence, owners, next actions and prerequisites. Copy technical strings character for character, including spaces and hyphens. Preserve negations, numbers, units, commands, errors, filenames, fields, frontmatter and code blocks. Never invent or infer a completed action.\n\nCopy an already concise source EXACTLY, with no added words. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance. Check the final text against every source sentence for missing information.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict; preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a concise standalone API migration note.\n\nSource:\nThis note should explain the change to the pagination response and should preserve the compatibility details rather than merely saying that pagination was improved. Version 2 adds the next_cursor field. Version 1 clients continue to receive their existing items field, and that field is not being removed. A null next_cursor means that the captured result has no further page. Results are captured once for a query. Files created after that capture do not appear in later pages of the same result. A caller that needs current files must start a new query instead of expecting the cursor to refresh the tree. Cursor state expires when the run is retired. These decisions are specified in api-pagination-2, which is the evidence reference for the migration. The next action is to update the client example so that it follows next_cursor until it is null. There is no change to write permissions or file ownership as part of this API change."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:38:54.348568Z",
+    "message": {
+      "role": "assistant",
+      "content": "Version 2 adds a next_cursor field to the pagination response; Version 1 clients still receive their items field, which is not removed. A null next_cursor means no further page. Results are captured once per query; files created after that do not appear in later pages of the same result. Callers needing current files must start a new query instead of expecting the cursor to refresh the tree. Cursor state expires when the run is retired. These decisions are specified in api-pagination-2, the evidence reference for the migration. The next action is to update the client example so that it follows next_cursor until it is null. There is no change to write permissions or file ownership as part of this API change.",
+      "thinking": "We need to output a memo, concise, 60-80 words? The instruction: \"Write a concise standalone API migration note.\" The source contains facts. We must preserve all facts. Let's craft a paragraph 60-80 words. Include all facts: change to pagination response, version 2 adds next_cursor, version 1 clients continue to receive items field, not removed, null next_cursor means no further page, results captured once per query, files created after capture don't appear in later pages, caller needing current files must start new query, cursor state expires when run retired, decisions specified in api-pagination-2 evidence reference, next action update client example to follow next_cursor until null, no change to write permissions or file ownership. Need to keep technical strings exactly: next_cursor, items field, null, api-pagination-2. Let's count words: We'll aim ~70 words.\n\nLet's draft: \"Version 2 of the API adds a next_cursor field to the pagination response. Version 1 clients still receive their existing items field, which is not removed. A null next_cursor indicates no further page. Results are captured once per query; files created after that capture do not appear in later pages of the same result. Callers needing current files must start a new query instead of expecting the cursor to refresh the tree. Cursor state expires when the run is retired. These decisions are specified in api-pagination-2, which is the evidence reference for the migration. The next action is to update the client example so that it follows next_cursor until it is null. There is no change to write permissions or file ownership as part of this API change.\"\n\nCount words: Let's count quickly: Version(1) 2(2) of(3) the(4) API(5) adds(6) a(7) next_cursor(8) field(9) to(10) the(11) pagination(12) response.(13) Version(14) 1(15) clients(16) still(17) receive(18) their(19) existing(20) items(21) field,(22) which(23) is(24) not(25) removed.(26) A(27) null(28) next_cursor(29) indicates(30) no(31) further(32) page.(33) Results(34) are(35) captured(36) once(37) per(38) query;(39) files(40) created(41) after(42) that(43) capture(44) do(45) not(46) appear(47) in(48) later(49) pages(50) of(51) the(52) same(53) result.(54) Callers(55) needing(56) current(57) files(58) must(59) start(60) a(61) new(62) query(63) instead(64) of(65) expecting(66) the(67) cursor(68) to(69) refresh(70) the(71) tree.(72) Cursor(73) state(74) expires(75) when(76) the(77) run(78) is(79) retired.(80) These(81) decisions(82) are(83) specified(84) in(85) api-pagination-2,(86) which(87) is(88) the(89) evidence(90) reference(91) for(92) the(93) migration.(94) The(95) next(96) action(97) is(98) to(99) update(100) the(101) client(102) example(103) so(104) that(105) it(106) follows(107) next_cursor(108) until(109) it(110) is(111) null.(112) There(113) is(114) no(115) change(116) to(117) write(118) permissions(119) or(120) file(121) ownership(122) as(123) part(124) of(125) this(126) API(127) change.(128)\n\n128 words, too many. Need 60-80 words. Must condense but preserve facts. We can combine sentences. Let's aim ~70 words.\n\nDraft shorter: \"Version 2 adds a next_cursor field to the pagination response; Version 1 clients still receive their items field, which is not removed. A null next_cursor means no further page. Results are captured once per query; files created after that capture do not appear in later pages of the same result. Callers needing current files must start a new query instead of expecting the cursor to refresh the tree. Cursor state expires when the run is retired. These decisions are specified in api-pagination-2, the evidence reference for the migration. The next action is to update the client example so that it follows next_cursor until it is null. There is no change to write permissions or file ownership as part of this API change.\"\n\nCount words: Version1(1) adds2 next_cursor3 field4 to5 the6 pagination7 response;8 Version9 110 clients11 still12 receive13 their14 items15 field,16 which17 is18 not19 removed.20 A21 null22 next_cursor23 means24 no25 further26 page.27 Results28 are29 captured30 once31 per32 query;33 files34 created35 after36 that37 capture38 do39 not40 appear41 in42 later43 pages44 of45 the46 same47 result.48 Callers49 needing50 current51 files52 must53 start54 a55 new56 query57 instead58 of59 expecting60 the61 cursor62 to63 refresh64 the65 tree.66 Cursor67 state68 expires69 when70 the71 run72 is73 retired.74 These75 decisions76 are77 specified78 in79 api-pagination-2,80 the81 evidence82 reference83 for84 the85 migration.86 The87 next88 action89 is90 to91 update92 the93 client94 example95 so96 that97 it98 follows99 next_cursor100 until101 it102 is103 null.104 There105 is106 no107 change108 to109 write110 permissions111 or112 file113 ownership114 as115 part116 of117 this118 API119 change120.\n\n120 words. Need reduce to 60-80. We can cut some details: maybe remove sentence about evidence reference? but must preserve. We can combine. Let's try 75 words.\n\nDraft: \"Version 2 adds a next_cursor field to the pagination response; Version 1 clients still receive their items field, which is not removed. A null next_cursor means no further page. Results are captured once per query; files created after that capture do not appear in later pages of the same result. Callers needing current files must start a new query instead of expecting the cursor to refresh the tree. Cursor state expires when the run is retired. These decisions are specified in api-pagination-2, the evidence reference for the migration. The next action is to update the client example so that it follows next_cursor until it is null. There is no change to write permissions or file ownership as part of this API change.\"\n\nCount: Version1 adds2 a3 next_cursor4 field5 to6 the7 pagination8 response;9 Version10 111 clients12 still13 receive14 their15 items16 field,17 which18 is19 not20 removed.21 A22 null23 next_cursor24 means25 no26 further27 page.28 Results29 are30 captured31 once32 per33 query;34 files35 created36 after37 that38 capture39 do40 not41 appear42 in43 later44 pages45 of46 the47 same48 result.49 Callers50 needing51 current52 files53 must54 start55 a56 new57 query58 instead59 of60 expecting61 the62 cursor63 to64 refresh65 the66 tree.67 Cursor68 state69 expires70 when71 the72 run73 is74 retired.75 These76 decisions77 are78 specified79 in80 api-pagination-2,81 the82 evidence83 reference84 for85 the86 migration.87 The88 next89 action90 is91 to92 update93 the94 client95 example96 so97 that98 it99 follows100 next_cursor101 until102 it103 is104 null.105 There106 is107 no108 change109 to110 write111 permissions112 or113 file114 ownership115 as116 part117 of118 this119 API120 change121.\n\n121 words. Need cut 40-50 words. Remove some explanatory parts: maybe remove \"Callers needing current files must start a new query instead of expecting the cursor to refresh the tree.\" but that's a fact. Could shorten: \"Callers needing current files must start a new query instead of expecting the cursor to refresh the tree.\" keep. Maybe remove \"These decisions are specified in api-pagination-2, the evidence reference for the migration.\" but must preserve. Could combine sentences to reduce words. Let's try compress:\n\n\"Version 2 adds a next_cursor field to the pagination response; Version 1 clients still receive their items field, which is not removed. A null next_cursor means no further page. Results are captured once per query; files created after that capture do not appear in later pages of the same result. Callers needing current files must start a new query instead of expecting the cursor to refresh the tree. Cursor state expires when the run is retired. These decisions are specified in api-pagination-2, the evidence reference for the migration. The next action is to update the client example so that it follows next_cursor until it is null. There is no change to write permissions or file ownership as part of this API change.\"\n\nCount words: Version1 2 adds3 a4 next_cursor5 field6 to7 the8 pagination9 response;10 Version11 112 clients13 still14 receive15 their16 items17 field,18 which19 is20 not21 removed.22 A23 null24 next_cursor25 means26 no27 further28 page.29 Results30 are31 captured32 once33 per34 query;35 files36 created37 after38 that39 capture40 do41 not42 appear43 in44 later45 pages46 of47 the48 same49 result.50 Callers51 needing52 current53 files54 must55 start56 a57 new58 query59 instead60 of61 expecting62 the63 cursor64 to65 refresh66 the67 tree.68 Cursor69 state70 expires71 when72 the73 run74 is75 retired.76 These77 decisions78 are79 specified80 in81 api-pagination-2,82 the83 evidence84 reference85 for86 the87 migration.88 The89 next90 action91 is92 to93 update94 the95 client96 example97 so98 that99 it100 follows101 next_cursor102 until103 it104 is105 null.106 There107 is108 no109 change110 to111 write112 permissions113 or114 file115 ownership116 as117 part118 of119 this120 API121 change122.\n\n122 words. Need cut 40-50. We can remove some phrases: maybe remove \"The next action is to update the client example so that it follows next_cursor until it is null.\" but that's a next action. Keep. Maybe remove \"These decisions are specified in api-pagination-2, the evidence reference for the migration.\" but must preserve. We can combine sentences to reduce words: e.g., merge first two sentences: \"Version 2 adds a next_cursor field to the pagination response; Version 1 clients still receive their items field, which is not removed.\" already combined. Maybe shorten \"Results are captured once per query; files created after that capture do not appear in later pages of the same result.\" could be \"Results are captured once per query; files created after that do not appear in later pages of the same result.\" That's minor. Let's try final 80 words.\n\nI'll produce final memo with ~80 words."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 117919916125,
+    "load_duration": 1928000,
+    "prompt_eval_count": 553,
+    "prompt_eval_cached_count": 0,
+    "prompt_eval_duration": 1598806000,
+    "eval_count": 2608,
+    "eval_duration": 116305908000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "Version 2 adds a next_cursor field to the pagination response; Version 1 clients still receive their items field, which is not removed. A null next_cursor means no further page. Results are captured once per query; files created after that do not appear in later pages of the same result. Callers needing current files must start a new query instead of expecting the cursor to refresh the tree. Cursor state expires when the run is retired. These decisions are specified in api-pagination-2, the evidence reference for the migration. The next action is to update the client example so that it follows next_cursor until it is null. There is no change to write permissions or file ownership as part of this API change.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:38:54.773802Z",
+      "response": " The",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 424518333,
+      "load_duration": 1784875,
+      "prompt_eval_count": 142,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 408161000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 142
+  },
+  "generation_tokens": 2608,
+  "output_tokens": 142,
+  "input_tokens": 553,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

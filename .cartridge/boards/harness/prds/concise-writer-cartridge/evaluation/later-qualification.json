@@ -1,0 +1,72 @@
+{
+  "qualification": "FAIL: no candidate meets all frozen gates",
+  "frozen_criteria_unchanged": true,
+  "variants": [
+    {
+      "variant": "gptoss-candidate",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        1.1256302521008403,
+        1.052910052910053,
+        1.1580286663896968
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 28,
+      "concise_growth_cases": 4
+    },
+    {
+      "variant": "gptoss-candidate-3",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.88437262483064,
+        0.7735042735042734,
+        0.8914104694640632
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 16,
+      "concise_growth_cases": 0
+    },
+    {
+      "variant": "cloud-candidate",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.7629113924050632,
+        0.8077450980392157,
+        0.7225852996095739
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 1,
+      "concise_growth_cases": 0
+    },
+    {
+      "variant": "cloud-candidate-4",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.7019047619047619,
+        0.622556930249238,
+        0.6669226268831359
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 0,
+      "concise_growth_cases": 0
+    },
+    {
+      "variant": "cloud-candidate-5",
+      "responses": 60,
+      "repeat_verbose_median_ratios": [
+        0.6266666666666667,
+        0.5843434343434344,
+        0.6458607576422407
+      ],
+      "required_maximum_each": 0.5,
+      "missing_literal_cases": 0,
+      "concise_growth_cases": 0
+    }
+  ],
+  "limitations": [
+    "Later variants fail the per-repeat token gate, so full question-by-question semantic qualification has not been claimed.",
+    "The local Ollama digest pins its model package; the cloud routing digest does not pin remote weights. The configured remote revision and provider-native counts are retained with the original requests.",
+    "The most recent cloud candidate preserves protected literals and concise fixture bytes, but those checks alone do not establish full meaning preservation.",
+    "Native integration is implemented separately in the writer lane; product quality remains unchecked and the PRD stays unfinished."
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "fixture": "p04",
+  "repeat": 2,
+  "category": "precision",
+  "started": "2026-09-13T14:43:47.499Z",
+  "completed": "2026-09-13T14:44:14.715Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the deliverable. Use short, plain, complete sentences. Lead with the answer. A memo is a short standalone paragraph, not a form: add no heading, subject line, label, preface or conclusion. Say each fact once. Aim for 60–80 words from a long source, but keep all facts even if that needs more words.\n\nMeaning comes before length. Preserve every unique source fact: results, limits, exclusions, unknowns, evidence, owners, next actions and prerequisites. Copy technical strings character for character, including spaces and hyphens. Preserve negations, numbers, units, commands, errors, filenames, fields, frontmatter and code blocks. Never invent or infer a completed action.\n\nCopy an already concise source EXACTLY, with no added words. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance. Check the final text against every source sentence for missing information.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict; preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nThe user explicitly asks for a detailed, ordered explanation. Give the three steps and explain why each is necessary; do not compress them into a fragment.\n\nSource:\nFirst, read the current revision because a stale save may overwrite someone else's edit. Second, compare the requested change with the current text because the original change may already have been applied. Third, save only if the change is still needed, using the current revision as expected_revision. If that save conflicts again, stop and ask for a new decision instead of automatically retrying. These are instructions from edit-protocol-5, not a report that a save happened."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:44:14.375896Z",
+    "message": {
+      "role": "assistant",
+      "content": "First, read the current revision because a stale save may overwrite someone else's edit. Second, compare the requested change with the current text because the original change may already have been applied. Third, save only if the change is still needed, using the current revision as expected_revision. If that save conflicts again, stop and ask for a new decision instead of automatically retrying. These are instructions from edit-protocol-5, not a report that a save happened.",
+      "thinking": "We need to output the deliverable: a memo paragraph with 60-80 words, preserving all facts. The source sentences: \"First, read the current revision because a stale save may overwrite someone else's edit. Second, compare the requested change with the current text because the original change may already have been applied. Third, save only if the change is still needed, using the current revision as expected_revision. If that save conflicts again, stop and ask for a new decision instead of automatically retrying. These are instructions from edit-protocol-5, not a report that a save happened.\"\n\nWe need to preserve all facts, constraints, uncertainties, provenance, next action. So include all sentences. Count words: let's approximate: \"First, read the current revision because a stale save may overwrite someone else's edit.\" (15 words). \"Second, compare the requested change with the current text because the original change may already have been applied.\" (22). \"Third, save only if the change is still needed, using the current revision as expected_revision.\" (18). \"If that save conflicts again, stop and ask for a new decision instead of automatically retrying.\" (18). \"These are instructions from edit-protocol-5, not a report that a save happened.\" (15). Total ~88 words. Need 60-80, but we can keep all facts; maybe we can trim but must preserve facts. We can combine sentences but keep facts. Let's try to keep all facts but reduce word count: maybe remove some filler but keep meaning. But must preserve every unique source fact. We cannot remove facts. But we can rephrase? The instruction says copy an already concise source EXACTLY, with no added words. So we must copy source exactly? It says \"Copy an already concise source EXACTLY, with no added words.\" The source is not concise? It's concise. So we must copy exactly. That yields 88 words. But requirement 60-80 words. Conflict. But instruction says preserve every fact. So maybe we must keep all sentences, even if >80. The instruction earlier: \"Aim for 60–80 words from a long source, but keep all facts even if that needs more words.\" So we can exceed. So output the paragraph exactly as source sentences."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 26875914500,
+    "load_duration": 602166,
+    "prompt_eval_count": 489,
+    "prompt_eval_cached_count": 31,
+    "prompt_eval_duration": 844818000,
+    "eval_count": 566,
+    "eval_duration": 26025416000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "First, read the current revision because a stale save may overwrite someone else's edit. Second, compare the requested change with the current text because the original change may already have been applied. Third, save only if the change is still needed, using the current revision as expected_revision. If that save conflicts again, stop and ask for a new decision instead of automatically retrying. These are instructions from edit-protocol-5, not a report that a save happened.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:44:14.715373Z",
+      "response": " The",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 339148208,
+      "load_duration": 1155542,
+      "prompt_eval_count": 92,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 332414000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 92
+  },
+  "generation_tokens": 566,
+  "output_tokens": 92,
+  "input_tokens": 489,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

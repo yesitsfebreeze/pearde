@@ -1,0 +1,79 @@
+{
+  "fixture": "v10",
+  "repeat": 1,
+  "category": "verbose",
+  "started": "2026-09-13T14:39:25.982Z",
+  "completed": "2026-09-13T14:39:46.595Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the deliverable. Use short, plain, complete sentences. Lead with the answer. A memo is a short standalone paragraph, not a form: add no heading, subject line, label, preface or conclusion. Say each fact once. Aim for 60–80 words from a long source, but keep all facts even if that needs more words.\n\nMeaning comes before length. Preserve every unique source fact: results, limits, exclusions, unknowns, evidence, owners, next actions and prerequisites. Copy technical strings character for character, including spaces and hyphens. Preserve negations, numbers, units, commands, errors, filenames, fields, frontmatter and code blocks. Never invent or infer a completed action.\n\nCopy an already concise source EXACTLY, with no added words. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance. Check the final text against every source sentence for missing information.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict; preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone accessibility review result.\n\nSource:\nThe settings dialog has been reviewed with keyboard navigation, and the result should be stated in terms of what was actually observed. Tab now moves from the name field to the save button and then to the cancel button. Shift+Tab moves through those controls in reverse order. Escape closes the dialog without saving. The review used the fixture settings-keyboard-5 on the desktop layout. The mobile layout was not checked, and screen-reader announcements were not checked. Those omissions do not imply failures, but they also cannot be presented as passing checks. The next action is for Ada to verify the mobile layout and screen-reader announcements. The change does not alter which settings the user is allowed to save. A later reader should be able to tell which interactions were verified, which were not, and who has the remaining work without referring back to this source text."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:39:46.294722Z",
+    "message": {
+      "role": "assistant",
+      "content": "Tab navigation in the settings dialog moves from the name field to the save button, then to the cancel button. Shift+Tab reverses that order. Pressing Escape closes the dialog without saving. The review used fixture settings‑keyboard‑5 on the desktop layout. The mobile layout and screen‑reader announcements were not checked; these omissions do not indicate failures but cannot be marked as passes. Ada must verify the mobile layout and screen‑reader announcements next. The change does not affect which settings can be saved.",
+      "thinking": "We need to produce a memo with the accessibility review result. Must preserve every fact. 60-80 words but include all facts. Let's count words. We'll craft concise but include all. Let's draft.\n\nWord count estimate: We'll produce maybe 70 words.\n\nLet's write:\n\n\"Tab navigation in the settings dialog moves from the name field to the save button, then to the cancel button. Shift+Tab reverses that order. Pressing Escape closes the dialog without saving. The review used fixture settings‑keyboard‑5 on the desktop layout. The mobile layout and screen‑reader announcements were not checked; these omissions do not indicate failures but cannot be marked as passes. Ada must verify the mobile layout and screen‑reader announcements next. The change does not affect which settings can be saved.\"\n\nCount words: Let's count quickly.\n\nTab(1) navigation2 in3 the4 settings5 dialog6 moves7 from8 the9 name10 field11 to12 the13 save14 button,15 then16 to17 the18 cancel19 button.20 Shift+Tab21 reverses22 that23 order.24 Pressing25 Escape26 closes27 the28 dialog29 without30 saving.31 The32 review33 used34 fixture35 settings‑keyboard‑536 on37 the38 desktop39 layout.40 The41 mobile42 layout43 and44 screen‑reader45 announcements46 were47 not48 checked;49 these50 omissions51 do52 not53 indicate54 failures55 but56 cannot57 be58 marked59 as60 passes.61 Ada62 must63 verify64 the65 mobile66 layout67 and68 screen‑reader69 announcements70 next.71 The72 change73 does74 not75 affect76 which77 settings78 can79 be80 saved81.\n\n81 words. Good."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 20311944791,
+    "load_duration": 983541,
+    "prompt_eval_count": 542,
+    "prompt_eval_cached_count": 48,
+    "prompt_eval_duration": 971047000,
+    "eval_count": 467,
+    "eval_duration": 19330802000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "Tab navigation in the settings dialog moves from the name field to the save button, then to the cancel button. Shift+Tab reverses that order. Pressing Escape closes the dialog without saving. The review used fixture settings‑keyboard‑5 on the desktop layout. The mobile layout and screen‑reader announcements were not checked; these omissions do not indicate failures but cannot be marked as passes. Ada must verify the mobile layout and screen‑reader announcements next. The change does not affect which settings can be saved.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:39:46.59518Z",
+      "response": " The",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 300122916,
+      "load_duration": 1385666,
+      "prompt_eval_count": 102,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 293741000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 102
+  },
+  "generation_tokens": 467,
+  "output_tokens": 102,
+  "input_tokens": 542,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

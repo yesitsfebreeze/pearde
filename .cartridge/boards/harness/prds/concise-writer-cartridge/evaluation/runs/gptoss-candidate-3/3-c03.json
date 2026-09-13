@@ -1,0 +1,79 @@
+{
+  "fixture": "c03",
+  "repeat": 3,
+  "category": "concise",
+  "started": "2026-09-13T14:46:11.906Z",
+  "completed": "2026-09-13T14:46:21.060Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the deliverable. Use short, plain, complete sentences. Lead with the answer. A memo is a short standalone paragraph, not a form: add no heading, subject line, label, preface or conclusion. Say each fact once. Aim for 60–80 words from a long source, but keep all facts even if that needs more words.\n\nMeaning comes before length. Preserve every unique source fact: results, limits, exclusions, unknowns, evidence, owners, next actions and prerequisites. Copy technical strings character for character, including spaces and hyphens. Preserve negations, numbers, units, commands, errors, filenames, fields, frontmatter and code blocks. Never invent or infer a completed action.\n\nCopy an already concise source EXACTLY, with no added words. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance. Check the final text against every source sentence for missing information.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict; preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nEdit only if needed; preserve the command exactly.\n\nSource:\nRun `git status --short`. Do not discard uncommitted changes."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:46:20.951172Z",
+    "message": {
+      "role": "assistant",
+      "content": "Run `git status --short`. Do not discard uncommitted changes.",
+      "thinking": "We need to produce a memo? The instruction: \"Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\"\n\nThe source: \"Run `git status --short`. Do not discard uncommitted changes.\"\n\nWe need to produce a memo? The deliverable surface: reply. So we need to output a reply that includes the instruction? The source is a command. The deliverable likely is a memo that says \"Run `git status --short`. Do not discard uncommitted changes.\" But we need to preserve all facts. There's only one fact. So output that sentence. No extra."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 9044171000,
+    "load_duration": 577916,
+    "prompt_eval_count": 392,
+    "prompt_eval_cached_count": 43,
+    "prompt_eval_duration": 811184000,
+    "eval_count": 176,
+    "eval_duration": 8228202999
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "Run `git status --short`. Do not discard uncommitted changes.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:46:21.059943Z",
+      "response": " Use",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 108383667,
+      "load_duration": 786417,
+      "prompt_eval_count": 15,
+      "prompt_eval_cached_count": 10,
+      "prompt_eval_duration": 106055000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 15
+  },
+  "generation_tokens": 176,
+  "output_tokens": 15,
+  "input_tokens": 392,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

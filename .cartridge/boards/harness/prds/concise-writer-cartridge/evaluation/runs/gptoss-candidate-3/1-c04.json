@@ -1,0 +1,79 @@
+{
+  "fixture": "c04",
+  "repeat": 1,
+  "category": "concise",
+  "started": "2026-09-13T14:40:33.651Z",
+  "completed": "2026-09-13T14:40:36.676Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the deliverable. Use short, plain, complete sentences. Lead with the answer. A memo is a short standalone paragraph, not a form: add no heading, subject line, label, preface or conclusion. Say each fact once. Aim for 60–80 words from a long source, but keep all facts even if that needs more words.\n\nMeaning comes before length. Preserve every unique source fact: results, limits, exclusions, unknowns, evidence, owners, next actions and prerequisites. Copy technical strings character for character, including spaces and hyphens. Preserve negations, numbers, units, commands, errors, filenames, fields, frontmatter and code blocks. Never invent or infer a completed action.\n\nCopy an already concise source EXACTLY, with no added words. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance. Check the final text against every source sentence for missing information.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict; preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nEdit only if needed; preserve uncertainty and provenance.\n\nSource:\nfixture-8 measured 9 ms. Production latency remains unknown."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:40:36.483046Z",
+    "message": {
+      "role": "assistant",
+      "content": "fixture-8 measured 9 ms. Production latency remains unknown.",
+      "thinking": "Need memo 60-80 words? But source only two sentences. Just copy facts. Provide memo paragraph."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 2830882334,
+    "load_duration": 528209,
+    "prompt_eval_count": 390,
+    "prompt_eval_cached_count": 42,
+    "prompt_eval_duration": 707273000,
+    "eval_count": 45,
+    "eval_duration": 2119029000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "fixture-8 measured 9 ms. Production latency remains unknown.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:40:36.676303Z",
+      "response": " The",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 192704584,
+      "load_duration": 648334,
+      "prompt_eval_count": 13,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 190726000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 13
+  },
+  "generation_tokens": 45,
+  "output_tokens": 13,
+  "input_tokens": 390,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

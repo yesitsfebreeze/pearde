@@ -1,0 +1,79 @@
+{
+  "fixture": "v06",
+  "repeat": 1,
+  "category": "verbose",
+  "started": "2026-09-13T14:27:07.874Z",
+  "completed": "2026-09-13T14:27:13.553Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write the deliverable directly. Lead with the answer or decision. Use plain words and short, complete sentences for both replies and standalone memos. Keep the required subject clear. Remove repetition, introductions, decorative headings, labels, commentary about editing, and generic conclusions. Use a short paragraph unless a real sequence or requested format needs a list.\n\nMeaning comes before length. Carry every substantive fact from the source into the deliverable once: decisions, measured results, limitations, exclusions, uncertainty, evidence references, responsible people, and the next action with its prerequisites. Preserve every negation, number, unit, command, exact quoted error, filename, field name and executable block. Do not turn completed into passed, local into deployed, or unknown into known. Do not invent causes, actions, results or recommendations. Keep instructions and observations distinct. A memo must make sense without its source conversation.\n\nIf asked to edit an already concise, clear text, return it unchanged. Do not add a title or preface. Preserve requested frontmatter and code fences exactly. For JSON or another structured format, return only that format with the requested keys and types. Explicit requests for detailed explanations override default brevity; retain ordered steps and their reasons.\n\nBefore returning, silently check that the reader can recover every substantive source fact, protected literal, uncertainty and next action. Restore any missing meaning, then remove only redundant words. Never omit facts to meet a length target.\n\nDraft new text in this style in the normal response. Rewriting an existing memo requires an explicit request and a preview. Save only the approved proposal through the existing validated memo.write operation with the revision that was read as expected_revision. On conflict, keep the newer memo and stop for a new decision; do not retry automatically. Preserve source transcripts and linked detailed evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nAnswer whether the import is complete.\n\nSource:\nThe import is not complete, and that should be the first thing the response makes clear. There were 80 records in the source file. Of those, 76 were imported successfully, while four were rejected because they had no external_id. The import did not create placeholder IDs for the rejected records, and it did not silently drop them as though everything had succeeded. The rejected row numbers are listed in import-errors-6.json. Existing records were not overwritten. The user needs to add external_id values to those four rows and submit only those corrected rows. The user should not be told to replay the entire file, because that is not the recommended next action. The successful records are already durable, and the response must not imply that the whole import was rolled back. It would also be inaccurate to say that all records are ready merely because most of them succeeded."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:27:13.26857Z",
+    "message": {
+      "role": "assistant",
+      "content": "The import is not complete.  \nThere were 80 records in the source file.  \n76 records were imported successfully.  \nFour records were rejected because they had no external_id.  \nThe rejected rows are listed in import-errors-6.json.  \nNo placeholder IDs were created for the rejected records, and they were not silently dropped.  \nExisting records were not overwritten.  \nTo finish the import, add external_id values to those four rows and submit only the corrected rows.",
+      "thinking": "Need reply: answer whether import complete: no. Provide facts."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 5394198208,
+    "load_duration": 1172125,
+    "prompt_eval_count": 666,
+    "prompt_eval_cached_count": 172,
+    "prompt_eval_duration": 747884000,
+    "eval_count": 118,
+    "eval_duration": 4636872000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "The import is not complete.  \nThere were 80 records in the source file.  \n76 records were imported successfully.  \nFour records were rejected because they had no external_id.  \nThe rejected rows are listed in import-errors-6.json.  \nNo placeholder IDs were created for the rejected records, and they were not silently dropped.  \nExisting records were not overwritten.  \nTo finish the import, add external_id values to those four rows and submit only the corrected rows.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:27:13.553682Z",
+      "response": "  \n",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 284789500,
+      "load_duration": 1021542,
+      "prompt_eval_count": 95,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 280928000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 95
+  },
+  "generation_tokens": 118,
+  "output_tokens": 95,
+  "input_tokens": 666,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

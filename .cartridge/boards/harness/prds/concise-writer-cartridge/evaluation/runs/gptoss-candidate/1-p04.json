@@ -1,0 +1,79 @@
+{
+  "fixture": "p04",
+  "repeat": 1,
+  "category": "precision",
+  "started": "2026-09-13T14:28:30.179Z",
+  "completed": "2026-09-13T14:28:38.739Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write the deliverable directly. Lead with the answer or decision. Use plain words and short, complete sentences for both replies and standalone memos. Keep the required subject clear. Remove repetition, introductions, decorative headings, labels, commentary about editing, and generic conclusions. Use a short paragraph unless a real sequence or requested format needs a list.\n\nMeaning comes before length. Carry every substantive fact from the source into the deliverable once: decisions, measured results, limitations, exclusions, uncertainty, evidence references, responsible people, and the next action with its prerequisites. Preserve every negation, number, unit, command, exact quoted error, filename, field name and executable block. Do not turn completed into passed, local into deployed, or unknown into known. Do not invent causes, actions, results or recommendations. Keep instructions and observations distinct. A memo must make sense without its source conversation.\n\nIf asked to edit an already concise, clear text, return it unchanged. Do not add a title or preface. Preserve requested frontmatter and code fences exactly. For JSON or another structured format, return only that format with the requested keys and types. Explicit requests for detailed explanations override default brevity; retain ordered steps and their reasons.\n\nBefore returning, silently check that the reader can recover every substantive source fact, protected literal, uncertainty and next action. Restore any missing meaning, then remove only redundant words. Never omit facts to meet a length target.\n\nDraft new text in this style in the normal response. Rewriting an existing memo requires an explicit request and a preview. Save only the approved proposal through the existing validated memo.write operation with the revision that was read as expected_revision. On conflict, keep the newer memo and stop for a new decision; do not retry automatically. Preserve source transcripts and linked detailed evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nThe user explicitly asks for a detailed, ordered explanation. Give the three steps and explain why each is necessary; do not compress them into a fragment.\n\nSource:\nFirst, read the current revision because a stale save may overwrite someone else's edit. Second, compare the requested change with the current text because the original change may already have been applied. Third, save only if the change is still needed, using the current revision as expected_revision. If that save conflicts again, stop and ask for a new decision instead of automatically retrying. These are instructions from edit-protocol-5, not a report that a save happened."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:28:38.354124Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Reply**\n\n1. **Read the current revision**  \n   *Why necessary:* A stale save may overwrite someone else’s edit. By reading the latest revision first, you ensure you are working with the most recent content and avoid accidental data loss.\n\n2. **Compare the requested change with the current text**  \n   *Why necessary:* The original change may already have been applied by another user. Comparing prevents duplicate work and ensures that you only proceed if the change is still needed.\n\n3. **Save only if the change is still needed, using the current revision as `expected_revision`**  \n   *Why necessary:* This step guarantees that the save operation is based on the latest state. If a conflict occurs again, the process stops and asks for a new decision instead of automatically retrying, preventing repeated conflicts and ensuring that the user can resolve the issue manually.",
+      "thinking": "We need to produce a reply with detailed ordered steps and explanations. Provide three steps."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 8174840917,
+    "load_duration": 642458,
+    "prompt_eval_count": 609,
+    "prompt_eval_cached_count": 159,
+    "prompt_eval_duration": 801569000,
+    "eval_count": 201,
+    "eval_duration": 7367482000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "**Reply**\n\n1. **Read the current revision**  \n   *Why necessary:* A stale save may overwrite someone else’s edit. By reading the latest revision first, you ensure you are working with the most recent content and avoid accidental data loss.\n\n2. **Compare the requested change with the current text**  \n   *Why necessary:* The original change may already have been applied by another user. Comparing prevents duplicate work and ensures that you only proceed if the change is still needed.\n\n3. **Save only if the change is still needed, using the current revision as `expected_revision`**  \n   *Why necessary:* This step guarantees that the save operation is based on the latest state. If a conflict occurs again, the process stops and asks for a new decision instead of automatically retrying, preventing repeated conflicts and ensuring that the user can resolve the issue manually.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:28:38.739241Z",
+      "response": "",
+      "done": true,
+      "done_reason": "stop",
+      "total_duration": 384859459,
+      "load_duration": 659542,
+      "prompt_eval_count": 174,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 381501000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 174
+  },
+  "generation_tokens": 201,
+  "output_tokens": 174,
+  "input_tokens": 609,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

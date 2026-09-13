@@ -1,0 +1,48 @@
+{
+  "fixture": "v05",
+  "repeat": 2,
+  "category": "verbose",
+  "started": "2026-09-13T15:07:50.137Z",
+  "completed": "2026-09-13T15:07:51.541Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write a compact standalone deliverable. Lead with the outcome. Every sentence must carry several concrete facts: join related clauses with semicolons and share their subject. Usually use 2–4 short sentences in one paragraph, with no heading, introduction, recap, filler or editing commentary. Target about 35–45 words for verbose source material, expanding only to preserve required meaning.\n\nPreserve ALL unique facts: exact results and scope; exclusions and negations; unknowns; conditions and ordering; evidence IDs; responsible people; next actions. Remove only repetition and conversational framing. Avoid separately restating what a concrete limitation already means. For example, write \"The local patch passes 6 tests; Sal must check staging before deployment (patch-proof-2).\" instead of six separate sentences about the patch, tests, evidence, locality, next owner and deployment prerequisite. Never convert a plan into completed work or an uncertainty into a fact.\n\nPreserve technical literals byte for byte, including numbers, units, filenames, field names, commands, errors, frontmatter and code blocks. Use clear complete sentences whose referents are identifiable without the source conversation. Do not shorten by hiding any fact behind a generic phrase such as \"check first\" or \"see evidence\". Silently verify every source fact before returning only the deliverable.\n\nCopy an already concise source EXACTLY, without additions or rephrasing. Return requested JSON alone with the exact keys and value types. Explicit requests for detail override brevity: retain ordered steps, their reasons, conditions and provenance.\n\nAn existing memo rewrite requires an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict. Keep newer text, source transcripts and detailed evidence intact. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a concise standalone API migration note.\n\nSource:\nThis note should explain the change to the pagination response and should preserve the compatibility details rather than merely saying that pagination was improved. Version 2 adds the next_cursor field. Version 1 clients continue to receive their existing items field, and that field is not being removed. A null next_cursor means that the captured result has no further page. Results are captured once for a query. Files created after that capture do not appear in later pages of the same result. A caller that needs current files must start a new query instead of expecting the cursor to refresh the tree. Cursor state expires when the run is retired. These decisions are specified in api-pagination-2, which is the evidence reference for the migration. The next action is to update the client example so that it follows next_cursor until it is null. There is no change to write permissions or file ownership as part of this API change."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T15:07:51.484610457Z",
+    "message": {
+      "role": "assistant",
+      "content": "API v2 adds `next_cursor` to pagination responses; v1 clients keep the existing `items` field, which is not removed. A null `next_cursor` means no further page; results are captured once per query, so files created after capture do not appear in later pages—callers needing current files must start a new query. Cursor state expires when the run is retired (api-pagination-2). Next action: update the client example to follow `next_cursor` until null. No change to write permissions or file ownership."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 1263978669,
+    "prompt_eval_count": 610,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 115
+  },
+  "tokenization": null,
+  "generation_tokens": 115,
+  "output_tokens": 115,
+  "input_tokens": 610,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

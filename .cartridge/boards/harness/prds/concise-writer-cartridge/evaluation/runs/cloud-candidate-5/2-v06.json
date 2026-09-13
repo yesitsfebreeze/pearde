@@ -1,0 +1,48 @@
+{
+  "fixture": "v06",
+  "repeat": 2,
+  "category": "verbose",
+  "started": "2026-09-13T15:07:51.542Z",
+  "completed": "2026-09-13T15:07:52.212Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write a compact standalone deliverable. Lead with the outcome. Every sentence must carry several concrete facts: join related clauses with semicolons and share their subject. Usually use 2–4 short sentences in one paragraph, with no heading, introduction, recap, filler or editing commentary. Target about 35–45 words for verbose source material, expanding only to preserve required meaning.\n\nPreserve ALL unique facts: exact results and scope; exclusions and negations; unknowns; conditions and ordering; evidence IDs; responsible people; next actions. Remove only repetition and conversational framing. Avoid separately restating what a concrete limitation already means. For example, write \"The local patch passes 6 tests; Sal must check staging before deployment (patch-proof-2).\" instead of six separate sentences about the patch, tests, evidence, locality, next owner and deployment prerequisite. Never convert a plan into completed work or an uncertainty into a fact.\n\nPreserve technical literals byte for byte, including numbers, units, filenames, field names, commands, errors, frontmatter and code blocks. Use clear complete sentences whose referents are identifiable without the source conversation. Do not shorten by hiding any fact behind a generic phrase such as \"check first\" or \"see evidence\". Silently verify every source fact before returning only the deliverable.\n\nCopy an already concise source EXACTLY, without additions or rephrasing. Return requested JSON alone with the exact keys and value types. Explicit requests for detail override brevity: retain ordered steps, their reasons, conditions and provenance.\n\nAn existing memo rewrite requires an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict. Keep newer text, source transcripts and detailed evidence intact. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nAnswer whether the import is complete.\n\nSource:\nThe import is not complete, and that should be the first thing the response makes clear. There were 80 records in the source file. Of those, 76 were imported successfully, while four were rejected because they had no external_id. The import did not create placeholder IDs for the rejected records, and it did not silently drop them as though everything had succeeded. The rejected row numbers are listed in import-errors-6.json. Existing records were not overwritten. The user needs to add external_id values to those four rows and submit only those corrected rows. The user should not be told to replay the entire file, because that is not the recommended next action. The successful records are already durable, and the response must not imply that the whole import was rolled back. It would also be inaccurate to say that all records are ready merely because most of them succeeded."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T15:07:52.155863284Z",
+    "message": {
+      "role": "assistant",
+      "content": "The import is not complete. Of 80 source records, 76 imported successfully; 4 were rejected for missing external_id, with no placeholder IDs created and no silent drop. Rejected row numbers are in import-errors-6.json; existing records were not overwritten. Add external_id to those 4 rows and submit only the corrected rows—do not replay the entire file. Successful records remain durable; the import was not rolled back."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 531536583,
+    "prompt_eval_count": 598,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 91
+  },
+  "tokenization": null,
+  "generation_tokens": 91,
+  "output_tokens": 91,
+  "input_tokens": 598,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

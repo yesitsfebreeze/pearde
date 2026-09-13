@@ -20,7 +20,8 @@ const api = new URL(endpoint).origin;
 async function metadata() {
   const tags = await (await fetch(api + '/api/tags')).json() as any;
   const model = tags.models.find((row: any) => row.name === modelName);
-  if (!model || model.remote_host) throw Error('the frozen model must be installed locally');
+  if (!model) throw Error('frozen model unavailable');
+  if (model.remote_host && (!pair || model.remote_host !== pair.remote_host || model.remote_model !== pair.remote_model)) throw Error('remote target differs from frozen pair');
   return model;
 }
 const installed = await metadata();
@@ -31,7 +32,7 @@ const output = path.join(directory, 'runs', variant);
 fs.mkdirSync(output, { recursive: true });
 const runManifest = {
   variant, model: modelName, model_digest: installed.digest,
-  tokenizer_revision: installed.digest,
+  tokenizer_revision: pair?.tokenizer_revision ?? installed.digest,
   pair,
   tokenizer_revision_basis: 'The installed GGUF model digest includes its tokenizer; scalar tokenizer metadata is retained below.',
   tokenizer: Object.fromEntries(Object.entries(show.model_info ?? {}).filter(([key, value]) => key.startsWith('tokenizer.') && !Array.isArray(value))),
@@ -65,7 +66,9 @@ for (let repeat = 0; repeat < rubric.repetitions; repeat++) {
       throw Error(`model request failed for ${repeat + 1}-${fixture.id}; saved error receipt`);
     }
     let tokenization: any = null;
-    if (pair) {
+    try {
+    if (pair?.native_completion_tokens && (body.message.thinking || body.model !== pair.response_model)) throw Error('native visible-token pair requires no reasoning and the frozen response model');
+    if (pair && !pair.native_completion_tokens) {
       for (const key of ['tokenizer.ggml.add_bos_token','tokenizer.ggml.add_eos_token','tokenizer.ggml.add_padding_token']) {
         if (show.model_info?.[key] !== false) throw Error('raw visible token count requires disabled special-token insertion');
       }
@@ -75,10 +78,14 @@ for (let repeat = 0; repeat < rubric.repetitions; repeat++) {
       if (tokenResponse.error || !Number.isInteger(tokenResponse.prompt_eval_count)) throw Error('visible tokenization failed');
       tokenization = {request:tokenRequest,response:tokenResponse,visible_tokens:tokenResponse.prompt_eval_count};
     }
+    } catch (error) {
+      fs.writeFileSync(path.join(output, `error-${Date.now()}-${fixture.id}.json`), JSON.stringify({ started, request, response: body, tokenization, error: String(error) }, null, 2) + '\n');
+      throw error;
+    }
     const record = {
       fixture: fixture.id, repeat: repeat + 1, category: fixture.category, started, completed: new Date().toISOString(),
       request, response: body, tokenization, generation_tokens: body.eval_count, output_tokens: tokenization?.visible_tokens ?? body.eval_count, input_tokens: body.prompt_eval_count,
-      model_digest: installed.digest, tokenizer_revision: installed.digest,
+      model_digest: installed.digest, tokenizer_revision: pair?.tokenizer_revision ?? installed.digest,
     };
     fs.writeFileSync(target, JSON.stringify(record, null, 2) + '\n', { flag: 'wx' });
     console.log(`${variant} ${repeat + 1}-${fixture.id}: ${record.output_tokens} output tokens; ${body.done_reason}`);

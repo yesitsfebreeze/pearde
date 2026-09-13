@@ -1,0 +1,48 @@
+{
+  "fixture": "v05",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T14:40:37.262Z",
+  "completed": "2026-09-13T14:40:37.995Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the deliverable. Use short, plain, complete sentences. Lead with the answer. A memo is a short standalone paragraph, not a form: add no heading, subject line, label, preface or conclusion. Say each fact once. Aim for 60–80 words from a long source, but keep all facts even if that needs more words.\n\nMeaning comes before length. Preserve every unique source fact: results, limits, exclusions, unknowns, evidence, owners, next actions and prerequisites. Copy technical strings character for character, including spaces and hyphens. Preserve negations, numbers, units, commands, errors, filenames, fields, frontmatter and code blocks. Never invent or infer a completed action.\n\nCopy an already concise source EXACTLY, with no added words. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance. Check the final text against every source sentence for missing information.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict; preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a concise standalone API migration note.\n\nSource:\nThis note should explain the change to the pagination response and should preserve the compatibility details rather than merely saying that pagination was improved. Version 2 adds the next_cursor field. Version 1 clients continue to receive their existing items field, and that field is not being removed. A null next_cursor means that the captured result has no further page. Results are captured once for a query. Files created after that capture do not appear in later pages of the same result. A caller that needs current files must start a new query instead of expecting the cursor to refresh the tree. Cursor state expires when the run is retired. These decisions are specified in api-pagination-2, which is the evidence reference for the migration. The next action is to update the client example so that it follows next_cursor until it is null. There is no change to write permissions or file ownership as part of this API change."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T14:40:37.942460972Z",
+    "message": {
+      "role": "assistant",
+      "content": "Version 2 adds the next_cursor field to the pagination response. Version 1 clients continue to receive their existing items field, which is not being removed. A null next_cursor means the captured result has no further page. Results are captured once for a query; files created after capture do not appear in later pages. Callers needing current files must start a new query. Cursor state expires when the run is retired. These decisions are specified in api-pagination-2. Next action: update the client example to follow next_cursor until null. No change to write permissions or file ownership."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 598082932,
+    "prompt_eval_count": 496,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 123
+  },
+  "tokenization": null,
+  "generation_tokens": 123,
+  "output_tokens": 123,
+  "input_tokens": 496,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

@@ -1,0 +1,79 @@
+{
+  "fixture": "v02",
+  "repeat": 2,
+  "category": "verbose",
+  "started": "2026-09-13T14:28:47.230Z",
+  "completed": "2026-09-13T14:28:56.191Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write the deliverable directly. Lead with the answer or decision. Use plain words and short, complete sentences for both replies and standalone memos. Keep the required subject clear. Remove repetition, introductions, decorative headings, labels, commentary about editing, and generic conclusions. Use a short paragraph unless a real sequence or requested format needs a list.\n\nMeaning comes before length. Carry every substantive fact from the source into the deliverable once: decisions, measured results, limitations, exclusions, uncertainty, evidence references, responsible people, and the next action with its prerequisites. Preserve every negation, number, unit, command, exact quoted error, filename, field name and executable block. Do not turn completed into passed, local into deployed, or unknown into known. Do not invent causes, actions, results or recommendations. Keep instructions and observations distinct. A memo must make sense without its source conversation.\n\nIf asked to edit an already concise, clear text, return it unchanged. Do not add a title or preface. Preserve requested frontmatter and code fences exactly. For JSON or another structured format, return only that format with the requested keys and types. Explicit requests for detailed explanations override default brevity; retain ordered steps and their reasons.\n\nBefore returning, silently check that the reader can recover every substantive source fact, protected literal, uncertainty and next action. Restore any missing meaning, then remove only redundant words. Never omit facts to meet a length target.\n\nDraft new text in this style in the normal response. Rewriting an existing memo requires an explicit request and a preview. Save only the approved proposal through the existing validated memo.write operation with the revision that was read as expected_revision. On conflict, keep the newer memo and stop for a new decision; do not retry automatically. Preserve source transcripts and linked detailed evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nTurn this conversation record into a standalone decision memo.\n\nSource:\nNora: We need a record of the decision about the image cache, because somebody reading this later will not have been in this conversation. Leon: The decision is to keep image thumbnails for 14 days. Original uploads are outside this cache and must not be deleted by this change. Nora: That distinction is the part I want to make especially clear. Leon: We are keeping the limit at 2 GiB for each workspace, and the oldest thumbnail is evicted when the limit would otherwise be exceeded. Nora: Did we measure the effect on mobile clients? Leon: No. Mobile bandwidth impact is still unknown. Nora: Then the next step is for Leon to compare a cold mobile session with a warm mobile session. We should make that comparison before enabling the policy outside staging. Leon: Agreed. The decision was recorded in discussion cache-review-4. Nora: Please carry those facts into the memo without requiring its reader to reconstruct this exchange."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:28:55.760563Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Subject:** Decision on Image Cache Policy – Thumbnail Retention and Workspace Size\n\n**Decision:**  \n- Image thumbnails will be retained for 14 days.  \n- Original image uploads are excluded from this cache and will not be deleted by this change.  \n- The cache limit per workspace remains 2 GiB; when the limit would be exceeded, the oldest thumbnail is evicted.\n\n**Constraints & Uncertainties:**  \n- Mobile bandwidth impact of the 14‑day thumbnail retention is unknown; no measurement has been performed.  \n- The effect on mobile clients has not yet been evaluated.\n\n**Next Action:**  \n- Leon will compare a cold mobile session with a warm mobile session to assess bandwidth impact.  \n- The comparison must be completed before the policy is enabled outside of staging.\n\n**Provenance:**  \n- Decision recorded in discussion cache‑review‑4.",
+      "thinking": "Need memo with subject, decision, constraints, uncertainties, next action."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 8530273709,
+    "load_duration": 683667,
+    "prompt_eval_count": 688,
+    "prompt_eval_cached_count": 166,
+    "prompt_eval_duration": 1195325000,
+    "eval_count": 200,
+    "eval_duration": 7328544000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "**Subject:** Decision on Image Cache Policy – Thumbnail Retention and Workspace Size\n\n**Decision:**  \n- Image thumbnails will be retained for 14 days.  \n- Original image uploads are excluded from this cache and will not be deleted by this change.  \n- The cache limit per workspace remains 2 GiB; when the limit would be exceeded, the oldest thumbnail is evicted.\n\n**Constraints & Uncertainties:**  \n- Mobile bandwidth impact of the 14‑day thumbnail retention is unknown; no measurement has been performed.  \n- The effect on mobile clients has not yet been evaluated.\n\n**Next Action:**  \n- Leon will compare a cold mobile session with a warm mobile session to assess bandwidth impact.  \n- The comparison must be completed before the policy is enabled outside of staging.\n\n**Provenance:**  \n- Decision recorded in discussion cache‑review‑4.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:28:56.191381Z",
+      "response": "  \n",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 430378333,
+      "load_duration": 703458,
+      "prompt_eval_count": 176,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 423970000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 176
+  },
+  "generation_tokens": 200,
+  "output_tokens": 176,
+  "input_tokens": 688,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

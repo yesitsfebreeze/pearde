@@ -1,0 +1,79 @@
+{
+  "fixture": "p04",
+  "repeat": 2,
+  "category": "precision",
+  "started": "2026-09-13T14:30:46.060Z",
+  "completed": "2026-09-13T14:30:56.844Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write the deliverable directly. Lead with the answer or decision. Use plain words and short, complete sentences for both replies and standalone memos. Keep the required subject clear. Remove repetition, introductions, decorative headings, labels, commentary about editing, and generic conclusions. Use a short paragraph unless a real sequence or requested format needs a list.\n\nMeaning comes before length. Carry every substantive fact from the source into the deliverable once: decisions, measured results, limitations, exclusions, uncertainty, evidence references, responsible people, and the next action with its prerequisites. Preserve every negation, number, unit, command, exact quoted error, filename, field name and executable block. Do not turn completed into passed, local into deployed, or unknown into known. Do not invent causes, actions, results or recommendations. Keep instructions and observations distinct. A memo must make sense without its source conversation.\n\nIf asked to edit an already concise, clear text, return it unchanged. Do not add a title or preface. Preserve requested frontmatter and code fences exactly. For JSON or another structured format, return only that format with the requested keys and types. Explicit requests for detailed explanations override default brevity; retain ordered steps and their reasons.\n\nBefore returning, silently check that the reader can recover every substantive source fact, protected literal, uncertainty and next action. Restore any missing meaning, then remove only redundant words. Never omit facts to meet a length target.\n\nDraft new text in this style in the normal response. Rewriting an existing memo requires an explicit request and a preview. Save only the approved proposal through the existing validated memo.write operation with the revision that was read as expected_revision. On conflict, keep the newer memo and stop for a new decision; do not retry automatically. Preserve source transcripts and linked detailed evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nThe user explicitly asks for a detailed, ordered explanation. Give the three steps and explain why each is necessary; do not compress them into a fragment.\n\nSource:\nFirst, read the current revision because a stale save may overwrite someone else's edit. Second, compare the requested change with the current text because the original change may already have been applied. Third, save only if the change is still needed, using the current revision as expected_revision. If that save conflicts again, stop and ask for a new decision instead of automatically retrying. These are instructions from edit-protocol-5, not a report that a save happened."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:30:56.201524Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Reply**\n\n1. **Read the current revision first.**  \n   This ensures that you are working with the most recent version of the document. If you read an older revision, you risk overwriting changes made by others after that revision, leading to lost work and conflicts.\n\n2. **Compare the requested change with the current text.**  \n   The original change may have already been applied by someone else. By comparing, you can determine whether the change is still needed. If the change is already present, you avoid making redundant edits and prevent unnecessary version churn.\n\n3. **Save only if the change is still needed, using the current revision as `expected_revision`.**  \n   By specifying the current revision as the expected revision, you guarantee that the save will succeed only if no other edits have occurred since you read the document. If another edit has happened, the save will conflict; in that case, you stop and ask for a new decision instead of retrying automatically. This preserves data integrity and prevents accidental overwrites.",
+      "thinking": "Need to produce reply with three steps and explain why each necessary."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 10140659833,
+    "load_duration": 1223625,
+    "prompt_eval_count": 609,
+    "prompt_eval_cached_count": 158,
+    "prompt_eval_duration": 1011207000,
+    "eval_count": 230,
+    "eval_duration": 9116045000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "**Reply**\n\n1. **Read the current revision first.**  \n   This ensures that you are working with the most recent version of the document. If you read an older revision, you risk overwriting changes made by others after that revision, leading to lost work and conflicts.\n\n2. **Compare the requested change with the current text.**  \n   The original change may have already been applied by someone else. By comparing, you can determine whether the change is still needed. If the change is already present, you avoid making redundant edits and prevent unnecessary version churn.\n\n3. **Save only if the change is still needed, using the current revision as `expected_revision`.**  \n   By specifying the current revision as the expected revision, you guarantee that the save will succeed only if no other edits have occurred since you read the document. If another edit has happened, the save will conflict; in that case, you stop and ask for a new decision instead of retrying automatically. This preserves data integrity and prevents accidental overwrites.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:30:56.844084Z",
+      "response": "  \n\n",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 642211000,
+      "load_duration": 1058125,
+      "prompt_eval_count": 207,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 636394000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 207
+  },
+  "generation_tokens": 230,
+  "output_tokens": 207,
+  "input_tokens": 609,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

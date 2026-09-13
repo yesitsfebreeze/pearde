@@ -1,0 +1,48 @@
+{
+  "fixture": "v04",
+  "repeat": 2,
+  "category": "verbose",
+  "started": "2026-09-13T14:43:39.036Z",
+  "completed": "2026-09-13T14:43:40.216Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write the shortest complete deliverable that preserves the source's meaning. Use plain, complete sentences. Start with the result or decision. A standalone memo usually needs one paragraph, not a title, subject, labels or a report outline. Aim for 45–60 words for a long source; exceed that only when its unique facts need more space.\n\nCompress wording, never facts. Combine sentences about the same subject. Remove repeated status, explanations of why a memo is useful, editing instructions, and broad caveats already expressed by a specific limitation. Keep every concrete result, constraint, exclusion, unknown, evidence reference, responsible person and next action with its prerequisites. Do not stop after the headline answer.\n\nExample source: The team has now made a choice about the simulator button. We chose amber for that button. This choice applies to the simulator, not the physical device. The physical device's button must stay unchanged. We have not measured contrast yet. Ina owns the contrast test, which must happen before release. The decision is in color-note-2. Please record this so the next reader need not reconstruct our discussion.\nExample deliverable: Use an amber simulator button; keep the physical button unchanged. Contrast is unmeasured. Ina must test it before release. The decision is in color-note-2.\n\nMeaning comes before length. Preserve exact technical strings, including spaces and hyphens: numbers, units, commands, errors, filenames, field names, frontmatter and code blocks. Never turn an instruction into a completed action, a partial result into success, or an unknown into a fact. Silently check every concrete source fact before returning.\n\nIf the source is already concise, copy it EXACTLY. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict. Preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone incident handoff.\n\nSource:\nThe incident record concerns the preview service rather than the main application. Between 10:05 and 10:12 UTC, preview requests returned HTTP 503. The main application continued serving requests during that interval. Investigation found that the preview process could not acquire its local lock. The log contained the exact message \"preview lock unavailable\". We have not established who held that lock, so the handoff must not name an owner as though that were known. Restarting the preview process restored previews at 10:12 UTC. That is the observed recovery, not evidence that the lock ownership question has been solved. The supporting log is incident-preview-8. The next step belongs to Oren, who will add lock-owner diagnostics and reproduce the contention in a disposable fixture. The purpose of this handoff is to allow someone who did not see the incident discussion to understand the affected surface, the recovery and the remaining investigation."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T14:43:40.16415285Z",
+    "message": {
+      "role": "assistant",
+      "content": "Incident handoff: Between 10:05 and 10:12 UTC, the preview service returned HTTP 503; the main application continued serving requests. The preview process could not acquire its local lock, with the exact log message \"preview lock unavailable\". The lock owner is unknown. Restarting the preview process restored previews at 10:12 UTC, but this does not resolve the lock ownership question. Supporting log: incident-preview-8. Next step: Oren will add lock-owner diagnostics and reproduce the contention in a disposable fixture."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 1039791081,
+    "prompt_eval_count": 673,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 115
+  },
+  "tokenization": null,
+  "generation_tokens": 115,
+  "output_tokens": 115,
+  "input_tokens": 673,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

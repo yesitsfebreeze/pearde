@@ -8,7 +8,7 @@ workflow: develop-one-cartridge
 work-kind: leaf
 capability-owner: harness
 canonical-scope: concise-writer-cartridge
-review-round: 4
+review-round: 5
 review-status: passed
 claim: "codex 2026-09-13T14:08:02.906Z"
 ---

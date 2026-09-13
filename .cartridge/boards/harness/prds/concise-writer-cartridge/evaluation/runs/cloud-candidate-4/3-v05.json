@@ -1,0 +1,48 @@
+{
+  "fixture": "v05",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T14:43:55.233Z",
+  "completed": "2026-09-13T14:43:56.101Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write the shortest complete deliverable that preserves the source's meaning. Use plain, complete sentences. Start with the result or decision. A standalone memo usually needs one paragraph, not a title, subject, labels or a report outline. Aim for 45–60 words for a long source; exceed that only when its unique facts need more space.\n\nCompress wording, never facts. Combine sentences about the same subject. Remove repeated status, explanations of why a memo is useful, editing instructions, and broad caveats already expressed by a specific limitation. Keep every concrete result, constraint, exclusion, unknown, evidence reference, responsible person and next action with its prerequisites. Do not stop after the headline answer.\n\nExample source: The team has now made a choice about the simulator button. We chose amber for that button. This choice applies to the simulator, not the physical device. The physical device's button must stay unchanged. We have not measured contrast yet. Ina owns the contrast test, which must happen before release. The decision is in color-note-2. Please record this so the next reader need not reconstruct our discussion.\nExample deliverable: Use an amber simulator button; keep the physical button unchanged. Contrast is unmeasured. Ina must test it before release. The decision is in color-note-2.\n\nMeaning comes before length. Preserve exact technical strings, including spaces and hyphens: numbers, units, commands, errors, filenames, field names, frontmatter and code blocks. Never turn an instruction into a completed action, a partial result into success, or an unknown into a fact. Silently check every concrete source fact before returning.\n\nIf the source is already concise, copy it EXACTLY. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict. Preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a concise standalone API migration note.\n\nSource:\nThis note should explain the change to the pagination response and should preserve the compatibility details rather than merely saying that pagination was improved. Version 2 adds the next_cursor field. Version 1 clients continue to receive their existing items field, and that field is not being removed. A null next_cursor means that the captured result has no further page. Results are captured once for a query. Files created after that capture do not appear in later pages of the same result. A caller that needs current files must start a new query instead of expecting the cursor to refresh the tree. Cursor state expires when the run is retired. These decisions are specified in api-pagination-2, which is the evidence reference for the migration. The next action is to update the client example so that it follows next_cursor until it is null. There is no change to write permissions or file ownership as part of this API change."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T14:43:56.047050418Z",
+    "message": {
+      "role": "assistant",
+      "content": "Version 2 adds the next_cursor field. Version 1 clients continue to receive their existing items field; that field is not removed. A null next_cursor means the captured result has no further page. Results are captured once per query; files created after capture do not appear in later pages. Callers needing current files must start a new query. Cursor state expires when the run is retired. These decisions are specified in api-pagination-2. Next action: update the client example to follow next_cursor until null. No change to write permissions or file ownership."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 729410473,
+    "prompt_eval_count": 671,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 117
+  },
+  "tokenization": null,
+  "generation_tokens": 117,
+  "output_tokens": 117,
+  "input_tokens": 671,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

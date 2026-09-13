@@ -1,0 +1,79 @@
+{
+  "fixture": "p01",
+  "repeat": 2,
+  "category": "precision",
+  "started": "2026-09-13T14:43:23.658Z",
+  "completed": "2026-09-13T14:43:34.370Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the deliverable. Use short, plain, complete sentences. Lead with the answer. A memo is a short standalone paragraph, not a form: add no heading, subject line, label, preface or conclusion. Say each fact once. Aim for 60–80 words from a long source, but keep all facts even if that needs more words.\n\nMeaning comes before length. Preserve every unique source fact: results, limits, exclusions, unknowns, evidence, owners, next actions and prerequisites. Copy technical strings character for character, including spaces and hyphens. Preserve negations, numbers, units, commands, errors, filenames, fields, frontmatter and code blocks. Never invent or infer a completed action.\n\nCopy an already concise source EXACTLY, with no added words. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance. Check the final text against every source sentence for missing information.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict; preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nWrite a precise handoff reply. Preserve each quoted command and error exactly.\n\nSource:\nThe command `archive verify --limit 0.25 --unit GiB` failed with `error: unknown flag --unit`. No archive was changed. Do not rerun with `--force`. The supported replacement command is not known. Ask the archive owner which version supports the unit flag, then update the fixture before retrying. Evidence: archive-probe-2."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:43:34.257231Z",
+    "message": {
+      "role": "assistant",
+      "content": "The command `archive verify --limit 0.25 --unit GiB` failed with `error: unknown flag --unit`. No archive was changed. Do not rerun with `--force`. The supported replacement command is not known. Ask the archive owner which version supports the unit flag, then update the fixture before retrying.",
+      "thinking": "We need to produce a reply. The deliverable surface: reply. So we need to write a precise handoff reply preserving facts. Must include quoted command and error exactly. So reply: \"The command `archive verify --limit 0.25 --unit GiB` failed with `error: unknown flag --unit`. No archive was changed. Do not rerun with `--force`. The supported replacement command is not known. Ask the archive owner which version supports the unit flag, then update the fixture before retrying.\" That's the source. We need to preserve each quoted command and error exactly. So produce that as reply."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 10598554125,
+    "load_duration": 634708,
+    "prompt_eval_count": 457,
+    "prompt_eval_cached_count": 41,
+    "prompt_eval_duration": 819992000,
+    "eval_count": 204,
+    "eval_duration": 9773701000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "The command `archive verify --limit 0.25 --unit GiB` failed with `error: unknown flag --unit`. No archive was changed. Do not rerun with `--force`. The supported replacement command is not known. Ask the archive owner which version supports the unit flag, then update the fixture before retrying.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:43:34.370549Z",
+      "response": " The",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 112840083,
+      "load_duration": 1474333,
+      "prompt_eval_count": 67,
+      "prompt_eval_cached_count": 62,
+      "prompt_eval_duration": 108112000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 67
+  },
+  "generation_tokens": 204,
+  "output_tokens": 67,
+  "input_tokens": 457,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

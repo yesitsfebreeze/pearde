@@ -1,0 +1,79 @@
+{
+  "fixture": "v01",
+  "repeat": 2,
+  "category": "verbose",
+  "started": "2026-09-13T14:41:10.879Z",
+  "completed": "2026-09-13T14:41:22.342Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the deliverable. Use short, plain, complete sentences. Lead with the answer. A memo is a short standalone paragraph, not a form: add no heading, subject line, label, preface or conclusion. Say each fact once. Aim for 60–80 words from a long source, but keep all facts even if that needs more words.\n\nMeaning comes before length. Preserve every unique source fact: results, limits, exclusions, unknowns, evidence, owners, next actions and prerequisites. Copy technical strings character for character, including spaces and hyphens. Preserve negations, numbers, units, commands, errors, filenames, fields, frontmatter and code blocks. Never invent or infer a completed action.\n\nCopy an already concise source EXACTLY, with no added words. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance. Check the final text against every source sentence for missing information.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict; preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone handoff memo.\n\nSource:\nWe have now reached a point where the retry change for the export worker has been implemented, and it is useful to put the present position in writing so that another person can pick up the work. The retry limit was changed from five attempts to three attempts. That is the change that has been made. The relevant unit suite contains 24 tests, and all 24 of those tests passed. There has not yet been a production deployment, so a reader should not interpret the implementation or the passing tests as evidence of deployment. The run that produced the test result is recorded as fixture-run-17. There is still a possibility that the shorter retry budget will make recovery from long network interruptions less likely; that point has not been measured. Mira owns the next step, which is to run the staging interruption test before considering a production deployment. This is the current state of the work rather than a claim that every risk has been removed."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:41:21.860066Z",
+    "message": {
+      "role": "assistant",
+      "content": "We have now reached a point where the retry change for the export worker has been implemented, and it is useful to put the present position in writing so that another person can pick up the work. The retry limit was changed from five attempts to three attempts. That is the change that has been made. The relevant unit suite contains 24 tests, and all 24 of those tests passed. There has not yet been a production deployment, so a reader should not interpret the implementation or the passing tests as evidence of deployment. The run that produced the test result is recorded as fixture-run-17. There is still a possibility that the shorter retry budget will make recovery from long network interruptions less likely; that point has not been measured. Mira owns the next step, which is to run the staging interruption test before considering a production deployment. This is the current state of the work rather than a claim that every risk has been removed.",
+      "thinking": "Need memo with facts."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 10980500333,
+    "load_duration": 651167,
+    "prompt_eval_count": 559,
+    "prompt_eval_cached_count": 31,
+    "prompt_eval_duration": 1160713000,
+    "eval_count": 200,
+    "eval_duration": 9813662000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "We have now reached a point where the retry change for the export worker has been implemented, and it is useful to put the present position in writing so that another person can pick up the work. The retry limit was changed from five attempts to three attempts. That is the change that has been made. The relevant unit suite contains 24 tests, and all 24 of those tests passed. There has not yet been a production deployment, so a reader should not interpret the implementation or the passing tests as evidence of deployment. The run that produced the test result is recorded as fixture-run-17. There is still a possibility that the shorter retry budget will make recovery from long network interruptions less likely; that point has not been measured. Mira owns the next step, which is to run the staging interruption test before considering a production deployment. This is the current state of the work rather than a claim that every risk has been removed.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:41:22.342476Z",
+      "response": " The",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 482010458,
+      "load_duration": 1640041,
+      "prompt_eval_count": 185,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 477874000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 185
+  },
+  "generation_tokens": 200,
+  "output_tokens": 185,
+  "input_tokens": 559,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

@@ -1,0 +1,48 @@
+{
+  "fixture": "v06",
+  "repeat": 2,
+  "category": "verbose",
+  "started": "2026-09-13T14:43:40.972Z",
+  "completed": "2026-09-13T14:43:42.007Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write the shortest complete deliverable that preserves the source's meaning. Use plain, complete sentences. Start with the result or decision. A standalone memo usually needs one paragraph, not a title, subject, labels or a report outline. Aim for 45–60 words for a long source; exceed that only when its unique facts need more space.\n\nCompress wording, never facts. Combine sentences about the same subject. Remove repeated status, explanations of why a memo is useful, editing instructions, and broad caveats already expressed by a specific limitation. Keep every concrete result, constraint, exclusion, unknown, evidence reference, responsible person and next action with its prerequisites. Do not stop after the headline answer.\n\nExample source: The team has now made a choice about the simulator button. We chose amber for that button. This choice applies to the simulator, not the physical device. The physical device's button must stay unchanged. We have not measured contrast yet. Ina owns the contrast test, which must happen before release. The decision is in color-note-2. Please record this so the next reader need not reconstruct our discussion.\nExample deliverable: Use an amber simulator button; keep the physical button unchanged. Contrast is unmeasured. Ina must test it before release. The decision is in color-note-2.\n\nMeaning comes before length. Preserve exact technical strings, including spaces and hyphens: numbers, units, commands, errors, filenames, field names, frontmatter and code blocks. Never turn an instruction into a completed action, a partial result into success, or an unknown into a fact. Silently check every concrete source fact before returning.\n\nIf the source is already concise, copy it EXACTLY. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict. Preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nAnswer whether the import is complete.\n\nSource:\nThe import is not complete, and that should be the first thing the response makes clear. There were 80 records in the source file. Of those, 76 were imported successfully, while four were rejected because they had no external_id. The import did not create placeholder IDs for the rejected records, and it did not silently drop them as though everything had succeeded. The rejected row numbers are listed in import-errors-6.json. Existing records were not overwritten. The user needs to add external_id values to those four rows and submit only those corrected rows. The user should not be told to replay the entire file, because that is not the recommended next action. The successful records are already durable, and the response must not imply that the whole import was rolled back. It would also be inaccurate to say that all records are ready merely because most of them succeeded."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T14:43:41.954226854Z",
+    "message": {
+      "role": "assistant",
+      "content": "The import is not complete. Of 80 records in the source file, 76 were imported successfully; four were rejected because they had no external_id. No placeholder IDs were created, and no records were silently dropped. Existing records were not overwritten. The rejected row numbers are in import-errors-6.json. Add external_id values to those four rows and submit only those corrected rows; do not replay the entire file. The successful records are durable and were not rolled back."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 898573764,
+    "prompt_eval_count": 659,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 98
+  },
+  "tokenization": null,
+  "generation_tokens": 98,
+  "output_tokens": 98,
+  "input_tokens": 659,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

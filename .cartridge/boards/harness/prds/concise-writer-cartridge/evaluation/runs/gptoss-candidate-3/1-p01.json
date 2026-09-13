@@ -1,0 +1,79 @@
+{
+  "fixture": "p01",
+  "repeat": 1,
+  "category": "precision",
+  "started": "2026-09-13T14:40:36.677Z",
+  "completed": "2026-09-13T14:40:45.100Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the deliverable. Use short, plain, complete sentences. Lead with the answer. A memo is a short standalone paragraph, not a form: add no heading, subject line, label, preface or conclusion. Say each fact once. Aim for 60–80 words from a long source, but keep all facts even if that needs more words.\n\nMeaning comes before length. Preserve every unique source fact: results, limits, exclusions, unknowns, evidence, owners, next actions and prerequisites. Copy technical strings character for character, including spaces and hyphens. Preserve negations, numbers, units, commands, errors, filenames, fields, frontmatter and code blocks. Never invent or infer a completed action.\n\nCopy an already concise source EXACTLY, with no added words. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance. Check the final text against every source sentence for missing information.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict; preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nWrite a precise handoff reply. Preserve each quoted command and error exactly.\n\nSource:\nThe command `archive verify --limit 0.25 --unit GiB` failed with `error: unknown flag --unit`. No archive was changed. Do not rerun with `--force`. The supported replacement command is not known. Ask the archive owner which version supports the unit flag, then update the fixture before retrying. Evidence: archive-probe-2."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:40:44.735321Z",
+    "message": {
+      "role": "assistant",
+      "content": "{\"reply\":\"The command `archive verify --limit 0.25 --unit GiB` failed with `error: unknown flag --unit`. No archive was changed. Do not rerun with `--force`. The supported replacement command is not known. Ask the archive owner which version supports the unit flag, then update the fixture before retrying. Evidence: archive-probe-2.\"}",
+      "thinking": "Need JSON? The instruction: \"Return requested JSON alone with exact keys and types.\" But deliverable surface: reply. So output should be JSON? Probably a JSON object with key \"reply\" containing the memo. Let's produce JSON with key \"reply\" and value the paragraph."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 8057846375,
+    "load_duration": 658041,
+    "prompt_eval_count": 457,
+    "prompt_eval_cached_count": 41,
+    "prompt_eval_duration": 832183000,
+    "eval_count": 145,
+    "eval_duration": 7220354000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "{\"reply\":\"The command `archive verify --limit 0.25 --unit GiB` failed with `error: unknown flag --unit`. No archive was changed. Do not rerun with `--force`. The supported replacement command is not known. Ask the archive owner which version supports the unit flag, then update the fixture before retrying. Evidence: archive-probe-2.\"}",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:40:45.10074Z",
+      "response": "",
+      "done": true,
+      "done_reason": "stop",
+      "total_duration": 365179334,
+      "load_duration": 817167,
+      "prompt_eval_count": 79,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 362085000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 79
+  },
+  "generation_tokens": 145,
+  "output_tokens": 79,
+  "input_tokens": 457,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

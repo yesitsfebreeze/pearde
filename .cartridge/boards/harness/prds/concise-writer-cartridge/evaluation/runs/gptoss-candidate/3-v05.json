@@ -1,0 +1,79 @@
+{
+  "fixture": "v05",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T14:31:26.840Z",
+  "completed": "2026-09-13T14:31:36.277Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write the deliverable directly. Lead with the answer or decision. Use plain words and short, complete sentences for both replies and standalone memos. Keep the required subject clear. Remove repetition, introductions, decorative headings, labels, commentary about editing, and generic conclusions. Use a short paragraph unless a real sequence or requested format needs a list.\n\nMeaning comes before length. Carry every substantive fact from the source into the deliverable once: decisions, measured results, limitations, exclusions, uncertainty, evidence references, responsible people, and the next action with its prerequisites. Preserve every negation, number, unit, command, exact quoted error, filename, field name and executable block. Do not turn completed into passed, local into deployed, or unknown into known. Do not invent causes, actions, results or recommendations. Keep instructions and observations distinct. A memo must make sense without its source conversation.\n\nIf asked to edit an already concise, clear text, return it unchanged. Do not add a title or preface. Preserve requested frontmatter and code fences exactly. For JSON or another structured format, return only that format with the requested keys and types. Explicit requests for detailed explanations override default brevity; retain ordered steps and their reasons.\n\nBefore returning, silently check that the reader can recover every substantive source fact, protected literal, uncertainty and next action. Restore any missing meaning, then remove only redundant words. Never omit facts to meet a length target.\n\nDraft new text in this style in the normal response. Rewriting an existing memo requires an explicit request and a preview. Save only the approved proposal through the existing validated memo.write operation with the revision that was read as expected_revision. On conflict, keep the newer memo and stop for a new decision; do not retry automatically. Preserve source transcripts and linked detailed evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a concise standalone API migration note.\n\nSource:\nThis note should explain the change to the pagination response and should preserve the compatibility details rather than merely saying that pagination was improved. Version 2 adds the next_cursor field. Version 1 clients continue to receive their existing items field, and that field is not being removed. A null next_cursor means that the captured result has no further page. Results are captured once for a query. Files created after that capture do not appear in later pages of the same result. A caller that needs current files must start a new query instead of expecting the cursor to refresh the tree. Cursor state expires when the run is retired. These decisions are specified in api-pagination-2, which is the evidence reference for the migration. The next action is to update the client example so that it follows next_cursor until it is null. There is no change to write permissions or file ownership as part of this API change."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:31:35.74214Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Memo: API Pagination Response Update – Version 2**\n\n**Change Summary**  \nVersion 2 of the API introduces a `next_cursor` field in the pagination response. The existing `items` field remains unchanged for Version 1 clients; it is not removed. A `null` `next_cursor` indicates no further pages.\n\n**Behavior Details**  \n- Results are captured once per query.  \n- Files created after the capture do not appear in subsequent pages of that result.  \n- To see newly created files, a caller must start a new query rather than rely on the cursor to refresh the tree.  \n- Cursor state expires when the run is retired.\n\n**Compatibility**  \n- Version 1 clients continue to receive only the `items` field.  \n- No changes to write permissions or file ownership.\n\n**Evidence**  \n- api‑pagination‑2\n\n**Next Action**  \nUpdate the client example to iterate using `next_cursor` until it is `null`.",
+      "thinking": "Need memo."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 8901470500,
+    "load_duration": 768958,
+    "prompt_eval_count": 673,
+    "prompt_eval_cached_count": 173,
+    "prompt_eval_duration": 1128004000,
+    "eval_count": 210,
+    "eval_duration": 7764633000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "**Memo: API Pagination Response Update – Version 2**\n\n**Change Summary**  \nVersion 2 of the API introduces a `next_cursor` field in the pagination response. The existing `items` field remains unchanged for Version 1 clients; it is not removed. A `null` `next_cursor` indicates no further pages.\n\n**Behavior Details**  \n- Results are captured once per query.  \n- Files created after the capture do not appear in subsequent pages of that result.  \n- To see newly created files, a caller must start a new query rather than rely on the cursor to refresh the tree.  \n- Cursor state expires when the run is retired.\n\n**Compatibility**  \n- Version 1 clients continue to receive only the `items` field.  \n- No changes to write permissions or file ownership.\n\n**Evidence**  \n- api‑pagination‑2\n\n**Next Action**  \nUpdate the client example to iterate using `next_cursor` until it is `null`.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:31:36.276972Z",
+      "response": "  \n",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 534438083,
+      "load_duration": 970000,
+      "prompt_eval_count": 197,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 528474000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 197
+  },
+  "generation_tokens": 210,
+  "output_tokens": 197,
+  "input_tokens": 673,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

@@ -1,0 +1,79 @@
+{
+  "fixture": "v04",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T14:44:43.313Z",
+  "completed": "2026-09-13T14:44:51.815Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the deliverable. Use short, plain, complete sentences. Lead with the answer. A memo is a short standalone paragraph, not a form: add no heading, subject line, label, preface or conclusion. Say each fact once. Aim for 60–80 words from a long source, but keep all facts even if that needs more words.\n\nMeaning comes before length. Preserve every unique source fact: results, limits, exclusions, unknowns, evidence, owners, next actions and prerequisites. Copy technical strings character for character, including spaces and hyphens. Preserve negations, numbers, units, commands, errors, filenames, fields, frontmatter and code blocks. Never invent or infer a completed action.\n\nCopy an already concise source EXACTLY, with no added words. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance. Check the final text against every source sentence for missing information.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict; preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone incident handoff.\n\nSource:\nThe incident record concerns the preview service rather than the main application. Between 10:05 and 10:12 UTC, preview requests returned HTTP 503. The main application continued serving requests during that interval. Investigation found that the preview process could not acquire its local lock. The log contained the exact message \"preview lock unavailable\". We have not established who held that lock, so the handoff must not name an owner as though that were known. Restarting the preview process restored previews at 10:12 UTC. That is the observed recovery, not evidence that the lock ownership question has been solved. The supporting log is incident-preview-8. The next step belongs to Oren, who will add lock-owner diagnostics and reproduce the contention in a disposable fixture. The purpose of this handoff is to allow someone who did not see the incident discussion to understand the affected surface, the recovery and the remaining investigation."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:44:51.40022Z",
+    "message": {
+      "role": "assistant",
+      "content": "The incident involved the preview service, not the main application. Between 10:05 and 10:12 UTC, preview requests returned HTTP 503 while the main application remained operational. Investigation revealed the preview process could not acquire its local lock; logs showed the exact message “preview lock unavailable.” The lock owner is unknown, so no owner is named. Restarting the preview process at 10:12 UTC restored preview functionality; this recovery was observed but does not resolve the lock ownership question. The supporting log is incident‑preview‑8. The next step is for Oren to add lock‑owner diagnostics and reproduce the contention in a disposable fixture.",
+      "thinking": "Need memo."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 8087064083,
+    "load_duration": 2442083,
+    "prompt_eval_count": 557,
+    "prompt_eval_cached_count": 54,
+    "prompt_eval_duration": 1136530000,
+    "eval_count": 146,
+    "eval_duration": 6941751000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "The incident involved the preview service, not the main application. Between 10:05 and 10:12 UTC, preview requests returned HTTP 503 while the main application remained operational. Investigation revealed the preview process could not acquire its local lock; logs showed the exact message “preview lock unavailable.” The lock owner is unknown, so no owner is named. Restarting the preview process at 10:12 UTC restored preview functionality; this recovery was observed but does not resolve the lock ownership question. The supporting log is incident‑preview‑8. The next step is for Oren to add lock‑owner diagnostics and reproduce the contention in a disposable fixture.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:44:51.814769Z",
+      "response": " The",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 414299417,
+      "load_duration": 617667,
+      "prompt_eval_count": 133,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 411428000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 133
+  },
+  "generation_tokens": 146,
+  "output_tokens": 133,
+  "input_tokens": 557,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

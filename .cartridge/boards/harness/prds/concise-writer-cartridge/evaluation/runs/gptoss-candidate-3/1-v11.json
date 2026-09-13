@@ -1,0 +1,79 @@
+{
+  "fixture": "v11",
+  "repeat": 1,
+  "category": "verbose",
+  "started": "2026-09-13T14:39:46.596Z",
+  "completed": "2026-09-13T14:39:58.867Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the deliverable. Use short, plain, complete sentences. Lead with the answer. A memo is a short standalone paragraph, not a form: add no heading, subject line, label, preface or conclusion. Say each fact once. Aim for 60–80 words from a long source, but keep all facts even if that needs more words.\n\nMeaning comes before length. Preserve every unique source fact: results, limits, exclusions, unknowns, evidence, owners, next actions and prerequisites. Copy technical strings character for character, including spaces and hyphens. Preserve negations, numbers, units, commands, errors, filenames, fields, frontmatter and code blocks. Never invent or infer a completed action.\n\nCopy an already concise source EXACTLY, with no added words. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance. Check the final text against every source sentence for missing information.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict; preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone retention decision.\n\nSource:\nThe retention decision applies to generated preview artifacts. It does not apply to the original source documents, and that distinction should not be lost in shortening the note. Preview artifacts become eligible for cleanup after seven days without access. Eligibility is not the same as deletion: the first operation produces a preview of the candidates and does not delete them. A pinned artifact is excluded even if it is older than seven days. Applying cleanup requires the exact candidate revision from the preview; if an artifact changes before apply, that artifact is skipped and reported as changed. There is no automatic replay of skipped deletions. The decision is captured in retention-review-2. The next step is to test a pinned artifact and an artifact changed between preview and apply. No assertion has yet been made that those tests have passed, so the note must keep them as next actions."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:39:58.378437Z",
+    "message": {
+      "role": "assistant",
+      "content": "The retention decision applies to generated preview artifacts. It does not apply to the original source documents, and that distinction should not be lost in shortening the note. Preview artifacts become eligible for cleanup after seven days without access. Eligibility is not the same as deletion: the first operation produces a preview of the candidates and does not delete them. A pinned artifact is excluded even if it is older than seven days. Applying cleanup requires the exact candidate revision from the preview; if an artifact changes before apply, that artifact is skipped and reported as changed. There is no automatic replay of skipped deletions. The decision is captured in retention-review-2. The next step is to test a pinned artifact and an artifact changed between preview and apply. No assertion has yet been made that those tests have passed, so the note must keep them as next actions.",
+      "thinking": "We need to produce a memo with the retention decision. Must preserve facts. 60-80 words? But instruction: \"Copy an already concise source EXACTLY, with no added words.\" The source is concise. We should copy it exactly. Let's output the memo as a paragraph."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 11781698875,
+    "load_duration": 780875,
+    "prompt_eval_count": 540,
+    "prompt_eval_cached_count": 47,
+    "prompt_eval_duration": 902561000,
+    "eval_count": 234,
+    "eval_duration": 10871284000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "The retention decision applies to generated preview artifacts. It does not apply to the original source documents, and that distinction should not be lost in shortening the note. Preview artifacts become eligible for cleanup after seven days without access. Eligibility is not the same as deletion: the first operation produces a preview of the candidates and does not delete them. A pinned artifact is excluded even if it is older than seven days. Applying cleanup requires the exact candidate revision from the preview; if an artifact changes before apply, that artifact is skipped and reported as changed. There is no automatic replay of skipped deletions. The decision is captured in retention-review-2. The next step is to test a pinned artifact and an artifact changed between preview and apply. No assertion has yet been made that those tests have passed, so the note must keep them as next actions.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:39:58.867816Z",
+      "response": " The",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 488988792,
+      "load_duration": 719375,
+      "prompt_eval_count": 167,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 485093000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 167
+  },
+  "generation_tokens": 234,
+  "output_tokens": 167,
+  "input_tokens": 540,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

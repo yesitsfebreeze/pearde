@@ -1,0 +1,79 @@
+{
+  "fixture": "p02",
+  "repeat": 3,
+  "category": "precision",
+  "started": "2026-09-13T14:46:31.766Z",
+  "completed": "2026-09-13T14:46:39.430Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the deliverable. Use short, plain, complete sentences. Lead with the answer. A memo is a short standalone paragraph, not a form: add no heading, subject line, label, preface or conclusion. Say each fact once. Aim for 60–80 words from a long source, but keep all facts even if that needs more words.\n\nMeaning comes before length. Preserve every unique source fact: results, limits, exclusions, unknowns, evidence, owners, next actions and prerequisites. Copy technical strings character for character, including spaces and hyphens. Preserve negations, numbers, units, commands, errors, filenames, fields, frontmatter and code blocks. Never invent or infer a completed action.\n\nCopy an already concise source EXACTLY, with no added words. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance. Check the final text against every source sentence for missing information.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict; preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nReturn a standalone Markdown memo. Preserve the frontmatter and fenced executable block exactly; shorten only explanatory prose.\n\nSource:\n---\nkind: routine\nname: verify-fixture\nstatus: draft\n---\n\nThis routine is for a disposable fixture only. It has not been approved for a shared store. Keep the commands in the stated order.\n\n```sh\nfixture seed --count 3\nfixture verify --read-only\n```\n\nSuccess means the exact output `3 rows checked`. On any other output, stop and preserve the fixture. The expected result is specified by routine-proof-3; this source does not claim that the routine has already passed."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:46:39.307211Z",
+    "message": {
+      "role": "assistant",
+      "content": "```markdown\n---\nkind: routine\nname: verify-fixture\nstatus: draft\n---\n\nThis routine is for a disposable fixture only. It has not been approved for a shared store. Keep the commands in the stated order.\n\n```sh\nfixture seed --count 3\nfixture verify --read-only\n```\n\nSuccess means the exact output `3 rows checked`. On any other output, stop and preserve the fixture. The expected result is specified by routine-proof-3; this source does not claim that the routine has already passed.\n```",
+      "thinking": "Need to produce memo with frontmatter and fenced block. Include all facts."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 7540788083,
+    "load_duration": 673750,
+    "prompt_eval_count": 493,
+    "prompt_eval_cached_count": 40,
+    "prompt_eval_duration": 1014662000,
+    "eval_count": 134,
+    "eval_duration": 6520609000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "```markdown\n---\nkind: routine\nname: verify-fixture\nstatus: draft\n---\n\nThis routine is for a disposable fixture only. It has not been approved for a shared store. Keep the commands in the stated order.\n\n```sh\nfixture seed --count 3\nfixture verify --read-only\n```\n\nSuccess means the exact output `3 rows checked`. On any other output, stop and preserve the fixture. The expected result is specified by routine-proof-3; this source does not claim that the routine has already passed.\n```",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:46:39.430599Z",
+      "response": "\n\n",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 123134916,
+      "load_duration": 793250,
+      "prompt_eval_count": 109,
+      "prompt_eval_cached_count": 104,
+      "prompt_eval_duration": 118450000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 109
+  },
+  "generation_tokens": 134,
+  "output_tokens": 109,
+  "input_tokens": 493,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

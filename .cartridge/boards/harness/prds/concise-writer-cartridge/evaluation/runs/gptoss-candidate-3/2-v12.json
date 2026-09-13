@@ -1,0 +1,79 @@
+{
+  "fixture": "v12",
+  "repeat": 2,
+  "category": "verbose",
+  "started": "2026-09-13T14:42:45.543Z",
+  "completed": "2026-09-13T14:42:54.258Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the deliverable. Use short, plain, complete sentences. Lead with the answer. A memo is a short standalone paragraph, not a form: add no heading, subject line, label, preface or conclusion. Say each fact once. Aim for 60–80 words from a long source, but keep all facts even if that needs more words.\n\nMeaning comes before length. Preserve every unique source fact: results, limits, exclusions, unknowns, evidence, owners, next actions and prerequisites. Copy technical strings character for character, including spaces and hyphens. Preserve negations, numbers, units, commands, errors, filenames, fields, frontmatter and code blocks. Never invent or infer a completed action.\n\nCopy an already concise source EXACTLY, with no added words. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance. Check the final text against every source sentence for missing information.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict; preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nReply with the current delivery status and remaining blocker.\n\nSource:\nThe documentation update is ready locally, which is the main status to report. It updates the setup instructions to name the `config_dir` field and removes the obsolete `credentials_path` example. The local documentation link check passed on 18 pages. However, the change has not been published. Publication is blocked because the staging host returned the exact message `certificate expired` when the preview was checked. The expiry problem has not been repaired, and no production request was made as part of this check. The result is recorded in docs-preview-11. The next step is to renew the staging certificate and rerun the preview check before publishing. It would be misleading to collapse ready locally and published into the same status, or to claim that production is unhealthy on the basis of a staging-only observation."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:42:53.901722Z",
+    "message": {
+      "role": "assistant",
+      "content": "The documentation update is ready locally, updating setup instructions to name the `config_dir` field and removing the obsolete `credentials_path` example. Local documentation link check passed on 18 pages. However, publication is blocked because the staging host returned the exact message `certificate expired` when the preview was checked. The expiry problem has not been repaired, and no production request was made as part of this check. The result is recorded in docs-preview-11. The next step is to renew the staging certificate and rerun the preview check before publishing.",
+      "thinking": "We need to produce a memo: short paragraph 60-80 words. Include all facts. Let's count. We'll craft 70 words."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 8357796417,
+    "load_duration": 800792,
+    "prompt_eval_count": 535,
+    "prompt_eval_cached_count": 46,
+    "prompt_eval_duration": 997707000,
+    "eval_count": 147,
+    "eval_duration": 7353334000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "The documentation update is ready locally, updating setup instructions to name the `config_dir` field and removing the obsolete `credentials_path` example. Local documentation link check passed on 18 pages. However, publication is blocked because the staging host returned the exact message `certificate expired` when the preview was checked. The expiry problem has not been repaired, and no production request was made as part of this check. The result is recorded in docs-preview-11. The next step is to renew the staging certificate and rerun the preview check before publishing.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:42:54.258495Z",
+      "response": " The",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 356449167,
+      "load_duration": 757208,
+      "prompt_eval_count": 109,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 353191000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 109
+  },
+  "generation_tokens": 147,
+  "output_tokens": 109,
+  "input_tokens": 535,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "frozen_rubric_sha256": "3f94576b52e4faec8dba7f6ece2aecb266d812cfca6866736a4fe2c419ffa218",
+  "model": "deepseek-v4-flash:cloud",
+  "expected_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "remote_host": "https://ollama.com",
+  "remote_model": "deepseek-v4-flash:0731",
+  "response_model": "deepseek-v4-flash",
+  "settings": {
+    "temperature": 0.2,
+    "num_predict": 4096,
+    "num_ctx": 8192
+  },
+  "think": false,
+  "native_completion_tokens": true,
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed.",
+  "revision_limit": "Installed manifest digest pins the requested remote host/target, not remotely served weights. Responses report deepseek-v4-flash. Retain both labels and timestamps; no independent remote-weights verification is claimed.",
+  "guidance": "candidate-3-guidance.txt; unchanged frozen fixtures and questions; same settings for baseline and candidate."
+}

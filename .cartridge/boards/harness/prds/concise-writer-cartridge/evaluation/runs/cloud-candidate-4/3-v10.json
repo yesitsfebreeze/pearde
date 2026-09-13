@@ -1,0 +1,48 @@
+{
+  "fixture": "v10",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T14:43:59.155Z",
+  "completed": "2026-09-13T14:44:00.022Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write the shortest complete deliverable that preserves the source's meaning. Use plain, complete sentences. Start with the result or decision. A standalone memo usually needs one paragraph, not a title, subject, labels or a report outline. Aim for 45–60 words for a long source; exceed that only when its unique facts need more space.\n\nCompress wording, never facts. Combine sentences about the same subject. Remove repeated status, explanations of why a memo is useful, editing instructions, and broad caveats already expressed by a specific limitation. Keep every concrete result, constraint, exclusion, unknown, evidence reference, responsible person and next action with its prerequisites. Do not stop after the headline answer.\n\nExample source: The team has now made a choice about the simulator button. We chose amber for that button. This choice applies to the simulator, not the physical device. The physical device's button must stay unchanged. We have not measured contrast yet. Ina owns the contrast test, which must happen before release. The decision is in color-note-2. Please record this so the next reader need not reconstruct our discussion.\nExample deliverable: Use an amber simulator button; keep the physical button unchanged. Contrast is unmeasured. Ina must test it before release. The decision is in color-note-2.\n\nMeaning comes before length. Preserve exact technical strings, including spaces and hyphens: numbers, units, commands, errors, filenames, field names, frontmatter and code blocks. Never turn an instruction into a completed action, a partial result into success, or an unknown into a fact. Silently check every concrete source fact before returning.\n\nIf the source is already concise, copy it EXACTLY. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict. Preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone accessibility review result.\n\nSource:\nThe settings dialog has been reviewed with keyboard navigation, and the result should be stated in terms of what was actually observed. Tab now moves from the name field to the save button and then to the cancel button. Shift+Tab moves through those controls in reverse order. Escape closes the dialog without saving. The review used the fixture settings-keyboard-5 on the desktop layout. The mobile layout was not checked, and screen-reader announcements were not checked. Those omissions do not imply failures, but they also cannot be presented as passing checks. The next action is for Ada to verify the mobile layout and screen-reader announcements. The change does not alter which settings the user is allowed to save. A later reader should be able to tell which interactions were verified, which were not, and who has the remaining work without referring back to this source text."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T14:43:59.967848141Z",
+    "message": {
+      "role": "assistant",
+      "content": "Keyboard navigation in the settings dialog works as observed: Tab moves from the name field to the save button, then to the cancel button; Shift+Tab reverses that order; Escape closes the dialog without saving. Verified on the desktop layout using fixture settings-keyboard-5. The mobile layout and screen-reader announcements were not checked; these omissions are not failures but are unverified. Ada must verify the mobile layout and screen-reader announcements. The change does not alter which settings the user is allowed to save."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 723566359,
+    "prompt_eval_count": 655,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 103
+  },
+  "tokenization": null,
+  "generation_tokens": 103,
+  "output_tokens": 103,
+  "input_tokens": 655,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

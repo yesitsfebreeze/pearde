@@ -1,0 +1,79 @@
+{
+  "fixture": "v08",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T14:31:51.729Z",
+  "completed": "2026-09-13T14:32:01.451Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write the deliverable directly. Lead with the answer or decision. Use plain words and short, complete sentences for both replies and standalone memos. Keep the required subject clear. Remove repetition, introductions, decorative headings, labels, commentary about editing, and generic conclusions. Use a short paragraph unless a real sequence or requested format needs a list.\n\nMeaning comes before length. Carry every substantive fact from the source into the deliverable once: decisions, measured results, limitations, exclusions, uncertainty, evidence references, responsible people, and the next action with its prerequisites. Preserve every negation, number, unit, command, exact quoted error, filename, field name and executable block. Do not turn completed into passed, local into deployed, or unknown into known. Do not invent causes, actions, results or recommendations. Keep instructions and observations distinct. A memo must make sense without its source conversation.\n\nIf asked to edit an already concise, clear text, return it unchanged. Do not add a title or preface. Preserve requested frontmatter and code fences exactly. For JSON or another structured format, return only that format with the requested keys and types. Explicit requests for detailed explanations override default brevity; retain ordered steps and their reasons.\n\nBefore returning, silently check that the reader can recover every substantive source fact, protected literal, uncertainty and next action. Restore any missing meaning, then remove only redundant words. Never omit facts to meet a length target.\n\nDraft new text in this style in the normal response. Rewriting an existing memo requires an explicit request and a preview. Save only the approved proposal through the existing validated memo.write operation with the revision that was read as expected_revision. On conflict, keep the newer memo and stop for a new decision; do not retry automatically. Preserve source transcripts and linked detailed evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone operational instruction from this conversation.\n\nSource:\nPriya: We need the handoff to say exactly which environment is safe for this reproduction. Sam: Use the disposable fixture workspace. Do not use the shared production store. Priya: What should the operator run? Sam: First run `fixture seed --count 12`. Then run `fixture verify --read-only`. Keep that order, because verify expects the seeded rows. Priya: What result is expected? Sam: The verification should report `12 rows checked`. If it reports `writer lock held`, stop and keep the fixture for inspection. Do not delete the lock file. Priya: Where do we keep the result? Sam: Save stdout and stderr in fixture-proof-12.txt. Priya: And after that? Sam: Send the recorded result to the next reviewer as part of the handoff. That is an instruction to the operator in the memo, not a claim that anybody has already sent it."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:32:00.865847Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Memo**\n\n**Subject:** Reproduction Handoff Procedure – Disposable Fixture Workspace\n\n**Instruction to Operator:**\n\n1. Use the disposable fixture workspace; do **not** use the shared production store.  \n2. Run the commands in the following order:  \n   - `fixture seed --count 12`  \n   - `fixture verify --read-only`  \n   Keep this order because `verify` expects the seeded rows.  \n3. Verify the output. The expected result is the message `12 rows checked`.  \n   - If the output reports `writer lock held`, stop immediately and keep the fixture for inspection. Do **not** delete the lock file.  \n4. Save both stdout and stderr to the file `fixture-proof-12.txt`.  \n5. Send the recorded result file to the next reviewer as part of the handoff.  \n\n**Next Action:** Operator must complete the steps above and forward `fixture-proof-12.txt` to the next reviewer.",
+      "thinking": "We need memo with operational instruction. Include all facts."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 9136407042,
+    "load_duration": 800375,
+    "prompt_eval_count": 682,
+    "prompt_eval_cached_count": 170,
+    "prompt_eval_duration": 1023037000,
+    "eval_count": 217,
+    "eval_duration": 8105242000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "**Memo**\n\n**Subject:** Reproduction Handoff Procedure – Disposable Fixture Workspace\n\n**Instruction to Operator:**\n\n1. Use the disposable fixture workspace; do **not** use the shared production store.  \n2. Run the commands in the following order:  \n   - `fixture seed --count 12`  \n   - `fixture verify --read-only`  \n   Keep this order because `verify` expects the seeded rows.  \n3. Verify the output. The expected result is the message `12 rows checked`.  \n   - If the output reports `writer lock held`, stop immediately and keep the fixture for inspection. Do **not** delete the lock file.  \n4. Save both stdout and stderr to the file `fixture-proof-12.txt`.  \n5. Send the recorded result file to the next reviewer as part of the handoff.  \n\n**Next Action:** Operator must complete the steps above and forward `fixture-proof-12.txt` to the next reviewer.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:32:01.450853Z",
+      "response": "  \n",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 584711875,
+      "load_duration": 771250,
+      "prompt_eval_count": 196,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 577508000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 196
+  },
+  "generation_tokens": 217,
+  "output_tokens": 196,
+  "input_tokens": 682,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

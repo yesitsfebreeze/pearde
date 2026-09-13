@@ -72,3 +72,25 @@ is now executable in verify-isolated.ts. It retains owner manifests, records
 source digests, and runs the three specified public gates; no acceptance outcome
 changed. The first three deterministic checks passed. Candidate prompt tuning
 continues within the reviewed frozen-corpus evaluation; all variants are retained.
+
+## Round 5 — configured remote pair with explicit revision limits
+
+Reviewer: Codex self-review. Local models still fail required meaning, literal and
+length checks. The already configured Ollama cloud endpoint passed an off-corpus
+connection probe with thinking disabled and native completion counts. Freeze its
+installed manifest digest, remote host, remote target deepseek-v4-flash:0731,
+response model label and identical paired settings before evaluating the unchanged
+corpus. Use candidate-3 guidance in this pair. No failed local output is discarded
+or relabeled as passing. Every actual fixture is fictional.
+
+The provider exposes no separate tokenizer or remote weight digest. Record the
+bundled tokenizer's requested deployment revision and that limitation; the local
+manifest hash pins routing metadata, not remote weights. Native response tokens
+are the metric only when no thinking text is present. This evidence qualifies
+only the observed provider deployment and timestamps, not all models or a claim
+of independently verified model weights. Full semantic checks remain mandatory.
+
+Value 19, reuse 19, dependencies 19, evidence 18 (opaque provider revision),
+recovery/compatibility 19: **94/100 — PASS for the plan**, no unresolved plan
+blocker. Inputs bound in review-round-5-inputs.json. Five rounds used; no further
+substantive automatic plan revisions remain. Product quality is still unproven.

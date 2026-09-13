@@ -1,0 +1,79 @@
+{
+  "fixture": "c01",
+  "repeat": 1,
+  "category": "concise",
+  "started": "2026-09-13T14:40:05.615Z",
+  "completed": "2026-09-13T14:40:15.997Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Return only the deliverable. Use short, plain, complete sentences. Lead with the answer. A memo is a short standalone paragraph, not a form: add no heading, subject line, label, preface or conclusion. Say each fact once. Aim for 60–80 words from a long source, but keep all facts even if that needs more words.\n\nMeaning comes before length. Preserve every unique source fact: results, limits, exclusions, unknowns, evidence, owners, next actions and prerequisites. Copy technical strings character for character, including spaces and hyphens. Preserve negations, numbers, units, commands, errors, filenames, fields, frontmatter and code blocks. Never invent or infer a completed action.\n\nCopy an already concise source EXACTLY, with no added words. Return requested JSON alone with exact keys and types. Explicit requests for detail override brevity: include ordered steps, reasons, conditions and provenance. Check the final text against every source sentence for missing information.\n\nExisting memo rewrites require an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict; preserve newer text, source transcripts and detailed evidence. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nEdit only if needed; do not expand an already clear reply.\n\nSource:\nThe fix is local. All 12 tests pass. Deployment is pending."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:40:15.87299Z",
+    "message": {
+      "role": "assistant",
+      "content": "The fix is local. All 12 tests pass. Deployment is pending.",
+      "thinking": "Need to produce memo? The request: \"Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\"\n\nSource: \"The fix is local. All 12 tests pass. Deployment is pending.\"\n\nWe need to produce a memo? The instructions: \"Return only the deliverable, with no account of your editing process.\" Deliverable surface: reply. So just reply with the memo content. The memo should be a short standalone paragraph, no heading. 60-80 words? But source is short. We must preserve facts. So produce a paragraph: \"The fix is local. All 12 tests pass. Deployment is pending.\" That's it."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 10257437541,
+    "load_duration": 645791,
+    "prompt_eval_count": 395,
+    "prompt_eval_cached_count": 45,
+    "prompt_eval_duration": 806685000,
+    "eval_count": 186,
+    "eval_duration": 9444536000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "The fix is local. All 12 tests pass. Deployment is pending.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:40:15.997644Z",
+      "response": " No",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 124403625,
+      "load_duration": 734584,
+      "prompt_eval_count": 15,
+      "prompt_eval_cached_count": 10,
+      "prompt_eval_duration": 119528000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 15
+  },
+  "generation_tokens": 186,
+  "output_tokens": 15,
+  "input_tokens": 395,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

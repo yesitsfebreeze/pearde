@@ -1,0 +1,79 @@
+{
+  "fixture": "v07",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T14:31:42.792Z",
+  "completed": "2026-09-13T14:31:51.728Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write the deliverable directly. Lead with the answer or decision. Use plain words and short, complete sentences for both replies and standalone memos. Keep the required subject clear. Remove repetition, introductions, decorative headings, labels, commentary about editing, and generic conclusions. Use a short paragraph unless a real sequence or requested format needs a list.\n\nMeaning comes before length. Carry every substantive fact from the source into the deliverable once: decisions, measured results, limitations, exclusions, uncertainty, evidence references, responsible people, and the next action with its prerequisites. Preserve every negation, number, unit, command, exact quoted error, filename, field name and executable block. Do not turn completed into passed, local into deployed, or unknown into known. Do not invent causes, actions, results or recommendations. Keep instructions and observations distinct. A memo must make sense without its source conversation.\n\nIf asked to edit an already concise, clear text, return it unchanged. Do not add a title or preface. Preserve requested frontmatter and code fences exactly. For JSON or another structured format, return only that format with the requested keys and types. Explicit requests for detailed explanations override default brevity; retain ordered steps and their reasons.\n\nBefore returning, silently check that the reader can recover every substantive source fact, protected literal, uncertainty and next action. Restore any missing meaning, then remove only redundant words. Never omit facts to meet a length target.\n\nDraft new text in this style in the normal response. Rewriting an existing memo requires an explicit request and a preview. Save only the approved proposal through the existing validated memo.write operation with the revision that was read as expected_revision. On conflict, keep the newer memo and stop for a new decision; do not retry automatically. Preserve source transcripts and linked detailed evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone experiment result.\n\nSource:\nWe ran a small comparison of the index lookup change, and the result should be recorded with enough context to prevent it from being mistaken for a broader benchmark. The old implementation took a median of 42 ms. The candidate took a median of 31 ms. Both medians came from 30 runs against the same local fixture. The fixture contained 10,000 entries and was already warm before the timed runs began. No cold-start measurement was taken, and no production latency claim follows from these numbers. Peak memory was not measured either. The raw timings are recorded in lookup-fixture-3.csv. The next action is to measure cold-start latency and peak memory before deciding whether to adopt the change. The result is promising in the measured fixture, but the memo must not translate that into an unsupported promise about production or workloads that were not tested."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:31:51.211218Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Memo**\n\n**Subject:** Index Lookup Change – Small Comparison Results\n\n**Context:**  \nA small comparison was performed on the index lookup change. The test used a local fixture containing 10,000 entries that was already warm before the timed runs began. Thirty runs were executed against this same fixture for both implementations. No cold‑start measurement or peak memory measurement was taken. Raw timings are recorded in *lookup-fixture-3.csv*.\n\n**Results:**  \n- Old implementation median time: **42 ms**  \n- Candidate implementation median time: **31 ms**\n\n**Limitations & Uncertainty:**  \n- The measurement is limited to a warm, local fixture and does not represent production workloads.  \n- No cold‑start latency or peak memory data were collected.  \n- The result should not be interpreted as a production performance claim.\n\n**Next Action:**  \nMeasure cold‑start latency and peak memory before deciding whether to adopt the change.",
+      "thinking": "Need memo."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 8418616875,
+    "load_duration": 812083,
+    "prompt_eval_count": 663,
+    "prompt_eval_cached_count": 171,
+    "prompt_eval_duration": 935222000,
+    "eval_count": 204,
+    "eval_duration": 7475680000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "**Memo**\n\n**Subject:** Index Lookup Change – Small Comparison Results\n\n**Context:**  \nA small comparison was performed on the index lookup change. The test used a local fixture containing 10,000 entries that was already warm before the timed runs began. Thirty runs were executed against this same fixture for both implementations. No cold‑start measurement or peak memory measurement was taken. Raw timings are recorded in *lookup-fixture-3.csv*.\n\n**Results:**  \n- Old implementation median time: **42 ms**  \n- Candidate implementation median time: **31 ms**\n\n**Limitations & Uncertainty:**  \n- The measurement is limited to a warm, local fixture and does not represent production workloads.  \n- No cold‑start latency or peak memory data were collected.  \n- The result should not be interpreted as a production performance claim.\n\n**Next Action:**  \nMeasure cold‑start latency and peak memory before deciding whether to adopt the change.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:31:51.728078Z",
+      "response": "  \n",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 516534291,
+      "load_duration": 899208,
+      "prompt_eval_count": 191,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 512115000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 191
+  },
+  "generation_tokens": 204,
+  "output_tokens": 191,
+  "input_tokens": 663,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

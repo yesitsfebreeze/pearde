@@ -1,0 +1,48 @@
+{
+  "fixture": "v03",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T15:08:03.768Z",
+  "completed": "2026-09-13T15:08:04.506Z",
+  "request": {
+    "model": "deepseek-v4-flash:cloud",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write a compact standalone deliverable. Lead with the outcome. Every sentence must carry several concrete facts: join related clauses with semicolons and share their subject. Usually use 2–4 short sentences in one paragraph, with no heading, introduction, recap, filler or editing commentary. Target about 35–45 words for verbose source material, expanding only to preserve required meaning.\n\nPreserve ALL unique facts: exact results and scope; exclusions and negations; unknowns; conditions and ordering; evidence IDs; responsible people; next actions. Remove only repetition and conversational framing. Avoid separately restating what a concrete limitation already means. For example, write \"The local patch passes 6 tests; Sal must check staging before deployment (patch-proof-2).\" instead of six separate sentences about the patch, tests, evidence, locality, next owner and deployment prerequisite. Never convert a plan into completed work or an uncertainty into a fact.\n\nPreserve technical literals byte for byte, including numbers, units, filenames, field names, commands, errors, frontmatter and code blocks. Use clear complete sentences whose referents are identifiable without the source conversation. Do not shorten by hiding any fact behind a generic phrase such as \"check first\" or \"see evidence\". Silently verify every source fact before returning only the deliverable.\n\nCopy an already concise source EXACTLY, without additions or rephrasing. Return requested JSON alone with the exact keys and value types. Explicit requests for detail override brevity: retain ordered steps, their reasons, conditions and provenance.\n\nAn existing memo rewrite requires an explicit request, preview and approved save through validated memo.write with expected_revision. Stop on conflict. Keep newer text, source transcripts and detailed evidence intact. Draft in one normal model call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nAnswer the user's request for the current fix status.\n\nSource:\nThe status of the duplicate notification issue is that the fix has been written, and the implementation now rejects a repeated event ID before a notification is sent. This means that a duplicate with the same event ID no longer causes a second send in the fixture. The fixture delivered the same event 20 times and observed one notification. That is the extent of the evidence so far. Events that have different IDs but represent the same underlying action have not been deduplicated by this change, and it is important to keep that boundary in the response. The test is named replay_same_id. The change is on a local branch and has not been pushed. The next action is to review the behavior for events arriving out of order; no result for that review exists yet. There is no need to give the user a narration of how the code was edited, but the distinction between the tested case and the remaining case must survive."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": false
+  },
+  "response": {
+    "model": "deepseek-v4-flash",
+    "created_at": "2026-09-13T15:08:04.451069615Z",
+    "message": {
+      "role": "assistant",
+      "content": "The duplicate notification fix is written: implementation rejects a repeated event ID before sending, so the fixture delivered the same event 20 times and observed one notification (test replay_same_id). This covers only same-ID duplicates; different IDs representing the same action remain undeduplicated. The change is on a local branch, unpushed; out-of-order event review is the next action, with no result yet."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 602408735,
+    "prompt_eval_count": 611,
+    "prompt_eval_cached_count": 0,
+    "eval_count": 82
+  },
+  "tokenization": null,
+  "generation_tokens": 82,
+  "output_tokens": 82,
+  "input_tokens": 611,
+  "model_digest": "d3f1c87447216481a8001f48c517a51e13bfb141853a8df5e52f81bf765dabc3",
+  "tokenizer_revision": "Provider-native tokenizer bundled with remote target deepseek-v4-flash:0731; no separate tokenizer or remote weight digest is exposed."
+}

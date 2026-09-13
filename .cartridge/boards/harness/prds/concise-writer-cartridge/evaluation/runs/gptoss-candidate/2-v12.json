@@ -1,0 +1,79 @@
+{
+  "fixture": "v12",
+  "repeat": 2,
+  "category": "verbose",
+  "started": "2026-09-13T14:30:04.980Z",
+  "completed": "2026-09-13T14:30:09.187Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write the deliverable directly. Lead with the answer or decision. Use plain words and short, complete sentences for both replies and standalone memos. Keep the required subject clear. Remove repetition, introductions, decorative headings, labels, commentary about editing, and generic conclusions. Use a short paragraph unless a real sequence or requested format needs a list.\n\nMeaning comes before length. Carry every substantive fact from the source into the deliverable once: decisions, measured results, limitations, exclusions, uncertainty, evidence references, responsible people, and the next action with its prerequisites. Preserve every negation, number, unit, command, exact quoted error, filename, field name and executable block. Do not turn completed into passed, local into deployed, or unknown into known. Do not invent causes, actions, results or recommendations. Keep instructions and observations distinct. A memo must make sense without its source conversation.\n\nIf asked to edit an already concise, clear text, return it unchanged. Do not add a title or preface. Preserve requested frontmatter and code fences exactly. For JSON or another structured format, return only that format with the requested keys and types. Explicit requests for detailed explanations override default brevity; retain ordered steps and their reasons.\n\nBefore returning, silently check that the reader can recover every substantive source fact, protected literal, uncertainty and next action. Restore any missing meaning, then remove only redundant words. Never omit facts to meet a length target.\n\nDraft new text in this style in the normal response. Rewriting an existing memo requires an explicit request and a preview. Save only the approved proposal through the existing validated memo.write operation with the revision that was read as expected_revision. On conflict, keep the newer memo and stop for a new decision; do not retry automatically. Preserve source transcripts and linked detailed evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nReply with the current delivery status and remaining blocker.\n\nSource:\nThe documentation update is ready locally, which is the main status to report. It updates the setup instructions to name the `config_dir` field and removes the obsolete `credentials_path` example. The local documentation link check passed on 18 pages. However, the change has not been published. Publication is blocked because the staging host returned the exact message `certificate expired` when the preview was checked. The expiry problem has not been repaired, and no production request was made as part of this check. The result is recorded in docs-preview-11. The next step is to renew the staging certificate and rerun the preview check before publishing. It would be misleading to collapse ready locally and published into the same status, or to claim that production is unhealthy on the basis of a staging-only observation."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 29
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:30:08.883235Z",
+    "message": {
+      "role": "assistant",
+      "content": "Current delivery status: Documentation update is ready locally. Remaining blocker: Staging host returned “certificate expired” during preview check; the staging certificate has not been renewed, so publishing is blocked. Next step: renew the staging certificate and rerun the preview check before publishing.",
+      "thinking": "We need reply: current delivery status and remaining blocker. Include facts."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 3902908917,
+    "load_duration": 729917,
+    "prompt_eval_count": 655,
+    "prompt_eval_cached_count": 166,
+    "prompt_eval_duration": 934732000,
+    "eval_count": 78,
+    "eval_duration": 2959866000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "Current delivery status: Documentation update is ready locally. Remaining blocker: Staging host returned “certificate expired” during preview check; the staging certificate has not been renewed, so publishing is blocked. Next step: renew the staging certificate and rerun the preview check before publishing.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:30:09.187443Z",
+      "response": "\n\n",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 303753000,
+      "load_duration": 819333,
+      "prompt_eval_count": 54,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 299501000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 54
+  },
+  "generation_tokens": 78,
+  "output_tokens": 54,
+  "input_tokens": 655,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

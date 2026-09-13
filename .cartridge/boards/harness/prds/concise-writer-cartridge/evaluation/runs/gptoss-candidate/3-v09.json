@@ -1,0 +1,79 @@
+{
+  "fixture": "v09",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T14:32:01.451Z",
+  "completed": "2026-09-13T14:32:08.179Z",
+  "request": {
+    "model": "gpt-oss:20b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write the deliverable directly. Lead with the answer or decision. Use plain words and short, complete sentences for both replies and standalone memos. Keep the required subject clear. Remove repetition, introductions, decorative headings, labels, commentary about editing, and generic conclusions. Use a short paragraph unless a real sequence or requested format needs a list.\n\nMeaning comes before length. Carry every substantive fact from the source into the deliverable once: decisions, measured results, limitations, exclusions, uncertainty, evidence references, responsible people, and the next action with its prerequisites. Preserve every negation, number, unit, command, exact quoted error, filename, field name and executable block. Do not turn completed into passed, local into deployed, or unknown into known. Do not invent causes, actions, results or recommendations. Keep instructions and observations distinct. A memo must make sense without its source conversation.\n\nIf asked to edit an already concise, clear text, return it unchanged. Do not add a title or preface. Preserve requested frontmatter and code fences exactly. For JSON or another structured format, return only that format with the requested keys and types. Explicit requests for detailed explanations override default brevity; retain ordered steps and their reasons.\n\nBefore returning, silently check that the reader can recover every substantive source fact, protected literal, uncertainty and next action. Restore any missing meaning, then remove only redundant words. Never omit facts to meet a length target.\n\nDraft new text in this style in the normal response. Rewriting an existing memo requires an explicit request and a preview. Save only the approved proposal through the existing validated memo.write operation with the revision that was read as expected_revision. On conflict, keep the newer memo and stop for a new decision; do not retry automatically. Preserve source transcripts and linked detailed evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nReply to a user asking why their saved edit was rejected.\n\nSource:\nThe save was rejected because the document changed after the version that the user read. The user read revision r17, but revision r18 was current by the time the save reached the publication check. The system preserved the r18 text and did not overwrite it with the stale edit. The rejected edit has not been applied. This was a revision conflict, not a permission denial. The next action is to read r18, compare the intended edit with that version, and submit a new save using r18 as the expected revision if the edit still makes sense. There is no automatic retry. The diagnostic reference is save-check-9. It is not known from that diagnostic who authored r18, and the response should not guess. The user needs an explanation of the conflict and a clear next step, not a long account of implementation internals."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192,
+      "seed": 47
+    },
+    "think": "low"
+  },
+  "response": {
+    "model": "gpt-oss:20b",
+    "created_at": "2026-09-13T14:32:07.719996Z",
+    "message": {
+      "role": "assistant",
+      "content": "Your edit was rejected because the document had changed after you read it. You read revision r17, but by the time your save reached the publication check, revision r18 was the current version. The system kept r18 and did not overwrite it with your stale edit, so the change was not applied. This is a revision conflict, not a permission issue.  \n\nNext step: open revision r18, compare your intended changes with that version, and submit a new save using r18 as the expected revision if the edit still makes sense. There is no automatic retry. The diagnostic reference for this event is **save-check-9**.",
+      "thinking": "Need reply."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 6268340459,
+    "load_duration": 700792,
+    "prompt_eval_count": 667,
+    "prompt_eval_cached_count": 169,
+    "prompt_eval_duration": 949001000,
+    "eval_count": 144,
+    "eval_duration": 5311359000
+  },
+  "tokenization": {
+    "request": {
+      "model": "gpt-oss:20b",
+      "raw": true,
+      "prompt": "Your edit was rejected because the document had changed after you read it. You read revision r17, but by the time your save reached the publication check, revision r18 was the current version. The system kept r18 and did not overwrite it with your stale edit, so the change was not applied. This is a revision conflict, not a permission issue.  \n\nNext step: open revision r18, compare your intended changes with that version, and submit a new save using r18 as the expected revision if the edit still makes sense. There is no automatic retry. The diagnostic reference for this event is **save-check-9**.",
+      "stream": false,
+      "options": {
+        "num_predict": 1,
+        "num_ctx": 8192,
+        "temperature": 0
+      }
+    },
+    "response": {
+      "model": "gpt-oss:20b",
+      "created_at": "2026-09-13T14:32:08.178982Z",
+      "response": "  \n\n",
+      "done": true,
+      "done_reason": "length",
+      "total_duration": 458676125,
+      "load_duration": 780041,
+      "prompt_eval_count": 131,
+      "prompt_eval_cached_count": 0,
+      "prompt_eval_duration": 454911000,
+      "eval_count": 1,
+      "eval_duration": 1000
+    },
+    "visible_tokens": 131
+  },
+  "generation_tokens": 144,
+  "output_tokens": 131,
+  "input_tokens": 667,
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7"
+}

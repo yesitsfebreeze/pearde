@@ -1,0 +1,10 @@
+{
+  "prd.md": "8f352f22db4cec2ae1891559466a2395bef82586cb6b262cf426327670b1e592",
+  "specs/spec01.md": "ab11ec1d684ceecbd11f3e69db530d7e6eea1a39a23645c7949dc2a2623226b7",
+  "evaluation/cloud-pair.json": "506baa1d91beb5fc81912d35f754e35e99ab3d368bd061ecd79bd62dc4abc2bd",
+  "evaluation/fixtures.json": "31dc49595042df1add80582153d8746d9f5945b23682846006c72d3440cb5772",
+  "evaluation/rubric.json": "3f94576b52e4faec8dba7f6ece2aecb266d812cfca6866736a4fe2c419ffa218",
+  "evaluation/candidate-3-guidance.txt": "19dfbde6bd968198d0de9fc534a2381b75b66f417a39aded2cc1d962d006694e",
+  "evaluation/run.ts": "59a4e611ed98f3b7eb53ac23f94ec725b5243202bd6a1fe4f4818cf2fff5e3da",
+  "verify-isolated.ts": "44feaecf62a51080b18efa69c7ad58352f5a4a86713e22f94ecaece12b9e2beb"
+}

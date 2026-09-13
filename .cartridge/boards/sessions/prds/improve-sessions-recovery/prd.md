@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/sessions.ctg
-state: "specced"
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -11,7 +11,7 @@ review-round: 3
 review-status: accepted
 canonical-scope: improve-sessions-recovery
 footprint: ["src/roster.rs","Cargo.toml","src/main.rs","src/recovery.rs",".cartridge/tests/unit/main/repair_tests.rs",".cartridge/tests/unit/recovery.rs",".cartridge/docs/README.md","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
-commit: "a306370f10b78d94365b7832ce22ce8d10c09487"
+commit: "191e2b6cb4291bdcce7a894f98bb2d475361d30f"
 ---
 
 # Explain session damage and narrowly repair eligible snapshots

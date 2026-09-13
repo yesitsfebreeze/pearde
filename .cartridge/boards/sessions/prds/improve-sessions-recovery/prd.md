@@ -10,8 +10,8 @@ work-kind: leaf
 review-round: 3
 review-status: accepted
 canonical-scope: improve-sessions-recovery
-footprint: ["src/roster.rs","Cargo.toml","src/main.rs","src/recovery.rs",".cartridge/tests/unit/main/repair_tests.rs",".cartridge/tests/unit/recovery.rs",".cartridge/docs/README.md","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
-commit: "191e2b6cb4291bdcce7a894f98bb2d475361d30f"
+footprint: ["src/roster.rs","src/channels.rs","src/mailbox.rs","Cargo.toml","src/main.rs","src/recovery.rs",".cartridge/tests/unit/main/repair_tests.rs",".cartridge/tests/unit/recovery.rs",".cartridge/docs/README.md","src/observations.rs","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs","src/context.rs",".cartridge/tests/unit/main/context_tests.rs",".cartridge/tests/integration/context.test.ts"]
+commit: "92240c6ba415f53b2d17971aea185536a6f517bc"
 ---
 
 # Explain session damage and narrowly repair eligible snapshots

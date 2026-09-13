@@ -17,7 +17,7 @@ footprint:
 - .cartridge/templates/board
 - .cartridge/tests/unit/board.rs
 - .cartridge/docs/board.md
-commit: "154bde9d8f97fb1c015fe34cf62ae79b153e6feb"
+commit: "5345aaaa3407584825f624edb6cefaff14846b07"
 ---
 
 # Preview and install a board without overwriting edits
@@ -43,3 +43,6 @@ Preserve the last usable implementation and durable data on failure; report part
 
 Reverify unchanged preview/install safety at154bde9 after template version2 adds
 the pinned engine entry; earlier0976a3b0 receipt retained.
+
+Reverify unchanged acceptance after the next integrated owner feature; earlier
+154bde9d receipt retained. No contract relaxation.

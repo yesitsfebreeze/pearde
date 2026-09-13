@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/sessions.ctg
-state: "specced"
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -11,7 +11,7 @@ review-round: 3
 review-status: passed
 canonical-scope: scoped-roster-projection
 needs: ["@sessions/an-agent-is-one-lookup-from-the-roster/durable-channel-read-cursors"]
-commit: "a306370f10b78d94365b7832ce22ce8d10c09487"
+commit: "191e2b6cb4291bdcce7a894f98bb2d475361d30f"
 ---
 
 # Project scoped session activity and watched unread counts

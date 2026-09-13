@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/sessions.ctg
-state: "specced"
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -11,6 +11,7 @@ review-round: 3
 review-status: passed
 canonical-scope: an-agent-is-one-lookup-from-the-roster
 needs: ["@harness/scoped-roster-context-contributor"]
+commit: "191e2b6cb4291bdcce7a894f98bb2d475361d30f"
 ---
 
 # an-agent-is-one-lookup-from-the-roster
@@ -19,9 +20,9 @@ Build a scoped read projection over sessions and durable channel cursors. Identi
 
 ## Acceptance
 
-- [ ] A 20-session fixture stays within configured row/byte caps and reports omitted rows and unread counts.
-- [ ] Only authorized sessions/channels appear; copying another client's metadata cannot reveal its roster.
-- [ ] Reading advances only the requesting session's cursor, concurrent posts are not skipped, and a child phase change appears on a fresh query without a board post.
+- [x] A 20-session fixture stays within configured row/byte caps and reports omitted rows and unread counts.
+- [x] Only authorized sessions/channels appear; copying another client's metadata cannot reveal its roster.
+- [x] Reading advances only the requesting session's cursor, concurrent posts are not skipped, and a child phase change appears on a fresh query without a board post.
 
 ## Proof and recovery
 

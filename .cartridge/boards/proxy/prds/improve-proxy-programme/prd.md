@@ -1,29 +1,41 @@
 ---
 repo: /Users/feb/dev/cartridge/proxy.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: proxy
+capability-owner: proxy
 work-kind: rollup
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: improve-proxy-programme
 needs:
 - '@proxy/improve-proxy-total-usage'
 - '@proxy/improve-proxy-tool-trace'
 - '@proxy/improve-proxy-continuation-recovery'
+footprint:
+- src/main.rs
+- src/service.rs
+- src/streaming.rs
+- src/usage.rs
+- src/continuation.rs
+- src/trace.rs
+- .cartridge/tests/unit/tests.rs
+- .cartridge/docs/usage.md
+- .cartridge/docs/continuations.md
+- .cartridge/docs/traces.md
+commit: "439594188097e770fb9993aae379ac9906e0824a"
 ---
 
 # Proxy improvement plan
 
-Coordinate the linked owner outcomes and record their combined evidence; claim a leaf for implementation.
+Coordinate the three linked outcomes at one integrated source revision. No new feature implementation belongs to this rollup; its executable spec validates dependency receipts and runs the complete proxy suite. See [combined proof contract](specs/spec01.md) and [baseline](baseline.json).
 
 ## Acceptance
 
-- [ ] Each linked leaf passes its own review and observable acceptance.
-- [ ] Record tested mitigations and remaining limitations at the integrated revisions.
+- [x] Each linked leaf passes its own review and observable acceptance.
+- [x] Record tested mitigations and remaining limitations at the integrated revisions.
 
 ## Work items
 
@@ -33,4 +45,4 @@ Coordinate the linked owner outcomes and record their combined evidence; claim a
 
 ## Review
 
-[Round 2 agent review](review.md). Inherits round 1 from `improve-proxy-programme`; maximum five rounds.
+[Round 3 independent agent review](review.md). Inherits round 1 from `improve-proxy-programme`; maximum five rounds.

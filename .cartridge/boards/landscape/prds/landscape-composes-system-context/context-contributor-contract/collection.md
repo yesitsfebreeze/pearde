@@ -1,6 +1,6 @@
 ---
-commit: 33e0418fa82966772c38ec8191d02a158b2cb56d
-spec-digests: {"spec01.md":"5f80f2175d0c4bd47ef439795a4ceddcf089bed0b5dc0e42447aea1234de068b"}
+commit: 422c521aed170a4d098505c73469a1a59dccf49d
+spec-digests: {"spec01.md":"ee1f21285bd149ffd36426302222b6931aeb363c01b55be3b8e8b90d69244f5e"}
 child-contracts: {}
 ---
 
@@ -11,10 +11,10 @@ child-contracts: {}
 Command SHA-256: e6c3734889235d192ec325c56d5652220f6e0db5a7cf75045ab614be27cab874
 
 ```text
-    Finished `test` profile [unoptimized] target(s) in 0.06s
+    Finished `test` profile [unoptimized] target(s) in 0.11s
      Running unittests src/lib.rs (target/tool-result-contract/debug/deps/landscape-1841d9637182d43e)
 
-running 56 tests
+running 67 tests
 test census::tests::address_segments_are_distinct_and_reject_ambiguous_paths ... ok
 test context::tests::availability_is_explicit_and_disabled_producers_never_poll ... ok
 test context::tests::dropping_collector_drops_pending_producers_without_spawning_work ... ok
@@ -24,56 +24,67 @@ test context::tests::hanging_first_source_does_not_starve_siblings_and_is_droppe
 test context::tests::late_ready_contribution_cannot_publish_after_deadline ... ok
 test context::tests::private_content_cannot_change_public_digest_or_capacity ... ok
 test context::tests::producer_capacity_omissions_remain_explicit_in_prepared_snapshot ... ok
-test census::tests::independent_root_metadata_never_grants_activation_and_invalid_roots_do_not_query ... ok
+test context::tests::exact_serialized_bounds_count_metadata_and_keep_whole_utf8_rows ... ok
 test file_kernel::tests::exact_bytes_empty_text_and_untrusted_native_shape_checks ... ok
+test file_kernel::tests::kernel_private_disabled_malformed_caps_and_exact_references ... ok
+test file_kernel::tests::malformed_snapshot_never_claims_empty_and_kernel_slots_obey_shared_budget ... ok
+test file_kernel::tests::nomination_slots_do_not_refill_and_failures_do_not_remove_other_rows ... ok
+test file_kernel::tests::canonical_deadline_keeps_kernel_and_never_polls_disabled_file_task ... ok
+test file_kernel::tests::trusted_allowlist_validates_counts_id_paths_and_typed_namespace_aliases ... ok
+test census::tests::independent_root_metadata_never_grants_activation_and_invalid_roots_do_not_query ... ok
 test census::tests::aliases_cycles_and_symlinks_are_observed_once_with_sorted_owners ... ok
 test census::tests::callback_shapes_revisions_and_alias_conflicts_fail_without_descending ... ok
-test file_kernel::tests::kernel_private_disabled_malformed_caps_and_exact_references ... ok
-test file_kernel::tests::nomination_slots_do_not_refill_and_failures_do_not_remove_other_rows ... ok
-test file_kernel::tests::trusted_allowlist_validates_counts_id_paths_and_typed_namespace_aliases ... ok
-test file_kernel::tests::malformed_snapshot_never_claims_empty_and_kernel_slots_obey_shared_budget ... ok
-test census::tests::filesystem_failures_and_directory_replacement_preserve_usable_siblings ... ok
 test file_kernel::tests::real_file_bytes_and_kernel_share_collector_and_exact_freshness ... ok
-test context::tests::exact_serialized_bounds_count_metadata_and_keep_whole_utf8_rows ... ok
+test census::tests::filesystem_failures_and_directory_replacement_preserve_usable_siblings ... ok
 test census::tests::depth_count_edge_and_full_serialized_byte_caps_are_explicit ... ok
-test file_kernel::tests::canonical_deadline_keeps_kernel_and_never_polls_disabled_file_task ... ok
+test census::tests::shared_deadline_preserves_completed_siblings_and_drops_pending_callback ... ok
 test inventory::tests::named_failures_preserve_usable_owners_and_disable_reads ... ok
-test inventory::tests::escaped_rows_force_byte_paging_without_losing_progress ... ok
 test memory::tests::conflicting_duplicate_expiry_and_malformed_bounds_refuse_without_substitution ... ok
 test memory::tests::count_bytes_source_mismatch_and_compact_truncation_are_explicit ... ok
-test inventory::tests::subprocess_output_deadline_and_exit_failures_are_bounded ... ok
+test inventory::tests::escaped_rows_force_byte_paging_without_losing_progress ... ok
 test memory::tests::exact_missing_changed_prefix_and_invalid_references_never_requery ... ok
-test census::tests::actual_prd_three_level_declarations_preserve_addresses_and_fresh_snapshots ... ok
 test memory::tests::memory_fact_joins_shared_context_and_exact_readback_without_requery ... ok
+test memory::tests::deadline_drops_pending_read_without_starting_later_hydration ... ok
 test memory::tests::private_oversized_and_unknown_metadata_cannot_enter_evidence ... ok
-test memory::tests::unavailable_malformed_empty_and_inactive_memory_preserve_other_sources ... ok
 test memory::tests::private_only_results_have_the_same_public_snapshot_as_empty_memory ... ok
+test memory::tests::unavailable_malformed_empty_and_inactive_memory_preserve_other_sources ... ok
+test source_search::tests::absolute_deadline_spans_stages_and_drops_only_pending_callback ... ok
+test inventory::tests::subprocess_output_deadline_and_exit_failures_are_bounded ... ok
+test source_search::tests::all_count_input_and_serialized_output_limits_are_explicit ... ok
+test inventory::tests::nested_shared_roots_newline_names_and_frozen_refresh ... ok
+test source_search::tests::exact_reference_has_no_owner_basename_or_stale_revision_fallback ... ok
+test source_search::tests::invalid_queries_are_rejected_before_owner_work ... ok
+test source_search::tests::malformed_indexes_never_select_a_record_or_copy_private_diagnostics ... ok
+test source_search::tests::full_text_ranking_is_independent_of_preview_and_returns_only_compact_public_hits ... ok
+test source_search::tests::read_evidence_is_revalidated_before_ranking_and_attempts_include_rejections ... ok
+test source_search::tests::rejected_body_bytes_and_partial_index_omissions_remain_visible_to_limits ... ok
+test source_search::tests::partial_sources_and_aliases_preserve_completed_hits_without_duplicate_calls ... ok
 test surface::tests::cartridge_nodes_carry_their_capability_keys ... ok
 test surface::tests::compose_skips_malformed_surface_entries ... ok
+test surface::tests::compose_grows_the_live_surface_and_counts_observations ... ok
 test surface::tests::composed_memo_links_respect_cartridge_namespaces ... ok
 test surface::tests::memo_nodes_carry_their_kind_and_declared_usage_phrases ... ok
-test surface::tests::compose_grows_the_live_surface_and_counts_observations ... ok
 test surface::tests::tool_nodes_carry_the_describe_description ... ok
 test tests::edges_connect_present_nodes_and_tolerate_ones_to_come ... ok
 test tests::graph_search_keeps_the_seed_ranking ... ok
 test tests::journal_counts_weight_stages ... ok
 test tests::observed_use_outranks_equal_match ... ok
-test tests::upsert_grows_the_node_set_in_place ... ok
 test tests::search_returns_kinds_with_descriptions ... ok
-test census::tests::shared_deadline_preserves_completed_siblings_and_drops_pending_callback ... ok
-test memory::tests::deadline_drops_pending_read_without_starting_later_hydration ... ok
+test tests::upsert_grows_the_node_set_in_place ... ok
+test census::tests::actual_prd_three_level_declarations_preserve_addresses_and_fresh_snapshots ... ok
 test view_tests::cursor_from_another_snapshot_is_stale ... ok
-test inventory::tests::nested_shared_roots_newline_names_and_frozen_refresh ... ok
 test view_tests::tracked_files_follow_sibling_repository_links ... ok
 test view_tests::tracked_files_join_by_scope_and_page_by_id ... ok
 test inventory::tests::structural_and_response_limits_are_explicit ... ok
+test source_search::tests::actual_prd_helper_three_level_bytes_and_fresh_edits_remain_source_owned ... ok
 test census::tests::actual_native_prd_callback_feeds_census_without_loading_discovered_cartridges ... ok
 test inventory::tests::git_output_is_strict_and_paths_always_fit_serialized_pages ... ok
 test inventory::tests::retained_byte_cap_refuses_whole_owner_before_count_cap ... ok
+test source_search::tests::actual_native_owner_search_and_selected_read_never_activate_discovered_sources ... ok
 test inventory::tests::ten_thousand_names_fit_summary_and_exact_bounded_pages ... ok
 
-test result: ok. 56 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.95s
+test result: ok. 67 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 5.03s
 
-    Finished `dev` profile [unoptimized] target(s) in 0.06s
+    Finished `dev` profile [unoptimized] target(s) in 0.07s
 
 ```

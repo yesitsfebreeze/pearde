@@ -18,7 +18,7 @@ footprint:
 - .cartridge/tests/unit/tests.rs
 - .cartridge/tests/integration/refresh.test.ts
 - .cartridge/docs/README.md
-commit: "29b20b27b352ccb8df04cbc2ad9e4eefa20e7369"
+commit: "f5a740517bc2668b50cf4f61fe81a1e37bb4cfad"
 ---
 
 # Refresh a live client's tool catalog after replacement

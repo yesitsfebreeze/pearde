@@ -13,7 +13,7 @@ canonical-scope: improve-memo-types-drilldown
 footprint:
 - src/service.rs
 - .cartridge/tests/integration/tests.rs
-commit: "648b420fd12e38d7d07e934595e57fdaa74ae51b"
+commit: "0976a3b0035c67bbb828063a1def17a1f5297d14"
 ---
 
 # Read type declarations individually
@@ -43,3 +43,6 @@ Preserve the last usable implementation and durable data on failure; report part
 The shared integration test file gained the shadowing fixture at 648b420. The
 types/index/read contract is unchanged. Re-run the public memo gate and retain
 the previous receipt in collection-5ecbf9e4.md.
+
+Reverify unchanged drilldown contract after owner board installation at0976a3b;
+prior648b420f receipt retained. No acceptance scope change.

@@ -1,24 +1,27 @@
 ---
 repo: /Users/feb/dev/cartridge/gitfs.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: gitfs
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: improve-gitfs-readable-diff
 needs:
 - '@policy/improve-policy-operation-rules'
 - '@gitfs/tool-results-interoperate'
 footprint:
-- /Users/feb/dev/cartridge/gitfs.ctg/service.rs
-- /Users/feb/dev/cartridge/gitfs.ctg/store.rs
-- /Users/feb/dev/cartridge/gitfs.ctg/ship.rs
-- /Users/feb/dev/cartridge/gitfs.ctg/secrets.rs
-- /Users/feb/dev/cartridge/gitfs.ctg/cartridge.json
+- src/service.rs
+- src/store.rs
+- src/tool_result.rs
+- src/inspection.rs
+- .cartridge/tests/unit/tool_result.rs
+- .cartridge/tests/integration/tool-result.test.ts
+- .cartridge/docs/inspection.md
+commit: "55cc8aae27575ded5950737c46a99aa358b95980"
 ---
 
 # Inspect session changes without a mutation grant
@@ -27,10 +30,10 @@ A read-only caller can list/read session files and compare overlay, disk and bas
 
 ## Acceptance
 
-- [ ] With writes denied, real MCP list/read/diff succeed and leave Git refs, index and worktree unchanged.
-- [ ] An external disk edit is visible as a conflict with both revisions; oversized diffs are bounded with drilldown.
+- [x] With writes denied, real MCP list/read/diff succeed and leave Git refs, index and worktree unchanged.
+- [x] An external disk edit is visible as a conflict with both revisions; oversized diffs are bounded with drilldown.
 
-- [ ] Use temporary Git repos/remotes for checks. Preserve unrelated index/worktree/ref changes. Roll back API additions before applying migrations; committed/pushed mutations require a recorded reconciliation/revert, not an assertion that cancellation undid them.
+- [x] Use temporary Git repos/remotes for checks. Preserve unrelated index/worktree/ref changes. Roll back API additions before applying migrations; committed/pushed mutations require a recorded reconciliation/revert, not an assertion that cancellation undid them.
 
 ## Proof and recovery
 
@@ -42,3 +45,20 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-gitfs-readable-diff`; maximum five rounds.
+
+## Current analysis
+
+[Baseline](baseline.json) confirms no diff operation and read-induced store
+creation. Add a lazy read-only store attachment, path-specific three-way
+inspection and revision-bound byte drilldown. The existing operation policy
+owner registers diff as a recognized operation; all decisions still follow its
+configured rules. That small dependency addition is committed and its own
+existing proof rerun before collection. No migration, materialization or ship.
+
+## Verified result
+
+Actual MCP with actual policy passes 199 assertions: read/list/diff work, four
+mutation operations are denied, refs/indexes/worktree bytes are unchanged, large
+UTF-8 pages reconstruct exactly, and changed disk bytes reject continuation.
+The public GitFS suite passes 25 tests, formatting/clippy passes, and the public
+policy suite passes three contract tests plus documentation checks.

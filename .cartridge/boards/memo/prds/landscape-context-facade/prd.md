@@ -14,13 +14,8 @@ needs:
 - '@landscape/landscape-composes-system-context/context-contributor-contract'
 - '@landscape/landscape-composes-system-context/memory-context-contributor'
 - '@memo/one-document-serves-every-reader/document-projections'
-footprint:
-- src/main.rs
-- src/service.rs
-- src/context.rs
-- .cartridge/tests/integration/context.test.ts
-- .cartridge/docs/context.md
-commit: "1ffca32db1d06364b3e35e6cbca4881a1f814f71"
+footprint: ["src/inventory.rs","src/main.rs","src/service.rs","src/context.rs",".cartridge/tests/integration/context.test.ts",".cartridge/docs/context.md","src/source_search.rs","src/document.rs",".cartridge/tests/unit/source_search.rs"]
+commit: "a458148fb21f85cabcd9e1ced85c96c581b8e0b2"
 ---
 
 # The memo facade serves the shared context snapshot

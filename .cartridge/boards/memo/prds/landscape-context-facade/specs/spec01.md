@@ -1,12 +1,6 @@
 ---
 complexity: medium
-footprint:
-- src/inventory.rs
-- src/main.rs
-- src/service.rs
-- src/context.rs
-- .cartridge/tests/integration/context.test.ts
-- .cartridge/docs/context.md
+footprint: ["src/inventory.rs","src/main.rs","src/service.rs","src/context.rs",".cartridge/tests/integration/context.test.ts",".cartridge/docs/context.md","src/source_search.rs","src/document.rs",".cartridge/tests/unit/source_search.rs"]
 ---
 
 # Native memo exposes the canonical context snapshot

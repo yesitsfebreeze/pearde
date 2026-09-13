@@ -1,6 +1,7 @@
 ---
 complexity: medium
 footprint:
+- cartridge.json
 - src/main.rs
 - src/context.rs
 - .cartridge/tests/unit/context.rs

@@ -1,6 +1,6 @@
 ---
-commit: de1406682a33c5b12cb472787178e2570e5ed0f8
-spec-digests: {"spec01.md":"cd7054eeac80661075cc0db7dfa52f93f231307bade9285c41283d25869a8e1c"}
+commit: d4a4239ccce02bc0e647e9ad80892995f48b317f
+spec-digests: {"spec01.md":"66bb61e5e9bbbd2c3b96391a752947a0b24bd66f857aa845292ee95d4e41c7cc"}
 child-contracts: {}
 ---
 
@@ -11,7 +11,7 @@ child-contracts: {}
 Command SHA-256: 01a58d6701ec70b4fa0c36d85207a8ea58481baa5dd5becab23b1251cb1f7f04
 
 ```text
-    Finished `test` profile [unoptimized] target(s) in 0.10s
+    Finished `test` profile [unoptimized] target(s) in 0.11s
      Running unittests src/main.rs (target/tool-result-contract/debug/deps/fs-54056baceabd5b7a)
 
 running 47 tests
@@ -27,9 +27,9 @@ test context::tests::pinned_handle_refuses_observed_replacement_and_deadline_dro
 test search::tests::missing_rg_is_actionable_not_empty ... ok
 test search::tests::deadlock_deadline_terminates_and_reaps_child ... ok
 test search::tests::deadline_covers_child_wait_after_stdout_is_closed ... ok
-test search::tests::large_real_tree_pages_every_identity_once_and_ref_keeps_the_tail ... ok
-test search::tests::pre_cancelled_invocation_spawns_no_process ... ok
 test search::tests::page_has_a_continuation_for_the_rest ... ok
+test search::tests::pre_cancelled_invocation_spawns_no_process ... ok
+test search::tests::large_real_tree_pages_every_identity_once_and_ref_keeps_the_tail ... ok
 test search::tests::snapshot_budget_fails_without_eviction_and_retirement_frees_it ... ok
 test search::tests::real_grep_keeps_over_200_matches_and_empty_chains_do_not_sweep ... ok
 test service::tests::cancel_during_spawn_prevents_mutation ... ok
@@ -63,18 +63,18 @@ test search::tests::oversized_results_report_truncation ... ok
 test search::tests::user_config_cannot_change_results ... ok
 test search::tests::floods_and_oversized_items_fail_instead_of_claiming_completeness ... ok
 
-test result: ok. 47 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.07s
+test result: ok. 47 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 2.23s
 
-    Finished `dev` profile [unoptimized] target(s) in 0.07s
+    Finished `dev` profile [unoptimized] target(s) in 0.12s
 bun test v1.3.14 (0d9b296a)
 
 ../fs.ctg/.cartridge/tests/integration/context.test.ts:
-(pass) native FS snapshots return exact full bytes and preserve legacy tool reads without touches [405.37ms]
-(pass) native FS refuses typed aliases, unsafe sources and cap overflow without partial payload [17.84ms]
+(pass) native FS snapshots return exact full bytes and preserve legacy tool reads without touches [542.37ms]
+(pass) native FS refuses typed aliases, unsafe sources and cap overflow without partial payload [16.56ms]
 
  2 pass
  0 fail
  56 expect() calls
-Ran 2 tests across 1 file. [431.00ms]
+Ran 2 tests across 1 file. [573.00ms]
 
 ```

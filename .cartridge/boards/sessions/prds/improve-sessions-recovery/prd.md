@@ -1,18 +1,23 @@
 ---
 repo: /Users/feb/dev/cartridge/sessions.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: sessions
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: accepted
 canonical-scope: improve-sessions-recovery
 footprint:
-- /Users/feb/dev/cartridge/sessions.ctg/main.rs
-- /Users/feb/dev/cartridge/sessions.ctg/README.md
+- Cargo.toml
+- src/main.rs
+- src/recovery.rs
+- .cartridge/tests/unit/main/repair_tests.rs
+- .cartridge/tests/unit/recovery.rs
+- .cartridge/docs/README.md
+commit: "4dd8518e2f9fb1bf63f191acffe3777d4eec3b5c"
 ---
 
 # Explain session damage and narrowly repair eligible snapshots
@@ -21,10 +26,10 @@ A read-only recovery report distinguishes missing, legacy, corrupt and incomplet
 
 ## Acceptance
 
-- [ ] Fixtures for missing, legacy-empty, corrupt and uncertain-run states produce distinct diagnoses; inspection changes no files.
-- [ ] Only eligible legacy-empty snapshots can be repaired, backups are preserved, and a repeated repair cannot overwrite an existing backup or transcript.
+- [x] Fixtures for missing, legacy-empty, corrupt and uncertain-run states produce distinct diagnoses; inspection changes no files.
+- [x] Only eligible legacy-empty snapshots can be repaired, backups are preserved, and a repeated repair cannot overwrite an existing backup or transcript.
 
-- [ ] Keep old snapshots readable; any migration preserves original bytes and uses atomic revision-checked writes. Retention requires an explicit reviewed candidate set. Reverting code must not delete or reinterpret an uncertain external effect.
+- [x] Keep old snapshots readable; any migration preserves original bytes and uses atomic revision-checked writes. Retention requires an explicit reviewed candidate set. Reverting code must not delete or reinterpret an uncertain external effect.
 
 ## Proof and recovery
 
@@ -36,3 +41,13 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-sessions-recovery`; maximum five rounds.
+
+## Verified implementation — 2026-09-13
+
+The sessions gate passes all 25 tests. Fresh recovery reports distinguish missing,
+legacy-empty, corrupt and incomplete-run fixtures without changing files. SHA-256
+revisions reject stale repair requests. An injected change after backup creation
+is caught at the temporary-file commit boundary, preserving newer transcript
+bytes, the original backup and an unchanged in-memory store. Existing backup,
+repeated-repair, canonical-transcript, atomic-write and uncertainty tests pass.
+The shared Cargo lock adds only the existing sha2 dependency to sessions.

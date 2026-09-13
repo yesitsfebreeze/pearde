@@ -1,6 +1,8 @@
 ---
 complexity: medium
 footprint:
+  - src/main.rs
+  - src/context.rs
   - src/files.rs
   - src/service.rs
   - .cartridge/tests/unit/service/tests.rs
@@ -34,9 +36,17 @@ its current executable-mode, guard, selection and partial-error tests.
 
 ```sh
 cd ../cartridge.ctg
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/fs-revision" just test fs
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" just test fs
 ```
 
 Run the owner's public check gate and `just test gitfs` from the runtime as well.
 The deterministic hook is per-service and test-only; it runs after prepared
 bytes are synced, before cancellation/revision checks and publication.
+
+```sh
+set -eu
+cd /Users/feb/dev/cartridge/cartridge.ctg
+export RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract"
+just check fs
+just test gitfs
+```

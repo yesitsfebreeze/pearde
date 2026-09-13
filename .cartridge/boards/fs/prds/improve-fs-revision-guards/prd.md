@@ -11,11 +11,13 @@ review-round: 4
 review-status: passed
 canonical-scope: improve-fs-revision-guards
 footprint:
+- src/main.rs
+- src/context.rs
 - src/files.rs
 - src/service.rs
 - .cartridge/tests/unit/service/tests.rs
 - .cartridge/docs/revision-guards.md
-commit: "6a8dec3cc259968a6bcd3aa1b507321268f88b7e"
+commit: "de1406682a33c5b12cb472787178e2570e5ed0f8"
 ---
 
 # Use consistent stale-write checks for filesystem mutations

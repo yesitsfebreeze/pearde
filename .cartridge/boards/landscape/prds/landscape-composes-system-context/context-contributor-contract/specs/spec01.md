@@ -1,13 +1,6 @@
 ---
 complexity: medium
-footprint:
-  - src/file_kernel.rs
-  - src/inventory.rs
-  - src/lib.rs
-  - src/context.rs
-  - Cargo.toml
-  - .cartridge/tests/unit/context.rs
-  - .cartridge/docs/context.md
+footprint: ["src/file_kernel.rs","src/inventory.rs","src/lib.rs","src/context.rs","Cargo.toml",".cartridge/tests/unit/context.rs",".cartridge/docs/context.md","src/census.rs",".cartridge/tests/unit/census.rs"]
 ---
 
 # A shared context snapshot retains bounded source evidence

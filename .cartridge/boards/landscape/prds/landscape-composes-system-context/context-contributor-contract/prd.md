@@ -10,16 +10,10 @@ work-kind: leaf
 review-round: 3
 review-status: passed
 canonical-scope: landscape-composes-system-context
-footprint:
-- src/file_kernel.rs
-  - src/lib.rs
-  - src/context.rs
-  - Cargo.toml
-  - .cartridge/tests/unit/context.rs
-  - .cartridge/docs/context.md
+footprint: ["src/file_kernel.rs - src/lib.rs - src/context.rs - Cargo.toml - .cartridge/tests/unit/context.rs - .cartridge/docs/context.md","src/census.rs",".cartridge/tests/unit/census.rs"]
 needs:
 - '@memo/one-document-serves-every-reader/document-identity'
-commit: "62185289d148017c74986b618456a72bab620228"
+commit: "33e0418fa82966772c38ec8191d02a158b2cb56d"
 ---
 
 # Contributors return bounded attributable context rows

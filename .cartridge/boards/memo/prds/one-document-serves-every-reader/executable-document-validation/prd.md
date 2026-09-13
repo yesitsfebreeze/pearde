@@ -1,17 +1,25 @@
 ---
 repo: /Users/feb/dev/cartridge/memo.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: memo
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: one-document-serves-every-reader
+footprint:
+- src/document.rs
+- src/validation.rs
+- .cartridge/tests/unit/validation.rs
+- .cartridge/tests/integration/validation.test.ts
+- .cartridge/tests/fixtures/validation
+- .cartridge/docs/documents.md
 needs:
 - '@memo/one-document-serves-every-reader/document-identity'
+commit: "3251566e6c92439e4a32c5ce8b734e55726801ee"
 ---
 
 # Invalid executable documents refuse before launch
@@ -20,15 +28,15 @@ Require kind, description, recipe, invocation mode and owner-relative execution 
 
 ## Acceptance
 
-- [ ] Duplicate recipes and malformed fences report source locations.
-- [ ] Forbidden executable dependency forms cause zero process starts.
-- [ ] Valid frozen extraction produces the declared recipe and argv without re-reading mutable source.
+- [x] Duplicate recipes and malformed fences report source locations.
+- [x] Forbidden executable dependency forms cause zero process starts.
+- [x] Valid frozen extraction produces the declared recipe and argv without re-reading mutable source.
 
 ## Proof and recovery
 
 Start at [service.rs](../../../../../../../memo.ctg/src/service.rs), [record.rs](../../../../../../../memo.ctg/src/record.rs).
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test memo` from the composed root with the acceptance fixtures. These gates have not run for this plan.
+Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test memo` from the composed root with the acceptance fixtures. Public/native gates pass at 3251566e6c92439e4a32c5ce8b734e55726801ee; see proof.json and retained logs.
 Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
 
 ## Review

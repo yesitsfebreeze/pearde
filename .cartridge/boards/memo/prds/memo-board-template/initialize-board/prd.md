@@ -1,15 +1,23 @@
 ---
 repo: /Users/feb/dev/cartridge/memo.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: memo
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: memo-board-template
+footprint:
+- src/main.rs
+- src/service.rs
+- src/board.rs
+- .cartridge/templates/board
+- .cartridge/tests/unit/board.rs
+- .cartridge/docs/board.md
+commit: "0976a3b0035c67bbb828063a1def17a1f5297d14"
 ---
 
 # Preview and install a board without overwriting edits
@@ -18,9 +26,9 @@ Copy the owner-local template with explicit preview and collision handling.
 
 ## Acceptance
 
-- [ ] An empty fixture receives the declared files.
-- [ ] Repeated application changes no bytes.
-- [ ] A conflicting edited file is reported and preserved; interrupted application is resumable.
+- [x] An empty fixture receives the declared files.
+- [x] Repeated application changes no bytes.
+- [x] A conflicting edited file is reported and preserved; interrupted application is resumable.
 
 ## Proof and recovery
 

@@ -1,6 +1,6 @@
 ---
 complexity: medium
-footprint: ["src/main.rs","src/mailbox.rs","src/channels.rs","src/roster.rs",".cartridge/tests/unit/main/roster_tests.rs",".cartridge/tests/integration/roster.test.ts",".cartridge/docs/roster.md","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
+footprint: ["src/main.rs","src/mailbox.rs","src/channels.rs","src/roster.rs",".cartridge/tests/unit/main/roster_tests.rs",".cartridge/tests/integration/roster.test.ts",".cartridge/docs/roster.md","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs","src/context.rs",".cartridge/tests/unit/main/context_tests.rs",".cartridge/tests/integration/context.test.ts"]
 ---
 
 # One bounded read of authorized session and channel metadata

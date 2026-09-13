@@ -1,6 +1,7 @@
 ---
 complexity: small
 footprint:
+  - src/inventory.rs
   - src/service.rs
   - .cartridge/tests/integration/tests.rs
 ---

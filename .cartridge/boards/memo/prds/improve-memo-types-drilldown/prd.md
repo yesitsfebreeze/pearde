@@ -13,7 +13,7 @@ canonical-scope: improve-memo-types-drilldown
 footprint:
 - src/service.rs
 - .cartridge/tests/integration/tests.rs
-commit: "4b081453d610af42daac0456750a50bdc719a5fe"
+commit: "45d5a54ab9da1a798cd9997af9a8c19bed8a1812"
 ---
 
 # Read type declarations individually
@@ -51,3 +51,5 @@ Reverify unchanged acceptance after the next integrated owner feature; earlier
 0976a3b0 receipt retained. No contract relaxation.
 
 Reverification at4b081453 after native context facade: existing type/board behavior unchanged; service/main source integration changed.
+
+Inventory facade revalidation: unchanged behavior and acceptance at memo 45d5a54; shared native registration is checked with its registered inventory module.

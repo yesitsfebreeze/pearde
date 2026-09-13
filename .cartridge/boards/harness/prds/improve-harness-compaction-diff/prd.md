@@ -1,21 +1,22 @@
 ---
 repo: /Users/feb/dev/cartridge/harness.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: harness
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: accepted
 canonical-scope: improve-harness-compaction-diff
 footprint:
-- /Users/feb/dev/cartridge/harness.ctg/prompt.rs
-- /Users/feb/dev/cartridge/harness.ctg/working.rs
-- /Users/feb/dev/cartridge/harness.ctg/inspection.rs
-- /Users/feb/dev/cartridge/harness.ctg/inspection_tests.rs
-- /Users/feb/dev/cartridge/harness.ctg/eval/eval_compaction.py
+- src/main.rs
+- src/inspection.rs
+- src/compaction.rs
+- .cartridge/tests/unit/compaction.rs
+- .cartridge/tests/integration/working.rs
+commit: "a282c87798a7dd17462bcaac32f413e90e9c4f73"
 ---
 
 # Inspect what each compaction retained and removed
@@ -24,10 +25,10 @@ The inspector shows original covered messages, resulting summary, retained tail 
 
 ## Acceptance
 
-- [ ] After two compactions, inspection maps each summary to its exact covered prefix and shows corrected user constraints in source and result.
-- [ ] A failed compaction retains the prior summary; requesting its comparison makes no model call and leaks no authorization headers.
+- [x] After two compactions, inspection maps each summary to its exact covered prefix and shows corrected user constraints in source and result.
+- [x] A failed compaction retains the prior summary; requesting its comparison makes no model call and leaks no authorization headers.
 
-- [ ] Keep canonical transcripts intact. New metadata/inspection is additive; revert compaction settings without discarding old summaries or their source. Live evaluation requires separately configured models and a bounded budget.
+- [x] Keep canonical transcripts intact. New metadata/inspection is additive; revert compaction settings without discarding old summaries or their source. Live evaluation requires separately configured models and a bounded budget.
 
 ## Proof and recovery
 
@@ -39,3 +40,15 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-harness-compaction-diff`; maximum five rounds.
+
+## Verified implementation — 2026-09-13
+
+`cargo test --manifest-path ../harness.ctg/Cargo.toml -p harness` passes 33 unit
+and 6 real-process integration tests. The rolling-memory test performs two
+compactions, compares exact source message arrays and original tails, checks a
+corrected constraint in source and summary, timestamp/revision/numeric usage,
+reload, and four failure modes with unchanged history and transcript. Inspection
+leaves the router call count unchanged and excludes provider authorization data.
+Legacy metadata gaps and changed-source comparisons have explicit diagnostics.
+Malformed legacy text is retained during regeneration; unknown history versions
+are refused. Historical comparisons grow with the number of retained summaries.

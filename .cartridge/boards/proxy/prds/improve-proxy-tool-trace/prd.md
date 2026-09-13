@@ -1,24 +1,28 @@
 ---
 repo: /Users/feb/dev/cartridge/proxy.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: proxy
+capability-owner: proxy
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: improve-proxy-tool-trace
 needs:
 - '@gitfs/tool-results-interoperate'
 - '@policy/improve-policy-explain'
+- '@proxy/improve-proxy-continuation-recovery'
 footprint:
-- /Users/feb/dev/cartridge/proxy.ctg/service.rs
-- /Users/feb/dev/cartridge/proxy.ctg/streaming.rs
-- /Users/feb/dev/cartridge/proxy.ctg/wire.rs
-- /Users/feb/dev/cartridge/proxy.ctg/tests.rs
-- /Users/feb/dev/cartridge/proxy.ctg/README.md
+- src/main.rs
+- src/service.rs
+- src/streaming.rs
+- src/usage.rs
+- src/trace.rs
+- .cartridge/tests/unit/tests.rs
+- .cartridge/docs/traces.md
+commit: "439594188097e770fb9993aae379ac9906e0824a"
 ---
 
 # Inspect internal proxy tool work by request identity
@@ -27,14 +31,14 @@ An optional bounded trace identifies internal rounds, tools, policy decisions, t
 
 ## Acceptance
 
-- [ ] A mixed internal/caller tool batch has one trace per executed internal call with correct policy/outcome identity.
-- [ ] Another client cannot read the trace; retention expiry is explicit and secret values do not appear in default traces.
+- [x] A mixed internal/caller tool batch has one trace per executed internal call with correct policy/outcome identity.
+- [x] Another client cannot read the trace; retention expiry is explicit and secret values do not appear in default traces.
 
-- [ ] Keep native request/response wire semantics and caller-owned conversation history. New telemetry is opt-in/additive and bounded. Reverting continuation changes must report invalid mappings rather than resolve to the wrong provider/client.
+- [x] Keep native request/response wire semantics and caller-owned conversation history. New telemetry is opt-in/additive and bounded. Reverting continuation changes must report invalid mappings rather than resolve to the wrong provider/client.
 
 ## Proof and recovery
 
-Start at [service.rs](../../../service.rs), [streaming.rs](../../../streaming.rs), [wire.rs](../../../wire.rs).
+Start at owner-local `src/service.rs` and `src/streaming.rs`; see [specification](specs/spec01.md).
 
 Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test proxy` from the composed root with the acceptance fixtures. These gates have not run for this plan.
 Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.

@@ -29,3 +29,21 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-13
+
+Reviewer: Codex `/root`, self-review under session delegation policy.
+Inputs: [review-round-3-inputs.json](review-round-3-inputs.json).
+Baseline [baseline.json](baseline.json) at cf18e856 shows selecting A snapshots
+both A and B, and deleting A on disk returns an empty errors list.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 20 | Two concrete contract violations reproduced through the runtime. |
+| Ownership and reuse | 20 | Existing GitFS dispatch, ownership and blob mutation APIs. |
+| Dependencies and slices | 19 | Two source paths, no storage migration or consumer protocol change. |
+| Acceptance and baseline | 19 | Selection matrix, missing-file partial failure, unchanged index and refs. |
+| Failure and compatibility | 19 | Validate full selection first; preserve completed effects and prior failed-path bytes. |
+
+**97/100 — PASS**, no blocking findings, 3/5 rounds used. Reverify the earlier
+interoperability contract after this shared-source change before root closure.

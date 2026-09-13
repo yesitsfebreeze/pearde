@@ -1,0 +1,15 @@
+{
+  "source_head": "cf18e85679a6d0ac353f0655c7808132958aea94",
+  "selected_A": {
+    "content": "{\"errors\":[],\"snapshotted\":[\"A\",\"B\"]}",
+    "error": false
+  },
+  "overlay_B": {
+    "content": "{\"content\":\"disk-B\",\"found\":true,\"path\":\"B\",\"revision\":\"aac1dca4a5cf7036ac8705c8e415448120f35af11a438eb49744f1e4200ad67b\",\"source\":\"gitfs\"}",
+    "error": false
+  },
+  "missing_A": {
+    "content": "{\"errors\":[],\"snapshotted\":[]}",
+    "error": false
+  }
+}

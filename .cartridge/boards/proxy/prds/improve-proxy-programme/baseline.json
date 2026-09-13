@@ -1,0 +1,29 @@
+{
+  "source": "439594188097e770fb9993aae379ac9906e0824a",
+  "references": [
+    {
+      "ref": "@proxy/improve-proxy-total-usage",
+      "state": "done",
+      "problem": "verified source footprint changed after collection",
+      "specs": {
+        "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-total-usage/specs/spec01.md": "96812da0fe910323008b349f169b21112150ee4521bdbf1d45882989ac50536d"
+      }
+    },
+    {
+      "ref": "@proxy/improve-proxy-tool-trace",
+      "state": "done",
+      "problem": null,
+      "specs": {
+        "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-tool-trace/specs/spec01.md": "45929b354c59a0f88ba5721a20e557442fefc126204fffbb8ad1cae3075a9489"
+      }
+    },
+    {
+      "ref": "@proxy/improve-proxy-continuation-recovery",
+      "state": "done",
+      "problem": "verified source footprint changed after collection",
+      "specs": {
+        "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/proxy/prds/improve-proxy-continuation-recovery/specs/spec01.md": "be8993e5f72e4e9893ee65b85dc8c44f44684d5e1363bb027b5499bd51a24974"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "observation": "All three completed contracts require refresh after finite recovery changed shared router files. No new behavior in this rollup.",
+  "dependencies": {
+    "improve-router-route-explanation": {
+      "source_receipt": "0a216cb100ea40aa0535509d44c38b16a009b9cc",
+      "current_source": "4ad9cd35dc862ecfe0786612d39913612d93fc45"
+    },
+    "improve-router-capability-routing": {
+      "source_receipt": "0a216cb100ea40aa0535509d44c38b16a009b9cc",
+      "current_source": "4ad9cd35dc862ecfe0786612d39913612d93fc45"
+    },
+    "improve-router-cost-latency": {
+      "source_receipt": "0a216cb100ea40aa0535509d44c38b16a009b9cc",
+      "current_source": "4ad9cd35dc862ecfe0786612d39913612d93fc45"
+    }
+  }
+}

@@ -29,3 +29,18 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — Integrated router contract evidence
+
+Independent reviewer `/root/proxy_continuation`; exact inputs in review-round-3-inputs.json.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | One point-in-time rollup, no new product behavior. |
+| Ownership and reuse | 20 | Existing engine completion checks and owner tests. |
+| Dependencies and slices | 20 | Exactly three child contracts, union footprint and integrated source. |
+| Acceptance and baseline | 19 | Prior receipts stale after shared recovery edits; refresh required. |
+| Failure and compatibility | 19 | Explicit bounded archives, unknown estimates and external-needs invalidation limit. |
+
+**97/100 — PASS**. No blockers. Current child review headings match the parser.
+Rounds used3/5. A passed review does not substitute for integrated execution proof.

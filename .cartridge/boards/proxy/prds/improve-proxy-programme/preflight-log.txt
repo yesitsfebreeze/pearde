@@ -1,0 +1,12 @@
+Exact inline spec receipt-validation command; exit 1
+12 | const parent=graph.get("@proxy/improve-proxy-programme");
+13 | if(!parent) throw Error("missing canonical rollup");
+14 | const owner=codeRepo(parent), union=new Set(), evidence=[];
+15 | for(const [ref,digest] of Object.entries(expected)) {
+16 |   const child=graph.get(ref); if(!child) throw Error("missing dependency "+ref);
+17 |   const problem=completionProblem(child,graph);if(problem)throw Error(ref+": "+problem);
+                                                                     ^
+error: @proxy/improve-proxy-total-usage: verified source footprint changed after collection
+      at /Users/feb/dev/cartridge/prd.ctg/[eval]:17:65
+
+Bun v1.3.14 (macOS arm64)

@@ -22,7 +22,7 @@ footprint:
 - .cartridge/tests/unit/proxy/capabilities.rs
 - .cartridge/tests/unit/catalog/capabilities.rs
 - .cartridge/docs/decisions.md
-commit: "0a216cb100ea40aa0535509d44c38b16a009b9cc"
+commit: "4ad9cd35dc862ecfe0786612d39913612d93fc45"
 ---
 
 # Explain why a provider was selected
@@ -49,3 +49,5 @@ Preserve the last usable implementation and durable data on failure; report part
 
 Reverify unchanged acceptance after0a216cb cost/latency metadata shares source;
 prior07b77ff7 receipt retained. No semantic acceptance change.
+
+Reverification after finite recovery integration at4ad9cd3: same admission, decision and cost contracts; shared provider files changed.

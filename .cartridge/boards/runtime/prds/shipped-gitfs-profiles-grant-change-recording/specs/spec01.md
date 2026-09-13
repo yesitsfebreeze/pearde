@@ -42,9 +42,9 @@ infer success merely from a hand-authored test profile.
 
 ## Acceptance
 
-- [ ] Only the existing GitFS entries in default/live/MCP gain the exact Sessions grant; unrelated user profile changes remain byte-identical.
-- [ ] Actual Host composition reports effective grants and records direct/overlay changes through the real Sessions owner; no-grant standalone behavior remains available.
-- [ ] Runtime public test/check and owner native provenance fixtures pass with exact source/binary and desired-profile-hunk evidence.
+- [x] Only the existing GitFS entries in default/live/MCP gain the exact Sessions grant; unrelated user profile changes remain byte-identical.
+- [x] Actual Host composition reports effective grants and records direct/overlay changes through the real Sessions owner; no-grant standalone behavior remains available.
+- [x] Runtime public test/check and owner native provenance fixtures pass with exact source/binary and desired-profile-hunk evidence.
 
 ## Verify and Proof
 

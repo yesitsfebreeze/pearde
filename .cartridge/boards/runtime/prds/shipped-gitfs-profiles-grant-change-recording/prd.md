@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/cartridge.ctg
-state: open
+state: "done"
 workflow: develop-one-cartridge
 capability-owner: runtime
 work-kind: leaf
@@ -9,6 +9,7 @@ review-status: "passed"
 needs:
 - '@gitfs/overlay-mutations-report-revisions'
 - '@sessions/file-change-records-retain-reported-revisions'
+commit: "8e514eace6b88d4ef4e55aa5f031e539ab28eb5b"
 ---
 
 # Grant change recording in the shipped GitFS profiles
@@ -20,9 +21,9 @@ permission to call; file-change metadata cannot add or expand it.
 
 ## Acceptance
 
-- [ ] Each existing GitFS profile entry receives exactly the Sessions grant while other entries and permissions remain unchanged.
-- [ ] Real Host composition runs FS/GitFS against the declared Sessions instance and records distinct changes; a standalone GitFS profile remains usable without a Sessions dependency.
-- [ ] Existing public runtime/profile gates and the composed provenance fixture pass with pinned native binaries and recorded source revisions.
+- [x] Each existing GitFS profile entry receives exactly the Sessions grant while other entries and permissions remain unchanged.
+- [x] Real Host composition runs FS/GitFS against the declared Sessions instance and records distinct changes; a standalone GitFS profile remains usable without a Sessions dependency.
+- [x] Existing public runtime/profile gates and the composed provenance fixture pass with pinned native binaries and recorded source revisions.
 
 No new runtime dependency language, wildcard grant, implicit activation, session
 mapping or authentication is introduced. The profile's existing declared-provider

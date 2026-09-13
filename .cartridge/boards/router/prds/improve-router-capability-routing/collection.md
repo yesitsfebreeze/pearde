@@ -1,0 +1,58 @@
+---
+commit: 77d5d48085466931669486a16078019b745eb823
+spec-digests: {"spec01.md":"aeada460bce0000ca8ff3c31f07f988c9aed27208518552c18521e3322e39044"}
+child-contracts: {}
+---
+
+# Collection
+
+/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/router/prds/improve-router-capability-routing/specs/spec01.md: exit 0
+
+Command SHA-256: c820aad8065665d0b576252439b167714b48814e12d0261c0b1925939a597d49
+
+```text
+   Compiling ring v0.17.14
+   Compiling rustls v0.23.44
+   Compiling rustls-webpki v0.103.15
+   Compiling tokio-rustls v0.26.5
+   Compiling hyper-rustls v0.27.9
+   Compiling reqwest v0.12.28
+   Compiling router v0.1.0 (/Users/feb/dev/cartridge/router.ctg)
+    Finished `test` profile [unoptimized] target(s) in 4.42s
+     Running unittests src/lib.rs (target/tool-result-contract/debug/deps/router-053e75aeb2cc0c18)
+
+running 6 tests
+test protocol::tests::multi_line_data_frames_join_and_empty_ones_stay_errors ... ok
+test protocol::tests::chat_to_anthropic_carries_tool_calls_and_tool_results ... ok
+test protocol::tests::anthropic_upstream_events_decode_to_tools_text_and_done ... ok
+test protocol::tests::anthropic_in_chat_out_and_back_through_the_encoder ... ok
+test protocol::tests::upstream_chat_stream_reencodes_to_anthropic_sse ... ok
+test protocol::tests::responses_output_indices_become_contiguous_chat_tool_indices ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (target/tool-result-contract/debug/deps/router-c8f9f400cd98cef6)
+
+running 17 tests
+test auth::tests::jwt_exp_decodes_the_expiry_claim ... ok
+test catalog::capability_tests::wire_features_require_explicit_support_and_native_preservation ... ok
+test settings::tests::storage_paths_are_required_without_implicit_locations ... ok
+test catalog::capability_tests::every_preference_obeys_known_capabilities_and_context ... ok
+test sync::tests::a_provider_without_live_inventory_still_contributes_its_known_models ... ok
+test sync::tests::an_entry_lands_under_the_alias_then_the_shared_core_then_its_slug ... ok
+test auth::tests::device_begin_guides_key_providers_to_a_key ... ok
+test sync::tests::subscription_cache_reads_are_not_fresh_remote_observations ... ok
+test sync::tests::incomplete_hops_do_not_inherit_other_providers_or_refresh_expired_evidence ... ok
+test sync::tests::the_fallback_index_lists_known_models_and_unknown_providers_stay_empty ... ok
+test catalog::capability_tests::detailed_discovery_is_bounded_and_preserves_evidence_distinctions ... ok
+test proxy::capability_tests::no_compatible_route_fails_before_network_and_health_rules_cannot_waive_fields ... ok
+test proxy::capability_tests::native_anthropic_features_survive_selection_and_request_encoding ... ok
+test auth::tests::oauth_store_round_trips_and_removes ... ok
+test auth::tests::valid_oauth_requests_do_not_wait_for_the_store_writer ... ok
+test proxy::capability_tests::actual_failover_skips_incompatible_routes_and_preserves_required_fields ... ok
+test proxy::reload_tests::preparation_retains_existing_leases_and_defers_new_ones ... ok
+
+test result: ok. 17 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+
+
+```

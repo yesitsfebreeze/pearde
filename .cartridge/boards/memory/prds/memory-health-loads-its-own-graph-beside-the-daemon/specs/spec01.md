@@ -1,26 +1,6 @@
 ---
 complexity: medium
-footprint:
-- src/commands/src/commands_health.rs
-- src/commands/src/commands_admin.rs
-- src/commands/src/lib.rs
-- src/store/core/src/lib.rs
-- src/store/core/src/cold.rs
-- src/store/core/src/health.rs
-- src/health/src/lib.rs
-- src/transport/src/typed.rs
-- src/transport/src/memory_rpc.rs
-- src/rpc/src/server.rs
-- .cartridge/tests/unit/src/commands/src/tests/commands_health_owner_test.rs
-- .cartridge/tests/unit/src/commands/src/tests/commands_admin_test.rs
-- .cartridge/tests/unit/src/store/core/src/health_test.rs
-- .cartridge/tests/unit/src/health/src/lib/tests.rs
-- .cartridge/tests/integration/e2e/cli_surface.rs
-- .cartridge/docs/health-owner.md
-- src/health/Cargo.toml
-- .cartridge/tests/integration/e2e/health_surface.rs
-- .cartridge/tests/unit/src/store/core/src/tests/legacy_test.rs
-- .cartridge/tests/integration/e2e/focus_routing.rs
+footprint: ["src/commands/src/commands_health.rs","src/commands/src/commands_admin.rs","src/commands/src/lib.rs","src/store/core/src/lib.rs","src/store/core/src/cold.rs","src/store/core/src/health.rs","src/health/src/lib.rs","src/transport/src/typed.rs","src/transport/src/memory_rpc.rs","src/rpc/src/server.rs",".cartridge/tests/unit/src/commands/src/tests/commands_health_owner_test.rs",".cartridge/tests/unit/src/commands/src/tests/commands_admin_test.rs",".cartridge/tests/unit/src/store/core/src/health_test.rs",".cartridge/tests/unit/src/health/src/lib/tests.rs",".cartridge/tests/integration/e2e/cli_surface.rs",".cartridge/docs/health-owner.md","src/health/Cargo.toml",".cartridge/tests/integration/e2e/health_surface.rs",".cartridge/tests/unit/src/store/core/src/tests/legacy_test.rs",".cartridge/tests/integration/e2e/focus_routing.rs",".cartridge/docs/owner-attachment.md",".cartridge/tests/integration/cartridge.rs",".cartridge/tests/unit/src/cartridge/tests.rs",".cartridge/tests/unit/src/transport/src/owner_test.rs","Cargo.toml","src/cartridge.rs","src/transport/src/lib.rs","src/transport/src/owner.rs"]
 ---
 
 # Ask the selected store owner for bounded health

@@ -1,6 +1,6 @@
 ---
-commit: 439bea56749d6a7361d6c1afb7d1a43bb46c7e9f
-spec-digests: {"spec01.md":"ae58673cef26d06ca0d7ea952dbb2267491e0618445138748846929413e95f5d"}
+commit: f9759848c56255ee0607587970f58ccc087ade53
+spec-digests: {"spec01.md":"a11d64f09d4ffeab6a0d79f2917e8f065a5b22ae18c16dc81daba372f158562f"}
 child-contracts: {}
 ---
 
@@ -11,17 +11,17 @@ child-contracts: {}
 Command SHA-256: c4359ad8fd40d8656db82e6dc39c10e5eb4db24712be4fba07793f0091f084d2
 
 ```text
-    Finished `test` profile [unoptimized] target(s) in 0.12s
+    Finished `test` profile [unoptimized] target(s) in 0.16s
      Running unittests src/lib.rs (target/prd-writer-boundary/debug/deps/commands-0b246b2b6a4d9b46)
 
 running 5 tests
+test commands_health::health_owner_tests::health_owner_absent_calls_local_exactly_once_and_propagates_failure ... ok
 test commands_health::health_owner_tests::health_owner_success_and_alias_never_load_local ... ok
 test commands_health::health_owner_tests::health_owner_regular_file_is_not_a_store_identity ... ok
-test commands_health::health_owner_tests::health_owner_absent_calls_local_exactly_once_and_propagates_failure ... ok
 test commands_health::health_owner_tests::health_owner_errors_never_load_local ... ok
 test commands_health::health_owner_tests::health_owner_deadline_disconnect_and_stale_are_retryable_without_fallback ... ok
 
-test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 125 filtered out; finished in 0.03s
+test result: ok. 5 passed; 0 failed; 0 ignored; 0 measured; 125 filtered out; finished in 0.04s
 
      Running ../../.cartridge/tests/unit/src/commands/tests/exit_status.rs (target/prd-writer-boundary/debug/deps/exit_status-b2a44cc2997c160d)
 
@@ -62,7 +62,7 @@ running 0 tests
 
 test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
 
-551efad925dca70181667e5644ef1e9d3ee9f170bf40d17b479fa25f801c9e80  /tmp/memory-health-full.UqVBz2
+169cd292b5058de02c7c8cd5167fcf887bbe81ab231e581f993c115194c3cdd4  /tmp/memory-health-full.T6zKxl
 
 ```
 
@@ -73,6 +73,6 @@ Command SHA-256: 094d2a92b89aeaaff56f8650c4d1b7aaed048513eb47cc2c380119a065b13bb
 ```text
 cargo fmt --all -- --check
 cargo clippy --workspace --all-targets -- -D warnings
-    Finished `dev` profile [unoptimized] target(s) in 0.13s
+    Finished `dev` profile [unoptimized] target(s) in 0.17s
 
 ```

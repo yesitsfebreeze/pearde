@@ -11,7 +11,7 @@ review-round: 3
 review-status: "passed"
 canonical-scope: recursive-development-graph
 needs: ["@memo/memo-board-template/initialize-board","@memo/one-document-serves-every-reader/document-identity","@prd/declared-source-edges"]
-commit: "33e0418fa82966772c38ec8191d02a158b2cb56d"
+commit: "1109ab9e8cff8bd9061a426567d453d613589d39"
 ---
 
 # Declared descendants have distinct source identities

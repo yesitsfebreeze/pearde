@@ -10,11 +10,8 @@ work-kind: leaf
 review-round: 1
 review-status: passed
 canonical-scope: startup-eof-retains-exit-status
-footprint:
-  - src/sdk.rs
-  - src/cartridge.rs
-  - .cartridge/tests/unit/src/tests/wire.rs
-commit: "1a5e9867acec1d07cd732c3af2ccf331a0979a61"
+footprint: ["src/sdk.rs","src/cartridge.rs",".cartridge/tests/unit/src/tests/wire.rs","src/loader.rs",".cartridge/tests/unit/src/tests/mod.rs",".cartridge/tests/unit/src/tests/composition.rs"]
+commit: "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df"
 ---
 
 # Startup EOF retains exit status

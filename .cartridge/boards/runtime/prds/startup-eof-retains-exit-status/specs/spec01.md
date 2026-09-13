@@ -1,9 +1,6 @@
 ---
 complexity: low
-footprint:
-  - src/sdk.rs
-  - src/cartridge.rs
-  - .cartridge/tests/unit/src/tests/wire.rs
+footprint: ["src/sdk.rs","src/cartridge.rs",".cartridge/tests/unit/src/tests/wire.rs","src/loader.rs",".cartridge/tests/unit/src/tests/mod.rs",".cartridge/tests/unit/src/tests/composition.rs"]
 ---
 
 # Await exit after startup EOF within the original deadline

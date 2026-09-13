@@ -21,7 +21,7 @@ footprint:
 - .cartridge/tests/unit/proxy/capabilities.rs
 - .cartridge/tests/unit/telemetry.rs
 - .cartridge/docs/cost-latency.md
-commit: "0a216cb100ea40aa0535509d44c38b16a009b9cc"
+commit: "4ad9cd35dc862ecfe0786612d39913612d93fc45"
 ---
 
 # Report attributable route cost and latency estimates
@@ -45,3 +45,5 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-router-cost-latency`; maximum five rounds.
+
+Reverification after finite recovery integration at4ad9cd3: same admission, decision and cost contracts; shared provider files changed.

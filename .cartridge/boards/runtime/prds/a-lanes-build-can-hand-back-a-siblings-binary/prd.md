@@ -1,15 +1,16 @@
 ---
 repo: /Users/feb/dev/cartridge/cartridge.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: runtime
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: accepted
 canonical-scope: a-lanes-build-can-hand-back-a-siblings-binary
+commit: "6d1f9569296d9ce7dd310eed23236b035adeaefc"
 ---
 
 # a lane's build can hand back a sibling's binary
@@ -18,9 +19,9 @@ Retain the measured cache-contamination evidence and move the executable outcome
 
 ## Acceptance
 
-- [ ] Two worktrees change the same crate differently and executing each resulting binary proves its own behavior.
-- [ ] Repeating with the wrapper enabled/disabled identifies whether target isolation alone is sufficient; a wrong artifact fails the gate, not a manual strings warning.
-- [ ] The report preserves cold/warm timing, actual binary digests and source identities without changing unrelated worktrees or global cache configuration.
+- [x] Two worktrees change the same crate differently and executing each resulting binary proves its own behavior.
+- [x] Repeating with the wrapper enabled/disabled identifies whether target isolation alone is sufficient; a wrong artifact fails the gate, not a manual strings warning.
+- [x] The report preserves cold/warm timing, actual binary digests and source identities without changing unrelated worktrees or global cache configuration.
 
 ## Proof and recovery
 

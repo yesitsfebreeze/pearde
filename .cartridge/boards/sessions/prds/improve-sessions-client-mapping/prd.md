@@ -16,7 +16,7 @@ footprint:
 - .cartridge/tests/unit/main/mapping_tests.rs
 - .cartridge/tests/integration/mapping.test.ts
 - .cartridge/docs/client-mapping.md
-commit: "b772c6ee4f1ad476995c8c8c07cd02ed2be264fa"
+commit: "965108d9c29bce1a41a518917d6c8892e67e42bf"
 ---
 
 # Map client conversations to cartridge sessions honestly
@@ -42,3 +42,5 @@ Preserve the last usable implementation and durable data on failure; report part
 
 Reverify unchanged acceptance after the next integrated owner feature; earlier
 181adb20 receipt retained. No contract relaxation.
+
+Reverification at965108d9 after mailbox integration. Add the new transitive source module to verification coverage; behavioral acceptance is unchanged.

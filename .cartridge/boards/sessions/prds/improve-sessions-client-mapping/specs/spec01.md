@@ -1,6 +1,7 @@
 ---
 complexity: medium
 footprint:
+  - src/mailbox.rs
   - src/main.rs
   - src/mapping.rs
   - .cartridge/tests/unit/main/mapping_tests.rs

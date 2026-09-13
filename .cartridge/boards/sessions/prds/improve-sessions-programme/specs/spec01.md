@@ -1,6 +1,6 @@
 ---
 complexity: low
-footprint: ["src/roster.rs","src/channels.rs","src/mailbox.rs",".cartridge/docs/README.md",".cartridge/docs/client-mapping.md",".cartridge/docs/retention.md",".cartridge/tests/integration/mapping.test.ts",".cartridge/tests/integration/retention.test.ts",".cartridge/tests/unit/main/mapping_tests.rs",".cartridge/tests/unit/main/repair_tests.rs",".cartridge/tests/unit/main/retention_tests.rs",".cartridge/tests/unit/recovery.rs","Cargo.toml","src/main.rs","src/mapping.rs","src/recovery.rs","src/retention.rs","src/observations.rs","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
+footprint: ["src/roster.rs","src/channels.rs","src/mailbox.rs",".cartridge/docs/README.md",".cartridge/docs/client-mapping.md",".cartridge/docs/retention.md",".cartridge/tests/integration/mapping.test.ts",".cartridge/tests/integration/retention.test.ts",".cartridge/tests/unit/main/mapping_tests.rs",".cartridge/tests/unit/main/repair_tests.rs",".cartridge/tests/unit/main/retention_tests.rs",".cartridge/tests/unit/recovery.rs","Cargo.toml","src/main.rs","src/mapping.rs","src/recovery.rs","src/retention.rs","src/observations.rs","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs","src/context.rs",".cartridge/tests/unit/main/context_tests.rs",".cartridge/tests/integration/context.test.ts"]
 ---
 
 # spec01 — Verify integrated sessions improvements

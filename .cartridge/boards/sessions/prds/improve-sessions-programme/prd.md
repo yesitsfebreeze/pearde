@@ -14,7 +14,7 @@ needs:
 - '@sessions/improve-sessions-client-mapping'
 - '@sessions/improve-sessions-retention'
 - '@sessions/improve-sessions-recovery'
-commit: "191e2b6cb4291bdcce7a894f98bb2d475361d30f"
+commit: "92240c6ba415f53b2d17971aea185536a6f517bc"
 ---
 
 # Sessions improvement plan

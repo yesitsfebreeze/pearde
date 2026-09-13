@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/prd.ctg
-state: "specced"
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -11,6 +11,7 @@ review-round: 3
 review-status: "passed"
 canonical-scope: declared-source-edges
 needs: []
+commit: "c344629f00bd9afc4b5f993538600fc52e612ab2"
 ---
 
 # Existing board declarations expose bounded source edges

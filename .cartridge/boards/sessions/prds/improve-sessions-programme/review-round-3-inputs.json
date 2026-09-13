@@ -1,0 +1,20 @@
+{
+  "reviewer": "/root",
+  "round": 3,
+  "score": 97,
+  "result": "pass",
+  "inputs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-programme/prd.md",
+      "sha256": "7a1bdcd377a95bbb851c620df6293ac16c0b5450db9441ed24cc10d4a14d521c"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-programme/specs/spec01.md",
+      "sha256": "ba84017dbd551de3b0ce772b97da70e22c0d1654370a272836a8d4bc3a2759c7"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-programme/baseline.json",
+      "sha256": "9213d2c064ef369877bfeadf46bf2b3d318310a16556a79c601ba8af47fb6d71"
+    }
+  ]
+}

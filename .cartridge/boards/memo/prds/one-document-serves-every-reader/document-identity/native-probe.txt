@@ -1,0 +1,17 @@
+import pathlib,tempfile,subprocess,json,hashlib
+owner=pathlib.Path('/Users/feb/dev/cartridge/memo.ctg');root=pathlib.Path(tempfile.mkdtemp(prefix='memo-document-native-proof-'));source=owner/'.cartridge/tests/fixtures/documents/example.md';file=root/'.cartridge/documents/example.md';file.parent.mkdir(parents=True);file.write_bytes(source.read_bytes());before=file.read_bytes();before_paths=sorted(str(p.relative_to(root)) for p in root.rglob('*'))
+child=subprocess.Popen([str(owner.parent/'cartridge.ctg/target/tool-result-contract/debug/memo_cartridge')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+def send(value):child.stdin.write(json.dumps(value)+'\n');child.stdin.flush()
+send({'apply':{'name':'memo','config':{}}})
+while not json.loads(child.stdout.readline()).get('ready'):pass
+results=[]
+for identifier,projection in enumerate(['commands','docs','human'],1):
+ send({'id':identifier,'call':'memo','args':{'op':'document','cwd':str(root),'path':'.cartridge/documents/example.md','projection':projection}})
+ while True:
+  value=json.loads(child.stdout.readline())
+  if value.get('cartridges'):send({'reply':value['id'],'data':[]});continue
+  if value.get('reply')==identifier:break
+ assert 'error' not in value,value
+ result=value['data'];assert result['revision']==hashlib.sha256(before).hexdigest();assert result['identity']=='@workspace/.cartridge/documents/example.md';results.append({'projection':projection,'identity':result['identity'],'revision':result['revision']})
+send({'dispose':True});child.communicate(timeout=10);assert file.read_bytes()==before;assert sorted(str(p.relative_to(root)) for p in root.rglob('*'))==before_paths
+print(json.dumps({'native_sdk_projections':results,'preserved_source':True,'created_no_extra_files':True},indent=2))

@@ -1,0 +1,55 @@
+{
+  "source_revision": "439594188097e770fb9993aae379ac9906e0824a",
+  "source_clean": true,
+  "router_revision_at_final_gates": "fa23893bd5dfb3a7d5a801ac42d34b6a915bf81b",
+  "source_inputs": {
+    "src/main.rs": "2325db618e7bc459c24e228eeb7716b54caa966e3b27b36358b7e64e9b4e1d2c",
+    "src/service.rs": "cec6334e76baabc91a1c41416d0ded4515ae1ac8884b872cbcb32ac35638cfe4",
+    "src/streaming.rs": "cbde03f2e36d00472876e63faed15bc2944787765d340c5f287bbe46411c00ee",
+    "src/usage.rs": "13df81be296373062101e890e8c83bb4d0d0a83c98dc565702a8e0c6d03695e6",
+    "src/trace.rs": "9861f9729ae47892f1031f55ad4c7029c471a8a34112e6441f5013946d736fe3",
+    ".cartridge/tests/unit/tests.rs": "07d0d013274213ea9a47223769f8baa569feb28338e59ccdba75f166a6aa8478",
+    ".cartridge/docs/traces.md": "edfdce529f03ea955c66ed5f88d116970e1b123607d427b29c262ac618874058"
+  },
+  "gates": [
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/proxy-trace\" just test proxy",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "33 passed, 0 failed",
+      "log": "test-log.txt"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/proxy-trace\" just check proxy",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "passed including clippy",
+      "log": "check-log.txt"
+    }
+  ],
+  "observed": [
+    "All three JSON/SSE wires retain caller-owned tools/history while one private mixed-batch call yields correct policy/descriptor identity and one terminal trace reference.",
+    "Secret sentinels in tool arguments/results, policy reason/revision and arbitrary error text are absent from retrieved trace metadata.",
+    "Real authenticated HTTP active/final/evicted lookups isolate alice/bob/default/native principals; spoofed client/scope headers cannot elevate identity.",
+    "Deadline and disconnect preserve one completed tool and mark another dispatched call as cancellation requested with unknown completion; exact trusted cancellation context matches.",
+    "Cancellation during memo outcome observation preserves completed tool evidence and issues no tool cancellation.",
+    "Immediate unpolled SSE drop finalizes cancelled tracing without any dispatch.",
+    "Real 257-call execution completes all calls while storing256 and reporting one omitted; metadata overflow and global active/archive TTL/capacity are bounded.",
+    "Expired or evicted active work cannot reinsert records, and restart returns unavailable. Disabled traces preserve native JSON/SSE and refuse lookup explicitly."
+  ],
+  "review": {
+    "round": 3,
+    "reviewer": "/root",
+    "score": 96,
+    "result": "pass"
+  },
+  "coordinator_integration": [
+    "Collect PRD against clean source4395941.",
+    "Refresh completed continuation and total-usage receipts whose main/service/streaming/tests footprints changed.",
+    "Run existing GitFS/policy consumer gates per shared contracts."
+  ],
+  "limitations": [
+    "Global archive capacity includes active and finished requests; other authorized traffic can evict a trace but cannot read another principal\u2019s records.",
+    "Retention is process-local and bounded; cancellation requested is not cancellation acknowledgment or rollback.",
+    "A shared HTTP key denotes one principal; separate client keys are needed for isolation.",
+    "Policy revision digest identifies the supplied revision, not policy source code or approval authority."
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "source_revision": "154bde9d8f97fb1c015fe34cf62ae79b153e6feb",
+  "fixture": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-identity-izc92rc6",
+  "command": "python3 /tmp/memo-document-identity-baseline.py (retained baseline-probe.txt)",
+  "expected": "All three native projections return cartridge-document/v1 canonical identity and same exact-byte source digest",
+  "observed": [
+    {
+      "error": "unknown field `projection`, expected one of `op`, `path`, `body`, `kind`, `limit`, `cursor`, `usage`, `query`, `ref`, `expected_revision`, `event`",
+      "reply": 1
+    },
+    {
+      "error": "unknown field `projection`, expected one of `op`, `path`, `body`, `kind`, `limit`, `cursor`, `usage`, `query`, `ref`, `expected_revision`, `event`",
+      "reply": 2
+    },
+    {
+      "error": "unknown field `projection`, expected one of `op`, `path`, `body`, `kind`, `limit`, `cursor`, `usage`, `query`, `ref`, `expected_revision`, `event`",
+      "reply": 3
+    }
+  ],
+  "finding": "Native document operation and projection selector are absent; legacy memo service remains separate."
+}

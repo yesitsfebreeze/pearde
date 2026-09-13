@@ -1,0 +1,25 @@
+   Compiling router v0.1.0 (/private/tmp/cartridge-writer-proof/router.ctg)
+    Finished `test` profile [unoptimized] target(s) in 2.28s
+     Running unittests src/lib.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/writer-proof/debug/deps/router-b0046100d240ca44)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 6 filtered out; finished in 0.00s
+
+     Running unittests src/main.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/writer-proof/debug/deps/router-518a7374ce08ab44)
+
+running 1 test
+
+thread 'proxy::capability_tests::baseline_recovery_has_no_lifetime_budget' (43393281) panicked at /private/tmp/cartridge-writer-proof/router.ctg/src/../.cartridge/tests/unit/proxy/capabilities.rs:671:47:
+one incident performed 6 recovery calls without a finite lifetime budget
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test proxy::capability_tests::baseline_recovery_has_no_lifetime_budget ... FAILED
+
+failures:
+
+failures:
+    proxy::capability_tests::baseline_recovery_has_no_lifetime_budget
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 29 filtered out; finished in 0.08s
+
+error: test failed, to rerun pass `--bin router`

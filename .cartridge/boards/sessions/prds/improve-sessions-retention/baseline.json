@@ -1,0 +1,74 @@
+{
+  "source_revision": "181adb20248c6fdb718823919438939de55bdefc",
+  "rows": [
+    {
+      "args": {
+        "op": "retention_preview"
+      },
+      "reply": {
+        "error": "unknown sessions op retention_preview",
+        "reply": 1
+      }
+    },
+    {
+      "args": {
+        "op": "create",
+        "name": "disposable-retention-baseline"
+      },
+      "reply": {
+        "data": {
+          "agent": {},
+          "buffers": [],
+          "created": 1789315155,
+          "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+          "files": [],
+          "id": "18d4eca74e7d7560-2",
+          "name": "disposable-retention-baseline",
+          "parent": null,
+          "revision": 0,
+          "transcript": null,
+          "updated": 1789315155
+        },
+        "reply": 2
+      }
+    },
+    {
+      "args": {
+        "op": "update",
+        "id": "18d4eca74e7d7560-2",
+        "agent": {
+          "phase": "running"
+        }
+      },
+      "reply": {
+        "data": {
+          "agent": {
+            "phase": "running"
+          },
+          "buffers": [],
+          "created": 1789315155,
+          "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+          "files": [],
+          "id": "18d4eca74e7d7560-2",
+          "name": "disposable-retention-baseline",
+          "parent": null,
+          "revision": 1,
+          "transcript": null,
+          "updated": 1789315155
+        },
+        "reply": 3
+      }
+    },
+    {
+      "args": {
+        "op": "delete",
+        "id": "18d4eca74e7d7560-2"
+      },
+      "reply": {
+        "data": true,
+        "reply": 4
+      }
+    }
+  ],
+  "note": "All changes confined to disposable fixture; preview missing and generic delete currently accepts active session. New retention path must independently protect active state; legacy generic delete compatibility to be decided in spec."
+}

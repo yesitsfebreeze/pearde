@@ -1,0 +1,8 @@
+{
+  "source_commit": "fa23893bd5dfb3a7d5a801ac42d34b6a915bf81b",
+  "probe": "\n#[tokio::test]\nasync fn baseline_recovery_has_no_lifetime_budget() {\nlet fixture=fixture(Wire::Chat).await;\nfixture.proxy.health.fail(\"fixture@first\",503,\"fixture outage\",Wire::Chat,&request()).await;\nfor _ in 0..6 { fixture.proxy.health.data.write().await.incidents.get_mut(\"fixture@first\").unwrap().retry_at=0; fixture.proxy.heal_once().await; }\nlet calls=fixture.calls.lock().unwrap().len();assert!(calls<=3,\"one incident performed {calls} recovery calls without a finite lifetime budget\");\n}\n",
+  "probe_sha256": "729bcd74d06b8d8b691d55e8634940968adcf466f20adbfa6194ea0b042a170d",
+  "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/writer-proof cargo test --manifest-path /private/tmp/cartridge-writer-proof/router.ctg/Cargo.toml baseline_recovery_has_no_lifetime_budget -- --nocapture",
+  "expected": "At most three recovery attempts for the same incident, even across repeated sweeps",
+  "observed": "Expected assertion failed: six actual HTTP recovery calls were issued for one incident; baseline-log.txt retained."
+}

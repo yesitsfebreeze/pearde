@@ -1,0 +1,7 @@
+{
+  ".cartridge/boards/router/prds/provider-recovery-proves-its-authority-boundary/prd.md": "f620fa2715c098ff4e94bec7412c33686e5c1bb464e7f78911b23fe393252bcb",
+  ".cartridge/boards/router/prds/provider-recovery-proves-its-authority-boundary/specs/spec01.md": "71d704de07f44fb44236ce796079e3fa5eb22e60dd3e85a8f132a1e59ab1e2d0",
+  ".cartridge/boards/router/prds/provider-recovery-proves-its-authority-boundary/baseline-inputs.json": "bc24d00478c0d638cf847158f5891071f55816ba8803200071f163cdbd6792dd",
+  "../router.ctg/src/health.rs": "ad35eb6e7585f6050963c698eb968402c33ef6508a716949722b59197c9822e7",
+  "../router.ctg/src/proxy.rs": "491fc134131fe3b40d34d83e7d210bfced0eb683bc1eab29fafc6d5d0a73476d"
+}

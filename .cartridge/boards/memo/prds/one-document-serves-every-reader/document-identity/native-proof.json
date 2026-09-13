@@ -1,0 +1,21 @@
+{
+  "native_sdk_projections": [
+    {
+      "projection": "commands",
+      "identity": "@workspace/.cartridge/documents/example.md",
+      "revision": "16d32044899419128ebc6d21a60c4672e28479c278d5088c41bb20b970192ecb"
+    },
+    {
+      "projection": "docs",
+      "identity": "@workspace/.cartridge/documents/example.md",
+      "revision": "16d32044899419128ebc6d21a60c4672e28479c278d5088c41bb20b970192ecb"
+    },
+    {
+      "projection": "human",
+      "identity": "@workspace/.cartridge/documents/example.md",
+      "revision": "16d32044899419128ebc6d21a60c4672e28479c278d5088c41bb20b970192ecb"
+    }
+  ],
+  "preserved_source": true,
+  "created_no_extra_files": true
+}

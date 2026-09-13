@@ -29,3 +29,40 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-13
+
+Independent reviewer: `/root`; final spec and fixture manifest are bound by
+[review-round-3-inputs.json](review-round-3-inputs.json). The actual native SDK
+baseline at154bde9 refuses all three document projections. Fixtures freeze LF,
+CRLF, opted-in metadata, body/recipe-only words, just/psaido and legacy records.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Shared identity/revision with separate validation and hydration leaves. |
+| Ownership and reuse | 19 | Trusted roots, nested-cwd canonical owner and overlapping ownership refusal. |
+| Dependencies and slices | 19 | Additive native operation; legacy memo behavior remains independent. |
+| Acceptance and baseline | 19 | Native missing-operation baseline, frozen bytes and source-bound fixtures. |
+| Failure and compatibility | 19 | Explicit alias collisions, stale guards, capacity errors and unvalidated commands. |
+
+**95/100 — PASS**, no blocking findings; rounds used3/5. This is an agent plan
+score, not a user rating or product result. Implementation checks: enforce entry
+and byte bounds before allocation/result append, preserve CRLF/trailing newline
+in exact source digests, and explicitly reject malformed schema files in index.
+
+### Implementation evidence
+
+Source `5345aaaa3407584825f624edb6cefaff14846b07` passes 64 memo tests,
+public format/check and the existing 113-assertion board-engine integration. Eight
+document fixtures cover native projections, exact LF/CRLF/trailing bytes, stale
+reads, metadata-only matching, aliases, nested/default ownership, malformed schema,
+unsafe paths, no file effects and bounded reads/indexing. An actual SDK process
+returns the same frozen identity/revision across all three projections.
+
+A staged-byte check caught Git normalizing the CRLF fixture in the initial source
+commit. The follow-up adds local -text attributes and restores its frozen bytes;
+a fresh Git clone now matches every fixture digest. Public gates were rerun at
+the corrected revision. The first disposable native probe used an incorrect file
+count; it was corrected to compare the exact before/after path set, which passes.
+See proof.json and retained commands/logs. Acceptance checkbox updates record
+observations only; the reviewed behavioral contract is unchanged.

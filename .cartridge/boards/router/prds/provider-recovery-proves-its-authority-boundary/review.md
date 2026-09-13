@@ -29,3 +29,20 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round3 — One persisted lifetime budget per incident
+
+Independent reviewer `/root/proxy_continuation`; inputs in review-round-3-inputs.json.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Baseline issued six real probes for one unresolved incident. |
+| Ownership and reuse | 20 | Existing router health/probe/collection boundary owns recovery. |
+| Dependencies and slices | 19 | Local persisted reservation and exclusive sweeps; no Memory migration. |
+| Acceptance and baseline | 19 | Real loopback failure, concurrency, crash and completion fixtures. |
+| Failure and compatibility | 18 | Obsolete-probe CAS must include observation revision as well as stable budget identity. |
+
+**95/100 — PASS**. No blockers. Compare exact observation revision because fresh
+foreground failures retain budget identity. Validate native Responses tool
+arguments; terminal routes consume no dispatch slot. Old starting-path references
+are corrected. Rounds used3/5. Implementation gates pending.

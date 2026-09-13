@@ -1,0 +1,17 @@
+bun test v1.3.14 (0d9b296a)
+
+../sessions.ctg/.cartridge/tests/integration/mapping.test.ts:
+(pass) real host configuration survives reconnect and copied call metadata cannot cross scopes [434.14ms]
+(pass) missing identity or conversation has one honest connection scope and no reconnect identity [50.72ms]
+(pass) concurrent fresh SDK processes cannot publish two mappings against one revision [23.78ms]
+
+../sessions.ctg/.cartridge/tests/integration/retention.test.ts:
+(pass) real SDK previews exact bytes/records and preserves protected sessions across apply/restart/resume [80.00ms]
+(pass) native late protection and durable client references cannot be bypassed with copied candidates [65.03ms]
+(pass) actual harness ring still deletes an unprotected completed turn [1152.91ms]
+(pass) actual harness ring preserves a turn becoming active during ingest [1158.07ms]
+
+ 7 pass
+ 0 fail
+ 83 expect() calls
+Ran 7 tests across 2 files. [2.98s]

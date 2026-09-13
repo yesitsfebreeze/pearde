@@ -1,0 +1,15 @@
+{
+  "source_revision": "0c9d4e9bd2bb7fef98dd1bc2f593f314b7a090e2",
+  "router_revision": "0a216cb100ea40aa0535509d44c38b16a009b9cc",
+  "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/proxy-continuation-baseline cargo test --manifest-path /private/tmp/proxy-tool-trace-baseline/Cargo.toml baseline_tool_trace_probe -- --nocapture",
+  "expected": "Observe current behavior, not a desired-contract passing test: existing mixed batch dispatch has no retained trace identity and tool_trace config is unknown.",
+  "observed": "One private call and matching policy call; caller tool retained, memo observations present, no cartridge_trace identity; unknown tool_trace config rejected.",
+  "isolation": "Tracked source copied to a disposable standalone Cargo package; cartridge/router dependencies use existing absolute paths; probe appended only in copy.",
+  "inputs": {
+    "src/main.rs": "d4020c32e14ceb46444fb7c33803da3585d51a77fe4bf157994f5b3ec2e19a06",
+    "src/service.rs": "26b6e2ec4997595033bd49ba0cfd3e2272fb8c12c06b3d374f243dc2e57eec18",
+    "src/streaming.rs": "7d21cb22318c460e9ccb140defe21570ffbefe05a348afa8bf24610de1650c8c",
+    "src/usage.rs": "88bee3a1ad3b563dd94eff0607d857209a70e9e89183d09f31023546a7af9ec6",
+    ".cartridge/tests/unit/tests.rs": "4a55b3e794d6ebf423e0116b215e04ec803ea85b4760729db848db88abfa94ce"
+  }
+}

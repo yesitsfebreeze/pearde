@@ -1,0 +1,32 @@
+[
+  {
+    "ref": "@sessions/improve-sessions-client-mapping",
+    "state": "done",
+    "revision": "2ab20ecae8cce86d267a4f74e3f03a732740a535c59371488b9aeaf992ad5984",
+    "commit": "b772c6ee4f1ad476995c8c8c07cd02ed2be264fa",
+    "verified": true,
+    "integrated": true,
+    "reason": null,
+    "evidence": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-client-mapping/collection.md"
+  },
+  {
+    "ref": "@sessions/improve-sessions-retention",
+    "state": "done",
+    "revision": "53c9c6c4ec19c70bdde72df21fa028b2bd1cfe80195fb2f54448429acf13e25c",
+    "commit": "b772c6ee4f1ad476995c8c8c07cd02ed2be264fa",
+    "verified": true,
+    "integrated": true,
+    "reason": null,
+    "evidence": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-retention/collection.md"
+  },
+  {
+    "ref": "@sessions/improve-sessions-recovery",
+    "state": "done",
+    "revision": "64d51b2a16735336aa28c93d5bb1fb495d01bbbf17484916ec4040d848f08bd6",
+    "commit": "b772c6ee4f1ad476995c8c8c07cd02ed2be264fa",
+    "verified": true,
+    "integrated": true,
+    "reason": null,
+    "evidence": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-recovery/collection.md"
+  }
+]

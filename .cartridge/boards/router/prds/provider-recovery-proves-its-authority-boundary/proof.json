@@ -1,0 +1,13 @@
+{
+  "source_commit": "4ad9cd35dc862ecfe0786612d39913612d93fc45",
+  "tests": {
+    "router": 42,
+    "result": "passed"
+  },
+  "public_check": "passed",
+  "fixtures": "loopback HTTP, synthetic JWT, disposable health files, controlled streams",
+  "logs": {
+    "test-log.txt": "b9950d0b310a2ae458be691aab6fe00a9b49231991edfd3d8c1ff5ecd550798c",
+    "check-log.txt": "4358c17b9a24873b0990a854664b21856f4f86ae3f3a1d9528e68fc58082e364"
+  }
+}

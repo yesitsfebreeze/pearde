@@ -1,0 +1,92 @@
+{
+  "source_revision": "b772c6ee4f1ad476995c8c8c07cd02ed2be264fa",
+  "source_files": [
+    {
+      "path": "src/main.rs",
+      "sha256": "31e0bfa29d0d1a748d34d36c065044521eefbf8cc512eae80a9d7bb250138388"
+    },
+    {
+      "path": "src/mapping.rs",
+      "sha256": "618c5afd412d936bfd143da74e5d23fb807d8adf2ea601de8d36fceffa2cf92f"
+    },
+    {
+      "path": "src/retention.rs",
+      "sha256": "b3470b8d8b43ad0e71436a7b26ae1346c6ea011aea7fbb3b0bd79837ca23d06d"
+    },
+    {
+      "path": ".cartridge/tests/unit/main/retention_tests.rs",
+      "sha256": "9b13b70dbe62cd93128bcfdab5c89e2ae54979dddad6f49d4842b9b70960d291"
+    },
+    {
+      "path": ".cartridge/tests/integration/retention.test.ts",
+      "sha256": "54ee87ee00510677cf02b2b29d396733f04bbd32a372e5c52d063ea6f329ebb6"
+    },
+    {
+      "path": ".cartridge/docs/retention.md",
+      "sha256": "fc1a1e5e226294cc78e68350585391ee775a59a55b2f4477a824c9371f434045"
+    }
+  ],
+  "commands": [
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just test sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "41 passed; 0 failed; 32 retained + 9 retention tests",
+      "log": "proof-test.log"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just check sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "passed",
+      "log": "proof-check.log"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just build sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "passed",
+      "log": "proof-build.log"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just build harness",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "passed; existing concurrent harness work preserved",
+      "log": "proof-harness-build.log"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just test harness",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "41 passed across 35+4+1+1 suites",
+      "log": "proof-harness-test.log"
+    },
+    {
+      "command": "SESSIONS_BINARY=\"$PWD/target/sessions-mapping/debug/sessions\" HARNESS_BINARY=\"$PWD/target/sessions-mapping/debug/harness\" bun test ../sessions.ctg/.cartridge/tests/integration/mapping.test.ts ../sessions.ctg/.cartridge/tests/integration/retention.test.ts",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "7 tests passed; 0 failed; 83 assertions; real sessions+harness SDK subprocesses, synthetic router and recording memory",
+      "log": "proof-integration.log"
+    }
+  ],
+  "harness_consumer": {
+    "head": "ca7eeabd38f4eaba69063cf98e2071df694a1dc3",
+    "status": "existing uncommitted main.rs and integration/working.rs changes preserved",
+    "inputs": [
+      {
+        "path": "src/main.rs",
+        "sha256": "e4c23eeb9da21595c3a5bdea3a2374482f3ab51f1f0eadf95953afbdfa2ea0d8"
+      },
+      {
+        "path": ".cartridge/tests/integration/working.rs",
+        "sha256": "505e0f9b22e2a0c539e3833df54f6eddbb727ecc1b89cbfa6492053c6ce5e19d"
+      }
+    ]
+  },
+  "limitations": [
+    "Native trusted host API; no authentication or distributed transcript locking is added.",
+    "OS locks serialize mapping/protection/journal publication. Session/transcript writes retain one active owner writer across processes.",
+    "Hosts must register external references not discoverable from parent links or durable mappings. Per-instance connection references are visible only in that instance.",
+    "Generic delete gains eligibility protections but retains legacy persistence behavior; journal/backups require explicit retention apply.",
+    "Backups are preserved indefinitely; resume is explicit and performs no model/tool replay or automatic cleanup."
+  ],
+  "shared_receipt_refresh": [
+    "@sessions/improve-sessions-client-mapping",
+    "@sessions/improve-sessions-recovery"
+  ]
+}

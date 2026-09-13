@@ -1,0 +1,51 @@
+{
+  "source_commit": "5345aaaa3407584825f624edb6cefaff14846b07",
+  "implementation_commit": "847d6b790ac76c27c3425967d4025ab0f203df01",
+  "commands": [
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just test memo",
+      "result": "64 passed, 0 failed; 8 document fixtures; test-log.txt"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just check memo",
+      "result": "passed format and cargo check; check-log.txt"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/memo.ctg",
+      "command": "bun test ./.cartridge/tests/integration/board-engine.test.ts",
+      "result": "existing board integration passes113 assertions; board-compat-log.txt"
+    },
+    {
+      "command": "python3 /tmp/memo-document-native-proof.py; exact retained source native-probe.txt",
+      "result": "actual SDK commands/docs/human identity and revision agree, source and directory entries preserved; native-proof.json"
+    },
+    {
+      "command": "git clone -q --no-hardlinks <memo-owner> <disposable-clone>, then hash every frozen fixture against manifest.json",
+      "result": "Fresh checkout preserves all LF/CRLF fixture digests at5345aaaa3407584825f624edb6cefaff14846b07"
+    }
+  ],
+  "source_sha256": {
+    "src/main.rs": "712a1796442a3e3323f837addd374128a2874f0262a303929ebd26ea95dd281c",
+    "src/service.rs": "b144d55b10ce0a018dacc353c25078d1607fe8c37e674be5c68a4f028f8701bd",
+    "src/document.rs": "7a0ace36dbc0395d74865923beb38635c628d0798c6bd1e57bdc4d1bd86e5d6b",
+    ".cartridge/tests/unit/document.rs": "e05c70c9ba66506465d722c56dcaddfd92d611259236dff395fe6318a5a21c31",
+    ".cartridge/docs/documents.md": "400b37bd4c65183878d72a07caee5131612a6ce534e8cd3181e63d2d27113a0a",
+    ".cartridge/tests/fixtures/documents/.gitattributes": "17ae0f3588a0eef00a3a4e7c0226d7b75e872fde65ee8d41e468d8286fb647c2",
+    ".cartridge/tests/fixtures/documents/example-crlf.jd": "cbea98216d07e65d23d17f0f34f5d6375d7618bb789c4bf47f2927a95be52232",
+    ".cartridge/tests/fixtures/documents/example.md": "16d32044899419128ebc6d21a60c4672e28479c278d5088c41bb20b970192ecb",
+    ".cartridge/tests/fixtures/documents/manifest.json": "57d34f90c12ca00a27ab3f2d22f4a230312dd26586517ff9886828ed47d2fde6",
+    ".cartridge/tests/fixtures/documents/ordinary.md": "90edc6ca94b3213428b170bd80166c8e1065a8de631c92ffce345a4766dae305"
+  },
+  "limits": [
+    "Native host API only. Commands are located raw just blocks with validated:false; no launch authority or process execution.",
+    "Docs/human are unhydrated single-document projections; dependency hydration and executable validation are separate leaves.",
+    "Exact bytes are frozen per read; subsequent reads require expected_revision for stable identity/revision agreement.",
+    "Host owns directories; adversarial concurrent ancestor replacement is outside the trust boundary."
+  ],
+  "receipt_impacts": [
+    "types-drilldown overlaps service.rs; initialize-board overlaps main.rs/service.rs. Refresh both at5345aaaa.",
+    "board-engine-integration source footprint is unchanged, and its113-assertion compatibility fixture passes. Parent child-revision evidence may require refresh after initializer receipt refresh."
+  ]
+}

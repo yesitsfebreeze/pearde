@@ -1,0 +1,15 @@
+import pathlib,tempfile,subprocess,json
+owner=pathlib.Path('/Users/feb/dev/cartridge/memo.ctg'); proof=owner.parent/'prd.ctg/.cartridge/boards/memo/prds/one-document-serves-every-reader/document-identity';fixture=pathlib.Path(tempfile.mkdtemp(prefix='memo-document-identity-'));file=fixture/'.cartridge/documents/example.md';file.parent.mkdir(parents=True);file.write_text('---\nschema: cartridge-document/v1\nkind: tool\ndescription: Example\n---\nReadable guidance.\n\n```just\nshow:\n    echo example\n```\n')
+child=subprocess.Popen([str(owner.parent/'cartridge.ctg/target/tool-result-contract/debug/memo_cartridge')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+def send(v):child.stdin.write(json.dumps(v)+'\n');child.stdin.flush()
+send({'apply':{'name':'memo','config':{}}})
+while not json.loads(child.stdout.readline()).get('ready'):pass
+outputs=[]
+for identifier,projection in enumerate(['commands','docs','human'],1):
+ send({'id':identifier,'call':'memo','args':{'op':'document','cwd':str(fixture),'path':'.cartridge/documents/example.md','projection':projection}})
+ while True:
+  output=json.loads(child.stdout.readline())
+  if output.get('reply')==identifier:outputs.append(output);break
+send({'dispose':True});child.communicate(timeout=10)
+result={'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=owner,text=True).strip(),'fixture':str(fixture),'command':'python3 /tmp/memo-document-identity-baseline.py (retained baseline-probe.txt)','expected':'All three native projections return cartridge-document/v1 canonical identity and same exact-byte source digest','observed':outputs,'finding':'Native document operation and projection selector are absent; legacy memo service remains separate.'}
+(proof/'baseline-inputs.json').write_text(json.dumps(result,indent=2)+'\n');(proof/'baseline-probe.txt').write_text(pathlib.Path('/tmp/memo-document-identity-baseline.py').read_text());print(json.dumps(result,indent=2))

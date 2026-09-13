@@ -1,0 +1,80 @@
+{
+  "source_revision": "b772c6ee4f1ad476995c8c8c07cd02ed2be264fa",
+  "dependencies": [
+    {
+      "ref": "@sessions/improve-sessions-client-mapping",
+      "state": "done",
+      "revision": "2ab20ecae8cce86d267a4f74e3f03a732740a535c59371488b9aeaf992ad5984",
+      "commit": "b772c6ee4f1ad476995c8c8c07cd02ed2be264fa",
+      "verified": true,
+      "integrated": true,
+      "reason": null,
+      "evidence": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-client-mapping/collection.md"
+    },
+    {
+      "ref": "@sessions/improve-sessions-retention",
+      "state": "done",
+      "revision": "53c9c6c4ec19c70bdde72df21fa028b2bd1cfe80195fb2f54448429acf13e25c",
+      "commit": "b772c6ee4f1ad476995c8c8c07cd02ed2be264fa",
+      "verified": true,
+      "integrated": true,
+      "reason": null,
+      "evidence": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-retention/collection.md"
+    },
+    {
+      "ref": "@sessions/improve-sessions-recovery",
+      "state": "done",
+      "revision": "64d51b2a16735336aa28c93d5bb1fb495d01bbbf17484916ec4040d848f08bd6",
+      "commit": "b772c6ee4f1ad476995c8c8c07cd02ed2be264fa",
+      "verified": true,
+      "integrated": true,
+      "reason": null,
+      "evidence": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-recovery/collection.md"
+    }
+  ],
+  "combined_gate_evidence": "../improve-sessions-retention/proof-inputs.json",
+  "combined_gate_evidence_sha256": "93d725dd2e3a8f89601e8bb4aa2aee2b52154fe4335f03942b088b5fd10a4c5e",
+  "commands": [
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just test sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "41 passed; 0 failed; 32 retained + 9 retention tests",
+      "log": "proof-test.log"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just check sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "passed",
+      "log": "proof-check.log"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just build sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "passed",
+      "log": "proof-build.log"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just build harness",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "passed; existing concurrent harness work preserved",
+      "log": "proof-harness-build.log"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just test harness",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "41 passed across 35+4+1+1 suites",
+      "log": "proof-harness-test.log"
+    },
+    {
+      "command": "SESSIONS_BINARY=\"$PWD/target/sessions-mapping/debug/sessions\" HARNESS_BINARY=\"$PWD/target/sessions-mapping/debug/harness\" bun test ../sessions.ctg/.cartridge/tests/integration/mapping.test.ts ../sessions.ctg/.cartridge/tests/integration/retention.test.ts",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "7 tests passed; 0 failed; 83 assertions; real sessions+harness SDK subprocesses, synthetic router and recording memory",
+      "log": "proof-integration.log"
+    }
+  ],
+  "review": {
+    "reviewer": "/root",
+    "round": 3,
+    "score": 97
+  }
+}

@@ -1,6 +1,6 @@
 ---
-commit: de1406682a33c5b12cb472787178e2570e5ed0f8
-spec-digests: {"spec01.md":"41d9da605cf256b32fc20821d3eb07a62ceb11ccf615520d76071583ecf09564"}
+commit: d4a4239ccce02bc0e647e9ad80892995f48b317f
+spec-digests: {"spec01.md":"d23c270b0908a6a7ec06e665d3a4d909cd9608df24c8587fdfc1de871590fca6"}
 child-contracts: {}
 ---
 
@@ -11,7 +11,7 @@ child-contracts: {}
 Command SHA-256: d7f6c923c6d32c4efc3c792e69c7fca9ff1a1cff4dcd07c3d5c264fac6f39610
 
 ```text
-    Finished `test` profile [unoptimized] target(s) in 0.08s
+    Finished `test` profile [unoptimized] target(s) in 0.14s
      Running unittests src/main.rs (target/tool-result-contract/debug/deps/fs-54056baceabd5b7a)
 
 running 47 tests
@@ -27,34 +27,34 @@ test context::tests::pinned_handle_refuses_observed_replacement_and_deadline_dro
 test search::tests::missing_rg_is_actionable_not_empty ... ok
 test search::tests::deadlock_deadline_terminates_and_reaps_child ... ok
 test search::tests::deadline_covers_child_wait_after_stdout_is_closed ... ok
-test search::tests::large_real_tree_pages_every_identity_once_and_ref_keeps_the_tail ... ok
 test search::tests::page_has_a_continuation_for_the_rest ... ok
 test search::tests::pre_cancelled_invocation_spawns_no_process ... ok
-test search::tests::snapshot_budget_fails_without_eviction_and_retirement_frees_it ... ok
 test search::tests::real_grep_keeps_over_200_matches_and_empty_chains_do_not_sweep ... ok
+test search::tests::snapshot_budget_fails_without_eviction_and_retirement_frees_it ... ok
+test search::tests::active_search_cancellation_reaps_the_backend ... ok
 test service::tests::cancel_during_spawn_prevents_mutation ... ok
 test service::tests::cancellation_after_preparation_leaves_no_mutation_or_temp ... ok
-test search::tests::active_search_cancellation_reaps_the_backend ... ok
+test service::tests::commit_rechecks_symlinks_and_preserves_executable_modes ... ok
 test service::tests::competing_sessions_with_one_observed_revision_have_one_winner ... ok
 test service::tests::concurrent_creators_preserve_the_winner ... ok
-test service::tests::commit_rechecks_symlinks_and_preserves_executable_modes ... ok
 test service::tests::create_overwrite_and_edit_variants ... ok
 test service::tests::describe_names_and_schemas_match_the_three_keys ... ok
-test service::tests::failed_preparation_preserves_bytes_and_permissions ... ok
 test service::tests::disappearance_and_creation_at_publication_are_conflicts ... ok
+test service::tests::failed_preparation_preserves_bytes_and_permissions ... ok
 test service::tests::newer_bytes_at_commit_survive_write_and_edit ... ok
-test search::tests::fake_rg_error_exit_is_a_failure ... ok
 test service::tests::observation_failure_after_publication_is_explicit_partial_success ... ok
-test service::tests::pre_cancelled_call_never_mutates ... ok
 test service::tests::partial_read_establishes_freshness_only ... ok
-test service::tests::read_byte_limit_truncates ... ok
+test search::tests::fake_rg_error_exit_is_a_failure ... ok
+test service::tests::pre_cancelled_call_never_mutates ... ok
 test service::tests::path_escapes_and_forged_context_fail_before_mutation ... ok
+test service::tests::read_byte_limit_truncates ... ok
 test service::tests::read_offsets_limits_binary_and_missing ... ok
 test service::tests::touch_failure_reports_partial_success_with_the_file ... ok
 test service::tests::stale_version_fails_until_reread_including_same_size_with_restored_mtime ... ok
 test service::tests::unread_overwrite_fails_without_changing_bytes ... ok
 test service::tests::unseen_edit_fails_without_changing_bytes ... ok
 test service::tests::touch_records_successful_mutations_only ... ok
+test search::tests::large_real_tree_pages_every_identity_once_and_ref_keeps_the_tail ... ok
 test search::tests::fake_rg_receives_literal_arguments_no_shell ... ok
 test search::tests::malformed_backend_output_fails_explicitly ... ok
 test search::tests::matching_json_backend_produces_typed_items ... ok
@@ -63,7 +63,7 @@ test search::tests::oversized_results_report_truncation ... ok
 test search::tests::user_config_cannot_change_results ... ok
 test search::tests::floods_and_oversized_items_fail_instead_of_claiming_completeness ... ok
 
-test result: ok. 47 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.06s
+test result: ok. 47 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.83s
 
 
 ```
@@ -73,6 +73,6 @@ test result: ok. 47 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; fin
 Command SHA-256: 34178f4fe709bf686339dcee11423a2fef21262207d2c3b60cbd97bba853b4cc
 
 ```text
-    Finished `dev` profile [unoptimized] target(s) in 0.07s
+    Finished `dev` profile [unoptimized] target(s) in 0.12s
 
 ```

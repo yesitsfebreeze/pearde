@@ -16,7 +16,7 @@ footprint:
 - .cartridge/tests/unit/main/mapping_tests.rs
 - .cartridge/tests/integration/mapping.test.ts
 - .cartridge/docs/client-mapping.md
-commit: "965108d9c29bce1a41a518917d6c8892e67e42bf"
+commit: "2a6a863cf1af0876072f8879050274cfa650a785"
 ---
 
 # Map client conversations to cartridge sessions honestly
@@ -44,3 +44,5 @@ Reverify unchanged acceptance after the next integrated owner feature; earlier
 181adb20 receipt retained. No contract relaxation.
 
 Reverification at965108d9 after mailbox integration. Add the new transitive source module to verification coverage; behavioral acceptance is unchanged.
+
+Reverification: attributed report at2a6a863 adds native main dispatch; bind src/observations.rs as transitive source, retaining previous acceptance and executable gates.

@@ -1,12 +1,13 @@
 ---
 complexity: medium
 footprint:
-  - src/mailbox.rs
-  - src/main.rs
-  - src/mapping.rs
-  - .cartridge/tests/unit/main/mapping_tests.rs
-  - .cartridge/tests/integration/mapping.test.ts
-  - .cartridge/docs/client-mapping.md
+- src/mailbox.rs
+- src/main.rs
+- src/mapping.rs
+- .cartridge/tests/unit/main/mapping_tests.rs
+- .cartridge/tests/integration/mapping.test.ts
+- .cartridge/docs/client-mapping.md
+- src/observations.rs
 ---
 
 # spec01 — Resolve client conversations using host-owned scope

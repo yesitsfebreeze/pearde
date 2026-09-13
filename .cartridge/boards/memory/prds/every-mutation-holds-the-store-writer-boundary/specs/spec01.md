@@ -27,6 +27,23 @@ footprint:
 - .cartridge/tests/unit/src/commands/src/tests/commands_queue_cmd_test.rs
 - .cartridge/tests/unit/src/commands/src/commands_serve/entry_point_tests.rs
 - .cartridge/docs/writer-boundary.md
+- .cartridge/docs/graph-inspection.md
+- .cartridge/tests/integration/e2e/cli_surface.rs
+- .cartridge/tests/unit/src/commands/src/tests/commands_admin_test.rs
+- .cartridge/tests/unit/src/retrieval/piece/src/tests/retrieval_score_test.rs
+- .cartridge/tests/unit/src/rpc/src/tests/server_admin_test.rs
+- .cartridge/tests/unit/src/store/core/src/cold/memory_contract_tests.rs
+- .cartridge/tests/unit/src/transport/src/tests/memory_rpc_test.rs
+- src/commands/src/commands_health.rs
+- src/config/src/config.rs
+- src/retrieval/piece/Cargo.toml
+- src/retrieval/piece/src/retrieval_query.rs
+- src/retrieval/piece/src/retrieval_score.rs
+- src/rpc/src/server.rs
+- src/store/core/Cargo.toml
+- src/store/core/src/cold.rs
+- src/store/core/src/lib.rs
+- src/transport/src/memory_rpc.rs
 ---
 
 # Hold the existing writer claim through every graph mutation

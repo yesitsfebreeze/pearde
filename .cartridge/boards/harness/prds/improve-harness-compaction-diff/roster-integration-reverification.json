@@ -1,0 +1,18 @@
+{
+  "date": "2026-09-13",
+  "source": "698a4dc9555a6b3ad8d46dcc5dd3a14463048e70",
+  "reason": "Preserve original summary fallback and bind imported roster module/manifests/tests after reviewed integration. Acceptance and executable cargo gate unchanged.",
+  "spec_before_sha256": "83216a648a1ac85ddfe2b23f46cad33aea7df737bf24d264e3cdbabb8a0517c8",
+  "spec_after_sha256": "94dbdf9bcba065d12476468290147d12b80f3773dcc69ee0e902429aeb7c3099",
+  "added_footprint": [
+    "src/roster.rs",
+    ".cartridge/tests/unit/main/tests.rs",
+    ".cartridge/tests/unit/inspection_tests.rs",
+    ".cartridge/tests/unit/accounting.rs",
+    ".cartridge/tests/unit/working_tests.rs",
+    ".cartridge/tests/unit/roster_tests.rs",
+    ".cartridge/tests/integration/roster.test.ts",
+    ".cartridge/docs/roster.md"
+  ],
+  "review_round_preserved": 3
+}

@@ -1,0 +1,14 @@
+{
+  "source": "35e6786",
+  "spec_before_sha256": "6ad93b1e79ba3e768fc7fd922eafb2af7d721957a5f2a8c56216bdd39206cac9",
+  "spec_after_sha256": "13961e65098fb2bf80ed1f3318127373af37941869272b0942afe9e70f1ec52d",
+  "acceptance_semantics_changed": false,
+  "reason": "Add maintained migration-fidelity test correction and mandatory real Host binary to executable proof; no product acceptance waived.",
+  "runtime_binary": {
+    "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/cartridge",
+    "sha256": "3c107ead7a60caa07a7aa295cb46c7b2a0663a17ca7aa11fc11b45076b9b08c8"
+  },
+  "full_suite": "64 passed, 3 skipped (separate Memory native integration), 5377 assertions",
+  "check": "passed",
+  "source_review": "Independent sessions_mapping identified FIFO and YAML alias expansion issues; regressions added and fixes verified."
+}

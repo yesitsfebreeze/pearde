@@ -1,0 +1,2 @@
+import {scan} from '/Users/feb/dev/cartridge/prd.ctg/src/records.ts';
+const root=process.argv[2];try{const rows=[...scan(root).values()];console.log(JSON.stringify({ok:true,records:rows.map(r=>({ref:r.ref,title:r.title,file:r.file}))}));}catch(e){console.log(JSON.stringify({ok:false,error:String(e)}));}

@@ -1,0 +1,12 @@
+{
+  "source": "191e2b6cb4291bdcce7a894f98bb2d475361d30f",
+  "reason": "Bind imported change recorder/shared DTO while preserving prior acceptance. Reuse existing shared compiled target; public/native commands unchanged.",
+  "behavior_acceptance_changed": false,
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/reflex-reports-attributed-tool-outcomes/attributed-outcome-report/specs/spec01.md",
+      "before_sha256": "381b171c7db71dbb7911768be9d9ea05847333f82f1dfd3b61486f6bce68d393",
+      "after_sha256": "cc56d8dc0a70540b7e97652afde47ebd9284bdde09cf3e5ff879c974e2ccd122"
+    }
+  ]
+}

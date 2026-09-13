@@ -1,0 +1,12 @@
+{
+  "source": "191e2b6cb4291bdcce7a894f98bb2d475361d30f",
+  "reason": "Bind imported change recorder/shared DTO while preserving prior acceptance. Reuse existing shared compiled target; public/native commands unchanged.",
+  "behavior_acceptance_changed": false,
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/improve-sessions-retention/specs/spec01.md",
+      "before_sha256": "f673b7039d170996c820cff6785b1cecda968ca1653e6d0fb65adcf3eac1dedd",
+      "after_sha256": "58f1a115c636444620e2ea9af13a0aa9d8140b8b6d344ac31f832cb27652553f"
+    }
+  ]
+}

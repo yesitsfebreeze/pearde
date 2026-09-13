@@ -1,0 +1,98 @@
+$ bun test ./.cartridge/tests/*.test.ts
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/engine.test.ts:
+(pass) scan preserves prose, counts members once and resolves cross-owner prerequisites [290.15ms]
+(pass) isolated member cannot claim an unscanned prerequisite [187.49ms]
+(pass) dependency cycles and held footprints are not dispatchable [336.81ms]
+(pass) pagination and planning do not mutate source records [159.03ms]
+(pass) claim is serialized across processes and board aliases [204.28ms]
+(pass) edits preserve unrelated fields, comments and body and reject stale revisions [107.82ms]
+(pass) PRD symlinks and oversized reads are refused [105.89ms]
+(pass) invalid source mapping and missing specs cannot create a lane [146.45ms]
+(pass) real collect verifies an isolated lane and commits integration evidence [738.72ms]
+(pass) failed proof preserves source HEAD and never marks done [296.94ms]
+(pass) forged done state and old commit cannot substitute for collection evidence [119.20ms]
+(pass) run dry needs no adapter and failed workers are not treated as completion [262.78ms]
+(pass) deadline kills owned worker groups and leaves a stopped checkpoint [331.72ms]
+(pass) process timeout remains enforced after stdout closes [227.46ms]
+(pass) process output has a hard byte limit [161.38ms]
+(pass) rolling coordinator rescans analysis, dependencies and parent collection [3179.13ms]
+
+.cartridge/tests/event-stream.test.ts:
+(pass) event socket drains complete Unicode frames and the final event before process completion [61.11ms]
+(pass) event socket rejects malformed and oversized Unicode frames while retaining later valid events [34.83ms]
+(pass) event socket callback failures are reported and do not prevent draining later events [36.27ms]
+(pass) event socket count budget is bounded while excess frames are drained [37.35ms]
+(pass) event socket bytes budget is bounded while excess frames are drained [44.08ms]
+(pass) real service run streams attributed domain events before returning bounded verified completion [1262.74ms]
+
+.cartridge/tests/host.test.ts:
+(pass) real runtime supplies memory and routes PRD events [460.61ms]
+
+.cartridge/tests/native-host.test.ts:
+(skip) actual runtime and memory recall context and commit verified collection evidence
+(skip) actual memory deduplication is never mistaken for committed collection ingestion
+(skip) shipped MCP profile discovers PRD and routes real read, plan and mutation
+
+.cartridge/tests/parity.test.ts:
+(pass) plan addresses round-trip and member children inherit their actual source owner [436.78ms]
+(pass) parent proof validates child contracts and current source across repositories [1811.58ms]
+(pass) unverified pre-existing done records fail and persist their reason [123.32ms]
+(pass) coordinator independently collects a finished owned claim and preserves foreign claims [1014.13ms]
+(pass) partly failed runs publish only independently verified successful receipts to memory [1113.51ms]
+(pass) owned descendants are confirmed stopped after normal leader exit [301.85ms]
+(pass) owned descendants are confirmed stopped after cancellation [287.33ms]
+(pass) collection refuses a contract changed by its own verification before committing code [220.23ms]
+(pass) collection rejects already committed out-of-footprint modify [322.60ms]
+(pass) collection rejects already committed out-of-footprint delete [361.03ms]
+(pass) collection rejects already committed out-of-footprint rename [310.00ms]
+(pass) collection rejects already committed out-of-footprint leading-space [421.58ms]
+(pass) all serialized tool results obey the byte cap and retain omitted diagnostics [128.24ms]
+(pass) planned waves honor member capacity with disjoint footprints [183.32ms]
+
+.cartridge/tests/records.test.ts:
+(pass) central records retain explicit owners and a resolvable acyclic dependency graph [4953.61ms]
+(pass) migration preserves original PRD fields, native states and historical review inputs [524.38ms]
+
+.cartridge/tests/service.test.ts:
+(pass) real service describes and dispatches the native planner [99.42ms]
+(pass) context and closed model input cannot override execution [16.29ms]
+(pass) argument whitelist refuses injected paths, flags, adapters and excess counts [16.36ms]
+(pass) board and PRD symlinks cannot escape central records [17.12ms]
+(pass) duplicate invocation does not repeat a mutation and cancellation leaves a tombstone [72.53ms]
+(pass) memory is attributed context and successful mutations publish scoped events [142.98ms]
+(pass) only verified evidence enters the durable memory outbox with bounded retry [16.39ms]
+(pass) memory replay acknowledges once and deduplicates simultaneous deliveries [36.76ms]
+(pass) asynchronous jobs enforce session ownership and never signal stale journals [29.54ms]
+(pass) host bridge correlates replies and closes pending requests [14.27ms]
+(pass) wire hello, apply, describe, native call, reload and dispose [147.97ms]
+
+.cartridge/tests/source-declarations.test.ts:
+(pass) real grammar retains hierarchical scanner identities and exports exact immutable declaration bytes [6.56ms]
+(pass) missing descendants, backlinks and repeated mounts remain declarations without weakening strict scan [4.78ms]
+(pass) selectors, exact configured authority and settings inode rules reject escapes and nonregular files [4.35ms]
+(pass) malformed grammar and bounded declarations fail explicitly, with no child scan [6.33ms]
+(pass) deadline covers filesystem work and static failures do not expose paths [19.23ms]
+(pass) YAML alias member lists stop at the edge cap before expanding repeated maps [3.13ms]
+(pass) service native method bypasses tool execution, callbacks, journals and spills [2.88ms]
+(pass) a FIFO swapped in after metadata inspection cannot strand the settings open [3.68ms]
+(pass) timed out native reads retain their capacity slots until actual IO settles [8.00ms]
+(pass) actual Host invokes native declarations without Memory or event effects and tool exposure [313.87ms]
+
+.cartridge/tests/statusline.test.ts:
+(pass) statusline selects mapped code owner and labels recorded weighted progress [636.08ms]
+(pass) statusline renders safe first line without a board and tolerates malformed input [541.81ms]
+(pass) statusline bounds transcript reading and uses latest assistant model and persona [213.33ms]
+(pass) statusline shows local ahead and behind counts without contacting an upstream [422.24ms]
+
+3 tests skipped:
+(skip) actual runtime and memory recall context and commit verified collection evidence
+(skip) actual memory deduplication is never mistaken for committed collection ingestion
+(skip) shipped MCP profile discovers PRD and routes real read, plan and mutation
+
+ 64 pass
+ 3 skip
+ 0 fail
+ 5377 expect() calls
+Ran 67 tests across 9 files. [24.14s]

@@ -1,0 +1,21 @@
+{
+  "reviewer": "/root",
+  "independent_author": "/root/proxy_continuation",
+  "round": 3,
+  "score": 95,
+  "result": "PASS",
+  "files": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/prd.md",
+      "sha256": "3ddcb5ccb00167899b50b3fe88742829b30a49b8b04ce59f33a86552043972af"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/specs/spec01.md",
+      "sha256": "c099cb8995972dc85350cde33a47b503d6d1569af010e3156300c5b5b8c8b119"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/review-round-3-candidate-inputs.json",
+      "sha256": "de4968eb325836fd2b9f008213874160ee45c7d68b422f1e982c2fc6d58045c1"
+    }
+  ]
+}

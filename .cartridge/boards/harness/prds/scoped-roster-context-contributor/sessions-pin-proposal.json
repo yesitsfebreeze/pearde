@@ -1,0 +1,13 @@
+{
+  "before_sha256": "7099b57a8c0bc99ed7476f4a79017ce4ed59b9355b9222fe1672ce8a91aa0083",
+  "after_sha256": "eb29f608b6f591ee7029d0e52664f119912c9186ec1519261ea22092d6f2978c",
+  "pin": "a306370f10b78d94365b7832ce22ce8d10c09487",
+  "reason": "Active unrelated Sessions provenance source must not qualify roster; archive exact verified dependency. No public gate changes.",
+  "scope": "One optional full-SHA Sessions selector; same git-archive path already used for committed Harness; selected dependency recorded in receipt.",
+  "reviewer": "/root",
+  "review": "Approved narrow source selector; correct repository archive/list-tree, pin recorded, public gates unchanged.",
+  "spec_before_sha256": "f264ddee94c4307d03c9d2cb8944f7ffb57228d61984c9b3210d98a9d4b7a8f3",
+  "spec_after_sha256": "1c1a339c6df89b785e151bddf7a310a0a41c3e26ea242957d0b574d5adb75a7b",
+  "excluded_development_receipt": "integration/cartridge-roster-verification-I402H7.json",
+  "exclusion_reason": "This unpinned run selected actively edited Sessions provenance source and is not roster qualification."
+}

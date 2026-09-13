@@ -1,0 +1,51 @@
+{
+  "status": "pending-independent-review",
+  "round": 3,
+  "inherited_rounds": 2,
+  "canonical": "@fs/improve-fs-change-provenance",
+  "no_scanner_records_created": true,
+  "baseline_sha256": "75aa279e933e88c30c66f1bb5f8c10d6d1ca4d5a142a4c44942ff8f1c7c4fc71",
+  "inputs": [
+    {
+      "path": "owner-split-proposal.md",
+      "sha256": "d24d1ec974607ae15d876580cc8f322f6224b758e68b32df099fbc51c9314c33"
+    },
+    {
+      "path": "specs/spec01.md",
+      "sha256": "c099cb8995972dc85350cde33a47b503d6d1569af010e3156300c5b5b8c8b119"
+    },
+    {
+      "path": "proposals/gitfs-producer/prd-draft.md",
+      "sha256": "88d4f9d4b7d767da3109e7f019013ee213cbcd9434f6d95a96ac4ba66767a815"
+    },
+    {
+      "path": "proposals/gitfs-producer/spec01.md",
+      "sha256": "3bd87aa6555601a4148853c09cd637c482341b09e724f85f21751aeac5988ae1"
+    },
+    {
+      "path": "proposals/runtime-grants/prd-draft.md",
+      "sha256": "1ad228c259409d5114cc1ac51c7b5b5fe946c6880dacfbad4e26a2d63e6d2510"
+    },
+    {
+      "path": "proposals/runtime-grants/spec01.md",
+      "sha256": "a38c417d65b17c2c684c58039fd386e2da16d2192a3354bac5b8e5feed8c3ea7"
+    },
+    {
+      "path": "proposals/sessions-records/prd-draft.md",
+      "sha256": "a929a9224074c20b9f523effd315c97ac5d185df95bbda82bc4c372b9dc11c68"
+    },
+    {
+      "path": "proposals/sessions-records/spec01.md",
+      "sha256": "d9f80d44a64563d9e8a254d53c94c23b1bc37d4ea2e777120fb4869c68605d1b"
+    },
+    {
+      "path": "proposals/fs-producer/prd-draft.md",
+      "sha256": "f83c53a937594967f7db346a6b215aa083718d3b1624cb54e3ad03c5b277777a"
+    },
+    {
+      "path": "proposals/fs-producer/spec01.md",
+      "sha256": "02bf8d0916972a4a1e1882cfc805901a672997697b7f3fc67bd4d2d8fa239ac1"
+    }
+  ],
+  "frozen_at": "2026-09-13T19:00:36.821131+00:00"
+}

@@ -1,0 +1,12 @@
+{
+  "source": "191e2b6cb4291bdcce7a894f98bb2d475361d30f",
+  "reason": "Bind imported change recorder/shared DTO while preserving prior acceptance. Reuse existing shared compiled target; public/native commands unchanged.",
+  "behavior_acceptance_changed": false,
+  "specs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/the-board-is-channels-of-lines/specs/spec01.md",
+      "before_sha256": "c045a20caba29fbe4530761ca918a853ad8752f4945cc44bd6f43be597cf1cec",
+      "after_sha256": "d401d42413bdb22283368e075c38782e5258c11204a6fe372ba309fc374bb046"
+    }
+  ]
+}

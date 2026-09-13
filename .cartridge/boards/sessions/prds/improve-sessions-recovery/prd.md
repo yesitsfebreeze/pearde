@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/sessions.ctg
-state: "done"
+state: "specced"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -10,14 +10,7 @@ work-kind: leaf
 review-round: 3
 review-status: accepted
 canonical-scope: improve-sessions-recovery
-footprint:
-- src/roster.rs
-- Cargo.toml
-- src/main.rs
-- src/recovery.rs
-- .cartridge/tests/unit/main/repair_tests.rs
-- .cartridge/tests/unit/recovery.rs
-- .cartridge/docs/README.md
+footprint: ["src/roster.rs","Cargo.toml","src/main.rs","src/recovery.rs",".cartridge/tests/unit/main/repair_tests.rs",".cartridge/tests/unit/recovery.rs",".cartridge/docs/README.md","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
 commit: "a306370f10b78d94365b7832ce22ce8d10c09487"
 ---
 

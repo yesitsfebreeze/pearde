@@ -1,16 +1,6 @@
 ---
 complexity: medium
-footprint:
-- src/roster.rs
-- src/channels.rs
-- src/mailbox.rs
-- Cargo.toml
-- src/main.rs
-- src/recovery.rs
-- .cartridge/tests/unit/main/repair_tests.rs
-- .cartridge/tests/unit/recovery.rs
-- .cartridge/docs/README.md
-- src/observations.rs
+footprint: ["src/roster.rs","src/channels.rs","src/mailbox.rs","Cargo.toml","src/main.rs","src/recovery.rs",".cartridge/tests/unit/main/repair_tests.rs",".cartridge/tests/unit/recovery.rs",".cartridge/docs/README.md","src/observations.rs","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
 ---
 
 # spec01 — Inspect recovery state and guard the narrow legacy repair

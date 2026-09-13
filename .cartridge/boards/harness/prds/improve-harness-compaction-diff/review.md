@@ -49,3 +49,7 @@ retain both compaction comparisons”: write_summary replaces one plain summary.
 **96/100 — PASS**, no blocking findings, 3/5 rounds used. Full historical
 comparison size grows with the number of summaries, consistent with this
 inspector's existing complete-transcript source view; no silent history eviction.
+
+## Source revalidation — 2026-09-13
+
+Imported roster source and preserved summary fallback are integrated at698a4dc. [Exact footprint-only binding](roster-integration-reverification.json); unchanged behavioral acceptance and cargo gate rerun before renewed receipt. This adds no new plan scope or review round.

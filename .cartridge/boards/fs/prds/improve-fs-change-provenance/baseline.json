@@ -1,0 +1,95 @@
+{
+  "measured_at": "2026-09-13T19:00:36.764785+00:00",
+  "command": "SESSIONS_BINARY=/tmp/fs-provenance-baseline-sessions-c2693a7 bun baseline-probe.ts",
+  "exit": 0,
+  "sources": {
+    "fs": "de1406682a33c5b12cb472787178e2570e5ed0f8",
+    "gitfs": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+    "sessions": "c2693a7ca3e23c295b8fe52a664720dde137eedc"
+  },
+  "binaries": {
+    "fs": "6dc5fe3749af4547a86e4c43aba85fe5da012a54451b19bdc8d206f5be2ed2fd",
+    "gitfs": "8354b64d6220bd75396cd6f14209382b5f7ea1c0a9dffb2ecdfc1f4c62eaf0c2",
+    "sessions": "80b9e2759e8faff31d937b5009beb36cb48e54336b2478f5b7d1a0afb436e9ee"
+  },
+  "probe_sha256": "6eb60c3c78ead9dda0ffdf4efe1d3d8fef03f4b5981bd025f05b79b73c8e1fdd",
+  "native_output_sha256": "3e09231ddf16c24744ac05748054dbc673a6754a9fee2fa3bb20485d7f4db8e8",
+  "source_bindings": [
+    {
+      "owner": "fs",
+      "revision": "de1406682a33c5b12cb472787178e2570e5ed0f8",
+      "path": "src/main.rs",
+      "sha256": "c5b16ee706cb657107b6ed4604b1632716ec3b7ffe5e5e5db536a3da5d7cee99"
+    },
+    {
+      "owner": "fs",
+      "revision": "de1406682a33c5b12cb472787178e2570e5ed0f8",
+      "path": "src/files.rs",
+      "sha256": "623607a2be7b1c6dfff4e9b763a55e0213d2019e57f904bc9461efafd5e01625"
+    },
+    {
+      "owner": "fs",
+      "revision": "de1406682a33c5b12cb472787178e2570e5ed0f8",
+      "path": "src/service.rs",
+      "sha256": "40d56829741c86c4f7c45d74b8bf5526ea399b54617145e3f98b1f796d2bfaba"
+    },
+    {
+      "owner": "gitfs",
+      "revision": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+      "path": "src/main.rs",
+      "sha256": "970c295962aac29ee39c382ed347c9efb6e45a651ee71b46a1861d6f0a5727b7"
+    },
+    {
+      "owner": "gitfs",
+      "revision": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+      "path": "src/service.rs",
+      "sha256": "b7543ca03b5f0e2268dcdf1e47b816f06c1f373804e6f3839e5e4060a261d78b"
+    },
+    {
+      "owner": "gitfs",
+      "revision": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+      "path": "src/store.rs",
+      "sha256": "390a95bf3a6b52bae4d7595f4ee2eb619094694b43ccc2fb5a9108a65fc03971"
+    },
+    {
+      "owner": "gitfs",
+      "revision": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+      "path": "src/inspection.rs",
+      "sha256": "188e4bda7a9ec731fa1faf946d9639a624d2376a332f3587888b18764b594468"
+    },
+    {
+      "owner": "sessions",
+      "revision": "c2693a7ca3e23c295b8fe52a664720dde137eedc",
+      "path": "src/main.rs",
+      "sha256": "31404c63045524bbe967e363a0bfa5f152487103708570e783cee1f5f6642031"
+    },
+    {
+      "owner": "sessions",
+      "revision": "c2693a7ca3e23c295b8fe52a664720dde137eedc",
+      "path": "src/mapping.rs",
+      "sha256": "618c5afd412d936bfd143da74e5d23fb807d8adf2ea601de8d36fceffa2cf92f"
+    }
+  ],
+  "observed": {
+    "direct_touch_keys": [
+      "file",
+      "id",
+      "op"
+    ],
+    "overlay_session_records_changed": false,
+    "divergence": true,
+    "unrelated_not_owned": true,
+    "unsupported_changes": "Error: unknown sessions op changes"
+  },
+  "limitations": [
+    "SDK harness forwards FS callback to actual Sessions native process; this baseline is not the final real Host composition proof.",
+    "Sessions binary c2693a7 independently confirmed by its owner and existing durable-channel proof; roster source was untouched.",
+    "Source leases remain read-only; root alone installs canonical proposed leaves and changes work-map/state."
+  ],
+  "current_review_sources": {
+    "fs": "d4a4239ccce02bc0e647e9ad80892995f48b317f",
+    "gitfs": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+    "sessions": "a306370f10b78d94365b7832ce22ce8d10c09487"
+  },
+  "baseline_delta": "FS manifest-only fs.context declaration and Sessions roster implementation followed the frozen measured binaries; implementation targets current reviewed sources."
+}

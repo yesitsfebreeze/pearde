@@ -1,0 +1,42 @@
+--- verify-isolated.ts.before
++++ verify-isolated.ts.after
+@@ -6,13 +6,16 @@
+ const root = path.resolve(records, "../../../../../..");
+ const committed = process.argv[2] === "--committed";
+ const owner = path.resolve(process.argv[committed ? 3 : 2] ?? "");
++const options = process.argv.slice(committed ? 4 : 3);
++if (options.length && (options.length !== 2 || options[0] !== "--sessions-revision" || !/^[0-9a-f]{40}$/.test(options[1]))) throw Error("expected --sessions-revision followed by a full commit SHA");
++const sessionsRevision = options[1];
+ if (!fs.existsSync(path.join(owner, "Cargo.toml"))) throw Error("harness source owner required");
+ const digest = (value: Buffer | string) => new Bun.CryptoHasher("sha256").update(value).digest("hex");
+ const shadow = fs.mkdtempSync(path.join(os.tmpdir(), "cartridge-roster-verification-"));
+ const resultFile = path.join(records, "integration", path.basename(shadow) + ".json");
+ fs.mkdirSync(path.dirname(resultFile), { recursive: true });
+ const receipt: any = {
+-  owner, committed, shadow, started: new Date().toISOString(), revisions: {}, inputs: {}, results: [],
++  owner, committed, pinned_revisions: sessionsRevision ? { "sessions.ctg": sessionsRevision } : {}, shadow, started: new Date().toISOString(), revisions: {}, inputs: {}, results: [],
+   scope: "Exact selected owner and adjacent source snapshots. Public gates execute inside the disposable composition; a successful lane proof does not integrate owner changes."
+ };
+ const save = () => fs.writeFileSync(resultFile, JSON.stringify(receipt, null, 2) + "\n");
+@@ -32,14 +35,16 @@
+   const files = new Map<string, { source: string; sha256: string; mode: number }>();
+   for (const repository of repositories) {
+     let source = repository === "harness.ctg" ? owner : path.join(root, repository);
+-    receipt.revisions[repository] = run(["git", "rev-parse", "HEAD"], source).trim();
++    const pin = repository === "sessions.ctg" ? sessionsRevision : undefined;
++    receipt.revisions[repository] = run(["git", "rev-parse", pin ? pin + "^{commit}" : "HEAD"], source).trim();
+     let names: string[];
+-    if (repository === "harness.ctg" && committed) {
+-      const archive = path.join(shadow, "committed-owner.tar");
++    if ((repository === "harness.ctg" && committed) || pin) {
++      const archiveOwner = source;
++      const archive = path.join(shadow, "committed-" + repository + ".tar");
+       run(["git", "archive", "--format=tar", "--output=" + archive, receipt.revisions[repository]], source);
+-      source = path.join(shadow, "committed-owner"); fs.mkdirSync(source);
++      source = path.join(shadow, "committed-" + repository); fs.mkdirSync(source);
+       run(["tar", "-xf", archive, "-C", source], shadow);
+-      names = run(["git", "ls-tree", "-rz", "--name-only", receipt.revisions[repository]], owner).split("\0").filter(Boolean);
++      names = run(["git", "ls-tree", "-rz", "--name-only", receipt.revisions[repository]], archiveOwner).split("\0").filter(Boolean);
+     } else {
+       names = run(["git", "ls-files", "-z", "--cached", "--others", "--exclude-standard"], source).split("\0").filter(Boolean);
+     }

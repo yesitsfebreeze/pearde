@@ -2,24 +2,7 @@
 name: cartridge-system
 language: English
 memos: memos/note
-members:
-- agent: ../agent
-- runtime: ../runtime
-- fs: ../fs
-- gitfs: ../gitfs
-- harness: ../harness
-- landscape: ../landscape
-- mcp: ../mcp
-- memo: ../memo
-- memory-tool: ../memory-tool
-- memory: ../memory
-- policy: ../policy
-- proxy: ../proxy
-- pty: ../pty
-- router: ../router
-- sessions: ../sessions
-- tools: ../tools
-- ui: ../ui
+members: [{"agent":"../agent"},{"runtime":"../runtime"},{"fs":"../fs"},{"gitfs":"../gitfs"},{"harness":"../harness"},{"landscape":"../landscape"},{"mcp":"../mcp"},{"memo":"../memo"},{"memory-tool":"../memory-tool"},{"memory":"../memory"},{"policy":"../policy"},{"proxy":"../proxy"},{"pty":"../pty"},{"router":"../router"},{"sessions":"../sessions"},{"tools":"../tools"},{"ui":"../ui"},{"prd":"../prd"}]
 repo: /Users/feb/dev/cartridge
 source-repository: /Users/feb/dev/cartridge
 require-repo: true

@@ -1,0 +1,16 @@
+cargo fmt --all -- --check
+cargo clippy --workspace --all-targets -- -D warnings
+    Checking retrieval-piece v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/retrieval/piece)
+    Checking ingest v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/ingest)
+    Checking tick v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/tick)
+    Checking bootstrap v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/bootstrap)
+    Checking store_core v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/store/core)
+    Checking retrieval v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/retrieval)
+    Checking tick_loop v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/tick/loop)
+    Checking store v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/store)
+    Checking memory-bench v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/.cartridge/tests/integration/bench)
+    Checking health v0.1.0 (/private/tmp/memory-owned-integration/memory.ctg/src/health)
+    Checking rpc v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/rpc)
+    Checking commands v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/commands)
+    Checking memory v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg)
+    Finished `dev` profile [unoptimized] target(s) in 3.16s

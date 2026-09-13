@@ -1,13 +1,6 @@
 ---
 complexity: medium
-footprint:
-  - src/roster.rs
-  - src/main.rs
-  - src/mailbox.rs
-  - src/channels.rs
-  - .cartridge/tests/unit/main/channel_tests.rs
-  - .cartridge/tests/integration/channels.test.ts
-  - .cartridge/docs/channels.md
+footprint: ["src/roster.rs","src/main.rs","src/mailbox.rs","src/channels.rs",".cartridge/tests/unit/main/channel_tests.rs",".cartridge/tests/integration/channels.test.ts",".cartridge/docs/channels.md","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
 ---
 
 # Scoped named channels and direct mailbox aliases
@@ -32,13 +25,13 @@ Read returns earliest seq strictly greater than since(default0), ordered, defaul
 
 ```sh
 cd ../cartridge.ctg
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/sessions-mapping" just test sessions
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" just test sessions
 ```
 
 ```sh
 cd ../cartridge.ctg
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/sessions-mapping" just build sessions
-SESSIONS_BINARY="$PWD/target/sessions-mapping/debug/sessions" HARNESS_BINARY="$PWD/target/sessions-mapping/debug/harness" bun test ../sessions.ctg/.cartridge/tests/integration/channels.test.ts ../sessions.ctg/.cartridge/tests/integration/mailbox.test.ts ../sessions.ctg/.cartridge/tests/integration/retention.test.ts
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" just build sessions
+SESSIONS_BINARY="$PWD/target/tool-result-contract/debug/sessions" HARNESS_BINARY="$PWD/target/tool-result-contract/debug/harness" bun test ../sessions.ctg/.cartridge/tests/integration/channels.test.ts ../sessions.ctg/.cartridge/tests/integration/mailbox.test.ts ../sessions.ctg/.cartridge/tests/integration/retention.test.ts
 ```
 
 Also run just check sessions and verify the mailbox prerequisite receipt at the final shared source footprint. Tests use disposable stores only. Preserve historical memo claim and source; coordinator owns canonical map and receipt refreshes.

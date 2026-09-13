@@ -1,0 +1,23 @@
+{
+  "canonical": "@landscape/recursive-development-graph/recursive-source-census",
+  "round_requested": 3,
+  "rounds_inherited": 2,
+  "status": "pending independent root review",
+  "digests": {
+    "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-source-census/prd.md": "e8052a0701ea6b783b93b62bbe2982f39eedf2d298f5d2e8dceb3aa03bc66e57",
+    "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-source-census/specs/spec01.md": "482da6256b5a8ee1d0a29ed3b8bd519cbe54e65be61ce5401e185efd90e09480",
+    "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-source-census/baseline.json": "dc30d1c7b730418c03fbe2afcc8148a24e867ea6a475de6db26fcf941ae75a8c",
+    "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-source-census/baseline-log.json": "ea6cd729ffe0836caece2447c81f7bb74cce4584b8946ccb17039da24dae35d3",
+    "/Users/feb/dev/cartridge/landscape.ctg/src/lib.rs": "72f4ec026e9e3a9fdec90847b42d20a2783c1144719ae43985b21451c43f7c6b",
+    "/Users/feb/dev/cartridge/landscape.ctg/src/surface.rs": "bff64821b6a9ea147937e0b7f0060f82bdc4daa16b1be865aa983603d6c9332f",
+    "/Users/feb/dev/cartridge/prd.ctg/src/records.ts": "7f60038af768a68ee51f7755a232efd1c60e2e6c6c06598b3b43e5c6faf6f4ed",
+    "/Users/feb/dev/cartridge/prd.ctg/src/service.ts": "1e7ad44209ed7aeb14ea3e43fd346ab2c7662b0500184e5df1348a53e40ec096",
+    "/tmp/recursive-source-census-proposal/prd-draft.md": "573fb0c71d34ae1cef6632d1df34bd400edeae8d224a71a3674ae6be19c3b726",
+    "/tmp/recursive-source-census-proposal/prd-spec-draft.md": "323f11c3a7a9ac18fd2c8143ee016610dc7bd64148ae5aa8acf131f22904bb2e",
+    "/tmp/recursive-source-census-proposal/prd-board-settings-draft.md": "57639086f9ed505efb74ce505f4c5c798992aeea16cfe7102f67c1c71ecb75e0",
+    "/tmp/recursive-source-census-proposal/work-map-proposal.json": "ae84740054bc68908b2583e3a7da6ab731e8fa72b9a9fbc0b6572a7d3613d831"
+  },
+  "proposal": "@prd/declared-source-edges is a new PRD-owned prerequisite; shared map/root settings are coordinator-only; drafts remain outside scanner",
+  "existing_acceptance_preserved": true,
+  "source_changes": false
+}

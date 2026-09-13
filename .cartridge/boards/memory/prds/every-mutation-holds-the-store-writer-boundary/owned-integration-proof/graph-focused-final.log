@@ -1,0 +1,12 @@
+   Compiling store_core v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/store/core)
+    Finished `test` profile [unoptimized] target(s) in 1.08s
+     Running unittests src/lib.rs (/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/store_core-f8ab0d41e21a8f11)
+
+running 4 tests
+test cold::memory_contract_tests::graph_export_missing_store_does_not_create_files ... ok
+test cold::memory_contract_tests::graph_export_full_relationships_keep_group_provenance ... ok
+test cold::memory_contract_tests::graph_export_refuses_malformed_cold_vector_bytes_without_partial_success ... ok
+test cold::memory_contract_tests::graph_export_reads_hot_and_cold_without_modifying_the_database ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 67 filtered out; finished in 0.07s
+

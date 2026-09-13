@@ -1,0 +1,30 @@
+{
+  "type": "nonsemantic source-footprint and stronger integration proof refinement",
+  "review_round_preserved": 4,
+  "spec_before_sha256": "970081c8176339f66ef6164826615beb4170d79891b5051279e67ac20bc52484",
+  "spec_after_sha256": "424cab22073f7164087e58b87db6c010e07847093954847995e650e457a8a7d8",
+  "spec_body_and_acceptance_unchanged": true,
+  "footprint_added": [
+    ".cartridge/docs/graph-inspection.md",
+    ".cartridge/tests/integration/e2e/cli_surface.rs",
+    ".cartridge/tests/unit/src/commands/src/tests/commands_admin_test.rs",
+    ".cartridge/tests/unit/src/retrieval/piece/src/tests/retrieval_score_test.rs",
+    ".cartridge/tests/unit/src/rpc/src/tests/server_admin_test.rs",
+    ".cartridge/tests/unit/src/store/core/src/cold/memory_contract_tests.rs",
+    ".cartridge/tests/unit/src/transport/src/tests/memory_rpc_test.rs",
+    "src/commands/src/commands_health.rs",
+    "src/config/src/config.rs",
+    "src/retrieval/piece/Cargo.toml",
+    "src/retrieval/piece/src/retrieval_query.rs",
+    "src/retrieval/piece/src/retrieval_score.rs",
+    "src/rpc/src/server.rs",
+    "src/store/core/Cargo.toml",
+    "src/store/core/src/cold.rs",
+    "src/store/core/src/lib.rs",
+    "src/transport/src/memory_rpc.rs"
+  ],
+  "source": "0a8736c5126781b90b842a5b818f083458b2f740",
+  "reason": "User authorized review and integration of all original 15 Memory edits. Bind every additional changed source/test/document and direct Cargo dependency in the coherent tested merge. Prior snapshot is retained verbatim at ancestor8837f84; integrated corrections documented in review. Original preservation acceptance remains proven at snapshot boundary.",
+  "proof_review": "owned-integration-proof/review.json",
+  "proof_review_sha256": "e82c0c647bb829be25bc26e46b8bcd06558fe27aaf5ad60e1ad03d0d6d318a07"
+}

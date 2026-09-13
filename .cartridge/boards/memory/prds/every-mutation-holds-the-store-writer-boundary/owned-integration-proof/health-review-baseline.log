@@ -1,0 +1,21 @@
+   Compiling rpc v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/rpc)
+    Finished `test` profile [unoptimized] target(s) in 1.88s
+     Running unittests src/lib.rs (/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/rpc-559604f069b3fc03)
+
+running 1 test
+
+thread 'server::server_admin_tests::health_reports_effective_access_half_life_for_zero_configuration' (45683476) panicked at src/rpc/src/../../../.cartridge/tests/unit/src/rpc/src/tests/server_admin_test.rs:728:5:
+assertion `left == right` failed
+  left: Number(0)
+ right: 1
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test server::server_admin_tests::health_reports_effective_access_half_life_for_zero_configuration ... FAILED
+
+failures:
+
+failures:
+    server::server_admin_tests::health_reports_effective_access_half_life_for_zero_configuration
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 95 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `-p rpc --lib`

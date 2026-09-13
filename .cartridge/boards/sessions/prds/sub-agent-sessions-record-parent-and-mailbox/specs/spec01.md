@@ -1,14 +1,6 @@
 ---
 complexity: high
-footprint:
-- src/roster.rs
-- src/channels.rs
-- src/main.rs
-- src/mailbox.rs
-- .cartridge/tests/unit/main/mailbox_tests.rs
-- .cartridge/tests/integration/mailbox.test.ts
-- .cartridge/docs/mailbox.md
-- src/observations.rs
+footprint: ["src/roster.rs","src/channels.rs","src/main.rs","src/mailbox.rs",".cartridge/tests/unit/main/mailbox_tests.rs",".cartridge/tests/integration/mailbox.test.ts",".cartridge/docs/mailbox.md","src/observations.rs","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
 ---
 
 # spec01 — Authenticate direct mailboxes and acknowledge delivered batches
@@ -57,14 +49,14 @@ wakes an agent or grants approval; named/group channels remain separate work.
 
 ```sh
 cd ../cartridge.ctg
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/sessions-mapping" just test sessions
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" just test sessions
 ```
 
 ```sh
 cd ../cartridge.ctg
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/sessions-mapping" just build sessions
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/sessions-mapping" just build harness
-SESSIONS_BINARY="$PWD/target/sessions-mapping/debug/sessions" HARNESS_BINARY="$PWD/target/sessions-mapping/debug/harness" bun test ../sessions.ctg/.cartridge/tests/integration/mapping.test.ts ../sessions.ctg/.cartridge/tests/integration/retention.test.ts ../sessions.ctg/.cartridge/tests/integration/mailbox.test.ts
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" just build sessions
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" just build harness
+SESSIONS_BINARY="$PWD/target/tool-result-contract/debug/sessions" HARNESS_BINARY="$PWD/target/tool-result-contract/debug/harness" bun test ../sessions.ctg/.cartridge/tests/integration/mapping.test.ts ../sessions.ctg/.cartridge/tests/integration/retention.test.ts ../sessions.ctg/.cartridge/tests/integration/mailbox.test.ts
 ```
 
 Run public check sessions. Use only synthetic environment credentials and disposable

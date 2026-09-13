@@ -5,19 +5,12 @@ origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: fs
-work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+work-kind: "rollup"
+review-round: 3
+review-status: "passed"
 canonical-scope: improve-fs-change-provenance
-needs:
-- '@gitfs/improve-gitfs-readable-diff'
-- '@sessions/improve-sessions-client-mapping'
-footprint:
-- /Users/feb/dev/cartridge/fs.ctg/service.rs
-- /Users/feb/dev/cartridge/fs.ctg/files.rs
-- /Users/feb/dev/cartridge/fs.ctg/search.rs
-- /Users/feb/dev/cartridge/fs.ctg/service/tests.rs
+needs: ["@sessions/file-change-records-retain-reported-revisions","@fs/improve-fs-change-provenance/direct-file-mutations-report-revisions","@gitfs/overlay-mutations-report-revisions","@runtime/shipped-gitfs-profiles-grant-change-recording"]
+capability-owner: "fs"
 ---
 
 # Share change attribution between direct files and overlays

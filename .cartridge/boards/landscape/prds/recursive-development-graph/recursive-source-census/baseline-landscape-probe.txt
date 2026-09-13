@@ -1,0 +1,8 @@
+use serde_json::json;
+fn main() {
+ let root=std::env::args().nth(1).expect("fixture root");
+ let entries=vec![json!({"id":"root","state":"Active","dir":root,"provide":[]})];
+ let memos=vec![("@root/same".into(),json!({"kind":"memo","name":"same","description":"ROOTAMBER"}))];
+ let (graph,_)=landscape::surface::compose(&entries,&[],&memos,"");
+ println!("{}",json!({"provided_entry_count":entries.len(),"provided_memo_count":memos.len(),"nodes":graph.nodes().collect::<Vec<_>>(),"root_hits":graph.search("ROOTAMBER",&Default::default()),"base_hits":graph.search("BASEBERYL",&Default::default()),"plugin_hits":graph.search("PLUGINCOBALT",&Default::default())}));
+}

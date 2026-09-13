@@ -1,0 +1,24 @@
+{
+  "source_heads": {
+    "landscape.ctg": "62185289d148017c74986b618456a72bab620228",
+    "memo.ctg": "1ffca32db1d06364b3e35e6cbca4881a1f814f71",
+    "prd.ctg": "d9c79a00b3d07f3f704427fc55a62657fa00202b"
+  },
+  "measured_before_spec": true,
+  "commands_record": "baseline-log.json",
+  "findings": [
+    "Maintained PRD member scanner already returns three distinct same-named PRDs under same, @base/same, @base/plugin/same.",
+    "Repeated mount uses first canonical record identity; backlink and missing descendant abort strict scan.",
+    "Current Landscape surface only contains explicitly supplied root entries/memos; ROOTAMBER matches, BASEBERYL/PLUGINCOBALT have zero hits.",
+    "No runtime Lua is evaluated by the baseline board parser, and no providers are started by either probe."
+  ],
+  "plan_implication": "Keep strict PRD behavior. PRD-owned bounded normalized declaration reader feeds additive Landscape census callback; explicit trusted cartridge declarations avoid executable profile parsing. Search/body hydration/freshness remain existing sibling leaves.",
+  "sha256": {
+    "landscape.ctg/src/lib.rs": "72f4ec026e9e3a9fdec90847b42d20a2783c1144719ae43985b21451c43f7c6b",
+    "landscape.ctg/src/surface.rs": "bff64821b6a9ea147937e0b7f0060f82bdc4daa16b1be865aa983603d6c9332f",
+    "prd.ctg/src/records.ts": "7f60038af768a68ee51f7755a232efd1c60e2e6c6c06598b3b43e5c6faf6f4ed",
+    "prd.ctg/src/service.ts": "1e7ad44209ed7aeb14ea3e43fd346ab2c7662b0500184e5df1348a53e40ec096",
+    "prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-source-census/prd.md": "e8052a0701ea6b783b93b62bbe2982f39eedf2d298f5d2e8dceb3aa03bc66e57",
+    "prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-source-census/review.md": "1db6fd8a388e78c3b73ee6e702356709bc2eaf54187e8eabb8c88baa4a6f7a47"
+  }
+}

@@ -48,3 +48,7 @@ fails at “inspection must label a token estimate”; only byte accounting exis
 **96/100 — PASS**, no blocking findings, 3/5 rounds used. This heuristic is not
 an exact tokenizer or a promised upper bound; resolved provider framing remains
 unknown until a later request is actually assembled and measured.
+
+## Source revalidation — 2026-09-13
+
+Imported roster source and preserved summary fallback are integrated at698a4dc. [Exact footprint-only binding](roster-integration-reverification.json); unchanged behavioral acceptance and cargo gate rerun before renewed receipt. This adds no new plan scope or review round.

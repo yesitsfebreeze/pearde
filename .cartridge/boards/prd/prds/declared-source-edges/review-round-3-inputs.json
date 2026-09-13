@@ -1,0 +1,29 @@
+{
+  "reviewer": "/root",
+  "independent_author": "/root/memo_board",
+  "round": 3,
+  "score": 96,
+  "result": "PASS",
+  "files": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/prd/prds/declared-source-edges/prd.md",
+      "sha256": "570f29051e2ee16dd8e0fcaf9be0aba1ec3edfd60aecbd7702c725aca83932e0"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/prd/prds/declared-source-edges/specs/spec01.md",
+      "sha256": "6ad93b1e79ba3e768fc7fd922eafb2af7d721957a5f2a8c56216bdd39206cac9"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/src/records.ts",
+      "sha256": "7f60038af768a68ee51f7755a232efd1c60e2e6c6c06598b3b43e5c6faf6f4ed"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/src/service.ts",
+      "sha256": "1e7ad44209ed7aeb14ea3e43fd346ab2c7662b0500184e5df1348a53e40ec096"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-source-census/baseline.json",
+      "sha256": "dc30d1c7b730418c03fbe2afcc8148a24e867ea6a475de6db26fcf941ae75a8c"
+    }
+  ]
+}

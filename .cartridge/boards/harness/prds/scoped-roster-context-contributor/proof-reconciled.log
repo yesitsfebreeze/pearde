@@ -1,0 +1,6 @@
+just test harness: passed
+just check harness: passed
+just build harness: passed
+just build sessions: passed
+bun test /var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-fBbVcU/harness.ctg/.cartridge/tests/integration/roster.test.ts: passed
+Roster composition proof: /Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/harness/prds/scoped-roster-context-contributor/integration/cartridge-roster-verification-fBbVcU.json

@@ -1,0 +1,152 @@
+{
+  "source_revision": "d3a4187bf946e02a4806082994e0aac662c1d0c3",
+  "source_parent": "df93d5bbc036aee0ac2a08beecb9b18a85fa3835",
+  "source_owner": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/harness/.lanes/scoped-roster-integration",
+  "source_files": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "9703cc5fdb70f80262adc1ade4beca0ea7f1df1364c9466295eccb09ef3311d4"
+    },
+    {
+      "path": "src/main.rs",
+      "sha256": "76d5e2d308917583fd76c08b45f6f2b233748705e6bc679f619afa0cc865f541"
+    },
+    {
+      "path": "src/inspection.rs",
+      "sha256": "c6ac10ea7bc40829210dbd8c780484ae8de3d7621df68c762f98cb7d9bb80f5d"
+    },
+    {
+      "path": "src/roster.rs",
+      "sha256": "479694e130faa723ffdc7ff832814574b70c279d53b1e5987be55ca11e0cad69"
+    },
+    {
+      "path": ".cartridge/tests/unit/main/tests.rs",
+      "sha256": "f7f9f5764d866fed18439596e5c2b19f84336bc03cac24496fea19ea64503f02"
+    },
+    {
+      "path": ".cartridge/tests/unit/inspection_tests.rs",
+      "sha256": "d998ce2fc926c764218e907e6bbeed375c35e40b24f5be147912d742be6e9f06"
+    },
+    {
+      "path": ".cartridge/tests/unit/accounting.rs",
+      "sha256": "05cfc09928a172a28943cbed06bd142ac88660691ce6ecd6e565986c6a82e3ec"
+    },
+    {
+      "path": ".cartridge/tests/unit/working_tests.rs",
+      "sha256": "7141c61d5dd4b81624ffaf252efeaa5a1ca1dec37d5353282aec6caa81de9e9f"
+    },
+    {
+      "path": ".cartridge/tests/unit/roster_tests.rs",
+      "sha256": "3e6ecd9b475afbee76a5e284dd728a055e8aae4de03445035d6dad38e866334c"
+    },
+    {
+      "path": ".cartridge/tests/integration/roster.test.ts",
+      "sha256": "130a4f9dbb55965193530dcd93ed07bcf48510e89988808378d7072a50aff160"
+    },
+    {
+      "path": ".cartridge/docs/roster.md",
+      "sha256": "60a4c14f1c9588a25bd90d260f986f15ad3548060d85c07939352d6efa9f6dd0"
+    },
+    {
+      "path": ".cartridge/tests/integration/working.rs",
+      "sha256": "505e0f9b22e2a0c539e3833df54f6eddbb727ecc1b89cbfa6492053c6ce5e19d"
+    }
+  ],
+  "source_commit_matches_captured_files": true,
+  "proof_receipt": "integration/cartridge-roster-verification-fBbVcU.json",
+  "proof_receipt_sha256": "669b79d40b5dd6ee11062bef210eb67f0d7cb1582a3a14edf239915ba13b4f59",
+  "snapshot_identity": "9dde41912ebea5252718f934b68b90b1e5c282018dc72a5ac13eb0a10f528049",
+  "verifier_sha256": "7099b57a8c0bc99ed7476f4a79017ce4ed59b9355b9222fe1672ce8a91aa0083",
+  "review": {
+    "reviewer": "/root",
+    "decision": "approved preservation/integration approach; no blocker",
+    "scope": "Exact existing source/test fallback patch plus combined SDK proof; no new board prerequisite and no roster acceptance weakening"
+  },
+  "preserved_original_inputs": {
+    "original_head": "ca7eeabd38f4eaba69063cf98e2071df694a1dc3",
+    "roster_base": "df93d5bbc036aee0ac2a08beecb9b18a85fa3835",
+    "files": {
+      "src/main.rs": {
+        "working_sha256": "e4c23eeb9da21595c3a5bdea3a2374482f3ab51f1f0eadf95953afbdfa2ea0d8",
+        "patch_sha256": "e4c313a95a770357488ad2cafd295430782ad65259b4ef94a4fb723caccb3dcb"
+      },
+      ".cartridge/tests/integration/working.rs": {
+        "working_sha256": "505e0f9b22e2a0c539e3833df54f6eddbb727ecc1b89cbfa6492053c6ce5e19d",
+        "patch_sha256": "0fa3789a050d2574f120cfc917a0f01aa7ed1ba8b38d765669f5e04afb81319b"
+      }
+    },
+    "review": "Existing user changes preserved for isolated reconciliation; original checkout not modified.",
+    "baseline": {
+      "receipt": "integration/cartridge-roster-verification-rdzsB9.json",
+      "log": "original-delta-baseline.log",
+      "receipt_sha256": "ac99f49d580e975c93c8aac5bf2811e5d6bc6bfb0431664df8b60ea3d9c6da2a",
+      "result": "Original working test fails at line101 against strict df93d5b: failed maintenance must not abort a fitting context; summary provider unavailable. Unit/process/ring pass."
+    }
+  },
+  "original_checkout_hashes_still_match": true,
+  "working_test_preserved_byte_for_byte": true,
+  "results": [
+    {
+      "command": [
+        "just",
+        "test",
+        "harness"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "just",
+        "check",
+        "harness"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "just",
+        "build",
+        "harness"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "just",
+        "build",
+        "sessions"
+      ],
+      "exit": 0
+    },
+    {
+      "command": [
+        "bun",
+        "test",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-fBbVcU/harness.ctg/.cartridge/tests/integration/roster.test.ts"
+      ],
+      "exit": 0
+    }
+  ],
+  "binary_inputs": {
+    "harness": "872a1c644cb40fc0f682e7b5d12cd08ef8eb9ccd48a3cd22c952412e0d073333",
+    "sessions": "cab86638b15cb124d5e781a797774cd82c6b86144b1850037d902b8990bae42e"
+  },
+  "external_revisions": {
+    "cartridge.ctg": "1a5e9867acec1d07cd732c3af2ccf331a0979a61",
+    "docs.ctg": "06084126c42b93ca570b3526e35573bd04ec859d",
+    "agent.ctg": "a09b593a11ed1e027c823bb632838cc92a09e2eb",
+    "fs.ctg": "d4a4239ccce02bc0e647e9ad80892995f48b317f",
+    "gitfs.ctg": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+    "harness.ctg": "df93d5bbc036aee0ac2a08beecb9b18a85fa3835",
+    "landscape.ctg": "62185289d148017c74986b618456a72bab620228",
+    "mcp.ctg": "f5a740517bc2668b50cf4f61fe81a1e37bb4cfad",
+    "memo.ctg": "1ffca32db1d06364b3e35e6cbca4881a1f814f71",
+    "memory-tool.ctg": "2c490a9c6dd3d6fe5ab187ab5f74e541b8c35d16",
+    "proxy.ctg": "9ddcc08807a059579c21227ad9d3523d242ddf86",
+    "pty.ctg": "7c1af4ace396c931334bb58aa2150e14b6ceeb67",
+    "router.ctg": "4ad9cd35dc862ecfe0786612d39913612d93fc45",
+    "sessions.ctg": "a306370f10b78d94365b7832ce22ce8d10c09487",
+    "tools.ctg": "62546896b771dcba67211ea1ac73fc29a7aa44dd"
+  },
+  "integration": "Pending coordinator integration of clean candidate into original checkout; original existing edits remain untouched. Final roster/prior receipts should bind coherent source plus working.rs and verifier digest."
+}

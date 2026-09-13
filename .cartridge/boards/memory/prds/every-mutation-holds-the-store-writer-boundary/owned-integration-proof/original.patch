@@ -1,0 +1,902 @@
+diff --git a/.cartridge/tests/unit/src/commands/src/tests/commands_admin_test.rs b/.cartridge/tests/unit/src/commands/src/tests/commands_admin_test.rs
+index caad469..6aebcd5 100644
+--- a/.cartridge/tests/unit/src/commands/src/tests/commands_admin_test.rs
++++ b/.cartridge/tests/unit/src/commands/src/tests/commands_admin_test.rs
+@@ -224,7 +224,8 @@ mod degradation_lines_tests {
+ 		let recency = HealthRes {
+ 			ok: true,
+ 			heat_half_life_secs: 2592000,
+-			qbst_recency_half_life_secs: 86400,
++			qbst_recency_half_life_secs: 0,
++			qbst_recency_half_life_accesses: 32,
+ 			..Default::default()
+ 		};
+ 		assert_eq!(
+@@ -232,7 +233,7 @@ mod degradation_lines_tests {
+ 			vec![
+ 				"preset:      ",
+ 				"heat:        half-life 2592000s",
+-				"recency:     half-life 86400s",
++				"recency:     half-life 32 newer accesses",
+ 			],
+ 			"recency half-life surfaced daemon-sourced"
+ 		);
+diff --git a/.cartridge/tests/unit/src/retrieval/piece/src/tests/retrieval_score_test.rs b/.cartridge/tests/unit/src/retrieval/piece/src/tests/retrieval_score_test.rs
+index 316abd6..db61cf5 100644
+--- a/.cartridge/tests/unit/src/retrieval/piece/src/tests/retrieval_score_test.rs
++++ b/.cartridge/tests/unit/src/retrieval/piece/src/tests/retrieval_score_test.rs
+@@ -388,7 +388,7 @@ mod query_filter_tests {
+ 			qbst_cap: 1e9,
+ 			..Default::default()
+ 		};
+-		let got = qbst(&cfg, 0, Some(SystemTime::now()));
++		let got = qbst(&cfg, 0, Some(0));
+ 		assert!(
+ 			(got - 3.0).abs() < 0.05,
+ 			"near-zero age -> ~full weight, got {got}"
+@@ -403,11 +403,7 @@ mod query_filter_tests {
+ 			qbst_cap: 2.0,
+ 			..Default::default()
+ 		};
+-		assert_eq!(
+-			qbst(&cfg, 1000, Some(SystemTime::now())),
+-			2.0,
+-			"clamped to qbst_cap"
+-		);
++		assert_eq!(qbst(&cfg, 1000, Some(0)), 2.0, "clamped to qbst_cap");
+ 	}
+ 
+ 	#[test]
+@@ -425,7 +421,7 @@ mod query_filter_tests {
+ 		claim.score = 2.0;
+ 		claim.entity.score = 0.5;
+ 		let mut results = vec![fact, claim];
+-		apply_boosts(&cfg, &mut results);
++		apply_boosts(&cfg, &mut results, &[]);
+ 		assert!(
+ 			(results[0].score - 1.5).abs() < 1e-9,
+ 			"fact got {}",
+@@ -465,7 +461,7 @@ mod query_filter_tests {
+ 			"fixture must share a mean"
+ 		);
+ 		let mut results = vec![single, many];
+-		apply_boosts(&cfg, &mut results);
++		apply_boosts(&cfg, &mut results, &[]);
+ 		assert!(
+ 			results[1].score > results[0].score,
+ 			"well-evidenced should outrank single-observation: many={} single={}",
+@@ -508,7 +504,7 @@ mod query_filter_tests {
+ 			})
+ 			.collect();
+ 
+-		apply_boosts(&cfg, &mut results);
++		apply_boosts(&cfg, &mut results, &[]);
+ 
+ 		let got: Vec<u64> = results.iter().map(|r| r.score.to_bits()).collect();
+ 		assert_eq!(got, expected, "an unconfigured source_trust moved a score");
+@@ -522,7 +518,7 @@ mod query_filter_tests {
+ 		let typed = ent("typed", EntityKind::Claim, Source::default());
+ 
+ 		let mut tied = vec![watched.clone(), typed.clone()];
+-		apply_boosts(&RetrievalConfig::default(), &mut tied);
++		apply_boosts(&RetrievalConfig::default(), &mut tied, &[]);
+ 		assert_eq!(
+ 			tied[0].score, tied[1].score,
+ 			"the two differ only by source scheme, so unconfigured they must tie"
+@@ -533,7 +529,7 @@ mod query_filter_tests {
+ 			..Default::default()
+ 		};
+ 		let mut results = vec![watched, typed];
+-		apply_boosts(&cfg, &mut results);
++		apply_boosts(&cfg, &mut results, &[]);
+ 		assert!(
+ 			results[1].score > results[0].score,
+ 			"the file-scheme entity must fall below the inline one: {} vs {}",
+@@ -787,7 +783,7 @@ mod query_filter_tests {
+ 		for r in rows.iter_mut() {
+ 			r.score = 1.0;
+ 		}
+-		apply_boosts(&cfg, &mut rows);
++		apply_boosts(&cfg, &mut rows, &[]);
+ 		assert!(
+ 			rows[0].score > rows[1].score,
+ 			"at equal positive score the better-evidenced row must rank higher: {:?}",
+@@ -805,7 +801,7 @@ mod query_filter_tests {
+ 		for r in rows.iter_mut() {
+ 			r.score = -1.0;
+ 		}
+-		apply_boosts(&cfg, &mut rows);
++		apply_boosts(&cfg, &mut rows, &[]);
+ 		assert!(
+ 			rows[0].score < rows[1].score,
+ 			"a negative score inverts confidence order — if this ever fails, a term \
+@@ -886,3 +882,41 @@ mod lexical_boost_tests {
+ 		assert!(results[0].score > results.last().unwrap().score);
+ 	}
+ }
++
++#[test]
++fn access_heat_uses_order_and_preserves_relevance() {
++	let cfg = RetrievalConfig {
++		qbst_access_weight: 0.0,
++		..Default::default()
++	};
++	assert_eq!(qbst(&cfg, 0, Some(32)), qbst(&cfg, 0, Some(0)) * 0.5);
++	assert_eq!(qbst(&cfg, 0, None), 0.0);
++	let old = SystemTime::UNIX_EPOCH + Duration::from_secs(1);
++	let recent = old + Duration::from_secs(1);
++	let make = |id: &str, at, score| {
++		let mut entity = test_support::entity(id);
++		entity.accessed_at = at;
++		ScoredEntity { entity, score }
++	};
++	let mut rows = vec![
++		make("cold", Some(old), 1.0),
++		make("hot", Some(recent), 1.0),
++		make("unrelated", Some(recent), 0.0),
++	];
++	apply_boosts(&cfg, &mut rows, &[recent, old]);
++	assert!(rows[1].score > rows[0].score);
++	let scores: Vec<_> = rows.iter().map(|r| r.score).collect();
++	// Moving every wall timestamp by decades without changing access order is inert.
++	let shift = Duration::from_secs(50 * 365 * 86400);
++	let mut shifted = vec![
++		make("cold", Some(old + shift), 1.0),
++		make("hot", Some(recent + shift), 1.0),
++		make("unrelated", Some(recent + shift), 0.0),
++	];
++	apply_boosts(&cfg, &mut shifted, &[recent + shift, old + shift]);
++	assert_eq!(scores, shifted.iter().map(|r| r.score).collect::<Vec<_>>());
++	assert_eq!(
++		rows[2].score, 0.0,
++		"heat alone cannot turn zero relevance into a match"
++	);
++}
+diff --git a/.cartridge/tests/unit/src/store/core/src/cold/memory_contract_tests.rs b/.cartridge/tests/unit/src/store/core/src/cold/memory_contract_tests.rs
+index 9666340..28f9742 100644
+--- a/.cartridge/tests/unit/src/store/core/src/cold/memory_contract_tests.rs
++++ b/.cartridge/tests/unit/src/store/core/src/cold/memory_contract_tests.rs
+@@ -35,3 +35,47 @@ fn corrupt_row_aborts_snapshot_instead_of_silently_skipping_it() {
+ 		Some(&b"not a stored row"[..])
+ 	);
+ }
++
++#[test]
++fn graph_export_reads_hot_and_cold_without_modifying_the_database() {
++	use base::base_types::{mk_entity, EntityKind, Memory};
++	let dir = tempfile::tempdir().unwrap();
++	let path = dir.path().to_str().unwrap();
++	let mut hot = mk_entity("hot", &"Full body ".repeat(100), 0.0, EntityKind::Document);
++	hot.vector = vec![0.1, 0.2].into();
++	let mut cold = mk_entity("cold", "Cold body", 0.0, EntityKind::Document);
++	cold.vector = vec![0.3, 0.4].into();
++	{
++		let store = Store::open(path).unwrap();
++		let mut memory = Memory::new("group", "");
++		memory.entities.insert(hot.id.clone(), hot.clone());
++		store.save_one_memory(&memory).unwrap();
++		store.cold_put_all(&[cold.clone()]).unwrap();
++		let closed = store.env.clone().prepare_for_closing();
++		drop(store);
++		closed.wait();
++	}
++	let file = dir.path().join("data.mdb");
++	let before = std::fs::read(&file).unwrap();
++	let graph = read_graph_view(path, false, true, None, None).unwrap();
++	assert_eq!(graph["nodes"].as_array().unwrap().len(), 2);
++	assert_eq!(graph["groups"].as_array().unwrap().len(), 1);
++	assert!(graph["nodes"][0]["text"].as_str().unwrap().len() <= 360);
++	let detail = read_graph_view(path, false, false, Some(&hot.id), Some("group")).unwrap();
++	assert_eq!(detail["nodes"].as_array().unwrap().len(), 1);
++	assert_eq!(detail["nodes"][0]["text"], hot.text());
++	assert_eq!(detail["nodes"][0]["vector_dimensions"], 2);
++	assert!(detail["nodes"][0].get("vector").is_none());
++	let cold_detail = read_graph_view(path, true, false, Some(&cold.id), Some("cold")).unwrap();
++	assert_eq!(cold_detail["nodes"][0]["cold"], true);
++	assert_eq!(cold_detail["nodes"][0]["text"], "Cold body");
++	assert_eq!(std::fs::read(&file).unwrap(), before);
++}
++
++#[test]
++fn graph_export_missing_store_does_not_create_files() {
++	let dir = tempfile::tempdir().unwrap();
++	let absent = dir.path().join("absent");
++	assert!(read_graph(absent.to_str().unwrap(), false).is_err());
++	assert!(!absent.exists());
++}
+diff --git a/.cartridge/tests/unit/src/transport/src/tests/memory_rpc_test.rs b/.cartridge/tests/unit/src/transport/src/tests/memory_rpc_test.rs
+index 120429c..62f490c 100644
+--- a/.cartridge/tests/unit/src/transport/src/tests/memory_rpc_test.rs
++++ b/.cartridge/tests/unit/src/transport/src/tests/memory_rpc_test.rs
+@@ -198,6 +198,7 @@ mod dto_serde_tests {
+ 			gini_memory_sizes: 0.42,
+ 			heat_half_life_secs: 2592000,
+ 			qbst_recency_half_life_secs: 86400,
++			qbst_recency_half_life_accesses: 32,
+ 			retrieval: RetrievalHealth {
+ 				rrf_k: 60.0,
+ 				rrf_global_weight: 0.5,
+diff --git a/Cargo.lock b/Cargo.lock
+index 2bcdc84..ff79b69 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -226,6 +226,15 @@ dependencies = [
+  "serde_core",
+ ]
+ 
++[[package]]
++name = "block-buffer"
++version = "0.10.4"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "3078c7629b62d3f0439517fa394996acacc5cbc91c5a20d8c658e77abd503a71"
++dependencies = [
++ "generic-array",
++]
++
+ [[package]]
+ name = "block-buffer"
+ version = "0.12.1"
+@@ -286,6 +295,7 @@ dependencies = [
+  "parking_lot",
+  "serde",
+  "serde_json",
++ "sha2 0.10.9",
+  "thiserror",
+  "tokio",
+ ]
+@@ -321,7 +331,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "d524456ba66e72eb8b115ff89e01e497f8e6d11d78b70b1aa13c0fbd97540a81"
+ dependencies = [
+  "cfg-if",
+- "cpufeatures",
++ "cpufeatures 0.3.0",
+  "rand_core 0.10.1",
+ ]
+ 
+@@ -463,6 +473,15 @@ version = "0.8.7"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b"
+ 
++[[package]]
++name = "cpufeatures"
++version = "0.2.17"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "59ed5838eebb26a2bb2e58f6d5b5316989ae9d08bab10e0e6d103e656d1b0280"
++dependencies = [
++ "libc",
++]
++
+ [[package]]
+ name = "cpufeatures"
+ version = "0.3.0"
+@@ -524,6 +543,16 @@ version = "0.8.22"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "61803da095bee82a81bb1a452ecc25d3b2f1416d1897eb86430c6159ef717c17"
+ 
++[[package]]
++name = "crypto-common"
++version = "0.1.7"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "78c8292055d1c1df0cce5d180393dc8cce0abec0a7102adb6c7b1eef6016d60a"
++dependencies = [
++ "generic-array",
++ "typenum",
++]
++
+ [[package]]
+ name = "crypto-common"
+ version = "0.2.2"
+@@ -533,15 +562,25 @@ dependencies = [
+  "hybrid-array",
+ ]
+ 
++[[package]]
++name = "digest"
++version = "0.10.7"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "9ed9a281f7bc9b7576e61468ba615a66a5c8cfdff42420a70aa82701a3b1e292"
++dependencies = [
++ "block-buffer 0.10.4",
++ "crypto-common 0.1.7",
++]
++
+ [[package]]
+ name = "digest"
+ version = "0.11.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "f1dd6dbb5841937940781866fa1281a1ff7bd3bf827091440879f9994983d5c2"
+ dependencies = [
+- "block-buffer",
++ "block-buffer 0.12.1",
+  "const-oid",
+- "crypto-common",
++ "crypto-common 0.2.2",
+ ]
+ 
+ [[package]]
+@@ -767,6 +806,16 @@ dependencies = [
+  "slab",
+ ]
+ 
++[[package]]
++name = "generic-array"
++version = "0.14.7"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "85649ca51fd72272d7821adaf274ad91c288277713d9c18820d8499a7ff69e9a"
++dependencies = [
++ "typenum",
++ "version_check",
++]
++
+ [[package]]
+ name = "getrandom"
+ version = "0.2.17"
+@@ -2454,6 +2503,17 @@ dependencies = [
+  "serde",
+ ]
+ 
++[[package]]
++name = "sha2"
++version = "0.10.9"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "a7507d819769d01a365ab707794a4084392c824f54a7a6a7862f8c3d0892b283"
++dependencies = [
++ "cfg-if",
++ "cpufeatures 0.2.17",
++ "digest 0.10.7",
++]
++
+ [[package]]
+ name = "sha2"
+ version = "0.11.0"
+@@ -2461,8 +2521,8 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "446ba717509524cb3f22f17ecc096f10f4822d76ab5c0b9822c5f9c284e825f4"
+ dependencies = [
+  "cfg-if",
+- "cpufeatures",
+- "digest",
++ "cpufeatures 0.3.0",
++ "digest 0.11.3",
+ ]
+ 
+ [[package]]
+@@ -2566,6 +2626,7 @@ dependencies = [
+  "heed",
+  "math",
+  "serde",
++ "serde_json",
+  "tempfile",
+  "thiserror",
+  "tracing",
+@@ -2729,7 +2790,7 @@ dependencies = [
+  "parking_lot",
+  "rayon",
+  "retrieval",
+- "sha2",
++ "sha2 0.11.0",
+  "store_core",
+  "tempfile",
+  "test_support",
+@@ -3058,7 +3119,7 @@ dependencies = [
+  "ignore",
+  "notify 8.2.0",
+  "rand 0.10.2",
+- "sha2",
++ "sha2 0.11.0",
+  "tempfile",
+  "thiserror",
+  "tokio",
+@@ -3071,6 +3132,12 @@ version = "0.1.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "ba73ea9cf16a25df0c8caa16c51acb937d5712a8429db78a3ee29d5dcacd3a65"
+ 
++[[package]]
++name = "version_check"
++version = "0.9.5"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
++
+ [[package]]
+ name = "virtue"
+ version = "0.0.18"
+diff --git a/src/commands/src/commands_health.rs b/src/commands/src/commands_health.rs
+index 310322f..2bbdbbf 100644
+--- a/src/commands/src/commands_health.rs
++++ b/src/commands/src/commands_health.rs
+@@ -482,7 +482,14 @@ pub(crate) fn heat_health_lines(h: Option<&transport::memory_rpc::HealthRes>) ->
+ 			// QBST recency half-life — the 24h ranking-freshness signal, the
+ 			// second of item 55's two freshness signals. Same daemon-sourced
+ 			// rule as the heat line above.
+-			format!("recency:     half-life {}s", h.qbst_recency_half_life_secs),
++			if h.qbst_recency_half_life_accesses > 0 {
++				format!(
++					"recency:     half-life {} newer accesses",
++					h.qbst_recency_half_life_accesses
++				)
++			} else {
++				format!("recency:     half-life {}s", h.qbst_recency_half_life_secs)
++			},
+ 		],
+ 		None => Vec::new(),
+ 	}
+diff --git a/src/commands/src/lib.rs b/src/commands/src/lib.rs
+index 4cb4816..6773577 100644
+--- a/src/commands/src/lib.rs
++++ b/src/commands/src/lib.rs
+@@ -496,6 +496,25 @@ pub enum Commands {
+ 		embed: EmbedArgs,
+ 	},
+ 
++	/// Read all stored nodes, relationships and groups as JSON without changing the database.
++	Graph {
++		/// Lightweight geometry inventory; full records stay available with --node.
++		#[arg(long)]
++		summary: bool,
++		/// Read one complete entity and its native relationships.
++		#[arg(long)]
++		node: Option<String>,
++		/// The memory group containing --node, to avoid scanning unrelated rows.
++		#[arg(long)]
++		group: Option<String>,
++		/// An existing memory store directory; defaults to this project's store.
++		#[arg(long)]
++		store: Option<String>,
++		/// Include embedding arrays and model weights, in addition to their dimensions.
++		#[arg(long)]
++		include_vectors: bool,
++	},
++
+ 	/// Export hot and cold memory, vectors, provenance and temporal history.
+ 	/// Stop the daemon first. Existing output files are never overwritten.
+ 	Export {
+@@ -955,6 +974,12 @@ pub async fn dispatch(cmd: Commands, cfg: &config::Config) {
+ 		Commands::ClaimKind { action } => crate::commands_admin::cmd_claim_kind(cfg, action).await,
+ 		Commands::Register { path } => crate::commands_admin::cmd_register(cfg, &path),
+ 		Commands::Unnamed { action } => crate::commands_admin::cmd_unnamed(cfg, action).await,
++		Commands::Graph { store, include_vectors, summary, node, group } => {
++			match store_core::read_graph_view(store.as_deref().unwrap_or(&cfg.data_dir), include_vectors, summary, node.as_deref(), group.as_deref()) {
++				Ok(graph) => println!("{}", graph),
++				Err(error) => fail("graph", error),
++			}
++		},
+ 		Commands::Export { out } => crate::commands_export::cmd_export(cfg, &out),
+ 		Commands::Import { file, force } => crate::commands_export::cmd_import(cfg, &file, force),
+ 		Commands::Compress { src, mode, out } => {
+diff --git a/src/config/src/config.rs b/src/config/src/config.rs
+index e832eca..6ec0472 100644
+--- a/src/config/src/config.rs
++++ b/src/config/src/config.rs
+@@ -929,7 +929,10 @@ pub struct RetrievalConfig {
+ 	pub decay: f64,
+ 	pub qbst_access_weight: f64,
+ 	pub qbst_recency_weight: f64,
++	/// Legacy config compatibility only; retrieval no longer ages by wall time.
+ 	pub qbst_recency_half_life_secs: u64,
++	/// Newer accessed entities needed to halve the recency boost.
++	pub qbst_recency_half_life_accesses: u64,
+ 	pub qbst_cap: f64,
+ 	pub refine_traversal_weight: f64,
+ 	pub refine_boost_cap: f64,
+@@ -994,6 +997,7 @@ impl Default for RetrievalConfig {
+ 			qbst_access_weight: constants::QBST_ACCESS_WEIGHT,
+ 			qbst_recency_weight: constants::QBST_RECENCY_WEIGHT,
+ 			qbst_recency_half_life_secs: constants::QBST_RECENCY_HALF_LIFE.as_secs(),
++			qbst_recency_half_life_accesses: 32,
+ 			qbst_cap: constants::QBST_CAP,
+ 			refine_traversal_weight: constants::REFINE_TRAVERSAL_WEIGHT,
+ 			refine_boost_cap: constants::REFINE_BOOST_CAP,
+diff --git a/src/retrieval/piece/src/retrieval_query.rs b/src/retrieval/piece/src/retrieval_query.rs
+index fb4f1f1..26a0ad8 100644
+--- a/src/retrieval/piece/src/retrieval_query.rs
++++ b/src/retrieval/piece/src/retrieval_query.rs
+@@ -237,7 +237,12 @@ pub fn retrieve_profiled(
+ 		.collect();
+ 	let mut results = merge_results(g, &unvisited_seeds, expanded.scored);
+ 	let mut chains = expanded.chains;
+-	let (cold, cold_rows_scanned, error) = cold_candidates(g, cfg, qvec, opts);
++	let access_order = if cfg.simple_hybrid {
++		Vec::new()
++	} else {
++		score::access_order(g)
++	};
++	let (cold, cold_rows_scanned, error) = cold_candidates(g, cfg, qvec, opts, &access_order);
+ 	let mut cold_ids = HashSet::new();
+ 	// Every cold row participates before policy and top-k cuts. A hot copy
+ 	// wins identity collisions left by a spill or merge.
+@@ -338,7 +343,7 @@ pub fn retrieve_profiled(
+ 	prof.checkpoint("merge");
+ 
+ 	if !cfg.simple_hybrid {
+-		score::apply_boosts(cfg, &mut results);
++		score::apply_boosts(cfg, &mut results, &access_order);
+ 	}
+ 	capture_scores(&mut traces, &results, "after_confidence_access_trust");
+ 	if !cfg.simple_hybrid {
+@@ -664,6 +669,7 @@ fn cold_candidates(
+ 	cfg: &RetrievalConfig,
+ 	qvec: &[f32],
+ 	opts: Option<&QueryOptions>,
++	access_order: &[std::time::SystemTime],
+ ) -> (Vec<base::base_types::Entity>, usize, Option<String>) {
+ 	let Some(store) = g.store() else {
+ 		return (Vec::new(), 0, None);
+@@ -696,7 +702,7 @@ fn cold_candidates(
+ 			}
+ 			let mut candidate = [ScoredEntity { entity, score: raw }];
+ 			if !cfg.simple_hybrid {
+-				score::apply_boosts(cfg, &mut candidate);
++				score::apply_boosts(cfg, &mut candidate, access_order);
+ 				apply_gravity(g, cfg, &mut candidate);
+ 			}
+ 			let [row] = candidate;
+diff --git a/src/retrieval/piece/src/retrieval_score.rs b/src/retrieval/piece/src/retrieval_score.rs
+index 8a026cf..f6f832a 100644
+--- a/src/retrieval/piece/src/retrieval_score.rs
++++ b/src/retrieval/piece/src/retrieval_score.rs
+@@ -17,21 +17,41 @@ use std::collections::HashMap;
+ use std::time::{Duration, SystemTime};
+ use util::cmp_partial;
+ 
+-pub fn qbst(cfg: &RetrievalConfig, access_count: i32, accessed_at: Option<SystemTime>) -> f64 {
+-	let access = (access_count as f64 + 1.0).ln() * cfg.qbst_access_weight;
+-	let recency = match accessed_at {
+-		Some(at) => {
+-			let age = SystemTime::now()
+-				.duration_since(at)
+-				.unwrap_or_default()
+-				.as_secs_f64();
+-			let half_life = Duration::from_secs(cfg.qbst_recency_half_life_secs)
+-				.as_secs_f64()
+-				.max(1.0);
+-			cfg.qbst_recency_weight * (-age / half_life).exp()
++/// Access-stack distance, not elapsed time. Timestamps are only ordering keys:
++/// an idle corpus keeps exactly the same ranking, including after reopening.
++pub fn access_order(g: &GraphGnn) -> Vec<SystemTime> {
++	let mut order: Vec<_> = g
++		.memories
++		.values()
++		.flat_map(|m| m.entities.values())
++		.filter_map(|e| e.accessed_at)
++		.collect();
++	if let Some(store) = g.store() {
++		let loaded: std::collections::HashSet<_> = g
++			.memories
++			.values()
++			.flat_map(|m| m.entities.keys())
++			.collect();
++		if let Err(error) = store.cold_visit(|entity| {
++			if !loaded.contains(&entity.id) {
++				if let Some(at) = entity.accessed_at {
++					order.push(at);
++				}
++			}
++		}) {
++			tracing::warn!(%error, "access-order scan incomplete");
+ 		}
+-		None => 0.0,
+-	};
++	}
++	order.sort_unstable_by(|a, b| b.cmp(a));
++	order
++}
++
++pub fn qbst(cfg: &RetrievalConfig, access_count: i32, distance: Option<usize>) -> f64 {
++	let access = (access_count.max(0) as f64 + 1.0).ln() * cfg.qbst_access_weight;
++	let recency = distance.map_or(0.0, |distance| {
++		cfg.qbst_recency_weight
++			* 0.5_f64.powf(distance as f64 / cfg.qbst_recency_half_life_accesses.max(1) as f64)
++	});
+ 	(access + recency).min(cfg.qbst_cap)
+ }
+ 
+@@ -70,14 +90,23 @@ pub fn apply_lexical_boost<T: Scored>(
+ }
+ 
+ /// Scale each result by its confidence and add the flat fact bonus.
+-pub fn apply_boosts<T: Scored>(cfg: &RetrievalConfig, results: &mut [T]) {
++pub fn apply_boosts<T: Scored>(
++	cfg: &RetrievalConfig,
++	results: &mut [T],
++	access_order: &[SystemTime],
++) {
+ 	for r in results.iter_mut() {
+ 		let e = r.entity();
+ 		// Lower confidence bound, not the mean: a well-evidenced claim outranks a
+ 		// single-observation one at equal mean (change `git log --grep='item 65'`). Clamped >= 0 so
+ 		// a high-variance claim never inverts the boost.
+ 		let confidence = (e.conf_mean() - CONFIDENCE_BOUND_K * e.conf_variance().sqrt()).max(0.0);
+-		let boost = qbst(cfg, e.access_count.value_i32(), e.accessed_at);
++		let boost = qbst(
++			cfg,
++			e.access_count.value_i32(),
++			e.accessed_at
++				.map(|at| access_order.partition_point(|other| *other > at)),
++		);
+ 		let fact_bonus = if e.kind == EntityKind::Fact {
+ 			cfg.fact_score_boost
+ 		} else {
+@@ -88,7 +117,7 @@ pub fn apply_boosts<T: Scored>(cfg: &RetrievalConfig, results: &mut [T]) {
+ 			.get(e.source.scheme())
+ 			.copied()
+ 			.unwrap_or(1.0);
+-		r.set_score((r.score() * confidence + boost + fact_bonus) * trust);
++		r.set_score((r.score() * confidence + r.score().max(0.0) * boost + fact_bonus) * trust);
+ 	}
+ }
+ 
+@@ -271,8 +300,10 @@ pub fn commit_access(results: &mut [ScoredEntity], heat_cfg: &HeatConfig) {
+ // would otherwise do on the back of it.
+ fn stamp_access(e: &mut Entity, now: SystemTime, heat_cfg: &HeatConfig) -> bool {
+ 	let throttled = e
+-		.accessed_at
++		.heat_updated_at
++		.or(e.accessed_at)
+ 		.is_some_and(|last| now.duration_since(last).is_ok_and(|d| d < ACCESS_COOLDOWN));
++	e.accessed_at = Some(now);
+ 	if throttled {
+ 		return false;
+ 	}
+@@ -290,7 +321,16 @@ fn stamp_access(e: &mut Entity, now: SystemTime, heat_cfg: &HeatConfig) -> bool
+ 
+ // Goes through `memories` directly, NOT `get_mut`: an access stamp must not bump the mutation epoch (it would invalidate the query cache).
+ pub fn commit_access_ids(g: &mut GraphGnn, ids: &[String], heat_cfg: &HeatConfig) {
+-	let now = SystemTime::now();
++	// Order remains monotonic even when the host clock moves backwards.
++	let last = g
++		.memories
++		.values()
++		.flat_map(|m| m.entities.values())
++		.filter_map(|e| e.accessed_at)
++		.max();
++	let now = last.map_or(SystemTime::now(), |last| {
++		SystemTime::now().max(last + Duration::from_nanos(1))
++	});
+ 	for id in ids {
+ 		let Some(memory_id) = g.memory_of_entity(id).map(str::to_string) else {
+ 			continue;
+diff --git a/src/rpc/src/server.rs b/src/rpc/src/server.rs
+index 20d3c90..99bc2ef 100644
+--- a/src/rpc/src/server.rs
++++ b/src/rpc/src/server.rs
+@@ -337,7 +337,8 @@ impl Server {
+ 			// QBST recency half-life — the 24h ranking-freshness signal, the
+ 			// second of the two freshness signals (the heat half-life above is
+ 			// the first). Daemon-sourced.
+-			"qbst_recency_half_life_secs": self.cfg.retrieval.qbst_recency_half_life_secs,
++			"qbst_recency_half_life_secs": 0,
++			"qbst_recency_half_life_accesses": self.cfg.retrieval.qbst_recency_half_life_accesses,
+ 			// Active RRF config + mode blends. Preset-owned; surfaced
+ 			// daemon-sourced so an operator sees which preset's retrieval runs.
+ 			"retrieval": {
+diff --git a/src/store/core/Cargo.toml b/src/store/core/Cargo.toml
+index 4f1232b..4e4271b 100644
+--- a/src/store/core/Cargo.toml
++++ b/src/store/core/Cargo.toml
+@@ -14,6 +14,7 @@ util = { path = "../../util" }
+ # env/read-txn snapshot semantics changed. Bumping needs a store-layer pass.
+ heed = "0.20"
+ serde.workspace = true
++serde_json.workspace = true
+ bincode.workspace = true
+ tracing.workspace = true
+ thiserror.workspace = true
+diff --git a/src/store/core/src/cold.rs b/src/store/core/src/cold.rs
+index ecafeb8..ee35434 100644
+--- a/src/store/core/src/cold.rs
++++ b/src/store/core/src/cold.rs
+@@ -468,3 +468,188 @@ impl Store {
+ #[cfg(test)]
+ #[path = "../../../../.cartridge/tests/unit/src/store/core/src/cold/memory_contract_tests.rs"]
+ mod memory_contract_tests;
++
++/// A graph projection of every persisted tier, including superseded records.
++/// Opens only an existing LMDB environment and never creates a database or
++/// acquires a write transaction. Safe to inspect a store owned by another daemon.
++pub fn read_graph(dir: &str, include_vectors: bool) -> Result<serde_json::Value, String> {
++	read_graph_view(dir, include_vectors, false, None, None)
++}
++
++pub fn read_graph_view(
++	dir: &str,
++	include_vectors: bool,
++	summary: bool,
++	node: Option<&str>,
++	group: Option<&str>,
++) -> Result<serde_json::Value, String> {
++	use heed::types::{Bytes, Str};
++	use serde_json::{json, Value};
++	let path = std::path::Path::new(dir);
++	if !path.join("data.mdb").is_file() {
++		return Err(format!("no memory database at {dir}"));
++	}
++	// SAFETY: LMDB coordinates readers with its existing writer through the
++	// shared lock file. READ_ONLY forbids writes to the data map. The caller must
++	// retain the memory-owned file; this function never truncates or replaces it.
++	let env = unsafe {
++		heed::EnvOpenOptions::new()
++			.max_dbs(32)
++			.flags(heed::EnvFlags::READ_ONLY)
++			.open(path)
++	}
++	.map_err(|e| e.to_string())?;
++	let txn = env.read_txn().map_err(|e| e.to_string())?;
++	let memory = env
++		.open_database::<Str, Bytes>(&txn, Some(crate::MEMORY_DB))
++		.map_err(|e| e.to_string())?;
++	let memory = memory.or(
++		env
++			.open_database::<Str, Bytes>(&txn, Some("kern"))
++			.map_err(|e| e.to_string())?,
++	);
++	let memory = match memory {
++		Some(db) => db,
++		None => {
++			let names = env
++				.open_database::<Str, Bytes>(&txn, None)
++				.map_err(|e| e.to_string())?
++				.map(|db| {
++					db.iter(&txn).map(|rows| {
++						rows
++							.filter_map(|r| r.ok().map(|(key, _)| key.to_string()))
++							.collect::<Vec<_>>()
++					})
++				})
++				.transpose()
++				.map_err(|e| e.to_string())?
++				.unwrap_or_default();
++			return Err(format!(
++				"unrecognized memory store tables: {}",
++				names.join(", ")
++			));
++		}
++	};
++	let mut nodes = Vec::new();
++	let mut edges = Vec::new();
++	let mut groups = Vec::new();
++	let entity = |mut e: Entity,
++	              cold: bool,
++	              group: &str,
++	              dimensions: Option<usize>|
++	 -> Result<Value, String> {
++		let dimensions = dimensions.unwrap_or(e.vector.len());
++		let gnn_dimensions = e.gnn_vector.len();
++		let text = e.text();
++		let confidence = e.conf_mean();
++		let access_count = e.access_count.value_i32();
++		let kind = e.kind.as_str();
++		if summary {
++			return Ok(
++				json!({"id":e.id,"kind_label":kind,"text":text.chars().take(360).collect::<String>(),"text_bytes":text.len(),"score":e.score,"conf":confidence,"access_total":access_count,"accessed_at":e.accessed_at,"source":e.source,"memory":group,"cold":cold,"created_at":e.created_at,"status":e.status,"vector_dimensions":dimensions}),
++			);
++		}
++		let temporal =
++			json!({"valid_from":e.valid_from,"valid_to":e.valid_to,"invalidated_at":e.invalidated_at});
++		if !include_vectors {
++			e.vector = Default::default();
++			e.gnn_vector = Default::default();
++		}
++		let mut value = serde_json::to_value(&e).map_err(|e| e.to_string())?;
++		value["text"] = json!(text);
++		value["conf"] = json!(confidence);
++		value["kind_label"] = json!(kind);
++		value["access_total"] = json!(access_count);
++		value["memory"] = json!(group);
++		value["cold"] = json!(cold);
++		value["temporal"] = temporal;
++		value["vector_dimensions"] = json!(dimensions);
++		value["gnn_dimensions"] = json!(gnn_dimensions);
++		if !include_vectors {
++			value.as_object_mut().unwrap().remove("vector");
++			value.as_object_mut().unwrap().remove("gnn_vector");
++		}
++		Ok(value)
++	};
++	for item in memory.iter(&txn).map_err(|e| e.to_string())? {
++		let (key, bytes) = item.map_err(|e| e.to_string())?;
++		if group.is_some_and(|group| group != key) {
++			continue;
++		}
++		let mut row = crate::decode_memory_row(bytes)
++			.map_err(|e| e.to_string())?
++			.stored
++			.into_memory();
++		for (_, e) in std::mem::take(&mut row.entities) {
++			if node.is_none_or(|id| e.id == id) {
++				nodes.push(entity(e, false, &row.id, None)?);
++			}
++		}
++		for (_, mut edge) in std::mem::take(&mut row.reasons) {
++			if node.is_some_and(|id| edge.from != id && edge.to != id) {
++				continue;
++			}
++			if summary {
++				edges.push(json!({"id":edge.id,"from":edge.from,"to":edge.to,"to_memory_id":edge.to_memory_id,"kind_code":edge.kind as i32,"score":edge.score,"memory":row.id}));
++				continue;
++			}
++			let dimensions = edge.vector.len();
++			let kind = edge.kind as i32;
++			if !include_vectors {
++				edge.vector = Default::default();
++			}
++			let mut value = serde_json::to_value(&edge).map_err(|e| e.to_string())?;
++			value["kind_code"] = json!(kind);
++			value["vector_dimensions"] = json!(dimensions);
++			if !include_vectors {
++				value.as_object_mut().unwrap().remove("vector");
++			}
++			edges.push(value);
++		}
++		if summary || node.is_some() {
++			groups.push(json!({"id":row.id,"root_id":row.root_id,"focus_text":row.focus_text,"parent":row.parent,"children":row.children,"refs":row.refs,"claim_kinds":row.claim_kinds,"claim_kind_parents":row.claim_kind_parents,"mass":row.mass}));
++			continue;
++		}
++		if !include_vectors {
++			row.focus_vec.clear();
++			row.gnn_weights.clear();
++		}
++		groups.push(serde_json::to_value(row).map_err(|e| e.to_string())?);
++	}
++	if group.is_none() || group == Some("cold") {
++		if let Some(cold) = env
++			.open_database::<Str, Bytes>(&txn, Some(crate::COLD_DB))
++			.map_err(|e| e.to_string())?
++		{
++			let vectors = env
++				.open_database::<Str, Bytes>(&txn, Some(crate::COLD_VEC_DB))
++				.map_err(|e| e.to_string())?;
++			for item in cold.iter(&txn).map_err(|e| e.to_string())? {
++				let (id, bytes) = item.map_err(|e| e.to_string())?;
++				if node.is_some_and(|node| node != id) {
++					continue;
++				}
++				let row = decode_cold(bytes).map_err(|e| e.to_string())?;
++				let raw = match vectors {
++					Some(db) => db.get(&txn, id).map_err(|e| e.to_string())?,
++					None => None,
++				};
++				let dimensions = raw.map_or(0, |v| v.len() / 4);
++				let vector = if include_vectors {
++					raw.map(decode_vec).unwrap_or_default()
++				} else {
++					Default::default()
++				};
++				nodes.push(entity(
++					row.into_entity(vector),
++					true,
++					"cold",
++					Some(dimensions),
++				)?);
++			}
++		}
++	}
++	Ok(
++		json!({"schema":"memory.graph.v1","store":dir,"nodes":nodes,"edges":edges,"groups":groups,"vectors_included":include_vectors}),
++	)
++}
+diff --git a/src/store/core/src/lib.rs b/src/store/core/src/lib.rs
+index e7dac53..3c1b254 100644
+--- a/src/store/core/src/lib.rs
++++ b/src/store/core/src/lib.rs
+@@ -83,7 +83,7 @@ pub enum StoreError {
+ mod cold;
+ mod legacy;
+ 
+-pub use cold::ColdRow;
++pub use cold::{read_graph, read_graph_view, ColdRow};
+ 
+ /// Portable contents of both storage tiers, read at one transaction boundary.
+ pub struct Snapshot {
+diff --git a/src/transport/src/memory_rpc.rs b/src/transport/src/memory_rpc.rs
+index 2749f09..0dd0446 100644
+--- a/src/transport/src/memory_rpc.rs
++++ b/src/transport/src/memory_rpc.rs
+@@ -262,6 +262,9 @@ pub struct HealthRes {
+ 	// the 24h ranking-freshness signal). 0 from older daemons (open-work item 9).
+ 	#[serde(default)]
+ 	pub qbst_recency_half_life_secs: u64,
++	/// Access-order recency; zero identifies a legacy time-based daemon.
++	#[serde(default)]
++	pub qbst_recency_half_life_accesses: u64,
+ 	// Active RRF config + mode blends (change `git log --grep='item 66'` measurement half).
+ 	// Zeroed from older daemons.
+ 	#[serde(default)]

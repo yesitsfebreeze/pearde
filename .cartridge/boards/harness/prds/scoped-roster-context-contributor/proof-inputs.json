@@ -1,0 +1,177 @@
+{
+  "source_revision": "698a4dc9555a6b3ad8d46dcc5dd3a14463048e70",
+  "source_owner": "/Users/feb/dev/cartridge/harness.ctg",
+  "source_files": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "9703cc5fdb70f80262adc1ade4beca0ea7f1df1364c9466295eccb09ef3311d4"
+    },
+    {
+      "path": "src/main.rs",
+      "sha256": "76d5e2d308917583fd76c08b45f6f2b233748705e6bc679f619afa0cc865f541"
+    },
+    {
+      "path": "src/inspection.rs",
+      "sha256": "c6ac10ea7bc40829210dbd8c780484ae8de3d7621df68c762f98cb7d9bb80f5d"
+    },
+    {
+      "path": "src/roster.rs",
+      "sha256": "479694e130faa723ffdc7ff832814574b70c279d53b1e5987be55ca11e0cad69"
+    },
+    {
+      "path": ".cartridge/tests/unit/main/tests.rs",
+      "sha256": "f7f9f5764d866fed18439596e5c2b19f84336bc03cac24496fea19ea64503f02"
+    },
+    {
+      "path": ".cartridge/tests/unit/inspection_tests.rs",
+      "sha256": "d998ce2fc926c764218e907e6bbeed375c35e40b24f5be147912d742be6e9f06"
+    },
+    {
+      "path": ".cartridge/tests/unit/accounting.rs",
+      "sha256": "05cfc09928a172a28943cbed06bd142ac88660691ce6ecd6e565986c6a82e3ec"
+    },
+    {
+      "path": ".cartridge/tests/unit/working_tests.rs",
+      "sha256": "7141c61d5dd4b81624ffaf252efeaa5a1ca1dec37d5353282aec6caa81de9e9f"
+    },
+    {
+      "path": ".cartridge/tests/unit/roster_tests.rs",
+      "sha256": "3e6ecd9b475afbee76a5e284dd728a055e8aae4de03445035d6dad38e866334c"
+    },
+    {
+      "path": ".cartridge/tests/integration/roster.test.ts",
+      "sha256": "130a4f9dbb55965193530dcd93ed07bcf48510e89988808378d7072a50aff160"
+    },
+    {
+      "path": ".cartridge/tests/integration/working.rs",
+      "sha256": "505e0f9b22e2a0c539e3833df54f6eddbb727ecc1b89cbfa6492053c6ce5e19d"
+    },
+    {
+      "path": ".cartridge/docs/roster.md",
+      "sha256": "60a4c14f1c9588a25bd90d260f986f15ad3548060d85c07939352d6efa9f6dd0"
+    }
+  ],
+  "source_clean": true,
+  "source_commit_matches_captured_files": true,
+  "tree_equals_reconciled_candidate": "d3a4187bf946e02a4806082994e0aac662c1d0c3",
+  "preserved_original_commit": "e9d8612",
+  "feature_commit": "df93d5bbc036aee0ac2a08beecb9b18a85fa3835",
+  "proof_receipt": "integration/cartridge-roster-verification-6s1Oup.json",
+  "proof_receipt_sha256": "a12aa607c074ab561e33c4d4dffaf8c4160729da8ccb3a484d589f899c4509c8",
+  "snapshot_identity": "3cf229245d5d760343f596f68b8d9c5ad4fb5e145e61177d71eebb40968d10f2",
+  "verifier_sha256": "eb29f608b6f591ee7029d0e52664f119912c9186ec1519261ea22092d6f2978c",
+  "verification_command": "bun /Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/harness/prds/scoped-roster-context-contributor/verify-isolated.ts --committed \"$PWD\" --sessions-revision a306370f10b78d94365b7832ce22ce8d10c09487",
+  "verification_cwd": "/Users/feb/dev/cartridge/harness.ctg",
+  "build_environment": {
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "RUSTC_WRAPPER": "",
+    "RUSTC_WORKSPACE_WRAPPER": "",
+    "CARGO_TARGET_DIR": "/Users/feb/dev/cartridge/cartridge.ctg/target/roster-proof"
+  },
+  "commands": [
+    {
+      "command": [
+        "just",
+        "test",
+        "harness"
+      ],
+      "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-6s1Oup/cartridge.ctg",
+      "exit": 0
+    },
+    {
+      "command": [
+        "just",
+        "check",
+        "harness"
+      ],
+      "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-6s1Oup/cartridge.ctg",
+      "exit": 0
+    },
+    {
+      "command": [
+        "just",
+        "build",
+        "harness"
+      ],
+      "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-6s1Oup/cartridge.ctg",
+      "exit": 0
+    },
+    {
+      "command": [
+        "just",
+        "build",
+        "sessions"
+      ],
+      "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-6s1Oup/cartridge.ctg",
+      "exit": 0
+    },
+    {
+      "command": [
+        "bun",
+        "test",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-6s1Oup/harness.ctg/.cartridge/tests/integration/roster.test.ts"
+      ],
+      "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-6s1Oup/cartridge.ctg",
+      "exit": 0
+    }
+  ],
+  "results": {
+    "public_tests": {
+      "unit": 38,
+      "process": 4,
+      "ring": 1,
+      "working": 1,
+      "total": 44
+    },
+    "check_harness": "passed",
+    "build_harness": "passed",
+    "build_sessions": "passed",
+    "actual_sdk_tests": 5,
+    "actual_sdk_assertions": 295
+  },
+  "binary_inputs": {
+    "harness": "63231c0b84341eeb40784e576afa13239fad25817d550a61e998ab6ea2d1738b",
+    "sessions": "4ad58881188a9467236495f5ddcdd6ed4501392b191601af57a7075d8d113518"
+  },
+  "external_revisions": {
+    "cartridge.ctg": "1a5e9867acec1d07cd732c3af2ccf331a0979a61",
+    "docs.ctg": "06084126c42b93ca570b3526e35573bd04ec859d",
+    "agent.ctg": "a09b593a11ed1e027c823bb632838cc92a09e2eb",
+    "fs.ctg": "d4a4239ccce02bc0e647e9ad80892995f48b317f",
+    "gitfs.ctg": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+    "harness.ctg": "698a4dc9555a6b3ad8d46dcc5dd3a14463048e70",
+    "landscape.ctg": "62185289d148017c74986b618456a72bab620228",
+    "mcp.ctg": "f5a740517bc2668b50cf4f61fe81a1e37bb4cfad",
+    "memo.ctg": "1ffca32db1d06364b3e35e6cbca4881a1f814f71",
+    "memory-tool.ctg": "2c490a9c6dd3d6fe5ab187ab5f74e541b8c35d16",
+    "proxy.ctg": "9ddcc08807a059579c21227ad9d3523d242ddf86",
+    "pty.ctg": "7c1af4ace396c931334bb58aa2150e14b6ceeb67",
+    "router.ctg": "4ad9cd35dc862ecfe0786612d39913612d93fc45",
+    "sessions.ctg": "a306370f10b78d94365b7832ce22ce8d10c09487",
+    "tools.ctg": "62546896b771dcba67211ea1ac73fc29a7aa44dd"
+  },
+  "pinned_revisions": {
+    "sessions.ctg": "a306370f10b78d94365b7832ce22ce8d10c09487"
+  },
+  "review": {
+    "round": 3,
+    "reviewer": "/root",
+    "score": 95,
+    "status": "passed",
+    "semantic_acceptance_changes": false
+  },
+  "final_plan_digests": {
+    "prd.md": "50c6ca63f9aaec1b4615099151926ce80db4a638e0219772396110e62d04e001",
+    "specs/spec01.md": "1c1a339c6df89b785e151bddf7a310a0a41c3e26ea242957d0b574d5adb75a7b"
+  },
+  "integration": "Completed without conflicts after original dirty hashes verified and exact original edits committed; entire final tree matches reviewed/tested coherent candidate. Shared lifecycle/receipt collection remains coordinator-owned.",
+  "proof_refinements": [
+    "integrated-proof-refinement.json",
+    "sessions-pin-proposal.json"
+  ],
+  "excluded_development_receipts": [
+    "integration/cartridge-roster-verification-I402H7.json"
+  ]
+}

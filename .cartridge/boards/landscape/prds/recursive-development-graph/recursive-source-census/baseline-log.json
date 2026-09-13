@@ -1,0 +1,138 @@
+{
+  "source_heads": {
+    "landscape.ctg": "62185289d148017c74986b618456a72bab620228",
+    "memo.ctg": "1ffca32db1d06364b3e35e6cbca4881a1f814f71",
+    "prd.ctg": "d9c79a00b3d07f3f704427fc55a62657fa00202b"
+  },
+  "board_three_levels": {
+    "command": [
+      "bun",
+      "/tmp/recursive-census-baseline/board-probe.ts",
+      "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-census-fixture-blql54_m/root"
+    ],
+    "exit": 0,
+    "output": {
+      "ok": true,
+      "records": [
+        {
+          "ref": "same",
+          "title": "ROOTAMBER",
+          "file": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-census-fixture-blql54_m/root/prds/same/prd.md"
+        },
+        {
+          "ref": "@base/same",
+          "title": "BASEBERYL",
+          "file": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-census-fixture-blql54_m/base/prds/same/prd.md"
+        },
+        {
+          "ref": "@base/plugin/same",
+          "title": "PLUGINCOBALT",
+          "file": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-census-fixture-blql54_m/plugin/prds/same/prd.md"
+        }
+      ]
+    }
+  },
+  "landscape_surface": {
+    "command": [
+      "cargo",
+      "run",
+      "--quiet",
+      "--manifest-path",
+      "/tmp/recursive-census-baseline/Cargo.toml",
+      "--",
+      "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-census-fixture-blql54_m/root"
+    ],
+    "exit": 0,
+    "output": {
+      "base_hits": [],
+      "nodes": [
+        {
+          "description": "ROOTAMBER",
+          "key": "@root/same",
+          "kind": "memo",
+          "name": "same",
+          "tags": [],
+          "when": []
+        },
+        {
+          "description": "Active",
+          "key": "root",
+          "kind": "cartridge",
+          "name": "root",
+          "tags": [],
+          "when": []
+        }
+      ],
+      "plugin_hits": [],
+      "provided_entry_count": 1,
+      "provided_memo_count": 1,
+      "root_hits": [
+        {
+          "node": {
+            "description": "ROOTAMBER",
+            "key": "@root/same",
+            "kind": "memo",
+            "name": "same",
+            "tags": [],
+            "when": []
+          },
+          "score": 1.0,
+          "uses": 0,
+          "why": "description: rootamber"
+        }
+      ]
+    }
+  },
+  "backlink": {
+    "command": [
+      "bun",
+      "/tmp/recursive-census-baseline/board-probe.ts",
+      "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-census-fixture-blql54_m/root"
+    ],
+    "exit": 0,
+    "output": {
+      "ok": false,
+      "error": "Error: member board cycle at /private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-census-fixture-blql54_m/root"
+    }
+  },
+  "repeated_mount": {
+    "command": [
+      "bun",
+      "/tmp/recursive-census-baseline/board-probe.ts",
+      "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-census-fixture-blql54_m/root"
+    ],
+    "exit": 0,
+    "output": {
+      "ok": true,
+      "records": [
+        {
+          "ref": "same",
+          "title": "ROOTAMBER",
+          "file": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-census-fixture-blql54_m/root/prds/same/prd.md"
+        },
+        {
+          "ref": "@base/same",
+          "title": "BASEBERYL",
+          "file": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-census-fixture-blql54_m/base/prds/same/prd.md"
+        },
+        {
+          "ref": "@base/plugin/same",
+          "title": "PLUGINCOBALT",
+          "file": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-census-fixture-blql54_m/plugin/prds/same/prd.md"
+        }
+      ]
+    }
+  },
+  "deleted_descendant": {
+    "command": [
+      "bun",
+      "/tmp/recursive-census-baseline/board-probe.ts",
+      "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-census-fixture-blql54_m/root"
+    ],
+    "exit": 0,
+    "output": {
+      "ok": false,
+      "error": "Error: no planning board at /private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/recursive-census-fixture-blql54_m/plugin"
+    }
+  }
+}

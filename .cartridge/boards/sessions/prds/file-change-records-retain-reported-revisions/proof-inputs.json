@@ -1,0 +1,111 @@
+{
+  "source": "191e2b6cb4291bdcce7a894f98bb2d475361d30f",
+  "recorded_at": "2026-09-13T19:14:39.985944+00:00",
+  "source_clean": true,
+  "review": {
+    "reviewer": "/root",
+    "round": 3,
+    "score": 96,
+    "implementation_review": "/root inspected shared DTO/storage/main integration and reported no blocker"
+  },
+  "spec_sha256": "7d0403c1823ba82837ddae2bffc6a8eb6337ff408250e909d9f00984ad707a84",
+  "footprint": [
+    {
+      "path": ".cartridge/docs/change-records.md",
+      "sha256": "d97571b03407d62b9c3fb1d5a59c3e028f5e90f3551868fb50b2b84dcf688555"
+    },
+    {
+      "path": ".cartridge/tests/integration/change-records.test.ts",
+      "sha256": "56611256a47d763dd4ebe014e7b82f122888a483009f182c33df4812a8eaee42"
+    },
+    {
+      "path": ".cartridge/tests/unit/main/change_records_tests.rs",
+      "sha256": "76c4205501207301335d394b592852abb6ee33a6d4ff1c4c02c674d49c4eed3c"
+    },
+    {
+      "path": "Cargo.toml",
+      "sha256": "35e12f2d7bfa6161f9beb75a5302988b69e29f72119803cecdc586aa7305c8ad"
+    },
+    {
+      "path": "src/change_record.rs",
+      "sha256": "4a22e6869f4f111f51cd578238bad9f5edac584ced4ae3a9cf81d7ff4c3477da"
+    },
+    {
+      "path": "src/changes.rs",
+      "sha256": "ae4220f44a013663b29f93097028634a403bdaeb988b23cf0ef781ef75c257de"
+    },
+    {
+      "path": "src/lib.rs",
+      "sha256": "e7e7ac5dd3a3e0f6b151846ac88370bdcb07faeb417507c9367d759838e5daeb"
+    },
+    {
+      "path": "src/main.rs",
+      "sha256": "1beedc1ae44b363230942a22dcdcd36650bd899a39de6cda9f224e4ebc734de3"
+    }
+  ],
+  "gates": [
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract just test sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "exit": 0,
+      "result": "89 passed",
+      "log": "/tmp/sessions-change-records-public-test.log",
+      "sha256": "2cb8273e37ea7a073b711758320471bc04cff2f8dc7ef4314a753f7b6b47400e"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract just check sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "exit": 0,
+      "result": "passed",
+      "log": "/tmp/sessions-change-records-public-check.log",
+      "sha256": "f3e347907a445b076a53b7bbb3df3c84231b021ab0a3c2b2ec399ad30454dc2d"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract just build sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "exit": 0,
+      "result": "passed",
+      "log": "/tmp/sessions-change-records-build.log",
+      "sha256": "1072a05ac7ecf47a70f2c98761b0c6886f01d89d586af7804d7152978c1fc91e"
+    },
+    {
+      "command": "CARTRIDGE_TEST_BIN=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/cartridge HARNESS_BINARY=/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/harness-698a4dc-proof-0wgwxdd4/harness SESSIONS_BINARY=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/sessions bun test ./.cartridge/tests/integration/change-records.test.ts ./.cartridge/tests/integration/channel-cursors.test.ts ./.cartridge/tests/integration/channels.test.ts ./.cartridge/tests/integration/roster.test.ts ./.cartridge/tests/integration/mailbox.test.ts ./.cartridge/tests/integration/observations.test.ts ./.cartridge/tests/integration/retention.test.ts ./.cartridge/tests/integration/mapping.test.ts",
+      "cwd": "/Users/feb/dev/cartridge/sessions.ctg",
+      "exit": 0,
+      "result": "26 passed, 703 assertions; new recorder4/92 and prior compatibility22/611",
+      "log": "/tmp/sessions-change-records-final-native.log",
+      "sha256": "a06f076890afaec0917b41aebcb8fe1e95019e745e024786a1adca58286e97a1"
+    }
+  ],
+  "binaries": {
+    "sessions": {
+      "sha256": "dfb46cff10f156771a1340023f3fd3fd61c02ece619a32d6695eba4dedd4baf6",
+      "source": "191e2b6cb4291bdcce7a894f98bb2d475361d30f"
+    },
+    "runtime": {
+      "sha256": "3c107ead7a60caa07a7aa295cb46c7b2a0663a17ca7aa11fc11b45076b9b08c8",
+      "note": "coordinator-provided current runtime binary; exact binary identity pinned, no claim of rebuilt current dirty runtime sources"
+    },
+    "harness": {
+      "sha256": "63231c0b84341eeb40784e576afa13239fad25817d550a61e998ab6ea2d1738b",
+      "source": "698a4dc9555a6b3ad8d46dcc5dd3a14463048e70",
+      "origin": "sessions_mapping frozen final actual-owner build"
+    }
+  },
+  "resolved_failures": [
+    "Initial strict nested test exposed Serde internally tagged unit variant accepting unknown fields; Absent is now an empty struct variant, explicit unit/native rejection passed.",
+    "Initial optional compatibility invocation omitted required runtime/Harness binary environment; rerun all eight native suites with source-bound inputs passed26/703.",
+    "Public check unused-unit lint corrected; final check passed."
+  ],
+  "limitations": [
+    "Provider-reported invocation coordinates are not authenticated identity, authorization, or ownership.",
+    "Filesystem/overlay publication and Sessions append remain separate; producer failures can leave unknown recording.",
+    "512 records/1MiB per-session retained log; no eviction. Older writers must not mutate upgraded snapshots.",
+    "Existing single-active-writer and legacy whole-snapshot initial allocation behavior remains."
+  ],
+  "coordinator_actions": [
+    "Collect this source and refresh earlier Sessions src/main.rs receipts (mapping, retention, programme, mailbox/channels/cursors/roster/observations as footprint requires).",
+    "Retain direct getrandom0.4.3 shared Cargo.lock edge under runtime grant leaf.",
+    "Release FS/GitFS producer source only after recorder collection."
+  ]
+}

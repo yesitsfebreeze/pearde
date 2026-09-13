@@ -1,0 +1,1554 @@
+cargo nextest run --workspace
+   Compiling transport v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/transport)
+   Compiling store_core v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/store/core)
+   Compiling hub v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/hub)
+   Compiling graph v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/graph)
+   Compiling retrieval-piece v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/retrieval/piece)
+   Compiling ingest v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/ingest)
+   Compiling tick v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/tick)
+   Compiling bootstrap v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/bootstrap)
+   Compiling retrieval v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/retrieval)
+   Compiling tick_loop v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/tick/loop)
+   Compiling store v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/store)
+   Compiling memory-bench v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/.cartridge/tests/integration/bench)
+   Compiling health v0.1.0 (/private/tmp/memory-owned-integration/memory.ctg/src/health)
+   Compiling rpc v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/rpc)
+   Compiling commands v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/commands)
+   Compiling memory v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg)
+    Finished `test` profile [unoptimized] target(s) in 33.74s
+────────────
+ Nextest run ID 142dfafe-30b6-4f3d-9464-1d0107fe52ee with nextest profile: default
+    Starting 1366 tests across 57 binaries (17 tests skipped)
+        PASS [   0.013s] (   1/1366) base base_retention::base_retention_tests::a_superseded_fact_is_forgettable_without_force
+        PASS [   0.015s] (   2/1366) base base_retention::base_retention_tests::the_table_is_what_the_doc_says_it_is
+        PASS [   0.016s] (   3/1366) base base_retention::base_retention_tests::the_refusal_carries_the_wire_text_callers_already_print
+        PASS [   0.016s] (   4/1366) base base_retention::base_retention_tests::the_tick_is_the_stricter_authority_on_documents
+        PASS [   0.017s] (   5/1366) config config::config_tests::tests::a_real_memory_toml_can_set_per_source_retention
+        PASS [   0.017s] (   6/1366) base base_retention::base_retention_tests::authority_is_monotone_over_every_entity_the_table_can_describe
+        PASS [   0.018s] (   7/1366) ingest ingest_file_watcher::ingest_file_watcher_tests::tests::a_rename_with_no_old_entity_is_a_noop
+        PASS [   0.018s] (   8/1366) ingest ingest_file_watcher::ingest_file_watcher_tests::tests::a_pure_rename_supersedes_the_old_path_and_moves_the_source_index
+        PASS [   0.019s] (   9/1366) config config::config_tests::ingest_run_config_tests::the_mapping_carries_the_resolved_retention_deadline
+        PASS [   0.019s] (  10/1366) ingest ingest_file_watcher::ingest_file_watcher_tests::tests::sink_ingest_produces_file_document
+        PASS [   0.021s] (  11/1366) ingest ingest_file_watcher::ingest_file_watcher_tests::tests::duplicate_ingest_is_idempotent
+        PASS [   0.021s] (  12/1366) ingest ingest_file_watcher::ingest_file_watcher_tests::tests::a_rename_plus_edit_supersedes_the_old_path_document
+        PASS [   0.017s] (  13/1366) ingest ingest_file_watcher::ingest_file_watcher_tests::tests::strip_file_uri_handles_windows_and_posix
+        PASS [   0.013s] (  14/1366) ingest ingest_file_watcher::truthful_placement_probe::probe::the_embed_stub_varies_with_its_input
+        PASS [   0.041s] (  15/1366) ingest ingest_file_watcher::ingest_file_watcher_tests::tests::a_watched_file_is_parked_on_disk_and_drains_back_as_a_file_not_an_agent
+        PASS [   0.012s] (  16/1366) ingest ingest_file_watcher::truthful_placement_probe::probe_rest::the_second_offer_of_unchanged_bytes_is_deduped_with_zero_embedded_chunks
+        PASS [   0.055s] (  17/1366) ingest ingest_file_watcher::ingest_file_watcher_tests::tests::an_unwritable_queue_falls_through_to_the_queue_instead_of_dropping_the_file
+        PASS [   0.058s] (  18/1366) ingest ingest_file_watcher::ingest_file_watcher_tests::tests::a_watched_file_is_capped_below_a_deliberate_agent_assertion
+        PASS [   0.049s] (  19/1366) ingest ingest_file_watcher::ingest_file_watcher_tests::tests::the_sink_stamps_the_configured_retention_on_what_it_ingests
+        PASS [   0.008s] (  20/1366) ingest ingest_place::ingest_place_tests::tests::dedup_without_retention_leaves_the_survivor_deadline_alone
+        PASS [   0.010s] (  21/1366) ingest ingest_place::ingest_place_tests::tests::a_configured_retention_stamps_valid_until_on_every_placed_entity
+        PASS [   0.008s] (  22/1366) ingest ingest_place::ingest_place_tests::tests::no_retention_leaves_valid_until_unset
+        PASS [   0.007s] (  23/1366) ingest_config ingest_config::ingest_config_tests::tests::retention_that_overflows_the_clock_is_rejected_loudly
+        PASS [   0.007s] (  24/1366) ingest_config ingest_config::ingest_config_tests::tests::omitted_retention_leaves_no_deadline
+        PASS [   0.009s] (  25/1366) ingest_config ingest_config::ingest_config_tests::tests::retention_becomes_an_absolute_deadline_one_hour_out
+        PASS [   0.007s] (  26/1366) ingest_config ingest_config::ingest_config_tests::tests::with_retention_carries_a_standing_policy_onto_the_config
+        PASS [   0.176s] (  27/1366) ingest ingest_file_watcher::ingest_file_watcher_tests::tests::the_sink_waits_for_queue_capacity_rather_than_losing_the_file
+        PASS [   0.192s] (  28/1366) ingest ingest_file_watcher::ingest_file_watcher_tests::tests::document_kinds_are_retrievable_metadata_without_configuration_side_effects
+        PASS [   0.007s] (  29/1366) memory::e2e gnn_recall::the_log_parser_reads_a_coloured_nodes_field
+        PASS [   0.193s] (  30/1366) ingest ingest_file_watcher::ingest_file_watcher_tests::tests::watcher_pipeline_creates_document_for_new_file
+        PASS [   0.302s] (  31/1366) ingest ingest_file_watcher::truthful_placement_probe::probe::a_replaces_the_graph_cannot_resolve_is_counted
+        PASS [   0.553s] (  32/1366) ingest ingest_file_watcher::truthful_placement_probe::probe::an_unchanged_rescan_spends_no_embed_call_and_moves_no_confidence
+        PASS [   0.724s] (  33/1366) ingest ingest_file_watcher::truthful_placement_probe::probe_rest::a_delete_for_a_path_nothing_ingested_retires_nothing_and_does_not_panic
+        PASS [   0.801s] (  34/1366) ingest ingest_file_watcher::truthful_placement_probe::probe::a_deleted_file_tombstones_its_document_and_every_chunk
+        PASS [   0.825s] (  35/1366) ingest ingest_file_watcher::truthful_placement_probe::probe_rest::a_file_whose_content_changed_still_embeds_on_the_second_offer
+        PASS [   0.925s] (  36/1366) ingest ingest_file_watcher::truthful_placement_probe::probe_rest::a_pure_rename_raises_no_unresolved_count_and_carries_the_new_path
+        PASS [   0.920s] (  37/1366) ingest ingest_file_watcher::truthful_placement_probe::probe_rest::a_rename_plus_edit_raises_no_unresolved_count_and_supersedes_the_old_path
+        PASS [   0.008s] (  38/1366) audit hygiene_tests::tests::density_is_what_decides_not_the_presence_of_one_slot
+        PASS [   0.007s] (  39/1366) audit hygiene_tests::tests::empty_content_scores_one
+        PASS [   0.007s] (  40/1366) audit hygiene_tests::tests::gate_mode_parses_exactly_three_values
+        PASS [   0.010s] (  41/1366) audit hygiene_tests::tests::filling_the_ledger_row_in_makes_it_content
+        PASS [   0.006s] (  42/1366) audit hygiene_tests::tests::gate_off_allows_everything
+        PASS [   0.032s] (  43/1366) audit hygiene_tests::tests::gate_strict_rejects_secrets_and_noise
+        PASS [   0.030s] (  44/1366) audit hygiene_tests::tests::gate_warn_carries_the_classification_but_allows
+        PASS [   0.032s] (  45/1366) audit hygiene_tests::tests::low_confidence_is_a_weak_signal
+        PASS [   0.030s] (  46/1366) audit hygiene_tests::tests::operator_patterns_reject
+        PASS [   0.009s] (  47/1366) audit hygiene_tests::tests::real_prose_that_merely_looks_like_a_placeholder_passes
+        PASS [   1.027s] (  48/1366) ingest ingest_file_watcher::truthful_placement_probe::probe_rest::a_delete_queued_behind_an_edit_of_the_same_file_lands_after_it
+        PASS [   1.017s] (  49/1366) ingest ingest_file_watcher::truthful_placement_probe::probe_rest::a_tombstone_clears_every_index_and_writes_a_deleted_edge
+        PASS [   0.007s] (  50/1366) audit hygiene_tests::tests::suggested_action_ladder
+        PASS [   0.033s] (  51/1366) audit hygiene_tests::tests::scoring_is_max_not_additive
+        PASS [   0.010s] (  52/1366) audit hygiene_tests::tests::the_prevention_ledger_template_is_unresolved
+        PASS [   0.010s] (  53/1366) base base_types::base_types_tests::tests::conf_mean_and_variance_for_a_beta_prior
+        PASS [   0.037s] (  54/1366) audit hygiene_tests::tests::secrets_are_labelled_and_never_echoed
+        PASS [   0.008s] (  55/1366) base base_types::base_types_tests::tests::entity_kind_serde_roundtrip
+        PASS [   0.011s] (  56/1366) base base_types::base_types_tests::tests::conf_mean_and_variance_handle_a_zero_total_prior
+        PASS [   0.037s] (  57/1366) audit hygiene_tests::tests::terminal_output_and_stack_traces_score_high
+        PASS [   0.008s] (  58/1366) base base_types::base_types_tests::tests::entity_set_text_replaces_text_and_marks_dirty
+        PASS [   0.007s] (  59/1366) base base_types::base_types_tests::tests::file_commit_field_defaults_and_roundtrips
+        PASS [   0.008s] (  60/1366) base base_types::base_types_tests::tests::entity_status_default_is_active
+        PASS [   0.033s] (  61/1366) audit hygiene_tests::tests::value_keyword_clamps_score_down_but_not_over_secrets
+        PASS [   0.008s] (  62/1366) base base_types::base_types_tests::tests::memory_has_focus_requires_both_text_and_vector
+        PASS [   0.010s] (  63/1366) base base_types::base_types_tests::tests::memory_id_derivation_is_deterministic_and_input_sensitive
+        PASS [   0.010s] (  64/1366) base base_types::base_types_tests::tests::named_child_memory_id_pins_parent_name_nonce_composition
+        PASS [   0.009s] (  65/1366) base base_types::base_types_tests::tests::new_named_child_sets_focus_parent_and_root
+        PASS [   0.009s] (  66/1366) base base_types::base_types_tests::tests::observe_support_and_observe_contradict_stamp_updated_at
+        PASS [   0.008s] (  67/1366) base base_types::base_types_tests::tests::source_id_pins_null_delimited_composition
+        PASS [   0.009s] (  68/1366) base base_types::base_types_tests::tests::reason_set_text_replaces_text_and_marks_dirty
+        PASS [   0.008s] (  69/1366) base base_types::base_types_tests::tests::source_scheme_returns_correct_tag
+        PASS [   0.008s] (  70/1366) base base_types::base_types_tests::tests::the_memory_constructors_mint_from_the_nonce_and_read_no_clock
+        PASS [   0.008s] (  71/1366) base crdt::crdt_tests::tests::lww_wins_is_a_total_order_higher_lamport_then_producer
+        PASS [   0.009s] (  72/1366) base base_types::base_types_tests::tests::unnamed_memory_id_pins_parent_then_nonce_composition
+        PASS [   0.009s] (  73/1366) base crdt::crdt_tests::tests::lww_wins_is_irreflexive_so_redelivery_is_a_noop
+        PASS [   0.008s] (  74/1366) base crdt::crdt_tests::tests::lww_wins_matches_the_tuple_comparison_it_replaced
+        PASS [   0.008s] (  75/1366) base crdt::crdt_tests::tests::merge_is_commutative_and_order_independent
+        PASS [   0.009s] (  76/1366) base crdt::crdt_tests::tests::merge_is_idempotent
+        PASS [   0.007s] (  77/1366) base crdt::crdt_tests::tests::merge_is_per_slot_max
+        PASS [   0.008s] (  78/1366) commands commands_admin::commands_admin_tests::cmd_tests::a_refused_gnn_training_shows_with_no_other_counter_moving
+        PASS [   0.010s] (  79/1366) commands commands_admin::commands_admin_tests::cmd_tests::a_clean_daemon_prints_no_last_fault_lines
+        PASS [   0.015s] (  80/1366) commands cli_scope_tests::memory_commands_remain_and_harness_commands_are_rejected
+        PASS [   0.023s] (  81/1366) commands commands_admin::commands_admin_tests::cmd_tests::a_routed_claim_kind_add_lands_in_the_daemon_and_never_touches_the_store
+        PASS [   0.009s] (  82/1366) commands commands_admin::commands_admin_tests::cmd_tests::ready_says_no_daemon_rather_than_leaving_the_state_line_out
+        PASS [   0.007s] (  83/1366) commands commands_admin::commands_admin_tests::cmd_tests::ready_states_the_endpoints_even_when_nothing_has_failed
+        PASS [   0.039s] (  84/1366) commands commands_admin::commands_admin_tests::cmd_tests::cmd_health_runs_on_a_fresh_graph_without_panicking
+        PASS [   0.008s] (  85/1366) commands commands_admin::commands_admin_tests::cmd_tests::the_build_line_names_the_daemons_binary_and_calls_an_old_one_unstamped
+        PASS [   0.048s] (  86/1366) commands commands_admin::commands_admin_tests::cmd_tests::a_routed_focus_remove_lands_in_the_daemon_and_never_touches_the_store
+        PASS [   0.007s] (  87/1366) commands commands_admin::commands_admin_tests::cmd_tests::the_crossing_line_prints_the_count_against_the_worker_count
+        PASS [   0.053s] (  88/1366) commands commands_admin::commands_admin_tests::cmd_tests::claim_kind_add_then_remove_persists_through_the_graph
+        PASS [   0.008s] (  89/1366) commands commands_admin::commands_admin_tests::cmd_tests::the_embed_line_keeps_an_unreadable_stamp_apart_from_an_unstamped_store
+        PASS [   0.008s] (  90/1366) commands commands_admin::commands_admin_tests::cmd_tests::the_ingest_line_prints_the_daemons_depth_and_nothing_without_one
+        PASS [   0.009s] (  91/1366) commands commands_admin::commands_admin_tests::cmd_tests::the_llm_line_names_which_failure_it_counted
+        PASS [   0.009s] (  92/1366) commands commands_admin::commands_admin_tests::cmd_tests::tick_health_lines_report_both_degradation_counters
+        PASS [   0.009s] (  93/1366) commands commands_admin::commands_admin_tests::degradation_lines_tests::a_healthy_memory_prints_no_degraded_line_from_either_source
+        PASS [   0.010s] (  94/1366) commands commands_admin::commands_admin_tests::degradation_lines_tests::a_local_count_is_not_printed_over_a_serving_daemons
+        PASS [   0.009s] (  95/1366) commands commands_admin::commands_admin_tests::degradation_lines_tests::a_watchdog_restart_reaches_the_operator_and_stays_out_of_the_degraded_sum
+        PASS [   0.011s] (  96/1366) commands commands_admin::commands_admin_tests::degradation_lines_tests::a_serving_daemons_counts_win_over_this_processs_zeros
+        PASS [   0.010s] (  97/1366) commands commands_admin::commands_admin_tests::degradation_lines_tests::memory_health_prints_dedup_config
+        PASS [   0.010s] (  98/1366) commands commands_admin::commands_admin_tests::degradation_lines_tests::memory_health_prints_heat_half_life
+        PASS [   0.009s] (  99/1366) commands commands_admin::commands_admin_tests::degradation_lines_tests::memory_health_prints_preset
+        PASS [   0.009s] ( 100/1366) commands commands_admin::commands_admin_tests::degradation_lines_tests::memory_health_prints_source_trust
+        PASS [   0.010s] ( 101/1366) commands commands_admin::commands_admin_tests::degradation_lines_tests::memory_health_prints_retrieval_config
+        PASS [   0.009s] ( 102/1366) commands commands_admin::commands_admin_tests::degradation_lines_tests::memory_health_warns_when_resident_memories_approach_cap
+        PASS [   0.010s] ( 103/1366) commands commands_admin::commands_admin_tests::degradation_lines_tests::with_nothing_serving_the_local_counts_still_stand
+        PASS [   0.009s] ( 104/1366) commands commands_admin::commands_admin_tests::rekey_stop_tests::a_refused_or_clean_plan_stops_the_command_and_a_dirty_one_does_not
+        PASS [   0.320s] ( 105/1366) commands commands_admin::commands_admin_tests::hub_merge_tests::merge_refuses_identical_roots_and_missing_src
+        PASS [   0.313s] ( 106/1366) commands commands_admin::commands_admin_tests::rekey_tests::migrate_does_not_rekey_a_stale_identity_store
+        PASS [   0.695s] ( 107/1366) commands commands_admin::commands_admin_tests::rekey_tests::a_thought_findable_before_a_rekey_is_findable_after_it
+        PASS [   0.422s] ( 108/1366) commands commands_admin::commands_admin_tests::rekey_tests::rekey_dry_run_reports_the_plan_and_writes_nothing
+        PASS [   0.763s] ( 109/1366) commands commands_admin::commands_admin_tests::hub_merge_tests::merge_absorbs_src_entities_into_dst_and_leaves_src_alone
+        PASS [   0.625s] ( 110/1366) commands commands_admin::commands_admin_tests::rekey_tests::rekey_moves_every_stale_thought_its_refs_and_its_cold_rows
+        PASS [   0.269s] ( 111/1366) commands commands_admin::commands_admin_tests::rekey_tests::rekey_refuses_an_unrecognized_id_and_leaves_the_store_exactly_as_it_was
+        PASS [   0.505s] ( 112/1366) commands commands_admin::commands_admin_tests::rekey_tests::rekey_rehashes_a_reason_edge_whose_endpoint_moved
+        PASS [   0.474s] ( 113/1366) commands commands_admin::commands_admin_tests::rekey_tests::rekey_run_twice_has_nothing_to_do_the_second_time
+        PASS [   0.704s] ( 114/1366) commands commands_admin::commands_admin_tests::rekey_tests::rekey_refuses_while_the_writer_lock_is_held
+        PASS [   0.010s] ( 115/1366) commands commands_check::commands_check_tests::stale_identity_tests::check_escalates_to_error_when_the_pass_would_refuse
+        PASS [   0.008s] ( 116/1366) commands commands_check::commands_check_tests::stale_identity_tests::check_reports_a_stale_identity_store_and_names_the_command_that_fixes_it
+        PASS [   0.008s] ( 117/1366) commands commands_check::commands_check_tests::stale_identity_tests::check_says_nothing_about_identity_on_a_rekeyed_store
+        PASS [   0.010s] ( 118/1366) commands commands_check::commands_check_tests::tests::check_and_gc_agree_and_preserve_named_groups_and_populated_ancestry
+        PASS [   0.009s] ( 119/1366) commands commands_check::commands_check_tests::tests::check_finds_dangling_reasons_and_repair_executes_only_the_manifest
+        PASS [   0.008s] ( 120/1366) commands commands_check::commands_check_tests::tests::graph_findings_sees_the_graph_and_nothing_of_the_store
+        PASS [   0.250s] ( 121/1366) commands commands_admin::commands_admin_tests::rekey_tests::relocate_refuses_a_destination_that_is_not_there
+        PASS [   0.009s] ( 122/1366) commands commands_check::commands_check_tests::tests::repair_with_no_authorized_actions_repairs_nothing
+        PASS [   0.009s] ( 123/1366) commands commands_check::commands_check_tests::tests::repairs_preserve_content_and_names
+        PASS [   0.009s] ( 124/1366) commands commands_check::commands_check_tests::tests::semantic_repair_actions_are_rejected
+        PASS [   0.628s] ( 125/1366) commands commands_admin::commands_admin_tests::rekey_tests::relocate_moves_every_file_row_its_ref_and_its_cold_row_onto_the_new_root
+        PASS [   0.079s] ( 126/1366) commands commands_compress::writer_boundary_tests::writer_boundary_compress_reservation_race_publishes_once
+        PASS [   0.016s] ( 127/1366) commands commands_export::commands_export_tests::export_never_overwrites_an_existing_document
+        PASS [   0.012s] ( 128/1366) commands commands_export::commands_export_tests::previous_hot_only_export_is_still_readable
+        PASS [   0.011s] ( 129/1366) commands commands_export::commands_export_tests::tests::export_import_round_trip_survives_json_and_restamps_bitemporal_clocks
+        PASS [   0.010s] ( 130/1366) commands commands_export::commands_union_origin_tests::tests::export_import_keeps_two_origins_two_nodes
+        PASS [   0.010s] ( 131/1366) commands commands_export::commands_union_origin_tests::tests::export_import_unions_one_origin_to_one_node_across_channels
+        PASS [   0.060s] ( 132/1366) commands commands_export::commands_export_tests::full_snapshot_round_trip_keeps_cold_history_vectors_and_source
+        PASS [   0.011s] ( 133/1366) commands commands_export::commands_union_origin_tests::tests::hub_merge_keeps_two_origins_two_nodes
+        PASS [   0.012s] ( 134/1366) commands commands_export::commands_union_origin_tests::tests::hub_merge_unions_one_origin_to_one_node_across_channels
+        PASS [   0.171s] ( 135/1366) commands commands_compress::writer_boundary_tests::writer_boundary_compress_refuses_claims_and_preserves_existing_targets
+        PASS [   0.274s] ( 136/1366) commands commands_admin::commands_admin_tests::rekey_tests::the_on_disk_index_names_the_new_id_after_a_rekey_and_not_the_old_one
+        PASS [   0.014s] ( 137/1366) commands commands_export::commands_union_origin_tests::tests::re_import_of_origin_carrying_ids_joins_nothing
+        PASS [   0.012s] ( 138/1366) commands commands_export::commands_union_origin_tests::tests::re_merging_the_same_store_joins_nothing
+        PASS [   0.012s] ( 139/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::a_local_fact_survives_without_force_and_goes_with_it
+        PASS [   0.012s] ( 140/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::a_prefix_dry_run_counts_what_the_live_prefix_removal_takes
+        PASS [   0.011s] ( 141/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::an_unknown_source_removes_nothing_and_does_not_error
+        PASS [   0.018s] ( 142/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::a_source_forget_drops_the_parked_captures_under_the_same_prefix
+        PASS [   0.011s] ( 143/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::degrade_clamps_edge_score_at_floor
+        PASS [   0.011s] ( 144/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::degrade_on_unknown_memory_is_a_noop
+        PASS [   0.011s] ( 145/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::degrade_decays_survivors_and_removes_below_threshold
+        PASS [   0.012s] ( 146/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::detail_json_carries_everything_the_get_printer_needs
+        PASS [   0.014s] ( 147/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::forget_by_source_takes_every_section_of_one_object
+        PASS [   0.016s] ( 148/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::forget_by_source_reaches_across_memories
+        PASS [   0.016s] ( 149/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::forget_by_source_takes_the_edge_that_points_in_from_another_memory
+        PASS [   0.011s] ( 150/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::forget_by_source_with_prefix_takes_everything_under_a_path
+        PASS [   0.018s] ( 151/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::forget_refuses_a_fact
+        PASS [   0.015s] ( 152/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::forget_unknown_id_is_rejected_not_panicked
+        PASS [   0.019s] ( 153/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::forget_removes_thought_and_reports_edge_delta
+        PASS [   0.011s] ( 154/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::the_reap_takes_a_thought_with_no_word_or_number_and_spares_a_fact
+        PASS [   0.012s] ( 155/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::the_source_selector_is_scheme_colon_slash_slash_object_id
+        PASS [   0.012s] ( 156/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::the_id_path_flags_an_expired_thought_instead_of_hiding_it
+        PASS [   0.011s] ( 157/1366) commands commands_hub::writer_boundary_tests::writer_boundary_configured_clean_child
+        PASS [   0.166s] ( 158/1366) commands commands_graph_ops::commands_graph_ops_tests::tests::a_link_racing_an_external_commit_keeps_both
+        PASS [   0.124s] ( 159/1366) commands commands_graph_ops::commands_graph_ops_tests::writer_boundary_link_does_not_reintroduce_deleted_endpoints
+        PASS [   0.120s] ( 160/1366) commands commands_hub::writer_boundary_tests::writer_boundary_configured_clean_protects_ancestors_equal_nested_and_external_links
+        PASS [   0.140s] ( 161/1366) commands commands_hub::writer_boundary_tests::writer_boundary_clean_retains_the_owned_inode_and_symlink_targets
+        PASS [   0.011s] ( 162/1366) commands commands_queue_cmd::commands_queue_cmd_tests::tests::a_stuck_delta_is_distinguishable_from_one_merely_waiting
+        PASS [   0.009s] ( 163/1366) commands commands_queue_cmd::commands_queue_cmd_tests::tests::ages_read_in_the_largest_unit_that_fits
+        PASS [   0.034s] ( 164/1366) commands commands_query::commands_query_tests::tests::cmd_profile_no_llm_path_does_not_panic
+        PASS [   0.121s] ( 165/1366) commands commands_queue_cmd::commands_queue_cmd_tests::writer_boundary_refused_drain_cannot_archive_queue_bytes
+        PASS [   0.117s] ( 166/1366) commands commands_reembed::commands_reembed_tests::tests::a_completed_reembed_restamps_the_store_with_the_new_model
+        PASS [   0.011s] ( 167/1366) commands commands_reembed::commands_reembed_tests::tests::embed_all_errs_when_server_returns_a_mismatched_vector_count
+        PASS [   0.010s] ( 168/1366) commands commands_route::tests::a_daemon_tool_error_is_refused_not_downgraded_to_no_daemon
+        PASS [   0.020s] ( 169/1366) commands commands_reembed::commands_reembed_tests::tests::reembed_cold_reports_stale_count_and_leaves_the_tier_unchanged_on_failure
+        PASS [   0.010s] ( 170/1366) commands commands_route::tests::a_draining_daemon_is_a_refusal_that_says_so
+        PASS [   0.011s] ( 171/1366) commands commands_route::tests::a_missing_socket_is_no_daemon_not_an_error
+        PASS [   0.010s] ( 172/1366) commands commands_route::tests::a_routed_degrade_reports_both_counts_from_the_daemon
+        PASS [   0.009s] ( 173/1366) commands commands_route::tests::a_routed_forget_by_source_mutates_the_serving_daemons_graph
+        PASS [   0.013s] ( 174/1366) commands commands_route::tests::a_routed_forget_mutates_the_serving_daemons_graph
+        PASS [   0.013s] ( 175/1366) commands commands_route::tests::a_routed_get_reads_the_daemons_unflushed_state
+        PASS [   0.010s] ( 176/1366) commands commands_route::tests::a_routed_get_reads_the_serving_daemons_graph
+        PASS [   0.011s] ( 177/1366) commands commands_route::tests::a_routed_get_still_resolves_a_prefix
+        PASS [   0.016s] ( 178/1366) commands commands_route::tests::a_stale_socket_is_refused_connection_not_a_missing_endpoint
+        PASS [   0.121s] ( 179/1366) commands commands_serve::entry_point_tests::a_normal_open_stamps_the_model_and_a_swap_reaches_health
+        PASS [   0.111s] ( 180/1366) commands commands_serve::entry_point_tests::apply_graph_config_spills_to_disk_when_threshold_enabled
+        PASS [   0.009s] ( 181/1366) commands commands_serve::entry_point_tests::daemon_subcommand_exists
+        PASS [   0.438s] ( 182/1366) commands commands_hub::writer_boundary_tests::writer_boundary_pair_claims_both_stores_and_refuses_each_holder_or_alias
+        PASS [   0.030s] ( 183/1366) commands commands_serve::entry_point_tests::do_persist_skips_overwriting_a_memory_when_the_graph_is_stale
+        PASS [   0.030s] ( 184/1366) commands commands_serve::entry_point_tests::periodic_snapshot_closes_the_unflushed_mutation_crash_window
+        PASS [   0.030s] ( 185/1366) commands commands_serve::entry_point_tests::reconcile_if_stale_reloads_only_when_the_store_advanced
+        PASS [   0.026s] ( 186/1366) commands commands_serve::entry_point_tests::writer_boundary_stale_flush_preserves_disk_and_unflushed_ram
+        PASS [   0.108s] ( 187/1366) commands commands_serve::entry_point_tests::cluster_migrated_entities_survive_a_crash_after_the_spawn_persists
+        PASS [   0.014s] ( 188/1366) commands commands_serve::watchdog_handover_tests::a_handover_with_no_listener_frees_the_store_and_returns
+        PASS [   0.011s] ( 189/1366) commands commands_serve::watchdog_handover_tests::the_watchdog_gets_a_clone_of_the_published_listener_and_nothing_before_it
+        PASS [   0.489s] ( 190/1366) commands commands_ingest_cmd::operator_tests::writer_boundary_operator_refused_malformed_and_lost_replies_never_replay_offline
+        PASS [   0.063s] ( 191/1366) commands commands_serve::watchdog_flush_tests::a_fast_save_fn_returns_flushed_and_ran
+        PASS [   0.014s] ( 192/1366) commands commands_serve::watcher_deny_tests::denies_memory_dir_even_when_data_dir_points_outside_it
+        PASS [   0.013s] ( 193/1366) commands commands_serve::watcher_deny_tests::denies_memory_state_dir_whole_plus_data_and_queue
+        PASS [   0.017s] ( 194/1366) commands commands_serve::watcher_deny_tests::watcher_excludes_all_database_state
+        PASS [   0.011s] ( 195/1366) commands launch_dir_tests::launch_dir_join_falls_back_when_no_dir_was_recorded
+        PASS [   0.015s] ( 196/1366) commands launch_dir_tests::launch_dir_join_resolves_relative_paths_against_the_pre_pin_cwd
+        PASS [   0.014s] ( 197/1366) commands writer_boundary_tests::writer_boundary_child
+        PASS [   0.043s] ( 198/1366) commands writer_boundary_tests::writer_boundary_stale_snapshot_cannot_resurrect_after_owner_crash
+        PASS [   0.135s] ( 199/1366) commands writer_boundary_tests::writer_boundary_killed_process_releases_claim
+        PASS [   0.215s] ( 200/1366) commands commands_serve::watchdog_flush_tests::a_save_fn_that_overruns_the_deadline_returns_blocked
+        PASS [   0.010s] ( 201/1366) commands::exit_status a_reported_failure_is_what_the_exit_status_reads
+        PASS [   0.008s] ( 202/1366) config config::config_tests::embed_tests::default_uses_the_shared_constants
+        PASS [   0.011s] ( 203/1366) config config::config_tests::evaluation_variants_load_through_the_real_config_gate
+        PASS [   0.009s] ( 204/1366) config config::config_tests::gnn_tests::default_arms_disk_spill
+        PASS [   0.010s] ( 205/1366) config config::config_tests::gnn_tests::default_bounds_resident_memories_conservatively
+        PASS [   0.010s] ( 206/1366) config config::config_tests::graph_tests::an_unknown_review_policy_scheme_is_flagged
+        PASS [   0.008s] ( 207/1366) config config::config_tests::graph_tests::default_validates_and_bad_knobs_are_rejected
+        PASS [   0.009s] ( 208/1366) config config::config_tests::hub_tests::defaults_are_on_with_sane_tunables
+        PASS [   0.010s] ( 209/1366) config config::config_tests::hub_tests::validate_rejects_zero_poll_only_when_enabled
+        PASS [   0.010s] ( 210/1366) config config::config_tests::ingest_run_config_tests::every_field_the_mapping_carries_comes_from_the_config_it_was_given
+        PASS [   0.143s] ( 211/1366) commands writer_boundary_tests::writer_boundary_two_process_barrier_has_one_commit_and_unchanged_loser_bytes
+        PASS [   0.008s] ( 212/1366) config config::config_tests::ingest_tests::default_config_is_valid
+        PASS [   0.011s] ( 213/1366) config config::config_tests::ingest_tests::an_unknown_or_negative_source_trust_key_is_flagged
+        PASS [   0.010s] ( 214/1366) config config::config_tests::ingest_tests::out_of_range_bm25_params_are_flagged
+        PASS [   0.009s] ( 215/1366) config config::config_tests::ingest_tests::retrieval_breaking_values_are_flagged
+        PASS [   0.010s] ( 216/1366) config config::config_tests::ingest_tests::weights_not_summing_to_one_are_flagged
+        PASS [   0.008s] ( 217/1366) config config::config_tests::io_tests::merge_deep_leaf_and_array_in_over_replace_the_base
+        PASS [   0.009s] ( 218/1366) config config::config_tests::io_tests::merge_deep_scalar_in_over_beats_a_table_in_base
+        PASS [   0.011s] ( 219/1366) config config::config_tests::io_tests::merge_deep_merges_nested_tables_at_depth
+        PASS [   0.009s] ( 220/1366) config config::config_tests::io_tests::merged_value_keeps_sections_present_in_only_one_scope
+        PASS [   0.011s] ( 221/1366) config config::config_tests::io_tests::merged_value_merges_project_section_over_missing_user
+        PASS [   0.013s] ( 222/1366) config config::config_tests::io_tests::merged_value_seals_the_key_when_the_project_redirects_the_endpoint
+        PASS [   0.016s] ( 223/1366) config config::config_tests::io_tests::merged_value_project_field_wins_and_keeps_the_user_fields_it_omits
+        PASS [   0.011s] ( 224/1366) config config::config_tests::io_tests::read_value_parses_leading_section_header
+        PASS [   0.011s] ( 225/1366) config config::config_tests::llm_timeout_tests::the_unconfigured_timeout_is_the_const_it_replaced
+        PASS [   0.013s] ( 226/1366) config config::config_tests::preset_tests::every_preset_yields_a_valid_config
+        PASS [   0.012s] ( 227/1366) config config::config_tests::preset_tests::medium_matches_the_neutral_struct_defaults
+        PASS [   0.011s] ( 228/1366) config config::config_tests::preset_tests::relaxed_and_tight_move_the_knobs_in_opposite_directions
+        PASS [   0.014s] ( 229/1366) config config::config_tests::preset_tests::the_default_preset_is_relaxed
+        PASS [   0.011s] ( 230/1366) config config::config_tests::queue_tests::open_private_append_creates_then_appends_without_truncating
+        PASS [   0.015s] ( 231/1366) config config::config_tests::queue_tests::open_private_append_tightens_a_world_readable_file
+        PASS [   0.010s] ( 232/1366) config config::config_tests::reload_tests::effective_roots_is_empty_when_disabled
+        PASS [   0.012s] ( 233/1366) config config::config_tests::reload_tests::effective_roots_falls_back_to_cwd_when_enabled_and_empty
+        PASS [   0.010s] ( 234/1366) config config::config_tests::reload_tests::effective_roots_uses_configured_roots_when_present
+        PASS [   0.010s] ( 235/1366) config config::config_tests::secrets_tests::a_project_that_leaves_the_url_alone_keeps_inheriting_the_key
+        PASS [   0.011s] ( 236/1366) config config::config_tests::secrets_tests::a_project_supplying_its_own_key_with_its_own_url_keeps_it
+        PASS [   0.010s] ( 237/1366) config config::config_tests::secrets_tests::a_project_that_redirects_the_url_does_not_inherit_the_users_key
+        PASS [   0.011s] ( 238/1366) config config::config_tests::secrets_tests::sealing_is_per_section_not_global
+        PASS [   0.011s] ( 239/1366) config config::config_tests::serve_tests::an_unopenable_log_is_an_error_the_caller_can_see
+        PASS [   0.011s] ( 240/1366) config config::config_tests::serve_tests::one_log_file_per_spawn_arg
+        PASS [   0.011s] ( 241/1366) config config::config_tests::serve_tests::opening_creates_the_dir_and_appends_rather_than_truncating
+        PASS [   0.011s] ( 242/1366) config config::config_tests::tests::a_memory_toml_naming_the_absolute_floor_key_fails_loud
+        PASS [   0.016s] ( 243/1366) config config::config_tests::tests::a_mixed_retrieval_table_refuses
+        PASS [   0.015s] ( 244/1366) config config::config_tests::tests::configless_load_defaults_to_relaxed
+        PASS [   0.018s] ( 245/1366) config config::config_tests::tests::a_real_memory_toml_can_set_review_policy_and_nothing_else_in_ingest
+        PASS [   0.016s] ( 246/1366) config config::config_tests::tests::default_in_pins_data_dir_to_the_given_cwd_deterministically
+        PASS [   0.014s] ( 247/1366) config config::config_tests::tests::egress_warnings_flags_a_public_embed_url_and_silences_loopback
+        PASS [   0.015s] ( 248/1366) config config::config_tests::tests::egress_warnings_flags_a_cloud_tag_behind_a_loopback_url
+        PASS [   0.013s] ( 249/1366) config config::config_tests::tests::egress_warnings_name_the_endpoint_without_its_credential
+        PASS [   0.011s] ( 250/1366) config config::config_tests::tests::egress_warnings_reports_one_per_non_local_url
+        PASS [   0.011s] ( 251/1366) config config::config_tests::tests::embed_config_default_carries_the_native_knob_constants
+        PASS [   0.011s] ( 252/1366) config config::config_tests::tests::is_loopback_url_pins_loopback_only
+        PASS [   0.010s] ( 253/1366) config config::config_tests::tests::load_of_a_foreign_root_pins_data_dir_to_that_root
+        PASS [   0.010s] ( 254/1366) config config::config_tests::tests::log_dir_stays_inside_the_data_dir_memory_owns
+        PASS [   0.013s] ( 255/1366) config config::config_tests::tests::load_resolves_relative_data_dir_to_cwd
+        PASS [   0.029s] ( 256/1366) config config::config_tests::tests::every_other_retrieval_key_still_refuses
+        PASS [   0.014s] ( 257/1366) config config::config_tests::tests::memory_dir_env_pins_the_store_base
+        PASS [   0.015s] ( 258/1366) config config::config_tests::tests::min_deliver_fraction_range_is_checked
+        PASS [   0.013s] ( 259/1366) config config::config_tests::tests::native_knob_warnings_names_a_tuned_knob_on_a_v1_endpoint
+        PASS [   0.012s] ( 260/1366) config config::config_tests::tests::native_knob_warnings_silent_on_a_v1_endpoint_with_default_knobs
+        PASS [   0.013s] ( 261/1366) config config::config_tests::tests::native_knob_warnings_silent_on_default_loopback
+        PASS [   0.012s] ( 262/1366) config config::config_tests::tests::preset_key_applies_its_tier
+        PASS [   0.014s] ( 263/1366) config config::config_tests::tests::preset_managed_sections_refuse_to_load
+        PASS [   0.016s] ( 264/1366) config config::config_tests::tests::project_preset_beats_user_preset
+        PASS [   0.016s] ( 265/1366) config config::config_tests::tests::reason_sampling_is_unset_by_default_and_zero_temperature_is_a_real_setting
+        PASS [   0.013s] ( 266/1366) config config::config_tests::tests::resolve_root_detects_git_as_a_file
+        PASS [   0.012s] ( 267/1366) config config::config_tests::tests::resolve_root_innermost_git_wins
+        PASS [   0.018s] ( 268/1366) config config::config_tests::tests::resolve_root_prefers_git_root_over_deeper_memory
+        PASS [   0.016s] ( 269/1366) config config::config_tests::tests::resolve_root_returns_start_when_no_memory_ancestor
+        PASS [   0.017s] ( 270/1366) config config::config_tests::tests::resolve_root_starts_at_git_root_when_no_memory
+        PASS [   0.013s] ( 271/1366) config config::config_tests::tests::resolve_root_walks_up_to_nearest_memory_dir
+        PASS [   0.015s] ( 272/1366) config config::config_tests::tests::the_three_retrieval_quality_keys_are_settable_from_a_memory_toml
+        PASS [   0.011s] ( 273/1366) config config::config_tests::tests::unknown_preset_name_refuses_to_load
+        PASS [   0.012s] ( 274/1366) config config::config_tests::tests::validate_refuses_an_empty_denied_path
+        PASS [   0.013s] ( 275/1366) config config::config_tests::tests::wsl_loopback_warnings_names_a_loopback_endpoint_under_wsl
+        PASS [   0.016s] ( 276/1366) config config::config_tests::tests::validate_requires_embed_and_surfaces_sub_config_invariants
+        PASS [   0.010s] ( 277/1366) config config::config_tests::tests::wsl_loopback_warnings_silent_off_wsl
+        PASS [   0.010s] ( 278/1366) gnn gnn::gnn_tests::gcn_tests::forward_graph_aggregates_then_projects_to_out_features
+        PASS [   0.011s] ( 279/1366) gnn gnn::gnn_tests::backward_tests::relu_backward_is_exact_no_kink_bias
+        PASS [   0.014s] ( 280/1366) gnn gnn::gnn_tests::gcn_tests::forward_graph_with_mismatched_features_is_a_tensor_error
+        PASS [   0.012s] ( 281/1366) gnn gnn::gnn_tests::gcn_tests::try_backward_before_forward_is_missing_state
+        PASS [   0.017s] ( 282/1366) gnn gnn::gnn_tests::gnn_math_tests::gcn_linear_backward_matches_numeric
+        PASS [   0.015s] ( 283/1366) gnn gnn::gnn_tests::gnn_math_tests::gcn_linear_input_grad_matches_numeric
+        PASS [   0.020s] ( 284/1366) gnn gnn::gnn_tests::gnn_math_tests::gcn_relu_backward_matches_numeric
+        PASS [   0.014s] ( 285/1366) gnn gnn::gnn_tests::gnn_math_tests::gcn_relu_input_grad_matches_numeric
+        PASS [   0.011s] ( 286/1366) gnn gnn::gnn_tests::gnn_math_tests::matmul_and_transpose_are_correct
+        PASS [   0.009s] ( 287/1366) gnn gnn::gnn_tests::layer_tests::backward_accumulates_across_calls_until_zeroed
+        PASS [   0.010s] ( 288/1366) gnn gnn::gnn_tests::layer_tests::forward_projects_to_out_features_width
+        PASS [   0.014s] ( 289/1366) gnn gnn::gnn_tests::layer_tests::backward_dinput_shape_and_grad_accumulation
+        PASS [   0.011s] ( 290/1366) gnn gnn::gnn_tests::layer_tests::forward_with_mismatched_input_width_is_a_tensor_error
+        PASS [   0.011s] ( 291/1366) gnn gnn::gnn_tests::layer_tests::try_backward_before_forward_is_a_missing_state_error
+        PASS [   0.014s] ( 292/1366) gnn gnn::gnn_tests::loss_tests::link_prediction_aligned_positive_edge_has_lower_loss_than_opposed
+        PASS [   0.013s] ( 293/1366) gnn gnn::gnn_tests::loss_tests::link_prediction_grad_matches_numerical_gradient
+        PASS [   0.016s] ( 294/1366) gnn gnn::gnn_tests::loss_tests::link_prediction_empty_edges_is_zero_loss_and_grad
+        PASS [   0.012s] ( 295/1366) gnn gnn::gnn_tests::model_tests::a_projection_mismatch_fails_the_forward_and_then_the_backward
+        PASS [   0.010s] ( 296/1366) gnn gnn::gnn_tests::model_tests::backward_without_a_forward_is_an_error_not_a_zero_gradient
+        PASS [   0.011s] ( 297/1366) gnn gnn::gnn_tests::model_tests::forward_projects_to_out_layer_width_and_is_finite
+        PASS [   0.011s] ( 298/1366) gnn gnn::gnn_tests::model_tests::forward_surfaces_an_aggregation_mismatch_instead_of_zeroing
+        PASS [   0.012s] ( 299/1366) gnn gnn::gnn_tests::norm_tests::backward_matches_numeric
+        PASS [   0.010s] ( 300/1366) gnn gnn::gnn_tests::norm_tests::forward_normalizes_each_row
+        PASS [   0.009s] ( 301/1366) gnn gnn::gnn_tests::norm_tests::parameters_returns_gamma_then_beta_in_order
+        PASS [   0.012s] ( 302/1366) gnn gnn::gnn_tests::norm_tests::try_backward_before_forward_is_a_missing_state_error
+        PASS [   0.012s] ( 303/1366) gnn gnn::gnn_tests::norm_tests::zero_grads_resets_accumulation_between_backward_passes
+        PASS [   0.012s] ( 304/1366) gnn gnn::gnn_tests::optim_tests::adam_first_step_is_lr_scaled_sign
+        PASS [   0.010s] ( 305/1366) gnn gnn::gnn_tests::optim_tests::adam_keeps_independent_moment_state_per_parameter
+        PASS [   0.010s] ( 306/1366) gnn gnn::gnn_tests::persist_tests::marshal_unmarshal_round_trips_every_param_value_and_shape
+        PASS [   0.009s] ( 307/1366) gnn gnn::gnn_tests::persist_tests::unmarshal_rejects_a_corrupt_data_length_without_panicking
+        PASS [   0.010s] ( 308/1366) gnn gnn::gnn_tests::persist_tests::unmarshal_rejects_a_param_count_mismatch
+        PASS [   0.010s] ( 309/1366) gnn gnn::gnn_tests::persist_tests::unmarshal_rejects_a_future_version_before_checking_params
+        PASS [   0.009s] ( 310/1366) gnn gnn::gnn_tests::tests::forward_dispatches_correctly
+        PASS [   0.010s] ( 311/1366) gnn gnn::gnn_tests::tests::relu_deriv_is_exact_at_and_near_kink
+        PASS [   0.011s] ( 312/1366) gnn gnn::gnn_tests::tests::smooth_derivs_match_central_difference
+        PASS [   0.010s] ( 313/1366) gnn gnn_graph::gnn_graph_tests::tests::add_edge_rejects_unknown_endpoints
+        PASS [   0.010s] ( 314/1366) gnn gnn_graph::gnn_graph_tests::tests::add_node_rejects_duplicate_ids
+        PASS [   0.009s] ( 315/1366) gnn gnn_graph::gnn_graph_tests::tests::add_self_loops_is_idempotent
+        PASS [   0.011s] ( 316/1366) gnn gnn_graph::gnn_graph_tests::tests::normalized_adjacency_rows_sum_to_one_on_a_regular_graph
+        PASS [   0.010s] ( 317/1366) gnn gnn_propagate::gnn_propagate_tests::tests::empty_snapshot_is_an_error
+        PASS [   0.010s] ( 318/1366) gnn gnn_propagate::gnn_propagate_tests::tests::a_feature_graph_shape_mismatch_aborts_instead_of_training_on_zeros
+        PASS [   0.010s] ( 319/1366) gnn gnn_propagate::gnn_propagate_tests::tests::happy_path_returns_finite_updates_and_weights
+        PASS [   0.010s] ( 320/1366) gnn gnn_propagate::gnn_propagate_tests::tests::sample_negative_edges_avoids_positives_and_self_loops
+        PASS [   0.007s] ( 321/1366) gnn gnn_tensor::gnn_tensor_tests::sparse_tests::matmul_inner_dimension_mismatch_errors
+        PASS [   0.015s] ( 322/1366) gnn gnn_propagate::gnn_propagate_tests::tests::two_propagations_of_one_snapshot_are_bit_identical
+        PASS [   0.029s] ( 323/1366) gnn gnn_tensor::gnn_tensor_tests::sparse_tests::sparse_storage_actually_skips_the_zeros
+        PASS [   0.044s] ( 324/1366) gnn gnn_tensor::gnn_tensor_tests::sparse_tests::sparse_normalized_adjacency_is_bit_identical_to_dense
+        PASS [   0.014s] ( 325/1366) gnn gnn_tensor::gnn_tensor_tests::tests::add_row_vec_broadcasts_and_validates_width
+        PASS [   0.010s] ( 326/1366) gnn gnn_tensor::gnn_tensor_tests::tests::matmul_inner_dimension_mismatch_errors
+        PASS [   0.013s] ( 327/1366) gnn gnn_tensor::gnn_tensor_tests::tests::debug_truncates_large_data
+        PASS [   0.009s] ( 328/1366) gnn gnn_tensor::gnn_tensor_tests::tests::matmul_small_path_is_correct
+        PASS [   0.015s] ( 329/1366) gnn gnn_tensor::gnn_tensor_tests::tests::matmul_parallel_and_serial_paths_agree_at_the_threshold
+        PASS [   0.012s] ( 330/1366) gnn gnn_tensor::gnn_tensor_tests::tests::row_extracts_a_1xn_slice
+        PASS [   0.015s] ( 331/1366) gnn gnn_tensor::gnn_tensor_tests::tests::transpose_swaps_axes_and_elements
+        PASS [   0.013s] ( 332/1366) graph accept::accept_tests::tests::a_rename_onto_the_same_path_is_refused_not_self_superseded
+        PASS [   0.012s] ( 333/1366) graph accept::accept_tests::tests::accept_never_leaves_empty_unnamed_memory
+        PASS [   0.013s] ( 334/1366) graph accept::accept_tests::tests::accept_time_duplicate_merges_instead_of_dropping
+        PASS [   0.011s] ( 335/1366) graph accept::accept_tests::tests::accept_time_duplicate_records_rephrase_edge
+        PASS [   0.010s] ( 336/1366) graph accept::accept_tests::tests::accept_time_merge_never_overwrites_survivor_text_or_vector
+        PASS [   0.012s] ( 337/1366) graph accept::accept_tests::tests::commit_entity_indexes_the_entity_s_own_vector_allocation
+        PASS [   0.011s] ( 338/1366) graph accept::accept_tests::tests::contradiction_supersede_is_a_noop_on_missing_or_already_superseded
+        PASS [   0.130s] ( 339/1366) gnn gnn_tensor::gnn_tensor_tests::sparse_tests::sparse_and_dense_products_are_bit_identical
+        PASS [   0.012s] ( 340/1366) graph accept::accept_tests::tests::contradiction_supersede_materializes_new_and_invalidates_old
+        PASS [   0.011s] ( 341/1366) graph accept::accept_tests::tests::default_mass_preserves_nearest_focus_routing
+        PASS [   0.011s] ( 342/1366) graph accept::accept_tests::tests::distinct_vector_is_placed
+        PASS [   0.011s] ( 343/1366) graph accept::accept_tests::tests::duplicate_vector_is_deduped
+        PASS [   0.009s] ( 344/1366) graph accept::accept_tests::tests::heavier_focus_wins_at_equal_distance
+        PASS [   0.009s] ( 345/1366) graph accept::accept_tests::tests::parse_contradiction_fails_open_to_related
+        PASS [   0.009s] ( 346/1366) graph accept::accept_tests::tests::resolve_valid_until_is_a_min_with_none_as_infinity
+        PASS [   0.023s] ( 347/1366) graph accept::accept_tests::tests::generic_child_reused_when_evicted_by_load_cap
+        PASS [   0.009s] ( 348/1366) graph accept::accept_tests::tests::route_entity_does_not_clone_children_per_descent
+        PASS [   0.014s] ( 349/1366) graph accept::accept_tests::tests::routes_nonmatch_to_generic
+        PASS [   0.016s] ( 350/1366) graph accept::accept_tests::tests::routes_match_to_focus
+        PASS [   0.009s] ( 351/1366) graph accept::accept_tests::tests::supersede_chain_depth_counter_increments_past_threshold
+        PASS [   0.021s] ( 352/1366) graph accept::accept_tests::tests::spawn_unnamed_child_under_cap_keeps_the_child_in_parent_children
+        PASS [   0.012s] ( 353/1366) graph accept::accept_tests::tests::supersede_drops_the_old_entity_from_the_search_index
+        PASS [   0.844s] ( 354/1366) commands writer_boundary_tests::writer_boundary_direct_entries_refuse_before_mutation_and_reads_work
+        PASS [   0.011s] ( 355/1366) graph accept::accept_tests::tests::supersede_repoints_a_deferred_rephrase_to_the_new_entity
+        PASS [   0.010s] ( 356/1366) graph accept::accept_tests::tests::supersede_stamps_both_temporal_clocks
+        PASS [   0.010s] ( 357/1366) graph accept::focus_tests::tests::add_focus_creates_named_root_child
+        PASS [   0.011s] ( 358/1366) graph accept::focus_tests::tests::add_focus_updates_existing_same_name_instead_of_minting_duplicate
+        PASS [   0.008s] ( 359/1366) graph accept::focus_tests::tests::add_focus_with_mass_round_trips_and_updates_in_place
+        PASS [   0.009s] ( 360/1366) graph accept::focus_tests::tests::mean_pool_normalizes_and_rejects_mismatched_dims
+        PASS [   0.035s] ( 361/1366) graph accept::accept_tests::tests::unnamed_child_not_duplicated_when_non_root_parent_evicts
+        PASS [   0.033s] ( 362/1366) graph accept::accept_tests::tests::unnamed_child_reused_when_evicted_by_load_cap
+        PASS [   0.009s] ( 363/1366) graph accept::focus_tests::tests::promote_skips_when_root_has_equivalent_focus_by_name
+        PASS [   0.010s] ( 364/1366) graph accept::focus_tests::tests::promote_skips_when_root_focus_vec_is_near_duplicate
+        PASS [   0.012s] ( 365/1366) graph accept::focus_tests::tests::promotes_generic_child_to_root
+        PASS [   0.012s] ( 366/1366) graph accept::focus_tests::tests::promote_unnamed_rejects_a_named_or_missing_memory
+        PASS [   0.011s] ( 367/1366) graph accept::focus_tests::tests::remove_focus_demotes_and_reports
+        PASS [   0.017s] ( 368/1366) graph accept::focus_tests::tests::promote_unnamed_adds_a_focus_in_place
+        PASS [   0.012s] ( 369/1366) graph accept::focus_tests::tests::seed_examples_char_chunks_split_on_a_code_point_boundary
+        PASS [   0.015s] ( 370/1366) graph accept::focus_tests::tests::seed_examples_char_chunks_a_long_single_paragraph
+        PASS [   0.016s] ( 371/1366) graph accept::focus_tests::tests::seed_examples_splits_lines_and_keeps_single_text_whole
+        PASS [   0.013s] ( 372/1366) graph accept::rankone_probe::probe_p2_gate_two_merges_into_the_rank_two_same_origin_survivor
+        PASS [   0.011s] ( 373/1366) graph accept::rankone_probe::probe_p5_gate_two_refuses_an_unresolvable_cross_origin_survivor
+        PASS [   0.014s] ( 374/1366) graph accept::rankone_probe::probe_p3_same_origin_refuses_a_survivor_it_cannot_resolve
+        PASS [   0.013s] ( 375/1366) graph accept::rankone_probe::probe_p6_both_legs_are_documented_at_the_function
+        PASS [   0.054s] ( 376/1366) graph diskann::diskann_tests::tests::corrupt_index_is_rejected
+        PASS [   0.065s] ( 377/1366) graph diskann::diskann_tests::tests::corrupt_meta_is_rejected
+        PASS [   0.075s] ( 378/1366) graph diskann::diskann_tests::tests::empty_and_single
+        PASS [   0.030s] ( 379/1366) graph diskann::diskann_tests::tests::out_of_range_neighbor_is_rejected
+        PASS [   0.102s] ( 380/1366) graph diskann::diskann_tests::tests::no_neighbour_list_outgrows_r_and_a_lone_item_gets_none
+        PASS [   0.122s] ( 381/1366) graph diskann::diskann_tests::tests::rebuild_over_an_existing_index_swaps_and_leaves_no_staging
+        PASS [   0.575s] ( 382/1366) graph diskann::diskann_tests::tests::build_open_search_roundtrip
+        PASS [   0.522s] ( 383/1366) graph diskann::diskann_tests::tests::search_hits_filtered_returns_cosine_similarity_nearest_first
+        PASS [   0.033s] ( 384/1366) graph diskann::diskann_tests::tests::truncated_graph_is_rejected
+        PASS [   0.011s] ( 385/1366) graph graph::graph_tests::tests::a_reaped_memory_hands_its_reasons_to_its_parent
+        PASS [   0.177s] ( 386/1366) graph graph::graph_tests::tests::consolidate_folds_delta_into_snapshot_and_resets_it
+        PASS [   0.015s] ( 387/1366) graph graph::graph_tests::tests::consolidate_is_a_noop_for_a_resident_index
+        PASS [   5.321s] ( 388/1366) memory::e2e hub::an_idle_node_is_auto_unloaded
+        PASS [   0.012s] ( 389/1366) graph graph::graph_tests::tests::gc_keeps_empty_ancestor_on_path_to_data
+        PASS [   0.015s] ( 390/1366) graph graph::graph_tests::tests::gc_reaps_cyclic_empty_memories_with_children
+        PASS [   0.018s] ( 391/1366) graph graph::graph_tests::tests::query_dim_guard_follows_the_dominant_indexed_dimension
+        PASS [   0.013s] ( 392/1366) graph graph::graph_tests::tests::rebuild_index_excludes_superseded_entities
+        PASS [   0.191s] ( 393/1366) graph graph::graph_tests::tests::disk_index_snapshot_mirrors_in_ram_membership_and_ranking
+        PASS [   0.030s] ( 394/1366) graph graph::graph_tests::tests::rebuild_index_never_spills_without_a_data_dir
+        PASS [   0.040s] ( 395/1366) graph graph::graph_tests::tests::rebuild_index_shares_the_map_s_vector_allocation_with_every_index
+        PASS [   0.999s] ( 396/1366) graph diskann::diskann_tests::tests::search_hits_filtered_returns_only_matching_and_is_a_subset
+        PASS [   0.021s] ( 397/1366) graph graph::graph_tests::tests::replacing_an_entity_vector_does_not_reach_the_index_copy
+        PASS [   0.284s] ( 398/1366) graph graph::graph_tests::tests::rebuild_index_is_deterministic_across_instances
+        PASS [   0.013s] ( 399/1366) graph graph::graph_tests::tests::superseded_vectors_never_decide_the_indexed_dimension
+        PASS [   0.013s] ( 400/1366) graph graph::graph_tests::tests::unload_without_a_store_keeps_the_memory_resident
+        PASS [   0.134s] ( 401/1366) graph graph::graph_tests::tests::rebuild_index_spills_entity_index_to_disk_above_threshold
+        PASS [   0.011s] ( 402/1366) graph graph_ops::graph_ops_tests::tests::a_link_carries_the_endpoint_midpoint_not_its_note
+        PASS [   0.112s] ( 403/1366) graph graph::graph_tests::tests::stale_snapshot_reconciles_diff_into_delta_on_reload
+        PASS [   0.014s] ( 404/1366) graph graph_ops::graph_ops_tests::tests::a_linked_edge_is_findable_without_a_scan
+        PASS [   0.014s] ( 405/1366) graph graph_ops::graph_ops_tests::tests::a_superseded_fact_is_forgettable_by_the_operator_who_names_it
+        PASS [   0.021s] ( 406/1366) graph graph_ops::graph_ops_tests::tests::an_active_fact_is_still_refused_and_the_refusal_is_typed
+        PASS [   0.052s] ( 407/1366) graph graph_ops::graph_ops_tests::tests::a_flagged_secret_is_named_in_the_report_and_absent_from_its_preview
+        PASS [   0.056s] ( 408/1366) graph graph_ops::graph_ops_tests::tests::audit_apply_floor_caps_min_score_from_below
+        PASS [   0.013s] ( 409/1366) graph heat::heat_tests::tests::config_default_is_a_one_week_half_life
+        PASS [   0.055s] ( 410/1366) graph graph_ops::graph_ops_tests::tests::audit_ranks_noise_and_secrets_and_archive_holds_them_pending
+        PASS [   0.014s] ( 411/1366) graph heat::heat_tests::tests::decayed_clock_skew_returns_heat_unchanged
+        PASS [   0.014s] ( 412/1366) graph heat::heat_tests::tests::decayed_none_since_returns_heat_unchanged
+        PASS [   0.012s] ( 413/1366) graph heat::heat_tests::tests::decayed_one_half_life_halves_the_heat
+        PASS [   0.077s] ( 414/1366) graph graph_ops::graph_ops_tests::tests::audit_delete_honors_the_fact_guard_and_never_deletes_secrets
+        PASS [   0.013s] ( 415/1366) graph heat::heat_tests::tests::decayed_zero_half_life_is_clamped_to_one_second
+        PASS [   0.014s] ( 416/1366) graph heat::heat_tests::tests::deposit_adds_on_top_of_the_decayed_value
+        PASS [   0.018s] ( 417/1366) graph heat::heat_tests::tests::decayed_zero_or_negative_heat_is_zero
+        PASS [   0.016s] ( 418/1366) graph heat::heat_tests::tests::increasing_hazard_decays_faster_late
+        PASS [   0.017s] ( 419/1366) graph heat::heat_tests::tests::preference_curve_outlives_the_default_and_unknown_labels_change_nothing
+        PASS [   0.016s] ( 420/1366) graph heat::heat_tests::tests::weibull_default_curve_is_bit_identical_to_exponential
+        PASS [   0.017s] ( 421/1366) graph hnsw::hnsw_tests::tests::a_deleted_slot_is_not_reusable_until_its_inbound_edges_are_scrubbed
+        PASS [   0.016s] ( 422/1366) graph hnsw::hnsw_tests::tests::delete_removes_node_from_results
+        PASS [   0.011s] ( 423/1366) graph hnsw::hnsw_tests::tests::empty_index_returns_nothing
+        PASS [   0.163s] ( 424/1366) graph hnsw::hnsw_tests::tests::delete_then_insert_reuses_slot_and_search_stays_correct
+        PASS [   0.012s] ( 425/1366) graph hnsw::hnsw_tests::tests::inserts_and_finds_exact_nearest
+        PASS [   0.235s] ( 426/1366) graph hnsw::hnsw_tests::tests::a_rare_predicate_still_returns_the_exact_subset_top_k
+        PASS [   0.246s] ( 427/1366) graph hnsw::hnsw_tests::tests::identical_insert_sequence_builds_identical_graph
+        PASS [   0.016s] ( 428/1366) graph hnsw::hnsw_tests::tests::one_scrub_pass_clears_every_slot_deleted_since_the_last_one
+        PASS [   0.177s] ( 429/1366) graph hnsw::hnsw_tests::tests::recall_matches_brute_force
+        PASS [   0.271s] ( 430/1366) graph hnsw::hnsw_tests::tests::node_level_depends_only_on_id_not_insert_order
+        PASS [   0.081s] ( 431/1366) graph hnsw::hnsw_tests::tests::search_filtered_finds_single_rare_match
+        PASS [   0.019s] ( 432/1366) graph hnsw::hnsw_tests::tests::search_filtered_reject_all_is_empty
+        PASS [   0.394s] ( 433/1366) graph hnsw::hnsw_tests::tests::int8_recall_tracks_f64
+        PASS [   0.031s] ( 434/1366) graph hnsw::hnsw_tests::tests::structure_digest_pins_canon_layout_for_a_single_node
+        PASS [   0.135s] ( 435/1366) graph hnsw::hnsw_tests::tests::search_filtered_matches_brute_force_over_subset
+        PASS [   0.014s] ( 436/1366) graph lexical::lexical_tests::tests::a_rebuild_keeps_the_alternate_wording_a_dedup_merged_on
+        PASS [   0.012s] ( 437/1366) graph lexical::lexical_tests::tests::insert_is_an_idempotent_upsert
+        PASS [   0.012s] ( 438/1366) graph lexical::lexical_tests::tests::rebuild_from_graph_indexes_every_nonempty_entity
+        PASS [   0.012s] ( 439/1366) graph lexical::lexical_tests::tests::remove_drops_the_document
+        PASS [   0.089s] ( 440/1366) graph hnsw::hnsw_tests::tests::the_scan_fallback_ranks_the_kept_subset_exactly
+        PASS [   0.012s] ( 441/1366) graph lexical::lexical_tests::tests::search_filtered_drops_nonmatching_before_truncation
+        PASS [   0.015s] ( 442/1366) graph lexical::lexical_tests::tests::search_empty_query_or_zero_k_is_empty
+        PASS [   0.013s] ( 443/1366) graph lexical::lexical_tests::tests::search_ranks_by_bm25_and_excludes_nonmatching_docs
+        PASS [   0.013s] ( 444/1366) graph lexical::lexical_tests::tests::set_bm25_params_changes_query_scores_and_clamps_invalid
+        PASS [   0.011s] ( 445/1366) graph lexical::lexical_tests::tests::tokenize_splits_lowercases_and_stems
+        PASS [   0.012s] ( 446/1366) graph lexical::lexical_tests::tests::stem_strips_known_suffixes_and_guards_short_words
+        PASS [   0.013s] ( 447/1366) graph merge::merge_tests::tests::a_local_memory_merge_keeps_the_trusted_disk_absorb_path_intact
+        PASS [   0.016s] ( 448/1366) graph merge::merge_tests::tests::a_merge_cannot_hijack_an_id_owned_by_another_memory
+        PASS [   0.013s] ( 449/1366) graph merge::merge_tests::tests::a_merge_never_pairs_one_sides_heat_with_the_others_stamp
+        PASS [   0.013s] ( 450/1366) graph merge::merge_tests::tests::cleared_statements_do_not_resurrect_under_merge
+        PASS [   2.150s] ( 451/1366) graph diskann::diskann_tests::tests::recall_at_10_is_high_vs_brute_force
+        PASS [   0.022s] ( 452/1366) graph merge::merge_tests::tests::merge_created_at_takes_earliest_accessed_latest
+        PASS [   0.030s] ( 453/1366) graph merge::merge_tests::tests::merge_does_not_import_confidence
+        PASS [   0.033s] ( 454/1366) graph merge::merge_tests::tests::merge_entity_into_inserts_then_merges
+        PASS [   0.033s] ( 455/1366) graph merge::merge_tests::tests::merge_entity_is_order_independent_and_idempotent
+        PASS [   0.024s] ( 456/1366) graph merge::merge_tests::tests::merge_entity_never_imports_replica_local_mutable_state
+        PASS [   0.036s] ( 457/1366) graph merge::merge_tests::tests::merge_entity_never_imports_statements
+        PASS [   0.031s] ( 458/1366) graph merge::merge_tests::tests::merge_entity_second_apply_reports_no_change
+        PASS [   0.033s] ( 459/1366) graph merge::merge_tests::tests::merge_entity_valid_until_lower_lamport_loses
+        PASS [   0.025s] ( 460/1366) graph merge::merge_tests::tests::merge_entity_valid_until_lww_takes_higher_lamport
+        PASS [   0.023s] ( 461/1366) graph merge::merge_tests::tests::merge_is_idempotent
+        PASS [   0.025s] ( 462/1366) graph merge::merge_tests::tests::merge_is_monotonic
+        PASS [   0.026s] ( 463/1366) graph merge::merge_tests::tests::merge_joins_access_count
+        PASS [   0.024s] ( 464/1366) graph merge::merge_tests::tests::merge_reason_lww_score_and_joins_traversal_idempotently
+        PASS [   0.018s] ( 465/1366) graph merge::merge_tests::tests::merge_status_superseded_dominates
+        PASS [   6.136s] ( 466/1366) memory::e2e retention::an_expired_fact_is_served_by_id_but_flagged
+        PASS [   0.010s] ( 467/1366) graph merge::merge_tests::tests::merged_entity_is_vector_searchable_without_rebuild
+        PASS [   0.011s] ( 468/1366) graph merge::merge_tests::tests::merge_to_superseded_drops_entity_from_search_index
+        PASS [   0.011s] ( 469/1366) graph merge::merge_tests::tests::superseded_by_join_picks_the_lexicographically_higher_id
+        PASS [   0.016s] ( 470/1366) graph merge::merge_tests::tests::merged_superseded_entity_is_stored_but_not_indexed
+        PASS [   0.028s] ( 471/1366) graph persist::persist_tests::tests::a_truly_empty_store_still_loads_as_a_fresh_graph
+        PASS [   0.036s] ( 472/1366) graph persist::persist_tests::tests::a_root_write_through_get_mut_survives_the_flush
+        PASS [   0.013s] ( 473/1366) graph reason::reason_tests::tests::add_reason_is_idempotent_on_adjacency
+        PASS [   0.040s] ( 474/1366) graph persist::persist_tests::tests::rows_without_root_error_instead_of_loading_empty
+        PASS [   0.014s] ( 475/1366) graph reason::reason_tests::tests::drop_reason_clears_the_ownership_index_as_well_as_the_memory
+        PASS [   6.805s] ( 476/1366) memory::e2e retention::a_deduped_ingest_still_applies_its_retention
+        PASS [   6.169s] ( 477/1366) memory::e2e retention::queued_ingestion_preserves_the_submitted_expiration
+        PASS [   0.013s] ( 478/1366) graph reason::reason_tests::tests::move_entity_rejects_missing_source_memory_and_missing_entity
+        PASS [   0.010s] ( 479/1366) graph reason::reason_tests::tests::move_entity_same_memory_is_a_validated_noop
+        PASS [   0.014s] ( 480/1366) graph reason::reason_tests::tests::move_entity_relocates_outgoing_and_stamps_cross_memory_targets
+        PASS [   0.011s] ( 481/1366) graph reason::reason_tests::tests::remove_after_reobserve_fully_clears_adjacency
+        PASS [   0.013s] ( 482/1366) graph reason::reason_tests::tests::remove_entity_cascades_through_reasons_and_hnsw_indices
+        PASS [   0.013s] ( 483/1366) graph reason::reason_tests::tests::move_entity_to_missing_destination_leaves_source_untouched
+        PASS [   0.011s] ( 484/1366) graph reason::reason_tests::tests::remove_entity_fact_is_immune
+        PASS [   0.013s] ( 485/1366) graph reason::reason_tests::tests::superseded_ancestors_walks_the_supersedes_chain_backward
+        PASS [   0.010s] ( 486/1366) graph rekey::rekey_tests::probe_c1_a_content_only_entity_moves_to_its_origin_id
+        PASS [   0.009s] ( 487/1366) graph rekey::rekey_tests::probe_c1_a_rekeyed_store_is_clean
+        PASS [   0.012s] ( 488/1366) graph rekey::rekey_tests::probe_c2_a_cross_memory_edge_follows_an_entity_in_another_memory
+        PASS [   0.013s] ( 489/1366) graph rekey::rekey_tests::probe_c1_an_originless_entity_is_not_stale
+        PASS [   0.009s] ( 490/1366) graph rekey::rekey_tests::probe_c2_every_reference_to_a_moved_id_moves_with_it
+        PASS [   0.008s] ( 491/1366) graph rekey::rekey_tests::probe_c3_a_stale_row_landing_on_a_current_one_is_joined_not_overwritten
+        PASS [   0.010s] ( 492/1366) graph rekey::rekey_tests::probe_c3_an_unrecognized_id_refuses_and_writes_nothing
+        PASS [   0.011s] ( 493/1366) graph rekey::rekey_tests::relocate_refuses_when_a_row_under_the_root_is_not_at_its_origin_id
+        PASS [   0.013s] ( 494/1366) graph rekey::rekey_tests::relocate_moves_a_file_row_onto_the_id_its_new_path_mints
+        PASS [   0.014s] ( 495/1366) graph rekey::rekey_tests::relocate_carries_a_chunk_and_the_edge_between_it_and_its_document
+        PASS [   0.009s] ( 496/1366) graph search::search_tests::tests::a_query_of_the_wrong_dimension_is_a_counted_no_op
+        PASS [   0.097s] ( 497/1366) graph persist::persist_tests::tests::an_unloaded_memory_survives_a_full_save_and_reload
+        PASS [   0.012s] ( 498/1366) graph search::search_tests::tests::an_ambiguous_prefix_resolves_the_same_way_every_time
+        PASS [   0.010s] ( 499/1366) graph search::search_tests::tests::an_ambiguous_short_memory_id_resolves_the_same_way_every_time
+        PASS [   0.010s] ( 500/1366) graph search::search_tests::tests::find_entity_by_prefix_resolves_a_unique_prefix
+        PASS [   0.011s] ( 501/1366) graph search::search_tests::tests::find_entity_resolves_through_the_ref_indirection_path
+        PASS [   0.012s] ( 502/1366) graph search::search_tests::tests::merge_blends_a_nonpositive_content_hit_present_in_both
+        PASS [   0.013s] ( 503/1366) graph search::search_tests::tests::merge_keeps_single_index_hits_and_blends_shared_positive
+        PASS [   0.012s] ( 504/1366) graph search::search_tests::tests::search_reasons_ranks_by_proximity_and_guards_empty
+        PASS [   0.021s] ( 505/1366) graph search::search_tests::tests::search_all_filtered_reject_all_is_empty
+        PASS [   0.019s] ( 506/1366) graph search::search_tests::tests::unfiltered_equals_filtered_with_always_true
+        PASS [   0.024s] ( 507/1366) graph search::search_tests::tests::search_all_filtered_returns_only_matching_ids
+        PASS [   0.012s] ( 508/1366) health tests::empty_graph_reports_no_entities_or_reasons
+        PASS [   0.013s] ( 509/1366) health tests::gini_over_access_pins_known_distributions
+        PASS [   0.010s] ( 510/1366) health tests::gini_over_memory_sizes_pins_known_distributions
+        PASS [   0.010s] ( 511/1366) health tests::graph_health_stats_empty_graph_gini_is_zero
+        PASS [   0.009s] ( 512/1366) health tests::graph_health_stats_reports_gini_memory_sizes
+        PASS [   6.381s] ( 513/1366) memory::e2e retention::a_retention_expires_the_fact_out_of_query_results
+        PASS [   0.012s] ( 514/1366) health tests::graph_health_stats_reports_largest_memory_entities
+        PASS [   0.012s] ( 515/1366) health tests::graph_health_stats_reports_max_memories
+        PASS [   0.010s] ( 516/1366) health tests::graph_health_stats_skewed_access_gini_above_half
+        PASS [   0.009s] ( 517/1366) health tests::the_graphs_own_counters_reach_health_and_another_graphs_do_not
+        PASS [   0.011s] ( 518/1366) health tests::storeless_graph_reports_zeroed_store_signals
+        PASS [   0.063s] ( 519/1366) graph vector_backend::vector_backend_tests::tests::disk_union_top_hit_matches_a_single_index_over_the_whole_corpus
+        PASS [   0.011s] ( 520/1366) hub canon_tests::canon_rejects_a_missing_path
+        PASS [   0.038s] ( 521/1366) health tests::store_signals_surface_evictions_and_the_embed_stamp
+        PASS [   0.025s] ( 522/1366) health tests::the_sorted_form_agrees_with_the_pairwise_one_it_replaced
+        PASS [   0.012s] ( 523/1366) hub canon_tests::canon_repins_to_the_nearest_memory_ancestor
+        PASS [   0.014s] ( 524/1366) hub hub_registry::tests::a_corrupt_file_opens_empty_rather_than_failing
+        PASS [   0.013s] ( 525/1366) hub hub_registry::tests::a_seen_root_survives_a_reopen
+        PASS [   0.043s] ( 526/1366) hotreload audit::tests::invalid_patterns_refuse_compile_and_valid_ones_gate
+        PASS [   0.018s] ( 527/1366) hub hub_registry::tests::stats_overwrite_and_persist
+        PASS [   0.010s] ( 528/1366) hub self_exe_tests::deleted_marker_is_stripped_only_as_suffix
+        PASS [   0.026s] ( 529/1366) hub hub_registry::tests::prune_drops_only_roots_whose_directory_vanished
+        PASS [   0.010s] ( 530/1366) hub self_exe_tests::self_exe_resolves_to_an_existing_binary
+        PASS [   0.140s] ( 531/1366) graph vector_backend::vector_backend_tests::tests::disk_backend_finds_an_insert_made_after_the_snapshot
+        PASS [   0.026s] ( 532/1366) identity identity_tests::stop_signal_tests::an_ignored_disposition_survives_exec
+        PASS [   0.014s] ( 533/1366) identity identity_tests::takeover_tests::takeover_env_gate_reads_the_environment
+        PASS [   0.023s] ( 534/1366) identity identity_tests::stop_signal_tests::the_successor_spawn_restores_both_dispositions
+        PASS [   0.151s] ( 535/1366) graph vector_backend::vector_backend_tests::tests::disk_len_counts_live_vectors_after_delete_and_insert
+        PASS [   0.012s] ( 536/1366) identity identity_tests::tests::build_id_is_stable_across_calls
+        PASS [   0.012s] ( 537/1366) identity identity_tests::tests::config_id_moves_when_config_moves
+        PASS [   0.011s] ( 538/1366) identity identity_tests::tests::deleted_marker_is_stripped_only_when_present
+        PASS [   0.009s] ( 539/1366) identity identity_tests::tests::uptime_is_zero_until_marked
+        PASS [   0.171s] ( 540/1366) graph vector_backend::vector_backend_tests::tests::disk_backend_excludes_a_tombstoned_snapshot_id
+        PASS [   0.013s] ( 541/1366) ingest ingest_dedup::ingest_dedup_tests::tests::different_text_preserves_id_invariant_and_records_rephrase
+        PASS [   0.012s] ( 542/1366) ingest ingest_dedup::ingest_dedup_tests::tests::find_duplicate_on_empty_graph_is_none
+        PASS [   0.013s] ( 543/1366) ingest ingest_dedup::ingest_dedup_tests::tests::find_duplicate_matches_above_threshold_and_skips_below
+        PASS [   0.011s] ( 544/1366) ingest ingest_dedup::ingest_dedup_tests::tests::same_text_reinforces_confidence_without_rephrase_edge
+        PASS [   0.012s] ( 545/1366) ingest ingest_dedup::ingest_dedup_tests::tests::rephrase_edge_is_idempotent_under_repeat
+        PASS [   0.014s] ( 546/1366) ingest ingest_dedup::ingest_dedup_tests::tests::two_inline_arrivals_are_one_origin
+        PASS [   0.012s] ( 547/1366) ingest ingest_dedup::rankone_probe::probe_p1_gate_one_finds_the_rank_two_same_origin_survivor
+        PASS [   0.012s] ( 548/1366) ingest ingest_dedup::rankone_probe::probe_p7_a_chunk_still_merges_into_its_just_placed_document
+        PASS [   0.013s] ( 549/1366) ingest ingest_dedup::rankone_probe::probe_p4_gate_one_refuses_an_unresolvable_cross_origin_survivor
+        PASS [   0.092s] ( 550/1366) hub hub_search_tests::search_asks_one_root_at_a_time
+        PASS [   0.019s] ( 551/1366) ingest ingest_direct::ingest_direct_tests::tests::drain_direct_once_clamps_against_the_payloads_tag_not_a_fixed_principal
+        PASS [   0.021s] ( 552/1366) ingest ingest_direct::ingest_direct_tests::tests::drain_direct_once_ingests_and_archives_end_to_end
+        PASS [   0.012s] ( 553/1366) ingest ingest_direct::ingest_direct_tests::tests::old_payload_without_valid_from_deserializes_as_none
+        PASS [   0.015s] ( 554/1366) ingest ingest_direct::ingest_direct_tests::tests::queue_direct_writes_idempotent_json_named_by_the_document_id
+        PASS [   0.013s] ( 555/1366) ingest ingest_direct::ingest_direct_tests::tests::valid_from_round_trips_through_json
+        PASS [   0.016s] ( 556/1366) ingest ingest_direct::ingest_direct_tests::tests::unparseable_payloads_are_archived_as_poison_and_parseable_ones_are_parked
+        PASS [   0.011s] ( 557/1366) ingest ingest_distill::ingest_distill_tests::tests::absent_kind_falls_back_to_fact
+        PASS [   0.013s] ( 558/1366) ingest ingest_distill::ingest_distill_tests::tests::declared_kind_maps_through
+        PASS [   0.016s] ( 559/1366) ingest ingest_distill::ingest_distill_tests::tests::citation_markers_around_the_claims_array_are_not_the_span
+        PASS [   0.064s] ( 560/1366) ingest ingest_dedup::rankone_probe::probe_p8_the_filter_reaches_past_a_wall_of_cross_origin_neighbours
+        PASS [   0.014s] ( 561/1366) ingest ingest_distill::ingest_distill_tests::tests::distill_batch_format_failure_retries_whole_delta
+        PASS [   0.014s] ( 562/1366) ingest ingest_distill::ingest_distill_tests::tests::distill_chunk_markers_carry_global_turn_index
+        PASS [   0.014s] ( 563/1366) ingest ingest_distill::ingest_distill_tests::tests::distill_prompt_injects_current_date_for_relative_resolution
+        PASS [   0.016s] ( 564/1366) ingest ingest_distill::ingest_distill_tests::tests::distill_chunks_long_conversation_turn_batched
+        PASS [   0.069s] ( 565/1366) ingest ingest_direct::ingest_direct_tests::tests::a_seeded_drain_archives_every_job_exactly_once
+        PASS [   0.011s] ( 566/1366) ingest ingest_distill::ingest_distill_tests::tests::distill_short_conversation_is_one_call
+        PASS [   0.014s] ( 567/1366) ingest ingest_distill::ingest_distill_tests::tests::empty_conversation_skips_llm
+        PASS [   0.011s] ( 568/1366) ingest ingest_distill::ingest_distill_tests::tests::extracts_claims_and_maps_kind
+        PASS [   0.014s] ( 569/1366) ingest ingest_distill::ingest_distill_tests::tests::empty_or_missing_text_is_skipped
+        PASS [   0.015s] ( 570/1366) ingest ingest_distill::ingest_distill_tests::tests::empty_llm_response_signals_retry
+        PASS [   0.013s] ( 571/1366) ingest ingest_distill::ingest_distill_tests::tests::genuine_empty_array_is_some_empty
+        PASS [   0.015s] ( 572/1366) ingest ingest_distill::ingest_distill_tests::tests::kind_list_dedups_a_word_declared_twice
+        PASS [   0.012s] ( 573/1366) ingest ingest_distill::ingest_distill_tests::tests::multiple_sibling_arrays_signal_retry
+        PASS [   0.014s] ( 574/1366) ingest ingest_distill::ingest_distill_tests::tests::kind_list_is_the_same_string_whatever_order_the_extras_arrive_in
+        PASS [   0.016s] ( 575/1366) ingest ingest_distill::ingest_distill_tests::tests::len2_array_of_arrays_parses_to_empty
+        PASS [   0.015s] ( 576/1366) ingest ingest_distill::ingest_distill_tests::tests::parse_claims_records_turn_provenance
+        PASS [   0.013s] ( 577/1366) ingest ingest_distill::ingest_distill_tests::tests::registered_kind_is_accepted_and_offered_to_the_llm
+        PASS [   0.013s] ( 578/1366) ingest ingest_distill::ingest_distill_tests::tests::prose_reply_carrying_knowledge_is_not_lost
+        PASS [   0.014s] ( 579/1366) ingest ingest_distill::ingest_distill_tests::tests::prose_reply_signals_retry_not_archive
+        PASS [   0.014s] ( 580/1366) ingest ingest_distill::ingest_distill_tests::tests::single_nested_array_is_unwrapped
+        PASS [   0.013s] ( 581/1366) ingest ingest_distill::ingest_distill_tests::tests::split_turns_breaks_on_blank_lines
+        PASS [   0.013s] ( 582/1366) ingest ingest_distill::ingest_distill_tests::tests::the_first_turn_is_marked_one_and_can_be_cited
+        PASS [   0.016s] ( 583/1366) ingest ingest_distill::ingest_distill_tests::tests::turns_absent_or_malformed_leaves_empty
+        PASS [   0.018s] ( 584/1366) ingest ingest_distill::ingest_distill_tests::tests::tolerates_prose_around_json
+        PASS [   0.015s] ( 585/1366) ingest ingest_distill::ingest_distill_tests::tests::undeclared_kind_falls_back_to_fact
+        PASS [   0.015s] ( 586/1366) ingest ingest_distill::ingest_distill_tests::tests::valid_from_hint_is_parsed_when_present_and_ignored_when_garbage
+        PASS [   0.014s] ( 587/1366) ingest ingest_distill::ingest_distill_tests::tests::whitespace_llm_response_signals_retry
+        PASS [   0.012s] ( 588/1366) ingest ingest_place::identity_origin_probe::probe::probe_c2_gate_one_refuses_across_origins
+        PASS [   0.014s] ( 589/1366) ingest ingest_place::identity_origin_probe::probe::probe_c1_chunk_id_carries_origin
+        PASS [   0.014s] ( 590/1366) ingest ingest_place::identity_origin_probe::probe::probe_c1_document_id_carries_origin
+        PASS [   0.013s] ( 591/1366) ingest ingest_place::identity_origin_probe::probe::probe_c3_gate_two_refuses_across_origins
+        PASS [   0.010s] ( 592/1366) ingest ingest_place::ingest_place_tests::tests::build_chunk_entity_clamps_out_of_range_confidence
+        PASS [   0.016s] ( 593/1366) ingest ingest_place::ingest_place_tests::tests::a_tightening_dedup_stamps_the_survivor_only
+        PASS [   0.013s] ( 594/1366) ingest ingest_place::ingest_place_tests::tests::beta_params_map_confidence_to_prior
+        PASS [   0.013s] ( 595/1366) ingest ingest_place::ingest_place_tests::tests::build_chunk_entity_carries_text_vector_and_confidence
+        PASS [   0.012s] ( 596/1366) ingest ingest_place::ingest_place_tests::tests::chunk_in_the_old_threshold_gap_is_not_silently_dropped
+        PASS [   0.016s] ( 597/1366) ingest ingest_place::ingest_place_tests::tests::chunk_source_id_is_scoped_to_the_full_source_identity
+        PASS [   0.015s] ( 598/1366) ingest ingest_place::ingest_place_tests::tests::dedup_onto_an_untimed_survivor_adopts_the_incoming_deadline
+        PASS [   0.016s] ( 599/1366) ingest ingest_place::ingest_place_tests::tests::dedup_keeps_the_shorter_deadline_whichever_arrives_first
+        PASS [   0.016s] ( 600/1366) ingest ingest_place::ingest_place_tests::tests::place_chunks_defers_question_seeding_via_the_hook
+        PASS [   0.022s] ( 601/1366) ingest ingest_place::ingest_place_tests::tests::per_kind_dedup_threshold_tightens_facts_loosens_claims
+        PASS [   0.016s] ( 602/1366) ingest ingest_place::ingest_place_tests::tests::place_chunks_skips_empty_vectors
+        PASS [   0.016s] ( 603/1366) ingest ingest_place::ingest_place_tests::tests::place_chunks_second_gate_keeps_the_discarded_id_out_of_the_lexical_index
+        PASS [   0.017s] ( 604/1366) ingest ingest_place::ingest_place_tests::tests::place_chunks_inserts_each_distinct_nonempty_chunk
+        PASS [   0.017s] ( 605/1366) ingest ingest_place::ingest_place_tests::tests::place_document_second_gate_returns_the_survivor_and_indexes_no_orphan
+        PASS [   0.019s] ( 606/1366) ingest ingest_place::ingest_place_tests::tests::veracity_weights_by_channel_keep_inline_a_full_observation
+        PASS [   0.019s] ( 607/1366) ingest ingest_place::rekey_identity_probe::probe_p1_origin_id_reproduces_document_id_from_the_stored_external_id
+        PASS [   0.019s] ( 608/1366) ingest ingest_place::ingest_place_tests::tests::the_second_dedup_gate_tightens_too_and_orphans_no_stamp
+        PASS [   0.019s] ( 609/1366) ingest ingest_place::rekey_identity_probe::probe_p2_origin_id_reproduces_chunk_id_from_the_stored_external_id
+        PASS [   0.016s] ( 610/1366) ingest ingest_queue::tests::loose_documents_are_neither_consumed_nor_archived
+        PASS [   0.016s] ( 611/1366) ingest ingest_queue_status::ingest_queue_status_tests::tests::a_parked_direct_payload_counts_as_pending
+        PASS [   0.018s] ( 612/1366) ingest ingest_place::rekey_identity_probe::probe_p3_an_originless_row_is_already_at_its_id
+        PASS [   0.017s] ( 613/1366) ingest ingest_queue_status::ingest_queue_status_tests::tests::a_recorded_failure_is_readable_and_clearable
+        PASS [   0.016s] ( 614/1366) ingest ingest_queue_status::ingest_queue_status_tests::tests::an_absent_queue_dir_is_reported_not_invented
+        PASS [   0.014s] ( 615/1366) ingest ingest_queue_status::ingest_queue_status_tests::tests::the_error_sidecar_lives_in_a_directory_the_drain_skips
+        PASS [   0.020s] ( 616/1366) ingest ingest_queue_status::ingest_queue_status_tests::tests::scan_reports_pending_failed_and_done_separately
+        PASS [   0.013s] ( 617/1366) ingest ingest_wikilinks::ingest_wikilinks_tests::a_body_yields_its_links_once_each_and_refuses_a_guess
+        PASS [   0.012s] ( 618/1366) ingest ingest_wikilinks::ingest_wikilinks_tests::a_memo_is_named_by_its_leaf_whichever_channel_carried_it
+        PASS [   0.020s] ( 619/1366) ingest ingest_wikilinks::ingest_wikilinks_tests::code_is_quoted_syntax_and_never_a_link
+        PASS [   0.018s] ( 620/1366) ingest ingest_wikilinks::ingest_wikilinks_tests::the_fold_links_both_directions_so_arrival_order_does_not_matter
+        PASS [   0.020s] ( 621/1366) ingest ingest_worker::ingest_worker_tests::embed_tests::embed_chunks_empty_input_short_circuits_to_empty
+        PASS [   0.019s] ( 622/1366) ingest ingest_worker::ingest_worker_tests::embed_tests::embed_chunks_falls_back_to_per_item_on_a_count_mismatch
+        PASS [   0.016s] ( 623/1366) ingest ingest_worker::ingest_worker_tests::embed_tests::embed_chunks_short_circuits_on_the_batch_path_when_counts_match
+        PASS [   0.020s] ( 624/1366) ingest ingest_worker::ingest_worker_tests::embed_tests::embed_with_retry_treats_an_empty_response_as_permanent
+        PASS [   0.017s] ( 625/1366) ingest ingest_worker::ingest_worker_tests::outcome_tests::document_permanent_has_the_canonical_shape
+        PASS [   0.015s] ( 626/1366) ingest ingest_worker::ingest_worker_tests::outcome_tests::failed_zeroes_every_counter_and_carries_the_failures
+        PASS [   0.934s] ( 627/1366) graph hnsw::hnsw_tests::tests::search_order_matches_brute_force_on_separated_corpus
+        PASS [   0.016s] ( 628/1366) ingest ingest_worker::ingest_worker_tests::outcome_tests::status_as_str_is_the_lowercase_label
+        PASS [   0.012s] ( 629/1366) ingest ingest_worker::ingest_worker_tests::split_tests::a_label_glues_onto_the_paragraph_below_and_junk_is_skipped
+        PASS [   0.013s] ( 630/1366) ingest ingest_worker::ingest_worker_tests::split_tests::front_matter_is_split_off_and_its_two_keys_read
+        PASS [   0.024s] ( 631/1366) ingest ingest_worker::ingest_worker_tests::split_tests::a_batch_of_parked_jobs_spends_one_embed_call_on_every_chunk
+        PASS [   0.012s] ( 632/1366) ingest ingest_worker::ingest_worker_tests::split_tests::paragraph_split_single_and_multi
+        PASS [   0.012s] ( 633/1366) ingest ingest_worker::ingest_worker_tests::split_tests::whitespace_or_empty_input_yields_no_chunks
+        PASS [   0.018s] ( 634/1366) ingest ingest_worker::ingest_worker_tests::tests::a_second_gate_dedup_reports_deduped_and_the_surviving_id
+        PASS [   0.018s] ( 635/1366) ingest ingest_worker::ingest_worker_tests::tests::an_ordinary_memo_registers_no_claim_kind
+        PASS [   0.015s] ( 636/1366) ingest ingest_worker::ingest_worker_tests::tests::classify_status_maps_tallies_to_outcome
+        PASS [   0.015s] ( 637/1366) ingest ingest_worker::ingest_worker_tests::tests::document_permanent_failure_has_canonical_shape
+        PASS [   0.014s] ( 638/1366) ingest ingest_worker::ingest_worker_tests::tests::enqueue_returns_the_origin_carrying_doc_id
+        PASS [   0.031s] ( 639/1366) ingest ingest_worker::ingest_worker_tests::tests::enqueue_refuses_past_the_queue_bound_and_counts_the_refusal
+        PASS [   0.013s] ( 640/1366) ingest ingest_worker::ingest_worker_tests::tests::finalize_doc_identity_marks_dedup_and_keeps_surviving_id
+        PASS [   0.014s] ( 641/1366) ingest ingest_worker::ingest_worker_tests::tests::no_entry_point_can_mint_an_unclamped_confidence
+        PASS [   0.049s] ( 642/1366) ingest ingest_worker::ingest_worker_tests::tests::every_public_entry_point_walks_through_the_clamp
+        PASS [   0.011s] ( 643/1366) ingest ingest_worker::ingest_worker_tests::tests::outcome_log_severity_maps_status_to_level
+        PASS [   0.038s] ( 644/1366) ingest ingest_worker::ingest_worker_tests::tests::queue_depth_reads_the_parked_jobs_and_falls_after_drain
+        PASS [   1.077s] ( 645/1366) ingest ingest_direct::ingest_direct_tests::tests::drain_direct_once_leaves_failed_job_for_retry
+        PASS [   0.015s] ( 646/1366) ingest ingest_worker::transcript_ingest_tests::a_queued_transcript_survives_missing_reason_configuration_and_retries
+        PASS [   0.013s] ( 647/1366) ingest ingest_worker::transcript_ingest_tests::malformed_distillation_does_not_commit_or_discard_input
+        PASS [   0.028s] ( 648/1366) ingest ingest_worker::transcript_ingest_tests::partial_transcript_embeddings_retry_missing_claims_without_losing_citations
+        PASS [   0.017s] ( 649/1366) ingest ingest_worker::transcript_ingest_tests::raw_transcripts_do_not_call_the_reason_model
+        PASS [   0.012s] ( 650/1366) ingest ingest_worker::transcript_ingest_tests::transcript_detection_requires_both_conversation_roles
+        PASS [   0.018s] ( 651/1366) ingest ingest_worker::transcript_ingest_tests::transcripts_distill_by_default_with_source_and_turns
+        PASS [   0.014s] ( 652/1366) ingest_config ingest_config::ingest_config_tests::tests::dedup_threshold_for_kind_resolves
+        PASS [   0.012s] ( 653/1366) ingest_config ingest_config::ingest_config_tests::tests::review_for_keys_on_the_scheme_and_defaults_to_active
+        PASS [   0.010s] ( 654/1366) ingest_config ingest_config::ingest_config_tests::tests::validate_accepts_the_default_and_rejects_bad_knobs
+        PASS [   0.009s] ( 655/1366) ingest_config ingest_config::ingest_config_tests::tests::validate_rejects_out_of_range_per_kind
+        PASS [   1.078s] ( 656/1366) ingest ingest_place::ingest_place_tests::tests::place_document_reports_failure_and_leaves_graph_untouched_on_embed_error
+        PASS [   0.015s] ( 657/1366) llm llm::llm_tests::tests::a_live_runtime_is_still_crossed_normally
+        PASS [   0.010s] ( 658/1366) llm llm::llm_tests::tests::a_missing_runtime_and_a_shutdown_are_different_refusals
+        PASS [   1.073s] ( 659/1366) ingest ingest_worker::ingest_worker_tests::embed_tests::embed_with_retry_treats_a_connection_failure_as_transient
+        PASS [   0.017s] ( 660/1366) llm llm::llm_tests::tests::a_weak_model_that_answers_is_not_counted_as_a_failure
+        PASS [   0.015s] ( 661/1366) llm llm::llm_tests::tests::a_wedged_embedding_slot_is_unloaded_counted_and_named
+        PASS [   1.075s] ( 662/1366) ingest ingest_worker::ingest_worker_tests::tests::a_document_with_no_letter_or_digit_is_refused_with_the_gate_off
+        PASS [   1.076s] ( 663/1366) ingest ingest_worker::ingest_worker_tests::tests::an_unresolved_template_is_refused_on_the_direct_and_the_watched_leg_alike
+        PASS [   0.016s] ( 664/1366) llm llm::llm_tests::tests::configured_embedding_endpoint_preserves_order_auth_and_permanent_errors
+        PASS [   0.020s] ( 665/1366) llm llm::llm_tests::tests::embed_falls_back_to_single_on_empty_batch_response
+        PASS [   0.018s] ( 666/1366) llm llm::llm_tests::tests::embed_falls_back_to_single_on_transient_batch_error
+        PASS [   8.398s] ( 667/1366) memory::e2e retention::a_default_ingest_never_expires
+        PASS [   0.022s] ( 668/1366) llm llm::llm_tests::tests::explicit_v1_suffix_forces_openai_compat_even_on_localhost
+        PASS [   0.032s] ( 669/1366) llm llm::llm_tests::tests::embed_propagates_permanent_batch_error_without_retry
+        PASS [   1.079s] ( 670/1366) ingest ingest_worker::ingest_worker_tests::tests::run_assembles_a_failed_outcome_when_document_embedding_fails
+        PASS [   0.019s] ( 671/1366) llm llm::llm_tests::tests::is_local_url_accepts_local_hosts
+        PASS [   0.016s] ( 672/1366) llm llm::llm_tests::tests::is_local_url_rejects_public_hosts
+        PASS [   8.194s] ( 673/1366) memory::e2e retention::a_queued_job_without_expiration_remains_recallable
+        PASS [   0.013s] ( 674/1366) llm llm::llm_tests::tests::local_ollama_markers_match_loopback_and_default_port
+        PASS [   0.019s] ( 675/1366) llm llm::llm_tests::tests::no_runtime_at_all_is_still_none_and_is_not_a_shutdown_refusal
+        PASS [   0.019s] ( 676/1366) llm llm::llm_tests::tests::permanent_client_errors_do_not_retry_single
+        PASS [   0.013s] ( 677/1366) llm llm::llm_tests::tests::strip_think_recovers_answer_after_leaked_reasoning
+        PASS [   0.018s] ( 678/1366) llm llm::llm_tests::tests::redact_url_hides_userinfo_and_leaves_everything_else_alone
+        PASS [   0.017s] ( 679/1366) llm llm::llm_tests::tests::the_bridge_refuses_and_counts_instead_of_entering_a_dying_runtime
+        PASS [   0.017s] ( 680/1366) llm llm::llm_tests::tests::tokio_still_panics_when_a_timer_is_polled_on_a_shut_down_runtime
+        PASS [   0.017s] ( 681/1366) llm llm::llm_tests::tests::transient_and_empty_batch_retry_single
+        PASS [   0.018s] ( 682/1366) llm llm::llm_tests::tests::the_recovery_unloads_the_embed_model_with_keep_alive_zero
+        PASS [   0.169s] ( 683/1366) llm llm::llm_tests::tests::complete_retries_a_transient_5xx_then_succeeds
+        PASS [   1.101s] ( 684/1366) ingest ingest_worker::ingest_worker_tests::tests::strict_hygiene_gate_rejects_before_any_embed_spend_and_the_store_counts_both_legs
+        PASS [   0.016s] ( 685/1366) math heap::tests::ties_break_on_the_tie_field_in_both_directions
+        PASS [   0.016s] ( 686/1366) llm llm::llm_tests::tests::userinfo_does_not_make_a_public_url_local
+        PASS [   0.015s] ( 687/1366) math math::math_tests::cosine_tests::mismatched_lengths_are_refused_rather_than_truncated
+        PASS [   0.018s] ( 688/1366) math math::math_tests::cosine_tests::identical_vectors_are_one_orthogonal_are_zero
+        PASS [   0.018s] ( 689/1366) math math::math_tests::cosine_tests::zero_norm_inputs_return_zero_not_nan
+        PASS [   0.015s] ( 690/1366) math math::math_tests::online_softmax_tests::corroborated_item_can_outrank_higher_single_observation
+        PASS [   0.010s] ( 691/1366) math math::math_tests::online_softmax_tests::two_equal_observations_add_ln2
+        PASS [   0.010s] ( 692/1366) math math::math_tests::online_softmax_tests::empty_finalizes_to_neg_infinity
+        PASS [   0.010s] ( 693/1366) math math::math_tests::online_softmax_tests::single_observation_is_identity
+        PASS [   0.014s] ( 694/1366) math quant::quant_tests::tests::empty_and_zero_vectors
+        PASS [   0.013s] ( 695/1366) math quant::quant_tests::tests::float_cosine_edge_cases
+        PASS [   0.013s] ( 696/1366) math quant::quant_tests::tests::int8_round_trip_within_scale
+        PASS [   0.012s] ( 697/1366) math quant::quant_tests::tests::mixed_mode_falls_back_to_decoded_float
+        PASS [   0.013s] ( 698/1366) math quant::quant_tests::tests::mixed_mode_exactly_matches_the_decoded_float_distance
+        PASS [   0.014s] ( 699/1366) math quant::quant_tests::tests::int8_cosine_identical_is_zero_orthogonal_is_one
+        PASS [   0.012s] ( 700/1366) math quant::quant_tests::tests::mode_parse_round_trip
+        PASS [   0.015s] ( 701/1366) math quant::quant_tests::tests::none_mode_is_lossless
+        PASS [   0.209s] ( 702/1366) llm llm::llm_tests::tests::concurrent_embeds_queue_behind_one_lane
+        PASS [   0.014s] ( 703/1366) memory::cited_paths a_part_is_held_to_its_anchors_and_not_its_paths
+        PASS [   0.019s] ( 704/1366) memory::cited_paths the_gate_can_go_red
+        PASS [   0.034s] ( 705/1366) memory::cited_paths every_cited_path_is_there
+        PASS [   0.011s] ( 706/1366) memory::declared_dependencies the_gate_can_see_a_dependency_that_is_not_used
+        PASS [   0.028s] ( 707/1366) memory::declared_dependencies the_workspace_catalogue_lists_nothing_no_member_inherits
+        PASS [   0.039s] ( 708/1366) memory::dynamic_surface no_declaration_answers_a_query_for_its_own_body
+        PASS [   0.132s] ( 709/1366) memory::declared_dependencies every_declared_dependency_is_named_by_the_crates_own_main_code
+        PASS [   0.193s] ( 710/1366) memory::e2e cli_surface::a_flag_the_id_path_would_ignore_is_refused_not_swallowed
+        PASS [   0.200s] ( 711/1366) memory::e2e cli_surface::a_miss_exits_non_zero_and_names_the_command
+        PASS [   0.038s] ( 712/1366) memory::e2e cli_surface::forget_with_no_target_is_a_usage_error
+        PASS [   0.736s] ( 713/1366) llm llm::llm_tests::tests::a_read_takes_the_front_of_the_embed_lane
+        PASS [   0.076s] ( 714/1366) memory::e2e cli_surface::graph_cli_inspects_an_owned_store_without_claiming_or_changing_it
+        PASS [   0.059s] ( 715/1366) memory::e2e cli_surface::help_and_version_answer_before_anything_else
+        PASS [   0.317s] ( 716/1366) memory::e2e cli_surface::forget_absorbed_the_pattern_sweep_and_its_dry_run
+        PASS [   2.319s] ( 717/1366) identity identity_tests::takeover_tests::self_watch_does_not_fire_on_an_unchanged_binary
+        PASS [   0.197s] ( 718/1366) memory::e2e daemon_reads::daemon_exposes_only_headless_consumer_contracts
+        PASS [   0.247s] ( 719/1366) memory::e2e cli_surface::query_absorbed_the_vector_read_and_its_k
+        PASS [   0.489s] ( 720/1366) memory::e2e daemon_reads::get_and_query_answer_off_disk_with_no_daemon
+        PASS [   0.024s] ( 721/1366) memory::e2e eval_ground::categories_are_the_known_four
+        PASS [   0.026s] ( 722/1366) memory::e2e eval_ground::every_anchor_appears_in_its_cited_turn
+        PASS [   0.603s] ( 723/1366) memory::e2e daemon_reads::explanations_and_missing_id_diagnostics_work_locally_and_through_daemon
+        PASS [   0.015s] ( 724/1366) memory::e2e eval_ground::noise_turns_carry_no_anchor_and_duplicate_no_corpus_turn
+        PASS [   0.011s] ( 725/1366) memory::e2e eval_ground::session_ids_are_unique_and_referenced
+        PASS [   0.013s] ( 726/1366) memory::e2e eval_ground::turns_are_single_paragraph_and_nonempty
+        PASS [   1.268s] ( 727/1366) memory::cartridge hello_declares_memory_without_loading_configuration
+        PASS [   1.300s] ( 728/1366) memory::cartridge corrupt_store_is_refused_without_rewriting_it
+        PASS [   0.069s] ( 729/1366) memory::e2e focus_routing::pulse_fails_loudly_with_no_daemon
+        PASS [   1.492s] ( 730/1366) memory::capacity health_overtakes_blocked_ingestion_and_dispose_drains_it
+        PASS [   5.277s] ( 731/1366) graph diskann::diskann_tests::tests::the_same_corpus_builds_a_byte_identical_index
+        PASS [   0.211s] ( 732/1366) memory::e2e focus_routing::pulse_reaches_the_daemons_tick_queue
+        PASS [   0.146s] ( 733/1366) memory::e2e focus_routing::unnamed_list_does_not_offer_the_root
+        PASS [   0.401s] ( 734/1366) memory::e2e focus_routing::focus_and_claim_kind_still_write_locally_with_no_daemon
+        PASS [   0.131s] ( 735/1366) memory::e2e focus_routing::unnamed_promote_still_writes_locally_with_no_daemon
+        PASS [   0.465s] ( 736/1366) memory::e2e focus_routing::focus_add_lands_in_the_serving_daemon_and_survives_its_persist
+        PASS [   0.099s] ( 737/1366) memory::e2e forget_source::a_bad_source_selector_is_refused_not_guessed_at
+        PASS [   1.071s] ( 738/1366) memory::e2e daemon_reads::get_and_query_read_the_serving_daemons_live_graph
+        PASS [   0.035s] ( 739/1366) memory::e2e harness::the_sweep_takes_the_old_runtime_dirs_and_leaves_the_rest
+        PASS [   1.821s] ( 740/1366) memory::cartridge host_replacement_preserves_memory_and_rejects_bad_configuration
+        PASS [   1.825s] ( 741/1366) memory::cartridge memory_persists_and_replacement_does_not_open_a_second_writer
+        PASS [   0.479s] ( 742/1366) memory::e2e forget_source::force_without_source_is_refused_rather_than_ignored
+        PASS [   0.537s] ( 743/1366) memory::e2e forget_source::a_fact_in_the_source_needs_force
+        PASS [   0.500s] ( 744/1366) memory::e2e forget_source::forget_source_lands_in_the_serving_daemon_not_on_the_clis_disk
+        PASS [   0.418s] ( 745/1366) memory::e2e health_surface::health_reports_the_serving_daemons_degradation_counts
+        PASS [   0.660s] ( 746/1366) memory::e2e focus_routing::unnamed_promote_reaches_the_daemon_instead_of_the_callers_store
+        PASS [   0.438s] ( 747/1366) memory::e2e health_surface::health_reads_the_ingest_queue_depth_from_the_live_daemon
+        PASS [   0.013s] ( 748/1366) memory::e2e health_surface::the_health_line_parsers_read_their_numbers
+        PASS [   0.081s] ( 749/1366) memory::e2e health_surface::health_with_no_daemon_still_reports_this_processs_own_counts
+        PASS [   0.586s] ( 750/1366) memory::e2e forget_source::forget_source_removes_every_chunk_of_one_file
+        PASS [   0.574s] ( 751/1366) memory::e2e health_surface::health_uses_the_daemon_store_without_opening_a_second_database
+        PASS [   0.192s] ( 752/1366) memory::e2e hub::a_second_hub_refuses_the_taken_socket
+        PASS [   0.183s] ( 753/1366) memory::e2e hub::hub_binds_serves_status_and_rejects_bogus_unload
+        PASS [   0.151s] ( 754/1366) memory::e2e hub::status_without_a_hub_fails_softly
+        PASS [  11.520s] ( 755/1366) memory::e2e file_watcher::database_state_is_excluded_while_user_documents_are_ingested
+        PASS [   0.536s] ( 756/1366) memory::e2e hub::a_cross_root_search_registers_the_project_it_was_called_from
+        PASS [   1.520s] ( 757/1366) memory::e2e focus_routing::a_promoted_child_survives_the_daemons_next_flush
+        PASS [   0.586s] ( 758/1366) memory::e2e health_surface::ready_tells_two_daemon_generations_apart_and_names_the_build
+        PASS [   0.759s] ( 759/1366) memory::e2e hub::resolve_spawns_a_node_and_unload_reaps_it
+        PASS [  11.915s] ( 760/1366) memory::e2e file_watcher::a_watched_file_survives_a_kill_taken_before_its_distillation_lands
+        PASS [   1.094s] ( 761/1366) memory::e2e hub::an_empty_hub_exits_on_its_own
+        PASS [   0.408s] ( 762/1366) memory::e2e invariants::identical_text_ingested_twice_is_one_node
+        PASS [   2.861s] ( 763/1366) memory::e2e daemon_reads::routed_query_delivers_as_many_hits_as_the_local_one
+        PASS [   0.911s] ( 764/1366) memory::e2e invariants::a_fact_survives_gc_and_refuses_to_be_forgotten
+        PASS [   0.910s] ( 765/1366) memory::e2e invariants::degrading_an_entity_punishes_its_delivered_score
+        PASS [   0.033s] ( 766/1366) memory::e2e lifecycle::memory_stop_says_so_when_nothing_is_serving
+        PASS [   0.374s] ( 767/1366) memory::e2e lifecycle::sigterm_runs_the_guarded_flush
+        PASS [   0.017s] ( 768/1366) memory::e2e lifecycle_canary::a_health_only_takeover_does_not_pass_the_verdict
+        PASS [   0.426s] ( 769/1366) memory::e2e lifecycle::memory_stop_stops_this_projects_daemon
+        PASS [   0.568s] ( 770/1366) memory::e2e lifecycle::clean_refuses_a_served_store_and_then_removes_what_the_config_names
+        PASS [   0.252s] ( 771/1366) memory::e2e near_duplicates::check_manifest_round_trips_and_repair_rejects_old_format
+        PASS [   2.144s] ( 772/1366) memory::e2e hub::an_adopted_node_whose_daemon_was_killed_leaves_the_map
+        PASS [   1.683s] ( 773/1366) memory::e2e invariants::every_ingested_fact_is_its_own_top_hit
+        PASS [   0.012s] ( 774/1366) memory::e2e pollution::a_shared_content_token_is_not_pollution
+        PASS [   0.334s] ( 775/1366) memory::e2e near_duplicates::consolidate_joins_two_origins_and_folds_nothing
+        PASS [   0.158s] ( 776/1366) memory::e2e queue_drain::ingest_names_the_queue_a_fact_landed_in_and_the_id_read_says_where_it_is
+        PASS [   0.260s] ( 777/1366) memory::e2e queue_drain::queue_drain_lands_in_the_serving_daemon_not_on_the_clis_disk
+        PASS [   0.403s] ( 778/1366) memory::e2e near_duplicates::ingest_leaves_no_twins_and_no_bare_headings
+        PASS [   0.011s] ( 779/1366) memory::e2e ranking::a_hit_line_parses_and_prose_does_not
+        PASS [   0.081s] ( 780/1366) memory::e2e retrieval::query_on_an_empty_graph_says_no_results
+        PASS [   0.268s] ( 781/1366) memory::e2e queue_drain::queue_drain_still_drains_in_process_with_no_daemon
+        PASS [   0.520s] ( 782/1366) memory::e2e retrieval::query_ranks_the_matching_fact_first
+        PASS [   0.491s] ( 783/1366) memory::e2e retrieval::query_recalls_each_fact_from_a_paraphrase
+        PASS [   2.669s] ( 784/1366) memory::e2e invariants::a_reason_edge_makes_its_neighbour_reachable
+        PASS [   0.415s] ( 785/1366) memory::e2e retrieval::vector_recall_ranks_the_matching_fact_first
+        PASS [   0.007s] ( 786/1366) memory::id_mint_reads_no_clock every_watched_file_still_exists
+        PASS [   0.010s] ( 787/1366) memory::id_mint_reads_no_clock every_watched_function_still_exists
+        PASS [   0.009s] ( 788/1366) memory::id_mint_reads_no_clock no_watched_function_reads_the_machine_clock
+        PASS [   6.194s] ( 789/1366) llm llm::llm_tests::tests::a_failed_completion_is_counted_and_named_instead_of_erased
+        PASS [   0.009s] ( 790/1366) memory::id_mint_reads_no_clock the_clock_reads_left_in_base_are_the_known_ones_and_no_others
+        PASS [   0.008s] ( 791/1366) memory::id_mint_reads_no_clock the_serde_skip_exemption_is_still_load_bearing
+        PASS [   0.011s] ( 792/1366) memory::id_replay one_nonce_and_one_parent_mint_one_child_so_the_pinning_is_real
+        PASS [   0.013s] ( 793/1366) memory::id_replay the_fold_actually_mints_ids_so_the_comparison_is_not_vacuous
+        PASS [   0.014s] ( 794/1366) memory::id_replay two_folds_of_one_prefix_build_a_byte_identical_graph
+        PASS [   0.012s] ( 795/1366) memory::layer_headers every_layer_line_names_its_imports_and_nothing_above_it
+        PASS [   0.009s] ( 796/1366) memory::layer_headers the_header_parser_reads_a_wrapped_line_and_reads_nothing_as_nothing
+        PASS [   0.555s] ( 797/1366) memory::e2e review_lifecycle::a_held_claim_is_filtered_until_promote_releases_it
+        PASS [   0.084s] ( 798/1366) memory::memory_contract cold_filters_precede_the_delivery_cut_and_expired_rows_stay_stored
+        PASS [   0.102s] ( 799/1366) memory::layer_headers the_gate_can_go_red
+        PASS [   0.066s] ( 800/1366) memory::memory_contract diagnosing_a_filtered_memory_does_not_emit_its_content
+        PASS [   0.073s] ( 801/1366) memory::memory_contract cold_winner_competes_with_full_hot_pool_and_explains_its_score
+        PASS [   0.100s] ( 802/1366) memory::memory_contract cold_history_obeys_world_time_and_missing_ids_are_honestly_unknown
+        PASS [   0.036s] ( 803/1366) memory::memory_contract simple_hybrid_history_uses_one_score_scale_in_every_tier
+        PASS [   0.641s] ( 804/1366) memory::e2e review_lifecycle::promote_and_the_filter_route_through_a_serving_daemon
+        PASS [   0.019s] ( 805/1366) memory::one_dispatch the_check_can_fail
+        PASS [   0.061s] ( 806/1366) memory::memory_contract unlinked_hot_and_cold_copies_have_equal_scores
+        PASS [   0.038s] ( 807/1366) memory::one_llm_client every_llm_client_is_built_in_one_place
+        PASS [   0.012s] ( 808/1366) memory::one_llm_client the_http_client_is_not_an_llm_client
+        PASS [   0.021s] ( 809/1366) memory::one_llm_client the_check_can_fail
+        PASS [   0.016s] ( 810/1366) memory::orphan_modules the_gate_can_go_red
+        PASS [  14.806s] ( 811/1366) memory::e2e gnn_recall::recall_over_a_graph_the_gnn_has_propagated
+        PASS [   0.012s] ( 812/1366) memory::reason_ownership the_gate_can_go_red
+        PASS [   0.031s] ( 813/1366) memory::reason_ownership every_minted_edge_is_registered_where_it_lands
+        PASS [   0.013s] ( 814/1366) memory::removal_policy authority_is_monotone_across_every_kind_and_status
+        PASS [   0.020s] ( 815/1366) memory::removal_policy the_policy_itself_is_where_the_gate_says_it_is
+        PASS [   0.064s] ( 816/1366) memory::orphan_modules every_source_file_is_reached_by_a_module_declaration
+        PASS [   0.050s] ( 817/1366) memory::removal_policy the_durable_kind_set_is_written_once
+        PASS [   0.010s] ( 818/1366) memory::tracked_artifacts no_crate_directory_holds_a_store
+        PASS [   0.023s] ( 819/1366) memory::tracked_artifacts git_tracks_no_runtime_artifact
+        PASS [   0.013s] ( 820/1366) memory::tracked_artifacts the_gate_can_go_red
+        PASS [   0.014s] ( 821/1366) memory::watcher_tests a_delete_becomes_a_tombstone_and_never_a_record
+        PASS [   0.187s] ( 822/1366) memory::one_dispatch every_operation_dispatches_from_one_table
+        PASS [   0.100s] ( 823/1366) memory::tick_shutdown a_runtime_teardown_under_a_full_tick_queue_is_not_a_panic_storm
+        PASS [   0.012s] ( 824/1366) memory::watcher_tests paths_equal_handles_var_symlink
+        PASS [   0.024s] ( 825/1366) memory::watcher_tests pipeline_skips_files_over_one_megabyte
+        PASS [   0.184s] ( 826/1366) memory::watcher_tests rename_within_root_emits_renamed_or_delete_create_pair
+        PASS [   3.145s] ( 827/1366) memory::e2e lifecycle::a_signal_during_boot_still_runs_the_guarded_flush
+        PASS [   0.010s] ( 828/1366) memory::wire_tolerant_decode a_health_payload_missing_a_later_field_still_decodes
+        PASS [   0.009s] ( 829/1366) memory::wire_tolerant_decode every_response_decodes_a_payload_with_none_of_its_later_fields
+        PASS [   0.009s] ( 830/1366) memory::wire_tolerant_decode the_gate_can_go_red
+        PASS [   0.008s] ( 831/1366) memory::wire_tolerant_decode the_gate_exercises_every_response_type_on_both_wires
+        PASS [   0.011s] ( 832/1366) memory::bin/memory tests::a_config_that_fails_validation_is_fatal_and_names_the_key
+        PASS [   0.184s] ( 833/1366) memory::watcher_tests watches_multiple_roots_simultaneously
+        PASS [   0.010s] ( 834/1366) memory::bin/memory tests::an_absent_config_still_boots_on_defaults
+        PASS [   0.013s] ( 835/1366) memory::bin/memory tests::an_unparseable_config_is_fatal_rather_than_defaulting
+        PASS [   0.012s] ( 836/1366) memory::bin/memory tests::repin_cwd_child
+        PASS [   0.016s] ( 837/1366) memory::bin/memory tests::repin_cwd_failure_warns_with_target_and_os_error
+        PASS [   0.016s] ( 838/1366) memory::bin/memory tests::repin_cwd_success_preserves_the_log
+        PASS [   0.495s] ( 839/1366) memory::watcher_tests create_modify_delete_cycle_emits_expected_events
+        PASS [   0.012s] ( 840/1366) memory::bin/memory tests::worker_count_honors_the_floor_of_four
+        PASS [   0.010s] ( 841/1366) memory::bin/memory_cartridge tests::invalid_operations_do_not_open_a_store
+        PASS [   0.012s] ( 842/1366) memory::bin/memory_cartridge tests::config_requires_explicit_storage_and_rejects_typos
+        PASS [   0.009s] ( 843/1366) memory-bench::bin/memory-bench pylit::tests::dict_of_lists_of_dicts
+        PASS [   0.012s] ( 844/1366) memory-bench::bin/memory-bench harness::the_sweep_takes_the_old_runtime_dirs_and_leaves_the_rest
+        PASS [   0.010s] ( 845/1366) memory-bench::bin/memory-bench pylit::tests::garbage_is_an_error_not_a_panic
+        PASS [   0.009s] ( 846/1366) memory-bench::bin/memory-bench pylit::tests::quotes_escape_inside_strings
+        PASS [   0.008s] ( 847/1366) memory-bench::bin/memory-bench pylit::tests::trailing_comma_and_whitespace
+        PASS [   0.011s] ( 848/1366) memory-bench::bin/memory-bench pylit::tests::python_singletons_and_numbers
+        PASS [   0.009s] ( 849/1366) memory-bench::bin/memory-bench pylit::tests::unicode_rides_through_raw_and_escaped
+        PASS [   0.011s] ( 850/1366) memory-bench::bin/memory-bench pylit::tests::tuple_reads_as_a_list
+        PASS [   0.011s] ( 851/1366) memory-bench::bin/memory-bench ranking::a_hit_line_parses_and_prose_does_not
+        PASS [   0.012s] ( 852/1366) memory-bench::bin/memory-bench replay::tests::corrupt_vectors_cannot_produce_a_benchmark_score
+        PASS [   0.016s] ( 853/1366) memory-bench::bin/memory-bench replay::tests::fixture_rejects_missing_gold_and_invalid_historical_labels
+        PASS [   0.013s] ( 854/1366) memory-bench::bin/memory-bench score::tests::empty_question_sets_score_zero
+        PASS [   0.010s] ( 855/1366) memory-bench::bin/memory-bench score::tests::gold_never_retrieved_leaves_no_rank
+        PASS [   0.011s] ( 856/1366) memory-bench::bin/memory-bench score::tests::ndcg_discounts_a_later_rank
+        PASS [   0.011s] ( 857/1366) memory-bench::bin/memory-bench score::tests::ndcg_ignores_hits_past_k
+        PASS [   0.009s] ( 858/1366) memory-bench::bin/memory-bench score::tests::ndcg_is_one_when_gold_ranks_first
+        PASS [   0.011s] ( 859/1366) memory-bench::bin/memory-bench score::tests::partial_multi_evidence_splits_the_two_recalls
+        PASS [   0.011s] ( 860/1366) memory-bench::bin/memory-bench score::tests::percentile_interpolates_between_neighbours
+        PASS [   0.008s] ( 861/1366) memory-bench::bin/memory-bench score::tests::ranks_are_the_first_hit_per_gold_item
+        PASS [   0.011s] ( 862/1366) memory-bench::bin/memory-bench score::tests::recall_all_needs_every_gold_inside_k
+        PASS [   0.012s] ( 863/1366) retrieval-piece retrieval_diversify::retrieval_diversify_tests::tests::a_vectorless_row_does_not_outrank_every_vectored_one
+        PASS [   0.013s] ( 864/1366) retrieval-piece retrieval_diversify::retrieval_diversify_tests::tests::dedup_keeps_empty_section_entries
+        PASS [   0.014s] ( 865/1366) retrieval-piece retrieval_diversify::retrieval_diversify_tests::tests::dedup_keeps_highest_per_section
+        PASS [   0.009s] ( 866/1366) retrieval-piece retrieval_diversify::retrieval_diversify_tests::tests::dedup_noop_when_disabled
+        PASS [   0.012s] ( 867/1366) retrieval-piece retrieval_diversify::retrieval_diversify_tests::tests::dedup_preserves_relative_order_of_survivors
+        PASS [   0.031s] ( 868/1366) retrieval-piece retrieval_diversify::retrieval_diversify_tests::tests::mmr_is_byte_identical_to_naive_reference
+        PASS [   0.009s] ( 869/1366) retrieval-piece retrieval_diversify::retrieval_diversify_tests::tests::mmr_lambda_one_is_pure_relevance_order
+        PASS [   0.009s] ( 870/1366) retrieval-piece retrieval_diversify::retrieval_diversify_tests::tests::mmr_noop_when_disabled
+        PASS [   0.012s] ( 871/1366) retrieval-piece retrieval_diversify::retrieval_diversify_tests::tests::mmr_runs_and_selects_diverse_over_near_duplicates
+        PASS [   0.015s] ( 872/1366) retrieval-piece retrieval_expand::retrieval_expand_tests::tests::a_lifted_neighbour_saturates_just_below_its_strongest_voucher
+        PASS [   0.009s] ( 873/1366) retrieval-piece retrieval_expand::retrieval_expand_tests::tests::a_strong_seed_no_longer_prunes_the_walk_off_it
+        PASS [   0.012s] ( 874/1366) retrieval-piece retrieval_expand::retrieval_expand_tests::tests::an_edge_off_a_strong_seed_lifts_a_neighbour_that_is_already_a_weak_hit
+        PASS [   0.012s] ( 875/1366) retrieval-piece retrieval_expand::retrieval_expand_tests::tests::credit_from_a_weaker_voucher_cannot_lift_past_the_voucher
+        PASS [   0.013s] ( 876/1366) retrieval-piece retrieval_expand::retrieval_expand_tests::tests::expand_walks_edges_from_seed_and_records_a_chain
+        PASS [   0.011s] ( 877/1366) retrieval-piece retrieval_expand::retrieval_expand_tests::tests::score_neighbor_pure_content_weight_is_cosine
+        PASS [   0.014s] ( 878/1366) retrieval-piece retrieval_expand::retrieval_expand_tests::tests::score_neighbor_pure_edge_weight_uses_clamped_reason_score
+        PASS [   0.017s] ( 879/1366) retrieval-piece retrieval_expand::retrieval_expand_tests::tests::traversal_credit_is_capped
+        PASS [   0.919s] ( 880/1366) memory::watcher_tests debounce_collapses_rapid_modifies_to_one_event
+        PASS [   0.043s] ( 881/1366) retrieval-piece retrieval_intent::retrieval_intent_tests::tests::preference_queries_lean_importance
+        PASS [   0.045s] ( 882/1366) retrieval-piece retrieval_intent::retrieval_intent_tests::tests::more_matches_win_over_fewer
+        PASS [   0.042s] ( 883/1366) retrieval-piece retrieval_intent::retrieval_intent_tests::tests::procedural_queries_lean_dense
+        PASS [   0.050s] ( 884/1366) retrieval-piece retrieval_intent::retrieval_intent_tests::tests::temporal_queries_lean_lexical
+        PASS [   0.035s] ( 885/1366) retrieval-piece retrieval_intent::retrieval_intent_tests::tests::unmatched_queries_are_general_and_bias_nothing
+        PASS [   0.013s] ( 886/1366) retrieval-piece retrieval_pagerank::retrieval_pagerank_tests::tests::a_new_edge_changes_the_ranking_it_should_change
+        PASS [   1.186s] ( 887/1366) memory::watcher_tests gitignore_is_respected
+        PASS [   0.013s] ( 888/1366) retrieval-piece retrieval_pagerank::retrieval_pagerank_tests::tests::convergence_early_exit_matches_full_iteration
+        PASS [   0.015s] ( 889/1366) retrieval-piece retrieval_pagerank::retrieval_pagerank_tests::tests::empty_graph_is_empty
+        PASS [   0.016s] ( 890/1366) retrieval-piece retrieval_pagerank::retrieval_pagerank_tests::tests::personalization_biases_toward_seed_and_conserves_mass
+        PASS [   0.019s] ( 891/1366) retrieval-piece retrieval_pagerank::retrieval_pagerank_tests::tests::rank_reaches_past_the_seed_and_its_first_hop
+        PASS [   0.299s] ( 892/1366) retrieval-piece retrieval_pagerank::retrieval_pagerank_tests::tests::a_narrow_query_allocates_nothing_sized_by_the_graph
+        PASS [   0.012s] ( 893/1366) retrieval-piece retrieval_pagerank::retrieval_pagerank_tests::tests::ranks_hub_above_leaves_and_sums_to_one
+        PASS [   0.010s] ( 894/1366) retrieval-piece retrieval_pagerank::retrieval_pagerank_tests::tests::self_loops_do_not_inflate_score
+        PASS [   0.013s] ( 895/1366) retrieval-piece retrieval_pagerank::retrieval_pagerank_tests::tests::ties_break_by_id_ascending_under_top_k
+        PASS [   0.010s] ( 896/1366) retrieval-piece retrieval_pagerank::retrieval_pagerank_tests::tests::top_k_partition_matches_full_sort_prefix
+        PASS [   0.015s] ( 897/1366) retrieval-piece retrieval_query::retrieval_query_tests::fuse_tests::empty_weights_recovers_unweighted_rrf
+        PASS [   0.017s] ( 898/1366) retrieval-piece retrieval_query::retrieval_query_tests::fuse_tests::equal_score_tie_broken_by_id_ascending_under_top_k
+        PASS [   0.013s] ( 899/1366) retrieval-piece retrieval_query::retrieval_query_tests::fuse_tests::global_list_downweight_sinks_popular_irrelevant_entity
+        PASS [   0.013s] ( 900/1366) retrieval-piece retrieval_query::retrieval_query_tests::fuse_tests::missing_weight_defaults_to_one
+        PASS [   0.014s] ( 901/1366) retrieval-piece retrieval_query::retrieval_query_tests::fuse_tests::top_k_truncates_and_zero_is_empty_without_panicking
+        PASS [   0.012s] ( 902/1366) retrieval-piece retrieval_query::retrieval_query_tests::gravity_tests::focus_near_entity_outranks_focus_far_at_equal_base_score
+        PASS [   0.011s] ( 903/1366) retrieval-piece retrieval_query::retrieval_query_tests::gravity_tests::gravity_weight_zero_changes_nothing
+        PASS [   0.433s] ( 904/1366) retrieval-piece retrieval_pagerank::retrieval_pagerank_tests::tests::confined_iteration_equals_the_full_width_one_bit_for_bit
+        PASS [   0.013s] ( 905/1366) retrieval-piece retrieval_query::retrieval_query_tests::gravity_tests::mass_two_pulls_harder_than_mass_one
+        PASS [   0.012s] ( 906/1366) retrieval-piece retrieval_query::retrieval_query_tests::gravity_tests::overlapping_focuses_take_the_max_not_the_sum
+        PASS [   0.010s] ( 907/1366) retrieval-piece retrieval_query::retrieval_query_tests::merge_tests::entity_seen_in_both_sources_outranks_one_seen_once
+        PASS [   0.207s] ( 908/1366) retrieval-piece retrieval_pagerank::retrieval_pagerank_tests::tests::the_near_n_body_runs_on_saturating_reach_and_not_on_narrow_reach
+        PASS [   0.010s] ( 909/1366) retrieval-piece retrieval_query::retrieval_query_tests::merge_tests::seed_absent_from_graph_and_beam_is_silently_skipped
+        PASS [   0.011s] ( 910/1366) retrieval-piece retrieval_query::retrieval_query_tests::merge_tests::seed_only_entity_is_pulled_from_the_graph
+        PASS [   0.038s] ( 911/1366) retrieval-piece retrieval_query::retrieval_query_tests::tests::a_filtered_entity_does_not_leak_through_a_path_chain
+        PASS [   0.040s] ( 912/1366) retrieval-piece retrieval_query::retrieval_query_tests::tests::a_query_in_the_merged_away_wording_finds_the_survivor
+        PASS [   0.043s] ( 913/1366) retrieval-piece retrieval_query::retrieval_query_tests::tests::an_entity_matching_both_wordings_is_delivered_once
+        PASS [   0.031s] ( 914/1366) retrieval-piece retrieval_query::retrieval_query_tests::tests::an_entity_under_the_floor_does_not_leak_through_a_path_chain
+        PASS [   0.011s] ( 915/1366) retrieval-piece retrieval_query::retrieval_query_tests::tests::format_chains_renders_entities_and_reason_labels
+        PASS [   0.013s] ( 916/1366) retrieval-piece retrieval_query::retrieval_query_tests::tests::query_locked_is_read_only_and_defers_the_access_stamp
+        PASS [   0.038s] ( 917/1366) retrieval-piece retrieval_query::retrieval_query_tests::tests::lexical_top_boost_pins_a_verbatim_match_to_the_top_past_higher_cosine_decoys
+        PASS [   0.011s] ( 918/1366) retrieval-piece retrieval_score::retrieval_score_tests::access_heat_uses_order_and_preserves_relevance
+        PASS [   0.036s] ( 919/1366) retrieval-piece retrieval_query::retrieval_query_tests::tests::retrieve_drops_an_expired_claim_from_the_default_path
+        PASS [   0.010s] ( 920/1366) retrieval-piece retrieval_score::retrieval_score_tests::access_order_first_access_is_not_suppressed_by_existing_heat
+        PASS [   0.010s] ( 921/1366) retrieval-piece retrieval_score::retrieval_score_tests::lexical_boost_tests::exact_match_gets_the_full_bonus_others_get_less
+        PASS [   0.012s] ( 922/1366) retrieval-piece retrieval_score::retrieval_score_tests::lexical_boost_tests::zero_weight_is_a_noop
+        PASS [   0.015s] ( 923/1366) retrieval-piece retrieval_score::retrieval_score_tests::lexical_boost_tests::no_query_terms_in_corpus_is_a_noop
+        PASS [  16.687s] ( 924/1366) memory::e2e file_watcher::the_default_cwd_root_does_not_ingest_the_queue_it_just_parked
+        PASS [   0.013s] ( 925/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::a_configured_source_trust_reorders_two_otherwise_equal_entities
+        PASS [   0.013s] ( 926/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::a_never_accessed_thought_is_not_throttled
+        PASS [   0.011s] ( 927/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::a_point_in_time_query_still_sees_a_since_expired_claim
+        PASS [   0.009s] ( 928/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::an_entity_with_no_ttl_is_never_dropped
+        PASS [   0.010s] ( 929/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::a_zero_floor_cuts_only_negative_scores_and_the_best_hit_always_ships
+        PASS [   0.012s] ( 930/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::an_expired_claim_is_dropped_on_the_default_path
+        PASS [   0.010s] ( 931/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::an_explicit_valid_at_is_left_to_matches_filter
+        PASS [   0.085s] ( 932/1366) retrieval-piece retrieval_score::retrieval_score_tests::access_order_new_access_sorts_after_cold_timestamps_even_after_clock_rewind
+        PASS [   0.011s] ( 933/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::apply_boosts_scales_by_confidence_and_adds_fact_bonus_only_for_facts
+        PASS [   0.009s] ( 934/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::claim_kind_filter_matches_the_entity_field_and_drops_the_rest
+        PASS [   0.009s] ( 935/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::as_of_filters_across_open_and_closed_windows
+        PASS [   0.011s] ( 936/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::commit_access_ids_skips_ids_unknown_to_the_graph
+        PASS [   0.011s] ( 937/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::commit_access_ids_stamps_the_live_entity_without_bumping_the_epoch
+        PASS [   0.009s] ( 938/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::delivery_cap_is_the_pool_mmr_keeps_and_the_cut_it_applies
+        PASS [   0.011s] ( 939/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::confidence_orders_two_equal_scores_and_would_invert_a_negative_one
+        PASS [   0.010s] ( 940/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::exclude_pending_drops_only_the_uncurated_and_only_when_asked
+        PASS [   0.011s] ( 941/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::filter_delivery_cuts_to_cap_when_mmr_disabled
+        PASS [   0.010s] ( 942/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::filter_delivery_keeps_mmr_pool_when_mmr_enabled
+        PASS [   0.009s] ( 943/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::lower_confidence_bound_ranks_well_evidenced_above_single_observation
+        PASS [   0.009s] ( 944/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::genuine_reuse_after_the_window_still_counts
+        PASS [   0.010s] ( 945/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::matches_filter_is_the_per_entity_predicate
+        PASS [   0.009s] ( 946/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::qbst_access_component_follows_log_count_times_weight
+        PASS [   0.011s] ( 947/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::qbst_clamps_to_cap
+        PASS [   0.011s] ( 948/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::qbst_recency_is_near_full_weight_at_zero_age
+        PASS [   0.011s] ( 949/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::qbst_zero_access_and_no_recency_is_zero
+        PASS [   0.011s] ( 950/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::query_filter_by_kind_retains_only_matching
+        PASS [   0.012s] ( 951/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::query_filter_by_scheme_retains_only_matching
+        PASS [   0.010s] ( 952/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::replaying_a_query_cannot_pump_one_thoughts_access_count
+        PASS [   0.009s] ( 953/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::shipped_source_trust_default_leaves_boosted_scores_bit_identical
+        PASS [   0.010s] ( 954/1366) retrieval-piece retrieval_score::retrieval_score_tests::query_filter_tests::the_floor_is_a_fraction_of_the_best_score_in_any_scale
+        PASS [   0.009s] ( 955/1366) retrieval-piece retrieval_seed::retrieval_seed_tests::tests::active_kind_filter_seeds_matches_post_filtering_would_miss
+        PASS [   0.010s] ( 956/1366) retrieval-piece retrieval_seed::retrieval_seed_tests::tests::an_eligibility_change_is_reflected_with_no_epoch_bump
+        PASS [   0.009s] ( 957/1366) retrieval-piece retrieval_seed::retrieval_seed_tests::tests::non_access_mutations_leave_mutation_epoch_unchanged
+        PASS [   0.010s] ( 958/1366) retrieval-piece retrieval_seed::retrieval_seed_tests::tests::merge_seeds_pools_by_entity_and_sorts_descending
+        PASS [   0.017s] ( 959/1366) retrieval-piece retrieval_seed::retrieval_seed_tests::tests::seed_important_applies_cosine_and_access_gates
+        PASS [   0.016s] ( 960/1366) retrieval-piece retrieval_seed::retrieval_seed_tests::tests::seed_important_respects_an_active_filter_at_source
+        PASS [   0.022s] ( 961/1366) retrieval-piece retrieval_seed::retrieval_seed_tests::tests::seed_important_is_deterministic_at_scale
+        PASS [   0.018s] ( 962/1366) retrieval-piece retrieval_seed::retrieval_seed_tests::tests::unfiltered_seed_is_unchanged_when_opts_is_inactive
+        PASS [   0.111s] ( 963/1366) retrieval-piece retrieval_seed::retrieval_seed_tests::tests::parallel_importance_scan_equals_the_sequential_scan_it_replaces
+        PASS [   0.126s] ( 964/1366) rpc cli::tests::writer_boundary_operator_request_is_strict_and_bound_to_its_store
+        PASS [   0.116s] ( 965/1366) rpc cli::tests::writer_boundary_operator_shutdown_refuses_before_enqueue
+        PASS [   0.013s] ( 966/1366) rpc server::ingest_source_tests::every_source_string_maps_to_its_variant
+        PASS [   0.015s] ( 967/1366) rpc server::log_tests::a_thoughts_chain_carries_the_supersede_why
+        PASS [   0.012s] ( 968/1366) rpc server::log_tests::an_unknown_id_is_an_error_not_an_empty_chain
+        PASS [   0.012s] ( 969/1366) rpc server::log_tests::history_lists_newest_first_and_honours_the_cap
+        PASS [   0.014s] ( 970/1366) rpc server::server_admin_tests::claim_kind_tests::a_bare_call_and_an_explicit_list_answer_the_same_registry
+        PASS [   0.013s] ( 971/1366) rpc server::server_admin_tests::claim_kind_tests::a_dropped_query_on_one_store_leaves_the_other_stores_health_at_zero
+        PASS [   0.260s] ( 972/1366) retrieval-piece retrieval_seed::retrieval_seed_tests::tests::the_in_memory_parallel_split_selects_exactly_what_the_serial_walk_does
+        PASS [   0.010s] ( 973/1366) rpc server::server_admin_tests::claim_kind_tests::a_parent_edge_that_closes_a_cycle_is_refused
+        PASS [   0.137s] ( 974/1366) rpc cli::tests::writer_boundary_operator_stale_persistence_cannot_report_commit
+        PASS [   0.011s] ( 975/1366) rpc server::server_admin_tests::claim_kind_tests::add_empty_description_returns_error_no_save
+        PASS [   0.010s] ( 976/1366) rpc server::server_admin_tests::claim_kind_tests::add_inserts_claim_kind_and_calls_save
+        PASS [   0.010s] ( 977/1366) rpc server::server_admin_tests::claim_kind_tests::add_with_parent_puts_kind_into_the_parents_closure
+        PASS [   0.011s] ( 978/1366) rpc server::server_admin_tests::claim_kind_tests::add_with_unknown_parent_is_refused_without_save
+        PASS [   1.647s] ( 979/1366) memory-bench::bin/memory-bench replay::tests::layouts_preserve_text_and_history_and_populate_hot_lexical_index
+        PASS [   0.010s] ( 980/1366) rpc server::server_admin_tests::claim_kind_tests::add_without_a_name_names_the_field_it_wants
+        PASS [   0.013s] ( 981/1366) rpc server::server_admin_tests::claim_kind_tests::every_health_field_is_carried_by_the_payload
+        PASS [   0.010s] ( 982/1366) rpc server::server_admin_tests::claim_kind_tests::focus_list_on_empty_graph_returns_no_focuses
+        PASS [   0.009s] ( 983/1366) rpc server::server_admin_tests::claim_kind_tests::focus_list_reports_mass
+        PASS [   0.010s] ( 984/1366) rpc server::server_admin_tests::claim_kind_tests::focus_remove_not_found_errors_and_does_not_save
+        PASS [   0.010s] ( 985/1366) rpc server::server_admin_tests::claim_kind_tests::health_carries_the_egress_state_of_this_daemons_config
+        PASS [   0.011s] ( 986/1366) rpc server::server_admin_tests::claim_kind_tests::health_stats_aggregates_entities_and_claim_kinds
+        PASS [   0.010s] ( 987/1366) rpc server::server_admin_tests::claim_kind_tests::health_stats_reports_zeroed_queue_metrics_without_a_queue
+        PASS [   0.010s] ( 988/1366) rpc server::server_admin_tests::claim_kind_tests::health_stats_reports_queue_depth_and_task_latency
+        PASS [   0.010s] ( 989/1366) rpc server::server_admin_tests::claim_kind_tests::pulse_without_a_task_queue_is_a_labeled_noop
+        PASS [   0.010s] ( 990/1366) rpc server::server_admin_tests::claim_kind_tests::rm_drops_the_kinds_own_edge_and_its_childrens_edges
+        PASS [   0.010s] ( 991/1366) rpc server::server_admin_tests::claim_kind_tests::rm_nonexistent_is_noop_but_still_calls_save
+        PASS [   0.011s] ( 992/1366) rpc server::server_admin_tests::claim_kind_tests::rm_removes_existing_claim_kind_and_calls_save_twice
+        PASS [   0.011s] ( 993/1366) rpc server::server_admin_tests::health_reports_effective_access_half_life_for_zero_configuration
+        PASS [   0.011s] ( 994/1366) rpc server::server_admin_tests::claim_kind_tests::unknown_action_returns_error
+        PASS [   0.010s] ( 995/1366) rpc server::server_admin_tests::readiness_tests::readiness_shows_draining_before_requests_start_failing
+        PASS [   0.011s] ( 996/1366) rpc server::server_admin_tests::readiness_tests::readiness_names_this_process_and_this_build
+        PASS [   0.010s] ( 997/1366) rpc server::server_admin_tests::shutdown_admission_tests::a_draining_daemon_still_answers_what_needs_no_model
+        PASS [   0.011s] ( 998/1366) rpc server::server_admin_tests::shutdown_admission_tests::model_dependent_work_is_refused_at_admission_once_the_shutdown_begins
+        PASS [   0.008s] ( 999/1366) rpc server::server_admin_tests::shutdown_admission_tests::the_two_refusals_are_distinct_at_the_rpc_surface
+        PASS [   0.012s] (1000/1366) rpc server::server_bounded_tests::a_default_id_lookup_is_bounded_and_says_what_it_left_out
+        PASS [   0.015s] (1001/1366) rpc server::server_bounded_tests::a_revision_chain_pages_and_its_cursor_walks_each_revision_once
+        PASS [   0.012s] (1002/1366) rpc server::server_bounded_tests::an_edge_cursor_walks_every_edge_exactly_once
+        PASS [   0.010s] (1003/1366) rpc server::server_bounded_tests::compact_omits_the_two_documented_fields_and_nothing_else
+        PASS [   0.012s] (1004/1366) rpc server::server_bounded_tests::the_history_feed_keys_on_the_change_not_the_id
+        PASS [   0.010s] (1005/1366) rpc server::server_events_tests::tests::a_live_entity_yields_one_created_and_a_superseded_one_yields_both_stamps
+        PASS [   0.011s] (1006/1366) rpc server::server_events_tests::tests::a_malformed_string_cursor_is_rejected
+        PASS [   0.011s] (1007/1366) rpc server::server_events_tests::tests::a_supersede_surfaces_as_superseded_plus_the_new_created
+        PASS [   0.008s] (1008/1366) rpc server::server_events_tests::tests::cursor_encode_decode_roundtrips
+        PASS [   0.010s] (1009/1366) rpc server::server_events_tests::tests::limit_bounds_the_batch_and_the_cursor_resumes_without_gap_or_overlap
+        PASS [   0.013s] (1010/1366) rpc server::server_events_tests::tests::from_zero_returns_both_creates_then_a_replay_is_empty
+        PASS [   0.011s] (1011/1366) rpc server::server_mutate_tests::tests::forget_by_source_dispatches_through_invoke
+        PASS [   0.011s] (1012/1366) rpc server::server_mutate_tests::tests::a_bulk_forget_reaps_the_memories_it_empties_and_keeps_the_named_one
+        PASS [   0.009s] (1013/1366) rpc server::server_mutate_tests::tests::tool_degrade_decays_survivors_and_reaps_subthreshold
+        PASS [   0.010s] (1014/1366) rpc server::server_mutate_tests::tests::tool_forget_by_source_force_takes_the_local_fact
+        PASS [   0.012s] (1015/1366) rpc server::server_mutate_tests::tests::tool_forget_by_source_rejects_an_unknown_scheme
+        PASS [   0.012s] (1016/1366) rpc server::server_mutate_tests::tests::tool_forget_refuses_a_fact
+        PASS [   0.011s] (1017/1366) rpc server::server_mutate_tests::tests::tool_forget_removes_entity_and_counts_cascaded_edges
+        PASS [   0.446s] (1018/1366) rpc cli::tests::writer_boundary_operator_socket_preserves_provenance_expiry_and_persistence
+        PASS [   0.022s] (1019/1366) rpc server::server_mutate_tests::tests::tool_ingest_acks_the_durable_queue_job_it_wrote
+        PASS [   0.022s] (1020/1366) rpc server::server_mutate_tests::tests::tool_ingest_refuses_a_section_on_a_file_source
+        PASS [   0.013s] (1021/1366) rpc server::server_mutate_tests::tests::tool_link_adds_edge_with_provided_reason_text
+        PASS [   0.010s] (1022/1366) rpc server::server_mutate_tests::tests::tool_link_errors_on_unknown_endpoint
+        PASS [   0.010s] (1023/1366) rpc server::server_mutate_tests::tests::tool_move_carries_entity_and_outgoing_edges
+        PASS [   0.011s] (1024/1366) rpc server::server_mutate_tests::tests::tool_move_rejects_malformed_arguments
+        PASS [   0.011s] (1025/1366) rpc server::server_mutate_tests::tests::tool_move_rejects_unknown_entity_and_unknown_destination
+        PASS [   0.014s] (1026/1366) rpc server::server_mutate_tests::tests::tool_promote_refuses_an_unknown_id_rather_than_reporting_success
+        PASS [   0.013s] (1027/1366) rpc server::server_mutate_tests::tests::tool_promote_releases_a_held_row_and_is_idempotent
+        PASS [   0.032s] (1028/1366) rpc server::server_query_tests::cold_tier_filter_tests::a_default_query_bounds_both_its_width_and_its_edges
+        PASS [   0.011s] (1029/1366) rpc server::server_query_tests::envelope_shape_tests::envelope_emits_every_kind_label
+        PASS [   0.015s] (1030/1366) rpc server::server_query_tests::envelope_shape_tests::envelope_includes_kind_scheme_status_for_active_entity
+        PASS [   0.075s] (1031/1366) rpc server::server_query_tests::cold_tier_filter_tests::a_cold_hit_answers_the_same_filter_the_hot_path_does
+        PASS [   0.015s] (1032/1366) rpc server::server_query_tests::envelope_shape_tests::envelope_status_is_superseded_when_entity_superseded
+        PASS [   0.010s] (1033/1366) rpc server::server_query_tests::exclude_pending_surface_tests::exclude_pending_reaches_query_options_only_when_asked
+        PASS [   0.010s] (1034/1366) rpc server::server_query_tests::id_filter_tests::bare_id_read_still_serves_an_expired_row_flagged
+        PASS [   0.013s] (1035/1366) rpc server::server_query_tests::id_filter_tests::batch_ids_filter_drops_non_matching_into_missing
+        PASS [   0.013s] (1036/1366) rpc server::server_query_tests::id_filter_tests::batch_ids_returns_found_and_missing
+        PASS [   0.013s] (1037/1366) rpc server::server_query_tests::id_filter_tests::claim_kind_filter_admits_registered_sub_kinds_of_the_asked_parent
+        PASS [   0.013s] (1038/1366) rpc server::server_query_tests::id_filter_tests::claim_kind_filter_rejects_an_unknown_label_instead_of_matching_nothing
+        PASS [   0.012s] (1039/1366) rpc server::server_query_tests::id_filter_tests::id_read_drops_a_row_the_kind_filter_excludes
+        PASS [   0.013s] (1040/1366) rpc server::server_query_tests::id_filter_tests::id_read_keeps_a_row_the_filters_admit
+        PASS [   0.013s] (1041/1366) rpc server::server_query_tests::id_filter_tests::id_read_reports_a_bad_filter_rather_than_ignoring_it
+        PASS [   0.011s] (1042/1366) rpc server::server_query_tests::time_filter_tests::empty_is_no_filter
+        PASS [   0.013s] (1043/1366) rpc server::server_query_tests::id_filter_tests::id_read_withholds_a_held_row_only_when_exclude_pending_is_asked
+        PASS [   0.010s] (1044/1366) rpc server::server_query_tests::time_filter_tests::nonempty_malformed_is_hard_error
+        PASS [   0.011s] (1045/1366) rpc server::server_query_tests::time_filter_tests::valid_parses_to_some
+        PASS [   0.010s] (1046/1366) rpc server::server_report_tests::counts_only_drops_the_ids_and_keeps_the_counts
+        PASS [   0.012s] (1047/1366) rpc server::server_report_tests::cursor_resumes_strictly_after_the_last_group
+        PASS [   0.013s] (1048/1366) rpc server::server_report_tests::empty_scheme_filter_means_no_filter
+        PASS [   0.012s] (1049/1366) rpc server::server_report_tests::filters_narrow_the_pool
+        PASS [   0.011s] (1050/1366) rpc server::server_report_tests::groups_by_kind_and_counts_every_active_row
+        PASS [   0.012s] (1051/1366) rpc server::server_report_tests::superseded_revisions_are_not_counted
+        PASS [   0.013s] (1052/1366) rpc server::server_report_tests::undated_rows_group_under_empty_day_not_dropped
+        PASS [   0.012s] (1053/1366) rpc server::server_report_tests::unknown_claim_kind_is_an_error_not_silence
+        PASS [   0.011s] (1054/1366) rpc server::server_report_tests::unknown_scheme_is_an_error_not_silence
+        PASS [   0.015s] (1055/1366) rpc tests::a_refused_ingest_reaches_the_rpc_health_surface
+        PASS [   0.011s] (1056/1366) rpc tests::a_refused_propagation_reaches_the_rpc_health_surface
+        PASS [   0.011s] (1057/1366) rpc tests::health_carries_every_degradation_signal_to_the_rpc_surface
+        PASS [   0.013s] (1058/1366) rpc tests::idle_stop_preserves_active_memory_daemons_and_stops_idle_ones
+        PASS [   0.031s] (1059/1366) store registry::registry_tests::an_existing_dir_still_keys_by_its_resolved_path
+        PASS [   0.053s] (1060/1366) store registry::registry_tests::tests::concurrent_open_of_same_dir_yields_one_store
+        PASS [   0.074s] (1061/1366) store registry::registry_tests::tests::distinct_dirs_get_isolated_stores
+        PASS [   0.059s] (1062/1366) store registry::registry_tests::tests::open_dedups_and_touches_on_reopen
+        PASS [   0.030s] (1063/1366) store registry::registry_tests::two_spellings_of_a_dir_that_does_not_exist_yet_key_the_same
+        PASS [   0.059s] (1064/1366) store_core cold::memory_contract_tests::corrupt_row_aborts_snapshot_instead_of_silently_skipping_it
+        PASS [   0.019s] (1065/1366) store_core cold::memory_contract_tests::graph_export_missing_store_does_not_create_files
+        PASS [   0.070s] (1066/1366) store_core cold::memory_contract_tests::graph_export_full_relationships_keep_group_provenance
+        PASS [   0.060s] (1067/1366) store_core cold::memory_contract_tests::graph_export_refuses_malformed_cold_vector_bytes_without_partial_success
+        PASS [   5.914s] (1068/1366) memory::e2e lifecycle::a_second_daemon_over_one_store_refuses_and_names_the_holder
+        PASS [   0.069s] (1069/1366) store_core cold::memory_contract_tests::graph_export_reads_hot_and_cold_without_modifying_the_database
+        PASS [   0.011s] (1070/1366) store_core layout_guard::the_cold_row_layout_has_not_changed_without_a_version_bump
+        PASS [   0.012s] (1071/1366) store_core layout_guard::the_embed_stamp_layout_has_not_changed_without_a_version_bump
+        PASS [   0.012s] (1072/1366) store_core layout_guard::the_fixtures_actually_encode_something
+        PASS [   0.012s] (1073/1366) store_core layout_guard::the_graph_meta_layout_has_not_changed_without_a_version_bump
+        PASS [   0.813s] (1074/1366) rpc server::server_admin_tests::readiness_tests::readiness_answers_while_a_write_holds_the_graph
+        PASS [   0.010s] (1075/1366) store_core layout_guard::the_stored_memory_layout_has_not_changed_without_a_version_bump
+        PASS [   0.009s] (1076/1366) store_core legacy::legacy_tests::skipped_v12_release_decodes_full_hot_row
+        PASS [   0.010s] (1077/1366) store_core legacy::legacy_tests::bytes_that_are_not_the_layout_are_refused_rather_than_guessed_at
+        PASS [   0.010s] (1078/1366) store_core legacy::legacy_tests::the_v13_layout_decodes_with_every_field_in_place
+        PASS [   4.946s] (1079/1366) memory::e2e pollution::a_floor_in_the_band_clears_the_top_five_of_unrelated_facts
+        PASS [   0.060s] (1080/1366) store_core legacy::legacy_tests::a_v13_memory_row_loads_through_the_store_and_marks_it_migrated
+        PASS [   0.044s] (1081/1366) store_core lock::lock_tests::inherited_description_requires_the_bounded_retry
+        PASS [   0.018s] (1082/1366) store_core lock::lock_tests::tests::holder_reports_free_and_taken
+        PASS [   0.024s] (1083/1366) store_core lock::lock_tests::tests::the_lock_file_is_not_the_lock
+        PASS [   1.067s] (1084/1366) rpc server::server_admin_tests::claim_kind_tests::a_failed_completion_through_the_servers_client_reaches_health_stats
+        PASS [   0.082s] (1085/1366) store_core tests::a_changed_embed_model_or_dimension_is_flagged
+        PASS [   0.164s] (1086/1366) store_core lock::lock_tests::tests::a_rewrite_in_progress_refuses_the_process_that_would_clobber_it
+        PASS [   0.085s] (1087/1366) store_core tests::a_cold_row_missing_its_tail_is_never_decoded_as_a_stampless_entity
+        PASS [   0.157s] (1088/1366) store_core lock::lock_tests::tests::a_second_acquire_is_refused_and_names_the_holder
+        PASS [   0.149s] (1089/1366) store_core lock::lock_tests::tests::one_store_under_two_names_is_one_lock
+        PASS [   0.015s] (1090/1366) store_core tests::a_readable_older_version_is_migrated_and_an_unreadable_one_is_not
+        PASS [   0.016s] (1091/1366) store_core tests::a_v6_row_is_rejected_rather_than_misdecoded
+        PASS [   0.016s] (1092/1366) store_core tests::an_embedding_encodes_byte_identically_to_the_vec_it_replaced
+        PASS [   0.128s] (1093/1366) store_core tests::a_spill_past_the_cap_does_not_trim_until_the_slack_is_used_up
+        PASS [   0.121s] (1094/1366) store_core tests::an_amortized_trim_cuts_all_the_way_back_to_the_cap
+        PASS [   0.011s] (1095/1366) store_core tests::codec_prepends_format_version
+        PASS [   0.172s] (1096/1366) store_core tests::a_row_read_in_an_older_format_is_remembered_by_the_store_that_read_it
+        PASS [   0.012s] (1097/1366) store_core tests::codec_roundtrips_a_struct
+        PASS [   0.157s] (1098/1366) store_core tests::an_unreadable_stamp_is_neither_missing_nor_a_match
+        PASS [   1.075s] (1099/1366) rpc server::server_mutate_tests::tests::tool_ingest_answers_the_sync_leg_with_a_document_and_balanced_counters
+        PASS [   0.096s] (1100/1366) store_core tests::an_unstamped_store_adopts_the_current_embed_model
+        PASS [   4.996s] (1101/1366) memory::e2e recall::recall_over_the_inline_corpus
+        PASS [   0.109s] (1102/1366) store_core tests::cold_latest_wins
+        PASS [   0.144s] (1103/1366) store_core tests::cold_cap_drops_oldest
+        PASS [   0.166s] (1104/1366) store_core tests::cold_cap_counts_every_eviction
+        PASS [   0.122s] (1105/1366) store_core tests::cold_rekey_leaves_a_current_row_and_an_originless_row_alone
+        PASS [   0.104s] (1106/1366) store_core tests::cold_rekey_moves_a_row_the_hot_move_map_never_named
+        PASS [   0.094s] (1107/1366) store_core tests::cold_rekey_moves_the_row_and_its_vector_and_leaves_nothing_behind
+        PASS [   0.123s] (1108/1366) store_core tests::cold_rekey_refuses_to_clobber_a_row_already_at_the_destination
+        PASS [   0.250s] (1109/1366) store_core tests::cold_rekey_does_not_trim_the_tier
+        PASS [   0.106s] (1110/1366) store_core tests::cold_rekey_trips_the_cross_check_when_the_hot_map_disagrees
+        PASS [   0.138s] (1111/1366) store_core tests::cold_rekey_returns_only_the_rows_whose_key_actually_changed
+        PASS [   0.111s] (1112/1366) store_core tests::cold_search_breaks_cosine_ties_by_id_ascending
+        PASS [   0.129s] (1113/1366) store_core tests::cold_relocate_moves_a_parked_file_row_and_leaves_the_rest
+        PASS [   0.101s] (1114/1366) store_core tests::cold_spill_round_trips_the_temporal_triple
+        PASS [   0.109s] (1115/1366) store_core tests::cold_spill_then_get
+        PASS [   0.167s] (1116/1366) store_core tests::cold_search_ranks_by_cosine
+        PASS [   0.120s] (1117/1366) store_core tests::cold_vectors_carry_no_version_byte_and_are_never_read_as_one
+        PASS [   0.015s] (1118/1366) store_core tests::decode_rejects_unknown_version
+        PASS [   0.924s] (1119/1366) store_core cold::memory_contract_tests::spilling_past_the_old_cap_preserves_every_row
+        PASS [   0.099s] (1120/1366) store_core tests::corrupt_memory_value_is_skipped
+        PASS [   0.141s] (1121/1366) store_core tests::compact_dir_skips_a_store_below_the_min_size
+        PASS [   0.108s] (1122/1366) store_core tests::flush_guarded_refuses_a_stale_smaller_snapshot_and_keeps_disk_rows
+        PASS [   0.119s] (1123/1366) store_core tests::epoch_starts_at_zero_and_every_full_save_bumps_it
+        PASS [   0.105s] (1124/1366) store_core tests::get_absent_is_none
+        PASS [   6.223s] (1125/1366) memory::e2e lifecycle_canary::the_installed_generation_survives_hang_drain_and_takeover
+        PASS [   0.128s] (1126/1366) store_core tests::put_get_remove_roundtrip
+        PASS [   0.112s] (1127/1366) store_core tests::reopen_persists_data
+        PASS [   0.014s] (1128/1366) store_core tests::snapshot_cold_rows_and_stamp_all_decode
+        PASS [   0.011s] (1129/1366) store_core tests::stored_memory_handles_empty_vectors
+        PASS [   0.012s] (1130/1366) store_core tests::stored_memory_roundtrip_quantizes_and_drops_gnn
+        PASS [   0.123s] (1131/1366) store_core tests::save_then_load_graph_roundtrip
+        PASS [   0.011s] (1132/1366) store_core tests::stored_memory_roundtrips_temporal_stamps
+        PASS [   0.128s] (1133/1366) store_core tests::save_all_prunes_removed_memories
+        PASS [   0.011s] (1134/1366) test_support env_guard::env_guard_tests::a_panicking_body_restores_and_leaves_the_lock_usable
+        PASS [   0.009s] (1135/1366) test_support env_guard::env_guard_tests::the_guard_puts_back_a_variable_it_found
+        PASS [   0.479s] (1136/1366) store_core tests::cold_search_selects_exactly_what_the_linear_scan_did
+        PASS [   0.430s] (1137/1366) store_core tests::compact_dir_shrinks_after_bulk_delete
+        PASS [   0.137s] (1138/1366) store_core tests::single_memory_save_load_delete
+        PASS [   0.010s] (1139/1366) test_support env_guard::env_guard_tests::the_guard_removes_a_variable_the_test_added
+        PASS [   0.010s] (1140/1366) test_support tests::the_crate_walk_finds_every_declared_member
+        PASS [   0.010s] (1141/1366) test_support tests::the_hashed_vectors_are_the_ones_the_copies_produced
+        PASS [   0.010s] (1142/1366) test_support tests::the_dense_draw_is_the_one_the_copies_produced
+        PASS [   0.186s] (1143/1366) store_core tests::scan_returns_all_rows
+        PASS [   0.009s] (1144/1366) test_support tests::the_word_draw_is_the_one_the_copies_made
+        PASS [   0.010s] (1145/1366) tick tick_pulse::tick_pulse_tests::tests::a_shed_slot_task_gives_its_cadence_back
+        PASS [   0.101s] (1146/1366) store_core tests::the_embed_stamp_survives_reopen
+        PASS [   0.014s] (1147/1366) tick tick_pulse::tick_pulse_tests::tests::claim_slot_lets_exactly_one_caller_through_per_cadence
+        PASS [   0.012s] (1148/1366) tick tick_pulse::tick_pulse_tests::tests::concurrent_claims_on_one_cadence_produce_exactly_one_winner
+        PASS [   0.014s] (1149/1366) tick tick_pulse::tick_pulse_tests::tests::pulse_decays_below_threshold_before_reaching_the_child
+        PASS [   0.012s] (1150/1366) tick tick_pulse::tick_pulse_tests::tests::pulse_reaches_the_child_when_strength_survives_one_decay
+        PASS [   0.009s] (1151/1366) tick tick_pulse::tick_pulse_tests::tests::should_run_gc_gates_on_clock_validity_and_elapsed_interval
+        PASS [   0.010s] (1152/1366) tick tick_pulse::tick_pulse_tests::tests::reembed_is_enqueued_only_for_memories_with_dirty_content
+        PASS [   0.011s] (1153/1366) tick tick_queue::tick_queue_tests::tests::a_fresh_queue_reports_no_panics
+        PASS [   0.012s] (1154/1366) tick tick_queue::tick_queue_tests::tests::a_graph_global_task_panic_renders_without_an_empty_memory_slot
+        PASS [   0.010s] (1155/1366) tick tick_queue::tick_queue_tests::tests::a_higher_rank_displaces_the_newest_lower_one
+        PASS [   0.012s] (1156/1366) tick tick_queue::tick_queue_tests::tests::an_equal_or_lower_rank_is_shed_itself
+        PASS [   0.010s] (1157/1366) tick tick_queue::tick_queue_tests::tests::dequeued_clears_pending_so_the_key_can_re_enqueue
+        PASS [   0.013s] (1158/1366) tick tick_queue::tick_queue_tests::tests::enqueue_dedups_an_already_pending_key
+        PASS [   0.013s] (1159/1366) tick tick_queue::tick_queue_tests::tests::failures_count_separately_from_panics
+        PASS [   0.014s] (1160/1366) tick tick_queue::tick_queue_tests::tests::full_channel_send_failure_rolls_back_pending
+        PASS [   0.149s] (1161/1366) store_core tests::the_guarded_write_path_notes_an_old_epoch_row_too
+        PASS [   0.011s] (1162/1366) tick tick_queue::tick_queue_tests::tests::record_task_latency_accumulates_count_and_average
+        PASS [   0.012s] (1163/1366) tick tick_queue::tick_queue_tests::tests::record_task_panic_counts_and_keeps_the_latest
+        PASS [   0.156s] (1164/1366) store_core tests::the_prune_spares_rows_named_in_spare
+        PASS [   0.100s] (1165/1366) tick tick_pulse::tick_pulse_tests::tests::at_equal_usage_survival_does_not_depend_on_depth
+        PASS [   1.105s] (1166/1366) store_core tests::a_cold_tier_pinned_at_capacity_counts_every_eviction_but_logs_once
+        PASS [   0.015s] (1167/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::cold_old_claim_is_a_victim
+        PASS [   0.017s] (1168/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::a_normal_old_entity_is_reclaimed_without_counting_skew
+        PASS [   0.018s] (1169/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::a_future_timestamp_is_not_reclaimed_and_is_counted
+        PASS [   0.018s] (1170/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::created_at_seeds_the_staleness_clock_for_never_accessed_thoughts
+        PASS [   0.019s] (1171/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::an_in_memory_memory_counts_what_it_drops_with_nowhere_to_spill
+        PASS [   0.019s] (1172/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::durable_kinds_are_never_collected
+        PASS [   0.012s] (1173/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::evict_drops_victim_once_spill_succeeds
+        PASS [   0.012s] (1174/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::evict_keeps_victim_hot_when_spill_fails
+        PASS [   0.015s] (1175/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::evidence_decay_damps_alpha_beta_toward_prior_by_half_life
+        PASS [   0.013s] (1176/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::evidence_decay_half_life_zero_is_a_noop
+        PASS [   0.053s] (1177/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::a_failed_batch_falls_back_per_victim_instead_of_holding_the_sweep
+        PASS [   0.013s] (1178/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::heat_above_threshold_is_preserved_even_when_old
+        PASS [   0.013s] (1179/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::evidence_decay_skips_superseded_entities
+        PASS [   0.063s] (1180/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::a_batched_sweep_never_spills_or_drops_an_active_fact
+        PASS [   0.013s] (1181/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::recent_untouched_or_clock_skewed_is_preserved
+        PASS [   0.011s] (1182/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::stale_heat_decays_away_and_stops_shielding_the_entity
+        PASS [   0.010s] (1183/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::superseded_fact_loses_immunity_and_becomes_a_victim
+        PASS [   0.014s] (1184/1366) tick_loop tick::tick_tests::tests::a_failed_cluster_migration_never_drops_the_entity
+        PASS [   0.014s] (1185/1366) tick_loop tick::tick_tests::tests::a_panicking_task_is_contained_counted_and_still_accounted_for
+        PASS [   0.011s] (1186/1366) tick_loop tick::tick_tests::tests::collect_jobs_splits_enrich_and_question_edges
+        PASS [   0.016s] (1187/1366) tick_loop tick::tick_tests::tests::collect_jobs_skips_edges_with_missing_endpoint
+        PASS [   0.026s] (1188/1366) tick_loop tick::tick_tests::tests::a_gnn_propagate_handed_off_the_loop_still_lands_its_embeddings
+        PASS [   0.010s] (1189/1366) tick_loop tick::tick_tests::tests::do_cluster_skips_gnn_when_no_structural_work
+        PASS [   0.013s] (1190/1366) tick_loop tick::tick_tests::tests::do_cluster_persists_each_spawned_child_before_the_parent
+        PASS [   0.010s] (1191/1366) tick_loop tick::tick_tests::tests::evict_keeps_unnamed_child_that_has_thoughts
+        PASS [   0.011s] (1192/1366) tick_loop tick::tick_tests::tests::evict_reaps_empty_unnamed_child
+        PASS [   0.012s] (1193/1366) tick_loop tick::tick_tests::tests::identical_panics_fold_into_one_line_while_a_new_one_still_speaks
+        PASS [   0.076s] (1194/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::run_gc_spills_stale_victim_to_cold_store_and_spares_facts
+        PASS [   0.009s] (1195/1366) tick_loop tick::tick_tests::tests::panic_message_reads_str_string_and_unknown_payloads
+        PASS [   0.009s] (1196/1366) tick_loop tick::tick_tests::tests::run_guarded_reports_which_tasks_died_so_the_loop_can_see_a_storm
+        PASS [   0.009s] (1197/1366) tick_loop tick::tick_tests::tests::select_spawn_clusters_never_spawns_from_an_unnamed_memory
+        PASS [   0.009s] (1198/1366) tick_loop tick::tick_tests::tests::select_spawn_clusters_still_spawns_off_core_cluster_from_named_memory
+        PASS [   0.009s] (1199/1366) tick_loop tick::tick_tests::tests::spawn_child_clusters_creates_a_distinct_child_per_cluster
+        PASS [   0.092s] (1200/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::run_gc_spills_superseded_fact_to_cold_while_active_fact_stays_immune
+        PASS [   0.010s] (1201/1366) tick_loop tick::tick_tests::tests::spawn_child_migrates_cluster_members_into_new_child
+        PASS [   0.009s] (1202/1366) tick_loop tick::tick_tests::tests::spawning_a_cluster_carries_outgoing_reasons_and_reindexes_the_entity
+        PASS [   0.010s] (1203/1366) tick_loop tick::tick_tests::tests::the_gnn_arm_hands_the_propagation_off_instead_of_running_it_on_the_loop
+        PASS [   0.010s] (1204/1366) tick_loop tick::tick_tests::tests::the_drain_stops_when_the_process_begins_shutting_down
+        PASS [   0.009s] (1205/1366) tick_loop tick::tick_tests::tests::the_tick_loop_body_survives_a_panic_and_runs_the_next_task
+        PASS [   0.016s] (1206/1366) tick_loop tick::tick_tests::tests::start_contains_a_panicking_task_and_keeps_draining_the_queue
+        PASS [   0.010s] (1207/1366) tick_loop tick_cluster::tick_cluster_tests::tests::a_cluster_never_forms_out_of_contentless_thoughts
+        PASS [   0.009s] (1208/1366) tick_loop tick_cluster::tick_cluster_tests::tests::best_cluster_none_below_min_size
+        PASS [   0.010s] (1209/1366) tick_loop tick_cluster::tick_cluster_tests::tests::best_cluster_prefers_larger_cohesive_cluster
+        PASS [   0.010s] (1210/1366) tick_loop tick_cluster::tick_cluster_tests::tests::centroid_thought_empty_is_none
+        PASS [   0.012s] (1211/1366) tick_loop tick_cluster::tick_cluster_tests::tests::centroid_thought_picks_member_in_dominant_direction
+        PASS [   0.099s] (1212/1366) tick_loop tick::tick_tests::tests::evict_keeps_an_idle_unloaded_child_registered
+        PASS [   0.010s] (1213/1366) tick_loop tick_cluster::tick_cluster_tests::tests::compute_centroid_empty_is_empty
+        PASS [   0.014s] (1214/1366) tick_loop tick_cluster::tick_cluster_tests::tests::cohesion_empty_is_zero
+        PASS [   0.011s] (1215/1366) tick_loop tick_cluster::tick_cluster_tests::tests::cohesion_of_identical_vectors_is_one
+        PASS [   0.013s] (1216/1366) tick_loop tick_cluster::tick_cluster_tests::tests::focus_prompt_keeps_header_then_one_bullet_per_member
+        PASS [   0.013s] (1217/1366) tick_loop tick_cluster::tick_cluster_tests::tests::compute_centroid_is_componentwise_mean
+        PASS [   0.014s] (1218/1366) tick_loop tick_cluster::tick_cluster_tests::tests::is_core_cluster_false_when_focus_empty
+        PASS [   0.017s] (1219/1366) tick_loop tick_cluster::tick_cluster_tests::tests::vector_cluster_empty_input_yields_no_clusters
+        PASS [   0.017s] (1220/1366) tick_loop tick_gnn_propagate::tick_gnn_propagate_tests::tests::apply_gnn_updates_writes_gnn_vector_weights_and_enqueues_persist
+        PASS [   0.018s] (1221/1366) tick_loop tick_gnn_propagate::tick_gnn_propagate_tests::tests::apply_gnn_updates_skips_empty_update_vectors
+        PASS [   0.019s] (1222/1366) tick_loop tick_gnn_propagate::tick_gnn_propagate_tests::tests::cosine_align_maps_similarity_into_zero_one
+        PASS [   0.022s] (1223/1366) tick_loop tick_cluster::tick_cluster_tests::tests::vector_cluster_identical_vectors_collapse_to_one
+        PASS [   0.019s] (1224/1366) tick_loop tick_gnn_propagate::tick_gnn_propagate_tests::tests::a_failed_propagation_writes_nothing_and_is_recorded_as_a_degradation
+        PASS [   0.022s] (1225/1366) tick_loop tick_cluster::tick_cluster_tests::tests::vector_cluster_respects_max_sample
+        PASS [   0.031s] (1226/1366) tick_loop tick_cluster::tick_cluster_tests::tests::the_sample_is_the_sorted_first_ids_whatever_order_they_arrive_in
+        PASS [   0.015s] (1227/1366) tick_loop tick_gnn_propagate::tick_gnn_propagate_tests::tests::gnn_runs_when_floor_lowered
+        PASS [   0.016s] (1228/1366) tick_loop tick_gnn_propagate::tick_gnn_propagate_tests::tests::gnn_skipped_below_min_thoughts_default
+        PASS [   0.020s] (1229/1366) tick_loop tick_gnn_propagate::tick_gnn_propagate_tests::tests::two_identical_memories_snapshot_in_the_same_order
+        PASS [   0.023s] (1230/1366) tick_loop tick_gnn_propagate::tick_gnn_propagate_tests::tests::superseded_entities_excluded_from_gnn_snapshot
+        PASS [   0.020s] (1231/1366) tick_loop tick_idle::tick_idle_tests::tests::a_storeless_graph_is_never_swept
+        PASS [   0.022s] (1232/1366) tick_loop tick_idle::tick_idle_tests::tests::a_zero_timeout_disables_the_sweep
+        PASS [   0.025s] (1233/1366) tick_loop tick_gnn_propagate::tick_gnn_propagate_tests::tests::vector_ids_drops_superseded_and_odd_length_before_the_floor
+        PASS [   0.013s] (1234/1366) tick_loop tick_idle::tick_idle_tests::tests::idle_victims_spare_recently_accessed_memories
+        PASS [   0.019s] (1235/1366) tick_loop tick_idle::tick_idle_tests::tests::idle_victims_never_include_the_root_memory
+        PASS [   0.015s] (1236/1366) tick_loop tick_idle::tick_idle_tests::tests::is_idle_gates_on_elapsed_timeout_and_clock_skew
+        PASS [   0.011s] (1237/1366) tick_loop tick_tasks::tick_tasks_tests::tests::classify_contradiction_keeps_rephrase_on_related_verdict
+        PASS [   0.012s] (1238/1366) tick_loop tick_tasks::tick_tasks_tests::tests::classify_contradiction_is_a_noop_without_llm
+        PASS [   0.012s] (1239/1366) tick_loop tick_tasks::tick_tasks_tests::tests::a_refusal_and_a_code_fence_leave_the_memory_unnamed
+        PASS [   0.012s] (1240/1366) tick_loop tick_tasks::tick_tasks_tests::tests::classify_contradiction_supersedes_on_update_verdict
+        PASS [   0.013s] (1241/1366) tick_loop tick_tasks::tick_tasks_tests::tests::do_commit_access_stamps_the_live_entities_from_the_id_list
+        PASS [   0.013s] (1242/1366) tick_loop tick_tasks::tick_tasks_tests::tests::do_reembed_clears_dirty_and_sets_vector
+        PASS [   0.014s] (1243/1366) tick_loop tick_tasks::tick_tasks_tests::tests::do_name_refuses_an_answer_that_is_a_document
+        PASS [   0.015s] (1244/1366) tick_loop tick_tasks::tick_tasks_tests::tests::do_reembed_shares_vector_allocation_with_gnn_vector
+        PASS [   0.015s] (1245/1366) tick_loop tick_tasks::tick_tasks_tests::tests::do_reembed_recomputes_dirty_reason_as_endpoint_mean
+        PASS [   0.015s] (1246/1366) tick_loop tick_tasks::tick_tasks_tests::tests::do_name_accepts_a_short_single_line_answer
+        PASS [   0.048s] (1247/1366) tick_loop tick_idle::tick_idle_tests::tests::an_idle_memory_unloads_and_reloads_transparently_with_its_entities
+        PASS [   0.012s] (1248/1366) tick_loop tick_tasks::tick_tasks_tests::tests::do_resolve_ignores_non_question_or_already_linked
+        PASS [   0.042s] (1249/1366) tick_loop tick_idle::tick_idle_tests::tests::the_root_memory_is_never_unloaded_by_a_sweep
+        PASS [   0.015s] (1250/1366) tick_loop tick_tasks::tick_tasks_tests::tests::do_resolve_links_question_to_nearest_entity_above_threshold
+        PASS [   0.015s] (1251/1366) tick_loop tick_tasks::tick_tasks_tests::tests::do_seed_questions_adds_question_edges_for_the_entity
+        PASS [   0.016s] (1252/1366) tick_loop tick_tasks::tick_tasks_tests::tests::pending_rephrase_refuses_a_targeted_edge_and_a_superseded_entity
+        PASS [   0.017s] (1253/1366) tick_loop tick_tasks::tick_tasks_tests::tests::do_seed_questions_is_a_noop_without_llm_or_entity
+        PASS [   0.018s] (1254/1366) tick_loop tick_tasks::tick_tasks_tests::tests::strip_name_prefixes_removes_first_known_label_only
+        PASS [   0.020s] (1255/1366) tick_loop tick_trainer::tick_trainer_tests::tests::a_backlog_past_the_cap_is_refused_and_counted_not_grown
+        PASS [   0.023s] (1256/1366) tick_loop tick_trainer::tick_trainer_tests::tests::a_panicking_propagation_is_counted_and_the_trainer_keeps_training
+        PASS [   0.019s] (1257/1366) transport memory_rpc::memory_rpc_tests::client_tests::a_foreign_owned_endpoint_is_refused
+        PASS [   0.022s] (1258/1366) tick_loop tick_trainer::tick_trainer_tests::tests::dropping_the_trainer_stops_its_thread
+        PASS [   0.017s] (1259/1366) transport memory_rpc::memory_rpc_tests::client_tests::jittered_stays_within_half_to_full_and_zero_stays_zero
+        PASS [   0.014s] (1260/1366) transport memory_rpc::memory_rpc_tests::dto_serde_tests::every_health_field_round_trips_through_json
+        PASS [   0.009s] (1261/1366) transport memory_rpc::memory_rpc_tests::dto_serde_tests::invoke_res_round_trips_ok_and_error
+        PASS [   0.013s] (1262/1366) transport memory_rpc::memory_rpc_tests::dto_serde_tests::an_older_health_payload_without_queue_fields_still_deserializes
+        PASS [   0.023s] (1263/1366) transport memory_rpc::memory_rpc_tests::client_tests::connect_endpoint_gives_up_after_exhausting_retries
+        PASS [   0.017s] (1264/1366) transport typed::bind_tests_unix::a_bound_socket_is_owner_only
+        PASS [   0.018s] (1265/1366) transport typed::bind_tests_unix::a_live_owner_reports_already_running
+        PASS [   0.018s] (1266/1366) transport typed::bind_tests_unix::a_live_endpoint_served_by_another_uid_refuses_the_bind
+        PASS [   0.025s] (1267/1366) transport typed::owner_tests_unix::a_dangling_symlink_is_refused
+        PASS [   0.016s] (1268/1366) transport typed::owner_tests_unix::a_missing_path_reads_as_absence_not_as_a_squat
+        PASS [   0.025s] (1269/1366) transport typed::bind_tests_unix::a_symlink_to_a_foreign_target_refuses_the_bind
+        PASS [   0.025s] (1270/1366) transport typed::bind_tests_unix::a_stale_socket_file_is_removed_and_rebound
+        PASS [   0.010s] (1271/1366) transport typed::owner_tests_unix::a_path_owned_by_another_uid_is_refused
+        PASS [   0.022s] (1272/1366) transport typed::owner_tests_unix::a_path_this_user_owns_is_accepted
+        PASS [   0.039s] (1273/1366) transport typed::bind_tests_unix::a_rebound_stale_socket_is_also_owner_only
+        PASS [   0.012s] (1274/1366) transport typed::owner_tests_unix::connect_memory_refuses_a_foreign_endpoint_before_it_connects
+        PASS [   0.010s] (1275/1366) transport typed::typed_tests::cwd_tag_tests::endpoint_memory_includes_tag
+        PASS [   0.022s] (1276/1366) transport typed::owner_tests_unix::connect_memory_accepts_a_socket_this_user_bound
+        PASS [   0.022s] (1277/1366) transport typed::owner_tests_unix::connect_memory_refuses_when_the_peer_uid_differs
+        PASS [   0.023s] (1278/1366) transport typed::owner_tests_unix::the_peer_check_reads_the_server_uid_and_decides_both_ways
+        PASS [   0.027s] (1279/1366) transport typed::owner_tests_unix::a_symlink_to_a_foreign_target_is_refused
+        PASS [   0.012s] (1280/1366) transport typed::typed_tests::cwd_tag_tests::memory_dir_env_retags_the_endpoint
+        PASS [   0.013s] (1281/1366) transport typed::typed_tests::cwd_tag_tests::memory_for_cwd_matches_memory
+        PASS [   0.024s] (1282/1366) transport typed::typed_tests::a_root_that_does_not_exist_yet_tags_the_same_from_every_spelling
+        PASS [   0.010s] (1283/1366) transport typed::typed_tests::cwd_tag_tests::parse_round_trips_display
+        PASS [   0.011s] (1284/1366) transport typed::typed_tests::tests::rpc_error_absorbs_adapter_and_codec_via_from
+        PASS [   0.011s] (1285/1366) transport typed::typed_tests::cwd_tag_tests::path_tag_is_stable_and_nonempty
+        PASS [   0.013s] (1286/1366) transport typed::typed_tests::tests::io_error_into_codec_is_a_decode_carrying_the_original_message
+        PASS [   0.010s] (1287/1366) transport typed::typed_tests::tests::serde_error_into_codec_preserves_the_serde_message
+        PASS [   0.012s] (1288/1366) transport typed::typed_tests::tests_2::inproc_reader_drains_leftover_across_small_reads
+        PASS [   0.013s] (1289/1366) transport typed::typed_tests::tests_3::json_decodes_multiple_frames_from_one_buffer
+        PASS [   7.844s] (1290/1366) memory::e2e lifecycle::a_handover_generation_stops_on_a_signal
+        PASS [   0.011s] (1291/1366) transport typed::typed_tests::tests_3::json_roundtrip_single_frame
+        PASS [   0.013s] (1292/1366) transport typed::typed_tests::tests_3::json_partial_line_yields_none_until_newline
+        PASS [   0.018s] (1293/1366) transport typed::typed_tests::tests_3::json_many_consecutive_newlines_do_not_overflow
+        PASS [   0.015s] (1294/1366) transport typed::typed_tests::tests_3::json_tolerates_crlf_and_skips_blank_lines
+        PASS [   0.012s] (1295/1366) transport typed::typed_tests::tests_4::channel_roundtrip_json_envelope
+        PASS [   0.009s] (1296/1366) transport-macros tests::to_snake_lowercases_and_word_splits_on_interior_capitals
+        PASS [   0.012s] (1297/1366) transport typed::typed_tests::tests_4::recv_returns_none_on_closed_adapter
+        PASS [   0.017s] (1298/1366) transport typed::typed_tests::the_tag_is_the_same_before_and_after_the_root_is_created
+        PASS [   0.017s] (1299/1366) util lifecycle::lifecycle_tests::a_fresh_process_is_not_shutting_down
+        PASS [   0.013s] (1300/1366) util lifecycle::lifecycle_tests::a_waiter_that_arrives_after_the_latch_does_not_park_behind_it
+        PASS [   0.014s] (1301/1366) util lifecycle::lifecycle_tests::only_the_first_caller_flips_it_and_the_latch_stays_set
+        PASS [   0.013s] (1302/1366) util lifecycle::lifecycle_tests::the_latch_is_visible_the_moment_it_is_flipped
+        PASS [   0.012s] (1303/1366) util lifecycle::lifecycle_tests::the_test_guard_releases_the_latch_so_later_tests_see_a_live_process
+        PASS [   0.010s] (1304/1366) util profile::profile_tests::tests::render_timeline_empty_and_zero
+        PASS [   0.011s] (1305/1366) util profile::profile_tests::tests::profile_display_formats_correctly
+        PASS [   0.032s] (1306/1366) util lifecycle::lifecycle_tests::a_crossing_that_never_unwinds_bounds_the_exit_instead_of_hanging_it
+        PASS [   0.009s] (1307/1366) util profile::profile_tests::tests::render_timeline_scales_and_lists_stages
+        PASS [   0.011s] (1308/1366) util profile::profile_tests::tests::render_timeline_tiny_nonzero_stage_gets_at_least_one_cell
+        PASS [   0.014s] (1309/1366) util util::util_tests::tests::cmp_partial_orders_and_treats_nan_as_equal
+        PASS [   0.011s] (1310/1366) util util::util_tests::tests::cmp_rank_orders_by_score_desc_then_id_asc
+        PASS [   0.011s] (1311/1366) util util::util_tests::tests::content_hash_is_deterministic_64_char_lowercase_hex
+        PASS [   0.035s] (1312/1366) util profile::profile_tests::tests::profiler_records_checkpoints
+        PASS [   0.011s] (1313/1366) util util::util_tests::tests::hex_encode_is_lowercase_two_chars_per_byte
+        PASS [   0.029s] (1314/1366) util util::util_tests::git_head_commit_reads_none_outside_a_repo
+        PASS [   0.012s] (1315/1366) util util::util_tests::tests::now_nanos_is_after_epoch
+        PASS [   0.009s] (1316/1366) util util::util_tests::tests::short_id_caps_at_12_chars_and_is_boundary_safe
+        PASS [   0.010s] (1317/1366) util util::util_tests::tests::uuid_v4_has_correct_layout_version_and_variant
+        PASS [   0.016s] (1318/1366) util util::util_tests::tests::slugify_collapses_trims_and_falls_back
+        PASS [   0.068s] (1319/1366) util lifecycle::lifecycle_tests::a_parked_waiter_is_woken_by_a_shutdown_it_could_not_have_seen
+        PASS [   0.012s] (1320/1366) util util::util_tests::tests::truncate_appends_ellipsis_only_when_cut
+        PASS [   0.041s] (1321/1366) util util::util_tests::git_head_commit_stamps_inside_a_repo
+        PASS [   0.012s] (1322/1366) util util::util_tests::throttle_tests::a_zero_interval_never_throttles
+        PASS [   0.011s] (1323/1366) util util::util_tests::throttle_tests::the_first_call_passes_and_the_flood_behind_it_does_not
+        PASS [   0.010s] (1324/1366) util util::util_tests::time_tests::civil_from_days_round_trips_a_known_date
+        PASS [   0.010s] (1325/1366) util util::util_tests::time_tests::date_string_renders_epoch_and_a_known_instant
+        PASS [   0.010s] (1326/1366) util util::util_tests::time_tests::epoch_and_known_instant_compute_correctly
+        PASS [   0.012s] (1327/1366) util util::util_tests::time_tests::multibyte_in_slice_region_is_err_not_panic
+        PASS [   0.013s] (1328/1366) util util::util_tests::time_tests::civil_from_days_at_epoch_is_1970_01_01
+        PASS [   0.015s] (1329/1366) util util::util_tests::time_tests::malformed_digits_are_err
+        PASS [   0.015s] (1330/1366) util util::util_tests::time_tests::short_after_trim_is_err_not_panic
+        PASS [   0.010s] (1331/1366) util util::util_tests::validate_tests::conf_inclusive_bounds_accepted
+        PASS [   0.010s] (1332/1366) util util::util_tests::validate_tests::conf_out_of_range_rejected_low
+        PASS [   0.010s] (1333/1366) util util::util_tests::time_tests::valid_timestamps_parse
+        PASS [   0.013s] (1334/1366) util util::util_tests::validate_tests::conf_out_of_range_rejected_high
+        PASS [   0.011s] (1335/1366) util watcher::watcher_tests::file_tests::translate_create_file_to_created
+        PASS [   0.013s] (1336/1366) util util::util_tests::validate_tests::conf_out_of_range_rejected_nan
+        PASS [   0.014s] (1337/1366) util watcher::watcher_tests::file_tests::translate_generic_modify_and_remove_map_to_expected_kinds
+        PASS [   0.011s] (1338/1366) util watcher::watcher_tests::file_tests::translate_rename_both_collapses_to_single_renamed
+        PASS [   0.013s] (1339/1366) util watcher::watcher_tests::file_tests::translate_rename_half_events_split_to_delete_and_create
+        PASS [   0.015s] (1340/1366) util watcher::watcher_tests::file_tests::translate_rename_both_with_wrong_arity_is_not_a_rename
+        PASS [   0.015s] (1341/1366) util watcher::watcher_tests::file_tests::translate_non_actionable_access_events_are_dropped
+        PASS [   0.018s] (1342/1366) util watcher::watcher_tests::ignore_tests::a_denied_prefix_matches_on_whole_components_not_string_prefix
+        PASS [   0.013s] (1343/1366) util watcher::watcher_tests::ignore_tests::dot_git_paths_are_always_ignored
+        PASS [   0.016s] (1344/1366) util watcher::watcher_tests::ignore_tests::denied_prefixes_are_ignored_even_with_no_ignore_file
+        PASS [   0.014s] (1345/1366) util watcher::watcher_tests::ignore_tests::empty_rules_ignore_nothing_except_dot_git
+        PASS [   0.021s] (1346/1366) util watcher::watcher_tests::ignore_tests::an_allowed_prefix_reopens_part_of_a_denied_one_and_no_more
+        PASS [   0.035s] (1347/1366) util watcher::watcher_tests::ignore_tests::a_nested_ignore_file_governs_its_own_subtree
+        PASS [   0.027s] (1348/1366) util watcher::watcher_tests::ignore_tests::gitignore_patterns_match_relative_to_root
+        PASS [   0.013s] (1349/1366) util watcher::watcher_tests::pipeline_tests::a_deleted_event_builds_no_record_and_names_the_file_that_is_gone
+        PASS [   0.013s] (1350/1366) util watcher::watcher_tests::pipeline_tests::file_uri_strips_windows_unc_prefix
+        PASS [   0.023s] (1351/1366) util watcher::watcher_tests::ignore_tests::memoryignore_rules_are_honored_alongside_gitignore
+        PASS [   0.015s] (1352/1366) util watcher::watcher_tests::pipeline_tests::file_uri_unix_absolute_path_gets_three_slashes
+        PASS [   0.023s] (1353/1366) util watcher::watcher_tests::ignore_tests::paths_outside_any_root_are_not_ignored
+        PASS [   0.013s] (1354/1366) util watcher::watcher_tests::tests::non_renamed_event_keeps_its_given_path
+        PASS [   0.011s] (1355/1366) util watcher::watcher_tests::tests::renamed_event_path_is_forced_to_the_new_location
+        PASS [   0.012s] (1356/1366) util watcher::watcher_tests::tests::watch_event_works_as_a_hash_set_key
+        PASS [   0.022s] (1357/1366) util watcher::watcher_tests::pipeline_tests::renamed_with_non_utf8_from_reads_the_to_path
+        PASS [   0.580s] (1358/1366) tick tick_stigmergy::tick_stigmergy_tests::tests::batched_eviction_evicts_exactly_what_the_per_victim_path_evicted
+        PASS [   0.324s] (1359/1366) tick_loop tick_trainer::tick_trainer_tests::tests::a_repeat_request_for_a_waiting_memory_is_coalesced_not_queued_twice
+        PASS [   0.217s] (1360/1366) util lifecycle::lifecycle_tests::the_shutdown_waits_for_a_crossing_that_is_still_in_flight
+        PASS [  21.515s] (1361/1366) memory::e2e file_watcher::a_root_populated_before_the_daemon_is_scanned_at_boot_and_only_once
+        PASS [   7.577s] (1362/1366) memory-bench::bin/memory-bench replay::tests::the_mature_fixture_carries_read_history_and_trains_where_rows_are_resident
+        PASS [  13.334s] (1363/1366) memory::spill_transparency a_spilled_graph_answers_the_same_queries_as_one_that_never_spilled
+        PASS [  30.137s] (1364/1366) memory::e2e hub::vanished_root_reaper_drops_adopted_handle_without_stopping_child
+        PASS [  30.337s] (1365/1366) memory::e2e hub::vanished_root_reaper_stops_owned_child_gracefully
+        PASS [  31.446s] (1366/1366) memory::e2e hub::vanished_root_reaper_keeps_owned_child_with_existing_root
+────────────
+     Summary [  42.765s] 1366 tests run: 1366 passed, 17 skipped
+cargo test --doc --workspace
+    Finished `test` profile [unoptimized] target(s) in 0.20s
+   Doc-tests audit
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests base
+
+running 1 test
+test src/base/src/base_types.rs - base_types::Embedding (line 770) - compile fail ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.04s
+
+   Doc-tests bootstrap
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests commands
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests config
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests gnn
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests graph
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests health
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests hotreload
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests hub
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests identity
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests ingest
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests ingest_config
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests llm
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests math
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests memory
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests retrieval
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests retrieval_piece
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests rpc
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests store
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests store_core
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests test_support
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests tick
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests tick_loop
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests transport
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests transport_macros
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+   Doc-tests util
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+

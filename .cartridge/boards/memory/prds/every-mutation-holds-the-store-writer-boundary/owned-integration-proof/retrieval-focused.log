@@ -1,0 +1,45 @@
+   Compiling store_core v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/store/core)
+   Compiling graph v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/graph)
+   Compiling retrieval-piece v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/retrieval/piece)
+    Finished `test` profile [unoptimized] target(s) in 2.47s
+     Running unittests src/lib.rs (/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/retrieval_piece-29ad5b204d6bbd87)
+
+running 35 tests
+test retrieval_score::retrieval_score_tests::access_order_first_access_is_not_suppressed_by_existing_heat ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::a_never_accessed_thought_is_not_throttled ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::a_point_in_time_query_still_sees_a_since_expired_claim ... ok
+test retrieval_score::retrieval_score_tests::lexical_boost_tests::zero_weight_is_a_noop ... ok
+test retrieval_score::retrieval_score_tests::access_heat_uses_order_and_preserves_relevance ... ok
+test retrieval_score::retrieval_score_tests::lexical_boost_tests::no_query_terms_in_corpus_is_a_noop ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::a_configured_source_trust_reorders_two_otherwise_equal_entities ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::a_zero_floor_cuts_only_negative_scores_and_the_best_hit_always_ships ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::an_expired_claim_is_dropped_on_the_default_path ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::an_entity_with_no_ttl_is_never_dropped ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::an_explicit_valid_at_is_left_to_matches_filter ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::apply_boosts_scales_by_confidence_and_adds_fact_bonus_only_for_facts ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::as_of_filters_across_open_and_closed_windows ... ok
+test retrieval_score::retrieval_score_tests::lexical_boost_tests::exact_match_gets_the_full_bonus_others_get_less ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::claim_kind_filter_matches_the_entity_field_and_drops_the_rest ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::confidence_orders_two_equal_scores_and_would_invert_a_negative_one ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::exclude_pending_drops_only_the_uncurated_and_only_when_asked ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::commit_access_ids_stamps_the_live_entity_without_bumping_the_epoch ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::commit_access_ids_skips_ids_unknown_to_the_graph ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::genuine_reuse_after_the_window_still_counts ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::filter_delivery_cuts_to_cap_when_mmr_disabled ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::delivery_cap_is_the_pool_mmr_keeps_and_the_cut_it_applies ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::filter_delivery_keeps_mmr_pool_when_mmr_enabled ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::lower_confidence_bound_ranks_well_evidenced_above_single_observation ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::matches_filter_is_the_per_entity_predicate ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::qbst_access_component_follows_log_count_times_weight ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::qbst_clamps_to_cap ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::qbst_zero_access_and_no_recency_is_zero ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::qbst_recency_is_near_full_weight_at_zero_age ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::query_filter_by_kind_retains_only_matching ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::replaying_a_query_cannot_pump_one_thoughts_access_count ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::query_filter_by_scheme_retains_only_matching ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::shipped_source_trust_default_leaves_boosted_scores_bit_identical ... ok
+test retrieval_score::retrieval_score_tests::query_filter_tests::the_floor_is_a_fraction_of_the_best_score_in_any_scale ... ok
+test retrieval_score::retrieval_score_tests::access_order_new_access_sorts_after_cold_timestamps_even_after_clock_rewind ... ok
+
+test result: ok. 35 passed; 0 failed; 0 ignored; 0 measured; 68 filtered out; finished in 0.01s
+

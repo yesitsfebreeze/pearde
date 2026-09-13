@@ -1,0 +1,17 @@
+from pathlib import Path
+import tempfile,subprocess,json,shutil,os,hashlib
+base=Path('/Users/feb/dev/cartridge');work=Path('/tmp/recursive-census-baseline');root=Path(tempfile.mkdtemp(prefix='recursive-census-fixture-'))
+try:
+ for name,fact in [('root','ROOTAMBER'),('base','BASEBERYL'),('plugin','PLUGINCOBALT')]:
+  p=root/name;p.mkdir();(p/'prds/same').mkdir(parents=True);(p/'prds/same/prd.md').write_text('---\nstate: open\n---\n# '+fact+'\n');(p/'settings.md').write_text('---\nmembers: {}\n---\n')
+ (root/'root/settings.md').write_text('---\nmembers:\n  base: ../base\n---\n');(root/'base/settings.md').write_text('---\nmembers:\n  plugin: ../plugin\n---\n')
+ def board():
+  command=['bun',str(work/'board-probe.ts'),str(root/'root')];r=subprocess.run(command,text=True,capture_output=True,check=True);return {'command':command,'exit':r.returncode,'output':json.loads(r.stdout)}
+ result={'source_heads':{o:subprocess.check_output(['git','rev-parse','HEAD'],cwd=base/o,text=True).strip() for o in ['landscape.ctg','memo.ctg','prd.ctg']},'board_three_levels':board()}
+ env=dict(os.environ,RUSTC_WRAPPER='',RUSTC_WORKSPACE_WRAPPER='',CARGO_TARGET_DIR=str(base/'cartridge.ctg/target/tool-result-contract'))
+ command=['cargo','run','--quiet','--manifest-path',str(work/'Cargo.toml'),'--',str(root/'root')];r=subprocess.run(command,env=env,text=True,capture_output=True,check=True);result['landscape_surface']={'command':command,'exit':r.returncode,'output':json.loads(r.stdout)}
+ (root/'plugin/settings.md').write_text('---\nmembers:\n  back: ../root\n---\n');result['backlink']=board()
+ (root/'plugin/settings.md').write_text('---\nmembers: {}\n---\n');(root/'root/settings.md').write_text('---\nmembers:\n  base: ../base\n  repeated: ../base\n---\n');result['repeated_mount']=board()
+ shutil.rmtree(root/'plugin');result['deleted_descendant']=board()
+ print(json.dumps(result,indent=2))
+finally:shutil.rmtree(root)

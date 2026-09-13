@@ -1,14 +1,6 @@
 ---
 complexity: low
-footprint:
-  - src/roster.rs
-  - src/channels.rs
-  - src/mailbox.rs
-  - src/main.rs
-  - src/observations.rs
-  - .cartridge/tests/unit/main/observation_tests.rs
-  - .cartridge/tests/integration/observations.test.ts
-  - .cartridge/docs/observations.md
+footprint: ["src/roster.rs","src/channels.rs","src/mailbox.rs","src/main.rs","src/observations.rs",".cartridge/tests/unit/main/observation_tests.rs",".cartridge/tests/integration/observations.test.ts",".cartridge/docs/observations.md","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
 ---
 
 # Roll up actual attributed execution evidence
@@ -29,7 +21,7 @@ bun -e 'for (const ref of ["@runtime/native-tool-observation-adapter", "@session
 
 ```sh
 cd ../cartridge.ctg
-CARTRIDGE_TEST_BIN="$PWD/target/sessions-mapping/debug/cartridge" SESSIONS_BINARY="$PWD/target/sessions-mapping/debug/sessions" bun test ../sessions.ctg/.cartridge/tests/integration/observations.test.ts
+CARTRIDGE_TEST_BIN="$PWD/target/tool-result-contract/debug/cartridge" SESSIONS_BINARY="$PWD/target/tool-result-contract/debug/sessions" bun test ../sessions.ctg/.cartridge/tests/integration/observations.test.ts
 ```
 
 No additional source changes. Runtime footprint is validated through its receipt rather than pretending runtime paths belong to sessions. Preserve earlier evidence and diagnostic data; no repair/replay.

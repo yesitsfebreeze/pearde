@@ -7,12 +7,10 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: landscape
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: "passed"
 canonical-scope: recursive-development-graph
-needs:
-- '@memo/memo-board-template/initialize-board'
-- '@memo/one-document-serves-every-reader/document-identity'
+needs: ["@memo/memo-board-template/initialize-board","@memo/one-document-serves-every-reader/document-identity","@prd/declared-source-edges"]
 ---
 
 # Declared descendants have distinct source identities

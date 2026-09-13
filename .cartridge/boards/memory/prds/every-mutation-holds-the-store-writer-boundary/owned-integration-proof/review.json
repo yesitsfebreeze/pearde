@@ -1,0 +1,101 @@
+{
+  "original_edits_commit": "8837f84",
+  "writer_commit_merged": "4c0c8244ac9850ba2b215877c012ce4010a1e32d",
+  "original_files": "original-files.json",
+  "reviewed_all_original_files": 15,
+  "intent_preserved": [
+    "Graph JSON CLI with summary/exact-node/group/vector modes",
+    "Read-only hot/cold graph projection",
+    "Access-order recency with legacy config compatibility and health field",
+    "Existing writer-boundary and native operator-ingest behavior"
+  ],
+  "demonstrated_fixes": [
+    {
+      "baseline": "graph-review-baseline.log",
+      "finding": "Full relationships omitted their owning group",
+      "change": "Preserve memory attribution on full relationship rows"
+    },
+    {
+      "baseline": "graph-review-baseline.log",
+      "finding": "Malformed cold vector bytes were silently truncated",
+      "change": "Refuse invalid f32 byte lengths before successful graph output"
+    },
+    {
+      "baseline": "access-order-review-baseline.log",
+      "finding": "Pre-existing heat suppressed the first counted access",
+      "change": "Cooldown requires an existing access timestamp"
+    },
+    {
+      "baseline": "access-order-review-baseline.log",
+      "finding": "Clock rewind allowed a new hot access behind existing cold timestamps",
+      "change": "Monotonic stamp considers both tiers; shared metadata visitor avoids cold vector-table reads"
+    },
+    {
+      "baseline": "Graph original summary projection omitted arrays while returning vectors_included true when requested",
+      "change": "Summary reports vectors_included false; full/detail vector modes retained"
+    },
+    {
+      "baseline": "health-review-baseline.log",
+      "finding": "Zero access half-life configured returned zero health sentinel despite scoring clamp1",
+      "change": "Health reports effective max(1) value; legacy seconds field remains0"
+    }
+  ],
+  "unsafe_review": "Retains LMDB locking and READ_ONLY, does not use NO_LOCK or mutate/truncate data; normal reader lock-file coordination is not advertised as no filesystem activity. Existing memory-owned local store assumption remains.",
+  "limitations": [
+    "Graph view is a full persisted snapshot and can be large; no unsolicited paging protocol introduced",
+    "Same-process differently configured pre-opened LMDB environment can refuse read-only open; supported CLI path is a separate process",
+    "Access-order ranking scans corpus metadata, including cold rows",
+    "CLI data-dir/group flags retain original behavior, including cold reserved tier label"
+  ],
+  "isolated_worktree": "/tmp/memory-owned-integration/memory.ctg",
+  "original_owner_hashes_match": {
+    ".cartridge/tests/unit/src/commands/src/tests/commands_admin_test.rs": "e3ba9c0ef403749ce7c2e5e6181d66f05eae1c5367f83edc2f2fa13e186bebec",
+    ".cartridge/tests/unit/src/retrieval/piece/src/tests/retrieval_score_test.rs": "a0b1985abac50ca76ada561e6c633d1d99bcc3b80b1d9a4936c885c63e399e28",
+    ".cartridge/tests/unit/src/store/core/src/cold/memory_contract_tests.rs": "27fff4fefaa8c379020aa3a26ab223aed2c10a1f7a78ca00eae965ddb1edb120",
+    ".cartridge/tests/unit/src/transport/src/tests/memory_rpc_test.rs": "f3d22bf2cc9b3c28c6fcfde74165a8cabc7268896a2426b6877d8c733a214cf0",
+    "Cargo.lock": "c73048e32b356f1c30a02e75bbfe30abce7a06216827deac421984dbed819da3",
+    "src/commands/src/commands_health.rs": "cc7d7cb3828c921f6028d976cf5c13dea02feebe99d49e8cc6032d48fa05fc0d",
+    "src/commands/src/lib.rs": "fab02565ada7a95592853067697eb8f77e8ed30e2ffa45de98aae8642a2615c2",
+    "src/config/src/config.rs": "395808ca6ca32f625d5370fc0cac78ffe5e1d4faac69cb561fb1162a09a21387",
+    "src/retrieval/piece/src/retrieval_query.rs": "dfa0349ac099b72f5996495f49fa83b073e9a47759be3a4d4a47c07d4ccc760c",
+    "src/retrieval/piece/src/retrieval_score.rs": "ce4d84ca4d54375a9b962380f8d00067632ea2c9252ff254d16e8e2a1c776de8",
+    "src/rpc/src/server.rs": "d18dab5298f3744e7eb02a212c2daaff5778f4c1f46818e73b527360f7a7464b",
+    "src/store/core/Cargo.toml": "3c3a171a0c7d4c0dc2d792549291c66474018cc5fddfc7b212a4296fd422fefd",
+    "src/store/core/src/cold.rs": "1bc68574b3db62f998fe3781dd4e8d6998c16dfa17c77d7357734af5cb6b4d94",
+    "src/store/core/src/lib.rs": "e2dbdfcdeab3c2608817efebc42339b3e2e0d9054d0d0711dd383425cee6a983",
+    "src/transport/src/memory_rpc.rs": "2eb3c3037df524bbf0748616199261e9822dd9cdb190e4fd48e580f242004340"
+  },
+  "integrated_source": "0a8736c5126781b90b842a5b818f083458b2f740",
+  "integrated_owner": "/Users/feb/dev/cartridge/memory.ctg",
+  "integration_method": "Verified original 15 byte hashes and unchanged base/staging; saved exact committed original patch; checked and reversed only that patch; fast-forwarded owner to tested merge retaining original and writer commits as ancestors.",
+  "owner_clean": true,
+  "gates": {
+    "public_just_test": "1366 passed, 17 skipped; all documentation tests passed",
+    "public_just_check": "passed after final test-only cloned_ref_to_slice_refs cleanup",
+    "focused_graph": "4 passed after final cleanup",
+    "focused_retrieval": "35 passed",
+    "real_graph_cli_held_writer": "1 passed, also included in full suite"
+  },
+  "gate_environment": {
+    "RUSTC_WRAPPER": "",
+    "RUSTC_WORKSPACE_WRAPPER": "",
+    "CARGO_PROFILE_DEV_DEBUG": "0",
+    "CARGO_PROFILE_TEST_DEBUG": "0",
+    "CARGO_INCREMENTAL": "0",
+    "CARGO_TARGET_DIR": "/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary"
+  },
+  "evidence_sha256": {
+    "access-order-review-baseline.log": "94c8dea79dac6d1013109d4fbcd944735a3415953217e64a27f9dcf3e9eaaed1",
+    "full-check-final.log": "c6e2e0a25f8f1f3fff89f4667b29c50c5fa370904de59fe4c7d14ccebae3b19f",
+    "full-test-final.log": "55fbf09f653b23f291f4d2f334bc2d9684473f1b236acd9de34fd8c002373794",
+    "graph-cli.log": "c61335664f0ee74b3576300d95bac0652c00367371f2ce1c4483647b06ec9319",
+    "graph-focused-final.log": "7a9ba1be366ec8a82e470548cfcb5fadbc61827a2675651550ce59f859cca9bc",
+    "graph-review-baseline.log": "3a3592697f3e204f2b35eefb98382aa1d5d5cf759b2a0e37b2ec269a6275bff5",
+    "health-review-baseline.log": "b9396b589a2e241dd6a2fe308be52bb726f6d8526f2e951ca090f6c51b5fc732",
+    "original-files.json": "2725c4026607cb75f10397fc6ba73a02ae97dd095956b80f82e2c8c7420282bd",
+    "original.patch": "b1645a98ad5198a817c4019f8177a9fc74e8f61e29719cae8815f8521398eb4f",
+    "retrieval-focused.log": "6d88ec986da3d37267b72d85c99f118009fe81d7462ec47f1c899d2620d186fe"
+  },
+  "verified_at_utc": "2026-09-13T19:17:15.422497+00:00",
+  "canonical_evidence": "owned-integration-proof/"
+}

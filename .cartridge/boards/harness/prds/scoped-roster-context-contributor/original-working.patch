@@ -1,0 +1,176 @@
+diff --git a/.cartridge/tests/integration/working.rs b/.cartridge/tests/integration/working.rs
+index 2a67c98..799254b 100644
+--- a/.cartridge/tests/integration/working.rs
++++ b/.cartridge/tests/integration/working.rs
+@@ -30,7 +30,7 @@ async fn rolling_memory_refreshes_below_budget_and_survives_reload_and_failure()
+ 	.unwrap();
+ 	std::fs::write(dir.path().join("services.lua"), format!(r#"
+ return {{ provide = {{'sessions','buffers','router','clock','memo','control'}}, apply = function(ctx)
+-  local text, summary, calls, mode = '', '', {{}}, 'ok'
++  local text, summary, calls, mode, append = '', '', {{}}, 'ok', ''
+   ctx:provide('sessions', function() return {{id='s',revision=#text,cwd={cwd:?},transcript=7,buffers={{7,8}}}} end)
+   ctx:provide('buffers', function(a)
+     if a.op == 'get' then return {{id=a.id,name=a.id == 7 and 'transcript' or 'summary',text=a.id == 7 and text or summary}} end
+@@ -43,12 +43,15 @@ return {{ provide = {{'sessions','buffers','router','clock','memo','control'}},
+   ctx:provide('control', function(a)
+     if a.text then text = a.text end
+     if a.mode then mode = a.mode end
++    if a.append then append = a.append end
+     return {{calls=calls,count=#calls,summary=summary,text=text}}
+   end)
+   ctx:provide('router', function(a)
+     assert(a.op == 'request' and a.wire == 'chat' and a.body.tools == nil)
+     calls[#calls+1] = a.body
++    text, append = text .. append, ''
+     if mode == 'error' then error('summary provider unavailable') end
++    if mode == 'timeout' then os.execute('sleep 2') end
+     local content = '- Goal: fix editor\n- terminal.tsx → draft retained → preserve it\n- Next: verify'
+     if mode == 'corrected' then content = content .. '\n- Corrected constraint: preserve the draft' end
+     if mode == 'empty' then content = '' end
+@@ -64,7 +67,7 @@ end }}"#, cwd = dir.path().to_str().unwrap())).unwrap();
+ 			host.clone(),
+ 			"harness".into(),
+ 			vec![env!("CARGO_BIN_EXE_harness").into()],
+-			json!({"max_bytes":1048576}),
++			json!({"max_bytes":1048576,"summary_timeout_secs":1}),
+ 		)
+ 		.unwrap();
+ 		host.runtime().ctx().cartridge(component)
+@@ -89,6 +92,21 @@ end }}"#, cwd = dir.path().to_str().unwrap())).unwrap();
+ 	);
+ 	assert_eq!(host.call("control", json!({})).await.unwrap()["count"], 0);
+ 
++	// An automatic refresh is optional while the full conversation fits.
++	host.call("control", json!({"text":history(8),"mode":"error"}))
++		.await
++		.unwrap();
++	let fallback = call()
++		.await
++		.expect("failed maintenance must not abort a fitting context");
++	assert_eq!(fallback["messages"].as_array().unwrap().len(), 16);
++	assert_eq!(fallback["messages"][0]["content"], "q0");
++	assert_eq!(
++		host.call("control", json!({})).await.unwrap()["summary"],
++		""
++	);
++	host.call("control", json!({"mode":"ok"})).await.unwrap();
++
+ 	host.call("control", json!({"text":history(8)}))
+ 		.await
+ 		.unwrap();
+@@ -112,9 +130,9 @@ end }}"#, cwd = dir.path().to_str().unwrap())).unwrap();
+ 			> 0
+ 	);
+ 	let state = host.call("control", json!({})).await.unwrap();
+-	assert_eq!(state["calls"].as_array().unwrap().len(), 1);
++	assert_eq!(state["calls"].as_array().unwrap().len(), 2);
+ 	let input: Value = serde_json::from_str(
+-		state["calls"][0]["messages"][1]["content"]
++		state["calls"][1]["messages"][1]["content"]
+ 			.as_str()
+ 			.unwrap(),
+ 	)
+@@ -135,9 +153,9 @@ end }}"#, cwd = dir.path().to_str().unwrap())).unwrap();
+ 	let second = call().await.unwrap();
+ 	assert_eq!(second["messages"][0]["content"], "q8");
+ 	let state = host.call("control", json!({})).await.unwrap();
+-	assert_eq!(state["calls"].as_array().unwrap().len(), 2);
++	assert_eq!(state["calls"].as_array().unwrap().len(), 3);
+ 	let input: Value = serde_json::from_str(
+-		state["calls"][1]["messages"][1]["content"]
++		state["calls"][2]["messages"][1]["content"]
+ 			.as_str()
+ 			.unwrap(),
+ 	)
+@@ -197,17 +215,45 @@ end }}"#, cwd = dir.path().to_str().unwrap())).unwrap();
+ 		.as_str()
+ 		.unwrap()
+ 		.contains("Corrected constraint: preserve the draft"));
+-	assert_eq!(host.call("control", json!({})).await.unwrap()["count"], 2);
++	assert_eq!(host.call("control", json!({})).await.unwrap()["count"], 3);
+ 	assert!(!comparison.to_string().contains("private-fixture"));
+ 	assert!(!state["summary"].as_str().unwrap().contains("authorization"));
+ 
+ 	// Failure never replaces good memory or alters the original transcript.
+ 	let saved = state["summary"].clone();
+-	for mode in ["error", "empty", "huge", "length"] {
++	for mode in ["error", "empty", "huge", "length", "timeout"] {
+ 		host.call("control", json!({"text":history(16),"mode":mode}))
+ 			.await
+ 			.unwrap();
+-		assert!(call().await.unwrap_err().contains("context_over_budget"));
++		let fallback = tokio::time::timeout(Duration::from_secs(5), call())
++			.await
++			.unwrap()
++			.expect("use saved memory and the entire unsummarized tail on refresh failure");
++		assert_eq!(fallback["system"], second["system"]);
++		assert_eq!(fallback["messages"].as_array().unwrap().len(), 16);
++		assert_eq!(fallback["messages"][0]["content"], "q8");
++		assert_eq!(fallback["messages"][15]["content"], "a15");
++		// Explicit compaction still reports why a refresh failed, including
++		// a real deadline firing before the delayed provider responds.
++		let error = tokio::time::timeout(
++			Duration::from_secs(5),
++			host.call(
++				"harness",
++				json!({"op":"compact","session":"s","descriptors":[]}),
++			),
++		)
++		.await
++		.unwrap()
++		.unwrap_err();
++		let reason = match mode {
++			"error" => "summary provider unavailable",
++			"empty" => "summary response is empty",
++			"huge" => "7000 bytes, limit is 6144 bytes",
++			"length" => "output token limit reached",
++			"timeout" => "timed out",
++			_ => unreachable!(),
++		};
++		assert!(error.contains(reason), "{error}");
+ 		let state = host.call("control", json!({})).await.unwrap();
+ 		assert_eq!(state["summary"], saved);
+ 		assert_eq!(state["text"], history(16));
+@@ -226,6 +272,42 @@ end }}"#, cwd = dir.path().to_str().unwrap())).unwrap();
+ 		);
+ 		assert!(!inspected.to_string().contains("private-fixture"));
+ 	}
++	// Messages appended during a failed refresh must join the fallback tail.
++	let appended = history(17);
++	host.call(
++		"control",
++		json!({"mode":"error","append":appended.strip_prefix(&history(16)).unwrap()}),
++	)
++	.await
++	.unwrap();
++	let fallback = call().await.unwrap();
++	assert_eq!(fallback["messages"].as_array().unwrap().len(), 18);
++	assert_eq!(fallback["messages"][17]["content"], "a16");
++	assert_eq!(
++		host.call("control", json!({})).await.unwrap()["summary"],
++		saved
++	);
++
++	// A fallback exceeding the hard budget still fails. The large exchange
++	// is in the unsummarized prefix, so a successful refresh could cover it.
++	let oversized = history(16).replace("q8", &"x".repeat(1048576));
++	host.call("control", json!({"text":oversized,"mode":"error"}))
++		.await
++		.unwrap();
++	let before = host.call("control", json!({})).await.unwrap()["count"]
++		.as_u64()
++		.unwrap();
++	assert!(call()
++		.await
++		.unwrap_err()
++		.contains("summary provider unavailable"));
++	let state = host.call("control", json!({})).await.unwrap();
++	assert_eq!(state["count"], before + 1);
++	assert_eq!(state["summary"], saved);
++	assert_eq!(state["text"], oversized);
++	host.call("control", json!({"text":history(16)}))
++		.await
++		.unwrap();
+ 	host.call("control", json!({"mode":"ok"})).await.unwrap();
+ 	assert_eq!(call().await.unwrap()["messages"][0]["content"], "q12");
+ 	fiber.dispose().await;

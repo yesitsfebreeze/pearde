@@ -1,0 +1,114 @@
+diff --git a/src/main.rs b/src/main.rs
+index b0f7136..8a0e544 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -28,6 +28,8 @@
+ //! the current user request stays verbatim. Instructions are never summarized.
+ //! Summaries are size-limited and stored separately with a prefix hash. The
+ //! full transcript remains untouched, and failed compaction preserves it.
++//! A failed automatic refresh reuses existing memory and the entire remaining
++//! tail (or the full conversation) when that projection still fits the budget.
+ //!
+ //! `ring` is the turn ring: the newest `ring_keep` finished turns keep their
+ //! session files as hard reference, and older ones are distilled through the
+@@ -513,11 +515,18 @@ async fn summarize(
+ 		.as_str()
+ 		.ok_or_else(|| "summary response has no text content".to_owned())?;
+ 	let text = text.trim();
+-	if text.is_empty()
+-		|| text.len() > config.summary_max_bytes
+-		|| value["choices"][0]["finish_reason"] == "length"
+-	{
+-		return Err("summary response is empty, oversized, or incomplete".to_owned());
++	if value["choices"][0]["finish_reason"] == "length" {
++		return Err("summary response is incomplete: output token limit reached".to_owned());
++	}
++	if text.is_empty() {
++		return Err("summary response is empty".to_owned());
++	}
++	if text.len() > config.summary_max_bytes {
++		return Err(format!(
++			"summary response is oversized: {} bytes, limit is {} bytes",
++			text.len(),
++			config.summary_max_bytes
++		));
+ 	}
+ 	Ok((text.to_owned(), compaction::usage(&value["usage"])))
+ }
+@@ -1262,11 +1271,17 @@ async fn context(host: &Host, config: &Config, request: &Request) -> Result<Valu
+ 		// A saved working memory is always used or refreshed, even below the
+ 		// hard budget. Never resurrect the entire raw conversation.
+ 		if working::valid_saved(config, &request.text, saved).is_some() {
+-			return compact(host, config, request).await;
++			return refresh_context(host, config, request, Some(saved)).await;
+ 		}
+ 	}
+ 	if working::due(config, &messages) {
+-		return compact(host, config, request).await;
++		return refresh_context(
++			host,
++			config,
++			request,
++			stored.as_ref().map(|(_, saved)| saved.as_str()),
++		)
++		.await;
+ 	}
+ 	match build_context(
+ 		SystemPrompt {
+@@ -1281,12 +1296,55 @@ async fn context(host: &Host, config: &Config, request: &Request) -> Result<Valu
+ 	) {
+ 		Ok(out) => Ok(out),
+ 		Err(error) if error.starts_with("context_over_budget") => {
+-			compact(host, config, request).await
++			refresh_context(
++				host,
++				config,
++				request,
++				stored.as_ref().map(|(_, saved)| saved.as_str()),
++			)
++			.await
+ 		}
+ 		Err(error) => Err(error),
+ 	}
+ }
+ 
++/// Summary maintenance must not abort a context that still fits. Only recover
++/// from summarizer failures; storage and transcript errors remain explicit.
++/// Explicit `compact` calls continue to report unsuccessful refreshes.
++async fn refresh_context(
++	host: &Host,
++	config: &Config,
++	request: &Request,
++	saved: Option<&str>,
++) -> Result<Value, String> {
++	let error = match compact(host, config, request).await {
++		Err(error) if error.starts_with("context_over_budget: summary ") => error,
++		result => return result,
++	};
++	// Include messages appended while the provider was answering. Revalidate
++	// the saved prefix against this fresh journal before using its summary.
++	let fresh = read_transcript(host, request.transcript_id).await?;
++	project_messages(&fresh)?;
++	let fallback = match saved.and_then(|saved| working::valid_saved(config, &fresh, saved)) {
++		Some((end, summary)) => working::project(config, request, &fresh, end, &summary),
++		None => build_context(
++			SystemPrompt {
++				base: &config.system,
++				template: &request.template,
++			},
++			request.frame(),
++			&request.instructions,
++			&fresh,
++			&request.descriptors,
++			config.max_bytes.saturating_sub(config.output_headroom),
++		),
++	};
++	match fallback {
++		Err(fallback_error) if fallback_error.starts_with("context_over_budget") => Err(error),
++		result => result,
++	}
++}
++
+ /// Registration contract: prove this cartridge's own projection with no
+ /// dependency in the way. The frame renders into the system text and one
+ /// transcript record projects to one message, inside the configured budget.

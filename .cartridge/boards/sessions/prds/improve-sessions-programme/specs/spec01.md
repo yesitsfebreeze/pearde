@@ -1,24 +1,6 @@
 ---
 complexity: low
-footprint:
-- src/roster.rs
-- src/channels.rs
-- src/mailbox.rs
-- .cartridge/docs/README.md
-- .cartridge/docs/client-mapping.md
-- .cartridge/docs/retention.md
-- .cartridge/tests/integration/mapping.test.ts
-- .cartridge/tests/integration/retention.test.ts
-- .cartridge/tests/unit/main/mapping_tests.rs
-- .cartridge/tests/unit/main/repair_tests.rs
-- .cartridge/tests/unit/main/retention_tests.rs
-- .cartridge/tests/unit/recovery.rs
-- Cargo.toml
-- src/main.rs
-- src/mapping.rs
-- src/recovery.rs
-- src/retention.rs
-- src/observations.rs
+footprint: ["src/roster.rs","src/channels.rs","src/mailbox.rs",".cartridge/docs/README.md",".cartridge/docs/client-mapping.md",".cartridge/docs/retention.md",".cartridge/tests/integration/mapping.test.ts",".cartridge/tests/integration/retention.test.ts",".cartridge/tests/unit/main/mapping_tests.rs",".cartridge/tests/unit/main/repair_tests.rs",".cartridge/tests/unit/main/retention_tests.rs",".cartridge/tests/unit/recovery.rs","Cargo.toml","src/main.rs","src/mapping.rs","src/recovery.rs","src/retention.rs","src/observations.rs","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
 ---
 
 # spec01 — Verify integrated sessions improvements
@@ -61,8 +43,8 @@ bun -e 'for (const ref of ["@sessions/improve-sessions-client-mapping","@session
 
 ```sh
 cd ../cartridge.ctg
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/sessions-mapping" just test sessions
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/sessions-mapping" just build sessions
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/sessions-mapping" just build harness
-SESSIONS_BINARY="$PWD/target/sessions-mapping/debug/sessions" HARNESS_BINARY="$PWD/target/sessions-mapping/debug/harness" bun test ../sessions.ctg/.cartridge/tests/integration/mapping.test.ts ../sessions.ctg/.cartridge/tests/integration/retention.test.ts
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" just test sessions
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" just build sessions
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" just build harness
+SESSIONS_BINARY="$PWD/target/tool-result-contract/debug/sessions" HARNESS_BINARY="$PWD/target/tool-result-contract/debug/harness" bun test ../sessions.ctg/.cartridge/tests/integration/mapping.test.ts ../sessions.ctg/.cartridge/tests/integration/retention.test.ts
 ```

@@ -1,0 +1,162 @@
+{
+  "sources": {
+    "fs": "de1406682a33c5b12cb472787178e2570e5ed0f8",
+    "gitfs": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+    "sessions": "c2693a7ca3e23c295b8fe52a664720dde137eedc"
+  },
+  "binary_sha256": {
+    "fs": "6dc5fe3749af4547a86e4c43aba85fe5da012a54451b19bdc8d206f5be2ed2fd",
+    "gitfs": "8354b64d6220bd75396cd6f14209382b5f7ea1c0a9dffb2ecdfc1f4c62eaf0c2",
+    "sessions": "80b9e2759e8faff31d937b5009beb36cb48e54336b2478f5b7d1a0afb436e9ee"
+  },
+  "base": "9ada0c6a5d1b34c643c1baa5c082e2f2e1b25cd0",
+  "session": "18d4f64a98373428-2",
+  "direct_result": {
+    "content": "edited /private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/change-provenance-baseline-oc9hCS/repo/a.txt",
+    "error": false
+  },
+  "direct_callback": {
+    "args": {
+      "file": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/change-provenance-baseline-oc9hCS/repo/a.txt",
+      "id": "18d4f64a98373428-2",
+      "op": "touch"
+    },
+    "call": "sessions",
+    "id": 1,
+    "turn": "18d4f64a99f2bf08-2"
+  },
+  "overlay_result": {
+    "content": "{\"branch\":\"refs/gitfs/18d4f64a98373428-2\",\"commit\":\"8317fc997a1fbb6f805212b343dd2b134ba586e3\",\"path\":\"a.txt\",\"saved\":true}",
+    "error": false
+  },
+  "after_direct": {
+    "agent": {},
+    "buffers": [],
+    "created": 1789325752,
+    "cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/change-provenance-baseline-oc9hCS/repo",
+    "files": [
+      "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/change-provenance-baseline-oc9hCS/repo/a.txt"
+    ],
+    "id": "18d4f64a98373428-2",
+    "name": "native provenance baseline",
+    "parent": null,
+    "revision": 0,
+    "transcript": null,
+    "updated": 1789325752
+  },
+  "after_overlay": {
+    "agent": {},
+    "buffers": [],
+    "created": 1789325752,
+    "cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/change-provenance-baseline-oc9hCS/repo",
+    "files": [
+      "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/change-provenance-baseline-oc9hCS/repo/a.txt"
+    ],
+    "id": "18d4f64a98373428-2",
+    "name": "native provenance baseline",
+    "parent": null,
+    "revision": 0,
+    "transcript": null,
+    "updated": 1789325752
+  },
+  "divergence": {
+    "base": {
+      "bytes": 5,
+      "mode": "100644",
+      "present": true,
+      "revision": "f34848ca92665c342abd5816c9e3eda0e82180671195362bcd0080544a3bc2ac"
+    },
+    "base_commit": "9ada0c6a5d1b34c643c1baa5c082e2f2e1b25cd0",
+    "complete": true,
+    "conflict": true,
+    "consistency": "read_time_comparison",
+    "disk": {
+      "bytes": 7,
+      "mode": "100644",
+      "present": true,
+      "revision": "96f56a26868e3613cca099b0457840e9e532b916a4de8572946edca4b12a5a15"
+    },
+    "disk_changed": true,
+    "next_offset": null,
+    "offset": 0,
+    "overlay": {
+      "bytes": 8,
+      "mode": "100644",
+      "present": true,
+      "revision": "5971fc5991ae2b514c4e25cbfaa154aa191b4230c4201e33c00da182209f53fd"
+    },
+    "overlay_changed": true,
+    "overlay_commit": "8317fc997a1fbb6f805212b343dd2b134ba586e3",
+    "patch": "--- base/\"a.txt\"\n+++ overlay/\"a.txt\"\nmode 100644 -> 100644\n@@ -1,1 +1,1 @@\n-base\n+overlay\n--- base/\"a.txt\"\n+++ disk/\"a.txt\"\nmode 100644 -> 100644\n@@ -1,1 +1,1 @@\n-base\n+direct\n",
+    "path": "a.txt",
+    "revision": "ac54fafdcc52167b02e8da5d484e23618b0c90c9695a69847969e9f270ea6811",
+    "total_patch_bytes": 176
+  },
+  "external_divergence": {
+    "base": {
+      "bytes": 5,
+      "mode": "100644",
+      "present": true,
+      "revision": "f34848ca92665c342abd5816c9e3eda0e82180671195362bcd0080544a3bc2ac"
+    },
+    "base_commit": "9ada0c6a5d1b34c643c1baa5c082e2f2e1b25cd0",
+    "complete": true,
+    "conflict": true,
+    "consistency": "read_time_comparison",
+    "disk": {
+      "bytes": 9,
+      "mode": "100644",
+      "present": true,
+      "revision": "1b665050c87b37aa6ac165e4d12580794f99fa769fc6a87d482923a5be8465bb"
+    },
+    "disk_changed": true,
+    "next_offset": null,
+    "offset": 0,
+    "overlay": {
+      "bytes": 8,
+      "mode": "100644",
+      "present": true,
+      "revision": "5971fc5991ae2b514c4e25cbfaa154aa191b4230c4201e33c00da182209f53fd"
+    },
+    "overlay_changed": true,
+    "overlay_commit": "8317fc997a1fbb6f805212b343dd2b134ba586e3",
+    "patch": "--- base/\"a.txt\"\n+++ overlay/\"a.txt\"\nmode 100644 -> 100644\n@@ -1,1 +1,1 @@\n-base\n+overlay\n--- base/\"a.txt\"\n+++ disk/\"a.txt\"\nmode 100644 -> 100644\n@@ -1,1 +1,1 @@\n-base\n+external\n",
+    "path": "a.txt",
+    "revision": "2ebb2c61fb37435aa4b51fccef639fba154e93a70840fc42600ff927325fc6c2",
+    "total_patch_bytes": 178
+  },
+  "after_external": {
+    "agent": {},
+    "buffers": [],
+    "created": 1789325752,
+    "cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/change-provenance-baseline-oc9hCS/repo",
+    "files": [
+      "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/change-provenance-baseline-oc9hCS/repo/a.txt"
+    ],
+    "id": "18d4f64a98373428-2",
+    "name": "native provenance baseline",
+    "parent": null,
+    "revision": 0,
+    "transcript": null,
+    "updated": 1789325752
+  },
+  "owned": {
+    "branch": "refs/gitfs/18d4f64a98373428-2",
+    "owned": [
+      {
+        "path": "a.txt",
+        "status": "M"
+      }
+    ],
+    "session": "18d4f64a98373428-2",
+    "tip": "8317fc997a1fbb6f805212b343dd2b134ba586e3"
+  },
+  "unsupported_changes": "Error: unknown sessions op changes",
+  "legacy_file_records": [
+    "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/change-provenance-baseline-oc9hCS/repo/a.txt"
+  ],
+  "index_unchanged": true,
+  "head_unchanged": true,
+  "unrelated_not_owned": true,
+  "observed_gap": "FS records only absolute path; GitFS emits no touch. Existing diff already shows divergence. No actor/operation/storage target/before-after revisions persist at Sessions boundary."
+}

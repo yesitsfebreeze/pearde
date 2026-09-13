@@ -1,14 +1,6 @@
 ---
 complexity: medium
-footprint:
-  - src/roster.rs
-  - src/channels.rs
-  - src/mailbox.rs
-  - src/main.rs
-  - src/observations.rs
-  - .cartridge/tests/unit/main/observation_tests.rs
-  - .cartridge/tests/integration/observations.test.ts
-  - .cartridge/docs/observations.md
+footprint: ["src/roster.rs","src/channels.rs","src/mailbox.rs","src/main.rs","src/observations.rs",".cartridge/tests/unit/main/observation_tests.rs",".cartridge/tests/integration/observations.test.ts",".cartridge/docs/observations.md","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
 ---
 
 # Report the retained observation window
@@ -29,14 +21,14 @@ No second durable collector/API writes. Sessions is a reader of runtime diagnost
 
 ```sh
 cd ../cartridge.ctg
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/sessions-mapping" just test sessions
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" just test sessions
 ```
 
 ```sh
 cd ../cartridge.ctg
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/sessions-mapping" just build sessions
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/sessions-mapping" cargo build --manifest-path .cartridge/workspace/Cargo.toml -p cartridge --bin cartridge
-CARTRIDGE_TEST_BIN="$PWD/target/sessions-mapping/debug/cartridge" SESSIONS_BINARY="$PWD/target/sessions-mapping/debug/sessions" bun test ../sessions.ctg/.cartridge/tests/integration/observations.test.ts
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" just build sessions
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" cargo build --manifest-path .cartridge/workspace/Cargo.toml -p cartridge --bin cartridge
+CARTRIDGE_TEST_BIN="$PWD/target/tool-result-contract/debug/cartridge" SESSIONS_BINARY="$PWD/target/tool-result-contract/debug/sessions" bun test ../sessions.ctg/.cartridge/tests/integration/observations.test.ts
 ```
 
 Also run public just check sessions and verified-status @runtime/native-tool-observation-adapter before collection. Report source is host-configured; tests use disposable stores and synthetic secrets only.

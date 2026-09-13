@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/sessions.ctg
-state: "done"
+state: "specced"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -11,13 +11,7 @@ review-round: 3
 review-status: passed
 canonical-scope: attributed-outcome-report
 needs: ["@runtime/native-tool-observation-adapter"]
-footprint:
-- src/roster.rs
-  - src/main.rs
-  - src/observations.rs
-  - .cartridge/tests/unit/main/observation_tests.rs
-  - .cartridge/tests/integration/observations.test.ts
-  - .cartridge/docs/observations.md
+footprint: ["src/roster.rs - src/main.rs - src/observations.rs - .cartridge/tests/unit/main/observation_tests.rs - .cartridge/tests/integration/observations.test.ts - .cartridge/docs/observations.md","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
 commit: "a306370f10b78d94365b7832ce22ce8d10c09487"
 ---
 

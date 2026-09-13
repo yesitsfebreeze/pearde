@@ -2313,7 +2313,7 @@
         "@memo/landscape-context-facade"
       ],
       "words": 97,
-      "sha256": "b6fd18fbb45a9eefa1970d69c9eaf8677222db70bf38b8b5b5817ff0ed9f78e4",
+      "sha256": "12cd0475d77e01ec23d9faa06f858e017d6b13b9648a7cf0e4d8775f1d3e97f3",
       "score": 94,
       "review_result": "PASS",
       "round": 2,
@@ -2695,23 +2695,25 @@
       "id": "@fs/improve-fs-change-provenance",
       "path": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/prd.md",
       "owner": "fs",
-      "kind": "leaf",
+      "kind": "rollup",
       "sources": [
         "improve-fs-change-provenance"
       ],
       "needs": [
-        "@gitfs/improve-gitfs-readable-diff",
-        "@sessions/improve-sessions-client-mapping"
+        "@sessions/file-change-records-retain-reported-revisions",
+        "@fs/improve-fs-change-provenance/direct-file-mutations-report-revisions",
+        "@gitfs/overlay-mutations-report-revisions",
+        "@runtime/shipped-gitfs-profiles-grant-change-recording"
       ],
       "words": 182,
-      "sha256": "a359dda626e93d7bd901d30cea79d0ebdda2af3caa469e24ebe7a5ed8d4d1415",
-      "score": 94,
+      "sha256": "3ddcb5ccb00167899b50b3fe88742829b30a49b8b04ce59f33a86552043972af",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/review.md",
       "historical_sha256": "49c602e352a451bf6b53470aa4e405a6957d2975520d329824931138c5bf8412",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review"
     },
     {
       "id": "@fs/improve-fs-revision-guards",
@@ -2782,12 +2784,12 @@
         "improve-gitfs-reviewable-ship"
       ],
       "needs": [
+        "@policy/ship-push-is-an-explicit-policy-operation",
         "@gitfs/improve-gitfs-readable-diff",
         "@gitfs/improve-gitfs-snapshot-selection",
         "@policy/improve-policy-operation-rules",
         "@gitfs/improve-gitfs-reviewable-ship/reviewed-owned-tree-commits-locally",
-        "@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head",
-        "@policy/ship-push-is-an-explicit-policy-operation"
+        "@gitfs/improve-gitfs-reviewable-ship/recorded-push-reconciles-the-exact-remote-head"
       ],
       "words": 199,
       "sha256": "b11f1b137675ea09397193a0a6d237befa9b55c1836180081624b7c9a31029f6",
@@ -2828,7 +2830,7 @@
       ],
       "needs": [],
       "words": 188,
-      "sha256": "5b6fe9862205790a05738c3fc7a91cb949126d558c9166abffdcf790749c4758",
+      "sha256": "283249b6d035753316b1877dd14defbe357789cd229893856c01f8239a4622d2",
       "score": 96,
       "review_result": "PASS",
       "round": 3,
@@ -2869,7 +2871,7 @@
       ],
       "needs": [],
       "words": 186,
-      "sha256": "af6aaf221810d4440509bb44ac251ff953de053ec098117a43949434f748633c",
+      "sha256": "c85126f77d8bcd7988eba73aab2174b25642765672dc45c6e1ec552d7e849803",
       "score": 96,
       "review_result": "PASS",
       "round": 3,
@@ -2909,8 +2911,8 @@
         "improve-mcp-refresh-catalog"
       ],
       "needs": [
-        "@gitfs/tool-results-interoperate",
-        "@runtime/mcp-stdio-replies-during-replacement"
+        "@runtime/mcp-stdio-replies-during-replacement",
+        "@gitfs/tool-results-interoperate"
       ],
       "words": 184,
       "sha256": "cf94a80c1f71e1027749d45a46e6dabe37e33c56676a01892d528877d687ee03",
@@ -3217,7 +3219,8 @@
       ],
       "needs": [
         "@gitfs/tool-results-interoperate",
-        "@policy/improve-policy-explain"
+        "@policy/improve-policy-explain",
+        "@proxy/improve-proxy-continuation-recovery"
       ],
       "words": 189,
       "sha256": "3a97d54f54fb1e70deec5c4d919124a3a9bf73b6c798a9ae36d65f0594593a5d",
@@ -3359,7 +3362,9 @@
       "sources": [
         "improve-router-route-explanation"
       ],
-      "needs": [],
+      "needs": [
+        "@router/improve-router-capability-routing"
+      ],
       "words": 176,
       "sha256": "28f78dd0f0072401f68eb8417f277f1e683c96ef90aa4e55ae7c47a35f3acda8",
       "score": 96,
@@ -3380,7 +3385,7 @@
       ],
       "needs": [],
       "words": 189,
-      "sha256": "85be97ff149b90d851df5fc6b273388195daa7be289f2b92497990558e4daa34",
+      "sha256": "7ab9e3f5bec5776afc360d81feda9b5b14e976e6a2c4b86838871e3c544b9f3f",
       "score": 96,
       "review_result": "PASS",
       "round": 3,
@@ -3399,7 +3404,7 @@
       ],
       "needs": [],
       "words": 187,
-      "sha256": "f11a7a4624bc64b691d1e488ac762292abc713cc6f0f86364095adafadee9da5",
+      "sha256": "797cf4900afabc7d127ef2bb6e3c30b59fde9d78638da16a52c938fd58c35267",
       "score": 96,
       "review_result": "PASS",
       "round": 3,
@@ -3418,7 +3423,7 @@
       ],
       "needs": [],
       "words": 191,
-      "sha256": "754dc5938fa0987e8883481b81dac5167694fdbdbdd34d4ae12f84120c4ede30",
+      "sha256": "a02f5c6b8d6daffca92881c60d88fa4202b4428ecf75c7ac98465e3cfb362073",
       "score": 95,
       "review_result": "PASS",
       "round": 3,
@@ -3877,7 +3882,7 @@
         "@sessions/improve-sessions-recovery"
       ],
       "words": 88,
-      "sha256": "ac492187610e8557dd0e584d078497ea823372af76f89c6240de641c099749d9",
+      "sha256": "c1e921bfed49314cdfbe4617030b9611311ecca436bfc64ad9229a369ac1434c",
       "score": 97,
       "review_result": "PASS",
       "round": 3,
@@ -4330,7 +4335,7 @@
       ],
       "needs": [],
       "words": 184,
-      "sha256": "c600ad1a3fbf18c2e8412d65984c02855cc67b3494b64e633ed25dc44ea0ef26",
+      "sha256": "ee8f73772c19af947f2443c095f1bb631b974f814f991d52cfc4c00bd1c41458",
       "score": 95,
       "review_result": "PASS",
       "round": 3,
@@ -5068,7 +5073,11 @@
       "sources": [
         "proxy-turns-carry-recall-and-reflex-tools"
       ],
-      "needs": [],
+      "needs": [
+        "@landscape/landscape-composes-system-context/context-contributor-contract",
+        "@landscape/landscape-composes-system-context/memory-context-contributor",
+        "@memo/landscape-context-facade"
+      ],
       "words": 185,
       "sha256": "ddbbdbfef4b2fe4295f2ad451a23b067cc05e3e8eaa4c1ebccc7b28962b849bb",
       "score": 95,
@@ -5088,11 +5097,10 @@
         "reflex-reports-attributed-tool-outcomes"
       ],
       "needs": [
-        "@runtime/native-tool-observation-adapter",
-        "@sessions/reflex-reports-attributed-tool-outcomes/attributed-outcome-report"
+        "@runtime/native-tool-observation-adapter"
       ],
       "words": 189,
-      "sha256": "62ff1f67269c45e21d6d874bf5381c8f7d67a32a5ff1d83eee756d4528386bd6",
+      "sha256": "5169e5bbed44b2223ac5dee8ca5bb278cb31b827ab564d25995fd5bf945e7d36",
       "score": 96,
       "review_result": "PASS",
       "round": 3,
@@ -5580,17 +5588,18 @@
       ],
       "needs": [
         "@memo/memo-board-template/initialize-board",
-        "@memo/one-document-serves-every-reader/document-identity"
+        "@memo/one-document-serves-every-reader/document-identity",
+        "@prd/declared-source-edges"
       ],
       "words": 139,
-      "sha256": "e8052a0701ea6b783b93b62bbe2982f39eedf2d298f5d2e8dceb3aa03bc66e57",
-      "score": 94,
+      "sha256": "215c2c67176667f9e19a9d8589da45efed6247325f5a49cd4f67243849e5c203",
+      "score": 95,
       "review_result": "PASS",
-      "round": 2,
+      "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/landscape/prds/recursive-development-graph/recursive-source-census/review.md",
       "historical_sha256": "36f14eba1d9b3f9cbe6cf053cc51c2dbb1a31121c3e04bc911bb5fd7441983f1",
-      "review_binding_status": "stale-after-migration"
+      "review_binding_status": "current-review"
     },
     {
       "id": "@landscape/recursive-development-graph/recursive-root-search",
@@ -5945,7 +5954,7 @@
         "improve-mcp-refresh-catalog"
       ],
       "needs": [],
-      "sha256": "348bde39eb5135e390c449adff3baf71b5b6584b88bf9e0584d33ac019a9f9b2",
+      "sha256": "6692244d2db00173a3f176af73d53efa4127f3b64dd32f1c3a86914c7160586b",
       "score": 96,
       "review_result": "PASS",
       "round": 4,
@@ -6028,7 +6037,7 @@
       "needs": [
         "@runtime/startup-eof-retains-exit-status"
       ],
-      "sha256": "a98883287309abbddf0e8582170d3aac707f27ec9db2acbcfa0565e83a200662",
+      "sha256": "0f9c06131215ee796168c5379c16258dbb3ab5ba158342727899c5ffbd5a08ed",
       "round": 2,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/runtime/prds/native-tool-observation-adapter/review.md",
@@ -6045,7 +6054,7 @@
       "needs": [
         "@runtime/native-tool-observation-adapter"
       ],
-      "sha256": "b8e0d4993837ae2a47692be0f30391f27824572a804d789c268a1d07ed2661c0",
+      "sha256": "9ac6ab0f77c29b05cd4afdc42c3c66d2266b3adb19e2cea9dfd465148415862f",
       "round": 2,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/reflex-reports-attributed-tool-outcomes/attributed-outcome-report/review.md",
@@ -6120,10 +6129,10 @@
       "needs": [
         "@sessions/sub-agent-sessions-record-parent-and-mailbox"
       ],
-      "sha256": "6829008101e75df9a7da551b0fee7ce00f22f788118c54fd96f304ba35b66ffe",
+      "sha256": "0c49f7d1bffc25eeac730bd70929bc77b47dd3488356014b304f9432446b8484",
       "round": 1,
       "max_rounds": 5,
-      "review": ".cartridge/boards/sessions/prds/the-board-is-channels-of-lines/review.md",
+      "review": "prd.ctg/.cartridge/boards/sessions/prds/the-board-is-channels-of-lines/review.md",
       "review_binding_status": "current-review-with-recorded-proof-refinements",
       "disposition": "add bounded current owner delta; preserve historical source verbatim; no historical completion inferred",
       "score": 96,
@@ -6326,7 +6335,7 @@
       "sources": [
         "an-agent-is-one-lookup-from-the-roster"
       ],
-      "sha256": "85676e550379b9d98dfa75ee084c203ff7c5f5fbee8a701852dfafde0237a425",
+      "sha256": "b355ec3c7542cbb5f45a951941efe9dd77505d884564202c431ed8cc831ab35c",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/an-agent-is-one-lookup-from-the-roster/durable-channel-read-cursors/review.md",
@@ -6345,7 +6354,7 @@
       "sources": [
         "an-agent-is-one-lookup-from-the-roster"
       ],
-      "sha256": "b9198a55aeb528a5695d66d4af06015b16aa5bb8affb690f6815db289113dfe5",
+      "sha256": "ea70c0d57c1272af8cd90b90b106abc03e5ac2b649310b3edefbf9ad0d42f638",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/sessions/prds/an-agent-is-one-lookup-from-the-roster/scoped-roster-projection/review.md",
@@ -6365,7 +6374,7 @@
       "sources": [
         "an-agent-is-one-lookup-from-the-roster"
       ],
-      "sha256": "a340ee41abfc541b7a2985677bd5b8c45292eb765532d7787c8f06e45373b865",
+      "sha256": "50c6ca63f9aaec1b4615099151926ce80db4a638e0219772396110e62d04e001",
       "round": 3,
       "max_rounds": 5,
       "review": "prd.ctg/.cartridge/boards/harness/prds/scoped-roster-context-contributor/review.md",
@@ -6391,6 +6400,136 @@
       "review_binding_status": "current-review-with-recorded-proof-refinements",
       "score": 96,
       "review_result": "PASS"
+    },
+    {
+      "id": "@prd/declared-source-edges",
+      "owner": "prd",
+      "kind": "leaf",
+      "sources": [
+        "recursive-development-graph"
+      ],
+      "max_rounds": 5,
+      "needs": [],
+      "path": "prd.ctg/.cartridge/boards/prd/prds/declared-source-edges/prd.md",
+      "sha256": "ffb7d40e1d757e2cf52d58d3223faac0081d40be7bda5646ffe188cb3fbfd8b4",
+      "round": 3,
+      "review": "prd.ctg/.cartridge/boards/prd/prds/declared-source-edges/review.md",
+      "review_binding_status": "current-review",
+      "score": 96,
+      "review_result": "PASS"
+    },
+    {
+      "id": "@sessions/file-change-records-retain-reported-revisions",
+      "owner": "sessions",
+      "sources": [
+        "improve-fs-change-provenance"
+      ],
+      "max_rounds": 5,
+      "kind": "leaf",
+      "needs": [
+        "@sessions/improve-sessions-client-mapping"
+      ],
+      "path": "prd.ctg/.cartridge/boards/sessions/prds/file-change-records-retain-reported-revisions/prd.md",
+      "sha256": "560ec93d79b842097e2abf736a038fa49ac70919f63f76a2952ed35f29a7a578",
+      "round": 3,
+      "score": 96,
+      "review_result": "PASS",
+      "review_binding_status": "current-review",
+      "review": "prd.ctg/.cartridge/boards/sessions/prds/file-change-records-retain-reported-revisions/review.md"
+    },
+    {
+      "id": "@fs/improve-fs-change-provenance/direct-file-mutations-report-revisions",
+      "owner": "fs",
+      "sources": [
+        "improve-fs-change-provenance"
+      ],
+      "max_rounds": 5,
+      "kind": "leaf",
+      "needs": [
+        "@sessions/file-change-records-retain-reported-revisions",
+        "@fs/improve-fs-revision-guards"
+      ],
+      "path": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/direct-file-mutations-report-revisions/prd.md",
+      "sha256": "522601d499358355f9f0b0730696f6376c8d5b22229752e6168995ddf5cf0228",
+      "round": 3,
+      "score": 95,
+      "review_result": "PASS",
+      "review_binding_status": "current-review",
+      "review": "prd.ctg/.cartridge/boards/fs/prds/improve-fs-change-provenance/direct-file-mutations-report-revisions/review.md"
+    },
+    {
+      "id": "@gitfs/overlay-mutations-report-revisions",
+      "owner": "gitfs",
+      "sources": [
+        "improve-fs-change-provenance"
+      ],
+      "max_rounds": 5,
+      "kind": "leaf",
+      "needs": [
+        "@sessions/file-change-records-retain-reported-revisions",
+        "@gitfs/improve-gitfs-readable-diff"
+      ],
+      "path": "prd.ctg/.cartridge/boards/gitfs/prds/overlay-mutations-report-revisions/prd.md",
+      "sha256": "10ffe20b1256adbeb364889a782eb9444188ef80c9b89b60f1582adfda92ffa4",
+      "round": 3,
+      "score": 94,
+      "review_result": "PASS",
+      "review_binding_status": "current-review",
+      "review": "prd.ctg/.cartridge/boards/gitfs/prds/overlay-mutations-report-revisions/review.md"
+    },
+    {
+      "id": "@runtime/shipped-gitfs-profiles-grant-change-recording",
+      "owner": "runtime",
+      "sources": [
+        "improve-fs-change-provenance"
+      ],
+      "max_rounds": 5,
+      "kind": "leaf",
+      "needs": [
+        "@gitfs/overlay-mutations-report-revisions",
+        "@sessions/file-change-records-retain-reported-revisions"
+      ],
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/shipped-gitfs-profiles-grant-change-recording/prd.md",
+      "sha256": "a74fcbb1d92bf17467d4190dbf078e75454a277d2357557628799abc6bb59944",
+      "round": 3,
+      "score": 96,
+      "review_result": "PASS",
+      "review_binding_status": "current-review",
+      "review": "prd.ctg/.cartridge/boards/runtime/prds/shipped-gitfs-profiles-grant-change-recording/review.md"
+    },
+    {
+      "id": "@runtime/second-harness-composition-proof",
+      "owner": "runtime",
+      "kind": "leaf",
+      "sources": [
+        "second-harness-composition-proof"
+      ],
+      "max_rounds": 5,
+      "round": 2,
+      "score": 94,
+      "review_result": "STALE",
+      "path": "prd.ctg/.cartridge/boards/runtime/prds/second-harness-composition-proof/prd.md",
+      "needs": [
+        "@harness/concise-writer-cartridge"
+      ],
+      "sha256": "fe150e1547d37a796820adea7bfeb2451788a3fea9e82fc02d5a937e481b79ce",
+      "review": "prd.ctg/.cartridge/boards/runtime/prds/second-harness-composition-proof/review.md"
+    },
+    {
+      "id": "@harness/concise-writer-cartridge",
+      "owner": "harness",
+      "kind": "leaf",
+      "sources": [
+        "concise-writer-cartridge"
+      ],
+      "max_rounds": 5,
+      "round": 5,
+      "score": 94,
+      "review_result": "PASS",
+      "path": "prd.ctg/.cartridge/boards/harness/prds/concise-writer-cartridge/prd.md",
+      "needs": [],
+      "sha256": "8f352f22db4cec2ae1891559466a2395bef82586cb6b262cf426327670b1e592",
+      "review": "prd.ctg/.cartridge/boards/harness/prds/concise-writer-cartridge/review.md"
     }
   ],
   "migration_manifest": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/reports/record-migration/manifest.json"

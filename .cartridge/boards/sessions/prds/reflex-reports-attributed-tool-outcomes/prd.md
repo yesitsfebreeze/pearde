@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/sessions.ctg
-state: "done"
+state: "specced"
 origin: requested
 priority: 50
 blast-radius: mid

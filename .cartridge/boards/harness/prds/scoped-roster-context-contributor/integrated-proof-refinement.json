@@ -1,0 +1,25 @@
+{
+  "reason": "Bind reviewed preservation of existing main.rs/working.rs behavior, integrated clean owner, and exact verification helper; acceptance and public test scope unchanged.",
+  "reviewer": "/root",
+  "review": "Approved preservation/integration, source separate commits, exact unchanged original hashes checked; no behavior conflict on merge.",
+  "source_revision": "698a4dc9555a6b3ad8d46dcc5dd3a14463048e70",
+  "preservation_commit": "e9d8612",
+  "coherent_candidate": "d3a4187bf946e02a4806082994e0aac662c1d0c3",
+  "tree_equals_candidate": true,
+  "changes": {
+    "footprint_addition": ".cartridge/tests/integration/working.rs",
+    "verify_cwd": "/Users/feb/dev/cartridge/harness.ctg",
+    "verify_owner_selection": "--committed actual owner",
+    "verifier_sha256": "7099b57a8c0bc99ed7476f4a79017ce4ed59b9355b9222fe1672ce8a91aa0083"
+  },
+  "before": {
+    "prd.md": "69900d710499396abae26de0ca417251f65d188c4928f4f9191f02a32b65397c",
+    "specs/spec01.md": "0d8d795169158f0ed9397f01eed140ccf604247c073ffd67b56f14448ff66631"
+  },
+  "after": {
+    "prd.md": "50c6ca63f9aaec1b4615099151926ce80db4a638e0219772396110e62d04e001",
+    "specs/spec01.md": "f264ddee94c4307d03c9d2cb8944f7ffb57228d61984c9b3210d98a9d4b7a8f3"
+  },
+  "acceptance_exactly_unchanged": true,
+  "public_gate_scope_unchanged": true
+}

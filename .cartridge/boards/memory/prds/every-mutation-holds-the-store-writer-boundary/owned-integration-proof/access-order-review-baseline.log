@@ -1,0 +1,35 @@
+   Compiling util v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/util)
+   Compiling tower-http v0.6.11
+   Compiling reqwest v0.13.4
+   Compiling base v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/base)
+   Compiling ingest_config v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/ingest/config)
+   Compiling math v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/math)
+   Compiling test_support v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/.cartridge/tests/support)
+   Compiling store_core v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/store/core)
+   Compiling llm v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/llm)
+   Compiling config v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/config)
+   Compiling graph v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/graph)
+   Compiling retrieval-piece v2.0.0 (/private/tmp/memory-owned-integration/memory.ctg/src/retrieval/piece)
+    Finished `test` profile [unoptimized] target(s) in 3.68s
+     Running unittests src/lib.rs (/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/retrieval_piece-29ad5b204d6bbd87)
+
+running 2 tests
+
+thread 'retrieval_score::retrieval_score_tests::access_order_first_access_is_not_suppressed_by_existing_heat' (45614056) panicked at src/retrieval/piece/src/../../../../.cartridge/tests/unit/src/retrieval/piece/src/tests/retrieval_score_test.rs:929:5:
+assertion failed: stamp_access(&mut entity, now, &HeatConfig::default())
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test retrieval_score::retrieval_score_tests::access_order_first_access_is_not_suppressed_by_existing_heat ... FAILED
+
+thread 'retrieval_score::retrieval_score_tests::access_order_new_access_sorts_after_cold_timestamps_even_after_clock_rewind' (45614057) panicked at src/retrieval/piece/src/../../../../.cartridge/tests/unit/src/retrieval/piece/src/tests/retrieval_score_test.rs:945:5:
+assertion failed: graph.memories["group"].entities[&id].accessed_at.unwrap() > future
+test retrieval_score::retrieval_score_tests::access_order_new_access_sorts_after_cold_timestamps_even_after_clock_rewind ... FAILED
+
+failures:
+
+failures:
+    retrieval_score::retrieval_score_tests::access_order_first_access_is_not_suppressed_by_existing_heat
+    retrieval_score::retrieval_score_tests::access_order_new_access_sorts_after_cold_timestamps_even_after_clock_rewind
+
+test result: FAILED. 0 passed; 2 failed; 0 ignored; 0 measured; 101 filtered out; finished in 0.01s
+
+error: test failed, to rerun pass `-p retrieval-piece --lib`

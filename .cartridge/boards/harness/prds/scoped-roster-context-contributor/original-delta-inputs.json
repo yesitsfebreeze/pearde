@@ -1,0 +1,21 @@
+{
+  "original_head": "ca7eeabd38f4eaba69063cf98e2071df694a1dc3",
+  "roster_base": "df93d5bbc036aee0ac2a08beecb9b18a85fa3835",
+  "files": {
+    "src/main.rs": {
+      "working_sha256": "e4c23eeb9da21595c3a5bdea3a2374482f3ab51f1f0eadf95953afbdfa2ea0d8",
+      "patch_sha256": "e4c313a95a770357488ad2cafd295430782ad65259b4ef94a4fb723caccb3dcb"
+    },
+    ".cartridge/tests/integration/working.rs": {
+      "working_sha256": "505e0f9b22e2a0c539e3833df54f6eddbb727ecc1b89cbfa6492053c6ce5e19d",
+      "patch_sha256": "0fa3789a050d2574f120cfc917a0f01aa7ed1ba8b38d765669f5e04afb81319b"
+    }
+  },
+  "review": "Existing user changes preserved for isolated reconciliation; original checkout not modified.",
+  "baseline": {
+    "receipt": "integration/cartridge-roster-verification-rdzsB9.json",
+    "log": "original-delta-baseline.log",
+    "receipt_sha256": "ac99f49d580e975c93c8aac5bf2811e5d6bc6bfb0431664df8b60ea3d9c6da2a",
+    "result": "Original working test fails at line101 against strict df93d5b: failed maintenance must not abort a fitting context; summary provider unavailable. Unit/process/ring pass."
+  }
+}

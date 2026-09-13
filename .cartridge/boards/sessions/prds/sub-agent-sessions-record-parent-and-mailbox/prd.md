@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/sessions.ctg
-state: "done"
+state: "specced"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -10,13 +10,7 @@ work-kind: leaf
 review-round: 3
 review-status: passed
 canonical-scope: sub-agent-sessions-record-parent-and-mailbox
-footprint:
-- src/roster.rs
-- src/main.rs
-- src/mailbox.rs
-- .cartridge/tests/unit/main/mailbox_tests.rs
-- .cartridge/tests/integration/mailbox.test.ts
-- .cartridge/docs/mailbox.md
+footprint: ["src/roster.rs","src/main.rs","src/mailbox.rs",".cartridge/tests/unit/main/mailbox_tests.rs",".cartridge/tests/integration/mailbox.test.ts",".cartridge/docs/mailbox.md","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
 commit: "a306370f10b78d94365b7832ce22ce8d10c09487"
 ---
 

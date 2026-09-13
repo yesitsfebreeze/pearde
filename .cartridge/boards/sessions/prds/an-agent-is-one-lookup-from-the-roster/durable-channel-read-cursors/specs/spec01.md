@@ -1,13 +1,6 @@
 ---
 complexity: medium
-footprint:
-- src/roster.rs
-- src/main.rs
-- src/mailbox.rs
-- src/channels.rs
-- .cartridge/tests/unit/main/channel_cursor_tests.rs
-- .cartridge/tests/integration/channel-cursors.test.ts
-- .cartridge/docs/channel-cursors.md
+footprint: ["src/roster.rs","src/main.rs","src/mailbox.rs","src/channels.rs",".cartridge/tests/unit/main/channel_cursor_tests.rs",".cartridge/tests/integration/channel-cursors.test.ts",".cartridge/docs/channel-cursors.md","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
 ---
 
 # Acknowledge only the named-channel batch delivered to this actor
@@ -30,13 +23,13 @@ Use the same scope gate and atomic snapshot publication as posts, retaining revi
 
 ```sh
 cd ../cartridge.ctg
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/sessions-mapping" just test sessions
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" just test sessions
 ```
 
 ```sh
 cd ../cartridge.ctg
-RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/sessions-mapping" just build sessions
-SESSIONS_BINARY="$PWD/target/sessions-mapping/debug/sessions" bun test ../sessions.ctg/.cartridge/tests/integration/channel-cursors.test.ts ../sessions.ctg/.cartridge/tests/integration/channels.test.ts ../sessions.ctg/.cartridge/tests/integration/mailbox.test.ts
+RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR="$PWD/target/tool-result-contract" just build sessions
+SESSIONS_BINARY="$PWD/target/tool-result-contract/debug/sessions" bun test ../sessions.ctg/.cartridge/tests/integration/channel-cursors.test.ts ../sessions.ctg/.cartridge/tests/integration/channels.test.ts ../sessions.ctg/.cartridge/tests/integration/mailbox.test.ts
 ```
 
 Also public just check sessions; coordinator refreshes shared channel/mailbox receipts before collection. All failure fixtures use disposable stores; no live cursor advancement occurs during development.

@@ -1,0 +1,2916 @@
+{
+  "owner": "/Users/feb/dev/cartridge/harness.ctg",
+  "committed": true,
+  "shadow": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7",
+  "started": "2026-09-13T19:08:52.406Z",
+  "revisions": {
+    "cartridge.ctg": "1a5e9867acec1d07cd732c3af2ccf331a0979a61",
+    "docs.ctg": "06084126c42b93ca570b3526e35573bd04ec859d",
+    "agent.ctg": "a09b593a11ed1e027c823bb632838cc92a09e2eb",
+    "fs.ctg": "d4a4239ccce02bc0e647e9ad80892995f48b317f",
+    "gitfs.ctg": "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5",
+    "harness.ctg": "698a4dc9555a6b3ad8d46dcc5dd3a14463048e70",
+    "landscape.ctg": "62185289d148017c74986b618456a72bab620228",
+    "mcp.ctg": "f5a740517bc2668b50cf4f61fe81a1e37bb4cfad",
+    "memo.ctg": "1ffca32db1d06364b3e35e6cbca4881a1f814f71",
+    "memory-tool.ctg": "2c490a9c6dd3d6fe5ab187ab5f74e541b8c35d16",
+    "proxy.ctg": "9ddcc08807a059579c21227ad9d3523d242ddf86",
+    "pty.ctg": "7c1af4ace396c931334bb58aa2150e14b6ceeb67",
+    "router.ctg": "4ad9cd35dc862ecfe0786612d39913612d93fc45",
+    "sessions.ctg": "a306370f10b78d94365b7832ce22ce8d10c09487",
+    "tools.ctg": "62546896b771dcba67211ea1ac73fc29a7aa44dd"
+  },
+  "inputs": {
+    "agent.ctg/.cartridge/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/.cartridge/.gitignore",
+      "sha256": "f076c055ecd6ece41fa5f876021eeaad16846016ea2317cff27433008826f1f4",
+      "mode": 33188
+    },
+    "agent.ctg/.cartridge/memos/type/note.md": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/.cartridge/memos/type/note.md",
+      "sha256": "b4cdf899ab4580b86d21bbfd2adf28808d610f5c1f16f0fb0c92514d10b4d908",
+      "mode": 33188
+    },
+    "agent.ctg/.cartridge/memos/type/type.md": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/.cartridge/memos/type/type.md",
+      "sha256": "71f82003eaa30155dc564fd89bfc3aca6ef39ab8342e762d0ec7524c8dd56cf0",
+      "mode": 33188
+    },
+    "agent.ctg/.cartridge/PORT.md": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/.cartridge/PORT.md",
+      "sha256": "44677fda2370a3451409cd930b41ebafe28273d4e7563d7c1e0934855a5d9bd5",
+      "mode": 33188
+    },
+    "agent.ctg/.cartridge/tests/integration/loop.rs": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/.cartridge/tests/integration/loop.rs",
+      "sha256": "5872429cba385eac50eb8bb2584181ad032e75c2a449ba4a73e9d44391ba1568",
+      "mode": 33188
+    },
+    "agent.ctg/.cartridge/tests/unit/context_tests.rs": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/.cartridge/tests/unit/context_tests.rs",
+      "sha256": "e1302576278cc85239a42708bca061909cedac35efcfff58a8c8eeb1fc26b7d2",
+      "mode": 33188
+    },
+    "agent.ctg/.cartridge/tests/unit/http_fake.rs": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/.cartridge/tests/unit/http_fake.rs",
+      "sha256": "a4240d7297c7e0f8a36fd3ec4bc1c6f3d780b69823158027e13fdefab27b5482",
+      "mode": 33188
+    },
+    "agent.ctg/.cartridge/tests/unit/run_state.rs": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/.cartridge/tests/unit/run_state.rs",
+      "sha256": "824dfd53d36729a9afd1c141cef83458f74126cf00ab69afc1d38712a2865207",
+      "mode": 33188
+    },
+    "agent.ctg/.cartridge/tests/unit/sse/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/.cartridge/tests/unit/sse/tests.rs",
+      "sha256": "279d3296ddf356286b7edc2280076aebf22f2974e1093b7afb9dc8d8d9326262",
+      "mode": 33188
+    },
+    "agent.ctg/.cartridge/tests/unit/stream/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/.cartridge/tests/unit/stream/tests.rs",
+      "sha256": "61677bf2ba8d2ef3f4ef48d34a23aa881fdd37b35d6360f1ab9dd85721846f30",
+      "mode": 33188
+    },
+    "agent.ctg/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/.gitignore",
+      "sha256": "663ec4b6f6fbea402c9cad6d2eb7745783ed3a74428f5c7bb2d2da3913dc0ec9",
+      "mode": 33188
+    },
+    "agent.ctg/Cargo.toml": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/Cargo.toml",
+      "sha256": "2627d0bc01437a5614583ec21a200fb9e692b4355a861f0bd2a566590c80eed6",
+      "mode": 33188
+    },
+    "agent.ctg/cartridge.json": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/cartridge.json",
+      "sha256": "e07dd681fd7d6f53068b72a8da6e8ae9b5705351220c716d5ff007712a7f16be",
+      "mode": 33188
+    },
+    "agent.ctg/init.lua": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/init.lua",
+      "sha256": "6ed34d5e2b92ab0f958f93ed4b55882c0b9526f0634a0cbd24941a2c73fa8bad",
+      "mode": 33188
+    },
+    "agent.ctg/rustfmt.toml": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/rustfmt.toml",
+      "sha256": "9aaa9837831ff31ac3f07f96d8d7d9a7ca8b38afb8d07713da52b0f8374d80a7",
+      "mode": 33188
+    },
+    "agent.ctg/src/context.rs": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/src/context.rs",
+      "sha256": "9a1e5b133ea0df165ba2d656f471f118d2960cfd310c11dfbd1587a56e43adc6",
+      "mode": 33188
+    },
+    "agent.ctg/src/lib.rs": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/src/lib.rs",
+      "sha256": "260c749471c3d4ca439046acc170e2c608237621ffb1201ebf3bdac178eba265",
+      "mode": 33188
+    },
+    "agent.ctg/src/main.rs": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/src/main.rs",
+      "sha256": "787220330de6dec6ebeada4db276db8de95a26b036e15d85aaebc1f7d1697ada",
+      "mode": 33188
+    },
+    "agent.ctg/src/model_loop.rs": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/src/model_loop.rs",
+      "sha256": "d7ada4bf1298a5e9e24407800146fcfa9fbb133223779f0d681e8778768cb7bd",
+      "mode": 33188
+    },
+    "agent.ctg/src/sse.rs": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/src/sse.rs",
+      "sha256": "b07a2902fdc61da322ac7481366e0fc799c21cff8278afa5eb009a73f7e66cea",
+      "mode": 33188
+    },
+    "agent.ctg/src/stream.rs": {
+      "source": "/Users/feb/dev/cartridge/agent.ctg/src/stream.rs",
+      "sha256": "636db2e0b807034c9b0edf646558a2eb3943e01aaab665aaa1de48a1bef2096b",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/.gitignore",
+      "sha256": "f076c055ecd6ece41fa5f876021eeaad16846016ea2317cff27433008826f1f4",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/default/config.lua": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/default/config.lua",
+      "sha256": "798cb9040b8cdf9addc967f3aba8dfcd3b81d553079d1bb9b3aa25df71900f13",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/default/init.lua": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/default/init.lua",
+      "sha256": "edcd7283de63cd0c413d1294079e692e71fc9c7efd65ca3cae4ec5d5fd420ab3",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/docs/init.lua": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/docs/init.lua",
+      "sha256": "7ed047a6fc95e11667c4cd732725ae1c65ba7f66b8245713c2ab024b642e5e1e",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/docs/tool-observations.md": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/docs/tool-observations.md",
+      "sha256": "c966d8aa2ac68a52286fc63599ec71dbff475ea5f4a2934f992e5348e406619d",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/justfile": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/justfile",
+      "sha256": "0514a338f144c0bce01bc4cc5389cb9e3a584de508159a757a278ce10300ca0a",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/live-service/runtime.log": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/live-service/runtime.log",
+      "sha256": "4daec1651d4396afe23f8dd397a3e66e959b5aa186edc91abbee3f2805dc846e",
+      "mode": 33152
+    },
+    "cartridge.ctg/.cartridge/live/config.lua": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/live/config.lua",
+      "sha256": "4babb5a89fb85be436ba2e940fb7470f6d61d99d7f8d2c7e606126d40da87eed",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/live/init.lua": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/live/init.lua",
+      "sha256": "1563bfb6ea2e4cbff714aa963c704c23aef89bae6162c052c0317fc63dea0ca2",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp-sessions/18d48a2af11b6f00-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp-sessions/18d48a2af11b6f00-1.json",
+      "sha256": "acc3bede26ee5028149e92f3acaad21853a52e2b9059af076f83c677ae1e7e55",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp-sessions/18d48c47cc9aa0f0-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp-sessions/18d48c47cc9aa0f0-1.json",
+      "sha256": "4a4be94062cb7a9b76711b3991a8ce7b9cb1718129413261fb28b4da583e39b3",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp-sessions/18d49003d9828db8-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp-sessions/18d49003d9828db8-1.json",
+      "sha256": "b1d5ad7c001152c06cf1dc183900c02064a202910cdda266b0dc5d3f4ef460b0",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp-sessions/18d4b2d94cdf52a8-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp-sessions/18d4b2d94cdf52a8-1.json",
+      "sha256": "49696b94023266c7ce3e9d2137a95ab7b9634b76e7669be341748b9c7cff953d",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp-sessions/18d4b41fc2c1f330-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp-sessions/18d4b41fc2c1f330-1.json",
+      "sha256": "b486db4b1c22d143cae479a55169d4b0420755ccbf4d8ed037db7ce2be40aa88",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp-sessions/18d4b4354fee1170-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp-sessions/18d4b4354fee1170-1.json",
+      "sha256": "3afdf01aa44106976e8f35fe14aa32455be2b0f3da89edfcb4c8c2ba1434b7e4",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp-sessions/18d4b4810ea644c0-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp-sessions/18d4b4810ea644c0-1.json",
+      "sha256": "62264794b413a6fb326fb5a87c379f45f1ff3df587a9b4dc3b529b50d6589f7e",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp-sessions/18d4d2b721f02d30-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp-sessions/18d4d2b721f02d30-1.json",
+      "sha256": "cb6bae5e8274af1eb7821599b8e4eac8b89f7479ac7486238c816ea8031f34e1",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp-sessions/18d4d2d437663778-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp-sessions/18d4d2d437663778-1.json",
+      "sha256": "6d98f6b1e79640bed0ccc0b1db845d12a4b1a05abee8cd8fc48a704ccc5e6c2a",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp-sessions/18d4d2f874c27d38-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp-sessions/18d4d2f874c27d38-1.json",
+      "sha256": "00d88b7e52baf384442b0b51dafee9ba0b70e2222f4f5c44e3dcade4d398191e",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp-sessions/18d4d380d7fa1518-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp-sessions/18d4d380d7fa1518-1.json",
+      "sha256": "b41513937eed696fa36e3003c436ee8fb097f767207e3aa5d1ee9eb7c50b79ad",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp-sessions/18d4d3bd47e646f8-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp-sessions/18d4d3bd47e646f8-1.json",
+      "sha256": "3183a883cc11f60ef7d78bacfc0af7c1be0b375cf9454edcb773eba3a08534d4",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp-sessions/18d4d4280e908470-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp-sessions/18d4d4280e908470-1.json",
+      "sha256": "de2b3440d837bc6c88958e9716c0904db44c84792e2f7aeee7af94ef82140366",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp-sessions/18d4d474cde0b8a8-3.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp-sessions/18d4d474cde0b8a8-3.json",
+      "sha256": "85058dad05a5b7f31b65fe34d67a1973cdbef1bf29861e3079d1c4d83db7e74d",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp-sessions/18d4e0d1ffa2e5f0-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp-sessions/18d4e0d1ffa2e5f0-1.json",
+      "sha256": "c07397c1ec0b51780ffe2acd9d757a333606f499e6755aa98bccd37873b1e05d",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp/config.lua": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp/config.lua",
+      "sha256": "d5da670a9fb4b38d4b9eea13b6ff5cf0024a9b97d5a1c6498d7b8ef2006c8f88",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/mcp/init.lua": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/mcp/init.lua",
+      "sha256": "f9b4af2e97d3e40a9e84f1c62183207ed8c1ce5102c5707b3b1a265486f7e113",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/memos/note/cartridge-development-home.md": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/memos/note/cartridge-development-home.md",
+      "sha256": "13c19faced8c755d075357a8111ba1f51ec765337379327725ebbe6edf8a75d8",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/memos/note/cartridge-improvement-evidence.md": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/memos/note/cartridge-improvement-evidence.md",
+      "sha256": "4e5e37f1378ae646a06dca161eab2a5c4593859cba8d03616848425b04609202",
+      "mode": 33152
+    },
+    "cartridge.ctg/.cartridge/memos/note/cartridge-plan-validation.md": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/memos/note/cartridge-plan-validation.md",
+      "sha256": "e7ef4b877570d052042cf3eb717a7ede60069803a28587b2eb63fe94942345fa",
+      "mode": 33152
+    },
+    "cartridge.ctg/.cartridge/memos/routine/cartridge-development.md": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/memos/routine/cartridge-development.md",
+      "sha256": "6adc73f568e56924d0cc3d2c66fda5e06bbdd66dc14e5e714069a6fbbbcfb6c8",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/memos/routine/cartridge-proxy.md": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/memos/routine/cartridge-proxy.md",
+      "sha256": "069d8e6fcc72cca41f90ffdca7db614a634b20a67ab9ecff1ac4a65647bc8ff5",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/memos/routine/cartridge-runtime.md": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/memos/routine/cartridge-runtime.md",
+      "sha256": "8a8215913fdc36552ecd36e27c772a65857bfd1604d90dddd25aee91b1462f96",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/memos/routine/cartridge-smoke.md": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/memos/routine/cartridge-smoke.md",
+      "sha256": "05c455cbf71c2b347d94d56760630257bb85056ebe232d48c4c274869cac4102",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/memos/routine/create-cartridge.md": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/memos/routine/create-cartridge.md",
+      "sha256": "da4509bd34145e273e73f9d0d1190e41c2727606d92b79b565fc45bdce20440d",
+      "mode": 33152
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d4512408497d60-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d4512408497d60-1.json",
+      "sha256": "31791892bc2330bef192bf4cd8aae7e0f6b119d0a6be28a0fcd5e0971790efef",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d451e31b0132f8-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d451e31b0132f8-1.json",
+      "sha256": "784fd55c4a8a3529d7132890dd362588004d08995c4a26c4b692a80f5be1164b",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d4522daddd3578-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d4522daddd3578-1.json",
+      "sha256": "ee7a58bd3f19b07e303e38d3c2ffa361ac47dc6aad299b5d6aaa729067d26c85",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d452313ebf67c0-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d452313ebf67c0-1.json",
+      "sha256": "e8899e9e340c9de11729dbde21729e418ecaea72f11640ff021585b854660494",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d47a4dcfd611e8-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d47a4dcfd611e8-1.json",
+      "sha256": "07c4b38011146a4c4085e134c9df4772b199bfab6b48dd71a3b0f328129c11f0",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d47a8dca3ca900-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d47a8dca3ca900-1.json",
+      "sha256": "6b69614461a54a574ee4e91070091c9cdc9537c8075ca45dbe1830087620f911",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d49a8f321d9d60-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d49a8f321d9d60-1.json",
+      "sha256": "5835916befc966304e52b3f3da23d53d77ab9d3bf3df6e07cc390b7f628f13e3",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d49bc4cda50d78-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d49bc4cda50d78-1.json",
+      "sha256": "00e48392b9bcdfd3a92a93202e5bfa97aaa52dd58ec23dcec659882fe68c571f",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d49c0276a7bac8-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d49c0276a7bac8-1.json",
+      "sha256": "2b791835a6219833a4ed3de1dd20df5d1bb815cf58849a44a387bbaa75a66437",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d49c49702ac798-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d49c49702ac798-1.json",
+      "sha256": "faa873f4f06c7879cbb5806a8b7e5aac6814a510be146fa57f6ef7971ad98f34",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d49cc00889b550-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d49cc00889b550-1.json",
+      "sha256": "89555aa83997024a6b94c4be1f189d800830fd65c399fdd733b6e63b74ffbef7",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d49ceeaea5a7b8-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d49ceeaea5a7b8-1.json",
+      "sha256": "e4221f94ee3775f8f3314acdefcf0a8d22e84daca14a485ee798d8237ed6e7cb",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d49d625a88c088-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d49d625a88c088-1.json",
+      "sha256": "e928295d3c86a4ce4fc1a5bf2e0b78ac559fcb8f10019e8ce0c2b856895302b5",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d49f794fd48ed8-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d49f794fd48ed8-1.json",
+      "sha256": "994c1a25fcbb8954332c85e6565917b939e1e35b607180b954a526c1fcf68b77",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d49ff3da169198-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d49ff3da169198-1.json",
+      "sha256": "0b92473bf510711a164e767ecae6e9861e154a7fa2cc8a13a8203320e4441c0b",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d4a9c0413584f8-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d4a9c0413584f8-1.json",
+      "sha256": "f7c80cae25f21261b8e2a3866c9b7fc85712894ee760cb06d11cd72aaba0f14b",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d4acba680516a0-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d4acba680516a0-1.json",
+      "sha256": "52d195c1760ac0f29944478d3b840b50bbeb4cb856ab41e19b4ab3e9aab15924",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d4acffb4cfc5f8-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d4acffb4cfc5f8-1.json",
+      "sha256": "7021b0addc341db9206c049f62ec45dde2c0c25acc8f914aba72f4c322bdb345",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy-sessions/18d4ad1f37c84628-1.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy-sessions/18d4ad1f37c84628-1.json",
+      "sha256": "848e4b6a7cd526fcb71be91bd9367dcb95d095bd8f56273d2726a240fdef41c4",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy/config.lua": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy/config.lua",
+      "sha256": "6c62b89beadbbf069f2c9797c605ca16ded97b60f94a950f8729da87a492eacf",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/proxy/init.lua": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/proxy/init.lua",
+      "sha256": "f83d3c89cb6e98d7550fadfa0f54a2b2f0b6e64f184b239ca65d307587cbfd71",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/README.md": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/README.md",
+      "sha256": "2a9588beea9f6308aadb8696bf8b477094b33fa73320a1452236239069601579",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/integration/memo-run.test.ts": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/integration/memo-run.test.ts",
+      "sha256": "69d19f052cbe6c45f16de0b577aac712a6572b1b0806091b6c4d566fb1c5a942",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/integration/observation-fixture.ts": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/integration/observation-fixture.ts",
+      "sha256": "c22f0767afae49d3621391f5c77a1db0b34b13d382517229531c0095f4b1a80c",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/integration/smoke.test.ts": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/integration/smoke.test.ts",
+      "sha256": "c28607009dab24b11679ff689941de59b1b6a72ff21ae4716d15d93463b64861",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/integration/source-layout.test.ts": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/integration/source-layout.test.ts",
+      "sha256": "b293e1a26eec69402f30fdea69de370da492aeb57ec443db12d9a642cbcc18fa",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/integration/tool-observations.test.ts": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/integration/tool-observations.test.ts",
+      "sha256": "fe169d7cd59d3c0812c54b2429399a3af0721f22e4745df1ca66d87c09a9d27b",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/observation.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/observation.rs",
+      "sha256": "e2f2b5f0b916360ce125a3e63ea0df69359fc401a6bd3e1ea9374f760cacecc6",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/service/version_tests.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/service/version_tests.rs",
+      "sha256": "35a00fcf8b73518aeb6f7ead78741ae01c3aeece830f85a11a6b6783883a8fc9",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/process/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/process/tests.rs",
+      "sha256": "b23cac06bcd70a22d5bbde7d2f047b9e68cb064459883da935488205b555681c",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/sandbox/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/sandbox/tests.rs",
+      "sha256": "b7c257c0805b5fdd85f12afd8f68584127a33026a7a146085f4aebc8232b60f7",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/sdk/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/sdk/tests.rs",
+      "sha256": "696f43e73756569e6a71becfd4eab4b86604d3e96cb06a599c6ab10268dd6056",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/socket/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/socket/tests.rs",
+      "sha256": "eaee457b838daa100238647fcd567d349fefce0fbaf1c0b08d0877162c90ff41",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/bridge.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/bridge.rs",
+      "sha256": "18f332206f3337f46567486ea32a696ef081bfba1f7177bc3cc758d186da67e5",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/cartridges.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/cartridges.rs",
+      "sha256": "f5212874be533cce85f8d5736b3888735ebf10837c1bc5c2880eafab0dae9c95",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/contracts.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/contracts.rs",
+      "sha256": "9148f12e772bca07681047b745e34b3c39f182acae233f34a1a87a1ed74536fe",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/fixtures/chain_fixture.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/fixtures/chain_fixture.rs",
+      "sha256": "97c56e4a38172c58db3c56510bde36bf77ae73c29417084fbf11813ef457bdd8",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/fixtures/lua_fixture.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/fixtures/lua_fixture.rs",
+      "sha256": "fef8a041697926949378fcbedfcc2f93d2bbd6bf4137810763c86b710ec36ce1",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/fixtures/nested_fixture.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/fixtures/nested_fixture.rs",
+      "sha256": "eeceffcf78a97fd32fe94a432207ab588fd680ac29d4e6499eb0f36e1c3cba32",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/fixtures/rpc_fixture.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/fixtures/rpc_fixture.rs",
+      "sha256": "332ae6bb5472e87e18009d12639d491e72598f8a311c184175af65d4f490c67c",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/fixtures/rpc/cases.json": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/fixtures/rpc/cases.json",
+      "sha256": "2161ac0acf318879a974b10400783aabd8aa1b11b94d144f5cbea42c52b4b8e6",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/fixtures/rpc/echo.lua": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/fixtures/rpc/echo.lua",
+      "sha256": "45da102c92fa7eef32e363325f56649506cde1d82e3657a451cfc310733e1eec",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/folders.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/folders.rs",
+      "sha256": "498ea6316793c20c92ff66ccd6c7100cbf6d098a51de9bcbf0f78c978d61f5db",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/foreground.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/foreground.rs",
+      "sha256": "b15df1a7face0d0f706b9fbc78186ddc49d09330973acbc06ef8e70a6f495aac",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/landscape.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/landscape.rs",
+      "sha256": "1105795f0d09c5ab6571f545cd5feff047d85b23891336add248cac1a7a63e8d",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/ledger.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/ledger.rs",
+      "sha256": "2c9db32c4a30eec1a84cb221020b3f18fc3ddbb42eb6cfbcd10f7285704c58ca",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/lifecycle.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/lifecycle.rs",
+      "sha256": "6b68cc357d6d41a55d195ce98ba7cfe77ee72c03a4c144191df756b49feaa514",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/manifest.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/manifest.rs",
+      "sha256": "899cf5c6f7107a5272ef58af1c21fbbb552794a86a7ed5eaf087582643e200ee",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/mod.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/mod.rs",
+      "sha256": "90e81a7e9f3b9c4173e99435b00e3339f97f4dc5497e7f27260a5bf1f4e31b5f",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/node.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/node.rs",
+      "sha256": "e652f1b8fca1eaef8e891defc73ad30c7fb38b9691e57004b8a901188d9f884d",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/process.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/process.rs",
+      "sha256": "0b034f9da927986e662b036734cf3644e46429db2056b174928e28bedc3eedfd",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/reload.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/reload.rs",
+      "sha256": "3f681027f8aba4e58b255afab783ae73424402372f5f33ccc8762e4a623a7a5b",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/resolver.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/resolver.rs",
+      "sha256": "23076f259a70303e4df3b064621f926eca8167a4293ecd0a70f7d718ea8bbcb1",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/rpc_contract.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/rpc_contract.rs",
+      "sha256": "b11326b946b51ff9c9f980182cf30e3cf61afd828f7a8027d1cfbf9a412ffe12",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/socket.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/socket.rs",
+      "sha256": "0b92b274e1624f52e987c6f69a184628c57fa954ae4ff10a0a1faa8d3644de94",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/stream.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/stream.rs",
+      "sha256": "bf50696afec5617e7b8352ddde35d6054eb75e7cddad9318f745d03133077c10",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/tests/wire.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/wire.rs",
+      "sha256": "86c43966f7ac33f3bce9e373cbf646acb4e95dd18600768a9c8c0cd32b42c35a",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/src/turn/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/turn/tests.rs",
+      "sha256": "dd12cb7ff730b3a974c98c2e05c50666c3f8d4de2106710b701f12c08c2698fb",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tests/unit/stdio.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/stdio.rs",
+      "sha256": "6e198a496e5ea34fbaad40af535b0f776081b87bb62e563f9dc42e533faae206",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tools/init.lua": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tools/init.lua",
+      "sha256": "7e0b63eaba3c8f613882d6e7b65e92e156a22a7def15365327c7086473311fe8",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/tools/memo-run": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tools/memo-run",
+      "sha256": "c0908b2fdc14b75c1e8c8e05f16d92030b6f6b461519fb942f5ed2c5bf597711",
+      "mode": 33261
+    },
+    "cartridge.ctg/.cartridge/tools/run": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tools/run",
+      "sha256": "7f4f936c43d9c9efb8801781f51bf0553e8c9b96332f76b372393c728abbb80d",
+      "mode": 33261
+    },
+    "cartridge.ctg/.cartridge/workspace/Cargo.lock": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/workspace/Cargo.lock",
+      "sha256": "ad3754f3135e5908a392a884a1af95f1b956a67e40063ecc8bca4d793acd74ff",
+      "mode": 33188
+    },
+    "cartridge.ctg/.cartridge/workspace/Cargo.toml": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/workspace/Cargo.toml",
+      "sha256": "9e0ed6f2f82a3d14f64466012c2dbed1f418569162924a3fe59e2f38a18605a4",
+      "mode": 33188
+    },
+    "cartridge.ctg/.editorconfig": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.editorconfig",
+      "sha256": "b70a3b9a6dbe4b48c4edce26448316db2b266dd697172154544f671280476d02",
+      "mode": 33188
+    },
+    "cartridge.ctg/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/.gitignore",
+      "sha256": "06df8d3475e15c47618351edfd6ee6671a15be0d0ec219740e31aff8a9b83ef1",
+      "mode": 33188
+    },
+    "cartridge.ctg/Cargo.lock": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/Cargo.lock",
+      "sha256": "7c75fddc4bf796b88e20df2f30c5d635f95969663e14206a26473254b9b44549",
+      "mode": 33188
+    },
+    "cartridge.ctg/Cargo.toml": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/Cargo.toml",
+      "sha256": "cc3e736cb59620afdb89380da1a4c29bd6cbbdb0bfba399ce080d2ae50833616",
+      "mode": 33188
+    },
+    "cartridge.ctg/docs/architecture.txt": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/docs/architecture.txt",
+      "sha256": "6ff3d55111525919cea60c215453571ad2bcd707b622eb782e70fb5348a480f9",
+      "mode": 33188
+    },
+    "cartridge.ctg/docs/creating-cartridges.txt": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/docs/creating-cartridges.txt",
+      "sha256": "29cba8b0fec6159af978fa245dc7b280197f090ebb70d367146a8072f2914b7a",
+      "mode": 33188
+    },
+    "cartridge.ctg/docs/development.txt": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/docs/development.txt",
+      "sha256": "705b5fc918a9aee070fe954412d086ae892c1ab2339316b1957d6d49360e0f9c",
+      "mode": 33188
+    },
+    "cartridge.ctg/docs/memos.txt": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/docs/memos.txt",
+      "sha256": "93e756e5f3d71c578a748ba1893f2d33c6ec497296444266bc42a2110e1f5d1c",
+      "mode": 33188
+    },
+    "cartridge.ctg/docs/writing-good-modules.txt": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/docs/writing-good-modules.txt",
+      "sha256": "860c7a7e63304838a417e8cf4025967deb085c5837458665370022959524c262",
+      "mode": 33188
+    },
+    "cartridge.ctg/justfile": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/justfile",
+      "sha256": "f3a9881649823babfbf4b847e1265a6226146e528f32e77b8089ff925e07c51f",
+      "mode": 33188
+    },
+    "cartridge.ctg/llms.txt": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/llms.txt",
+      "sha256": "38c9a0c6324784e32f8ebb1da445a77688944c2942f224adfd5654889d9400db",
+      "mode": 33188
+    },
+    "cartridge.ctg/rustfmt.toml": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/rustfmt.toml",
+      "sha256": "bce79651b2e2ff42e1c54b9a26c5e17af5222f9f65ab51d9563a48fd159dae84",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/cartridge.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/cartridge.rs",
+      "sha256": "fdba649494235896466ddf81efa757ab8141761ee2ee4cddf7ed340302041551",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/context.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/context.rs",
+      "sha256": "4fae8449a668c6b73ed3a1ba8d02ae098488b9c85f8a1e02740b7f4d160dbc27",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/fiber.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/fiber.rs",
+      "sha256": "7cd8e138e75ebe72c2abc3f5e95b7e38f84eb03879df2b0ea1b77b2bcd396058",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/landscape.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/landscape.rs",
+      "sha256": "e9e98295a03f5be73c514bf4dcd25897cc345fa77b5415971287b7ab6d0eea73",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/ledger.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/ledger.rs",
+      "sha256": "5f2e4aa315d3ef8eb0495c3adcc8c3e2ac8f37c5e6860adaccd8e090602fce8e",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/lib.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/lib.rs",
+      "sha256": "210568cf5ffbe14c48bc560be22d14805ca9d2e3e696c189a346bca189626fe9",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/loader.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/loader.rs",
+      "sha256": "2be4017b529a096087b17d59fe1b17edf5693ad444b9758b63e302724c35b737",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/lua.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/lua.rs",
+      "sha256": "e9b1caa126a77d07e479e7bda78ed2f7cccea27d374276563e06926ae0b63177",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/main.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/main.rs",
+      "sha256": "9716a9012037bd2e0c45908a5eeb6ba58ae2baad98016b15b8fbee7c34333cfe",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/observation.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/observation.rs",
+      "sha256": "ae19d0706c996c40d39ef48f46a98dd9058df09a5a5f0dff78dad034f0638b4f",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/process.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/process.rs",
+      "sha256": "87ecf7b6caec12fb78eed65e50737af203f5e3b91b013646166c5052dd4987ee",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/reload.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/reload.rs",
+      "sha256": "62eb95b23d4d3c449b19bc4a11a7af6379cc374aa53f51efe60fd8311b95ccce",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/resolver.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/resolver.rs",
+      "sha256": "141190913439ffe527140fca80d26b78854f0431769a8a67483d853217a42352",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/runtime.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/runtime.rs",
+      "sha256": "75abcc496fd04dcb72c2057905576b316dbd0992744f5d9a4b646917908198d2",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/sandbox.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/sandbox.rs",
+      "sha256": "4814adca887c621c8a650065e471747a93bc7417945bbccde40e06def5d4a6ee",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/sandbox/linux.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/sandbox/linux.rs",
+      "sha256": "720e75e65b77c72d07652d0e83123e6667f2713ae95ee6c64c9e79ea663be09c",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/sdk.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/sdk.rs",
+      "sha256": "e2eb0911440cbb0f9a10554f4803bb63e8e32b5e25ae142c1c09760ac2a20123",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/service.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/service.rs",
+      "sha256": "0f32c908bd2ab189ba9b06f901df9acc323138ae472176cdb9954e1d550be951",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/socket.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/socket.rs",
+      "sha256": "5f481a12c0c87911ba111cb28bfefcc24513f30a1dcd31e3cdc1fc9eb3b69ce8",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/stream.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/stream.rs",
+      "sha256": "0566e67b6c8471b06deddae68fcde15dbb88785462d56dfbc6031c165c5a6804",
+      "mode": 33188
+    },
+    "cartridge.ctg/src/turn.rs": {
+      "source": "/Users/feb/dev/cartridge/cartridge.ctg/src/turn.rs",
+      "sha256": "d5d5fcb55ce6b82afea868e1609f66174faa30d39c04017e5f2e5e42cd18c8a0",
+      "mode": 33188
+    },
+    "docs.ctg/.cartridge/docs/README.md": {
+      "source": "/Users/feb/dev/cartridge/docs.ctg/.cartridge/docs/README.md",
+      "sha256": "fc21c42571c77f08f0aa43ae711da284ae6fb8db6271e456abd8e75218dabe29",
+      "mode": 33188
+    },
+    "docs.ctg/.cartridge/memos/note/documentation-service.md": {
+      "source": "/Users/feb/dev/cartridge/docs.ctg/.cartridge/memos/note/documentation-service.md",
+      "sha256": "762b984a6ba3ff1eec7089b580ce5268eeae0d021a42575c178bdd74dcb1e556",
+      "mode": 33188
+    },
+    "docs.ctg/.cartridge/memos/system/docs-entry.md": {
+      "source": "/Users/feb/dev/cartridge/docs.ctg/.cartridge/memos/system/docs-entry.md",
+      "sha256": "0e70bac682a546fb3c5caacc5b9ea9e22f5a48aa0a960544d74af6d705ae7836",
+      "mode": 33188
+    },
+    "docs.ctg/.cartridge/tests/host.rs": {
+      "source": "/Users/feb/dev/cartridge/docs.ctg/.cartridge/tests/host.rs",
+      "sha256": "33338c9d04b31564f38460a857610eb31a8292354c74bda769628a9d5872a711",
+      "mode": 33188
+    },
+    "docs.ctg/.cartridge/tests/inventory.rs": {
+      "source": "/Users/feb/dev/cartridge/docs.ctg/.cartridge/tests/inventory.rs",
+      "sha256": "52ac709c94d743bde5c4506ce94854e491c8a4465768aa9859afb9e6c34e54f0",
+      "mode": 33188
+    },
+    "docs.ctg/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/docs.ctg/.gitignore",
+      "sha256": "d4cdd29f9db464ff0476e6c0787c008405cdb64ea7c074d040b47d26890a0684",
+      "mode": 33188
+    },
+    "docs.ctg/Cargo.toml": {
+      "source": "/Users/feb/dev/cartridge/docs.ctg/Cargo.toml",
+      "sha256": "04b223b610f28441a7be837941f619481b4b45937b99276b56c99d313d2ce6fe",
+      "mode": 33188
+    },
+    "docs.ctg/cartridge.json": {
+      "source": "/Users/feb/dev/cartridge/docs.ctg/cartridge.json",
+      "sha256": "5b7cf09b1e097d1dccbf5fc57bea518b8c092c10bba449d71325d1ed37b7c2c1",
+      "mode": 33188
+    },
+    "docs.ctg/init.lua": {
+      "source": "/Users/feb/dev/cartridge/docs.ctg/init.lua",
+      "sha256": "6544bd4e0e87c34ef86af82676acc03199d293a271b5188a97f1be76a4024163",
+      "mode": 33188
+    },
+    "docs.ctg/rustfmt.toml": {
+      "source": "/Users/feb/dev/cartridge/docs.ctg/rustfmt.toml",
+      "sha256": "bce79651b2e2ff42e1c54b9a26c5e17af5222f9f65ab51d9563a48fd159dae84",
+      "mode": 33188
+    },
+    "docs.ctg/src/inventory.rs": {
+      "source": "/Users/feb/dev/cartridge/docs.ctg/src/inventory.rs",
+      "sha256": "9a251107d25219b478d7723e3044867bd97c559fbf2720f82705e4bf23ac313d",
+      "mode": 33188
+    },
+    "docs.ctg/src/main.rs": {
+      "source": "/Users/feb/dev/cartridge/docs.ctg/src/main.rs",
+      "sha256": "fc6e7f078bdfea7cadabf050fc24feaf20b3cc27665efe2209f7810d4d8fe215",
+      "mode": 33188
+    },
+    "docs.ctg/src/service.rs": {
+      "source": "/Users/feb/dev/cartridge/docs.ctg/src/service.rs",
+      "sha256": "ccbfd36ecdcc894aadff1c38a8d14f5155e7b937ef98664732aa915bb58f6c2e",
+      "mode": 33188
+    },
+    "fs.ctg/.cartridge/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/.cartridge/.gitignore",
+      "sha256": "f076c055ecd6ece41fa5f876021eeaad16846016ea2317cff27433008826f1f4",
+      "mode": 33188
+    },
+    "fs.ctg/.cartridge/docs/context.md": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/.cartridge/docs/context.md",
+      "sha256": "9f8404b2dfb6122fffc8f34734410b061f754c9e2564e4175028bf993995522d",
+      "mode": 33188
+    },
+    "fs.ctg/.cartridge/docs/revision-guards.md": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/.cartridge/docs/revision-guards.md",
+      "sha256": "7834ec45573b32f907c71b539cb5b80ae9f52bc5e0cc593797b84eefe669c584",
+      "mode": 33188
+    },
+    "fs.ctg/.cartridge/docs/search-pages.md": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/.cartridge/docs/search-pages.md",
+      "sha256": "34a5663f9d0c0eb9a67ad72deb76194c5fc21db540c879479b35db77f7d91e8a",
+      "mode": 33188
+    },
+    "fs.ctg/.cartridge/memos/decision/composable-agent-search.md": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/.cartridge/memos/decision/composable-agent-search.md",
+      "sha256": "497f291d0833b7efd4a277e73dffa5317aebb83a161293a0a70cc1ea6d7c5056",
+      "mode": 33188
+    },
+    "fs.ctg/.cartridge/memos/note/search-read-survives-polling.md": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/.cartridge/memos/note/search-read-survives-polling.md",
+      "sha256": "44d2dbd9fcdcd783b92103259fa7f9542e52f786c4255307e79cfd2f66efa5f0",
+      "mode": 33188
+    },
+    "fs.ctg/.cartridge/memos/type/note.md": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/.cartridge/memos/type/note.md",
+      "sha256": "b4cdf899ab4580b86d21bbfd2adf28808d610f5c1f16f0fb0c92514d10b4d908",
+      "mode": 33188
+    },
+    "fs.ctg/.cartridge/memos/type/type.md": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/.cartridge/memos/type/type.md",
+      "sha256": "71f82003eaa30155dc564fd89bfc3aca6ef39ab8342e762d0ec7524c8dd56cf0",
+      "mode": 33188
+    },
+    "fs.ctg/.cartridge/PORT.md": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/.cartridge/PORT.md",
+      "sha256": "251ccfcdec60ae85aadd2e0f278134210c7e0455342c4f0a8743545fb48dca11",
+      "mode": 33188
+    },
+    "fs.ctg/.cartridge/tests/integration/context.test.ts": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/.cartridge/tests/integration/context.test.ts",
+      "sha256": "5239eacb5463d1a6e032c0c6cd22ff370458d574621ac3a5ec486de4244b1264",
+      "mode": 33188
+    },
+    "fs.ctg/.cartridge/tests/unit/context.rs": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/.cartridge/tests/unit/context.rs",
+      "sha256": "51050abb6411553d2f9478035a72e626f1282a8f6e043eb0652387267740d8b8",
+      "mode": 33188
+    },
+    "fs.ctg/.cartridge/tests/unit/search/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/.cartridge/tests/unit/search/tests.rs",
+      "sha256": "54c1a2785666176bd67e9965b29d60dc1b8676a7006998cf12108253c16c4c82",
+      "mode": 33188
+    },
+    "fs.ctg/.cartridge/tests/unit/service/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/.cartridge/tests/unit/service/tests.rs",
+      "sha256": "6b027807ce3783dac5c7b29278804862731c6eebd68695b83c358e42fe0c2615",
+      "mode": 33188
+    },
+    "fs.ctg/.cartridge/UPSTREAM.md": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/.cartridge/UPSTREAM.md",
+      "sha256": "739b2a54f27eb39fe28004e502ce65be3f6973b34474a7ed055546e6521f729b",
+      "mode": 33188
+    },
+    "fs.ctg/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/.gitignore",
+      "sha256": "663ec4b6f6fbea402c9cad6d2eb7745783ed3a74428f5c7bb2d2da3913dc0ec9",
+      "mode": 33188
+    },
+    "fs.ctg/Cargo.toml": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/Cargo.toml",
+      "sha256": "1d4a96661593f847a97b35cfcc5f0df58f06646e2a5a079dbcb96f62655313db",
+      "mode": 33188
+    },
+    "fs.ctg/cartridge.json": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/cartridge.json",
+      "sha256": "68502209e955e716f485eb2b774e12564915d71676dc17451142163c98ae9202",
+      "mode": 33188
+    },
+    "fs.ctg/init.lua": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/init.lua",
+      "sha256": "38979acfffd609ccb3b0d3efb837f32a51241e7707442daf49bf1dc84e8088a7",
+      "mode": 33188
+    },
+    "fs.ctg/rustfmt.toml": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/rustfmt.toml",
+      "sha256": "9aaa9837831ff31ac3f07f96d8d7d9a7ca8b38afb8d07713da52b0f8374d80a7",
+      "mode": 33188
+    },
+    "fs.ctg/src/context.rs": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/src/context.rs",
+      "sha256": "6b49e59d0356a2759eb1be5ec6a98582563c3918da6ea2af610d6294e7e250b0",
+      "mode": 33188
+    },
+    "fs.ctg/src/files.rs": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/src/files.rs",
+      "sha256": "623607a2be7b1c6dfff4e9b763a55e0213d2019e57f904bc9461efafd5e01625",
+      "mode": 33188
+    },
+    "fs.ctg/src/main.rs": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/src/main.rs",
+      "sha256": "c5b16ee706cb657107b6ed4604b1632716ec3b7ffe5e5e5db536a3da5d7cee99",
+      "mode": 33188
+    },
+    "fs.ctg/src/search.rs": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/src/search.rs",
+      "sha256": "afc2a8261c5f0e8fcaeb844d85c69f075919a48e54344a10f950b3f632209e2f",
+      "mode": 33188
+    },
+    "fs.ctg/src/service.rs": {
+      "source": "/Users/feb/dev/cartridge/fs.ctg/src/service.rs",
+      "sha256": "40d56829741c86c4f7c45d74b8bf5526ea399b54617145e3f98b1f796d2bfaba",
+      "mode": 33188
+    },
+    "gitfs.ctg/.cartridge/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/.gitignore",
+      "sha256": "f076c055ecd6ece41fa5f876021eeaad16846016ea2317cff27433008826f1f4",
+      "mode": 33188
+    },
+    "gitfs.ctg/.cartridge/docs/inspection.md": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/docs/inspection.md",
+      "sha256": "725f6e3db0573e2485ae774d99440c3f3b83ec2b1ff247651c4f8a73a53cbd14",
+      "mode": 33188
+    },
+    "gitfs.ctg/.cartridge/docs/push.md": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/docs/push.md",
+      "sha256": "af8f84dc0598ed7d96561a01de6b4c234c2561c481ce2ef61e88f22ddd209bd8",
+      "mode": 33188
+    },
+    "gitfs.ctg/.cartridge/docs/ship.md": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/docs/ship.md",
+      "sha256": "4ad5976529f00af42931ec72bdd27046315be0bd88a5cb456f17c7b75bb1580d",
+      "mode": 33188
+    },
+    "gitfs.ctg/.cartridge/memos/type/note.md": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/memos/type/note.md",
+      "sha256": "b4cdf899ab4580b86d21bbfd2adf28808d610f5c1f16f0fb0c92514d10b4d908",
+      "mode": 33188
+    },
+    "gitfs.ctg/.cartridge/memos/type/type.md": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/memos/type/type.md",
+      "sha256": "71f82003eaa30155dc564fd89bfc3aca6ef39ab8342e762d0ec7524c8dd56cf0",
+      "mode": 33188
+    },
+    "gitfs.ctg/.cartridge/PORT.md": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/PORT.md",
+      "sha256": "03da44b8ca85073227954af389027bbb79d71c813ff8170acc82f38e538c277b",
+      "mode": 33188
+    },
+    "gitfs.ctg/.cartridge/tests/integration/recorded-push.test.ts": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/integration/recorded-push.test.ts",
+      "sha256": "0c6b4e111e2aea72d3736b5df433a6998ced1d076a417179b75e78361da4953a",
+      "mode": 33188
+    },
+    "gitfs.ctg/.cartridge/tests/integration/reviewed-ship.test.ts": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/integration/reviewed-ship.test.ts",
+      "sha256": "2cd16fcb495650e8266fb5cdf660e868f656b547768e4777dd1e9c996fc806f9",
+      "mode": 33188
+    },
+    "gitfs.ctg/.cartridge/tests/integration/tool-result.test.ts": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/integration/tool-result.test.ts",
+      "sha256": "1c7d95e7cb20545b2dd3d67196dfdd096ad67b1fbad281f285ba0ca6e5016033",
+      "mode": 33188
+    },
+    "gitfs.ctg/.cartridge/tests/unit/push/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/unit/push/tests.rs",
+      "sha256": "defe3762687ac2d873f84e5abf76c2afb4198c50ee6975ddc7ea029076fbb4e2",
+      "mode": 33188
+    },
+    "gitfs.ctg/.cartridge/tests/unit/secrets/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/unit/secrets/tests.rs",
+      "sha256": "598e276882c50f497ee49d8f756f459710c82e89826bff628f086b9d3797f713",
+      "mode": 33188
+    },
+    "gitfs.ctg/.cartridge/tests/unit/ship/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/unit/ship/tests.rs",
+      "sha256": "7d3efc0fb55dde91c946a6e01807caa2170e6e9e873313c8ae9d02ce13fe10e5",
+      "mode": 33188
+    },
+    "gitfs.ctg/.cartridge/tests/unit/snapshot.rs": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/unit/snapshot.rs",
+      "sha256": "562a15704248bfc17fe132230f370c5a89ac5894e6b6b6c6023ae555aac27669",
+      "mode": 33188
+    },
+    "gitfs.ctg/.cartridge/tests/unit/store/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/unit/store/tests.rs",
+      "sha256": "9312577bf3a569acd3be691acce2e445f33262960340e060b172aad35042c0c5",
+      "mode": 33188
+    },
+    "gitfs.ctg/.cartridge/tests/unit/tool_result.rs": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.cartridge/tests/unit/tool_result.rs",
+      "sha256": "da287f1ef8f12ae800efc5e4e5d1ec6a2da7f583439f7a16bf76d2107baafb2c",
+      "mode": 33188
+    },
+    "gitfs.ctg/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/.gitignore",
+      "sha256": "663ec4b6f6fbea402c9cad6d2eb7745783ed3a74428f5c7bb2d2da3913dc0ec9",
+      "mode": 33188
+    },
+    "gitfs.ctg/Cargo.toml": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/Cargo.toml",
+      "sha256": "4a4e8f593cddae68250b7ae445bf8feddba2a652b5065d46ac061b2a650c639c",
+      "mode": 33188
+    },
+    "gitfs.ctg/cartridge.json": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/cartridge.json",
+      "sha256": "4aa504bbbaa14fd129bbcd2747f0eec58250dbba86b1c7cbd3971cc2ae085013",
+      "mode": 33188
+    },
+    "gitfs.ctg/init.lua": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/init.lua",
+      "sha256": "9dee10ca8bd8fd9f7b7e397a6888a3719c47aaf2cd43fe1e7b4f0333c65cd9f6",
+      "mode": 33188
+    },
+    "gitfs.ctg/rustfmt.toml": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/rustfmt.toml",
+      "sha256": "9aaa9837831ff31ac3f07f96d8d7d9a7ca8b38afb8d07713da52b0f8374d80a7",
+      "mode": 33188
+    },
+    "gitfs.ctg/src/inspection.rs": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/src/inspection.rs",
+      "sha256": "188e4bda7a9ec731fa1faf946d9639a624d2376a332f3587888b18764b594468",
+      "mode": 33188
+    },
+    "gitfs.ctg/src/main.rs": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/src/main.rs",
+      "sha256": "970c295962aac29ee39c382ed347c9efb6e45a651ee71b46a1861d6f0a5727b7",
+      "mode": 33188
+    },
+    "gitfs.ctg/src/push.rs": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/src/push.rs",
+      "sha256": "3222f3a8f656b8066091fe259026cb7a77e8e9d40a2673db48e64fbead7a543c",
+      "mode": 33188
+    },
+    "gitfs.ctg/src/secrets.rs": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/src/secrets.rs",
+      "sha256": "a17f9b5b38f44c8b707636c1fd696738dd9836183fc4b59220c2c035e52c085f",
+      "mode": 33188
+    },
+    "gitfs.ctg/src/service.rs": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/src/service.rs",
+      "sha256": "b7543ca03b5f0e2268dcdf1e47b816f06c1f373804e6f3839e5e4060a261d78b",
+      "mode": 33188
+    },
+    "gitfs.ctg/src/ship.rs": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/src/ship.rs",
+      "sha256": "4500a127bb18c06a4861ab95df6d60cf0c48efaaf30cdf36fe7c1545d48947e5",
+      "mode": 33188
+    },
+    "gitfs.ctg/src/store.rs": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/src/store.rs",
+      "sha256": "390a95bf3a6b52bae4d7595f4ee2eb619094694b43ccc2fb5a9108a65fc03971",
+      "mode": 33188
+    },
+    "gitfs.ctg/src/tool_result.rs": {
+      "source": "/Users/feb/dev/cartridge/gitfs.ctg/src/tool_result.rs",
+      "sha256": "570c880fadcb2045556cc2d1f377679913b6ea4fd5c3cfdad859f1b4f494a700",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/.gitignore": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/.gitignore",
+      "sha256": "f076c055ecd6ece41fa5f876021eeaad16846016ea2317cff27433008826f1f4",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/docs/README.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/docs/README.md",
+      "sha256": "48c80e7507d2f43b3ea39fddc70dc2c9b167b3401df4fe889ea63097eae7bde9",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/docs/roster.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/docs/roster.md",
+      "sha256": "60a4c14f1c9588a25bd90d260f986f15ad3548060d85c07939352d6efa9f6dd0",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/docs/summarize.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/docs/summarize.md",
+      "sha256": "685a50497a440523a28536527e3da86d6c7db18bb3289d498f2413091db4a5c4",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/memos/resource/harness-prompt-source.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/memos/resource/harness-prompt-source.md",
+      "sha256": "69f6f18495d087d2c86c51ae510e74aab2a0199af666a62f59fe50b1dba8a610",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/memos/routine/evaluate-harness-memory.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/memos/routine/evaluate-harness-memory.md",
+      "sha256": "9420d1ed582d8e5a0d89c967b06aa46dc0e1c9e1fbd290ee7221dd7df8225ebe",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/memos/type/note.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/memos/type/note.md",
+      "sha256": "b4cdf899ab4580b86d21bbfd2adf28808d610f5c1f16f0fb0c92514d10b4d908",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/memos/type/type.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/memos/type/type.md",
+      "sha256": "71f82003eaa30155dc564fd89bfc3aca6ef39ab8342e762d0ec7524c8dd56cf0",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/PORT.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/PORT.md",
+      "sha256": "877d2eeaada4ebeffee43928f1c0ea3871b660bcb9cffd352e02c61295141884",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/eval/corpus/facts.json": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/eval/corpus/facts.json",
+      "sha256": "54ff45a1baabe9930d3734c818b70290d950099f8c8b415afd0323bca40a95f9",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/eval/corpus/journal-v1.jsonl": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/eval/corpus/journal-v1.jsonl",
+      "sha256": "0a5b6435caaf42a8527d9c686875abe170ad6534a54a3492f43fcbadaaabf816",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/eval/corpus/journal-v2.jsonl": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/eval/corpus/journal-v2.jsonl",
+      "sha256": "f0413b1bc17b3b8dd97b184bf288c8312efb9a41d333f0e14d42fd8b8d75869e",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/eval/corpus/journal-v3.jsonl": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/eval/corpus/journal-v3.jsonl",
+      "sha256": "baefb425bb3f7f58a1043aa86fe6b42c6a4d2b8efff86584ddd1c2ce7d26109f",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/eval/corpus/summaries/bad-invented-completion.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/eval/corpus/summaries/bad-invented-completion.md",
+      "sha256": "0b2be538db528b3bd8a036f99f00ac7a43a3d108a21aeaac74854ce4b064095c",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/eval/corpus/summaries/bad-invented-permission.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/eval/corpus/summaries/bad-invented-permission.md",
+      "sha256": "d3687a804dc80e548f64eb6312b33c589c2c15312186bcb008a722e46dedc446",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/eval/corpus/summaries/bad-lost-constraint.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/eval/corpus/summaries/bad-lost-constraint.md",
+      "sha256": "52982d3331d627be48029a9f38c1dec9f2aa9aa6e35e3d31ace32ba3855d840b",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/eval/corpus/summaries/bad-obsolete-conclusion.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/eval/corpus/summaries/bad-obsolete-conclusion.md",
+      "sha256": "7ef8d3f9fd596f24437a5a2e0f59cf100b067e8be988830b115628fc5e524664",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/eval/corpus/summaries/good-round-1.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/eval/corpus/summaries/good-round-1.md",
+      "sha256": "455e5a6edfa4b262d741197c860c494bac3347fdf3311c59f49a901c0b809a69",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/eval/corpus/summaries/good-round-2.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/eval/corpus/summaries/good-round-2.md",
+      "sha256": "fd749f6be81ea43eda156ad2e1c4713997e1f784727c6c61476fe566ffd7749a",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/eval/corpus/summaries/good-round-3.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/eval/corpus/summaries/good-round-3.md",
+      "sha256": "2594400ff34a4400748bed6aba84ba0daa5fb0f2656290db0d0d148143a162b5",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/eval/corpus/summaries/manifest.json": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/eval/corpus/summaries/manifest.json",
+      "sha256": "282ef4796c290629d27cbe6eb67dde04967656dcc30774109705631dea0efc2b",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/integration/process.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/integration/process.rs",
+      "sha256": "11bc1fd469aba7e1c53047cdae26eab3423f9304de6d065d5c4108f672b3b5d3",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/integration/ring.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/integration/ring.rs",
+      "sha256": "f5bb49121dd03bfaf73df159b78a4b126b7c9d3feb55d7b5055f1eee7a969603",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/integration/roster.test.ts": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/integration/roster.test.ts",
+      "sha256": "130a4f9dbb55965193530dcd93ed07bcf48510e89988808378d7072a50aff160",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/integration/system-template.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/integration/system-template.md",
+      "sha256": "6252413b7ddf8b7522432c551ade6d4024617014c04cd99d08dc593c36ecf1dd",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/integration/working.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/integration/working.rs",
+      "sha256": "505e0f9b22e2a0c539e3833df54f6eddbb727ecc1b89cbfa6492053c6ce5e19d",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/unit/accounting.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/unit/accounting.rs",
+      "sha256": "05cfc09928a172a28943cbed06bd142ac88660691ce6ecd6e565986c6a82e3ec",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/unit/compaction.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/unit/compaction.rs",
+      "sha256": "fd6867a53fee9bfa92bc687c63beeb43827c84244289845910dea4c46f975679",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/unit/inspection_tests.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/unit/inspection_tests.rs",
+      "sha256": "d998ce2fc926c764218e907e6bbeed375c35e40b24f5be147912d742be6e9f06",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/unit/main/tests.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/unit/main/tests.rs",
+      "sha256": "f7f9f5764d866fed18439596e5c2b19f84336bc03cac24496fea19ea64503f02",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/unit/prompt/tests.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/unit/prompt/tests.rs",
+      "sha256": "a829512470490e8c6507eb2e0a1013e962181e44bff443585b0422f914c67ad0",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/unit/roster_tests.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/unit/roster_tests.rs",
+      "sha256": "3e6ecd9b475afbee76a5e284dd728a055e8aae4de03445035d6dad38e866334c",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/tests/unit/working_tests.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/tests/unit/working_tests.rs",
+      "sha256": "7141c61d5dd4b81624ffaf252efeaa5a1ca1dec37d5353282aec6caa81de9e9f",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/UPSTREAM_LICENSE": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/UPSTREAM_LICENSE",
+      "sha256": "ebb4f09972aee8608be255debaf78451a68e95c290f55c240dec2ecfa16ea6be",
+      "mode": 33188
+    },
+    "harness.ctg/.cartridge/UPSTREAM.md": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.cartridge/UPSTREAM.md",
+      "sha256": "5b52a98fc5e93386164cbc8f82305ba779b7012987bdc3a1fbb16d43ed0e427c",
+      "mode": 33188
+    },
+    "harness.ctg/.gitignore": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/.gitignore",
+      "sha256": "663ec4b6f6fbea402c9cad6d2eb7745783ed3a74428f5c7bb2d2da3913dc0ec9",
+      "mode": 33188
+    },
+    "harness.ctg/Cargo.toml": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/Cargo.toml",
+      "sha256": "9703cc5fdb70f80262adc1ade4beca0ea7f1df1364c9466295eccb09ef3311d4",
+      "mode": 33188
+    },
+    "harness.ctg/cartridge.json": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/cartridge.json",
+      "sha256": "6733846b3a6a41521b27e2044b39467660903c5ae2b023b3112f37f435d03168",
+      "mode": 33188
+    },
+    "harness.ctg/init.lua": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/init.lua",
+      "sha256": "52495354e77ce1f0bbd2bdba6689b15195158fd26ea080cabf0261532072bbd1",
+      "mode": 33188
+    },
+    "harness.ctg/rustfmt.toml": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/rustfmt.toml",
+      "sha256": "9aaa9837831ff31ac3f07f96d8d7d9a7ca8b38afb8d07713da52b0f8374d80a7",
+      "mode": 33188
+    },
+    "harness.ctg/src/accounting.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/src/accounting.rs",
+      "sha256": "f45b65d915e884012762d07946f856f54d90e2c855157af916838d08f66464cb",
+      "mode": 33188
+    },
+    "harness.ctg/src/compaction.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/src/compaction.rs",
+      "sha256": "c43c230ea1987e8649e683450b232bf5a381f0cc965076f033022059fe86c87d",
+      "mode": 33188
+    },
+    "harness.ctg/src/inspection.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/src/inspection.rs",
+      "sha256": "c6ac10ea7bc40829210dbd8c780484ae8de3d7621df68c762f98cb7d9bb80f5d",
+      "mode": 33188
+    },
+    "harness.ctg/src/main.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/src/main.rs",
+      "sha256": "76d5e2d308917583fd76c08b45f6f2b233748705e6bc679f619afa0cc865f541",
+      "mode": 33188
+    },
+    "harness.ctg/src/prompt.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/src/prompt.rs",
+      "sha256": "7bf31a1329d32e0f627d1840348ad30f32e4ae0192caf20646de961260d70e1d",
+      "mode": 33188
+    },
+    "harness.ctg/src/roster.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/src/roster.rs",
+      "sha256": "479694e130faa723ffdc7ff832814574b70c279d53b1e5987be55ca11e0cad69",
+      "mode": 33188
+    },
+    "harness.ctg/src/working.rs": {
+      "source": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/committed-owner/src/working.rs",
+      "sha256": "f8296ecc8cb711c92e99fbb3c0878621c64a12648c3293dacd5e4d29291242cd",
+      "mode": 33188
+    },
+    "landscape.ctg/.cartridge/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.cartridge/.gitignore",
+      "sha256": "f076c055ecd6ece41fa5f876021eeaad16846016ea2317cff27433008826f1f4",
+      "mode": 33188
+    },
+    "landscape.ctg/.cartridge/docs/context.md": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.cartridge/docs/context.md",
+      "sha256": "5710d4ecd8876c4afc8e00a612da5594c630429bf5266fc77c7a8abb9bbe06b7",
+      "mode": 33188
+    },
+    "landscape.ctg/.cartridge/docs/file-kernel-context.md": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.cartridge/docs/file-kernel-context.md",
+      "sha256": "bd475847d87807e921826f7a7d3067df66b7300c4b672afae859f5ed1363f1f6",
+      "mode": 33188
+    },
+    "landscape.ctg/.cartridge/docs/inventory.md": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.cartridge/docs/inventory.md",
+      "sha256": "16a1d1145cb3965829cc7ae89b29cf7b6c1b70576c6f9fe5f8824551c4d4c014",
+      "mode": 33188
+    },
+    "landscape.ctg/.cartridge/docs/memory-context.md": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.cartridge/docs/memory-context.md",
+      "sha256": "c7f42c187c7a2364f27857d2c4c168025b428aff61e13dfdaa2d2391e5cbc096",
+      "mode": 33188
+    },
+    "landscape.ctg/.cartridge/docs/README.md": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.cartridge/docs/README.md",
+      "sha256": "b7c5ff397701cb4c14298ac96f888a596ffa4cda551446535bedb24ab0c20b35",
+      "mode": 33188
+    },
+    "landscape.ctg/.cartridge/memos/type/note.md": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.cartridge/memos/type/note.md",
+      "sha256": "b4cdf899ab4580b86d21bbfd2adf28808d610f5c1f16f0fb0c92514d10b4d908",
+      "mode": 33188
+    },
+    "landscape.ctg/.cartridge/memos/type/type.md": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.cartridge/memos/type/type.md",
+      "sha256": "71f82003eaa30155dc564fd89bfc3aca6ef39ab8342e762d0ec7524c8dd56cf0",
+      "mode": 33188
+    },
+    "landscape.ctg/.cartridge/PORT.md": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.cartridge/PORT.md",
+      "sha256": "d9d97921712af8eae8fc9738433bb55756440d53e98b79118b80918e99890838",
+      "mode": 33188
+    },
+    "landscape.ctg/.cartridge/tests/unit/context.rs": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.cartridge/tests/unit/context.rs",
+      "sha256": "d9b06f58d63800614e71ce4de5641d951039cdf03453553952762c301eedc3cc",
+      "mode": 33188
+    },
+    "landscape.ctg/.cartridge/tests/unit/file_kernel.rs": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.cartridge/tests/unit/file_kernel.rs",
+      "sha256": "f873c041a825194ae5c4321712a7ec06a769e703919860bebc7d57ea08185b36",
+      "mode": 33188
+    },
+    "landscape.ctg/.cartridge/tests/unit/src/inventory/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.cartridge/tests/unit/src/inventory/tests.rs",
+      "sha256": "2680dea3bb1da84baaa27ec9167c587e32809e062821ee300c3be4b9380db3a6",
+      "mode": 33188
+    },
+    "landscape.ctg/.cartridge/tests/unit/src/lib/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.cartridge/tests/unit/src/lib/tests.rs",
+      "sha256": "dc87daef72e3b0151cb3a253de06903243643993aae33899a02e12092a1e52c2",
+      "mode": 33188
+    },
+    "landscape.ctg/.cartridge/tests/unit/src/lib/view_tests.rs": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.cartridge/tests/unit/src/lib/view_tests.rs",
+      "sha256": "d9b0508708600e2eed4efd719c7a3e7bc7b0e27cb3528771538c27856d3cb62a",
+      "mode": 33188
+    },
+    "landscape.ctg/.cartridge/tests/unit/src/memory/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.cartridge/tests/unit/src/memory/tests.rs",
+      "sha256": "e6aecf9d82dc2a9cccb5228056f30a008b821acb87332562c844bcb46637ab18",
+      "mode": 33188
+    },
+    "landscape.ctg/.cartridge/tests/unit/src/surface/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.cartridge/tests/unit/src/surface/tests.rs",
+      "sha256": "437a747a343b76d5c7c1512e5f53ecd3b5a0fa6011af2b4009b9894f89c51f77",
+      "mode": 33188
+    },
+    "landscape.ctg/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/.gitignore",
+      "sha256": "341e40497c3421844f726ef5badb4f949cea78924127c0a75a2b120761829331",
+      "mode": 33188
+    },
+    "landscape.ctg/Cargo.toml": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/Cargo.toml",
+      "sha256": "3d0bf028746f3d3ff19688107ee8312dcda8df94d0a46b670a6aa356638bad6b",
+      "mode": 33188
+    },
+    "landscape.ctg/rustfmt.toml": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/rustfmt.toml",
+      "sha256": "9aaa9837831ff31ac3f07f96d8d7d9a7ca8b38afb8d07713da52b0f8374d80a7",
+      "mode": 33188
+    },
+    "landscape.ctg/src/context.rs": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/src/context.rs",
+      "sha256": "1f111cddc66eb6f9c1c8d5fa16fce86d470c748ea6e39ed6fef48f09c500f1fa",
+      "mode": 33188
+    },
+    "landscape.ctg/src/file_kernel.rs": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/src/file_kernel.rs",
+      "sha256": "b3c7544c54e162fd0c26c2bfaf64b677ee18d5cc0610b4302a8c886219032436",
+      "mode": 33188
+    },
+    "landscape.ctg/src/inventory.rs": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/src/inventory.rs",
+      "sha256": "3997af5733630a8828af4f0b50c92273be3b273edfaa67eda95f168d540d0c2f",
+      "mode": 33188
+    },
+    "landscape.ctg/src/lib.rs": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/src/lib.rs",
+      "sha256": "72f4ec026e9e3a9fdec90847b42d20a2783c1144719ae43985b21451c43f7c6b",
+      "mode": 33188
+    },
+    "landscape.ctg/src/memory.rs": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/src/memory.rs",
+      "sha256": "0cf860434f897bafbb6ba44cc16a1cb910a30c7370ba3482c203b28b636d83e9",
+      "mode": 33188
+    },
+    "landscape.ctg/src/surface.rs": {
+      "source": "/Users/feb/dev/cartridge/landscape.ctg/src/surface.rs",
+      "sha256": "bff64821b6a9ea147937e0b7f0060f82bdc4daa16b1be865aa983603d6c9332f",
+      "mode": 33188
+    },
+    "mcp.ctg/.cartridge/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/mcp.ctg/.cartridge/.gitignore",
+      "sha256": "f076c055ecd6ece41fa5f876021eeaad16846016ea2317cff27433008826f1f4",
+      "mode": 33188
+    },
+    "mcp.ctg/.cartridge/docs/approval.md": {
+      "source": "/Users/feb/dev/cartridge/mcp.ctg/.cartridge/docs/approval.md",
+      "sha256": "da2fc0d3181d3e15e35695bc8d9f0e8e9119e3874d4477141a12e688de23f231",
+      "mode": 33188
+    },
+    "mcp.ctg/.cartridge/docs/README.md": {
+      "source": "/Users/feb/dev/cartridge/mcp.ctg/.cartridge/docs/README.md",
+      "sha256": "2ae29948ff21eee2b87f09a5f4f9770864bf6bc9381baffcaedb3dce0d0c2479",
+      "mode": 33188
+    },
+    "mcp.ctg/.cartridge/memos/type/note.md": {
+      "source": "/Users/feb/dev/cartridge/mcp.ctg/.cartridge/memos/type/note.md",
+      "sha256": "b4cdf899ab4580b86d21bbfd2adf28808d610f5c1f16f0fb0c92514d10b4d908",
+      "mode": 33188
+    },
+    "mcp.ctg/.cartridge/memos/type/type.md": {
+      "source": "/Users/feb/dev/cartridge/mcp.ctg/.cartridge/memos/type/type.md",
+      "sha256": "71f82003eaa30155dc564fd89bfc3aca6ef39ab8342e762d0ec7524c8dd56cf0",
+      "mode": 33188
+    },
+    "mcp.ctg/.cartridge/PORT.md": {
+      "source": "/Users/feb/dev/cartridge/mcp.ctg/.cartridge/PORT.md",
+      "sha256": "8d8dd327f15939658f74c5e18a309b9acfda7c99563c014d2e6734ccb8231aac",
+      "mode": 33188
+    },
+    "mcp.ctg/.cartridge/tests/integration/approval.test.ts": {
+      "source": "/Users/feb/dev/cartridge/mcp.ctg/.cartridge/tests/integration/approval.test.ts",
+      "sha256": "0108b53a7b5e7ba5f83d1368463b9240403ff01311f3dbd5bdb6a59e008d78fc",
+      "mode": 33188
+    },
+    "mcp.ctg/.cartridge/tests/integration/refresh.test.ts": {
+      "source": "/Users/feb/dev/cartridge/mcp.ctg/.cartridge/tests/integration/refresh.test.ts",
+      "sha256": "c5861cea131b1a64a425c422a784ba6269fdb2a4f2f86f8408fb2578ff21016c",
+      "mode": 33188
+    },
+    "mcp.ctg/.cartridge/tests/unit/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/mcp.ctg/.cartridge/tests/unit/tests.rs",
+      "sha256": "f6a256ab3c7a80119c2cebba03252de1d98d64e91e5aebe2e07d433b135e8c50",
+      "mode": 33188
+    },
+    "mcp.ctg/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/mcp.ctg/.gitignore",
+      "sha256": "663ec4b6f6fbea402c9cad6d2eb7745783ed3a74428f5c7bb2d2da3913dc0ec9",
+      "mode": 33188
+    },
+    "mcp.ctg/Cargo.toml": {
+      "source": "/Users/feb/dev/cartridge/mcp.ctg/Cargo.toml",
+      "sha256": "37769378006fa384aa17ddc0da6fe52b9002132824ef7b78ca1661b940f7163f",
+      "mode": 33188
+    },
+    "mcp.ctg/cartridge.json": {
+      "source": "/Users/feb/dev/cartridge/mcp.ctg/cartridge.json",
+      "sha256": "ec07259953fc691ced92e6bc3a8341d3c29496a3e470299b69c32d5db3c42984",
+      "mode": 33188
+    },
+    "mcp.ctg/init.lua": {
+      "source": "/Users/feb/dev/cartridge/mcp.ctg/init.lua",
+      "sha256": "8d4bfe4a28337eff2bf5b47dc34a41bc83de11dccfdb016f5b9895d3fdca08ac",
+      "mode": 33188
+    },
+    "mcp.ctg/rustfmt.toml": {
+      "source": "/Users/feb/dev/cartridge/mcp.ctg/rustfmt.toml",
+      "sha256": "9aaa9837831ff31ac3f07f96d8d7d9a7ca8b38afb8d07713da52b0f8374d80a7",
+      "mode": 33188
+    },
+    "mcp.ctg/src/main.rs": {
+      "source": "/Users/feb/dev/cartridge/mcp.ctg/src/main.rs",
+      "sha256": "af253725e767161448261f3bcdcb2adf02d08f97c8deb17f8257920bec0c551d",
+      "mode": 33188
+    },
+    "mcp.ctg/src/service.rs": {
+      "source": "/Users/feb/dev/cartridge/mcp.ctg/src/service.rs",
+      "sha256": "883960f1f5b768e3818a216810065ddb2df2b569782a82c1c49629338d8d43d5",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/.gitignore",
+      "sha256": "f076c055ecd6ece41fa5f876021eeaad16846016ea2317cff27433008826f1f4",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/docs/board.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/docs/board.md",
+      "sha256": "973f645e2820f04b0fbf69d9148407f27d605797ea54191dbe8a334bad654a15",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/docs/context.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/docs/context.md",
+      "sha256": "c87c9dbac011d45ee67e2d913f694b8fcf7663b817afbefe36a30a6eae8a3838",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/docs/documents.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/docs/documents.md",
+      "sha256": "de9ff6ded6d35084cd6d207cbee54555074b5a477b5233b9cd42fd0e0c99f85e",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/docs/inventory.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/docs/inventory.md",
+      "sha256": "8fe6a22ca0dd12765393102e5f1bc9f2c4185f24786c8c88a12cc4de7f498ab6",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/docs/README.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/docs/README.md",
+      "sha256": "5e4f1ba7a788c638540db253b98227b098b7d803f55c1d37a7b789e134693775",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/docs/shadowing.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/docs/shadowing.md",
+      "sha256": "722c436af37e8101be1fb91f472c181b09391714d6e838e2445c3da9b03973a9",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/memos/note/core.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/memos/note/core.md",
+      "sha256": "d994b3c35b650d56c19f0482a29a28a986ba000d2222474c215f6dd19cc8abbb",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/memos/note/memo-resolver-design.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/memos/note/memo-resolver-design.md",
+      "sha256": "df1b60f6aaef2a55e0aadde448518c6bd86eb937285cdf537a5aa5d6b355de61",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/memos/note/memo.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/memos/note/memo.md",
+      "sha256": "dc1c4c1e7e89b7b4c3470ec0d56f2482679332ef8e770edb9881518888af1073",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/memos/note/plugin.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/memos/note/plugin.md",
+      "sha256": "a5ef33d002d9b92f140c74401478cb694afd35dcab54592eedd47f219b865644",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/memos/note/program-cartridge-contracts.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/memos/note/program-cartridge-contracts.md",
+      "sha256": "f1d0518455cb48bbf088cb40c63f7fc210ab885b48bf2d9b3845f1dd0d74361a",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/memos/note/program-checks.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/memos/note/program-checks.md",
+      "sha256": "e76358b62e6b7821b2c6aec57a2c6b54895fffa3a8eb23539e75547fadad4ace",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/memos/note/program-map.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/memos/note/program-map.md",
+      "sha256": "bb542021a4059f515278e9c7924690fd865fbd218322473905f5bea0be285573",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/memos/note/resolver-source-findings.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/memos/note/resolver-source-findings.md",
+      "sha256": "8d45c942bb1c67716ad98a29f630e3542302f5f38067044ef45513fed07a4580",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/memos/resource/memo-record-source.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/memos/resource/memo-record-source.md",
+      "sha256": "2551507da1facd37706582d6e85bdc620cbea7b88aafce8620c2a4eedaecaad9",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/memos/resource/memo-resolver-source.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/memos/resource/memo-resolver-source.md",
+      "sha256": "66ff02243f5bfab003d132a9415406f7e4bbd502abaad0b3f16fe916a7dd998f",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/memos/resource/memo-usage-source.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/memos/resource/memo-usage-source.md",
+      "sha256": "caaf9a0c7487fc3f3c339943b4832e90736357ffc9d2012be7e61cfd7d0dced0",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/memos/scope/native-memo-system.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/memos/scope/native-memo-system.md",
+      "sha256": "e6fb0764ad20abe70e0e1dfbf5f0c739964e2e0a30eae2311c9bc2be7ec0f8f1",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/memos/system/program-entry.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/memos/system/program-entry.md",
+      "sha256": "e43576c6bcda492003936819a8dc1978ad7026630becce8f7dbf777f8ce52eba",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/memos/system/resolver-guidance.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/memos/system/resolver-guidance.md",
+      "sha256": "df16b470416eabb36feff1634ba0b1102d06a94fec84cdbc9f5519eb51d42a73",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/memos/type/note.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/memos/type/note.md",
+      "sha256": "b4cdf899ab4580b86d21bbfd2adf28808d610f5c1f16f0fb0c92514d10b4d908",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/memos/type/type.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/memos/type/type.md",
+      "sha256": "71f82003eaa30155dc564fd89bfc3aca6ef39ab8342e762d0ec7524c8dd56cf0",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/PORT.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/PORT.md",
+      "sha256": "473a72f268a540bf0432bec0a4beaa5800ef054576c2293201ce4db66626778c",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/board/engine.json": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/board/engine.json",
+      "sha256": "78f3fe21c286ab8798a42efe3664036d8fd0f334841b2b30b974f1c6ad3a3fff",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/board/grammar.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/board/grammar.md",
+      "sha256": "ef86eb03e8768cecdcf76cd628ddd7b016b3809433feec6361245ba9346a0d48",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/board/prd.ts": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/board/prd.ts",
+      "sha256": "3266380d6e5d0bf38a214a939aa96a9da2751087fddd96e51cc9fd2614212cdc",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/board/README.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/board/README.md",
+      "sha256": "d3435761dab5b82eef529e83402df317005a6c2e291390f96a820d55418dbbd3",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/board/settings.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/board/settings.md",
+      "sha256": "e9b3f7db6a313634ea2ee19812368bc4203f332db58eda7b2e7532b4254e54d0",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/board/templates/prd.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/board/templates/prd.md",
+      "sha256": "e20927f1ca4fe61c5d14b38057e4e8d78370d1b791b8f3f40a824308cce6a5cc",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/board/templates/spec.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/board/templates/spec.md",
+      "sha256": "2f25baed0471daf9a5cf4d65383f8de5a14d1817e4610ffec9076d0fa8e1e824",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/board/workflows/analyze.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/board/workflows/analyze.md",
+      "sha256": "3b13c5694e5bec9dee9491856b501410de51ad7ecda92dc544ef9952841f041e",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/board/workflows/develop.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/board/workflows/develop.md",
+      "sha256": "18a6b3ee42ae3e07d1c29502a7cffea7cd16d287dbef30d2f006387a899a5174",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/board/workflows/verify.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/board/workflows/verify.md",
+      "sha256": "2ab105f4e225bb89054bf863b9c00c789cee0edaf920502b67d87cc66537e10a",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/system/base.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/system/base.md",
+      "sha256": "7072bf87d3dbdda6e1b4d3e7885733db0d70370870675a25073373bc092056d7",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/system/corrections.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/system/corrections.md",
+      "sha256": "bf2cffd928eb241ba9d9660ad73ce99426d8fcc24bf365db6be27cb22fc6de27",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/system/memos.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/system/memos.md",
+      "sha256": "cc0168c6736956f9c31eda8896866ccc4be50984920346b042de21284f22ff61",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/system/resolver-guidance.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/system/resolver-guidance.md",
+      "sha256": "df16b470416eabb36feff1634ba0b1102d06a94fec84cdbc9f5519eb51d42a73",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/system/summary.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/system/summary.md",
+      "sha256": "5af46817e71c7e27f0e4fae2f65af63b915def4c78af700a120f18b05f45f096",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/system/terminal-agent.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/system/terminal-agent.md",
+      "sha256": "664a2320ff56d7cfb4b2a679a56473674ce5944aa07bfb8e054e6c1408e6a234",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/system/workspace.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/system/workspace.md",
+      "sha256": "aecb180ae63e2633fc62aae05a9f66ea0fd6bc66f2dc7818f41f93988296b936",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/type/decision.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/type/decision.md",
+      "sha256": "3f86a3286d3c97dd791b052d36986e7ec7208f95bb6a106b6023187f1dcdd3c9",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/type/note.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/type/note.md",
+      "sha256": "e020c2127b218e92b44cd332fae7effe3d723a50017505587d7c33cf9b574c26",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/type/question.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/type/question.md",
+      "sha256": "a0b19afb3c0d0cb6ac265774bbc1ab33226bd71f5140c65eb7faf1df891d4d0a",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/type/resolver.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/type/resolver.md",
+      "sha256": "cd69eda7a8e6bbb957675ebed6bcc36bcf0ec8f17cd7a8e0bc1ac660921aedfc",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/type/resource.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/type/resource.md",
+      "sha256": "27c578fb93c72b41aef7b0504e03e919fda3ecb9a2c157f5e0f73c6ecfda8753",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/type/routine.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/type/routine.md",
+      "sha256": "08807a4c813f20dc196c44745547cfe2c2b4288537cca3012858be9c09ed25c5",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/type/scope.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/type/scope.md",
+      "sha256": "df4cf1c575af5b3415da9138273d55505c1c8afb2d2fe500e8f40e645dda9cc3",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/type/system.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/type/system.md",
+      "sha256": "944d7c20f4cd1def0ccd5a2385c4a5b2d5604a6f01e7d93b3e04261ab00f757a",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/type/type.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/type/type.md",
+      "sha256": "126e0fbaaa64b21bbbfc69329beeb56e0be1c9d468d4531f52a455b51eaa3c90",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/type/usage.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/type/usage.md",
+      "sha256": "67c783662ae26f08e0b44b6a55bb530e46dc7c3255def7b7f8ace272914d34e0",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/type/work.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/type/work.md",
+      "sha256": "6539b3f54b1ee04f45e55b7eb3ecf4ea6da6d0f60ae2dc5e12eb08d7fb3054de",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/usage/compose-usage.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/usage/compose-usage.md",
+      "sha256": "61e1feb4d849ef23ce1d18bf56a14730476e26c3932378c78454144bdd64d6a9",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/usage/edit-usage.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/usage/edit-usage.md",
+      "sha256": "2c4e844216fcf7d2e72482d6e1e38f461280c82f4082f5ad0fb28063f1fd9e40",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/usage/read-usage.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/usage/read-usage.md",
+      "sha256": "a89d78cd7e9f065d7340d9b8bb52eae0816d307d86dc4419c95f918e70eb024b",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/templates/seeds/usage/run-usage.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/templates/seeds/usage/run-usage.md",
+      "sha256": "494259a321dd5fefbf8a977d20c119a0e3c823cec034f440e453aad1471c4c8c",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/fixtures/documents/.gitattributes": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/fixtures/documents/.gitattributes",
+      "sha256": "17ae0f3588a0eef00a3a4e7c0226d7b75e872fde65ee8d41e468d8286fb647c2",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/fixtures/documents/example-crlf.jd": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/fixtures/documents/example-crlf.jd",
+      "sha256": "cbea98216d07e65d23d17f0f34f5d6375d7618bb789c4bf47f2927a95be52232",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/fixtures/documents/example.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/fixtures/documents/example.md",
+      "sha256": "16d32044899419128ebc6d21a60c4672e28479c278d5088c41bb20b970192ecb",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/fixtures/documents/manifest.json": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/fixtures/documents/manifest.json",
+      "sha256": "57d34f90c12ca00a27ab3f2d22f4a230312dd26586517ff9886828ed47d2fde6",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/fixtures/documents/ordinary.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/fixtures/documents/ordinary.md",
+      "sha256": "90edc6ca94b3213428b170bd80166c8e1065a8de631c92ffce345a4766dae305",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/fixtures/projections/.gitattributes": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/fixtures/projections/.gitattributes",
+      "sha256": "166ed80450dc0bc0cba414bd62eec0730bfb0f9cf70254625c9787e85d10624c",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/fixtures/projections/linked.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/fixtures/projections/linked.md",
+      "sha256": "e5b4e45d8624461c5e2fa8a1995b7b5b958ccccb0fbd02152e458dd20848f71e",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/fixtures/projections/main.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/fixtures/projections/main.md",
+      "sha256": "64c0e22fdc655b100a4df97f296d30de858c6b992c89bb9554de3e92eb478c73",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/fixtures/projections/manifest.json": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/fixtures/projections/manifest.json",
+      "sha256": "8f730ab51f7ea5b9744a896b90f1038ce84210b967a071d94178440edabf5b04",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/fixtures/projections/private.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/fixtures/projections/private.md",
+      "sha256": "efb5bdb45d7bc5d568e2d7227fdf223e7a609bf8ada37601ebd53311d4f2df96",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/fixtures/validation/.gitattributes": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/fixtures/validation/.gitattributes",
+      "sha256": "2d32780456b92185f0b4d485add631d361ead347307d79cba2a0336850ea4ece",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/fixtures/validation/manifest.json": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/fixtures/validation/manifest.json",
+      "sha256": "ccdc19ef4a7c75c8e3b6ec24ac0ff9b61d54a3da3059bb34e9e5ae2946b25bf2",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/fixtures/validation/valid-crlf.jd": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/fixtures/validation/valid-crlf.jd",
+      "sha256": "56f627b5556412c517ca406bcce0f86fb7d8d41015317b564da88e8b8b285b59",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/fixtures/validation/valid.md": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/fixtures/validation/valid.md",
+      "sha256": "15dcb82647ae50026fe9ec5b5b4404e80c014ab118683a6623775e674f0f3bd7",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/integration/board-engine.test.ts": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/integration/board-engine.test.ts",
+      "sha256": "71fdcfb6533ba614c314a0cfab1fef2dbe9146f7383c5b2469501e81a9d02dbc",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/integration/context.test.ts": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/integration/context.test.ts",
+      "sha256": "049511edaea3f8df891dfc439a9b3d928989174358692543bebe61278d5664b0",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/integration/file-kernel-context.test.ts": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/integration/file-kernel-context.test.ts",
+      "sha256": "9e4c9393ef7bbd96ed77f54c98303d1752cd18f29119be6f0a54ac217dc1d04a",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/integration/inventory.test.ts": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/integration/inventory.test.ts",
+      "sha256": "f5d959f37655db31828a7b92122e22aa5a22488d0f5ee47c818c6679ad20b546",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/integration/journal.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/integration/journal.rs",
+      "sha256": "ebb3ce11fc9f2b97e0ce971486717c83d9534bd541f25bcbf13bfe265091d518",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/integration/resolver.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/integration/resolver.rs",
+      "sha256": "110c3927794199da3bb6d55ce85aab1a49e5261a8cfe8f64f4ad0a6fe6a4489e",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/integration/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/integration/tests.rs",
+      "sha256": "3fa52226f9b394e9a2177b3aca6c6f7a296f6cebcb3dde003460d0371a3ec85b",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/integration/validation.test.ts": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/integration/validation.test.ts",
+      "sha256": "8bb1ee782c1857ceb5bc2657d2511ef3c1eba97c4cc277361542a456b02581b4",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/unit/board.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/unit/board.rs",
+      "sha256": "8e4e6d6b7d86f0739453cc2e418ea0d12750dcc3a25500859fac326deaf08c24",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/unit/document.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/unit/document.rs",
+      "sha256": "e05c70c9ba66506465d722c56dcaddfd92d611259236dff395fe6318a5a21c31",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/unit/projection.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/unit/projection.rs",
+      "sha256": "9efa78ffcf177de051145a979e3c560f65e56850635e3c2a972cd14d3658601e",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/unit/src/record/distill_tests.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/unit/src/record/distill_tests.rs",
+      "sha256": "67c1f37901b25cea7051c72ae9b501f8742b49b6680016a5bc5ffc851c49370e",
+      "mode": 33188
+    },
+    "memo.ctg/.cartridge/tests/unit/validation.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/unit/validation.rs",
+      "sha256": "ceab87cf2d31be3be3d283101c4d35a964258d4605390742c2e427437f5503ed",
+      "mode": 33188
+    },
+    "memo.ctg/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/.gitignore",
+      "sha256": "663ec4b6f6fbea402c9cad6d2eb7745783ed3a74428f5c7bb2d2da3913dc0ec9",
+      "mode": 33188
+    },
+    "memo.ctg/Cargo.toml": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/Cargo.toml",
+      "sha256": "f13638c2dbbfa651a747e9cd28d092a998eb7250cb846470833f0d5914e41dea",
+      "mode": 33188
+    },
+    "memo.ctg/cartridge.json": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/cartridge.json",
+      "sha256": "840fee2ad298651b82031f92f8bc4023a624ea5e8ab1b32d0bbe789d01cabedb",
+      "mode": 33188
+    },
+    "memo.ctg/init.lua": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/init.lua",
+      "sha256": "821bb06f038442dd93d27aa91a6d2804b9ebb63d733299ddd24bce08d82b1502",
+      "mode": 33188
+    },
+    "memo.ctg/rustfmt.toml": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/rustfmt.toml",
+      "sha256": "9aaa9837831ff31ac3f07f96d8d7d9a7ca8b38afb8d07713da52b0f8374d80a7",
+      "mode": 33188
+    },
+    "memo.ctg/src/board.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/src/board.rs",
+      "sha256": "35f1a79a8d700b4542f6ab0de447678790428094ce6d1c696c48a741588e460e",
+      "mode": 33188
+    },
+    "memo.ctg/src/context.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/src/context.rs",
+      "sha256": "49a94dad8a8b8113dabbeba34b5775eccb6697f30c4726363e3deb61098cd4bf",
+      "mode": 33188
+    },
+    "memo.ctg/src/document.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/src/document.rs",
+      "sha256": "27bf670fddd9e95d32b65c04c125f350c543ff481d68e259f90164e0b40d1ec5",
+      "mode": 33188
+    },
+    "memo.ctg/src/inventory.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/src/inventory.rs",
+      "sha256": "69601e09608f1392bd083f22908a7d2616348e7b257b67a98a2cc50108b78651",
+      "mode": 33188
+    },
+    "memo.ctg/src/main.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/src/main.rs",
+      "sha256": "85166c6bb38974396319f5c13c04c1eed6c38cf9b8eb9963732a068a1ea0e63a",
+      "mode": 33188
+    },
+    "memo.ctg/src/projection.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/src/projection.rs",
+      "sha256": "17679c1389951928b8d897a89cf163dd33a415ea8d9c46fef8793029757c9eaa",
+      "mode": 33188
+    },
+    "memo.ctg/src/record.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/src/record.rs",
+      "sha256": "7c55a2cacf01d59e6d2f1a52f4686551f1f9443ae79fb85916e536142fbd8a07",
+      "mode": 33188
+    },
+    "memo.ctg/src/resolver.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/src/resolver.rs",
+      "sha256": "71b7b58334d42b2a578d1623985e6c99fce5f0208600f265e9dae21ffd371574",
+      "mode": 33188
+    },
+    "memo.ctg/src/service.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/src/service.rs",
+      "sha256": "2843d9a750e6965d08347e5b02a4d306cd254e8e4876a341ac5dd7edcc91d637",
+      "mode": 33188
+    },
+    "memo.ctg/src/usage.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/src/usage.rs",
+      "sha256": "e60dc37d0a208f3204af9a2e2a78484a1cf310ce4b27628227a1b5c15c76f4ac",
+      "mode": 33188
+    },
+    "memo.ctg/src/validation.rs": {
+      "source": "/Users/feb/dev/cartridge/memo.ctg/src/validation.rs",
+      "sha256": "e917d1cc8fe73ecde64c2208e25633dc594aafc3bcd3ce84027b2bf3ce273891",
+      "mode": 33188
+    },
+    "memory-tool.ctg/.cartridge/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/memory-tool.ctg/.cartridge/.gitignore",
+      "sha256": "f076c055ecd6ece41fa5f876021eeaad16846016ea2317cff27433008826f1f4",
+      "mode": 33188
+    },
+    "memory-tool.ctg/.cartridge/memos/type/note.md": {
+      "source": "/Users/feb/dev/cartridge/memory-tool.ctg/.cartridge/memos/type/note.md",
+      "sha256": "b4cdf899ab4580b86d21bbfd2adf28808d610f5c1f16f0fb0c92514d10b4d908",
+      "mode": 33188
+    },
+    "memory-tool.ctg/.cartridge/memos/type/type.md": {
+      "source": "/Users/feb/dev/cartridge/memory-tool.ctg/.cartridge/memos/type/type.md",
+      "sha256": "71f82003eaa30155dc564fd89bfc3aca6ef39ab8342e762d0ec7524c8dd56cf0",
+      "mode": 33188
+    },
+    "memory-tool.ctg/.cartridge/PORT.md": {
+      "source": "/Users/feb/dev/cartridge/memory-tool.ctg/.cartridge/PORT.md",
+      "sha256": "7416cc36993badcbd91f596e5dfab678bf4bb027f3c3e50589a3eba53759aa36",
+      "mode": 33188
+    },
+    "memory-tool.ctg/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/memory-tool.ctg/.gitignore",
+      "sha256": "663ec4b6f6fbea402c9cad6d2eb7745783ed3a74428f5c7bb2d2da3913dc0ec9",
+      "mode": 33188
+    },
+    "memory-tool.ctg/Cargo.toml": {
+      "source": "/Users/feb/dev/cartridge/memory-tool.ctg/Cargo.toml",
+      "sha256": "add45debdef1ffeb2999dc175a7a67ca120b27654d8babed1bed8653dd5e7e8d",
+      "mode": 33188
+    },
+    "memory-tool.ctg/cartridge.json": {
+      "source": "/Users/feb/dev/cartridge/memory-tool.ctg/cartridge.json",
+      "sha256": "d5e7a6ec85012eeafaf0c18bebc7953991309f0fb443a9cc7dec5d1e882d4f4c",
+      "mode": 33188
+    },
+    "memory-tool.ctg/init.lua": {
+      "source": "/Users/feb/dev/cartridge/memory-tool.ctg/init.lua",
+      "sha256": "f545034cfc98d0bbca7a60ef2272752dbf6c119f5102e0387943f1cc857be06c",
+      "mode": 33188
+    },
+    "memory-tool.ctg/rustfmt.toml": {
+      "source": "/Users/feb/dev/cartridge/memory-tool.ctg/rustfmt.toml",
+      "sha256": "9aaa9837831ff31ac3f07f96d8d7d9a7ca8b38afb8d07713da52b0f8374d80a7",
+      "mode": 33188
+    },
+    "memory-tool.ctg/src/main.rs": {
+      "source": "/Users/feb/dev/cartridge/memory-tool.ctg/src/main.rs",
+      "sha256": "478f05de3d1d790d2796cdd762c82889c762eb2738a51267bd4e32459c3712d9",
+      "mode": 33188
+    },
+    "proxy.ctg/.cartridge/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/.cartridge/.gitignore",
+      "sha256": "f076c055ecd6ece41fa5f876021eeaad16846016ea2317cff27433008826f1f4",
+      "mode": 33188
+    },
+    "proxy.ctg/.cartridge/docs/context.md": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/.cartridge/docs/context.md",
+      "sha256": "de2a5460397b8361b2bc4c06706f3e4ca119d94d06861f7800f33381959ab70b",
+      "mode": 33188
+    },
+    "proxy.ctg/.cartridge/docs/continuations.md": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/.cartridge/docs/continuations.md",
+      "sha256": "d63eaa91d3f18ce23a3691018cf2b60a360a0f3c5bfe9ca385657859481a04ac",
+      "mode": 33188
+    },
+    "proxy.ctg/.cartridge/docs/README.md": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/.cartridge/docs/README.md",
+      "sha256": "c02ef81ee3f2d7dbb18e0040b64ad6b68320252529fb7966cf39d3f29bc89540",
+      "mode": 33188
+    },
+    "proxy.ctg/.cartridge/docs/traces.md": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/.cartridge/docs/traces.md",
+      "sha256": "edfdce529f03ea955c66ed5f88d116970e1b123607d427b29c262ac618874058",
+      "mode": 33188
+    },
+    "proxy.ctg/.cartridge/docs/usage.md": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/.cartridge/docs/usage.md",
+      "sha256": "4a4aaded828076bd8c0a986e5def8a0d934b79e0a9de43499703744b9f2317b1",
+      "mode": 33188
+    },
+    "proxy.ctg/.cartridge/memos/routine/check-recall.md": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/.cartridge/memos/routine/check-recall.md",
+      "sha256": "a5df38c81d4c865b74befa142ec156be7170109f33916f2ea5edccf58515ea9c",
+      "mode": 33188
+    },
+    "proxy.ctg/.cartridge/memos/type/note.md": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/.cartridge/memos/type/note.md",
+      "sha256": "b4cdf899ab4580b86d21bbfd2adf28808d610f5c1f16f0fb0c92514d10b4d908",
+      "mode": 33188
+    },
+    "proxy.ctg/.cartridge/memos/type/type.md": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/.cartridge/memos/type/type.md",
+      "sha256": "71f82003eaa30155dc564fd89bfc3aca6ef39ab8342e762d0ec7524c8dd56cf0",
+      "mode": 33188
+    },
+    "proxy.ctg/.cartridge/PORT.md": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/.cartridge/PORT.md",
+      "sha256": "33ab4838f322c821370f9d15b004a6a56a435e390769f7aa572477855525ec48",
+      "mode": 33188
+    },
+    "proxy.ctg/.cartridge/tests/integration/recall.test.ts": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/.cartridge/tests/integration/recall.test.ts",
+      "sha256": "f1d684333a7f5f13a427800ca10201b4a65cd7d682776a4acea70b54d0c2c1af",
+      "mode": 33188
+    },
+    "proxy.ctg/.cartridge/tests/unit/context.rs": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/.cartridge/tests/unit/context.rs",
+      "sha256": "b36fde021e45692bddcc1c89fee7627ae4cc807ebba8b4cdc17d762d928560f4",
+      "mode": 33188
+    },
+    "proxy.ctg/.cartridge/tests/unit/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/.cartridge/tests/unit/tests.rs",
+      "sha256": "51a140dd59182eb72fe8f3bff36be594215c31c0fe38a291b35885b3a7a7be67",
+      "mode": 33188
+    },
+    "proxy.ctg/.cartridge/tests/unit/wire/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/.cartridge/tests/unit/wire/tests.rs",
+      "sha256": "5eb693e77d9d446220a82efdcdfc0971dae09ae4626082c487b089f252af76fa",
+      "mode": 33188
+    },
+    "proxy.ctg/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/.gitignore",
+      "sha256": "663ec4b6f6fbea402c9cad6d2eb7745783ed3a74428f5c7bb2d2da3913dc0ec9",
+      "mode": 33188
+    },
+    "proxy.ctg/Cargo.toml": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/Cargo.toml",
+      "sha256": "fdfb28637695c2b3c246933e225dfdd2844437c5703a9f8f4e877cedc7a97ba1",
+      "mode": 33188
+    },
+    "proxy.ctg/cartridge.json": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/cartridge.json",
+      "sha256": "f6cf072554bb09bf721ca6459f045f0bc8caf4f2328edfb9e55e20b45b927df4",
+      "mode": 33188
+    },
+    "proxy.ctg/init.lua": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/init.lua",
+      "sha256": "4753e01b400d5096049cda26420c3ddae5336275ed7c83a2ee44ed61f273b7fd",
+      "mode": 33188
+    },
+    "proxy.ctg/rustfmt.toml": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/rustfmt.toml",
+      "sha256": "9aaa9837831ff31ac3f07f96d8d7d9a7ca8b38afb8d07713da52b0f8374d80a7",
+      "mode": 33188
+    },
+    "proxy.ctg/src/context.rs": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/src/context.rs",
+      "sha256": "3d1a0fbe1bf3b9c11d72e31cdae649cb34770f6ab9bcaa307910c77401cbc0c4",
+      "mode": 33188
+    },
+    "proxy.ctg/src/continuation.rs": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/src/continuation.rs",
+      "sha256": "9a658c80b8fc10a1e4ea73f6cd0273ce51c98e214e76c075633a7e459fdc809b",
+      "mode": 33188
+    },
+    "proxy.ctg/src/main.rs": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/src/main.rs",
+      "sha256": "2fe510fd73a41534785a3114e7bdb3ea1bb998b39b880f4cc68e150e9b1ae3e8",
+      "mode": 33188
+    },
+    "proxy.ctg/src/service.rs": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/src/service.rs",
+      "sha256": "e3bbc5803eb5481164d0609421fc944305d17cc97779c05e1bb9784a04192a30",
+      "mode": 33188
+    },
+    "proxy.ctg/src/streaming.rs": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/src/streaming.rs",
+      "sha256": "bc929101874c799422e543643bb938be14651ea788a248c70827c8ffc66eefde",
+      "mode": 33188
+    },
+    "proxy.ctg/src/trace.rs": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/src/trace.rs",
+      "sha256": "9861f9729ae47892f1031f55ad4c7029c471a8a34112e6441f5013946d736fe3",
+      "mode": 33188
+    },
+    "proxy.ctg/src/usage.rs": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/src/usage.rs",
+      "sha256": "861cdff66fb23ff919df6c6a972ac228e529c61a6606e40215ebafb362f372dd",
+      "mode": 33188
+    },
+    "proxy.ctg/src/wire.rs": {
+      "source": "/Users/feb/dev/cartridge/proxy.ctg/src/wire.rs",
+      "sha256": "a89549f7f9eafc07ceb2fe6da193e04deb8569c67dd17af59841eb726949864a",
+      "mode": 33188
+    },
+    "pty.ctg/.cartridge/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/.cartridge/.gitignore",
+      "sha256": "f076c055ecd6ece41fa5f876021eeaad16846016ea2317cff27433008826f1f4",
+      "mode": 33188
+    },
+    "pty.ctg/.cartridge/docs/README.md": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/.cartridge/docs/README.md",
+      "sha256": "994bfccee735e5eaee9ed426dc310bd6d197794a7cd35375bbfb7634b24dabf6",
+      "mode": 33188
+    },
+    "pty.ctg/.cartridge/memos/type/note.md": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/.cartridge/memos/type/note.md",
+      "sha256": "b4cdf899ab4580b86d21bbfd2adf28808d610f5c1f16f0fb0c92514d10b4d908",
+      "mode": 33188
+    },
+    "pty.ctg/.cartridge/memos/type/type.md": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/.cartridge/memos/type/type.md",
+      "sha256": "71f82003eaa30155dc564fd89bfc3aca6ef39ab8342e762d0ec7524c8dd56cf0",
+      "mode": 33188
+    },
+    "pty.ctg/.cartridge/PORT.md": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/.cartridge/PORT.md",
+      "sha256": "71ab2efc906100f185c1a979abf638cdcdb2b82238dc1a6ea243dfa46c74e506",
+      "mode": 33188
+    },
+    "pty.ctg/.cartridge/tests/integration/process.rs": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/.cartridge/tests/integration/process.rs",
+      "sha256": "c626e7ef298d9dfabedeaef8e95daae2d1a03175b4ce02a568daef2e6eec41ca",
+      "mode": 33188
+    },
+    "pty.ctg/.cartridge/tests/unit/grid/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/.cartridge/tests/unit/grid/tests.rs",
+      "sha256": "c653c334763fa60fc1805c6cedfbd0661cf0f62498cf9a7b1531480b9c794245",
+      "mode": 33188
+    },
+    "pty.ctg/.cartridge/tests/unit/input/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/.cartridge/tests/unit/input/tests.rs",
+      "sha256": "6796db362a7fac3070ce48dce0f7450278ec2b2bdf626dc7dfad3c2a5e5b2c8c",
+      "mode": 33188
+    },
+    "pty.ctg/.cartridge/tests/unit/marks/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/.cartridge/tests/unit/marks/tests.rs",
+      "sha256": "415313919d95e1d868fccb9848f512b071cd9e409fbde7b0e54c56e5ef8405eb",
+      "mode": 33188
+    },
+    "pty.ctg/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/.gitignore",
+      "sha256": "663ec4b6f6fbea402c9cad6d2eb7745783ed3a74428f5c7bb2d2da3913dc0ec9",
+      "mode": 33188
+    },
+    "pty.ctg/Cargo.toml": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/Cargo.toml",
+      "sha256": "124e19977fd1914c4c17ae0180ca1c32930478ec65cca8bce53143a557970ae5",
+      "mode": 33188
+    },
+    "pty.ctg/cartridge.json": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/cartridge.json",
+      "sha256": "3a119336e42dbc759c94ae1cb872d430ff567e747a128515a529d1a15f72873e",
+      "mode": 33188
+    },
+    "pty.ctg/init.lua": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/init.lua",
+      "sha256": "b824ed4208b9d83aad988e3ae41bbe09099e15e88541a7418c9fecf88a892442",
+      "mode": 33188
+    },
+    "pty.ctg/rustfmt.toml": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/rustfmt.toml",
+      "sha256": "9aaa9837831ff31ac3f07f96d8d7d9a7ca8b38afb8d07713da52b0f8374d80a7",
+      "mode": 33188
+    },
+    "pty.ctg/src/grid.rs": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/src/grid.rs",
+      "sha256": "e0f51ebcf11a7d2a4f8b58c3d907e8fc1116df4b06e797e8314d48e9fef91d16",
+      "mode": 33188
+    },
+    "pty.ctg/src/input.rs": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/src/input.rs",
+      "sha256": "140c7a66580c16ded709eb4c45cf14fc534556cf9a05fe7c05c2a0e2d0b3fb3d",
+      "mode": 33188
+    },
+    "pty.ctg/src/main.rs": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/src/main.rs",
+      "sha256": "cf86aa2d900d6f1e622f25382890ab8f23a8309101e46bb33a6edb82fbaa6a3c",
+      "mode": 33188
+    },
+    "pty.ctg/src/marks.rs": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/src/marks.rs",
+      "sha256": "b7cfeccc2ae40e1ee973dd5cef55ff594de5ecb57aa999423c70a4c3fd6e2597",
+      "mode": 33188
+    },
+    "pty.ctg/src/tool.rs": {
+      "source": "/Users/feb/dev/cartridge/pty.ctg/src/tool.rs",
+      "sha256": "e2b1a66438458d086f0f6b42b7e5793028452cb051436dbeb9ca2e7924e86eb6",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/.gitignore",
+      "sha256": "f076c055ecd6ece41fa5f876021eeaad16846016ea2317cff27433008826f1f4",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/docs/capabilities.md": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/docs/capabilities.md",
+      "sha256": "41079cb4b688881def398bc783c7abfb94267fd34f0112a42d44beb923225838",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/docs/cost-latency.md": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/docs/cost-latency.md",
+      "sha256": "1e11fb1d6a4f9e0b79cf2451c88080b4b1d8a1198289ec9e82c94dc6fd6103ab",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/docs/decisions.md": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/docs/decisions.md",
+      "sha256": "4451a54fa5ba70c156a469566c52375004a824b8755a808bd16d6fea496fe79b",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/docs/recovery.md": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/docs/recovery.md",
+      "sha256": "1f9c002332186a74d4028e3f993f1dd31d303e2b3d743c9851f48b9f36b864ae",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/docs/routing-handoff.json": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/docs/routing-handoff.json",
+      "sha256": "2d11259faf62a3c3e3540f5f536ec6169fc671cbe8c8651a5b723baac56127ab",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/docs/routing-handoff.md": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/docs/routing-handoff.md",
+      "sha256": "cfbb8555afd5b241fb95a532c3769b999424a465245a29566be4ebccf591b597",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/memos/type/note.md": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/memos/type/note.md",
+      "sha256": "b4cdf899ab4580b86d21bbfd2adf28808d610f5c1f16f0fb0c92514d10b4d908",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/memos/type/type.md": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/memos/type/type.md",
+      "sha256": "71f82003eaa30155dc564fd89bfc3aca6ef39ab8342e762d0ec7524c8dd56cf0",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/PORT.md": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/PORT.md",
+      "sha256": "f4f2d468e866d09d9bb161ff409301c66576eb3745e4a8f63fd95243773534e4",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/tests/integration/routing-handoff.test.ts": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/tests/integration/routing-handoff.test.ts",
+      "sha256": "35fa1c92e913df0e56583eafd90f03e602a965472b4b34a8a807837600d9589f",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/tests/unit/auth/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/tests/unit/auth/tests.rs",
+      "sha256": "6d5a49250c7e86f98a4bcdbc7ecb091c4d8974eefc32a4233b77e0a4be7a4dd9",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/tests/unit/catalog/capabilities.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/tests/unit/catalog/capabilities.rs",
+      "sha256": "560d71955773d8bdbc821a2de4ea09cd49a7caa61c68c3e3fa15673dc339775f",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/tests/unit/protocol/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/tests/unit/protocol/tests.rs",
+      "sha256": "ea32377c974dbd3809b965184bd0e8d50e1764458696d7645a584271dea16e49",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/tests/unit/proxy/capabilities.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/tests/unit/proxy/capabilities.rs",
+      "sha256": "37bb1bcaa46a34fc072b0041ea9add7bc2651c9094fcded181d06fd484aa0089",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/tests/unit/proxy/reload_tests.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/tests/unit/proxy/reload_tests.rs",
+      "sha256": "a102c1f0d7dff1dc9e247a609ae23976710f8f7ae9b279d229d1ef07484b0c07",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/tests/unit/settings/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/tests/unit/settings/tests.rs",
+      "sha256": "83a5407745cae124044a6896a3b087064df492369b48ab798bf423f906f13e81",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/tests/unit/sync/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/tests/unit/sync/tests.rs",
+      "sha256": "8260bcc86bf9e377c2ee4eb9445b12db6f3fa1aeb1392e72e66e2cd9b0c08ed9",
+      "mode": 33188
+    },
+    "router.ctg/.cartridge/tests/unit/telemetry.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.cartridge/tests/unit/telemetry.rs",
+      "sha256": "97b8045543c4df257910bbf39b6f6b8ed2bb46004fe3028f96a14bd764d1a995",
+      "mode": 33188
+    },
+    "router.ctg/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/.gitignore",
+      "sha256": "663ec4b6f6fbea402c9cad6d2eb7745783ed3a74428f5c7bb2d2da3913dc0ec9",
+      "mode": 33188
+    },
+    "router.ctg/Cargo.toml": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/Cargo.toml",
+      "sha256": "18aa698f757b30358c7c1705993932d50a4825cb79b7662787f53a4a46234b2c",
+      "mode": 33188
+    },
+    "router.ctg/cartridge.json": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/cartridge.json",
+      "sha256": "215c6b949619a4d2b58f92335a08dc54631c9ce9d936e4ccfbacd146f1e88395",
+      "mode": 33188
+    },
+    "router.ctg/init.lua": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/init.lua",
+      "sha256": "3430e53961fddc5ea367773ad125bb89cce1e68b8eebc07ee2ce61644f315349",
+      "mode": 33188
+    },
+    "router.ctg/rustfmt.toml": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/rustfmt.toml",
+      "sha256": "9aaa9837831ff31ac3f07f96d8d7d9a7ca8b38afb8d07713da52b0f8374d80a7",
+      "mode": 33188
+    },
+    "router.ctg/src/auth.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/src/auth.rs",
+      "sha256": "a7c6332e33137626632834c87c1de344c510a6869b0994aea4504115eb0696b6",
+      "mode": 33188
+    },
+    "router.ctg/src/catalog.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/src/catalog.rs",
+      "sha256": "14342e3f717740e671446c7afbe9109d7ea8b54c842810380cbf2a5e38dae327",
+      "mode": 33188
+    },
+    "router.ctg/src/decision.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/src/decision.rs",
+      "sha256": "97a83bd771cae03daea876d69a73386de020bc8f7e0b348a4dc95f9b598c11ca",
+      "mode": 33188
+    },
+    "router.ctg/src/frontier.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/src/frontier.rs",
+      "sha256": "df5adfbd4ef4f1823146020444eff63f9cd312a58721bd572befb40ff54f480f",
+      "mode": 33188
+    },
+    "router.ctg/src/health.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/src/health.rs",
+      "sha256": "724a0014a805823c8815a8d7e952b9bfe1096c5144d49d96c5839eecc96810a6",
+      "mode": 33188
+    },
+    "router.ctg/src/known.json": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/src/known.json",
+      "sha256": "5c82a98dbbbf48a80277f2d1ad740cae5ca5705e76b87cfc669e4560b1515b62",
+      "mode": 33188
+    },
+    "router.ctg/src/launch.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/src/launch.rs",
+      "sha256": "5f537916250084ad2fe1c7af1cfa0becb5b72f829f17dbb3fd7a8c33cc34e1d1",
+      "mode": 33188
+    },
+    "router.ctg/src/lib.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/src/lib.rs",
+      "sha256": "eb270b5a9582b75265ed2358f97dfdd0f26cb13c23369a322a80abd160a4ccb5",
+      "mode": 33188
+    },
+    "router.ctg/src/main.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/src/main.rs",
+      "sha256": "2f0ce16e0db2baa7d6dd84c53d339112bbccc7f9b974aebc5f2949a5aa1815c9",
+      "mode": 33188
+    },
+    "router.ctg/src/protocol.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/src/protocol.rs",
+      "sha256": "2e0367193ffb669ddde6fb6d7b4c0a9a40fbce407ccb2cd66f077ae28e17b398",
+      "mode": 33188
+    },
+    "router.ctg/src/proxy.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/src/proxy.rs",
+      "sha256": "1276d3d9bf2e0c86830cd7275952c9cb742c68e83d55855c7b7c083ee48e5875",
+      "mode": 33188
+    },
+    "router.ctg/src/requirements.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/src/requirements.rs",
+      "sha256": "a7d0c82d449fdd3bd1873079ba9e45a601e084e68d3e7c0839349974d8212815",
+      "mode": 33188
+    },
+    "router.ctg/src/settings.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/src/settings.rs",
+      "sha256": "4d1d81d5b3b8ab2ed39d828af06c2d1eb289d50078c70c5e67eeaec3c64214e2",
+      "mode": 33188
+    },
+    "router.ctg/src/sync.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/src/sync.rs",
+      "sha256": "c8cf2a80dc0df8caf04fa5c9c94fb5d2059031acd2bdf535836099bc3d3075d3",
+      "mode": 33188
+    },
+    "router.ctg/src/telemetry.rs": {
+      "source": "/Users/feb/dev/cartridge/router.ctg/src/telemetry.rs",
+      "sha256": "6aece403b3c8aff1b03177b1737c0a1d6f3a0444474860ef077f12c3bf56a6d4",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/.gitignore",
+      "sha256": "f076c055ecd6ece41fa5f876021eeaad16846016ea2317cff27433008826f1f4",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/docs/capacity-benchmark.md": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/docs/capacity-benchmark.md",
+      "sha256": "03124b30c9c347d8a0ac79d55b12cbd2d416c1910aee9639b5d730afa6dafe25",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/docs/change-records.md": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/docs/change-records.md",
+      "sha256": "d97571b03407d62b9c3fb1d5a59c3e028f5e90f3551868fb50b2b84dcf688555",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/docs/channel-cursors.md": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/docs/channel-cursors.md",
+      "sha256": "88c33f81d2788a8f23d42f7be2ea589ff7e119a356aa8ea8ce9064fa478efade",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/docs/channels.md": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/docs/channels.md",
+      "sha256": "9c619846df4ead4506b3253f78d56e19315b43b93de266900b4e757a770da02b",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/docs/client-mapping.md": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/docs/client-mapping.md",
+      "sha256": "4c195e767ce7aa7f64aaf8bb36411c6832a8b9179b951e165fd01efe41076dc5",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/docs/mailbox.md": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/docs/mailbox.md",
+      "sha256": "d29c92f40560dc982d64c3f5b4a692841d780e59951a75d4f5d809359dcd4e8e",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/docs/observations.md": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/docs/observations.md",
+      "sha256": "5c2b83003a4b750ae6fffbb77c8b52d56f3ef2d2f8c7eb55675c0e2193e4ce0d",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/docs/README.md": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/docs/README.md",
+      "sha256": "3380ab548c46c25509d9086d680466606394ba646bf47ac64e73385ec0244763",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/docs/retention.md": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/docs/retention.md",
+      "sha256": "fc1a1e5e226294cc78e68350585391ee775a59a55b2f4477a824c9371f434045",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/docs/roster.md": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/docs/roster.md",
+      "sha256": "f3d3922cc2f2f897f8354f24f74fbb062258cf27ffd1ab254626822b9ac09e94",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/memos/type/note.md": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/memos/type/note.md",
+      "sha256": "b4cdf899ab4580b86d21bbfd2adf28808d610f5c1f16f0fb0c92514d10b4d908",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/memos/type/type.md": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/memos/type/type.md",
+      "sha256": "71f82003eaa30155dc564fd89bfc3aca6ef39ab8342e762d0ec7524c8dd56cf0",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/PORT.md": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/PORT.md",
+      "sha256": "1815afb1f7679eeed4b2d20c8656fbeb354a867a8f02706996df11c492135863",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/integration/change-records.test.ts": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/integration/change-records.test.ts",
+      "sha256": "56611256a47d763dd4ebe014e7b82f122888a483009f182c33df4812a8eaee42",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/integration/channel-cursors.test.ts": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/integration/channel-cursors.test.ts",
+      "sha256": "3e77da11a4a11ae80f57f5e875042dc1d38ddd28363f92241faa17d2e6a426aa",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/integration/channels.test.ts": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/integration/channels.test.ts",
+      "sha256": "fde9433ad59a35f157510dd2d4656a0282a757e2b8fd2e7edc5b993d06f0e786",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/integration/mailbox.test.ts": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/integration/mailbox.test.ts",
+      "sha256": "49f89b5e63acbd0a844a5ac74ec8baf0d50812315a0a43a4c89ca7704a9f77f7",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/integration/mapping.test.ts": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/integration/mapping.test.ts",
+      "sha256": "d8253cede757c915a1cb6032b293425d23effdb4010dda50d64cf486928af89d",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/integration/observations.test.ts": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/integration/observations.test.ts",
+      "sha256": "ead875d65915dd6c498a99d833eaa3a318a003be7c9ba8a545f0e8467b2fc903",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/integration/retention.test.ts": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/integration/retention.test.ts",
+      "sha256": "54ee87ee00510677cf02b2b29d396733f04bbd32a372e5c52d063ea6f329ebb6",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/integration/roster.test.ts": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/integration/roster.test.ts",
+      "sha256": "f0841d783827be61e7604387b803a21a74155c8b7c35fab1a1cd4a0e855f3880",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/unit/main/change_records_tests.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/unit/main/change_records_tests.rs",
+      "sha256": "8042bba380cf2ff075d0c23dcdf2482f740592822823ab66c7520ad092afc66c",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/unit/main/channel_cursor_tests.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/unit/main/channel_cursor_tests.rs",
+      "sha256": "3790dab99a481058ffd0075a77c1a578208dfad98ffebf39fd8661c43c7361ae",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/unit/main/channel_tests.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/unit/main/channel_tests.rs",
+      "sha256": "4d019c690c55d09b49fd29079705863d78d0aaad8b9a5faec50e85a3bda512c9",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/unit/main/mailbox_tests.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/unit/main/mailbox_tests.rs",
+      "sha256": "7800379bedea5ca7158ed62c4843a0f7894ce9f1f0c33a60339853a718310f26",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/unit/main/mapping_tests.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/unit/main/mapping_tests.rs",
+      "sha256": "255bc5245fdf45fb81627b9d0212a63bfa51c2b0794e5a395bfaf1c2398910d2",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/unit/main/observation_tests.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/unit/main/observation_tests.rs",
+      "sha256": "b46676a060b61392b714005badfec3e226502677fdc8dd040190f92a03cac46f",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/unit/main/repair_tests.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/unit/main/repair_tests.rs",
+      "sha256": "d228a1519c41d16cac9697a63912f02ef034cb761d2def6635869f7840829f57",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/unit/main/retention_tests.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/unit/main/retention_tests.rs",
+      "sha256": "9b13b70dbe62cd93128bcfdab5c89e2ae54979dddad6f49d4842b9b70960d291",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/unit/main/roster_tests.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/unit/main/roster_tests.rs",
+      "sha256": "3671c6ac761ed55c8d0fc203018a97236219feeae97ae300f8b0eeb98f46618e",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/unit/main/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/unit/main/tests.rs",
+      "sha256": "6ab29e4a5020cf1f4124f992afe0e8b1025ce911edfe4a808ef5e7e560c3c212",
+      "mode": 33188
+    },
+    "sessions.ctg/.cartridge/tests/unit/recovery.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.cartridge/tests/unit/recovery.rs",
+      "sha256": "345b419f8f194d2a29f9511a673317063d99990abf9368823e1abdc3947d6beb",
+      "mode": 33188
+    },
+    "sessions.ctg/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/.gitignore",
+      "sha256": "663ec4b6f6fbea402c9cad6d2eb7745783ed3a74428f5c7bb2d2da3913dc0ec9",
+      "mode": 33188
+    },
+    "sessions.ctg/Cargo.toml": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/Cargo.toml",
+      "sha256": "35e12f2d7bfa6161f9beb75a5302988b69e29f72119803cecdc586aa7305c8ad",
+      "mode": 33188
+    },
+    "sessions.ctg/cartridge.json": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/cartridge.json",
+      "sha256": "780e29049d66eb5414f7a4ba06ada0818fa9a98858f1d3963913537c1d635af3",
+      "mode": 33188
+    },
+    "sessions.ctg/init.lua": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/init.lua",
+      "sha256": "f7d27e6992a5547a89028ca64716945299eecb24152c47ea98a83b7bf3b2298b",
+      "mode": 33188
+    },
+    "sessions.ctg/rustfmt.toml": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/rustfmt.toml",
+      "sha256": "9aaa9837831ff31ac3f07f96d8d7d9a7ca8b38afb8d07713da52b0f8374d80a7",
+      "mode": 33188
+    },
+    "sessions.ctg/src/change_record.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/src/change_record.rs",
+      "sha256": "686a8bb4ca5415e59c7c6a98e4be9d147afbfbbdb1e5ff7268e7422149b3cfd0",
+      "mode": 33188
+    },
+    "sessions.ctg/src/changes.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/src/changes.rs",
+      "sha256": "ae4220f44a013663b29f93097028634a403bdaeb988b23cf0ef781ef75c257de",
+      "mode": 33188
+    },
+    "sessions.ctg/src/channels.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/src/channels.rs",
+      "sha256": "0c933b11fc49ab3e8c522b2592dc22d0dfb4c33240bd52e78aca65fa6fa2eb07",
+      "mode": 33188
+    },
+    "sessions.ctg/src/lib.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/src/lib.rs",
+      "sha256": "e7e7ac5dd3a3e0f6b151846ac88370bdcb07faeb417507c9367d759838e5daeb",
+      "mode": 33188
+    },
+    "sessions.ctg/src/mailbox.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/src/mailbox.rs",
+      "sha256": "ed8119babe71b1d1039eee80fb67a7f6f7672dacc890fd4ca08925c7a92bd535",
+      "mode": 33188
+    },
+    "sessions.ctg/src/main.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/src/main.rs",
+      "sha256": "1beedc1ae44b363230942a22dcdcd36650bd899a39de6cda9f224e4ebc734de3",
+      "mode": 33188
+    },
+    "sessions.ctg/src/mapping.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/src/mapping.rs",
+      "sha256": "618c5afd412d936bfd143da74e5d23fb807d8adf2ea601de8d36fceffa2cf92f",
+      "mode": 33188
+    },
+    "sessions.ctg/src/observations.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/src/observations.rs",
+      "sha256": "f07be68e70494bbf588e41a907a96477236ec16de4a1f5b1511543a61e26e417",
+      "mode": 33188
+    },
+    "sessions.ctg/src/recovery.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/src/recovery.rs",
+      "sha256": "9c8064a3269f434150a3a3425cf3e6c18de277530ff350c1f2663329b5cb4c35",
+      "mode": 33188
+    },
+    "sessions.ctg/src/retention.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/src/retention.rs",
+      "sha256": "b3470b8d8b43ad0e71436a7b26ae1346c6ea011aea7fbb3b0bd79837ca23d06d",
+      "mode": 33188
+    },
+    "sessions.ctg/src/roster.rs": {
+      "source": "/Users/feb/dev/cartridge/sessions.ctg/src/roster.rs",
+      "sha256": "a44b325ca8b220b6a3e46a5ae26730aba4f28e6b74976d1aca48d4a37565acd4",
+      "mode": 33188
+    },
+    "tools.ctg/.cartridge/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/tools.ctg/.cartridge/.gitignore",
+      "sha256": "f076c055ecd6ece41fa5f876021eeaad16846016ea2317cff27433008826f1f4",
+      "mode": 33188
+    },
+    "tools.ctg/.cartridge/memos/routine/test-worktree-operations.md": {
+      "source": "/Users/feb/dev/cartridge/tools.ctg/.cartridge/memos/routine/test-worktree-operations.md",
+      "sha256": "a26056ae70f9d980fd544f36b2ef1e35bbf1a5236a99620aa41090efc338ea9a",
+      "mode": 33188
+    },
+    "tools.ctg/.cartridge/memos/type/note.md": {
+      "source": "/Users/feb/dev/cartridge/tools.ctg/.cartridge/memos/type/note.md",
+      "sha256": "b4cdf899ab4580b86d21bbfd2adf28808d610f5c1f16f0fb0c92514d10b4d908",
+      "mode": 33188
+    },
+    "tools.ctg/.cartridge/memos/type/type.md": {
+      "source": "/Users/feb/dev/cartridge/tools.ctg/.cartridge/memos/type/type.md",
+      "sha256": "71f82003eaa30155dc564fd89bfc3aca6ef39ab8342e762d0ec7524c8dd56cf0",
+      "mode": 33188
+    },
+    "tools.ctg/.cartridge/PORT.md": {
+      "source": "/Users/feb/dev/cartridge/tools.ctg/.cartridge/PORT.md",
+      "sha256": "82318082bd9f5f4ed12e1473107f9dfaab8312b091969953cba1bf48bcb981de",
+      "mode": 33188
+    },
+    "tools.ctg/.cartridge/tests/integration/lane.test.ts": {
+      "source": "/Users/feb/dev/cartridge/tools.ctg/.cartridge/tests/integration/lane.test.ts",
+      "sha256": "03b6a4f9cbaaffb51544a53fba3696962c20d48faca886063abf07960b94bfc2",
+      "mode": 33188
+    },
+    "tools.ctg/.cartridge/tests/unit/service/tests.rs": {
+      "source": "/Users/feb/dev/cartridge/tools.ctg/.cartridge/tests/unit/service/tests.rs",
+      "sha256": "fd27390c5be2af0f7cb4e19b055f07d388f0546c35b5a4feb30058231a1fb56d",
+      "mode": 33188
+    },
+    "tools.ctg/.gitignore": {
+      "source": "/Users/feb/dev/cartridge/tools.ctg/.gitignore",
+      "sha256": "663ec4b6f6fbea402c9cad6d2eb7745783ed3a74428f5c7bb2d2da3913dc0ec9",
+      "mode": 33188
+    },
+    "tools.ctg/Cargo.toml": {
+      "source": "/Users/feb/dev/cartridge/tools.ctg/Cargo.toml",
+      "sha256": "f182999a7d8863ab320041dad094c6be34765c9062b0773172dc390db5f47d32",
+      "mode": 33188
+    },
+    "tools.ctg/cartridge.json": {
+      "source": "/Users/feb/dev/cartridge/tools.ctg/cartridge.json",
+      "sha256": "a41653497239e4be1331771711984e109314af5e4f677206bf849957d7a26a05",
+      "mode": 33188
+    },
+    "tools.ctg/init.lua": {
+      "source": "/Users/feb/dev/cartridge/tools.ctg/init.lua",
+      "sha256": "30416a969bb97f626dd3f83346ed41252647c985f9269f86b5a41723561cab05",
+      "mode": 33188
+    },
+    "tools.ctg/rustfmt.toml": {
+      "source": "/Users/feb/dev/cartridge/tools.ctg/rustfmt.toml",
+      "sha256": "9aaa9837831ff31ac3f07f96d8d7d9a7ca8b38afb8d07713da52b0f8374d80a7",
+      "mode": 33188
+    },
+    "tools.ctg/src/main.rs": {
+      "source": "/Users/feb/dev/cartridge/tools.ctg/src/main.rs",
+      "sha256": "ffd86d13253358c1c9390220908cc4a724d30de0e4074b796cae029b8ccb92c4",
+      "mode": 33188
+    },
+    "tools.ctg/src/service.rs": {
+      "source": "/Users/feb/dev/cartridge/tools.ctg/src/service.rs",
+      "sha256": "572b4118492cf8ee3c8a1e85e02ad44e9aa2252401a77bde2b1b1986cfb11034",
+      "mode": 33188
+    }
+  },
+  "results": [
+    {
+      "command": [
+        "just",
+        "test",
+        "harness"
+      ],
+      "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/cartridge.ctg",
+      "started": "2026-09-13T19:08:53.062Z",
+      "completed": "2026-09-13T19:09:11.351Z",
+      "stdout": "\nrunning 38 tests\ntest inspection::accounting::tests::historical_usage_keeps_run_and_turn_identity_without_replacing_estimate ... ok\ntest compaction::tests::prefix_and_original_tail_are_verified_independently ... ok\ntest inspection::accounting::tests::multilingual_schemas_and_tool_exchanges_keep_byte_enforcement ... ok\ntest compaction::tests::legacy_upgrade_retains_summary_and_labels_missing_evidence ... ok\ntest compaction::tests::malformed_legacy_evidence_survives_regeneration_and_unknown_versions_fail ... ok\ntest prompt::tests::replaces_only_exact_known_placeholders_without_recursion ... ok\ntest roster::tests::host_binding_rejects_bad_caps_and_never_accepts_request_credentials ... ok\ntest tests::anchor_names_session_foreground_and_files_without_the_user_naming_them ... ok\ntest tests::ancestor_tree_orders_instructions_and_leaves_legacy_memos_alone ... ok\ntest tests::context_and_compaction_use_the_supplied_memo_template ... ok\ntest roster::tests::final_render_is_escaped_after_template_and_accounts_whole_row_omissions ... ok\ntest roster::tests::source_adapter_checks_identity_digest_revisions_bounds_and_private_inbox_fields ... ok\ntest tests::compacted_projection_inserts_summary_and_keeps_tail ... ok\ntest inspection::tests::compaction_can_shrink_retained_turns_without_cutting_current_input ... ok\ntest tests::descriptors_become_function_tools_and_bad_ones_fail ... ok\ntest tests::canonical_deduplication_keeps_each_source_once ... ok\ntest tests::journal_projects_ordered_messages_without_lifecycle_records ... ok\ntest tests::malformed_configuration_is_rejected ... ok\ntest tests::malformed_records_and_unresolved_groups_are_refused ... ok\ntest tests::markdown_system_resolves_session_values_and_optional_context_once ... ok\ntest tests::compacted_projection_fits_budget ... ok\ntest tests::framing_delimiters_are_escaped_and_multibyte_stays_valid ... ok\ntest tests::native_date_covers_the_utc_day_boundary_and_stays_fresh ... ok\ntest tests::prefix_hash_is_stable_and_distinguishes_prefixes ... ok\ntest tests::tail_start_keeps_complete_turns_and_never_splits_tool_groups ... ok\ntest tests::terminal_renders_recent_commands_or_nothing ... ok\ntest tests::telemetry_renders_from_the_journal_and_the_block_is_posted_to_build_system ... ok\ntest tests::missing_optional_files_are_skipped_and_bad_files_error ... ok\ntest tests::total_instruction_budget_is_enforced ... ok\ntest tests::oversized_context_returns_context_over_budget_without_changing_transcript ... ok\ntest working::tests::message_and_byte_limits_trigger_with_provider_headroom ... ok\ntest working::tests::multi_call_groups_are_indivisible_and_open_groups_are_rejected ... ok\ntest working::tests::compacts_inside_a_tool_loop_and_pins_current_request ... ok\ntest tests::environment_renders_as_one_block_or_empty ... ok\ntest working::tests::saved_memory_is_validated_and_refreshes_after_new_messages ... ok\ntest inspection::tests::oversized_result_no_longer_blocks_the_next_model_turn ... ok\ntest inspection::tests::long_open_tool_exchange_keeps_all_ids_and_fits_budget ... ok\ntest working::tests::old_history_is_folded_in_small_complete_batches ... ok\n\ntest result: ok. 38 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.24s\n\n\nrunning 4 tests\ntest harness_process_fails_on_router_timeout_without_history_loss ... ok\ntest harness_process_compacts_oversized_context_over_the_real_rpc_path ... ok\ntest harness_process_fails_safely_on_huge_turns_and_router_failures ... ok\ntest harness_process_projects_context_over_the_real_rpc_path ... ok\n\ntest result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.80s\n\n\nrunning 1 test\ntest the_ring_distills_old_turns_into_memory_and_keeps_the_rest ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s\n\n\nrunning 1 test\ntest rolling_memory_refreshes_below_budget_and_survives_reload_and_failure ... ok\n\ntest result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.99s\n\n",
+      "stderr": "   Compiling landscape v0.1.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/landscape.ctg)\n   Compiling cartridge v0.1.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/cartridge.ctg)\n   Compiling harness v0.1.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/harness.ctg)\n    Finished `test` profile [unoptimized] target(s) in 9.85s\n     Running unittests src/main.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/roster-proof/debug/deps/harness-fc42be1e347133a6)\n     Running .cartridge/tests/integration/process.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/roster-proof/debug/deps/process-df23554c39383a48)\n     Running .cartridge/tests/integration/ring.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/roster-proof/debug/deps/ring-db5fd4c578ec3a80)\n     Running .cartridge/tests/integration/working.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/roster-proof/debug/deps/working-224a92d2b43b9073)\n",
+      "exit": 0
+    },
+    {
+      "command": [
+        "just",
+        "check",
+        "harness"
+      ],
+      "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/cartridge.ctg",
+      "started": "2026-09-13T19:09:11.352Z",
+      "completed": "2026-09-13T19:09:14.740Z",
+      "stdout": "",
+      "stderr": "    Checking landscape v0.1.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/landscape.ctg)\n    Checking cartridge v0.1.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/cartridge.ctg)\n    Checking harness v0.1.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/harness.ctg)\n    Finished `dev` profile [unoptimized] target(s) in 2.86s\n",
+      "exit": 0
+    },
+    {
+      "command": [
+        "just",
+        "build",
+        "harness"
+      ],
+      "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/cartridge.ctg",
+      "started": "2026-09-13T19:09:14.741Z",
+      "completed": "2026-09-13T19:09:15.375Z",
+      "stdout": "",
+      "stderr": "    Finished `dev` profile [unoptimized] target(s) in 0.16s\n",
+      "exit": 0
+    },
+    {
+      "command": [
+        "just",
+        "build",
+        "sessions"
+      ],
+      "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/cartridge.ctg",
+      "started": "2026-09-13T19:09:15.376Z",
+      "completed": "2026-09-13T19:09:21.711Z",
+      "stdout": "",
+      "stderr": "   Compiling sessions v0.1.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/sessions.ctg)\n    Finished `dev` profile [unoptimized] target(s) in 5.79s\n",
+      "exit": 0
+    },
+    {
+      "command": [
+        "bun",
+        "test",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/harness.ctg/.cartridge/tests/integration/roster.test.ts"
+      ],
+      "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/cartridge-roster-verification-I402H7/cartridge.ctg",
+      "started": "2026-09-13T19:09:21.711Z",
+      "completed": "2026-09-13T19:09:24.598Z",
+      "stdout": "bun test v1.3.14 (0d9b296a)\n",
+      "stderr": "\n../harness.ctg/.cartridge/tests/integration/roster.test.ts:\n(pass) actual sessions and harness compose twenty scoped agents once with bounded escaped evidence [1406.92ms]\n(pass) disabled roster and copied request configuration never override host binding [393.73ms]\n(pass) wrong identity malformed evidence source errors and deadline remain explicit nonfatal states [380.62ms]\n(pass) partial actual channel evidence preserves phase and compaction uses the captured roster once [382.74ms]\n(pass) failed automatic refresh preserves full fitting context and one captured roster [285.45ms]\n\n 5 pass\n 0 fail\n 295 expect() calls\nRan 5 tests across 1 file. [2.88s]\n",
+      "exit": 0
+    }
+  ],
+  "scope": "Exact selected owner and adjacent source snapshots. Public gates execute inside the disposable composition; a successful lane proof does not integrate owner changes.",
+  "identity": "65b3d399247cd468c3c7b6c0c967086b0bc8e3b6c58e8d02feff29bcd3b4d357",
+  "binary_inputs": {
+    "harness": "6c91a39f01eadd7f1d9d1768367f1bbc62117b3bc0ff955d4fdf5abd21b04754",
+    "sessions": "54be52f32460e236860ca38eced18f4999f7476ffc35fbdd2e548deae3c2968b"
+  },
+  "resulting_workspace_lock_sha256": "ad3754f3135e5908a392a884a1af95f1b956a67e40063ecc8bca4d793acd74ff",
+  "completed": "2026-09-13T19:09:24.607Z",
+  "status": "passed"
+}

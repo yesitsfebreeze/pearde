@@ -1,21 +1,21 @@
 ---
 repo: /Users/feb/dev/cartridge/harness.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: harness
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: accepted
 canonical-scope: improve-harness-token-accounting
 footprint:
-- /Users/feb/dev/cartridge/harness.ctg/prompt.rs
-- /Users/feb/dev/cartridge/harness.ctg/working.rs
-- /Users/feb/dev/cartridge/harness.ctg/inspection.rs
-- /Users/feb/dev/cartridge/harness.ctg/inspection_tests.rs
-- /Users/feb/dev/cartridge/harness.ctg/eval/eval_compaction.py
+- src/inspection.rs
+- src/accounting.rs
+- .cartridge/tests/unit/accounting.rs
+- .cartridge/tests/integration/working.rs
+commit: "ca7eeabd38f4eaba69063cf98e2071df694a1dc3"
 ---
 
 # Show token estimates alongside serialized bytes
@@ -24,9 +24,9 @@ Remove capability-routing as a hard prerequisite. Use existing model metadata wh
 
 ## Acceptance
 
-- [ ] Multilingual, JSON-schema and indivisible-exchange fixtures stay within byte safeguards while estimates identify tokenizer/model and uncertainty.
-- [ ] Unknown models produce unknown/estimated token counts, not zero or an inference call.
-- [ ] Provider-reported usage remains separately attributed and never silently replaces an estimate for a different assembled request.
+- [x] Multilingual, JSON-schema and indivisible-exchange fixtures stay within byte safeguards while estimates identify tokenizer/model and uncertainty.
+- [x] Unknown models produce unknown/estimated token counts, not zero or an inference call.
+- [x] Provider-reported usage remains separately attributed and never silently replaces an estimate for a different assembled request.
 
 ## Proof and recovery
 
@@ -38,3 +38,11 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `improve-harness-token-accounting`; maximum five rounds.
+
+## Verified implementation — 2026-09-13
+
+The harness gate passes 35 unit and 6 real-process integration tests. Fixtures
+cover multilingual text, JSON schemas, complete tool calls, hard byte budget
+refusal with reserved output headroom, unknown/model hints, changed projection
+hashes, and interleaved per-run usage without credential propagation. The actual
+inspector exposes a nonzero labelled estimate and still makes no model call.

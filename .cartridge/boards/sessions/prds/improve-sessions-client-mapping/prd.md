@@ -10,8 +10,8 @@ work-kind: leaf
 review-round: 3
 review-status: passed
 canonical-scope: improve-sessions-client-mapping
-footprint: ["src/roster.rs","src/main.rs","src/mapping.rs",".cartridge/tests/unit/main/mapping_tests.rs",".cartridge/tests/integration/mapping.test.ts",".cartridge/docs/client-mapping.md","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs"]
-commit: "191e2b6cb4291bdcce7a894f98bb2d475361d30f"
+footprint: ["src/roster.rs","src/channels.rs","src/mailbox.rs","src/main.rs","src/mapping.rs",".cartridge/tests/unit/main/mapping_tests.rs",".cartridge/tests/integration/mapping.test.ts",".cartridge/docs/client-mapping.md","src/observations.rs","Cargo.toml","src/lib.rs","src/change_record.rs","src/changes.rs",".cartridge/tests/unit/main/change_records_tests.rs","src/context.rs",".cartridge/tests/unit/main/context_tests.rs",".cartridge/tests/integration/context.test.ts"]
+commit: "92240c6ba415f53b2d17971aea185536a6f517bc"
 ---
 
 # Map client conversations to cartridge sessions honestly

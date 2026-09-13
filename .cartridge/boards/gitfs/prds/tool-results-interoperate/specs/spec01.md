@@ -1,6 +1,7 @@
 ---
 complexity: medium
 footprint:
+  - src/push.rs
   - src/main.rs
   - src/service.rs
   - src/ship.rs

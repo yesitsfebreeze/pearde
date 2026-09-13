@@ -17,7 +17,7 @@ footprint:
 - src/tool_result.rs
 - .cartridge/tests/unit/tool_result.rs
 - .cartridge/tests/integration/tool-result.test.ts
-commit: "55cc8aae27575ded5950737c46a99aa358b95980"
+commit: "b4b95bb648ea1e99b6ffc9ba3cbd562f255ca9d5"
 ---
 
 # Every currently exposed tool completes through its real consumers
@@ -61,3 +61,5 @@ the original proof remains in collection-cf18e856.md. No acceptance is waived.
 
 Inspection changes shared GitFS source. Re-run this unchanged specification
 against the integrated owner commit. Prior receipt is collection-21be1528.md.
+
+Recorded-push revalidation at b4b95bb: shared native registration and new registered module are bound; original acceptance and executable gates are unchanged.

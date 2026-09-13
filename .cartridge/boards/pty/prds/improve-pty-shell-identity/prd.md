@@ -1,21 +1,17 @@
 ---
 repo: /Users/feb/dev/cartridge/pty.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: pty
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: "passed"
 canonical-scope: improve-pty-shell-identity
-footprint:
-- /Users/feb/dev/cartridge/pty.ctg/main.rs
-- /Users/feb/dev/cartridge/pty.ctg/tool.rs
-- /Users/feb/dev/cartridge/pty.ctg/marks.rs
-- /Users/feb/dev/cartridge/pty.ctg/input.rs
-- /Users/feb/dev/cartridge/pty.ctg/tests/process.rs
+footprint: ["src/main.rs","src/marks.rs","src/tool.rs","src/identity.rs",".cartridge/tests/unit/identity/tests.rs",".cartridge/tests/integration/process.rs",".cartridge/docs/shell-identity.md"]
+capability-owner: "pty"
+commit: "e8e6b319b03dcc9e1dea66b4fd3a0f6b83ab2d47"
 ---
 
 # Return explicit shell and working-directory identity
@@ -24,10 +20,10 @@ Every shell readback states the shell executable/dialect, cwd, phase and whether
 
 ## Acceptance
 
-- [ ] Nushell, Zsh and Bash fixtures return explicit identity/cwd without requiring welcome-text parsing.
-- [ ] An unsupported shell reports unknown integration while screen/input still work; UI replacement does not replace the PTY.
+- [x] Nushell, Zsh and Bash fixtures return explicit identity/cwd without requiring welcome-text parsing.
+- [x] An unsupported shell reports unknown integration while screen/input still work; UI replacement does not replace the PTY.
 
-- [ ] Preserve the one shared PTY and literal-input fallback. Feature negotiation/additive fields permit old callers; reverting the UI/client must not terminate the user's shell. Do not interrupt the live terminal for testing.
+- [x] Preserve the one shared PTY and literal-input fallback. Feature negotiation/additive fields permit old callers; reverting the UI/client must not terminate the user's shell. Do not interrupt the live terminal for testing.
 
 ## Proof and recovery
 

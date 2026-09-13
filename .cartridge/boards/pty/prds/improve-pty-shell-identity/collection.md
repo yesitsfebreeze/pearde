@@ -1,0 +1,70 @@
+---
+commit: e8e6b319b03dcc9e1dea66b4fd3a0f6b83ab2d47
+spec-digests: {"spec01.md":"145b7a0030fcf272179633ebaea67b13da0bc05321b5c6696c80b02acf7af3b5"}
+child-contracts: {}
+---
+
+# Collection
+
+/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/pty/prds/improve-pty-shell-identity/specs/spec01.md: exit 0
+
+Command SHA-256: f5d8748d4ddd5556b00e04c3482efa9a079a137632078a1c508057d6ba14a27b
+
+```text
+/opt/homebrew/bin/nu
+/bin/zsh
+/bin/bash
+    Finished `test` profile [unoptimized] target(s) in 0.07s
+     Running unittests src/main.rs (target/tool-result-contract/debug/deps/pty-c67a52319cb6c716)
+
+running 20 tests
+test grid::tests::cursor_queries_return_terminal_replies_without_a_ui ... ok
+test grid::tests::alternate_screen_leaves_primary_and_scrollback ... ok
+test grid::tests::resize_rewraps_and_keeps_cursor_line ... ok
+test input::tests::enter_uses_lf_under_line_feed_newline_mode ... ok
+test input::tests::focus_is_reported_only_under_focus_mode ... ok
+test input::tests::kitty_event_types_append_the_action ... ok
+test identity::tests::configured_and_observed_identity_remain_distinct ... ok
+test input::tests::paste_is_wrapped_only_when_bracketed ... ok
+test input::tests::modified_arrow_uses_the_parameter_form ... ok
+test input::tests::sgr_mouse_reports_cells_after_enabling_and_nothing_before ... ok
+test input::tests::up_arrow_respects_application_cursor_keys ... ok
+test marks::tests::marks_delimit_commands_output_exit_and_cwd ... ok
+test marks::tests::plain_strips_csi_osc_and_carriage_returns ... ok
+test grid::tests::rows_survive_a_full_scrollback ... ok
+test identity::tests::restarted_shell_hooks_survive_prior_shell_cleanup ... ok
+test grid::tests::frame_reports_damage_since_version ... ok
+test grid::tests::scroll_saturates_at_the_grid ... ok
+test identity::tests::invalid_or_oversized_metadata_cannot_expand_identity ... ok
+test marks::tests::running_command_exposes_partial_output_and_bounded_tail ... ok
+test grid::tests::rows_survive_scrolling ... ok
+
+test result: ok. 20 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running .cartridge/tests/integration/process.rs (target/tool-result-contract/debug/deps/process-c29dd5693a225f96)
+
+running 10 tests
+test bash_reports_marks_through_the_rcfile_shim ... ok
+test zsh_reports_marks_through_the_zdotdir_shim ... ok
+test resize_moves_the_emulator_and_the_shell_together ... ok
+test shell_serializes_input_and_only_cancels_the_matching_invocation ... ok
+test identity_and_shell_survive_real_ui_replacement_and_rollback ... ok
+test handoff_blocks_agent_input_and_takeback_interrupts_without_closing_shell ... ok
+test nu_reports_marks_through_the_spawn_hook ... ok
+test terminal_tool_runs_in_the_users_shell_and_commands_report_it ... ok
+test identity_is_explicit_for_real_shells_and_unknown_fallback ... ok
+test shell_controls_nvim_and_reads_the_visible_screen ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.82s
+
+
+```
+
+/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/pty/prds/improve-pty-shell-identity/specs/spec01.md: exit 0
+
+Command SHA-256: 9b00769067fc2a0373174762457ba0f16c7aa02142733a40b119faf5798330ed
+
+```text
+    Finished `dev` profile [unoptimized] target(s) in 0.08s
+
+```

@@ -1,10 +1,6 @@
 ---
 complexity: medium
-footprint:
-- src/lib.rs
-- src/census.rs
-- .cartridge/tests/unit/census.rs
-- .cartridge/docs/source-census.md
+footprint: ["src/lib.rs","src/census.rs",".cartridge/tests/unit/census.rs",".cartridge/docs/source-census.md","src/source_search.rs",".cartridge/tests/unit/source_search.rs"]
 ---
 
 # Bounded declared source traversal keeps hierarchical ownership explicit

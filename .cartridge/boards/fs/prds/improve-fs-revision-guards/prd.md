@@ -10,14 +10,8 @@ work-kind: leaf
 review-round: 4
 review-status: passed
 canonical-scope: improve-fs-revision-guards
-footprint:
-- src/main.rs
-- src/context.rs
-- src/files.rs
-- src/service.rs
-- .cartridge/tests/unit/service/tests.rs
-- .cartridge/docs/revision-guards.md
-commit: "d4a4239ccce02bc0e647e9ad80892995f48b317f"
+footprint: ["src/main.rs","src/context.rs","src/files.rs","src/service.rs",".cartridge/tests/unit/service/tests.rs",".cartridge/docs/revision-guards.md","Cargo.toml"]
+commit: "3a79023311b1a9b30c383ec8c71cf31c20a69ee7"
 ---
 
 # Use consistent stale-write checks for filesystem mutations

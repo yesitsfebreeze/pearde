@@ -1,13 +1,6 @@
 ---
 complexity: medium
-footprint:
-  - cartridge.json
-  - src/main.rs
-  - src/context.rs
-  - src/files.rs
-  - src/service.rs
-  - .cartridge/tests/unit/service/tests.rs
-  - .cartridge/docs/revision-guards.md
+footprint: ["cartridge.json","src/main.rs","src/context.rs","src/files.rs","src/service.rs",".cartridge/tests/unit/service/tests.rs",".cartridge/docs/revision-guards.md","Cargo.toml"]
 ---
 
 # spec01 — Recheck the observed version at filesystem publication

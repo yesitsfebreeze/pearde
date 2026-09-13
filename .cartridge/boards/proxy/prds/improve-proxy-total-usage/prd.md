@@ -1,23 +1,25 @@
 ---
 repo: /Users/feb/dev/cartridge/proxy.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: proxy
+capability-owner: proxy
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: improve-proxy-total-usage
 needs:
 - '@gitfs/tool-results-interoperate'
 footprint:
-- /Users/feb/dev/cartridge/proxy.ctg/service.rs
-- /Users/feb/dev/cartridge/proxy.ctg/streaming.rs
-- /Users/feb/dev/cartridge/proxy.ctg/wire.rs
-- /Users/feb/dev/cartridge/proxy.ctg/tests.rs
-- /Users/feb/dev/cartridge/proxy.ctg/README.md
+- src/main.rs
+- src/service.rs
+- src/streaming.rs
+- src/usage.rs
+- .cartridge/tests/unit/tests.rs
+- .cartridge/docs/usage.md
+commit: "480a093f5f6e2cbfb74e3a34c222f7f89be7e6b6"
 ---
 
 # Account for every internal model round consistently
@@ -26,18 +28,18 @@ JSON and streaming responses provide consistent total usage across internal tool
 
 ## Acceptance
 
-- [ ] A three-round fixture reports matching cumulative totals for JSON and SSE and no double counting of final events.
-- [ ] Missing usage, partial stream failure and cancellation preserve known totals and label incomplete accounting.
+- [x] A three-round fixture reports matching cumulative totals for JSON and SSE and no double counting of final events.
+- [x] Missing usage, partial stream failure and cancellation preserve known totals and label incomplete accounting.
 
-- [ ] Keep native request/response wire semantics and caller-owned conversation history. New telemetry is opt-in/additive and bounded. Reverting continuation changes must report invalid mappings rather than resolve to the wrong provider/client.
+- [x] Keep native request/response wire semantics and caller-owned conversation history. New telemetry is opt-in/additive and bounded. Reverting continuation changes must report invalid mappings rather than resolve to the wrong provider/client.
 
 ## Proof and recovery
 
-Start at [service.rs](../../../service.rs), [streaming.rs](../../../streaming.rs), [wire.rs](../../../wire.rs).
+Source: `proxy.ctg/src/service.rs`, `src/streaming.rs`, `src/wire.rs` and `src/usage.rs`.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test proxy` from the composed root with the acceptance fixtures. These gates have not run for this plan.
+Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test proxy` from the composed root with the acceptance fixtures. The public proxy tests/check and GitFS/policy consumer gates now pass; see verification.json.
 Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
 
 ## Review
 
-[Round 2 agent review](review.md). Inherits round 1 from `improve-proxy-total-usage`; maximum five rounds.
+[Review history](review.md): round 3 passed at 96/100; acceptance evidence is separate from the plan score.

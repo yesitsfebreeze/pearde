@@ -1,18 +1,19 @@
 ---
 repo: /Users/feb/dev/cartridge/memo.ctg
-state: open
+state: "done"
 origin: requested
 priority: 80
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: memo
 work-kind: rollup
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: memo-board-template
 needs:
 - '@memo/memo-board-template/initialize-board'
 - '@memo/memo-board-template/board-engine-integration'
+commit: "154bde9d8f97fb1c015fe34cf62ae79b153e6feb"
 ---
 
 # The memo cartridge supplies a Pearde-compatible project template
@@ -21,8 +22,8 @@ Coordinate the linked outcomes. Claim and implement a leaf; this parent records 
 
 ## Acceptance
 
-- [ ] Each linked leaf has revision-bound proof and passes its own review.
-- [ ] The included outcomes work together at the same pinned owner revisions.
+- [x] Each linked leaf has revision-bound proof and passes its own review.
+- [x] The included outcomes work together at the same pinned owner revisions.
 
 ## Work items
 

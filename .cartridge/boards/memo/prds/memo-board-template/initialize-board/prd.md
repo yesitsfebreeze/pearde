@@ -17,7 +17,7 @@ footprint:
 - .cartridge/templates/board
 - .cartridge/tests/unit/board.rs
 - .cartridge/docs/board.md
-commit: "4b081453d610af42daac0456750a50bdc719a5fe"
+commit: "45d5a54ab9da1a798cd9997af9a8c19bed8a1812"
 ---
 
 # Preview and install a board without overwriting edits
@@ -48,3 +48,5 @@ Reverify unchanged acceptance after the next integrated owner feature; earlier
 154bde9d receipt retained. No contract relaxation.
 
 Reverification at4b081453 after native context facade: existing type/board behavior unchanged; service/main source integration changed.
+
+Inventory facade revalidation: unchanged behavior and acceptance at memo 45d5a54; shared native registration is checked with its registered inventory module.

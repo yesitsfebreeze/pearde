@@ -1,8 +1,6 @@
 ---
 complexity: small
-footprint:
-  - src/main.rs
-  - .cartridge/tests/unit/stdio.rs
+footprint: ["src/main.rs",".cartridge/tests/unit/stdio.rs","src/loader.rs"]
 ---
 
 # spec01 — Preserve request correlation on bridge failure

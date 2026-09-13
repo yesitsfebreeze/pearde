@@ -8,10 +8,8 @@ work-kind: leaf
 review-round: 4
 review-status: passed
 canonical-scope: mcp-stdio-replies-during-replacement
-footprint:
-- src/main.rs
-- .cartridge/tests/unit/stdio.rs
-commit: "f71b762fd839e6a2644f16565b1de10edf967c9e"
+footprint: ["src/main.rs",".cartridge/tests/unit/stdio.rs","src/loader.rs"]
+commit: "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df"
 ---
 
 # MCP stdio replies during replacement

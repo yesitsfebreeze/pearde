@@ -1,32 +1,36 @@
 ---
 repo: /Users/feb/dev/cartridge/sessions.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: sessions
-work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+work-kind: rollup
+review-round: 3
+review-status: passed
 canonical-scope: reflex-reports-attributed-tool-outcomes
+needs: ["@runtime/native-tool-observation-adapter"]
+commit: "2a6a863cf1af0876072f8879050274cfa650a785"
 ---
 
 # reflex-reports-attributed-tool-outcomes
 
 Use the existing execution/session observation boundary as the owner of tool-use attribution. Classify actor and activity origin, attempt versus completion, outcome, duration and size; retain unknown historical fields. Landscape can consume the evidence, but memory does not host a second Reflex service.
 
+Runtime collection is owned by [native-tool-observation-adapter](../../../runtime/prds/native-tool-observation-adapter/prd.md); sessions projection by [attributed-outcome-report](attributed-outcome-report/prd.md). Both inherit rounds 1–2. This parent remains incomplete until actual composed mixed-work evidence passes, including adapter receipt validity. Synthetic projector fixtures alone are insufficient. Historical source aliases remain on this parent.
+
 ## Acceptance
 
-- [ ] A mixed fixture of agent calls, UI reads, polling, discovery and cancelled work produces distinct correctly attributed observations.
-- [ ] Old rows retain unknown status/time rather than gaining invented success or billing; source/descriptor changes identify stale verdicts.
-- [ ] Default telemetry excludes sensitive arguments/bodies, has bounded retention and cannot turn observation failure into tool failure.
+- [x] A mixed fixture of agent calls, UI reads, polling, discovery and cancelled work produces distinct correctly attributed observations.
+- [x] Old rows retain unknown status/time rather than gaining invented success or billing; source/descriptor changes identify stale verdicts.
+- [x] Default telemetry excludes sensitive arguments/bodies, has bounded retention and cannot turn observation failure into tool failure.
 
 ## Proof and recovery
 
 Start at [main.rs](../../../main.rs).
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test sessions` from the composed root with the acceptance fixtures. These gates have not run for this plan.
+Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test sessions` from the composed root with the acceptance fixtures. The actual composed gates and dependency receipts now pass; see [proof](proof.md).
 Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
 
 ## Review

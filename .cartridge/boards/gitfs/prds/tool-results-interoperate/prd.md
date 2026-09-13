@@ -17,7 +17,7 @@ footprint:
 - src/tool_result.rs
 - .cartridge/tests/unit/tool_result.rs
 - .cartridge/tests/integration/tool-result.test.ts
-commit: "cf18e85679a6d0ac353f0655c7808132958aea94"
+commit: "21be1528bff2840b00dcef3e87ece41585df3017"
 ---
 
 # Every currently exposed tool completes through its real consumers
@@ -50,3 +50,9 @@ error recovery. The fixture isolates its compiler target and disables wrappers;
 the first shared-target run exposed read-only cached artifacts and was rejected.
 The native agent ordinary-error and exact-cancellation gates both passed.
 Cancellation acknowledgments and partial-effect behavior are unchanged.
+
+## Reverification — 2026-09-13
+
+The snapshot-selection change 21be1528 touches the producer service footprint.
+Reopened for fresh execution of the unchanged interoperability specification;
+the original proof remains in collection-cf18e856.md. No acceptance is waived.

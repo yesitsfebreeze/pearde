@@ -1,0 +1,48 @@
+{
+  "fixture": "v01",
+  "repeat": 3,
+  "category": "verbose",
+  "started": "2026-09-13T14:15:09.023Z",
+  "completed": "2026-09-13T14:15:11.340Z",
+  "request": {
+    "model": "granite4:3b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a precise editor. Return only the requested final text.\n\nUse the SAME short, plain, complete sentences for replies and memos. Lead with the decision or result. Delete repetition and filler. Do not add titles, subject lines, labels, introductions, explanations of editing, or conclusions. A memo is a standalone short note, not a form to fill in.\n\nKeep ALL substantive facts, including limits, exclusions, unknowns, negative results, evidence identifiers, owners and next actions. Do not stop after answering the first question. Keep exact commands, errors, numbers, units, names, frontmatter and fenced code. Never add an unsupported fact. Readability and meaning beat shortening.\n\nExample source: We chose the blue theme for the kiosk. This is the choice. The phone theme is unchanged. The contrast measurement is unknown. Jules will measure it before rollout. Evidence is theme-note-6.\nExample output: Use the blue kiosk theme; keep the phone theme. Contrast is unmeasured. Jules must measure it before rollout. Evidence is theme-note-6.\n\nIf the source is already clear and concise, copy it EXACTLY. Do not rewrite, add labels or expand it. Preserve Markdown frontmatter and code blocks verbatim. If JSON is requested, output only valid JSON with the requested keys and value types. A request for detail overrides brevity: give the ordered steps, reasons, conditions and provenance.\n\nBefore answering, check every source sentence for unique information. Include each unique fact once. Preserve unknown versus known, local versus published, completed versus passed, and instructions versus actions already taken.\n\nExisting memo rewrites require an explicit request and a preview. Save the approved proposal through validated memo.write with the read revision as expected_revision. On conflict, preserve the newer memo and stop for a new decision. Do not retry automatically. Preserve source transcripts and linked detailed evidence. Use the normal drafting model call, with no second rewrite call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone handoff memo.\n\nSource:\nWe have now reached a point where the retry change for the export worker has been implemented, and it is useful to put the present position in writing so that another person can pick up the work. The retry limit was changed from five attempts to three attempts. That is the change that has been made. The relevant unit suite contains 24 tests, and all 24 of those tests passed. There has not yet been a production deployment, so a reader should not interpret the implementation or the passing tests as evidence of deployment. The run that produced the test result is recorded as fixture-run-17. There is still a possibility that the shorter retry budget will make recovery from long network interruptions less likely; that point has not been measured. Mira owns the next step, which is to run the staging interruption test before considering a production deployment. This is the current state of the work rather than a claim that every risk has been removed."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 1536,
+      "num_ctx": 8192,
+      "seed": 47
+    }
+  },
+  "response": {
+    "model": "granite4:3b",
+    "created_at": "2026-09-13T14:15:11.34024Z",
+    "message": {
+      "role": "assistant",
+      "content": "Use the retry limit of three attempts for the export worker. All 24 tests in the unit suite passed during the fixture-run-17 run. No production deployment has occurred yet. The shorter retry budget may reduce recovery chances from long network interruptions, which has not been measured. Mira will run the staging interruption test before a production deployment. This reflects the current state, not a risk-free claim."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 2316992708,
+    "load_duration": 1208041,
+    "prompt_eval_count": 659,
+    "prompt_eval_cached_count": 457,
+    "prompt_eval_duration": 269270000,
+    "eval_count": 81,
+    "eval_duration": 2043364000
+  },
+  "output_tokens": 81,
+  "input_tokens": 659,
+  "model_digest": "89962fcc75239ac434cdebceb6b7e0669397f92eaef9c487774b718bc36a3e5f",
+  "tokenizer_revision": "89962fcc75239ac434cdebceb6b7e0669397f92eaef9c487774b718bc36a3e5f"
+}

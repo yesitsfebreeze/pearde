@@ -1,0 +1,8 @@
+{
+  "evaluation/gptoss-pair.json": "9dd425e7de0da73db1afa0e698e6ca1d45ec110739cddcb49fd5f1a229b6f333",
+  "evaluation/fixtures.json": "31dc49595042df1add80582153d8746d9f5945b23682846006c72d3440cb5772",
+  "evaluation/rubric.json": "3f94576b52e4faec8dba7f6ece2aecb266d812cfca6866736a4fe2c419ffa218",
+  "evaluation/candidate-guidance.txt": "88ebc45679437a89a3932e8e20605d95cb3da05b0699b38de24b81c3004caa08",
+  "evaluation/run.ts": "f8d29ef7391846f0f39dd53ab64bac88d298aad620a198da3978caba52a0e382",
+  "specs/spec01.md": "41b00458e50935ddc1091ad5dfa91a0a6f32ac6a62851da8241542b7a32cfaa1"
+}

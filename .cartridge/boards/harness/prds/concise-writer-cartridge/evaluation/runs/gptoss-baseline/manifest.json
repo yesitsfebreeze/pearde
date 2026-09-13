@@ -1,0 +1,69 @@
+{
+  "variant": "gptoss-baseline",
+  "model": "gpt-oss:20b",
+  "model_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "tokenizer_revision": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "pair": {
+    "version": 1,
+    "frozen_rubric_sha256": "3f94576b52e4faec8dba7f6ece2aecb266d812cfca6866736a4fe2c419ffa218",
+    "model": "gpt-oss:20b",
+    "expected_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+    "settings": {
+      "temperature": 0.2,
+      "num_predict": 4096,
+      "num_ctx": 8192
+    },
+    "think": "low",
+    "visible_token_measurement": "Native /api/generate raw:true prompt_eval_count on the completed visible text. Model metadata must disable BOS/EOS/padding insertion. One generated token is discarded; this measurement is evaluation-only. Record generation eval_count separately because it includes reasoning.",
+    "guidance": "Reuse unchanged candidate-guidance.txt from candidate 1; preserve both failed Granite candidates.",
+    "rationale": "Both Granite candidates lose required facts and formats. Evaluate a second already-installed local model against the identical frozen corpus and meaning/length rubric; baseline and candidate use identical model/settings/tokenizer."
+  },
+  "tokenizer_revision_basis": "The installed GGUF model digest includes its tokenizer; scalar tokenizer metadata is retained below.",
+  "tokenizer": {
+    "tokenizer.ggml.add_bos_token": false,
+    "tokenizer.ggml.add_eos_token": false,
+    "tokenizer.ggml.add_padding_token": false,
+    "tokenizer.ggml.bos_token_id": 199998,
+    "tokenizer.ggml.eos_token_id": 199999,
+    "tokenizer.ggml.eos_token_ids": null,
+    "tokenizer.ggml.merges": null,
+    "tokenizer.ggml.model": "gpt2",
+    "tokenizer.ggml.padding_token_id": 199999,
+    "tokenizer.ggml.pre": "default",
+    "tokenizer.ggml.scores": null,
+    "tokenizer.ggml.token_type": null,
+    "tokenizer.ggml.tokens": null
+  },
+  "model_details": {
+    "parent_model": "",
+    "format": "gguf",
+    "family": "gptoss",
+    "families": [
+      "gptoss"
+    ],
+    "parameter_size": "20.9B",
+    "quantization_level": "MXFP4"
+  },
+  "capabilities": [
+    "completion",
+    "tools",
+    "thinking"
+  ],
+  "ollama_version": {
+    "version": "0.34.0"
+  },
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "guidance_sha256": "d5f2110c4732410ba8f43331177bf2b9cf1532a5641166c7da919ca89995d668",
+  "fixture_sha256": "31dc49595042df1add80582153d8746d9f5945b23682846006c72d3440cb5772",
+  "rubric_sha256": "3f94576b52e4faec8dba7f6ece2aecb266d812cfca6866736a4fe2c419ffa218",
+  "settings": {
+    "temperature": 0.2,
+    "num_predict": 4096,
+    "num_ctx": 8192
+  },
+  "seeds": [
+    11,
+    29,
+    47
+  ]
+}

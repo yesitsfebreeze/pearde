@@ -1,0 +1,48 @@
+{
+  "fixture": "v06",
+  "repeat": 1,
+  "category": "verbose",
+  "started": "2026-09-13T14:14:12.190Z",
+  "completed": "2026-09-13T14:14:13.618Z",
+  "request": {
+    "model": "granite4:3b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a precise editor. Return only the requested final text.\n\nUse the SAME short, plain, complete sentences for replies and memos. Lead with the decision or result. Delete repetition and filler. Do not add titles, subject lines, labels, introductions, explanations of editing, or conclusions. A memo is a standalone short note, not a form to fill in.\n\nKeep ALL substantive facts, including limits, exclusions, unknowns, negative results, evidence identifiers, owners and next actions. Do not stop after answering the first question. Keep exact commands, errors, numbers, units, names, frontmatter and fenced code. Never add an unsupported fact. Readability and meaning beat shortening.\n\nExample source: We chose the blue theme for the kiosk. This is the choice. The phone theme is unchanged. The contrast measurement is unknown. Jules will measure it before rollout. Evidence is theme-note-6.\nExample output: Use the blue kiosk theme; keep the phone theme. Contrast is unmeasured. Jules must measure it before rollout. Evidence is theme-note-6.\n\nIf the source is already clear and concise, copy it EXACTLY. Do not rewrite, add labels or expand it. Preserve Markdown frontmatter and code blocks verbatim. If JSON is requested, output only valid JSON with the requested keys and value types. A request for detail overrides brevity: give the ordered steps, reasons, conditions and provenance.\n\nBefore answering, check every source sentence for unique information. Include each unique fact once. Preserve unknown versus known, local versus published, completed versus passed, and instructions versus actions already taken.\n\nExisting memo rewrites require an explicit request and a preview. Save the approved proposal through validated memo.write with the read revision as expected_revision. On conflict, preserve the newer memo and stop for a new decision. Do not retry automatically. Preserve source transcripts and linked detailed evidence. Use the normal drafting model call, with no second rewrite call.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nAnswer whether the import is complete.\n\nSource:\nThe import is not complete, and that should be the first thing the response makes clear. There were 80 records in the source file. Of those, 76 were imported successfully, while four were rejected because they had no external_id. The import did not create placeholder IDs for the rejected records, and it did not silently drop them as though everything had succeeded. The rejected row numbers are listed in import-errors-6.json. Existing records were not overwritten. The user needs to add external_id values to those four rows and submit only those corrected rows. The user should not be told to replay the entire file, because that is not the recommended next action. The successful records are already durable, and the response must not imply that the whole import was rolled back. It would also be inaccurate to say that all records are ready merely because most of them succeeded."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 1536,
+      "num_ctx": 8192,
+      "seed": 11
+    }
+  },
+  "response": {
+    "model": "granite4:3b",
+    "created_at": "2026-09-13T14:14:13.618147Z",
+    "message": {
+      "role": "assistant",
+      "content": "The import is not complete. Four records were rejected due to missing external_id values. Existing records were not overwritten. Add external_id values to the four rejected rows and resubmit them. Do not replay the entire file."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 1427572375,
+    "load_duration": 987834,
+    "prompt_eval_count": 645,
+    "prompt_eval_cached_count": 457,
+    "prompt_eval_duration": 255967000,
+    "eval_count": 46,
+    "eval_duration": 1166821000
+  },
+  "output_tokens": 46,
+  "input_tokens": 645,
+  "model_digest": "89962fcc75239ac434cdebceb6b7e0669397f92eaef9c487774b718bc36a3e5f",
+  "tokenizer_revision": "89962fcc75239ac434cdebceb6b7e0669397f92eaef9c487774b718bc36a3e5f"
+}

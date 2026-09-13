@@ -1,0 +1,48 @@
+{
+  "fixture": "v04",
+  "repeat": 1,
+  "category": "verbose",
+  "started": "2026-09-13T14:09:14.978Z",
+  "completed": "2026-09-13T14:09:18.882Z",
+  "request": {
+    "model": "granite4:3b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write the deliverable directly. Lead with the answer or decision. Use plain words and short, complete sentences for both replies and standalone memos. Keep the required subject clear. Remove repetition, introductions, decorative headings, labels, commentary about editing, and generic conclusions. Use a short paragraph unless a real sequence or requested format needs a list.\n\nMeaning comes before length. Carry every substantive fact from the source into the deliverable once: decisions, measured results, limitations, exclusions, uncertainty, evidence references, responsible people, and the next action with its prerequisites. Preserve every negation, number, unit, command, exact quoted error, filename, field name and executable block. Do not turn completed into passed, local into deployed, or unknown into known. Do not invent causes, actions, results or recommendations. Keep instructions and observations distinct. A memo must make sense without its source conversation.\n\nIf asked to edit an already concise, clear text, return it unchanged. Do not add a title or preface. Preserve requested frontmatter and code fences exactly. For JSON or another structured format, return only that format with the requested keys and types. Explicit requests for detailed explanations override default brevity; retain ordered steps and their reasons.\n\nBefore returning, silently check that the reader can recover every substantive source fact, protected literal, uncertainty and next action. Restore any missing meaning, then remove only redundant words. Never omit facts to meet a length target.\n\nDraft new text in this style in the normal response. Rewriting an existing memo requires an explicit request and a preview. Save only the approved proposal through the existing validated memo.write operation with the revision that was read as expected_revision. On conflict, keep the newer memo and stop for a new decision; do not retry automatically. Preserve source transcripts and linked detailed evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nWrite a standalone incident handoff.\n\nSource:\nThe incident record concerns the preview service rather than the main application. Between 10:05 and 10:12 UTC, preview requests returned HTTP 503. The main application continued serving requests during that interval. Investigation found that the preview process could not acquire its local lock. The log contained the exact message \"preview lock unavailable\". We have not established who held that lock, so the handoff must not name an owner as though that were known. Restarting the preview process restored previews at 10:12 UTC. That is the observed recovery, not evidence that the lock ownership question has been solved. The supporting log is incident-preview-8. The next step belongs to Oren, who will add lock-owner diagnostics and reproduce the contention in a disposable fixture. The purpose of this handoff is to allow someone who did not see the incident discussion to understand the affected surface, the recovery and the remaining investigation."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 1536,
+      "num_ctx": 8192,
+      "seed": 11
+    }
+  },
+  "response": {
+    "model": "granite4:3b",
+    "created_at": "2026-09-13T14:09:18.882242Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Subject: Incident Handoff - Preview Service HTTP 503**\n\nThe incident involved the preview service, not the main application. Between 10:05 and 10:12 UTC, preview requests returned HTTP 503. The main application continued serving requests during this period. The issue was that the preview process could not acquire its local lock, as indicated by the log message \"preview lock unavailable\". The holder of the lock is unknown. Restarting the preview process resolved the issue at 10:12 UTC. No lock ownership has been confirmed. Oren will add lock-owner diagnostics and reproduce the contention in a disposable fixture. This handoff provides context for the affected surface, recovery, and ongoing investigation."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 3903216542,
+    "load_duration": 1177042,
+    "prompt_eval_count": 621,
+    "prompt_eval_cached_count": 422,
+    "prompt_eval_duration": 238601000,
+    "eval_count": 142,
+    "eval_duration": 3659236000
+  },
+  "output_tokens": 142,
+  "input_tokens": 621,
+  "model_digest": "89962fcc75239ac434cdebceb6b7e0669397f92eaef9c487774b718bc36a3e5f",
+  "tokenizer_revision": "89962fcc75239ac434cdebceb6b7e0669397f92eaef9c487774b718bc36a3e5f"
+}

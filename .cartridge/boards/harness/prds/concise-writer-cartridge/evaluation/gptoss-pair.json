@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "frozen_rubric_sha256": "3f94576b52e4faec8dba7f6ece2aecb266d812cfca6866736a4fe2c419ffa218",
+  "model": "gpt-oss:20b",
+  "expected_digest": "17052f91a42e97930aa6e28a6c6c06a983e6a58dbb00434885a0cf5313e376f7",
+  "settings": {
+    "temperature": 0.2,
+    "num_predict": 4096,
+    "num_ctx": 8192
+  },
+  "think": "low",
+  "visible_token_measurement": "Native /api/generate raw:true prompt_eval_count on the completed visible text. Model metadata must disable BOS/EOS/padding insertion. One generated token is discarded; this measurement is evaluation-only. Record generation eval_count separately because it includes reasoning.",
+  "guidance": "Reuse unchanged candidate-guidance.txt from candidate 1; preserve both failed Granite candidates.",
+  "rationale": "Both Granite candidates lose required facts and formats. Evaluate a second already-installed local model against the identical frozen corpus and meaning/length rubric; baseline and candidate use identical model/settings/tokenizer."
+}

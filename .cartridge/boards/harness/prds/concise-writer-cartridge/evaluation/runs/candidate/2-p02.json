@@ -1,0 +1,48 @@
+{
+  "fixture": "p02",
+  "repeat": 2,
+  "category": "precision",
+  "started": "2026-09-13T14:10:34.726Z",
+  "completed": "2026-09-13T14:10:36.931Z",
+  "request": {
+    "model": "granite4:3b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write the deliverable directly. Lead with the answer or decision. Use plain words and short, complete sentences for both replies and standalone memos. Keep the required subject clear. Remove repetition, introductions, decorative headings, labels, commentary about editing, and generic conclusions. Use a short paragraph unless a real sequence or requested format needs a list.\n\nMeaning comes before length. Carry every substantive fact from the source into the deliverable once: decisions, measured results, limitations, exclusions, uncertainty, evidence references, responsible people, and the next action with its prerequisites. Preserve every negation, number, unit, command, exact quoted error, filename, field name and executable block. Do not turn completed into passed, local into deployed, or unknown into known. Do not invent causes, actions, results or recommendations. Keep instructions and observations distinct. A memo must make sense without its source conversation.\n\nIf asked to edit an already concise, clear text, return it unchanged. Do not add a title or preface. Preserve requested frontmatter and code fences exactly. For JSON or another structured format, return only that format with the requested keys and types. Explicit requests for detailed explanations override default brevity; retain ordered steps and their reasons.\n\nBefore returning, silently check that the reader can recover every substantive source fact, protected literal, uncertainty and next action. Restore any missing meaning, then remove only redundant words. Never omit facts to meet a length target.\n\nDraft new text in this style in the normal response. Rewriting an existing memo requires an explicit request and a preview. Save only the approved proposal through the existing validated memo.write operation with the revision that was read as expected_revision. On conflict, keep the newer memo and stop for a new decision; do not retry automatically. Preserve source transcripts and linked detailed evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: memo.\nReturn a standalone Markdown memo. Preserve the frontmatter and fenced executable block exactly; shorten only explanatory prose.\n\nSource:\n---\nkind: routine\nname: verify-fixture\nstatus: draft\n---\n\nThis routine is for a disposable fixture only. It has not been approved for a shared store. Keep the commands in the stated order.\n\n```sh\nfixture seed --count 3\nfixture verify --read-only\n```\n\nSuccess means the exact output `3 rows checked`. On any other output, stop and preserve the fixture. The expected result is specified by routine-proof-3; this source does not claim that the routine has already passed."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 1536,
+      "num_ctx": 8192,
+      "seed": 29
+    }
+  },
+  "response": {
+    "model": "granite4:3b",
+    "created_at": "2026-09-13T14:10:36.930926Z",
+    "message": {
+      "role": "assistant",
+      "content": "**Subject:** Verify Fixture\n\n**Deliverable:**\n\n```sh\nfixture seed --count 3\nfixture verify --read-only\n```\n\n**Success Criteria:** Output must be `3 rows checked`.\n\n**Failure Criteria:** Any output other than `3 rows checked`. Preserve the fixture.\n\n**Provenance:** Routine-proof-3. Routine status: draft."
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 2203877125,
+    "load_duration": 791834,
+    "prompt_eval_count": 557,
+    "prompt_eval_cached_count": 422,
+    "prompt_eval_duration": 249404000,
+    "eval_count": 75,
+    "eval_duration": 1950163000
+  },
+  "output_tokens": 75,
+  "input_tokens": 557,
+  "model_digest": "89962fcc75239ac434cdebceb6b7e0669397f92eaef9c487774b718bc36a3e5f",
+  "tokenizer_revision": "89962fcc75239ac434cdebceb6b7e0669397f92eaef9c487774b718bc36a3e5f"
+}

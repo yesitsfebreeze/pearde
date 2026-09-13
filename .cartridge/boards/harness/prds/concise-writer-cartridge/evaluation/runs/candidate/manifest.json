@@ -1,0 +1,50 @@
+{
+  "variant": "candidate",
+  "model": "granite4:3b",
+  "model_digest": "89962fcc75239ac434cdebceb6b7e0669397f92eaef9c487774b718bc36a3e5f",
+  "tokenizer_revision": "89962fcc75239ac434cdebceb6b7e0669397f92eaef9c487774b718bc36a3e5f",
+  "tokenizer_revision_basis": "The installed GGUF model digest includes its tokenizer; scalar tokenizer metadata is retained below.",
+  "tokenizer": {
+    "tokenizer.ggml.add_bos_token": false,
+    "tokenizer.ggml.bos_token_id": 100257,
+    "tokenizer.ggml.eos_token_id": 100257,
+    "tokenizer.ggml.merges": null,
+    "tokenizer.ggml.model": "gpt2",
+    "tokenizer.ggml.padding_token_id": 100256,
+    "tokenizer.ggml.pre": "dbrx",
+    "tokenizer.ggml.token_type": null,
+    "tokenizer.ggml.tokens": null,
+    "tokenizer.ggml.unknown_token_id": 100269
+  },
+  "model_details": {
+    "parent_model": "/Users/runner/.ollama/models/blobs/sha256-6c02683809a8dc4eb05c78d44bc63bcd707703b078998fa58829c858ab337bb0",
+    "format": "gguf",
+    "family": "granite",
+    "families": [
+      "granite"
+    ],
+    "parameter_size": "3.4B",
+    "quantization_level": "Q4_K_M"
+  },
+  "capabilities": [
+    "completion",
+    "tools"
+  ],
+  "ollama_version": {
+    "version": "0.34.0"
+  },
+  "endpoint": "http://127.0.0.1:11434/api/chat",
+  "guidance_sha256": "88ebc45679437a89a3932e8e20605d95cb3da05b0699b38de24b81c3004caa08",
+  "fixture_sha256": "31dc49595042df1add80582153d8746d9f5945b23682846006c72d3440cb5772",
+  "rubric_sha256": "3f94576b52e4faec8dba7f6ece2aecb266d812cfca6866736a4fe2c419ffa218",
+  "settings": {
+    "temperature": 0.2,
+    "num_predict": 1536,
+    "num_ctx": 8192
+  },
+  "seeds": [
+    11,
+    29,
+    47
+  ]
+}

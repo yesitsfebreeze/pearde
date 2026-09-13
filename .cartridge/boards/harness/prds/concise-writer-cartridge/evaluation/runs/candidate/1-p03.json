@@ -1,0 +1,49 @@
+{
+  "fixture": "p03",
+  "repeat": 1,
+  "category": "precision",
+  "started": "2026-09-13T14:09:49.453Z",
+  "completed": "2026-09-13T14:09:51.092Z",
+  "request": {
+    "model": "granite4:3b",
+    "stream": false,
+    "messages": [
+      {
+        "role": "system",
+        "content": "Write the deliverable directly. Lead with the answer or decision. Use plain words and short, complete sentences for both replies and standalone memos. Keep the required subject clear. Remove repetition, introductions, decorative headings, labels, commentary about editing, and generic conclusions. Use a short paragraph unless a real sequence or requested format needs a list.\n\nMeaning comes before length. Carry every substantive fact from the source into the deliverable once: decisions, measured results, limitations, exclusions, uncertainty, evidence references, responsible people, and the next action with its prerequisites. Preserve every negation, number, unit, command, exact quoted error, filename, field name and executable block. Do not turn completed into passed, local into deployed, or unknown into known. Do not invent causes, actions, results or recommendations. Keep instructions and observations distinct. A memo must make sense without its source conversation.\n\nIf asked to edit an already concise, clear text, return it unchanged. Do not add a title or preface. Preserve requested frontmatter and code fences exactly. For JSON or another structured format, return only that format with the requested keys and types. Explicit requests for detailed explanations override default brevity; retain ordered steps and their reasons.\n\nBefore returning, silently check that the reader can recover every substantive source fact, protected literal, uncertainty and next action. Restore any missing meaning, then remove only redundant words. Never omit facts to meet a length target.\n\nDraft new text in this style in the normal response. Rewriting an existing memo requires an explicit request and a preview. Save only the approved proposal through the existing validated memo.write operation with the revision that was read as expected_revision. On conflict, keep the newer memo and stop for a new decision; do not retry automatically. Preserve source transcripts and linked detailed evidence.\n"
+      },
+      {
+        "role": "user",
+        "content": "Write the requested deliverable from the supplied source. Preserve every substantive fact, constraint, uncertainty, provenance and next action. Do not invent information. Return only the deliverable, with no account of your editing process.\n\nDeliverable surface: reply.\nReturn only a JSON object with keys status, completed, total, deployed, evidence, next_action. Preserve value types. No Markdown fences.\n\nSource:\nStatus is partial. Exactly 7 of 9 checks completed. Deployed is the boolean false, not the string \"false\". Evidence is null because no durable receipt was saved. The next action is to rerun the two remaining checks and save the receipt. Do not infer that the completed checks passed: the source says only completed."
+      }
+    ],
+    "options": {
+      "temperature": 0.2,
+      "num_predict": 1536,
+      "num_ctx": 8192,
+      "seed": 11
+    },
+    "format": "json"
+  },
+  "response": {
+    "model": "granite4:3b",
+    "created_at": "2026-09-13T14:09:51.091718Z",
+    "message": {
+      "role": "assistant",
+      "content": "{\n  \"status\": \"partial\",\n  \"completed\": 7,\n  \"total\": 9,\n  \"deployed\": false,\n  \"evidence\": null,\n  \"next_action\": \"rerun the two remaining checks and save the receipt\"\n}"
+    },
+    "done": true,
+    "done_reason": "stop",
+    "total_duration": 1638496208,
+    "load_duration": 1102375,
+    "prompt_eval_count": 526,
+    "prompt_eval_cached_count": 422,
+    "prompt_eval_duration": 154320000,
+    "eval_count": 55,
+    "eval_duration": 1479465000
+  },
+  "output_tokens": 55,
+  "input_tokens": 526,
+  "model_digest": "89962fcc75239ac434cdebceb6b7e0669397f92eaef9c487774b718bc36a3e5f",
+  "tokenizer_revision": "89962fcc75239ac434cdebceb6b7e0669397f92eaef9c487774b718bc36a3e5f"
+}

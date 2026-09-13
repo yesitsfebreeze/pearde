@@ -13,7 +13,7 @@ canonical-scope: memo-board-template
 needs:
 - '@memo/memo-board-template/initialize-board'
 - '@memo/memo-board-template/board-engine-integration'
-commit: "4b081453d610af42daac0456750a50bdc719a5fe"
+commit: "45d5a54ab9da1a798cd9997af9a8c19bed8a1812"
 ---
 
 # The memo cartridge supplies a Pearde-compatible project template
@@ -37,3 +37,5 @@ Coordinate the linked outcomes. Claim and implement a leaf; this parent records 
 Reverification: initialize-board receipt refreshed at5345aaaa after document identity integration; child contracts unchanged.
 
 Reverification: initialize-board and types native registrations revalidated at4b081453 after the context facade; template contracts unchanged.
+
+Inventory facade revalidation: unchanged behavior and acceptance at memo 45d5a54; shared native registration is checked with its registered inventory module.

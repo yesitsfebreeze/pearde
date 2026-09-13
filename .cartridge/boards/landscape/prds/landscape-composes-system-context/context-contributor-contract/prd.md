@@ -18,7 +18,7 @@ footprint:
   - .cartridge/docs/context.md
 needs:
 - '@memo/one-document-serves-every-reader/document-identity'
-commit: "c705d648830582e5cf2b4ded267b3c1da4f1eac4"
+commit: "3b9f72854c39ddd90128a48bfce2667e387c3fba"
 ---
 
 # Contributors return bounded attributable context rows
@@ -43,3 +43,5 @@ Preserve the last usable implementation and durable data on failure; report part
 [Round 2 agent review](review.md). Inherits round 1 from `landscape-composes-system-context`; maximum five rounds.
 
 Reverification after Memory contributor c705d648: public context contract unchanged; shared lib.rs registration changed.
+
+Inventory registration revalidation: unchanged acceptance and verification at Landscape 3b9f728; source footprint additionally binds the registered inventory module.

@@ -1,6 +1,7 @@
 ---
 complexity: medium
 footprint:
+  - src/inventory.rs
   - src/lib.rs
   - src/context.rs
   - Cargo.toml

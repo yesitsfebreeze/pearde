@@ -17,7 +17,7 @@ footprint:
 - .cartridge/tests/unit/main/retention_tests.rs
 - .cartridge/tests/integration/retention.test.ts
 - .cartridge/docs/retention.md
-commit: "2a6a863cf1af0876072f8879050274cfa650a785"
+commit: "423ecd329a98d0e0702a71c9ccb0a33a16cedae6"
 ---
 
 # Preview and apply safe session retention
@@ -44,3 +44,5 @@ Preserve the last usable implementation and durable data on failure; report part
 Reverification at965108d9 after mailbox integration. Add the new transitive source module to verification coverage; behavioral acceptance is unchanged.
 
 Reverification: attributed report at2a6a863 adds native main dispatch; bind src/observations.rs as transitive source, retaining previous acceptance and executable gates.
+
+Named channel registration revalidation at 423ecd32: source footprint includes registered channels and its shared mailbox codec; acceptance and behavior gates remain unchanged.

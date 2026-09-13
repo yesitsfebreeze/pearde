@@ -1,0 +1,690 @@
+[
+  {
+    "parameter": "name",
+    "body": "echo ok",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "name",
+    "body": "@",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "name",
+    "body": "-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "name",
+    "body": "@-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "name",
+    "body": "echo }}",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "name",
+    "body": "echo {{name}}",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "name",
+    "body": "echo\u0000bad",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "name",
+    "body": "echo \u00e9",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a-",
+    "body": "echo ok",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a-",
+    "body": "@",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a-",
+    "body": "-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a-",
+    "body": "@-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a-",
+    "body": "echo }}",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a-",
+    "body": "echo {{name}}",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "unsupported_expression",
+        "column": 10,
+        "line": 12
+      }
+    ]
+  },
+  {
+    "parameter": "a-",
+    "body": "echo\u0000bad",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a-",
+    "body": "echo \u00e9",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a--b",
+    "body": "echo ok",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a--b",
+    "body": "@",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a--b",
+    "body": "-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a--b",
+    "body": "@-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a--b",
+    "body": "echo }}",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a--b",
+    "body": "echo {{name}}",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "unsupported_expression",
+        "column": 10,
+        "line": 12
+      }
+    ]
+  },
+  {
+    "parameter": "a--b",
+    "body": "echo\u0000bad",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a--b",
+    "body": "echo \u00e9",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "if",
+    "body": "echo ok",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "if",
+    "body": "@",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "if",
+    "body": "-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "if",
+    "body": "@-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "if",
+    "body": "echo }}",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "if",
+    "body": "echo {{name}}",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "unsupported_expression",
+        "column": 10,
+        "line": 12
+      }
+    ]
+  },
+  {
+    "parameter": "if",
+    "body": "echo\u0000bad",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "if",
+    "body": "echo \u00e9",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "x_",
+    "body": "echo ok",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "x_",
+    "body": "@",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "x_",
+    "body": "-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "x_",
+    "body": "@-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "x_",
+    "body": "echo }}",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "x_",
+    "body": "echo {{name}}",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "unsupported_expression",
+        "column": 10,
+        "line": 12
+      }
+    ]
+  },
+  {
+    "parameter": "x_",
+    "body": "echo\u0000bad",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "x_",
+    "body": "echo \u00e9",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "\u00a0name",
+    "body": "echo ok",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "invalid_recipe_header",
+        "column": 1,
+        "line": 11
+      },
+      {
+        "code": "body_without_recipe",
+        "column": 1,
+        "line": 12
+      },
+      {
+        "code": "missing_default_recipe",
+        "column": 1,
+        "line": 6
+      }
+    ]
+  },
+  {
+    "parameter": "\u00a0name",
+    "body": "@",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "invalid_recipe_header",
+        "column": 1,
+        "line": 11
+      },
+      {
+        "code": "body_without_recipe",
+        "column": 1,
+        "line": 12
+      },
+      {
+        "code": "missing_default_recipe",
+        "column": 1,
+        "line": 6
+      }
+    ]
+  },
+  {
+    "parameter": "\u00a0name",
+    "body": "-",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "invalid_recipe_header",
+        "column": 1,
+        "line": 11
+      },
+      {
+        "code": "body_without_recipe",
+        "column": 1,
+        "line": 12
+      },
+      {
+        "code": "missing_default_recipe",
+        "column": 1,
+        "line": 6
+      }
+    ]
+  },
+  {
+    "parameter": "\u00a0name",
+    "body": "@-",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "invalid_recipe_header",
+        "column": 1,
+        "line": 11
+      },
+      {
+        "code": "body_without_recipe",
+        "column": 1,
+        "line": 12
+      },
+      {
+        "code": "missing_default_recipe",
+        "column": 1,
+        "line": 6
+      }
+    ]
+  },
+  {
+    "parameter": "\u00a0name",
+    "body": "echo }}",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "invalid_recipe_header",
+        "column": 1,
+        "line": 11
+      },
+      {
+        "code": "body_without_recipe",
+        "column": 1,
+        "line": 12
+      },
+      {
+        "code": "missing_default_recipe",
+        "column": 1,
+        "line": 6
+      }
+    ]
+  },
+  {
+    "parameter": "\u00a0name",
+    "body": "echo {{name}}",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "invalid_recipe_header",
+        "column": 1,
+        "line": 11
+      },
+      {
+        "code": "body_without_recipe",
+        "column": 1,
+        "line": 12
+      },
+      {
+        "code": "missing_default_recipe",
+        "column": 1,
+        "line": 6
+      }
+    ]
+  },
+  {
+    "parameter": "\u00a0name",
+    "body": "echo\u0000bad",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "invalid_recipe_header",
+        "column": 1,
+        "line": 11
+      },
+      {
+        "code": "body_without_recipe",
+        "column": 1,
+        "line": 12
+      },
+      {
+        "code": "missing_default_recipe",
+        "column": 1,
+        "line": 6
+      }
+    ]
+  },
+  {
+    "parameter": "\u00a0name",
+    "body": "echo \u00e9",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "invalid_recipe_header",
+        "column": 1,
+        "line": 11
+      },
+      {
+        "code": "body_without_recipe",
+        "column": 1,
+        "line": 12
+      },
+      {
+        "code": "missing_default_recipe",
+        "column": 1,
+        "line": 6
+      }
+    ]
+  },
+  {
+    "parameter": "name\u00a0",
+    "body": "echo ok",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "invalid_recipe_header",
+        "column": 1,
+        "line": 11
+      },
+      {
+        "code": "body_without_recipe",
+        "column": 1,
+        "line": 12
+      },
+      {
+        "code": "missing_default_recipe",
+        "column": 1,
+        "line": 6
+      }
+    ]
+  },
+  {
+    "parameter": "name\u00a0",
+    "body": "@",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "invalid_recipe_header",
+        "column": 1,
+        "line": 11
+      },
+      {
+        "code": "body_without_recipe",
+        "column": 1,
+        "line": 12
+      },
+      {
+        "code": "missing_default_recipe",
+        "column": 1,
+        "line": 6
+      }
+    ]
+  },
+  {
+    "parameter": "name\u00a0",
+    "body": "-",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "invalid_recipe_header",
+        "column": 1,
+        "line": 11
+      },
+      {
+        "code": "body_without_recipe",
+        "column": 1,
+        "line": 12
+      },
+      {
+        "code": "missing_default_recipe",
+        "column": 1,
+        "line": 6
+      }
+    ]
+  },
+  {
+    "parameter": "name\u00a0",
+    "body": "@-",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "invalid_recipe_header",
+        "column": 1,
+        "line": 11
+      },
+      {
+        "code": "body_without_recipe",
+        "column": 1,
+        "line": 12
+      },
+      {
+        "code": "missing_default_recipe",
+        "column": 1,
+        "line": 6
+      }
+    ]
+  },
+  {
+    "parameter": "name\u00a0",
+    "body": "echo }}",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "invalid_recipe_header",
+        "column": 1,
+        "line": 11
+      },
+      {
+        "code": "body_without_recipe",
+        "column": 1,
+        "line": 12
+      },
+      {
+        "code": "missing_default_recipe",
+        "column": 1,
+        "line": 6
+      }
+    ]
+  },
+  {
+    "parameter": "name\u00a0",
+    "body": "echo {{name}}",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "invalid_recipe_header",
+        "column": 1,
+        "line": 11
+      },
+      {
+        "code": "body_without_recipe",
+        "column": 1,
+        "line": 12
+      },
+      {
+        "code": "missing_default_recipe",
+        "column": 1,
+        "line": 6
+      }
+    ]
+  },
+  {
+    "parameter": "name\u00a0",
+    "body": "echo\u0000bad",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "invalid_recipe_header",
+        "column": 1,
+        "line": 11
+      },
+      {
+        "code": "body_without_recipe",
+        "column": 1,
+        "line": 12
+      },
+      {
+        "code": "missing_default_recipe",
+        "column": 1,
+        "line": 6
+      }
+    ]
+  },
+  {
+    "parameter": "name\u00a0",
+    "body": "echo \u00e9",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "invalid_recipe_header",
+        "column": 1,
+        "line": 11
+      },
+      {
+        "code": "body_without_recipe",
+        "column": 1,
+        "line": 12
+      },
+      {
+        "code": "missing_default_recipe",
+        "column": 1,
+        "line": 6
+      }
+    ]
+  }
+]

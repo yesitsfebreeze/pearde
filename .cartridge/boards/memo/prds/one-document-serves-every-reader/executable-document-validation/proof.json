@@ -1,0 +1,56 @@
+{
+  "source_commit": "3251566e6c92439e4a32c5ce8b734e55726801ee",
+  "commands": [
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just test memo",
+      "result": "77 passed,0 failed;5 validation unit tests with table-driven negatives/caps/snapshot mutation; test-log.txt"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just check memo",
+      "result": "PASS public format/check including Clippy; check-log.txt"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/memo.ctg",
+      "command": "bun test ./.cartridge/tests/integration/validation.test.ts",
+      "result": "1 real native SDK test,63 assertions PASS; Just stub sentinel remains absent; test-only actual Just1.58.0 dump accepts exact LF/CRLF extraction; sdk-log.txt"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/memo.ctg",
+      "command": "bun test ./.cartridge/tests/integration/context.test.ts",
+      "result": "3 context compatibility tests,80 assertions PASS; context-compat-log.txt"
+    },
+    {
+      "command": "python3 /tmp/memo-validation-conformance.py; retained conformance-probe.txt",
+      "result": "56 actual native/parser cases;36 accepted with0 Just parser mismatches; conformance.json. Before-fix Unicode whitespace mismatch retained in conformance-before-ascii-fix.json."
+    },
+    {
+      "command": "SHA256 every documents/projections/validation fixture against HEAD blob and manifest",
+      "result": "PASS: existing identity/projection fixtures unchanged; validation LF/CRLF stored exactly. Scoped .gitattributes preserves CRLF and marks CR-at-EOL intentional."
+    }
+  ],
+  "source_sha256": {
+    ".cartridge/docs/documents.md": "de9ff6ded6d35084cd6d207cbee54555074b5a477b5233b9cd42fd0e0c99f85e",
+    ".cartridge/tests/fixtures/validation/.gitattributes": "2d32780456b92185f0b4d485add631d361ead347307d79cba2a0336850ea4ece",
+    ".cartridge/tests/fixtures/validation/manifest.json": "ccdc19ef4a7c75c8e3b6ec24ac0ff9b61d54a3da3059bb34e9e5ae2946b25bf2",
+    ".cartridge/tests/fixtures/validation/valid-crlf.jd": "56f627b5556412c517ca406bcce0f86fb7d8d41015317b564da88e8b8b285b59",
+    ".cartridge/tests/fixtures/validation/valid.md": "15dcb82647ae50026fe9ec5b5b4404e80c014ab118683a6623775e674f0f3bd7",
+    ".cartridge/tests/integration/validation.test.ts": "8bb1ee782c1857ceb5bc2657d2511ef3c1eba97c4cc277361542a456b02581b4",
+    ".cartridge/tests/unit/validation.rs": "ceab87cf2d31be3be3d283101c4d35a964258d4605390742c2e427437f5503ed",
+    "src/document.rs": "27bf670fddd9e95d32b65c04c125f350c543ff481d68e259f90164e0b40d1ec5",
+    "src/validation.rs": "e917d1cc8fe73ecde64c2208e25633dc594aafc3bcd3ce84027b2bf3ce273891"
+  },
+  "limits": [
+    "Conservative cartridge-just/v1 profile pinned to Just1.58.0; not full Just/justdown compatibility. Explicit reviewed upgrades only.",
+    "Product validation never launches processes, opens imports, evaluates Just expressions or grants execution. launch_authorized:false. Shell body syntax/safety is intentionally opaque.",
+    "Frozen exact stdin/hash/source map and selected recipe/argv/base are returned only on success. Downstream runner owns pinned-version enforcement, policy, lifecycle and consuming frozen bytes without source reread.",
+    "32 blocks,64 recipes,64KiB source,64 diagnostics,16 required params/argv,4096 bytes per arg/16KiB total; existing source/owner/private bounds remain.",
+    "Source directories are trusted host roots; execution-base directory contents are not frozen by validation."
+  ],
+  "receipt_impacts": [
+    "Document identity and document projections overlap src/document.rs and documents.md; refresh both at current source.",
+    "Facade source footprint unchanged, but its document-projection prerequisite binding may need refresh after projection receipt changes. Native context compatibility80 passes.",
+    "Types/initialize/board-engine source footprints unchanged. Parent one-document-serves-every-reader may roll up all three children after serial receipt refresh."
+  ]
+}

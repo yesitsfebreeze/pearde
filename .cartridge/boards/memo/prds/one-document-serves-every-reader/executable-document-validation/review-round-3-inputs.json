@@ -1,0 +1,15 @@
+{
+  "canonical": "@memo/one-document-serves-every-reader/executable-document-validation",
+  "round": 3,
+  "sha256": {
+    "prd.md": "ad4e7155be381ba5249ea2f380649f2171e4fd89197e7fcab6f78f0feecf2204",
+    "specs/spec01.md": "351a31bd9dc55042eed8fbc32279f53daea47dec32898ecdc90dc2609fc2d0dd",
+    "baseline.json": "3fad0f6f30542835ad0486d0acb8fe86bcdd3538404a526b5703e66526f59ef6",
+    "baseline-probe.txt": "2f1907548b63c2b7d9a5a920d159f0e3d8182af1ebb411f890ea94bb84e533fb",
+    "../memo.ctg/src/document.rs": "4b4d882b67a9035482515a72081402b568b581cf31b65aaaa29a6bd90583801d",
+    "../memo.ctg/src/projection.rs": "17679c1389951928b8d897a89cf163dd33a415ea8d9c46fef8793029757c9eaa",
+    "parser-edge-probes.json": "bf35154ceaa9a84f85925fb0dddb8fd7ce21c4fe69e8159f4b20a415207c47cc"
+  },
+  "reviewer": "/root",
+  "score": 95
+}

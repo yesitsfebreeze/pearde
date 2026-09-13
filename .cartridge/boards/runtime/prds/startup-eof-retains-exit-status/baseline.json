@@ -1,0 +1,12 @@
+{
+  "source_head": "83fb05a189a7f4fca4c1a152244feb221c6a1b81",
+  "binary_sha256": "bd16fa5dae33225722c75526d5ab271cd651d4dec398c9e5ac05395d9f7ea0cd",
+  "command": "Launch existing freshly-built nested_fixture SDK executable; apply config.child to disposable shell below. Child closes stdout, remains alive50ms, then exits7. Keep host stdin open while waiting for error; terminate only afterward.",
+  "script": "#!/bin/sh\nif [ \"$1\" = hello ]; then echo '{\"provide\":[\"roundtrip\"]}'; exit 0; fi\necho '{\"not\":\"ready\"}'\nexec 1>&-\nsleep 0.05\nexit 7\n",
+  "stdout": "{\"error\":\"nested exited before ready: closed stdout\"}\n",
+  "stderr": "",
+  "exit_code": -15,
+  "elapsed_ms": 142.91,
+  "hypothesis": "Stdout EOF can precede OS exit-status availability; one-shot child.try_wait returns None, then drop kills the child before exit7 can be observed. This is not a stderr drain race and predates observation instrumentation.",
+  "initial_probe_note": "First subprocess.run probe closed host stdin immediately and ended SDK lifecycle before apply completed; corrected probe keeps pipe open."
+}

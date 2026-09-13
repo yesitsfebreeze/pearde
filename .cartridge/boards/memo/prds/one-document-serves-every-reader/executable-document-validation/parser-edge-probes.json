@@ -1,0 +1,114 @@
+[
+  {
+    "case": "mixed",
+    "source": "show:\n \techo hi\n",
+    "exit_code": 1,
+    "stderr": "error: found a mix of tabs and spaces in leading whitespace: `\u2420\u2409`\nleading whitespace may consist of tabs or spaces, but not both\n \u2014\u2014\u25b6 mixed.just:2:1\n  \u2502\n2 \u2502      echo hi\n  \u2502 ^^^^^\n",
+    "stdout": ""
+  },
+  {
+    "case": "tab",
+    "source": "show:\n\techo hi\n",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"assignments\":{},\"first\":\"show\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"show\":{\"attributes\":[],\"body\":[[\"echo hi\"]],\"dependencies\":[],\"doc\":null,\"name\":\"show\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"show\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-just-profile-esuls0cp/tab.just\",\"unexports\":[],\"warnings\":[]}\n"
+  },
+  {
+    "case": "space",
+    "source": "show:\n echo hi\n",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"assignments\":{},\"first\":\"show\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"show\":{\"attributes\":[],\"body\":[[\"echo hi\"]],\"dependencies\":[],\"doc\":null,\"name\":\"show\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"show\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-just-profile-esuls0cp/space.just\",\"unexports\":[],\"warnings\":[]}\n"
+  },
+  {
+    "case": "comment",
+    "source": "show:\n    # comment\n",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"assignments\":{},\"first\":\"show\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"show\":{\"attributes\":[],\"body\":[[\"# comment\"]],\"dependencies\":[],\"doc\":null,\"name\":\"show\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"show\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-just-profile-esuls0cp/comment.just\",\"unexports\":[],\"warnings\":[]}\n"
+  },
+  {
+    "case": "empty",
+    "source": "show:\n",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"assignments\":{},\"first\":\"show\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"show\":{\"attributes\":[],\"body\":[],\"dependencies\":[],\"doc\":null,\"name\":\"show\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"show\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-just-profile-esuls0cp/empty.just\",\"unexports\":[],\"warnings\":[]}\n"
+  },
+  {
+    "case": "paramtrue",
+    "source": "show true:\n    echo {{true}}\n",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"assignments\":{},\"first\":\"show\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"show\":{\"attributes\":[],\"body\":[[\"echo \",[[\"variable\",\"true\"]]]],\"dependencies\":[],\"doc\":null,\"name\":\"show\",\"parameters\":[{\"default\":null,\"export\":false,\"flag\":false,\"help\":null,\"kind\":\"singular\",\"long\":null,\"max\":null,\"min\":null,\"multiple\":false,\"name\":\"true\",\"pattern\":null,\"short\":null,\"value\":null}],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"show\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-just-profile-esuls0cp/paramtrue.just\",\"unexports\":[],\"warnings\":[]}\n"
+  },
+  {
+    "case": "paramhyphen",
+    "source": "show the-name:\n    echo {{the-name}}\n",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"assignments\":{},\"first\":\"show\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"show\":{\"attributes\":[],\"body\":[[\"echo \",[[\"variable\",\"the-name\"]]]],\"dependencies\":[],\"doc\":null,\"name\":\"show\",\"parameters\":[{\"default\":null,\"export\":false,\"flag\":false,\"help\":null,\"kind\":\"singular\",\"long\":null,\"max\":null,\"min\":null,\"multiple\":false,\"name\":\"the-name\",\"pattern\":null,\"short\":null,\"value\":null}],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"show\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-just-profile-esuls0cp/paramhyphen.just\",\"unexports\":[],\"warnings\":[]}\n"
+  },
+  {
+    "case": "import",
+    "source": "import:\n    echo hi\n",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"assignments\":{},\"first\":\"import\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"import\":{\"attributes\":[],\"body\":[[\"echo hi\"]],\"dependencies\":[],\"doc\":null,\"name\":\"import\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"import\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-just-profile-esuls0cp/import.just\",\"unexports\":[],\"warnings\":[]}\n"
+  },
+  {
+    "case": "set",
+    "source": "set:\n    echo hi\n",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"assignments\":{},\"first\":\"set\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"set\":{\"attributes\":[],\"body\":[[\"echo hi\"]],\"dependencies\":[],\"doc\":null,\"name\":\"set\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"set\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-just-profile-esuls0cp/set.just\",\"unexports\":[],\"warnings\":[]}\n"
+  },
+  {
+    "case": "alias",
+    "source": "alias:\n    echo hi\n",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"assignments\":{},\"first\":\"alias\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"alias\":{\"attributes\":[],\"body\":[[\"echo hi\"]],\"dependencies\":[],\"doc\":null,\"name\":\"alias\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"alias\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-just-profile-esuls0cp/alias.just\",\"unexports\":[],\"warnings\":[]}\n"
+  },
+  {
+    "case": "export",
+    "source": "export:\n    echo hi\n",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"assignments\":{},\"first\":\"export\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"export\":{\"attributes\":[],\"body\":[[\"echo hi\"]],\"dependencies\":[],\"doc\":null,\"name\":\"export\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"export\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-just-profile-esuls0cp/export.just\",\"unexports\":[],\"warnings\":[]}\n"
+  },
+  {
+    "case": "mod",
+    "source": "mod:\n    echo hi\n",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"assignments\":{},\"first\":\"mod\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"mod\":{\"attributes\":[],\"body\":[[\"echo hi\"]],\"dependencies\":[],\"doc\":null,\"name\":\"mod\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"mod\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-just-profile-esuls0cp/mod.just\",\"unexports\":[],\"warnings\":[]}\n"
+  },
+  {
+    "case": "unexport",
+    "source": "unexport:\n    echo hi\n",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"assignments\":{},\"first\":\"unexport\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"unexport\":{\"attributes\":[],\"body\":[[\"echo hi\"]],\"dependencies\":[],\"doc\":null,\"name\":\"unexport\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"unexport\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-just-profile-esuls0cp/unexport.just\",\"unexports\":[],\"warnings\":[]}\n"
+  },
+  {
+    "case": "true",
+    "source": "true:\n    echo hi\n",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"assignments\":{},\"first\":\"true\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"true\":{\"attributes\":[],\"body\":[[\"echo hi\"]],\"dependencies\":[],\"doc\":null,\"name\":\"true\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"true\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-just-profile-esuls0cp/true.just\",\"unexports\":[],\"warnings\":[]}\n"
+  },
+  {
+    "case": "false",
+    "source": "false:\n    echo hi\n",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"assignments\":{},\"first\":\"false\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"false\":{\"attributes\":[],\"body\":[[\"echo hi\"]],\"dependencies\":[],\"doc\":null,\"name\":\"false\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"false\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-just-profile-esuls0cp/false.just\",\"unexports\":[],\"warnings\":[]}\n"
+  },
+  {
+    "case": "assert",
+    "source": "assert:\n    echo hi\n",
+    "exit_code": 0,
+    "stderr": "",
+    "stdout": "{\"assignments\":{},\"first\":\"assert\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"assert\":{\"attributes\":[],\"body\":[[\"echo hi\"]],\"dependencies\":[],\"doc\":null,\"name\":\"assert\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"assert\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-just-profile-esuls0cp/assert.just\",\"unexports\":[],\"warnings\":[]}\n"
+  }
+]

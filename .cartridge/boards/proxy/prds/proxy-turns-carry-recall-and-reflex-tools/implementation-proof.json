@@ -1,0 +1,108 @@
+{
+  "source_commit": "9ddcc08807a059579c21227ad9d3523d242ddf86",
+  "dependencies": {
+    "landscape": "c705d648830582e5cf2b4ded267b3c1da4f1eac4",
+    "memo": "3251566e6c92439e4a32c5ce8b734e55726801ee",
+    "router": "4ad9cd35dc862ecfe0786612d39913612d93fc45",
+    "runtime_source_head": "83fb05a189a7f4fca4c1a152244feb221c6a1b81"
+  },
+  "runtime_attribution": "Runtime source is concurrently owned by another agent; real composition uses the fingerprinted existing runtime binary, not a claimed rebuild at this source HEAD. Shared Cargo.lock and exact shipped memo memory grant belong to coordinator.",
+  "source_paths": [
+    "Cargo.toml",
+    "cartridge.json",
+    "src/main.rs",
+    "src/service.rs",
+    "src/context.rs",
+    "src/wire.rs",
+    "src/streaming.rs",
+    "src/usage.rs",
+    ".cartridge/tests/unit/tests.rs",
+    ".cartridge/tests/unit/context.rs",
+    ".cartridge/tests/integration/recall.test.ts",
+    ".cartridge/docs/context.md"
+  ],
+  "commands": [
+    "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/proxy-context\" just test proxy",
+    "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/proxy-context\" just check proxy",
+    "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/proxy-context\" just build proxy",
+    "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/proxy-context\" just build memo",
+    "CARTRIDGE_WRAPPER=/Users/feb/dev/cartridge/cartridge.ctg/target/debug/cartridge MEMORY_BINARY=/Users/feb/dev/cartridge/cartridge.ctg/target/debug/memory_cartridge MEMO_BINARY=/Users/feb/dev/cartridge/cartridge.ctg/target/proxy-context/debug/memo_cartridge PROXY_BINARY=/Users/feb/dev/cartridge/cartridge.ctg/target/proxy-context/debug/proxy bun test ./.cartridge/tests/integration/recall.test.ts"
+  ],
+  "results": {
+    "unit": "41 passed, 0 failed; 33 existing plus 8 context cases",
+    "check": "public check passed; no warning suppression",
+    "build": "proxy and current memo builds passed",
+    "real_composition": "2 passed, 0 failed, 19 assertions; memory present is user-role data with exact source ID; valid absent-Memory profile starts and forwards without a memory store"
+  },
+  "review": {
+    "reviewer": "/root",
+    "round": 3,
+    "score": 95
+  },
+  "footprint_refresh": [
+    "@proxy/improve-proxy-total-usage",
+    "@proxy/improve-proxy-tool-trace",
+    "@proxy/improve-proxy-continuation-recovery",
+    "@proxy/improve-proxy-programme"
+  ],
+  "limitations": [
+    "Snapshot data is untrusted and remains user-role evidence; source digests are observed projections, not atomic engine freshness",
+    "Optional context preserves valid mandatory envelopes; existing mandatory harness/tool resource failures remain errors",
+    "Configured declared-provider startup still obeys existing runtime dependency activation; valid missing-Memory profiles omit both provider and memo grant",
+    "Diagnostics are opt-in and principal-bound; shared keys share one principal; bounded process-local records expire or evict without replay",
+    "Dropping/cancelling reads does not acknowledge remote cancellation or undo completed effects"
+  ],
+  "shared_profile_sha256": "f83d3c89cb6e98d7550fadfa0f54a2b2f0b6e64f184b239ca65d307587cbfd71",
+  "logs": {
+    "implementation-tests-log.txt": "9e9b8bbd9df600125fb32750d8292787edc59ac77194d99685cd56bb65c4542a",
+    "implementation-check-log.txt": "c6cca8cb94afc15f63cc585cd7e1fde0ab4de50d1a627dc477d2711e98a71176",
+    "implementation-build-log.txt": "88f0b835e314aef2845b31983c25a1e3ac729e3d0e7dc13142403138e30039ff",
+    "implementation-integration-log.txt": "c94187ea5bd45afcf0ff7080484d732c11a733f7940eb2fdad2fcabc9e24c1ea"
+  },
+  "binary_fingerprints": [
+    {
+      "fixture": "memory_present",
+      "sourceId": "9c0e8179c18f55fca23dbd9c999e7ac1715c0c3241a0868af8b5fa46c512937f",
+      "binaries": {
+        "CARTRIDGE_WRAPPER": {
+          "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/debug/cartridge",
+          "sha256": "e0a2e43d5c0adf83309ad1a80957947d3dab90963f6ee01b305ba91d931d0f28"
+        },
+        "MEMORY_BINARY": {
+          "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/debug/memory_cartridge",
+          "sha256": "d595a4db61c2f71cf2a6413b3f4d2e244f2f7d0da90122d1329829bb568b94b8"
+        },
+        "MEMO_BINARY": {
+          "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/proxy-context/debug/memo_cartridge",
+          "sha256": "bc9e1aedcf76ea3389d9158d72dd211976e9b187953c7600f85e4fa048f88807"
+        },
+        "PROXY_BINARY": {
+          "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/proxy-context/debug/proxy",
+          "sha256": "c74b4a43efaf1471e560b2af1fa20d6ccd9b70c9ba00d22e383581ec071b0347"
+        }
+      }
+    },
+    {
+      "fixture": "memory_absent",
+      "binaries": {
+        "CARTRIDGE_WRAPPER": {
+          "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/debug/cartridge",
+          "sha256": "e0a2e43d5c0adf83309ad1a80957947d3dab90963f6ee01b305ba91d931d0f28"
+        },
+        "MEMORY_BINARY": {
+          "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/debug/memory_cartridge",
+          "sha256": "d595a4db61c2f71cf2a6413b3f4d2e244f2f7d0da90122d1329829bb568b94b8"
+        },
+        "MEMO_BINARY": {
+          "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/proxy-context/debug/memo_cartridge",
+          "sha256": "bc9e1aedcf76ea3389d9158d72dd211976e9b187953c7600f85e4fa048f88807"
+        },
+        "PROXY_BINARY": {
+          "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/proxy-context/debug/proxy",
+          "sha256": "c74b4a43efaf1471e560b2af1fa20d6ccd9b70c9ba00d22e383581ec071b0347"
+        }
+      }
+    }
+  ],
+  "checked_spec_sha256": "7b347989088f57af48a44b8105bb743a7fb9bf82a0f67cb74e6b525db6943d7a"
+}

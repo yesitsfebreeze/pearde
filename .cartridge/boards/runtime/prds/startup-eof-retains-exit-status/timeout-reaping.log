@@ -1,0 +1,14 @@
+    Finished `test` profile [unoptimized] target(s) in 0.06s
+     Running unittests src/lib.rs (target/sessions-mapping/debug/deps/cartridge-41093d4bbf807d0f)
+
+running 1 test
+test tests::wire::stdout_closed_live_children_obey_each_host_deadline_and_are_reaped ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 162 filtered out; finished in 11.08s
+
+     Running unittests src/main.rs (target/sessions-mapping/debug/deps/cartridge-bfe1ba4daa6e9908)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+

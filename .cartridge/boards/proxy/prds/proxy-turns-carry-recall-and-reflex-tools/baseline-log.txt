@@ -1,0 +1,19 @@
+    Updating crates.io index
+     Locking 206 packages to latest compatible versions
+      Adding generic-array v0.14.7 (available: v0.14.9)
+      Adding matchit v0.8.4 (available: v0.8.6)
+      Adding reqwest v0.12.28 (available: v0.13.5)
+      Adding sha2 v0.10.9 (available: v0.11.0)
+   Compiling proxy v0.1.0 (/private/tmp/proxy-context-baseline)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.66s
+     Running unittests src/main.rs (target/proxy-continuation-baseline/debug/deps/proxy-0d4b8396a976504d)
+
+running 1 test
+Chat: memory data entered privileged instructions; source/ID omitted; no Landscape selection
+Anthropic: memory data entered privileged instructions; source/ID omitted; no Landscape selection
+Responses: memory data entered privileged instructions; source/ID omitted; no Landscape selection
+Oversized optional memory prevented a valid original request from reaching the provider: context_over_budget: injected request is 300615 bytes, budget is 200000 (raise harness.max_bytes and proxy.max_bytes in the profile)
+test tests::baseline_recall_authority_and_optional_budget_probe ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 33 filtered out; finished in 0.01s
+

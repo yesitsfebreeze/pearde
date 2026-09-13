@@ -1,0 +1,23 @@
+import pathlib,tempfile,subprocess,json,os
+owner=pathlib.Path('/Users/feb/dev/cartridge/memo.ctg');proof=owner.parent/'prd.ctg/.cartridge/boards/memo/prds/one-document-serves-every-reader/executable-document-validation';root=pathlib.Path(tempfile.mkdtemp(prefix='memo-executable-baseline-'))
+(root/'dep.just').write_text('dependency:\n    echo imported\n');(root/'marker.txt').write_text('FIXTURE_READ_VALUE')
+cases={'valid':'show name:\n    echo {{name}}\n','duplicate':'show:\n    echo first\nshow:\n    echo second\n','import':"import 'dep.just'\nshow:\n    echo imported\n",'include':"!include dep.just\nshow:\n    echo included\n",'read_expression':"value := read('marker.txt')\nshow:\n    echo {{value}}\n",'backtick':"value := `touch payload-started`\nshow:\n    echo {{value}}\n",'bad_indent':'show:\n  echo one\n    echo two\n'}
+env={k:v for k,v in os.environ.items() if not k.startswith('JUST_')};results=[]
+for name,text in cases.items():
+ fixture=root/(name+'.just');fixture.write_text(text)
+ args=['just','--no-dotenv','--color','never','--working-directory',str(root),'--justfile',str(fixture),'--dump','--dump-format','json']
+ result=subprocess.run(args,input=text,text=True,capture_output=True,cwd=root,env=env,timeout=10)
+ results.append({'case':name,'source':text,'argv':args,'exit_code':result.returncode,'stdout':result.stdout,'stderr':result.stderr,'payload_started':(root/'payload-started').exists()})
+file=root/'.cartridge/documents/unsafe.md';file.parent.mkdir(parents=True);file.write_text('---\nschema: cartridge-document/v1\nkind: tool\ndescription: Validation baseline\n---\n```just\n'+cases['duplicate']+cases['import']+'```\n')
+child=subprocess.Popen([str(owner.parent/'cartridge.ctg/target/tool-result-contract/debug/memo_cartridge')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+def send(v):child.stdin.write(json.dumps(v)+'\n');child.stdin.flush()
+send({'apply':{'name':'memo','config':{}}})
+while not json.loads(child.stdout.readline()).get('ready'):pass
+send({'id':1,'call':'memo','args':{'op':'document','cwd':str(root),'path':'.cartridge/documents/unsafe.md','projection':'commands'}})
+while True:
+ value=json.loads(child.stdout.readline())
+ if value.get('cartridges'):send({'reply':value['id'],'data':[]});continue
+ if value.get('reply')==1:break
+send({'dispose':True});child.communicate(timeout=10)
+output={'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=owner,text=True).strip(),'parser_version':subprocess.check_output(['just','--version'],text=True).strip(),'fixture':str(root),'native_response':value,'parser_probes':results,'command':'python3 /tmp/memo-executable-baseline.py; exact source baseline-probe.txt','finding':'Native commands returns validated:false without duplicate/metadata/import diagnostics. Installed parser accepts imports and source-read/backtick expressions in dump, with no payload start; import reads dependent file during parse. In-process conservative validation must reject those before any process starts.'}
+(proof/'baseline.json').write_text(json.dumps(output,indent=2)+'\n');(proof/'baseline-probe.txt').write_text(pathlib.Path(__file__).read_text());print(json.dumps({'native':value,'parser':[(r['case'],r['exit_code'],r['payload_started']) for r in results]},indent=2))

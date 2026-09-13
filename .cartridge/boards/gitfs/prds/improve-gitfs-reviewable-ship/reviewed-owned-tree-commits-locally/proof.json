@@ -1,0 +1,23 @@
+{
+  "owner": "gitfs",
+  "state": "implemented-reviewed-awaiting-collection",
+  "public_tests": 33,
+  "public_check": "pass",
+  "native_tests": 3,
+  "native_assertions": 186,
+  "logs": {
+    "test-log.txt": "a79e6ec10a3663e0253e83f75481c00a901332cc280eed960b08f60c50b3db63",
+    "check-log.txt": "c2b14fd6ea327c75db3cc64c95feaf30394b79c3eb823fec2ef1170857a923e9",
+    "integration-log.txt": "0ef7260ad7908dc764e91289f3e63b28708a62d062053060eebfaea23f8158fa",
+    "build-log.txt": "b853ed2c3a9a1713b08089db03ad459f46068c91d42d9d0fce429ecc29ac29d6"
+  },
+  "limitations": [
+    "arbitrary hostile filesystem writers excluded",
+    "macOS/Linux root identity required",
+    "remote push separate unfinished child",
+    "existing undo behavior unchanged"
+  ],
+  "public_build": "pass",
+  "commit": "67ef4ac0770de2770f6eee10164467c25dd370f0",
+  "spec_sha256": "5895bc036bb624d102b374413166b8e6f4ddb3743fd0dfbf3484bc79c0dd7fb6"
+}

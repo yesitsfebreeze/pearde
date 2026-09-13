@@ -1,0 +1,466 @@
+[
+  {
+    "parameter": "name",
+    "body": "echo ok",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "name",
+    "body": "@",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "name",
+    "body": "-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "name",
+    "body": "@-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "name",
+    "body": "echo }}",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "name",
+    "body": "echo {{name}}",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "name",
+    "body": "echo\u0000bad",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "name",
+    "body": "echo \u00e9",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a-",
+    "body": "echo ok",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a-",
+    "body": "@",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a-",
+    "body": "-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a-",
+    "body": "@-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a-",
+    "body": "echo }}",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a-",
+    "body": "echo {{name}}",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "unsupported_expression",
+        "column": 10,
+        "line": 12
+      }
+    ]
+  },
+  {
+    "parameter": "a-",
+    "body": "echo\u0000bad",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a-",
+    "body": "echo \u00e9",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a--b",
+    "body": "echo ok",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a--b",
+    "body": "@",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a--b",
+    "body": "-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a--b",
+    "body": "@-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a--b",
+    "body": "echo }}",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a--b",
+    "body": "echo {{name}}",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "unsupported_expression",
+        "column": 10,
+        "line": 12
+      }
+    ]
+  },
+  {
+    "parameter": "a--b",
+    "body": "echo\u0000bad",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "a--b",
+    "body": "echo \u00e9",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "if",
+    "body": "echo ok",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "if",
+    "body": "@",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "if",
+    "body": "-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "if",
+    "body": "@-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "if",
+    "body": "echo }}",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "if",
+    "body": "echo {{name}}",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "unsupported_expression",
+        "column": 10,
+        "line": 12
+      }
+    ]
+  },
+  {
+    "parameter": "if",
+    "body": "echo\u0000bad",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "if",
+    "body": "echo \u00e9",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "x_",
+    "body": "echo ok",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "x_",
+    "body": "@",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "x_",
+    "body": "-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "x_",
+    "body": "@-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "x_",
+    "body": "echo }}",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "x_",
+    "body": "echo {{name}}",
+    "validated": false,
+    "diagnostics": [
+      {
+        "code": "unsupported_expression",
+        "column": 10,
+        "line": 12
+      }
+    ]
+  },
+  {
+    "parameter": "x_",
+    "body": "echo\u0000bad",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "x_",
+    "body": "echo \u00e9",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 0,
+    "parser_stderr": ""
+  },
+  {
+    "parameter": "\u00a0name",
+    "body": "echo ok",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 1,
+    "parser_stderr": "error: unknown start of token '\u00a0' (U+00A0)\n \u2014\u2014\u25b6 justfile:1:6\n  \u2502\n1 \u2502 show \u00a0name:\n  \u2502      ^\n"
+  },
+  {
+    "parameter": "\u00a0name",
+    "body": "@",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 1,
+    "parser_stderr": "error: unknown start of token '\u00a0' (U+00A0)\n \u2014\u2014\u25b6 justfile:1:6\n  \u2502\n1 \u2502 show \u00a0name:\n  \u2502      ^\n"
+  },
+  {
+    "parameter": "\u00a0name",
+    "body": "-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 1,
+    "parser_stderr": "error: unknown start of token '\u00a0' (U+00A0)\n \u2014\u2014\u25b6 justfile:1:6\n  \u2502\n1 \u2502 show \u00a0name:\n  \u2502      ^\n"
+  },
+  {
+    "parameter": "\u00a0name",
+    "body": "@-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 1,
+    "parser_stderr": "error: unknown start of token '\u00a0' (U+00A0)\n \u2014\u2014\u25b6 justfile:1:6\n  \u2502\n1 \u2502 show \u00a0name:\n  \u2502      ^\n"
+  },
+  {
+    "parameter": "\u00a0name",
+    "body": "echo }}",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 1,
+    "parser_stderr": "error: unknown start of token '\u00a0' (U+00A0)\n \u2014\u2014\u25b6 justfile:1:6\n  \u2502\n1 \u2502 show \u00a0name:\n  \u2502      ^\n"
+  },
+  {
+    "parameter": "\u00a0name",
+    "body": "echo {{name}}",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 1,
+    "parser_stderr": "error: unknown start of token '\u00a0' (U+00A0)\n \u2014\u2014\u25b6 justfile:1:6\n  \u2502\n1 \u2502 show \u00a0name:\n  \u2502      ^\n"
+  },
+  {
+    "parameter": "\u00a0name",
+    "body": "echo\u0000bad",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 1,
+    "parser_stderr": "error: unknown start of token '\u00a0' (U+00A0)\n \u2014\u2014\u25b6 justfile:1:6\n  \u2502\n1 \u2502 show \u00a0name:\n  \u2502      ^\n"
+  },
+  {
+    "parameter": "\u00a0name",
+    "body": "echo \u00e9",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 1,
+    "parser_stderr": "error: unknown start of token '\u00a0' (U+00A0)\n \u2014\u2014\u25b6 justfile:1:6\n  \u2502\n1 \u2502 show \u00a0name:\n  \u2502      ^\n"
+  },
+  {
+    "parameter": "name\u00a0",
+    "body": "echo ok",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 1,
+    "parser_stderr": "error: unknown start of token '\u00a0' (U+00A0)\n \u2014\u2014\u25b6 justfile:1:10\n  \u2502\n1 \u2502 show name\u00a0:\n  \u2502          ^\n"
+  },
+  {
+    "parameter": "name\u00a0",
+    "body": "@",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 1,
+    "parser_stderr": "error: unknown start of token '\u00a0' (U+00A0)\n \u2014\u2014\u25b6 justfile:1:10\n  \u2502\n1 \u2502 show name\u00a0:\n  \u2502          ^\n"
+  },
+  {
+    "parameter": "name\u00a0",
+    "body": "-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 1,
+    "parser_stderr": "error: unknown start of token '\u00a0' (U+00A0)\n \u2014\u2014\u25b6 justfile:1:10\n  \u2502\n1 \u2502 show name\u00a0:\n  \u2502          ^\n"
+  },
+  {
+    "parameter": "name\u00a0",
+    "body": "@-",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 1,
+    "parser_stderr": "error: unknown start of token '\u00a0' (U+00A0)\n \u2014\u2014\u25b6 justfile:1:10\n  \u2502\n1 \u2502 show name\u00a0:\n  \u2502          ^\n"
+  },
+  {
+    "parameter": "name\u00a0",
+    "body": "echo }}",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 1,
+    "parser_stderr": "error: unknown start of token '\u00a0' (U+00A0)\n \u2014\u2014\u25b6 justfile:1:10\n  \u2502\n1 \u2502 show name\u00a0:\n  \u2502          ^\n"
+  },
+  {
+    "parameter": "name\u00a0",
+    "body": "echo {{name}}",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 1,
+    "parser_stderr": "error: unknown start of token '\u00a0' (U+00A0)\n \u2014\u2014\u25b6 justfile:1:10\n  \u2502\n1 \u2502 show name\u00a0:\n  \u2502          ^\n"
+  },
+  {
+    "parameter": "name\u00a0",
+    "body": "echo\u0000bad",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 1,
+    "parser_stderr": "error: unknown start of token '\u00a0' (U+00A0)\n \u2014\u2014\u25b6 justfile:1:10\n  \u2502\n1 \u2502 show name\u00a0:\n  \u2502          ^\n"
+  },
+  {
+    "parameter": "name\u00a0",
+    "body": "echo \u00e9",
+    "validated": true,
+    "diagnostics": [],
+    "parser_exit": 1,
+    "parser_stderr": "error: unknown start of token '\u00a0' (U+00A0)\n \u2014\u2014\u25b6 justfile:1:10\n  \u2502\n1 \u2502 show name\u00a0:\n  \u2502          ^\n"
+  }
+]

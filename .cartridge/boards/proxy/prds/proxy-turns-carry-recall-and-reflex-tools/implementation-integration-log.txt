@@ -1,0 +1,12 @@
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/integration/recall.test.ts:
+{"fixture":"memory_present","sourceId":"9c0e8179c18f55fca23dbd9c999e7ac1715c0c3241a0868af8b5fa46c512937f","binaries":{"CARTRIDGE_WRAPPER":{"path":"/Users/feb/dev/cartridge/cartridge.ctg/target/debug/cartridge","sha256":"e0a2e43d5c0adf83309ad1a80957947d3dab90963f6ee01b305ba91d931d0f28"},"MEMORY_BINARY":{"path":"/Users/feb/dev/cartridge/cartridge.ctg/target/debug/memory_cartridge","sha256":"d595a4db61c2f71cf2a6413b3f4d2e244f2f7d0da90122d1329829bb568b94b8"},"MEMO_BINARY":{"path":"/Users/feb/dev/cartridge/cartridge.ctg/target/proxy-context/debug/memo_cartridge","sha256":"bc9e1aedcf76ea3389d9158d72dd211976e9b187953c7600f85e4fa048f88807"},"PROXY_BINARY":{"path":"/Users/feb/dev/cartridge/cartridge.ctg/target/proxy-context/debug/proxy","sha256":"c74b4a43efaf1471e560b2af1fa20d6ccd9b70c9ba00d22e383581ec071b0347"}}}
+(pass) real proxy and memo inject bounded memory as user data [1391.54ms]
+{"fixture":"memory_absent","binaries":{"CARTRIDGE_WRAPPER":{"path":"/Users/feb/dev/cartridge/cartridge.ctg/target/debug/cartridge","sha256":"e0a2e43d5c0adf83309ad1a80957947d3dab90963f6ee01b305ba91d931d0f28"},"MEMORY_BINARY":{"path":"/Users/feb/dev/cartridge/cartridge.ctg/target/debug/memory_cartridge","sha256":"d595a4db61c2f71cf2a6413b3f4d2e244f2f7d0da90122d1329829bb568b94b8"},"MEMO_BINARY":{"path":"/Users/feb/dev/cartridge/cartridge.ctg/target/proxy-context/debug/memo_cartridge","sha256":"bc9e1aedcf76ea3389d9158d72dd211976e9b187953c7600f85e4fa048f88807"},"PROXY_BINARY":{"path":"/Users/feb/dev/cartridge/cartridge.ctg/target/proxy-context/debug/proxy","sha256":"c74b4a43efaf1471e560b2af1fa20d6ccd9b70c9ba00d22e383581ec071b0347"}}}
+(pass) valid composition without Memory starts and forwards the original request [70.76ms]
+
+ 2 pass
+ 0 fail
+ 19 expect() calls
+Ran 2 tests across 1 file. [1472.00ms]

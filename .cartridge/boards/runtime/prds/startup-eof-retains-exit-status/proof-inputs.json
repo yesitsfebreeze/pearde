@@ -1,0 +1,31 @@
+{
+  "source_commit": "294b39fd1b8dd420e4e40bce6c2679cf1044220c",
+  "review": {
+    "reviewer": "/root",
+    "round": 1,
+    "score": 96
+  },
+  "source_files": {
+    "src/sdk.rs": "e2eb0911440cbb0f9a10554f4803bb63e8e32b5e25ae142c1c09760ac2a20123",
+    "src/cartridge.rs": "fdba649494235896466ddf81efa757ab8141761ee2ee4cddf7ed340302041551",
+    ".cartridge/tests/unit/src/tests/wire.rs": "86c43966f7ac33f3bce9e373cbf646acb4e95dd18600768a9c8c0cd32b42c35a"
+  },
+  "logs": {
+    "proof-observation-integration.log": "18818ee01730603b5315e9f1af9625070e53dba88f870c513ca6aa4f6be7f34b",
+    "proof-build.log": "4b395c9c76c7f7fb5221d30df7320c7a2387ff3842c426dbee6a59a54b5cffab",
+    "proof-check.log": "d72cb645df7538aa64202fa97c231c91bb4d27a385c3029d16e4af7c7a89e797",
+    "regression-after.log": "6ec3b545f5b90e5b8ad0b6d6a2b2f7d8b3674f7a194af4f27f2663c09b975129",
+    "regression-before.log": "f82ab7dff7819fc825ee345c7481c7fc381d297ad1152ccaf5b7c7c3b65c4aad",
+    "proof-test.log": "48c2b113c92c09a76280c66dcb7909b291fe0c8f65766db15b8f1c029d858c54",
+    "timeout-reaping.log": "3ac82d1b99f8eb5530593ac0dee47032388681d427180955a62aba69ef0e3648"
+  },
+  "results": {
+    "regression_before": "FAIL: nested=false exited before ready: closed stdout; strict expected exit status7",
+    "regression_after": "PASS: immediate/delayed exit7 and malformed fixtures, both direct and nested",
+    "timeout_reaping": "PASS: both host layers within existing5s deadline, recorded owned child PID gone",
+    "public_runtime_test": "163 library +2 binary Rust tests;4 memo-run tests/47 assertions",
+    "public_runtime_check": "PASS formatting/Clippy",
+    "observation_integration": "3 tests/38 assertions PASS"
+  },
+  "scope": "Only startup EOF wait at two existing boundaries plus tests. Source observer and runtime/user profiles unchanged. Coordinator recreates detached collection lane at currentHEAD."
+}

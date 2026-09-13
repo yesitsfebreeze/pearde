@@ -1,0 +1,12 @@
+{
+  "reason": "Coordinator collection verification passed but integration refused unrelated runtime working-tree changes. A detached clean lane at the current exact committed runtime HEAD is used solely for collector integration checks. Executable verification remains in the actual composed checkout.",
+  "change": "Prefix both existing shell Verify blocks with cd /Users/feb/dev/cartridge/cartridge.ctg; all test/build commands, acceptance and footprint unchanged.",
+  "source_commit": "83fb05a189a7f4fca4c1a152244feb221c6a1b81",
+  "spec_before_sha256": "2463efdc44b7e8d729febf35b46ba965e98437634b98b45a6a7b0c3cf8bde979",
+  "spec_after_sha256": "1e1416307cc077d6fd289ad35666a63b4e539fc876b86f4d0397684acbfdb3af",
+  "review_round": 3,
+  "reviewer": "/root",
+  "preserved_score": 95,
+  "authorization": "Coordinator /root explicitly requested nonsemantic cwd handling for detached-lane collection. Source must never be moved or stashed; collector still checks the same declared source footprint.",
+  "source_changes": false
+}

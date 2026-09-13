@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/integration/reviewed-ship.test.ts:
+(pass) native required gate is fail-closed for explicit subjects, body timeout and cancellation; exact success never pushes [3536.31ms]
+(pass) native stale reviews preserve external commits, and concurrent commits publish once without a configured model [1842.46ms]
+(pass) native force never bypasses a gate and oversized required review never silently truncates [1639.94ms]
+
+ 3 pass
+ 0 fail
+ 186 expect() calls
+Ran 3 tests across 1 file. [11.65s]

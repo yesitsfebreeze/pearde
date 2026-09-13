@@ -1,0 +1,14 @@
+{
+  "add": {
+    "id": "@runtime/startup-eof-retains-exit-status",
+    "owner": "runtime",
+    "kind": "leaf",
+    "rounds_used": 1,
+    "origin": "new measured preexisting startup EOF/exit race during adapter collection"
+  },
+  "adapter_add_needs": [
+    "@runtime/startup-eof-retains-exit-status"
+  ],
+  "preserve_adapter_review_and_footprint": true,
+  "matching_scope_audit": "On-demand activation and document sidecar lifecycle are broader/different scopes; neither owns this narrow native+SDK stdout EOF exit-status race."
+}

@@ -1,0 +1,47 @@
+{
+  "source_commit": "a6cbab2d78fe1c45ff6545518a558051fcafad2e",
+  "review": {
+    "round": 3,
+    "reviewer": "/root",
+    "score": 95
+  },
+  "files": {
+    "Cargo.toml": "cc3e736cb59620afdb89380da1a4c29bd6cbbdb0bfba399ce080d2ae50833616",
+    "src/lib.rs": "210568cf5ffbe14c48bc560be22d14805ca9d2e3e696c189a346bca189626fe9",
+    "src/cartridge.rs": "285c952968359493eb993ced730e54fd1ab4c2cd4f21befcf0de89fd677f2504",
+    "src/service.rs": "0f32c908bd2ab189ba9b06f901df9acc323138ae472176cdb9954e1d550be951",
+    "src/turn.rs": "d5d5fcb55ce6b82afea868e1609f66174faa30d39c04017e5f2e5e42cd18c8a0",
+    "src/observation.rs": "ae19d0706c996c40d39ef48f46a98dd9058df09a5a5f0dff78dad034f0638b4f",
+    ".cartridge/tests/unit/observation.rs": "e2f2b5f0b916360ce125a3e63ea0df69359fc401a6bd3e1ea9374f760cacecc6",
+    ".cartridge/tests/integration/tool-observations.test.ts": "fe169d7cd59d3c0812c54b2429399a3af0721f22e4745df1ca66d87c09a9d27b",
+    ".cartridge/tests/integration/observation-fixture.ts": "c22f0767afae49d3621391f5c77a1db0b34b13d382517229531c0095f4b1a80c",
+    ".cartridge/docs/tool-observations.md": "c966d8aa2ac68a52286fc63599ec71dbff475ea5f4a2934f992e5348e406619d"
+  },
+  "logs": {
+    "proof-build.log": "146cf8c8705ff1c2ce630a26839f8dce046cf1c87a9a33724d366757e7a227e1",
+    "proof-check.log": "27d21d148e3f0d8664f846b1fd1910e56007337ca26fd8b004b55f6f2708ddbb",
+    "proof-integration.log": "3b9d902312ae1c524ea5f38477fbcb9c72d7d0965e38c8ba3a4ef28f98612110",
+    "proof-test.log": "534c9c3a91793e485061621fb6a7d012956f3736f7ad64d6cc11b2e92d6099f3"
+  },
+  "tests": {
+    "native_library": 162,
+    "native_binary": 2,
+    "public_memo_run_integration": 4,
+    "public_memo_run_assertions": 47,
+    "native_observation_integration": 3,
+    "native_observation_assertions": 38
+  },
+  "binary_sha256": "4a0f76fed470635126fa9ae4f746f3a8913a3075cad81804961cf2705b824990",
+  "limitations": [
+    "Native tool call frame boundary only; direct Lua/socket/nested calls not crossing it are not observed.",
+    "Actor classification is immutable host configuration, not authenticated user identity.",
+    "Diagnostic writes best effort; missing completions and lost/rotated rows never imply success or rollback.",
+    "Descriptor revision is last successful describe, never presumed current.",
+    "Root owns both dependency lockfiles and unrelated runtime changes."
+  ],
+  "collection_cwd_binding": {
+    "path": "collection-cwd-binding.json",
+    "sha256": "d52913df5b3f721b6f87bb6dc1f3e8c94ef7f0f73bb40b9fecf1a067abf8294b",
+    "spec_sha256": "1e1416307cc077d6fd289ad35666a63b4e539fc876b86f4d0397684acbfdb3af"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "command": [
+    "/Users/feb/dev/cartridge/cartridge.ctg/target/sessions-mapping/debug/cartridge",
+    "--dir",
+    "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/runtime-reflex-baseline-lu95h8ee",
+    "--profile",
+    "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/runtime-reflex-baseline-lu95h8ee",
+    "run",
+    "fixture.run",
+    "null"
+  ],
+  "fixture": {
+    "child.py": "import sys,json\nif len(sys.argv)>1 and sys.argv[1]=='hello':\n print(json.dumps({'inject':['tool.fixture'],'provide':['fixture.run']}));sys.exit()\ndef emit(x):print(json.dumps(x),flush=True)\nfor line in sys.stdin:\n m=json.loads(line)\n if 'apply' in m:emit({'provide':'fixture.run'});emit({'ready':True})\n elif 'call' in m:\n  waiting=m['id'];emit({'id':100,'call':'tool.fixture','args':{'op':'call','input':{'sensitive':'BASELINE_SECRET'}}})\n elif m.get('reply')==100:emit({'reply':waiting,'data':m.get('data')})\n elif m.get('dispose'):break\n",
+    "child.lua": "return cartridge.process({\"/usr/bin/python3\",\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/runtime-reflex-baseline-rbaoe2pz/child.py\"})",
+    "tool.lua": "return {provide={\"tool.fixture\"},apply=function(ctx) ctx:provide(\"tool.fixture\",function(args) return {content=\"BASELINE_SECRET_RESPONSE\",error=false} end) end}",
+    "init.lua": "return {{id=\"agent\",path=\"child.lua\"},{id=\"tool\",path=\"tool.lua\"}}"
+  },
+  "environment": {
+    "CARTRIDGE_DIAGNOSTICS": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/runtime-reflex-baseline-rbaoe2pz/diagnostics.jsonl",
+    "CARTRIDGE_TOOL_OBSERVATIONS": "1",
+    "CARTRIDGE_TOOL_ACTORS": "{\"agent\": {\"actor\": \"agent\", \"activity\": \"deliberate\"}}"
+  },
+  "exit_code": 0,
+  "stdout": "{\"content\":\"BASELINE_SECRET_RESPONSE\",\"error\":false}\n",
+  "stderr": "",
+  "diagnostics": "",
+  "binary_sha256": "54e94353c696ecbeb9584044f751b362145195dc978bcc2823a5fbb8587a79a8",
+  "source_head": "a029e785922985ede8539a75b83b265e9e238a96",
+  "observed": "Actual native child tool dispatch succeeds; no attempt/completion diagnostics exist at baseline. Proposed TOOL_OBSERVATIONS/ACTORS configuration is currently ignored.",
+  "initial_probe_note": "First CLI probe omitted --dir and failed profile root resolution before dispatch; corrected exact command explicitly supplies both root and profile."
+}

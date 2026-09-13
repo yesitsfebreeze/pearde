@@ -1,0 +1,13 @@
+{
+  "reason": "transitive optional-context module dependency after recall integration",
+  "behavior_and_gates_changed": false,
+  "before_spec_sha256": "be8993e5f72e4e9893ee65b85dc8c44f44684d5e1363bb027b5499bd51a24974",
+  "after_spec_sha256": "e47b432ca4747609f5d62a90decd713ee630747f01f7d9285d0b13af1930e172",
+  "added_bound_sources": [
+    "Cargo.toml",
+    "cartridge.json",
+    "src/context.rs",
+    "src/wire.rs"
+  ],
+  "source_commit": "9ddcc08807a059579c21227ad9d3523d242ddf86"
+}

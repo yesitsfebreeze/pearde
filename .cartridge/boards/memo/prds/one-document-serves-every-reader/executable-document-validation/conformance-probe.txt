@@ -1,0 +1,19 @@
+import pathlib,tempfile,subprocess,json,os,itertools
+owner=pathlib.Path('/Users/feb/dev/cartridge/memo.ctg');root=pathlib.Path(tempfile.mkdtemp(prefix='memo-validation-conformance-'));file=root/'.cartridge/documents/test.md';file.parent.mkdir(parents=True);proof=owner.parent/'prd.ctg/.cartridge/boards/memo/prds/one-document-serves-every-reader/executable-document-validation';child=subprocess.Popen([str(owner.parent/'cartridge.ctg/target/tool-result-contract/debug/memo_cartridge')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+def send(v):child.stdin.write(json.dumps(v)+'\n');child.stdin.flush()
+send({'apply':{'name':'memo','config':{}}})
+while not json.loads(child.stdout.readline()).get('ready'):pass
+results=[];env={k:v for k,v in os.environ.items() if not k.startswith('JUST_')}
+for number,(parameter,body) in enumerate(itertools.product(['name','a-','a--b','if','x_','\u00a0name','name\u00a0'],['echo ok','@','-','@-','echo }}','echo {{name}}','echo\0bad','echo é']),1):
+ file.write_text('---\nschema: cartridge-document/v1\nkind: tool\ndescription: Conformance\ndialect: cartridge-just/v1\nrecipe: show\ninvocation: run\nexecution_base: .\n---\n```just\nshow '+parameter+':\n    '+body+'\n```\n')
+ send({'id':number,'call':'memo','args':{'op':'document','action':'validate','cwd':str(root),'path':'.cartridge/documents/test.md','argv':['value']}})
+ while True:
+  value=json.loads(child.stdout.readline())
+  if value.get('cartridges'):send({'reply':value['id'],'data':[]});continue
+  if value.get('reply')==number:break
+ data=value.get('data',{});row={'parameter':parameter,'body':body,'validated':data.get('validated'),'diagnostics':data.get('diagnostics')}
+ if data.get('validated'):
+  args=['just',*data['command']['argv'][:6],'--dump','--dump-format','json'];r=subprocess.run(args,input=data['extraction']['stdin'],text=True,capture_output=True,env=env,cwd=root);row.update(parser_exit=r.returncode,parser_stderr=r.stderr)
+ results.append(row)
+send({'dispose':True});child.communicate(timeout=10)
+(proof/'conformance-probe.txt').write_text(pathlib.Path(__file__).read_text());(proof/'conformance.json').write_text(json.dumps(results,indent=2)+'\n');bad=[r for r in results if r.get('parser_exit',0)!=0];print(json.dumps({'cases':len(results),'accepted':sum(r['validated'] is True for r in results),'mismatches':bad},indent=2));raise SystemExit(bool(bad))

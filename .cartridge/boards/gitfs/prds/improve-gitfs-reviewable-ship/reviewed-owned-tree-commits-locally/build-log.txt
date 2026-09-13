@@ -1,0 +1,2 @@
+   Compiling gitfs v0.1.0 (/Users/feb/dev/cartridge/gitfs.ctg)
+    Finished `dev` profile [unoptimized] target(s) in 1.05s

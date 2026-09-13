@@ -1,0 +1,4 @@
+   Compiling proxy v0.1.0 (/Users/feb/dev/cartridge/proxy.ctg)
+    Finished `dev` profile [unoptimized] target(s) in 1.28s
+   Compiling memo_cartridge v0.1.0 (/Users/feb/dev/cartridge/memo.ctg)
+    Finished `dev` profile [unoptimized] target(s) in 4.34s

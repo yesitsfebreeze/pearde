@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/integration/tool-observations.test.ts:
+(pass) actual native dispatch attributes mixed work, revisions and uncertain completions without bodies [850.43ms]
+(pass) disabled, failed and rotating diagnostic sinks preserve native tool replies [138.77ms]
+(pass) native provider exits after a partial reply without inventing completion [80.95ms]
+
+ 3 pass
+ 0 fail
+ 38 expect() calls
+Ran 3 tests across 1 file. [1083.00ms]

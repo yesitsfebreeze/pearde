@@ -1,0 +1,13 @@
+{
+  "source_commit": "439594188097e770fb9993aae379ac9906e0824a",
+  "fixture": "baseline-probe.rs copied into disposable tracked-source checkout /private/tmp/proxy-context-baseline; real proxy Service with bounded fake Host dependencies",
+  "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/proxy-continuation-baseline cargo test --manifest-path /private/tmp/proxy-context-baseline/Cargo.toml baseline_recall_authority_and_optional_budget_probe -- --nocapture",
+  "observations": [
+    "All three wire formats elevate memory text into privileged system instructions",
+    "Memory source and ID omitted; no Landscape selection",
+    "300000-byte optional recalled body rejects valid original request before routing at 200000-byte budget"
+  ],
+  "result": "1 observation probe passed; 33 filtered out; this is measured old behavior, not desired acceptance",
+  "probe_sha256": "bb6a6b73054929390e36992571f9805fe80b7f6e1bb82afd6cb50a714f86d1b6",
+  "log_sha256": "04d6679a1dbaa875ffa6ff060fd296ee1687d9eb23f605e7fa8e7344fe875282"
+}

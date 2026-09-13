@@ -1,0 +1,203 @@
+{
+  "source_revision": "4b081453d610af42daac0456750a50bdc719a5fe",
+  "parser_version": "just 1.58.0",
+  "fixture": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd",
+  "native_response": {
+    "data": {
+      "commands": {
+        "blocks": [
+          {
+            "body": "show:\n    echo first\nshow:\n    echo second\nimport 'dep.just'\nshow:\n    echo imported\n",
+            "line": 6
+          }
+        ],
+        "diagnostics": [],
+        "validated": false
+      },
+      "complete": true,
+      "diagnostics": [],
+      "hydrated": false,
+      "identity": "@workspace/.cartridge/documents/unsafe.md",
+      "limits": {
+        "content_bytes": 65536,
+        "depth": 4,
+        "diagnostics": 64,
+        "reference_visits": 128,
+        "source_bytes": 16777216,
+        "sources": 32
+      },
+      "metadata": {
+        "description": "Validation baseline",
+        "kind": "tool",
+        "schema": "cartridge-document/v1"
+      },
+      "omitted_diagnostics": 0,
+      "owner": "workspace",
+      "path": ".cartridge/documents/unsafe.md",
+      "projection": "commands",
+      "projection_revision": "a84c50bea60c99a841e79b40633ce6623c8009cb155a03d1950d5e2a4e95c75f",
+      "revision": "272c30d6043521df81b9493a29a2e4e0fa1ca1e4d779ee2f470734a57ad9b5e2",
+      "schema": "cartridge-document/v1",
+      "source_path": ".cartridge/documents/unsafe.md",
+      "sources": [
+        {
+          "identity": "@workspace/.cartridge/documents/unsafe.md",
+          "revision": "272c30d6043521df81b9493a29a2e4e0fa1ca1e4d779ee2f470734a57ad9b5e2"
+        }
+      ],
+      "truncated": false
+    },
+    "reply": 1
+  },
+  "parser_probes": [
+    {
+      "case": "valid",
+      "source": "show name:\n    echo {{name}}\n",
+      "argv": [
+        "just",
+        "--no-dotenv",
+        "--color",
+        "never",
+        "--working-directory",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd",
+        "--justfile",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd/valid.just",
+        "--dump",
+        "--dump-format",
+        "json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"assignments\":{},\"first\":\"show\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"show\":{\"attributes\":[],\"body\":[[\"echo \",[[\"variable\",\"name\"]]]],\"dependencies\":[],\"doc\":null,\"name\":\"show\",\"parameters\":[{\"default\":null,\"export\":false,\"flag\":false,\"help\":null,\"kind\":\"singular\",\"long\":null,\"max\":null,\"min\":null,\"multiple\":false,\"name\":\"name\",\"pattern\":null,\"short\":null,\"value\":null}],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"show\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd/valid.just\",\"unexports\":[],\"warnings\":[]}\n",
+      "stderr": "",
+      "payload_started": false
+    },
+    {
+      "case": "duplicate",
+      "source": "show:\n    echo first\nshow:\n    echo second\n",
+      "argv": [
+        "just",
+        "--no-dotenv",
+        "--color",
+        "never",
+        "--working-directory",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd",
+        "--justfile",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd/duplicate.just",
+        "--dump",
+        "--dump-format",
+        "json"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "error: recipe `show` first defined on line 1 is redefined on line 3\n \u2014\u2014\u25b6 duplicate.just:3:1\n  \u2502\n3 \u2502 show:\n  \u2502 ^^^^\n",
+      "payload_started": false
+    },
+    {
+      "case": "import",
+      "source": "import 'dep.just'\nshow:\n    echo imported\n",
+      "argv": [
+        "just",
+        "--no-dotenv",
+        "--color",
+        "never",
+        "--working-directory",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd",
+        "--justfile",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd/import.just",
+        "--dump",
+        "--dump-format",
+        "json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"assignments\":{},\"first\":\"show\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"dependency\":{\"attributes\":[],\"body\":[[\"echo imported\"]],\"dependencies\":[],\"doc\":null,\"name\":\"dependency\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"dependency\",\"shebang\":false},\"show\":{\"attributes\":[],\"body\":[[\"echo imported\"]],\"dependencies\":[],\"doc\":null,\"name\":\"show\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"show\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd/import.just\",\"unexports\":[],\"warnings\":[]}\n",
+      "stderr": "",
+      "payload_started": false
+    },
+    {
+      "case": "include",
+      "source": "!include dep.just\nshow:\n    echo included\n",
+      "argv": [
+        "just",
+        "--no-dotenv",
+        "--color",
+        "never",
+        "--working-directory",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd",
+        "--justfile",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd/include.just",
+        "--dump",
+        "--dump-format",
+        "json"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "error: unknown start of token '.'\n \u2014\u2014\u25b6 include.just:1:13\n  \u2502\n1 \u2502 !include dep.just\n  \u2502             ^\n",
+      "payload_started": false
+    },
+    {
+      "case": "read_expression",
+      "source": "value := read('marker.txt')\nshow:\n    echo {{value}}\n",
+      "argv": [
+        "just",
+        "--no-dotenv",
+        "--color",
+        "never",
+        "--working-directory",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd",
+        "--justfile",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd/read_expression.just",
+        "--dump",
+        "--dump-format",
+        "json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"assignments\":{\"value\":{\"eager\":false,\"export\":false,\"name\":\"value\",\"private\":false,\"value\":[\"call\",\"read\",\"marker.txt\"]}},\"first\":\"show\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"show\":{\"attributes\":[],\"body\":[[\"echo \",[[\"variable\",\"value\"]]]],\"dependencies\":[],\"doc\":null,\"name\":\"show\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"show\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd/read_expression.just\",\"unexports\":[],\"warnings\":[]}\n",
+      "stderr": "",
+      "payload_started": false
+    },
+    {
+      "case": "backtick",
+      "source": "value := `touch payload-started`\nshow:\n    echo {{value}}\n",
+      "argv": [
+        "just",
+        "--no-dotenv",
+        "--color",
+        "never",
+        "--working-directory",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd",
+        "--justfile",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd/backtick.just",
+        "--dump",
+        "--dump-format",
+        "json"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"assignments\":{\"value\":{\"eager\":false,\"export\":false,\"name\":\"value\",\"private\":false,\"value\":[\"evaluate\",\"touch payload-started\"]}},\"first\":\"show\",\"doc\":null,\"groups\":[],\"module_path\":\"\",\"modules\":{},\"aliases\":{},\"recipes\":{\"show\":{\"attributes\":[],\"body\":[[\"echo \",[[\"variable\",\"value\"]]]],\"dependencies\":[],\"doc\":null,\"name\":\"show\",\"parameters\":[],\"priors\":0,\"private\":false,\"quiet\":false,\"namepath\":\"show\",\"shebang\":false}},\"settings\":{\"allow_duplicate_recipes\":false,\"allow_duplicate_variables\":false,\"default_list\":false,\"default_script\":false,\"dotenv_command\":[],\"dotenv_filename\":null,\"dotenv_load\":false,\"dotenv_override\":false,\"dotenv_path\":null,\"dotenv_required\":false,\"export\":false,\"fallback\":false,\"guards\":false,\"ignore_comments\":false,\"indentation\":null,\"lazy\":false,\"lists\":false,\"no_cd\":false,\"no_exit_message\":false,\"positional_arguments\":false,\"quiet\":false,\"shell\":null,\"tempdir\":null,\"unstable\":false,\"windows_powershell\":false,\"windows_shell\":null,\"working_directory\":null},\"source\":\"/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd/backtick.just\",\"unexports\":[],\"warnings\":[]}\n",
+      "stderr": "",
+      "payload_started": false
+    },
+    {
+      "case": "bad_indent",
+      "source": "show:\n  echo one\n    echo two\n",
+      "argv": [
+        "just",
+        "--no-dotenv",
+        "--color",
+        "never",
+        "--working-directory",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd",
+        "--justfile",
+        "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-executable-baseline-i4_u91jd/bad_indent.just",
+        "--dump",
+        "--dump-format",
+        "json"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "error: recipe line has extra leading whitespace\n \u2014\u2014\u25b6 bad_indent.just:3:3\n  \u2502\n3 \u2502     echo two\n  \u2502   ^^^^^^^^^^\n",
+      "payload_started": false
+    }
+  ],
+  "command": "python3 /tmp/memo-executable-baseline.py; exact source baseline-probe.txt",
+  "finding": "Native commands returns validated:false without duplicate/metadata/import diagnostics. Installed parser accepts imports and source-read/backtick expressions in dump, with no payload start; import reads dependent file during parse. In-process conservative validation must reject those before any process starts."
+}

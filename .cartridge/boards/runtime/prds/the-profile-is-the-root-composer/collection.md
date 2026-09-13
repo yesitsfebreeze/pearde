@@ -1,0 +1,308 @@
+---
+commit: bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df
+spec-digests: {"spec01.md":"73857534bc91e36698fceec4743874d38881683ebab4747470b2b908a3514c9d"}
+child-contracts: {}
+---
+
+# Collection
+
+/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/runtime/prds/the-profile-is-the-root-composer/specs/spec01.md: exit 0
+
+Command SHA-256: 056f4c0c77b0c96495cd0e59ddee4fab7336e63a94e386ac1dd0c4084ad3b3b9
+
+```text
+    Finished `test` profile [unoptimized] target(s) in 0.08s
+     Running unittests src/lib.rs (target/tool-result-contract/debug/deps/cartridge-41093d4bbf807d0f)
+
+running 3 tests
+test tests::composition::failed_initial_profile_entry_recovers_with_its_current_handle ... ok
+test tests::composition::replacement_has_one_contract_at_root_and_nested_depth ... ok
+test tests::process::ordinary_lua_composition_can_load_a_process_wrapper ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 162 filtered out; finished in 0.34s
+
+     Running unittests src/main.rs (target/tool-result-contract/debug/deps/cartridge-bfe1ba4daa6e9908)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running unittests .cartridge/tests/unit/src/tests/fixtures/chain_fixture.rs (target/tool-result-contract/debug/examples/chain_fixture-352252d61bd6755b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests .cartridge/tests/unit/src/tests/fixtures/lua_fixture.rs (target/tool-result-contract/debug/examples/lua_fixture-e8ce3e540cfc5bdc)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests .cartridge/tests/unit/src/tests/fixtures/nested_fixture.rs (target/tool-result-contract/debug/examples/nested_fixture-edd2fe45942c6858)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests .cartridge/tests/unit/src/tests/fixtures/rpc_fixture.rs (target/tool-result-contract/debug/examples/rpc_fixture-8e172d8aaafa386c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/integration/memo-run.test.ts:
+(pass) memo recipes preserve argument boundaries and propagate failure [43.54ms]
+(pass) memo runner refuses missing, repeated and unterminated executable blocks [23.56ms]
+(pass) nested PRD lanes resolve their own memo owner [13.90ms]
+lane-build-evidence [{"lane":"alpha","mode":"safe","temperature":"cold","ms":574.801584,"source":{"commit":"ea5b6e5bdc78b03683d0c752f04dfe2c437bf179","tree":"9a08268bb20ac8730ac543ea7d92cc6e8d3bf9f9","digest":"d12a11572ff645ddd6ef8218e56d6a7f0424bb428b02cf77089b7be92751f0f2"},"binary_sha256":"621c63cda4141929dcc27bacc90bf3ef4c9d9819e41b3f3222381c4bdb1e3471","expected":"alpha","observed":"alpha","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"},{"lane":"alpha","mode":"safe","temperature":"warm","ms":364.28200000000015,"source":{"commit":"ea5b6e5bdc78b03683d0c752f04dfe2c437bf179","tree":"9a08268bb20ac8730ac543ea7d92cc6e8d3bf9f9","digest":"d12a11572ff645ddd6ef8218e56d6a7f0424bb428b02cf77089b7be92751f0f2"},"binary_sha256":"621c63cda4141929dcc27bacc90bf3ef4c9d9819e41b3f3222381c4bdb1e3471","expected":"alpha","observed":"alpha","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"},{"lane":"bravo","mode":"safe","temperature":"cold","ms":534.1399159999999,"source":{"commit":"4f8db93765a1177ca3ff54f531e30ff56855d1a7","tree":"f6ae5de5148108d3fb163edb0b16f3b83e9b7e84","digest":"101fc091b5b3c98b8c6c6948f7c20f06809f26890f2ff7a0bd65d1caca571ba9"},"binary_sha256":"febb286887708a068c11f7fead75a49e73f7d2ee84646d9029e7e0109abf4166","expected":"bravo","observed":"bravo","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"},{"lane":"bravo","mode":"safe","temperature":"warm","ms":403.3717080000001,"source":{"commit":"4f8db93765a1177ca3ff54f531e30ff56855d1a7","tree":"f6ae5de5148108d3fb163edb0b16f3b83e9b7e84","digest":"101fc091b5b3c98b8c6c6948f7c20f06809f26890f2ff7a0bd65d1caca571ba9"},"binary_sha256":"febb286887708a068c11f7fead75a49e73f7d2ee84646d9029e7e0109abf4166","expected":"bravo","observed":"bravo","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"}]
+(pass) divergent lanes execute their own cold and warm builds without inherited caches [2056.64ms]
+
+ 4 pass
+ 0 fail
+ 47 expect() calls
+Ran 4 tests across 1 file. [2.15s]
+    Finished `test` profile [unoptimized] target(s) in 0.07s
+     Running unittests src/lib.rs (target/tool-result-contract/debug/deps/cartridge-41093d4bbf807d0f)
+
+running 165 tests
+test observation::tests::outcomes_never_treat_transport_or_cancellation_as_known_effect_completion ... ok
+test process::tests::an_unterminated_startup_frame_cannot_exceed_its_budget ... ok
+test observation::tests::attribution_is_host_configuration_and_discovery_is_distinct ... ok
+test observation::tests::intended_service_capture_ignores_nested_services_and_resumes_become_unknown ... ok
+test observation::tests::invalid_host_config_and_poisoned_cache_do_not_create_authority_or_fail_outcomes ... ok
+test sandbox::tests::a_net_grant_turns_the_network_on_and_an_empty_one_leaves_it_off ... ok
+test observation::tests::dropping_live_invocation_records_unknown_without_retry ... ok
+test sandbox::tests::an_empty_grant_builds_no_allowance_beyond_the_runtime ... ok
+test sandbox::tests::an_empty_command_is_refused_before_launch ... ok
+test sandbox::tests::a_write_grant_names_the_canonicalized_path_and_implies_the_read ... ok
+test sdk::tests::older_hosts_use_uncached_descriptions_without_an_unknown_wire_request ... ok
+test sandbox::tests::an_exec_grant_that_resolves_builds_a_literal_and_one_that_does_not_builds_nothing ... ok
+test sandbox::tests::a_script_names_its_interpreter ... ok
+test service::version_tests::descriptors_invalidate_on_switch_and_recreation ... ok
+test sdk::tests::reload_registration_dispatches_boolean_values_for_prepare_and_cancel ... ok
+test sdk::tests::slow_stream_handlers_have_bounded_queues_and_receive_a_gap ... ok
+test observation::tests::actual_descriptor_shapes_are_hashed_and_invalid_oversized_descriptors_are_unknown ... ok
+test socket::tests::explicit_unsubscribe_removes_idle_pump_once ... ok
+test socket::tests::idle_disconnect_unsubscribes_without_a_future_publish ... ok
+test tests::bridge::bridge_manifest_rejects_paths_outside_the_cartridge ... ok
+test socket::tests::disconnect_cleans_subscriptions_while_host_owned_reconcile_waits ... ok
+test socket::tests::writer_failure_cancels_a_pending_call_and_unsubscribes ... ok
+test tests::bridge::process_scripts_resolve_relative_to_the_cartridge ... ok
+test tests::cartridges::a_changed_file_swaps_the_fiber_and_a_broken_one_keeps_it ... ok
+test tests::cartridges::a_glob_injects_every_matching_key_the_other_entries_provide ... ok
+test tests::bridge::bridge_status_tracks_active_generations_and_scopes_backend_calls ... ok
+test tests::cartridges::config_lua_overrides_entries_and_manifest_resolves_providers ... ok
+test tests::cartridges::reconcile_adds_removes_and_revises_by_id ... ok
+test tests::cartridges::yields_are_boundaries_and_access_is_enforced ... ok
+test tests::cartridges::yolo_overrides_cartridge_config_only_for_automatic_services ... ok
+test tests::composition::failed_initial_profile_entry_recovers_with_its_current_handle ... ok
+test process::tests::excessive_discovery_stderr_is_also_bounded ... ok
+test tests::contracts::a_broken_integration_check_fails_closed_with_its_error ... ok
+test tests::composition::replacement_has_one_contract_at_root_and_nested_depth ... ok
+test tests::contracts::a_broken_selftest_fails_closed_and_names_the_cartridge ... ok
+test tests::contracts::a_cartridge_declaring_nothing_is_never_called ... ok
+test tests::contracts::a_clashed_need_stops_the_run_before_it_loads ... ok
+test tests::contracts::a_failing_contract_names_the_path_the_obligation_and_the_key ... ok
+test tests::contracts::a_need_that_binds_to_nothing_is_named_instead_of_run ... ok
+test tests::contracts::an_unknown_cartridge_is_named_rather_than_run ... ok
+test tests::contracts::a_nested_cartridge_is_verified_by_its_path_from_the_root ... ok
+test tests::contracts::declared_contracts_run_after_apply_and_pass ... ok
+test tests::contracts::one_cartridge_is_verified_without_a_profile ... ok
+test tests::contracts::the_providers_a_need_binds_to_are_reached_but_never_graded ... ok
+test tests::contracts::one_obligation_may_be_declared_alone ... ok
+test tests::folders::malformed_manifests_fail_without_evaluating_entries ... ok
+test tests::folders::folder_manifest_names_the_component_and_reloads_its_entry ... ok
+test socket::tests::a_write_half_close_still_receives_its_pending_reply ... ok
+test tests::foreground::foreground_call_returns_the_service_value_and_disposes_the_profile ... ok
+test tests::foreground::foreground_missing_or_failed_service_still_disposes ... ok
+test tests::landscape::landscape_distinguishes_provider_states_and_refreshes_committed_generations ... ok
+test tests::landscape::landscape_lists_dynamic_children_and_tracked_source_paths ... ok
+test tests::ledger::a_child_provide_is_seen_by_its_parent_subtree_and_not_by_the_graph_outside ... ok
+test tests::ledger::a_dangling_re_export_is_unread_on_the_ledger_read_too ... ok
+test tests::ledger::a_new_cartridge_is_available_and_not_started ... ok
+test tests::ledger::a_root_that_does_not_exist_is_an_empty_ledger ... ok
+test tests::ledger::a_walk_answers_from_the_asker_subtree_then_steps_outward ... ok
+test tests::ledger::a_walk_from_a_nested_scope_steps_outward ... ok
+test tests::ledger::an_entry_is_its_path_from_the_root ... ok
+test tests::ledger::an_unreadable_document_is_an_entry_with_its_reason ... ok
+test tests::ledger::two_entries_of_one_scope_offering_one_key_is_a_clash ... ok
+test tests::lifecycle::a_cycle_stays_inactive ... ok
+test tests::lifecycle::a_raising_step_fails_the_fiber_with_nothing_installed ... ok
+test tests::lifecycle::a_replaced_provider_reloads_its_dependents ... ok
+test process::tests::excessive_discovery_output_is_killed_and_reaped ... ok
+test tests::lifecycle::a_target_change_stops_the_iterator_at_the_boundary ... ok
+test tests::lifecycle::access_is_enforced_at_the_point_of_use ... ok
+test tests::lifecycle::disposing_a_parent_retires_its_children ... ok
+test tests::lifecycle::dependents_are_drained_before_any_provider_inverse ... ok
+test tests::lifecycle::disposing_an_effect_that_never_yields_finishes ... ok
+test tests::lifecycle::effects_revert_in_lifo_order ... ok
+test tests::lifecycle::isolated_realms_bind_independently ... ok
+test tests::lifecycle::listeners_fire_in_order_and_bail_stops ... ok
+test tests::lifecycle::user_values_and_callbacks_are_dropped_outside_the_registry_lock ... ok
+test tests::manifest::a_blank_grant_path_is_refused_like_a_blank_key ... ok
+test tests::manifest::a_cartridge_two_levels_down_is_not_offered ... ok
+test tests::manifest::a_disabled_cartridge_still_declares_what_it_asked_for ... ok
+test tests::manifest::a_grandchild_key_reaches_the_top_only_through_every_level ... ok
+test tests::manifest::a_missing_file_the_document_names_does_not_blank_its_declarations ... ok
+test tests::folders::watcher_reloads_a_folder_when_its_manifest_changes ... ok
+test tests::manifest::a_parent_passes_an_inner_key_outward_by_naming_it ... ok
+test tests::manifest::an_empty_document_requests_nothing ... ok
+test tests::manifest::an_export_that_names_nothing_inside_is_refused ... ok
+test tests::manifest::documented_commands_are_data_and_keep_the_manifest_strict ... ok
+test tests::manifest::an_unreadable_document_asks_for_nothing_knowable_not_for_nothing ... ok
+test tests::manifest::malformed_declarations_are_refused_without_evaluating_the_entry ... ok
+test tests::manifest::probe_nesting_is_not_discovered ... ok
+test tests::manifest::the_capability_request_is_on_the_same_document ... ok
+test tests::manifest::the_document_declares_what_it_provides_and_needs ... ok
+test tests::manifest::the_document_overrides_what_the_entry_declares ... ok
+test tests::manifest::two_subtrees_may_provide_the_same_key ... ok
+test tests::node::the_document_carries_the_cartridges_own_config ... ok
+test tests::lifecycle::disposing_an_apply_that_never_yields_finishes_and_runs_prior_inverses ... ok
+test sdk::tests::cancelling_nested_startup_kills_and_reaps_its_child ... ok
+test tests::process::closed_links_release_pending_and_reject_new_requests ... ok
+test tests::process::disabled_processes_never_run_hello_apply_or_replace ... ok
+test sandbox::tests::the_asynchronous_spawn_enforces_the_same_empty_grant ... ok
+test tests::process::dropping_a_waiter_ignores_its_late_reply ... ok
+test tests::process::invalid_registration_fails_before_changing_loaded_fibers ... ok
+test sandbox::tests::the_synchronous_command_enforces_the_empty_grant ... ok
+test tests::process::ordinary_lua_composition_can_load_a_process_wrapper ... ok
+test tests::process::lua_wrappers_merge_injections_before_start_and_preserve_config ... ok
+test tests::process::sdk_eof_and_dispose_release_waiters_before_finalizers ... ok
+test tests::process::sdk_child_roundtrip_errors_metadata_and_eof ... ok
+test tests::reload::a_composed_handle_reloads_its_node_again_after_the_first_swap ... ok
+test tests::cartridges::wrapped_process_isolation_metadata_and_dependency_restart_compose ... ok
+test tests::reload::an_ask_at_a_retired_uid_is_refused_and_the_node_still_reloads ... ok
+test tests::reload::an_uncomposed_node_and_an_unknown_uid_refuse_the_ask ... ok
+test tests::reload::corrected_code_can_recover_a_failed_initial_generation ... ok
+test tests::reload::switching_keeps_consumers_bound_and_rejects_bad_migrations ... ok
+test tests::reload::two_entries_of_one_file_each_get_their_own_switch ... ok
+test tests::reload::a_nested_node_is_swapped_and_its_dependent_follows ... ok
+test tests::process::a_process_provides_listens_and_is_disposed ... ok
+test tests::process::disposing_a_child_before_ready_kills_it_without_waiting_for_startup_deadline ... ok
+test tests::resolver::a_chain_walks_to_its_far_end_before_the_tool_it_names ... ok
+test tests::resolver::a_clash_is_refused_naming_every_offer ... ok
+test tests::resolver::a_cycle_is_refused_not_walked ... ok
+test tests::resolver::a_diamond_launches_its_shared_provider_once ... ok
+test tests::resolver::a_hosted_node_runs_its_lua_component_and_provides_its_keys ... ok
+test tests::resolver::a_nested_provider_answers_before_any_outer_one ... ok
+68188
+test tests::resolver::a_reentry_into_an_uninstalled_node_launches_nothing ... ok
+{"nodes":["db","store","tool"],"socket":"/tmp/cartridge-6f20eeb17786aef3-feb.sock","up":"tool.run"}
+test tests::resolver::an_unbound_key_refuses_the_launch ... ok
+test tests::resolver::a_chain_node_whose_binary_does_not_exist_refuses_the_ask ... ok
+test tests::cartridges::local_list_resolves_wrappers_without_starting_a_daemon_or_applying_cartridges ... ok
+test tests::resolver::the_launch_refuses_a_cycle_the_ledger_holds ... ok
+test tests::rpc_contract::rust_sdk_eof_rejects_another_inflight_call ... ok
+test tests::resolver::layered_shared_dependencies_are_completed_once_in_bottom_up_order ... ok
+test tests::rpc_contract::rust_sdk_and_lua_share_json_and_bidirectional_contracts ... ok
+test tests::socket::one_turn_id_crosses_the_socket_the_host_a_cartridge_and_lua ... ok
+test tests::socket::socket_calls_a_lua_wrapped_sdk_process_with_correlated_errors ... ok
+test tests::socket::a_client_round_trips_through_a_cartridge ... ok
+test tests::stream::a_failing_listener_publishes_an_error_event_on_its_channel ... ok
+test tests::stream::a_full_replay_and_gap_leave_the_subscription_live ... ok
+test tests::stream::a_lua_cartridge_watches_a_channel_a_socket_client_publishes_to ... ok
+test tests::stream::a_lua_cartridge_publishes_and_a_late_watcher_replays_the_log ... ok
+test tests::stream::a_queue_nobody_reads_ends_at_the_next_publish ... ok
+test tests::resolver::a_chain_of_lua_cartridges_is_hosted_and_the_cascade_follows_the_dependency ... ok
+test tests::rpc_contract::rust_sdk_failed_apply_retains_generation_then_reload_and_dispose_work ... ok
+test tests::stream::a_subscriber_receives_everything_published_to_its_channel_in_order ... ok
+test tests::stream::a_slow_subscriber_gets_a_gap_and_closes_without_blocking_publishers ... ok
+test tests::stream::concurrent_publishers_leave_a_gapless_ordered_log ... ok
+test tests::stream::history_is_bounded_and_an_old_cursor_receives_a_gap ... ok
+test tests::stream::leaving_is_an_event_everyone_still_on_the_channel_sees ... ok
+test tests::stream::publishing_without_a_listener_costs_one_append_and_keeps_the_log ... ok
+test tests::node::a_chain_node_calls_its_dependency_and_serves_its_dependents ... ok
+test tests::stream::a_subscriber_that_crashed_and_came_back_ends_up_where_it_was ... ok
+test tests::stream::a_process_cartridge_publishes_and_watches_over_the_wire ... ok
+test tests::stream::a_repeat_subscribe_spawns_no_second_pump ... ok
+test tests::resolver::a_chain_comes_up_from_the_bottom_and_teardown_follows_the_dependency ... ok
+test process::tests::hung_discovery_is_killed_and_reaped ... ok
+test tests::wire::a_cartridge_hosts_a_cartridge_over_the_same_wire ... ok
+test turn::tests::a_credential_or_a_prompt_body_is_omitted_and_named ... ok
+test turn::tests::a_sink_that_cannot_repair_a_failed_write_stops_accepting_records ... ok
+test turn::tests::oversized_records_are_valid_json_and_bounded_before_and_after_rotation ... ok
+test turn::tests::redaction_reaches_objects_inside_nested_arrays ... ok
+test turn::tests::the_sink_stays_bounded_by_rotating_one_generation ... ok
+test tests::wire::a_child_key_the_sub_host_never_declared_stays_private ... ok
+test tests::wire::a_daemon_reload_carries_down_to_the_child_that_declared_it ... ok
+test tests::wire::a_nested_bridge_call_resolves_against_the_daemons_profile_grant ... ok
+test tests::wire::a_child_that_declared_no_reload_still_answers_null ... ok
+test tests::wire::a_child_that_never_becomes_ready_fails_the_spawn_where_it_failed ... ok
+test tests::process::a_child_that_stays_alive_without_ready_times_out_and_is_reaped ... ok
+test tests::process::watches_reload_wrappers_binaries_and_new_executable_directories_once ... ok
+test tests::folders::recorded_memory_layout_uses_the_separate_submodule ... ok
+test tests::wire::stdout_closed_live_children_obey_each_host_deadline_and_are_reaped ... ok
+
+test result: ok. 165 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 13.69s
+
+     Running unittests src/main.rs (target/tool-result-contract/debug/deps/cartridge-bfe1ba4daa6e9908)
+
+running 2 tests
+test stdio_tests::mcp_bridge_failure_preserves_request_ids_without_replay ... ok
+test stdio_tests::mcp_bridge_keeps_notifications_silent_and_successes_intact ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests .cartridge/tests/unit/src/tests/fixtures/chain_fixture.rs (target/tool-result-contract/debug/examples/chain_fixture-352252d61bd6755b)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests .cartridge/tests/unit/src/tests/fixtures/lua_fixture.rs (target/tool-result-contract/debug/examples/lua_fixture-e8ce3e540cfc5bdc)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests .cartridge/tests/unit/src/tests/fixtures/nested_fixture.rs (target/tool-result-contract/debug/examples/nested_fixture-edd2fe45942c6858)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+     Running unittests .cartridge/tests/unit/src/tests/fixtures/rpc_fixture.rs (target/tool-result-contract/debug/examples/rpc_fixture-8e172d8aaafa386c)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/integration/memo-run.test.ts:
+(pass) memo recipes preserve argument boundaries and propagate failure [58.76ms]
+(pass) memo runner refuses missing, repeated and unterminated executable blocks [30.37ms]
+(pass) nested PRD lanes resolve their own memo owner [16.87ms]
+lane-build-evidence [{"lane":"alpha","mode":"safe","temperature":"cold","ms":1094.5669169999999,"source":{"commit":"13ecfecfc02998ebd2f0320c04db105ddb058a55","tree":"9a08268bb20ac8730ac543ea7d92cc6e8d3bf9f9","digest":"d12a11572ff645ddd6ef8218e56d6a7f0424bb428b02cf77089b7be92751f0f2"},"binary_sha256":"621c63cda4141929dcc27bacc90bf3ef4c9d9819e41b3f3222381c4bdb1e3471","expected":"alpha","observed":"alpha","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"},{"lane":"alpha","mode":"safe","temperature":"warm","ms":406.496709,"source":{"commit":"13ecfecfc02998ebd2f0320c04db105ddb058a55","tree":"9a08268bb20ac8730ac543ea7d92cc6e8d3bf9f9","digest":"d12a11572ff645ddd6ef8218e56d6a7f0424bb428b02cf77089b7be92751f0f2"},"binary_sha256":"621c63cda4141929dcc27bacc90bf3ef4c9d9819e41b3f3222381c4bdb1e3471","expected":"alpha","observed":"alpha","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"},{"lane":"bravo","mode":"safe","temperature":"cold","ms":530.442708,"source":{"commit":"e95c5b650b64b1967e2103ccd55a6b0c970f4e7b","tree":"f6ae5de5148108d3fb163edb0b16f3b83e9b7e84","digest":"101fc091b5b3c98b8c6c6948f7c20f06809f26890f2ff7a0bd65d1caca571ba9"},"binary_sha256":"febb286887708a068c11f7fead75a49e73f7d2ee84646d9029e7e0109abf4166","expected":"bravo","observed":"bravo","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"},{"lane":"bravo","mode":"safe","temperature":"warm","ms":374.8645419999998,"source":{"commit":"e95c5b650b64b1967e2103ccd55a6b0c970f4e7b","tree":"f6ae5de5148108d3fb163edb0b16f3b83e9b7e84","digest":"101fc091b5b3c98b8c6c6948f7c20f06809f26890f2ff7a0bd65d1caca571ba9"},"binary_sha256":"febb286887708a068c11f7fead75a49e73f7d2ee84646d9029e7e0109abf4166","expected":"bravo","observed":"bravo","correct":true,"toolchain":"rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"}]
+(pass) divergent lanes execute their own cold and warm builds without inherited caches [2593.14ms]
+
+ 4 pass
+ 0 fail
+ 47 expect() calls
+Ran 4 tests across 1 file. [2.71s]
+
+```
+
+/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/runtime/prds/the-profile-is-the-root-composer/specs/spec01.md: exit 0
+
+Command SHA-256: eefc57087a4a1cf624a887748303b44d55947e8f5f39f86d7efc89ccecea903f
+
+```text
+    Finished `dev` profile [unoptimized] target(s) in 0.08s
+    Finished `dev` profile [unoptimized] target(s) in 0.06s
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/integration/smoke.test.ts:
+(pass) policy: real isolated protocol [566.67ms]
+(pass) mcp: real isolated protocol [201.33ms]
+(pass) proxy: real isolated protocol [110.33ms]
+
+ 3 pass
+ 0 fail
+ 17 expect() calls
+Ran 3 tests across 1 file. [888.00ms]
+
+```

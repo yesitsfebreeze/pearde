@@ -29,3 +29,34 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-13
+
+Reviewer: Codex `/root`, self-review under session delegation policy.
+Inputs: [review-round-3-inputs.json](review-round-3-inputs.json).
+Baseline [fresh-build evidence](baseline-build.json): composed revision
+`aae108998c35e217a557fb9a2637bc1b4b47fa79` recursively initialized 22 submodules,
+retained memory `318c8f71347f63cc3296945aada8373029f8f372`, resolved the SDK to the
+sibling checkout, and built memory_cartridge in 31.13 seconds through the public
+build recipe with locked dependencies and the cartridge feature. The temporary
+clone was removed; the existing repository, worktrees and stores were untouched.
+The metadata path compares equal after canonicalizing macOS /var and /private/var.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Replaces obsolete import assumptions with a reproduced fresh build. |
+| Ownership and reuse | 20 | Runtime verification only; memory history and ownership unchanged. |
+| Dependencies and slices | 19 | Local Git object sources, recorded gitlinks and current public recipe. |
+| Acceptance and baseline | 20 | Fresh recursive checkout and adapter binary already observed; retain a repeatable gate. |
+| Failure and compatibility | 19 | Fixture-only configuration/output/cleanup; assert original registrations unchanged. |
+
+**97/100 — PASS**, no blocking findings, 3/5 rounds used. No production relocation
+is needed. Add the regression proof and collect it using the current recipe.
+
+Validation: the maintained full Bun proof recursively initialized all 22 pinned
+submodules, built memory_cartridge, and checked the source/worktree registrations
+remained unchanged (93 assertions, 32.83 seconds). The runtime test
+`recorded_memory_layout_uses_the_separate_submodule` passed and is included by
+`just test runtime`; it verifies layout/metadata without repeating the full build.
+Collection reruns both declared proof commands. No migration or bootstrap source
+change was necessary. Checkbox changes record these observations only.

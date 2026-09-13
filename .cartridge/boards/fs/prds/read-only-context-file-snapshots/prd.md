@@ -10,7 +10,7 @@ work-kind: leaf
 review-round: 3
 review-status: passed
 canonical-scope: read-only-context-file-snapshots
-commit: "d4a4239ccce02bc0e647e9ad80892995f48b317f"
+commit: "3a79023311b1a9b30c383ec8c71cf31c20a69ee7"
 ---
 
 # Read exact bounded file context without tool observations

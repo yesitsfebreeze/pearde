@@ -1,12 +1,6 @@
 ---
 complexity: medium
-footprint:
-- cartridge.json
-- src/main.rs
-- src/context.rs
-- .cartridge/tests/unit/context.rs
-- .cartridge/tests/integration/context.test.ts
-- .cartridge/docs/context.md
+footprint: ["cartridge.json","src/main.rs","src/context.rs",".cartridge/tests/unit/context.rs",".cartridge/tests/integration/context.test.ts",".cartridge/docs/context.md","Cargo.toml","src/files.rs","src/service.rs"]
 ---
 
 # Native exact file snapshots without tool observation

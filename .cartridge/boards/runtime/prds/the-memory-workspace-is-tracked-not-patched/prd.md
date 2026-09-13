@@ -1,15 +1,16 @@
 ---
 repo: /Users/feb/dev/cartridge/cartridge.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: runtime
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: accepted
 canonical-scope: the-memory-workspace-is-tracked-not-patched
+commit: "ae989f6a4ab5a27d1c8a31f487b49fbcfaacfd35"
 ---
 
 # the-memory-workspace-is-tracked-not-patched
@@ -18,9 +19,9 @@ Replace the obsolete import plan with verification of the current separate memor
 
 ## Acceptance
 
-- [ ] A fresh recursive checkout obtains the recorded memory commit and builds using documented sibling SDK dependencies.
-- [ ] Runtime manifests/catalog/links point to memory.ctg without obsolete vendor-copy or patch bootstrap requirements.
-- [ ] Existing memory worktrees, ignored stores and repository history remain intact; any remaining portability gap becomes a bounded development-tooling requirement.
+- [x] A fresh recursive checkout obtains the recorded memory commit and builds using documented sibling SDK dependencies.
+- [x] Runtime manifests/catalog/links point to memory.ctg without obsolete vendor-copy or patch bootstrap requirements.
+- [x] Existing memory worktrees, ignored stores and repository history remain intact; any remaining portability gap becomes a bounded development-tooling requirement.
 
 ## Proof and recovery
 

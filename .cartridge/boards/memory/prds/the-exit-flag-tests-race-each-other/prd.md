@@ -1,15 +1,20 @@
 ---
 repo: /Users/feb/dev/cartridge/memory.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: memory
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: accepted
 canonical-scope: the-exit-flag-tests-race-each-other
+footprint:
+- src/commands/Cargo.toml
+- src/store/core/src/lock.rs
+- .cartridge/tests/unit/src/store/core/src/tests/lock_test.rs
+commit: "09bfaaefdcbe2fb3705bece2fcc643c9a95da478"
 ---
 
 # the-exit-flag-tests-race-each-other
@@ -18,9 +23,9 @@ Treat the exit-status integration-binary move as delivered history until a curre
 
 ## Acceptance
 
-- [ ] The exit-status test fails when the reported-failure behavior is deliberately removed, independently of sibling timing.
-- [ ] A controlled handover/global-state interleaving reproduces the remaining race and verifies the proposed synchronization.
-- [ ] Five unchanged isolated runs supplement causal proof, and the report names which historical fixes were reused rather than reimplemented.
+- [x] The exit-status test fails when the reported-failure behavior is deliberately removed, independently of sibling timing.
+- [x] A controlled handover/global-state interleaving reproduces the remaining race and verifies the proposed synchronization.
+- [x] Five unchanged isolated runs supplement causal proof, and the report names which historical fixes were reused rather than reimplemented.
 
 ## Proof and recovery
 
@@ -32,3 +37,17 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `the-exit-flag-tests-race-each-other`; maximum five rounds.
+
+## Verified implementation — 2026-09-13
+
+Full `just check` passed formatting and workspace/all-target clippy. Full
+`just test` passed 1,339 nextest tests (17 configured skips) and documentation
+tests. Five unchanged isolated runs passed all 15 exit, controlled-lock and
+no-listener-handover checks. Removing FAILED.store made the exit target fail
+at its reported-failure assertion; removing retry made the controlled-lock
+fixture fail at its observed-WouldBlock assertion. Both mutations were restored.
+
+The historical isolated test file and 100ms inherited-descriptor patience are
+reused. The current gap was missing Cargo registration plus missing causal
+coverage, not a reason to reset the global failure flag. The completed historical
+work record is memory--the-handover-test-cannot-retake-its-own-lock.

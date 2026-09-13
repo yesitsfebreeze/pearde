@@ -13,7 +13,7 @@ canonical-scope: memo-board-template
 needs:
 - '@memo/memo-board-template/initialize-board'
 - '@memo/memo-board-template/board-engine-integration'
-commit: "154bde9d8f97fb1c015fe34cf62ae79b153e6feb"
+commit: "5345aaaa3407584825f624edb6cefaff14846b07"
 ---
 
 # The memo cartridge supplies a Pearde-compatible project template
@@ -33,3 +33,5 @@ Coordinate the linked outcomes. Claim and implement a leaf; this parent records 
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `memo-board-template`; maximum five rounds.
+
+Reverification: initialize-board receipt refreshed at5345aaaa after document identity integration; child contracts unchanged.

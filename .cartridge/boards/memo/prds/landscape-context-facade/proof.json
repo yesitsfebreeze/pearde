@@ -1,0 +1,53 @@
+{
+  "source_commit": "4b081453d610af42daac0456750a50bdc719a5fe",
+  "dependencies": {
+    "landscape": "c705d648830582e5cf2b4ded267b3c1da4f1eac4",
+    "document_projections": "76800a23d90202645a2eca7d4ee5dcdca3951998"
+  },
+  "commands": [
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just test memo",
+      "result": "72 passed,0 failed"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just check memo",
+      "result": "PASS format/cargo check"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just test landscape",
+      "result": "32 passed,0 failed"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just check landscape",
+      "result": "PASS format/cargo check"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/memo.ctg",
+      "command": "bun test ./.cartridge/tests/integration/context.test.ts",
+      "result": "3 actual SDK integration tests,80 assertions passed; callback allowlist/counters, exact file hashes, private fields, shared80ms deadline with two50ms host stages and exact readback statuses"
+    }
+  ],
+  "source_sha256": {
+    ".cartridge/docs/context.md": "7dff9a1e7a952a7dee3f55d78755537bac42efe18e4bef9912225038dbf239a4",
+    ".cartridge/tests/integration/context.test.ts": "049511edaea3f8df891dfc439a9b3d928989174358692543bebe61278d5664b0",
+    "src/context.rs": "725dca7da578a760ea4ddef9c1bdabec483890c43852aa33646d6866430b211d",
+    "src/main.rs": "989dbe07d6a5bbaf4ffde9ac5f15d1b1d69a08dfbab2c7d0521858902167abdc",
+    "src/service.rs": "3e9cfaabb8b1d8bec6ce08f057411018be13ba67db929290470b521a1887df5a"
+  },
+  "limits": [
+    "Native trusted cwd operation only; model tool schema unchanged. No inference, tools, writes, provider activation, cache or retries.",
+    "Two canonical Tasks include every source discovery/read under one shared deadline. Timed-out remote/filesystem work may continue without publishing a late snapshot.",
+    "Memory only when explicitly requested and host already injects memory; synthetic SDK host proves capability calls, not a deployed backend.",
+    "Existing document adapter caps and SDK decoded-response boundary apply; source rows at most8192 text bytes and shared serialized caps.",
+    "Readback validates all reference fields, uses exact source reads only and enforces serialized wrapper byte capacity without trimming under an old digest."
+  ],
+  "receipt_impacts": [
+    "types-drilldown overlaps src/service.rs; initialize-board overlaps src/main.rs/service.rs. Refresh these receipts at current source, then memo-board-template parent.",
+    "Document identity/projection source footprints unchanged. Their dependency receipts remain at76800a2.",
+    "Root owns separate shipped runtime Memory grant wiring. Current required-injection lifecycle means an exact profile grant would gate memo on configured provider activation; this facade does not declare a native required Memory dependency."
+  ]
+}

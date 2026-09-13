@@ -1,0 +1,11 @@
+{
+  "source_commit": "e5805e6960844af42a32dbc37833304c8208459b",
+  "runtime_lock_commit": "a029e785922985ede8539a75b83b265e9e238a96",
+  "tests": 24,
+  "check": "passed",
+  "scope": "shared contract and synthetic producers; native facade separately unfinished",
+  "logs": {
+    "test-log.txt": "633a970515bf13407087449367828db2f11b92d9c3942ac42756e70b893e27b8",
+    "check-log.txt": "8715953ee48e9223dc011c3fc59d232037e1790ce3eb709b471f0d82e5c18526"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "source_commit": "965108d9c29bce1a41a518917d6c8892e67e42bf",
+  "spec_before": "c97be5210ffc7d55180dca02e74d6cc021d9df4892d07ab84fb8e3c6e180ea9b",
+  "spec_after": "0353d2ed8f555d959f4727d2bc265b58e72406942535880c7ff70fdc54e8e8e0",
+  "change": "Add src/mailbox.rs to verification footprint only; Session lineage/cursor deserialization and generic mutation guards now depend on it. Acceptance/Verify behavior unchanged.",
+  "independent_dependency_check": "/root/sessions_mapping",
+  "review_rounds": "Unchanged; source verification dependency expansion, not a substantive behavior-plan revision."
+}

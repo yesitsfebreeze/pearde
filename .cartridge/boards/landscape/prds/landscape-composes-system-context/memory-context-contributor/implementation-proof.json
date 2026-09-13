@@ -1,0 +1,39 @@
+{
+  "source_commit": "c705d648830582e5cf2b4ded267b3c1da4f1eac4",
+  "shared_contract_commit": "e5805e6960844af42a32dbc37833304c8208459b",
+  "memo_source_commit": "76800a23d90202645a2eca7d4ee5dcdca3951998",
+  "source_paths": [
+    "src/lib.rs",
+    "src/memory.rs",
+    ".cartridge/tests/unit/src/memory/tests.rs",
+    ".cartridge/docs/memory-context.md"
+  ],
+  "commands": {
+    "test": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/landscape-memory\" just test landscape",
+    "check": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/landscape-memory\" just check landscape",
+    "memo": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/landscape-memory-consumer\" just test memo"
+  },
+  "results": {
+    "test": "32 passed, 0 failed (24 existing + 8 memory fixtures)",
+    "check": "passed; initial Clippy test-only guard-lifetime warning fixed with lexical scope, final check passed",
+    "memo": "72 passed, 0 failed"
+  },
+  "review": {
+    "reviewer": "/root",
+    "round": 3,
+    "score": 96
+  },
+  "retained_limitations": [
+    "Optional decoded reply retention is bounded; upstream transport allocations remain host/memory-owned",
+    "Compact exact readback is 500 Unicode characters plus ellipsis; projection digest is not an engine revision or atomic freshness guarantee",
+    "No native facade or proxy integration claimed by this library leaf",
+    "Memory-only metadata transport still belongs to the separate one-search requirement"
+  ],
+  "receipt_refresh": "Shared context contract footprint includes src/lib.rs and requires coordinator refresh after this source commit",
+  "logs": {
+    "implementation-test-log.txt": "295d1b60fa370e34aaf67b91f78f7a1d78139997bc820a808da99437b50ccf94",
+    "implementation-check-log.txt": "fc1bd87bb96d4fdd127a98c333ec942e86d47d41452df0df063c93c85cb90b61",
+    "implementation-memo-log.txt": "51e911e5740bc9868369c1ea8f0af15f0bca1357f8366a76cb300518464c2b1d"
+  },
+  "checked_spec_sha256": "e036235d8275becdf600ffec37058396eaf72bcca9d847e5c2075c0518976203"
+}

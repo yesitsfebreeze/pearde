@@ -1,0 +1,14 @@
+{
+  "source_commit": "408de6cbde348b25234b492d9f9a15e1f3cf0986",
+  "memo_source_commit": "5345aaaa3407584825f624edb6cefaff14846b07",
+  "memory_source_commit": "09bfaaefdcbe2fb3705bece2fcc643c9a95da478",
+  "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/landscape-memory-baseline cargo test --manifest-path /private/tmp/landscape-memory-baseline/Cargo.toml -- --nocapture",
+  "result": "1 observation probe passed; graph returns two memo/tool hits and zero memory-only hits; no memory contributor/availability rows",
+  "probe_sha256": "3c717479a51743c5d5d2799b9482b85bde0ae606f7d78e2d55b4b4358bdae919",
+  "log_sha256": "2b58d0b6923df8f926a64c31599e4fa2aca3e8a3b34106a01a296c9b9044aa62",
+  "source_inspection": {
+    "query": "memory native query returns ranked entities with exact IDs, source object, active/superseded status, 500-character text previews and bounded edge previews; no metadata-only projection",
+    "get": "native get aliases exact-ID query and supports compact:true, edge_limit:1; output has text_truncated/expired but no engine revision or supersession flag",
+    "bounded_scope": "Add memory library contributor to canonical context contract; defer metadata-only wire projection to one-search acceptance; no memory engine writes/ranker/model/tool execution"
+  }
+}

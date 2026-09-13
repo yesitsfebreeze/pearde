@@ -1,0 +1,7 @@
+{
+  "source_commit": "408de6cbde348b25234b492d9f9a15e1f3cf0986",
+  "command": "cargo run -p landscape --example context_baseline",
+  "expected": "private node excluded",
+  "observed": "private metadata exposed by legacy graph; new context contract absent",
+  "probe_source": "fn main() {\n let (graph,_) = landscape::surface::compose(&[], &[], &[(\"@secret/note/hidden.md\".into(),serde_json::json!({\"kind\":\"note\",\"name\":\"SECRET-NAME\",\"description\":\"SECRET-BODY\",\"visibility\":\"private\"}))], \"\");\n println!(\"{}\",serde_json::to_string(&graph.nodes().collect::<Vec<_>>()).unwrap());\n assert!(graph.is_empty(), \"private context remains visible and lacks owner/revision/availability envelope\");\n}\n"
+}

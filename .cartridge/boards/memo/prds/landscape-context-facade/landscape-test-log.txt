@@ -1,0 +1,39 @@
+    Finished `test` profile [unoptimized] target(s) in 0.07s
+     Running unittests src/lib.rs (target/tool-result-contract/debug/deps/landscape-790bf2959c895d43)
+
+running 32 tests
+test context::tests::duplicate_tasks_and_invalid_limits_fail_before_any_producer ... ok
+test context::tests::dropping_collector_drops_pending_producers_without_spawning_work ... ok
+test context::tests::late_ready_contribution_cannot_publish_after_deadline ... ok
+test context::tests::producer_capacity_omissions_remain_explicit_in_prepared_snapshot ... ok
+test context::tests::availability_is_explicit_and_disabled_producers_never_poll ... ok
+test context::tests::hanging_first_source_does_not_starve_siblings_and_is_dropped ... ok
+test context::tests::canonical_order_exact_readback_and_conflicting_sources ... ok
+test context::tests::private_content_cannot_change_public_digest_or_capacity ... ok
+test surface::tests::cartridge_nodes_carry_their_capability_keys ... ok
+test memory::tests::conflicting_duplicate_expiry_and_malformed_bounds_refuse_without_substitution ... ok
+test memory::tests::exact_missing_changed_prefix_and_invalid_references_never_requery ... ok
+test surface::tests::compose_skips_malformed_surface_entries ... ok
+test surface::tests::composed_memo_links_respect_cartridge_namespaces ... ok
+test surface::tests::memo_nodes_carry_their_kind_and_declared_usage_phrases ... ok
+test memory::tests::private_oversized_and_unknown_metadata_cannot_enter_evidence ... ok
+test surface::tests::compose_grows_the_live_surface_and_counts_observations ... ok
+test surface::tests::tool_nodes_carry_the_describe_description ... ok
+test tests::edges_connect_present_nodes_and_tolerate_ones_to_come ... ok
+test memory::tests::unavailable_malformed_empty_and_inactive_memory_preserve_other_sources ... ok
+test tests::graph_search_keeps_the_seed_ranking ... ok
+test tests::observed_use_outranks_equal_match ... ok
+test tests::journal_counts_weight_stages ... ok
+test memory::tests::memory_fact_joins_shared_context_and_exact_readback_without_requery ... ok
+test tests::upsert_grows_the_node_set_in_place ... ok
+test tests::search_returns_kinds_with_descriptions ... ok
+test memory::tests::count_bytes_source_mismatch_and_compact_truncation_are_explicit ... ok
+test memory::tests::private_only_results_have_the_same_public_snapshot_as_empty_memory ... ok
+test context::tests::exact_serialized_bounds_count_metadata_and_keep_whole_utf8_rows ... ok
+test view_tests::cursor_from_another_snapshot_is_stale ... ok
+test memory::tests::deadline_drops_pending_read_without_starting_later_hydration ... ok
+test view_tests::tracked_files_follow_sibling_repository_links ... ok
+test view_tests::tracked_files_join_by_scope_and_page_by_id ... ok
+
+test result: ok. 32 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.06s
+

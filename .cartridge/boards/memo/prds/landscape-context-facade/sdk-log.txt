@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/integration/context.test.ts:
+(pass) native shared context and exact readback retain attribution without tool calls or writes [1958.58ms]
+(pass) optional states and delayed discovery/read use one deadline while retaining other evidence [409.72ms]
+(pass) invalid inputs and evidence size caps preserve exact references and legacy tool surface [12.98ms]
+
+ 3 pass
+ 0 fail
+ 80 expect() calls
+Ran 3 tests across 1 file. [2.39s]

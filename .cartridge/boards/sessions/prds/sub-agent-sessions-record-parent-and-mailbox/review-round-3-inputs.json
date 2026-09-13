@@ -1,0 +1,28 @@
+{
+  "reviewer": "/root",
+  "round": 3,
+  "score": 95,
+  "result": "pass",
+  "inputs": [
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/sub-agent-sessions-record-parent-and-mailbox/prd.md",
+      "sha256": "99142b9fe4bb3d6bf31e21e686938a8e38c9acf2db6b30fd2360cffa01c11d5e"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/sub-agent-sessions-record-parent-and-mailbox/specs/spec01.md",
+      "sha256": "6786a146b5a577ce69d1214e1b5e3a8eaf12c82c0d92081ba627232ea0042366"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/sub-agent-sessions-record-parent-and-mailbox/baseline.json",
+      "sha256": "3e42fe7515bdb4fc01bb86994c452a76ec1a44e3511c28597bfb8646d5608c73"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/sessions/prds/sub-agent-sessions-record-parent-and-mailbox/channel-prerequisite-analysis.md",
+      "sha256": "87d7ab32227f4f6cfc7853eb8e8c5a6b6d2142b9a56977b5d869ebf43bd86736"
+    },
+    {
+      "path": "/Users/feb/dev/cartridge/sessions.ctg/src/main.rs",
+      "sha256": "31e0bfa29d0d1a748d34d36c065044521eefbf8cc512eae80a9d7bb250138388"
+    }
+  ]
+}

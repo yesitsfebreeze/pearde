@@ -1,0 +1,10 @@
+{
+  "command": "bun /tmp/memory-compact-baseline.ts",
+  "binary": "/Users/feb/dev/cartridge/cartridge.ctg/target/debug/memory_cartridge",
+  "binary_sha256": "d595a4db61c2f71cf2a6413b3f4d2e244f2f7d0da90122d1329829bb568b94b8",
+  "source_attribution": "Existing executable fingerprint only; no claim it was rebuilt at a particular source revision",
+  "result": "Temporary store and local embedding endpoint; raw seed committed; k1 ranked query and compact exact-ID get matched source and ID; text 503 chars including ellipsis with text_truncated true; native dispose exit0",
+  "fixture_cleanup": "Temporary store deleted; local endpoint stopped; child disposed",
+  "probe_sha256": "61203e9ebe0e32e7f9c5f0940c088802c373f1e8c8b25543c1b395faee43765e",
+  "log_sha256": "0cde44d5429972b04a1cac4a507464e4c8dedab5741473467fe13a811e530f16"
+}

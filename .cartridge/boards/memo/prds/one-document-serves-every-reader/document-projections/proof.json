@@ -1,0 +1,50 @@
+{
+  "source_commit": "76800a23d90202645a2eca7d4ee5dcdca3951998",
+  "commands": [
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just test memo",
+      "result": "PASS:72 tests,0 failed;8 projection tests including immutable snapshot reuse, all bounds and private stale-revision refusal; test-log.txt"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/tool-result-contract\" just check memo",
+      "result": "PASS: format and cargo check; check-log.txt"
+    },
+    {
+      "cwd": "/Users/feb/dev/cartridge/memo.ctg",
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract cargo build --manifest-path Cargo.toml -p memo_cartridge",
+      "result": "PASS: fresh native executable; build-log.txt"
+    },
+    {
+      "command": "python3 /tmp/memo-document-projection-proof.py; retained exact source native-probe.txt",
+      "result": "PASS: native public closure/private redaction, docs/human hydration, stable primary revision, changed derived revision after dependency edit, literal stable commands and no new paths; native-proof.json"
+    },
+    {
+      "command": "SHA256 of working and staged document/projection fixtures against both manifest schemas",
+      "result": "PASS: all existing LF/CRLF identity bytes and new projection fixture bytes match; no identity fixture changes"
+    }
+  ],
+  "source_sha256": {
+    ".cartridge/docs/documents.md": "580e901074561a2b0398c45662f560feefe9ae71fad16d52f6e4695554d7aacd",
+    ".cartridge/tests/fixtures/projections/.gitattributes": "166ed80450dc0bc0cba414bd62eec0730bfb0f9cf70254625c9787e85d10624c",
+    ".cartridge/tests/fixtures/projections/linked.md": "e5b4e45d8624461c5e2fa8a1995b7b5b958ccccb0fbd02152e458dd20848f71e",
+    ".cartridge/tests/fixtures/projections/main.md": "64c0e22fdc655b100a4df97f296d30de858c6b992c89bb9554de3e92eb478c73",
+    ".cartridge/tests/fixtures/projections/manifest.json": "8f730ab51f7ea5b9744a896b90f1038ce84210b967a071d94178440edabf5b04",
+    ".cartridge/tests/fixtures/projections/private.md": "efb5bdb45d7bc5d568e2d7227fdf223e7a609bf8ada37601ebd53311d4f2df96",
+    ".cartridge/tests/unit/projection.rs": "9efa78ffcf177de051145a979e3c560f65e56850635e3c2a972cd14d3658601e",
+    "src/document.rs": "4b4d882b67a9035482515a72081402b568b581cf31b65aaaa29a6bd90583801d",
+    "src/projection.rs": "17679c1389951928b8d897a89cf163dd33a415ea8d9c46fef8793029757c9eaa"
+  },
+  "limits": [
+    "Native host API only. Docs/human hydrate explicit bounded wiki references; commands remain raw/unvalidated and never launch.",
+    "Depth4,32 cached identities including failed lookups,128 visits,16MiB reads,64KiB UTF8 output,64 diagnostics.",
+    "Per-source immutable request snapshots; no cross-file atomic snapshot or filesystem access-control claim.",
+    "Private sources are omitted from index/refused directly before revision-conflict diagnostics; linked private source metadata/body/digest never returned."
+  ],
+  "receipt_impacts": [
+    "Document-identity overlaps src/document.rs and documents.md: refresh prerequisite receipt before collecting dependent projections.",
+    "Types-drilldown/initialize-board/board-engine footprints unchanged in this commit.",
+    "Upcoming @memo/landscape-context-facade can use native projections after coordinator collection."
+  ]
+}

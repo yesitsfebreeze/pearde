@@ -1,0 +1,16 @@
+import pathlib,tempfile,subprocess,json,time
+owner=pathlib.Path('/Users/feb/dev/cartridge/memo.ctg');proof=owner.parent/'prd.ctg/.cartridge/boards/memo/prds/landscape-context-facade';root=pathlib.Path(tempfile.mkdtemp(prefix='memo-context-baseline-'));doc=root/'.cartridge/documents/fact.md';doc.parent.mkdir(parents=True);doc.write_text('---\nschema: cartridge-document/v1\nkind: note\ndescription: Context baseline fact\n---\nDOCUMENT_ONLY_FACT\n')
+child=subprocess.Popen([str(owner.parent/'cartridge.ctg/target/tool-result-contract/debug/memo_cartridge')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+def send(v):child.stdin.write(json.dumps(v)+'\n');child.stdin.flush()
+send({'apply':{'name':'memo','config':{}}})
+while not json.loads(child.stdout.readline()).get('ready'):pass
+calls=[];started=time.monotonic();request={'op':'context','action':'prepare','cwd':str(root),'query':'Context baseline fact','documents':[{'path':'.cartridge/documents/fact.md'}],'memory':False}
+send({'id':1,'call':'memo','args':request})
+while True:
+ value=json.loads(child.stdout.readline())
+ if value.get('reply')==1:break
+ if 'id' in value:calls.append(value);send({'reply':value['id'],'data':[]})
+elapsed=time.monotonic()-started
+send({'dispose':True});child.communicate(timeout=10)
+result={'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=owner,text=True).strip(),'command':'python3 /tmp/memo-context-baseline.py; exact source baseline-probe.txt','request':request,'response':value,'host_calls':calls,'elapsed_seconds':elapsed,'expected':'One attributable shared document/optional-memory context snapshot','observed':'Native context operation is rejected by legacy Input parser; no host source calls occurred','fixture':str(root)}
+(proof/'baseline.json').write_text(json.dumps(result,indent=2)+'\n');(proof/'baseline-probe.txt').write_text(pathlib.Path(__file__).read_text());print(json.dumps(result,indent=2))

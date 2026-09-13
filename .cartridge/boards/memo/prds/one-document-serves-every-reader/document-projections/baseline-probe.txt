@@ -1,0 +1,18 @@
+import pathlib,tempfile,subprocess,json
+owner=pathlib.Path('/Users/feb/dev/cartridge/memo.ctg');proof=owner.parent/'prd.ctg/.cartridge/boards/memo/prds/one-document-serves-every-reader/document-projections';root=pathlib.Path(tempfile.mkdtemp(prefix='memo-document-projection-baseline-'))
+def put(name,body,extra=''):
+ p=root/'.cartridge/documents'/name;p.parent.mkdir(parents=True,exist_ok=True);p.write_text('---\nschema: cartridge-document/v1\nkind: note\ndescription: Fixture\n'+extra+'---\n'+body)
+put('main.md','Public introduction.\n\n[[linked.md#Details]]\n\n[[private.md]]\n\n```just\nshow:\n    echo "[[linked.md]]"\n```\n');put('linked.md','# Details\nLinked prose version one.\n');put('private.md','PRIVATE_BODY_SENTINEL\n','visibility: private\n')
+child=subprocess.Popen([str(owner.parent/'cartridge.ctg/target/tool-result-contract/debug/memo_cartridge')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+def send(value):child.stdin.write(json.dumps(value)+'\n');child.stdin.flush()
+send({'apply':{'name':'memo','config':{}}})
+while not json.loads(child.stdout.readline()).get('ready'):pass
+results=[]
+for identifier,name in enumerate(['main.md','private.md'],1):
+ send({'id':identifier,'call':'memo','args':{'op':'document','cwd':str(root),'path':'.cartridge/documents/'+name,'projection':'docs'}})
+ while True:
+  value=json.loads(child.stdout.readline())
+  if value.get('cartridges'):send({'reply':value['id'],'data':[]});continue
+  if value.get('reply')==identifier:results.append(value);break
+send({'dispose':True});child.communicate(timeout=10)
+result={'source_revision':subprocess.check_output(['git','rev-parse','HEAD'],cwd=owner,text=True).strip(),'fixture':str(root),'command':'python3 /tmp/memo-document-projection-baseline.py (retained baseline-probe.txt)','expected':'Readable projection includes public linked section with separate closure revision and excludes explicit private bodies','observed':results,'finding':'Docs returns literal wiki links, hydrated:false and no projection revision; explicit private metadata currently does not prevent body projection.'};(proof/'baseline-inputs.json').write_text(json.dumps(result,indent=2)+'\n');(proof/'baseline-probe.txt').write_text(pathlib.Path('/tmp/memo-document-projection-baseline.py').read_text());print(json.dumps({'source':result['source_revision'],'finding':result['finding']},indent=2))

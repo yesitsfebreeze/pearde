@@ -1,0 +1,81 @@
+{
+  "source_revision": "965108d9c29bce1a41a518917d6c8892e67e42bf",
+  "source_files": [
+    {
+      "path": "src/main.rs",
+      "sha256": "a70552ce348041d7ef6d1115153d7e45ef6ea0195840c4cae253a276e8d59cb5"
+    },
+    {
+      "path": "src/mailbox.rs",
+      "sha256": "b2b0088fb6376a2082d16103308a02516e1c1effba2c15c0995071ca9e52ef74"
+    },
+    {
+      "path": ".cartridge/tests/unit/main/mailbox_tests.rs",
+      "sha256": "7800379bedea5ca7158ed62c4843a0f7894ce9f1f0c33a60339853a718310f26"
+    },
+    {
+      "path": ".cartridge/tests/integration/mailbox.test.ts",
+      "sha256": "49f89b5e63acbd0a844a5ac74ec8baf0d50812315a0a43a4c89ca7704a9f77f7"
+    },
+    {
+      "path": ".cartridge/docs/mailbox.md",
+      "sha256": "d29c92f40560dc982d64c3f5b4a692841d780e59951a75d4f5d809359dcd4e8e"
+    }
+  ],
+  "commands": [
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just test sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "51 passed; 0 failed; 41 retained + 10 mailbox tests",
+      "log": "proof-test.log"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just check sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "passed",
+      "log": "proof-check.log"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just build sessions",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "passed",
+      "log": "proof-build.log"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_TARGET_DIR=\"$PWD/target/sessions-mapping\" just build harness",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "passed; existing concurrent harness changes untouched",
+      "log": "proof-harness-build.log"
+    },
+    {
+      "command": "SESSIONS_BINARY=\"$PWD/target/sessions-mapping/debug/sessions\" HARNESS_BINARY=\"$PWD/target/sessions-mapping/debug/harness\" bun test ../sessions.ctg/.cartridge/tests/integration/mapping.test.ts ../sessions.ctg/.cartridge/tests/integration/retention.test.ts ../sessions.ctg/.cartridge/tests/integration/mailbox.test.ts",
+      "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+      "result": "10 tests passed; 0 failed; 178 assertions; actual sessions+harness SDK processes",
+      "log": "proof-integration.log"
+    }
+  ],
+  "consumer_inputs": [
+    {
+      "path": "harness.ctg/src/main.rs",
+      "sha256": "e4c23eeb9da21595c3a5bdea3a2374482f3ab51f1f0eadf95953afbdfa2ea0d8"
+    },
+    {
+      "path": "harness.ctg/.cartridge/tests/integration/working.rs",
+      "sha256": "505e0f9b22e2a0c539e3833df54f6eddbb727ecc1b89cbfa6492053c6ce5e19d"
+    }
+  ],
+  "limitations": [
+    "Environment-provisioned credentials authenticate configured mailbox/child operations; unrelated native session/buffer APIs remain host-trusted.",
+    "Legacy unconfigured create/send/mailbox behavior remains available; historical sender claims are not retroactively authenticated.",
+    "One active owner writer per snapshot; no cross-process transcript locking is claimed.",
+    "Host bindings supply actor membership and override owner lineage. Only authenticated child creation writes lineage through SDK APIs; direct filesystem edits are outside the authority protocol.",
+    "Read persists a receipt without cursor acknowledgement; a newer read supersedes older receipts, yielding explicit conflicts/re-delivery.",
+    "Named/public channels, catalogue, watch/wake and global channel ordering remain separate unimplemented historical delta."
+  ],
+  "shared_receipt_refresh": [
+    "@sessions/improve-sessions-client-mapping",
+    "@sessions/improve-sessions-retention",
+    "@sessions/improve-sessions-recovery",
+    "@sessions/improve-sessions-programme"
+  ]
+}

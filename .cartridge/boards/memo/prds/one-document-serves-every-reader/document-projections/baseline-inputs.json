@@ -1,0 +1,48 @@
+{
+  "source_revision": "5345aaaa3407584825f624edb6cefaff14846b07",
+  "fixture": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-projection-baseline-yf_og19v",
+  "command": "python3 /tmp/memo-document-projection-baseline.py (retained baseline-probe.txt)",
+  "expected": "Readable projection includes public linked section with separate closure revision and excludes explicit private bodies",
+  "observed": [
+    {
+      "data": {
+        "content": "Public introduction.\n\n[[linked.md#Details]]\n\n[[private.md]]\n\n```just\nshow:\n    echo \"[[linked.md]]\"\n```\n",
+        "hydrated": false,
+        "identity": "@workspace/.cartridge/documents/main.md",
+        "metadata": {
+          "description": "Fixture",
+          "kind": "note",
+          "schema": "cartridge-document/v1"
+        },
+        "owner": "workspace",
+        "path": ".cartridge/documents/main.md",
+        "projection": "docs",
+        "revision": "d0bc1373fe65ab5e24893d392c5e55306190e854a5815ce489ac4c9fe8f8422c",
+        "schema": "cartridge-document/v1",
+        "source_path": ".cartridge/documents/main.md"
+      },
+      "reply": 1
+    },
+    {
+      "data": {
+        "content": "PRIVATE_BODY_SENTINEL\n",
+        "hydrated": false,
+        "identity": "@workspace/.cartridge/documents/private.md",
+        "metadata": {
+          "description": "Fixture",
+          "kind": "note",
+          "schema": "cartridge-document/v1",
+          "visibility": "private"
+        },
+        "owner": "workspace",
+        "path": ".cartridge/documents/private.md",
+        "projection": "docs",
+        "revision": "40f36c1d7d399802ef0b591a7f6c7d8858f5ec08f327a369263a234705e5004a",
+        "schema": "cartridge-document/v1",
+        "source_path": ".cartridge/documents/private.md"
+      },
+      "reply": 2
+    }
+  ],
+  "finding": "Docs returns literal wiki links, hydrated:false and no projection revision; explicit private metadata currently does not prevent body projection."
+}

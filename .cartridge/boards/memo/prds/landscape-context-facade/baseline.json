@@ -1,0 +1,25 @@
+{
+  "source_revision": "76800a23d90202645a2eca7d4ee5dcdca3951998",
+  "command": "python3 /tmp/memo-context-baseline.py; exact source baseline-probe.txt",
+  "request": {
+    "op": "context",
+    "action": "prepare",
+    "cwd": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-context-baseline-69e9spdu",
+    "query": "Context baseline fact",
+    "documents": [
+      {
+        "path": ".cartridge/documents/fact.md"
+      }
+    ],
+    "memory": false
+  },
+  "response": {
+    "error": "unknown field `action`, expected one of `op`, `path`, `body`, `kind`, `limit`, `cursor`, `usage`, `query`, `ref`, `expected_revision`, `event`",
+    "reply": 1
+  },
+  "host_calls": [],
+  "elapsed_seconds": 0.00014070899999999928,
+  "expected": "One attributable shared document/optional-memory context snapshot",
+  "observed": "Native context operation is rejected by legacy Input parser; no host source calls occurred",
+  "fixture": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-context-baseline-69e9spdu"
+}

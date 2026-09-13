@@ -1,0 +1,69 @@
+{
+  "binary": "/Users/feb/dev/cartridge/cartridge.ctg/target/debug/memory_cartridge",
+  "binary_sha256": "d595a4db61c2f71cf2a6413b3f4d2e244f2f7d0da90122d1329829bb568b94b8",
+  "seed": {
+    "conf": 0.5,
+    "doc_id": "ca73482da7ec15f356f1f36c8c040e86f6c04cf751e78898028f3d1c559a924d",
+    "embedded_chunks": 1,
+    "failed_chunks": 0,
+    "id_kind": "document",
+    "kind": 1,
+    "message": "1 chunks placed",
+    "permanent_failures": 0,
+    "status": "committed",
+    "total_chunks": 1,
+    "transient_failures": 0
+  },
+  "query": {
+    "chains": "",
+    "entities": [
+      {
+        "cold": false,
+        "conf": 0.5714285714285714,
+        "conf_uncertainty": 0.05442176870748299,
+        "id": "ca73482da7ec15f356f1f36c8c040e86f6c04cf751e78898028f3d1c559a924d",
+        "invalidated_at": null,
+        "kind": "document",
+        "scheme": "inline",
+        "score": 0.8381438340206497,
+        "source": {
+          "object_id": "",
+          "scheme": "inline",
+          "section": "",
+          "url": ""
+        },
+        "status": "active",
+        "superseded_by": "",
+        "text": "Cedar-only-fact xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+        "valid_from": null,
+        "valid_to": null,
+        "valid_until": null
+      }
+    ]
+  }
+}
+{
+  "get": {
+    "access_count": 1,
+    "compact": true,
+    "conf": 0.5714285714285714,
+    "conf_uncertainty": 0.05442176870748299,
+    "edges": [],
+    "edges_cursor": "",
+    "edges_more": false,
+    "edges_total": 0,
+    "id": "ca73482da7ec15f356f1f36c8c040e86f6c04cf751e78898028f3d1c559a924d",
+    "kind": 2,
+    "memory": "74b7275b8dc0ca96014450c353d480d24785ed1e95076a0d89ccf36f50270657",
+    "score": 0.5714285714285714,
+    "source": {
+      "object_id": "",
+      "scheme": "inline",
+      "section": "",
+      "url": ""
+    },
+    "text": "Cedar-only-fact xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...",
+    "text_truncated": true
+  },
+  "assertions": "ranked source and ID exactly match compact get; 503 characters including ellipsis; text_truncated true"
+}

@@ -1,0 +1,37 @@
+import pathlib,tempfile,subprocess,json,hashlib
+owner=pathlib.Path('/Users/feb/dev/cartridge/memo.ctg')
+proof=owner.parent/'prd.ctg/.cartridge/boards/memo/prds/one-document-serves-every-reader/document-projections'
+root=pathlib.Path(tempfile.mkdtemp(prefix='memo-document-projection-proof-'))
+docs=root/'.cartridge/documents';docs.mkdir(parents=True)
+for name in ['main.md','linked.md','private.md']:
+ (docs/name).write_bytes((owner/'.cartridge/tests/fixtures/projections'/name).read_bytes())
+before=sorted(str(p.relative_to(root)) for p in root.rglob('*'))
+child=subprocess.Popen([str(owner.parent/'cartridge.ctg/target/tool-result-contract/debug/memo_cartridge')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+def send(v):child.stdin.write(json.dumps(v)+'\n');child.stdin.flush()
+send({'apply':{'name':'memo','config':{}}})
+while not json.loads(child.stdout.readline()).get('ready'):pass
+results=[]
+def call(name,projection):
+ identifier=len(results)+1
+ send({'id':identifier,'call':'memo','args':{'op':'document','cwd':str(root),'path':'.cartridge/documents/'+name,'projection':projection}})
+ while True:
+  value=json.loads(child.stdout.readline())
+  if value.get('cartridges'):send({'reply':value['id'],'data':[]});continue
+  if value.get('reply')==identifier:results.append(value);return value
+first=call('main.md','docs')['data'];commands=call('main.md','commands')['data'];private=call('private.md','docs')
+assert first['hydrated'] and 'Linked prose version one.' in first['content']
+assert len(first['sources'])==2 and not first['complete'] and not first['truncated']
+assert all(hidden not in json.dumps(first) for hidden in ['PRIVATE_BODY_SENTINEL','PRIVATE_METADATA_SENTINEL',hashlib.sha256((docs/'private.md').read_bytes()).hexdigest()])
+assert 'private document' in json.dumps(private)
+assert '[[linked.md]]' in commands['commands']['blocks'][0]['body'] and not commands['hydrated']
+assert len(commands['sources'])==1
+(docs/'linked.md').write_bytes((docs/'linked.md').read_bytes().replace(b'version one',b'version two'))
+changed=call('main.md','docs')['data'];commands_after=call('main.md','commands')['data'];human=call('main.md','human')['data']
+assert changed['revision']==first['revision'] and changed['projection_revision']!=first['projection_revision']
+assert 'version two' in changed['content'] and commands_after['projection_revision']==commands['projection_revision']
+assert human['content']==changed['content'] and human['projection_revision']!=changed['projection_revision']
+assert before==sorted(str(p.relative_to(root)) for p in root.rglob('*'))
+assert (docs/'main.md').read_bytes()==(owner/'.cartridge/tests/fixtures/projections/main.md').read_bytes()
+send({'dispose':True});child.communicate(timeout=10);assert child.returncode==0
+result={'source_parent':subprocess.check_output(['git','rev-parse','HEAD'],cwd=owner,text=True).strip(),'fixture':str(root),'result':'PASS: actual native SDK docs/human hydrate public section and redact private source; linked edit changes derived revision only; commands remain literal and stable; no new paths or primary edits','responses':results}
+(proof/'native-proof.json').write_text(json.dumps(result,indent=2)+'\n');(proof/'native-probe.txt').write_text(pathlib.Path(__file__).read_text());print(result['result'])

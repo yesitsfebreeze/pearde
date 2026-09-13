@@ -14,6 +14,7 @@ needs:
 - '@landscape/landscape-composes-system-context/context-contributor-contract'
 - '@landscape/landscape-composes-system-context/memory-context-contributor'
 - '@landscape/landscape-composes-system-context/live-file-context-contributors'
+- '@memo/landscape-context-facade'
 ---
 
 # Landscape answers across kernel, directories, memo, memory, and live state
@@ -34,3 +35,5 @@ Coordinate the linked outcomes. Claim and implement a leaf; this parent records 
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `landscape-composes-system-context`; maximum five rounds.
+
+- [Native context facade](../../../memo/prds/landscape-context-facade/prd.md)

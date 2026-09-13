@@ -29,3 +29,23 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-13
+
+Independent reviewer: Codex `/root`; implementer `/root/sessions_mapping`.
+Inputs: [review-round-3-inputs.json](review-round-3-inputs.json).
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Concrete direct-mailbox gap; named channel delta preserved separately. |
+| Ownership and reuse | 19 | Existing snapshots/buffers, immutable host actor bindings and private lineage. |
+| Dependencies and slices | 19 | Canonical source/alias boundary and inherited single-writer contract remain traceable. |
+| Acceptance and baseline | 19 | Real duplicate-message baseline, bounded receipt/ack and metadata-forgery proof. |
+| Failure and compatibility | 19 | Restart-safe explicit ack, stale receipts, atomic failure and unchanged legacy compatibility tests. |
+
+**95/100 — PASS**, no blocking findings, 3/5 rounds used.
+Reviewer required private lineage protection against generic create/save field
+rewriting and generic mailbox buffer mutation, with negative tests. Legacy raw
+APIs remain host-trusted but cannot change authoritative lineage through their
+arguments. No fabricated claim that direct mailboxes implement named channels.
+This agent plan rating is not a user rating or an implementation test result.

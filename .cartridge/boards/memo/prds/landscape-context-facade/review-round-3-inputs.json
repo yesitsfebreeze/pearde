@@ -1,0 +1,17 @@
+{
+  "canonical": "@memo/landscape-context-facade",
+  "round": 3,
+  "source_revision": "76800a23d90202645a2eca7d4ee5dcdca3951998",
+  "sha256": {
+    "prd.md": "6bc735bd02bf5707ddf63976d5894c98deeb3ed2d875d16f512dda95d05facd1",
+    "specs/spec01.md": "9e39c4b11f4dd15a16d1b785b0d8ac4442655a5480d8d4d762508c2fdce8777e",
+    "baseline.json": "a4ce7f9d9c65a747c8f2040011c0fdb465cfa7d5140393c090663a3fa55df3cb",
+    "baseline-probe.txt": "5e9d9adb5eca2de7e86b5511084d8b979e97073fd79b305c3139ad5161841217",
+    "../memo.ctg/src/service.rs": "b144d55b10ce0a018dacc353c25078d1607fe8c37e674be5c68a4f028f8701bd",
+    "../memo.ctg/src/document.rs": "4b4d882b67a9035482515a72081402b568b581cf31b65aaaa29a6bd90583801d",
+    "../memo.ctg/src/projection.rs": "17679c1389951928b8d897a89cf163dd33a415ea8d9c46fef8793029757c9eaa",
+    "../landscape.ctg/src/context.rs": "2698532a05e9d9d831b1c806392cb7a12c677c23aaca4eb93126b8738f494ec3"
+  },
+  "reviewer": "/root",
+  "score": 96
+}

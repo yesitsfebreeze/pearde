@@ -1,0 +1,2 @@
+    Checking landscape v0.1.0 (/Users/feb/dev/cartridge/landscape.ctg)
+    Finished `dev` profile [unoptimized] target(s) in 0.35s

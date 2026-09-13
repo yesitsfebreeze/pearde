@@ -1,0 +1,146 @@
+{
+  "source_revision": "b772c6ee4f1ad476995c8c8c07cd02ed2be264fa",
+  "binary_sha256": "189e03928761802b17de7fd970fe28213c20f4cb8e3ab917f5c91d428cb0335e",
+  "command": "Build sessions via public just build sessions; launch real sessions SDK process with apply config.dir pointing to a disposable directory; execute exact request/reply frames below.",
+  "results": "Existing parent and mailbox operations work, but duplicate message_id appends twice, lines lack sequence IDs, bounded cursor operation is absent and parent strings are not scoped/validated by this unconfigured native service.",
+  "rows": [
+    {
+      "args": {
+        "op": "create",
+        "name": "parent"
+      },
+      "reply": {
+        "data": {
+          "agent": {},
+          "buffers": [],
+          "created": 1789316697,
+          "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+          "files": [],
+          "id": "18d4ee0e4f7ef250-2",
+          "name": "parent",
+          "parent": null,
+          "revision": 0,
+          "transcript": null,
+          "updated": 1789316697
+        },
+        "reply": 1
+      }
+    },
+    {
+      "args": {
+        "op": "create",
+        "name": "child",
+        "parent": "18d4ee0e4f7ef250-2"
+      },
+      "reply": {
+        "data": {
+          "agent": {},
+          "buffers": [],
+          "created": 1789316697,
+          "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+          "files": [],
+          "id": "18d4ee0e5011a8e8-4",
+          "name": "child",
+          "parent": "18d4ee0e4f7ef250-2",
+          "revision": 0,
+          "transcript": null,
+          "updated": 1789316697
+        },
+        "reply": 2
+      }
+    },
+    {
+      "args": {
+        "op": "send",
+        "id": "18d4ee0e5011a8e8-4",
+        "from": "18d4ee0e4f7ef250-2",
+        "text": "one logical message",
+        "message_id": "retry-id"
+      },
+      "reply": {
+        "data": {
+          "from": "18d4ee0e4f7ef250-2",
+          "text": "one logical message",
+          "to": "18d4ee0e5011a8e8-4",
+          "ts": 1789316697
+        },
+        "reply": 3
+      }
+    },
+    {
+      "args": {
+        "op": "send",
+        "id": "18d4ee0e5011a8e8-4",
+        "from": "18d4ee0e4f7ef250-2",
+        "text": "one logical message",
+        "message_id": "retry-id"
+      },
+      "reply": {
+        "data": {
+          "from": "18d4ee0e4f7ef250-2",
+          "text": "one logical message",
+          "to": "18d4ee0e5011a8e8-4",
+          "ts": 1789316697
+        },
+        "reply": 4
+      }
+    },
+    {
+      "args": {
+        "op": "mailbox",
+        "id": "18d4ee0e5011a8e8-4"
+      },
+      "reply": {
+        "data": [
+          {
+            "from": "18d4ee0e4f7ef250-2",
+            "text": "one logical message",
+            "to": "18d4ee0e5011a8e8-4",
+            "ts": 1789316697
+          },
+          {
+            "from": "18d4ee0e4f7ef250-2",
+            "text": "one logical message",
+            "to": "18d4ee0e5011a8e8-4",
+            "ts": 1789316697
+          }
+        ],
+        "reply": 5
+      }
+    },
+    {
+      "args": {
+        "op": "mailbox_read",
+        "id": "18d4ee0e5011a8e8-4",
+        "limit": 1
+      },
+      "reply": {
+        "error": "unknown sessions op mailbox_read",
+        "reply": 6
+      }
+    },
+    {
+      "args": {
+        "op": "create",
+        "name": "unverified-parent",
+        "parent": "invented-parent"
+      },
+      "reply": {
+        "data": {
+          "agent": {},
+          "buffers": [],
+          "created": 1789316697,
+          "cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+          "files": [],
+          "id": "18d4ee0e5173a600-8",
+          "name": "unverified-parent",
+          "parent": "invented-parent",
+          "revision": 0,
+          "transcript": null,
+          "updated": 1789316697
+        },
+        "reply": 7
+      }
+    }
+  ]
+}

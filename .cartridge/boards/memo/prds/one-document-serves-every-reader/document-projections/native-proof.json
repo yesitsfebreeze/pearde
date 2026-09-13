@@ -1,0 +1,252 @@
+{
+  "source_parent": "5345aaaa3407584825f624edb6cefaff14846b07",
+  "fixture": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-document-projection-proof-3h888ncw",
+  "result": "PASS: actual native SDK docs/human hydrate public section and redact private source; linked edit changes derived revision only; commands remain literal and stable; no new paths or primary edits",
+  "responses": [
+    {
+      "data": {
+        "complete": false,
+        "content": "Introduction.\n\n# Details\nLinked prose version one.\n\n## Subsection\nIncluded subordinate prose.\n\n\n\n[private source omitted]\n\n```just\nshow:\n    echo \"[[linked.md]]\"\n```\n",
+        "diagnostics": [
+          {
+            "code": "private_source",
+            "line": 10,
+            "source": "@workspace/.cartridge/documents/main.md",
+            "target": "private.md"
+          }
+        ],
+        "hydrated": true,
+        "identity": "@workspace/.cartridge/documents/main.md",
+        "limits": {
+          "content_bytes": 65536,
+          "depth": 4,
+          "diagnostics": 64,
+          "reference_visits": 128,
+          "source_bytes": 16777216,
+          "sources": 32
+        },
+        "metadata": {
+          "description": "Public main",
+          "kind": "note",
+          "schema": "cartridge-document/v1"
+        },
+        "omitted_diagnostics": 0,
+        "owner": "workspace",
+        "path": ".cartridge/documents/main.md",
+        "projection": "docs",
+        "projection_revision": "b2acbd4c8a5b44a0ae05e5f768328cb41d70954d5facca2a8979e85d13dad6b9",
+        "revision": "64c0e22fdc655b100a4df97f296d30de858c6b992c89bb9554de3e92eb478c73",
+        "schema": "cartridge-document/v1",
+        "source_path": ".cartridge/documents/main.md",
+        "sources": [
+          {
+            "identity": "@workspace/.cartridge/documents/linked.md",
+            "revision": "e5b4e45d8624461c5e2fa8a1995b7b5b958ccccb0fbd02152e458dd20848f71e"
+          },
+          {
+            "identity": "@workspace/.cartridge/documents/main.md",
+            "revision": "64c0e22fdc655b100a4df97f296d30de858c6b992c89bb9554de3e92eb478c73"
+          }
+        ],
+        "truncated": false
+      },
+      "reply": 1
+    },
+    {
+      "data": {
+        "commands": {
+          "blocks": [
+            {
+              "body": "show:\n    echo \"[[linked.md]]\"\n",
+              "line": 12
+            }
+          ],
+          "diagnostics": [],
+          "validated": false
+        },
+        "complete": true,
+        "diagnostics": [],
+        "hydrated": false,
+        "identity": "@workspace/.cartridge/documents/main.md",
+        "limits": {
+          "content_bytes": 65536,
+          "depth": 4,
+          "diagnostics": 64,
+          "reference_visits": 128,
+          "source_bytes": 16777216,
+          "sources": 32
+        },
+        "metadata": {
+          "description": "Public main",
+          "kind": "note",
+          "schema": "cartridge-document/v1"
+        },
+        "omitted_diagnostics": 0,
+        "owner": "workspace",
+        "path": ".cartridge/documents/main.md",
+        "projection": "commands",
+        "projection_revision": "ba0a440a0958f7d87e94c8d92de3cc433dc3f2bdb09f60794ccf2aec16929306",
+        "revision": "64c0e22fdc655b100a4df97f296d30de858c6b992c89bb9554de3e92eb478c73",
+        "schema": "cartridge-document/v1",
+        "source_path": ".cartridge/documents/main.md",
+        "sources": [
+          {
+            "identity": "@workspace/.cartridge/documents/main.md",
+            "revision": "64c0e22fdc655b100a4df97f296d30de858c6b992c89bb9554de3e92eb478c73"
+          }
+        ],
+        "truncated": false
+      },
+      "reply": 2
+    },
+    {
+      "error": "private document cannot be projected: @workspace/.cartridge/documents/private.md",
+      "reply": 3
+    },
+    {
+      "data": {
+        "complete": false,
+        "content": "Introduction.\n\n# Details\nLinked prose version two.\n\n## Subsection\nIncluded subordinate prose.\n\n\n\n[private source omitted]\n\n```just\nshow:\n    echo \"[[linked.md]]\"\n```\n",
+        "diagnostics": [
+          {
+            "code": "private_source",
+            "line": 10,
+            "source": "@workspace/.cartridge/documents/main.md",
+            "target": "private.md"
+          }
+        ],
+        "hydrated": true,
+        "identity": "@workspace/.cartridge/documents/main.md",
+        "limits": {
+          "content_bytes": 65536,
+          "depth": 4,
+          "diagnostics": 64,
+          "reference_visits": 128,
+          "source_bytes": 16777216,
+          "sources": 32
+        },
+        "metadata": {
+          "description": "Public main",
+          "kind": "note",
+          "schema": "cartridge-document/v1"
+        },
+        "omitted_diagnostics": 0,
+        "owner": "workspace",
+        "path": ".cartridge/documents/main.md",
+        "projection": "docs",
+        "projection_revision": "963cd1d567982048a5c27aa87644c12b309eee1aa395cf6c98d5e5f295579622",
+        "revision": "64c0e22fdc655b100a4df97f296d30de858c6b992c89bb9554de3e92eb478c73",
+        "schema": "cartridge-document/v1",
+        "source_path": ".cartridge/documents/main.md",
+        "sources": [
+          {
+            "identity": "@workspace/.cartridge/documents/linked.md",
+            "revision": "cf190152d0ec223449f9cbef0e875a334a9e36ea48bd93b172badacf5651e5d9"
+          },
+          {
+            "identity": "@workspace/.cartridge/documents/main.md",
+            "revision": "64c0e22fdc655b100a4df97f296d30de858c6b992c89bb9554de3e92eb478c73"
+          }
+        ],
+        "truncated": false
+      },
+      "reply": 4
+    },
+    {
+      "data": {
+        "commands": {
+          "blocks": [
+            {
+              "body": "show:\n    echo \"[[linked.md]]\"\n",
+              "line": 12
+            }
+          ],
+          "diagnostics": [],
+          "validated": false
+        },
+        "complete": true,
+        "diagnostics": [],
+        "hydrated": false,
+        "identity": "@workspace/.cartridge/documents/main.md",
+        "limits": {
+          "content_bytes": 65536,
+          "depth": 4,
+          "diagnostics": 64,
+          "reference_visits": 128,
+          "source_bytes": 16777216,
+          "sources": 32
+        },
+        "metadata": {
+          "description": "Public main",
+          "kind": "note",
+          "schema": "cartridge-document/v1"
+        },
+        "omitted_diagnostics": 0,
+        "owner": "workspace",
+        "path": ".cartridge/documents/main.md",
+        "projection": "commands",
+        "projection_revision": "ba0a440a0958f7d87e94c8d92de3cc433dc3f2bdb09f60794ccf2aec16929306",
+        "revision": "64c0e22fdc655b100a4df97f296d30de858c6b992c89bb9554de3e92eb478c73",
+        "schema": "cartridge-document/v1",
+        "source_path": ".cartridge/documents/main.md",
+        "sources": [
+          {
+            "identity": "@workspace/.cartridge/documents/main.md",
+            "revision": "64c0e22fdc655b100a4df97f296d30de858c6b992c89bb9554de3e92eb478c73"
+          }
+        ],
+        "truncated": false
+      },
+      "reply": 5
+    },
+    {
+      "data": {
+        "complete": false,
+        "content": "Introduction.\n\n# Details\nLinked prose version two.\n\n## Subsection\nIncluded subordinate prose.\n\n\n\n[private source omitted]\n\n```just\nshow:\n    echo \"[[linked.md]]\"\n```\n",
+        "diagnostics": [
+          {
+            "code": "private_source",
+            "line": 10,
+            "source": "@workspace/.cartridge/documents/main.md",
+            "target": "private.md"
+          }
+        ],
+        "hydrated": true,
+        "identity": "@workspace/.cartridge/documents/main.md",
+        "limits": {
+          "content_bytes": 65536,
+          "depth": 4,
+          "diagnostics": 64,
+          "reference_visits": 128,
+          "source_bytes": 16777216,
+          "sources": 32
+        },
+        "metadata": {
+          "description": "Public main",
+          "kind": "note",
+          "schema": "cartridge-document/v1"
+        },
+        "omitted_diagnostics": 0,
+        "owner": "workspace",
+        "path": ".cartridge/documents/main.md",
+        "projection": "human",
+        "projection_revision": "b0cc6a4b14e2e7e21e135aa9e98f50f56649d46e88ced94d5068103587b7333f",
+        "revision": "64c0e22fdc655b100a4df97f296d30de858c6b992c89bb9554de3e92eb478c73",
+        "schema": "cartridge-document/v1",
+        "source_path": ".cartridge/documents/main.md",
+        "sources": [
+          {
+            "identity": "@workspace/.cartridge/documents/linked.md",
+            "revision": "cf190152d0ec223449f9cbef0e875a334a9e36ea48bd93b172badacf5651e5d9"
+          },
+          {
+            "identity": "@workspace/.cartridge/documents/main.md",
+            "revision": "64c0e22fdc655b100a4df97f296d30de858c6b992c89bb9554de3e92eb478c73"
+          }
+        ],
+        "truncated": false
+      },
+      "reply": 6
+    }
+  ]
+}

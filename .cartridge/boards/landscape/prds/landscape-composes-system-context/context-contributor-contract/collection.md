@@ -1,6 +1,6 @@
 ---
-commit: 3b9f72854c39ddd90128a48bfce2667e387c3fba
-spec-digests: {"spec01.md":"d675de0b8bf8ccdab1e9c45c9713d300732d05697785b838c6616ef4fa21f75d"}
+commit: 62185289d148017c74986b618456a72bab620228
+spec-digests: {"spec01.md":"62f18e649889ee2d1e9a36d9ff119fb40f4a57ff7ede149a38d84adf54613808"}
 child-contracts: {}
 ---
 
@@ -11,22 +11,28 @@ child-contracts: {}
 Command SHA-256: e6c3734889235d192ec325c56d5652220f6e0db5a7cf75045ab614be27cab874
 
 ```text
-    Blocking waiting for file lock on build directory
-    Finished `test` profile [unoptimized] target(s) in 3.37s
+    Finished `test` profile [unoptimized] target(s) in 0.10s
      Running unittests src/lib.rs (target/tool-result-contract/debug/deps/landscape-1841d9637182d43e)
 
-running 40 tests
+running 47 tests
 test context::tests::duplicate_tasks_and_invalid_limits_fail_before_any_producer ... ok
 test context::tests::dropping_collector_drops_pending_producers_without_spawning_work ... ok
-test context::tests::availability_is_explicit_and_disabled_producers_never_poll ... ok
-test context::tests::producer_capacity_omissions_remain_explicit_in_prepared_snapshot ... ok
 test context::tests::late_ready_contribution_cannot_publish_after_deadline ... ok
 test context::tests::hanging_first_source_does_not_starve_siblings_and_is_dropped ... ok
-test context::tests::private_content_cannot_change_public_digest_or_capacity ... ok
+test context::tests::producer_capacity_omissions_remain_explicit_in_prepared_snapshot ... ok
+test context::tests::availability_is_explicit_and_disabled_producers_never_poll ... ok
 test context::tests::canonical_order_exact_readback_and_conflicting_sources ... ok
+test file_kernel::tests::exact_bytes_empty_text_and_untrusted_native_shape_checks ... ok
+test file_kernel::tests::trusted_allowlist_validates_counts_id_paths_and_typed_namespace_aliases ... ok
+test context::tests::private_content_cannot_change_public_digest_or_capacity ... ok
+test file_kernel::tests::kernel_private_disabled_malformed_caps_and_exact_references ... ok
+test file_kernel::tests::nomination_slots_do_not_refill_and_failures_do_not_remove_other_rows ... ok
+test file_kernel::tests::malformed_snapshot_never_claims_empty_and_kernel_slots_obey_shared_budget ... ok
+test file_kernel::tests::real_file_bytes_and_kernel_share_collector_and_exact_freshness ... ok
+test context::tests::exact_serialized_bounds_count_metadata_and_keep_whole_utf8_rows ... ok
 test memory::tests::conflicting_duplicate_expiry_and_malformed_bounds_refuse_without_substitution ... ok
 test memory::tests::count_bytes_source_mismatch_and_compact_truncation_are_explicit ... ok
-test context::tests::exact_serialized_bounds_count_metadata_and_keep_whole_utf8_rows ... ok
+test file_kernel::tests::canonical_deadline_keeps_kernel_and_never_polls_disabled_file_task ... ok
 test memory::tests::exact_missing_changed_prefix_and_invalid_references_never_requery ... ok
 test memory::tests::memory_fact_joins_shared_context_and_exact_readback_without_requery ... ok
 test memory::tests::private_only_results_have_the_same_public_snapshot_as_empty_memory ... ok
@@ -46,10 +52,10 @@ test tests::search_returns_kinds_with_descriptions ... ok
 test tests::upsert_grows_the_node_set_in_place ... ok
 test memory::tests::deadline_drops_pending_read_without_starting_later_hydration ... ok
 test view_tests::cursor_from_another_snapshot_is_stale ... ok
-test inventory::tests::escaped_rows_force_byte_paging_without_losing_progress ... ok
-test inventory::tests::subprocess_output_deadline_and_exit_failures_are_bounded ... ok
-test view_tests::tracked_files_follow_sibling_repository_links ... ok
 test inventory::tests::named_failures_preserve_usable_owners_and_disable_reads ... ok
+test inventory::tests::escaped_rows_force_byte_paging_without_losing_progress ... ok
+test view_tests::tracked_files_follow_sibling_repository_links ... ok
+test inventory::tests::subprocess_output_deadline_and_exit_failures_are_bounded ... ok
 test inventory::tests::nested_shared_roots_newline_names_and_frozen_refresh ... ok
 test view_tests::tracked_files_join_by_scope_and_page_by_id ... ok
 test inventory::tests::structural_and_response_limits_are_explicit ... ok
@@ -57,8 +63,8 @@ test inventory::tests::git_output_is_strict_and_paths_always_fit_serialized_page
 test inventory::tests::retained_byte_cap_refuses_whole_owner_before_count_cap ... ok
 test inventory::tests::ten_thousand_names_fit_summary_and_exact_bounded_pages ... ok
 
-test result: ok. 40 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 3.82s
+test result: ok. 47 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 4.36s
 
-    Finished `dev` profile [unoptimized] target(s) in 0.08s
+    Finished `dev` profile [unoptimized] target(s) in 0.09s
 
 ```

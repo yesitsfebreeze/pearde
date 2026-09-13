@@ -11,6 +11,7 @@ review-round: 3
 review-status: passed
 canonical-scope: landscape-composes-system-context
 footprint:
+- src/file_kernel.rs
   - src/lib.rs
   - src/context.rs
   - Cargo.toml
@@ -18,7 +19,7 @@ footprint:
   - .cartridge/docs/context.md
 needs:
 - '@memo/one-document-serves-every-reader/document-identity'
-commit: "3b9f72854c39ddd90128a48bfce2667e387c3fba"
+commit: "62185289d148017c74986b618456a72bab620228"
 ---
 
 # Contributors return bounded attributable context rows

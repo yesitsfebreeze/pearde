@@ -1,6 +1,7 @@
 ---
 complexity: medium
 footprint:
+  - src/file_kernel.rs
   - src/inventory.rs
   - src/lib.rs
   - src/context.rs

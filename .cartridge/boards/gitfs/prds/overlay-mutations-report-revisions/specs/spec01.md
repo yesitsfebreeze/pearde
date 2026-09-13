@@ -79,10 +79,10 @@ records. Existing partial-cancellation limitations remain honest.
 
 ## Acceptance
 
-- [ ] Write/edit/snapshot capture exact locked blob/commit receipts and distinct publication IDs; no-op/refused/unselected paths invent no publication or ownership.
-- [ ] Materialization records known applied content/deletion, preserves mixed actual effects and identifies unrecorded/uncertain paths under the metadata caps.
-- [ ] Real injected Sessions persists records; absent grant preserves standalone behavior; failed/malformed/hung recording reports partial/unknown without rollback or retry.
-- [ ] Existing inspection, selection, policy, reviewed local commit and recorded-push compatibility and public owner gates pass.
+- [x] Write/edit/snapshot capture exact locked blob/commit receipts and distinct publication IDs; no-op/refused/unselected paths invent no publication or ownership.
+- [x] Materialization records known applied content/deletion, preserves mixed actual effects and identifies unrecorded/uncertain paths under the metadata caps.
+- [x] Real injected Sessions persists records; absent grant preserves standalone behavior; failed/malformed/hung recording reports partial/unknown without rollback or retry.
+- [x] Existing inspection, selection, policy, reviewed local commit and recorded-push compatibility and public owner gates pass.
 
 ## Verify and Proof
 

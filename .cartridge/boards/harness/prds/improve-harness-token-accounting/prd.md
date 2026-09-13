@@ -10,12 +10,8 @@ work-kind: leaf
 review-round: 3
 review-status: accepted
 canonical-scope: improve-harness-token-accounting
-footprint:
-- src/inspection.rs
-- src/accounting.rs
-- .cartridge/tests/unit/accounting.rs
-- .cartridge/tests/integration/working.rs
-commit: "ca7eeabd38f4eaba69063cf98e2071df694a1dc3"
+footprint: ["src/inspection.rs","src/accounting.rs",".cartridge/tests/unit/accounting.rs",".cartridge/tests/integration/working.rs","Cargo.toml","src/main.rs","src/roster.rs",".cartridge/tests/unit/main/tests.rs",".cartridge/tests/unit/inspection_tests.rs",".cartridge/tests/unit/working_tests.rs",".cartridge/tests/unit/roster_tests.rs",".cartridge/tests/integration/roster.test.ts",".cartridge/docs/roster.md"]
+commit: "698a4dc9555a6b3ad8d46dcc5dd3a14463048e70"
 ---
 
 # Show token estimates alongside serialized bytes

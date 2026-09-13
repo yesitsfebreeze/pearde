@@ -1,10 +1,6 @@
 ---
 complexity: small
-footprint:
-  - src/inspection.rs
-  - src/accounting.rs
-  - .cartridge/tests/unit/accounting.rs
-  - .cartridge/tests/integration/working.rs
+footprint: ["src/inspection.rs","src/accounting.rs",".cartridge/tests/unit/accounting.rs",".cartridge/tests/integration/working.rs","Cargo.toml","src/main.rs","src/roster.rs",".cartridge/tests/unit/main/tests.rs",".cartridge/tests/unit/inspection_tests.rs",".cartridge/tests/unit/working_tests.rs",".cartridge/tests/unit/roster_tests.rs",".cartridge/tests/integration/roster.test.ts",".cartridge/docs/roster.md"]
 ---
 
 # spec01 — Label local token estimates and keep usage attribution separate

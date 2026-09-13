@@ -1,23 +1,27 @@
 ---
 repo: /Users/feb/dev/cartridge/router.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: router
+capability-owner: router
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: improve-router-cost-latency
 needs:
 - '@router/improve-router-route-explanation'
 footprint:
-- /Users/feb/dev/cartridge/router.ctg/frontier.rs
-- /Users/feb/dev/cartridge/router.ctg/catalog.rs
-- /Users/feb/dev/cartridge/router.ctg/health.rs
-- /Users/feb/dev/cartridge/router.ctg/protocol.rs
-- /Users/feb/dev/cartridge/router.ctg/settings.rs
+- src/catalog.rs
+- src/decision.rs
+- src/proxy.rs
+- src/telemetry.rs
+- src/main.rs
+- .cartridge/tests/unit/proxy/capabilities.rs
+- .cartridge/tests/unit/telemetry.rs
+- .cartridge/docs/cost-latency.md
+commit: "0a216cb100ea40aa0535509d44c38b16a009b9cc"
 ---
 
 # Report attributable route cost and latency estimates
@@ -26,10 +30,10 @@ Routing diagnostics report observed latency and estimated costs with timestamp, 
 
 ## Acceptance
 
-- [ ] Fixtures show estimates versus actual usage and record missing pricing as unknown rather than zero.
-- [ ] A fallback report names both attempts and their costs/durations without double counting; old observations show their age.
+- [x] Fixtures show estimates versus actual usage and record missing pricing as unknown rather than zero.
+- [x] A fallback report names both attempts and their costs/durations without double counting; old observations show their age.
 
-- [ ] Retain local credential ownership and avoid live provider calls in ordinary tests. New metadata is additive; routing requirements fail explicitly rather than silently downgrade. Roll back rules while preserving actual-attempt traces.
+- [x] Retain local credential ownership and avoid live provider calls in ordinary tests. New metadata is additive; routing requirements fail explicitly rather than silently downgrade. Roll back rules while preserving actual-attempt traces.
 
 ## Proof and recovery
 

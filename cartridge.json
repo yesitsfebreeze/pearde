@@ -247,8 +247,6 @@
   "grant": {
     "exec": [
       "bun",
-      "/bin/cat",
-      "mkfifo",
       "git",
       "sh"
     ],

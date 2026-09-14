@@ -7,28 +7,29 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: memo
 work-kind: leaf
-review-round: 2
-review-status: stale-after-owner-split
+review-round: 3
+review-status: passed
 canonical-scope: landscape-live-owner-context-facade
 needs:
-- "@landscape/landscape-composes-system-context/live-file-context-contributors/live-owner-evidence-adapters"
 - "@memo/landscape-file-kernel-context-facade"
 ---
 
-# Connect optional live-owner evidence to the native context facade
+# A context provider receives the trusted caller scope
 
-One owner-local part of the existing Landscape file/kernel/live context contract. Preserve the historical source scope and two inherited review rounds. This leaf owns its named native or library boundary; other owners remain prerequisites rather than copied implementations.
+memo already composes every injected `context.<kind>` provider through one collector and deadline ([context.md](../../../../../../memo.ctg/.cartridge/docs/context.md)), but `contribute` and `read` carry only query, limits and reference ([context.rs](../../../../../../memo.ctg/src/context.rs)). A live owner (sessions, pty, router) therefore cannot return only the caller's own metadata. memo owns this shape; live-owner providers remain their owners' work and consume it.
+
+Trigger: a trusted native `context` request from a host session names a provider toggle. Response: the provider call adds a host-derived `scope` (`session`, optional `run`); the model tool and request body cannot supply or override it.
 
 ## Acceptance
 
-- [ ] One prepared snapshot combines explicitly enabled scoped live-owner sources with the existing file/kernel/document/memory contributors.
-- [ ] Only trusted session/terminal identities and explicit optional grants reach owner adapters; missing or disabled providers remain named without activation.
-- [ ] Native integration proves exact readback, immutable prepared evidence, shared deadline, no inference or writes, and existing context compatibility.
+- [ ] A fixture provider in `context.test.ts` receives the exact trusted session for `contribute` and `read`; a request-body field named `scope` never alters the forwarded value.
+- [ ] A missing or disabled provider stays `absent`/`disabled` without activation, and other contributors keep their evidence under the shared deadline.
+- [ ] Existing `context.memory`/`context.file` fixtures pass unchanged; a provider ignoring `scope` remains compatible.
 
 ## Proof and recovery
 
-Measure the actual current owner behavior before specs. Independently review the concrete source footprint, authority and failure contract before implementation. Public owner tests/check and native integration must demonstrate the claimed readonly behavior. Preserve source records and existing APIs on failure; no automatic retries or activation.
+First probe where the service `Context` session reaches the context handler in [service.rs](../../../../../../memo.ctg/src/service.rs). Update the provider shape in `.cartridge/docs/context.md`. From /Users/feb/dev/cartridge: `just test memo`, `bun test memo.ctg/.cartridge/tests/integration/context.test.ts`, `just check memo`, `just isolation`. None has run for this plan. Rollback: revert the added field; no durable state changes.
 
-## Review
+## Dependencies and review
 
-Inherits rounds 1–2 from @landscape/landscape-composes-system-context/live-file-context-contributors; maximum five rounds. This split does not claim a new passing implementation review. The preserved original requires file/kernel evidence and separately owned live metadata.
+[Review history](review.md): rounds 1–2 inherited from `live-file-context-contributors`; round 3 rebased. Downstream live-owner providers should need this leaf.

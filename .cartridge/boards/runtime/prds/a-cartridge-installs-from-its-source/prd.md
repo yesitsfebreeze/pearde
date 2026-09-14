@@ -7,30 +7,31 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: runtime
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: a-cartridge-installs-from-its-source
+footprint:
+- /Users/feb/dev/cartridge/cartridge.ctg/src/cli/setup.rs
+- /Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/cli/setup.rs
 ---
 
 # a-cartridge-installs-from-its-source
 
-Keep retrieval/pinning in development or installation tooling outside the kernel. Fetch into an operation-owned temporary cache, verify the resolved commit and materialized tree, then atomically publish an immutable content-addressed entry and revision-checked profile lock. Approval binds that exact tree/pin and transitives are approved separately.
+`cartridge setup` installs a repository cartridge at a recorded commit, and a later run finds the same tree. Today `install` in [setup.rs](../../../../../../cartridge.ctg/src/cli/setup.rs) runs an unpinned `git clone` straight into `<root>/<name>` and records nothing; a failed clone can leave a partial folder, and nothing notices a tree that changed after installation. Runtime owns this in the base's installation tool (commit b02b200).
+
+Recommended default: clone into a temporary folder under the root, check `cartridge.json`, rename into place, and write the resolved commit to a lock file next to the profile that `write` produces. `cartridge doctor` compares installed trees with it. Stop and ask if the lock needs a format other cartridges must read.
 
 ## Acceptance
 
-- [ ] Concurrent installs of the same pin converge on one verified cache entry and no partial lockfile; a failed fetch leaves the previous pin usable.
-- [ ] A cached tree changed after approval is refused before Lua/hello/apply or demand activation.
-- [ ] New upstream commits do not change a loaded pin and unapproved transitive cartridges remain inert; no source repository history is rewritten.
+- [ ] Installing a repository cartridge records its resolved commit; a second setup from that lock checks out the same commit even after upstream moves.
+- [ ] A failed clone or a repository without `cartridge.json` leaves no folder under the root and keeps the previous lock byte-identical.
+- [ ] `cartridge doctor` reports a cartridge whose HEAD or tracked tree differs from its lock, names it, and changes nothing.
+- [ ] Folder (symlink) installs and existing profiles without a lock keep working.
 
 ## Proof and recovery
 
-Start at [runtime.rs](../../../../../../cartridge.ctg/src/runtime.rs), [service.rs](../../../../../../cartridge.ctg/src/service.rs).
+First reproduce the partial-folder case with a local bare repository fixture (no network) in the existing entry point [tests/unit/src/cli/setup.rs](../../../../../../cartridge.ctg/.cartridge/tests/unit/src/cli/setup.rs). Gates, cwd `/Users/feb/dev/cartridge`: `just test runtime`, `just check runtime`. Not run for this plan. Rollback: remove the lock writer; installed folders stay usable. Source history is never rewritten.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test runtime` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-External evidence prerequisites: [a-cartridge-declares-what-it-needs](../../../../memos/work/root--a-cartridge-declares-what-it-needs.md). Resolve their current completion and source revision before claiming.
-
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `a-cartridge-installs-from-its-source`; maximum five rounds.
+No hard prerequisites: manifest-only declarations already exist (`needs`/`listen` in [document.rs](../../../../../../cartridge.ctg/src/loader/document.rs)). [Review](review.md): inherits 2 rounds; at most five.

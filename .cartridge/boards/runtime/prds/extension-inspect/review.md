@@ -29,3 +29,20 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reconciliation verdict: **DELIVERED**. The proposed extension crate is gone, and per the direction digest "Landscape" became `Host::snapshot`. The read-only inspection is in the host:
+- `status()` (`cartridge.ctg/src/host/mod.rs:202`) gives each entry's state, error, the `waiting` needs that have no active listener, and its events, needs and listen.
+- `snapshot()` (mod.rs:673) gives entries with dependencies (the listeners per need), sources and context.
+- Both read synchronous locks and await nothing.
+- Nodes reach them through `cartridge.host("status"|"snapshot"|"cartridges")`.
+- Tests `a_missing_listener_waits_and_says_for_what` and `a_cartridge_asks_the_host_what_only_the_host_knows` (`.cartridge/tests/unit/src/tests/host.rs:479,496`) cover pending/missing-need evidence and provider/dependent visibility.
+- `bridge.status` reports the generation (mod.rs:762).
+
+Small residuals, not worth a separate leaf unless asked: `status`/`snapshot` do not carry the generation, and there is no explicit output bound. The scoped/private provider concept no longer exists (per-edge tokens replace it). The dependency on `extension-loader-plugin-tree` is not needed. The PRD still links the absent `src/runtime.rs`/`src/service.rs`.
+Presented revision (frontmatter status only changed): `eda60c9cf118f5cf4a853c8aa703bf348bc8466507d29585aadbc7e9021f06c2` (stale body digest `5ea160e19c6b3ee784f1a5af82fa497e8305002e32bce870ff80bd8016eaf02c`).
+Verification to close: from cwd `/Users/feb/dev/cartridge`, `just test runtime`, confirming the two named tests pass. Not run in this pass. `state:` is left unchanged.
+Validation: cheap existence checks only — ls/rg over cartridge.ctg (HEAD c9ef10b), tools.ctg (caea5b7) and memory.ctg (c25af4d) source; `git remote -v`; `just --list` at /Users/feb/dev/cartridge; relative-link resolution over prd.md; `shasum -a 256`. No product gates were run.
+Reviewer: agent (independent reviewer, plan refresh pass). User rating: not required under delegation; none supplied.
+Rounds used / remaining: 3 / 2. Next action: coordinator runs verification and decides done/retire.

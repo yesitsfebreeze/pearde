@@ -7,32 +7,26 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: root
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: memory-document-works-end-to-end
-needs:
-- '@memory/memory-owns-its-tool/memory-consumer-parity'
-- '@landscape/landscape-composes-system-context'
-- '@runtime/one-runner-executes-documents/document-artifact-result'
 ---
 
-# A memory document is discovered, read, executed, and improved live
+# Memory's own surface works end to end in a disposable composition
 
-Prove the first memory document on a fixed disposable composition. Remove recursive-development-graph from this slice's proposed needs; retain it on the final composed-system gate. Template installation and arbitrary-depth traversal cannot block this first runtime proof.
+The first end-to-end proof of an owner-shipped surface. Since the transport port (memory.ctg `9cc0f0b`) memory serves `tool.memory` (`query`, `ingest`, `describe`), the `memory` service and `context.memory` on its own socket and ships `.cartridge/help.md`. This slice proves that surface through a real host rather than through a separate document runner. Owner: the root composition's smoke fixture over memory.ctg.
 
 ## Acceptance
 
-- [ ] A real host discovers and reads one memory-owned query/ingest document and performs exact-ID readback with fixture providers.
-- [ ] The same fixture proves denial before effects, approved ingest, stale-revision refusal and a failed reload retaining the previous usable writer.
-- [ ] Record explicitly that nested-board discovery is untested by this slice and link its remaining requirement to the final release gate.
+- [ ] In a disposable profile the host starts memory, `cartridge help` lists it, and `tool.memory` `describe` returns its ops.
+- [ ] `ingest` of one fact then `query` recalls it, and the `memory` service `get` with the returned id reads back the same text.
+- [ ] With the profile's `config.lua` denying `ingest`, the call is refused and a following `query` finds no such fact.
+- [ ] After stopping and restarting memory in the same profile the fact is still recallable; a start with an empty `dir` fails with a named configuration error (`memory config.dir is required` or the host's settings refusal) and creates no bank.
 
 ## Proof and recovery
 
-Start at [settings.md](../../settings.md), [justfile](../../../../../../justfile).
+Extend the isolated profile in `/Users/feb/dev/cartridge/.cartridge/tests/integration/smoke.test.ts`, which already composes memory without a model or tick, with a `memory` target, and document it in `.cartridge/memos/routine/cartridge-smoke.md`. Gates from `/Users/feb/dev/cartridge`: `just smoke memory` (to be created by this item) and `just test memory`; not run for this plan. Baseline ([release-status](../../../../../../.cartridge/memos/note/release-status.md)): smoke mcp and proxy fail with `memo inactive`, so run this target alone. No user profile or bank is touched. Nested-board discovery and quality measurement stay with the composed-system gate.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test runtime` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `memory-document-works-end-to-end`; maximum five rounds.
+Former needs were dropped, with evidence in [review.md](review.md): the landscape board is dissolved (no landscape.ctg; its fabric graph now lives in `memo.ctg/src/fabric_graph.rs` after cartridge.ctg `939e7d1`); the document runner leaf names starting files that no longer exist; the memory-tool submodule whose parity the third need tested was dropped. 3 of 5 rounds used.

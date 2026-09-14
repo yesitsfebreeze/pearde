@@ -1,5 +1,5 @@
 ---
-repo: /Users/feb/dev/cartridge/cartridge.ctg
+repo: /Users/feb/dev/cartridge/tools.ctg
 state: open
 origin: requested
 priority: 50
@@ -7,28 +7,31 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: runtime
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: an-ancestry-test-cannot-tell-a-live-lane-from-an-abandoned-one
+footprint:
+- /Users/feb/dev/cartridge/tools.ctg/src/service.rs
+- /Users/feb/dev/cartridge/tools.ctg/.cartridge/tests/integration/lane.test.ts
 ---
 
 # an ancestry test cannot tell a live lane from an abandoned one
 
-Use explicit operation ownership and release records in runtime worktree tooling. Ancestry and age can refuse cleanup but cannot authorize it. Automatic cleanup requires a recorded released owner plus clean/unowned artifact checks; an unknown or live owner is left intact.
+`lane-rm` removes a lane only after that lane has been released. Today `lane` in [service.rs](../../../../../../tools.ctg/src/service.rs) authorizes removal with `merge-base --is-ancestor` plus clean and unlocked checks. A lane opened seconds ago, clean and still sitting on the trunk commit, passes all three, so a live session's worktree can be deleted. Ancestry and cleanliness stay as refusals only. Per [the-trunk-checkout-is-a-landing-pad](../../../../../../.cartridge/memos/decision/the-trunk-checkout-is-a-landing-pad.md), ownership is recorded, never inferred from mtime.
+
+Recommended default: `lane` writes a release marker under the lane's Git admin directory recording "open", and a successful `land` rewrites it as "released". `lane-rm` requires "released". An explicit `release <name>` op covers lanes that were merged another way.
 
 ## Acceptance
 
-- [ ] A new clean lane and a long-idle live lane both refuse automatic removal, even when HEAD is an ancestor of main.
-- [ ] A released completed lane with only attributable artifacts can be removed by the reviewed cleanup operation.
-- [ ] Reused path/branch, dirty files and a changed owner after preview invalidate cleanup; memory records and unrelated worktrees remain untouched.
+- [ ] A freshly created clean lane whose HEAD equals the trunk is refused by `lane-rm` with a message naming `release`. The worktree and branch remain.
+- [ ] `lane`, commit, `land`, `lane-rm` still removes the lane and keeps `.agents/local` (the existing case).
+- [ ] A released lane that later gains a commit, dirty file, lock or nested repository is still refused. Other worktrees are untouched.
+- [ ] A lane created before this change, with no marker, is refused until `release` is run. Nothing is deleted implicitly.
 
 ## Proof and recovery
 
-Start at [runtime.rs](../../../../../../cartridge.ctg/src/runtime.rs), [service.rs](../../../../../../cartridge.ctg/src/service.rs).
+First add the fresh-lane case to [lane.test.ts](../../../../../../tools.ctg/.cartridge/tests/integration/lane.test.ts) and watch it fail. Gates, cwd `/Users/feb/dev/cartridge`: `just test tools`, `just check tools`. Not run. Rollback: drop the marker check. Markers live in `.git/worktrees/<name>/` and disappear with the worktree.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test runtime` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `an-ancestry-test-cannot-tell-a-live-lane-from-an-abandoned-one`; maximum five rounds.
+No hard prerequisites. Shared footprint with `improve-tools-preflight` and `improve-tools-worktree-resume` (same `lane` function), so land them one after another. The implementation lives in tools.ctg ([tui-and-tools-are-cartridges](../../../../../../.cartridge/memos/decision/tui-and-tools-are-cartridges.md)). [Review](review.md): inherits 2 rounds.

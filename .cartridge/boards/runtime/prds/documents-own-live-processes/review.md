@@ -29,3 +29,22 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reconciliation verdict: **REBASE** (rollup). Old footprint (`src/process.rs`, `src/reload.rs`, `src/stream.rs`, justdown sidecars on fibers) is gone; current equivalents are helper programs via `cartridge.spawn` (`src/node.rs`), channels (`src/transport/cartridge.rs`) and replacement with a generation guard (`src/host/mod.rs:455-534`). Revision points at these paths, fixes the `capability-capability-owner` key typo (value unchanged) and assigns the two sibling overlaps.
+Stale presented revision: `bbd271850e9364da579739ebee0339b35415b8bdff8846834f323ee117be80d8`. Revised revision: `8c076523ed1124bb36bbce3f464f2905a1d0e9120f24f44b553f2207c9e942a2`.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 17 | Owned lifetimes remain wanted. -3: "documents" (justdown) framing unverified against current memo-run runner. |
+| Ownership and reuse | 17 | Parent assigns overlaps to `extension-loader-plugin-tree` and `a-listener-subscribes-to-event-types`. -3: children still carry the duplicate clauses. |
+| Dependencies and slices | 15 | Child needs resolve. -5: both children cite absent `cartridge.ctg/src/runtime.rs`/`service.rs` and need the stale rollup child `one-runner-executes-documents/document-command-result`; not implementable as linked. |
+| Acceptance and baseline | 18 | Roll-up acceptance plus `just test runtime`. -2. |
+| Failure and compatibility | 18 | No implementation in parent. -2. |
+| Reviewer total | 85 / 100 | |
+
+Result: **FAIL**. Blocking findings: children `document-sidecar-lifecycle` and `document-event-activation` (outside this reviewer's assignment) must be rebased and narrowed first; `one-runner-executes-documents` chain is stale.
+Validation: cheap existence checks only — ls/rg over cartridge.ctg (HEAD c9ef10b), tools.ctg (caea5b7) and memory.ctg (c25af4d) source; `just --list` at /Users/feb/dev/cartridge; relative-link resolution over prd.md; `shasum -a 256`. No product gates were run.
+Reviewer: agent (independent reviewer, plan refresh pass). User rating: not required under delegation; none supplied.
+Rounds used / remaining: 3 / 2. Next action: rebase the children, then re-review this parent.

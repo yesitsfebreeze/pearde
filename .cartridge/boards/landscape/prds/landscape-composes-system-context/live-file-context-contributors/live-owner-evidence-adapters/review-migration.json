@@ -1,0 +1,6 @@
+{
+  "status": "reviewed-2026-09-14",
+  "reason": "Created in the plan refresh pass: this owner-split record had no migration entry; round 3 rebased it to owner-provided context.<kind> events and split it into three provider leaves.",
+  "requires": "Retain inherited rounds 1-2; children inherit 3 used rounds.",
+  "resolved_by_round": 3
+}

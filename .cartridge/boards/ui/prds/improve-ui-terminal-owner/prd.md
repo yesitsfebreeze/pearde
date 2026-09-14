@@ -5,39 +5,36 @@ origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: ui
+capability-owner: ui
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 4
+review-status: passed
 canonical-scope: improve-ui-terminal-owner
 needs:
 - '@pty/improve-pty-input-ownership'
 footprint:
 - /Users/feb/dev/cartridge/tui.ctg/ui/index.ts
 - /Users/feb/dev/cartridge/tui.ctg/ui/palette.tsx
-- /Users/feb/dev/cartridge/tui.ctg/ui/activity.ts
-- /Users/feb/dev/cartridge/tui.ctg/src/chat.ts
-- /Users/feb/dev/cartridge/tui.ctg/tests/transcript.test.tsx
-- /Users/feb/dev/cartridge/tui.ctg/tests/palette.test.tsx
+- /Users/feb/dev/cartridge/tui.ctg/ui/terminal.tsx
+- /Users/feb/dev/cartridge/tui.ctg/src/term.ts
+- /Users/feb/dev/cartridge/tui.ctg/.cartridge/tests/integration/transcript.test.tsx
+- /Users/feb/dev/cartridge/tui.ctg/.cartridge/tests/integration/palette.test.tsx
 ---
 
 # Display shared terminal ownership and cwd
 
-Render the PTY service's lease ID/revision, owner, cwd and foreground phase. At command submission, use the same revision in input admission; stale display is informational and never permission. Human preemption behavior follows the settled PTY contract.
+Today `pty` knows only a boolean user/agent control flag (`agent_control` in pty.ctg `src/main.rs`); the UI mirrors it through `term` `control` and the `control` field of `read` (`src/term.ts`, `ui/index.ts`), and cwd is fetched only when a session starts (`shellCwd` in `src/chat.ts`). Once the PTY lease contract lands, the UI shows lease ID and revision, owner, cwd and foreground phase, and submits commands against the revision it showed. A stale display is information, never permission.
 
 ## Acceptance
 
-- [ ] Cwd and lease transfer update visible state; a command submitted against an old revision is refused even if the old status was just painted.
-- [ ] Disconnection/unknown foreground phase cannot appear ready; nvim and busy-shell preemption never receive an unintended command.
-- [ ] UI reload preserves the PTY and keyboard focus and reconnects to current ownership rather than replaying input.
+- [ ] Cwd change and lease transfer update the visible state; a command submitted against an old revision is refused even if that status was just painted.
+- [ ] Disconnected or unknown foreground phase never appears ready; with nvim or a busy shell in front, preemption never delivers an unintended command.
+- [ ] UI reload keeps the PTY and keyboard focus and reconnects to current ownership without replaying input.
 
 ## Proof and recovery
 
-Start at [index.ts](../../../../../../ui.ctg/ui/index.ts), [palette.tsx](../../../../../../ui.ctg/ui/palette.tsx), [activity.ts](../../../../../../ui.ctg/ui/activity.ts).
+Start at [term.ts](../../../../../../tui.ctg/src/term.ts), [index.ts](../../../../../../tui.ctg/ui/index.ts), [palette.tsx](../../../../../../tui.ctg/ui/palette.tsx). First probe: record the lease fields `pty` returns at the dependency's landed revision. Extend `transcript.test.tsx` and `palette.test.tsx` in `tui.ctg/.cartridge/tests/integration/`. Gates, cwd `/Users/feb/dev/cartridge`: `just test tui`, `just check tui`. Not run for this plan. If `pty` returns no lease fields, keep today's user/agent indicator; the UI holds no ownership state of its own.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test ui` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `improve-ui-terminal-owner`; maximum five rounds.
+Hard need [@pty/improve-pty-input-ownership](../../../pty/prds/improve-pty-input-ownership/prd.md) is open and must pass its own review and land first. Shared footprint with the other [improve-ui-programme](../improve-ui-programme/prd.md) leaves. [Review history](review.md): rounds 1–4 used.

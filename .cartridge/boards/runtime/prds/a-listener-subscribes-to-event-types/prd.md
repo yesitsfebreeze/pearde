@@ -7,30 +7,28 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: runtime
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: a-listener-subscribes-to-event-types
-needs:
-- '@agent/an-event-declares-its-type'
+footprint:
+- /Users/feb/dev/cartridge/cartridge.ctg/src/transport/cartridge.rs
+- /Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/host.rs
 ---
 
 # a-listener-subscribes-to-event-types
 
-Use durable journal sequence numbers with at-least-once notifications; listeners acknowledge their cursor after processing and deduplicate by event identity where effects permit it. Bounded queues never block the run. An overflow/error retires the subscription with a visible gap and replay position.
+A stream subscriber is told when replay cannot cover the gap since its last envelope. Listening by event type is already delivered: `listen` declarations, schema checks, per-edge tokens, timeouts and bounded queues ([transport.txt](../../../../../../cartridge.ctg/docs/transport.txt)). What remains is in the channel code in [transport/cartridge.rs](../../../../../../cartridge.ctg/src/transport/cartridge.rs). `publish_kind` keeps a bounded `history` and an in-memory `seq`. `join` replays envelopes newer than `since` without saying when the oldest retained one is already past it. The count also starts again at 1 when a publisher restarts, so a resubscribe from an old `last` can drop new envelopes. Both come from reading the source and are not reproduced yet.
 
 ## Acceptance
 
-- [ ] Replay after disconnect delivers the missing range in order; duplicate notification preserves one event identity and does not fabricate exactly-once side effects.
-- [ ] A hung listener leaves agent progress intact, with bounded resources and explicit delivery failure.
-- [ ] Listener-origin posts retain authenticated attribution; removing or reloading the owner tears down only its subscription and old callbacks cannot revive it.
+- [ ] A subscriber resubscribing from a `since` older than the retained history receives one `gap` envelope naming the first and last missing sequence numbers, followed by the retained replay in order.
+- [ ] After the publisher restarts, a resubscribe from the old cursor still receives every new envelope (for example, a per-generation epoch goes into the envelope and `since`).
+- [ ] A slow subscriber is still disconnected at a full queue and the publisher never blocks. Existing `streams_replay_and_then_deliver_live` keeps passing.
 
 ## Proof and recovery
 
-Start at [runtime.rs](../../../../../../cartridge.ctg/src/runtime.rs), [service.rs](../../../../../../cartridge.ctg/src/service.rs).
+First add failing reproductions for both cases next to `streams_replay_and_then_deliver_live` in [host.rs tests](../../../../../../cartridge.ctg/.cartridge/tests/unit/src/tests/host.rs). Gates, cwd `/Users/feb/dev/cartridge`: `just test runtime`, `just check runtime`. Not run. Compatibility: subscribers that ignore `kind: gap` keep working. There is no durable journal: retained history stays bounded in memory.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test runtime` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `a-listener-subscribes-to-event-types`; maximum five rounds.
+No hard prerequisites. The acceptance overlaps `documents-own-live-processes/document-event-activation` ("overflow reports a gap"); this leaf is the canonical owner of the channel gap. [Review](review.md): inherits 2 rounds.

@@ -29,3 +29,21 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14 (reconciliation)
+
+Reconciliation verdict: **SUPERSEDED**.
+
+Reviewed revision: prd.md SHA-256 `07ab38f5152740b270a0f1d1ad38101994cd0c0f6867a9b0174d4aa9147cbda0` (frontmatter afterwards set to review-round 3 / superseded-recommend-retire; body unchanged). Source revisions: proxy.ctg fb93074; cartridge.ctg c9ef10b; prd.ctg 077e57a2 (dirty tree).
+
+Owner evidence: proxy executes the profile's `tool.*` keys directly (`proxy.ctg/src/service.rs` 42-43, 122; `proxy.ctg/src/main.rs` 212-219) and already proves the acceptance themes natively: `interrupted_stream_reports_error_without_success_replay_or_tools`, `deadline_and_dropped_request_cancel_the_exact_active_tool`, `caller_tools_are_returned_and_mixed_batches_are_deferred_without_execution` (`proxy.ctg/.cartridge/tests/unit/tests.rs`). The "common runner" it was to adopt no longer exists as a planned surface. Cross-client result parity (agent/mcp/proxy shared fixtures), if still wanted, is an mcp-board question. Release note: proxy smoke still times out (implementation).
+
+Program-level evidence (shared by the owner-document leaves): the host was rewritten on the transport protocol (cartridge.ctg 939e7d1, ee7e295 "Events are the interface", c9ef10b) and every client now executes the same injected `tool.*` keys (`agent.ctg/src/main.rs` 19-26, `mcp.ctg/src/service.rs` 36-38/74, `proxy.ctg/src/service.rs` 42-43/122). Decision `.cartridge/memos/decision/a-cartridge-brings-its-own-surface.md` (2026-09-14, decided_by user) puts each cartridge's surface and `.cartridge/help.md` in its own directory, rebuilt by `cartridge help`; decision `the-tool-contract-is-a-memo.md` keeps Rust cartridges serving what a memo cannot express. No owner ships a `.cartridge/documents/` tool document, and the shared runner (`@runtime/one-runner-executes-documents`) and `@mcp/clients-share-document-execution` remain open and stale.
+Additional staleness: starting-file links resolved against the old owner-local board location; the files now live under `src/`.
+Disposition: retire recommendation (coordinator/user). Do not delete; `state:` unchanged. If an executable wrapper is still wanted, it belongs to the open root work memo `.cartridge/memos/work/a-tool-is-declared-by-its-memo.md`, not to this owner leaf.
+No score recorded (superseded verdicts need none).
+Validation: ls/rg existence checks, `git log` of the owner and cartridge.ctg, decision memo reads. No product gates were run.
+Reviewer identity: agent (independent reviewer, plan refresh pass). User rating: not required. User feedback: none supplied.
+Result: SUPERSEDED — recommend retire. Unresolved blocking findings: none for this leaf; the program parents need the same reconciliation.
+Rounds used / remaining: 3 / 2.
+Next action: coordinator confirms retirement or reopens under the tool-memo work.

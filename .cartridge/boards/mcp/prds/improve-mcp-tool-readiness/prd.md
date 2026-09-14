@@ -7,35 +7,43 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: mcp
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: improve-mcp-tool-readiness
 needs:
-- '@landscape/landscape-composes-system-context/context-contributor-contract'
 - '@policy/improve-policy-explain'
 footprint:
-- /Users/feb/dev/cartridge/mcp.ctg/service.rs
-- /Users/feb/dev/cartridge/mcp.ctg/tests.rs
-- /Users/feb/dev/cartridge/mcp.ctg/README.md
+- /Users/feb/dev/cartridge/mcp.ctg/src/service.rs
+- /Users/feb/dev/cartridge/mcp.ctg/.cartridge/tests/unit/tests.rs
+- /Users/feb/dev/cartridge/mcp.ctg/.cartridge/docs/README.md
 ---
 
 # Discover policy and readiness for exposed tools
 
-Landscape owns the generic readiness row assembled by the memo facade; memory supplies only its store/model status, and policy supplies a revision-bound decision. The row records installed, exposed, allowed, dependency-ready and verification state independently, with source revision/time. MCP exposes an optional diagnostic view without changing standard tool schema meanings.
+No generic readiness producer exists: landscape is dissolved into core fabric, and under
+decision `a-cartridge-brings-its-own-surface` MCP may not ask memory, gitfs or any sibling
+about its internals. MCP already knows three facts itself: installed/exposed (its registry
+from each tool's `describe`, `src/service.rs`), and allowed with a policy revision
+(`cartridge/policy` via the declared `policy.explain` need). This leaf adds one optional
+diagnostic view over those facts plus an optional descriptor-declared `readiness` field, the
+same way descriptors already declare `reads`. Standard `tools/list` and `tools/call` meanings
+do not change. Excluded: adding `readiness` to other cartridges' descriptors (their boards) and
+the tui view (`@ui/improve-ui-tool-availability`).
 
 ## Acceptance
 
-- [ ] A registered unavailable-memory tool, denied GitFS write and unverified healthy tool have distinct rows.
-- [ ] Missing diagnostics are unknown/partial; discovery starts no provider, opens no writer and runs no model.
-- [ ] MCP and UI consume the same fixture snapshot and do not treat stale observed readiness as execution authorization.
+- [ ] One row per exposed tool records exposed, allowed (with policy revision) and descriptor readiness independently, with observation time.
+- [ ] A tool whose descriptor omits `readiness`, or a `policy.explain` failure, shows `unknown`, never ready or denied.
+- [ ] Building the view starts no provider, opens no writer, runs no model and grants nothing; a subsequent `tools/call` still checks policy again.
+- [ ] A stale row (descriptor revision changed) is marked stale rather than served as current.
 
 ## Proof and recovery
 
-Start at [service.rs](../../../service.rs), [tests.rs](../../../tests.rs), [README.md](../../../README.md).
+First step: run `just test mcp` (cwd `/Users/feb/dev/cartridge`) and record the baseline,
+including the one known failure from release-status. Add fixture tools with and without
+`readiness` in `.cartridge/tests/unit/tests.rs`; the gate is the same command. Rollback: the
+view is an additional experimental method; removing it leaves the catalog unchanged.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test mcp` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `improve-mcp-tool-readiness`; maximum five rounds.
+Ready: `@policy/improve-policy-explain` is done. The former need on the dissolved landscape contributor contract was dropped; MCP does not consume context rows. [Review history](review.md); rounds inherited from `improve-mcp-tool-readiness`; limit five.

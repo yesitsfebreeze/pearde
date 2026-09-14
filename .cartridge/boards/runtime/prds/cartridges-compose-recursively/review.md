@@ -33,3 +33,22 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reconciliation verdict: **REBASE** (rollup). Recursive nesting is delivered in the base: `src/ledger.rs:1-3` (a `cartridge.json` folder at any depth, path identity) and profile path entries such as `live/record` in root `.cartridge/init.lua`; planning never runs an entry (`docs/architecture.txt`). Child states: `the-profile-is-the-root-composer` done; `a-key-starts-its-provider-on-demand` CONFLICT (needs-decision this pass); `a-cartridge-installs-from-its-source` rebased and passed this pass. Revision records child status and a real integration gate.
+Stale presented revision: `a95c1778e0af27dc800361ec1a3c90cb1b1944483353b489936b6d41d19af7a2`. Revised revision: `663e57750bcad63e6305c163cd0a87fadc58fb8525cea2daf364b20e62c7e8b3`.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 17 | Named outcome largely delivered; remaining children are adjacent (install, activation), not recursion. -3. |
+| Ownership and reuse | 19 | Runtime parent; nesting cites ledger. -1. |
+| Dependencies and slices | 16 | Needs resolve and are acyclic. -4: one child awaits a user decision that may remove it, so the rollup's scope is unsettled. |
+| Acceptance and baseline | 18 | Roll-up acceptance plus `just test runtime`. -2. |
+| Failure and compatibility | 18 | Parent carries no implementation; limitations recorded at integration. -2. |
+| Reviewer total | 88 / 100 | |
+
+Result: **FAIL**. Blocking finding: scope depends on the `a-key-starts-its-provider-on-demand` decision; after it, either drop that link (and consider retiring this parent as delivered-by-ledger plus the install leaf) or keep it. No further automatic revision: the fix needs that user choice.
+Validation: cheap existence checks only — ls/rg over cartridge.ctg (HEAD c9ef10b), tools.ctg (caea5b7) and memory.ctg (c25af4d) source; `just --list` at /Users/feb/dev/cartridge; relative-link resolution over prd.md; `shasum -a 256`. No product gates were run.
+Reviewer: agent (independent reviewer, plan refresh pass). User rating: not required under delegation; none supplied.
+Rounds used / remaining: 3 / 2. Next action: await the on-demand decision, then one revision.

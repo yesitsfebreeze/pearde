@@ -5,10 +5,10 @@ origin: requested
 priority: 80
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: memory
+capability-owner: memory
 work-kind: rollup
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: delivered-pending-verification
 canonical-scope: memory-owns-its-tool
 needs:
 - '@memory/memory-owns-its-tool/memory-adapter-core'

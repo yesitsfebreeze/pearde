@@ -29,3 +29,27 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reconciliation verdict: **REBASE**
+
+Reviewer: agent (independent reviewer, plan refresh pass). Presented revision: `prd.md` SHA-256 `545b4d545e23adad155a554c38049f02562f83a87e501faa51a885b6d106a28a`. Composition: root `24aa2be` (dirty), memo.ctg `9a1cf99`, memory.ctg `c25af4d`, cartridge.ctg `c9ef10b`, prd.ctg `077e57a2` (dirty).
+Change: added integration gate, retirement rule and a reconciliation list of children whose owners changed in the 2026-09-14 reorganisation. Pre-revision SHA-256 `c6581c28cfca0ab7fb417f4a00e7cd25e35cf686af8580acd90550db77b6efcc`.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Value and scope | 17 | Programme still wanted; six of sixteen children are already `done`. -3: at least three children may no longer be current. |
+| Ownership and reuse | 15 | -5: `@memory/improve-memory-tool-programme` targets the dropped memory-tool adapter (memory.ctg now serves `tool.memory`, see memory.ctg/.cartridge/help.md); `@runtime/improve-tools-programme` targets the dropped workspace while tools.ctg has its own board; `@policy/improve-policy-programme` must be checked against a-cartridge-brings-its-own-surface (policy knows no tool). |
+| Dependencies and slices | 16 | All 16 needs resolve and are acyclic. -4: the dispositions of the questionable children are owned by other boards and unresolved. |
+| Acceptance and baseline | 19 | Gate `just check`/`just test` from the composed root at recorded SHAs; per-owner mitigations in Result. -1: baseline red. |
+| Failure and compatibility | 18 | Children leave `needs` only with an owner-board disposition; changed pin reopens its child. |
+
+Agent score: **85/100 — FAIL**.
+Findings: Revision fixes the parent's own gaps, but closure depends on cross-board reconciliation this board cannot perform.
+Unresolved blocking findings: children on dropped or reorganised owners (`@memory/improve-memory-tool-programme`, `@runtime/improve-tools-programme`, `@policy/improve-policy-programme`) lack owner-board dispositions.
+Disposition: keep; coordinator to obtain dispositions for the listed children, then re-review.
+Validation (cwd /Users/feb/dev/cartridge): existence checks of the named starting files, fixtures and justfile recipes (`.cartridge/justfile`: check, test, smoke, verify; root `justfile`: isolation); `rg` for the named symbols and tests; `git log` in the owner submodules; a script resolving every `needs` target to `boards/<owner>/prds/<slug>/prd.md` and every relative link; `shasum -a 256`. No product gates (`just check`, `just test`, `just smoke`, `just verify`) were run.
+User rating: not required under delegation; none supplied.
+Rounds used / remaining: 3 / 2.
+Next action: coordinator reconciles the three children in their boards; then one re-review round (2 remain).

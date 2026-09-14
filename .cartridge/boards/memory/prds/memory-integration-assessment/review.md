@@ -31,3 +31,18 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). No user score was supplied or invented.
+Reconciliation verdict: **SUPERSEDED — the 2026-09-07 assessment observed failures in the pre-transport daemon RPC and `memory mcp` surface (`no tokio runtime`, `daemon rpc: rpc adapter: eof`; see round-1 source). Memory was ported to the cartridge transport on 2026-09-14 (memory.ctg `9cc0f0b`, `c25af4d`) and MCP hosting left memory (`.cartridge/docs/WORK_ITEMS.md` 'Not carried forward'). None of its ten original subwork items exists on the board. The round-2 snapshot only re-buckets leaves already tracked elsewhere: memory-002 and memory-004 under keep-the-tree-and-record-true, memory-adapter-core under memory-owns-its-tool and the-agent-surface-is-usable, and every-mutation-holds-the-store-writer-boundary is done. Its live-probe requirement is carried by the-agent-surface-is-usable's integration gate.**
+
+Presented revision: `prd.md` SHA-256 `8ef69fa96161352ada162d7401b39e267094a78a299b83981f9a0ec7d9360f16`. Frontmatter only changed (review-round, review-status); body unchanged.
+Source inspected: memory.ctg `c25af4d` (main), root `24aa2be`, prd.ctg `077e57a2` plus working tree.
+
+Agent score: not scored (superseded-recommend-retire).
+Findings: Recommend retiring this rollup; no requirement is lost (mapping above). `state:` left untouched.
+Blocking findings: none.
+Validation: Existence checks only: cited source/test/doc paths exist (`ls`), `needs` targets and local links resolve (script over frontmatter and markdown links), memory.ctg `just --list` shows `check`, `test`, `e2e`, `all`, `eval-mature`, `eval-replay`, `test-reload`. Leaf body word count checked. No product gates were run.
+Rounds used / remaining: 3 / 2.
+Next: Coordinator: retire or mark void in work-map; no implementation.

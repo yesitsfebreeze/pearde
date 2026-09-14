@@ -7,8 +7,8 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: runtime
 work-kind: rollup
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: failed
 canonical-scope: runtime-stays-small-and-provable
 needs:
 - '@runtime/ci-proves-the-supported-terminal-matrix'
@@ -18,11 +18,16 @@ needs:
 
 # A small, provable terminal runtime
 
-Coordinate the linked owner outcomes and record their combined evidence; claim a leaf for implementation.
+Coordinate the linked owner outcomes and record their combined evidence; claim a
+leaf for implementation. This parent owns the "provable" half: CI, agent-side
+diagnosis and a reliable reload test. The "small" half is the 2026-09-14 quality
+audit in [the-runtime-reaches-top-tier-quality](../the-runtime-reaches-top-tier-quality/prd.md),
+which also needs the CI leaf. That link is context, not a duplicate task.
 
 ## Acceptance
 
 - [ ] Each linked leaf passes its own review and observable acceptance.
+- [ ] The reload leaf was delivered before the transport rewrite (939e7d1). Its regression is re-proven on the current `Host::replace`/`reconcile` path at the integrated revision (`just test runtime`, cwd `/Users/feb/dev/cartridge`), or reopened.
 - [ ] Record tested mitigations and remaining limitations at the integrated revisions.
 
 ## Work items
@@ -33,4 +38,4 @@ Coordinate the linked owner outcomes and record their combined evidence; claim a
 
 ## Review
 
-[Round 2 agent review](review.md). Inherits round 1 from `runtime-stays-small-and-provable`; maximum five rounds.
+[Review history](review.md): round 3/5.

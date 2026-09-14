@@ -1,34 +1,34 @@
 ---
-repo: /Users/feb/dev/cartridge/cartridge.ctg
+repo: /Users/feb/dev/cartridge/memo.ctg
 state: open
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-owner: landscape
+capability-owner: memo
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: context-quality-is-measured
+footprint:
+- /Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/context-quality/
+- /Users/feb/dev/cartridge/memo.ctg/.cartridge/docs/context.md
 ---
 
-# A pinned corpus records the old selector baseline
+# A pinned corpus records the memo context baseline
 
-Freeze 100-row and 10000-row fixtures, critical facts and a 16 KiB scenario before observing candidate results; run the old pinned source in a disposable checkout.
+memo's `context` operation (`src/context.rs`, `evidence` crate) is the selector under test. A corpus was frozen on 2026-09-13, before any candidate observation, in [analysis](analysis/): `corpus-manifest.json` (100 and 10000 rows; corpus SHA-256 `f8148994…`, `5ed27206…`; six scenarios; 16 KiB cap). One baseline run at memo `a458148` is in `analysis/baseline.json`. That run used Python and the dissolved landscape layout, so it is historical evidence and not a gate input. This leaf moves the frozen corpus into memo and records a reproducible baseline at a pinned memo revision.
 
 ## Acceptance
 
-- [ ] Corpus, old source, toolchain and raw results have digests.
-- [ ] Critical-fact, scope and provenance expectations are declared before comparison.
-- [ ] The old path runs from a second checkout without altering current work.
+- [ ] A Bun generator in `.cartridge/tests/context-quality/` regenerates both corpora with the manifest's digests. Critical facts, forbidden tokens and provenance expectations are copied byte-identically from the manifest.
+- [ ] A runner builds a pinned memo revision in a disposable second checkout. It drives the base (`cartridge --dir <tmp> run memo '{"op":"context",…}'`) with Lua fixture providers for memory and files, and runs one warmup plus five timed prepares and exact readbacks per scenario and size. It writes raw results with corpus, source, toolchain and binary digests, and the original trees stay unchanged.
+- [ ] The runner fails by name on forbidden output, wrong provenance, a response over 16384 bytes, unreported truncation, a digest mismatch or a failed build. Known misses (`DOC_TAIL_CRITICAL` at 100; documents unavailable at 10000) are recorded as findings, and a failed run never replaces an earlier good baseline.
 
 ## Proof and recovery
 
-Start at [lib.rs](../../../../../../../landscape.ctg/src/lib.rs), [surface.rs](../../../../../../../landscape.ctg/src/surface.rs).
+Reuse `.cartridge/tests/integration/host.ts`. Gates, cwd `/Users/feb/dev/cartridge`: `just test memo` and `bun test memo.ctg/.cartridge/tests/context-quality/baseline.test.ts` (created by this leaf). Neither has run. They need memo's events-model port (`83bf1ad`) and a base binary. Timings are fixture evidence, not model quality.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test landscape` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `context-quality-is-measured`; maximum five rounds.
+No hard prerequisite. Rounds 1–2 are inherited from `context-quality-is-measured`; round 3 rebased ([review](review.md)).

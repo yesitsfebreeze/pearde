@@ -7,36 +7,44 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: pty
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: improve-pty-input-ownership
 needs:
 - '@pty/improve-pty-shell-identity'
 footprint:
-- /Users/feb/dev/cartridge/pty.ctg/main.rs
-- /Users/feb/dev/cartridge/pty.ctg/tool.rs
-- /Users/feb/dev/cartridge/pty.ctg/marks.rs
-- /Users/feb/dev/cartridge/pty.ctg/input.rs
-- /Users/feb/dev/cartridge/pty.ctg/tests/process.rs
+- /Users/feb/dev/cartridge/pty.ctg/src/main.rs
+- /Users/feb/dev/cartridge/pty.ctg/src/tool.rs
+- /Users/feb/dev/cartridge/pty.ctg/.cartridge/tests/integration/process.rs
+- /Users/feb/dev/cartridge/pty.ctg/.cartridge/docs/README.md
 ---
 
 # Coordinate human and agent input on the shared terminal
 
-Separate input lease ownership from foreground-program state. Human input may revoke an agent lease immediately, but granting a new agent command requires an observed shell-ready boundary; an active command/editor receives only explicitly intended literal human input. Child execution goes through the owner's lease and carries command/call identity.
+Delivered baseline (pty cacd7e1, documented in `.cartridge/docs/README.md`): tool writes are
+serialized by `tool_gate`; `pty {op:"control"}` hands the terminal to user or agent, and
+takeback revokes writes, sends one Ctrl+C and returns the interrupted invocation; stale
+cancellation only interrupts the matching context; commands need the prompt phase. Tests:
+`shell_serializes_input_and_only_cancels_the_matching_invocation`,
+`handoff_blocks_agent_input_and_takeback_interrupts_without_closing_shell`. Remaining gaps:
+a refused caller learns no owner, and after takeback the old prompt mark can admit the next
+agent command before the shell has answered the interrupt (handoff record in
+`../improve-pty-command-wait/`). Keep the documented takeback interrupt.
 
 ## Acceptance
 
-- [ ] Concurrent agents cannot interleave writes; a refused caller sees busy/owner information without gaining a lease.
-- [ ] Human preemption during nvim and a long-running command invalidates the old lease, and the next agent command is refused until shell readiness is observed.
-- [ ] Expiry/reload/cancellation cannot unlock another invocation's lease or permanently wedge input; the PTY PID and user's editor remain intact.
+- [ ] A refused concurrent call reports busy plus the owning invocation's session/run, without acquiring input.
+- [ ] After takeback and hand-back, the next agent command is refused until a new prompt mark arrives after the interrupt.
+- [ ] Hand-back, reload or cancellation of one invocation never releases another invocation's ownership, and a lost owner never leaves input permanently refused.
+- [ ] The shell PID and a running nvim survive every case above.
 
 ## Proof and recovery
 
-Start at [main.rs](../../../main.rs), [tool.rs](../../../tool.rs), [marks.rs](../../../marks.rs).
+First step: run `just test pty` (cwd `/Users/feb/dev/cartridge`) and record the baseline,
+including the two known failures in release-status. Extend the two existing integration tests
+with the prompt-mark race. Gate: the same command. Rollback: new fields are additive; the
+existing control op and its documented behaviour stay compatible.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test pty` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `improve-pty-input-ownership`; maximum five rounds.
+Ready: shell identity is done. [Review history](review.md); rounds inherited from `improve-pty-input-ownership`; limit five.

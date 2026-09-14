@@ -29,3 +29,24 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). Presented revision: `prd.md` SHA-256 `11a3225c7c57a6c2eea063d547e398e3b585a96208526c7e3b79a676ca397aeb`.
+
+Reconciliation verdict: **REBASE**. The "small" audit moved to the newer roll-up `the-runtime-reaches-top-tier-quality` (2026-09-14), which also needs the CI leaf. The done child `the-reload-test-is-not-flaky` was proven before the transport rewrite (`939e7d1`); reload is now `Host::replace`/`reconcile` (`src/host/socket.rs:301`), with `a_restart_keeps_its_dependents_working` in `tests/host.rs`. Revision: this parent now holds the "provable" half, links the sibling roll-up as context, and requires the reload regression to be re-proven at the integrated revision.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 18 | A clear split from the sibling roll-up; −2: the title still says "small". |
+| Ownership and reuse | 18 | Needs resolve across runtime/agent boards; −2: overlap with the sibling roll-up on the CI leaf. |
+| Dependencies and slices | 16 | Acyclic; −4: `ci-proves-the-supported-terminal-matrix` is `needs-decision` in this pass and `debug-mode-correlates-a-terminal-turn` is still stale. |
+| Acceptance and baseline | 18 | Re-proof requirement for delivered evidence; −2: no baseline. |
+| Failure and compatibility | 18 | Reopen path stated; −2: no integration rollback. |
+| Reviewer total | 88 / 100 | |
+
+Result: **FAIL**.
+Blocking findings: none in the text itself. The score fails because a hard child awaits a user decision (CI). Re-review once the CI leaf resolves.
+Validation: needs resolution with state/review-status of children; `rg reload` in host sources and tests. No product gates were run.
+User rating: not required. Rounds used / remaining: 3 / 2.
+Next: resolve the CI decision; consider merging this roll-up into the sibling at the coordinator's discretion.

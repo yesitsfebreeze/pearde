@@ -5,10 +5,10 @@ origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: memory
+capability-owner: memory
 work-kind: rollup
-review-round: 2
-review-status: stale-after-migration
+review-round: 4
+review-status: passed
 canonical-scope: improve-memory-programme
 needs:
 - '@memory/improve-memory-owner-access'
@@ -16,14 +16,15 @@ needs:
 - '@memory/improve-memory-provenance'
 ---
 
-# Memory improvement plan
+# Memory access, readiness and provenance improvements
 
-Coordinate the linked owner outcomes and record their combined evidence; claim a leaf for implementation.
+This parent groups three memory outcomes from the access assessment. Owner access and readiness are done; both PRDs record commit `a124fd3`. Provenance is specced and passed its round-3 review. Claim that leaf to implement it; this parent adds no implementation of its own.
 
 ## Acceptance
 
-- [ ] Each linked leaf passes its own review and observable acceptance.
-- [ ] Record tested mitigations and remaining limitations at the integrated revisions.
+- [ ] Each linked leaf is done with its own recorded acceptance evidence.
+- [ ] Integration gate: at the memory.ctg revision that completes provenance, `just test` passes when run from /Users/feb/dev/cartridge/memory.ctg, and the memory `status`/`health` answers still report owner access and readiness as their leaves specify.
+- [ ] Record tested mitigations and remaining limitations here. A failed gate reopens only the leaf it names; it never repairs a production store.
 
 ## Work items
 
@@ -33,4 +34,4 @@ Coordinate the linked owner outcomes and record their combined evidence; claim a
 
 ## Review
 
-[Round 2 agent review](review.md). Inherits round 1 from `improve-memory-programme`; maximum five rounds.
+[Review history](review.md): rounds 1–2 inherited; rounds 3–4 on 2026-09-14; maximum five.

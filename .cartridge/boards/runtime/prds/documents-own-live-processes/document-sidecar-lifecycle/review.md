@@ -29,3 +29,33 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). No user score was supplied or invented.
+
+Reconciliation verdict: **REBASE**. Aligned with the parent's round-3 REBASE.
+- The old footprint (`src/runtime.rs`, `src/service.rs`, justdown sidecars) is gone. "Sidecars" are now helper programs from `cartridge.spawn` (ws/cartridge.ctg `transport-design` `ba198f4`, `src/node.rs`), each belonging to one node process and generation (`src/host/mod.rs` `stop_slot` increments `generation`).
+- As the coordinator directed, the clause "replacement preserves the old usable service until a valid handoff" and the exclusive-handoff refusal are dropped; `@runtime/extension-loader-plugin-tree` owns refusal at planning and excludes overlapping handoff.
+- Nested-child teardown is left to `@runtime/launch-authority` (acceptance 3).
+- The need `@runtime/one-runner-executes-documents/document-command-result` is dropped. Helper lifetime does not depend on a document runner, and that leaf is CONFLICT in this pass.
+- The remaining gap, from source: the reader task ends silently on helper exit, and `status` keeps the node `active`.
+
+Stale presented revision: `ee2b82a410c82f62c7256788a7e12aaa2408739557b7ea47856f602e46276cd4`. Revised revision: `prd.md` SHA-256 `e93ff2bb99bd423ae56926f02595b6cdfa29a064f077cc29df86afe3bfc810b7`.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 18 | A silently dead helper behind an `active` TS cartridge (auth, live, tui, prd) is a real diagnosis gap; the scope is bounded to exit visibility and the generation boundary. -2: after the overlaps were removed, acceptance 3 is a negative guard rather than new behavior. |
+| Ownership and reuse | 19 | The base owns `cartridge.spawn` and `status`; the leaf reuses the existing test helpers and status publishing. -1: the shape of the status field is left to specs. |
+| Dependencies and implementable slices | 18 | No hard needs; overlaps are named with their owners. -2: `src/node.rs` is a shared footprint with launch-authority and needs coordinated landing. |
+| Observable acceptance and baseline evidence | 18 | Three checks with a fixture helper, next to named existing tests; the gates exist. -2: the silent-exit baseline is unreproduced source reading. |
+| Failure, recovery and compatibility | 18 | Additive status field, rollback named, no restart policy invented. -2: the retention bound of the stderr tail is unspecified. |
+| Reviewer total | 91 / 100 | |
+
+Result: **PASS**. Word count 279 with frontmatter (`wc -w`; leaf bound 150–300).
+Findings: reproduce the silent exit before specs; land in coordination with `@runtime/launch-authority`.
+Unresolved blocking findings: none.
+Validation (read-only): source reading on ws/cartridge.ctg branch `transport-design` `ba198f4` (`src/node.rs` `spawn`/`Spawned`/reader task/`request`/`kill`, global `subscribe`; `src/transport/cartridge.rs` `join`/`leave`/`subscribe`, connection loop subscribe/unsubscribe/disconnect; `src/host/mod.rs` `stop_slot`/`replace_locked`); existence of the named tests in `.cartridge/tests/unit/src/tests/host.rs`; main cartridge.ctg `e8a4da3` carries the same files; needs resolution under `boards/<owner>/prds/<slug>/prd.md` (`@runtime/launch-authority`, `@runtime/extension-loader-plugin-tree`, `@runtime/a-listener-subscribes-to-event-types` exist, passed round 3); root `.cartridge/justfile` `test`/`check` and the `runtime` routing in `.cartridge/memos/routine/cartridge-development.md`; `wc -w`; `shasum -a 256`. No product gates were run.
+User rating: not required under delegation; none supplied.
+Rounds used / remaining: 3 / 2.
+Next action: failing test for a helper that exits after one answer. The parent `documents-own-live-processes` can be re-reviewed.

@@ -29,3 +29,45 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reconciliation verdict: **CURRENT**. Evidence: roll-up names no architecture-bound paths; needs resolve: `@harness/improve-harness-token-accounting` done (harness ca7eeab), `@harness/improve-harness-compaction-diff` done (a282c87), `@harness/improve-harness-quality-eval` open (rebased round 3).
+Revision reviewed: `prd.md` SHA-256 `b902d5a60227b52c65de337e754d0ca07f379d9f71fe3521bf46b6af88e42989` (prd.ctg 077e57a2, pre-revision).
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 18 | Short roll-up; -2 does not say two of three leaves are done. |
+| Ownership and reuse | 19 | Harness board, children same board; -1 corpus reuse from round 1 not stated. |
+| Dependencies and implementable slices | 19 | Three needs resolve, acyclic; -1 no ready item named. |
+| Observable acceptance and baseline evidence | 15 | No integration gate command or cwd; "record mitigations" is not observable. |
+| Failure, recovery and compatibility | 15 | No behaviour when a leaf exhausts review or fails at integration. |
+| Reviewer total | 86 / 100 | |
+
+Result: **FAIL**.
+Findings: Missing integration gate; no failure/exhaustion rule; done children not reflected.
+Unresolved blocking findings: none (below threshold only).
+Validation: existence checks of child PRDs and cited commits (ls, git log); `./prd check` (cwd `/Users/feb/dev/cartridge/prd.ctg`, root graph) exit 0 with 228 records and no problems (needs resolve, no cycle); `just --list` (cwd `/Users/feb/dev/cartridge`) shows `test`/`smoke`; relative links checked. No product gates were run.
+Reviewer: agent (independent reviewer, plan refresh pass). User rating: not requested (delegated).
+Rounds used / remaining: 3 / 2.
+Next action: one bounded revision.
+
+## Round 4 — 2026-09-14
+
+Reconciliation verdict: **CURRENT** (unchanged from round 3).
+Revision reviewed: `prd.md` SHA-256 `9bf3ec1fa5edef8f5ceb0ee3c8e6407d7fda3e828afffe124373a3e36cf2bf32` (working tree, uncommitted). Change: done children and commits noted; integration gate `just test harness` at a pinned revision with named failures; limitation record; exhaustion rule.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 19 | States remaining work; -1 limitations list is open-ended. |
+| Ownership and reuse | 19 | Reuse of existing corpus explicit; -1 none further. |
+| Dependencies and implementable slices | 19 | Needs resolve; one open leaf is ready; -1 none. |
+| Observable acceptance and baseline evidence | 18 | Concrete gate with cwd; -2 "or named failures" permits closing with known failures. |
+| Failure, recovery and compatibility | 18 | Exhaustion keeps parent open; -2 no rollback note for a regressing leaf. |
+| Reviewer total | 93 / 100 | |
+
+Result: **PASS**. Unresolved blocking findings: none.
+Validation: existence checks of child PRDs and cited commits (ls, git log); `./prd check` (cwd `/Users/feb/dev/cartridge/prd.ctg`, root graph) exit 0 with 228 records and no problems (needs resolve, no cycle); `just --list` (cwd `/Users/feb/dev/cartridge`) shows `test`/`smoke`; relative links checked. No product gates were run.
+Reviewer: agent (independent reviewer, plan refresh pass). User rating: not requested (delegated).
+Rounds used / remaining: 4 / 1.
+Next action: implement open leaves; this parent closes only on its integration acceptance.

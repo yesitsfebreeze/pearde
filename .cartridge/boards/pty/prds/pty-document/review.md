@@ -29,3 +29,24 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reconciliation verdict: **REBASE**. Evidence: decision `the-tool-contract-is-a-memo.md` keeps document execution wanted; the runner is not built (`@runtime/one-runner-executes-documents` open); decision `a-cartridge-brings-its-own-surface.md` limits pty to a declared need; decision `the-agent-surface-preserves-the-visible-shell.md` keeps one visible `shell` interface; pty ported to transport (0a21768); `pty.ctg/src/tool.rs` already refuses at non-prompt phase and cancels only the matching context. Pre-revision text (SHA-256 `287948baaaa04578699f9f43322ca3174999288f682e041949fb4884986eee2d`) duplicated busy/ID/cancel scope owned by the two pty leaves, depended on the whole clients rollup (including agent and proxy leaves it does not need) instead of the contract leaf, lacked the command-id prerequisite, and had broken links. Blocking.
+
+Revision reviewed: `prd.md` SHA-256 `a87ddf68c85dbfea6188eada67d2db03dd1abb502143e8ecac8edc3c2ed15a44` (working tree). Changes: narrowed to adapting the contract's one-shot invocation to `tool.shell`; needs are the contract leaf, input ownership and command wait; footprint on real files including `.cartridge/help.md`.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 18 | Thin, non-duplicating adapter; -2 value only exists once the runner lands. |
+| Ownership and reuse | 19 | Reuses pty leaves and `tool.shell`, respects surface decision; -1 help.md change not in acceptance. |
+| Dependencies and implementable slices | 18 | Three hard needs resolve, acyclic; -2 contract leaf is stale and its shape unfrozen. |
+| Observable acceptance and baseline evidence | 18 | Three observable checks; -2 fixture depends on contract fixtures that do not exist yet. |
+| Failure, recovery and compatibility | 18 | Denial writes nothing, uncertain completion, direct calls unchanged; -2 retry/replay rule inherited from contract, not restated. |
+| Reviewer total | 91 / 100 | |
+
+Result: **PASS**. Unresolved blocking findings: none.
+Validation: existence checks of repo, source, test and doc paths (ls/rg); `./prd check` (cwd `/Users/feb/dev/cartridge/prd.ctg`, root graph) exit 0 with 228 records and no problems (needs resolve, no cycle); `just --list` (cwd `/Users/feb/dev/cartridge`) shows `test`/`smoke` and `.cartridge/memos/routine/cartridge-development.md` accepts the named owners; relative links checked. No product gates were run.
+Reviewer: agent (independent reviewer, plan refresh pass). User rating: not requested (delegated).
+Rounds used / remaining: 3 / 2.
+Next action: blocked on three needs.

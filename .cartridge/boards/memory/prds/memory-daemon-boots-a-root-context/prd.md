@@ -7,28 +7,31 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: memory
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: memory-daemon-boots-a-root-context
 ---
 
-# memory-daemon-boots-a-root-context
+# Memory's owner refuses writes while draining and survives a failed replacement
 
-Audit the current daemon startup/shutdown sequence directly and fix only a demonstrated ownership gap. Drop the obsolete extension root, mine/models plugin and MCP exposure requirements. Record dependencies between admission, in-flight work, persistence and listener ownership using current source paths.
+Memory owns its store through two lifecycles: the CLI daemon (`run_server` in `src/commands/src/commands_serve.rs`) and the transport cartridge (`on_dispose` in `src/cartridge.rs`). Three gaps are visible at `c25af4d`:
+
+- While shutdown runs, `invoke` refuses only model-dependent ops (`src/rpc/src/server.rs`). forget, degrade, move, promote, pulse and gc are still admitted while `save_fn` runs.
+- A replacement daemon evicts its predecessor (`evict_predecessor`) before it knows it can boot, and continues "anyway" after a timeout.
+- `ready` reports pid and draining state but not store state.
+
+Outcome, owned by memory: fix only those three gaps. There is no plugin tree or root Context; memory decision `memory-is-a-plugin-tree` conflicts with the repository scope in `.cartridge/docs/AGENTS.md`.
 
 ## Acceptance
 
-- [ ] A shutdown fixture stops admitting new writes before draining owned in-flight operations and persisting committed data.
-- [ ] Startup failure or rejected replacement preserves the previous owner and releases only candidate-owned resources.
-- [ ] Readiness and health report actual store state and no runtime plugin framework or duplicate writer is required to inspect it.
+- [ ] Once shutdown begins, every mutating op is refused with a draining error. In-flight calls complete and their effects are included in the final save (`lifecycle_test.rs` plus a `server_admin_test.rs` case).
+- [ ] A replacement whose config or store-directory validation fails exits without stopping the running owner, which keeps answering `health` with the same pid (`e2e/lifecycle.rs`).
+- [ ] `ready` reports store state (opening, ready, draining or unavailable), consistent with cartridge `status`, and the cartridge `on_dispose` path follows the same admission rule.
 
 ## Proof and recovery
 
-Start at [cartridge.rs](../../../../../../memory.ctg/src/cartridge.rs), [main.rs](../../../../../../memory.ctg/src/main.rs).
+First probe: reproduce each gap in a disposable store with the existing e2e harness and record what happens. Gates, from /Users/feb/dev/cartridge/memory.ctg: `just check`, `just test`, `just e2e` (not run). Rollback: revert per gap; the writer lock and guarded flush stay the durability boundary.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just check` and `just test` from memory.ctg with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `memory-daemon-boots-a-root-context`, `memory-boots-as-a-plugin-tree`; maximum five rounds.
+No hard needs. Shares its lifecycle files with memory-signals-become-events, so land this first. [Review history](review.md): rounds 1–2 inherited, round 3 rebased; maximum five.

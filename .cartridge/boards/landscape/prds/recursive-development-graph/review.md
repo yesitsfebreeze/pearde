@@ -29,3 +29,25 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass).
+Reconciliation verdict: **REBASE**. Census and search live in memo (`memo.ctg/src/sources/census.rs`, `sources/search.rs`, `source_search.rs`; memo.ctg a458148 exposed recursive search natively). Board records are reached only through prd's `source.board` key (`prd.ctg/cartridge.json`, `prd.ctg/src/service.ts`), per decision `a-cartridge-brings-its-own-surface.md` / `invert-memo-context-sources`. Children: census done; root-search specced (round 3 passed); refresh open/stale.
+Stale revision: `ec2531257457ec98c4c7cd82328dc9977b3467b47f0d5fcb7d449ae7edd0909c` (typo owner key, repo cartridge.ctg, no integration gate).
+Presented revision: prd.md SHA-256 `5789053f9b3ed791fa15d33b40eeb74efade33b5777f6ebd915420d354b0914d`. Source inspected at memo.ctg 9a1cf99, memory.ctg c25af4d, sessions.ctg e9725e8, cartridge.ctg c9ef10b (dirty working tree), prd.ctg 077e57a2 working tree.
+Change: owner memo; source.board boundary; three-level integration and provider-absent acceptance; gates `just test memo`, `just test prd`, bun source-search test.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 18 | Root reads every descendant record. -2: bounds (depth/count/bytes) deferred to children without restating limits. |
+| Ownership and reuse | 19 | memo search, prd provides source.board. -1: board alias landscape. |
+| Dependencies and slices | 18 | needs resolve; census done. -2: refresh leaf still cites landscape paths. |
+| Acceptance and baseline | 18 | Provider-absent behavior matches `declaration_failure("unavailable")` in `source_search.rs`. -2: edit-refresh check duplicates the refresh leaf rather than integrating it. |
+| Failure and compatibility | 18 | Cartridge roots survive board absence. -2: no statement on source-only vs callable runtime state in integration. |
+| Reviewer total | **91 / 100** | |
+
+Result: **PASS**. Blocking findings: none.
+Validation: file existence, `source.board` provider confirmed, `./prd.ctg/prd check` exit 0. Product gates were not run.
+User rating: not required under delegation. Rounds used / remaining: 3 / 2.
+Next: coordinator rehomes to memo board; rebase recursive-source-refresh.

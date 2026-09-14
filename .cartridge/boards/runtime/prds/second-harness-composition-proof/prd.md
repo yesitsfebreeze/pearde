@@ -8,8 +8,8 @@ workflow: develop-one-cartridge
 work-kind: leaf
 capability-owner: runtime
 canonical-scope: second-harness-composition-proof
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 needs:
   - '@harness/concise-writer-cartridge'
 ---
@@ -17,45 +17,31 @@ needs:
 # A second harness works by composing existing cartridges
 
 Verify that an author can build a concise writing harness by adding one
-[writer cartridge](../../../harness/prds/concise-writer-cartridge/prd.md)
-and composition profile. Reuse the shipped runtime, SDK and capability
-cartridges unchanged. Here, **base** means that shipped foundation and its default
-composition; both must remain reliable and easy to use. Owner: runtime.
+[writer cartridge](../../../harness/prds/concise-writer-cartridge/prd.md) and a
+composition profile, reusing the transport host and the shipped cartridges
+unchanged. **Base** means that foundation plus the default composition. On
+2026-09-14 that composition is the root `.cartridge/init.lua` and `config.lua`,
+which are uncommitted; cartridge.ctg no longer carries one (b1494bb). Owner: runtime.
 
 ## Acceptance
 
-- [ ] From a clean disposable checkout, follow a short author guide to compose
-  the writer. Its real-model corpus proves shorter replies and readable memos
-  without losing required meaning. Record setup time, commands and the diff;
-  require zero edits to existing runtime, SDK or capability implementations.
-- [ ] Exercise real memory, GitFS, PTY, policy, routing and session boundaries
-  with a deterministic model endpoint. Discover capabilities, call them and read
-  back effects; registration alone does not pass. A profile-only swap restores
-  the default harness, which passes the same shared-capability checks.
-- [ ] Test the base for missing/incompatible providers, denied access, malformed
-  results, cancellation, restart and failed reload. Require attributable errors,
-  preserved committed data, no uncertain-mutation replay, no duplicate writers,
-  no orphan processes and no expanded grants. Declare deadlines before running.
-- [ ] Capture revisions, fixtures, expected/observed outcomes and supported
-  platforms in a compact pass/fail matrix. Run three clean repetitions; report
-  startup/call timings and every manual workaround. Every required case must pass.
-- [ ] For each failure, reuse a matching open PRD or create one small owner-local
-  repair PRD with reproduction, expected behavior, acceptance and retest command.
-  Prioritize base defects; link blockers here. Filing tickets does not satisfy
-  this verification: close it only after repairs and a complete successful rerun.
+- [ ] From a clean disposable checkout, a short author guide composes the writer. Its real-model corpus shows shorter replies and readable memos with required meaning kept. Record setup time, commands and diff, with zero edits to host, transport or capability source.
+- [ ] With a deterministic model endpoint, exercise real memory, gitfs, pty, policy, router and sessions events: call each and read back its effect. A profile-only swap restores the default harness, which passes the same checks.
+- [ ] Missing or undeclared needs, denied grants, malformed replies, deadlines, cancellation, restart and failed reload give attributable outcomes. Committed data survives, with no uncertain-mutation replay, duplicate writer, orphan process or widened grant.
+- [ ] Three clean repetitions produce a pass/fail matrix with revisions, platform, timings and every manual workaround.
+- [ ] Each failure reuses a matching open PRD or files one owner-local repair PRD; close only after repairs and a complete rerun.
 
 ## Proof and recovery
 
-Start at [SDK](../../../../../../cartridge.ctg/src/sdk.rs), [runtime fixtures](../../../src/tests/fixtures),
-[default composition](../../../../../../cartridge.ctg/.cartridge/default/init.lua) and
-[harness contract](../../../../harness.ctg/README.md).
-Add fixtures to existing test entry points; run `just test runtime`,
-`just test harness` and `just smoke` from the composed root. These are proposed
-gates. Use disposable stores/profiles; teardown only fixture-owned resources.
+First commit or pin the root composition profile, then record the current
+baseline. The release-status note already lists failures: smoke mcp/proxy, and
+harness, gitfs, pty, router and sessions tests. Start at
+`cartridge.ctg/src/transport`, `.cartridge/tests/unit/src/tests/host.rs`,
+`docs/creating-cartridges.txt` and `harness.ctg/.cartridge/help.md`. From
+`/Users/feb/dev/cartridge` run `just test runtime`, `just test harness` and
+`just smoke`. Use disposable stores; teardown touches only fixture resources.
 
 ## Dependencies and review
 
-The baseline probe can start now; the complete trial needs the writer above.
-Consult [composition work](../cartridges-compose-recursively/prd.md)
-and the [source map](../../../root/work-map.json) to reuse repairs.
-Record discovered blockers before implementation. [Review](review.md): round 2/5.
+The baseline probe can start now; the full trial needs the writer. Reuse
+[composition work](../cartridges-compose-recursively/prd.md). [Review](review.md): round 3/5.

@@ -29,3 +29,27 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). No user score was supplied or invented.
+Reconciliation verdict: **REBASE — the host now carries events (`ctx.emit` in `cartridge.ctg/src/transport/cartridge.rs`: declared sends only, non-blocking, failures to `error` channel), and decision `a-cartridge-brings-its-own-surface` makes events a sanctioned boundary. Memory emits none today; `save_fn` discards `Flushed{epoch}`/`RefusedStale` (`src/store/core/src/lib.rs`); `events` op (`tool_events`) is a polled graph-change view. Mine/watch-channel framing is obsolete.**
+
+Presented revision: `prd.md` SHA-256 `bd3d050f647c4fa9a2101fb7a3e0ac286974fbeda25c531d45bc2522e4651357`. Rebased in this round (prior text `b455a036888f0a9a9fa42563d8d4317c93f10b6facb4cd03ca71fea34e58d73b`).
+Source inspected: memory.ctg `c25af4d` (main), root `24aa2be`, prd.ctg `077e57a2` plus working tree.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 14 | -6: no consumer of a memory save event is named in any board, decision or source; value is speculative. |
+| Ownership and reuse | 19 | Uses host `emit`; no memory event framework. -1. |
+| Dependencies and implementable slices | 17 | -3: send-declaration mechanism for a Rust process cartridge unprobed (memory `init.lua` is one line). |
+| Observable acceptance and baseline evidence | 18 | Epoch equality, non-blocking listener, generation. -2: 'generation' does not exist yet and is undefined. |
+| Failure, recovery and compatibility | 18 | Rollback trivial; no store impact. -2: overlap with daemon lifecycle leaf ordering only. |
+| Reviewer total | 86/100 | |
+
+Agent score: **86/100 — FAIL**.
+Findings: Rebased to the transport event model with current paths. Still fails on value: a named consumer (or a decision to retire) is required, which this reviewer cannot supply.
+Blocking findings: no consumer named; needs a user/owner decision to keep (with consumer) or retire.
+Validation: Existence checks only: cited source/test/doc paths exist (`ls`), `needs` targets and local links resolve (script over frontmatter and markdown links), memory.ctg `just --list` shows `check`, `test`, `e2e`, `all`, `eval-mature`, `eval-replay`, `test-reload`. Leaf body word count checked. No product gates were run.
+Rounds used / remaining: 3 / 2.
+Next: Decision on consumer; if none, recommend retire. Two rounds remain.

@@ -3,6 +3,9 @@ state: open
 origin: requested
 priority: 70
 repo: "/Users/feb/dev/cartridge/cartridge.ctg"
+work-kind: leaf
+review-round: 2
+review-status: delivered-pending-verification
 ---
 
 # Lua calls into the host without blocking a worker

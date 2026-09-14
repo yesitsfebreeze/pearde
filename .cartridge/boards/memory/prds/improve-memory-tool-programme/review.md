@@ -29,3 +29,27 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). No user score was supplied or invented.
+Reconciliation verdict: **REBASE — round-1 'owner is scheduled for retirement' is now history: memory-tool dropped (root `9e4cde8`), `tool.memory` served by memory (`src/cartridge.rs`). Children still open and rebased this round.**
+
+Presented revision: `prd.md` SHA-256 `7a7fdd341d87059c43a66f587eba1be4375e51669dee3703046d77ddfecad797`. Rebased in this round (prior text `a9526e61666f0bd3cb4786eed20d921a48bfe11dfe1b0fdf614a0c0b990f74d8`).
+Source inspected: memory.ctg `c25af4d` (main), root `24aa2be`, prd.ctg `077e57a2` plus working tree.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 18 | Index for three tool improvements; -2 parent-only value. |
+| Ownership and reuse | 20 | Owner fixed; no implementation of its own. |
+| Dependencies and implementable slices | 20 | Three needs resolve; order get → errors/correct stated in leaves. |
+| Observable acceptance and baseline evidence | 18 | Integration gate with a concrete call sequence and command. -2: case does not yet exist and must be created. |
+| Failure, recovery and compatibility | 17 | Limitations recorded, not silently closed. -3: no rollback statement at parent level (leaves carry it). |
+| Reviewer total | 93/100 | |
+
+Agent score: **93/100 — PASS**.
+Findings: Wrapper framing removed; integration gate added; owner key fixed.
+Blocking findings: none.
+Validation: Existence checks only: cited source/test/doc paths exist (`ls`), `needs` targets and local links resolve (script over frontmatter and markdown links), memory.ctg `just --list` shows `check`, `test`, `e2e`, `all`, `eval-mature`, `eval-replay`, `test-reload`. Leaf body word count checked. No product gates were run.
+Rounds used / remaining: 3 / 2.
+Next: Leaves proceed; run the gate when all three land.

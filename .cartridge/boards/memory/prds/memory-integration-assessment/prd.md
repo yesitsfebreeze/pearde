@@ -7,8 +7,8 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: memory
 work-kind: rollup
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: superseded-recommend-retire
 canonical-scope: memory-integration-assessment
 needs:
 - '@memory/memory-002'

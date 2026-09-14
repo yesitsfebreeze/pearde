@@ -33,3 +33,45 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reconciliation verdict: **CURRENT**. Evidence: roll-up names no architecture-bound paths; decision `the-tool-contract-is-a-memo.md` keeps the outcome; `@runtime/one-runner-executes-documents` still open, so nothing is delivered; all four needs resolve (children and `@agent/agent-document-client`, `@proxy/proxy-document-client` open, stale-after-migration). Compatible with `a-cartridge-brings-its-own-surface.md` provided clients reach the runner only by declared need.
+Revision reviewed: `prd.md` SHA-256 `9f705c42a0315375db1811a41ff0819a97396d211392c0b07d2369b5469f80a9` (prd.ctg 077e57a2, pre-revision).
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 17 | -3 round-1 findings (freeze schema/collision rule; stage one-shot parity before lifecycle modes) not reflected. |
+| Ownership and reuse | 19 | -1 surface-decision constraint not stated. |
+| Dependencies and implementable slices | 18 | Needs resolve; -2 staging (contract first) implicit only. |
+| Observable acceptance and baseline evidence | 15 | "work together" is not observable; no gates for three clients. |
+| Failure, recovery and compatibility | 15 | No rule for contract change after adoption or leaf exhaustion. |
+| Reviewer total | 84 / 100 | |
+
+Result: **FAIL**.
+Findings: Staging and schema-freeze findings absent; no shared-fixture parity check or gates; no contract-change rule.
+Unresolved blocking findings: none (below threshold only).
+Validation: existence checks of child PRDs and cited commits (ls, git log); `./prd check` (cwd `/Users/feb/dev/cartridge/prd.ctg`, root graph) exit 0 with 228 records and no problems (needs resolve, no cycle); `just --list` (cwd `/Users/feb/dev/cartridge`) shows `test`/`smoke`; relative links checked. No product gates were run.
+Reviewer: agent (independent reviewer, plan refresh pass). User rating: not requested (delegated).
+Rounds used / remaining: 3 / 2.
+Next action: one bounded revision.
+
+## Round 4 — 2026-09-14
+
+Reconciliation verdict: **CURRENT** (unchanged from round 3).
+Revision reviewed: `prd.md` SHA-256 `5fabb1002a70efbbc59aed14826b2cc4e696dc0a3d611041fe26eb135d570a6a` (working tree, uncommitted). Change: staged contract-then-clients plan; lifecycle modes refused; declared-need constraint; shared-fixture parity acceptance; `just test agent|mcp|proxy` and `just smoke mcp` gates; stale-on-contract-change and exhaustion rules.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 18 | Staging explicit; -2 value blocked behind root memory-document proof. |
+| Ownership and reuse | 19 | Owner boards per client, declared-need rule; -1 none. |
+| Dependencies and implementable slices | 18 | Needs resolve; -2 all children still stale-after-migration and unreviewed in this pass here. |
+| Observable acceptance and baseline evidence | 18 | Parity over shared fixtures, gates with cwd; -2 fixtures do not exist yet. |
+| Failure, recovery and compatibility | 18 | Contract-change staleness, exhaustion; -2 no rollback for a client that adopted early. |
+| Reviewer total | 91 / 100 | |
+
+Result: **PASS**. Unresolved blocking findings: none.
+Validation: existence checks of child PRDs and cited commits (ls, git log); `./prd check` (cwd `/Users/feb/dev/cartridge/prd.ctg`, root graph) exit 0 with 228 records and no problems (needs resolve, no cycle); `just --list` (cwd `/Users/feb/dev/cartridge`) shows `test`/`smoke`; relative links checked. No product gates were run.
+Reviewer: agent (independent reviewer, plan refresh pass). User rating: not requested (delegated).
+Rounds used / remaining: 4 / 1.
+Next action: implement open leaves; this parent closes only on its integration acceptance.

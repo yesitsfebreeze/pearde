@@ -29,3 +29,24 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). Presented revision: `prd.md` SHA-256 `9c35ba716e501a108a4a83cd2e6df4a5d2e5acdadd549f2032922efe5268c0a4`.
+
+Reconciliation verdict: **REBASE**, with an ownership shift. After the transport rewrite the host no longer executes tool commands. Cartridges spawn inside their grant (`src/node.rs` `cartridge.spawn`, `src/sandbox.rs`). `memo.ctg/src/validation.rs` already emits the frozen invocation: stdin source, source revision digest, `just --no-dotenv --one --justfile -` argv, execution base, `launch_authorized: false`. Nothing executes it. Decisions `tui-and-tools-are-cartridges`, `a-cartridge-brings-its-own-surface` and `the-tool-contract-is-a-memo` place execution behavior in a cartridge, not in core. Revision: the current route is stated; recommended default is memo executing its own approved invocation inside its grant; the integration gate is `just test memo` plus `just test runtime`.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 18 | The tool-contract decision still wants executable memos; −2: the executor boundary is not settled. |
+| Ownership and reuse | 15 | Reuses memo's frozen invocation; −5: `repo`/board are runtime while the recommended owner is memo; rehome is needed. |
+| Dependencies and slices | 15 | Needs resolve (`@memo/.../executable-document-validation` specced, `@gitfs/tool-results-interoperate` done); −5: all three children still describe an "existing host runner" and are not assigned in this pass. |
+| Acceptance and baseline | 17 | End-to-end fixture gate named; −3: depends on child rebase. |
+| Failure and compatibility | 17 | Children retain uncertainty and no-retry semantics; −3: approval source (policy event) not restated for the new route. |
+| Reviewer total | 82 / 100 | |
+
+Result: **FAIL**.
+Blocking findings: (1) children `approved-document-launch`, `document-command-result` and `document-artifact-result` must be rebased to the cartridge-executes route; they are not in any reviewer's list. (2) Owner rehome to the memo board must be decided by the coordinator (or the user, if memo's owner disagrees).
+Validation: reading of `memo.ctg/src/validation.rs`, `rg Command::new` in memo.ctg and cartridge.ctg `src`, `.cartridge/tools/memo-run`, decision memos, needs resolution. No product gates were run.
+User rating: not required. Rounds used / remaining: 3 / 2.
+Next: coordinator assigns the child rebase and rehome; then round 4.

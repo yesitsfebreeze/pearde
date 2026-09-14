@@ -1,39 +1,36 @@
 ---
-repo: /Users/feb/dev/cartridge/cartridge.ctg
+repo: /Users/feb/dev/cartridge/tools.ctg
 state: open
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: runtime
+capability-owner: runtime
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: improve-tools-bundle-provenance
-needs:
-- '@runtime/improve-tools-preflight'
 footprint:
-- /Users/feb/dev/cartridge/cartridge.ctg/scripts/workspace.py
-- /Users/feb/dev/cartridge/cartridge.ctg/repositories.json
+- /Users/feb/dev/cartridge/tools.ctg/src/service.rs
+- /Users/feb/dev/cartridge/tools.ctg/.cartridge/tests/unit/service/tests.rs
 ---
 
 # Ship bundles with source and dependency provenance
 
-Deliver the provenance contract in the runtime-owned development package, preserving this work ID and its fixture when tools.ctg is relocated. Record repository commits/dirty digests, executable checksums, dependency inventory and recipe/toolchain/configuration identities; do not claim reproducible binary bytes solely from reproducible metadata.
+`bundle` writes a provenance record into `dist/cartridge`. `bundle` and `package` in [service.rs](../../../../../../tools.ctg/src/service.rs) already stage into a temporary folder, refuse a missing Rust binary before publishing (`packaging_refuses_missing_rust_binaries_but_accepts_lua_only`) and rename into place. They record nothing about what was built. The old `scripts/workspace.py` and `repositories.json` inputs no longer exist.
+
+Record `PROVENANCE.json` inside the staged bundle before the rename. It holds, per repository under the composition root (submodules included), the commit and a SHA-256 of `git diff HEAD` when dirty; the SHA-256 of every copied executable; digests of each `Cargo.lock`/`bun.lock` used; the build profile; and the `rustc`, `cargo` and `bun` versions. This is metadata only and does not claim reproducible binary bytes.
 
 ## Acceptance
 
-- [ ] Unchanged fixture inputs yield identical metadata; a changed executable, dependency or dirty source changes its corresponding digest.
-- [ ] Missing required binaries fail before bundle publication, and credentials/private stores never enter the output.
-- [ ] The old command shim and new package produce equivalent manifests during the migration interval.
+- [ ] Two bundles of an unchanged fixture produce byte-identical `PROVENANCE.json` (the record has no timestamp).
+- [ ] Changing a copied executable, a lockfile or a tracked source file (dirty) changes exactly the corresponding digest.
+- [ ] The record contains no environment values, `config.lua` contents, credentials or `.cartridge` store paths. A failing version probe fails the bundle before the rename and keeps the previous `dist/cartridge`.
 
 ## Proof and recovery
 
-Start at [workspace.py](../../../scripts/workspace.py), [repositories.json](../../../repositories.json).
+First extend `package_preserves_entries_binaries_and_notices` in [tests.rs](../../../../../../tools.ctg/.cartridge/tests/unit/service/tests.rs) with a git fixture. Gates, cwd `/Users/feb/dev/cartridge`: `just test tools`, `just check tools`. Not run. Rollback: stop writing the file. Bundles stay loadable without it.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test runtime` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `improve-tools-bundle-provenance`; maximum five rounds.
+No hard prerequisites. Same file as `improve-tools-preflight`, so coordinate landing. Board placement under @runtime is historical. [Review](review.md): inherits 2 rounds.

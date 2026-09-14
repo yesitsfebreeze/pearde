@@ -29,3 +29,18 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). No user score was supplied or invented.
+Reconciliation verdict: **DELIVERED — memory serves its service and agent tool directly: `src/cartridge.rs` provides `memory`, `tool.memory` and `context.memory` (comment: 'the former separate memory-tool cartridge ... lives here'; `cartridge.json` `provide`). The wrapper was removed (root `9e4cde8` 'drop memory-tool'; no `memory-tool.ctg`, no remaining references outside prd.ctg). One-writer and tool reach are tested in `.cartridge/tests/integration/cartridge.rs` (`memory_persists_and_replacement_does_not_open_a_second_writer`, which calls `tool.memory`). Children memory-adapter-core, memory-consumer-parity and memory-wrapper-retirement appear delivered by the same evidence but are outside this reviewer's assignment.**
+
+Presented revision: `prd.md` SHA-256 `f9ce41471f113536e01ead0a00b4c65ba75c0764d0facd229508c4fae8055042`. Frontmatter only changed (review-round, review-status, owner key typo `capability-capability-owner` → `capability-owner`, value unchanged); body unchanged.
+Source inspected: memory.ctg `c25af4d` (main), root `24aa2be`, prd.ctg `077e57a2` plus working tree.
+
+Agent score: not scored (delivered-pending-verification).
+Findings: Recommend verifying the three children against the cited evidence (run `just test` in memory.ctg) before marking done. `state:` left untouched.
+Blocking findings: none.
+Validation: Existence checks only: cited source/test/doc paths exist (`ls`), `needs` targets and local links resolve (script over frontmatter and markdown links), memory.ctg `just --list` shows `check`, `test`, `e2e`, `all`, `eval-mature`, `eval-replay`, `test-reload`. Leaf body word count checked. No product gates were run.
+Rounds used / remaining: 3 / 2.
+Next: Coordinator verification; no further plan revision.

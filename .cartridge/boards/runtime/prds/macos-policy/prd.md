@@ -7,30 +7,35 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: runtime
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: macos-policy
 ---
 
 # macos-policy — macOS commands enforce manifest capabilities through sandbox-exec with verified runtime exceptions and real allowed/denied operation tests.
 
-macOS commands enforce manifest capabilities through sandbox-exec with verified runtime exceptions and real allowed/denied operation tests.
+The wall ships already. `src/sandbox.rs` builds a `(deny default)` profile for
+`sandbox-exec` from the grant. It writes canonical path spellings, escapes them
+in `literal()`, documents all-or-nothing networking, and allows the implicit
+runtime lines. The proof is thin: only `the_synchronous_command_enforces_the_empty_grant`
+runs a real child, and every other test in
+`.cartridge/tests/unit/src/sandbox/tests.rs` checks profile text. This item
+supplies the missing behavioral proof and justifies each runtime exception.
 
 ## Acceptance
 
-- [ ] A real child proves granted and denied read/write/exec behavior, including canonical paths, scripts and escaped profile text.
-- [ ] An empty grant denies networking; a nonempty macOS grant has the documented coarse network limitation.
-- [ ] Runtime exceptions are justified by an actual child operation; a boot failure is not counted as a resource-denial pass.
+- [ ] Real children prove: a granted write succeeds and an ungranted one is denied, a read outside the grant is denied, a granted exec runs and an ungranted one is denied, and a script runs through its interpreter.
+- [ ] An empty `net` denies a real TCP connect; a nonempty grant allows it (the documented coarse limit); a path containing a quote or backslash yields a profile `sandbox-exec` accepts, without widening access.
+- [ ] Each implicit allowance (`/usr/lib`, `/System/Library`, `/dev`, `/etc`, metadata, semaphores, `sysctl-read`, `mach-lookup`, `process-fork`) is tied to a child operation that fails without it, or gets a recorded reason. A boot failure never counts as a denial pass.
 
 ## Proof and recovery
 
-Start at [runtime.rs](../../../../../../cartridge.ctg/src/runtime.rs), [service.rs](../../../../../../cartridge.ctg/src/service.rs).
+Add cases to `.cartridge/tests/unit/src/sandbox/tests.rs` using the existing
+`wall_fixture` pattern. Gates, from `/Users/feb/dev/cartridge` on macOS:
+`just test runtime` and `just check runtime` (not yet run). Record the `just smoke` baseline first: mcp and proxy already fail
+(release-status note). Remove an unjustified allowance only if smoke shows no
+new failure against that baseline. Otherwise it stays, with its reason recorded.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test runtime` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-External evidence prerequisites: [command-adapter](../../../.pearde/prds/the-sandbox/command-adapter/prd.md). Resolve their current completion and source revision before claiming.
-
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `macos-policy`; maximum five rounds.
+No hard prerequisite. [Review](review.md): round 3/5.

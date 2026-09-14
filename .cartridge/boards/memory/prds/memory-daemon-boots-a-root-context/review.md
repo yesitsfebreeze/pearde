@@ -31,3 +31,27 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). No user score was supplied or invented.
+Reconciliation verdict: **REBASE — memory now runs under two lifecycles: CLI daemon (`run_server`, `src/commands/src/commands_serve.rs`) and the transport cartridge ported 2026-09-14 (`9cc0f0b`; `on_dispose` in `src/cartridge.rs`). Plugin-tree/root-Context design (memory decision `memory-is-a-plugin-tree`) conflicts with `.cartridge/docs/AGENTS.md` scope and stays dropped. Demonstrated gaps: non-model mutations admitted during drain (`src/rpc/src/server.rs` MODEL_DEPENDENT gate), eviction before boot validation (`evict_predecessor`), `ready` lacks store state.**
+
+Presented revision: `prd.md` SHA-256 `5520344fa06c02d6251f3f7bd384376de710ca874bbfb4aa15a25cdcc1f6495f`. Rebased in this round (prior text `31202a1f7eb4e949a8b1d34831b4dcc09dc0bc719ff67fb6ac9e2be0ba5b8725`).
+Source inspected: memory.ctg `c25af4d` (main), root `24aa2be`, prd.ctg `077e57a2` plus working tree.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 18 | Durability/ownership gaps confirmed in source. -2: impact of late mutations during save not measured. |
+| Ownership and reuse | 19 | Existing latch, writer lock and e2e harness reused. -1. |
+| Dependencies and implementable slices | 17 | Three gaps in one leaf. -3: they share files and a lifecycle but could land separately; stated per-gap rollback mitigates. |
+| Observable acceptance and baseline evidence | 18 | Named tests per check. -2: 'store-directory validation' before eviction is limited because the lock cannot be taken first; probe must define it. |
+| Failure, recovery and compatibility | 18 | Writer lock and guarded flush stay the boundary. -2: cartridge-mode ordering (drain before latch) change not fully specified. |
+| Reviewer total | 90/100 | |
+
+Agent score: **90/100 — PASS**.
+Findings: Obsolete plugin framing replaced with three source-observed gaps and current file paths.
+Blocking findings: none.
+Validation: Existence checks only: cited source/test/doc paths exist (`ls`), `needs` targets and local links resolve (script over frontmatter and markdown links), memory.ctg `just --list` shows `check`, `test`, `e2e`, `all`, `eval-mature`, `eval-replay`, `test-reload`. Leaf body word count checked. No product gates were run.
+Rounds used / remaining: 3 / 2.
+Next: Reproduce each gap in e2e; land before memory-signals-become-events.

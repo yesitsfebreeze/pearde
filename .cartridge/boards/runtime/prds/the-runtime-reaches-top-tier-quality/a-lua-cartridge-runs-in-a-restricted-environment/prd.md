@@ -3,6 +3,9 @@ state: "open"
 origin: requested
 priority: 70
 repo: "/Users/feb/dev/cartridge/cartridge.ctg"
+work-kind: leaf
+review-round: 2
+review-status: delivered-pending-verification
 needs:
 - "@runtime/launch-authority"
 - "@runtime/the-runtime-reaches-top-tier-quality/lua-calls-into-the-host-without-blocking-a-worker"
@@ -24,4 +27,4 @@ A Lua cartridge gets the same confinement story a process cartridge gets: nothin
 
 ## Review
 
-[Round 1 agent review](review.md): 72/100 FAIL, 1/5 rounds used. Held behind the prerequisites above and an in-flight, uncommitted refactor of `src/lua.rs` by another session; revise `specs/spec01.md` on that commit.
+[Review history](review.md): round 2/5, reconciled DELIVERED at `e8a4da3`/`ba198f4`; round-1 hold and spec01 are historical.

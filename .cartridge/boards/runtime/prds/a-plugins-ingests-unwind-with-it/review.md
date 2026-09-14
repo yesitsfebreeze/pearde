@@ -29,3 +29,17 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reconciliation verdict: **SUPERSEDED**. The fiber/effect model this outcome was built on is gone: plugin projections identified by owner generation and effect ID no longer exist. It was replaced by node processes that serve their own sockets (cartridge.ctg 939e7d1, ee7e295; `docs/architecture.txt`). The runtime part is delivered by construction:
+- Disposal is per node (`cartridge.on_dispose`, `docs/transport.txt`).
+- `stop_slot` bumps the generation before stopping, and replacement runs one at a time under the host `op` lock (`src/host/mod.rs:469-534`). A stale disposer therefore cannot overlap its successor.
+- A stale exit is ignored by generation (mod.rs:455).
+
+What remains belongs to memory. `memory.ctg/src` has no source-retraction operation (`rg retract` finds nothing; only `delete_one_memory` at `src/store/core/src/lib.rs:808`). Under decision `a-cartridge-brings-its-own-surface`, a cartridge would reach that through a declared need on a memory-owned event, not through runtime unwinding. The PRD also links the absent `src/runtime.rs`/`src/service.rs`.
+Presented revision (frontmatter status only changed): `3e4cc316a5a1174887fdfb2ef8307c15169bd9d39240a4942bf1d8361572a9e7` (stale body digest `1aa6887a6b83b1991047683ed5523b504f911bcee7eb9d8ac512148cf66389f9`).
+Recommendation: retire here. The coordinator decides whether @memory needs a leaf for source retraction with provenance, which would inherit this scope's 3 used rounds. No score needed.
+Validation: cheap existence checks only — ls/rg over cartridge.ctg (HEAD c9ef10b), tools.ctg (caea5b7) and memory.ctg (c25af4d) source; `git remote -v`; `just --list` at /Users/feb/dev/cartridge; relative-link resolution over prd.md; `shasum -a 256`. No product gates were run.
+Reviewer: agent (independent reviewer, plan refresh pass). User rating: not required under delegation; none supplied.
+Rounds used / remaining: 3 / 2. Next action: coordinator retire/rehome decision.

@@ -29,3 +29,17 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass).
+Reconciliation verdict: **DELIVERED** (pending verification). The PRD designates itself memory-contributor acceptance under landscape-composes-system-context; that scope exists in current source and tests:
+- A memory-only fact and a document fact from one `context` prepare with attribution and exact readback, no requery: `memo.ctg/.cartridge/tests/integration/context.test.ts` ("native shared context and exact readback retain attribution…"); `memory.ctg/.cartridge/tests/unit/src/cartridge/source.rs` (`memory_fact_joins_shared_context_and_exact_readback_without_requery`).
+- Missing/changed references explicit, never re-queried: `exact_missing_changed_prefix_and_invalid_references_never_requery`; context.test.ts `changed`/`invalid_reference` cases.
+- Disabled/absent/unavailable/timeout memory keeps other results within the deadline: `unavailable_malformed_empty_and_inactive_memory_preserve_other_sources`, `deadline_drops_pending_read_without_starting_later_hydration`; context.test.ts "optional states and a delayed read…".
+- Provider: `memory.ctg/src/source.rs` (`context.memory`), consumer `memo.ctg/src/context.rs`. Sibling PRDs @landscape/landscape-composes-system-context/memory-context-contributor and @memo/landscape-context-facade are `done`.
+Residual not covered (outside this PRD's canonical scope): tool hits appear in the `fabric` op, not the `context` op, so "memo/tool phrase" is met for documents and kernel only.
+Reviewed revision: `8bef1a42cbe5009026febf07a9b1463f149f4cccab894a9e710675e2a7b10d64`; after frontmatter-only update (review-round, review-status) `11b26820f2ebe2fb6d184e9cdff79069ca83fe5e662ff65c3e658f45b71b3f60`, no semantic change. Stale body links to `landscape.ctg` and gate `just test landscape` were left unrevised because the item is delivered. Source inspected at memo.ctg 9a1cf99, memory.ctg c25af4d, sessions.ctg e9725e8, cartridge.ctg c9ef10b (dirty working tree), prd.ctg 077e57a2 working tree.
+Score: not scored (delivered). Result: delivered-pending-verification; `state:` unchanged.
+Verification to run before marking done, from /Users/feb/dev/cartridge: `just test memory`, `just test memo`, `bun test memo.ctg/.cartridge/tests/integration/context.test.ts`. None were run in this pass.
+Rounds used / remaining: 3 / 2.

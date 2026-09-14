@@ -1,44 +1,41 @@
 ---
-repo: /Users/feb/dev/cartridge/cartridge.ctg
+repo: /Users/feb/dev/cartridge/memo.ctg
 state: open
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-owner: landscape
+capability-owner: memo
 work-kind: rollup
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: landscape-composes-system-context/live-file-context-contributors
 needs:
+- "@landscape/landscape-composes-system-context/live-file-context-contributors/file-kernel-evidence-adapter"
 - "@memo/landscape-file-kernel-context-facade"
-- "@memo/landscape-live-owner-context-facade"
-
+- "@landscape/landscape-composes-system-context/live-file-context-contributors/live-owner-evidence-adapters"
 ---
 
 # File and live context retain owner and freshness
 
-Adapt existing file/kernel/live sources to the shared row contract without starting inactive providers.
+Roll-up only; claim a leaf. memo's `context` operation (`memo.ctg/src/context.rs`, providers per `memo.ctg/.cartridge/docs/context.md`) composes evidence from every `context.<kind>` event the composition covers. The file and kernel half is delivered: the file/kernel adapter and memo facade are done, and fs listens to `context.file` (fs.ctg transport branch `03f360e`). The live half remains. Session, terminal and route providers belong to sessions, pty and router as `context.<kind>` events, and each receives the trusted caller scope from `@memo/landscape-live-owner-context-facade`.
 
 ## Acceptance
 
-- [ ] A fixture returns separately attributable file and kernel hits.
-- [ ] Source edits invalidate affected cursors while unchanged rows retain identity.
-- [ ] Removed or inaccessible sources return explicit availability within the shared budget.
+- [ ] Each linked leaf is done with revision-bound proof and a passed review.
+- [ ] At one pinned revision set, a single `context` prepare returns separately attributed `file`, `kernel`, `session`, `terminal` and `route` rows. Exact readback of each is `available`.
+- [ ] After a source edit, the affected row's readback is `changed` while unchanged rows keep their references. A provider removed from the composition reports `absent`, and the other rows stay within the shared budget.
 
-## Proof and recovery
+## Work items
 
-Start at [lib.rs](../../../../../../../landscape.ctg/src/lib.rs), [surface.rs](../../../../../../../landscape.ctg/src/surface.rs).
+- [File and kernel evidence use one attributed shared row contract](file-kernel-evidence-adapter/prd.md) (done)
+- [Expose configured file and kernel evidence through native shared context](../../../../memo/prds/landscape-file-kernel-context-facade/prd.md) (done)
+- [Live owners answer context with scoped metadata](live-owner-evidence-adapters/prd.md)
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test landscape` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Integration gate
+
+From `/Users/feb/dev/cartridge`: `just test memo`, `just test fs`, and `bun test memo.ctg/.cartridge/tests/integration/context.test.ts`, plus the live leaves' gates. None has run for this plan.
 
 ## Review
 
-[Round 2 agent review](review.md). Inherits round 1 from `landscape-composes-system-context`; maximum five rounds.
-
-## Owner split and freshness interpretation
-
-The original three acceptance checks above remain preserved. Current shared context uses exact references/readback and Prepared revision, not cursors. Per coordinator review, source edits must invalidate affected exact readback/prepared revisions; frozen inventory cursors retain their separate observed-name snapshot contract. No speculative paging is introduced.
-
-FS owns exact readonly file snapshots; Landscape owns shared file/kernel adapters; memo owns native integration. Historical session and terminal metadata become explicit owner prerequisites, and existing @router/improve-router-route-explanation supplies the router capability boundary. Separate Landscape and memo follow-ups integrate those sources; this parent remains open until those live-source outcomes also pass. See work-map-proposal.json. No duplicate router work item is added.
+[Review history](review.md). Rounds 1–2 are inherited from `landscape-composes-system-context`; round 3 rebased; five rounds maximum. Target board after rehoming: memo.

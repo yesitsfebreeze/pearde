@@ -29,3 +29,23 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). Presented revision: `prd.md` SHA-256 `0a061b731d1bc6dfdca584c2f752369af29a8fa5958dcc39671cb3d58af07a93`.
+
+Reconciliation verdict: **REBASE** (partially delivered). `src/sandbox.rs` ships the sandbox-exec profile: `(deny default)`, canonical path spellings, `literal()` escaping, all-or-nothing net documented, sockets and semaphores. One real-child test exists (`the_synchronous_command_enforces_the_empty_grant`); the other tests assert profile text. The old starting files and command-adapter link are gone. Revision: the outcome is narrowed to the missing behavioral proofs and exception justification, and the known-red smoke baseline is recorded (release-status note).
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Converts text-only tests into real enforcement proof; −1: the implicit-allowance audit may be sizeable. |
+| Ownership and reuse | 19 | Existing `wall_fixture` pattern and test file; −1: none beyond board-level. |
+| Dependencies and slices | 19 | No needs; macOS-only; −1: shares `sandbox.rs` with linux-policy and launch-authority. |
+| Acceptance and baseline | 18 | Concrete allow/deny operations; −2: no baseline run; TCP connect fixture target unspecified. |
+| Failure and compatibility | 18 | Removal of allowances is gated on the smoke baseline; −2: the smoke baseline is already red, which weakens that guard. |
+| Reviewer total | 93 / 100 | |
+
+Result: **PASS**. Blocking findings: none. This is not DELIVERED: the behavioral proof it requires does not exist.
+Validation: reading of `src/sandbox.rs` and `.cartridge/tests/unit/src/sandbox/tests.rs`, and `.cartridge/memos/note/release-status.md`. No product gates were run.
+User rating: not required. Rounds used / remaining: 3 / 2.
+Next: add real-child allow/deny cases.

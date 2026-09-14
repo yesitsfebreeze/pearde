@@ -3,6 +3,8 @@ state: open
 origin: requested
 priority: 60
 repo: "/Users/feb/dev/cartridge"
+review-round: 1
+review-status: superseded-recommend-retire
 ---
 
 # Unit/process tests time out and redden after settings refactor raised startup_timeout.

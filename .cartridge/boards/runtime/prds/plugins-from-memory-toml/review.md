@@ -29,3 +29,18 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14 (reconciliation, no score)
+
+Reviewer: agent (independent reviewer, plan refresh pass). Presented revision: `prd.md` SHA-256 `2730ac77ef51ca98bde8801da3571b2cc297c1b6278e5382c5a48b13a095208b` (frontmatter review fields only; body unchanged).
+
+Reconciliation verdict: **SUPERSEDED**. The `[[plugin]]` rows in `memory.toml` and `memory plugins reload` do not exist in memory.ctg (`rg -i plugin memory.ctg/src/config` finds nothing). Composition is the host's:
+- Profile entries `{id, path, disabled, config, inject}` in `.cartridge/init.lua`, laid over by `config.lua` (`cartridge.ctg/src/loader/entries.rs`).
+- A duplicate entry id is refused (`entries.rs:71` "duplicate entry id").
+- Reload is `Host::replace`/`reconcile` (`src/host/socket.rs:301`).
+- Decision `a-cartridge-brings-its-own-surface` (2026-09-14, user) puts optional wiring in the profile and `config.lua`, never in a sibling's config.
+
+The remaining generic checks (invalid candidate profile preserves the running composition) belong to host composition work such as `@runtime/cartridges-compose-recursively` / `the-profile-is-the-root-composer`, not to this item.
+Recommendation: retire; keep the round-1 source as history. `state:` unchanged.
+Validation: `rg` in memory.ctg and cartridge.ctg `src/loader`/`src/host`, decision memo read. No product gates were run.
+Rounds used / remaining: 3 / 2.

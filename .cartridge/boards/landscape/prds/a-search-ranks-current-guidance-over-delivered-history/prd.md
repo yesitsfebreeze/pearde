@@ -1,34 +1,31 @@
 ---
-repo: /Users/feb/dev/cartridge/cartridge.ctg
+repo: /Users/feb/dev/cartridge/memo.ctg
 state: open
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-owner: landscape
+capability-owner: memo
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: a-search-ranks-current-guidance-over-delivered-history
 ---
 
-# a-search-ranks-current-guidance-over-delivered-history
+# Fabric search ranks current guidance above delivered history unless history is asked for
 
-Add explicit current-guidance versus historical-evidence query intent to the existing ranker rather than universally demoting completed records. Retain measured paraphrase fixtures, source labels and usage evidence with bounded influence.
+The memo `fabric` query ranks graph nodes in `memo.ctg/src/fabric_graph.rs` (`search`: name/when 3.0, tags 2.0, description 1.0, times `1 + ln(1 + uses)`) and ignores lifecycle, so done work memos whose names share query words outrank the routine that applies (measured 2026-09-12 in root `.cartridge/memos/work/a-search-ranks-current-guidance-over-delivered-history.md`). The landscape crate no longer exists; memo owns this ranker. Reuse the `status`/`superseded_by` vocabulary `memo.ctg/src/usage.rs` already emits; add no second ranker or store.
 
 ## Acceptance
 
-- [ ] Both existing repository-gate questions find the applicable current routine in the required top positions.
-- [ ] A query asking what shipped or why an old decision changed can return done/superseded evidence with its status intact.
-- [ ] Equivalent snapshots sort deterministically; repeated observation counts cannot override scope, invalid-source or current-intent constraints.
+- [ ] In a fixture holding `routine/repository-checks.md` and four `status: done` gate work memos, "run only the gates the change touches" returns the routine in the top five and "which gates do I run before committing" returns it first.
+- [ ] With an explicit `intent: "history"`, done and superseded memos rank by match alone and each hit carries `status`; a demoted hit under the default `current` intent says why; an unknown intent is refused without results.
+- [ ] Equal scores order by key; journal counts never lift a done memo above current guidance under `current` intent. A node without `status` ranks as current.
 
 ## Proof and recovery
 
-Start at [lib.rs](../../../../../../landscape.ctg/src/lib.rs), [surface.rs](../../../../../../landscape.ctg/src/surface.rs).
+Start: `memo.ctg/src/fabric_graph.rs`, `memo.ctg/src/graph.rs` (`memo_node` must carry `status`), `memo.ctg/src/service.rs` (fabric request), tests `memo.ctg/.cartridge/tests/unit/src/fabric_graph.rs`. First add both queries as failing unit cases and record the observed order. Gates from /Users/feb/dev/cartridge: `just test memo`, `just check memo` (not run for this plan). Excluded: `resolve` ordering, memory hits. Rollback: ranking is derived; reverting restores the prior order with record and journal untouched.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test landscape` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `a-search-ranks-current-guidance-over-delivered-history`; maximum five rounds.
+No hard prerequisites. Target board after rehoming: memo. [Review history](review.md); rounds inherited, maximum five.

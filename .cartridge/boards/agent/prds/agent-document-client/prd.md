@@ -7,8 +7,8 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: agent
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: superseded-recommend-retire
 canonical-scope: clients-share-document-execution
 needs:
 - '@mcp/clients-share-document-execution/client-document-contract'

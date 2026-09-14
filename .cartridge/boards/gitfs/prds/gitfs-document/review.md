@@ -29,3 +29,21 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14 (reconciliation)
+
+Reconciliation verdict: **SUPERSEDED**.
+
+Reviewed revision: prd.md SHA-256 `01d522d0c3313a26316d46d750e6ad347fb7556193188550e8d02eca2de7112e` (frontmatter afterwards set to review-round 3 / superseded-recommend-retire; body unchanged). Source revisions: gitfs.ctg ebcb3d6; cartridge.ctg c9ef10b; prd.ctg 077e57a2 (dirty tree).
+
+Owner evidence: session overlays (`refs/gitfs/<session>`), explicit materialize with a disk-change guard and reviewed ship are native (`gitfs.ctg/src/store.rs` 1-4, 474-534; `gitfs.ctg/src/ship.rs`; decision `.cartridge/memos/decision/gitfs-overlay-and-ship.md`; tests `gitfs.ctg/.cartridge/tests/unit/store/tests.rs` `materialize_guard`, `unrelated_overlay_sessions_do_not_share_a_mutation_lock`). Release note `.cartridge/memos/note/release-status.md` reports 6 failing gitfs workspace tests after the port; that is an implementation regression, not a reason to keep this document leaf.
+
+Program-level evidence (shared by the owner-document leaves): the host was rewritten on the transport protocol (cartridge.ctg 939e7d1, ee7e295 "Events are the interface", c9ef10b) and every client now executes the same injected `tool.*` keys (`agent.ctg/src/main.rs` 19-26, `mcp.ctg/src/service.rs` 36-38/74, `proxy.ctg/src/service.rs` 42-43/122). Decision `.cartridge/memos/decision/a-cartridge-brings-its-own-surface.md` (2026-09-14, decided_by user) puts each cartridge's surface and `.cartridge/help.md` in its own directory, rebuilt by `cartridge help`; decision `the-tool-contract-is-a-memo.md` keeps Rust cartridges serving what a memo cannot express. No owner ships a `.cartridge/documents/` tool document, and the shared runner (`@runtime/one-runner-executes-documents`) and `@mcp/clients-share-document-execution` remain open and stale.
+Additional staleness: starting-file links resolved against the old owner-local board location; the files now live under `src/`.
+Disposition: retire recommendation (coordinator/user). Do not delete; `state:` unchanged. If an executable wrapper is still wanted, it belongs to the open root work memo `.cartridge/memos/work/a-tool-is-declared-by-its-memo.md`, not to this owner leaf.
+No score recorded (superseded verdicts need none).
+Validation: ls/rg existence checks, `git log` of the owner and cartridge.ctg, decision memo reads. No product gates were run.
+Reviewer identity: agent (independent reviewer, plan refresh pass). User rating: not required. User feedback: none supplied.
+Result: SUPERSEDED — recommend retire. Unresolved blocking findings: none for this leaf; the program parents need the same reconciliation.
+Rounds used / remaining: 3 / 2.
+Next action: coordinator confirms retirement or reopens under the tool-memo work.

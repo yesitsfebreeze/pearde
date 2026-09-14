@@ -29,3 +29,23 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). Presented revision: `prd.md` SHA-256 `069bee2e74bc4356cbb2c5db2c8a3f5f0cd701e7f160023c9ead9504e63418ab`.
+
+Reconciliation verdict: **REBASE**. Not delivered: no evidence cache exists (`rg` for evidence/digest in `.cartridge/tools/memo-run` and cartridge.ctg `src` finds none; `cartridge verify` runs selftests without recording). The old starting files `src/runtime.rs`/`src/service.rs` are gone. Gates now live in the root composition routine `.cartridge/memos/routine/cartridge-development.md`, and cartridge.ctg is "the base, not a composition" (`b1494bb`). Revision: `repo` moved to the composition root; key inputs named concretely; evidence under ignored `.cartridge/empirical/`; test file creation and test-entry extension stated. Already delivered and retained as a regression: per-worktree targets (the `_cargo` recipe sets `CARGO_TARGET_DIR` for git worktrees).
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 18 | Stale-evidence detection without running; −2: the original user trigger (a version bump) was replaced by digest keys in round 1; the version is retained as descriptive. |
+| Ownership and reuse | 17 | Reuses the root routine and memo-run; −3: runtime board vs composition owner; the routine files are currently uncommitted in the root checkout. |
+| Dependencies and slices | 19 | No needs; one leaf; −1: dependent-owner staleness needs the owner graph (`cartridge.json` needs). |
+| Acceptance and baseline | 18 | Three observable checks plus a test file; −2: no baseline. |
+| Failure and compatibility | 18 | A failure never masks a success; deleting evidence resets safely; −2: concurrent runs writing the same evidence file are not addressed. |
+| Reviewer total | 90 / 100 | |
+
+Result: **PASS**. Blocking findings: none. Findings: rehome to the root board (coordinator); specify atomic evidence writes in the spec.
+Validation: reading of `cartridge-development.md` and `memo-run`, `ls .cartridge/tests/integration`, `.gitignore` for `/.cartridge/empirical/`, `git ls-files` (routine and justfile untracked). No product gates were run.
+User rating: not required. Rounds used / remaining: 3 / 2.
+Next: commit the root routine files, then write the fixture test.

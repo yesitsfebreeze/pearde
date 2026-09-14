@@ -7,8 +7,8 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: pty
 work-kind: rollup
-review-round: 2
-review-status: stale-after-migration
+review-round: 4
+review-status: passed
 canonical-scope: improve-pty-programme
 needs:
 - '@pty/improve-pty-shell-identity'
@@ -18,19 +18,25 @@ needs:
 
 # PTY and shared shell improvement plan
 
-Coordinate the linked owner outcomes and record their combined evidence; claim a leaf for implementation.
+Roll-up only; claim a leaf for implementation. Shell identity is done (pty e8e6b31).
+Preemption and busy behaviour are settled once, in input ownership; command ids and waits
+live only in command wait. `@pty/pty-document` reuses both and is not a child here.
+Both open leaves share `src/main.rs`, `src/tool.rs` and the integration test file: land them
+sequentially, rebasing the second.
 
 ## Acceptance
 
-- [ ] Each linked leaf passes its own review and observable acceptance.
-- [ ] Record tested mitigations and remaining limitations at the integrated revisions.
+- [ ] Each linked leaf is done with its own revision-bound proof and passed review.
+- [ ] At one pinned pty revision, `just test pty` (cwd `/Users/feb/dev/cartridge`) passes, or each remaining failure is named (release-status currently lists two).
+- [ ] Remaining limitations are recorded at that revision.
 
 ## Work items
 
-- [Return explicit shell and working-directory identity](../improve-pty-shell-identity/prd.md)
-- [Coordinate human and agent input on the shared terminal](../improve-pty-input-ownership/prd.md)
-- [Wait and retrieve output for one terminal command](../improve-pty-command-wait/prd.md)
+- [Return explicit shell and working-directory identity](../improve-pty-shell-identity/prd.md) — done
+- [Coordinate human and agent input on the shared terminal](../improve-pty-input-ownership/prd.md) — open
+- [Wait and retrieve output for one terminal command](../improve-pty-command-wait/prd.md) — open
 
-## Review
+## Failure and review
 
-[Round 2 agent review](review.md). Inherits round 1 from `improve-pty-programme`; maximum five rounds.
+If a leaf exhausts its review allowance, this parent stays open and records that leaf's gaps;
+done leaves are not reopened. [Review history](review.md); limit five rounds.

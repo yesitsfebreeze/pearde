@@ -29,3 +29,27 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reconciliation verdict: **REBASE**
+
+Reviewer: agent (independent reviewer, plan refresh pass). Presented revision: `prd.md` SHA-256 `6f3c241ba286e4ddf2c34ac395f2b0149253bbf9b352c0b9becd6ce6f0d8cc2f`. Composition: root `24aa2be` (dirty), memo.ctg `9a1cf99`, memory.ctg `c25af4d`, cartridge.ctg `c9ef10b`, prd.ctg `077e57a2` (dirty).
+Change: the transport host already runs declared contracts: manifest `selftest`/`integration` keys (cartridge.ctg/src/loader/document.rs:27), `Host::verify`/`verify_one`/`run_contracts` (cartridge.ctg/src/host/run.rs:72-190), CLI `Verify` (src/cli/args.rs:126), `just verify`, unit test `verify_sends_every_declared_contract`. The old text re-invented a probe declaration and started at settings.md/justfile only. Rebased to a coverage census inside `cartridge verify`; dropped the stale debug-mode prerequisite (blocked memo citing `builtin/memory/.zirkle` paths). Pre-revision SHA-256 `977133b9779fe342d0451508ea65eb8e3d4beb255a4f414db7b0a2e588fdfbb8`.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Value and scope | 18 | Real gap: only harness.ctg and tools.ctg declare `selftest`; uncovered cartridges pass silently. -2: coverage lines alone do not add contracts. |
+| Ownership and reuse | 17 | Reuses the existing contract mechanism and test helpers. -3: host-owned work homed in the root board; rehome to runtime recommended. |
+| Dependencies and slices | 19 | No hard needs; shared `host.rs` footprint with tool-probes named. -1: follow-up per-cartridge contracts not yet itemised. |
+| Acceptance and baseline | 19 | Three observable checks with exact fixture location and gates `just test cartridge`, `just check cartridge`. -1: output wording not pinned beyond `no contract`. |
+| Failure and compatibility | 18 | Compatibility kept (informational lines, exit codes unchanged, manifests without contracts load). -2: no statement on `verify_one` coverage output. |
+
+Agent score: **91/100 — PASS**.
+Findings: Old plan duplicated an existing mechanism (would not have passed). Rebased revision is small and verifiable.
+Unresolved blocking findings: none.
+Disposition: keep; rehome to `@runtime` recommended.
+Validation (cwd /Users/feb/dev/cartridge): existence checks of the named starting files, fixtures and justfile recipes (`.cartridge/justfile`: check, test, smoke, verify; root `justfile`: isolation); `rg` for the named symbols and tests; `git log` in the owner submodules; a script resolving every `needs` target to `boards/<owner>/prds/<slug>/prd.md` and every relative link; `shasum -a 256`. No product gates (`just check`, `just test`, `just smoke`, `just verify`) were run.
+User rating: not required under delegation; none supplied.
+Rounds used / remaining: 3 / 2.
+Next action: select when ready; add the fixture beside `verify_sends_every_declared_contract` first.

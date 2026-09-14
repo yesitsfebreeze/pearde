@@ -29,3 +29,18 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reconciliation verdict: **CONFLICT**. The rewritten host starts every enabled entry eagerly, wave by wave, once its `needs` have active listeners (`cartridge.ctg/docs/architecture.txt` LIFECYCLE; `src/host/mod.rs:371` `start_ready`; commit 939e7d1). Decision `a-cartridge-brings-its-own-surface` (2026-09-14, user) says a need "is resolved before apply" and the host refuses to start a cartridge without a provider. On-demand activation would change that lifecycle. Parts of the old outcome are already delivered: discovery reads only manifests (planning never runs an entry), starts are serialised under the host `op` lock, and an undeclared event is refused immediately at the sender (`docs/transport.txt` CHECKS; test `a_missing_listener_waits_and_says_for_what`). The PRD still links absent `src/runtime.rs`/`src/service.rs`, and its external memo prerequisite describes the retired `core/loader.rs` hello path.
+Presented revision (frontmatter status only changed): `99f83b5508bd920486e7025c271bfd38038daa032c6ff6225b34287f92c34f25` (stale body digest `3953a5e218582b3bf6ae167b616009910465c01a1a417f6e107eaefa71d9ec36`).
+
+Alternatives for the user:
+- A. Retire. Eager wave start is the chosen model; the delivered parts above cover discovery and refusal. Recommended unless startup cost is measured to matter.
+- B. Opt-in `lazy = true` profile entry. It counts as satisfying dependents' needs while inactive; the first send starts it once and the sender waits within `timeout_ms`. A start failure surfaces as the send's `failed` outcome. Touches `start_ready`, `sender`/`bail`/`gather` in host/mod.rs and relaxes the decision's resolve-before-apply reading for lazy entries.
+- C. Idle-stop of unused entries instead (not originally requested).
+
+Not scored: needs a user decision. Unresolved blocking finding: lifecycle choice A/B/C.
+Validation: cheap existence checks only — ls/rg over cartridge.ctg (HEAD c9ef10b), tools.ctg (caea5b7) and memory.ctg (c25af4d) source; `git remote -v`; `just --list` at /Users/feb/dev/cartridge; relative-link resolution over prd.md; `shasum -a 256`. No product gates were run.
+Reviewer: agent (independent reviewer, plan refresh pass). User rating: not required under delegation; none supplied.
+Rounds used / remaining: 3 / 2. Next action: user decision; on B, one rebase revision against host/mod.rs.

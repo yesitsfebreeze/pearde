@@ -29,3 +29,27 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). No user score was supplied or invented.
+Reconciliation verdict: **REBASE — fixtures and per-layout/per-category reporting already exist (`.cartridge/tests/integration/bench/mature.json`, `replay.json`, `bench/src/replay.rs`, `RESULTS.md` linked_evidence 0.967/0.532/0.511), so round-2 acceptance 1 was largely delivered; the decision itself is absent (WORK_ITEMS.md MEMORY-004 open). Old starting files were wrong. The partial-cold-status check moved to parked-memory-remains-recallable to remove overlap.**
+
+Presented revision: `prd.md` SHA-256 `5f15705e724fb64ca1c3e4d35c30b85ecb8becb163c4513447bfe6eda98faf47`. Rebased in this round (prior text `787bc978ec7f65fc43863a9b509744aa22c951542c9f7135dc200cfca6a79edd`).
+Source inspected: memory.ctg `c25af4d` (main), root `24aa2be`, prd.ctg `077e57a2` plus working tree.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 19 | Measured 0.53 vs 0.92 deficit; bounded to a decision. -1. |
+| Ownership and reuse | 20 | Reuses existing harness, fixtures and recipes; no default switch. |
+| Dependencies and implementable slices | 18 | No needs. -2: evals' offline status unconfirmed; stop condition given. |
+| Observable acceptance and baseline evidence | 18 | Pre-declared thresholds, three layouts, recorded decision. -2: 'stated noise' not quantified in RESULTS.md yet. |
+| Failure, recovery and compatibility | 17 | Candidates behind an off knob; rejected code not merged. -3: no bound on candidate count/effort. |
+| Reviewer total | 92/100 | |
+
+Agent score: **92/100 — PASS**.
+Findings: Delivered parts recorded; scope narrowed to the decision; overlap with parked-memory removed.
+Blocking findings: none.
+Validation: Existence checks only: cited source/test/doc paths exist (`ls`), `needs` targets and local links resolve (script over frontmatter and markdown links), memory.ctg `just --list` shows `check`, `test`, `e2e`, `all`, `eval-mature`, `eval-replay`, `test-reload`. Leaf body word count checked. No product gates were run.
+Rounds used / remaining: 3 / 2.
+Next: Rerun baseline evals and write thresholds before candidates.

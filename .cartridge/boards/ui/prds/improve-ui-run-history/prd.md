@@ -5,10 +5,10 @@ origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: ui
+capability-owner: ui
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 4
+review-status: passed
 canonical-scope: improve-ui-run-history
 needs:
 - '@sessions/improve-sessions-recovery'
@@ -17,28 +17,25 @@ footprint:
 - /Users/feb/dev/cartridge/tui.ctg/ui/palette.tsx
 - /Users/feb/dev/cartridge/tui.ctg/ui/activity.ts
 - /Users/feb/dev/cartridge/tui.ctg/src/chat.ts
-- /Users/feb/dev/cartridge/tui.ctg/tests/transcript.test.tsx
-- /Users/feb/dev/cartridge/tui.ctg/tests/palette.test.tsx
+- /Users/feb/dev/cartridge/tui.ctg/.cartridge/tests/integration/transcript.test.tsx
+- /Users/feb/dev/cartridge/tui.ctg/.cartridge/tests/integration/palette.test.tsx
 ---
 
 # Reopen completed run evidence after closing the panel
 
-A user can reopen a completed run's transcript and tool outcomes while the foreground terminal remains intact.
+The chat pane keeps one transcript in `ui.state("transcript.v1")` (tui.ctg `ui/index.ts`), which survives module replacement but is not read back from the `sessions` owner, so a past run cannot be reopened after a restart. This leaf lets a user pick a completed run and read its prompts, replies and tool outcomes from the session record while the shell stays in front.
 
 ## Acceptance
 
-- [ ] Complete a fixture run, close/reopen its panel and reload the UI: transcript ordering and outcomes remain available.
-- [ ] Opening history during nvim/alternate-screen use preserves terminal grid/cursor and works at a narrow terminal width.
-
-- [ ] Keep session/PTY state in their existing owners. New UI features can be disabled/reverted without closing the PTY or deleting history. Check module replacement, keyboard navigation and supported terminal widths.
+- [ ] After a fixture run completes, closing and reopening the panel and restarting the UI process show the same transcript order and tool outcomes, read from `sessions`.
+- [ ] A run whose history the owner no longer retains shows an explicit "history unavailable" state, never an empty success.
+- [ ] Opening history while nvim holds the alternate screen keeps the grid and cursor, and it works at 80 columns with keyboard only.
+- [ ] Disabling the history view leaves the PTY open and deletes no session data.
 
 ## Proof and recovery
 
-Start at [index.ts](../../../../../../ui.ctg/ui/index.ts), [palette.tsx](../../../../../../ui.ctg/ui/palette.tsx), [activity.ts](../../../../../../ui.ctg/ui/activity.ts).
+Start at [index.ts](../../../../../../tui.ctg/ui/index.ts), [palette.tsx](../../../../../../tui.ctg/ui/palette.tsx), [activity.ts](../../../../../../tui.ctg/ui/activity.ts), [chat.ts](../../../../../../tui.ctg/src/chat.ts). First probe: record which `sessions` op returns a completed run's events at the current sessions.ctg revision. Extend `transcript.test.tsx` and `palette.test.tsx` in `tui.ctg/.cartridge/tests/integration/`. Gates, cwd `/Users/feb/dev/cartridge`: `just test tui`, `just check tui`. Not run for this plan. Session and PTY state stay with their owners; the UI only reads.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test ui` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `improve-ui-run-history`; maximum five rounds.
+Hard need [@sessions/improve-sessions-recovery](../../../sessions/prds/improve-sessions-recovery/prd.md) is done. Shared footprint with the other [improve-ui-programme](../improve-ui-programme/prd.md) leaves. [Review history](review.md): rounds 1–4 used.

@@ -3,47 +3,24 @@ state: open
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge"
+blast-radius: mid
+workflow: develop-one-cartridge
+work-kind: leaf
+review-round: 1
+review-status: passed
 ---
 
-# Memory tool refuses reads while a live writer holds the bank; attach instead.
+# Memory reads work while another process holds the bank, without a writer-lock error
 
-cartridge_memory query fails with "another memory writer holds this data dir
-(cartridge memory pid 72544)". A live memory_cartridge process owns the store,
-but the tool opens the data dir in Local mode and is refused on the exclusive
-writer lock instead of connecting to the running writer. A running writer
-should be an invitation to attach, not a wall.
-
-The design already intends attachment: memory.ctg/cartridge.json declares
-settings.owner = {endpoint, timeout_ms} — "Attach to another host's bank instead
-of opening one… naming its local socket". transport/owner.rs provides
-read_observed (read-only, validates the owner's identity against the configured
-store); transport/typed.rs Endpoint::memory() derives the socket path
-(/tmp/memory-<tag>-<user>.sock). But ServiceConfig is Local when no owner is
-set, and Local open errors on a held lock.
-
-## Outcome
-
-cartridge_memory query returns recalled facts while a live writer holds the
-bank, without erroring on the lock — by attaching to (or otherwise routing
-through) the running writer rather than fighting it for the file.
+Reported: `cartridge_memory query` failed with `another memory writer holds this data dir (cartridge memory pid 72544)` because a second memory cartridge opened the same `dir` in local mode. memory.ctg already supports explicit read-only attachment (`owner = {endpoint, timeout_ms}`, `ServiceConfig::Attached`, `read_observed`), which by its [contract](../../../../../../memory.ctg/.cartridge/docs/owner-attachment.md) does not discover or start a daemon. Since the transport port (memory.ctg `9cc0f0b`) the cartridge serves `memory`, `context.memory` and `tool.memory` on its own cartridge socket but binds no memory-RPC endpoint, so attachment has nothing to reach. Owner: memory.ctg.
 
 ## Acceptance
 
-- [ ] With a live memory_cartridge holding the bank, cartridge_memory query
-      returns matching facts instead of the writer-lock error.
-- [ ] When no live writer holds the bank, reads still work through the local
-      path as today (no regression).
-- [ ] The attached path validates the owner's identity (same store dir) before
-      serving; a mismatched owner is refused, not silently read.
-- [ ] The running writer actually serves its socket (currently pid 72544 binds
-      none), so attach has an endpoint to reach; confirm the writer runs a
-      serve surface or make the tool discover/bind it.
-- [ ] Writes (ingest) remain correct and non-conflicting under a live writer.
+- [ ] Probe first: with a disposable writer holding a temp bank, record which endpoint a second process can reach and whether the `read_observed` identity handshake works over it.
+- [ ] Recommended default: the writing cartridge serves its read endpoint, and a second cartridge configured with an explicit `owner` returns `query` hits for facts the writer ingested instead of the lock error.
+- [ ] A wrong-store or dead owner is refused with its static status and never falls back to opening the bank locally.
+- [ ] Without `owner` and without a live writer, local reads and ingest behave as today; `ingest` through an attachment fails `readonly_attachment` before connecting.
 
 ## Proof and recovery
 
-Decide between (a) auto-attach: when Local open hits Availability::Held, derive
-Endpoint::memory() for the pinned root and route reads through transport::owner;
-(b) wiring tool.memory with owner pointing at a shared writer. Confirm which
-surface the live writer serves before choosing. Start at memory.ctg/src/cartridge.rs
-(ServiceConfig decision) and transport/src/owner.rs.
+Start at `memory.ctg/src/cartridge.rs` (`service_configuration`, `memory`), `memory.ctg/src/transport/src/owner.rs`, `memory.ctg/src/transport/src/endpoint.rs` and `memory.ctg/src/store/core/src/lock.rs`. Extend `memory.ctg/.cartridge/tests/unit/src/transport/src/owner_test.rs` and `memory.ctg/.cartridge/tests/integration/cartridge.rs` with temp banks only. Gates from `/Users/feb/dev/cartridge`: `just test memory`, `just check memory`; not run for this plan. Stop condition: if the fix needs automatic owner discovery across compositions, stop and raise a question memo, because that reverses the documented explicit-attachment contract. Rehoming to the memory board is recommended.

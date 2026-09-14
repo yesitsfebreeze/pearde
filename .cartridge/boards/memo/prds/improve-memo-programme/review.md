@@ -29,3 +29,18 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14 (reconciliation)
+
+Reconciliation verdict: **DELIVERED**.
+
+Reviewed revision: prd.md SHA-256 `64e8e040c5c2cc720e0f5b702eea3df75c37071d33dfa4b56a085cf0ebf44187` (frontmatter afterwards set to review-round 3 / delivered-pending-verification; body unchanged). Source revisions: memo.ctg 9a1cf99 (post transport port 1d2fa92), cartridge.ctg c9ef10b, prd.ctg 077e57a2 (dirty tree).
+
+Evidence: all three linked leaves are `state: done` with recorded commits — `@landscape/improve-memo-compact-landscape` (cartridge.ctg 422c521, review passed), `@memo/improve-memo-stale-evidence` and `@memo/improve-memo-types-drilldown` (memo.ctg a458148, review accepted). Their behaviors survive the transport port in the current memo tool contract (`memo.ctg/src/service.rs` line 112): `index` returns compact kind metadata before reading one declaration path (types drilldown); `resolve` items carry kind and status "so a done or superseded item is not read as current" (stale evidence); `fabric` returns 5 entries by default with limit 1–20 and cursor paging (bounded discovery, formerly the landscape op, renamed per `.cartridge/memos/decision/the-fabric-lives-in-core.md`).
+Remaining for closure (not a plan defect): acceptance 2 wants an integrated-revision record; run `just test memo` and `just check memo` from /Users/feb/dev/cartridge at memo.ctg 9a1cf99 and record the result before marking done.
+Findings: (1) child link `../../../landscape/prds/improve-memo-compact-landscape/prd.md` still resolves but the landscape board must be rehomed to fabric (coordinator); (2) frontmatter key `capability-capability-owner` is a migration typo present in 68 PRD files board-wide (coordinator, not edited here).
+No score recorded (delivered verdict). Validation: ls/grep of child frontmatter, rg of memo source; no product gates were run.
+Reviewer identity: agent (independent reviewer, plan refresh pass). User rating: not required. User feedback: none supplied.
+Result: DELIVERED — pending verification gate. Unresolved blocking findings: none.
+Rounds used / remaining: 3 / 2.
+Next action: coordinator runs the memo gates and marks the roll-up done.

@@ -29,3 +29,18 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14 (reconciliation, no score)
+
+Reviewer: agent (independent reviewer, plan refresh pass). Presented revision: `prd.md` SHA-256 `c558c9c21db07fabde33e06a9a86d857009277801c591c8d34ca632320bd576b` (frontmatter review fields only; body unchanged).
+
+Reconciliation verdict: **SUPERSEDED**. The plan was to move development implementation under runtime ownership with an old-interface shim. The route taken is different:
+- Decision `tui-and-tools-are-cartridges` gives bundle/lane operations to the `tools` cartridge (`tools.ctg/src/service.rs`: `bundle`, `lane`, `land`, `lane-rm`, with unit and integration tests).
+- Decision `cartridge-repositories-keep-records-and-executable-memos` removed Python, so `scripts/workspace.py` is gone (last touched in `f9b8d9a`).
+- Build/check/test are root routine memos run by `.cartridge/tools/memo-run`.
+- cartridge.ctg `b1494bb` states the runtime is "the base, not a composition", so it must not own composition tooling.
+
+Its needs (`@memory/memory-owns-its-tool/memory-adapter-core`, `@memo/one-document-serves-every-reader/document-identity`) are unrelated to the outcome. Remaining tooling gaps are owned by the rebased `improve-tools-*` leaves.
+Recommendation: retire. Cross-board: `@tools/development-tooling-has-one-home` lists this PRD in `needs`, so the coordinator must drop or replace that need. `state:` unchanged.
+Validation: `ls` of cartridge.ctg `scripts` (absent), `git log -- scripts/workspace.py`, reading of tools.ctg `service.rs`, decision memos. No product gates were run.
+Rounds used / remaining: 3 / 2.

@@ -7,30 +7,37 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: runtime
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: launch-authority
 ---
 
-# launch-authority — Discovery, direct, resolver and nested launches use trusted host-resolved policies while preserving scoped wire behavior and descendant teardown.
+# launch-authority — Every cartridge process starts inside its grant, and nothing it spawns escapes it
 
-Limit this item to mediation of discovery/direct/resolver/nested process starts by the trusted host. First verify whether Host::on_reload is already restored; retain that check as a compatibility prerequisite, and create a separately bounded spec only for a demonstrated remaining reload gap. Do not merge unrelated SDK restoration into launch-policy implementation.
+The transport host (939e7d1, c9ef10b) collapsed the old discovery, direct,
+resolver and nested routes. Manifests are read as data (`src/loader/document.rs`);
+the host starts every node through one call, `src/host/process.rs` into
+`crate::sandbox::command`; and `cartridge.spawn` (`src/node.rs`) runs a child
+from inside the node's wall. What is unproven is that the wall holds for nested
+children and that a refused wall spawns nothing. The CLI `launch` branch
+(`src/cli/host.rs`) stays out of scope: it is the narrow CLI policy kept by
+decision `core-composes-and-the-cli-selects-services`.
 
 ## Acceptance
 
-- [ ] Forged policies/arbitrary command requests are refused, while installed identities resolve against authenticated logical scope.
-- [ ] The three previously observed bypass routes and distinct-grant nested launches run through the real command constructor; private child services and descendant teardown retain their behavior.
-- [ ] Current Rust/Lua wire, reply correlation, event and reload fixtures pass at the same integrated SDK revision; old patch paths are evidence references, not blindly applied changes.
+- [ ] On macOS, `cartridge.spawn` of a program the node's grant does not name fails with a denial reaching the listener, while a granted program runs (real child processes, not profile text).
+- [ ] When the platform wall cannot be built, start fails naming the cartridge, dependents report it unavailable, and no child process exists. This check runs on the Linux runner named by linux-policy.
+- [ ] Stopping or replacing a node leaves no nested child running; its dependents keep working (extend `a_restart_keeps_its_dependents_working`).
 
 ## Proof and recovery
 
-Start at [runtime.rs](../../../../../../cartridge.ctg/src/runtime.rs), [service.rs](../../../../../../cartridge.ctg/src/service.rs).
+Start at `src/host/process.rs`, `src/node.rs` (`spawn`) and `src/sandbox.rs`.
+Add fixtures to `.cartridge/tests/unit/src/tests/host.rs`. Gates, from
+`/Users/feb/dev/cartridge`: `just test runtime` and `just check runtime`. They
+have not run for this plan. A failed fix preserves the current single launch
+route. Never add an unconfined fallback.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test runtime` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-External evidence prerequisites: [command-adapter](../../../.pearde/prds/the-sandbox/command-adapter/prd.md). Resolve their current completion and source revision before claiming.
-
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `launch-authority`; maximum five rounds.
+No hard prerequisite. The Linux case uses the runner from
+[linux-policy](../linux-policy/prd.md). [Review](review.md): round 3/5.

@@ -29,3 +29,27 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). No user score was supplied or invented.
+Reconciliation verdict: **REBASE — outcome still wanted; the round-2 text pointed at `src/cartridge.rs`/`src/main.rs`, which do not contain degrade. Current code: `tool_degrade` (`src/rpc/src/server.rs`, `DegradeArgs{query_id}`), `degrade_entity_reasons` (`src/graph/src/graph_ops.rs`) decays every reason of a thought; `cmd_degrade` (`src/commands/src/commands_graph_ops.rs`). No query provenance is retained anywhere. Memory decision `does-a-removal-need-a-tombstone` rules out tombstone state.**
+
+Presented revision: `prd.md` SHA-256 `9a98d3f57b69be7ac6bcd0afb5400c93cc51fe8d802f1ea4ec6f8324dcc50d9f`. Rebased in this round (prior text `32467682b46cabfcd9b205fdf4c2b46d0187843fb3c6afa11f374df68be77c3d`).
+Source inspected: memory.ctg `c25af4d` (main), root `24aa2be`, prd.ctg `077e57a2` plus working tree.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 18 | Real defect confirmed in source (thought-wide decay under a misleading `query_id`). -2: feedback quality benefit is argued, not measured. |
+| Ownership and reuse | 19 | Memory-owned; reuses reason `score_lamport` and graph `replica_id` instead of a new provenance store. -1: explain output shape not yet confirmed. |
+| Dependencies and implementable slices | 18 | Single leaf, no needs. -2: whether explain already returns reason IDs is an unprobed first step that may add work. |
+| Observable acceptance and baseline evidence | 18 | Three observable checks incl. untouched sibling reasons and stale replay. -2: fixture/baseline numbers to be captured at probe. |
+| Failure, recovery and compatibility | 19 | Refusals write nothing; legacy `query_id` behaviour preserved and documented. -1: concurrent degrade of the same reason relies on lamport check only. |
+| Reviewer total | 92/100 | |
+
+Agent score: **92/100 — PASS**.
+Findings: (1) Stale starting files replaced with the actual degrade path. (2) 'Retained provenance' had no implementation basis; replaced by a stateless handle validated against live reason lamports, with a stop-and-probe on explain output. (3) Compatibility of the CLI `memory degrade <id>` made explicit.
+Blocking findings: none.
+Validation: Existence checks only: cited source/test/doc paths exist (`ls`), `needs` targets and local links resolve (script over frontmatter and markdown links), memory.ctg `just --list` shows `check`, `test`, `e2e`, `all`, `eval-mature`, `eval-replay`, `test-reload`. Leaf body word count checked. No product gates were run.
+Rounds used / remaining: 3 / 2.
+Next: Probe explain output for reason IDs, then spec the handle.

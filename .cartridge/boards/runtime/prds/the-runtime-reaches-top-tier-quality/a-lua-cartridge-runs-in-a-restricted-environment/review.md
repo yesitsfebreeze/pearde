@@ -49,3 +49,44 @@ Result: FAIL.
 Unresolved blocking findings: 1, 2, 3, 4.
 Rounds used / remaining: 1 / 4.
 Next action: hold. Session cartridge-ctg-40 is landing a user-requested uncommitted refactor of `src/lua.rs`, `context.rs`, `loader.rs`, `settings.rs` (async coroutines, `crate::lua::interpreter()`); revise spec01 on top of that commit, then request round 2.
+
+## Round 2 — 2026-09-14
+
+Reconciliation verdict: **DELIVERED** (pending verification).
+
+Reviewer: agent (independent reviewer, plan refresh pass). Presented revision: `prd.md` SHA-256 `47c4f0b47486212a9326a391e5a783248a6173f7e8d3d12f056b4551bf4cc859`. The change is frontmatter and the review pointer only; the body is the round-1 text, and the prior prd.ctg HEAD text is `33b9f1fb1689c7a2fa4e1f2d77f39432137ffcaab8b428111884b8a6280e8c3e`. `specs/spec01.md` is historical: it targets `src/context.rs` and `src/cartridge.rs`, both deleted.
+Composition:
+- root `24aa2be` (dirty);
+- cartridge.ctg `main` `e8a4da3`, clean;
+- `ws/cartridge.ctg` `transport-design` `ba198f4`, clean;
+- prd.ctg `077e57a2`, dirty.
+
+Inherited rounds: this leaf's own round 1 and the parent's round 1 cover the same date and audit. The count is 1, not 2, so this is round 2.
+
+Evidence, identical on both lines unless noted:
+- **Interpreter.** `src/lua.rs::interpreter` (`d2a761e`) builds `StdLib::ALL_SAFE ^ IO ^ PACKAGE`, trims `os` to `clock/date/difftime/getenv/time`, and removes `dofile`/`loadfile`. `.cartridge/tests/unit/src/lua/tests.rs` asserts that `io`, `package`, `require`, `debug`, `os.execute/exit/remove/rename` are nil.
+- **Process confinement.** Since `939e7d1`, every Lua cartridge runs as its own node process spawned through `crate::sandbox::command(&command, &plan.grant, ...)` (`src/host/process.rs:36`). The OS confines it by its grant, and programs it spawns inherit the sandbox. Round-1 blocker 1 (`cartridge.process` unconfined) is closed by construction.
+- **Memory.** `node.rs` sets `lua.set_memory_limit(settings::host().lua_memory_bytes)` (`e8a4da3:106-110`, `ba198f4:100`), and a unit test covers it (`a_memory_limit_bounds_what_a_chunk_can_allocate`).
+- **Runaway code.** A runaway listener is bounded by event deadlines (`transport/cartridge.rs` `Outcome::TimedOut`; host test `a_hung_listener_times_out_and_its_node_keeps_serving`). It stalls only its own process.
+- **Docs.** `docs/architecture.txt` NODES and the `src/sandbox.rs` module doc state the two layers.
+
+Round-1 blockers:
+1. Closed, as above.
+2. Closed: `folders.rs` is gone.
+3. Superseded: the per-instruction hook gave way to process isolation plus deadlines.
+4. Superseded: limits come from the host settings.
+
+Residual gaps, not blocking:
+- There is no instruction-count hook, so a busy loop burns CPU until its deadline answers the caller.
+- Linux refuses to spawn nodes; that is owned by `@runtime/linux-policy`.
+
+Result: no score (verdict round). Status: `delivered-pending-verification`. Recommend retiring `specs/spec01.md` with the leaf.
+Unresolved blocking findings: none.
+Validation (read-only):
+- reads of `src/lua.rs`, `src/node.rs:25-120`, `src/host/process.rs:20-60`, `src/sandbox.rs:1-30`, the lua unit tests and `docs/architecture.txt:60-90`;
+- `rg 'sandbox::|set_memory_limit|set_hook'` on both lines;
+- `shasum -a 256`.
+
+Tests were not run. Verification step for the coordinator: `just test runtime` includes `lua::tests` and `tests::host`.
+Rounds used / remaining: 2 / 3.
+Next action: the coordinator collects or retires the leaf after the gate runs.

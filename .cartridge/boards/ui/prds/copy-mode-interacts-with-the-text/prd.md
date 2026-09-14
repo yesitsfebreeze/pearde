@@ -7,30 +7,28 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: ui
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 4
+review-status: passed
 canonical-scope: copy-mode-interacts-with-the-text
 needs:
 - '@ui/the-ui-paints-the-grid'
 ---
 
-# copy-mode-interacts-with-the-text
+# Copy mode acts on exactly the selected terminal text
 
-Rebase the candidate onto ui.ctg and pty.ctg. Freeze a revision-bound view, not the running shell. Selection uses terminal cells with correct wide/combining-character handling; aged-out content is explicit. Opening a path validates an owner-qualified reference and passes literal argv to the intended editor through the owned shell. Corrections target memo and memory independently through their validated services.
+Today a mouse drag copies OpenTUI's own selection through OSC 52 and `pbcopy` (`useSelectionHandler` in tui.ctg `ui/terminal.tsx`); there is no copy mode. This leaf adds one: it freezes a `pty` `screen`/`viewport` snapshot tagged with its frame generation, selects by grid cell with wide and combining characters handled, and offers three actions: copy, open a path, send a correction. Per [a-cartridge-brings-its-own-surface](../../../../../../.cartridge/memos/decision/a-cartridge-brings-its-own-surface.md), tui names no memo or memory protocol: a correction is an event tui defines and any cartridge may answer.
 
 ## Acceptance
 
-- [ ] Unicode selection and whole-command copying return exact selected text; scrollback expiry never silently substitutes current rows.
-- [ ] A malicious path or link cannot append shell syntax, and opening a link while an editor owns input is refused or explicitly routed without corrupting it.
-- [ ] Memo and memory correction fixtures each record anchored provenance and their own success/failure; one target failing cannot be reported as both saved.
+- [ ] Unicode and whole-command selections copy exact text; when scrollback has aged out part of the snapshot, copy mode says so instead of substituting current rows.
+- [ ] Opening a path sends one shell-quoted literal argument through `pty` only while the user holds terminal control; shell syntax in the path runs nothing extra, and opening while a foreground program owns input is refused.
+- [ ] A correction is sent with `gather` as one tui-defined event carrying the selected text and its snapshot anchor; each listener's outcome (answered, declined, failed, timed_out, unavailable) is shown under its cartridge name, and no listener shows "not delivered", never "saved".
+- [ ] Escape leaves copy mode with the shell grid, cursor and input untouched; drag-to-copy still works.
 
 ## Proof and recovery
 
-Start at [chat.ts](../../../../../../ui.ctg/src/chat.ts), [modules.ts](../../../../../../ui.ctg/src/modules.ts).
+Start at [terminal.tsx](../../../../../../tui.ctg/ui/terminal.tsx), [wire.ts](../../../../../../tui.ctg/src/wire.ts) (`gather`) and [pty main.rs](../../../../../../pty.ctg/src/main.rs). First probe: confirm how a node defines an event and receives per-listener outcomes since cartridge.ctg `c9ef10b`; tui's `wire.ts` `gather` currently drops non-answers. Create `copy.test.tsx` in `tui.ctg/.cartridge/tests/integration/` with a fixture listener that answers and one that fails. Gates, cwd `/Users/feb/dev/cartridge`: `just test tui`, `just check tui`, `just isolation`. Not run for this plan. Copy mode is additive and writes no data itself.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test ui` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `copy-mode-interacts-with-the-text`; maximum five rounds.
+Hard need: [the-ui-paints-the-grid](../the-ui-paints-the-grid/prd.md). Memo or memory listeners are their owners' work. Shared footprint: `ui/terminal.tsx`. [Review history](review.md): rounds 1–4 used.

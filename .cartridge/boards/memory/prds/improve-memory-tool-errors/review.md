@@ -29,3 +29,27 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). No user score was supplied or invented.
+Reconciliation verdict: **REBASE — 'across wrapper retirement' and 'MCP/proxy consumers' referred to the dropped memory-tool wrapper (root `9e4cde8`). Current tool: `tool_failure` prose in `src/cartridge.rs`; `memory(...).await?` lets engine/transport errors escape as provider errors rather than tool results (new finding).**
+
+Presented revision: `prd.md` SHA-256 `ac07b86a75ec3c1b691628b81ebfea34642d8a50de8158bf9f1e6839debfd48a`. Rebased in this round (prior text `ea274c6e1ea639e4d63e45212a1374e36faffa7597c3b35bc47d454c33477602`).
+Source inspected: memory.ctg `c25af4d` (main), root `24aa2be`, prd.ctg `077e57a2` plus working tree.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 19 | Agents currently cannot distinguish contention, dead embedder and refused ingest. -1. |
+| Ownership and reuse | 19 | One translation point in the memory adapter; wire unchanged. -1: codes land in content JSON, consumers parse it. |
+| Dependencies and implementable slices | 19 | Needs adapter-core (appears delivered); ordering with get stated. -1. |
+| Observable acceptance and baseline evidence | 18 | Codes, triggers and fixtures named (embed stub, held writer, disconnected owner). -2: `ingest_unknown` trigger (worker failure after dispatch) is hard to inject; probe must confirm. |
+| Failure, recovery and compatibility | 18 | No retries, no stored-state change. -2: host behaviour for provider-level errors versus tool results not verified. |
+| Reviewer total | 93/100 | |
+
+Agent score: **93/100 — PASS**.
+Findings: (1) Wrapper framing removed. (2) Named the code set and the `?` escape path. (3) Owner key typo fixed.
+Blocking findings: none.
+Validation: Existence checks only: cited source/test/doc paths exist (`ls`), `needs` targets and local links resolve (script over frontmatter and markdown links), memory.ctg `just --list` shows `check`, `test`, `e2e`, `all`, `eval-mature`, `eval-replay`, `test-reload`. Leaf body word count checked. No product gates were run.
+Rounds used / remaining: 3 / 2.
+Next: Land after get; reproduce each failure first.

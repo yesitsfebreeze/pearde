@@ -29,3 +29,27 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). No user score was supplied or invented.
+Reconciliation verdict: **REBASE — the historical source was a never-done standing maintenance terminal (round-1 65/100) whose subwork list no longer exists; the small-PRD rule (review-plan.md) retires such terminals. Round-2 text was a generic snapshot with no integration gate. Rebased as a finite parent: counts, spilled-store ranking and convergence.**
+
+Presented revision: `prd.md` SHA-256 `1ef4189f56609624e1cfdcd3420803bda30e55493f26ee3ae3222381ff13a7de`. Rebased in this round (prior text `bfff25489789ddbbba333934d0de6bf95b0220f0062c3de7d531b3d3e3acb2fb`).
+Source inspected: memory.ctg `c25af4d` (main), root `24aa2be`, prd.ctg `077e57a2` plus working tree.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 17 | Coherent theme (reported numbers are true). -3: bucket still groups a decision (004) with two fixes. |
+| Ownership and reuse | 19 | Memory-owned leaves only. -1. |
+| Dependencies and implementable slices | 20 | Three needs resolve; acyclic; no overlap now that memory-integration-assessment is superseded. |
+| Observable acceptance and baseline evidence | 18 | Gate: `just all` plus CLI/RPC count equality and zero dangling reasons on a named fixture. -2: fixture is created by a child. |
+| Failure, recovery and compatibility | 16 | Failure keeps parent open. -4: no statement of what happens if 004 decides 'neither' (still closes; implied, not stated). |
+| Reviewer total | 90/100 | |
+
+Agent score: **90/100 — PASS**.
+Findings: Standing-terminal semantics removed; finite outcome and integration gate added.
+Blocking findings: none.
+Validation: Existence checks only: cited source/test/doc paths exist (`ls`), `needs` targets and local links resolve (script over frontmatter and markdown links), memory.ctg `just --list` shows `check`, `test`, `e2e`, `all`, `eval-mature`, `eval-replay`, `test-reload`. Leaf body word count checked. No product gates were run.
+Rounds used / remaining: 3 / 2.
+Next: Children proceed independently; gate at the combined revision.

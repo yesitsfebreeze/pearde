@@ -31,3 +31,24 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reconciliation verdict: **REBASE**. Evidence: `eval/eval_compaction.py` deleted in harness 2364a43 ("Keep cartridge records, routines and tests under .cartridge") under decision `cartridge-repositories-keep-records-and-executable-memos` (no Python); corpus retained at `harness.ctg/.cartridge/tests/eval/corpus` (journals v1–v3, `facts.json`, `summaries/manifest.json` with good rounds 1–3 and four adversarial classes) but no test references it (rg); `src/compaction.rs` `comparisons` delivered by `@harness/improve-harness-compaction-diff` (done, a282c87). Pre-revision text (SHA-256 `0d415ffb73210ca4e820e5ffc1d96aef8112aeb9dae45ed7fd1845ffb2029376`) had all five footprint paths missing, broken links, a recovery statement formatted as acceptance, and did not carry the inherited long-horizon findings (licence, per-ability metrics, abstention). Blocking.
+
+Revision reviewed: `prd.md` SHA-256 `8b4f48665bcae1d7bb77457a1cefe825ed59dc4b80ecb41387f32c2a13373a34` (working tree). Changes: baseline stated; offline Rust test over the existing corpus in the existing compaction unit entry point; broken-checker negative; abstention/unknown and licence; opt-in live report with task-outcome replay; real footprint and gate.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 19 | Restores a missing check over an existing corpus; -1 live task-success scoring rubric still to be defined. |
+| Ownership and reuse | 19 | Harness-owned, reuses corpus and `compaction::comparisons`; -1 `inspection.rs` in footprint may be unnecessary. |
+| Dependencies and implementable slices | 19 | Only need done; ready; -1 offline and live parts could split if the live report grows. |
+| Observable acceptance and baseline evidence | 18 | Per-class expectations from the manifest, negative control, baseline command; -2 licence source for the corpus unknown until probed. |
+| Failure, recovery and compatibility | 18 | Additive, live run excluded from gate, bounded budget; -2 no statement on live-run cancellation/partial report. |
+| Reviewer total | 93 / 100 | |
+
+Result: **PASS**. Unresolved blocking findings: none.
+Validation: existence checks of repo, source, test and doc paths (ls/rg); `./prd check` (cwd `/Users/feb/dev/cartridge/prd.ctg`, root graph) exit 0 with 228 records and no problems (needs resolve, no cycle); `just --list` (cwd `/Users/feb/dev/cartridge`) shows `test`/`smoke` and `.cartridge/memos/routine/cartridge-development.md` accepts the named owners; relative links checked. No product gates were run.
+Reviewer: agent (independent reviewer, plan refresh pass). User rating: not requested (delegated).
+Rounds used / remaining: 3 / 2.
+Next action: ready to claim; record `just test harness` baseline first.

@@ -29,3 +29,25 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass).
+Reconciliation verdict: **REBASE**. Outcome still wanted and not delivered: channel lines accept only `channel, from, ts, seq, message_id, run, text` (`records` in `sessions.ctg/src/channels.rs`). Changed since writing: sessions was ported to the transport protocol; decision `a-cartridge-brings-its-own-surface.md` forbids sessions carrying sibling protocols, so "resolution uses existing scoped read APIs" must mean the reader resolves other owners' targets, not sessions.
+Stale revision: `91c4fce85718726c374819d8a5eebcfd711c861473534fed73ca1846ec357908` (start link `../../../main.rs` resolves to `boards/main.rs`, missing; typo owner key; resolution authority ambiguous).
+Presented revision: prd.md SHA-256 `9b6e6e6c41a4e1ac343d2c0cded69cb71ad66fccdd1b04be17de7483341dc9d4`. Source inspected at sessions.ctg e9725e8 (ported to transport 0d4310f), memo.ctg 9a1cf99, agent.ctg working tree, cartridge.ctg c9ef10b (dirty working tree), prd.ctg 077e57a2 working tree.
+Change: typed optional `references` with four owner-qualified forms; sessions dereferences only session/channel forms; conflict on same `message_id`; legacy compatibility; real start files and tests; caps as settings.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Small posts pointing into the record. -1: the reporting-bytes measurement from round 1 dropped to guidance. |
+| Ownership and reuse | 19 | Reuses channel append/dedup path and settings-based caps. -1: reference caps not yet named as settings keys. |
+| Dependencies and slices | 18 | needs the chat leaf (resolves). -2: shares `channels.rs` with chat and log leaves. |
+| Acceptance and baseline | 18 | Refusal leaves snapshot bytes unchanged; tests exist to extend. Current gate baseline: `.cartridge/memos/note/release-status.md` records 8 failing sessions workspace tests; the plan requires naming them before judging new failures. -2 for red baseline. |
+| Failure and compatibility | 17 | Optional field, legacy lines unchanged. -3: an older binary reading a newer snapshot with references is not addressed (channel-cursors doc says older binaries may refuse). |
+| Reviewer total | **91 / 100** | |
+
+Result: **PASS**. Blocking findings: none.
+Validation: file existence; `./prd.ctg/prd check` exit 0. Product gates were not run.
+User rating: not required under delegation. Rounds used / remaining: 3 / 2.
+Next: implement after the chat leaf; land after it in `channels.rs`.

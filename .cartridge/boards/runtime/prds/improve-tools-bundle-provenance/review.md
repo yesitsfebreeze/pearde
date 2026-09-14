@@ -29,3 +29,22 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reconciliation verdict: **REBASE**. Bundling is `bundle`/`package` in `tools.ctg/src/service.rs:300-413`; `scripts/workspace.py`/`repositories.json` are gone; the "runtime-owned development package" and old-shim equivalence clauses contradict decision `tui-and-tools-are-cartridges` and b1494bb. Partially delivered: staged temporary publish with rename, and missing-binary refusal before publication (test `packaging_refuses_missing_rust_binaries_but_accepts_lua_only`). Absent: any provenance record. The `@runtime/improve-tools-preflight` need was not a hard prerequisite and is dropped (shared footprint noted). Frontmatter key typo corrected (value unchanged).
+Stale presented revision: `77f969b5ff0f77b5bb51932f4ba3ab6296cbaba5ed39187875b1a4621a2bb808`. Revised revision: `8b5b1edd62508bb11ccab026b0c52c850d75e70aaf3a5d760270fd22a24830a4`.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 17 | Traceable bundles; delivered parts removed from scope. -3: no stated consumer of the record yet. |
+| Ownership and reuse | 18 | tools.ctg; extends existing staging. -2: @runtime board placement historical. |
+| Dependencies and slices | 19 | No hard needs; shared file named. -1: landing order unset. |
+| Acceptance and baseline | 19 | Determinism, per-digest sensitivity, secret exclusion with existing test entry. -1: git fixture to build. |
+| Failure and compatibility | 18 | Probe failure keeps previous dist; bundles load without the file. -2: dirty-diff digest of large binary diffs unbounded. |
+| Reviewer total | 91 / 100 | |
+
+Result: **PASS**. Unresolved blocking findings: none.
+Validation: cheap existence checks only — ls/rg over cartridge.ctg (HEAD c9ef10b), tools.ctg (caea5b7) and memory.ctg (c25af4d) source; `just --list` at /Users/feb/dev/cartridge; relative-link resolution over prd.md; `shasum -a 256`. No product gates were run.
+Reviewer: agent (independent reviewer, plan refresh pass). User rating: not required under delegation; none supplied.
+Rounds used / remaining: 3 / 2. Next action: extend package test with a git fixture.

@@ -7,30 +7,38 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: agent
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: the-agent-spawns-wakes-and-owns-sub-agents
 needs:
 - '@sessions/sub-agent-sessions-record-parent-and-mailbox'
+- '@pty/improve-pty-input-ownership'
+footprint:
+- /Users/feb/dev/cartridge/agent.ctg/cartridge.json
+- /Users/feb/dev/cartridge/agent.ctg/src/lib.rs
+- /Users/feb/dev/cartridge/agent.ctg/.cartridge/tests/unit/run_state.rs
+- /Users/feb/dev/cartridge/agent.ctg/.cartridge/help.md
 ---
 
 # the-agent-spawns-wakes-and-owns-sub-agents
 
-Persist child identity, parent, launch intent and inbox wake cursor before acknowledging spawn/send. Coalesce wakes per idle generation and bound active children by configuration. Parent disposal stops admission and reports/reconciles owned children under the documented lifecycle policy; it never kills unrelated processes.
+The agent serves sub-agents — sessions in its own process with a recorded parent — through declared spawn, send, wait and peek events documented in its `.cartridge/help.md`. Child identity, parent, launch intent and wake cursor persist before spawn or send is answered. A send to an idle child wakes one run carrying the parked message; wakes coalesce per idle generation and a setting bounds active children. A child's shell request routes to its owner under a PTY input lease. Parent disposal stops admission and reports owned children, killing nothing unrelated.
 
 ## Acceptance
 
-- [ ] Crash around spawn acknowledgement or wake scheduling produces at most one live run per child generation, with replayable inbox evidence.
-- [ ] A forged owner/session or execution request without a current PTY lease is refused before shell input.
-- [ ] Two children finish concurrently with attributed reports; parent restart exposes unfinished/unknown work without automatic mutation replay.
+- [ ] Spawn, send to an idle child, wake and report: the child's report lands in the parent transcript naming the child.
+- [ ] A crash around spawn or wake yields at most one live run per child generation, with replayable mailbox evidence.
+- [ ] Two children run concurrently to terminal states with attributed reports; parent restart shows unfinished children as unknown without replaying mutations.
+- [ ] A forged owner or session, or a shell request without a current lease, is refused before shell input; an owner-routed request returns attributable readback in the child transcript.
 
 ## Proof and recovery
 
-Start at [model_loop.rs](../../../model_loop.rs), [run_state.rs](../../../run_state.rs).
+Baseline (agent `fad6d3b`, sessions `e9725e8`): no spawn surface (`agent.ctg/src/lib.rs:235`); one `Control` per session lives in `Agent.runs` (`agent.ctg/src/lib.rs:164`). Sessions already authenticates child lineage and mailbox messages with IDs and sequence (`sessions.ctg/src/mailbox.rs:132-175`). No input lease exists in `pty.ctg/src`, hence the PTY ownership need.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test agent` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+Precondition without a PRD: agent still targets the host API removed in cartridge `ee7e295` (`agent.ctg/src/main.rs:14,42`); no agent gate builds until it is ported to declared events.
+
+First probe: a failing spawn→send→wake test in `run_state.rs` with its sessions fake. Gates, cwd `/Users/feb/dev/cartridge`: `just test agent`, `just test sessions`, `just check agent`. Not run for this plan. Failure: a refused spawn writes no child; an unanswered send wakes nothing; an over-limit spawn is `declined`, never queued silently.
 
 ## Review
 
-[Round 2 agent review](review.md). Inherits round 1 from `the-agent-spawns-wakes-and-owns-sub-agents`; maximum five rounds.
+[Review history](review.md): round 3 of 5 (rounds 1–2 inherited).

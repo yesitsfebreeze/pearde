@@ -7,32 +7,35 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: agent
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: a-stalled-step-raises-its-own-event
-needs:
-- '@runtime/a-listener-subscribes-to-event-types'
+footprint:
+- /Users/feb/dev/cartridge/agent.ctg/cartridge.json
+- /Users/feb/dev/cartridge/agent.ctg/src/lib.rs
+- /Users/feb/dev/cartridge/agent.ctg/src/model_loop.rs
+- /Users/feb/dev/cartridge/agent.ctg/.cartridge/tests/unit/run_state.rs
 ---
 
 # a-stalled-step-raises-its-own-event
 
-When a step crosses a declared budget threshold, emit one attributable stall event. Emit once per escalating threshold; the event informs a watcher and does not cancel the step or change its outcome.
+A stuck run says so. When a model stream or tool call crosses a budget declared for its step type, the agent notifies one attributable stall event, once per escalating threshold. The event informs a watcher; it never cancels the step or changes its phase or outcome.
 
 ## Acceptance
 
-- [ ] A step held past its budget emits exactly one stall event naming the run, the step, the tool and the elapsed time; holding it past a second threshold emits exactly one more.
-- [ ] A step finishing inside its budget emits none.
-- [ ] The stall event alone leaves the phase, the step and the run's outcome unchanged.
-- [ ] A stall event reaches a subscribed listener and appears on the run's stream like any other event.
-- [ ] A profile that declares no budget for a type emits no stall events for it.
+- [ ] Under paused test time, a step held past its budget emits exactly one stall event naming run, step, tool and elapsed time; past a second threshold, exactly one more.
+- [ ] A step finishing inside its budget, or a step type with no declared budget, emits none.
+- [ ] A stall event alone leaves phase, step and outcome unchanged; finish, cancel or restart leaves no pending stall timer.
+- [ ] A subscriber to the agent's channel receives the stall event in order with the run's other events.
 
 ## Proof and recovery
 
-Start at [model_loop.rs](../../../model_loop.rs), [run_state.rs](../../../run_state.rs).
+Baseline (agent `fad6d3b`): no budget setting in `agent.ctg/cartridge.json` and no stall emission in `agent.ctg/src`. Active calls are tracked in `Live.active` (`agent.ctg/src/lib.rs:125-140`); events leave through `Run::emit` (`agent.ctg/src/lib.rs:544`), which notifies listeners and publishes on the `agent` channel. The host's channel `subscribe` with `since` replay (cartridge `c9ef10b`) already delivers to subscribers, so this leaf drops its need on `@runtime/a-listener-subscribes-to-event-types`. Budgets are declared settings; an absent budget settles to null and disables stall events.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test agent` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+Precondition without a PRD: agent still targets the host API removed in cartridge `ee7e295` (`agent.ctg/src/main.rs:14,42`); no agent gate builds until it is ported to declared events.
+
+First probe: a failing test in `run_state.rs` using `driver_tool(_, false)` under `tokio::time::pause`. Gates, cwd `/Users/feb/dev/cartridge`: `just test agent`, `just check agent`. Not run for this plan. Failure: a timer error drops that stall event and never affects the step; with no subscriber the event still reaches the channel's bounded replay buffer.
 
 ## Review
 
-[Round 2 agent review](review.md). Inherits round 1 from `a-stalled-step-raises-its-own-event`; maximum five rounds.
+[Review history](review.md): round 3 of 5 (rounds 1–2 inherited).

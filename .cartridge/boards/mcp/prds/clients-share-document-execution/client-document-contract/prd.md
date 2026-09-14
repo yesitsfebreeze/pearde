@@ -7,8 +7,8 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: mcp
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: superseded-recommend-retire
 canonical-scope: clients-share-document-execution
 needs:
 - memory-document-works-end-to-end

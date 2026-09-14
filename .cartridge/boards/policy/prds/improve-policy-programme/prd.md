@@ -7,8 +7,8 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: policy
 work-kind: rollup
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: needs-decision
 canonical-scope: improve-policy-programme
 needs:
 - '@policy/improve-policy-operation-rules'

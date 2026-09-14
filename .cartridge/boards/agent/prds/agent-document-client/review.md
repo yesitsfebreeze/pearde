@@ -29,3 +29,19 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14 (reconciliation)
+
+Reconciliation verdict: **SUPERSEDED**.
+
+Reviewed revision: prd.md SHA-256 `97dd9e81daff68c6b27f49f6505f271b51b43f23eaf1092c2399b00f1da2ebb5`; afterwards only frontmatter changed (review-round 3, review-status superseded-recommend-retire), body unchanged, now `6043f14a28ad60794a3b2ba1517520c8f36525485744e9353eba26db745232b7`. Source revisions: agent.ctg `fad6d3b`, cartridge.ctg `c9ef10b`, sessions.ctg `e9725e8`, harness.ctg `336f2d1`, prd.ctg `077e57a2` (dirty tree).
+
+Evidence: the plan consumed a shared document-execution contract routed "through landscape" (round-1 source `clients-share-document-execution`). Landscape is gone, and every client now dispatches the same profile-injected `tool.*` keys: the agent takes them from its needs (`agent.ctg/src/main.rs:19-26`) and describes each per run (`agent.ctg/src/model_loop.rs:152-170`). Decision `.cartridge/memos/decision/a-cartridge-brings-its-own-surface.md` (2026-09-14, decided_by user) makes each cartridge's descriptor (`reads`) and help page its own surface; the agent parallelises on `reads` (`agent.ctg/src/model_loop.rs:276-288`). No owner ships a document the agent could execute, and the needed `@mcp/clients-share-document-execution/client-document-contract` is open and stale-after-migration (its links cite nonexistent `mcp.ctg/service.rs`). The leaf's remaining themes already exist for tool calls: exact-call approval binding (`approved_call_executes_exactly_once_and_duplicate_stale_answers_fail`, `run_state.rs:332`) and unknown-outcome recovery without replay (`run_state.rs:453,493`). Consistent with the SUPERSEDED verdict recorded for `@proxy/proxy-document-client` in the same pass.
+Disposition: retire recommendation (coordinator/user). Do not delete; `state:` unchanged. If an executable tool memo is still wanted it belongs to root memo `a-tool-is-declared-by-its-memo`, not to this agent leaf.
+No score recorded (superseded verdicts need none).
+Validation: `ls`/`rg`/`grep` existence checks of every cited path and line, needs resolution under `boards/<owner>/prds/<slug>/prd.md`, root `.cartridge/justfile` recipes (`test`, `check`, `verify`, `smoke`) and the `agent` case in `.cartridge/memos/routine/cartridge-development.md`, `git log` of agent.ctg and cartridge.ctg, decision memo reads. No product gates were run.
+Reviewer identity: agent (independent reviewer, plan refresh pass). User rating: not required under delegation; none supplied. User feedback: none supplied for this revision.
+Result: SUPERSEDED — recommend retire.
+Unresolved blocking findings: none for this leaf.
+Rounds used / remaining: 3 / 2.
+Next action: coordinator confirms retirement together with the mcp parent.

@@ -1,34 +1,31 @@
 ---
-repo: /Users/feb/dev/cartridge/cartridge.ctg
+repo: /Users/feb/dev/cartridge/memo.ctg
 state: open
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-owner: landscape
+capability-owner: memo
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: a-usage-ranked-tool-graph-serves-the-best-way
 ---
 
-# a-usage-ranked-tool-graph
+# One usage-ranked graph answers which tool, memo or routine to use
 
-Reconcile delivered child work against the existing Landscape library and observation journal. Keep a single derived ranker and no new durable ranking service. The remaining outcome is demonstrable consistent tool/routine/memo selection through real consumers.
+The separate `toolgraph`/landscape ranking crate was dissolved (root decisions `the-fabric-owns-the-graph.md`, `the-fabric-lives-in-core.md`; host commit 939e7d1 removed core's copy). The single derived ranker is now `memo.ctg/src/fabric_graph.rs`, fed by `graph.announce` rows (`memo.ctg/src/graph.rs`) and the resolver observation journal (`memo.ctg/src/resolver.rs`). This leaf reconciles the four older children against that source and proves ranking through the real `fabric` op, adding no service or store.
 
 ## Acceptance
 
-- [ ] Each named older child maps to a current symbol/test or a specific residual gap with source revision.
-- [ ] A controlled observation changes standing for equally relevant candidates while stale/private sources retain their constraints.
-- [ ] Memo resolve, discovery and agent selection use the agreed ranking boundary; completed child implementations are reused rather than ported twice.
+- [ ] A reconciliation note maps `tool-graph-engine-is-the-ranking-database`, `the-resolver-runs-on-the-tool-graph-engine`, `tool-dispatch-and-routines-are-graph-nodes` and `agents-query-the-tool-graph` each to a current symbol and test at a named memo revision, or to a residual gap; the resolver move reverted by the dissolution is recorded as such.
+- [ ] Through `tool.memo {"op":"fabric","query":…}`, an `observe` event raises one of two equally matched nodes; a malformed journal line is skipped without failing the graph.
+- [ ] The resolve/fabric boundary is stated with a default (resolve keeps situation matching; both read one journal standing) and a test proving they read the same counts.
 
 ## Proof and recovery
 
-Start at [lib.rs](../../../../../../landscape.ctg/src/lib.rs), [surface.rs](../../../../../../landscape.ctg/src/surface.rs).
+Start: `memo.ctg/src/fabric_graph.rs` (`search`, `counts_from_journal`, `grown`), `memo.ctg/src/service.rs` (fabric op), `memo.ctg/src/usage.rs`, tests `memo.ctg/.cartridge/tests/unit/src/fabric_graph.rs` (`observed_use_outranks_equal_match` covers only the pure function). Gates from /Users/feb/dev/cartridge: `just test memo`, `just check memo` (not run). `agents-query-the-tool-graph` is actively claimed elsewhere; do not reclaim it. Rollback: derived state only; journal and record are preserved.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test landscape` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `a-usage-ranked-tool-graph-serves-the-best-way`; maximum five rounds.
+No hard prerequisites. Target board after rehoming: memo. [Review history](review.md); rounds inherited, maximum five.

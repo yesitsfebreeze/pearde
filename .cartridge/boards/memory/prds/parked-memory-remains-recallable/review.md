@@ -29,3 +29,27 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). No user score was supplied or invented.
+Reconciliation verdict: **REBASE — much of the tier behaviour exists (`cold_candidates` joins fusion pre-top-k in `src/retrieval/piece/src/retrieval_query.rs`; cold fallback in `id_detail.rs`; tier invariants in `.cartridge/tests/integration/memory_contract.rs`). Gaps: no three-layout invariant test; a cold read error fails the whole query (`src/rpc/src/server.rs`, `src/commands/src/commands_query.rs`); cold scan unbounded in I/O. Old starting files wrong.**
+
+Presented revision: `prd.md` SHA-256 `ea42abbd0a31dbed49c0774e6cc6cf387a8cf0635f266941221bd1d715019d07`. Rebased in this round (prior text `817a960d5efe304abde1fa322b95d441ac92d462daebd433e45fffd11fc5078d`).
+Source inspected: memory.ctg `c25af4d` (main), root `24aa2be`, prd.ctg `077e57a2` plus working tree.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 18 | Availability of recall under cold faults. -2. |
+| Ownership and reuse | 19 | Reuses contract tests and replay fixture; config key unset preserves behaviour. -1. |
+| Dependencies and implementable slices | 19 | Hard need on memory-004 removed (fixtures exist; decision not a prerequisite). -1: coordinator must update work-map. |
+| Observable acceptance and baseline evidence | 18 | Three checks incl. partial shape and fault injection. -2: fault-injection seam for cold reads unprobed. |
+| Failure, recovery and compatibility | 18 | No-fault byte identity; read-only. -2: adding `partial` field is a response-shape change for strict decoders. |
+| Reviewer total | 92/100 | |
+
+Agent score: **92/100 — PASS**.
+Findings: Absorbed partial cold status from memory-004; dropped hard need on memory-004; paths corrected.
+Blocking findings: none.
+Validation: Existence checks only: cited source/test/doc paths exist (`ls`), `needs` targets and local links resolve (script over frontmatter and markdown links), memory.ctg `just --list` shows `check`, `test`, `e2e`, `all`, `eval-mature`, `eval-replay`, `test-reload`. Leaf body word count checked. No product gates were run.
+Rounds used / remaining: 3 / 2.
+Next: Write the three-layout test first.

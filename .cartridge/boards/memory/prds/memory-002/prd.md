@@ -7,28 +7,25 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: memory
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: MEMORY-002
 ---
 
-# Memory counts use consistent public terminology
+# CLI and RPC name the same memory counts
 
-Clarify stored memory, active memory and loaded/unloaded project daemons in current CLI/status documentation. Existing owner: `codex/memory-terminology`; preserve its reserved worktree and require handoff before claiming this scope. Keep hot/cold exports, history, audit, check/repair and hot reload intact.
+Memory counts are reported in two vocabularies. RPC `health` returns `entities`, `reasons` and `memories` (`health_stats` in `src/rpc/src/server.rs`), while `memory health` prints the same numbers as `thoughts:` (`src/commands/src/commands_health.rs`). The hub list mixes `loaded`/`cold` project daemons with counts of resident rows only (`src/commands/src/commands_hub.rs`), and no term separates stored rows (hot plus cold) from the resident working set. Outcome, owned by memory: one documented vocabulary for stored versus resident rows and loaded versus unloaded daemons, applied to CLI labels and help, with RPC wire keys unchanged.
 
 ## Acceptance
 
-- [ ] CLI and RPC counts name the same entities, thoughts and reasons for one snapshot.
-- [ ] Legacy data decodes with unchanged API and store layouts.
-- [ ] The owner-reserved worktree and unrelated store contents are preserved.
+- [ ] For one fixture snapshot, `memory health` and RPC `health` report equal numbers, and each label maps to one term documented in `.cartridge/help.md` and `.cartridge/docs/README.md`.
+- [ ] On a half-cold fixture, stored and resident counts differ and carry distinct labels; hub status labels daemon loading separately from row counts.
+- [ ] RPC keys, store layout and legacy decoders are unchanged, and the existing legacy-store and health e2e tests pass at the same revision.
 
 ## Proof and recovery
 
-Start at [cartridge.rs](../../../../../../memory.ctg/src/cartridge.rs), [main.rs](../../../../../../memory.ctg/src/main.rs).
+First probe: build a half-cold fixture at memory.ctg `c25af4d` and record both the CLI output and the RPC JSON. Add a CLI/RPC comparison test beside `.cartridge/tests/integration/e2e/health_surface.rs`. Gates, run from /Users/feb/dev/cartridge/memory.ctg: `just check`, `just test`, then `just all`; none has run yet. `.cartridge/docs/WORK_ITEMS.md` names an owner branch `codex/memory-terminology` and commits `0d3ce338`/`15862820`, but on 2026-09-14 none exists in memory.ctg and no `~/dev/memory-worktree-archives` exists. Before claiming, confirm with the user that the reservation lapsed; use any recovered wording only as reference. Rollback: revert the labels; no data changes.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just check` and `just test` from memory.ctg with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `MEMORY-002`; maximum five rounds.
+No hard needs. [Review history](review.md): rounds 1–2 inherited, round 3 rebased; maximum five.

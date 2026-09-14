@@ -7,8 +7,8 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: memory
 work-kind: rollup
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: keep-the-tree-and-record-true
 needs:
 - '@memory/memory-002'
@@ -16,21 +16,22 @@ needs:
 - '@memory/the-graph-converges'
 ---
 
-# keep-the-tree-and-record-true
+# What memory reports about its store stays true
 
-Track the linked current outcomes as a finite scope snapshot. Historical framework and product proposals remain source history.
+This is a finite parent for three memory outcomes: status counts use one vocabulary, ranking on a spilled store is measured and decided, and repeated ingest converges to stable counts. It replaces the historical standing maintenance terminal, which was never meant to finish and which the small-PRD rule retired. Later hygiene findings get their own leaves.
 
 ## Acceptance
 
-- [ ] Each included leaf has its own current acceptance and owner.
-- [ ] Close this snapshot only against observed child evidence; later enhancements get separate work items.
+- [ ] Each linked leaf is done, with its own evidence, at one memory.ctg revision.
+- [ ] Integration gate: at that revision, run `just all` from /Users/feb/dev/cartridge/memory.ctg. On the graph-converges fixture store, `memory health` and the `health` RPC must report equal counts under the terms memory-002 defines, and `memory check --json` must report no `dangling_reasons`.
+- [ ] If a leaf or the gate fails, record it here and leave the parent open.
 
 ## Work items
 
-- [Memory counts use consistent public terminology](../memory-002/prd.md)
-- [Mixed and cold recall preserve per-ability ranking](../memory-004/prd.md)
-- [the-graph-converges](../the-graph-converges/prd.md)
+- [CLI and RPC name the same memory counts](../memory-002/prd.md)
+- [Decide how ranking treats cold rows on a spilled store](../memory-004/prd.md)
+- [Repeating a multi-document ingest converges to stable counts](../the-graph-converges/prd.md)
 
 ## Review
 
-[Round 2 agent review](review.md). Inherits round 1 from `keep-the-tree-and-record-true`; maximum five rounds.
+[Review history](review.md): rounds 1–2 inherited, round 3 rebased; maximum five.

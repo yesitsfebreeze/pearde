@@ -29,3 +29,25 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass).
+Reconciliation verdict: **REBASE**. Composition now happens in memo's `context` op (`memo.ctg/src/context.rs`), which serves `documents`/`kernel` and asks injected `context.<kind>` providers: `context.memory` in `memory.ctg/src/source.rs`, `context.file` in `fs.ctg/src/main.rs`, consistent with decision `a-cartridge-brings-its-own-surface.md`. Children: context-contributor-contract done, memory-context-contributor done, @memo/landscape-context-facade done, live-file-context-contributors open (its live-owner facade is `stale-after-owner-split`). Not DELIVERED: no `context.<live>` provider exists in source.
+Stale revision: `ef941f40741d8598e22dee5c665cc937a6bfb5cd586937c8ab1f01d78c19407a` (typo owner key, repo cartridge.ctg, landscape naming, no integration gate).
+Presented revision: prd.md SHA-256 `1c1e7b52d9be8342879e60da5cfda5454e658e012b307501ce440d4d37bad3ac`. Source inspected at memo.ctg 9a1cf99, memory.ctg c25af4d, sessions.ctg e9725e8, cartridge.ctg c9ef10b (dirty working tree), prd.ctg 077e57a2 working tree.
+Change: owner memo; delivered children stated; end-to-end and provider-removal acceptance plus concrete integration gate.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | One query across sources; residual live/file scope identified. -1: live owner not named. |
+| Ownership and reuse | 19 | Providers owned by their cartridges per decision. -1: board alias landscape. |
+| Dependencies and slices | 18 | All four needs resolve; three done. -2: the open child is itself a rollup with a stale-after-owner-split facade. |
+| Acceptance and baseline | 18 | Provider-removal `absent` status already exercised in `memo.ctg/.cartridge/tests/integration/context.test.ts`. -2: the TS integration test is not wired into `just test memo`; the bun command is named separately. |
+| Failure and compatibility | 18 | Removal leaves other rows unchanged. -2: no rollback statement for the integration fixture itself. |
+| Reviewer total | **92 / 100** | |
+
+Result: **PASS**. Blocking findings: none.
+Validation: file existence; `rg` for `context.<kind>` providers across cartridges; `./prd.ctg/prd check` exit 0. Product gates were not run.
+User rating: not required under delegation. Rounds used / remaining: 3 / 2.
+Next: coordinator rehomes to memo board; the live-file rollup needs its own reconciliation.

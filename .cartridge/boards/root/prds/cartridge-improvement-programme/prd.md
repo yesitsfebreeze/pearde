@@ -7,8 +7,8 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-capability-owner: root
 work-kind: rollup
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: failed
 canonical-scope: cartridge-improvement-programme
 needs:
 - '@gitfs/tool-results-interoperate'
@@ -31,12 +31,13 @@ needs:
 
 # Cartridge improvement programme
 
-Coordinate the linked owner outcomes and record their combined evidence; claim a leaf for implementation.
+Roll-up only: index the per-owner improvement programmes and record their combined evidence. Claim a leaf in its owner board; this parent adds no implementation.
 
 ## Acceptance
 
-- [ ] Each linked leaf passes its own review and observable acceptance.
-- [ ] Record tested mitigations and remaining limitations at the integrated revisions.
+- [ ] Every linked child is `done` with its own recorded evidence, or retired by its owner-board review with the reason copied into Result.
+- [ ] After the last child lands, `just check` and `just test` exit 0 from `/Users/feb/dev/cartridge` at one recorded set of submodule revisions, and Result lists tested mitigations and remaining limitations per owner.
+- [ ] No child leaves `needs` without its owner-board disposition.
 
 ## Work items
 
@@ -57,6 +58,17 @@ Coordinate the linked owner outcomes and record their combined evidence; claim a
 - [Workspace tools improvement plan](../../../runtime/prds/improve-tools-programme/prd.md)
 - [Terminal UI improvement plan](../../../ui/prds/improve-ui-programme/prd.md)
 
+## Reconciliation and recovery
+
+The host now runs on the transport protocol and every cartridge was ported (2026-09-14). Children written before that must be reconciled in their owner boards before this parent can close:
+
+- `@memory/improve-memory-tool-programme`: the memory-tool submodule was dropped; memory.ctg serves `tool.memory` itself ([help](../../../../../../memory.ctg/.cartridge/help.md)).
+- `@runtime/improve-tools-programme`: "workspace tools" targets the dropped workspace; tools.ctg has its own `tools` board.
+- `@policy/improve-policy-programme`: under [a-cartridge-brings-its-own-surface](../../../../../../.cartridge/memos/decision/a-cartridge-brings-its-own-surface.md) the policy keeps no per-tool catalog; per-tool rules belong to `config.lua`.
+- `@ui/improve-ui-programme`: the board name is historical; it already targets tui.ctg.
+
+Six children are already `done`. Baseline ([release-status](../../../../../../.cartridge/memos/note/release-status.md)): `just test` is red in gitfs, harness, mcp, pty, router and sessions. These gates have not run for this plan. On an integration failure reopen the child whose pinned revision changed and keep the previous pinned revisions.
+
 ## Review
 
-[Round 2 agent review](review.md). Inherits round 1 from `cartridge-improvement-programme`; maximum five rounds.
+[Review history](review.md). Inherits round 1 from `cartridge-improvement-programme`; 3 of 5 used.

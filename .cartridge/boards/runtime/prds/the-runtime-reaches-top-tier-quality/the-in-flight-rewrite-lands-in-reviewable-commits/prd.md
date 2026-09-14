@@ -3,21 +3,37 @@ state: open
 origin: requested
 priority: 70
 repo: "/Users/feb/dev/cartridge/cartridge.ctg"
+work-kind: leaf
+review-round: 2
+review-status: passed
 ---
 
 # The in-flight rewrite lands in reviewable commits
 
 ## Outcome
 
-The working tree of `cartridge.ctg` is committed. On 2026-09-14 it carried 56 modified files, about 2200 changed lines, four untracked source modules (`src/evidence.rs`, `src/fabric.rs`, `src/graph.rs`, `src/settings.rs`), the rename of `src/turn.rs` to `src/trace.rs` and of `landscape` to `fabric`, deleted profile directories, and new tests. None of it is reviewable or bisectable while uncommitted, and every other child of this container would diff against a moving base.
+`cartridge.ctg` has one line of history that every sibling leaf diffs against. The 2026-09-14 working tree landed as `b4d553f`, but the host rewrite now runs on two diverged lines from merge base `b02b200`:
+
+- Local `main` (`e8a4da3`) has two unpushed commits: `c9ef10b` (declared sends, per-edge tokens, outcomes, deadlines, bounded queues, yielding Lua bridge) and `e8a4da3` (trust).
+- `origin/main` = `transport-design` (`ba198f4`, worktree `/Users/feb/dev/cartridge-worktrees/ws/cartridge.ctg`) has nine commits `main` lacks, including coroutine listeners (`29dbff6`) and unbounded queues in `src/transport/rpc.rs`.
+
+Sixteen files changed on both lines. This leaf reconciles them without redesigning either.
 
 ## Acceptance
 
-- [ ] `git status --porcelain` in `cartridge.ctg` is empty apart from ignored paths.
-- [ ] The rewrite is split into commits that each build and pass `just check runtime`: at minimum, the rename commits, the settings layer, the fabric/graph/evidence modules, and the profile collapse.
-- [ ] Each commit message states what changed and why in normal prose; no commit mixes a rename with a behavior change.
-- [ ] `docs/` and `.cartridge/README.md` changes travel with the code they describe.
+- [ ] In `cartridge.ctg`, `git rev-list --left-right --count main...origin/main` prints `0	0` and `git status --porcelain` is empty.
+- [ ] Origin's listener model (`29dbff6`, `8a59b5f`, `ba198f4`) is kept. The bounded queues, declared sends, per-edge tokens, outcomes and deadlines from `c9ef10b`, and the trust from `e8a4da3`, survive. Any dropped part is named in the commit message.
+- [ ] Each landed commit passes `just check runtime` and `just test runtime` (cwd `/Users/feb/dev/cartridge`). No commit mixes a rename with a behavior change.
+- [ ] The porting branches under `cartridge-worktrees/ws/` build against the reconciled head, or `coordination/PORTING.md` names the new base.
 
 ## Proof and recovery
 
-Start with `git diff --stat` and `git status --short`. Use `git add -p` to separate concerns. Do not rewrite already-pushed history. If a split cannot build on its own, note the dependency in the commit message rather than squashing everything.
+1. Probe from `cartridge.ctg`: `git log --oneline main...origin/main`, then the overlap `comm -12` of `git diff --name-only b02b200 main` and `git diff --name-only b02b200 origin/main`. Record the file list.
+2. Rebase on a disposable branch: `git switch -c reconcile e8a4da3 && git rebase origin/main`. Never force-push `origin/main`.
+3. If two yielding bridges cannot be merged without a design choice, keep origin's and record the question in a memo.
+
+`main` keeps the unpushed commits until `reconcile` passes the gates. The coordinator moves the root gitlink (now `d2a761e`) afterwards.
+
+## Review
+
+[Review history](review.md): round 2/5 (1 inherited from the parent).

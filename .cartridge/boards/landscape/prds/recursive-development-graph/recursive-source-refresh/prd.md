@@ -1,14 +1,14 @@
 ---
-repo: /Users/feb/dev/cartridge/cartridge.ctg
+repo: /Users/feb/dev/cartridge/memo.ctg
 state: open
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-owner: landscape
+capability-owner: memo
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: delivered-pending-verification
 canonical-scope: recursive-development-graph
 needs:
 - '@landscape/recursive-development-graph/recursive-root-search'

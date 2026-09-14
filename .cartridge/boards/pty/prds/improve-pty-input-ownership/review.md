@@ -29,3 +29,24 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reconciliation verdict: **REBASE** (partially delivered). Evidence: pty cacd7e1 "Support explicit user and agent control of the shared terminal" added `pty {op:"control"}`, takeback revocation with one Ctrl+C, and tests `shell_serializes_input_and_only_cancels_the_matching_invocation` and `handoff_blocks_agent_input_and_takeback_interrupts_without_closing_shell` in `pty.ctg/.cartridge/tests/integration/process.rs`; documented in `.cartridge/docs/README.md`; `src/tool.rs` `tool_gate` refuses concurrent input with a generic message (no owner); `src/main.rs` `run` admits on prompt phase, and `../improve-pty-command-wait/handoff-baseline-context.json` records the old prompt being treated as interrupt acknowledgment. Not DELIVERED: owner-bearing refusal and post-takeback readiness boundary are absent. Pre-revision text (SHA-256 `13376de73ba5c4ba9f05d15b74f57e759117e9ec0221beee6ac9787025631e90`) restated delivered behaviour as new work and named five missing paths. Blocking.
+
+Revision reviewed: `prd.md` SHA-256 `29ac20db79dfda3b5472a6f28c7434e45609de64c64b535edae84e7dcf819bb8` (working tree). Changes: delivered baseline cited; acceptance narrowed to owner-bearing refusal, new-prompt-after-interrupt boundary, no cross-invocation release/wedge, PID and nvim survival; documented takeback interrupt kept; real paths.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 19 | Remaining gaps only; -1 value of owner info to callers not tied to a consumer. |
+| Ownership and reuse | 19 | pty-only; extends existing tests and docs; -1 README update implied, not listed as acceptance. |
+| Dependencies and implementable slices | 19 | Need done; ready; -1 shared footprint with command wait. |
+| Observable acceptance and baseline evidence | 18 | Four checks with named existing tests; -2 "lost owner" recovery trigger (timeout vs reload) not pinned. |
+| Failure, recovery and compatibility | 18 | Compatible control op, additive fields; -2 behaviour when hand-back happens before the shell prints a prompt left to probe. |
+| Reviewer total | 93 / 100 | |
+
+Result: **PASS**. Unresolved blocking findings: none.
+Validation: existence checks of repo, source, test and doc paths (ls/rg); `./prd check` (cwd `/Users/feb/dev/cartridge/prd.ctg`, root graph) exit 0 with 228 records and no problems (needs resolve, no cycle); `just --list` (cwd `/Users/feb/dev/cartridge`) shows `test`/`smoke` and `.cartridge/memos/routine/cartridge-development.md` accepts the named owners; relative links checked. No product gates were run.
+Reviewer: agent (independent reviewer, plan refresh pass). User rating: not requested (delegated).
+Rounds used / remaining: 3 / 2.
+Next action: ready to claim; `@ui/improve-ui-terminal-owner` (ui renamed tui) depends on it.

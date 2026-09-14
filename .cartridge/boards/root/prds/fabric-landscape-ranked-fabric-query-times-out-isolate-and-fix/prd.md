@@ -3,37 +3,24 @@ state: open
 origin: requested
 priority: 75
 repo: "/Users/feb/dev/cartridge"
+blast-radius: low
+workflow: develop-one-cartridge
+work-kind: leaf
+review-round: 1
+review-status: passed
 ---
 
-# fabric/landscape Ranked fabric query times out; isolate and fix.
+# A ranked fabric query answers within its bound, or is retired as already fixed
 
-Calling cartridge_memo with op=landscape AND a query consistently hangs and is
-cancelled after 600000ms (the MCP tools/call timeout). Plain landscape (no
-query) returns fine, and op=resolve (usage+query over the same record) works.
-So the ranked graph/entry query path — the intended "narrow the fabric to what
-I need" entry point — is broken while the cheap paths are not.
-
-## Outcome
-
-A ranked fabric query returns scoped, relevant records (cartridges, tools,
-memos) in normal latency instead of hanging until the MCP timeout.
+Reported before the port: `cartridge_memo {op:"landscape", query}` hung until the 600000 ms MCP tool timeout while plain landscape and `op:"resolve"` returned. Since then the op is `fabric` (`memo.ctg/src/service.rs`; the host rewrite cartridge.ctg `939e7d1` removed the core graph, fabric and evidence modules) and memo.ctg `1d2fa92` ported memo to the transport protocol, moving graph assembly into memo (`src/fabric_graph.rs`); the rename item is delivered. In current source the query-only work is `fabric_graph::search` and the `view::view` filter, both linear; the announce gather in `graph` runs for every call. Owner: memo.ctg.
 
 ## Acceptance
 
-- [ ] Reproduce the 600000ms hang against a clean rebuild of memo_cartridge
-      (cartridge_memo {op:"landscape", query:"…"}), confirm it is reproducible
-      and not intermittent.
-- [ ] Land/commit the landscape->fabric rename in the memo cartridge, which is
-      currently uncommitted WIP, then retest.
-- [ ] Isolate the hang: ranking projection, entry paging, or the announce
-      gather. Compare against op=resolve which works.
-- [ ] Ranked landscape returns within normal latency; confirm plain landscape
-      (no query) and cursor paging still return.
-- [ ] Assert the returned rows and node/edge counts match the live composition
-      (the plain-landscape view) for the same profile.
+- [ ] Reproduce first at the current memo.ctg revision: `fabric` with and without `query` against the stand-in host `memo.ctg/.cartridge/tests/integration/host.ts`, recording revision and elapsed time. If neither hangs, record that evidence and recommend retiring this item.
+- [ ] If it reproduces: the query call returns `hits` within 5 s in that fixture, with the same `graph` node and edge counts as the plain call.
+- [ ] A `graph.announce` listener that never answers makes both calls return or fail within the host's `event_timeout_ms`, never the MCP timeout; cancellation still yields `cancelled`.
+- [ ] Cursor paging and the `fabric response exceeds output cap` refusal are unchanged.
 
 ## Proof and recovery
 
-Start at the memo cartridge (memo.ctg) fabric/landscape source and the record's
-landscape memo. If the hang is in the ranking query specifically, it shares a
-path with op=resolve's working matcher — find the divergence.
+Start at `memo.ctg/src/service.rs` (`fabric`, `graph`), `memo.ctg/src/fabric_graph.rs` and `memo.ctg/src/view.rs`; add the case to a test in `memo.ctg/.cartridge/tests/integration/` that uses `host.ts`. Gates from `/Users/feb/dev/cartridge`: `just test memo`, `just check memo`; not run for this plan. Live MCP reproduction is blocked for now: [release-status](../../../../../../.cartridge/memos/note/release-status.md) records the mcp smoke failing with `memo inactive`. Plain `fabric` stays the fallback; no durable state changes. Rehoming to the memo board is recommended.

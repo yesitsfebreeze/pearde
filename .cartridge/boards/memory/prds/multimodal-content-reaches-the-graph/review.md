@@ -29,3 +29,27 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). No user score was supplied or invented.
+Reconciliation verdict: **REBASE — media ingest absent (`IngestArgs`, `Source` text-only); embedding identity is a store-wide `EmbedStamp` that deliberately fails open at save (`src/graph/src/persist.rs`, `check_embed_stamp`). Old starting files wrong. Model access stays memory's (memory decision `memory-alone-owns-model-access`).**
+
+Presented revision: `prd.md` SHA-256 `0d4a5236375a405b8867bf26fd5884490bf6ba7563f4a6c721f385669588f004`. Rebased in this round (prior text `bd9d4fbf816b7e482e549bd862da88ed236ca67a28074768c5a9ba1a2ae6189e`).
+Source inspected: memory.ctg `c25af4d` (main), root `24aa2be`, prd.ctg `077e57a2` plus working tree.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 17 | Requested capability, bounded to one format. -3: no current consumer measurement. |
+| Ownership and reuse | 19 | Configured reason endpoint, existing stamp, no second store. -1. |
+| Dependencies and implementable slices | 17 | Size L with provider-capability probe and stop/split condition. -3. |
+| Observable acceptance and baseline evidence | 19 | Four checks incl. refusals and offline stubs. -1. |
+| Failure, recovery and compatibility | 18 | Text ingest and save fail-open preserved; private-image approval noted. -2: mismatch refusal scoped to media only leaves text mismatch as today. |
+| Reviewer total | 90/100 | |
+
+Agent score: **90/100 — PASS**.
+Findings: (1) Paths corrected. (2) Reconciled acceptance with the deliberate fail-open stamp: refusal at media admission only. (3) Provider capability made a first probe with split rule. Body ~317 words.
+Blocking findings: none.
+Validation: Existence checks only: cited source/test/doc paths exist (`ls`), `needs` targets and local links resolve (script over frontmatter and markdown links), memory.ctg `just --list` shows `check`, `test`, `e2e`, `all`, `eval-mature`, `eval-replay`, `test-reload`. Leaf body word count checked. No product gates were run.
+Rounds used / remaining: 3 / 2.
+Next: Probe llm.rs image support; split if absent.

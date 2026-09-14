@@ -29,3 +29,18 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14 (reconciliation)
+
+Reconciliation verdict: **SUPERSEDED**.
+
+Reviewed revision: prd.md SHA-256 `06f33c83256d656ef5eab70d8c10dc346c7ac779cef25d1ced9a6c1af25f9b2d` (frontmatter afterwards set to review-round 3 / superseded-recommend-retire; body unchanged). Source revisions: tools.ctg caea5b7, cartridge.ctg c9ef10b, root main 24aa2be, prd.ctg 077e57a2 (dirty tree).
+
+Evidence: the roll-up's route was to relocate tools' implementation into a runtime-owned package in cartridge.ctg (`@runtime/runtime-development-package`, starting files `cartridge.ctg/src/runtime.rs` and `service.rs`, which no longer exist). Later decisions and commits took the other route: (1) `.cartridge/memos/decision/tui-and-tools-are-cartridges.md` keeps repository bundle/lane operations in the tools cartridge, and `tools.ctg/.cartridge/help.md` says tools "stays out of the runtime binary"; (2) cartridge.ctg b1494bb "This repository is the base, not a composition"; (3) `.cartridge/memos/decision/cartridge-repositories-keep-records-and-executable-memos.md` (2026-09-13) moves development operations into routine memos — the one home for build/check/test is now the root `justfile` → `.cartridge/justfile` → `.cartridge/memos/routine/cartridge-development.md` (owner selection with explicit unknown-owner failure, line 78); (4) `.cartridge/memos/decision/a-cartridge-brings-its-own-surface.md` keeps each cartridge's surface in its own directory.
+Findings: the clean-checkout / source-absent bundle outcome (`@runtime/development-clean-checkout`) may still be wanted, but it should be rebased as an independent leaf against the routine memos and tools.ctg, not kept under this relocation roll-up (coordinator/runtime board). Its needs on `@runtime/improve-tools-*` and `@memo/one-document-serves-every-reader/document-identity` also need reconciliation there. `capability-capability-owner` typo is board-wide.
+Disposition: retire recommendation; do not delete; `state:` unchanged. No score recorded.
+Validation: ls of cartridge.ctg/src, reads of decisions, tools help.md, root justfile and routine; `just --list`. No product gates were run.
+Reviewer identity: agent (independent reviewer, plan refresh pass). User rating: not required. User feedback: none supplied.
+Result: SUPERSEDED — recommend retire. Unresolved blocking findings: none for this roll-up.
+Rounds used / remaining: 3 / 2.
+Next action: coordinator confirms retirement and rebases the clean-checkout child independently.

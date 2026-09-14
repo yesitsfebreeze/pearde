@@ -29,3 +29,17 @@ Blocking review findings: No maintained editor/LSP provider and teardown API has
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: resolve the named prerequisite and review a substantive revision.
+
+## Round 3 — 2026-09-14 (reconciliation, no score)
+
+Reviewer: agent (independent reviewer, plan refresh pass). Presented revision: `prd.md` SHA-256 `605a3ce27bcef1d27558e6f8ac7e8fe70e69b1f7519db2d86f396d469df27c88` (frontmatter review fields only; body unchanged).
+
+Reconciliation verdict: **CONFLICT**. The round-2 blocker persists: no editor/LSP provider exists in any cartridge (`rg -il "lsp|language server|rust-analyzer"` across all `*.ctg` outside prd.ctg returns nothing). Assigning provider-specific lifecycle to the runtime would contradict decisions `tui-and-tools-are-cartridges` / `core-composes-and-the-cli-selects-services` (behavior belongs to cartridges) and `a-cartridge-brings-its-own-surface` (no sibling knowledge in shared cartridges). The generic host part already exists: node generations in `src/host/process.rs` `start(…, generation)` and `a_restart_keeps_its_dependents_working`.
+Alternatives for the user:
+- (a) Retire this item. No semantic tool is planned, and generation-safe restart is covered by the host.
+- (b) Create an `lsp` (or editor) cartridge with its own board. This PRD is rehomed there, with provider and teardown API chosen as its first probe.
+- (c) Keep the item parked here until a provider is named.
+
+Recommended default: (a).
+Validation: `rg` across the repository, reading of `src/host/process.rs`, decision memos. No product gates were run.
+Rounds used / remaining: 3 / 2.

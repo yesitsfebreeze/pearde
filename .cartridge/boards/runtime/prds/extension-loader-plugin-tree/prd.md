@@ -7,28 +7,31 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: runtime
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: extension-loader-plugin-tree
+footprint:
+- /Users/feb/dev/cartridge/cartridge.ctg/src/host/mod.rs
+- /Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/host.rs
 ---
 
 # extension-loader-plugin-tree
 
-Reuse the current cartridge loader and transactional replacement semantics. Prepare a candidate before retiring the old active generation; where exclusive resources prevent overlap, require a tested handoff protocol or refuse the update while retaining the old service. The old dispose-then-mount prescription is not an atomic rollback guarantee.
+A reload whose new declaration is refused keeps the old node serving. In [host/mod.rs](../../../../../../cartridge.ctg/src/host/mod.rs), `replace_locked` computes `plan` and then calls `stop_slot` before looking at whether the plan is `Err`. Catalogue refusals (`plan::unmatched`, clashes) are only applied later, in `rewire`, to slots that have already stopped. `reconcile` likewise puts entries with a refused plan into `stale` and stops them. In each case a broken `cartridge.json` edit takes a working cartridge down. Unchanged entries already stay running across `reconcile`.
+
+Scope is refusal at planning, before anything is disposed: the candidate plan is checked on its own and against the current catalogue before `stop_slot` runs. A plan that is valid but whose node then fails to start still fails: the socket path is exclusive, and overlapping handoff is out of scope. Status and lifecycle report it with the last stderr lines, as today.
 
 ## Acceptance
 
-- [ ] Idempotent apply restarts nothing; add/remove/disable/config/name changes produce the documented minimal transitions.
-- [ ] Failed candidate preparation preserves the old active provider and removes only newly owned effects.
-- [ ] Nested isolation and owner disposal preserve private keys and sibling resources; no plugin loader or catalog is introduced into memory.
+- [ ] A source edit to a running cartridge that makes its document unreadable, or names an undeclared event, leaves that node `active` on its current generation. `status` and `lifecycle` carry the refusal.
+- [ ] The same refusal arriving through an `init.lua`/`config.lua` change in `reconcile` leaves the running entry serving. Removing the entry still stops it.
+- [ ] Fixing the document afterwards replaces the node exactly once. Dependents keep working, as `a_restart_keeps_its_dependents_working` shows.
+- [ ] A valid plan whose node fails to start ends `failed` with its error. No second node or stale socket is left behind.
 
 ## Proof and recovery
 
-Start at [runtime.rs](../../../../../../cartridge.ctg/src/runtime.rs), [service.rs](../../../../../../cartridge.ctg/src/service.rs).
+First add a failing test next to `a_restart_keeps_its_dependents_working` in [host.rs tests](../../../../../../cartridge.ctg/.cartridge/tests/unit/src/tests/host.rs). Gates, cwd `/Users/feb/dev/cartridge`: `just test runtime`, `just check runtime`. Not run. Rollback: restore stop-then-plan ordering.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test runtime` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `extension-loader-plugin-tree`; maximum five rounds.
+No hard prerequisites. The acceptance overlaps `documents-own-live-processes/document-sidecar-lifecycle` ("replacement preserves the old usable service"); this leaf owns refusal at planning. [Review](review.md): inherits 2 rounds.

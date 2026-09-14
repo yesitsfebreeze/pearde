@@ -29,3 +29,28 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14 (reconciliation and rebase)
+
+Reconciliation verdict: **REBASE**. The outcome is still wanted, but the old contract (a host-authenticated `post` op into a new inbox) predates the host rewrite: senders are now authenticated per edge and payloads schema-checked by the host (cartridge.ctg `ee7e295`, `c9ef10b`, `docs/transport.txt`), and a sessions mailbox with authenticated actors and message-ID dedupe is delivered (`@sessions/sub-agent-sessions-record-parent-and-mailbox`, state done; `sessions.ctg/src/mailbox.rs:132`). Nothing in agent source posts today (`agent.ctg/src/lib.rs:235`). Not delivered.
+
+Presented revision: prd.md SHA-256 `fb66166e1df080c5f97b716d52b1cf6ab2b904952d4c808c482d39585dbbfbeb` (rebased from `62094aeba7f2982e47838b5d5140fa8e67973f8cf4fe8e66a88f4da62e24358e`). Source revisions: agent.ctg `fad6d3b`, cartridge.ctg `c9ef10b`, sessions.ctg `e9725e8`, harness.ctg `336f2d1`, prd.ctg `077e57a2` (dirty tree).
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 19 | One outcome (posts reach a working run at whole boundaries), idle-session durability kept. −1: 308 words, slightly above the 300 aim. |
+| Ownership and reuse | 18 | Reuses host edge authentication, schema checks and the done sessions mailbox instead of a second inbox. −2: durable acceptance spans agent and sessions; drain cursor semantics still to be probed. |
+| Dependencies and slices | 17 | Both needs resolve (one done, one open); mailbox prerequisite now explicit. −3: `@agent/an-event-declares-its-type` is failing review; the events-port precondition has no PRD. |
+| Observable acceptance and baseline | 18 | Four behavioral checks incl. crash replay, idle race, refusal; baseline cites source lines; gates exist. −2: baseline is source reading, not a fixture run; gate cannot build until the port. |
+| Failure, recovery and compatibility | 18 | Declined-before-write, checkpoint-conflict retry from mailbox cursor, v1 transcripts readable. −2: idle-transition race strategy not chosen. |
+| Reviewer total | **90 / 100** | |
+
+Findings and concrete revisions: (1) starting-file links resolved to nonexistent `boards/model_loop.rs`/`run_state.rs`; `run_state.rs` is now a test module (`agent.ctg/.cartridge/tests/unit/run_state.rs`) — replaced with real paths and a footprint. (2) Post surface rebased to a declared, listened event with host outcomes (`answered`/`declined`). (3) Mailbox need added. (4) Restored the round-1 checks for single journal landing and tool-group integrity.
+Program finding (non-blocking for this plan, blocks implementation): agent.ctg `fad6d3b` still calls `transport::cartridge::run`, `ctx.call` and `ctx.provide` (`agent.ctg/src/main.rs:14,33,42`) and declares `provide` in `cartridge.json`; cartridge.ctg `ee7e295` removed that API ("provide, call, the Rust SDK crate and wire.ts are gone") and manifests now refuse unknown fields (`cartridge.ctg/docs/creating-cartridges.txt`). No agent gate builds until the agent is ported to declared events; no PRD owns that port. Coordinator action.
+Disposition: keep (rebased).
+Validation: `ls`/`rg`/`grep` existence checks of every cited path and line, needs resolution under `boards/<owner>/prds/<slug>/prd.md`, root `.cartridge/justfile` recipes (`test`, `check`, `verify`, `smoke`) and the `agent` case in `.cartridge/memos/routine/cartridge-development.md`, `git log` of agent.ctg and cartridge.ctg, decision memo reads. No product gates were run.
+Reviewer identity: agent (independent reviewer, plan refresh pass). User rating: not required under delegation; none supplied. User feedback: none supplied for this revision.
+Result: **PASS** (90/100).
+Unresolved blocking findings: none.
+Rounds used / remaining: 3 / 2.
+Next action: coordinator adds the agent events-port prerequisite; then probe the post fixture and write specs.

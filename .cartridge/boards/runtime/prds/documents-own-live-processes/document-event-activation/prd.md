@@ -7,30 +7,31 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: runtime
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: documents-own-live-processes
 needs:
-- '@runtime/one-runner-executes-documents/document-command-result'
+- '@runtime/a-listener-subscribes-to-event-types'
+footprint:
+- /Users/feb/dev/cartridge/cartridge.ctg/src/node.rs
+- /Users/feb/dev/cartridge/cartridge.ctg/src/transport/cartridge.rs
+- /Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/host.rs
 ---
 
-# Event activation resumes from a durable cursor
+# A replaced subscriber resumes from its cursor without duplicates
 
-Use at-least-once notifications and stable dispatch identities; do not promise exactly-once external effects.
+A node watches another cartridge's channel with `cartridge.subscribe` (`src/node.rs` into `Ctx::subscribe`, `src/transport/cartridge.rs`), on ws/cartridge.ctg branch `transport-design` (`ba198f4`). Delivery is at least once; no external effect is promised exactly once. From source: the publisher replaces a repeated subscribe on one connection and drops a disconnected peer's entries, but neither is tested. Lua always passes `since: nil`, so a replaced subscriber cannot resume and silently misses envelopes published while it restarted.
 
 ## Acceptance
 
-- [ ] Crash after dispatch replays the same identity for deduplication or explicit reconciliation.
-- [ ] Reload produces no duplicate subscriptions.
-- [ ] Queue overflow reports a gap and recoverable journal cursor.
+- [ ] Regression proof: subscribing twice to one cartridge and channel from a node delivers each later envelope once, to the newest handler.
+- [ ] Regression proof: stopping or replacing the subscriber node emits `unsubscribe` at the publisher, and no envelope reaches the old generation.
+- [ ] New: `cartridge.subscribe` accepts an optional `since`. A new generation resubscribing from its last `seq` receives every retained envelope after it, in order and once. Beyond retention it receives the needed leaf's `gap` envelope.
 
 ## Proof and recovery
 
-Start at [runtime.rs](../../../../../../../cartridge.ctg/src/runtime.rs), [service.rs](../../../../../../../cartridge.ctg/src/service.rs).
+First add tests next to `streams_replay_and_then_deliver_live` in `.cartridge/tests/unit/src/tests/host.rs`. The regression tests may pass immediately; the `since` test must fail first. Gates, cwd `/Users/feb/dev/cartridge`: `just test runtime`, `just check runtime`. They have not run, and they need the transport branch on main. Omitting `since` keeps today's behavior. The base keeps no durable journal; persisting the cursor is the subscriber's own job. Rollback: drop the optional argument.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test runtime` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `documents-own-live-processes`; maximum five rounds.
+The need owns the gap envelope and the restart cursor shape (`seq`/epoch), so `since` follows its wire format. Shared footprint: `src/transport/cartridge.rs`. [Review](review.md): rounds 1–2 inherited; round 3 rebased.

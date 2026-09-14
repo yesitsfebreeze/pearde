@@ -29,3 +29,23 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). Presented revision: `prd.md` SHA-256 `3a006fa4dc6de024f526c222d234fe2d68ecac7460407acf6eecc2a0af0f1244`.
+
+Reconciliation verdict: **REBASE**. All three children targeted pre-rewrite files. On the transport host the grant in `cartridge.json` is the single policy input and `src/sandbox.rs` the single wall (macOS profile shipped; Linux refuses). Round 1's "absolute-grant promise vs coarse network" point is reconciled: the snapshot now states the platform limit. Revision: current-state paragraph, pinned integration gate, shared footprint; the launch-authority link text was updated to its rebased title. All three children were rebased and passed round 3 in this pass.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 18 | A finite snapshot with a current state; −2: Linux closure has no date or runner certainty. |
+| Ownership and reuse | 19 | Single runtime module; −1: `src/cli/host.rs` launch remains an intentionally excluded route. |
+| Dependencies and slices | 18 | Three resolving needs, acyclic; −2: launch-authority acceptance 2 waits on the linux-policy runner. |
+| Acceptance and baseline | 18 | A pinned-revision gate on both platforms; −2: no baseline. |
+| Failure and compatibility | 18 | Refusal-not-fallback is retained in the children; −2: no roll-up-level rollback beyond child boundaries. |
+| Reviewer total | 91 / 100 | |
+
+Result: **PASS**. Blocking findings: none.
+Validation: needs resolution and children review status, reading of `src/sandbox.rs`/`sandbox_linux.rs`. No product gates were run.
+User rating: not required. Rounds used / remaining: 3 / 2.
+Next: macos-policy is dependency-free; linux-policy starts with the runner probe.

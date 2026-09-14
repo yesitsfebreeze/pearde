@@ -29,3 +29,23 @@ Blocking review findings: Linux enforcement needs a real runner with a recorded 
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: resolve the named prerequisite and review a substantive revision.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). Presented revision: `prd.md` SHA-256 `ae23a905edd60bf7d056a5f2cc255af69fe982df9e7ecb50d9efd3e56e5b6237`.
+
+Reconciliation verdict: **REBASE**. The outcome is unchanged and still undelivered: `src/sandbox_linux.rs` (17 lines) refuses all execution. The old starting files `src/runtime.rs`/`src/service.rs` and the `.pearde` command-adapter link are gone. Revision: current files named; macOS profile semantics adopted as the reference, including sockets directory and semaphores (`81a138e`, `92b7a5d`); the dead link dropped. The round-2 blocker ("no runner identified") is addressed. `docker context ls` shows an active `orbstack` context and `limactl` is installed (no instance). Step one records kernel, Landlock ABI and seccomp, with an explicit stop condition.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | Unblocks all Linux execution; clear parity target; −1: UDP denial needs seccomp, not Landlock, so the implementation must use both. |
+| Ownership and reuse | 19 | Runtime `sandbox` module and existing test file; −1: the container invocation is not yet a recipe. |
+| Dependencies and slices | 17 | No hard needs; the runner is named with a stop condition; −3: runner Landlock ABI not yet observed (docker was not run in this pass). |
+| Acceptance and baseline | 18 | Real-child allow/deny, refusal, and compile-vs-enforce separation; −2: no baseline. |
+| Failure and compatibility | 18 | The refusal remains the fallback and partial policy is forbidden; −2: kernels with partial ABI support need a recorded minimum. |
+| Reviewer total | 91 / 100 | |
+
+Result: **PASS**. Blocking findings: none (the round-2 blocker is resolved by naming a runner plus a stop condition). Non-blocking: if the OrbStack kernel lacks ABI 4, choose a Lima VM image with a newer kernel before implementation.
+Validation: `wc -l src/sandbox*.rs`, reading of `sandbox.rs`, `which docker limactl orb`, `docker context ls`, `limactl list`. No product gates or containers were run.
+User rating: not required. Rounds used / remaining: 3 / 2.
+Next: probe the container kernel and ABI; record the output in this review before specs.

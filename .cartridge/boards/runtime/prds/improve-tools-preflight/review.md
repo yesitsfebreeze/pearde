@@ -29,3 +29,22 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reconciliation verdict: **REBASE**. `scripts/workspace.py` and `repositories.json` no longer exist; the operations are the tools cartridge's `dispatch` (`tools.ctg/src/service.rs:652`: bundle, lane, land, lane-rm), ported 9b7d7dc. The stale revision's "surviving runtime development package" home contradicts decision `tui-and-tools-are-cartridges` and cartridge.ctg b1494bb ("the base, not a composition"). Preview mode is absent (every op mutates directly). Frontmatter key typo `capability-capability-owner` corrected to `capability-owner` (value unchanged).
+Stale presented revision: `d96307c195ad4501ee6acef22ecea9c024841b999786abb8443a92087a950523`. Revised revision: `0d40f6958fd96d07b8312ac17057c512c1a58a6277a8337122c7733e2bd0c2e8`.
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 17 | Useful for agents driving destructive repository ops; one outcome. -3: moderate value, no reported incident. |
+| Ownership and reuse | 18 | tools.ctg owns the ops; preview reuses each op's checks, no second executor. -2: @runtime board placement historical. |
+| Dependencies and slices | 19 | No hard needs; shared file with two siblings named. -1: landing order unset. |
+| Acceptance and baseline | 19 | Byte-identity, missing prerequisite, stale expect, compatibility. -1: snapshot fixture still to be written. |
+| Failure and compatibility | 19 | Stale digest refuses before effects; requests without new fields unchanged. -1: digest scope for bundle (build inputs) left open. |
+| Reviewer total | 92 / 100 | |
+
+Result: **PASS**. Unresolved blocking findings: none. Coordinator: rehome to @tools when convenient.
+Validation: cheap existence checks only — ls/rg over cartridge.ctg (HEAD c9ef10b), tools.ctg (caea5b7) and memory.ctg (c25af4d) source; `just --list` at /Users/feb/dev/cartridge; relative-link resolution over prd.md; `shasum -a 256`. No product gates were run.
+Reviewer: agent (independent reviewer, plan refresh pass). User rating: not required under delegation; none supplied.
+Rounds used / remaining: 3 / 2. Next action: fixture snapshot, then specs.

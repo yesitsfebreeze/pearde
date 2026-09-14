@@ -5,10 +5,10 @@ origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: memory
+capability-owner: memory
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: improve-memory-tool-errors
 needs:
 - '@memory/memory-owns-its-tool/memory-adapter-core'
@@ -16,23 +16,21 @@ footprint:
 - /Users/feb/dev/cartridge/memory.ctg/src/cartridge.rs
 ---
 
-# Return actionable memory failures and enforce the tool schema
+# tool.memory failures carry a stable code the agent can act on
 
-Translate engine outcomes once in the memory-owned adapter under the existing string-content/error wire. Publish codes for invalid input, incompatible/contended owner, unavailable dependency and refused/committed/unknown ingestion; preserve call identity and safe details.
+Today `tool.memory` failures are free prose inside `{content, error:true}` (`tool_failure` in `src/cartridge.rs`). An ingest that did not commit returns the raw engine reply. Engine and transport errors from `memory(...).await?` escape as provider errors, not tool results, so consumers see different failure shapes. Outcome, owned by memory: one translation point in the adapter maps every outcome to a JSON content body `{code, message, call}`. The codes are `invalid_input`, `writer_contended`, `dependency_unavailable`, `ingest_refused` and `ingest_unknown`. The `{content: string, error: bool}` wire stays unchanged.
 
 ## Acceptance
 
-- [ ] Invalid arguments invoke no engine operation; contention and model timeout remain distinct errors through real MCP/proxy consumers.
-- [ ] A store commit followed by response failure reports unknown or committed according to actual evidence and offers exact readback, not automatic retry.
-- [ ] Query/ingest compatibility and profile exposure stay unchanged across wrapper retirement; errors never become successful empty recall.
+- [ ] Invalid arguments return `invalid_input` without opening a store, proven the same way as `invalid_operations_do_not_open_a_store`.
+- [ ] A stopped fixture embed server returns `dependency_unavailable`, and so does a disconnected attached owner. A process that finds the store writer held returns `writer_contended`. None of these returns `error:false` with an empty recall.
+- [ ] An engine reply whose `status` is not `committed` returns `ingest_refused`. A worker failure after an ingest was dispatched returns `ingest_unknown` with the call ID and advice to verify by query. The adapter never retries.
+- [ ] Successful query and ingest content is unchanged in the existing integration case, and `.cartridge/help.md` lists the codes.
 
 ## Proof and recovery
 
-Start at [cartridge.rs](../../../../../../memory.ctg/src/cartridge.rs).
+First probe: at memory.ctg `c25af4d`, reproduce each failure using the `test_support` fixed-vector HTTP embed and record the content returned today. Tests go in `.cartridge/tests/unit/src/cartridge/tests.rs` and `.cartridge/tests/integration/cartridge.rs`. Gates from /Users/feb/dev/cartridge/memory.ctg: `just check` and `just test`, both not run. Rollback: revert the mapping. No stored state changes.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just check` and `just test` from memory.ctg with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `improve-memory-tool-errors`; maximum five rounds.
+Adapter-core appears delivered; verify it. Uses the same file as get and correct, so land it after get. [Review history](review.md): round 3 of 5.

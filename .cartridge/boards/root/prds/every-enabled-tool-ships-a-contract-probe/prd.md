@@ -7,30 +7,25 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: root
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: every-enabled-tool-ships-a-contract-probe
 ---
 
-# Every enabled tool ships a contract probe
+# `cartridge verify` names every enabled cartridge that declares no contract
 
-Use the owner-capability migration as canonical delivery. A probe declaration names capability identity, recipe revision, fixture requirements, allowed effects, timeout and expected assertions; discovery reads metadata only. One provider owns both the capability and its probe.
+The host already runs declared contracts: a manifest's `selftest` and `integration` keys name events the cartridge listens to, and `cartridge verify [cartridge]` (`just verify`) sends each one and names the failing entry. Only harness.ctg and tools.ctg declare `selftest` today, and verify says nothing about enabled cartridges without a contract, so they pass silently. Outcome: verify reports coverage. Owner: the host in cartridge.ctg; adding contracts to individual cartridges is follow-up work in their owner boards.
 
 ## Acceptance
 
-- [ ] Every exposed capability has a resolvable probe or an explicit unverified reason; disabled capabilities do not appear callable.
-- [ ] Merely listing or reading probes starts no subprocess/model/store, and malformed fixture/effect declarations are rejected before execution.
-- [ ] Probe changes invalidate previous evidence and the runtime census derives from actual exposure rather than a central handwritten list.
+- [ ] `verify` on a disposable profile with one covered and one uncovered cartridge names the uncovered entry id as `no contract`, derived from the loaded entries rather than a handwritten list; disabled entries are not listed.
+- [ ] Coverage lines are informational: an all-passing profile still exits 0, while a `selftest` returning `false` or erroring still exits non-zero naming `<id> selftest <key>`.
+- [ ] A manifest whose `selftest` names an event it does not listen to is still refused at load, before any contract runs (existing test `a_document_refuses_a_bad_schema_or_a_contract_it_does_not_listen_to`).
 
 ## Proof and recovery
 
-Start at [settings.md](../../settings.md), [justfile](../../../../../../justfile).
-
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test runtime` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
-
-External evidence prerequisites: [debug-mode-opens-and-closes-from-the-shell](../../../../memos/work/root--debug-mode-opens-and-closes-from-the-shell.md). Resolve their current completion and source revision before claiming.
+Start at `cartridge.ctg/src/host/run.rs` (`contracts`, `run_contracts`), `cartridge.ctg/src/cli/host.rs` (`verify`) and `cartridge.ctg/src/loader/document.rs` (`selftest`). Add the fixture beside `verify_sends_every_declared_contract` in `cartridge.ctg/.cartridge/tests/unit/src/tests/host.rs`, reusing its tempdir helpers. Gates from `/Users/feb/dev/cartridge`: `just test cartridge`, `just check cartridge`; not run for this plan. Manifests without contracts keep loading unchanged; making `no contract` fatal is a later opt-in. The former prerequisite on the blocked debug-mode memo is dropped: it cites pre-rename `builtin/memory/.zirkle` paths and gates nothing here. Shares `host.rs` tests with `tool-probes-run-and-locate-a-failing-provider`; land them in sequence.
 
 ## Review
 
-[Round 2 agent review](review.md). Inherits round 1 from `every-enabled-tool-ships-a-contract-probe`; maximum five rounds.
+[Review history](review.md). 3 of 5 rounds used.

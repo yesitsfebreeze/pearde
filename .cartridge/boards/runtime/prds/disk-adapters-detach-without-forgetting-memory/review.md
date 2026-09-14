@@ -29,3 +29,12 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reconciliation verdict: **SUPERSEDED**. The host no longer mounts adapters. File watching is memory's own configuration (`WatcherConfig.enabled` at `memory.ctg/src/config/src/config.rs:1202`, the `watcher` setting in `memory.ctg/cartridge.json`). Memo interpretation belongs to memo.ctg. The `plugins-from-memory-toml` loader prerequisite belongs to the retired plugin tree (host rewrite 939e7d1; memory port 9cc0f0b). Under decision `a-cartridge-brings-its-own-surface`, the runtime has nothing to own here. The invariant that is left (direct ingest and recall keep working with the watcher disabled or restarted, and durable facts survive) is memory-owned. The PRD also links the absent `cartridge.ctg/src/runtime.rs`/`service.rs`.
+Presented revision (frontmatter status only changed): `c81a5d5be22073f5406c81942c93d8b2dd1ef3b6fbd00a2120fd9911c4cb2316` (stale body digest `8e14490a897c5b0c2991ec8be82b159a502a6ecbfc1881bf00bd63106c70474e`).
+Recommendation: retire from @runtime. The coordinator should check whether an @memory leaf (for example `memory-owns-its-tool`) covers the watcher-disabled invariant and rehome it if not. Rounds are inherited. No score needed.
+Validation: cheap existence checks only — ls/rg over cartridge.ctg (HEAD c9ef10b), tools.ctg (caea5b7) and memory.ctg (c25af4d) source; `git remote -v`; `just --list` at /Users/feb/dev/cartridge; relative-link resolution over prd.md; `shasum -a 256`. No product gates were run.
+Reviewer: agent (independent reviewer, plan refresh pass). User rating: not required under delegation; none supplied.
+Rounds used / remaining: 3 / 2. Next action: coordinator retire/rehome decision.

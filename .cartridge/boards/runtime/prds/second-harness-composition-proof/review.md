@@ -56,3 +56,29 @@ can start independently; completing the trial needs the writer contract.
 Current inputs: [review-inputs.json](review-inputs.json). Round 1 remains archived
 above. Local links, dependency direction, word limits and content digests checked;
 no product tests run. Rounds used: 2/5; remaining: 3.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). Presented revision: `prd.md` SHA-256 `2c8c85f4892154f453e05cf9b797d91611ae7eb748eed409ec6884a0fee64d8f`.
+
+Reconciliation verdict: **REBASE**. Starting files are gone:
+- `cartridge.ctg/src/sdk.rs`: the transport crate is now `cartridge.ctg/src/transport` (`813521f`).
+- `cartridge.ctg/.cartridge/default/init.lua`: cartridge.ctg is the base, not a composition (`b1494bb`), and the composition is the root `.cartridge/init.lua`/`config.lua`, currently untracked.
+- `harness.ctg/README.md`: harness now documents itself in `.cartridge/help.md` (decision `a-cartridge-brings-its-own-surface`).
+- The `src/tests/fixtures` link is superseded by `cartridge.ctg/.cartridge/tests/unit/src/tests/host.rs`.
+
+The known red baseline is in `.cartridge/memos/note/release-status.md`. Revision: current files; failure vocabulary aligned with the event host (undeclared needs, grants, deadlines); step one commits/pins the profile and records the baseline; body trimmed from 344 to 306 words. The `@harness/concise-writer-cartridge` need resolves (claimed, review passed, round 5).
+
+| Dimension | /20 | Evidence and deduction |
+| --- | ---: | --- |
+| Value and scope | 19 | The user-requested composition experiment is unchanged; −1: 306 words, slightly above the 300 target. |
+| Ownership and reuse | 19 | Runtime integrates and repairs go to owners; −1: gitfs/pty/router/sessions repairs may queue behind current test failures. |
+| Dependencies and slices | 18 | One hard need resolves; −2: the uncommitted root profile is a precondition outside this item. |
+| Acceptance and baseline | 17 | Five checks with a matrix and repetitions; −3: the baseline is already red in several owners, so "every required case passes" needs those repairs first. |
+| Failure and compatibility | 18 | Attributable outcomes, no replay or orphans, fixture-only teardown; −2: deadline values are still undeclared. |
+| Reviewer total | 91 / 100 | |
+
+Result: **PASS**. Blocking findings: none.
+Validation: `ls` of the named files (harness `.cartridge/help.md`, `docs/creating-cartridges.txt`, root `init.lua` untracked per `git status`), `just --list` (`smoke` present), the `harness` owner case in `cartridge-development.md`, needs resolution. No product gates were run.
+User rating: not required. Rounds used / remaining: 3 / 2.
+Next: commit the root profile, then run the baseline probe.

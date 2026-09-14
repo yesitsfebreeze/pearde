@@ -29,3 +29,27 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14
+
+Reviewer: agent (independent reviewer, plan refresh pass). No user score was supplied or invented.
+Reconciliation verdict: **REBASE — largely delivered: ratification (`ratify_near_duplicates`, memory decision `does-a-merge-cross-origins`), `memory consolidate`, `memory check` dangling detection, and `.cartridge/tests/integration/e2e/near_duplicates.rs` (single-claim fold, two-origin ratification, idempotent re-consolidate, no dangling reasons). Missing: multi-document repeat-ingest evidence. Not recommended done until that test exists.**
+
+Presented revision: `prd.md` SHA-256 `5221beca0aa906a33c37406e290bbb7d76fe27732e7e629d67fe4e0055ca61ca`. Rebased in this round (prior text `b85d7166a5cf571201c718184cc1adb03c8a41df2507942b7708da5d39529eed`).
+Source inspected: memory.ctg `c25af4d` (main), root `24aa2be`, prd.ctg `077e57a2` plus working tree.
+
+| Dimension | /20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 18 | Closes the reopened evidence gap only. -2: small residual value. |
+| Ownership and reuse | 20 | Extends the existing e2e file and fixtures; no new mechanism. |
+| Dependencies and implementable slices | 19 | No needs; defect found spawns a separate leaf. -1. |
+| Observable acceptance and baseline evidence | 19 | Exact counts, ratification, no dangling. -1: fixture not yet authored. |
+| Failure, recovery and compatibility | 18 | Disposable store only; no rebaseline. -2: embed stub determinism assumed. |
+| Reviewer total | 94/100 | |
+
+Agent score: **94/100 — PASS**.
+Findings: Delivered parts recorded; scope narrowed to the missing test.
+Blocking findings: none.
+Validation: Existence checks only: cited source/test/doc paths exist (`ls`), `needs` targets and local links resolve (script over frontmatter and markdown links), memory.ctg `just --list` shows `check`, `test`, `e2e`, `all`, `eval-mature`, `eval-replay`, `test-reload`. Leaf body word count checked. No product gates were run.
+Rounds used / remaining: 3 / 2.
+Next: Run the scenario by hand, then add the test.

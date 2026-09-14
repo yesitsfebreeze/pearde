@@ -3,6 +3,9 @@ state: open
 origin: requested
 priority: 70
 repo: "/Users/feb/dev/cartridge/cartridge.ctg"
+work-kind: leaf
+review-round: 2
+review-status: needs-decision
 ---
 
 # The shipped policy defaults to ask

@@ -1,37 +1,35 @@
 ---
-repo: /Users/feb/dev/cartridge/cartridge.ctg
+repo: /Users/feb/dev/cartridge/memo.ctg
 state: open
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-owner: landscape
+capability-owner: memo
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: context-quality-is-measured
 needs:
 - '@landscape/context-quality-is-measured/context-baseline-corpus'
-- '@landscape/landscape-composes-system-context'
+footprint:
+- /Users/feb/dev/cartridge/memo.ctg/.cartridge/tests/context-quality/
 ---
 
 # Context regressions fail an explicit comparison gate
 
-Compare old and new selectors on the frozen corpus with five alternating paired runs.
+A change to memo's `context` selection can silently drop critical evidence or slow it down. This leaf compares a candidate memo revision against the pinned baseline revision on the frozen corpus from the needed leaf, in one invocation, and fails on quality regressions.
 
 ## Acceptance
 
-- [ ] Missing critical facts, forbidden facts and a deliberately broken ranker each fail.
-- [ ] Per-ability recall and paired median latency are reported; more than 20 percent latency regression remains a finding.
-- [ ] Hydration/count/byte bounds and unreported truncation are checked independently.
+- [ ] `bun memo.ctg/.cartridge/tests/context-quality/compare.ts --baseline <sha> --candidate <sha> --output <new dir>` runs five alternating paired runs per scenario and size, reports both revisions, and exits nonzero when a critical fact goes missing or a forbidden fact appears. A deliberately broken ranker fixture must fail it.
+- [ ] The report lists per-ability recall and paired median latency. A latency regression above 20 percent is reported as a finding, not a failure. Row, byte and deadline bounds and unreported truncation are checked on their own.
+- [ ] A missing or unreadable baseline checkout, a corpus digest mismatch or an existing output directory fails by name before any run. Nothing is skipped.
 
 ## Proof and recovery
 
-Start at [lib.rs](../../../../../../../landscape.ctg/src/lib.rs), [surface.rs](../../../../../../../landscape.ctg/src/surface.rs).
+Reuse the baseline runner and its raw-result format. Gates, cwd `/Users/feb/dev/cartridge`: `just test memo` and `bun test memo.ctg/.cartridge/tests/context-quality/compare.test.ts` (created by this leaf), which covers the broken-ranker and missing-baseline cases. Neither has run. Paired latency is valid only on one host and toolchain in one run window; the report records both. Failure leaves earlier reports untouched.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test landscape` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `context-quality-is-measured`; maximum five rounds.
+Hard need: the frozen corpus and baseline runner. The roll-up `landscape-composes-system-context` is context, not a prerequisite: every corpus scenario uses contributors that already exist. Rounds 1–2 are inherited; round 3 rebased ([review](review.md)).

@@ -1,37 +1,38 @@
 ---
-repo: /Users/feb/dev/cartridge/cartridge.ctg
+repo: /Users/feb/dev/cartridge/tools.ctg
 state: open
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
-capability-capability-owner: runtime
+capability-owner: runtime
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 3
+review-status: passed
 canonical-scope: improve-tools-preflight
 footprint:
-- /Users/feb/dev/cartridge/cartridge.ctg/scripts/workspace.py
-- /Users/feb/dev/cartridge/cartridge.ctg/repositories.json
+- /Users/feb/dev/cartridge/tools.ctg/src/service.rs
+- /Users/feb/dev/cartridge/tools.ctg/.cartridge/tests/unit/service/tests.rs
+- /Users/feb/dev/cartridge/tools.ctg/.cartridge/tests/integration/lane.test.ts
 ---
 
 # Preview workspace-tool effects before execution
 
-Own one preview/apply contract in the surviving runtime development package. Preview reports operation ID, canonical repository/path identities, prerequisite tools and planned effects without changing files/refs. Apply revalidates those inputs; preflight is not authorization.
+The tools cartridge can say what `bundle`, `lane`, `land` or `lane-rm` would do without doing it. `dispatch` in [service.rs](../../../../../../tools.ctg/src/service.rs) mutates straight away: it creates worktrees and branches, provisions `.cargo`, deletes artefacts and replaces `dist/cartridge`, and reports only failures. The old `scripts/workspace.py` home is gone. Per [tui-and-tools-are-cartridges](../../../../../../.cartridge/memos/decision/tui-and-tools-are-cartridges.md), this tooling is the tools cartridge.
+
+Recommended default: an optional `"preview": true` on each op returns `{op, paths, refs, effects[], missing[], digest}`. The digest covers trunk HEAD, the worktree list and the relevant status output. Apply may pass `"expect": digest` and is refused on mismatch. A preview grants nothing.
 
 ## Acceptance
 
-- [ ] Bundle and worktree previews leave refs/files byte-identical and identify missing prerequisites.
-- [ ] A target/repository change invalidates the old preview before any operation-owned creation.
-- [ ] Apply performs only the named reviewed operation; compatibility shims call the same implementation and no second generic executor is introduced.
+- [ ] A preview of each of the four ops leaves refs, worktrees and files byte-identical in a temporary repository, and lists the effects apply would perform, including artefacts `lane-rm` would delete.
+- [ ] A missing prerequisite (`git`, `cargo`, a Rust binary) is named by the preview, not first discovered at apply.
+- [ ] Apply with a stale `expect` (the trunk moved, or a file was added to the lane) is refused before any creation or deletion.
+- [ ] Requests without `preview`/`expect`, including the string form `"bundle debug"`, behave exactly as today.
 
 ## Proof and recovery
 
-Start at [workspace.py](../../../scripts/workspace.py), [repositories.json](../../../repositories.json).
+First capture a byte-level snapshot of the fixture repository around a preview in [lane.test.ts](../../../../../../tools.ctg/.cartridge/tests/integration/lane.test.ts). Gates, cwd `/Users/feb/dev/cartridge`: `just test tools`, `just check tools`. Not run. Rollback: remove the fields. There is no second executor: apply and preview share each op's checks.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test runtime` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `improve-tools-preflight`; maximum five rounds.
+No hard prerequisites. Same file as the lane-release and bundle-provenance leaves, so land them one after another. Board placement under @runtime is historical (see the `tools` board). [Review](review.md): inherits 2 rounds.

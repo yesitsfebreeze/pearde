@@ -29,3 +29,17 @@ Blocking review findings: none; implementation prerequisites remain in the PRD.
 Validation: complete work-map coverage, content digests, local links, short-leaf bounds and dependency-cycle checks; see [validation record](../../../root/reviews/validation.md). Product gates were not run.
 Rounds used: 2/5; remaining: 3. User feedback: create small defined PRDs and split broad work.
 Next: select a dependency-ready leaf, probe its contract and write specs before implementation.
+
+## Round 3 — 2026-09-14 (reconciliation)
+
+Reconciliation verdict: **CONFLICT** (inherited from one child).
+
+Reviewed revision: prd.md SHA-256 `56fe6cbf21c406d9470704320122dbc445fe0642549d9a12e2b2b6e40206486b` (frontmatter afterwards set to review-round 3 / needs-decision; body unchanged). Source revisions: policy.ctg 6c91708, prd.ctg 077e57a2 (dirty tree).
+
+Evidence: `@policy/improve-policy-operation-rules` (done, policy.ctg e442bef) and `@policy/improve-policy-explain` (done, e442bef) are present in current `policy.ctg/init.lua` (`operations` precedence, `policy.explain`) and `policy.ctg/.cartridge/docs/policy.md`; both match decision `a-cartridge-brings-its-own-surface.md` ("the policy knows no tool"). The third child `@policy/improve-policy-resource-scope` is CONFLICT: its policy-owned binding contradicts that decision (see its round 3). Unlisted sibling `@policy/ship-push-is-an-explicit-policy-operation` is done and needs no listing.
+Findings: (1) the roll-up cannot close until the resource-scope owner is decided; if alternative A is chosen the roll-up either drops that child (confinement moves to fs/gitfs boards) or is marked done with the two delivered children; (2) no integration gate is named — add `just test policy` from /Users/feb/dev/cartridge when revising; (3) `capability-capability-owner` migration typo (board-wide, coordinator).
+No score recorded. Validation: child frontmatter, init.lua and docs reads; no product gates were run.
+Reviewer identity: agent (independent reviewer, plan refresh pass). User rating: not required. User feedback: none supplied.
+Result: needs decision. Unresolved blocking findings: resource-scope ownership decision.
+Rounds used / remaining: 3 / 2.
+Next action: await the resource-scope decision, then one revision (drop child or close roll-up).

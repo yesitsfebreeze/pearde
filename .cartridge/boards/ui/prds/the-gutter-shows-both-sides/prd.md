@@ -7,30 +7,27 @@ blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: ui
 work-kind: leaf
-review-round: 2
-review-status: stale-after-migration
+review-round: 4
+review-status: passed
 canonical-scope: the-gutter-shows-both-sides
 needs:
 - '@ui/the-ui-paints-the-grid'
 ---
 
-# the-gutter-shows-both-sides
+# A two-column gutter marks each command block's shell and agent state
 
-Rebase row wiring onto the current painter and PTY block model. Agent events retain the command ID observed at dispatch; the renderer derives sticky placement from visible block ranges. Keep a single glyph table with distinct no-color fallbacks.
+`pty` already records command blocks with absolute rows (`commands`, pty.ctg `src/marks.rs`), but the shell pane draws no per-command indicators; the only gutter in tui.ctg is the accent bar `markdownToAnsi` puts on agent text (`ui/markdown.ts`). This leaf paints a two-column gutter beside the painted grid: one column for the shell's result, one for the agent's work on that command. Agent events keep the command ID observed at dispatch; sticky placement is derived from visible block ranges. One glyph table with distinct no-colour glyphs.
 
 ## Acceptance
 
-- [ ] Running/success/failure/alternate-screen and agent working/waiting/reply/error states remain distinct without color.
-- [ ] Resize, mid-block scrolling and aged-out block starts never move an event onto the wrong command; missing block identity renders unknown/blank explicitly.
-- [ ] Transcript and shell views share attribution without modifying PTY contents, and UI reload reconstructs the same indicators from owner state.
+- [ ] Running, success, failure and alternate-screen shell states, and agent working, waiting, reply and error states, stay distinct with colour disabled.
+- [ ] Resize, mid-block scrolling and aged-out block starts never move an indicator onto the wrong command; a block without identity renders an explicit unknown glyph.
+- [ ] Transcript and shell views share the same attribution without writing into PTY contents, and UI reload rebuilds the same indicators from `pty` and `agent` state.
 
 ## Proof and recovery
 
-Start at [chat.ts](../../../../../../ui.ctg/src/chat.ts), [modules.ts](../../../../../../ui.ctg/src/modules.ts).
+Start at [terminal.tsx](../../../../../../tui.ctg/ui/terminal.tsx), [markdown.ts](../../../../../../tui.ctg/ui/markdown.ts), [pty marks.rs](../../../../../../pty.ctg/src/marks.rs). First probe: record a `commands` payload with rows for two fixture commands at the current pty revision. Extend `term.test.ts` and `transcript.test.tsx` in `tui.ctg/.cartridge/tests/integration/`. Gates, cwd `/Users/feb/dev/cartridge`: `just test tui`, `just check tui`. Not run for this plan. The gutter is additive; hiding it restores today's pane with no state loss.
 
-Probe the current behavior in a disposable fixture; record source revision, exact command and expected/observed results before writing specs. Use `just test ui` from the composed root with the acceptance fixtures. These gates have not run for this plan.
-Preserve the last usable implementation and durable data on failure; report partial effects without automatic replay. Narrow the owner-local file footprint before claiming.
+## Dependencies and review
 
-## Review
-
-[Round 2 agent review](review.md). Inherits round 1 from `the-gutter-shows-both-sides`; maximum five rounds.
+Hard need: [the-ui-paints-the-grid](../the-ui-paints-the-grid/prd.md) for row-addressed painting. Parent: [the-gutter-is-the-boundary](../the-gutter-is-the-boundary/prd.md). Shared footprint: `ui/terminal.tsx`. [Review history](review.md): rounds 1–4 used.

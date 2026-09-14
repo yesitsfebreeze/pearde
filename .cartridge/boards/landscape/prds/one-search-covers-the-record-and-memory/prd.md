@@ -1,5 +1,5 @@
 ---
-repo: /Users/feb/dev/cartridge/landscape.ctg
+repo: /Users/feb/dev/cartridge/cartridge.ctg
 state: open
 origin: requested
 priority: 50

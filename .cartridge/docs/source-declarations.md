@@ -1,6 +1,6 @@
 # Read declared source edges
 
-Trusted native consumers can call the existing `prd` capability with
+Trusted native consumers can call the `source.board` capability with
 `{"op":"source_declarations","board":"root","deadline_ms":500}`. `board` defaults
 to the configured board and accepts a normal relative path under the configured
 `.cartridge/boards`. Caller-provided root/config/cwd overrides are rejected.

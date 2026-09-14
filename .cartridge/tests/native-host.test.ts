@@ -57,14 +57,16 @@ for (const distinct of [true, false]) test.skipIf(!enabled)(distinct
   try {
     const claimed = await execute('claim', f.board, ['example', 'fixture-worker']); expect(claimed.error).toBe('');
     atomic(path.join(lane(scan(f.board).get('example')!).directory, 'seed.txt'), 'changed\n');
-    const profile = path.join(f.root, 'profile'), plugins = path.join(f.root, 'plugins'); fs.mkdirSync(plugins);
+    // One user profile: the host reads the `.cartridge` beside its working
+    // directory, which is `f.root` for the run below.
+    const profile = path.join(f.root, '.cartridge'), plugins = path.join(f.root, 'plugins'); fs.mkdirSync(plugins);
     atomic(path.join(profile, 'init.lua'), 'return {{id="memory",path="memory"},{id="prd",path="prd"},{id="probe",path="probe"}}');
     atomic(path.join(profile, 'config.lua'), `return {${f.config},prd={root=${JSON.stringify(f.records)},timeout_seconds=30}}`);
     binaryPlugin(plugins, 'memory', memory); fs.symlinkSync(prd, path.join(plugins, 'prd'));
     const launch = path.join(f.root, 'native-host-probe');
     atomic(launch, `#!/bin/sh\nexec ${JSON.stringify(process.execPath)} ${JSON.stringify(path.join(import.meta.dir, 'fixtures/native-host-probe.ts'))} "$@"\n`); fs.chmodSync(launch, 0o755);
     binaryPlugin(plugins, 'probe', launch);
-    const data = JSON.parse(await run([cartridge, '--dir', plugins, '--profile', profile, 'run', 'native-host-probe', JSON.stringify({ cwd: f.records })], f.root));
+    const data = JSON.parse(await run([cartridge, '--dir', plugins, 'run', 'native-host-probe', JSON.stringify({ cwd: f.records })], f.root));
     expect(data.seed.status).toBe('committed'); expect(data.read.error).toBe(false);
     const read = JSON.parse(data.read.content); expect(read.memory.status).toBe('available'); expect(JSON.stringify(read.memory.results)).toContain('Cedar');
     expect(data.collected.error, String(data.collected.content)).toBe(false);
@@ -84,23 +86,32 @@ for (const distinct of [true, false]) test.skipIf(!enabled)(distinct
 test.skipIf(!enabled || !fs.existsSync(mcp))('shipped MCP profile discovers PRD and routes real read, plan and mutation', async () => {
   const f = fixture();
   try {
-    const profile = path.join(f.root, 'profile'), plugins = path.join(f.root, 'plugins'); fs.mkdirSync(plugins);
-    const init = fs.readFileSync(path.join(runtime, '.cartridge/mcp/init.lua'), 'utf8');
+    const profile = path.join(f.root, '.cartridge'), plugins = path.join(f.root, 'plugins'); fs.mkdirSync(plugins);
+    // There is one shipped profile now; the MCP server is an entry point into
+    // it, not a composition of its own.
+    const init = fs.readFileSync(path.join(runtime, '.cartridge/init.lua'), 'utf8');
     expect(init).toMatch(/id\s*=\s*"prd"/);
     atomic(path.join(profile, 'init.lua'), init);
-    for (const match of init.matchAll(/path\s*=\s*"([^"\n]+)"/g)) {
-      const name = match[1];
+    // Shallowest first: a cartridge nested inside another (`live/mcp`) arrives
+    // through its parent's link and must not be linked over it.
+    const names = [...new Set([...init.matchAll(/path\s*=\s*"([^"\n]+)"/g)].map(match => match[1]))]
+      .sort((left, right) => left.split('/').length - right.split('/').length);
+    for (const name of names) {
+      if (fs.existsSync(path.join(plugins, name))) continue;
       if (name === 'memory' || name === 'mcp') binaryPlugin(plugins, name, name === 'memory' ? memory : mcp);
-      else fs.symlinkSync(name === 'prd' ? prd : fs.realpathSync(path.join(runtime, 'builtin', name)), path.join(plugins, name));
+      else {
+        fs.mkdirSync(path.dirname(path.join(plugins, name)), { recursive: true });
+        fs.symlinkSync(name === 'prd' ? prd : fs.realpathSync(path.join(runtime, 'builtin', name)), path.join(plugins, name));
+      }
     }
-    atomic(path.join(profile, 'config.lua'), `local config=dofile(${JSON.stringify(path.join(runtime, '.cartridge/mcp/config.lua'))})\nlocal isolated={${f.config}}\nconfig.memory=isolated.memory\nconfig.prd={root=${JSON.stringify(f.records)},timeout_seconds=30}\nconfig.mcp.cwd=${JSON.stringify(f.records)}\nconfig.sessions={dir=${JSON.stringify(path.join(f.root, 'sessions'))}}\nreturn config\n`);
+    atomic(path.join(profile, 'config.lua'), `local config=dofile(${JSON.stringify(path.join(runtime, '.cartridge/config.lua'))})\nlocal isolated={${f.config}}\nconfig.memory=isolated.memory\nconfig.prd={root=${JSON.stringify(f.records)},timeout_seconds=30}\nconfig.mcp.cwd=${JSON.stringify(f.records)}\nconfig.sessions={dir=${JSON.stringify(path.join(f.root, 'sessions'))}}\nreturn config\n`);
     const messages = [
       { jsonrpc: '2.0', id: 1, method: 'initialize', params: { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'prd-native-host-fixture', version: '1' } } },
       { jsonrpc: '2.0', method: 'notifications/initialized' },
       { jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} },
       ...[['read', ['example']], ['plan', []], ['add', ['MCP native integration fixture']]].map(([op, args], index) => ({ jsonrpc: '2.0', id: index + 3, method: 'tools/call', params: { name: 'prd', arguments: { op, args } } })),
     ];
-    const output = await run([cartridge, '--dir', plugins, '--profile', profile, 'mcp'], f.root, messages.map(message => JSON.stringify(message) + '\n').join(''));
+    const output = await run([cartridge, '--dir', plugins, 'mcp'], f.root, messages.map(message => JSON.stringify(message) + '\n').join(''));
     const replies = output.trim().split('\n').map(line => JSON.parse(line));
     expect(replies.find(reply => reply.id === 2).result.tools.some((tool: any) => tool.name === 'prd')).toBe(true);
     for (const id of [3, 4, 5]) { const reply = replies.find(reply => reply.id === id); expect(reply.error, JSON.stringify(reply)).toBeUndefined(); expect(reply.result.isError, JSON.stringify(reply)).not.toBe(true); }

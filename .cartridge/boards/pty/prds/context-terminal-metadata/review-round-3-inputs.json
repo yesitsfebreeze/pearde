@@ -1,0 +1,12 @@
+{
+  "canonical": "@pty/context-terminal-metadata",
+  "review_round": 3,
+  "inherited_rounds": 2,
+  "max_rounds": 5,
+  "source": "e8e6b319b03dcc9e1dea66b4fd3a0f6b83ab2d47",
+  "prd_sha256": "242755cf5d309093543197df92517e5318e2976780f3ec8af9460cdee91f6af4",
+  "baseline_sha256": "26104d43f5e80503d7b3607330d81c0fafded39472b0e7b16e05b65ae48e8fde",
+  "spec_sha256": "b0850586a99c715b6a573177885383b20ec41d87caf93c148b6cd1d39cf8d524",
+  "dependency": "@pty/improve-pty-shell-identity",
+  "shared_lock_changes": "Coordinator applies exactly PTY->getrandom0.4 and PTY->sha2 0.10 edges; no new crate versions or unrelated edges."
+}

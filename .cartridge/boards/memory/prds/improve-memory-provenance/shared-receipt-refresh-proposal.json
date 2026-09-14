@@ -1,0 +1,68 @@
+{
+  "every-mutation-holds-the-store-writer-boundary": {
+    "source": "3df57b97e22d4e9d28d66298284a85c63408cb29",
+    "spec_sha256_before": "a7c27f7e8407e2bdb660e32a5e6022c5091b5e4c7dd4e2189e871f6ba485b9cb",
+    "additive_footprint_paths": [
+      "src/base/src/base_types.rs",
+      "src/retrieval/piece/src/id_detail.rs",
+      ".cartridge/tests/unit/src/base/src/tests/base_types_test.rs",
+      ".cartridge/tests/unit/src/retrieval/piece/src/tests/id_detail_provenance_test.rs",
+      ".cartridge/tests/unit/src/rpc/src/tests/server_bounded_test.rs",
+      ".cartridge/docs/fact-provenance.md"
+    ],
+    "acceptance_unchanged": true,
+    "reason": "Existing native/RPC query imports shared base and retrieval projector; new tests/docs bind additive projection. Exit-flag has no changed own source; optional conservative direct base dependency binding records unchanged stored discriminants used by store_core."
+  },
+  "memory-health-loads-its-own-graph-beside-the-daemon": {
+    "source": "3df57b97e22d4e9d28d66298284a85c63408cb29",
+    "spec_sha256_before": "f26624d38ee86a6ce2307fa594054157fefab7d697163014ebb3b95ea66b4750",
+    "additive_footprint_paths": [
+      "src/base/src/base_types.rs",
+      "src/retrieval/piece/src/id_detail.rs",
+      ".cartridge/tests/unit/src/base/src/tests/base_types_test.rs",
+      ".cartridge/tests/unit/src/retrieval/piece/src/tests/id_detail_provenance_test.rs",
+      ".cartridge/tests/unit/src/rpc/src/tests/server_bounded_test.rs",
+      ".cartridge/docs/fact-provenance.md"
+    ],
+    "acceptance_unchanged": true,
+    "reason": "Existing native/RPC query imports shared base and retrieval projector; new tests/docs bind additive projection. Exit-flag has no changed own source; optional conservative direct base dependency binding records unchanged stored discriminants used by store_core."
+  },
+  "improve-memory-owner-access": {
+    "source": "3df57b97e22d4e9d28d66298284a85c63408cb29",
+    "spec_sha256_before": "a7c7175e25c6951d64e1a432288ec0cdb321b8e7a4ec845ac7e5dc48a8276979",
+    "additive_footprint_paths": [
+      "src/base/src/base_types.rs",
+      "src/retrieval/piece/src/id_detail.rs",
+      ".cartridge/tests/unit/src/base/src/tests/base_types_test.rs",
+      ".cartridge/tests/unit/src/retrieval/piece/src/tests/id_detail_provenance_test.rs",
+      ".cartridge/tests/unit/src/rpc/src/tests/server_bounded_test.rs",
+      ".cartridge/docs/fact-provenance.md"
+    ],
+    "acceptance_unchanged": true,
+    "reason": "Existing native/RPC query imports shared base and retrieval projector; new tests/docs bind additive projection. Exit-flag has no changed own source; optional conservative direct base dependency binding records unchanged stored discriminants used by store_core."
+  },
+  "improve-memory-readiness": {
+    "source": "3df57b97e22d4e9d28d66298284a85c63408cb29",
+    "spec_sha256_before": "aeeb0eb70418f333cd1de29c1b9fb4d7d7da5919f9ae30ffc75c9f9d7d2b257f",
+    "additive_footprint_paths": [
+      "src/base/src/base_types.rs",
+      "src/retrieval/piece/src/id_detail.rs",
+      ".cartridge/tests/unit/src/base/src/tests/base_types_test.rs",
+      ".cartridge/tests/unit/src/retrieval/piece/src/tests/id_detail_provenance_test.rs",
+      ".cartridge/tests/unit/src/rpc/src/tests/server_bounded_test.rs",
+      ".cartridge/docs/fact-provenance.md"
+    ],
+    "acceptance_unchanged": true,
+    "reason": "Existing native/RPC query imports shared base and retrieval projector; new tests/docs bind additive projection. Exit-flag has no changed own source; optional conservative direct base dependency binding records unchanged stored discriminants used by store_core."
+  },
+  "the-exit-flag-tests-race-each-other": {
+    "source": "3df57b97e22d4e9d28d66298284a85c63408cb29",
+    "spec_sha256_before": "a2d6005ecf97de0e6a22197db86fc773e7427a7727afc0eb7a01676c502560d8",
+    "additive_footprint_paths": [
+      "src/base/src/base_types.rs",
+      ".cartridge/tests/unit/src/base/src/tests/base_types_test.rs"
+    ],
+    "acceptance_unchanged": true,
+    "reason": "Existing native/RPC query imports shared base and retrieval projector; new tests/docs bind additive projection. Exit-flag has no changed own source; optional conservative direct base dependency binding records unchanged stored discriminants used by store_core."
+  }
+}

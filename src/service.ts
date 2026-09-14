@@ -60,8 +60,12 @@ export class Service {
     if (!object(config) || Object.keys(config).some(k => !allowed.includes(k))) throw Error('unknown PRD configuration');
     this.root = real(path.resolve(config.root ?? ROOT)); this.boards = real(path.join(this.root, '.cartridge/boards')); this.state = path.join(this.root, '.cartridge/.state/prd-service');
     this.defaultBoard = config.default_board ?? 'root'; this.timeout = config.timeout_seconds ?? 120; this.jobTimeout = config.job_timeout_seconds ?? 1200; this.outputCap = config.max_output_bytes ?? 65536;
-    for (const [value, low, high] of [[this.timeout, .1, 600], [this.jobTimeout, .1, 86400], [this.outputCap, 1024, 1048576]]) if (typeof value !== 'number' || !Number.isFinite(value) || value < low || value > high) throw Error('invalid PRD execution caps');
-    this.outputCap = Math.floor(this.outputCap); this.adapter = config.adapter;
+    // How large each cap may be is declared in `cartridge.json` and the host has
+    // refused anything outside it already; a second copy of the bounds here is
+    // only a way for the two to drift apart. What stays is what no declaration
+    // can promise a caller who arrives without a host: a usable number.
+    for (const value of [this.timeout, this.jobTimeout, this.outputCap]) if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) throw Error('invalid PRD execution caps');
+    this.outputCap = Math.floor(this.outputCap); this.adapter = config.adapter ?? undefined;
     if (this.adapter !== undefined && (typeof this.adapter !== 'string' || !/^[A-Za-z0-9_-]{1,64}$/.test(this.adapter))) throw Error('invalid configured adapter');
     this.board(this.defaultBoard);
   }
@@ -239,7 +243,7 @@ export class Service {
   async close() { this.closed = true; for (const controller of this.cancelled.values()) controller.abort(); await Promise.allSettled([...this.tasks, ...this.deliveries.values()]); }
 }
 export async function main() {
-  if (process.argv[2] === 'hello') { console.log(JSON.stringify({ inject: ['memory'], provide: ['prd', 'tool.prd'], reload: true })); return; }
+  if (process.argv[2] === 'hello') { console.log(JSON.stringify({ inject: ['memory'], provide: ['prd', 'tool.prd', 'source.board'], reload: true })); return; }
   const send = (v: any) => process.stdout.write(JSON.stringify(v) + '\n'), bridge = new HostBridge(send), tasks = new Set<Promise<any>>();
   let service: Service | undefined, pending = '', dropping = false, disposed = false;
   const stop = () => { disposed = true; bridge.close(); void service?.close(); process.stdin.destroy(); };
@@ -259,11 +263,13 @@ export async function main() {
           if (!object(message)) throw Error('wire message must be an object');
           if (bridge.accept(message)) continue;
           if (message.dispose === true) { disposed = true; break; }
-          if ('apply' in message) { if (service) throw Error('cartridge is already applied'); service = new Service(message.apply?.config, bridge); send({ provide: 'prd' }); send({ provide: 'tool.prd' }); send({ ready: true }); void service.replayMemory(); }
+          if ('apply' in message) { if (service) throw Error('cartridge is already applied'); service = new Service(message.apply?.config, bridge); send({ provide: 'prd' }); send({ provide: 'tool.prd' }); send({ provide: 'source.board' }); send({ on: 'fabric.announce' }); send({ ready: true }); void service.replayMemory(); }
+          else if (message.event === 'fabric.announce') { const tool = describe(); send({ reply: message.id ?? 0, data: { nodes: [{ kind: 'tool', key: 'tool.prd', name: tool.name, description: tool.description }] } }); }
           else if (typeof message.reload === 'boolean') send({ reply: message.id ?? 0, data: null });
-          else if (['prd', 'tool.prd'].includes(message.call) && service) {
-            const declarations = message.call === 'prd' && message.args?.op === 'source_declarations';
-            const records = message.call === 'prd' && message.args?.op === 'source_records';
+          else if (['prd', 'tool.prd', 'source.board'].includes(message.call) && service) {
+            // `source.board` is the memo-declared key for the owner of board search roots; it serves only the two source ops.
+            const declarations = message.call === 'source.board' && message.args?.op !== 'source_records';
+            const records = message.call === 'source.board' && message.args?.op === 'source_records';
             if (tasks.size >= 8 && !['cancel', 'describe'].includes(message.args?.op)) { send({ reply: message.id ?? 0, data: declarations ? declarationFailure('capacity') : records ? sourceRecordFailure('capacity') : result({ error: 'service is busy' }, true) }); continue; }
             const work = (declarations ? service.declarations(message.args) : records ? service.records(message.args) : service.dispatch(message.args, message.turn)).then(data => send({ reply: message.id ?? 0, data })); tasks.add(work); void work.finally(() => tasks.delete(work));
           } else throw Error('unknown host operation or cartridge not applied');

@@ -1,0 +1,13 @@
+   Compiling memo_cartridge v0.1.0 (/Users/feb/dev/cartridge/memo.ctg)
+    Finished `test` profile [unoptimized] target(s) in 3.18s
+     Running unittests src/main.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/deps/memo_cartridge-bc0c17505d7b5b6c)
+
+running 1 test
+privacy_probe duplicate: {"action":"index","complete":false,"index_revision":"f7f18c03bd198a4a9ed941cf6ae6f0a9f7689c0337df86a7e30f1250fa331bcb","items":[],"root":"/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/.tmpRnJ02k","schema":"cartridge-source-records/v1","source_revision":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","status":"partial","truncated":false}
+privacy_probe merge: {"action":"index","complete":true,"index_revision":"7dc5b62007d63adc0496db879f1156197e0a3f55263fc4f4631a5bd0718243b6","items":[{"bytes":121,"path":".cartridge/documents/probe.md","revision":"ee8538dcb642f7708310170ddb0cb198c0551d57f957a058650b80be715fdd3c","title":"PRIVATE_PROBE","visibility":"public"}],"root":"/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/.tmpRnJ02k","schema":"cartridge-source-records/v1","source_revision":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","status":"available","truncated":false}
+privacy_probe private_alias: {"action":"index","complete":true,"index_revision":"f7f18c03bd198a4a9ed941cf6ae6f0a9f7689c0337df86a7e30f1250fa331bcb","items":[],"root":"/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/.tmpRnJ02k","schema":"cartridge-source-records/v1","source_revision":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","status":"available","truncated":false}
+privacy_probe public_alias: {"action":"index","complete":true,"index_revision":"7dd06d8ed4712520da94a4603016a634c5a5a9a4a6cab4e71d6bb6728fef2ea7","items":[{"bytes":142,"path":".cartridge/documents/probe.md","revision":"855df2ac982021c0714b4c1164bf6809c7bd7e0c6f41838d8ee1b38d443036b5","title":"PRIVATE_PROBE","visibility":"public"}],"root":"/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/.tmpRnJ02k","schema":"cartridge-source-records/v1","source_revision":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","status":"available","truncated":false}
+test source_search::tests::public_source_yaml_privacy_probe ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 82 filtered out; finished in 0.00s
+

@@ -1,0 +1,376 @@
+{
+  "before_spec": true,
+  "candidate_observed": false,
+  "command": "python3 analysis/baseline-probe.py",
+  "source_pins": "pre-measurement-pins.json",
+  "generator_sha256": "915a60e00e209e7ae6758002cd8140acc278d5bf067fa238a63a6c88a5c7b3f5",
+  "manifest_sha256": "e12fc1e60830e00a1a0c561d93e90548f58df8a78b5df0f45bc0b3c15bed2133",
+  "probe_sha256": "0beac0a670baa38d999092c893e0768c65eec2268b99d1c461bc51a8472cb4ef",
+  "raw_sha256": "19389aef97b03672b16de9495c554f25bc80f36457a06d31a3cc3f3f3fd02d9b",
+  "expectations_frozen_before_observation": true,
+  "native_path": "Real Memo SDK op:context prepare and exact read, real local document/projection reader + actual FS SDK fs.context; deterministic explicit Memory and host metadata fixtures. No Graph-only substitution.",
+  "results": [
+    {
+      "size": 100,
+      "scenario": "mixed",
+      "rows": 6,
+      "wire_bytes": 14763,
+      "elapsed_ns": 10430709,
+      "critical_missing": [
+        "DOC_TAIL_CRITICAL"
+      ],
+      "forbidden_present": [],
+      "exact_read_matches": true,
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "partial"
+        },
+        {
+          "contributor": "files",
+          "state": "available"
+        },
+        {
+          "contributor": "kernel",
+          "state": "available"
+        },
+        {
+          "contributor": "memory",
+          "state": "available"
+        }
+      ]
+    },
+    {
+      "size": 100,
+      "scenario": "documents",
+      "rows": 3,
+      "wire_bytes": 13496,
+      "elapsed_ns": 10486416,
+      "critical_missing": [
+        "DOC_TAIL_CRITICAL"
+      ],
+      "forbidden_present": [],
+      "exact_read_matches": true,
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "partial"
+        },
+        {
+          "contributor": "files",
+          "state": "disabled"
+        },
+        {
+          "contributor": "kernel",
+          "state": "disabled"
+        },
+        {
+          "contributor": "memory",
+          "state": "disabled"
+        }
+      ]
+    },
+    {
+      "size": 100,
+      "scenario": "memory",
+      "rows": 1,
+      "wire_bytes": 851,
+      "elapsed_ns": 535667,
+      "critical_missing": [],
+      "forbidden_present": [],
+      "exact_read_matches": true,
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "disabled"
+        },
+        {
+          "contributor": "files",
+          "state": "disabled"
+        },
+        {
+          "contributor": "kernel",
+          "state": "disabled"
+        },
+        {
+          "contributor": "memory",
+          "state": "available"
+        }
+      ]
+    },
+    {
+      "size": 100,
+      "scenario": "files",
+      "rows": 1,
+      "wire_bytes": 790,
+      "elapsed_ns": 1155875,
+      "critical_missing": [],
+      "forbidden_present": [],
+      "exact_read_matches": true,
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "disabled"
+        },
+        {
+          "contributor": "files",
+          "state": "available"
+        },
+        {
+          "contributor": "kernel",
+          "state": "disabled"
+        },
+        {
+          "contributor": "memory",
+          "state": "disabled"
+        }
+      ]
+    },
+    {
+      "size": 100,
+      "scenario": "kernel",
+      "rows": 1,
+      "wire_bytes": 922,
+      "elapsed_ns": 757500,
+      "critical_missing": [],
+      "forbidden_present": [],
+      "exact_read_matches": true,
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "disabled"
+        },
+        {
+          "contributor": "files",
+          "state": "disabled"
+        },
+        {
+          "contributor": "kernel",
+          "state": "available"
+        },
+        {
+          "contributor": "memory",
+          "state": "disabled"
+        }
+      ]
+    },
+    {
+      "size": 100,
+      "scenario": "budget",
+      "rows": 2,
+      "wire_bytes": 13135,
+      "elapsed_ns": 8534583,
+      "critical_missing": [
+        "BUDGET_CRITICAL_3"
+      ],
+      "forbidden_present": [],
+      "exact_read_matches": true,
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "partial"
+        },
+        {
+          "contributor": "files",
+          "state": "disabled"
+        },
+        {
+          "contributor": "kernel",
+          "state": "disabled"
+        },
+        {
+          "contributor": "memory",
+          "state": "disabled"
+        }
+      ]
+    },
+    {
+      "size": 10000,
+      "scenario": "mixed",
+      "rows": 3,
+      "wire_bytes": 1703,
+      "elapsed_ns": 2665000,
+      "critical_missing": [
+        "DOC_EARLY_CRITICAL",
+        "DOC_TAIL_CRITICAL"
+      ],
+      "forbidden_present": [],
+      "exact_read_matches": true,
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "unavailable"
+        },
+        {
+          "contributor": "files",
+          "state": "available"
+        },
+        {
+          "contributor": "kernel",
+          "state": "available"
+        },
+        {
+          "contributor": "memory",
+          "state": "available"
+        }
+      ]
+    },
+    {
+      "size": 10000,
+      "scenario": "documents",
+      "rows": 0,
+      "wire_bytes": 437,
+      "elapsed_ns": 2678292,
+      "critical_missing": [
+        "DOC_EARLY_CRITICAL",
+        "DOC_TAIL_CRITICAL"
+      ],
+      "forbidden_present": [],
+      "exact_read_matches": true,
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "unavailable"
+        },
+        {
+          "contributor": "files",
+          "state": "disabled"
+        },
+        {
+          "contributor": "kernel",
+          "state": "disabled"
+        },
+        {
+          "contributor": "memory",
+          "state": "disabled"
+        }
+      ]
+    },
+    {
+      "size": 10000,
+      "scenario": "memory",
+      "rows": 1,
+      "wire_bytes": 851,
+      "elapsed_ns": 844208,
+      "critical_missing": [],
+      "forbidden_present": [],
+      "exact_read_matches": true,
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "disabled"
+        },
+        {
+          "contributor": "files",
+          "state": "disabled"
+        },
+        {
+          "contributor": "kernel",
+          "state": "disabled"
+        },
+        {
+          "contributor": "memory",
+          "state": "available"
+        }
+      ]
+    },
+    {
+      "size": 10000,
+      "scenario": "files",
+      "rows": 1,
+      "wire_bytes": 790,
+      "elapsed_ns": 994250,
+      "critical_missing": [],
+      "forbidden_present": [],
+      "exact_read_matches": true,
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "disabled"
+        },
+        {
+          "contributor": "files",
+          "state": "available"
+        },
+        {
+          "contributor": "kernel",
+          "state": "disabled"
+        },
+        {
+          "contributor": "memory",
+          "state": "disabled"
+        }
+      ]
+    },
+    {
+      "size": 10000,
+      "scenario": "kernel",
+      "rows": 1,
+      "wire_bytes": 922,
+      "elapsed_ns": 511000,
+      "critical_missing": [],
+      "forbidden_present": [],
+      "exact_read_matches": true,
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "disabled"
+        },
+        {
+          "contributor": "files",
+          "state": "disabled"
+        },
+        {
+          "contributor": "kernel",
+          "state": "available"
+        },
+        {
+          "contributor": "memory",
+          "state": "disabled"
+        }
+      ]
+    },
+    {
+      "size": 10000,
+      "scenario": "budget",
+      "rows": 0,
+      "wire_bytes": 437,
+      "elapsed_ns": 2725625,
+      "critical_missing": [
+        "BUDGET_CRITICAL_1",
+        "BUDGET_CRITICAL_2",
+        "BUDGET_CRITICAL_3"
+      ],
+      "forbidden_present": [],
+      "exact_read_matches": true,
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "unavailable"
+        },
+        {
+          "contributor": "files",
+          "state": "disabled"
+        },
+        {
+          "contributor": "kernel",
+          "state": "disabled"
+        },
+        {
+          "contributor": "memory",
+          "state": "disabled"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    "100-row mixed: late document fact omitted under document nomination/retention and 16KiB whole response; Memory/file/kernel retained.",
+    "100-row budget: third 6KiB document omitted with partial/truncated status.",
+    "10000-row corpus: document contributor unavailable because existing owner reader caps4096 entries; other source abilities remain available. This is a measured baseline gap, not a reason to replace corpus or relax critical facts.",
+    "All returned rows passed native exact readback; no forbidden sentinels observed.",
+    "Pre-spec smoke has one observation per case, not latency statistics. Reviewed baseline will record warmup+five repeated runs.",
+    "Document hydration occurs internally without observation API; do not fabricate measured hydration counts from output rows. Callback counts are directly observed, internal hydration count remains unknown with source-bound upper cap."
+  ],
+  "fixture_correction": "Initial Python TextIO/select reader could strand a ready frame in its own buffer and timeout on second process. Changed harness to os.read with explicit newline buffering; product/source/corpus unchanged. First run process output not treated as final raw evidence.",
+  "source_binding_limit": "Current binary copies have equal before/copy/after fingerprints and observed source revisions. Rebuild exact frozen source in disposable second checkout is pending reviewed implementation; no premature reproducible-build claim."
+}

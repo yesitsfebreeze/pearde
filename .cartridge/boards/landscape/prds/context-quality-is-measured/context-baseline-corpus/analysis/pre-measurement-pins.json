@@ -1,0 +1,28 @@
+{
+  "generator": "915a60e00e209e7ae6758002cd8140acc278d5bf067fa238a63a6c88a5c7b3f5",
+  "manifest": "e12fc1e60830e00a1a0c561d93e90548f58df8a78b5df0f45bc0b3c15bed2133",
+  "sources": {
+    "memo": "a458148fb21f85cabcd9e1ced85c96c581b8e0b2",
+    "landscape": "422c521aed170a4d098505c73469a1a59dccf49d",
+    "fs": "3a79023311b1a9b30c383ec8c71cf31c20a69ee7",
+    "cartridge": "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df"
+  },
+  "binaries": {
+    "memo_cartridge": {
+      "source_before": "1e90b34d35f800169e06eb8789a4f2d9a0001d5a0375894c1738b92650b3fd5f",
+      "copy": "1e90b34d35f800169e06eb8789a4f2d9a0001d5a0375894c1738b92650b3fd5f",
+      "source_after": "1e90b34d35f800169e06eb8789a4f2d9a0001d5a0375894c1738b92650b3fd5f"
+    },
+    "fs": {
+      "source_before": "1aa7ebb9beca256e8ac357deb045890d1f478cc1bf896c01f7269d3f79cd0ebc",
+      "copy": "1aa7ebb9beca256e8ac357deb045890d1f478cc1bf896c01f7269d3f79cd0ebc",
+      "source_after": "1aa7ebb9beca256e8ac357deb045890d1f478cc1bf896c01f7269d3f79cd0ebc"
+    }
+  },
+  "toolchain": {
+    "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)",
+    "cargo": "cargo 1.98.0 (797e8a9bc 2026-08-05) (Homebrew)",
+    "python3": "Python 3.9.6",
+    "bun": "1.3.14"
+  }
+}

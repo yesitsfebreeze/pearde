@@ -1,0 +1,1311 @@
+[
+  {
+    "size": 100,
+    "scenario": "mixed",
+    "elapsed_ns": 10430709,
+    "wire_bytes": 14763,
+    "critical_present": [
+      "DOC_EARLY_CRITICAL",
+      "FILE_CRITICAL",
+      "MEMORY_CRITICAL"
+    ],
+    "critical_missing": [
+      "DOC_TAIL_CRITICAL"
+    ],
+    "forbidden_present": [],
+    "kinds": [
+      "document",
+      "file",
+      "kernel",
+      "memory"
+    ],
+    "exact_read_matches": [
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ],
+    "response": {
+      "complete": false,
+      "deadline_exceeded": false,
+      "limits": {
+        "deadline_ms": 2000,
+        "max_bytes": 16384,
+        "max_rows": 16
+      },
+      "revision": "774a5c1099fba9102c5997e621dc5c46dc591ba9b07650a7c6b7c515f57f148a",
+      "rows": [
+        {
+          "reference": {
+            "id": "@deployment/deployment.txt",
+            "kind": "file",
+            "owner": "deployment",
+            "revision": "3b056858bcddd05fe779190dc728058e04b0b161bc6d52d576382428e05b244b",
+            "revision_kind": "source_bytes"
+          },
+          "selection_reason": "public file owner/path match; exact source bytes",
+          "source": "{\"owner\":\"deployment\",\"path\":\"deployment.txt\"}",
+          "text": "FILE_CRITICAL\r\n"
+        },
+        {
+          "reference": {
+            "id": "quality-memory-exact",
+            "kind": "memory",
+            "owner": "memory",
+            "revision": "4567b7379d899fbd37831524059b769022f03e944167572f6757f686738e9b61",
+            "revision_kind": "observed_projection"
+          },
+          "selection_reason": "memory query match; exact-ID compact readback",
+          "source": "{\"object_id\":\"quality-memory\",\"scheme\":\"memo\",\"section\":\"deployment\",\"url\":\"memory://quality/deployment\"}",
+          "text": "MEMORY_CRITICAL"
+        },
+        {
+          "reference": {
+            "id": "@runtime/kernel/deployment",
+            "kind": "kernel",
+            "owner": "runtime",
+            "revision": "b1022c36050a61e7108a3603bd639a85e1c3530d08450a5794de107abb9d58ed",
+            "revision_kind": "observed_projection"
+          },
+          "selection_reason": "kernel owner/capability match; observed public metadata",
+          "source": "{\"generation\":7,\"id\":\"deployment\",\"provide\":[\"tool.deployment\"],\"state\":\"Active\"}",
+          "text": "{\"generation\":7,\"id\":\"deployment\",\"provide\":[\"tool.deployment\"],\"state\":\"Active\"}"
+        },
+        {
+          "reference": {
+            "id": "@workspace/.cartridge/documents/00000.md",
+            "kind": "document",
+            "owner": "workspace",
+            "revision": "2f9168375a5bd77cf7dd3245e9bfc362c3efc17c9032dee207da6e902168f6c7",
+            "revision_kind": "observed_projection"
+          },
+          "selection_reason": "Metadata match; bounded docs projection",
+          "source": "@workspace/.cartridge/documents/00000.md",
+          "text": "DOC_EARLY_CRITICAL\n"
+        },
+        {
+          "reference": {
+            "id": "@workspace/.cartridge/documents/00001.md",
+            "kind": "document",
+            "owner": "workspace",
+            "revision": "a9d2714f6e23e0b75ffec313758bdeca5c8c311cb6671c19ba16f6a0fd2e45cd",
+            "revision_kind": "observed_projection"
+          },
+          "selection_reason": "Metadata match; bounded docs projection",
+          "source": "@workspace/.cartridge/documents/00001.md",
+          "text": "BUDGET_CRITICAL_1\nzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n"
+        },
+        {
+          "reference": {
+            "id": "@workspace/.cartridge/documents/00002.md",
+            "kind": "document",
+            "owner": "workspace",
+            "revision": "e45e28a4cf05f647d8fff285835524d78409b80b715f9562832766e67379f349",
+            "revision_kind": "observed_projection"
+          },
+          "selection_reason": "Metadata match; bounded docs projection",
+          "source": "@workspace/.cartridge/documents/00002.md",
+          "text": "BUDGET_CRITICAL_2\nzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n"
+        }
+      ],
+      "schema": "cartridge-context/v1",
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "partial"
+        },
+        {
+          "contributor": "files",
+          "state": "available"
+        },
+        {
+          "contributor": "kernel",
+          "state": "available"
+        },
+        {
+          "contributor": "memory",
+          "state": "available"
+        }
+      ],
+      "truncated": true
+    },
+    "callbacks": [
+      {
+        "cartridges": true,
+        "id": 1,
+        "turn": "18d4fd7dc678a058-1"
+      },
+      {
+        "id": 2,
+        "injections": true,
+        "turn": "18d4fd7dc678a058-1"
+      },
+      {
+        "id": 3,
+        "landscape": true,
+        "turn": "18d4fd7dc678a058-1"
+      },
+      {
+        "id": 4,
+        "injections": true,
+        "turn": "18d4fd7dc678a058-1"
+      },
+      {
+        "args": {
+          "k": 16,
+          "op": "query",
+          "text": "deployment"
+        },
+        "call": "memory",
+        "id": 5,
+        "turn": "18d4fd7dc678a058-1"
+      },
+      {
+        "args": {
+          "cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/context-quality-baseline-fmm02ysq/100/public",
+          "deadline_ms": 1999,
+          "op": "read",
+          "path": "deployment.txt"
+        },
+        "call": "fs.context",
+        "id": 6,
+        "turn": "18d4fd7dc678a058-1"
+      },
+      {
+        "args": {
+          "compact": true,
+          "edge_limit": 1,
+          "id": "quality-memory-exact",
+          "op": "get"
+        },
+        "call": "memory",
+        "id": 7,
+        "turn": "18d4fd7dc678a058-1"
+      },
+      {
+        "id": 8,
+        "injections": true,
+        "turn": "18d4fd7dc678a058-2"
+      },
+      {
+        "id": 9,
+        "landscape": true,
+        "turn": "18d4fd7dc678a058-2"
+      },
+      {
+        "args": {
+          "cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/context-quality-baseline-fmm02ysq/100/public",
+          "deadline_ms": 1999,
+          "expected_revision": "3b056858bcddd05fe779190dc728058e04b0b161bc6d52d576382428e05b244b",
+          "op": "read",
+          "path": "deployment.txt"
+        },
+        "call": "fs.context",
+        "id": 10,
+        "turn": "18d4fd7dc678a058-2"
+      },
+      {
+        "id": 11,
+        "injections": true,
+        "turn": "18d4fd7dc678a058-3"
+      },
+      {
+        "args": {
+          "compact": true,
+          "edge_limit": 1,
+          "id": "quality-memory-exact",
+          "op": "get"
+        },
+        "call": "memory",
+        "id": 12,
+        "turn": "18d4fd7dc678a058-3"
+      },
+      {
+        "id": 13,
+        "landscape": true,
+        "turn": "18d4fd7dc678a058-4"
+      },
+      {
+        "cartridges": true,
+        "id": 14,
+        "turn": "18d4fd7dc678a058-5"
+      },
+      {
+        "cartridges": true,
+        "id": 15,
+        "turn": "18d4fd7dc678a058-6"
+      },
+      {
+        "cartridges": true,
+        "id": 16,
+        "turn": "18d4fd7dc678a058-7"
+      }
+    ]
+  },
+  {
+    "size": 100,
+    "scenario": "documents",
+    "elapsed_ns": 10486416,
+    "wire_bytes": 13496,
+    "critical_present": [
+      "DOC_EARLY_CRITICAL"
+    ],
+    "critical_missing": [
+      "DOC_TAIL_CRITICAL"
+    ],
+    "forbidden_present": [],
+    "kinds": [
+      "document"
+    ],
+    "exact_read_matches": [
+      true,
+      true,
+      true
+    ],
+    "response": {
+      "complete": false,
+      "deadline_exceeded": false,
+      "limits": {
+        "deadline_ms": 2000,
+        "max_bytes": 16384,
+        "max_rows": 16
+      },
+      "revision": "224a890ad2b053cd72a6550a46c434da44256bb6a7a5a0491355d34c9f0fb0a1",
+      "rows": [
+        {
+          "reference": {
+            "id": "@workspace/.cartridge/documents/00000.md",
+            "kind": "document",
+            "owner": "workspace",
+            "revision": "2f9168375a5bd77cf7dd3245e9bfc362c3efc17c9032dee207da6e902168f6c7",
+            "revision_kind": "observed_projection"
+          },
+          "selection_reason": "Metadata match; bounded docs projection",
+          "source": "@workspace/.cartridge/documents/00000.md",
+          "text": "DOC_EARLY_CRITICAL\n"
+        },
+        {
+          "reference": {
+            "id": "@workspace/.cartridge/documents/00001.md",
+            "kind": "document",
+            "owner": "workspace",
+            "revision": "a9d2714f6e23e0b75ffec313758bdeca5c8c311cb6671c19ba16f6a0fd2e45cd",
+            "revision_kind": "observed_projection"
+          },
+          "selection_reason": "Metadata match; bounded docs projection",
+          "source": "@workspace/.cartridge/documents/00001.md",
+          "text": "BUDGET_CRITICAL_1\nzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n"
+        },
+        {
+          "reference": {
+            "id": "@workspace/.cartridge/documents/00002.md",
+            "kind": "document",
+            "owner": "workspace",
+            "revision": "e45e28a4cf05f647d8fff285835524d78409b80b715f9562832766e67379f349",
+            "revision_kind": "observed_projection"
+          },
+          "selection_reason": "Metadata match; bounded docs projection",
+          "source": "@workspace/.cartridge/documents/00002.md",
+          "text": "BUDGET_CRITICAL_2\nzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n"
+        }
+      ],
+      "schema": "cartridge-context/v1",
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "partial"
+        },
+        {
+          "contributor": "files",
+          "state": "disabled"
+        },
+        {
+          "contributor": "kernel",
+          "state": "disabled"
+        },
+        {
+          "contributor": "memory",
+          "state": "disabled"
+        }
+      ],
+      "truncated": true
+    },
+    "callbacks": [
+      {
+        "cartridges": true,
+        "id": 17,
+        "turn": "18d4fd7dc678a058-8"
+      },
+      {
+        "cartridges": true,
+        "id": 18,
+        "turn": "18d4fd7dc678a058-9"
+      },
+      {
+        "cartridges": true,
+        "id": 19,
+        "turn": "18d4fd7dc678a058-10"
+      },
+      {
+        "cartridges": true,
+        "id": 20,
+        "turn": "18d4fd7dc678a058-11"
+      }
+    ]
+  },
+  {
+    "size": 100,
+    "scenario": "memory",
+    "elapsed_ns": 535667,
+    "wire_bytes": 851,
+    "critical_present": [
+      "MEMORY_CRITICAL"
+    ],
+    "critical_missing": [],
+    "forbidden_present": [],
+    "kinds": [
+      "memory"
+    ],
+    "exact_read_matches": [
+      true
+    ],
+    "response": {
+      "complete": true,
+      "deadline_exceeded": false,
+      "limits": {
+        "deadline_ms": 2000,
+        "max_bytes": 16384,
+        "max_rows": 16
+      },
+      "revision": "9a583ef83b160e4c3d591478c1e992f7e066eb2f1a3f731056e851e4b67c4d27",
+      "rows": [
+        {
+          "reference": {
+            "id": "quality-memory-exact",
+            "kind": "memory",
+            "owner": "memory",
+            "revision": "4567b7379d899fbd37831524059b769022f03e944167572f6757f686738e9b61",
+            "revision_kind": "observed_projection"
+          },
+          "selection_reason": "memory query match; exact-ID compact readback",
+          "source": "{\"object_id\":\"quality-memory\",\"scheme\":\"memo\",\"section\":\"deployment\",\"url\":\"memory://quality/deployment\"}",
+          "text": "MEMORY_CRITICAL"
+        }
+      ],
+      "schema": "cartridge-context/v1",
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "disabled"
+        },
+        {
+          "contributor": "files",
+          "state": "disabled"
+        },
+        {
+          "contributor": "kernel",
+          "state": "disabled"
+        },
+        {
+          "contributor": "memory",
+          "state": "available"
+        }
+      ],
+      "truncated": false
+    },
+    "callbacks": [
+      {
+        "id": 21,
+        "injections": true,
+        "turn": "18d4fd7dc678a058-12"
+      },
+      {
+        "args": {
+          "k": 16,
+          "op": "query",
+          "text": "deployment"
+        },
+        "call": "memory",
+        "id": 22,
+        "turn": "18d4fd7dc678a058-12"
+      },
+      {
+        "args": {
+          "compact": true,
+          "edge_limit": 1,
+          "id": "quality-memory-exact",
+          "op": "get"
+        },
+        "call": "memory",
+        "id": 23,
+        "turn": "18d4fd7dc678a058-12"
+      },
+      {
+        "id": 24,
+        "injections": true,
+        "turn": "18d4fd7dc678a058-13"
+      },
+      {
+        "args": {
+          "compact": true,
+          "edge_limit": 1,
+          "id": "quality-memory-exact",
+          "op": "get"
+        },
+        "call": "memory",
+        "id": 25,
+        "turn": "18d4fd7dc678a058-13"
+      }
+    ]
+  },
+  {
+    "size": 100,
+    "scenario": "files",
+    "elapsed_ns": 1155875,
+    "wire_bytes": 790,
+    "critical_present": [
+      "FILE_CRITICAL"
+    ],
+    "critical_missing": [],
+    "forbidden_present": [],
+    "kinds": [
+      "file"
+    ],
+    "exact_read_matches": [
+      true
+    ],
+    "response": {
+      "complete": true,
+      "deadline_exceeded": false,
+      "limits": {
+        "deadline_ms": 2000,
+        "max_bytes": 16384,
+        "max_rows": 16
+      },
+      "revision": "a38f40715c530840abd2054db5787494ac8b1d9c08cbae49931cacf61a1e32eb",
+      "rows": [
+        {
+          "reference": {
+            "id": "@deployment/deployment.txt",
+            "kind": "file",
+            "owner": "deployment",
+            "revision": "3b056858bcddd05fe779190dc728058e04b0b161bc6d52d576382428e05b244b",
+            "revision_kind": "source_bytes"
+          },
+          "selection_reason": "public file owner/path match; exact source bytes",
+          "source": "{\"owner\":\"deployment\",\"path\":\"deployment.txt\"}",
+          "text": "FILE_CRITICAL\r\n"
+        }
+      ],
+      "schema": "cartridge-context/v1",
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "disabled"
+        },
+        {
+          "contributor": "files",
+          "state": "available"
+        },
+        {
+          "contributor": "kernel",
+          "state": "disabled"
+        },
+        {
+          "contributor": "memory",
+          "state": "disabled"
+        }
+      ],
+      "truncated": false
+    },
+    "callbacks": [
+      {
+        "id": 26,
+        "injections": true,
+        "turn": "18d4fd7dc678a058-14"
+      },
+      {
+        "id": 27,
+        "landscape": true,
+        "turn": "18d4fd7dc678a058-14"
+      },
+      {
+        "args": {
+          "cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/context-quality-baseline-fmm02ysq/100/public",
+          "deadline_ms": 1999,
+          "op": "read",
+          "path": "deployment.txt"
+        },
+        "call": "fs.context",
+        "id": 28,
+        "turn": "18d4fd7dc678a058-14"
+      },
+      {
+        "id": 29,
+        "injections": true,
+        "turn": "18d4fd7dc678a058-15"
+      },
+      {
+        "id": 30,
+        "landscape": true,
+        "turn": "18d4fd7dc678a058-15"
+      },
+      {
+        "args": {
+          "cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/context-quality-baseline-fmm02ysq/100/public",
+          "deadline_ms": 1999,
+          "expected_revision": "3b056858bcddd05fe779190dc728058e04b0b161bc6d52d576382428e05b244b",
+          "op": "read",
+          "path": "deployment.txt"
+        },
+        "call": "fs.context",
+        "id": 31,
+        "turn": "18d4fd7dc678a058-15"
+      }
+    ]
+  },
+  {
+    "size": 100,
+    "scenario": "kernel",
+    "elapsed_ns": 757500,
+    "wire_bytes": 922,
+    "critical_present": [],
+    "critical_missing": [],
+    "forbidden_present": [],
+    "kinds": [
+      "kernel"
+    ],
+    "exact_read_matches": [
+      true
+    ],
+    "response": {
+      "complete": true,
+      "deadline_exceeded": false,
+      "limits": {
+        "deadline_ms": 2000,
+        "max_bytes": 16384,
+        "max_rows": 16
+      },
+      "revision": "a633576be417665d4354d644ed97eda2cb2ba4b5757c601c3df0c6006ac7dd9e",
+      "rows": [
+        {
+          "reference": {
+            "id": "@runtime/kernel/deployment",
+            "kind": "kernel",
+            "owner": "runtime",
+            "revision": "b1022c36050a61e7108a3603bd639a85e1c3530d08450a5794de107abb9d58ed",
+            "revision_kind": "observed_projection"
+          },
+          "selection_reason": "kernel owner/capability match; observed public metadata",
+          "source": "{\"generation\":7,\"id\":\"deployment\",\"provide\":[\"tool.deployment\"],\"state\":\"Active\"}",
+          "text": "{\"generation\":7,\"id\":\"deployment\",\"provide\":[\"tool.deployment\"],\"state\":\"Active\"}"
+        }
+      ],
+      "schema": "cartridge-context/v1",
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "disabled"
+        },
+        {
+          "contributor": "files",
+          "state": "disabled"
+        },
+        {
+          "contributor": "kernel",
+          "state": "available"
+        },
+        {
+          "contributor": "memory",
+          "state": "disabled"
+        }
+      ],
+      "truncated": false
+    },
+    "callbacks": [
+      {
+        "id": 32,
+        "landscape": true,
+        "turn": "18d4fd7dc678a058-16"
+      },
+      {
+        "id": 33,
+        "landscape": true,
+        "turn": "18d4fd7dc678a058-17"
+      }
+    ]
+  },
+  {
+    "size": 100,
+    "scenario": "budget",
+    "elapsed_ns": 8534583,
+    "wire_bytes": 13135,
+    "critical_present": [
+      "BUDGET_CRITICAL_1",
+      "BUDGET_CRITICAL_2"
+    ],
+    "critical_missing": [
+      "BUDGET_CRITICAL_3"
+    ],
+    "forbidden_present": [],
+    "kinds": [
+      "document"
+    ],
+    "exact_read_matches": [
+      true,
+      true
+    ],
+    "response": {
+      "complete": false,
+      "deadline_exceeded": false,
+      "limits": {
+        "deadline_ms": 2000,
+        "max_bytes": 16384,
+        "max_rows": 16
+      },
+      "revision": "80f5ac98f357aa90c7463d2d25bdd516d7b82799e5b2920a653c0ebbec5f7362",
+      "rows": [
+        {
+          "reference": {
+            "id": "@workspace/.cartridge/documents/00001.md",
+            "kind": "document",
+            "owner": "workspace",
+            "revision": "a9d2714f6e23e0b75ffec313758bdeca5c8c311cb6671c19ba16f6a0fd2e45cd",
+            "revision_kind": "observed_projection"
+          },
+          "selection_reason": "Metadata match; bounded docs projection",
+          "source": "@workspace/.cartridge/documents/00001.md",
+          "text": "BUDGET_CRITICAL_1\nzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n"
+        },
+        {
+          "reference": {
+            "id": "@workspace/.cartridge/documents/00002.md",
+            "kind": "document",
+            "owner": "workspace",
+            "revision": "e45e28a4cf05f647d8fff285835524d78409b80b715f9562832766e67379f349",
+            "revision_kind": "observed_projection"
+          },
+          "selection_reason": "Metadata match; bounded docs projection",
+          "source": "@workspace/.cartridge/documents/00002.md",
+          "text": "BUDGET_CRITICAL_2\nzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz\n"
+        }
+      ],
+      "schema": "cartridge-context/v1",
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "partial"
+        },
+        {
+          "contributor": "files",
+          "state": "disabled"
+        },
+        {
+          "contributor": "kernel",
+          "state": "disabled"
+        },
+        {
+          "contributor": "memory",
+          "state": "disabled"
+        }
+      ],
+      "truncated": true
+    },
+    "callbacks": [
+      {
+        "cartridges": true,
+        "id": 34,
+        "turn": "18d4fd7dc678a058-18"
+      },
+      {
+        "cartridges": true,
+        "id": 35,
+        "turn": "18d4fd7dc678a058-19"
+      },
+      {
+        "cartridges": true,
+        "id": 36,
+        "turn": "18d4fd7dc678a058-20"
+      }
+    ]
+  },
+  {
+    "size": 10000,
+    "scenario": "mixed",
+    "elapsed_ns": 2665000,
+    "wire_bytes": 1703,
+    "critical_present": [
+      "FILE_CRITICAL",
+      "MEMORY_CRITICAL"
+    ],
+    "critical_missing": [
+      "DOC_EARLY_CRITICAL",
+      "DOC_TAIL_CRITICAL"
+    ],
+    "forbidden_present": [],
+    "kinds": [
+      "file",
+      "kernel",
+      "memory"
+    ],
+    "exact_read_matches": [
+      true,
+      true,
+      true
+    ],
+    "response": {
+      "complete": false,
+      "deadline_exceeded": false,
+      "limits": {
+        "deadline_ms": 2000,
+        "max_bytes": 16384,
+        "max_rows": 16
+      },
+      "revision": "ee901299f0f53f9ae86bc060ecae3376882dbbc5a6becccdbf1503f7c65c60de",
+      "rows": [
+        {
+          "reference": {
+            "id": "@deployment/deployment.txt",
+            "kind": "file",
+            "owner": "deployment",
+            "revision": "3b056858bcddd05fe779190dc728058e04b0b161bc6d52d576382428e05b244b",
+            "revision_kind": "source_bytes"
+          },
+          "selection_reason": "public file owner/path match; exact source bytes",
+          "source": "{\"owner\":\"deployment\",\"path\":\"deployment.txt\"}",
+          "text": "FILE_CRITICAL\r\n"
+        },
+        {
+          "reference": {
+            "id": "quality-memory-exact",
+            "kind": "memory",
+            "owner": "memory",
+            "revision": "4567b7379d899fbd37831524059b769022f03e944167572f6757f686738e9b61",
+            "revision_kind": "observed_projection"
+          },
+          "selection_reason": "memory query match; exact-ID compact readback",
+          "source": "{\"object_id\":\"quality-memory\",\"scheme\":\"memo\",\"section\":\"deployment\",\"url\":\"memory://quality/deployment\"}",
+          "text": "MEMORY_CRITICAL"
+        },
+        {
+          "reference": {
+            "id": "@runtime/kernel/deployment",
+            "kind": "kernel",
+            "owner": "runtime",
+            "revision": "b1022c36050a61e7108a3603bd639a85e1c3530d08450a5794de107abb9d58ed",
+            "revision_kind": "observed_projection"
+          },
+          "selection_reason": "kernel owner/capability match; observed public metadata",
+          "source": "{\"generation\":7,\"id\":\"deployment\",\"provide\":[\"tool.deployment\"],\"state\":\"Active\"}",
+          "text": "{\"generation\":7,\"id\":\"deployment\",\"provide\":[\"tool.deployment\"],\"state\":\"Active\"}"
+        }
+      ],
+      "schema": "cartridge-context/v1",
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "unavailable"
+        },
+        {
+          "contributor": "files",
+          "state": "available"
+        },
+        {
+          "contributor": "kernel",
+          "state": "available"
+        },
+        {
+          "contributor": "memory",
+          "state": "available"
+        }
+      ],
+      "truncated": false
+    },
+    "callbacks": [
+      {
+        "cartridges": true,
+        "id": 1,
+        "turn": "18d4fd7e0fdec5b0-1"
+      },
+      {
+        "id": 2,
+        "injections": true,
+        "turn": "18d4fd7e0fdec5b0-1"
+      },
+      {
+        "id": 3,
+        "landscape": true,
+        "turn": "18d4fd7e0fdec5b0-1"
+      },
+      {
+        "id": 4,
+        "injections": true,
+        "turn": "18d4fd7e0fdec5b0-1"
+      },
+      {
+        "args": {
+          "k": 16,
+          "op": "query",
+          "text": "deployment"
+        },
+        "call": "memory",
+        "id": 5,
+        "turn": "18d4fd7e0fdec5b0-1"
+      },
+      {
+        "args": {
+          "cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/context-quality-baseline-fmm02ysq/10000/public",
+          "deadline_ms": 1999,
+          "op": "read",
+          "path": "deployment.txt"
+        },
+        "call": "fs.context",
+        "id": 6,
+        "turn": "18d4fd7e0fdec5b0-1"
+      },
+      {
+        "args": {
+          "compact": true,
+          "edge_limit": 1,
+          "id": "quality-memory-exact",
+          "op": "get"
+        },
+        "call": "memory",
+        "id": 7,
+        "turn": "18d4fd7e0fdec5b0-1"
+      },
+      {
+        "id": 8,
+        "injections": true,
+        "turn": "18d4fd7e0fdec5b0-2"
+      },
+      {
+        "id": 9,
+        "landscape": true,
+        "turn": "18d4fd7e0fdec5b0-2"
+      },
+      {
+        "args": {
+          "cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/context-quality-baseline-fmm02ysq/10000/public",
+          "deadline_ms": 1999,
+          "expected_revision": "3b056858bcddd05fe779190dc728058e04b0b161bc6d52d576382428e05b244b",
+          "op": "read",
+          "path": "deployment.txt"
+        },
+        "call": "fs.context",
+        "id": 10,
+        "turn": "18d4fd7e0fdec5b0-2"
+      },
+      {
+        "id": 11,
+        "injections": true,
+        "turn": "18d4fd7e0fdec5b0-3"
+      },
+      {
+        "args": {
+          "compact": true,
+          "edge_limit": 1,
+          "id": "quality-memory-exact",
+          "op": "get"
+        },
+        "call": "memory",
+        "id": 12,
+        "turn": "18d4fd7e0fdec5b0-3"
+      },
+      {
+        "id": 13,
+        "landscape": true,
+        "turn": "18d4fd7e0fdec5b0-4"
+      }
+    ]
+  },
+  {
+    "size": 10000,
+    "scenario": "documents",
+    "elapsed_ns": 2678292,
+    "wire_bytes": 437,
+    "critical_present": [],
+    "critical_missing": [
+      "DOC_EARLY_CRITICAL",
+      "DOC_TAIL_CRITICAL"
+    ],
+    "forbidden_present": [],
+    "kinds": [],
+    "exact_read_matches": [],
+    "response": {
+      "complete": false,
+      "deadline_exceeded": false,
+      "limits": {
+        "deadline_ms": 2000,
+        "max_bytes": 16384,
+        "max_rows": 16
+      },
+      "revision": "2f7df92925d9137d276a190db242745ae29ef8e62702ce09413998855859c443",
+      "rows": [],
+      "schema": "cartridge-context/v1",
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "unavailable"
+        },
+        {
+          "contributor": "files",
+          "state": "disabled"
+        },
+        {
+          "contributor": "kernel",
+          "state": "disabled"
+        },
+        {
+          "contributor": "memory",
+          "state": "disabled"
+        }
+      ],
+      "truncated": false
+    },
+    "callbacks": [
+      {
+        "cartridges": true,
+        "id": 14,
+        "turn": "18d4fd7e0fdec5b0-5"
+      }
+    ]
+  },
+  {
+    "size": 10000,
+    "scenario": "memory",
+    "elapsed_ns": 844208,
+    "wire_bytes": 851,
+    "critical_present": [
+      "MEMORY_CRITICAL"
+    ],
+    "critical_missing": [],
+    "forbidden_present": [],
+    "kinds": [
+      "memory"
+    ],
+    "exact_read_matches": [
+      true
+    ],
+    "response": {
+      "complete": true,
+      "deadline_exceeded": false,
+      "limits": {
+        "deadline_ms": 2000,
+        "max_bytes": 16384,
+        "max_rows": 16
+      },
+      "revision": "9a583ef83b160e4c3d591478c1e992f7e066eb2f1a3f731056e851e4b67c4d27",
+      "rows": [
+        {
+          "reference": {
+            "id": "quality-memory-exact",
+            "kind": "memory",
+            "owner": "memory",
+            "revision": "4567b7379d899fbd37831524059b769022f03e944167572f6757f686738e9b61",
+            "revision_kind": "observed_projection"
+          },
+          "selection_reason": "memory query match; exact-ID compact readback",
+          "source": "{\"object_id\":\"quality-memory\",\"scheme\":\"memo\",\"section\":\"deployment\",\"url\":\"memory://quality/deployment\"}",
+          "text": "MEMORY_CRITICAL"
+        }
+      ],
+      "schema": "cartridge-context/v1",
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "disabled"
+        },
+        {
+          "contributor": "files",
+          "state": "disabled"
+        },
+        {
+          "contributor": "kernel",
+          "state": "disabled"
+        },
+        {
+          "contributor": "memory",
+          "state": "available"
+        }
+      ],
+      "truncated": false
+    },
+    "callbacks": [
+      {
+        "id": 15,
+        "injections": true,
+        "turn": "18d4fd7e0fdec5b0-6"
+      },
+      {
+        "args": {
+          "k": 16,
+          "op": "query",
+          "text": "deployment"
+        },
+        "call": "memory",
+        "id": 16,
+        "turn": "18d4fd7e0fdec5b0-6"
+      },
+      {
+        "args": {
+          "compact": true,
+          "edge_limit": 1,
+          "id": "quality-memory-exact",
+          "op": "get"
+        },
+        "call": "memory",
+        "id": 17,
+        "turn": "18d4fd7e0fdec5b0-6"
+      },
+      {
+        "id": 18,
+        "injections": true,
+        "turn": "18d4fd7e0fdec5b0-7"
+      },
+      {
+        "args": {
+          "compact": true,
+          "edge_limit": 1,
+          "id": "quality-memory-exact",
+          "op": "get"
+        },
+        "call": "memory",
+        "id": 19,
+        "turn": "18d4fd7e0fdec5b0-7"
+      }
+    ]
+  },
+  {
+    "size": 10000,
+    "scenario": "files",
+    "elapsed_ns": 994250,
+    "wire_bytes": 790,
+    "critical_present": [
+      "FILE_CRITICAL"
+    ],
+    "critical_missing": [],
+    "forbidden_present": [],
+    "kinds": [
+      "file"
+    ],
+    "exact_read_matches": [
+      true
+    ],
+    "response": {
+      "complete": true,
+      "deadline_exceeded": false,
+      "limits": {
+        "deadline_ms": 2000,
+        "max_bytes": 16384,
+        "max_rows": 16
+      },
+      "revision": "a38f40715c530840abd2054db5787494ac8b1d9c08cbae49931cacf61a1e32eb",
+      "rows": [
+        {
+          "reference": {
+            "id": "@deployment/deployment.txt",
+            "kind": "file",
+            "owner": "deployment",
+            "revision": "3b056858bcddd05fe779190dc728058e04b0b161bc6d52d576382428e05b244b",
+            "revision_kind": "source_bytes"
+          },
+          "selection_reason": "public file owner/path match; exact source bytes",
+          "source": "{\"owner\":\"deployment\",\"path\":\"deployment.txt\"}",
+          "text": "FILE_CRITICAL\r\n"
+        }
+      ],
+      "schema": "cartridge-context/v1",
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "disabled"
+        },
+        {
+          "contributor": "files",
+          "state": "available"
+        },
+        {
+          "contributor": "kernel",
+          "state": "disabled"
+        },
+        {
+          "contributor": "memory",
+          "state": "disabled"
+        }
+      ],
+      "truncated": false
+    },
+    "callbacks": [
+      {
+        "id": 20,
+        "injections": true,
+        "turn": "18d4fd7e0fdec5b0-8"
+      },
+      {
+        "id": 21,
+        "landscape": true,
+        "turn": "18d4fd7e0fdec5b0-8"
+      },
+      {
+        "args": {
+          "cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/context-quality-baseline-fmm02ysq/10000/public",
+          "deadline_ms": 1999,
+          "op": "read",
+          "path": "deployment.txt"
+        },
+        "call": "fs.context",
+        "id": 22,
+        "turn": "18d4fd7e0fdec5b0-8"
+      },
+      {
+        "id": 23,
+        "injections": true,
+        "turn": "18d4fd7e0fdec5b0-9"
+      },
+      {
+        "id": 24,
+        "landscape": true,
+        "turn": "18d4fd7e0fdec5b0-9"
+      },
+      {
+        "args": {
+          "cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/context-quality-baseline-fmm02ysq/10000/public",
+          "deadline_ms": 1999,
+          "expected_revision": "3b056858bcddd05fe779190dc728058e04b0b161bc6d52d576382428e05b244b",
+          "op": "read",
+          "path": "deployment.txt"
+        },
+        "call": "fs.context",
+        "id": 25,
+        "turn": "18d4fd7e0fdec5b0-9"
+      }
+    ]
+  },
+  {
+    "size": 10000,
+    "scenario": "kernel",
+    "elapsed_ns": 511000,
+    "wire_bytes": 922,
+    "critical_present": [],
+    "critical_missing": [],
+    "forbidden_present": [],
+    "kinds": [
+      "kernel"
+    ],
+    "exact_read_matches": [
+      true
+    ],
+    "response": {
+      "complete": true,
+      "deadline_exceeded": false,
+      "limits": {
+        "deadline_ms": 2000,
+        "max_bytes": 16384,
+        "max_rows": 16
+      },
+      "revision": "a633576be417665d4354d644ed97eda2cb2ba4b5757c601c3df0c6006ac7dd9e",
+      "rows": [
+        {
+          "reference": {
+            "id": "@runtime/kernel/deployment",
+            "kind": "kernel",
+            "owner": "runtime",
+            "revision": "b1022c36050a61e7108a3603bd639a85e1c3530d08450a5794de107abb9d58ed",
+            "revision_kind": "observed_projection"
+          },
+          "selection_reason": "kernel owner/capability match; observed public metadata",
+          "source": "{\"generation\":7,\"id\":\"deployment\",\"provide\":[\"tool.deployment\"],\"state\":\"Active\"}",
+          "text": "{\"generation\":7,\"id\":\"deployment\",\"provide\":[\"tool.deployment\"],\"state\":\"Active\"}"
+        }
+      ],
+      "schema": "cartridge-context/v1",
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "disabled"
+        },
+        {
+          "contributor": "files",
+          "state": "disabled"
+        },
+        {
+          "contributor": "kernel",
+          "state": "available"
+        },
+        {
+          "contributor": "memory",
+          "state": "disabled"
+        }
+      ],
+      "truncated": false
+    },
+    "callbacks": [
+      {
+        "id": 26,
+        "landscape": true,
+        "turn": "18d4fd7e0fdec5b0-10"
+      },
+      {
+        "id": 27,
+        "landscape": true,
+        "turn": "18d4fd7e0fdec5b0-11"
+      }
+    ]
+  },
+  {
+    "size": 10000,
+    "scenario": "budget",
+    "elapsed_ns": 2725625,
+    "wire_bytes": 437,
+    "critical_present": [],
+    "critical_missing": [
+      "BUDGET_CRITICAL_1",
+      "BUDGET_CRITICAL_2",
+      "BUDGET_CRITICAL_3"
+    ],
+    "forbidden_present": [],
+    "kinds": [],
+    "exact_read_matches": [],
+    "response": {
+      "complete": false,
+      "deadline_exceeded": false,
+      "limits": {
+        "deadline_ms": 2000,
+        "max_bytes": 16384,
+        "max_rows": 16
+      },
+      "revision": "2f7df92925d9137d276a190db242745ae29ef8e62702ce09413998855859c443",
+      "rows": [],
+      "schema": "cartridge-context/v1",
+      "sources": [
+        {
+          "contributor": "documents",
+          "state": "unavailable"
+        },
+        {
+          "contributor": "files",
+          "state": "disabled"
+        },
+        {
+          "contributor": "kernel",
+          "state": "disabled"
+        },
+        {
+          "contributor": "memory",
+          "state": "disabled"
+        }
+      ],
+      "truncated": false
+    },
+    "callbacks": [
+      {
+        "cartridges": true,
+        "id": 28,
+        "turn": "18d4fd7e0fdec5b0-12"
+      }
+    ]
+  }
+]

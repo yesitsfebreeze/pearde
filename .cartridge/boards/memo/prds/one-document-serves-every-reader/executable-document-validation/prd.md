@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/memo.ctg
-state: "done"
+state: "specced"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -10,13 +10,7 @@ work-kind: leaf
 review-round: 3
 review-status: passed
 canonical-scope: one-document-serves-every-reader
-footprint:
-- src/document.rs
-- src/validation.rs
-- .cartridge/tests/unit/validation.rs
-- .cartridge/tests/integration/validation.test.ts
-- .cartridge/tests/fixtures/validation
-- .cartridge/docs/documents.md
+footprint: ["src/document.rs","src/validation.rs",".cartridge/tests/unit/validation.rs",".cartridge/tests/integration/validation.test.ts",".cartridge/tests/fixtures/validation",".cartridge/docs/documents.md","src/source_search.rs",".cartridge/tests/unit/source_search.rs"]
 needs:
 - '@memo/one-document-serves-every-reader/document-identity'
 commit: "45d5a54ab9da1a798cd9997af9a8c19bed8a1812"

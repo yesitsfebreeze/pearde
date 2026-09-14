@@ -1,0 +1,26 @@
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/integration/source-search.test.ts:
+{"native":"Runtime→Memo→PRD","public_owners":5,"memo_binary_sha256":"1e90b34d35f800169e06eb8789a4f2d9a0001d5a0375894c1738b92650b3fd5f","runtime_binary_sha256":"78c7fdfcb7478fcaf2cf5436438fd8138276f941fefaa0b2c8db76749658d272","source_files_unchanged":true}
+(pass) actual Runtime Memo and PRD route recursive public search and exact source reads without activation [1008.17ms]
+(pass) configured SDK invocation rejects request authority and stale references while preserving raw docs [66.44ms]
+(pass) staged owner delays consume one deadline and preserve completed cartridge evidence [323.51ms]
+
+.cartridge/tests/integration/inventory.test.ts:
+{"paths":10000,"summary_bytes":393,"max_page_bytes":11731,"snapshot_calls":3}
+(pass) native compact snapshot pages 10000 paths exactly with one discovery and no hidden writes [3904.70ms]
+(pass) cache replacement follows newest-started request and failed refresh preserves published snapshot [424.67ms]
+(pass) restart, invalid inputs and partial sources are explicit while legacy landscape remains accepted [69.91ms]
+
+.cartridge/tests/integration/context.test.ts:
+(pass) native shared context and exact readback retain attribution without tool calls or writes [442.26ms]
+(pass) optional states and delayed discovery/read use one deadline while retaining other evidence [409.86ms]
+(pass) invalid inputs and evidence size caps preserve exact references and legacy tool surface [28.66ms]
+
+.cartridge/tests/integration/validation.test.ts:
+(pass) native validation freezes source and refuses invalid documents without invoking Just [480.00ms]
+
+ 10 pass
+ 0 fail
+ 10415 expect() calls
+Ran 10 tests across 4 files. [7.18s]

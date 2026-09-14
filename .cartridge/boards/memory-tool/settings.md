@@ -4,8 +4,8 @@ language: English
 memos: memos/note
 workflows: ../../workflows
 grammar: ../../grammar.md
-repo: /Users/feb/dev/cartridge/memory-tool.ctg
-source-repository: /Users/feb/dev/cartridge/memory-tool.ctg
+repo: /Users/feb/dev/cartridge/memory.ctg
+source-repository: /Users/feb/dev/cartridge/memory.ctg
 require-repo: true
 ---
 

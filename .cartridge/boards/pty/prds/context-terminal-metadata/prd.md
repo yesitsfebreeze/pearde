@@ -1,17 +1,18 @@
 ---
 repo: /Users/feb/dev/cartridge/pty.ctg
-state: open
+state: "specced"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: pty
 work-kind: leaf
-review-round: 2
-review-status: stale-after-owner-split
+review-round: 3
+review-status: "passed"
 canonical-scope: context-terminal-metadata
 needs:
 - "@pty/improve-pty-shell-identity"
+footprint: ["Cargo.toml","src/main.rs","src/context.rs",".cartridge/tests/unit/context/tests.rs",".cartridge/tests/integration/process.rs",".cartridge/docs/context.md"]
 ---
 
 # Offer terminal lifecycle metadata without screen or command output

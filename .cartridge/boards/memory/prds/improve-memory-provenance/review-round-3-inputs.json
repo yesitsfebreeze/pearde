@@ -1,0 +1,42 @@
+{
+  "canonical_id": "@memory/improve-memory-provenance",
+  "round": 3,
+  "reviewer_requested": "/root",
+  "status": "pending-independent-review",
+  "source": "0a7c4a1f729c700f52c650ee0c3efc56a136560f",
+  "inputs": [
+    {
+      "path": "prd.md",
+      "sha256": "09600426b1c79c5388d5dc99e048162304a7d1c8e59c8b30f1375f68ae6e7c5b"
+    },
+    {
+      "path": "specs/spec01.md",
+      "sha256": "1ed6c579beac87fb053ac86c1c3dec31231af62816fd60c1631cf9401ec65f4f"
+    },
+    {
+      "path": "baseline.json",
+      "sha256": "1940aa265bfa14735a87cc2afce740191b59a8344fee2bcdc08f1599f30b9ac4"
+    },
+    {
+      "path": "baseline-results.json",
+      "sha256": "5508694ddc82889946ebb4554f5fdb0c23a8f3651f78d929d410fbe0e6b4c4ec"
+    },
+    {
+      "path": "baseline-seed.txt",
+      "sha256": "c1088713300b7d2c65dec1472fefb9d55b93223866dd522ddb4bba190d4b299b"
+    },
+    {
+      "path": "baseline-probe.txt",
+      "sha256": "4fa5ae3b279c68472909c5591126a48c03ae9ff397219aa34f675e1d27bb5a44"
+    },
+    {
+      "path": "review.md",
+      "sha256": "be4fed72a603fbe888e3ec068b6f43c23a55e60307f447644a5fb74840bd8e7f"
+    },
+    {
+      "path": "prd-refinement-proposal.json",
+      "sha256": "85e2de3e3506f0ede8bd3f56852b095b118962fc7ef26f71be6eee9e0dd5e036"
+    }
+  ],
+  "implementation_started": false
+}

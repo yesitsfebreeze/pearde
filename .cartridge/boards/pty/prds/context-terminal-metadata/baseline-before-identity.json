@@ -1,0 +1,14 @@
+{
+  "source": "cacd7e13fb012029fd6923ce59bbeffcdeb67c5a",
+  "binary_sha256": "abc3319334d0ef67a22b65d440e22dec1fa995239d4e98fee3a16cc95f580c4f",
+  "command": "bun .cartridge/boards/pty/prds/context-terminal-metadata/baseline-probe.ts",
+  "exit_code": 0,
+  "gap": "Native context_metadata is unsupported; read/tool readback includes terminal chunks or screen/command payload. Existing control/exit/marks state can supply a new minimal projection.",
+  "read_only_baseline": "The unsupported op was called on a deliberately already started disposable PTY; it did not start a second terminal. No live user terminal contacted.",
+  "dependency": "@pty/improve-pty-shell-identity",
+  "spec_status": "Await exact reviewed identity implementation before binding minimal projection and generation/revision API. No context implementation or broad outcome folding.",
+  "files": {
+    "baseline-probe.ts": "7e10a52001b69163d2d666180c89392670d7613c4e2d1f5b175899449abed87c",
+    "baseline-native.json": "3506ccc6ecf690fc8537e308d459fb009e83b6a241e2c9a06db276bb10d21e48"
+  }
+}

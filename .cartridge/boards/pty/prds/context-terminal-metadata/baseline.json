@@ -1,0 +1,18 @@
+{
+  "source": "e8e6b319b03dcc9e1dea66b4fd3a0f6b83ab2d47",
+  "binary_sha256": "e50e8b9f55ae410e0edcf56cdfbaf3d7f6a47d981ed55e3bc9ae9589689a542c",
+  "command": "bun .cartridge/boards/pty/prds/context-terminal-metadata/baseline-probe.ts",
+  "exit_code": 0,
+  "prerequisite": "@pty/improve-pty-shell-identity",
+  "observations": [
+    "Shell identity is now present on existing readbacks, with explicit unknown unsupported integration.",
+    "context_metadata still returns unknown pty op; metadata-only observation is absent.",
+    "Existing tool readback has screen/command fields; raw read returns output chunks. Existing read identity includes cwd/initial cwd; the minimal context projection must exclude these payload/path fields.",
+    "Existing control and exit fields are observations but no opaque per-Shell generation or minimal-projection digest exists."
+  ],
+  "fixture": "New native /bin/sh process with isolated child environment and cwd, then graceful shell exit/dispose. No live terminal touched.",
+  "files": {
+    "baseline-probe.ts": "7e10a52001b69163d2d666180c89392670d7613c4e2d1f5b175899449abed87c",
+    "baseline-native.json": "cf7910734d31a8cf91641ad62ffb5a6f63139f2313b9d3684760618e947862cf"
+  }
+}

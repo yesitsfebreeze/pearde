@@ -4,8 +4,8 @@ language: English
 memos: memos/note
 workflows: ../../workflows
 grammar: ../../grammar.md
-repo: /Users/feb/dev/cartridge/ui.ctg
-source-repository: /Users/feb/dev/cartridge/ui.ctg
+repo: /Users/feb/dev/cartridge/tui.ctg
+source-repository: /Users/feb/dev/cartridge/tui.ctg
 require-repo: true
 ---
 

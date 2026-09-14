@@ -1,0 +1,10 @@
+{
+  "pinned-composed-Cargo.lock": "bbd9430a981d958182a4f5873bd3fb90faaed66b36562e8191f14271c234b909",
+  "corpus-manifest.json": "e12fc1e60830e00a1a0c561d93e90548f58df8a78b5df0f45bc0b3c15bed2133",
+  "spec-draft.md": "c15f6ef2635736b733242b10f19e7a89431cf4781796513ba925104fbc374a53",
+  "baseline-probe.py": "0beac0a670baa38d999092c893e0768c65eec2268b99d1c461bc51a8472cb4ef",
+  "baseline.json": "c6d862cac679660c84c4690cf973663975fdcd78aa62803f6b0770af818e1565",
+  "baseline-raw.json": "19389aef97b03672b16de9495c554f25bc80f36457a06d31a3cc3f3f3fd02d9b",
+  "pre-measurement-pins.json": "722dfc22746829d07db89ce979f09b675031dea08ade7dd25b55b803aca14cd0",
+  "corpus-generator.py": "915a60e00e209e7ae6758002cd8140acc278d5bf067fa238a63a6c88a5c7b3f5"
+}

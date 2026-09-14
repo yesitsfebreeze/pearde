@@ -1,5 +1,5 @@
 ---
-repo: /Users/feb/dev/cartridge/ui.ctg
+repo: /Users/feb/dev/cartridge/tui.ctg
 state: open
 origin: requested
 priority: 50
@@ -13,12 +13,12 @@ canonical-scope: improve-ui-tool-availability
 needs:
 - '@mcp/improve-mcp-tool-readiness'
 footprint:
-- /Users/feb/dev/cartridge/ui.ctg/ui/index.ts
-- /Users/feb/dev/cartridge/ui.ctg/ui/palette.tsx
-- /Users/feb/dev/cartridge/ui.ctg/ui/activity.ts
-- /Users/feb/dev/cartridge/ui.ctg/src/chat.ts
-- /Users/feb/dev/cartridge/ui.ctg/tests/transcript.test.tsx
-- /Users/feb/dev/cartridge/ui.ctg/tests/palette.test.tsx
+- /Users/feb/dev/cartridge/tui.ctg/ui/index.ts
+- /Users/feb/dev/cartridge/tui.ctg/ui/palette.tsx
+- /Users/feb/dev/cartridge/tui.ctg/ui/activity.ts
+- /Users/feb/dev/cartridge/tui.ctg/src/chat.ts
+- /Users/feb/dev/cartridge/tui.ctg/tests/transcript.test.tsx
+- /Users/feb/dev/cartridge/tui.ctg/tests/palette.test.tsx
 ---
 
 # Explain tool readiness and policy in the palette

@@ -170,7 +170,7 @@ test('timed out native reads retain their capacity slots until actual IO settles
 });
 
 test.skipIf(!process.env.CARTRIDGE_TEST_BIN)('actual Host invokes native declarations without Memory or event effects and tool exposure', async () => {
-  const profile = path.join(root, 'profile'), plugins = path.join(root, 'plugins'); fs.mkdirSync(plugins);
+  const profile = path.join(root, '.cartridge'), plugins = path.join(root, 'plugins'); fs.mkdirSync(plugins);
   atomic(path.join(profile, 'init.lua'), 'return {{id="memory",path="memory.lua"},{id="prd",path="prd"},{id="probe",path="probe.lua"}}');
   atomic(path.join(profile, 'config.lua'), `return {prd={root=${JSON.stringify(root)},max_output_bytes=1024}}`);
   atomic(path.join(plugins, 'memory.lua'), `return {provide={"memory"},apply=function(ctx) ctx:provide("memory",function(request) error("declaration operation called Memory") end) end}`);
@@ -178,13 +178,13 @@ test.skipIf(!process.env.CARTRIDGE_TEST_BIN)('actual Host invokes native declara
   const probe = path.join(root, 'probe.ts');
   atomic(probe, `import {createInterface} from 'node:readline';
 import {HostBridge} from ${JSON.stringify(path.resolve(import.meta.dir, '../../src/service.ts'))};
-if(process.argv[2]==='hello'){console.log(JSON.stringify({inject:['prd','tool.prd'],provide:['probe']}));process.exit(0);}
+if(process.argv[2]==='hello'){console.log(JSON.stringify({inject:['source.board','tool.prd'],provide:['probe']}));process.exit(0);}
 const send=m=>console.log(JSON.stringify(m)),bridge=new HostBridge(send),events=[];
 for await(const line of createInterface({input:process.stdin})){
  const m=JSON.parse(line);if(bridge.accept(m))continue;if(m.dispose)break;
  if(m.apply){send({provide:'probe'});send({subscribe:'prd'});send({ready:true});}
  else if(m.call==='probe')void(async()=>{try{
-  const rows=[];for(const board of ['root','root/base','root/base/plugin'])rows.push(await bridge.request('prd',{op:'source_declarations',board}));
+  const rows=[];for(const board of ['root','root/base','root/base/plugin'])rows.push(await bridge.request('source.board',{op:'source_declarations',board}));
   const rejected=await bridge.request('tool.prd',{op:'source_declarations',board:'root'});
   const described=await bridge.request('tool.prd',{op:'describe'});
   send({reply:m.id,data:{rows,rejected,described,events}});
@@ -194,7 +194,7 @@ for await(const line of createInterface({input:process.stdin})){
   const launch = path.join(root, 'probe'); atomic(launch, `#!/bin/sh\nexec '${process.execPath.replaceAll("'", "'\\''")}' '${probe.replaceAll("'", "'\\''")}' "$@"\n`); fs.chmodSync(launch, 0o755);
   atomic(path.join(plugins, 'probe.lua'), `return cartridge.process(${JSON.stringify(launch)})`);
   const before = snapshot(boards);
-  const child = Bun.spawn([path.resolve(process.env.CARTRIDGE_TEST_BIN!), '--dir', plugins, '--profile', profile, 'run', 'probe', '{}'], { cwd: root, stdout: 'pipe', stderr: 'pipe', timeout: 15000 });
+  const child = Bun.spawn([path.resolve(process.env.CARTRIDGE_TEST_BIN!), '--dir', plugins, 'run', 'probe', '{}'], { cwd: root, stdout: 'pipe', stderr: 'pipe', timeout: 15000 });
   try {
     const [output, error, code] = await Promise.all([new Response(child.stdout).text(), new Response(child.stderr).text(), child.exited]);
     expect(code, error + '\n' + output).toBe(0);

@@ -1,0 +1,16 @@
+{
+  "source_base": "e8e6b319b03dcc9e1dea66b4fd3a0f6b83ab2d47",
+  "observed_during_context_source": "6176580636c13cf28abf5d0be5980cac9d5dda0d",
+  "original_fixture": "handoff_blocks_agent_input_and_takeback_interrupts_without_closing_shell",
+  "before_output_cursor": 5,
+  "observed_output_cursor": 6,
+  "new_OSC133_A_before_next_admission": false,
+  "new_OSC133_D_before_next_admission": false,
+  "observed": "Original fixture treated existing prompt as Ctrl-C acknowledgment, then interrupted owner null with tool already finished before intended takeback. Diagnostic outcomes varied: one rejected before prompt, another command result; full command admission/completion cause remains unresolved.",
+  "context_fixture_repair": "Wait new OSC133 A after captured cursor; keep exact owner/exit assertions. This establishes fixture setup and does not prove product command correlation safe.",
+  "next_requirement": "Measure stable command IDs/wait/output and delayed marker correlation without live terminals before bounded round3 plan.",
+  "logs": {
+    "handoff-before-context.log": "0a0f1f1ef01848a0c52182b78d666ab58d56ab4bfd19de57d63362e0c8d82c2e",
+    "handoff-causal-context.log": "a55d03f2ab4aa74d09be9fa5a1b47151d269b3feb419c8988671afe0d3ba9824"
+  }
+}

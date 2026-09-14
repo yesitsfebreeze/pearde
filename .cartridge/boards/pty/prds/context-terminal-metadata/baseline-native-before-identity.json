@@ -1,0 +1,60 @@
+{
+  "binary": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/pty",
+  "sha256": "abc3319334d0ef67a22b65d440e22dec1fa995239d4e98fee3a16cc95f580c4f",
+  "results": [
+    {
+      "metadata_error": "Error: unknown pty op",
+      "name": "unsupported",
+      "program": "/bin/sh",
+      "before": {
+        "commands": [],
+        "cwd": "",
+        "phase": "unknown",
+        "running": null
+      },
+      "tool_fields": [
+        "alternate_screen",
+        "commands",
+        "cwd",
+        "phase",
+        "running",
+        "screen",
+        "shell_exit",
+        "viewport"
+      ],
+      "read_fields": [
+        "chunks",
+        "control",
+        "cursor",
+        "exit"
+      ],
+      "screen_fields": [
+        "rows",
+        "version"
+      ],
+      "viewport_fields": [
+        "alt",
+        "cursor",
+        "offset",
+        "rows",
+        "total"
+      ],
+      "frame_fields": [
+        "rows",
+        "version"
+      ],
+      "environment": {
+        "shell": "/bin/sh",
+        "cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/pty-context-baseline-vco2M8"
+      },
+      "after": {
+        "cwd": "",
+        "phase": "unknown",
+        "literal_visible": true
+      },
+      "attachment_preserves_command_history": true,
+      "attachment_control": "agent",
+      "identity_absent": true
+    }
+  ]
+}

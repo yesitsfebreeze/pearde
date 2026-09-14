@@ -1,0 +1,720 @@
+diff --git a/.cartridge/docs/CARTRIDGE.md b/.cartridge/docs/CARTRIDGE.md
+index 41d2bab..8a21f96 100644
+--- a/.cartridge/docs/CARTRIDGE.md
++++ b/.cartridge/docs/CARTRIDGE.md
+@@ -79,3 +79,9 @@ The old cartridge remains available when replacement configuration is rejected.
+ Cile. Development rebuilds and bundles also discover independent Cargo workspaces
+ in cartridge directories. The Memory workspace remains separately versioned;
+ `just memory-check` and `just memory-test` run its gates.
++
++Fact reads carry consistent recorded lifecycle and timestamp metadata in
++`provenance`, including explicit unknown freshness for undated rows. Existing
++query history selection and source links are preserved; edge labels explain
++recorded relations. See [fact provenance](fact-provenance.md) for clock units,
++missing evidence and projection limits.
+diff --git a/.cartridge/docs/fact-provenance.md b/.cartridge/docs/fact-provenance.md
+new file mode 100644
+index 0000000..a1b7364
+--- /dev/null
++++ b/.cartridge/docs/fact-provenance.md
+@@ -0,0 +1,28 @@
++# Reading fact provenance
++
++Native `query`, `get`, batch ID lookup and compact lookup expose the same `provenance` object. Both local ownership and attachment to an existing daemon use the shared projections. Existing source links remain in `source` with `scheme`, `object_id`, `section` and `url`.
++
++The object has schema `memory.provenance.v1`. `status` is `active` or `superseded`, `review` is `active` or `pending`, and `superseded_by` is the recorded successor's exact ID or null. These labels report stored lifecycle decisions; they do not establish that a claim is true.
++
++| Field | Meaning |
++| --- | --- |
++| `created_at_ms` | Recorded entity creation time, when present. |
++| `updated_at_ms` | Recorded entity update time, including existing confidence updates. |
++| `observed_at_ms` | Null: there is no separate stored clock proving when the external source was observed. |
++| `valid_from_ms`, `valid_to_ms` | Recorded world-validity interval. |
++| `invalidated_at_ms` | Recorded transaction time at which the revision was invalidated. |
++| `valid_until_ms` | Retention deadline; separate from lifecycle supersession. |
++
++Times are signed Unix milliseconds, rounded down. A nanosecond before the epoch becomes `-1`; an absent clock remains null. Clocks that exceed the signed integer range become null and are named in the bounded `unrepresentable_clocks` list. No clock is replaced by query time, access time, filesystem time, or another date.
++
++`freshness: "recorded"` means a creation or update time is available. It makes no claim that the source was recently checked. `unknown` means neither time is stored, which is normal for legacy facts. `unrepresentable` means creation/update clocks exist but none fit the wire range. Validity or retention dates alone cannot establish creation/update freshness. Existing top-level time fields retain their earlier seconds-based contract.
++
++Edges keep their numeric `kind` and add `kind_label`: `similarity`, `provenance`, `question`, `spawn`, `supersedes`, `ratification`, `rephrase`, or `deleted`. Every returned edge names its exact `id`, `from`, and `to`. A `supersedes` edge points from the newer revision to the older one. `rephrase` records a proposed wording; it does not prove a conflict. `deleted` records source deletion and can have an empty target. Memory reports these stored relations without comparing claims or fetching sources to infer new conflicts.
++
++A default ranked query still excludes superseded revisions. Request `include_history: true` to include the existing revision history, or use `get` with either exact ID. Missing referenced evidence returns the existing missing-ID error; the edge itself does not guarantee the target remains available.
++
++Ranked rows include at most 12 eligible edges in score/ID order. `edges_total`, `edges_more`, and `edges_scope: "enriched_or_lifecycle"` state the scope and whether eligible edges were omitted. Eligible means an enriched explanation or a recorded supersedes/rephrase/deleted relation, even when its text is empty. An empty edge sample does not establish that no real-world conflict exists.
++
++Direct `get` retains its existing indexed-edge pagination (`edge_limit`, `edge_cursor`) and counts all its indexed edges. Compact lookup retains provenance and edge labels/endpoints while omitting edge text and limiting fact text. Cold direct reads retain provenance and the cold flag, with their existing lack of resident graph edges.
++
++Projection does not write entity metadata, fetch external sources, run inference, or change formats. Existing query access telemetry still belongs to the owning writer. Attachment failures remain explicit, with no local fallback or second writer. Removing these additive fields requires no store rewrite.
+diff --git a/.cartridge/tests/integration/cartridge.rs b/.cartridge/tests/integration/cartridge.rs
+index 307f4ea..74af2b0 100644
+--- a/.cartridge/tests/integration/cartridge.rs
++++ b/.cartridge/tests/integration/cartridge.rs
+@@ -901,3 +901,211 @@ async fn readiness_status_credential_config_and_absent_owner_never_load_store()
+ 	assert!(!socket.exists());
+ 	attached.stop().await;
+ }
++
++#[cfg(unix)]
++fn provenance_seed(dir: &Path) {
++	use base::base_types::{mk_entity, EntityKind, EntityStatus, Memory, Reason, ReasonKind, Source};
++	use std::time::UNIX_EPOCH;
++	let path = dir.to_str().unwrap();
++	let _writer = store_core::lock::acquire(path, "provenance-fixture").unwrap();
++	let store = store_core::Store::open(path).unwrap();
++	let mut root = Memory::new("root", "");
++	root.children.push("facts".into());
++	let mut facts = Memory::new("facts", "release facts");
++	facts.parent = "root".into();
++	for (id, text, source, created, updated) in [
++		(
++			"old-fact-exact",
++			"Release deadline is Monday",
++			"old-plan.md",
++			Some(1_700_000_000),
++			Some(1_700_000_100),
++		),
++		(
++			"new-fact-exact",
++			"Release deadline is Friday",
++			"new-plan.md",
++			Some(1_700_100_000),
++			Some(1_700_200_000),
++		),
++		(
++			"legacy-fact-exact",
++			"Release venue is unspecified",
++			"legacy-notes.md",
++			None,
++			None,
++		),
++	] {
++		let mut e = mk_entity(id, text, 1., EntityKind::Fact);
++		e.source = Source::File {
++			path: source.into(),
++			section: String::new(),
++			title: String::new(),
++			author: String::new(),
++			url: format!("https://fixture.invalid/{source}"),
++			commit: None,
++		};
++		e.vector = vec![1., 0., 0.].into();
++		e.created_at = created.map(|s| UNIX_EPOCH + Duration::from_secs(s));
++		e.updated_at = updated.map(|s| UNIX_EPOCH + Duration::from_secs(s));
++		e.valid_from = e.created_at;
++		if id == "old-fact-exact" {
++			e.status = EntityStatus::Superseded;
++			e.superseded_by = "new-fact-exact".into();
++			e.valid_to = Some(UNIX_EPOCH + Duration::from_secs(1_700_100_000));
++			e.invalidated_at = Some(UNIX_EPOCH + Duration::from_secs(1_700_200_000));
++		}
++		facts.entities.insert(id.into(), e);
++	}
++	graph::reason::add_reason(
++		&mut facts,
++		Reason {
++			id: "revision-edge-exact".into(),
++			from: "new-fact-exact".into(),
++			to: "old-fact-exact".into(),
++			kind: ReasonKind::Supersedes,
++			text: "New signed plan changes Monday to Friday".into(),
++			score: 1.,
++			..Default::default()
++		},
++	);
++	store.save_one_memory(&root).unwrap();
++	store.save_one_memory(&facts).unwrap();
++}
++
++#[cfg(unix)]
++async fn provenance_reads(client: &mut Process) -> Vec<Value> {
++	let default = client
++		.request(json!({"op":"query", "text":"Release deadline", "k":10}))
++		.await
++		.unwrap();
++	assert!(!default["entities"]
++		.as_array()
++		.unwrap()
++		.iter()
++		.any(|e| e["id"] == "old-fact-exact"));
++	let history = client
++		.request(json!({"op":"query", "text":"Release deadline", "k":10, "include_history":true}))
++		.await
++		.unwrap();
++	let rows = history["entities"].as_array().unwrap();
++	let mut metadata = Vec::new();
++	for (id, source, status, created, updated) in [
++		(
++			"new-fact-exact",
++			"new-plan.md",
++			"active",
++			Some(1_700_100_000_000i64),
++			Some(1_700_200_000_000i64),
++		),
++		(
++			"old-fact-exact",
++			"old-plan.md",
++			"superseded",
++			Some(1_700_000_000_000i64),
++			Some(1_700_000_100_000i64),
++		),
++		("legacy-fact-exact", "legacy-notes.md", "active", None, None),
++	] {
++		let ranked = rows
++			.iter()
++			.find(|e| e["id"] == id)
++			.expect("history retains every seeded identity");
++		let detail = client.request(json!({"op":"get", "id":id})).await.unwrap();
++		let compact = client
++			.request(json!({"op":"get", "id":id, "compact":true}))
++			.await
++			.unwrap();
++		assert_eq!(ranked["source"]["object_id"], source);
++		assert_eq!(ranked["source"], detail["source"]);
++		assert_eq!(ranked["provenance"], detail["provenance"]);
++		assert_eq!(detail["provenance"], compact["provenance"]);
++		let p = &detail["provenance"];
++		assert_eq!(p["schema"], "memory.provenance.v1");
++		assert_eq!(p["status"], status);
++		assert_eq!(p["created_at_ms"], json!(created));
++		assert_eq!(p["updated_at_ms"], json!(updated));
++		assert!(p["observed_at_ms"].is_null());
++		assert_eq!(
++			p["freshness"],
++			if created.is_some() {
++				"recorded"
++			} else {
++				"unknown"
++			}
++		);
++		if id == "old-fact-exact" {
++			assert_eq!(p["superseded_by"], "new-fact-exact");
++			assert_eq!(p["invalidated_at_ms"], 1_700_200_000_000i64);
++		}
++		if id != "legacy-fact-exact" {
++			for e in [
++				&ranked["edges"][0],
++				&detail["edges"][0],
++				&compact["edges"][0],
++			] {
++				assert_eq!(e["id"], "revision-edge-exact");
++				assert_eq!(e["kind_label"], "supersedes");
++				assert_eq!(e["from"], "new-fact-exact");
++				assert_eq!(e["to"], "old-fact-exact");
++			}
++			assert!(detail["edges"][0]["text"]
++				.as_str()
++				.unwrap()
++				.contains("Monday to Friday"));
++			assert!(compact["edges"][0].get("text").is_none());
++		}
++		metadata.push(p.clone());
++	}
++	let batch = client
++		.request(json!({"op":"query", "ids":["new-fact-exact", "old-fact-exact", "legacy-fact-exact"]}))
++		.await
++		.unwrap();
++	assert_eq!(batch["missing"], json!([]));
++	for (row, expected) in batch["results"].as_array().unwrap().iter().zip(&metadata) {
++		assert_eq!(&row["provenance"], expected);
++	}
++	assert!(client
++		.request(json!({"op":"get", "id":"missing-evidence-exact"}))
++		.await
++		.is_err());
++	metadata
++}
++
++#[cfg(unix)]
++#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
++async fn provenance_local_and_attached_reads_preserve_revisions_dates_and_unknowns() {
++	use std::os::unix::fs::MetadataExt;
++	let root = tempfile::Builder::new()
++		.prefix("mp-")
++		.tempdir_in("/tmp")
++		.unwrap();
++	let dir = root.path().join("store");
++	provenance_seed(&dir);
++	let (url, http) =
++		test_support::spawn_http(test_support::fixed_vec_embed_app(vec![1., 0., 0.])).await;
++	let mut local = Process::start(settings(&dir, &url)).await;
++	let expected = provenance_reads(&mut local).await;
++	local.stop().await;
++	let (mut daemon, endpoint) = owner_attachment_daemon(root.path(), &url).await;
++	let transport::typed::Endpoint::Unix(socket) = endpoint;
++	let cfg = json!({"dir":dir,"owner":{"endpoint":socket,"timeout_ms":2000}});
++	let lock = std::fs::read(dir.join("writer.lock")).unwrap();
++	let inode = std::fs::metadata(dir.join("writer.lock")).unwrap().ino();
++	let mut first = Process::start(cfg.clone()).await;
++	let mut second = Process::start(cfg).await;
++	assert_eq!(provenance_reads(&mut first).await, expected);
++	first.stop().await;
++	assert!(daemon.try_wait().unwrap().is_none());
++	assert_eq!(provenance_reads(&mut second).await, expected);
++	assert_eq!(std::fs::read(dir.join("writer.lock")).unwrap(), lock);
++	assert_eq!(
++		std::fs::metadata(dir.join("writer.lock")).unwrap().ino(),
++		inode
++	);
++	second.stop().await;
++	assert!(daemon.try_wait().unwrap().is_none());
++	daemon.kill().await.unwrap();
++	daemon.wait().await.unwrap();
++	http.abort();
++}
+diff --git a/.cartridge/tests/unit/src/base/src/tests/base_types_test.rs b/.cartridge/tests/unit/src/base/src/tests/base_types_test.rs
+index 2ac009a..eca482c 100644
+--- a/.cartridge/tests/unit/src/base/src/tests/base_types_test.rs
++++ b/.cartridge/tests/unit/src/base/src/tests/base_types_test.rs
+@@ -300,3 +300,22 @@ mod tests {
+ 		);
+ 	}
+ }
++
++#[test]
++fn reason_wire_labels_are_exhaustive_and_preserve_discriminants() {
++	for (number, kind, label) in [
++		(0, ReasonKind::Similarity, "similarity"),
++		(1, ReasonKind::Provenance, "provenance"),
++		(2, ReasonKind::Question, "question"),
++		(3, ReasonKind::Spawn, "spawn"),
++		(4, ReasonKind::Supersedes, "supersedes"),
++		(5, ReasonKind::Ratification, "ratification"),
++		(6, ReasonKind::Rephrase, "rephrase"),
++		(7, ReasonKind::Deleted, "deleted"),
++	] {
++		assert_eq!(kind as i32, number);
++		assert_eq!(ReasonKind::from_i32(number), Some(kind));
++		assert_eq!(kind.as_str(), label);
++	}
++	assert_eq!(ReasonKind::from_i32(8), None);
++}
+diff --git a/.cartridge/tests/unit/src/retrieval/piece/src/tests/id_detail_provenance_test.rs b/.cartridge/tests/unit/src/retrieval/piece/src/tests/id_detail_provenance_test.rs
+new file mode 100644
+index 0000000..11276fa
+--- /dev/null
++++ b/.cartridge/tests/unit/src/retrieval/piece/src/tests/id_detail_provenance_test.rs
+@@ -0,0 +1,166 @@
++use super::*;
++use base::base_types::{
++	mk_entity, EntityKind, EntityStatus, Memory, Reason, ReasonKind, ReviewState,
++};
++use std::sync::Arc;
++use std::time::{Duration, UNIX_EPOCH};
++
++#[test]
++fn provenance_milliseconds_floor_across_epoch_and_refuse_overflow() {
++	for (nanos, positive, negative) in [
++		(0, 0, 0),
++		(1, 0, -1),
++		(999_999, 0, -1),
++		(1_000_000, 1, -1),
++		(1_000_001, 1, -2),
++		(1_234_567_890, 1234, -1235),
++	] {
++		assert_eq!(
++			unix_millis(UNIX_EPOCH + Duration::from_nanos(nanos)),
++			Some(positive)
++		);
++		assert_eq!(
++			unix_millis(UNIX_EPOCH - Duration::from_nanos(nanos)),
++			Some(negative)
++		);
++	}
++	if let Some(huge) = UNIX_EPOCH.checked_add(Duration::from_secs(i64::MAX as u64 / 1000 + 1)) {
++		assert_eq!(unix_millis(huge), None);
++		let mut e = Entity {
++			created_at: Some(huge),
++			..Default::default()
++		};
++		let p = provenance(&e);
++		assert_eq!(p["freshness"], "unrepresentable");
++		assert!(p["created_at_ms"].is_null());
++		assert_eq!(p["unrepresentable_clocks"], json!(["created_at_ms"]));
++		e.updated_at = Some(UNIX_EPOCH);
++		assert_eq!(provenance(&e)["freshness"], "recorded");
++	} else {
++		eprintln!("SystemTime range is narrower than signed Unix milliseconds on this platform; overflow fixture cannot be constructed");
++	}
++}
++
++#[test]
++fn provenance_keeps_missing_partial_and_lifecycle_clocks_distinct() {
++	let mut e = Entity::default();
++	let p = provenance(&e);
++	assert_eq!(p["freshness"], "unknown");
++	for name in [
++		"created_at_ms",
++		"updated_at_ms",
++		"observed_at_ms",
++		"valid_from_ms",
++		"valid_to_ms",
++		"invalidated_at_ms",
++		"valid_until_ms",
++	] {
++		assert!(p[name].is_null(), "{name}: {p}");
++	}
++	assert_eq!(p["unrepresentable_clocks"], json!([]));
++	e.updated_at = Some(UNIX_EPOCH + Duration::from_millis(15));
++	let p = provenance(&e);
++	assert_eq!(p["freshness"], "recorded");
++	assert!(p["created_at_ms"].is_null());
++	assert!(p["observed_at_ms"].is_null());
++	e.created_at = Some(UNIX_EPOCH + Duration::from_millis(10));
++	e.valid_from = Some(UNIX_EPOCH - Duration::from_nanos(1));
++	e.valid_to = Some(UNIX_EPOCH + Duration::from_millis(20));
++	e.invalidated_at = Some(UNIX_EPOCH + Duration::from_millis(25));
++	e.valid_until = Some(UNIX_EPOCH + Duration::from_millis(30));
++	e.status = EntityStatus::Superseded;
++	e.review = ReviewState::Pending;
++	e.superseded_by = "new-exact-id".into();
++	let p = provenance(&e);
++	assert_eq!(p["created_at_ms"], 10);
++	assert_eq!(p["updated_at_ms"], 15);
++	assert_eq!(p["valid_from_ms"], -1);
++	assert_eq!(p["valid_to_ms"], 20);
++	assert_eq!(p["invalidated_at_ms"], 25);
++	assert_eq!(p["valid_until_ms"], 30);
++	assert_eq!(p["status"], "superseded");
++	assert_eq!(p["review"], "pending");
++	assert_eq!(p["superseded_by"], "new-exact-id");
++}
++
++#[test]
++fn provenance_rendering_preserves_hot_cold_entity_store_and_lock_state() {
++	let tmp = tempfile::tempdir().unwrap();
++	let path = tmp.path().to_str().unwrap();
++	let _claim = store_core::lock::acquire(path, "pure-projection-fixture").unwrap();
++	let store = Arc::new(store_core::Store::open(path).unwrap());
++	let mut e = mk_entity("old-exact", "The old recorded fact", 1., EntityKind::Fact);
++	e.created_at = Some(UNIX_EPOCH + Duration::from_secs(5));
++	e.updated_at = Some(UNIX_EPOCH + Duration::from_secs(8));
++	e.status = EntityStatus::Superseded;
++	e.superseded_by = "new-exact".into();
++	e.valid_until = Some(UNIX_EPOCH + Duration::from_secs(9));
++	let before_entity = format!("{e:?}");
++	let mut memory = Memory::new("facts", "fixture");
++	memory.entities.insert(e.id.clone(), e.clone());
++	graph::reason::add_reason(
++		&mut memory,
++		Reason {
++			id: "r".into(),
++			from: "new-exact".into(),
++			to: e.id.clone(),
++			kind: ReasonKind::Supersedes,
++			text: "Recorded replacement".into(),
++			..Default::default()
++		},
++	);
++	store.save_one_memory(&memory).unwrap();
++	let mut cold = e.clone();
++	cold.id = "cold-exact".into();
++	store.cold_spill(&cold).unwrap();
++	let mut g = GraphGnn::new();
++	g.memories.insert("facts".into(), memory);
++	g.index_entity(&e.id, "facts");
++	g.set_store(store.clone());
++	let before_graph = format!("{:?}", g.memories["facts"]);
++	let bytes = std::fs::read(tmp.path().join("data.mdb")).unwrap();
++	let lock = std::fs::read(tmp.path().join("writer.lock")).unwrap();
++	#[cfg(unix)]
++	let inode = {
++		use std::os::unix::fs::MetadataExt;
++		std::fs::metadata(tmp.path().join("writer.lock"))
++			.unwrap()
++			.ino()
++	};
++	let ranked = base_entity_json(&e, 1.);
++	let plain = entity_detail_by_id(&g, &e.id, &Projection::default()).unwrap();
++	let compact = entity_detail_by_id(
++		&g,
++		&e.id,
++		&Projection {
++			compact: true,
++			..Default::default()
++		},
++	)
++	.unwrap();
++	let cold_read = entity_detail_by_id(&g, &cold.id, &Projection::default()).unwrap();
++	for read in [&plain, &compact, &cold_read] {
++		assert_eq!(read["provenance"], ranked["provenance"]);
++		assert_eq!(read["source"], ranked["source"]);
++		assert_eq!(read["expired"], true);
++	}
++	assert_eq!(plain["edges"][0]["kind_label"], "supersedes");
++	assert!(compact["edges"][0].get("text").is_none());
++	assert_eq!(cold_read["cold"], true);
++	assert_eq!(cold_read["edges_total"], 0);
++	assert!(entity_detail_by_id(&g, "new-exact", &Projection::default()).is_none());
++	assert_eq!(format!("{e:?}"), before_entity);
++	assert_eq!(format!("{:?}", g.memories["facts"]), before_graph);
++	assert_eq!(std::fs::read(tmp.path().join("data.mdb")).unwrap(), bytes);
++	assert_eq!(std::fs::read(tmp.path().join("writer.lock")).unwrap(), lock);
++	#[cfg(unix)]
++	{
++		use std::os::unix::fs::MetadataExt;
++		assert_eq!(
++			std::fs::metadata(tmp.path().join("writer.lock"))
++				.unwrap()
++				.ino(),
++			inode
++		);
++	}
++}
+diff --git a/.cartridge/tests/unit/src/rpc/src/tests/server_bounded_test.rs b/.cartridge/tests/unit/src/rpc/src/tests/server_bounded_test.rs
+index 35e82a3..a105c2c 100644
+--- a/.cartridge/tests/unit/src/rpc/src/tests/server_bounded_test.rs
++++ b/.cartridge/tests/unit/src/rpc/src/tests/server_bounded_test.rs
+@@ -292,3 +292,76 @@ async fn the_history_feed_keys_on_the_change_not_the_id() {
+ 		"the fixture must carry both changes for the key to matter"
+ 	);
+ }
++
++#[tokio::test]
++async fn provenance_ranked_edges_name_exact_evidence_and_count_eligible_omissions() {
++	let srv = hub_server();
++	{
++		let mut g = srv.graph.write();
++		let memory = g.memories.get_mut("kx").unwrap();
++		for (id, kind) in [
++			("blank-lifecycle", ReasonKind::Supersedes),
++			("blank-similarity", ReasonKind::Similarity),
++		] {
++			graph::reason::add_reason(
++				memory,
++				Reason {
++					id: id.into(),
++					from: "hub".into(),
++					to: "missing-peer".into(),
++					kind,
++					score: 1.,
++					..Default::default()
++				},
++			);
++		}
++		graph::reason::add_reason(
++			memory,
++			Reason {
++				id: "self-loop".into(),
++				from: "hub".into(),
++				to: "hub".into(),
++				text: "One stored self-loop".into(),
++				score: 0.99,
++				..Default::default()
++			},
++		);
++	}
++	let scored = vec![retrieval::expand::ScoredEntity {
++		entity: srv.graph.read().memories["kx"].entities["hub"].clone(),
++		score: 1.,
++	}];
++	let none = std::collections::HashSet::new();
++	let rows = srv.entity_json(&scored, 1, &none, &none);
++	let row = &rows[0];
++	assert_eq!(row["edges_total"], EDGES + 2);
++	assert_eq!(row["edges_more"], true);
++	assert_eq!(row["edges_scope"], "enriched_or_lifecycle");
++	let edges = row["edges"].as_array().unwrap();
++	assert_eq!(edges.len(), QUERY_MAX_EDGES);
++	assert_eq!(edges.iter().filter(|e| e["id"] == "self-loop").count(), 1);
++	assert_eq!(edges[0]["id"], "blank-lifecycle");
++	assert_eq!(edges[0]["kind"], ReasonKind::Supersedes as i32);
++	assert_eq!(edges[0]["kind_label"], "supersedes");
++	assert_eq!(edges[0]["to"], "missing-peer");
++	assert_eq!(edges[0]["text"], "");
++	assert!(!edges.iter().any(|e| e["id"] == "blank-similarity"));
++	assert!(srv
++		.tool_query(&serde_json::json!({"id":"missing-peer"}))
++		.is_err());
++	let plain = srv
++		.tool_query(&serde_json::json!({"id":"hub", "edge_limit":0}))
++		.unwrap();
++	assert_eq!(
++		plain["edges_total"],
++		EDGES + 4,
++		"get keeps its existing adjacency pagination, including both self-loop entries"
++	);
++	let bare = retrieval::expand::ScoredEntity {
++		entity: test_support::entity("absent-from-graph"),
++		score: 1.,
++	};
++	let rows = srv.entity_json(&[bare], 1, &none, &none);
++	assert_eq!(rows[0]["edges_total"], 0);
++	assert_eq!(rows[0]["edges_more"], false);
++}
+diff --git a/src/base/src/base_types.rs b/src/base/src/base_types.rs
+index 3293740..ae771c7 100644
+--- a/src/base/src/base_types.rs
++++ b/src/base/src/base_types.rs
+@@ -116,6 +116,20 @@ pub enum ReasonKind {
+ }
+ 
+ impl ReasonKind {
++	/// Stable wire label beside the persisted numeric kind; no inference of truth.
++	pub fn as_str(self) -> &'static str {
++		match self {
++			Self::Similarity => "similarity",
++			Self::Provenance => "provenance",
++			Self::Question => "question",
++			Self::Spawn => "spawn",
++			Self::Supersedes => "supersedes",
++			Self::Ratification => "ratification",
++			Self::Rephrase => "rephrase",
++			Self::Deleted => "deleted",
++		}
++	}
++
+ 	// The inverse of the `as i32` the MCP edge payload carries.
+ 	pub fn from_i32(n: i32) -> Option<Self> {
+ 		match n {
+diff --git a/src/retrieval/piece/src/id_detail.rs b/src/retrieval/piece/src/id_detail.rs
+index 98eaad0..327ab4c 100644
+--- a/src/retrieval/piece/src/id_detail.rs
++++ b/src/retrieval/piece/src/id_detail.rs
+@@ -109,6 +109,7 @@ fn entity_detail(thought: &Entity, memory_id: &str, g: &GraphGnn, proj: &Project
+ 				"from": re.from,
+ 				"to": re.to,
+ 				"kind": re.kind as i32,
++				"kind_label": re.kind.as_str(),
+ 				"score": re.score,
+ 			});
+ 			if !proj.compact {
+@@ -121,6 +122,7 @@ fn entity_detail(thought: &Entity, memory_id: &str, g: &GraphGnn, proj: &Project
+ 	let text_truncated = proj.compact && text.chars().count() > COMPACT_TEXT;
+ 	let mut v = json!({
+ 		"id": thought.id,
++		"provenance": provenance(thought),
+ 		"kind": thought.kind as u8,
+ 		"text": if proj.compact { truncate(&text, COMPACT_TEXT) } else { text },
+ 		"score": thought.score,
+@@ -177,6 +179,7 @@ pub fn base_entity_json(entity: &Entity, score: f64) -> Value {
+ 	};
+ 	json!({
+ 		"id": entity.id,
++		"provenance": provenance(entity),
+ 		"source": {
+ 			"scheme": entity.source.scheme(),
+ 			"object_id": entity.source.object_id(),
+@@ -197,3 +200,60 @@ pub fn base_entity_json(entity: &Entity, score: f64) -> Value {
+ 		"status": status_str,
+ 	})
+ }
++
++// Recorded clocks describe this row, never a fresh observation of its source.
++fn provenance(entity: &Entity) -> Value {
++	let clocks = [
++		("created_at_ms", entity.created_at),
++		("updated_at_ms", entity.updated_at),
++		("valid_from_ms", entity.valid_from),
++		("valid_to_ms", entity.valid_to),
++		("invalidated_at_ms", entity.invalidated_at),
++		("valid_until_ms", entity.valid_until),
++	];
++	let mut value = json!({
++		"schema": "memory.provenance.v1",
++		"status": if entity.is_superseded() { "superseded" } else { "active" },
++		"review": entity.review,
++		"superseded_by": (!entity.superseded_by.is_empty()).then_some(&entity.superseded_by),
++		"observed_at_ms": null,
++	});
++	let mut unrepresentable = Vec::new();
++	for (name, clock) in clocks {
++		let millis = clock.and_then(unix_millis);
++		if clock.is_some() && millis.is_none() {
++			unrepresentable.push(name);
++		}
++		value[name] = json!(millis);
++	}
++	value["freshness"] = json!(
++		if entity.created_at.is_none() && entity.updated_at.is_none() {
++			"unknown"
++		} else if value["created_at_ms"].is_null() && value["updated_at_ms"].is_null() {
++			"unrepresentable"
++		} else {
++			"recorded"
++		}
++	);
++	value["unrepresentable_clocks"] = json!(unrepresentable);
++	value
++}
++
++// Signed Unix milliseconds, rounded toward negative infinity. In particular,
++// one nanosecond before epoch is -1ms, never a fabricated epoch timestamp.
++fn unix_millis(time: std::time::SystemTime) -> Option<i64> {
++	let millis = match time.duration_since(std::time::UNIX_EPOCH) {
++		Ok(d) => i128::from(d.as_secs()) * 1000 + i128::from(d.subsec_millis()),
++		Err(error) => {
++			let d = error.duration();
++			-(i128::from(d.as_secs()) * 1000
++				+ i128::from(d.subsec_millis())
++				+ i128::from(d.subsec_nanos() % 1_000_000 != 0))
++		}
++	};
++	i64::try_from(millis).ok()
++}
++
++#[cfg(test)]
++#[path = "../../../../.cartridge/tests/unit/src/retrieval/piece/src/tests/id_detail_provenance_test.rs"]
++mod provenance_tests;
+diff --git a/src/rpc/src/server.rs b/src/rpc/src/server.rs
+index 317697f..4c99c12 100644
+--- a/src/rpc/src/server.rs
++++ b/src/rpc/src/server.rs
+@@ -639,7 +639,7 @@ impl Server {
+ 			.iter()
+ 			.take(take_n)
+ 			.map(|st| {
+-				let edges: Vec<serde_json::Value> = g
++				let (edges, edges_total): (Vec<serde_json::Value>, usize) = g
+ 					.memory_of_entity(&st.entity.id)
+ 					.and_then(|kid| g.memories.get(kid))
+ 					.map(|memory| {
+@@ -647,28 +647,45 @@ impl Server {
+ 							graph::reason::collect_reason_ids(memory, &st.entity.id)
+ 								.into_iter()
+ 								.filter_map(|rid| memory.reasons.get(&rid))
+-								.filter(|r| r.is_enriched())
++								.filter(|r| {
++									r.is_enriched()
++										|| matches!(
++											r.kind,
++											base::base_types::ReasonKind::Supersedes
++												| base::base_types::ReasonKind::Rephrase
++												| base::base_types::ReasonKind::Deleted
++										)
++								})
+ 								.collect();
+ 						// Strongest first, then cut: a hub entity brought 394 edges and
+ 						// 124,325 characters on its own, and an unordered cut would drop
+ 						// the evidence and keep the noise.
+ 						enriched.sort_by(|a, b| util::cmp_rank(a.score, &a.id, b.score, &b.id));
+-						enriched
++						// Self-loops can occur in both adjacency directions; one edge is one evidence row.
++						enriched.dedup_by(|a, b| a.id == b.id);
++						let total = enriched.len();
++						let edges = enriched
+ 							.into_iter()
+ 							.take(base::base_constants::QUERY_MAX_EDGES)
+ 							.map(|r| {
+ 								serde_json::json!({
++									"id": r.id,
+ 									"from": r.from,
+ 									"to": r.to,
+ 									"kind": r.kind as i32,
++									"kind_label": r.kind.as_str(),
+ 									"text": truncate(&r.text, 120),
+ 									"score": r.score,
+ 								})
+ 							})
+-							.collect()
++							.collect();
++						(edges, total)
+ 					})
+ 					.unwrap_or_default();
+ 				let mut v = base_entity_json(&st.entity, st.score);
++				v["edges_total"] = serde_json::json!(edges_total);
++				v["edges_more"] = serde_json::json!(edges_total > edges.len());
++				v["edges_scope"] = serde_json::json!("enriched_or_lifecycle");
+ 				v["cold"] = serde_json::Value::Bool(cold_ids.contains(&st.entity.id));
+ 				if history_ids.contains(&st.entity.id) {
+ 					v["history"] = serde_json::Value::Bool(true);

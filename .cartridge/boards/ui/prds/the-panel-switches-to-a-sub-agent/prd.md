@@ -1,5 +1,5 @@
 ---
-repo: /Users/feb/dev/cartridge/ui.ctg
+repo: /Users/feb/dev/cartridge/tui.ctg
 state: open
 origin: requested
 priority: 50

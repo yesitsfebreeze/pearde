@@ -1,0 +1,19 @@
+"""Frozen version1 corpus inputs, declared before selector observations."""
+import json,hashlib
+
+def corpus(size):
+    assert size in (100,10000)
+    docs=[]
+    for i in range(size-4):
+        fact='DOC_EARLY_CRITICAL' if i==0 else 'DOC_TAIL_CRITICAL' if i==size-5 else 'DISTRACTOR_%05d'%i
+        body=fact+'\n'
+        if i in (1,2,3): body='BUDGET_CRITICAL_%d\n'%i+'z'*5990+'\n'
+        docs.append({'path':'.cartridge/documents/%05d.md'%i,'text':'---\nschema: cartridge-document/v1\nkind: note\ndescription: deployment'+(' budget' if i in (1,2,3) else '')+'\n---\n'+body})
+    docs.append({'path':'.cartridge/documents/private.md','text':'---\nschema: cartridge-document/v1\nkind: note\ndescription: deployment budget\nvisibility: private\n---\nPRIVATE_DOC_FORBIDDEN\n'})
+    return {'size':size,'count_definition':'size-4 public typed documents, one private document, one public file, one Memory entity, one kernel entry','documents':docs,'file':{'owner':'deployment','path':'deployment.txt','text':'FILE_CRITICAL\r\n'},'memory':{'id':'quality-memory-exact','source':{'scheme':'memo','object_id':'quality-memory','section':'deployment','url':'memory://quality/deployment'},'text':'MEMORY_CRITICAL'},'kernel':{'id':'deployment','generation':7,'state':'Active','provide':['tool.deployment'],'config':{'secret':'KERNEL_CONFIG_FORBIDDEN'}},'undeclared_file':{'path':'private.txt','text':'UNDECLARED_FILE_FORBIDDEN'}}
+
+def encode(x):return json.dumps(x,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()
+def manifest():
+    cases=[{'name':'mixed','query':'deployment','documents':True,'memory':True,'files':True,'kernel':True,'critical':['DOC_EARLY_CRITICAL','DOC_TAIL_CRITICAL','FILE_CRITICAL','MEMORY_CRITICAL'],'required_kinds':['document','file','memory','kernel']},{'name':'documents','query':'deployment','documents':True,'memory':False,'files':False,'kernel':False,'critical':['DOC_EARLY_CRITICAL','DOC_TAIL_CRITICAL'],'required_kinds':['document']},{'name':'memory','query':'deployment','documents':False,'memory':True,'files':False,'kernel':False,'critical':['MEMORY_CRITICAL'],'required_kinds':['memory']},{'name':'files','query':'deployment','documents':False,'memory':False,'files':True,'kernel':False,'critical':['FILE_CRITICAL'],'required_kinds':['file']},{'name':'kernel','query':'deployment','documents':False,'memory':False,'files':False,'kernel':True,'critical':[],'required_kinds':['kernel']},{'name':'budget','query':'budget','documents':True,'memory':False,'files':False,'kernel':False,'critical':['BUDGET_CRITICAL_1','BUDGET_CRITICAL_2','BUDGET_CRITICAL_3'],'required_kinds':['document']}]
+    return {'schema':'cartridge-context-quality-corpus/v1','sizes':[100,10000],'corpora':{str(n):{'sha256':hashlib.sha256(encode(corpus(n))).hexdigest(),'bytes':len(encode(corpus(n)))} for n in (100,10000)},'limits':{'deadline_ms':2000,'max_rows':16,'max_bytes':16384},'scenarios':cases,'forbidden':['PRIVATE_DOC_FORBIDDEN','UNDECLARED_FILE_FORBIDDEN','KERNEL_CONFIG_FORBIDDEN','QUERY_PREVIEW_FORBIDDEN','MEMORY_EXTENSION_FORBIDDEN'],'provenance':{'document':'workspace owner, exact .cartridge/documents path, observed_projection revision verified via native exact read','file':'deployment owner, @deployment/deployment.txt, source_bytes SHA256 over literal CRLF bytes','memory':'memory owner, exact quality-memory-exact ID, observed_projection and exact source metadata','kernel':'runtime owner, @runtime/kernel/deployment, observed_projection, generation7 and public capability only'},'measurement':'One warmup then five recorded runs per scenario and size, serialized full Prepared UTF8 bytes, native request elapsed_ns, rows, source statuses/truncation, fact recall, callback counts. Baseline misses are reported without editing expectations. No candidate or Graph-only replacement is measured by this leaf.'}
+if __name__=='__main__':print(json.dumps(manifest(),indent=2))

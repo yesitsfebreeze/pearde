@@ -1,0 +1,703 @@
+{
+  "source": "0a7c4a1f729c700f52c650ee0c3efc56a136560f",
+  "binary_sha256": "2276ade3458a3603d6edfc57fd31519b23ab7b926bf0ae543ce05f4237c57cb3",
+  "cases": [
+    {
+      "mode": "local",
+      "request": {
+        "op": "query",
+        "text": "Release deadline",
+        "k": 10,
+        "include_history": true
+      },
+      "reply": {
+        "data": {
+          "chains": "",
+          "entities": [
+            {
+              "cold": false,
+              "conf": 0.6666666666666666,
+              "conf_uncertainty": 0.05555555555555555,
+              "edges": [
+                {
+                  "from": "fact-new-002",
+                  "kind": 4,
+                  "score": 1.0,
+                  "text": "New signed plan changes Monday to Friday",
+                  "to": "fact-old-001"
+                }
+              ],
+              "id": "fact-new-002",
+              "invalidated_at": null,
+              "kind": "fact",
+              "scheme": "file",
+              "score": 1.2309644062711507,
+              "source": {
+                "object_id": "new-plan.md",
+                "scheme": "file",
+                "section": "",
+                "url": "https://fixture.invalid/new-plan.md"
+              },
+              "status": "active",
+              "superseded_by": "",
+              "text": "Release deadline is Friday",
+              "valid_from": 1700100000,
+              "valid_to": null,
+              "valid_until": null
+            },
+            {
+              "cold": false,
+              "conf": 0.6666666666666666,
+              "conf_uncertainty": 0.05555555555555555,
+              "id": "fact-legacy-003",
+              "invalidated_at": null,
+              "kind": "fact",
+              "scheme": "file",
+              "score": 0.7309644062711508,
+              "source": {
+                "object_id": "legacy-notes.md",
+                "scheme": "file",
+                "section": "",
+                "url": "https://fixture.invalid/legacy-notes.md"
+              },
+              "status": "active",
+              "superseded_by": "",
+              "text": "Release venue is unknown",
+              "valid_from": null,
+              "valid_to": null,
+              "valid_until": null
+            },
+            {
+              "cold": false,
+              "conf": 0.6666666666666666,
+              "conf_uncertainty": 0.05555555555555555,
+              "edges": [
+                {
+                  "from": "fact-new-002",
+                  "kind": 4,
+                  "score": 1.0,
+                  "text": "New signed plan changes Monday to Friday",
+                  "to": "fact-old-001"
+                }
+              ],
+              "history": true,
+              "id": "fact-old-001",
+              "invalidated_at": 1700200000,
+              "kind": "fact",
+              "scheme": "file",
+              "score": 1.2309644062711507,
+              "source": {
+                "object_id": "old-plan.md",
+                "scheme": "file",
+                "section": "",
+                "url": "https://fixture.invalid/old-plan.md"
+              },
+              "status": "superseded",
+              "superseded_by": "fact-new-002",
+              "text": "Release deadline is Monday",
+              "valid_from": 1700000000,
+              "valid_to": 1700100000,
+              "valid_until": null
+            }
+          ]
+        },
+        "reply": 1
+      }
+    },
+    {
+      "mode": "local",
+      "request": {
+        "op": "get",
+        "id": "fact-new-002"
+      },
+      "reply": {
+        "data": {
+          "access_count": 1,
+          "conf": 0.6666666666666666,
+          "conf_uncertainty": 0.05555555555555555,
+          "edges": [
+            {
+              "from": "fact-new-002",
+              "id": "revision-edge",
+              "kind": 4,
+              "score": 1.0,
+              "text": "New signed plan changes Monday to Friday",
+              "to": "fact-old-001"
+            }
+          ],
+          "edges_cursor": "revision-edge",
+          "edges_more": false,
+          "edges_total": 1,
+          "id": "fact-new-002",
+          "kind": 0,
+          "memory": "facts",
+          "score": 0.6666666666666666,
+          "source": {
+            "object_id": "new-plan.md",
+            "scheme": "file",
+            "section": "",
+            "url": "https://fixture.invalid/new-plan.md"
+          },
+          "text": "Release deadline is Friday"
+        },
+        "reply": 2
+      }
+    },
+    {
+      "mode": "local",
+      "request": {
+        "op": "get",
+        "id": "fact-old-001"
+      },
+      "reply": {
+        "data": {
+          "access_count": 0,
+          "conf": 0.6666666666666666,
+          "conf_uncertainty": 0.05555555555555555,
+          "edges": [
+            {
+              "from": "fact-new-002",
+              "id": "revision-edge",
+              "kind": 4,
+              "score": 1.0,
+              "text": "New signed plan changes Monday to Friday",
+              "to": "fact-old-001"
+            }
+          ],
+          "edges_cursor": "revision-edge",
+          "edges_more": false,
+          "edges_total": 1,
+          "id": "fact-old-001",
+          "kind": 0,
+          "memory": "facts",
+          "score": 0.6666666666666666,
+          "source": {
+            "object_id": "old-plan.md",
+            "scheme": "file",
+            "section": "",
+            "url": "https://fixture.invalid/old-plan.md"
+          },
+          "text": "Release deadline is Monday"
+        },
+        "reply": 3
+      }
+    },
+    {
+      "mode": "local",
+      "request": {
+        "op": "get",
+        "id": "fact-legacy-003"
+      },
+      "reply": {
+        "data": {
+          "access_count": 1,
+          "conf": 0.6666666666666666,
+          "conf_uncertainty": 0.05555555555555555,
+          "edges": [],
+          "edges_cursor": "",
+          "edges_more": false,
+          "edges_total": 0,
+          "id": "fact-legacy-003",
+          "kind": 0,
+          "memory": "facts",
+          "score": 0.6666666666666666,
+          "source": {
+            "object_id": "legacy-notes.md",
+            "scheme": "file",
+            "section": "",
+            "url": "https://fixture.invalid/legacy-notes.md"
+          },
+          "text": "Release venue is unknown"
+        },
+        "reply": 4
+      }
+    },
+    {
+      "mode": "local",
+      "request": {
+        "op": "get",
+        "id": "fact-new-002",
+        "compact": true
+      },
+      "reply": {
+        "data": {
+          "access_count": 1,
+          "compact": true,
+          "conf": 0.6666666666666666,
+          "conf_uncertainty": 0.05555555555555555,
+          "edges": [
+            {
+              "from": "fact-new-002",
+              "id": "revision-edge",
+              "kind": 4,
+              "score": 1.0,
+              "to": "fact-old-001"
+            }
+          ],
+          "edges_cursor": "revision-edge",
+          "edges_more": false,
+          "edges_total": 1,
+          "id": "fact-new-002",
+          "kind": 0,
+          "memory": "facts",
+          "score": 0.6666666666666666,
+          "source": {
+            "object_id": "new-plan.md",
+            "scheme": "file",
+            "section": "",
+            "url": "https://fixture.invalid/new-plan.md"
+          },
+          "text": "Release deadline is Friday",
+          "text_truncated": false
+        },
+        "reply": 5
+      }
+    },
+    {
+      "mode": "local",
+      "request": {
+        "op": "query",
+        "ids": [
+          "fact-new-002",
+          "fact-old-001",
+          "fact-legacy-003"
+        ]
+      },
+      "reply": {
+        "data": {
+          "missing": [],
+          "results": [
+            {
+              "access_count": 1,
+              "conf": 0.6666666666666666,
+              "conf_uncertainty": 0.05555555555555555,
+              "edges": [
+                {
+                  "from": "fact-new-002",
+                  "id": "revision-edge",
+                  "kind": 4,
+                  "score": 1.0,
+                  "text": "New signed plan changes Monday to Friday",
+                  "to": "fact-old-001"
+                }
+              ],
+              "edges_cursor": "revision-edge",
+              "edges_more": false,
+              "edges_total": 1,
+              "id": "fact-new-002",
+              "kind": 0,
+              "memory": "facts",
+              "score": 0.6666666666666666,
+              "source": {
+                "object_id": "new-plan.md",
+                "scheme": "file",
+                "section": "",
+                "url": "https://fixture.invalid/new-plan.md"
+              },
+              "text": "Release deadline is Friday"
+            },
+            {
+              "access_count": 0,
+              "conf": 0.6666666666666666,
+              "conf_uncertainty": 0.05555555555555555,
+              "edges": [
+                {
+                  "from": "fact-new-002",
+                  "id": "revision-edge",
+                  "kind": 4,
+                  "score": 1.0,
+                  "text": "New signed plan changes Monday to Friday",
+                  "to": "fact-old-001"
+                }
+              ],
+              "edges_cursor": "revision-edge",
+              "edges_more": false,
+              "edges_total": 1,
+              "id": "fact-old-001",
+              "kind": 0,
+              "memory": "facts",
+              "score": 0.6666666666666666,
+              "source": {
+                "object_id": "old-plan.md",
+                "scheme": "file",
+                "section": "",
+                "url": "https://fixture.invalid/old-plan.md"
+              },
+              "text": "Release deadline is Monday"
+            },
+            {
+              "access_count": 1,
+              "conf": 0.6666666666666666,
+              "conf_uncertainty": 0.05555555555555555,
+              "edges": [],
+              "edges_cursor": "",
+              "edges_more": false,
+              "edges_total": 0,
+              "id": "fact-legacy-003",
+              "kind": 0,
+              "memory": "facts",
+              "score": 0.6666666666666666,
+              "source": {
+                "object_id": "legacy-notes.md",
+                "scheme": "file",
+                "section": "",
+                "url": "https://fixture.invalid/legacy-notes.md"
+              },
+              "text": "Release venue is unknown"
+            }
+          ]
+        },
+        "reply": 6
+      }
+    },
+    {
+      "mode": "attached",
+      "request": {
+        "op": "query",
+        "text": "Release deadline",
+        "k": 10,
+        "include_history": true
+      },
+      "reply": {
+        "data": {
+          "chains": "",
+          "entities": [
+            {
+              "cold": false,
+              "conf": 0.6666666666666666,
+              "conf_uncertainty": 0.05555555555555555,
+              "edges": [
+                {
+                  "from": "fact-new-002",
+                  "kind": 4,
+                  "score": 1.0,
+                  "text": "New signed plan changes Monday to Friday",
+                  "to": "fact-old-001"
+                }
+              ],
+              "id": "fact-new-002",
+              "invalidated_at": null,
+              "kind": "fact",
+              "scheme": "file",
+              "score": 1.2948273498823497,
+              "source": {
+                "object_id": "new-plan.md",
+                "scheme": "file",
+                "section": "",
+                "url": "https://fixture.invalid/new-plan.md"
+              },
+              "status": "active",
+              "superseded_by": "",
+              "text": "Release deadline is Friday",
+              "valid_from": 1700100000,
+              "valid_to": null,
+              "valid_until": null
+            },
+            {
+              "cold": false,
+              "conf": 0.6666666666666666,
+              "conf_uncertainty": 0.05555555555555555,
+              "id": "fact-legacy-003",
+              "invalidated_at": null,
+              "kind": "fact",
+              "scheme": "file",
+              "score": 0.7948273498823497,
+              "source": {
+                "object_id": "legacy-notes.md",
+                "scheme": "file",
+                "section": "",
+                "url": "https://fixture.invalid/legacy-notes.md"
+              },
+              "status": "active",
+              "superseded_by": "",
+              "text": "Release venue is unknown",
+              "valid_from": null,
+              "valid_to": null,
+              "valid_until": null
+            },
+            {
+              "cold": false,
+              "conf": 0.6666666666666666,
+              "conf_uncertainty": 0.05555555555555555,
+              "edges": [
+                {
+                  "from": "fact-new-002",
+                  "kind": 4,
+                  "score": 1.0,
+                  "text": "New signed plan changes Monday to Friday",
+                  "to": "fact-old-001"
+                }
+              ],
+              "history": true,
+              "id": "fact-old-001",
+              "invalidated_at": 1700200000,
+              "kind": "fact",
+              "scheme": "file",
+              "score": 1.2948273498823497,
+              "source": {
+                "object_id": "old-plan.md",
+                "scheme": "file",
+                "section": "",
+                "url": "https://fixture.invalid/old-plan.md"
+              },
+              "status": "superseded",
+              "superseded_by": "fact-new-002",
+              "text": "Release deadline is Monday",
+              "valid_from": 1700000000,
+              "valid_to": 1700100000,
+              "valid_until": null
+            }
+          ]
+        },
+        "reply": 1
+      }
+    },
+    {
+      "mode": "attached",
+      "request": {
+        "op": "get",
+        "id": "fact-new-002"
+      },
+      "reply": {
+        "data": {
+          "access_count": 1,
+          "conf": 0.6666666666666666,
+          "conf_uncertainty": 0.05555555555555555,
+          "edges": [
+            {
+              "from": "fact-new-002",
+              "id": "revision-edge",
+              "kind": 4,
+              "score": 1.0,
+              "text": "New signed plan changes Monday to Friday",
+              "to": "fact-old-001"
+            }
+          ],
+          "edges_cursor": "revision-edge",
+          "edges_more": false,
+          "edges_total": 1,
+          "id": "fact-new-002",
+          "kind": 0,
+          "memory": "facts",
+          "score": 0.6666666666666666,
+          "source": {
+            "object_id": "new-plan.md",
+            "scheme": "file",
+            "section": "",
+            "url": "https://fixture.invalid/new-plan.md"
+          },
+          "text": "Release deadline is Friday"
+        },
+        "reply": 2
+      }
+    },
+    {
+      "mode": "attached",
+      "request": {
+        "op": "get",
+        "id": "fact-old-001"
+      },
+      "reply": {
+        "data": {
+          "access_count": 0,
+          "conf": 0.6666666666666666,
+          "conf_uncertainty": 0.05555555555555555,
+          "edges": [
+            {
+              "from": "fact-new-002",
+              "id": "revision-edge",
+              "kind": 4,
+              "score": 1.0,
+              "text": "New signed plan changes Monday to Friday",
+              "to": "fact-old-001"
+            }
+          ],
+          "edges_cursor": "revision-edge",
+          "edges_more": false,
+          "edges_total": 1,
+          "id": "fact-old-001",
+          "kind": 0,
+          "memory": "facts",
+          "score": 0.6666666666666666,
+          "source": {
+            "object_id": "old-plan.md",
+            "scheme": "file",
+            "section": "",
+            "url": "https://fixture.invalid/old-plan.md"
+          },
+          "text": "Release deadline is Monday"
+        },
+        "reply": 3
+      }
+    },
+    {
+      "mode": "attached",
+      "request": {
+        "op": "get",
+        "id": "fact-legacy-003"
+      },
+      "reply": {
+        "data": {
+          "access_count": 1,
+          "conf": 0.6666666666666666,
+          "conf_uncertainty": 0.05555555555555555,
+          "edges": [],
+          "edges_cursor": "",
+          "edges_more": false,
+          "edges_total": 0,
+          "id": "fact-legacy-003",
+          "kind": 0,
+          "memory": "facts",
+          "score": 0.6666666666666666,
+          "source": {
+            "object_id": "legacy-notes.md",
+            "scheme": "file",
+            "section": "",
+            "url": "https://fixture.invalid/legacy-notes.md"
+          },
+          "text": "Release venue is unknown"
+        },
+        "reply": 4
+      }
+    },
+    {
+      "mode": "attached",
+      "request": {
+        "op": "get",
+        "id": "fact-new-002",
+        "compact": true
+      },
+      "reply": {
+        "data": {
+          "access_count": 1,
+          "compact": true,
+          "conf": 0.6666666666666666,
+          "conf_uncertainty": 0.05555555555555555,
+          "edges": [
+            {
+              "from": "fact-new-002",
+              "id": "revision-edge",
+              "kind": 4,
+              "score": 1.0,
+              "to": "fact-old-001"
+            }
+          ],
+          "edges_cursor": "revision-edge",
+          "edges_more": false,
+          "edges_total": 1,
+          "id": "fact-new-002",
+          "kind": 0,
+          "memory": "facts",
+          "score": 0.6666666666666666,
+          "source": {
+            "object_id": "new-plan.md",
+            "scheme": "file",
+            "section": "",
+            "url": "https://fixture.invalid/new-plan.md"
+          },
+          "text": "Release deadline is Friday",
+          "text_truncated": false
+        },
+        "reply": 5
+      }
+    },
+    {
+      "mode": "attached",
+      "request": {
+        "op": "query",
+        "ids": [
+          "fact-new-002",
+          "fact-old-001",
+          "fact-legacy-003"
+        ]
+      },
+      "reply": {
+        "data": {
+          "missing": [],
+          "results": [
+            {
+              "access_count": 1,
+              "conf": 0.6666666666666666,
+              "conf_uncertainty": 0.05555555555555555,
+              "edges": [
+                {
+                  "from": "fact-new-002",
+                  "id": "revision-edge",
+                  "kind": 4,
+                  "score": 1.0,
+                  "text": "New signed plan changes Monday to Friday",
+                  "to": "fact-old-001"
+                }
+              ],
+              "edges_cursor": "revision-edge",
+              "edges_more": false,
+              "edges_total": 1,
+              "id": "fact-new-002",
+              "kind": 0,
+              "memory": "facts",
+              "score": 0.6666666666666666,
+              "source": {
+                "object_id": "new-plan.md",
+                "scheme": "file",
+                "section": "",
+                "url": "https://fixture.invalid/new-plan.md"
+              },
+              "text": "Release deadline is Friday"
+            },
+            {
+              "access_count": 0,
+              "conf": 0.6666666666666666,
+              "conf_uncertainty": 0.05555555555555555,
+              "edges": [
+                {
+                  "from": "fact-new-002",
+                  "id": "revision-edge",
+                  "kind": 4,
+                  "score": 1.0,
+                  "text": "New signed plan changes Monday to Friday",
+                  "to": "fact-old-001"
+                }
+              ],
+              "edges_cursor": "revision-edge",
+              "edges_more": false,
+              "edges_total": 1,
+              "id": "fact-old-001",
+              "kind": 0,
+              "memory": "facts",
+              "score": 0.6666666666666666,
+              "source": {
+                "object_id": "old-plan.md",
+                "scheme": "file",
+                "section": "",
+                "url": "https://fixture.invalid/old-plan.md"
+              },
+              "text": "Release deadline is Monday"
+            },
+            {
+              "access_count": 1,
+              "conf": 0.6666666666666666,
+              "conf_uncertainty": 0.05555555555555555,
+              "edges": [],
+              "edges_cursor": "",
+              "edges_more": false,
+              "edges_total": 0,
+              "id": "fact-legacy-003",
+              "kind": 0,
+              "memory": "facts",
+              "score": 0.6666666666666666,
+              "source": {
+                "object_id": "legacy-notes.md",
+                "scheme": "file",
+                "section": "",
+                "url": "https://fixture.invalid/legacy-notes.md"
+              },
+              "text": "Release venue is unknown"
+            }
+          ]
+        },
+        "reply": 6
+      }
+    }
+  ],
+  "owner_alive_after_read": true
+}

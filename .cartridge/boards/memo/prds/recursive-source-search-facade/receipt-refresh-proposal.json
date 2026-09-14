@@ -1,0 +1,96 @@
+{
+  "source": "a458148fb21f85cabcd9e1ced85c96c581b8e0b2",
+  "proposal_only": true,
+  "reason": "Eight old leaf footprints directly contain changed main/service/document source. Bind imported new facade, shared document source adapter and compiled unit proof. No acceptance or Verify changes. Two structural parents then revalidate over their existing children.",
+  "leaves": [
+    {
+      "ref": "@memo/improve-memo-types-drilldown",
+      "spec": ".cartridge/boards/memo/prds/improve-memo-types-drilldown/specs/spec01.md",
+      "before_sha256": "2e6f531584834164053aa2aba91b435b38b38e69390df65ef8540d1fd3e286b3",
+      "add_footprint": [
+        "src/source_search.rs",
+        "src/document.rs",
+        ".cartridge/tests/unit/source_search.rs"
+      ]
+    },
+    {
+      "ref": "@memo/landscape-context-facade",
+      "spec": ".cartridge/boards/memo/prds/landscape-context-facade/specs/spec01.md",
+      "before_sha256": "042cdcea6d4a769f20ea4e7fa82aed9cea05a92d29de1732d05312a6763e0c20",
+      "add_footprint": [
+        "src/source_search.rs",
+        "src/document.rs",
+        ".cartridge/tests/unit/source_search.rs"
+      ]
+    },
+    {
+      "ref": "@memo/landscape-file-kernel-context-facade",
+      "spec": ".cartridge/boards/memo/prds/landscape-file-kernel-context-facade/specs/spec01.md",
+      "before_sha256": "84448715ee4592a6a48bb657563d0763ac86c23e987798fe6e095b89b7f1fa5c",
+      "add_footprint": [
+        "src/source_search.rs",
+        "src/document.rs",
+        ".cartridge/tests/unit/source_search.rs"
+      ]
+    },
+    {
+      "ref": "@memo/landscape-inventory-facade",
+      "spec": ".cartridge/boards/memo/prds/landscape-inventory-facade/specs/spec01.md",
+      "before_sha256": "ea41b971efcfb21a844ffaf64535602ce7978decdea1518d67a6f885e96caef5",
+      "add_footprint": [
+        "src/source_search.rs",
+        "src/document.rs",
+        ".cartridge/tests/unit/source_search.rs"
+      ]
+    },
+    {
+      "ref": "@memo/memo-board-template/initialize-board",
+      "spec": ".cartridge/boards/memo/prds/memo-board-template/initialize-board/specs/spec01.md",
+      "before_sha256": "cc4da59b5b99704db851eb63e6b16e73030f43af0bdd8de08acde327f9352cb6",
+      "add_footprint": [
+        "src/source_search.rs",
+        "src/document.rs",
+        ".cartridge/tests/unit/source_search.rs"
+      ]
+    },
+    {
+      "ref": "@memo/one-document-serves-every-reader/document-identity",
+      "spec": ".cartridge/boards/memo/prds/one-document-serves-every-reader/document-identity/specs/spec01.md",
+      "before_sha256": "3167ea2e7b70d9890675f4a307a79424997b8c32867a163a52b2f98ab0a10d31",
+      "add_footprint": [
+        "src/source_search.rs",
+        "src/document.rs",
+        ".cartridge/tests/unit/source_search.rs"
+      ]
+    },
+    {
+      "ref": "@memo/one-document-serves-every-reader/document-projections",
+      "spec": ".cartridge/boards/memo/prds/one-document-serves-every-reader/document-projections/specs/spec01.md",
+      "before_sha256": "426f9cf49151639be394d79e3efc6f2658a74a944b3157e177b9f61f14889e71",
+      "add_footprint": [
+        "src/source_search.rs",
+        "src/document.rs",
+        ".cartridge/tests/unit/source_search.rs"
+      ]
+    },
+    {
+      "ref": "@memo/one-document-serves-every-reader/executable-document-validation",
+      "spec": ".cartridge/boards/memo/prds/one-document-serves-every-reader/executable-document-validation/specs/spec01.md",
+      "before_sha256": "358035ad53acf9cdebbbf6322105bd667cebe4c2207384b992f618aa0a1d0fcf",
+      "add_footprint": [
+        "src/source_search.rs",
+        ".cartridge/tests/unit/source_search.rs"
+      ]
+    }
+  ],
+  "rollups": [
+    "@memo/memo-board-template",
+    "@memo/one-document-serves-every-reader"
+  ],
+  "unchanged_direct_footprints": [
+    "@memo/a-shadowing-write-passes-the-leaf-check",
+    "@memo/improve-memo-stale-evidence",
+    "@memo/memo-board-template/board-engine-integration"
+  ],
+  "note": "There are 13 old done markers: eight source-stale leaves plus two parents form the requested ten. Three other direct footprints do not intersect this source commit; board-engine-integration depends on refreshed initialize-board and can be additionally revalidated if engine dependency status requires. New integration test/docs remain bound by new leaf, not appended to unrelated old leaves."
+}

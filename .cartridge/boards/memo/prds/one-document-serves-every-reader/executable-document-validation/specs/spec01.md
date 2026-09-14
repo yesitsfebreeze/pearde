@@ -1,12 +1,6 @@
 ---
 complexity: medium
-footprint:
-- src/document.rs
-- src/validation.rs
-- .cartridge/tests/unit/validation.rs
-- .cartridge/tests/integration/validation.test.ts
-- .cartridge/tests/fixtures/validation
-- .cartridge/docs/documents.md
+footprint: ["src/document.rs","src/validation.rs",".cartridge/tests/unit/validation.rs",".cartridge/tests/integration/validation.test.ts",".cartridge/tests/fixtures/validation",".cartridge/docs/documents.md","src/source_search.rs",".cartridge/tests/unit/source_search.rs"]
 ---
 
 # Freeze a validated execution descriptor without starting a process

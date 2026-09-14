@@ -4,8 +4,8 @@ language: English
 memos: memos/note
 workflows: ../../workflows
 grammar: ../../grammar.md
-repo: /Users/feb/dev/cartridge/landscape.ctg
-source-repository: /Users/feb/dev/cartridge/landscape.ctg
+repo: /Users/feb/dev/cartridge/cartridge.ctg
+source-repository: /Users/feb/dev/cartridge/cartridge.ctg
 require-repo: true
 ---
 

@@ -1,0 +1,30 @@
+   Compiling pty v0.1.0 (/Users/feb/dev/cartridge/pty.ctg)
+    Finished `test` profile [unoptimized] target(s) in 0.62s
+     Running unittests src/main.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/deps/pty-e415e5ac24759752)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 23 filtered out; finished in 0.00s
+
+     Running .cartridge/tests/integration/process.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/deps/process-ad00d12f2621f551)
+
+running 1 test
+handoff diagnostic before_cursor=5 observed_cursor=6 new_prompt=false new_done=false
+handoff diagnostic interrupted=null tool_already_finished=true
+handoff diagnostic premature_result_error=true exit130=false sleep_named=true
+handoff diagnostic not_at_prompt=false gate_busy=false user_control=false
+handoff diagnostic exit_lines=[]
+
+thread 'handoff_blocks_agent_input_and_takeback_interrupts_without_closing_shell' (47976800) panicked at /Users/feb/dev/cartridge/pty.ctg/.cartridge/tests/integration/process.rs:538:738:
+diagnostic premature completion
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test handoff_blocks_agent_input_and_takeback_interrupts_without_closing_shell ... FAILED
+
+failures:
+
+failures:
+    handoff_blocks_agent_input_and_takeback_interrupts_without_closing_shell
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.29s
+
+error: test failed, to rerun pass `-p pty --test process`

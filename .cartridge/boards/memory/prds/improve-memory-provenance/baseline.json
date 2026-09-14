@@ -1,0 +1,84 @@
+{
+  "author": "/root/memo_board",
+  "canonical_id": "@memory/improve-memory-provenance",
+  "source": "0a7c4a1f729c700f52c650ee0c3efc56a136560f",
+  "source_clean": true,
+  "runtime_source": "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df",
+  "measured_before_spec": true,
+  "command": "Compile baseline-seed.txt with recorded rustc --extern source-bound existing rlibs, then python3 baseline-probe.txt (adjust disposable paths); real memory_cartridge local and attached reads of same exclusive-writer-seeded store.",
+  "seed": "Three Fact identities: old source old-plan.md Monday superseded by new-plan.md Friday; explicit indexed Supersedes edge with explanatory text. Creation/update and bitemporal dates on revisions; all dates absent on legacy fact. No product source edits.",
+  "observed": [
+    "Ranked local and attached include_history queries both retain current and old identities, source links, active/superseded labels and recorded supersedes edge. Default direct old get remains readable.",
+    "Direct get/batch/compact omit lifecycle status and stored creation/update timestamps; ranked query includes status and bitemporal dates but omits creation/update timestamps.",
+    "Legacy no-date fact remains readable everywhere, but freshness unavailable is not explicit. Compact detail hides edge explanation text and offers only numeric kind; ranked edge omits edge ID.",
+    "Owner alive after attached reads. Existing default query filtering/history option and full source identity work; no new selection behavior needed."
+  ],
+  "source_inputs": [
+    {
+      "path": "src/base/src/base_types.rs",
+      "sha256": "d79ce2c6f52236afa717112075a95829312ff4353c213918b7cb239142455f95"
+    },
+    {
+      "path": "src/retrieval/piece/src/id_detail.rs",
+      "sha256": "01ce4193adccbac307b81a7b797405cddc0771a71d323f8cd70dae921e786534"
+    },
+    {
+      "path": "src/retrieval/piece/src/lib.rs",
+      "sha256": "cb99e7c6882a8fb4d87c4ce176a30c3f4024e804013b0514fafbe06818b42822"
+    },
+    {
+      "path": "src/retrieval/src/lib.rs",
+      "sha256": "bca40c2dd4d9a9d30e4b31e04ff75ac278f3c2b3d83614633a5edd3d538ea316"
+    },
+    {
+      "path": "src/rpc/src/server.rs",
+      "sha256": "735d6c6b0eba6f8760f4e9bedded8f8dac615c80aa6acb305d3fe726abd6c68a"
+    },
+    {
+      "path": "src/cartridge.rs",
+      "sha256": "89793da4c6d3ab6c87c3601fc0df01b3b24eae9f554a6e24d9494fb5a5c41ca4"
+    },
+    {
+      "path": "src/transport/src/owner.rs",
+      "sha256": "fb4330f8034f5fc641b108d1a2a7800a4b773da481e50648fd2c0eaaf2f1873b"
+    },
+    {
+      "path": "src/store/core/src/lib.rs",
+      "sha256": "ea9abafed31323272dba6250d779ce18c835665e5f8554ad57445503af9396be"
+    },
+    {
+      "path": ".cartridge/tests/integration/cartridge.rs",
+      "sha256": "8ed780c0c87d7f570d648ce2a3ca5b50b950f90bbcf41fe78012941dda003441"
+    },
+    {
+      "path": ".cartridge/tests/unit/src/rpc/src/tests/server_bounded_test.rs",
+      "sha256": "d2f35c0f2adeb3130debdece3da9dc6e8b45f0b37767f24fe2d6818eebd3d56b"
+    }
+  ],
+  "baseline_inputs": [
+    {
+      "path": "prd.md",
+      "sha256": "09600426b1c79c5388d5dc99e048162304a7d1c8e59c8b30f1375f68ae6e7c5b"
+    },
+    {
+      "path": "review.md",
+      "sha256": "be4fed72a603fbe888e3ec068b6f43c23a55e60307f447644a5fb74840bd8e7f"
+    },
+    {
+      "path": "baseline-seed.txt",
+      "sha256": "c1088713300b7d2c65dec1472fefb9d55b93223866dd522ddb4bba190d4b299b"
+    },
+    {
+      "path": "baseline-probe.txt",
+      "sha256": "4fa5ae3b279c68472909c5591126a48c03ae9ff397219aa34f675e1d27bb5a44"
+    },
+    {
+      "path": "baseline-results.json",
+      "sha256": "5508694ddc82889946ebb4554f5fdb0c23a8f3651f78d929d410fbe0e6b4c4ec"
+    },
+    {
+      "path": "baseline-seed-command.json",
+      "sha256": "a41fe561ab49f51f719db2d234b159733b4a9eb6ada800adf0dd3a343a268395"
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "source_head": "a458148fb21f85cabcd9e1ced85c96c581b8e0b2",
+  "source_clean": true,
+  "source_files": {
+    "src/main.rs": "2f9458b8eb137956142858eb27a05d6832d6dc1ed494705504a834b51c60bba6",
+    "src/service.rs": "6a2b0cfafaf4368a14ccc6abb47b2c4e01c2438aa95fe03d5d549f4c83a3c675",
+    "src/source_search.rs": "8db59a6fd9f009ccd2f68d230b234715be232c5d924988bc79c7be089ca40ffd",
+    "src/document.rs": "15b5b7ad17d262f356f60f54d090a3b33b30ba9b6e6ff813df8fdebbf6b9de0a",
+    ".cartridge/tests/unit/source_search.rs": "22ab48c4fb09e959f2fdb42752c818b29c10f66236ca926321f2c934834f7d5f",
+    ".cartridge/tests/integration/source-search.test.ts": "cd8b3384ebb788c41c6fc203e515d61766dedfd6253d71f973177eef5ab82a82",
+    ".cartridge/docs/source-search.md": "e68c244fd511192b39c86c5c197d7c4c7a44df9525f9be8a711e57d4522d14ee"
+  },
+  "review": {
+    "round": 3,
+    "score": 94,
+    "reviewer": "/root",
+    "source_audit": "Final root audit passed including source-only recursive merge-key privacy rejection; no blocker."
+  },
+  "checklist_refinement": {
+    "before": {
+      "prd.md": "ef092db14dc0ec60d0758870a53bad41300aa8c31a73e65ecee10f03de180218",
+      "specs/spec01.md": "ccfd11c1b381bb8ba9a9e06f773926d6ccc6295412c4fa5619c5261ddd5e64c7"
+    },
+    "after": {
+      "prd.md": "86a835dd3bbb88d001302f6ebd1b66000aa947118b36069da0a26fe9f49b6fc5",
+      "specs/spec01.md": "b808c1ed2f42949ab76f7634852d2cb52652024613d5f97b46a78c0d629cd4d1"
+    },
+    "change": "Acceptance markers only; requirements and executable gates unchanged."
+  },
+  "dependencies": {
+    "landscape_source": "422c521aed170a4d098505c73469a1a59dccf49d",
+    "prd_collected_source": "e4fd4346",
+    "prd_implementation": "0b39c5c",
+    "prd_files": {
+      "src/records.ts": "c8491c11d80db97eb58ec31589836a24655a713c937c322efbdda596b2e86085",
+      "src/source-records.ts": "e8947d91f3ffe5abb810b7d73a96d64185841d249cd6fe4f7041bbb1b88956a0",
+      "src/service.ts": "324af922c0f202fc26f56f077ea9304c7f3c49ec8a236d61b77b56930853b151",
+      "package.json": "021b3a075c52c5d18a7ed2574a8c877e78a527bc9e6672eaeac11cb9bf940abe",
+      "bun.lock": "83d0b4d57feae9c98706d646708238c589bf72e9ff838ead39d99be09e0e0c93"
+    },
+    "runtime": {
+      "source_head": "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df",
+      "source_binary": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/cartridge",
+      "source_before_sha256": "78c7fdfcb7478fcaf2cf5436438fd8138276f941fefaa0b2c8db76749658d272",
+      "copy": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-source-runtime-40z60zh8/cartridge",
+      "copy_sha256": "78c7fdfcb7478fcaf2cf5436438fd8138276f941fefaa0b2c8db76749658d272",
+      "source_after_sha256": "78c7fdfcb7478fcaf2cf5436438fd8138276f941fefaa0b2c8db76749658d272"
+    }
+  },
+  "memo_binary": {
+    "path": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/memo_cartridge",
+    "sha256": "1e90b34d35f800169e06eb8789a4f2d9a0001d5a0375894c1738b92650b3fd5f"
+  },
+  "commands": [
+    {
+      "command": "just test memo",
+      "exit": 0,
+      "result": "83 passed",
+      "log": "proof/test-memo.log"
+    },
+    {
+      "command": "just check memo",
+      "exit": 0,
+      "result": "passed",
+      "log": "proof/check-memo.log"
+    },
+    {
+      "command": "just build memo",
+      "exit": 0,
+      "result": "passed",
+      "log": "proof/build-memo.log"
+    },
+    {
+      "command": "just test landscape",
+      "exit": 0,
+      "result": "67 passed",
+      "log": "proof/test-landscape.log"
+    },
+    {
+      "command": "bun test ./.cartridge/tests/integration/source-search.test.ts ./.cartridge/tests/integration/inventory.test.ts ./.cartridge/tests/integration/context.test.ts ./.cartridge/tests/integration/validation.test.ts",
+      "exit": 0,
+      "result": "10 passed / 10415 assertions",
+      "log": "proof/integration.log"
+    }
+  ],
+  "environment": {
+    "rust_cwd": "/Users/feb/dev/cartridge/cartridge.ctg",
+    "bun_cwd": "/Users/feb/dev/cartridge/memo.ctg",
+    "RUSTC_WRAPPER": "",
+    "RUSTC_WORKSPACE_WRAPPER": "",
+    "CARGO_TARGET_DIR": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract",
+    "MEMO_SOURCE_RUNTIME_BIN": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memo-source-runtime-40z60zh8/cartridge"
+  },
+  "proof_binding_refinement": "Parent-approved immutable Runtime binary override avoids concurrent rebuild replacement; before/copy/after hashes equal. Default test path remains available; no gate/assertion change.",
+  "limitations": [
+    "Actual-job slot retention applies to explicit blocking document jobs; Tokio metadata/canonicalization may finish internally after request timeout.",
+    "Existing symlink confinement preserved; no race-proof hostile-writer or atomic snapshot claim.",
+    "Legacy document/projection merge parsing unchanged; only new public source index/read rejects recursive merge keys.",
+    "Source-only cartridge revisions hash explicit canonical host declarations, not unobserved manifest bytes."
+  ],
+  "logs": {
+    "proof/test-landscape.log": "5757533bc5a0abff79265691a2f0e99c63dc5506e901b8ce631df4b9f56db697",
+    "proof/merge-privacy-repair.json": "e1b0ccc95cdce54fd8b1bdad71d8c82825b281a0261bfea5c319f20e7343b5c8",
+    "proof/runtime-copy-inputs.json": "130e0f20d789289670e1eea07a8e72ef30bdfef4f367c7046431387097341f99",
+    "proof/test-memo.log": "82c9c522d3b9570aa0c574ac6a0bf1d6823f7fd7b9b060896c761fcfc17a9f31",
+    "proof/integration.log": "ef55cb2a1c1ce7dce6126e031a407d47638a1e96c1116825769e602847ac6cf5",
+    "proof/merge-privacy-baseline.log": "5722a72253ad744e1f807e75302f38f763fe00d1deeecabb258b43671e99f34d",
+    "proof/initial-fixture-failure.json": "1af5aed03546a3beaf7f61710a283230fa31fee85a046b55efe634444e111452",
+    "proof/build-memo.log": "544ff2d321023d8a5fc1f3230450423ca6e8e9dc864e830f6dd0fd8827b3c6db",
+    "proof/check-memo.log": "b9e7ee6c909b1642cfdfc82f8850e3be8f4b9e21e01e9d782301f3b05c1cd973"
+  }
+}

@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/memo.ctg
-state: "done"
+state: "specced"
 origin: requested
 priority: 80
 blast-radius: mid

@@ -1,0 +1,10 @@
+{
+  "source": "a458148fb21f85cabcd9e1ced85c96c581b8e0b2",
+  "previous_source": "1ffca32db1d06364b3e35e6cbca4881a1f814f71",
+  "source_search_review": "@memo/recursive-source-search-facade",
+  "spec_before_sha256": "84448715ee4592a6a48bb657563d0763ac86c23e987798fe6e095b89b7f1fa5c",
+  "spec_after_sha256": "732e0c359316113e2fc04fcbd04758de88ebc5fc2cf3118a1330b98af4d0edee",
+  "acceptance_changed": false,
+  "executable_gates_changed": false,
+  "reason": "Imported facade/document source and compiled unit proof added to existing footprint"
+}

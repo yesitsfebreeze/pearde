@@ -1,0 +1,78 @@
+{
+  "binary": "/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/pty",
+  "sha256": "e50e8b9f55ae410e0edcf56cdfbaf3d7f6a47d981ed55e3bc9ae9589689a542c",
+  "results": [
+    {
+      "metadata_error": "Error: unknown pty op",
+      "name": "unsupported",
+      "program": "/bin/sh",
+      "before": {
+        "commands": [],
+        "cwd": "",
+        "identity": {
+          "configured_dialect": "unknown",
+          "configured_executable": "/bin/sh",
+          "cwd": null,
+          "cwd_source": "unknown",
+          "dialect_source": "unknown",
+          "initial_cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/pty-context-baseline-Aw9wRI",
+          "integration": "unknown",
+          "observed_dialect": "unknown",
+          "phase": "unknown",
+          "schema": "pty.shell.v1",
+          "truncated": false
+        },
+        "phase": "unknown",
+        "running": null
+      },
+      "tool_fields": [
+        "alternate_screen",
+        "commands",
+        "cwd",
+        "identity",
+        "phase",
+        "running",
+        "screen",
+        "shell_exit",
+        "viewport"
+      ],
+      "read_fields": [
+        "chunks",
+        "control",
+        "cursor",
+        "exit",
+        "identity"
+      ],
+      "screen_fields": [
+        "identity",
+        "rows",
+        "version"
+      ],
+      "viewport_fields": [
+        "alt",
+        "cursor",
+        "identity",
+        "offset",
+        "rows",
+        "total"
+      ],
+      "frame_fields": [
+        "identity",
+        "rows",
+        "version"
+      ],
+      "environment": {
+        "shell": "/bin/sh",
+        "cwd": "/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/pty-context-baseline-Aw9wRI"
+      },
+      "after": {
+        "cwd": "",
+        "phase": "unknown",
+        "literal_visible": true
+      },
+      "attachment_preserves_command_history": true,
+      "attachment_control": "agent",
+      "identity_absent": false
+    }
+  ]
+}

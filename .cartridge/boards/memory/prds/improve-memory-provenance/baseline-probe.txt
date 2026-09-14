@@ -1,0 +1,65 @@
+import pathlib,os,tempfile,subprocess,json,select,time,hashlib,threading,http.server
+binary=pathlib.Path('/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/memory_cartridge')
+class Embedding(http.server.BaseHTTPRequestHandler):
+ def do_POST(self):
+  body=json.loads(self.rfile.read(int(self.headers['Content-Length']))); inputs=body.get('input',['x']); inputs=[inputs] if isinstance(inputs,str) else inputs
+  data=json.dumps({'embeddings':[[1.,0.,0.] for _ in inputs],'data':[{'embedding':[1.,0.,0.],'index':i} for i,_ in enumerate(inputs)]}).encode(); self.send_response(200); self.send_header('Content-Type','application/json'); self.send_header('Content-Length',str(len(data))); self.end_headers(); self.wfile.write(data)
+ def log_message(self,*args): pass
+class Client:
+ def __init__(self,cfg):
+  self.p=subprocess.Popen([str(binary)],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE);self.buf=b'';self.seq=0;self.send({'apply':{'config':cfg}})
+  while True:
+   response=self.read()
+   if response.get('ready')==True: break
+   assert 'error' not in response,response
+ def send(self,v):self.p.stdin.write(json.dumps(v).encode()+b'\n');self.p.stdin.flush()
+ def read(self):
+  end=time.monotonic()+8
+  while b'\n' not in self.buf:
+   assert select.select([self.p.stdout],[],[],max(0,end-time.monotonic()))[0],'SDK deadline'
+   data=os.read(self.p.stdout.fileno(),65536);assert data,'SDK EOF';self.buf+=data
+  line,self.buf=self.buf.split(b'\n',1);return json.loads(line)
+ def call(self,args):
+  self.seq+=1;self.send({'id':self.seq,'call':'memory','args':args})
+  while True:
+   v=self.read()
+   if v.get('reply')==self.seq:return v
+ def stop(self):
+  if self.p.poll() is None:
+   self.send({'dispose':True})
+   try:self.p.wait(timeout=8)
+   except subprocess.TimeoutExpired:self.p.kill();self.p.wait()
+
+
+source="0a7c4a1f729c700f52c650ee0c3efc56a136560f"
+results={"source":source,"binary_sha256":hashlib.sha256(binary.read_bytes()).hexdigest(),"cases":[]}
+server=http.server.ThreadingHTTPServer(('127.0.0.1',0),Embedding);thread=threading.Thread(target=server.serve_forever);thread.start()
+try:
+ with tempfile.TemporaryDirectory(prefix="mpb-",dir="/tmp") as tmp:
+  root=pathlib.Path(tmp);cwd=root/'p';cwd.mkdir();rt=root/'r';rt.mkdir();conf=root/'c';(conf/'memory').mkdir(parents=True);(conf/'memory/memory.toml').write_text('[models]\nlisten=["127.0.0.1:0"]\n');data=cwd/'.memory/data';data.parent.mkdir();url=f'http://127.0.0.1:{server.server_port}'
+  subprocess.run(['/tmp/memory-provenance-baseline/seed',str(data)],check=True)
+  cfg={'dir':str(data),'embed':{'url':url,'model':'fixture'},'reason':{'url':''},'tick':{'interval_secs':0},'queue':{'enabled':False}}
+  requests=[{'op':'query','text':'Release deadline','k':10,'include_history':True},{'op':'get','id':'fact-new-002'},{'op':'get','id':'fact-old-001'},{'op':'get','id':'fact-legacy-003'},{'op':'get','id':'fact-new-002','compact':True},{'op':'query','ids':['fact-new-002','fact-old-001','fact-legacy-003']}]
+  first=Client(cfg)
+  try:
+   for req in requests:results['cases'].append({'mode':'local','request':req,'reply':first.call(req)})
+  finally:first.stop()
+  (cwd/'.memory/memory.toml').write_text(f'[embed]\nurl="{url}"\nmodel="fixture"\n[reason]\nurl=""\nmodel=""\n[queue]\nenabled=false\n[tick]\ninterval_secs=0\n')
+  env=dict(os.environ,XDG_RUNTIME_DIR=str(rt),XDG_CONFIG_HOME=str(conf),XDG_STATE_HOME=str(conf/'state'))
+  daemon=subprocess.Popen([str(binary.with_name('memory')),'--daemon'],cwd=cwd,env=env,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,start_new_session=True)
+  try:
+   end=time.monotonic()+8
+   while not list(rt.glob('memory-*.sock')):
+    assert time.monotonic()<end,'daemon deadline';assert daemon.poll() is None,'daemon exited';time.sleep(.01)
+   endpoint=str(next(rt.glob('memory-*.sock')))
+   attached=Client({'dir':str(data),'owner':{'endpoint':endpoint,'timeout_ms':2000}})
+   try:
+    for req in requests:results['cases'].append({'mode':'attached','request':req,'reply':attached.call(req)})
+    results['owner_alive_after_read']=daemon.poll() is None
+   finally:attached.stop()
+  finally:
+   import signal
+   if daemon.poll() is None:os.killpg(daemon.pid,signal.SIGKILL)
+   daemon.wait()
+finally:server.shutdown();thread.join();server.server_close()
+print(json.dumps(results,indent=2))

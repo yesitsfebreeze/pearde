@@ -1,0 +1,19 @@
+    Finished `test` profile [unoptimized] target(s) in 0.09s
+     Running unittests src/main.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/deps/pty-e415e5ac24759752)
+
+running 3 tests
+test context::tests::strict_request_and_entropy_failure_are_local ... ok
+test context::tests::held_locks_fail_without_waiting_or_locking_unrelated_state ... ok
+test context::tests::projection_excludes_payload_preserves_damage_and_tracks_only_metadata ... ok
+
+test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 20 filtered out; finished in 0.00s
+
+     Running .cartridge/tests/integration/process.rs (/Users/feb/dev/cartridge/cartridge.ctg/target/tool-result-contract/debug/deps/process-ad00d12f2621f551)
+
+running 1 test
+context bash: initial="5546952fe0f58eb2d5a7c4826d555a2f0cbac98dafe02c5ef7d235b007f35835" exited="c5ed46bada474885d22b7e7f30af8000253009c5a993041f57e8d302fd7b473b" restarted="113745d29698e28ba5b9d2fecb22b01ab6797b80b0b0db9c889d3a68543d06d3"
+context sh: initial="6defd9fb3fadfff10f90dbccee5782a2fa65418dd9b1b130e865e712f0074b74" exited="05cad03d1b6d246bf34d36851237ec396082670c262ec2ae608421e079f08402" restarted="ac5ac5a7d0911bc738af0befeddc974e78ebafa86d0c93344d408ac6c93eb232"
+test context_metadata_is_bounded_readonly_and_tracks_restart ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 10 filtered out; finished in 0.37s
+

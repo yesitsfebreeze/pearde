@@ -1,0 +1,17 @@
+use base::base_types::{mk_entity, EntityKind, EntityStatus, Memory, Reason, ReasonKind, Source};
+use std::time::{Duration,UNIX_EPOCH};
+fn main() {
+ let dir=std::env::args().nth(1).unwrap();
+ let _claim=store_core::lock::acquire(&dir,"provenance-baseline").unwrap();
+ let store=store_core::Store::open(&dir).unwrap();
+ let mut root=Memory::new("root", "");root.children.push("facts".into());
+ let mut m=Memory::new("facts","project facts");m.parent="root".into();
+ for (id,text,path,created,updated) in [("fact-old-001","Release deadline is Monday","old-plan.md",Some(1700000000),Some(1700000100)),("fact-new-002","Release deadline is Friday","new-plan.md",Some(1700100000),Some(1700200000)),("fact-legacy-003","Release venue is unknown","legacy-notes.md",None,None)] {
+  let mut e=mk_entity(id,text,1.,EntityKind::Fact);e.source=Source::File{path:path.into(),section:"".into(),title:"".into(),author:"".into(),url:format!("https://fixture.invalid/{path}"),commit:Some("fixture-source-revision".into())};e.vector=vec![1.,0.,0.].into();e.created_at=created.map(|s|UNIX_EPOCH+Duration::from_secs(s));e.updated_at=updated.map(|s|UNIX_EPOCH+Duration::from_secs(s));e.valid_from=e.created_at;
+  if id=="fact-old-001" {e.status=EntityStatus::Superseded;e.superseded_by="fact-new-002".into();e.valid_to=Some(UNIX_EPOCH+Duration::from_secs(1700100000));e.invalidated_at=Some(UNIX_EPOCH+Duration::from_secs(1700200000));}
+  m.entities.insert(id.into(),e);
+ }
+ m.reasons.insert("revision-edge".into(),Reason{id:"revision-edge".into(),from:"fact-new-002".into(),to:"fact-old-001".into(),kind:ReasonKind::Supersedes,text:"New signed plan changes Monday to Friday".into(),score:1.,..Default::default()});
+ m.by_from.insert("fact-new-002".into(),vec!["revision-edge".into()]);m.by_to.insert("fact-old-001".into(),vec!["revision-edge".into()]);
+ store.save_one_memory(&root).unwrap();store.save_one_memory(&m).unwrap();
+}

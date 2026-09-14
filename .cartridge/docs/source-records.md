@@ -1,6 +1,6 @@
 # Native public source records
 
-The native `prd` capability accepts `source_records`; `tool.prd` does not expose it. The configured boards directory is the only authority. `board` selects one local board, including a normal hierarchical selector; it does not recursively scan member boards. The caller obtains `expected_source_revision` from `source_declarations` and must send it on every index/read request.
+The native `source.board` capability accepts `source_records`; `tool.prd` does not expose it. The configured boards directory is the only authority. `board` selects one local board, including a normal hierarchical selector; it does not recursively scan member boards. The caller obtains `expected_source_revision` from `source_declarations` and must send it on every index/read request.
 
 Index request: `{op:"source_records",board:"root",action:"index",expected_source_revision:"<64hex>",deadline_ms:500}`. The reply schema is `cartridge-source-records/v1`. An available index contains `root`, `source_revision`, `action:"index"`, `items`, `index_revision`, `complete:true`, and `truncated:false`. Items contain only `path`, `title`, `bytes`, `revision`, and `visibility:"public"`, sorted by path. `index_revision` is SHA256 of the UTF8 `JSON.stringify({root,source_revision,items})` bytes in that field order. It describes public metadata only; changing only excluded private content does not enter the digest.
 

@@ -1,0 +1,9 @@
+{
+  "reviewer": "/root",
+  "approval": "Source-adapter-only recursive << rejection approved after measured privacy leak; same accepted files and acceptance, no review-round reset.",
+  "before_document_sha256": "763440d538e4d8012616e42de7d0dccb24bec09769dc29efc08819a6698fc4a0",
+  "legacy_limitation": "Existing document parser and legacy projections retain their prior merge behavior. Only new public source index/read rejects merge-bearing metadata.",
+  "after_document_sha256": "15b5b7ad17d262f356f60f54d090a3b33b30ba9b6e6ff813df8fdebbf6b9de0a",
+  "source_commit": "a458148fb21f85cabcd9e1ced85c96c581b8e0b2",
+  "result": "Six public source tests plus native index/read merge-private regression pass."
+}

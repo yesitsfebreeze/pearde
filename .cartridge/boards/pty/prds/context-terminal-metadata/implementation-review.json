@@ -1,0 +1,21 @@
+{
+  "reviewer": "/root",
+  "status": "PASS",
+  "source": "6176580636c13cf28abf5d0be5980cac9d5dda0d",
+  "files": {
+    "Cargo.toml": "6aa5b6f7360e208bedae8207b428958b770b74a22030ade8757fa983356fe48d",
+    "src/main.rs": "846cc292559a944a447f8a49be217b4decefac402065af65053186447d763ecc",
+    "src/context.rs": "4f2af28dff63708ba39d4117baf7526ddde54174162b4d23beb8e2631cce9e7c",
+    ".cartridge/tests/unit/context/tests.rs": "a2f7fc5999d6afc66265472406a70f06422a95f46452a5e6c34dbaea65833f26",
+    ".cartridge/tests/integration/process.rs": "8b07d22b8727bd44e0a405dc8bbfd98808067c08fb9e13203629edecadfdb489",
+    ".cartridge/docs/context.md": "9ab5029b7698df0ace9998263df8b6de7b6c45c9a714375c5f4a38040d69307a"
+  },
+  "findings": [
+    "Strict metadata branch bypasses blocking holder/restart flow.",
+    "Sequential try_lock observations release each guard before the next.",
+    "Identity subset excludes paths/payload; entropy only at open, failure loses metadata only.",
+    "Exact terminal hash and minimal changed/unavailable envelopes.",
+    "Unit live-shell entropy failure, relevant/irrelevant locks and preserved partial frame damage.",
+    "Separate fixture repair accepted: require new OSC133 A after captured pre-handoff cursor; preserve interrupted-owner assertion and unresolved command admission/completion evidence for next leaf."
+  ]
+}

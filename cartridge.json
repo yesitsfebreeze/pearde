@@ -1,13 +1,83 @@
 {
   "name": "prd",
   "entry": "init.lua",
-  "provide": ["prd", "tool.prd"],
-  "needs": ["memory"],
+  "provide": [
+    "prd",
+    "tool.prd",
+    "source.board"  ],
+  "needs": [
+    "memory"
+  ],
   "description": "Native planning service for central PRDs, specs, dependency plans, Gantt and worker orchestration, integrated with memory and runtime events.",
+  "settings": {
+    "root": {
+      "type": "string",
+      "default": null,
+      "optional": true,
+      "doc": "Repository root the boards live under. Absent discovers it."
+    },
+    "default_board": {
+      "type": "string",
+      "default": "root",
+      "doc": "Board used when a request names none."
+    },
+    "timeout_seconds": {
+      "type": "integer",
+      "default": 600,
+      "min": 1,
+      "max": 86400,
+      "doc": "How long one command may run."
+    },
+    "job_timeout_seconds": {
+      "type": "integer",
+      "default": 7200,
+      "min": 1,
+      "max": 604800,
+      "doc": "How long one background job may run."
+    },
+    "max_output_bytes": {
+      "type": "integer",
+      "default": 16777216,
+      "min": 1024,
+      "max": 1073741824,
+      "doc": "Bytes one command may return."
+    },
+    "adapter": {
+      "type": "string",
+      "default": null,
+      "optional": true,
+      "doc": "Trusted external adapter an explicit `run` uses. Absent refuses external runs, which is the normal case: host-driven work goes through next/brief."
+    }
+  },
   "commands": {
-    "check": {"argv": ["bun", "run", "check"], "cwd": "."},
-    "test": {"argv": ["bun", "run", "test"], "cwd": "."},
-    "run": {"argv": ["./run"], "cwd": "."},
-    "hello": {"argv": ["./run", "hello"], "cwd": "."}
+    "check": {
+      "argv": [
+        "bun",
+        "run",
+        "check"
+      ],
+      "cwd": "."
+    },
+    "test": {
+      "argv": [
+        "bun",
+        "run",
+        "test"
+      ],
+      "cwd": "."
+    },
+    "run": {
+      "argv": [
+        "./run"
+      ],
+      "cwd": "."
+    },
+    "hello": {
+      "argv": [
+        "./run",
+        "hello"
+      ],
+      "cwd": "."
+    }
   }
 }

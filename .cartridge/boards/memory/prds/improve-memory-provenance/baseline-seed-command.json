@@ -1,0 +1,15 @@
+[
+  "rustc",
+  "--edition=2021",
+  "-C",
+  "debuginfo=0",
+  "/tmp/memory-provenance-baseline/seed.rs",
+  "-L",
+  "dependency=/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps",
+  "-o",
+  "/tmp/memory-provenance-baseline/seed",
+  "--extern",
+  "base=/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/libbase-cbdc92827ac36aef.rlib",
+  "--extern",
+  "store_core=/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/libstore_core-b98fc1dda0706f2b.rlib"
+]

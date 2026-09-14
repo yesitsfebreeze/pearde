@@ -1,0 +1,129 @@
+{
+  "schema": "cartridge-context-quality-corpus/v1",
+  "sizes": [
+    100,
+    10000
+  ],
+  "corpora": {
+    "100": {
+      "sha256": "f814899463d49c2ca1e5b683d727aaa063ef5b17ddeadbd485c63d86014871a5",
+      "bytes": 32923
+    },
+    "10000": {
+      "sha256": "5ed27206b2bed9a531bfbd64b01c26f345016d2f5ab4573826c6894224d73ca8",
+      "bytes": 1488225
+    }
+  },
+  "limits": {
+    "deadline_ms": 2000,
+    "max_rows": 16,
+    "max_bytes": 16384
+  },
+  "scenarios": [
+    {
+      "name": "mixed",
+      "query": "deployment",
+      "documents": true,
+      "memory": true,
+      "files": true,
+      "kernel": true,
+      "critical": [
+        "DOC_EARLY_CRITICAL",
+        "DOC_TAIL_CRITICAL",
+        "FILE_CRITICAL",
+        "MEMORY_CRITICAL"
+      ],
+      "required_kinds": [
+        "document",
+        "file",
+        "memory",
+        "kernel"
+      ]
+    },
+    {
+      "name": "documents",
+      "query": "deployment",
+      "documents": true,
+      "memory": false,
+      "files": false,
+      "kernel": false,
+      "critical": [
+        "DOC_EARLY_CRITICAL",
+        "DOC_TAIL_CRITICAL"
+      ],
+      "required_kinds": [
+        "document"
+      ]
+    },
+    {
+      "name": "memory",
+      "query": "deployment",
+      "documents": false,
+      "memory": true,
+      "files": false,
+      "kernel": false,
+      "critical": [
+        "MEMORY_CRITICAL"
+      ],
+      "required_kinds": [
+        "memory"
+      ]
+    },
+    {
+      "name": "files",
+      "query": "deployment",
+      "documents": false,
+      "memory": false,
+      "files": true,
+      "kernel": false,
+      "critical": [
+        "FILE_CRITICAL"
+      ],
+      "required_kinds": [
+        "file"
+      ]
+    },
+    {
+      "name": "kernel",
+      "query": "deployment",
+      "documents": false,
+      "memory": false,
+      "files": false,
+      "kernel": true,
+      "critical": [],
+      "required_kinds": [
+        "kernel"
+      ]
+    },
+    {
+      "name": "budget",
+      "query": "budget",
+      "documents": true,
+      "memory": false,
+      "files": false,
+      "kernel": false,
+      "critical": [
+        "BUDGET_CRITICAL_1",
+        "BUDGET_CRITICAL_2",
+        "BUDGET_CRITICAL_3"
+      ],
+      "required_kinds": [
+        "document"
+      ]
+    }
+  ],
+  "forbidden": [
+    "PRIVATE_DOC_FORBIDDEN",
+    "UNDECLARED_FILE_FORBIDDEN",
+    "KERNEL_CONFIG_FORBIDDEN",
+    "QUERY_PREVIEW_FORBIDDEN",
+    "MEMORY_EXTENSION_FORBIDDEN"
+  ],
+  "provenance": {
+    "document": "workspace owner, exact .cartridge/documents path, observed_projection revision verified via native exact read",
+    "file": "deployment owner, @deployment/deployment.txt, source_bytes SHA256 over literal CRLF bytes",
+    "memory": "memory owner, exact quality-memory-exact ID, observed_projection and exact source metadata",
+    "kernel": "runtime owner, @runtime/kernel/deployment, observed_projection, generation7 and public capability only"
+  },
+  "measurement": "One warmup then five recorded runs per scenario and size, serialized full Prepared UTF8 bytes, native request elapsed_ns, rows, source statuses/truncation, fact recall, callback counts. Baseline misses are reported without editing expectations. No candidate or Graph-only replacement is measured by this leaf."
+}

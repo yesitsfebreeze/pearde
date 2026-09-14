@@ -1,5 +1,5 @@
 ---
-repo: /Users/feb/dev/cartridge/ui.ctg
+repo: /Users/feb/dev/cartridge/tui.ctg
 state: open
 origin: requested
 priority: 50
@@ -13,11 +13,11 @@ canonical-scope: human-context-is-the-same-document
 needs:
 - memory-document-works-end-to-end
 footprint:
-- /Users/feb/dev/cartridge/ui.ctg/src/chat.ts
-- /Users/feb/dev/cartridge/ui.ctg/src/modules.ts
-- /Users/feb/dev/cartridge/ui.ctg/src/registry.ts
-- /Users/feb/dev/cartridge/ui.ctg/ui
-- /Users/feb/dev/cartridge/ui.ctg/tests
+- /Users/feb/dev/cartridge/tui.ctg/src/chat.ts
+- /Users/feb/dev/cartridge/tui.ctg/src/modules.ts
+- /Users/feb/dev/cartridge/tui.ctg/src/registry.ts
+- /Users/feb/dev/cartridge/tui.ctg/ui
+- /Users/feb/dev/cartridge/tui.ctg/tests
 ---
 
 # The UI presents the human view of the same landscape context

@@ -1,0 +1,16 @@
+   Compiling serde_core v1.0.229
+   Compiling bitflags v2.13.1
+   Compiling notify-types v2.1.0
+   Compiling notify v8.2.0
+   Compiling util v2.0.0 (/private/tmp/memory-health-work/memory.ctg/src/util)
+   Compiling serde v1.0.229
+   Compiling serde_json v1.0.151
+   Compiling base v2.0.0 (/private/tmp/memory-health-work/memory.ctg/src/base)
+    Finished `test` profile [unoptimized] target(s) in 6.41s
+     Running unittests src/lib.rs (/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary/debug/deps/base-caf453381178fc6e)
+
+running 1 test
+test base_types::base_types_tests::reason_wire_labels_are_exhaustive_and_preserve_discriminants ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 27 filtered out; finished in 0.00s
+

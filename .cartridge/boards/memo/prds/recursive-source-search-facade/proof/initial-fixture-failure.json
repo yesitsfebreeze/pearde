@@ -1,0 +1,7 @@
+{
+  "issue": "Bun recursive readdir followed fixture PRD symlink into actual repository during pre-run unchanged-source snapshot.",
+  "observed": "Known owned Bun test PID56196 consumed CPU and grew memory; lsof located traversal inside symlink target.",
+  "response": "Terminated only owned test process before Runtime invocation; replaced snapshot walker with explicit lstat and symlink recording, no symlink traversal.",
+  "result": "All3 actual native/SDK tests subsequently passed with84 assertions.",
+  "source_effects": "No source or user files outside disposable fixture were written."
+}

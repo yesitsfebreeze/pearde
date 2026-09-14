@@ -1,0 +1,136 @@
+{
+  "author": "/root/memo_board",
+  "source": "3df57b97e22d4e9d28d66298284a85c63408cb29",
+  "base": "a124fd30d59bcd06062b5464810188a0288e461e",
+  "isolated_branch": "work/prd-memory-provenance",
+  "isolated_checkout": "/tmp/memory-health-work/memory.ctg",
+  "owner_checkout_fast_forwarded": false,
+  "independent_plan_review": {
+    "reviewer": "/root",
+    "round": 3,
+    "score": 94,
+    "result": "PASS",
+    "record": "independent-round-3-review.json"
+  },
+  "independent_source_review": {
+    "reviewer": "/root",
+    "result": "PASS product audit; final integration release pending",
+    "reviewed": "Shared helper, exact stored clocks/labels, signed floor math, unchanged selectors/resolver/ABI and indexed bounded edge projection. Adjacent self-loop ID dedup approved with regression; platform-aware SystemTime overflow fixture approved.",
+    "refinement": "implementation-refinement.json"
+  },
+  "runtime_source": "bd3b5e78d6e3ddd7dc7567b0c357d6fe60bd02df",
+  "gates": [
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary just test",
+      "cwd": "/tmp/memory-health-work/memory.ctg",
+      "exit_code": 0,
+      "tests_passed": 1408,
+      "existing_skipped": 17,
+      "documentation_tests": "27 crate groups,1 executable documentation test passed"
+    },
+    {
+      "command": "RUSTC_WRAPPER= RUSTC_WORKSPACE_WRAPPER= CARGO_PROFILE_DEV_DEBUG=0 CARGO_PROFILE_TEST_DEBUG=0 CARGO_INCREMENTAL=0 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/memory.ctg/target/prd-writer-boundary just check",
+      "cwd": "/tmp/memory-health-work/memory.ctg",
+      "exit_code": 0
+    }
+  ],
+  "acceptance_evidence": [
+    "Actual local SDK and two attached clients to a real daemon preserve exact new/old/legacy IDs and source objects across ranked history, direct, compact and batch reads; default ranked query still omits superseded row. Same stored timestamps/lifecycle/successor metadata across every view; legacy unknown remains readable.",
+    "Pure projector test covers hot/cold, compact, expired/superseded lifecycle and missing peer. Exact entity/graph snapshots plus data.mdb/writer.lock bytes and inode are unchanged. No backend or model source fetch in projector.",
+    "Signed-floor epoch boundary tests cover \u00b11ns, \u00b1999999ns, \u00b11000000ns, \u00b11000001ns and longer fractional durations. Overflow construction was possible and null/unrepresentable checks passed on this macOS runner. All six clocks tested independently; absent/partial clocks do not fabricate source observations.",
+    "All eight reason labels preserve numeric discriminants. RPC fixture has 30 enriched edges, one blank lifecycle edge, one excluded blank similarity and one indexed self-loop; ranked output has 32 distinct eligible edges, 12 delivered, more=true, and exact IDs/labels. Direct get preserves existing 34-adjacency-entry pagination. Missing peer remains error.",
+    "Public owner/attachment/readiness/health/Graph/writer/legacy/bounded-projection regressions passed. Only3 product files changed, with no persisted field/variant/layout change or transport/resolver/hot-reload export change."
+  ],
+  "limitations": [
+    "Process/socket and file-inode assertions ran on macOS. Overflow fixture reports a platform limitation if SystemTime cannot construct a value outside signed-millisecond range; pre-epoch/fractional tests remain unconditional.",
+    "Recorded freshness means at least one creation/update clock is known; it is not remote-source recency or model truth. Source observation time is explicitly unknown.",
+    "Direct edge pagination retains prior adjacency behavior, including duplicate self-loop adjacency entries. New ranked eligible count deduplicates exact edge IDs. Cold direct metadata does not invent unavailable graph edges.",
+    "Existing query access telemetry can mutate under its owning writer; pure rendering is independently verified to preserve bytes. No persistent migration or data rewrite is required."
+  ],
+  "logs": [
+    {
+      "path": "implementation-proof/public-final-test.log",
+      "sha256": "db44b2d2ba4a30b80b3fddb1de85ace2f3d4d71a4b112b3b6f94522caa147a0f",
+      "binding": "final source full gates"
+    },
+    {
+      "path": "implementation-proof/public-final-check.log",
+      "sha256": "06fb2c555d4c317b405311fedb37ebe818fe36961ff08102242b1c7d20b8a741",
+      "binding": "final source full gates"
+    },
+    {
+      "path": "implementation-proof/projection-final-test.log",
+      "sha256": "8e65d6c34229575035f5a7a4855ce1e7528269b8652d4919e40fa94b7a130ed8",
+      "binding": "focused proof; final public gates exercise final source"
+    },
+    {
+      "path": "implementation-proof/labels-test.log",
+      "sha256": "489afe7153c2ee5618908f5310fda89e66a0db578dbcc08aab86daa79e8255a0",
+      "binding": "focused proof; final public gates exercise final source"
+    },
+    {
+      "path": "implementation-proof/edges-final-test.log",
+      "sha256": "2e3db2c77b452052d364e738dde83f5bf7c497d911671124454fa42e76cefaa0",
+      "binding": "focused proof; final public gates exercise final source"
+    },
+    {
+      "path": "implementation-proof/native-test.log",
+      "sha256": "647a6d13cd11df19015dbb688edbe936787b3008141ae1987685c8872190f5f3",
+      "binding": "focused proof; final public gates exercise final source"
+    }
+  ],
+  "source_files": [
+    {
+      "path": ".cartridge/docs/CARTRIDGE.md",
+      "sha256": "a028d60b6ecce0f32e0b946b971e85809036e2d453f229bf7957270791a9e058"
+    },
+    {
+      "path": ".cartridge/docs/fact-provenance.md",
+      "sha256": "87d4f8d525f63539438fe125f1743b9df1d9810a81eae330ae48c232fb7b0efa"
+    },
+    {
+      "path": ".cartridge/tests/integration/cartridge.rs",
+      "sha256": "fc436e042468e483376339da9d09e674922e909ed3df19fb5c6465a23038f83a"
+    },
+    {
+      "path": ".cartridge/tests/unit/src/base/src/tests/base_types_test.rs",
+      "sha256": "197eec02835480fd854fc7594edd880822cc4aebbe8c66eb149913736a6ddc7b"
+    },
+    {
+      "path": ".cartridge/tests/unit/src/retrieval/piece/src/tests/id_detail_provenance_test.rs",
+      "sha256": "5ea72a92eece93111b6da91ca181b2c855c66d6078c773e7963c17f1a55a65ec"
+    },
+    {
+      "path": ".cartridge/tests/unit/src/rpc/src/tests/server_bounded_test.rs",
+      "sha256": "0d4fdc0725101c0dfa2197a81131848fbfbbb1f60812a8a0088d4abc500fe338"
+    },
+    {
+      "path": "src/base/src/base_types.rs",
+      "sha256": "850930ff88ee3afd212a8ec2c8c1224b3b53fa2f9da912a71509703427f7c767"
+    },
+    {
+      "path": "src/retrieval/piece/src/id_detail.rs",
+      "sha256": "8567e4b415fca898e8885f7e67f5ba7ba9644604ab4c0b9e1f8ea4ad144c9a8b"
+    },
+    {
+      "path": "src/rpc/src/server.rs",
+      "sha256": "5b315f839ba3371960b02c9dc89b15fd34c5a8c43179d7b75c3ca1067ed5f73b"
+    }
+  ],
+  "source_diff": {
+    "path": "implementation-proof/source.diff",
+    "sha256": "bca07555b7b2f00fd387ed91c8721407542129fd11928648058e5a624f8ce832"
+  },
+  "final_checklist_changes": [
+    {
+      "path": "specs/spec01.md",
+      "before_sha256": "da2553c6bafacdedee11404f3fec44634013302545d8b1eb99d1c34254621668",
+      "after_sha256": "6dc8647fe8fab475a2980286e375c02743f21237e327c8d5b17f5c72e466295f"
+    },
+    {
+      "path": "prd.md",
+      "before_sha256": "c346c05a201a5f66e9190d1bf7194c503365b29e34a0d46d29b61313717c0593",
+      "after_sha256": "c9eb12ee8bec58c0992dd29377109627475675d980a9153fa46d6615be7761ed"
+    }
+  ]
+}

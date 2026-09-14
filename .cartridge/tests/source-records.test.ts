@@ -54,7 +54,7 @@ function snapshot(directory: string): string {
  return hash(JSON.stringify(fs.readdirSync(directory,{recursive:true,withFileTypes:true}).map(e=>{const file=path.join(e.parentPath,e.name);return[path.relative(directory,file),e.isFile()?hash(fs.readFileSync(file)):'directory'];}).sort((a,b)=>String(a[0]).localeCompare(String(b[0])))));
 }
 test.skipIf(!process.env.CARTRIDGE_TEST_BIN)('actual Host indexes and exactly reads all three source owners without Memory events spill or tool exposure', async () => {
-  const profile = path.join(root, 'profile'), plugins = path.join(root, 'plugins'); fs.mkdirSync(plugins);
+  const profile = path.join(root, '.cartridge'), plugins = path.join(root, 'plugins'); fs.mkdirSync(plugins);
   atomic(path.join(profile, 'init.lua'), 'return {{id="memory",path="memory.lua"},{id="prd",path="prd"},{id="probe",path="probe.lua"}}');
   atomic(path.join(profile, 'config.lua'), `return {prd={root=${JSON.stringify(root)},max_output_bytes=1024}}`);
   atomic(path.join(plugins, 'memory.lua'), `return {provide={"memory"},apply=function(ctx) ctx:provide("memory",function(request) error("declaration operation called Memory") end) end}`);
@@ -62,13 +62,13 @@ test.skipIf(!process.env.CARTRIDGE_TEST_BIN)('actual Host indexes and exactly re
   const probe = path.join(root, 'probe.ts');
   atomic(probe, `import {createInterface} from 'node:readline';
 import {HostBridge} from ${JSON.stringify(path.resolve(import.meta.dir, '../../src/service.ts'))};
-if(process.argv[2]==='hello'){console.log(JSON.stringify({inject:['prd','tool.prd'],provide:['probe']}));process.exit(0);}
+if(process.argv[2]==='hello'){console.log(JSON.stringify({inject:['source.board','tool.prd'],provide:['probe']}));process.exit(0);}
 const send=m=>console.log(JSON.stringify(m)),bridge=new HostBridge(send),events=[];
 for await(const line of createInterface({input:process.stdin})){
  const m=JSON.parse(line);if(bridge.accept(m))continue;if(m.dispose)break;
  if(m.apply){send({provide:'probe'});send({subscribe:'prd'});send({ready:true});}
  else if(m.call==='probe')void(async()=>{try{
-  const rows=[];for(const board of ['root','root/base','root/base/plugin']){const declaration=await bridge.request('prd',{op:'source_declarations',board});const indexed=await bridge.request('prd',{op:'source_records',board,action:'index',expected_source_revision:declaration.revision});const item=indexed.items[0];rows.push({indexed,read:await bridge.request('prd',{op:'source_records',board,action:'read',expected_source_revision:declaration.revision,path:item.path,expected_revision:item.revision})});}
+  const rows=[];for(const board of ['root','root/base','root/base/plugin']){const declaration=await bridge.request('source.board',{op:'source_declarations',board});const indexed=await bridge.request('source.board',{op:'source_records',board,action:'index',expected_source_revision:declaration.revision});const item=indexed.items[0];rows.push({indexed,read:await bridge.request('source.board',{op:'source_records',board,action:'read',expected_source_revision:declaration.revision,path:item.path,expected_revision:item.revision})});}
   const rejected=await bridge.request('tool.prd',{op:'source_records',board:'root',action:'index'});
   const described=await bridge.request('tool.prd',{op:'describe'});
   send({reply:m.id,data:{rows,rejected,described,events}});
@@ -80,7 +80,7 @@ for await(const line of createInterface({input:process.stdin})){
   record('root','private','---\nprivate: true\n---\n# PRIVATE_MARKER\nPRIVATE_BODY');
   record('root','same','# Root\n'+ 'Exact source body. '.repeat(150));
   const before = snapshot(boards);
-  const child = Bun.spawn([path.resolve(process.env.CARTRIDGE_TEST_BIN!), '--dir', plugins, '--profile', profile, 'run', 'probe', '{}'], { cwd: root, stdout: 'pipe', stderr: 'pipe', timeout: 15000 });
+  const child = Bun.spawn([path.resolve(process.env.CARTRIDGE_TEST_BIN!), '--dir', plugins, 'run', 'probe', '{}'], { cwd: root, stdout: 'pipe', stderr: 'pipe', timeout: 15000 });
   try {
     const [output, error, code] = await Promise.all([new Response(child.stdout).text(), new Response(child.stderr).text(), child.exited]);
     expect(code, error + '\n' + output).toBe(0);

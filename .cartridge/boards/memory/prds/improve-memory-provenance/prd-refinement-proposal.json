@@ -1,0 +1,29 @@
+{
+  "canonical_id": "@memory/improve-memory-provenance",
+  "coordinator_only": true,
+  "preserve_original_acceptance": true,
+  "inherited_rounds": 2,
+  "next_round": 3,
+  "capability-owner": "memory",
+  "replace_stale_footprint": [
+    "src/base/src/base_types.rs",
+    "src/retrieval/piece/src/id_detail.rs",
+    "src/retrieval/piece/src/lib.rs",
+    "src/retrieval/src/lib.rs",
+    "src/rpc/src/server.rs",
+    "src/cartridge.rs",
+    "src/transport/src/owner.rs",
+    "src/store/core/src/lib.rs",
+    ".cartridge/tests/unit/src/base/src/tests/base_types_test.rs",
+    ".cartridge/tests/unit/src/retrieval/piece/src/tests/id_detail_provenance_test.rs",
+    ".cartridge/tests/unit/src/rpc/src/tests/server_bounded_test.rs",
+    ".cartridge/tests/integration/cartridge.rs",
+    ".cartridge/docs/CARTRIDGE.md",
+    ".cartridge/docs/fact-provenance.md"
+  ],
+  "needs_add": [
+    "@memory/improve-memory-readiness"
+  ],
+  "correct_stale_start_links": true,
+  "note": "Lifecycle and map not mutated. Product baseline/spec written while readiness follow-up fixture verification runs; source lease not requested until review and receipts stable."
+}

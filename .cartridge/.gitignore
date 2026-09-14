@@ -1,0 +1,26 @@
+# Whitelist: a fresh checkout gets only what is listed here. Everything
+# else a cartridge writes into .cartridge (sessions, credentials, caches,
+# logs, live data) stays on this machine. A cartridge that keeps local
+# state inside a tracked folder adds its rule below the list.
+/*
+!/.gitignore
+!/adapters/
+!/boards/
+!/docs/
+!/grammar.md
+!/help.md
+!/memos/
+!/reports/
+!/templates/
+!/tests/
+!/workflows/
+
+# prd: per-board run state and lane worktrees.
+/boards/**/.state/
+/boards/**/.lanes/
+
+# memo: the record writer lock.
+/memos/.lock
+
+# prd: the upstream engine board is its own checkout.
+/boards/upstream-engine/

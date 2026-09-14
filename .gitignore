@@ -1,53 +1,8 @@
 __pycache__/
 *.pyc
 .DS_Store
-.cartridge/.state/
-.cartridge/boards/upstream-engine/
-.cartridge/engine/.claude/
-.cartridge/engine/.gstack/
-.cartridge/engine/.kern/
-.cartridge/engine/.obsidian/
-.cartridge/engine/.pi/
-.cartridge/engine/.mcp.json
-**/.state/
 **/node_modules/
 
-# Durable Cartridge records are tracked; generated state is not.
 /target/
 /dist/
-node_modules/
-/.cartridge/bin/
-/.cartridge/empirical/
-/.cartridge/dev/
-/.cartridge/.state/
-/.cartridge/workspace/target/
-**/.claims/
-**/.lanes/
-**/.sessions/
-/.cartridge/memos/.lock
-/.cartridge/memos/**/.obsidian/
-
-# Runtime stores, credentials and derived inventories.
-/.cartridge/credentials/
-/.cartridge/memory/
-/.cartridge/sessions/
-/.cartridge/live-sessions/
-/.cartridge/router/
-/.cartridge/resolver/
-/.cartridge/graphify/
-/.cartridge/graphs/
-/.cartridge/cache/
-/.cartridge/.cache/
-/.cartridge/logs/
-/.cartridge/**/probe/
 /bin/
-
-# Local live service database and generated web artifacts
-/.cartridge/live-data/
-/.cartridge/docs/**/.next/
-/.cartridge/docs/**/.source/
-/.cartridge/docs/**/out/
-
-# Mutable overlay and workspace page stores
-/.cartridge/gitfs/
-/.cartridge/workspace-pages/

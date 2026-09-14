@@ -3,7 +3,8 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
-import { Service, HostBridge } from '../../src/service';
+import { Service } from '../../src/service';
+import { connect, environment, peer } from './fixtures/host';
 import { atomic, git } from '../../src/records';
 let root: string, board: string, service: Service;
 const context = (session = 'one', call = randomUUID()) => ({ session, run: 'run', call, cwd: root });
@@ -42,12 +43,12 @@ test('duplicate invocation does not repeat a mutation and cancellation leaves a 
 });
 test('memory is attributed context and successful mutations publish scoped events', async () => {
   const calls: any[] = [], events: any[] = [];
-  service.host = { request: async (name, args, turn) => { calls.push({ name, args, turn }); return { items: [{ id: 'fact', text: 'prior evidence' }] }; }, publish: (event, turn) => { events.push({ event, turn }); } };
+  service.host = { call: async (name, args) => { calls.push({ name, args }); return { items: [{ id: 'fact', text: 'prior evidence' }] }; }, publish: (channel, event) => { events.push({ channel, event }); } };
   const answer = value(await call('read', ['one'])); expect(answer.memory.provider).toBe('memory'); expect(answer.memory.authority).toContain('context only');
   expect(calls[0].args.op).toBe('query');
-  await service.dispatch({ op: 'call', context: context(), input: { op: 'claim', args: ['one', 'worker'] } }, 'turn-1');
+  await service.dispatch({ op: 'call', context: context(), input: { op: 'claim', args: ['one', 'worker'] } });
   const completed = events.find(e => e.event.type === 'command.completed');
-  expect(completed.event.refs).toEqual(['one']); expect(completed.turn).toBe('turn-1'); expect(completed.event.output).toBeUndefined();
+  expect(completed.event.refs).toEqual(['one']); expect(completed.channel).toBe('prd'); expect(completed.event.output).toBeUndefined();
 });
 test('only verified evidence enters the durable memory outbox with bounded retry', async () => {
   expect((await service.rememberVerified(board, context(), {})).status).toBe('not_recorded');
@@ -58,7 +59,7 @@ test('only verified evidence enters the durable memory outbox with bounded retry
 test('memory replay acknowledges once and deduplicates simultaneous deliveries', async () => {
   const proof = { verification: [{ verified: true, ref: 'one', revision: 'a'.repeat(64), state: 'done' }] };
   await service.rememberVerified(board, context(), proof); let ingests = 0;
-  service.host = { request: async () => { ingests++; await Bun.sleep(20); return { status: 'committed' }; }, publish: () => {} };
+  service.host = { call: async () => { ingests++; await Bun.sleep(20); return { status: 'committed' }; }, publish: () => {} };
   await Promise.all([service.replayMemory(), service.rememberVerified(board, context(), proof)]);
   expect((await service.rememberVerified(board, context(), proof)).status).toBe('committed'); expect(ingests).toBe(1);
 });
@@ -73,27 +74,25 @@ test('asynchronous jobs enforce session ownership and never signal stale journal
   try { expect((await restarted.dispatch({ op: 'call', context: context(), input: { op: 'stop', args: [started.job_id] } })).error).toBe(true); }
   finally { await restarted.close(); }
 });
-test('host bridge correlates replies and closes pending requests', async () => {
-  const sent: any[] = [], bridge = new HostBridge(m => sent.push(m));
-  const first = bridge.request('memory', { op: 'query' }, 'turn'); expect(sent[0].turn).toBe('turn');
-  bridge.accept({ reply: sent[0].id, data: { ok: true } }); expect(await first).toEqual({ ok: true });
-  const second = bridge.request('memory', {}); bridge.close(); await expect(second).rejects.toThrow('disconnected');
-});
-test('wire hello, apply, describe, native call, reload and dispose', async () => {
-  const executable = path.resolve(import.meta.dir, '../../src/service.ts');
-  const hello = Bun.spawnSync([process.execPath, executable, 'hello']); expect(JSON.parse(hello.stdout.toString()).provide).toEqual(['prd', 'tool.prd', 'source.board']);
-  const child = Bun.spawn([process.execPath, executable], { stdin: 'pipe', stdout: 'pipe', stderr: 'pipe' });
-  const reader = child.stdout.getReader(), decoder = new TextDecoder(); let buffer = '';
-  async function receive(): Promise<any> { for (;;) { const newline = buffer.indexOf('\n'); if (newline >= 0) { const line = buffer.slice(0, newline); buffer = buffer.slice(newline + 1); return JSON.parse(line); } const chunk = await reader.read(); if (chunk.done) throw Error('wire ended'); buffer += decoder.decode(chunk.value, { stream: true }); } }
-  const send = (v: any) => child.stdin.write(JSON.stringify(v) + '\n');
+test('memory calls are bounded so a stalled provider never holds up planning', async () => {
+  service.host = { call: () => new Promise(() => {}), publish: () => {} };
+  const started = Date.now(); const answer = value(await call('read', ['one']));
+  expect(answer.memory.status).toBe('unavailable'); expect(answer.memory.error).toContain('timed out'); expect(Date.now() - started).toBeLessThan(6000);
+}, 10000);
+test('wire apply, describe, graph announce, native call with traced memory, and dispose', async () => {
+  const memory = peer('memory', (method, params) => { requests.push({ method, params }); return { items: [] }; }), requests: any[] = [];
+  const { socket, env } = environment();
+  const child = Bun.spawn([process.execPath, path.resolve(import.meta.dir, '../../src/service.ts')], { stdin: 'pipe', stdout: 'ignore', stderr: 'inherit', env });
   try {
-    send({ apply: { config: { root } } }); expect(await receive()).toEqual({ provide: 'prd' }); expect(await receive()).toEqual({ provide: 'tool.prd' }); expect(await receive()).toEqual({ provide: 'source.board' }); expect(await receive()).toEqual({ on: 'fabric.announce' }); expect(await receive()).toEqual({ ready: true });
-    send({ id: 1, call: 'prd', args: { op: 'describe' } }); expect((await receive()).data.name).toBe('prd');
+    const rpc = await connect(socket);
+    expect(await rpc.call('apply', { name: 'prd', config: { root }, directory: { needs: { memory: memory.address }, events: {}, accept: {} } })).toEqual({});
+    expect((await rpc.call('call', { key: 'prd', args: { op: 'describe' } })).name).toBe('prd');
     // The announce: this cartridge contributes its own tool to the graph.
-    send({ id: 9, event: 'fabric.announce', data: { scope: {} } }); const announced = await receive(); expect(announced.reply).toBe(9); expect(announced.data.nodes).toEqual([{ kind: 'tool', key: 'tool.prd', name: 'prd', description: expect.any(String) }]);
-    send({ id: 2, call: 'prd', args: { op: 'call', context: context(), input: { op: 'scan' } } }); expect((await receive()).data.error).toBe(false);
-    send({ id: 3, call: 'prd', turn: 'turn-3', args: { op: 'call', context: context(), input: { op: 'read', args: ['one'] } } });
-    const query = await receive(); expect(query.call).toBe('memory'); expect(query.turn).toBe('turn-3'); send({ reply: query.id, data: { items: [] } }); expect(value((await receive()).data).memory.status).toBe('available');
-    send({ id: 4, reload: true }); expect(await receive()).toEqual({ reply: 4, data: null }); send({ dispose: true }); expect(await child.exited).toBe(0);
-  } finally { child.kill(); child.stdin.end(); reader.releaseLock(); }
+    expect(await rpc.call('event', { name: 'graph.announce', data: { scope: {} } })).toEqual({ nodes: [{ kind: 'tool', key: 'tool.prd', name: 'prd', description: expect.any(String) }], edges: [] });
+    expect((await rpc.call('call', { key: 'prd', args: { op: 'call', context: context(), input: { op: 'scan' } } })).error).toBe(false);
+    const read = await rpc.call('call', { key: 'prd', trace: 'trace-3', args: { op: 'call', context: context(), input: { op: 'read', args: ['one'] } } });
+    expect(value(read).memory.status).toBe('available');
+    expect(requests).toMatchObject([{ method: 'call', params: { key: 'memory', trace: 'trace-3', args: { op: 'query' } } }]);
+    expect(await rpc.call('dispose')).toEqual({}); expect(await child.exited).toBe(0);
+  } finally { child.kill(); memory.close(); }
 }, 10000);

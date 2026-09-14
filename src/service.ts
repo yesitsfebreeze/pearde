@@ -5,6 +5,7 @@ import { atomic, contained, hash, inside, real, relative, sourceDeclarations, de
 import { ROOT } from './cli';
 import { sourceRecords, sourceRecordFailure } from './source-records';
 import { runProcess } from './process';
+import { Wire } from './wire';
 
 const OPS = ['scan', 'plan', 'gantt', 'read', 'brief', 'next', 'add', 'refine', 'specced', 'claim', 'release', 'collect', 'run', 'status', 'stop'];
 const flags: Record<string, Record<string, string>> = {
@@ -28,34 +29,12 @@ export function contextKey(context: any) {
   if (typeof context.cwd !== 'string' || !path.isAbsolute(context.cwd) || context.cwd.length > 4096 || context.cwd.includes('\0')) throw Error('context.cwd must be an absolute workspace directory');
   return JSON.stringify([context.session, context.run, context.call]);
 }
-export class HostBridge {
-  next = 0;
-  pending = new Map<number, { resolve: (data: any) => void; reject: (error: Error) => void; timer: ReturnType<typeof setTimeout> }>();
-  constructor(public send: (message: any) => void) {}
-  accept(message: any) {
-    if (!('reply' in message)) return false;
-    const entry = this.pending.get(message.reply);
-    if (entry) { this.pending.delete(message.reply); clearTimeout(entry.timer); message.error ? entry.reject(Error(String(message.error))) : entry.resolve(message.data); }
-    return true;
-  }
-  request(name: string, args: any, turn?: string, timeout = 3000) {
-    const identifier = ++this.next;
-    return new Promise<any>((resolve, reject) => {
-      const timer = setTimeout(() => { this.pending.delete(identifier); reject(Error('host request timed out; outcome may be unknown')); }, timeout);
-      this.pending.set(identifier, { resolve, reject, timer });
-      try { this.send({ id: identifier, call: name, args, ...(turn ? { turn } : {}) }); }
-      catch (error) { clearTimeout(timer); this.pending.delete(identifier); reject(error); }
-    });
-  }
-  publish(data: any, turn?: string) { this.send({ publish: 'prd', data, ...(turn ? { turn } : {}) }); }
-  close() { for (const entry of this.pending.values()) { clearTimeout(entry.timer); entry.reject(Error('host disconnected')); } this.pending.clear(); }
-}
 export class Service {
   root: string; boards: string; state: string; defaultBoard: string; timeout: number; jobTimeout: number; outputCap: number; adapter?: string;
   instance = id(); closed = false;
   declarationReads = new Set<Promise<unknown>>();
   cancelled = new Map<string, AbortController>(); started = new Set<string>(); jobs = new Map<string, any>(); tasks = new Set<Promise<any>>(); deliveries = new Map<string, Promise<any>>();
-  constructor(config: any = {}, public host?: Pick<HostBridge, 'request' | 'publish'>) {
+  constructor(config: any = {}, public host?: Pick<Wire, 'call' | 'publish'>) {
     const allowed = ['root', 'default_board', 'timeout_seconds', 'max_output_bytes', 'adapter', 'job_timeout_seconds'];
     if (!object(config) || Object.keys(config).some(k => !allowed.includes(k))) throw Error('unknown PRD configuration');
     this.root = real(path.resolve(config.root ?? ROOT)); this.boards = real(path.join(this.root, '.cartridge/boards')); this.state = path.join(this.root, '.cartridge/.state/prd-service');
@@ -104,13 +83,13 @@ export class Service {
     if (op === 'run') { if (!this.adapter) throw Error('external run needs trusted config.adapter; use next/brief for host-driven work'); output.push('--adapter', this.adapter); }
     return { op, board, args: output };
   }
-  async execute(op: string, board: string, args: string[], controller: AbortController, timeout: number, context?: any, turn?: string) {
+  async execute(op: string, board: string, args: string[], controller: AbortController, timeout: number, context?: any) {
     if (controller.signal.aborted || this.closed) return { op, state: 'cancelled', output: '', exit_code: null } as any;
     const delivery = { published: 0, unavailable: 0 };
     const processResult = await runProcess([process.execPath, path.join(ROOT, 'src/cli.ts'), op, '--board', board, '--json', ...args], { cwd: this.root, timeout: timeout * 1000, cap: ['plan', 'scan', 'run'].includes(op) ? 1048576 : this.outputCap, signal: controller.signal, grace: 12_000, onEvent: event => {
       if (!['plan.updated', 'worker.started', 'worker.finished', 'transition.applied', 'verification.completed'].includes(event.type)) throw Error('unknown native domain event');
       if (!context || !this.host) { delivery.unavailable++; return; }
-      try { this.host.publish({ ...event, schema_version: 1, operation: op, board: path.basename(board), session: context.session, run: context.run, call: context.call }, turn); delivery.published++; }
+      try { this.host.publish('prd', { ...event, schema_version: 1, operation: op, board: path.basename(board), session: context.session, run: context.run, call: context.call }); delivery.published++; }
       catch { delivery.unavailable++; }
     } });
     let outcome: any = { op, board: path.basename(board), ...processResult, effects: processResult.state === 'completed' ? 'see engine output' : 'inspect board before retrying' };
@@ -148,24 +127,31 @@ export class Service {
     if (job.instance !== this.instance && job.state === 'running') job = { ...job, state: 'interrupted', effects: 'previous service ended; inspect board before retrying' };
     return this.publicJob(job);
   }
-  publish(op: string, board: string, args: string[], context: any, outcome: any, turn?: string) {
+  publish(op: string, board: string, args: string[], context: any, outcome: any) {
     const refs = (outcome.changed ?? []).map((c: any) => c.ref).filter((r: any) => typeof r === 'string');
     const event = { schema_version: 1, type: 'command.' + outcome.state, operation: op, board: path.basename(board), ref: refs.length === 1 ? refs[0] : args[0]?.startsWith('-') ? null : args[0] ?? null, refs, session: context.session, run: context.run, call: context.call, exit_code: outcome.exit_code ?? null };
-    try { if (!this.host) throw Error('host unavailable'); this.host.publish(event, turn); return { ...event, delivery: 'submitted' }; }
+    try { if (!this.host) throw Error('host unavailable'); this.host.publish('prd', event); return { ...event, delivery: 'submitted' }; }
     catch (error) { return { ...event, delivery: 'unavailable', delivery_error: String(error) }; }
   }
-  async recall(board: string, args: string[], turn?: string) {
+  /** A memory call bounded to three seconds; memory is context and never holds up planning. */
+  memory(args: any) {
+    if (!this.host) return Promise.reject(Error('memory provider unavailable'));
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const expired = new Promise<never>((_, reject) => { timer = setTimeout(() => reject(Error('memory request timed out; outcome may be unknown')), 3000); });
+    return Promise.race([this.host.call('memory', args), expired]).finally(() => clearTimeout(timer));
+  }
+  async recall(board: string, args: string[]) {
     const authority = 'context only; PRD record is authoritative';
-    try { if (!this.host) throw Error('memory provider unavailable'); const results = await this.host.request('memory', { op: 'query', text: 'PRD planning board ' + path.basename(board) + ' ' + (args[0] ?? ''), k: 5 }, turn); if (bytes(results) > this.outputCap) throw Error('memory response exceeds output cap'); return { status: 'available', authority, provider: 'memory', results }; }
+    try { const results = await this.memory({ op: 'query', text: 'PRD planning board ' + path.basename(board) + ' ' + (args[0] ?? ''), k: 5 }); if (bytes(results) > this.outputCap) throw Error('memory response exceeds output cap'); return { status: 'available', authority, provider: 'memory', results }; }
     catch (error) { return { status: 'unavailable', authority, error: String(error) }; }
   }
-  deliverMemory(file: string, turn?: string): Promise<any> {
+  deliverMemory(file: string): Promise<any> {
     if (this.deliveries.has(file)) return this.deliveries.get(file)!;
     const work = (async () => {
       const entry = JSON.parse(fs.readFileSync(file, 'utf8'));
       if (entry.status !== 'committed' && entry.attempts < 3) {
         entry.attempts++; entry.status = 'pending'; atomic(file, JSON.stringify(entry));
-        try { if (!this.host) throw Error('memory provider unavailable'); const ack = await this.host.request('memory', { op: 'ingest', text: entry.text, raw: true, sync: true }, turn); if (ack?.status !== 'committed') throw Error('memory did not acknowledge committed status'); entry.status = 'committed'; delete entry.error; }
+        try { const ack = await this.memory({ op: 'ingest', text: entry.text, raw: true, sync: true }); if (ack?.status !== 'committed') throw Error('memory did not acknowledge committed status'); entry.status = 'committed'; delete entry.error; }
         catch (error) { entry.error = String(error).slice(0, 512); }
         atomic(file, JSON.stringify(entry));
       }
@@ -173,7 +159,7 @@ export class Service {
     })().finally(() => this.deliveries.delete(file));
     this.deliveries.set(file, work); return work;
   }
-  async rememberVerified(board: string, context: any, outcome: any, turn?: string) {
+  async rememberVerified(board: string, context: any, outcome: any) {
     const proof = (Array.isArray(outcome.verification) ? outcome.verification : [outcome.verification]).filter((p: any) => object(p) && p.verified === true);
     if (!proof.length) return { status: 'not_recorded', reason: 'no verified engine evidence' };
     const files: string[] = [];
@@ -183,7 +169,7 @@ export class Service {
       const text = 'Verified PRD collection on board ' + path.basename(board) + ': ' + evidence, identifier = hash(text), file = path.join(this.state, 'memory-outbox', identifier + '.json');
       if (!fs.existsSync(file)) atomic(file, JSON.stringify({ id: identifier, status: 'pending', attempts: 0, session: context.session, text })); files.push(file);
     }
-    const receipts = []; for (const file of files.slice(0, 8)) receipts.push(await this.deliverMemory(file, turn));
+    const receipts = []; for (const file of files.slice(0, 8)) receipts.push(await this.deliverMemory(file));
     return files.length === 1 ? receipts[0] : { status: receipts.length === files.length && receipts.every(r => r.status === 'committed') ? 'committed' : 'pending', queued: files.length, attempted: receipts.length, receipts };
   }
   async replayMemory() {
@@ -194,7 +180,7 @@ export class Service {
       try { const file = path.join(directory, name), entry = JSON.parse(fs.readFileSync(file, 'utf8')); if (entry.status !== 'committed' && entry.attempts < 3) { attempts++; await this.deliverMemory(file); } } catch {}
     }
   }
-  async dispatch(request: any, turn?: string): Promise<any> {
+  async dispatch(request: any): Promise<any> {
     try {
       if (!object(request)) throw Error('expected a tool envelope');
       if (request.op === 'describe' && Object.keys(request).length === 1) return describe();
@@ -210,15 +196,15 @@ export class Service {
       if (op === 'run') {
         if ([...this.jobs.values()].filter(j => j.state === 'running').length >= 4 || this.jobs.size >= 128) throw Error('PRD job capacity reached');
         const job = { job_id: id(), session: context.session, instance: this.instance, invocation: key, board: path.basename(board), state: 'running', started_at: Date.now() / 1000 };
-        this.jobs.set(job.job_id, job); this.saveJob(job); this.publish(op, board, args, context, job, turn);
-        const work = (async () => { let outcome: any; try { outcome = await this.execute(op, board, args, controller, this.jobTimeout, context, turn); outcome.memory = await this.rememberVerified(board, context, outcome, turn); } catch (error) { outcome = { state: 'failed', error: String(error) }; } Object.assign(job, outcome, { finished_at: Date.now() / 1000 }); this.saveJob(job); this.publish(op, board, args, context, outcome, turn); })();
+        this.jobs.set(job.job_id, job); this.saveJob(job); this.publish(op, board, args, context, job);
+        const work = (async () => { let outcome: any; try { outcome = await this.execute(op, board, args, controller, this.jobTimeout, context); outcome.memory = await this.rememberVerified(board, context, outcome); } catch (error) { outcome = { state: 'failed', error: String(error) }; } Object.assign(job, outcome, { finished_at: Date.now() / 1000 }); this.saveJob(job); this.publish(op, board, args, context, outcome); })();
         this.tasks.add(work); void work.finally(() => this.tasks.delete(work)); return this.result({ ...job });
       }
-      const work = this.execute(op, board, args, controller, this.timeout, context, turn); this.tasks.add(work);
+      const work = this.execute(op, board, args, controller, this.timeout, context); this.tasks.add(work);
       let outcome; try { outcome = await work; } finally { this.tasks.delete(work); }
-      if (['plan', 'brief', 'read'].includes(op) && outcome.state === 'completed') outcome.memory = await this.recall(board, args, turn);
-      if (['add', 'refine', 'specced', 'claim', 'release', 'collect'].includes(op)) outcome.event = this.publish(op, board, args, context, outcome, turn);
-      if (op === 'collect' && outcome.state === 'completed') outcome.memory = await this.rememberVerified(board, context, outcome, turn);
+      if (['plan', 'brief', 'read'].includes(op) && outcome.state === 'completed') outcome.memory = await this.recall(board, args);
+      if (['add', 'refine', 'specced', 'claim', 'release', 'collect'].includes(op)) outcome.event = this.publish(op, board, args, context, outcome);
+      if (op === 'collect' && outcome.state === 'completed') outcome.memory = await this.rememberVerified(board, context, outcome);
       return this.result(outcome, outcome.state !== 'completed');
     } catch (error) { return this.result({ error: error instanceof Error ? error.message : String(error) }, true); }
   }
@@ -242,41 +228,23 @@ export class Service {
   }
   async close() { this.closed = true; for (const controller of this.cancelled.values()) controller.abort(); await Promise.allSettled([...this.tasks, ...this.deliveries.values()]); }
 }
-export async function main() {
-  if (process.argv[2] === 'hello') { console.log(JSON.stringify({ inject: ['memory'], provide: ['prd', 'tool.prd', 'source.board'], reload: true })); return; }
-  const send = (v: any) => process.stdout.write(JSON.stringify(v) + '\n'), bridge = new HostBridge(send), tasks = new Set<Promise<any>>();
-  let service: Service | undefined, pending = '', dropping = false, disposed = false;
-  const stop = () => { disposed = true; bridge.close(); void service?.close(); process.stdin.destroy(); };
-  process.on('SIGTERM', stop); process.on('SIGINT', stop);
-  process.stdin.setEncoding('utf8');
-  try {
-    for await (const chunk of process.stdin) {
-      for (const part of String(chunk).split(/(?<=\n)/)) {
-        if (disposed) break;
-        if (!dropping) pending += part;
-        if (Buffer.byteLength(pending) > 262144) { dropping = true; pending = ''; send({ error: 'wire message exceeds input cap' }); }
-        if (!part.endsWith('\n')) continue;
-        if (dropping) { dropping = false; continue; }
-        let message: any;
-        try {
-          message = JSON.parse(pending); pending = '';
-          if (!object(message)) throw Error('wire message must be an object');
-          if (bridge.accept(message)) continue;
-          if (message.dispose === true) { disposed = true; break; }
-          if ('apply' in message) { if (service) throw Error('cartridge is already applied'); service = new Service(message.apply?.config, bridge); send({ provide: 'prd' }); send({ provide: 'tool.prd' }); send({ provide: 'source.board' }); send({ on: 'fabric.announce' }); send({ ready: true }); void service.replayMemory(); }
-          else if (message.event === 'fabric.announce') { const tool = describe(); send({ reply: message.id ?? 0, data: { nodes: [{ kind: 'tool', key: 'tool.prd', name: tool.name, description: tool.description }] } }); }
-          else if (typeof message.reload === 'boolean') send({ reply: message.id ?? 0, data: null });
-          else if (['prd', 'tool.prd', 'source.board'].includes(message.call) && service) {
-            // `source.board` is the memo-declared key for the owner of board search roots; it serves only the two source ops.
-            const declarations = message.call === 'source.board' && message.args?.op !== 'source_records';
-            const records = message.call === 'source.board' && message.args?.op === 'source_records';
-            if (tasks.size >= 8 && !['cancel', 'describe'].includes(message.args?.op)) { send({ reply: message.id ?? 0, data: declarations ? declarationFailure('capacity') : records ? sourceRecordFailure('capacity') : result({ error: 'service is busy' }, true) }); continue; }
-            const work = (declarations ? service.declarations(message.args) : records ? service.records(message.args) : service.dispatch(message.args, message.turn)).then(data => send({ reply: message.id ?? 0, data })); tasks.add(work); void work.finally(() => tasks.delete(work));
-          } else throw Error('unknown host operation or cartridge not applied');
-        } catch (error) { pending = ''; send({ reply: message?.id ?? 0, error: String(error) }); }
-      }
-      if (disposed) break;
-    }
-  } finally { bridge.close(); await service?.close(); await Promise.allSettled(tasks); process.off('SIGTERM', stop); process.off('SIGINT', stop); }
+export function main() {
+  const wire = new Wire(), tasks = new Set<Promise<any>>();
+  let service: Service | undefined;
+  wire.on('apply', async config => {
+    if (service) throw Error('cartridge is already applied');
+    service = new Service(config ?? {}, wire); void service.replayMemory();
+  });
+  for (const key of ['prd', 'tool.prd', 'source.board']) wire.on(key, async args => {
+    if (!service) throw Error('cartridge is not applied');
+    // `source.board` is the memo-declared key for the owner of board search roots; it serves only the two source ops.
+    const declarations = key === 'source.board' && args?.op !== 'source_records';
+    const records = key === 'source.board' && args?.op === 'source_records';
+    if (tasks.size >= 8 && !['cancel', 'describe'].includes(args?.op)) return declarations ? declarationFailure('capacity') : records ? sourceRecordFailure('capacity') : result({ error: 'service is busy' }, true);
+    const work = declarations ? service.declarations(args) : records ? service.records(args) : service.dispatch(args);
+    tasks.add(work); try { return await work; } finally { tasks.delete(work); }
+  });
+  wire.listen('graph.announce', async () => { const tool = describe(); return { nodes: [{ kind: 'tool', key: 'tool.prd', name: tool.name, description: tool.description }], edges: [] }; });
+  wire.onClose(() => { void service?.close(); });
 }
-if (import.meta.main) await main();
+if (import.meta.main) main();

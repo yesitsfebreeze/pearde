@@ -1,1 +1,1 @@
-return cartridge.process("./run", { inject = { "memory" } })
+return cartridge.process("./run")

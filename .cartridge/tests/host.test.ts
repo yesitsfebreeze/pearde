@@ -18,16 +18,20 @@ test.skipIf(!process.env.CARTRIDGE_TEST_BIN)('real runtime supplies memory and r
         if request.op=="query" then return {items={{id="evidence",text="Planning evidence"}}} end
         if request.op=="ingest" then return {status="committed"} end error("unexpected memory operation")
       end) end}`);
-    const launch = path.join(root, 'probe');
-    atomic(launch, `#!/bin/sh\nexec ${JSON.stringify(process.execPath)} ${JSON.stringify(path.join(import.meta.dir, 'fixtures/host-probe.ts'))} "$@"\n`); fs.chmodSync(launch, 0o755);
-    atomic(path.join(plugins, 'probe.lua'), `return cartridge.process(${JSON.stringify(launch)})`);
+    atomic(path.join(plugins, 'probe.lua'), `return {needs={"prd","memory"}, provide={"probe"}, apply=function(ctx)
+      local events={} ctx:subscribe("prd","prd",function(envelope) table.insert(events,envelope) end)
+      ctx:provide("probe",function(args)
+        local function call(op,list,id) return ctx.prd({op="call",context={session="test",run="one",call=id,cwd=args.cwd},input={op=op,args=list}}) end
+        local read=call("read",{"example"},"read") local added=call("add",{"Native runtime event probe"},"add")
+        return {read=read,added=added,memory_calls=ctx.memory({op="fixture_calls"}),events=events}
+      end) end}`);
     fs.symlinkSync(path.resolve(import.meta.dir, '../..'), path.join(plugins, 'prd'));
     const child = Bun.spawn([path.resolve(process.env.CARTRIDGE_TEST_BIN!), '--dir', plugins, 'run', 'probe', JSON.stringify({ cwd: root })], { cwd: root, stdout: 'pipe', stderr: 'pipe', timeout: 45000 });
     const [output, error, code] = await Promise.all([new Response(child.stdout).text(), new Response(child.stderr).text(), child.exited]);
     expect(error).not.toContain('panic'); expect(code, error).toBe(0); const data = JSON.parse(output);
     expect(data.read.error).toBe(false); expect(JSON.parse(data.read.content).memory.status).toBe('available'); expect(data.added.error).toBe(false);
     expect(data.memory_calls.some((c: any) => c.op === 'query')).toBe(true);
-    expect(data.events.some((e: any) => e.kind === 'data' && e.ch === 'prd' && e.data.operation === 'add'), JSON.stringify(data.events)).toBe(true);
+    expect(data.events.some((e: any) => e.kind === 'data' && e.channel === 'prd' && e.data.operation === 'add'), JSON.stringify(data.events)).toBe(true);
     expect(fs.existsSync(path.join(board, 'prds/native-runtime-event-probe/prd.md'))).toBe(true);
   } finally { fs.rmSync(root, { recursive: true, force: true }); }
 }, 60000);

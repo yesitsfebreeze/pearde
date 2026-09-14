@@ -83,13 +83,13 @@ const file=path.join(board,'prds',rel,'specs/spec01.md'); fs.writeFileSync(file,
 `);
     process.env.PRD_ADAPTER_DIR = path.join(root, 'adapters');
     atomic(path.join(process.env.PRD_ADAPTER_DIR, 'fixture.json'), JSON.stringify({ command: [process.execPath, worker, '{board}', '{rel}'] }));
-    const events: { event: any; turn?: string; whileRunning: boolean }[] = [];
+    const events: { channel: string; event: any; whileRunning: boolean }[] = [];
     service = new Service({ root: records, adapter: 'fixture', job_timeout_seconds: 10 }, {
-      publish(event, turn) { events.push({ event, turn, whileRunning: [...service!.jobs.values()].some(job => job.state === 'running') }); },
-      async request() { return { status: 'committed' }; },
+      publish(channel, event) { events.push({ channel, event, whileRunning: [...service!.jobs.values()].some(job => job.state === 'running') }); },
+      async call() { return { status: 'committed' }; },
     });
     const context = { session: 'trusted-session', run: 'trusted-run', call: 'trusted-call', cwd: code };
-    const started = await service.dispatch({ op: 'call', context, input: { op: 'run', args: ['--workers', '1'] } }, 'trusted-turn');
+    const started = await service.dispatch({ op: 'call', context, input: { op: 'run', args: ['--workers', '1'] } });
     expect(started.error).toBe(false); await Promise.allSettled([...service.tasks]);
     const job = [...service.jobs.values()][0]; expect(job.state, JSON.stringify(job)).toBe('completed');
     const domain = events.filter(row => !row.event.type.startsWith('command.'));
@@ -98,13 +98,13 @@ const file=path.join(board,'prds',rel,'specs/spec01.md'); fs.writeFileSync(file,
     expect(domain.some(row => row.whileRunning)).toBe(true);
     for (const row of domain) {
       expect(row.event.session).toBe(context.session); expect(row.event.run).toBe(context.run); expect(row.event.call).toBe(context.call);
-      expect(row.event.board).toBe('root'); expect(row.event.operation).toBe('run'); expect(row.turn).toBe('trusted-turn');
+      expect(row.event.board).toBe('root'); expect(row.event.operation).toBe('run'); expect(row.channel).toBe('prd');
     }
     expect(job.events.received).toBeGreaterThan(0); expect(job.events.published).toBe(domain.length); expect(job.events.unavailable).toBe(0);
     expect(Buffer.byteLength(JSON.stringify(service.publicJob(job)))).toBeLessThanOrEqual(service.outputCap);
     expect(completionProblem(scan(board).get('one')!)).toBeNull();
-    service.host = { publish() { throw Error('fixture event host unavailable'); }, async request() { return {}; } };
-    const fallback = await service.dispatch({ op: 'call', context: { ...context, call: 'delivery-failure' }, input: { op: 'plan', args: [] } }, 'trusted-turn');
+    service.host = { publish() { throw Error('fixture event host unavailable'); }, async call() { return {}; } };
+    const fallback = await service.dispatch({ op: 'call', context: { ...context, call: 'delivery-failure' }, input: { op: 'plan', args: [] } });
     expect(fallback.error).toBe(false);
     const outcome = JSON.parse(fallback.content);
     expect(outcome.events.unavailable).toBeGreaterThan(0); expect(outcome.events.published).toBe(0);

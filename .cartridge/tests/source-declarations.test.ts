@@ -123,7 +123,7 @@ test('YAML alias member lists stop at the edge cap before expanding repeated map
 
 test('service native method bypasses tool execution, callbacks, journals and spills', async () => {
   let callbacks = 0;
-  const service = new Service({ root, max_output_bytes: 1024 }, { request: async () => { callbacks++; throw Error('forbidden'); }, publish: () => { callbacks++; } });
+  const service = new Service({ root, max_output_bytes: 1024 }, { call: async () => { callbacks++; throw Error('forbidden'); }, publish: () => { callbacks++; } });
   try {
     const before = snapshot();
     expect((await service.declarations({ op: 'source_declarations', board: 'root' })).status).toBe('available');

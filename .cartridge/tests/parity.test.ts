@@ -81,7 +81,7 @@ test('coordinator independently collects a finished owned claim and preserves fo
 
 test('partly failed runs publish only independently verified successful receipts to memory', async () => {
   contract(item('good', 'specced'), true, 'test "$(cat seed.txt)" = changed'); item('bad', 'open', board, code, 'bad.txt'); adapter(implementation);
-  const writes: any[] = [], service = new Service({ root: records, adapter: 'fixture', job_timeout_seconds: 10 }, { publish() {}, async request(name, args) { expect(name).toBe('memory'); writes.push(args); return { status: 'committed' }; } });
+  const writes: any[] = [], service = new Service({ root: records, adapter: 'fixture', job_timeout_seconds: 10 }, { publish() {}, async call(name, args) { expect(name).toBe('memory'); writes.push(args); return { status: 'committed' }; } });
   try {
     const context = { session: 'parity', run: 'partial', call: 'one', cwd: code };
     const started = await service.dispatch({ op: 'call', context, input: { op: 'run', args: ['--workers', '2'] } }); expect(started.error).toBe(false);

@@ -4,9 +4,13 @@
   "provide": [
     "prd",
     "tool.prd",
-    "source.board"  ],
+    "source.board"
+  ],
   "needs": [
     "memory"
+  ],
+  "on": [
+    "graph.announce"
   ],
   "description": "Native planning service for central PRDs, specs, dependency plans, Gantt and worker orchestration, integrated with memory and runtime events.",
   "settings": {
@@ -71,13 +75,19 @@
         "./run"
       ],
       "cwd": "."
-    },
-    "hello": {
-      "argv": [
-        "./run",
-        "hello"
-      ],
-      "cwd": "."
     }
+  },
+  "grant": {
+    "exec": [
+      "bun",
+      "dirname",
+      "git"
+    ],
+    "read": [
+      "/"
+    ],
+    "net": [
+      "localhost"
+    ]
   }
 }

@@ -60,12 +60,18 @@ for (const distinct of [true, false]) test.skipIf(!enabled)(distinct
     // One user profile: the host reads the `.cartridge` beside its working
     // directory, which is `f.root` for the run below.
     const profile = path.join(f.root, '.cartridge'), plugins = path.join(f.root, 'plugins'); fs.mkdirSync(plugins);
-    atomic(path.join(profile, 'init.lua'), 'return {{id="memory",path="memory"},{id="prd",path="prd"},{id="probe",path="probe"}}');
+    atomic(path.join(profile, 'init.lua'), 'return {{id="memory",path="memory"},{id="prd",path="prd"},{id="probe",path="probe.lua"}}');
     atomic(path.join(profile, 'config.lua'), `return {${f.config},prd={root=${JSON.stringify(f.records)},timeout_seconds=30}}`);
     binaryPlugin(plugins, 'memory', memory); fs.symlinkSync(prd, path.join(plugins, 'prd'));
-    const launch = path.join(f.root, 'native-host-probe');
-    atomic(launch, `#!/bin/sh\nexec ${JSON.stringify(process.execPath)} ${JSON.stringify(path.join(import.meta.dir, 'fixtures/native-host-probe.ts'))} "$@"\n`); fs.chmodSync(launch, 0o755);
-    binaryPlugin(plugins, 'probe', launch);
+    atomic(path.join(plugins, 'probe.lua'), `return {needs={"prd","memory"}, provide={"native-host-probe"}, apply=function(ctx)
+      local events={} ctx:subscribe("prd","prd",function(envelope) table.insert(events,envelope) end)
+      ctx:provide("native-host-probe",function(args)
+        local function request(op,list) return ctx.prd({op="call",context={session="native-host-fixture",run="isolated",call=op,cwd=args.cwd},input={op=op,args=list}}) end
+        local seed=ctx.memory({op="ingest",text="The release code name is Cedar.",raw=true,sync=true})
+        local read=request("read",{"example"}) local collected=request("collect",{"example"})
+        local recalled=ctx.memory({op="query",text="Verified PRD collection",k=10})
+        return {seed=seed,read=read,collected=collected,recalled=recalled,events=events}
+      end) end}`);
     const data = JSON.parse(await run([cartridge, '--dir', plugins, 'run', 'native-host-probe', JSON.stringify({ cwd: f.records })], f.root));
     expect(data.seed.status).toBe('committed'); expect(data.read.error).toBe(false);
     const read = JSON.parse(data.read.content); expect(read.memory.status).toBe('available'); expect(JSON.stringify(read.memory.results)).toContain('Cedar');
@@ -77,7 +83,7 @@ for (const distinct of [true, false]) test.skipIf(!enabled)(distinct
     expect(receipts).toHaveLength(1); expect(receipts[0].status).toBe(expected); expect(receipts[0].attempts).toBe(1);
     if (distinct) expect(JSON.stringify(data.recalled)).toContain('Verified PRD collection');
     else expect(receipts[0].error).toContain('did not acknowledge committed status');
-    expect(data.events.some((event: any) => event.kind === 'data' && event.ch === 'prd' && event.data.operation === 'collect'), JSON.stringify(data.events)).toBe(true);
+    expect(data.events.some((event: any) => event.kind === 'data' && event.channel === 'prd' && event.data.operation === 'collect'), JSON.stringify(data.events)).toBe(true);
     expect(completionProblem(scan(f.board).get('example')!)).toBeNull(); expect(fs.readFileSync(path.join(f.source, 'seed.txt'), 'utf8')).toBe('changed\n');
     expect(f.requests()).toBeGreaterThan(0);
   } finally { f.dispose(); }

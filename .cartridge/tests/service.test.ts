@@ -4,7 +4,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { Service } from '../../src/service';
-import { connect, environment, peer } from './fixtures/host';
+import { program } from './fixtures/host';
 import { atomic, git } from '../../src/records';
 let root: string, board: string, service: Service;
 const context = (session = 'one', call = randomUUID()) => ({ session, run: 'run', call, cwd: root });
@@ -79,20 +79,21 @@ test('memory calls are bounded so a stalled provider never holds up planning', a
   const started = Date.now(); const answer = value(await call('read', ['one']));
   expect(answer.memory.status).toBe('unavailable'); expect(answer.memory.error).toContain('timed out'); expect(Date.now() - started).toBeLessThan(6000);
 }, 10000);
-test('wire apply, describe, graph announce, native call with traced memory, and dispose', async () => {
-  const memory = peer('memory', (method, params) => { requests.push({ method, params }); return { items: [] }; }), requests: any[] = [];
-  const { socket, env } = environment();
-  const child = Bun.spawn([process.execPath, path.resolve(import.meta.dir, '../../src/service.ts')], { stdin: 'pipe', stdout: 'ignore', stderr: 'inherit', env });
+test('wire apply, describe, graph announce, native call with memory, and dispose', async () => {
+  const requests: any[] = [];
+  const service = await program([process.execPath, path.resolve(import.meta.dir, '../../src/service.ts')], line => {
+    if (line.bail === 'memory') { requests.push(line); return { items: [] }; }
+    throw Error('unexpected ask ' + JSON.stringify(line));
+  });
   try {
-    const rpc = await connect(socket);
-    expect(await rpc.call('apply', { name: 'prd', config: { root }, directory: { needs: { memory: memory.address }, events: {}, accept: {} } })).toEqual({});
-    expect((await rpc.call('call', { key: 'prd', args: { op: 'describe' } })).name).toBe('prd');
+    expect(await service.call('apply', { root })).toBeNull();
+    expect((await service.call('prd', { op: 'describe' })).name).toBe('prd');
     // The announce: this cartridge contributes its own tool to the graph.
-    expect(await rpc.call('event', { name: 'graph.announce', data: { scope: {} } })).toEqual({ nodes: [{ kind: 'tool', key: 'tool.prd', name: 'prd', description: expect.any(String) }], edges: [] });
-    expect((await rpc.call('call', { key: 'prd', args: { op: 'call', context: context(), input: { op: 'scan' } } })).error).toBe(false);
-    const read = await rpc.call('call', { key: 'prd', trace: 'trace-3', args: { op: 'call', context: context(), input: { op: 'read', args: ['one'] } } });
+    expect(await service.call('graph.announce', { scope: {} })).toEqual({ nodes: [{ kind: 'tool', key: 'tool.prd', name: 'prd', description: expect.any(String) }], edges: [] });
+    expect((await service.call('prd', { op: 'call', context: context(), input: { op: 'scan' } })).error).toBe(false);
+    const read = await service.call('prd', { op: 'call', context: context(), input: { op: 'read', args: ['one'] } });
     expect(value(read).memory.status).toBe('available');
-    expect(requests).toMatchObject([{ method: 'call', params: { key: 'memory', trace: 'trace-3', args: { op: 'query' } } }]);
-    expect(await rpc.call('dispose')).toEqual({}); expect(await child.exited).toBe(0);
-  } finally { child.kill(); memory.close(); }
+    expect(requests).toMatchObject([{ bail: 'memory', args: { op: 'query' } }]);
+    expect(await service.call('dispose')).toBe(true);
+  } finally { await service.close(); }
 }, 10000);

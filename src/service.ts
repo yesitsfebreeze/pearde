@@ -244,7 +244,7 @@ export function main() {
     const work = declarations ? service.declarations(args) : records ? service.records(args) : service.dispatch(args);
     tasks.add(work); try { return await work; } finally { tasks.delete(work); }
   });
-  wire.listen('graph.announce', async () => { const tool = describe(); return { nodes: [{ kind: 'tool', key: 'tool.prd', name: tool.name, description: tool.description }], edges: [] }; });
+  wire.on('graph.announce', async () => { const tool = describe(); return { nodes: [{ kind: 'tool', key: 'tool.prd', name: tool.name, description: tool.description }], edges: [] }; });
   wire.onClose(() => { void service?.close(); });
 }
 if (import.meta.main) main();

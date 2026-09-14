@@ -55,28 +55,25 @@ function snapshot(directory: string): string {
 }
 test.skipIf(!process.env.CARTRIDGE_TEST_BIN)('actual Host indexes and exactly reads all three source owners without Memory events spill or tool exposure', async () => {
   const profile = path.join(root, '.cartridge'), plugins = path.join(root, 'plugins'); fs.mkdirSync(plugins);
-  atomic(path.join(profile, 'init.lua'), 'return {{id="memory",path="memory.lua"},{id="prd",path="prd"},{id="probe",path="probe.lua"}}');
-  atomic(path.join(profile, 'config.lua'), `return {prd={root=${JSON.stringify(root)},max_output_bytes=1024}}`);
-  atomic(path.join(plugins, 'memory.lua'), `return {provide={"memory"},apply=function(ctx) ctx:provide("memory",function(request) error("declaration operation called Memory") end) end}`);
+  atomic(path.join(profile, 'init.lua'), `return {{id="memory",path="memory"},{id="prd",path="prd",config={root=${JSON.stringify(root)},max_output_bytes=1024}},{id="probe",path="probe"}}`);
+  atomic(path.join(plugins, 'memory/cartridge.json'), JSON.stringify({ name: 'memory', entry: 'init.lua', events: { memory: {}, 'graph.announce': {} }, listen: ['memory'] }));
+  atomic(path.join(plugins, 'memory/init.lua'), `cartridge.listen("memory",function(request) error("declaration operation called Memory") end)`);
   fs.symlinkSync(path.resolve(import.meta.dir, '../..'), path.join(plugins, 'prd'));
-  const probe = path.join(root, 'probe.ts');
-  atomic(probe, `import {createInterface} from 'node:readline';
-import {HostBridge} from ${JSON.stringify(path.resolve(import.meta.dir, '../../src/service.ts'))};
-if(process.argv[2]==='hello'){console.log(JSON.stringify({inject:['source.board','tool.prd'],provide:['probe']}));process.exit(0);}
-const send=m=>console.log(JSON.stringify(m)),bridge=new HostBridge(send),events=[];
-for await(const line of createInterface({input:process.stdin})){
- const m=JSON.parse(line);if(bridge.accept(m))continue;if(m.dispose)break;
- if(m.apply){send({provide:'probe'});send({subscribe:'prd'});send({ready:true});}
- else if(m.call==='probe')void(async()=>{try{
-  const rows=[];for(const board of ['root','root/base','root/base/plugin']){const declaration=await bridge.request('source.board',{op:'source_declarations',board});const indexed=await bridge.request('source.board',{op:'source_records',board,action:'index',expected_source_revision:declaration.revision});const item=indexed.items[0];rows.push({indexed,read:await bridge.request('source.board',{op:'source_records',board,action:'read',expected_source_revision:declaration.revision,path:item.path,expected_revision:item.revision})});}
-  const rejected=await bridge.request('tool.prd',{op:'source_records',board:'root',action:'index'});
-  const described=await bridge.request('tool.prd',{op:'describe'});
-  send({reply:m.id,data:{rows,rejected,described,events}});
- }catch(e){send({reply:m.id,error:String(e)});}})();
- else events.push(m);
-}bridge.close();`);
-  const launch = path.join(root, 'probe'); atomic(launch, `#!/bin/sh\nexec '${process.execPath.replaceAll("'", "'\\''")}' '${probe.replaceAll("'", "'\\''")}' "$@"\n`); fs.chmodSync(launch, 0o755);
-  atomic(path.join(plugins, 'probe.lua'), `return cartridge.process(${JSON.stringify(launch)})`);
+  // The base refuses the source op on tool.prd at the sender: its schema knows no such op.
+  atomic(path.join(plugins, 'probe/cartridge.json'), JSON.stringify({ name: 'probe', entry: 'init.lua', events: { probe: {} }, listen: ['probe'], needs: ['source.board', 'tool.prd'] }));
+  atomic(path.join(plugins, 'probe/init.lua'), `local events={} cartridge.subscribe("prd","prd",function(envelope) table.insert(events,envelope) end)
+      cartridge.listen("probe",function()
+        local rows={} for _,board in ipairs({"root","root/base","root/base/plugin"}) do
+          local declaration=cartridge.bail("source.board",{op="source_declarations",board=board})
+          local indexed=cartridge.bail("source.board",{op="source_records",board=board,action="index",expected_source_revision=declaration.revision})
+          local item=indexed.items[1]
+          rows[#rows+1]={indexed=indexed,read=cartridge.bail("source.board",{op="source_records",board=board,action="read",expected_source_revision=declaration.revision,path=item.path,expected_revision=item.revision})}
+        end
+        local ok,rejected=pcall(cartridge.bail,"tool.prd",{op="source_records",board="root",action="index"})
+        if not ok then rejected={error=true,content=tostring(rejected)} end
+        local described=cartridge.bail("tool.prd",{op="describe"})
+        return {rows=rows,rejected=rejected,described=described,events=events}
+      end)`);
   record('root','private','---\nprivate: true\n---\n# PRIVATE_MARKER\nPRIVATE_BODY');
   record('root','same','# Root\n'+ 'Exact source body. '.repeat(150));
   const before = snapshot(boards);
@@ -89,7 +86,7 @@ for await(const line of createInterface({input:process.stdin})){
     expect(JSON.stringify(data)).not.toContain('PRIVATE_MARKER');expect(data.rows[0].read.bytes).toBeGreaterThan(1024);
     expect(data.rows[1].indexed.root).toBe(path.join(boards, 'root/base'));
     expect(data.rejected.error).toBe(true); expect(data.described.input_schema.properties.op.enum).not.toContain('source_records');
-    expect(data.events.filter((e: any) => e.event?.kind !== 'subscribe')).toEqual([]);
+    expect((Array.isArray(data.events) ? data.events : []).filter((e: any) => e.kind !== "subscribe")).toEqual([]);
     expect(snapshot(boards)).toBe(before); expect(fs.existsSync(path.join(root, '.cartridge/.state'))).toBe(false);
   } finally { if (child.exitCode === null) { child.kill(); await child.exited; } }
 }, 20000);

@@ -1,18 +1,184 @@
 {
   "name": "prd",
   "entry": "init.lua",
-  "provide": [
+  "description": "Native planning service for central PRDs, specs, dependency plans, Gantt and worker orchestration, integrated with memory and runtime events.",
+  "events": {
+    "tool.prd": {
+      "description": "Plan centralized PRD boards, prepare briefs and perform checked transitions: a tool envelope whose input is {op, board?, args?}.",
+      "schema": {
+        "type": "object",
+        "required": [
+          "op"
+        ],
+        "properties": {
+          "op": {
+            "type": "string",
+            "enum": [
+              "describe",
+              "call",
+              "cancel"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "input": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "op"
+            ],
+            "properties": {
+              "op": {
+                "type": "string",
+                "enum": [
+                  "scan",
+                  "plan",
+                  "gantt",
+                  "read",
+                  "brief",
+                  "next",
+                  "add",
+                  "refine",
+                  "specced",
+                  "claim",
+                  "release",
+                  "collect",
+                  "run",
+                  "status",
+                  "stop"
+                ]
+              },
+              "board": {
+                "type": "string",
+                "maxLength": 256
+              },
+              "args": {
+                "type": "array",
+                "maxItems": 64,
+                "items": {
+                  "type": "string",
+                  "maxLength": 8192
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "prd": {
+      "description": "The same engine for a trusted native caller: describe, call and cancel envelopes as for tool.prd.",
+      "schema": {
+        "type": "object",
+        "required": [
+          "op"
+        ],
+        "properties": {
+          "op": {
+            "type": "string",
+            "enum": [
+              "describe",
+              "call",
+              "cancel"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "input": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "op"
+            ],
+            "properties": {
+              "op": {
+                "type": "string",
+                "enum": [
+                  "scan",
+                  "plan",
+                  "gantt",
+                  "read",
+                  "brief",
+                  "next",
+                  "add",
+                  "refine",
+                  "specced",
+                  "claim",
+                  "release",
+                  "collect",
+                  "run",
+                  "status",
+                  "stop"
+                ]
+              },
+              "board": {
+                "type": "string",
+                "maxLength": 256
+              },
+              "args": {
+                "type": "array",
+                "maxItems": 64,
+                "items": {
+                  "type": "string",
+                  "maxLength": 8192
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "source.board": {
+      "description": "The owner of board search roots: {op:\"source_declarations\", board?, deadline_ms?} lists declared child boards; {op:\"source_records\", board?, action, expected_source_revision, path?, expected_revision?} indexes and reads public records.",
+      "schema": {
+        "type": "object",
+        "required": [
+          "op"
+        ],
+        "properties": {
+          "op": {
+            "type": "string",
+            "enum": [
+              "source_declarations",
+              "source_records"
+            ]
+          },
+          "board": {
+            "type": "string"
+          },
+          "deadline_ms": {
+            "type": "integer"
+          },
+          "action": {
+            "type": "string",
+            "enum": [
+              "index",
+              "read"
+            ]
+          },
+          "expected_source_revision": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "expected_revision": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "listen": [
     "prd",
     "tool.prd",
-    "source.board"
+    "source.board",
+    "graph.announce"
   ],
   "needs": [
     "memory"
   ],
-  "on": [
-    "graph.announce"
-  ],
-  "description": "Native planning service for central PRDs, specs, dependency plans, Gantt and worker orchestration, integrated with memory and runtime events.",
   "settings": {
     "root": {
       "type": "string",
@@ -72,7 +238,8 @@
     },
     "run": {
       "argv": [
-        "./run"
+        "bun",
+        "src/service.ts"
       ],
       "cwd": "."
     }
@@ -80,8 +247,10 @@
   "grant": {
     "exec": [
       "bun",
-      "dirname",
-      "git"
+      "/bin/cat",
+      "mkfifo",
+      "git",
+      "sh"
     ],
     "read": [
       "/"

@@ -171,28 +171,20 @@ test('timed out native reads retain their capacity slots until actual IO settles
 
 test.skipIf(!process.env.CARTRIDGE_TEST_BIN)('actual Host invokes native declarations without Memory or event effects and tool exposure', async () => {
   const profile = path.join(root, '.cartridge'), plugins = path.join(root, 'plugins'); fs.mkdirSync(plugins);
-  atomic(path.join(profile, 'init.lua'), 'return {{id="memory",path="memory.lua"},{id="prd",path="prd"},{id="probe",path="probe.lua"}}');
-  atomic(path.join(profile, 'config.lua'), `return {prd={root=${JSON.stringify(root)},max_output_bytes=1024}}`);
-  atomic(path.join(plugins, 'memory.lua'), `return {provide={"memory"},apply=function(ctx) ctx:provide("memory",function(request) error("declaration operation called Memory") end) end}`);
+  atomic(path.join(profile, 'init.lua'), `return {{id="memory",path="memory"},{id="prd",path="prd",config={root=${JSON.stringify(root)},max_output_bytes=1024}},{id="probe",path="probe"}}`);
+  atomic(path.join(plugins, 'memory/cartridge.json'), JSON.stringify({ name: 'memory', entry: 'init.lua', events: { memory: {}, 'graph.announce': {} }, listen: ['memory'] }));
+  atomic(path.join(plugins, 'memory/init.lua'), `cartridge.listen("memory",function(request) error("declaration operation called Memory") end)`);
   fs.symlinkSync(path.resolve(import.meta.dir, '../..'), path.join(plugins, 'prd'));
-  const probe = path.join(root, 'probe.ts');
-  atomic(probe, `import {createInterface} from 'node:readline';
-import {HostBridge} from ${JSON.stringify(path.resolve(import.meta.dir, '../../src/service.ts'))};
-if(process.argv[2]==='hello'){console.log(JSON.stringify({inject:['source.board','tool.prd'],provide:['probe']}));process.exit(0);}
-const send=m=>console.log(JSON.stringify(m)),bridge=new HostBridge(send),events=[];
-for await(const line of createInterface({input:process.stdin})){
- const m=JSON.parse(line);if(bridge.accept(m))continue;if(m.dispose)break;
- if(m.apply){send({provide:'probe'});send({subscribe:'prd'});send({ready:true});}
- else if(m.call==='probe')void(async()=>{try{
-  const rows=[];for(const board of ['root','root/base','root/base/plugin'])rows.push(await bridge.request('source.board',{op:'source_declarations',board}));
-  const rejected=await bridge.request('tool.prd',{op:'source_declarations',board:'root'});
-  const described=await bridge.request('tool.prd',{op:'describe'});
-  send({reply:m.id,data:{rows,rejected,described,events}});
- }catch(e){send({reply:m.id,error:String(e)});}})();
- else events.push(m);
-}bridge.close();`);
-  const launch = path.join(root, 'probe'); atomic(launch, `#!/bin/sh\nexec '${process.execPath.replaceAll("'", "'\\''")}' '${probe.replaceAll("'", "'\\''")}' "$@"\n`); fs.chmodSync(launch, 0o755);
-  atomic(path.join(plugins, 'probe.lua'), `return cartridge.process(${JSON.stringify(launch)})`);
+  // The base refuses the source op on tool.prd at the sender: its schema knows no such op.
+  atomic(path.join(plugins, 'probe/cartridge.json'), JSON.stringify({ name: 'probe', entry: 'init.lua', events: { probe: {} }, listen: ['probe'], needs: ['source.board', 'tool.prd'] }));
+  atomic(path.join(plugins, 'probe/init.lua'), `local events={} cartridge.subscribe("prd","prd",function(envelope) table.insert(events,envelope) end)
+      cartridge.listen("probe",function()
+        local rows={} for _,board in ipairs({"root","root/base","root/base/plugin"}) do rows[#rows+1]=cartridge.bail("source.board",{op="source_declarations",board=board}) end
+        local ok,rejected=pcall(cartridge.bail,"tool.prd",{op="source_declarations",board="root"})
+        if not ok then rejected={error=true,content=tostring(rejected)} end
+        local described=cartridge.bail("tool.prd",{op="describe"})
+        return {rows=rows,rejected=rejected,described=described,events=events}
+      end)`);
   const before = snapshot(boards);
   const child = Bun.spawn([path.resolve(process.env.CARTRIDGE_TEST_BIN!), '--dir', plugins, 'run', 'probe', '{}'], { cwd: root, stdout: 'pipe', stderr: 'pipe', timeout: 15000 });
   try {
@@ -201,7 +193,7 @@ for await(const line of createInterface({input:process.stdin})){
     const data = JSON.parse(output); expect(data.rows.map((r: any) => r.status)).toEqual(['available', 'available', 'available']);
     expect(data.rows[0].children[0].root).toBe(path.join(boards, 'root/base'));
     expect(data.rejected.error).toBe(true); expect(data.described.input_schema.properties.op.enum).not.toContain('source_declarations');
-    expect(data.events.filter((e: any) => e.event?.kind !== 'subscribe')).toEqual([]);
+    expect((Array.isArray(data.events) ? data.events : []).filter((e: any) => e.kind !== "subscribe")).toEqual([]);
     expect(snapshot(boards)).toBe(before); expect(fs.existsSync(path.join(root, '.cartridge/.state'))).toBe(false);
   } finally { if (child.exitCode === null) { child.kill(); await child.exited; } }
 }, 20000);

@@ -52,23 +52,32 @@ export async function runProcess(command: string[], options: { cwd: string; time
   // Bun invalidates ChildProcess.pid after exit. Capture the positive session ID
   // once so a late output chunk can never turn -1 into a signal to PID 1.
   const ownedPid = child.pid;
+  // The group's [pgid, state] rows from ps, or undefined where ps cannot run:
+  // /bin/ps is setuid and macOS refuses it to every sandboxed process.
+  const groupMembers = () => {
+    let ps: ReturnType<typeof Bun.spawnSync> | undefined;
+    try { ps = Bun.spawnSync(['ps', '-axo', 'pgid=,stat='], { stdout: 'pipe', stderr: 'pipe', timeout: 1000 }); } catch { ps = undefined; }
+    if (!ps || ps.exitCode !== 0) return undefined;
+    return String(ps.stdout ?? "").trim().split('\n').map(line => line.trim().split(/\s+/)).filter(([group]) => Number(group) === ownedPid);
+  };
   const liveGroup = () => {
     if (!ownedPid || ownedPid <= 1) return false;
-    const ps = Bun.spawnSync(['ps', '-axo', 'pgid=,stat='], { stdout: 'pipe', stderr: 'pipe', timeout: 1000 });
-    if (ps.exitCode !== 0) throw Error('cannot confirm owned process group termination');
-    return ps.stdout.toString().trim().split('\n').map(line => line.trim().split(/\s+/)).some(([group, state]) => Number(group) === ownedPid && !state.startsWith('Z'));
+    const members = groupMembers();
+    if (members) return members.some(([, state]) => !state.startsWith('Z'));
+    // Without ps, kill(0) on the group decides; Darwin reports EPERM for a group of zombies.
+    try { process.kill(-ownedPid, 0); return true; }
+    catch (error: any) { if (error.code === 'ESRCH' || error.code === 'EPERM') return false; throw error; }
   };
   const signal = (name: NodeJS.Signals) => {
     if (!ownedPid || ownedPid <= 1) return;
     try { process.kill(-ownedPid, name); }
     catch (error: any) {
       if (error.code === 'ESRCH') return;
-      // Darwin reports EPERM for a process group containing only zombies.
-      // Confirm that exact condition; never hide a permission failure on live work.
+      // Darwin reports EPERM for a process group containing only zombies. Confirm
+      // that condition where ps runs; the group's members are this process's own children.
       if (error.code === 'EPERM') {
-        const ps = Bun.spawnSync(['ps', '-axo', 'pgid=,stat='], { stdout: 'pipe', stderr: 'pipe' });
-        const members = ps.stdout.toString().trim().split('\n').map(line => line.trim().split(/\s+/)).filter(([group]) => Number(group) === ownedPid);
-        if (ps.exitCode === 0 && members.every(([, state]) => state.startsWith('Z'))) return;
+        const members = groupMembers();
+        if (!members || members.every(([, state]) => state.startsWith('Z'))) return;
       }
       throw error;
     }

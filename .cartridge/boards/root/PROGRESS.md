@@ -70,10 +70,24 @@ it against a fresh build clears both. No session here will stop it. That blocks
 one box on `the-record-has-one-vocabulary-and-no-shadowed-copies`, one on
 `the-profile-is-the-orchestration-service`, and it is why `just verify` is red.
 
+## The record item is worked, verified and committed, and still open
+
+Boxes 1 and 2 are observed green and ticked; box 3 stays open because its named
+command cannot be run against the stale daemon. Committed as `f6a4668d` in
+prd.ctg and `bc4f5b5` in the composed root. Not collected.
+
+The verifier caught one real defect and it is repaired. The two shadowing
+`type/` leaves were deleted on the premise that the shipped copies are
+byte-identical; they are not. The workspace `type/type.md` carried the memo file
+contract and the qualified-versus-bare wikilink rule, and two grammars cited it
+as authority for exactly that. The contract now lives in
+`grammar/memo-grammar.md` and `record-grammar.md` cites the grammar. The spec
+grew a fifth check that fails if either regresses.
+
 ## Next action
 
-Take the verifier's report, tick the gate PRD's boxes, write Result, commit the
-two justfiles and attempt `prd collect`. Then dispatch
+Take the re-run gate evidence, write the gate PRD's Result, commit the two
+justfiles and attempt `prd collect`. Then dispatch
 `@root/the-profile-is-the-orchestration-service`, which overlaps the gate
 footprint on `.cartridge/justfile` and the record footprint on
 `.cartridge/memos`, so it runs only after both land.

@@ -1,5 +1,5 @@
 ---
-state: "specced"
+state: "done"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge"
@@ -15,6 +15,7 @@ footprint:
 needs:
 - the-profile-is-the-orchestration-service
 - the-gates-run-from-the-root-justfile
+commit: "ee73c5361cc244691066e419170219789b99d09b"
 ---
 
 # Sessions and gitfs tests are green

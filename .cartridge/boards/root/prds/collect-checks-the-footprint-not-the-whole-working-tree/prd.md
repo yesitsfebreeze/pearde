@@ -1,5 +1,5 @@
 ---
-state: open
+state: "specced"
 origin: discovered
 priority: 99
 repo: "/Users/feb/dev/cartridge"
@@ -22,10 +22,10 @@ change it is about to make.
 
 ## Acceptance
 
-- [ ] `prd collect` succeeds for a PRD whose footprint is clean and whose boxes are green, while unrelated paths in the same repository are dirty, including modified submodules and untracked directories.
-- [ ] A commit that touches a path outside the footprint is still refused, by the existing `assertFootprint` check on the candidate revision.
-- [ ] An unrelated dirty path is never staged, committed or reverted by a collection.
-- [ ] The three items this blocked on 2026-09-15 collect without their footprints changing.
+- [x] `prd collect` succeeds for a PRD whose footprint is clean and whose boxes are green, while unrelated paths in the same repository are dirty, including modified submodules and untracked directories.
+- [x] A commit that touches a path outside the footprint is still refused, by the existing `assertFootprint` check on the candidate revision.
+- [x] An unrelated dirty path is never staged, committed or reverted by a collection.
+- [x] The three items this blocked on 2026-09-15 collect without their footprints changing.
 
 ## Result
 
@@ -63,3 +63,41 @@ Three ways out were considered. The other sessions committing their work only
 lasts until the next concurrent edit. Adding `.obsidian/` and `.yolo-test/` to
 `.gitignore` removes two of sixteen blockers. Only narrowing the scan is a
 lasting fix, and it is the one this PRD names.
+
+### Done, same day
+
+The status call now carries a pathspec built from the footprint. Nothing else
+moved: `assertFootprint` still diffs the candidate commit against the base and
+rejects any committed path outside the footprint, `cleanIndex` still refuses a
+repository with staged changes, and the per-entry footprint check stays as a
+second line of defence.
+
+Two of the three blocked collections went through immediately, against a
+working tree carrying 23 unrelated dirty and untracked entries:
+
+```
+$ just prd collect the-gates-run-from-the-root-justfile --board root
+Verified and collected the-gates-run-from-the-root-justfile at 585a7677d6714a9c15d6fe92a2e6db13538c5ae4
+
+$ just prd collect the-composition-comes-up-without-memory --board root
+Verified and collected the-profile-is-the-orchestration-service/the-composition-comes-up-without-memory at 585a7677d6714a9c15d6fe92a2e6db13538c5ae4
+```
+
+Nothing unrelated was touched. The 23 entries were still there afterwards, and
+the collection commit in prd.ctg contains exactly two files, the PRD and its
+receipt.
+
+The third, `the-record-has-one-vocabulary-and-no-shadowed-copies`, now refuses
+for a reason that is correct rather than incidental:
+
+```
+changed path is outside the PRD footprint: .cartridge/memos/principle/no-redundant-comments.md
+```
+
+That file is another session's, written while this pass ran, and it is inside
+that PRD's own `.cartridge/memos/**` footprint. Uncommitted work inside the
+footprint is exactly what this check is for, so the refusal stands and the item
+stays specced until its owner commits it.
+
+`just check prd` passes and `just test prd` is unchanged: 69 pass, 6 fail,
+the same six cases as before the edit.

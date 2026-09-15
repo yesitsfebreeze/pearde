@@ -138,7 +138,11 @@ async function collect(prd: Prd, graph: Map<string, Prd>, opts: Options, signal?
   contractsUnchanged();
   if (signal?.aborted) throw Error('collection cancelled before integration');
   // Verification may write output; only explicitly declared source paths may enter a commit.
-  const status = Bun.spawnSync(['git', '-C', tree, 'status', '--porcelain=v1', '-z', '--untracked-files=all']).stdout.toString();
+  // Ask only about the footprint: a composed repository worked by several sessions is
+  // never globally clean, and an unrelated dirty path is not this collection's business.
+  // The committed revision is still checked in full by assertFootprint below.
+  const scope = feet(prd).map(f => path.relative(code, f));
+  const status = Bun.spawnSync(['git', '-C', tree, 'status', '--porcelain=v1', '-z', '--untracked-files=all', '--', ...scope]).stdout.toString();
   const changed: string[] = [];
   const entries = status.split('\0').filter(Boolean);
   for (let i = 0; i < entries.length; i++) {

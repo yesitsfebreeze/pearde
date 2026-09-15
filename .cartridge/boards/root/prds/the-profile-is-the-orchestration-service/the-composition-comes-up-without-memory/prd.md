@@ -1,5 +1,5 @@
 ---
-state: "specced"
+state: "done"
 origin: discovered
 priority: 95
 repo: "/Users/feb/dev/cartridge"
@@ -9,6 +9,7 @@ wave: 1
 date: "2026-09-15"
 footprint:
 - "/Users/feb/dev/cartridge/prd.ctg/cartridge.json"
+commit: "585a7677d6714a9c15d6fe92a2e6db13538c5ae4"
 ---
 
 # The composition comes up without memory

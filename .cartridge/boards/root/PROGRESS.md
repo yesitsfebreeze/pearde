@@ -1,21 +1,22 @@
 # Root board progress
 
-Snapshot: 2026-09-15 11:15, coordinator pass 3 (session cartridge-ctg-22).
+Snapshot: 2026-09-15 11:28, coordinator pass 3 (session cartridge-ctg-22).
 
 - done this pass: 1 — `the-record-has-one-vocabulary-and-no-shadowed-copies`
-- open: 16 on root; 3 analyzing, 13 waiting on a `needs`
-- claims, all by cartridge-ctg-22:
-  - `host-tests-hold-under-suite-contention` — analyst reported (spec01
-    draft, not published). Red at `f8a2c00`: 3 of 14 main-binary tests, one
-    `host.sock is already served` collision in `cli::setup` that poisons the
-    `trust_home()` mutex for two more. Held again: a live session began editing
-    five host files (`src/host/socket.rs`, `src/host/mod.rs`, `src/cli/args.rs`,
-    `src/cli/client.rs`, `src/transport/typed.rs`) at 11:01, on exactly that
-    collision. Waiting for it to commit; the draft does not yet meet "never
-    process-global" and gets revised against the committed tree.
-  - `pty-router-harness-mcp-tests-are-green` and
-    `sessions-and-gitfs-tests-are-green` — analysts probing the owners with
-    the orphaned 07:13 attempt left in place
+- open: 16 on root; 2 specced, 1 analyzing, 13 waiting on a `needs`
+- `sessions-and-gitfs-tests-are-green` — specced, implemented (gitfs
+  `Capture` test-only cap fields removed; tests hit the real caps), independent
+  verifier running the acceptance.
+- `pty-router-harness-mcp-tests-are-green` — specced; pty, router, harness
+  3/3 green and all four checks clean, mcp refresh test hangs 1 in 3. Two
+  attempts recorded under its Result; blocked on the host session's commit
+  (unbounded `rewire` in `src/host/mod.rs`) and a stale release host the mcp
+  tests prefer. No claim.
+- `host-tests-hold-under-suite-contention` — claimed by cartridge-ctg-22,
+  analyst spec01 draft. Held: the host session's cartridge.ctg change is 52
+  files at 11:27 and uncommitted.
+- `@memory/...exchange-ledger...` shows in the root plan but is a memory-board
+  item; not touched.
 - hosts: none started by this session. A `cartridge launch claude` host from
   another session runs from `cartridge.ctg/target/debug`; it is not touched.
 

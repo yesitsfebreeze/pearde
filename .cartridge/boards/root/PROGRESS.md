@@ -1,6 +1,86 @@
 # Root board progress
 
-Snapshot: 2026-09-15 11:36, coordinator pass 3 (session cartridge-ctg-22).
+Snapshot: 2026-09-15, coordinator pass 4 (session cartridge-02).
+
+Pass 4 dispatch: three tracks, one worker each.
+- Track A worker 1: host-tests (cartridge.ctg only; the cartridge-ctg-22 hold
+  is stale — that session is not live; takeover messaged to peers).
+- Track A worker 2: pty-router-harness-mcp item (four repos; builds on the
+  uncommitted earlier attempt, 8× `just test mcp`).
+- Track B analyst: `prd refine` on the one-daemon PRD into children
+  (host attach contract, per-cartridge audit with one child per breaking
+  cartridge, composed acceptance test).
+- Track C analyst: proxy ledger chain readiness (f77ed64, yolo-edit
+  distinction, decision memo draft). proxy.ctg cleanliness is monitored;
+  the four live peers were asked who owns the dirty files.
+cartridge.ctg is clean; memory.ctg, live.ctg also clean.
+
+## Ownership answers (pass 4, 4 peers asked)
+
+- branch-server-20, branch-server-d7, cartridge-96: none own the
+  pty/harness/mcp/router edits or the proxy yolo edits; the two
+  branch-servers work only in ~/dev/diw/diw-installer.
+- cartridge-96 IS claude-opus-5, claim owner of
+  @proxy/the-proxy-hands-each-finished-exchange-to-the-memory-ledger
+  (lane f77ed64; collect blocked only by the yolo edits). It also owns the
+  uncommitted memory entry in .cartridge/init.lua and the memory block in
+  .cartridge/config.lua, and the lsp line in init.lua is NOT its — both
+  untouched here. Coordinator has offered: it finishes the collect, or our
+  Track C worker runs prd collect while it stays claim owner.
+- cartridge-38: not yet answered. If it disclaims too, the pty/harness/
+  mcp/router edits and the proxy yolo edits are an abandoned earlier attempt.
+
+## Stale hold released (14:40 local)
+
+cartridge-ctg-22's hold on host-tests (since 09:00Z) was released to `open`
+and re-claimed by cartridge-02. Justification: that session's last transcript
+activity is 12:00 local; all four live peers started after the hold was set
+(cartridge-96 ~11:30, branch-server-20 ~10:35, cartridge-38 and d7 ~13:34)
+and none can be cartridge-ctg-22; three of four answered and disclaimed the
+hold and all dirty-file sets outright. cartridge-38's answer remains queued;
+its answer cannot restore a hold whose holder is provably dead, but its claim
+on the dirty pty/harness/mcp/router and proxy files, if any, is still
+respected — nothing of theirs is committed or reverted.
+
+## Collected pass 4: pty-router-harness-mcp-tests-are-green (15:00)
+
+Receipt root `2b038c2`. pty `a3dd1ab`, router `ad05d7d`, harness `9c144a3`,
+mcp `6f06acd`. The mcp refresh test now prefers `target/debug` (the gates'
+build) over the stale 07:33 release host; 8/8 `just test mcp` runs green,
+13 tests each; pty/router/harness ×3 green; `just check` clean on all four.
+The 07:13–07:41 pending-attempt edits were folded in and committed —
+justified by the timeline (all live peers started after they were written;
+three disclaimed), though cartridge-38's answer was still queued when the
+worker committed. Nothing of a live session was touched.
+
+Newly unblocked: @root/smoke-passes-mcp-and-proxy (dispatched, worker
+track-a-smoke). M1 (@root/the-gates-are-green-at-one-pinned-set-of-shas)
+now waits only on host-tests (claimed by cartridge-02, running) + smoke.
+Note for prd owners: collect verify blocks must be one
+`cd /Users/feb/dev/cartridge && just …` block per run — the prd service
+node's sandbox denies exec of /opt/homebrew/bin/just.
+
+## Track C readiness (analyst report, 14:35)
+
+- f77ed64 verified on lane branch on 3380f34, +140/−1, matches the proxy PRD
+  exactly; all four acceptance boxes pre-checked in the lane; 46 tests green.
+- The proxy yolo edits are deliberate WIP (yolo-config policy bypass +
+  keyless loopback listener), zero overlap with f77ed64's regions — merge is
+  clean once they commit. Collect waits only on their owner's commit.
+- cartridge-96 handed all three Track C items to this run: proxy collect (run
+  by our worker under the handed-over claim), the root ledger item (its
+  uncommitted init.lua memory line and config.lua memory block are the
+  starting point, commit as part of the item), and the decision memo (write
+  directly; the user decided in cartridge-96's session).
+- One wording fix queued: the root ledger item's acceptance names "the recall
+  half of the-surface-is-the-orchestrators-doors' consequences", but the
+  recall clause actually lives in the-profile-is-the-orchestration-service;
+  `prd refine` will correct the acceptance when the item is claimed.
+- Head-up from cartridge-96: some session's lsp tests run
+  `pkill -f "cartridge daemon"`; one killed the ledger-condensing daemon at
+  13:58. Host-tests child must land the per-test isolation that stops this.
+
+Pass 3 snapshot: done 2 (record vocabulary, sessions+gitfs green).
 
 - done this pass: 2 — `the-record-has-one-vocabulary-and-no-shadowed-copies`,
   `sessions-and-gitfs-tests-are-green`

@@ -1,5 +1,5 @@
 ---
-state: open
+state: "open"
 origin: requested
 priority: 90
 repo: "/Users/feb/dev/cartridge/cartridge.ctg"
@@ -113,15 +113,24 @@ proxy identity. It is never duplicated by starting another node.
 ## Analysis first
 
 Split this with `prd refine` into same-board children before any
-implementation:
+implementation. Done 2026-09-15; the children are:
 
-1. **Host attach.** The host attach and auto-start contract (cartridge.ctg),
-   covering socket exclusivity, a second daemon on the same project, reload and
-   restart behaviour for attached instances, and a graceful stop command.
-2. **Per-cartridge audit.** Record, for every composed cartridge, its exclusive
-   resources and which state is per-project versus per-instance. Add one child
-   for each cartridge that breaks under many attached instances.
-3. **The composed test** described in Acceptance.
+1. **Host attach.** `an-instance-attaches-to-the-daemon-and-never-composes-silently`
+   (cartridge.ctg): the attach/auto-start contract, socket exclusivity, second
+   daemon refuses, `unpublish` ownership, one documented stop command.
+2. **Per-cartridge children.** One per cartridge that breaks under many
+   attached instances — memory (writer lock), sessions (store + buffer-id
+   space), mcp (one session/inflight per node), router (OAuth refresh lock),
+   live (spawns its own daemon; interrupted-marking), prd (journal + outbox
+   replay), agent (single-flight guard) — each needs the host-attach child
+   first.
+   The audit's safe-to-share cartridges (memo file lock, fs refs, live-record
+   WAL, docs, policy, harness, tools) and per-instance-keyed pty shells, auth
+   sockets and lsp servers get no child: they need no change for the one
+   daemon, unless the composed test disproves that.
+3. **The composed test.**
+   `the-composed-acceptance-test-proves-one-daemon-one-node-per-cartridge-and-attached-instances`
+   (cartridge.ctg): this PRD's Acceptance made runnable; needs all children.
 
 ## Open questions
 

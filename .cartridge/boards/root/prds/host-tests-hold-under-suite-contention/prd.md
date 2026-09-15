@@ -14,7 +14,7 @@ footprint:
 needs:
 - the-profile-is-the-orchestration-service
 - the-gates-run-from-the-root-justfile
-claim: "cartridge-ctg-22 2026-09-15T09:00:19.848Z"
+claim: "cartridge-02 2026-09-15T12:36:12.794Z"
 ---
 
 # Host tests hold under suite contention

@@ -25,8 +25,8 @@ The host's own check and test gates are green when the whole suite runs at once.
 
 ## Acceptance
 
-- [ ] `just check cartridge` exits 0 (2026-09-15: rustfmt diff in `.cartridge/tests/unit/src/host/socket.rs`).
-- [ ] `just test cartridge` exits 0 on three consecutive runs with the suite in parallel; `$CARTRIDGE_HOME` is set per test, never process-global; the `cli::setup` and `cli::trust` tests pass on macOS CI.
+- [x] `just check cartridge` exits 0 (2026-09-15: rustfmt diff in `.cartridge/tests/unit/src/host/socket.rs`).
+- [x] `just test cartridge` exits 0 on three consecutive runs with the suite in parallel; `$CARTRIDGE_HOME` is set per test, never process-global; the `cli::setup` and `cli::trust` tests pass on macOS CI.
 
 ## Folds
 
@@ -65,3 +65,13 @@ It has not answered on the cross-session channel. Building on that tree or
 beside it would overwrite moving work. The spec01 draft (keep `set_var`, make
 the mutex poison-tolerant) does not meet "never process-global" and is not
 published; it is revised against whatever that session commits.
+
+2026-09-15 pass 5 (cartridge-02/cartridge-6e): collected. Spec01 revised and
+published against HEAD 655beb6; implemented at cartridge.ctg `bceb644` (the
+`test` gate recipe runs `cargo nextest run --workspace`, one test per
+process; `trust_home()` recovers a poisoned lock; the settings test saves,
+clears and restores ambient `CARTRIDGE_YOLO`). Verification: four full
+gate runs green, 166/166 each (three consecutive plus one with ambient
+`CARTRIDGE_YOLO` unset); `just check` clean. Independent review 93/100, no
+blockers (two low findings: theoretical restore-on-panic gap under plain
+in-process runs; macOS-CI box verifiable only in the wave-4 CI item).

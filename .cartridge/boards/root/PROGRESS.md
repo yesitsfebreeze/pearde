@@ -80,6 +80,74 @@ node's sandbox denies exec of /opt/homebrew/bin/just.
   `pkill -f "cartridge daemon"`; one killed the ledger-condensing daemon at
   13:58. Host-tests child must land the per-test isolation that stops this.
 
+## Smoke attempt 1: blocked (15:20)
+
+@root/smoke-passes-mcp-and-proxy cannot be claimed: its footprint (all of
+proxy.ctg) overlaps the live proxy-ledger claim. Full diagnosis in the item's
+Result: fixture symlinks a gone `builtin/` dir (fix in root repo); scratch
+profiles fail trust (per-spawn CARTRIDGE_HOME pattern); router node dies
+under sandbox_apply in scratch compositions (fix in cartridge.ctg, same repo
+as host-tests). Re-dispatch after the proxy collect releases the footprint
+AND host-tests lands (its isolation work touches the same trust/sandbox
+machinery). Footprint likely needs prd refine (add cartridge.ctg).
+
+## Pass 5 (18:5x, coordinator now cartridge-7b, was cartridge-02)
+
+Session restarted as cartridge-7b. State:
+- host-tests: implementation landed (cartridge.ctg `bceb644` — nextest
+  one-test-per-process, poison-recovery trust_home(), ambient
+  CARTRIDGE_YOLO save/clear/restore). Verification: 4 full-suite runs
+  green, 166/166 each (three consecutive + one with ambient yolo
+  unset). `just check` clean. Independent spec review in flight; collect
+  after it passes ≥90 with no blockers.
+- proxy collect: lane rebased onto preservation commit, main at
+  `bd2035c`, 48/48 tests, fmt/clippy clean. `prd collect` refused:
+  fresh uncommitted proxy.ctg edits (18:48–18:49, ask/bail pipe
+  refactor + degraded-tool skip). Owner identified: cartridge-a7, live,
+  waiting on its user's commit decision. Collect blocked on that.
+  First collect refusal (from proxy board) was an alias problem —
+  @memory/… resolves only from root, collect from the root board.
+- cartridge-98 disclaims the edits; holds a queued two-line lsp-
+  contributor change on proxy, sequenced after the collect.
+- Peer roster turned over completely; cartridge-38 and cartridge-96
+  are gone. Their queued answers are moot: host-tests was re-claimed
+  and implemented; the yolo edits were preservation-committed
+  (`7bc7c4f`); a7's fresh edits are owned and untouched.
+
+## Host-tests ready to collect; gated on a7's cartridge.ctg fix (21:10)
+
+- Implementation `bceb644` verified: 4× full gate runs 166/166 green
+  (three consecutive + one without ambient CARTRIDGE_YOLO); `just check`
+  clean; independent review 93/100, no blockers (PASS). All acceptance
+  and spec boxes ticked; Result records the pass.
+- Collect refused while cartridge.ctg carries a7's uncommitted
+  `src/transport/cartridge.rs` blocking-pool listener fix (+11/−4, the
+  memo/harness/proxy deadlock fix, awaiting that session's user) — it
+  is inside the item's whole-repo footprint and would be swept into the
+  collect commit. The proxy-ledger collect is gated the same way on a7's
+  proxy.ctg WIP. Both run as soon as a7's user commits.
+- Incident recorded: coordinator accidentally swept a7's proxy WIP into
+  a fmt commit (6710665), noticed within a minute, reset and restored
+  the tree; a7 confirmed all three files intact, fmt clean, 50 tests
+  green. The stale proxy lane worktree was removed after ancestry check
+  (bd2035c ancestor of main).
+
+## Host-tests: review passed, collect gated (21:0x)
+
+Independent review of spec01: 93/100, PASS, no blockers (two low findings:
+theoretical restore-on-panic gap under plain in-process runs — mitigated by
+nextest killing the process; the macOS-CI acceptance box is verifiable only
+in the wave-4 CI item). All spec + PRD boxes ticked; implementation
+cartridge.ctg `bceb644`; verification 4×166/166 green incl. one run with
+ambient CARTRIDGE_YOLO unset.
+
+Collect is BLOCKED: cartridge-a7's uncommitted deadlock fix
+(src/transport/cartridge.rs, +11/−4, awaiting its user) is inside the
+item's whole-repo footprint. Same session's proxy.ctg WIP blocks the
+proxy-ledger collect. Both fixes weigh as a pair (per a7: 12-parallel
+all-green needed both; host fix alone stops the wedge, 1/12 answered
+without the proxy fix). Both collects run when a7's user commits.
+
 Pass 3 snapshot: done 2 (record vocabulary, sessions+gitfs green).
 
 - done this pass: 2 — `the-record-has-one-vocabulary-and-no-shadowed-copies`,

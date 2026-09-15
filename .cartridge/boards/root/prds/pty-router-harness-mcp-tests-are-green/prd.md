@@ -1,5 +1,5 @@
 ---
-state: "claimed"
+state: "done"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge"
@@ -17,7 +17,7 @@ footprint:
 needs:
 - the-profile-is-the-orchestration-service
 - the-gates-run-from-the-root-justfile
-claim: "cartridge-02 2026-09-15T12:32:35.733Z"
+commit: "2b038c2d240efb01002324dd686ff2f715523ba8"
 ---
 
 # pty, router, harness and mcp tests are green

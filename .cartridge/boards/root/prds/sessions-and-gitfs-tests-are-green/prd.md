@@ -1,5 +1,5 @@
 ---
-state: open
+state: "analyzing"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge"
@@ -15,6 +15,7 @@ footprint:
 needs:
 - the-profile-is-the-orchestration-service
 - the-gates-run-from-the-root-justfile
+claim: "cartridge-ctg-22 2026-09-15T09:06:12.264Z"
 ---
 
 # Sessions and gitfs tests are green

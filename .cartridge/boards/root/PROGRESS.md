@@ -1,13 +1,21 @@
 # Root board progress
 
-Snapshot: 2026-09-15 11:10, coordinator pass 3 (session cartridge-ctg-22).
+Snapshot: 2026-09-15 11:15, coordinator pass 3 (session cartridge-ctg-22).
 
 - done this pass: 1 — `the-record-has-one-vocabulary-and-no-shadowed-copies`
-- open: 16 on root; 1 analyzing, 2 dispatchable but footprint-held,
-  13 waiting on a `needs`
-- claims: `host-tests-hold-under-suite-contention` by cartridge-ctg-22
-  (analyst dispatched, probing `just check cartridge` and `just test cartridge`
-  on cartridge.ctg `f8a2c00`)
+- open: 16 on root; 3 analyzing, 13 waiting on a `needs`
+- claims, all by cartridge-ctg-22:
+  - `host-tests-hold-under-suite-contention` — analyst reported (spec01
+    draft, not published). Red at `f8a2c00`: 3 of 14 main-binary tests, one
+    `host.sock is already served` collision in `cli::setup` that poisons the
+    `trust_home()` mutex for two more. Held again: a live session began editing
+    five host files (`src/host/socket.rs`, `src/host/mod.rs`, `src/cli/args.rs`,
+    `src/cli/client.rs`, `src/transport/typed.rs`) at 11:01, on exactly that
+    collision. Waiting for it to commit; the draft does not yet meet "never
+    process-global" and gets revised against the committed tree.
+  - `pty-router-harness-mcp-tests-are-green` and
+    `sessions-and-gitfs-tests-are-green` — analysts probing the owners with
+    the orphaned 07:13 attempt left in place
 - hosts: none started by this session. A `cartridge launch claude` host from
   another session runs from `cartridge.ctg/target/debug`; it is not touched.
 

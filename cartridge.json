@@ -1,7 +1,7 @@
 {
   "name": "prd",
   "entry": "init.lua",
-  "description": "Native planning service for central PRDs, specs, dependency plans, Gantt and worker orchestration, integrated with memory and runtime events.",
+  "description": "Native planning service for central PRDs, specs, dependency plans, Gantt and worker orchestration, published over runtime events. Memory is optional context: when no provider answers, recall reports unavailable and the PRD record stands alone.",
   "events": {
     "tool.prd": {
       "description": "Plan centralized PRD boards, prepare briefs and perform checked transitions: a tool envelope whose input is {op, board?, args?}.",
@@ -175,9 +175,6 @@
     "tool.prd",
     "source.board",
     "graph.announce"
-  ],
-  "needs": [
-    "memory"
   ],
   "settings": {
     "root": {

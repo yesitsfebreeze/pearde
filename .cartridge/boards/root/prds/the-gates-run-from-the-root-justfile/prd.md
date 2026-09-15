@@ -1,5 +1,5 @@
 ---
-state: open
+state: "specced"
 origin: requested
 priority: 90
 repo: "/Users/feb/dev/cartridge"

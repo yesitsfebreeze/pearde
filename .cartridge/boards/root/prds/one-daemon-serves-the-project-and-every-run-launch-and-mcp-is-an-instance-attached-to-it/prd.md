@@ -4,58 +4,105 @@ origin: requested
 priority: 90
 repo: "/Users/feb/dev/cartridge/cartridge.ctg"
 capability-owner: runtime
+wave: 2
+date: "2026-09-15"
+needs:
+- "@root/host-tests-hold-under-suite-contention"
 ---
 
 # One daemon serves the project and every run, launch and mcp is an instance attached to it
 
 ## Why
 
-The intended shape is one daemon per project with many instances over it.
-What runs today is one full composition per command. Observed on 2026-09-15
-for project socket directory `/tmp/cartridge-501/69a3b8e0c7a1/`:
+The intended shape is one daemon per project running every composed cartridge
+once, with many instances attached to it. This covers all 20 cartridges in
+`.cartridge/init.lua`, not only the host. What ran on 2026-09-15 was one full
+composition per command:
 
 - `cartridge daemon` 74584, `cartridge launch claude` 58681 and
-  `cartridge run memory …` 78693 each had their own socket directory. Each
-  started its own node for every cartridge in `.cartridge/init.lua`.
-- Earlier that day, three `cartridge daemon` processes (68790, 92754, 93456)
-  ran on this project at once.
-- Every host starts its own memory node. Memory holds a single-writer lock on
-  its store (`store::lock::acquire`), so the first host to open it wins. The
-  others fail with `another memory writer holds this data dir`. Attached
-  memory is read-only, so their writes fail, the exchange ledger's `append`
-  included.
-- Each `cartridge run` pays a full composition start of about 15 seconds.
+  `cartridge run memory …` 78693 each had their own socket directory under
+  `/tmp/cartridge-501/69a3b8e0c7a1/`, and each started a node for every
+  cartridge.
+- Up to three `cartridge daemon` processes ran on the project at once, and
+  `cartridge run` costs about 15 seconds of full composition start.
+- Memory takes a single-writer lock (`store::lock::acquire`). The first host
+  wins, and every other host's memory fails with `another memory writer holds
+  this data dir`, including its ledger appends. Attached memory is read-only.
+- Another session's lsp tests run `pkill -f "cartridge daemon"`, which killed
+  the daemon condensing the ledger at 13:58. A shared daemon needs a stop path
+  that tests and tools use instead.
+
+## Findings (cartridge.ctg, 2026-09-15)
+
+Attach-first exists, but every failure quietly starts a full composition:
+
+- `run`, `launch` and `mcp` try `host.sock` first (`src/cli/host.rs:65`,
+  `:89-91`, `:150-163`). `client::served` turns every connect or auth error into
+  `None` (`src/cli/client.rs:44-46`), which starts their own composition
+  (`host.rs:72-74`, `:98-110`; `src/host/run.rs:23-59`).
+- A second `daemon` never checks for a first one. The bind returns
+  `AlreadyRunning`, which it only logs, then keeps running with no nodes
+  (`host.rs:240-269`; `src/transport/typed.rs:902-916`).
+- `unpublish` deletes `host.sock` without checking ownership
+  (`src/host/mod.rs:106-112`, `:567-569`). Any fallback host or losing daemon
+  that exits removes the real daemon's socket path, and every later command
+  starts its own composition. This is the main cause of the many compositions.
+- Nothing in cartridge.ctg starts a daemon. `live.ctg/src/launch.ts:46-52`
+  spawns `--yolo daemon` undetached when `status` fails.
+- Profile edits reload nodes (`src/host/watch.rs:41-52`), but a rebuilt native
+  module does not (`src/node/mod.rs:363-396`).
+- mcp keeps one `session` and one `inflight` map per node
+  (`mcp.ctg/src/service.rs:88-92`), so attached stdio clients would share one
+  session today.
 
 ## Outcome
 
-One project has at most one daemon. `run`, `call`, `launch` and `mcp` find it
-through the project's `host.sock`, start it when none answers, and send their
-events to it. They never start nodes of their own. Stateful cartridges such as
-memory, sessions and router exist once per project, so every instance shares
-one store and one writer.
+One project has at most one daemon, and it runs each composed cartridge
+exactly once. `run`, `call`, `launch` and `mcp` are instances. Each one:
+
+- finds the daemon through the project's `host.sock`, or starts it when none
+  answers;
+- sends its events there;
+- never starts nodes of its own.
+
+Project-scoped state exists once, in the daemon. That covers stores and locks
+(memory, sessions, gitfs, prd, docs), bound ports (router, proxy listener,
+live), credentials (auth) and long-lived children (lsp servers). State that
+belongs to one instance is keyed by that instance inside the shared cartridge:
+a session, a pty shell, an agent run, an MCP stdio client, a launched worker's
+proxy identity. It is never duplicated by starting another node.
+
+## Analysis first
+
+Split this with `prd refine` into same-board children before any
+implementation:
+
+1. **Host attach.** The host attach and auto-start contract (cartridge.ctg),
+   covering socket exclusivity, a second daemon on the same project, reload and
+   restart behaviour for attached instances, and a graceful stop command.
+2. **Per-cartridge audit.** Record, for every composed cartridge, its exclusive
+   resources and which state is per-project versus per-instance. Add one child
+   for each cartridge that breaks under many attached instances.
+3. **The composed test** described in Acceptance.
 
 ## Open questions
 
-- Do per-instance pieces stay in the instance and only services move to the
-  daemon? Examples: `launch`'s agent process and tmux window, `mcp`'s stdio,
-  and the proxy listener that `launch` points an agent at.
-- What happens to instances when the daemon restarts or reloads the profile?
-  Do they reconnect, or end?
-- How does a second daemon started on the same project behave? It could refuse
-  or hand over. Starting a second full composition is not an option.
-- `call` already asks the running host (`client::ask`). Should `run` become
-  `call` with auto-start, or keep its own meaning for a solo host
-  (`verify_one`)?
+- `launch` keeps its agent process and tmux window. Does its proxy listener
+  stay in the daemon, with the agent pointed at the daemon's proxy address?
+- `run` for a solo host (`verify_one`) and a test host: do they stay
+  self-contained, so gates never depend on a developer's live daemon?
 
 ## Acceptance
 
 - [ ] With a daemon running, `cartridge run memory '{"op":"status"}'` answers
       without starting any node process (count `cartridge node` children before
       and after).
-- [ ] Two `cartridge launch` instances and one `cartridge mcp` on the project
-      leave exactly one `cartridge daemon` and one node per composed
-      cartridge.
+- [ ] Two `cartridge launch` instances and one `cartridge mcp` leave exactly
+      one `cartridge daemon` and one node per composed cartridge.
 - [ ] A memory `ingest` from one instance is returned by `query` from another,
-      with no writer-lock error.
-- [ ] With no daemon running, the first instance starts one, and a second
-      instance started concurrently attaches to it instead of starting another.
+      with no writer-lock error; two instances' sessions and pty shells stay
+      separate.
+- [ ] With no daemon running, two instances started concurrently end up
+      sharing one daemon.
+- [ ] Stopping the daemon uses one documented command, and no test kills
+      daemons by process name.

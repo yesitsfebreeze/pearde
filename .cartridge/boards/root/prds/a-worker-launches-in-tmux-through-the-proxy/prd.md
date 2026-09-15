@@ -18,6 +18,7 @@ footprint:
 - ".cartridge/memos/routine/tmux-*.md"
 needs:
 - the-gates-are-green-at-one-pinned-set-of-shas
+- one-daemon-serves-the-project-and-every-run-launch-and-mcp-is-an-instance-attached-to-it
 ---
 
 # A worker launches in tmux through the proxy

@@ -1,5 +1,5 @@
 ---
-state: "specced"
+state: "claimed"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge"
@@ -17,6 +17,7 @@ footprint:
 needs:
 - the-profile-is-the-orchestration-service
 - the-gates-run-from-the-root-justfile
+claim: "cartridge-02 2026-09-15T12:32:35.733Z"
 ---
 
 # pty, router, harness and mcp tests are green
@@ -27,9 +28,38 @@ The four spine owners (2026-09-14: pty 2, router 2, harness 1, mcp 1 red) pass r
 
 ## Acceptance
 
-- [ ] `just test pty`, `just test router`, `just test harness`, `just test mcp` exit 0 on three consecutive runs; the counts observed at the start are in Result.
+- [x] `just test pty`, `just test router`, `just test harness`, `just test mcp` exit 0 on three consecutive runs; the counts observed at the start are in Result.
 
 ## Result
+
+2026-09-15, pass 4 (cartridge-02, implementer). Landed. The blocker cleared:
+cartridge.ctg committed (its 500ms rewire deadline is in the tree), and the
+tests now run the binary the gates build.
+
+Landed: pty `a3dd1ab` (CARTRIDGE_HOME on both spawned hosts, rustfmt reflow,
+`rfind` last-word parse); router `ad05d7d` (hand-off doc path fix); harness
+`9c144a3` (${config.*} needs for optional companions, roster `grant.env`,
+CARTRIDGE_HOME on spawned base and CLI); mcp `6f06acd` (both integration
+tests prefer the debug binary the gates build over the stale 07:33 release
+host, CARTRIDGE_HOME per fixture root, PRD wording in docs). Root pointer
+bump `2b038c2`. The unowned 07:13-09:17 attempt is kept in full, judged
+hunk-by-hunk in spec01.
+
+Verification, 14:34-14:44 CEST, cwd `/Users/feb/dev/cartridge`, against the
+debug host rebuilt from committed cartridge.ctg:
+
+```
+just build runtime               exit 0 (debug host 14:34)
+just test mcp      x8  exit 0 each  13 cargo tests + 1 bun integration
+just test pty      x3  exit 0 each
+just test router   x3  exit 0 each
+just test harness  x3  exit 0 each
+just check pty|router|harness|mcp  exit 0 each
+```
+
+The mcp refresh hang did not reproduce in any of the 8 runs (it hung 1 in 3
+before). This confirms the pass-3 analysis: the hang was the stale 07:33
+release host without the 500ms rewire cap, not the tests' own timing.
 
 2026-09-15, pass 3 (cartridge-ctg-22). Open: three owners green, mcp red on
 an intermittent hang that two attempts did not clear. No claim held.
@@ -87,3 +117,34 @@ runs a host older than the source it is gated with.
 Blocker: the host session's commit in cartridge.ctg. Next: after it lands,
 make the mcp tests take the binary the gates build, rebuild, and rerun
 `just test mcp` eight times.
+
+2026-09-15, pass 4 (cartridge-02, implementer and verifier). The cartridge.ctg
+commit landed (`f8a2c00`, tree clean), so the blocker is gone. Changes:
+kept every hunk of the pending attempt per spec01, and made both mcp
+integration tests take the binary the gates build — `refresh.test.ts` and
+`approval.test.ts` now prefer `target/debug` over `target/release` for both
+the base binary and the mcp module. Rebuilt the debug host with
+`just build runtime` (exit 0).
+
+Committed: pty `a3dd1ab` (CARTRIDGE_HOME on both spawned hosts, rustfmt,
+rfind), router `ad05d7d` (hand-off doc path), harness `9c144a3`
+(`${config.*}` needs, roster `grant.env`), mcp `6f06acd` (debug-first binary
+preference, CARTRIDGE_HOME on both test spawns, README wording). Root
+submodule bump `2b038c2`; other sessions' dirty pointers untouched.
+
+Verification, 14:34-14:44 CEST, cwd `/Users/feb/dev/cartridge`, all with
+the committed trees and the rebuilt debug host:
+
+```
+just test mcp   8/8 runs exit 0 (13 passed each, bun integration test green) —
+                the refresh hang did not reproduce once
+just test pty   x3  exit 0 (24 unit + 11 integration)
+just test router x3  exit 0 (46 unit)
+just test harness x3  exit 0 (39 unit + 4 process + 1 ring + 1 working)
+just check pty|router|harness|mcp  exit 0 each
+```
+
+Acceptance: `just test mcp` 8/8 green (the box asks three consecutive; eight
+ran and all passed, including four consecutive after the other three owners'
+runs). All four checks clean. No test killed daemons by process name; the
+running `cartridge daemon` from another session was left untouched.

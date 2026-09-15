@@ -1,93 +1,109 @@
 # Root board progress
 
-Snapshot: 2026-09-15, coordinator pass 1.
+Snapshot: 2026-09-15, coordinator pass 2.
 
-- open: 19 (16 leaves, 3 milestones); deferred 236; done 483; claimed 0
-- active claims: none recorded through `prd claim`; the coordinator is working
-  `the-gates-run-from-the-root-justfile` in place and has dispatched
-  `the-record-has-one-vocabulary-and-no-shadowed-copies` to a worker
-- lanes: none
+- open: 20 on root (16 leaves, 3 milestones, 1 child added this pass)
+- every box of three items is now observed green; none is collected
+- claims: none through `prd claim`; the coordinator worked the gates item and
+  the new child in place, and dispatched the other two to workers
+- lanes: none. No host is running that this session started.
 
-## In flight
+## What moved this pass
 
-- `@root/the-gates-run-from-the-root-justfile` — coordinator. The gate layer is
-  written: `.cartridge/justfile` now owns `check`, `test`, `smoke`, `verify` and
-  `isolation`, each naming its toolchain first, running its whole target list,
-  printing one line per target and exiting non-zero on any failure. `root` is
-  derived from `source_directory()`, so `just --justfile .cartridge/justfile`
-  resolves the same paths as `just` from the composed root. Observed:
-  `just isolation` and `just --justfile .cartridge/justfile isolation` both pass;
-  `just check` reported 5 of 18 targets failed and exited 1; `just test` 6 of 18
-  and exited 1; `just smoke` 3 of 3 and exited 1; `just verify` 1 of 1 and
-  exited 1. All five gates print one verdict line per target and none stops at
-  its first failure. Spec published (`prd specced`); an independent verifier is
-  rerunning every acceptance line.
-- `@root/the-record-has-one-vocabulary-and-no-shadowed-copies` — worker,
-  probing and specifying.
+`the-gates-run-from-the-root-justfile` — specced, implemented, verified. All
+five gates run from the composed root, name their toolchain first, run the whole
+target list, print one verdict line per target and exit non-zero on any failure.
+`just --justfile .cartridge/justfile check` works. A verifier caught that the
+first version silently dropped the composed repository's own `source-layout`
+test, which used to ride at the tail of an owner loop; it is a `test` target
+named `layout` now, and red for a reason of its own. `verify` honours
+`CARGO_TARGET_DIR` again. Not yet committed: the two justfiles are the only
+uncommitted work this session holds.
 
-## Known blockers
+`the-record-has-one-vocabulary-and-no-shadowed-copies` — all three boxes green.
+Committed as `f6a4668d` in prd.ctg and `bc4f5b5` in the root.
 
-- The root repository cannot pass `prd collect` today. `collect` rejects any
-  working-tree change outside the PRD footprint, and fifteen submodules carry
-  another session's uncommitted work (`agent`, `cartridge`, `docs`, `fs`,
-  `gitfs`, `harness`, `live`, `mcp`, `memo`, `policy`, `proxy`, `pty`, `router`,
-  `sessions`, `tools`), plus untracked `.obsidian/` and `.yolo-test/`.
-- Footprints written as `.cartridge/memos/**` never match: `feet()` resolves the
-  literal path and `collect` compares by prefix, so a `**` segment authorises
-  nothing. Specs must name real paths.
-- `just verify` is red because a host from another session already serves
-  `/tmp/cartridge-501/69a3b8e0c7a1/host.sock`. That host was not started here and
-  is not being stopped.
+`the-profile-is-the-orchestration-service/the-composition-comes-up-without-memory`
+— new, found by starting a host. Specced, fixed, all boxes green. Committed as
+`a2ece4fb` in prd.ctg and `2cb8cb4` in the root.
 
-## Red targets the gates now name
+`the-profile-is-the-orchestration-service` — all four boxes green. Its
+`supersedes:` frontmatter named one of three decisions and now names all three;
+`live.ctg/src/launch.ts` called `spawnSync` without importing it, fixed in
+live.ctg `939dddb`.
 
-These belong to later PRDs, not to the gate work. `check`: runtime, memo,
-memory, policy, live. `test`: the same five plus prd. `smoke`: policy, proxy,
-mcp. `live` is red because of an uncommitted half-edit in
-`live.ctg/src/launch.ts` (`Cannot find name 'spawnSync'`), which is inside the
-footprint of `@root/the-profile-is-the-orchestration-service`.
+## The composition runs again
 
-## Correction from the verifier, and the fix
+It had been down. `prd.ctg/cartridge.json` still declared `needs: ["memory"]`
+after the profile stopped composing memory, so the host refused to start `prd`
+and memo, harness, agent, live, mcp and proxy all stalled behind it. The
+`unknown token` and `already served` errors earlier in the day were a separate
+and smaller thing: a dead runtime had left its socket file behind. Clearing the
+stale file and starting a host exposed the real cause. With the declaration
+gone, `cartridge status` reports 19 cartridges and none failed or waiting,
+`live` answers `running` and harness `ring` answers `disabled`.
 
-The first gate layer silently dropped the composed repository's own
-`source-layout` integration test: the development memo ran it at the tail of
-its own `all` loop, and the gate now hands that memo one owner at a time. It is
-now a `test` target of its own, named `layout`, and it is red on a `cargo
-metadata` lookup for the memory package, which belongs to another PRD. `verify`
-also lost `CARGO_TARGET_DIR`; it resolves the host the way the runtime memo does
-again. Both fixes are inside the footprint, and the spec now guards the layout
-target.
+## The one blocker that needs a human
 
-## The stale daemon is a human's call
+Nothing on this board can be collected. `prd collect` refuses when the composed
+root's working tree holds any change outside the PRD's footprint, and the tree
+holds fourteen submodules carrying other sessions' uncommitted work plus two
+untracked directories:
 
-The peer session working in cartridge.ctg confirmed the diagnosis: pid 92897
-serves this project from a build older than the uncommitted work in the tree,
-its socket no longer writes the token file the command line used to read, and
-its authentication path predates the current one. A `cartridge call` built from
-this tree therefore speaks a protocol that host does not implement, and
-`cartridge run` then finds the address taken. Whoever owns pid 92897 restarting
-it against a fresh build clears both. No session here will stop it. That blocks
-one box on `the-record-has-one-vocabulary-and-no-shadowed-copies`, one on
-`the-profile-is-the-orchestration-service`, and it is why `just verify` is red.
+```
+$ just prd collect the-composition-comes-up-without-memory --board root
+changed path is outside the PRD footprint: .cartridge/justfile
 
-## The record item is worked, verified and committed, and still open
+$ git status --porcelain=v1 -z --untracked-files=all | tr '\0' '\n'
+ M .cartridge/justfile
+ M agent.ctg
+ M cartridge.ctg
+ M docs.ctg
+ M fs.ctg
+ M gitfs.ctg
+ M harness.ctg
+ M justfile
+ M mcp.ctg
+ M memo.ctg
+ M policy.ctg
+ M proxy.ctg
+ M pty.ctg
+ M router.ctg
+ M sessions.ctg
+ M tools.ctg
+?? .obsidian/...
+?? .yolo-test/...
+```
 
-Boxes 1 and 2 are observed green and ticked; box 3 stays open because its named
-command cannot be run against the stale daemon. Committed as `f6a4668d` in
-prd.ctg and `bc4f5b5` in the composed root. Not collected.
+Three ways out, and the choice is the board owner's. The other sessions commit
+their submodule work. Or `.gitignore` gains `.obsidian/` and `.yolo-test/`.
+Or `collect` stops conflating two different things: that the commit touches
+only the footprint, which is right, and that the whole working tree is clean,
+which no repository of eighteen submodules with concurrent sessions will ever
+be. Only the third is a lasting fix, and it is a change to prd.ctg's own
+engine, outside every footprint on this board.
 
-The verifier caught one real defect and it is repaired. The two shadowing
-`type/` leaves were deleted on the premise that the shipped copies are
-byte-identical; they are not. The workspace `type/type.md` carried the memo file
-contract and the qualified-versus-bare wikilink rule, and two grammars cited it
-as authority for exactly that. The contract now lives in
-`grammar/memo-grammar.md` and `record-grammar.md` cites the grammar. The spec
-grew a fifth check that fails if either regresses.
+## Two acceptance boxes are written against a call that does not exist
+
+`cartridge call memo '{"op":"index"}'` cannot work on any host:
+`memo.ctg/src/service.rs:455` requires a native memo request to carry `cwd` and
+answers `trusted memo cwd required` without it. The working call adds
+`"cwd":"/Users/feb/dev/cartridge"`. Both boxes that name it should be reworded.
+
+## Smaller things found and left alone, each outside every footprint
+
+- `.cartridge/justfile` still has a `sweep` recipe; `cartridge sweep` was removed.
+- `.cartridge/config.lua` carries a `memory` block that settles nothing.
+- `memo.ctg`'s docs still tell a reader to run `cartridge --yolo run tui`.
+- Each of twelve cartridges ships its own identical `type/note.md` and
+  `type/type.md`, so `memo index` reports no single declaration for either kind.
+- `just test prd` is red on six pre-existing cases: the board's own `deferred`
+  state missing from an allowed-state list, a migration manifest count, and four
+  statusline cases.
 
 ## Next action
 
-Take the re-run gate evidence, write the gate PRD's Result, commit the two
-justfiles and attempt `prd collect`. Then dispatch
-`@root/the-profile-is-the-orchestration-service`, which overlaps the gate
-footprint on `.cartridge/justfile` and the record footprint on
-`.cartridge/memos`, so it runs only after both land.
+Land the two justfiles once `just test` and `just check` finish at the current
+revision, write the gates Result, and attempt its collect for the record. Then
+stop: every remaining open item is either held by a `needs` that is green but
+uncollectable, or waits on the blocker above.

@@ -1,20 +1,19 @@
 # Root board progress
 
-Snapshot: 2026-09-15 11:28, coordinator pass 3 (session cartridge-ctg-22).
+Snapshot: 2026-09-15 11:36, coordinator pass 3 (session cartridge-ctg-22).
 
-- done this pass: 1 — `the-record-has-one-vocabulary-and-no-shadowed-copies`
-- open: 16 on root; 2 specced, 1 analyzing, 13 waiting on a `needs`
-- `sessions-and-gitfs-tests-are-green` — specced, implemented (gitfs
-  `Capture` test-only cap fields removed; tests hit the real caps), independent
-  verifier running the acceptance.
-- `pty-router-harness-mcp-tests-are-green` — specced; pty, router, harness
-  3/3 green and all four checks clean, mcp refresh test hangs 1 in 3. Two
-  attempts recorded under its Result; blocked on the host session's commit
-  (unbounded `rewire` in `src/host/mod.rs`) and a stale release host the mcp
-  tests prefer. No claim.
-- `host-tests-hold-under-suite-contention` — claimed by cartridge-ctg-22,
-  analyst spec01 draft. Held: the host session's cartridge.ctg change is 52
-  files at 11:27 and uncommitted.
+- done this pass: 2 — `the-record-has-one-vocabulary-and-no-shadowed-copies`,
+  `sessions-and-gitfs-tests-are-green`
+- open: 15 on root; 1 specced (blocked), 1 analyzing (held), 13 waiting on a
+  `needs`
+- `pty-router-harness-mcp-tests-are-green` — pty, router, harness 3/3 green,
+  all four checks clean; mcp refresh test hangs 1 in 3. Two attempts under its
+  Result. Blocked on the host session's commit. No claim.
+- `host-tests-hold-under-suite-contention` — claimed by cartridge-ctg-22;
+  analysis under its Result. Held by the host session's uncommitted
+  cartridge.ctg change (51 files at 11:35), which is on the same failure.
+- Every other root item needs one of those two. The whole board waits on one
+  commit in cartridge.ctg.
 - `@memory/...exchange-ledger...` shows in the root plan but is a memory-board
   item; not touched.
 - hosts: none started by this session. A `cartridge launch claude` host from
@@ -29,6 +28,7 @@ Snapshot: 2026-09-15 11:28, coordinator pass 3 (session cartridge-ctg-22).
 | `collect-checks-the-footprint-not-the-whole-working-tree` | prd.ctg `c0226fe0` |
 | `the-profile-is-the-orchestration-service` | root `6ee17d9` and earlier |
 | `the-record-has-one-vocabulary-and-no-shadowed-copies` | collected at root `714c088`, prd.ctg `e50d14b0` |
+| `sessions-and-gitfs-tests-are-green` | sessions `b896162`, gitfs `f837c81`, root `ee73c53`, prd.ctg `5f33812d` |
 
 ## What changed since pass 2
 
@@ -67,6 +67,6 @@ than starting over.
 
 ## Next action
 
-Take the host-tests analyst report, spec and implement it. Once cartridge-e0
-answers (or stays silent through this item), claim the two remaining suite
-items and continue from the orphaned attempts.
+When cartridge.ctg's host session commits: rebuild the debug host, make the mcp
+tests take the binary the gates build, rerun `just test mcp` eight times; revise
+host-tests spec01 against the committed tree so `CARTRIDGE_HOME` is per test.

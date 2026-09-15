@@ -37,25 +37,31 @@ Deferred with `superseded-by` pointing here:
 
 ## Result
 
-Dispatchable as of 2026-09-15 and not started: its footprint is held.
+2026-09-15 11:35, pass 3 (cartridge-ctg-22). Claimed, analysed, held.
 
-cartridge.ctg carries 30 uncommitted changes belonging to two other sessions,
-neither of them this one.
+The analyst probed at cartridge.ctg `f8a2c00`, cwd `/Users/feb/dev/cartridge`:
 
-One session is running a review-and-fix pass there. It reports its own part
-finished and green: formatting and clippy clean, 152 library tests passing,
-and it confirmed the remaining failures are not its own by checking `891a2c2`
-into a separate worktree, applying only its files and running the suite there,
-where 15 of 15 binaries passed. It is deliberately not committing, because four
-CLI tests are red from the other session's host work and committing now would
-put that red on main.
+```
+just check cartridge  exit 1  cargo fmt --all --check: unformatted debug block in src/host/socket.rs (uncommitted, another session's)
+just test cartridge   exit 1  lib 152/152 ok; main 11/14:
+  cli::setup::tests::setup_links_the_chosen_writes_a_descriptor_the_host_reads_and_lets_a_cartridge_ask
+    panicked at .cartridge/tests/unit/src/cli/setup.rs:180:46: Err(Remote(".../host.sock is already served"))
+  cli::setup::tests::setup_trusts_what_it_chose_not_what_the_tree_holds   PoisonError at setup.rs:7:18
+  cli::trust::tests::an_explicit_path_trusts_a_folder_that_is_neither     PoisonError at setup.rs:7:18
+```
 
-The other session holds the host files and is working those four failures with
-the diagnosis in hand. When it lands, the first session commits immediately.
-Dispatching a worker into those trees would either build on work that is still
-moving or overwrite it, and the acceptance here is about whether the suites are
-green, which cannot be judged at a revision that does not exist yet.
+One real failure: the second `listen()` for the same descriptor in the setup
+test finds the first host's socket still served. The two PoisonErrors follow
+from it: that test panics holding `trust_home()`'s process-wide mutex.
+`CARTRIDGE_HOME` is still process-global in the unit tests
+(`std::env::set_var` at `cli/setup.rs:99,213,243`, `cli/trust.rs:10`,
+`tests/mod.rs:22`), serialised only by that mutex, which is what this item's
+second box forbids. `src/trust/mod.rs:35` reads it from the environment.
 
-This clears the moment the owning session commits. Nothing about this item is
-otherwise blocked: the composition starts, the gates report per target, and
-`just test` already names exactly which of these owners are red.
+Held: from 11:01 another session has been changing the host on exactly this
+failure (`src/host/mod.rs` `unpublish` removes the socket synchronously,
+`rewire` bounded, socket and transport changes), 51 files uncommitted at 11:35.
+It has not answered on the cross-session channel. Building on that tree or
+beside it would overwrite moving work. The spec01 draft (keep `set_var`, make
+the mutex poison-tolerant) does not meet "never process-global" and is not
+published; it is revised against whatever that session commits.

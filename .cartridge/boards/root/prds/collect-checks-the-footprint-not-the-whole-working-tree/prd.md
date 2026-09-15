@@ -1,5 +1,5 @@
 ---
-state: "specced"
+state: "done"
 origin: discovered
 priority: 99
 repo: "/Users/feb/dev/cartridge"
@@ -9,6 +9,7 @@ wave: 1
 date: "2026-09-15"
 footprint:
 - "/Users/feb/dev/cartridge/prd.ctg/src/lifecycle.ts"
+commit: "6ee17d9e8ad35d7525e4fae4cbcb40f9f61988ce"
 ---
 
 # Collect checks the footprint, not the whole working tree

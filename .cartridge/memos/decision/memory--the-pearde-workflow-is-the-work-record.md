@@ -2,7 +2,7 @@
 kind: decision
 date: 2026-09-08
 status: superseded
-description: pearde's board, nine states and pass project onto the record with no new kind and no new state word — a work memo is the PRD, its `## Check` the spec, seven derived bands are the states, `memory plan` is the scan, and [[@prd/routine/run-board.md]] is the pass
+description: superseded — pearde's board, nine states and pass were once projected onto the record with no new kind and no new state word; the PRD under its board's `prds/` is the work record now, `prd scan` the scan, and [[@prd/routine/run-board.md]] the pass
 read_when: "asking where a pearde word lands in memory, running the plan, or adding a state the board seems to lack"
 ---
 
@@ -25,9 +25,9 @@ every read, so a state can never be stale.
 
 | pearde | memory |
 |---|---|
-| the board, `.pearde/prds/` | `memos/work/`, every `kind: work` memo |
-| a PRD, `prd.md`, the request as a contract | a work memo — `## Do` is the contract: what exists when done, never how |
-| a spec, `specs/specNN.md`, boxes an implementer ticks | the memo's `## Spec` (the how) and `## Check` (the boxes and the verify block), both the analyst's; one memo is one spec, and a memo holding more carries `subwork:` children at level 10 (the work-memo note, retired 2026-09-15 with the kind) |
+| the board, `.pearde/prds/` | not ported: the board is still `prds/` under a board directory |
+| a PRD, `prd.md`, the request as a contract | not ported: the PRD is still `prd.md`, and `## Outcome` is its contract — what exists when done, never how |
+| a spec, `specs/specNN.md`, boxes an implementer ticks | not ported: a spec is still `specs/specNN.md` beside its PRD, the analyst's to write and the implementer's to tick |
 | `vision.md`, `terminals:` | [the-vision](../../boards/root/prds/the-vision/prd.md), level 1; its `subwork:` are the terminals |
 | `state: open` | `status: open`, no `claim:` |
 | `analyzing`, `claimed` — a worker holds it | a `claim: <who> <stamp>` line, whatever `status:` says; `analyzing` when the memo has no `## Spec` yet |
@@ -76,8 +76,8 @@ one-line front matter edit here, and the gate on it is the Check.
   writing the Check. The section split is now three authors — asker, analyst,
   hand — and the `spec` band dispatches an analyst instead of a drill.
 
-- A work memo waiting on a question links it in `needs:`; a question memo
-  answered in full stops holding the memo without any edit to the memo.
+- A PRD waiting on a question links it in `needs:`; a question memo answered
+  in full stops holding it without any edit to the PRD.
 - A claim with no lane commit for a day is a stale claim; the pass strikes it
   and says so.
 - `memory plan` is the read and moves nothing; [[@prd/routine/run-board.md]] is the move.

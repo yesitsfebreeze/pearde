@@ -33,7 +33,13 @@ Three deletions and four repairs, all inside the two memo records.
    journal the board replaced (`note/release-{baseline,status,state,checkpoint}.md`).
 2. Delete the two workspace `type/` leaves that shadow memo.ctg's shipped
    declarations — `type/note.md` and `type/type.md`. Every composed cartridge
-   ships byte-identical copies of both, so the kinds stay declared.
+   ships a copy of both, so the kinds stay declared. Those copies are not the
+   same text: the shipped declarations are a sentence each, and the workspace
+   `type/type.md` carried the memo file contract and the wikilink resolution
+   rules that `grammar/memo-grammar.md` and `grammar/record-grammar.md` cite as
+   authority. That prose moves into `grammar/memo-grammar.md`, which is what a
+   grammar is for, and `record-grammar.md` cites the grammar instead of the
+   shipped stub. Deleting the shadow must not delete the contract.
 3. Repoint every unqualified wikilink whose leaf those deletions remove
    (`[[terminal]]`, `[[terminal-control]]`, `[[neovim-control]]`, `[[type]]`,
    `[[note]]`), and the pre-existing dangling `[[drill]]`, at
@@ -51,10 +57,11 @@ below is the same question asked of the composed record on disk.
 
 ## Acceptance
 
-- [ ] No memo named in the PRD's first box is left under `.cartridge/memos/`, and `.cartridge/memos/prd/` is gone.
-- [ ] No leaf under `.cartridge/memos/` has the same `<kind>/<name>.md` path as a memo shipped by a cartridge that `.cartridge/init.lua` composes.
-- [ ] Neither named decision memo contains the phrase `work memo`, and `@prd/routine/root--drill.md` is the only `routine/*drill*` memo in the workspace record or any composed cartridge record.
-- [ ] No unqualified wikilink in either record names a leaf the deletions removed (`terminal`, `terminal-control`, `neovim-control`, `type`, `note`, `drill`).
+- [x] No memo named in the PRD's first box is left under `.cartridge/memos/`, and `.cartridge/memos/prd/` is gone.
+- [x] No leaf under `.cartridge/memos/` has the same `<kind>/<name>.md` path as a memo shipped by a cartridge that `.cartridge/init.lua` composes.
+- [x] Neither named decision memo contains the phrase `work memo`, and `@prd/routine/root--drill.md` is the only `routine/*drill*` memo in the workspace record or any composed cartridge record.
+- [x] No unqualified wikilink in either record names a leaf the deletions removed (`terminal`, `terminal-control`, `neovim-control`, `type`, `note`, `drill`).
+- [x] No memo cites `@memo/type/type.md` as the authority for the memo file contract, and `grammar/memo-grammar.md` states that contract, including how a qualified and a bare wikilink resolve.
 
 ## Verify and Proof
 
@@ -106,6 +113,16 @@ if grep -rnE '\[\[(terminal|terminal-control|neovim-control|type|note|drill)\]\]
      --include='*.md' "$W" /Users/feb/dev/cartridge/prd.ctg/.cartridge/memos; then
   echo "FAIL dangling unqualified wikilink"; exit 1
 fi
+
+# 5. the file contract survived the deletion of the leaf that shadowed it
+if grep -rn '\[\[@memo/type/type\.md\]\] for the file contract' \
+     --include='*.md' "$W" /Users/feb/dev/cartridge/prd.ctg/.cartridge/memos; then
+  echo "FAIL a memo still cites the shipped stub for the file contract"; exit 1
+fi
+for phrase in 'UTF-8 Markdown file with YAML frontmatter' '<kind>/<name>.md' 'qualified reference'; do
+  grep -qF "$phrase" "$W/grammar/memo-grammar.md" || {
+    echo "FAIL memo-grammar.md lost the file contract: $phrase"; exit 1; }
+done
 
 echo "spec01 OK"
 ```

@@ -43,18 +43,28 @@ afterwards.
 
 `the-record-has-one-vocabulary-and-no-shadowed-copies` — specced, every box
 green, committed as `f6a4668d` and `bc4f5b5`. It refuses to collect for the
-right reason now: another session wrote
-`.cartridge/memos/principle/no-redundant-comments.md` inside its footprint
-while this pass ran, and it is uncommitted. It lands when that file's owner
-commits it.
+right reason now: `.cartridge/memos/principle/no-redundant-comments.md`, written
+at 10:47 today, sits untracked inside its footprint. It is not this session's
+and the review-and-fix session has confirmed it is not theirs either; the
+owning session has been asked to commit it. That one file is the whole
+remaining distance.
 
 `host-tests-hold-under-suite-contention`, `pty-router-harness-mcp-tests-are-green`
 and `sessions-and-gitfs-tests-are-green` — dispatchable, not started. Their
 footprints hold 30, 9 and 13 uncommitted changes belonging to other sessions.
-One of those sessions said it is running a review-and-fix pass in cartridge.ctg
-and named the files it holds. Judging whether a suite is green at a revision
-that does not exist yet is not possible, and dispatching into those trees would
-either build on moving work or overwrite it.
+
+cartridge.ctg is held by two of them. One is running a review-and-fix pass and
+reports its own work finished and green: formatting and clippy clean, 152
+library tests passing, and 15 of 15 binaries green when its files alone are
+applied to `891a2c2` in a separate worktree. It is holding its commit on
+purpose, because four CLI tests are red from the other session's host work and
+committing would put that red on main. The other session holds the host files
+and is working those four with the diagnosis in hand. This is a queue, not a
+stall, and it resolves without anyone here intervening.
+
+Judging whether a suite is green at a revision that does not exist yet is not
+possible, and dispatching into those trees would either build on moving work
+or overwrite it.
 
 Everything else waits on those.
 

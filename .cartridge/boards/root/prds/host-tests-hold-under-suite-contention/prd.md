@@ -38,7 +38,19 @@ Deferred with `superseded-by` pointing here:
 
 Dispatchable as of 2026-09-15 and not started: its footprint is held.
 
-cartridge.ctg carry 30 uncommitted changes that belong to another session. Another session said plainly that it is running a review-and-fix pass in cartridge.ctg and named the files it holds, including the socket, host, client and settings modules. Its work is not committed.
+cartridge.ctg carries 30 uncommitted changes belonging to two other sessions,
+neither of them this one.
+
+One session is running a review-and-fix pass there. It reports its own part
+finished and green: formatting and clippy clean, 152 library tests passing,
+and it confirmed the remaining failures are not its own by checking `891a2c2`
+into a separate worktree, applying only its files and running the suite there,
+where 15 of 15 binaries passed. It is deliberately not committing, because four
+CLI tests are red from the other session's host work and committing now would
+put that red on main.
+
+The other session holds the host files and is working those four failures with
+the diagnosis in hand. When it lands, the first session commits immediately.
 Dispatching a worker into those trees would either build on work that is still
 moving or overwrite it, and the acceptance here is about whether the suites are
 green, which cannot be judged at a revision that does not exist yet.

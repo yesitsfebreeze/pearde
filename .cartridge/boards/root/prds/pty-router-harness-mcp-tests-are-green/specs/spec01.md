@@ -24,11 +24,83 @@ written 07:13-09:17 by an unannounced session) in all four trees. No repo was
 reverted, stashed or edited by this probe.
 
 ```sh
-just test pty      # exit 0, 3/3 runs — 24 unit + 11 integration tests, all ok
-just test router   # exit 0, 3/3 runs — 46 unit tests, all ok
-just test harness  # exit 0, 3/3 runs — 39 unit + 4 process + 1 ring + 1 working, all ok
-just test mcp      # exit 0 on 7 of 8 runs; 1 flake (see Root cause)
-just check pty | just check router | just check harness | just check mcp   # exit 0 each
+cd /Users/feb/dev/cartridge
+just test pty
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just test pty
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just test pty
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just test router
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just test router
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just test router
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just test harness
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just test harness
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just test harness
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just test mcp
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just test mcp
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just test mcp
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just check pty
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just check router
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just check harness
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just check mcp
 ```
 
 Every suite is already green with the pending attempt applied as-is; no test

@@ -24,13 +24,15 @@ The workspace record declares every kind once (memo.ctg `type/`), carries no mem
 
 - [x] Deleted: `type/prd.md` and `prd/*` (their two items live on this board as host-tests-hold-under-suite-contention and ci-runs-the-gates-on-macos-and-linux), `routine/terminal.md`, `routine/terminal-control.md`, `routine/neovim-control.md`, `note/release-{baseline,status,state,checkpoint}.md`.
 - [x] `@prd/decision/memory--the-pearde-workflow-is-the-work-record.md` and `@prd/decision/memory--new-work-is-on-the-plan-by-default.md` no longer say a work memo is the PRD; `@prd/routine/root--drill.md` is the only drill routine in any composed record.
-- [ ] `cartridge call memo '{"op":"index"}'` lists no shipped memo shadowed by a workspace leaf; one `routine/hygiene.md` pass runs clean and its evidence line is in Result.
+- [x] `cartridge call memo '{"op":"index"}'` lists no shipped memo shadowed by a workspace leaf; one `routine/hygiene.md` pass runs clean and its evidence line is in Result.
 
 ## Result
 
 2026-09-15, worked by a dispatched analyst/implementer and checked by an
-independent verifier. Two boxes are observed green; the third is open on a
-blocker no session here may clear. Not collected.
+independent verifier. All three boxes are observed green. Not collected:
+`prd collect` refuses while the composed root's working tree carries other
+sessions' uncommitted submodule work, which is recorded on the board as its own
+blocker.
 
 ### Box 1 — deletions: green
 
@@ -74,10 +76,44 @@ The only other `*drill*` memos anywhere are `memory.ctg/.cartridge/memos/system/
 which `.cartridge/init.lua` does not compose, and a `decision` and a `grammar`
 in prd.ctg, neither of which is a routine.
 
-### Box 3 — `memo index` and a hygiene pass: open, blocked
+### Box 3 — `memo index` and a hygiene pass: green, later the same day
 
-The named command cannot be run here. Two attempts, from
-`/Users/feb/dev/cartridge`:
+Cleared once the composition could start. The blocker was never this record:
+`prd.ctg/cartridge.json` still declared `needs: ["memory"]` after the profile
+stopped composing memory, so `prd` failed at load and `memo` stalled behind it.
+That is its own item, `the-composition-comes-up-without-memory`. With it fixed
+and the host started by this session:
+
+```
+$ cartridge call memo '{"op":"index","cwd":"/Users/feb/dev/cartridge"}'
+```
+
+Thirteen kinds. Eleven are declared by exactly one workspace leaf and no
+shipped copy. Two, `note` and `type`, are declared only by shipped memos, 12
+each, which is what deleting the two workspace leaves was for. No kind is
+declared by both a workspace leaf and a shipped memo, so nothing is shadowed:
+
+```
+decision   workspace=1 shipped=0     note       workspace=0 shipped=12
+grammar    workspace=1 shipped=0     type       workspace=0 shipped=12
+persona    workspace=1 shipped=0     principle  workspace=1 shipped=0
+question   workspace=1 shipped=0     resolver   workspace=1 shipped=0
+resource   workspace=1 shipped=0     routine    workspace=1 shipped=0
+scope      workspace=1 shipped=0     system     workspace=1 shipped=0
+usage      workspace=1 shipped=0
+SHADOWED KINDS: none
+```
+
+The box's command does not work as literally written. `memo.ctg/src/service.rs:455`
+requires a native memo request to carry `cwd` and answers `trusted memo cwd
+required` without it, so `cartridge call memo '{"op":"index"}'` fails on any
+host. The working form adds `"cwd":"/Users/feb/dev/cartridge"`. The box should
+be reworded to the call that exists.
+
+### What was tried while the composition was down
+
+Before the composition could start, the named command failed three different
+ways from `/Users/feb/dev/cartridge`, none of them about this record:
 
 ```
 $ ./cartridge.ctg/target/debug/cartridge call memo '{"op":"index"}'
@@ -89,21 +125,15 @@ $ ./cartridge.ctg/target/debug/cartridge run memo '{"op":"index"}'
 EXIT=1
 ```
 
-The verifier, asking a few minutes later, got a third shape from the same
-socket: `adapter i/o: Connection refused (os error 61)`, the socket file still
-present and nothing listening. The cause is settled and is not a defect in this
-record. The host on that socket is pid 92897, started 09:49 from a build older
-than the working tree: its socket no longer writes the token file the command
-line reads, and its authentication path predates the current one, so a client
-built from this tree speaks a protocol it does not implement. `cartridge run`
-then finds the address taken. Whoever owns pid 92897 must restart it against a
-current build. No session here will stop a host it did not start, so this box
-stays open and this PRD is not collected.
+and then `adapter i/o: Connection refused (os error 61)`, the socket file still
+present with nothing listening. Pid 92897 had died and left its socket behind.
+Removing that stale file and starting a fresh host showed the real cause, which
+was the unsatisfied `memory` declaration above, not authentication.
 
-The substance of the first clause was checked on disk instead, over every
+The substance of the first clause was also checked on disk, over every
 cartridge `.cartridge/init.lua` composes, including the two nested `live.ctg`
 entries: zero workspace leaves share a `<kind>/<name>.md` path with a shipped
-memo. That is check 2 of the spec block above, and it passes.
+memo. That is check 2 of the spec block, and it agrees with the index.
 
 The `routine/hygiene.md` pass: probe (d), the duplicate-claim probe, found
 `type/note.md` and `type/type.md` carrying the same claim as `@memo/type/*` and

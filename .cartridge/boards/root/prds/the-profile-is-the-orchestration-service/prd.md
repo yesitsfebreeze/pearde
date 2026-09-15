@@ -29,10 +29,10 @@ The host runs one composition whose surface is the orchestrator's doors (text, M
 
 ## Acceptance
 
-- [ ] `git submodule deinit -f tui.ctg && git rm tui.ctg` is committed; `rg -n 'tui\.ctg|run tui' --glob '!*.git*'` over the composed repo is empty except git history.
-- [ ] `.cartridge/init.lua` has no `tui` and no `memory` entry; `live.ctg` `needs` drops `memory`; harness config `memory = ""`; `cartridge settings` exits 0 with no `undeclared` key.
-- [ ] `just daemon` starts the host and `cartridge call live '{"op":"status"}'` answers `running` with no memory daemon on the machine; harness `ring` reports `disabled`.
-- [ ] One decision memo supersedes `the-agent-surface-preserves-the-visible-shell`, the UI half of `the-terminal-grid-lives-in-pty` and `desktop-is-a-later-client-over-the-same-core`: the surface is the orchestrator's doors; a UI attaches later over the same host.
+- [x] `git submodule deinit -f tui.ctg && git rm tui.ctg` is committed; `rg -n 'tui\.ctg|run tui' --glob '!*.git*'` over the composed repo is empty except git history.
+- [x] `.cartridge/init.lua` has no `tui` and no `memory` entry; `live.ctg` `needs` drops `memory`; harness config `memory = ""`; `cartridge settings` exits 0 with no `undeclared` key.
+- [x] `just daemon` starts the host and `cartridge call live '{"op":"status"}'` answers `running` with no memory daemon on the machine; harness `ring` reports `disabled`.
+- [x] One decision memo supersedes `the-agent-surface-preserves-the-visible-shell`, the UI half of `the-terminal-grid-lives-in-pty` and `desktop-is-a-later-client-over-the-same-core`: the surface is the orchestrator's doors; a UI attaches later over the same host.
 
 ## Folds
 
@@ -54,5 +54,5 @@ Deferred with `superseded-by` pointing here:
 - `.cartridge/init.lua`: `tui` and `memory` entries removed; harness config no longer names `memory`. `live.ctg/cartridge.json` `needs` drops `memory`. `.cartridge/justfile` and `routine/cartridge-runtime.md` drop `tui` and `solo`; `routine/cartridge-development.md` drops `tui` from its owner lists; `live.ctg/src/launch.ts` no longer attaches a terminal.
 - `cartridge trust` re-recorded 48 files; `cartridge settings` exits 0 with no `undeclared` key; `just isolation`: "Isolation passed for 17 cartridges."
 - Decision `the-surface-is-the-orchestrators-doors` written and read back through `memo read`; `the-agent-surface-preserves-the-visible-shell`, `desktop-is-a-later-client-over-the-same-core`, `tui-and-tools-are-cartridges` marked superseded; `note/terminal-design-record.md` deleted.
-- Not yet observed: `just daemon` + `cartridge call live status` on the new profile. Two hosts from earlier sessions still serve this project (pids 59778 debug, 62849 release) and must be stopped by their owner before the new profile can be started.
+- Since observed, later the same day, by the coordinator. Neither of those hosts was serving: 59778 and 92897 were both gone, and 62849 is an old release daemon on a different socket scheme that this binary never looks at. The current project socket held only a stale file left by a dead runtime. Clearing it and starting a host revealed the real blocker, which was not a host at all.
 - `rg -n .tui\\.ctg|run tui.` over the composed repo: only git history and deferred board records mention it.

@@ -1,5 +1,5 @@
 ---
-state: "specced"
+state: "done"
 origin: requested
 priority: 90
 repo: "/Users/feb/dev/cartridge"
@@ -12,6 +12,7 @@ date: "2026-09-15"
 footprint:
 - ".cartridge/memos/**"
 - "prd.ctg/.cartridge/memos/**"
+commit: "714c0889e5caa2e2fadc04301813fa5c797a5faa"
 ---
 
 # The record has one vocabulary and no shadowed copies

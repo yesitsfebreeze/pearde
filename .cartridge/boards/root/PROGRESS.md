@@ -101,9 +101,32 @@ answers `trusted memo cwd required` without it. The working call adds
   state missing from an allowed-state list, a migration manifest count, and four
   statusline cases.
 
+## Where the pass ended
+
+The two justfiles landed as `53b25f2` in the composed root, with the gate
+evidence at that revision: `check` 3 of 18 red, `test` 7 of 19 red, `smoke` 3
+of 3 red, `verify` 1 of 1 red, `isolation` green, each printing one verdict
+line per target and exiting non-zero. `check live` and `check runtime` turned
+green during the session and the gate reported it without being asked.
+
+All three worked items then refused to collect at the same line:
+
+```
+$ just prd collect the-gates-run-from-the-root-justfile --board root
+changed path is outside the PRD footprint: agent.ctg
+$ just prd collect the-record-has-one-vocabulary-and-no-shadowed-copies --board root
+changed path is outside the PRD footprint: agent.ctg
+$ just prd collect the-profile-is-the-orchestration-service/the-composition-comes-up-without-memory --board root
+changed path is outside the PRD footprint: agent.ctg
+```
+
+That is now its own item,
+`@root/collect-checks-the-footprint-not-the-whole-working-tree`, which names the
+one line in `prd.ctg/src/lifecycle.ts` and why narrowing the scan is the only
+lasting fix. It is dispatchable, but it changes the engine that decides whether
+work may land, so it is the board owner's call rather than a coordinator's.
+
 ## Next action
 
-Land the two justfiles once `just test` and `just check` finish at the current
-revision, write the gates Result, and attempt its collect for the record. Then
-stop: every remaining open item is either held by a `needs` that is green but
-uncollectable, or waits on the blocker above.
+The board owner decides on the collect item. Until then nothing lands, and
+four items sit dispatchable with green boxes and committed work.

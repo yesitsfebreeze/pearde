@@ -31,10 +31,10 @@ every target, fail if any target failed.
 
 ## Acceptance
 
-- [ ] `just tools` from the composed root names the four tools and exits 0, and with those tools off `PATH` it reports them as missing and exits 2.
-- [ ] `just isolation` prints one `isolation composition pass` line and exits 0, and `just --justfile .cartridge/justfile isolation` behaves identically.
-- [ ] A target that cannot run prints a `FAIL` verdict line for that target and makes the gate exit non-zero.
-- [ ] The composed repository's `source-layout` test is a target of the `test` gate and gets its own verdict line.
+- [x] `just tools` from the composed root names the four tools and exits 0, and with those tools off `PATH` it reports them as missing and exits 2.
+- [x] `just isolation` prints one `isolation composition pass` line and exits 0, and `just --justfile .cartridge/justfile isolation` behaves identically.
+- [x] A target that cannot run prints a `FAIL` verdict line for that target and makes the gate exit non-zero.
+- [x] The composed repository's `source-layout` test is a target of the `test` gate and gets its own verdict line.
 
 ## Verify and Proof
 

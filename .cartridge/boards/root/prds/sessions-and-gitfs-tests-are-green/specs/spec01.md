@@ -90,26 +90,65 @@ matched to the hunk that fixes them.
 
 ## Acceptance
 
-- [ ] `just test sessions` exits 0 on three consecutive runs from
+- [x] `just test sessions` exits 0 on three consecutive runs from
       `/Users/feb/dev/cartridge`, all 92 tests passing each run.
-- [ ] `just test gitfs` exits 0 on three consecutive runs from
+- [x] `just test gitfs` exits 0 on three consecutive runs from
       `/Users/feb/dev/cartridge`, all 48 tests (+0 in `gitfs-hook`) passing
       each run.
-- [ ] `just check sessions` exits 0.
-- [ ] `just check gitfs` exits 0.
-- [ ] `grep -n 'kept' gitfs.ctg/src/provenance.rs` prints nothing: the
+- [x] `just check sessions` exits 0.
+- [x] `just check gitfs` exits 0.
+- [x] `grep -n 'kept' gitfs.ctg/src/provenance.rs` prints nothing: the
       caps under test are the ones production uses.
-- [ ] No source, cartridge.json, or test file outside `sessions.ctg` and
+- [x] No source, cartridge.json, or test file outside `sessions.ctg` and
       `gitfs.ctg` is touched.
 
 ## Verify and Proof
 
+Each run is its own block: `prd collect` gives every block 120 seconds.
+
 ```sh
 cd /Users/feb/dev/cartridge
-for i in 1 2 3; do just test sessions; done
-for i in 1 2 3; do just test gitfs; done
+just test sessions
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just test sessions
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just test sessions
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just test gitfs
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just test gitfs
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+just test gitfs
+```
+
+```sh
+cd /Users/feb/dev/cartridge
 just check sessions
+```
+
+```sh
+cd /Users/feb/dev/cartridge
 just check gitfs
+```
+
+```sh
+cd /Users/feb/dev/cartridge
+! grep -n 'kept' gitfs.ctg/src/provenance.rs
 ```
 
 Already run once each during specification (2026-09-15, this revision,

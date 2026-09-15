@@ -11,11 +11,11 @@ footprint:
 
 ## Acceptance
 
-- [ ] `just test pty` exits 0 on three consecutive runs from `/Users/feb/dev/cartridge`.
-- [ ] `just test router` exits 0 on three consecutive runs from `/Users/feb/dev/cartridge`.
-- [ ] `just test harness` exits 0 on three consecutive runs from `/Users/feb/dev/cartridge`.
-- [ ] `just test mcp` exits 0 on three consecutive runs from `/Users/feb/dev/cartridge`.
-- [ ] `just check pty`, `just check router`, `just check harness`, `just check mcp` each exit 0.
+- [x] `just test pty` exits 0 on three consecutive runs from `/Users/feb/dev/cartridge`.
+- [x] `just test router` exits 0 on three consecutive runs from `/Users/feb/dev/cartridge`.
+- [x] `just test harness` exits 0 on three consecutive runs from `/Users/feb/dev/cartridge`.
+- [x] `just test mcp` exits 0 on three consecutive runs from `/Users/feb/dev/cartridge`.
+- [x] `just check pty`, `just check router`, `just check harness`, `just check mcp` each exit 0.
 
 ## Verify and Proof
 

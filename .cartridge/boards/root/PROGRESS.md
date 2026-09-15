@@ -47,6 +47,29 @@ mcp. `live` is red because of an uncommitted half-edit in
 `live.ctg/src/launch.ts` (`Cannot find name 'spawnSync'`), which is inside the
 footprint of `@root/the-profile-is-the-orchestration-service`.
 
+## Correction from the verifier, and the fix
+
+The first gate layer silently dropped the composed repository's own
+`source-layout` integration test: the development memo ran it at the tail of
+its own `all` loop, and the gate now hands that memo one owner at a time. It is
+now a `test` target of its own, named `layout`, and it is red on a `cargo
+metadata` lookup for the memory package, which belongs to another PRD. `verify`
+also lost `CARGO_TARGET_DIR`; it resolves the host the way the runtime memo does
+again. Both fixes are inside the footprint, and the spec now guards the layout
+target.
+
+## The stale daemon is a human's call
+
+The peer session working in cartridge.ctg confirmed the diagnosis: pid 92897
+serves this project from a build older than the uncommitted work in the tree,
+its socket no longer writes the token file the command line used to read, and
+its authentication path predates the current one. A `cartridge call` built from
+this tree therefore speaks a protocol that host does not implement, and
+`cartridge run` then finds the address taken. Whoever owns pid 92897 restarting
+it against a fresh build clears both. No session here will stop it. That blocks
+one box on `the-record-has-one-vocabulary-and-no-shadowed-copies`, one on
+`the-profile-is-the-orchestration-service`, and it is why `just verify` is red.
+
 ## Next action
 
 Take the verifier's report, tick the gate PRD's boxes, write Result, commit the

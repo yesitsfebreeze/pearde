@@ -21,7 +21,11 @@ every target, fail if any target failed.
   and exits 1 when any target failed.
 - `_one` dispatches one target to the owner that implements it: the development
   memo for `check` and `test`, the smoke memo for `smoke`, the isolation memo
-  for `isolation`, the built host for `verify`.
+  for `isolation`, the built host for `verify`. The composed repository's own
+  `source-layout` test is a `test` target named `layout`, because the gate owns
+  the target list and the development memo only ever sees one owner at a time.
+  `verify` resolves the host through `CARGO_TARGET_DIR` exactly as the runtime
+  memo does.
 - The root justfile keeps only `prd` and the import; `isolation` moves into
   `.cartridge/justfile` with the other gates.
 
@@ -30,6 +34,7 @@ every target, fail if any target failed.
 - [ ] `just tools` from the composed root names the four tools and exits 0, and with those tools off `PATH` it reports them as missing and exits 2.
 - [ ] `just isolation` prints one `isolation composition pass` line and exits 0, and `just --justfile .cartridge/justfile isolation` behaves identically.
 - [ ] A target that cannot run prints a `FAIL` verdict line for that target and makes the gate exit non-zero.
+- [ ] The composed repository's `source-layout` test is a target of the `test` gate and gets its own verdict line.
 
 ## Verify and Proof
 
@@ -55,6 +60,11 @@ just --justfile .cartridge/justfile isolation | grep -Eq '^isolation +compositio
 just check nosuch > "$work/check.out" 2>&1 && {
   echo 'a failing target must fail the gate' >&2; exit 1; }
 grep -Eq '^check +nosuch +FAIL$' "$work/check.out"
+
+# The composed repository's own layout test is a target, not a tail of one
+# owner's run. Its verdict line must appear whichever way the test goes.
+just test layout > "$work/layout.out" 2>&1 || true
+grep -Eq '^test +layout +(pass|FAIL)$' "$work/layout.out"
 
 echo 'gate contract holds'
 ```

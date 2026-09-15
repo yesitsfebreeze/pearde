@@ -1,5 +1,5 @@
 ---
-state: "specced"
+state: "done"
 origin: requested
 priority: 90
 repo: "/Users/feb/dev/cartridge"
@@ -15,6 +15,7 @@ footprint:
 - ".cartridge/tools/memo-run"
 - ".cartridge/memos/routine/cartridge-development.md"
 - ".cartridge/memos/routine/cartridge-smoke.md"
+commit: "585a7677d6714a9c15d6fe92a2e6db13538c5ae4"
 ---
 
 # The gates run from the root justfile

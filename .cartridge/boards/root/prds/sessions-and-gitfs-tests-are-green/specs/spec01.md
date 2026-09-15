@@ -148,7 +148,7 @@ just check gitfs
 
 ```sh
 cd /Users/feb/dev/cartridge
-! grep -n 'kept' gitfs.ctg/src/provenance.rs
+test -z "$(grep -n 'kept' gitfs.ctg/src/provenance.rs || true)"
 ```
 
 Already run once each during specification (2026-09-15, this revision,

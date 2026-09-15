@@ -69,7 +69,15 @@ the 60s `startup_timeout_secs`/`event_timeout_ms`. The likely cause is
 host-side and already in another session's uncommitted cartridge.ctg work:
 `src/host/mod.rs` `rewire` awaited each node's `directory` reply with no
 deadline while holding the `op` lock, so one stuck reply keeps `start_ready`
-from restarting alpha; the working tree caps it at 500ms. Unproven.
+from restarting alpha; the working tree caps it at 500ms, the 07:33 release
+host the failing run used does not. Unproven. The other unverified
+candidates are also host-side: the watcher losing a batch
+(`src/host/watch.rs:36-61`), or every tokio worker in the mcp node blocked so
+the retry sleep never wakes. The `Operation not permitted` WARN is not a
+second event: it is alpha's own stderr, printed on every node start because
+the sandbox hides `.cartridge/config.lua`, and it appears in passing runs too.
+An instrumented copy that samples the host and nodes on timeout is in the
+coordinator's scratchpad (`hang/refresh.test.ts`) for the next attempt.
 
 Contributing, in this footprint: `refresh.test.ts:8` and `approval.test.ts`
 prefer `cartridge.ctg/target/release/cartridge` (built 07:33) over

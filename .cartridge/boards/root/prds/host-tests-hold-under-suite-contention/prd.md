@@ -36,4 +36,13 @@ Deferred with `superseded-by` pointing here:
 
 ## Result
 
-Not started.
+Dispatchable as of 2026-09-15 and not started: its footprint is held.
+
+cartridge.ctg carry 30 uncommitted changes that belong to another session. Another session said plainly that it is running a review-and-fix pass in cartridge.ctg and named the files it holds, including the socket, host, client and settings modules. Its work is not committed.
+Dispatching a worker into those trees would either build on work that is still
+moving or overwrite it, and the acceptance here is about whether the suites are
+green, which cannot be judged at a revision that does not exist yet.
+
+This clears the moment the owning session commits. Nothing about this item is
+otherwise blocked: the composition starts, the gates report per target, and
+`just test` already names exactly which of these owners are red.

@@ -31,4 +31,13 @@ The four spine owners (2026-09-14: pty 2, router 2, harness 1, mcp 1 red) pass r
 
 ## Result
 
-Not started.
+Dispatchable as of 2026-09-15 and not started: its footprint is held.
+
+pty.ctg, router.ctg, harness.ctg and mcp.ctg carry 9 uncommitted changes that belong to another session. The owner of these changes is not this session and did not announce itself.
+Dispatching a worker into those trees would either build on work that is still
+moving or overwrite it, and the acceptance here is about whether the suites are
+green, which cannot be judged at a revision that does not exist yet.
+
+This clears the moment the owning session commits. Nothing about this item is
+otherwise blocked: the composition starts, the gates report per target, and
+`just test` already names exactly which of these owners are red.

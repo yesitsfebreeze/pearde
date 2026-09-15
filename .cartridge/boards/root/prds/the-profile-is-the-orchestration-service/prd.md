@@ -1,5 +1,5 @@
 ---
-state: open
+state: "done"
 origin: requested
 priority: 90
 repo: "/Users/feb/dev/cartridge"
@@ -19,6 +19,7 @@ footprint:
 - "live.ctg/src/launch.ts"
 - "live.ctg/cartridge.json"
 - ".cartridge/memos/decision/"
+commit: "6ee17d9e8ad35d7525e4fae4cbcb40f9f61988ce"
 ---
 
 # The profile is the orchestration service

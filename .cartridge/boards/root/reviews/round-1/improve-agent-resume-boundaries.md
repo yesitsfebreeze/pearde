@@ -5,8 +5,8 @@ status: open
 priority: P1
 size: L
 needs:
-  - "[[@prd/work/root--improve-sessions-recovery.md]]"
-  - "[[@prd/work/root--improve-tool-result-contract.md]]"
+  - "[improve-sessions-recovery](../../../sessions/prds/improve-sessions-recovery/prd.md)"
+  - "[improve-tool-result-contract](../../prds/improve-tool-result-contract/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["resume interrupted runs without replaying uncertain mutations", "implementing agent cartridge improvements"]
@@ -23,7 +23,7 @@ After restart an agent identifies the last durable boundary and either resumes s
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--agents-query-the-tool-graph.md]], [[@prd/work/root--the-agent-spawns-wakes-and-owns-sub-agents.md]].
+Related existing work (context/coordination, not automatically a hard dependency): [agents-query-the-tool-graph](../../prds/agents-query-the-tool-graph/prd.md), [the-agent-spawns-wakes-and-owns-sub-agents](../../../agent/prds/the-agent-spawns-wakes-and-owns-sub-agents/prd.md).
 
 ## Footprint
 
@@ -80,6 +80,6 @@ Preserve existing checkpoints and transcripts. Resume only operations whose comp
 
 Priority P1; scope size L (S = one local change; M = a bounded cross-file
 contract; L = investigation plus likely smaller slices, not a time promise).
-Ready after [[@prd/work/root--improve-sessions-recovery.md]], [[@prd/work/root--improve-tool-result-contract.md]] are done with evidence.
+Ready after [improve-sessions-recovery](../../../sessions/prds/improve-sessions-recovery/prd.md), [improve-tool-result-contract](../../prds/improve-tool-result-contract/prd.md) are done with evidence.
 Leave status open until a worker actually starts; then set owner and active.
 Record Result and mark done only after the checks pass.

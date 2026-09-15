@@ -1,6 +1,8 @@
 ---
 repo: /Users/feb/dev/cartridge/harness.ctg
-state: "claimed"
+state: deferred
+deferred-from: claimed
+deferred-on: "2026-09-15"
 origin: requested
 priority: 95
 blast-radius: mid
@@ -10,7 +12,6 @@ capability-owner: harness
 canonical-scope: concise-writer-cartridge
 review-round: 5
 review-status: passed
-claim: "codex 2026-09-13T14:08:02.906Z"
 ---
 
 # One writer cartridge produces short, precise text

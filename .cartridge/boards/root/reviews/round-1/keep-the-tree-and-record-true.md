@@ -12,7 +12,7 @@ The vision names a product; the tree and the record decay under it, and the
 work that stops the decay — [[hygiene]], [[quality]], [[legible]] and
 [[@prd/routine/root--self-improve.md]] findings — advances no single terminal. Off the axis it is
 drawn grey and never dispatched first; on a product terminal it lies about
-what that terminal needs. So it hangs here, a terminal of [[@prd/work/root--the-vision.md]] that
+what that terminal needs. So it hangs here, a terminal of [the-vision](../../prds/the-vision/prd.md) that
 is never done and whose Check is the gates ([[@prd/routine/root--add-work.md]] step 4).
 
 ## Do

@@ -5,7 +5,7 @@ status: open
 level: 10
 estimate: 3h
 needs:
-  - "[[@prd/work/root--one-search-covers-the-record-and-memory.md]]"
+  - "[one-search-covers-the-record-and-memory](../../../landscape/prds/one-search-covers-the-record-and-memory/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["deciding whether a tool belongs on the surface, or trimming what the agent is handed"]
@@ -27,8 +27,8 @@ the landscape (`index`, whose kind histogram the graph carries as node counts,
 and `coverage`, whose undeclared-file report is a query over the same rows).
 
 Scope is the enabled surface and the memo op set. The tool envelope itself, and
-serving these tools outside zirkle, are [[@prd/work/root--every-tool-is-one-command.md]] and
-[[@prd/work/root--zirkles-tools-serve-any-agent.md]].
+serving these tools outside zirkle, are [every-tool-is-one-command](../../prds/every-tool-is-one-command/prd.md) and
+[zirkles-tools-serve-any-agent](../../prds/zirkles-tools-serve-any-agent/prd.md).
 
 ## Check
 
@@ -63,6 +63,6 @@ both rendered into the prompt. A file-reading tool adds a second way to do what
 the shell does, and every added key is one more thing the model has to choose
 between.
 
-Order: this needs [[@prd/work/root--one-search-covers-the-record-and-memory.md]] first, because
+Order: this needs [one-search-covers-the-record-and-memory](../../../landscape/prds/one-search-covers-the-record-and-memory/prd.md) first, because
 `index` and `coverage` may only go once the query that replaces them answers
 across both stores. Deleting `builtin/fs` needs nothing and can land on its own.

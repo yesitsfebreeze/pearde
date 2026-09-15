@@ -42,7 +42,7 @@ both rather than becoming a third copy.
 
 ## Approach
 
-Observed 2026-09-12. [[@prd/work/root--the-memory-bank-is-wired-into-the-surface.md]] is done, so
+Observed 2026-09-12. [the-memory-bank-is-wired-into-the-surface](../../prds/the-memory-bank-is-wired-into-the-surface/prd.md) is done, so
 `memory` and `memory-tool` are composed and `tool.memory` exists — but the
 landscape graphs cartridges, tools and memos only
 (`builtin/landscape/src/surface.rs`), so the two stores are two separate
@@ -61,5 +61,5 @@ graph needs a bound (the record's scan is already capped — see
 a query. Sits under the same ranking the resolver's observation journal feeds, so
 a memory fact that gets used outranks one that never does.
 
-Related: [[@prd/work/root--agents-query-the-tool-graph.md]] is the caller's side of this (active,
+Related: [agents-query-the-tool-graph](../../prds/agents-query-the-tool-graph/prd.md) is the caller's side of this (active,
 owned elsewhere) — this memo is what it has to search.

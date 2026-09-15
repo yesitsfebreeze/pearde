@@ -5,8 +5,8 @@ status: open
 level: 10
 estimate: 2d
 needs:
-  - "[[@prd/work/root--a-cartridge-declares-what-it-needs.md]]"
-  - "[[@prd/work/root--the-profile-is-the-root-composer.md]]"
+  - "[a-cartridge-declares-what-it-needs](../../prds/a-cartridge-declares-what-it-needs/prd.md)"
+  - "[the-profile-is-the-root-composer](../../../runtime/prds/the-profile-is-the-root-composer/prd.md)"
 ---
 
 # a-key-starts-its-provider-on-demand
@@ -59,7 +59,7 @@ exact place where activation belongs instead.
 Two changes, in this order.
 
 First, declarations without execution. With `provide` and `needs` in the manifest
-from [[@prd/work/root--a-cartridge-declares-what-it-needs.md]], the composer builds its graph from
+from [a-cartridge-declares-what-it-needs](../../prds/a-cartridge-declares-what-it-needs/prd.md), the composer builds its graph from
 the folder scan alone. `hello` stops being a boot step and becomes what verifies
 a cartridge at apply.
 

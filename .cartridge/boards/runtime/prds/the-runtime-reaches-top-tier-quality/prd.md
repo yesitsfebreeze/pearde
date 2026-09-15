@@ -1,5 +1,7 @@
 ---
-state: open
+state: deferred
+deferred-from: open
+deferred-on: "2026-09-15"
 origin: requested
 priority: 70
 repo: "/Users/feb/dev/cartridge/cartridge.ctg"

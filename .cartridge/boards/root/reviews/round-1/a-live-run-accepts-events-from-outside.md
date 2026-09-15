@@ -5,7 +5,7 @@ status: open
 level: 11
 estimate: 2d
 needs:
-  - "[[@prd/work/root--an-event-declares-its-type.md]]"
+  - "[an-event-declares-its-type](../../../agent/prds/an-event-declares-its-type/prd.md)"
 ---
 
 # a-live-run-accepts-events-from-outside

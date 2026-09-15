@@ -20,7 +20,7 @@ Every shell readback states the shell executable/dialect, cwd, phase and whether
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--sub-agents-share-the-terminal.md]], [[@prd/work/root--pty-encodes-input.md]].
+Related existing work (context/coordination, not automatically a hard dependency): [sub-agents-share-the-terminal](../../../agent/prds/sub-agents-share-the-terminal/prd.md), [pty-encodes-input](../../prds/pty-encodes-input/prd.md).
 
 ## Footprint
 

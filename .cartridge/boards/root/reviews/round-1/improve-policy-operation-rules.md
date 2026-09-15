@@ -20,7 +20,7 @@ A profile can allow gitfs read/list while retaining ask/deny for writes, and can
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--headless-policy-approval-channel.md]].
+Related existing work (context/coordination, not automatically a hard dependency): [headless-policy-approval-channel](../../prds/headless-policy-approval-channel/prd.md).
 
 ## Footprint
 

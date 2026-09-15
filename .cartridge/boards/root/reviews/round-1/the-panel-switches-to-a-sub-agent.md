@@ -3,8 +3,8 @@ kind: work
 description: "The full agent view lists live sub-agents and switches transcript and composer to one; a working sub-agent is visible in the gutter"
 status: open
 needs:
-  - "[[@prd/work/root--the-sidebar-slides-over-the-shell.md]]"
-  - "[[@prd/work/root--the-agent-spawns-wakes-and-owns-sub-agents.md]]"
+  - "[the-sidebar-slides-over-the-shell](../../prds/the-sidebar-slides-over-the-shell/prd.md)"
+  - "[the-agent-spawns-wakes-and-owns-sub-agents](../../../agent/prds/the-agent-spawns-wakes-and-owns-sub-agents/prd.md)"
 ---
 
 # the-panel-switches-to-a-sub-agent

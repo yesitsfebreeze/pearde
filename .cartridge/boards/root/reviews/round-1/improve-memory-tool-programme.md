@@ -3,9 +3,9 @@ kind: work
 description: "Deliver the three Memory tool adapter improvements with explicit risk coverage"
 status: open
 subwork:
-  - "[[@prd/work/root--improve-memory-tool-get.md]]"
-  - "[[@prd/work/root--improve-memory-tool-correct.md]]"
-  - "[[@prd/work/root--improve-memory-tool-errors.md]]"
+  - "[improve-memory-tool-get](../../../memory/prds/improve-memory-tool-get/prd.md)"
+  - "[improve-memory-tool-correct](../../../memory/prds/improve-memory-tool-correct/prd.md)"
+  - "[improve-memory-tool-errors](../../../memory/prds/improve-memory-tool-errors/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["planning memory-tool improvements", "reviewing memory-tool cartridge readiness"]
@@ -24,9 +24,9 @@ children; it is not a fourth implementation task. Evidence is in
 
 | Assessment improvement | Implementation owner |
 | --- | --- |
-| 1. Retrieve a recalled fact by stable ID | [[@prd/work/root--improve-memory-tool-get.md]] |
-| 2. Correct or forget one identified fact through the tool boundary | [[@prd/work/root--improve-memory-tool-correct.md]] |
-| 3. Return actionable memory failures and enforce the tool schema | [[@prd/work/root--improve-memory-tool-errors.md]] |
+| 1. Retrieve a recalled fact by stable ID | [improve-memory-tool-get](../../../memory/prds/improve-memory-tool-get/prd.md) |
+| 2. Correct or forget one identified fact through the tool boundary | [improve-memory-tool-correct](../../../memory/prds/improve-memory-tool-correct/prd.md) |
+| 3. Return actionable memory failures and enforce the tool schema | [improve-memory-tool-errors](../../../memory/prds/improve-memory-tool-errors/prd.md) |
 
 ## Downside coverage
 

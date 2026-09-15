@@ -1,6 +1,8 @@
 ---
 repo: /Users/feb/dev/cartridge/cartridge.ctg
-state: open
+state: deferred
+deferred-from: open
+deferred-on: "2026-09-15"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -10,6 +12,9 @@ work-kind: leaf
 review-round: 3
 review-status: superseded-recommend-retire
 canonical-scope: disk-adapters-detach-without-forgetting-memory
+needs:
+- "@memory/memory-daemon-boots-a-root-context"
+- "@runtime/plugins-from-memory-toml"
 ---
 
 # disk-adapters-detach-without-forgetting-memory
@@ -32,3 +37,22 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `disk-adapters-detach-without-forgetting-memory`; maximum five rounds.
+
+## From the retired work memo
+
+Folded 2026-09-15 from `@prd/work/memory--disk-adapters-detach-without-forgetting-memory.md` (status open, estimate 1d). The PRD state above is authoritative.
+
+> optional file and memo adapters can stop and restart while direct ingest and durable recall keep working
+
+### Do
+
+File watching and memo/frontmatter reading are optional mounted adapters into
+the existing ingest boundary. With them disabled, direct content ingest and
+recall still operate; re-enabling uses the existing loader rather than a new
+configuration mechanism. Durable decisions and facts survive adapter reload,
+while explicitly retractable projections follow their owned source contract.
+
+This proves [[plugin-disposal-is-not-durable-memory-retraction]] under
+[memory-boots-as-a-plugin-tree](../../../memory/prds/memory-boots-as-a-plugin-tree/prd.md). Store shutdown respects dependents and
+preserves persistence; no real shared store is rekeyed or repaired by this
+acceptance work.

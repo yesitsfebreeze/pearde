@@ -43,7 +43,7 @@ over `kind: work` parts.**
   twentieth. Eight hours of work is one day of axis.
 - **Unestimated parts take the board's average**, as pearde's do; a parent
   with a live child weighs nothing and folds when they are done.
-- **The vision is the one work part at the lowest level** — [[@prd/work/memory--the-vision.md]],
+- **The vision is the one work part at the lowest level** — [the-vision](../../boards/root/prds/the-vision/prd.md),
   level 1, its `subwork:` the terminals — and the axis is pearde's: a part's
   depth is the longest chain from it up to the vision, and a part no chain
   carries there is off the axis. The plan's header reads the vision's

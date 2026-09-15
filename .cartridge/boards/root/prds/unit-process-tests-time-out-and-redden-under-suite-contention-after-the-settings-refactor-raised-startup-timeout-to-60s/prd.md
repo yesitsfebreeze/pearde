@@ -1,5 +1,8 @@
 ---
-state: open
+state: deferred
+deferred-from: open
+deferred-on: "2026-09-15"
+superseded-by: "@root/host-tests-hold-under-suite-contention"
 origin: requested
 priority: 60
 repo: "/Users/feb/dev/cartridge"

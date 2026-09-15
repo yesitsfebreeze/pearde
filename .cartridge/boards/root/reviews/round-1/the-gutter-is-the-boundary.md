@@ -3,8 +3,8 @@ kind: work
 description: "Command indicators coexist with the latest-tool footer and composer/transcript access"
 status: open
 subwork:
-  - "[[@prd/work/root--the-gutter-shows-both-sides.md]]"
-  - "[[@prd/work/root--the-sidebar-slides-over-the-shell.md]]"
+  - "[the-gutter-shows-both-sides](../../../ui/prds/the-gutter-shows-both-sides/prd.md)"
+  - "[the-sidebar-slides-over-the-shell](../../prds/the-sidebar-slides-over-the-shell/prd.md)"
 ---
 
 # the-gutter-is-the-boundary
@@ -16,13 +16,13 @@ preserving [[the-agent-surface-preserves-the-visible-shell]]: latest-tool footer
 no empty-tool placeholder, main/dynamic status and Ctrl+G/Ctrl+F access.
 The gutter is an additional command boundary, not the whole application surface.
 
-The grid belongs to [[@prd/work/root--the-terminal-is-drawn-from-pty.md]]. Agent text stays outside
+The grid belongs to [the-terminal-is-drawn-from-pty](../../prds/the-terminal-is-drawn-from-pty/prd.md). Agent text stays outside
 its stream. Composer/transcript overlays preserve nvim's size and cursor.
 
 ## Check
 
-- [ ] [[@prd/work/root--the-gutter-shows-both-sides.md]] is done.
-- [ ] [[@prd/work/root--the-sidebar-slides-over-the-shell.md]] is done.
+- [ ] [the-gutter-shows-both-sides](../../../ui/prds/the-gutter-shows-both-sides/prd.md) is done.
+- [ ] [the-sidebar-slides-over-the-shell](../../prds/the-sidebar-slides-over-the-shell/prd.md) is done.
 
 ## Probe
 

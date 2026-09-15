@@ -5,8 +5,8 @@ status: open
 level: 11
 estimate: 2d
 needs:
-  - "[[@prd/work/root--the-board-is-channels-of-lines.md]]"
-  - "[[@prd/work/root--an-agent-is-one-lookup-from-the-roster.md]]"
+  - "[the-board-is-channels-of-lines](../../../sessions/prds/the-board-is-channels-of-lines/prd.md)"
+  - "[an-agent-is-one-lookup-from-the-roster](../../../sessions/prds/an-agent-is-one-lookup-from-the-roster/prd.md)"
 ---
 
 # the-agents-chat-through-one-tool
@@ -19,7 +19,7 @@ that injects the tool surface gives it to its agent and serves it to outside
 clients over MCP without a second registration. Posting to a channel an idle
 session watches wakes that session with the unread lines in its prompt; posting
 to a busy one leaves the lines for its next read, except for a priority line,
-which [[@prd/work/root--the-run-is-a-stream-of-typed-events.md]] carries into the run it is
+which [the-run-is-a-stream-of-typed-events](../../../agent/prds/the-run-is-a-stream-of-typed-events/prd.md) carries into the run it is
 already in.
 
 The protocol is part of the tool, not of a system prompt: the cartridge ships the
@@ -56,7 +56,7 @@ the model's `input` (`builtin/memo/src/service.rs:69`). A cartridge can ship its
 own `.zirkle/memos/`, merged read-only into the workspace record, which is how a
 routine memo arrives and leaves with the cartridge. Waking a session is the agent
 cartridge's contract, already claimed by
-[[@prd/work/root--the-agent-spawns-wakes-and-owns-sub-agents.md]]; this memo only gives it a channel
+[the-agent-spawns-wakes-and-owns-sub-agents](../../../agent/prds/the-agent-spawns-wakes-and-owns-sub-agents/prd.md); this memo only gives it a channel
 trigger beside the existing mailbox one.
 
 ## Spec
@@ -75,6 +75,6 @@ that arrived, so a burst of chatter is one run and not ten.
 The protocol memo is what the user asked for as caveman language, written as a
 routine: one claim per post, address by session id or channel, state result or
 blocker, never restate what the roster or the record already says, link instead
-of quoting ([[@prd/work/root--a-board-message-is-a-reference-not-a-payload.md]]). What the schema can
+of quoting ([a-board-message-is-a-reference-not-a-payload](../../../sessions/prds/a-board-message-is-a-reference-not-a-payload/prd.md)). What the schema can
 check, the schema checks — cap, required addressee, one line. What it cannot, the
 memo teaches and the log shows.

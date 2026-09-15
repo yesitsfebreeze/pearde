@@ -4,7 +4,7 @@ description: "Tooling use, memos and routines are ranked in one searchable graph
 status: open
 level: 9
 priority: P1
-subwork: ["[[@prd/work/root--tool-graph-engine-is-the-ranking-database.md]]", "[[@prd/work/root--the-resolver-runs-on-the-tool-graph-engine.md]]", "[[@prd/work/root--tool-dispatch-and-routines-are-graph-nodes.md]]", "[[@prd/work/root--agents-query-the-tool-graph.md]]"]
+subwork: ["[tool-graph-engine-is-the-ranking-database](../../prds/tool-graph-engine-is-the-ranking-database/prd.md)", "[the-resolver-runs-on-the-tool-graph-engine](../../prds/the-resolver-runs-on-the-tool-graph-engine/prd.md)", "[tool-dispatch-and-routines-are-graph-nodes](../../prds/tool-dispatch-and-routines-are-graph-nodes/prd.md)", "[agents-query-the-tool-graph](../../prds/agents-query-the-tool-graph/prd.md)"]
 
 ---
 
@@ -32,10 +32,10 @@ dispatch and routines all consult it; and a query like "best tool for X" or
 
 ## Check
 
-- [ ] [[@prd/work/root--tool-graph-engine-is-the-ranking-database.md]] is done.
-- [ ] [[@prd/work/root--the-resolver-runs-on-the-tool-graph-engine.md]] is done.
-- [ ] [[@prd/work/root--tool-dispatch-and-routines-are-graph-nodes.md]] is done.
-- [ ] [[@prd/work/root--agents-query-the-tool-graph.md]] is done.
+- [ ] [tool-graph-engine-is-the-ranking-database](../../prds/tool-graph-engine-is-the-ranking-database/prd.md) is done.
+- [ ] [the-resolver-runs-on-the-tool-graph-engine](../../prds/the-resolver-runs-on-the-tool-graph-engine/prd.md) is done.
+- [ ] [tool-dispatch-and-routines-are-graph-nodes](../../prds/tool-dispatch-and-routines-are-graph-nodes/prd.md) is done.
+- [ ] [agents-query-the-tool-graph](../../prds/agents-query-the-tool-graph/prd.md) is done.
 
 ## Probe
 

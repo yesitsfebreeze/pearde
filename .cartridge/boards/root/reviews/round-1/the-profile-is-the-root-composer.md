@@ -5,7 +5,7 @@ status: open
 level: 10
 estimate: 2d
 needs:
-  - "[[@prd/work/root--a-nested-cartridge-is-a-first-class-entry.md]]"
+  - "[a-nested-cartridge-is-a-first-class-entry](../../prds/a-nested-cartridge-is-a-first-class-entry/prd.md)"
 ---
 
 # the-profile-is-the-root-composer
@@ -55,7 +55,7 @@ holds one.
 
 The recursive case then needs no new concepts: a parent's `needs` are resolved in
 its own scope, its children's keys default to its realm, and a child need declared
-private (from [[@prd/work/root--a-cartridge-declares-what-it-needs.md]]) gets a fresh realm through
+private (from [a-cartridge-declares-what-it-needs](../../prds/a-cartridge-declares-what-it-needs/prd.md)) gets a fresh realm through
 `Ctx::isolate` (`core/runtime.rs:545`), which descendants inherit
 (`core/runtime.rs:184`). Sharing stays the default at every depth; otherwise a
 tree of four cartridges that each need `router` gets four routers fighting over a

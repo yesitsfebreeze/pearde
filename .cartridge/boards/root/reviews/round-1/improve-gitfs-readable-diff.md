@@ -5,8 +5,8 @@ status: open
 priority: P0
 size: M
 needs:
-  - "[[@prd/work/root--improve-policy-operation-rules.md]]"
-  - "[[@prd/work/root--improve-tool-result-contract.md]]"
+  - "[improve-policy-operation-rules](../../../policy/prds/improve-policy-operation-rules/prd.md)"
+  - "[improve-tool-result-contract](../../prds/improve-tool-result-contract/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["inspect session changes without a mutation grant", "implementing gitfs cartridge improvements"]
@@ -82,6 +82,6 @@ Use temporary Git repos/remotes for checks. Preserve unrelated index/worktree/re
 
 Priority P0; scope size M (S = one local change; M = a bounded cross-file
 contract; L = investigation plus likely smaller slices, not a time promise).
-Ready after [[@prd/work/root--improve-policy-operation-rules.md]], [[@prd/work/root--improve-tool-result-contract.md]] are done with evidence.
+Ready after [improve-policy-operation-rules](../../../policy/prds/improve-policy-operation-rules/prd.md), [improve-tool-result-contract](../../prds/improve-tool-result-contract/prd.md) are done with evidence.
 Leave status open until a worker actually starts; then set owner and active.
 Record Result and mark done only after the checks pass.

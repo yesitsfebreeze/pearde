@@ -1,6 +1,8 @@
 ---
 repo: /Users/feb/dev/cartridge/memory.ctg
-state: open
+state: deferred
+deferred-from: open
+deferred-on: "2026-09-15"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -29,3 +31,22 @@ First probe: extend `.cartridge/tests/unit/src/hub/src/tests/hub_search_test.rs`
 ## Dependencies and review
 
 No hard needs. [Review history](review.md): rounds 1–2 inherited, round 3 rebased; maximum five.
+
+## From the retired work memo
+
+Folded 2026-09-15 from `@prd/work/memory--the-track-record-is-reachable-across-stores.md` (status open, estimate 2d). The PRD state above is authoritative.
+
+> dated decisions, measurements and verdicts remain recallable across known local stores with provenance and explicit partial results
+
+### Do
+
+An agent opening a second local store can recall its dated decisions,
+measurements and verdicts alongside the first store through the existing hub
+and tool surface. Every result identifies its source store and claim origin;
+an unavailable store produces an explicit partial-result condition without
+losing the available results. Default per-cwd isolation remains intact until
+the caller explicitly requests cross-store recall.
+
+The record remains dated claims rather than raw transcripts. This reuses the
+existing fold and local hub, not cross-machine gossip, replication or another
+ledger format. No desktop shell is needed to prove engine-level federation.

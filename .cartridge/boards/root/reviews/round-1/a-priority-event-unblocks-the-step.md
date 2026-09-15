@@ -5,7 +5,7 @@ status: open
 level: 11
 estimate: 2d
 needs:
-  - "[[@prd/work/root--a-live-run-accepts-events-from-outside.md]]"
+  - "[a-live-run-accepts-events-from-outside](../../../agent/prds/a-live-run-accepts-events-from-outside/prd.md)"
 ---
 
 # a-priority-event-unblocks-the-step

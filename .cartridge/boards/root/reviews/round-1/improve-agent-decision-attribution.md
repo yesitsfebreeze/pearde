@@ -5,9 +5,9 @@ status: open
 priority: P2
 size: M
 needs:
-  - "[[@prd/work/root--improve-router-route-explanation.md]]"
-  - "[[@prd/work/root--improve-policy-explain.md]]"
-  - "[[@prd/work/root--improve-harness-compaction-diff.md]]"
+  - "[improve-router-route-explanation](../../../router/prds/improve-router-route-explanation/prd.md)"
+  - "[improve-policy-explain](../../../policy/prds/improve-policy-explain/prd.md)"
+  - "[improve-harness-compaction-diff](../../../harness/prds/improve-harness-compaction-diff/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["trace tool dispatch to exact context and route configuration", "implementing agent cartridge improvements"]
@@ -24,7 +24,7 @@ A run inspection links each tool dispatch to assembled request revision, descrip
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--agents-query-the-tool-graph.md]], [[@prd/work/root--the-agent-spawns-wakes-and-owns-sub-agents.md]].
+Related existing work (context/coordination, not automatically a hard dependency): [agents-query-the-tool-graph](../../prds/agents-query-the-tool-graph/prd.md), [the-agent-spawns-wakes-and-owns-sub-agents](../../../agent/prds/the-agent-spawns-wakes-and-owns-sub-agents/prd.md).
 
 ## Footprint
 
@@ -81,6 +81,6 @@ Preserve existing checkpoints and transcripts. Resume only operations whose comp
 
 Priority P2; scope size M (S = one local change; M = a bounded cross-file
 contract; L = investigation plus likely smaller slices, not a time promise).
-Ready after [[@prd/work/root--improve-router-route-explanation.md]], [[@prd/work/root--improve-policy-explain.md]], [[@prd/work/root--improve-harness-compaction-diff.md]] are done with evidence.
+Ready after [improve-router-route-explanation](../../../router/prds/improve-router-route-explanation/prd.md), [improve-policy-explain](../../../policy/prds/improve-policy-explain/prd.md), [improve-harness-compaction-diff](../../../harness/prds/improve-harness-compaction-diff/prd.md) are done with evidence.
 Leave status open until a worker actually starts; then set owner and active.
 Record Result and mark done only after the checks pass.

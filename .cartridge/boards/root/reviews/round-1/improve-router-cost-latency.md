@@ -5,7 +5,7 @@ status: open
 priority: P2
 size: M
 needs:
-  - "[[@prd/work/root--improve-router-route-explanation.md]]"
+  - "[improve-router-route-explanation](../../../router/prds/improve-router-route-explanation/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["report attributable route cost and latency estimates", "implementing router cartridge improvements"]
@@ -22,7 +22,7 @@ Routing diagnostics report observed latency and estimated costs with timestamp, 
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--the-router-ranks-and-recovers.md]].
+Related existing work (context/coordination, not automatically a hard dependency): [the-router-ranks-and-recovers](../../prds/the-router-ranks-and-recovers/prd.md).
 
 ## Footprint
 
@@ -80,6 +80,6 @@ Retain local credential ownership and avoid live provider calls in ordinary test
 
 Priority P2; scope size M (S = one local change; M = a bounded cross-file
 contract; L = investigation plus likely smaller slices, not a time promise).
-Ready after [[@prd/work/root--improve-router-route-explanation.md]] are done with evidence.
+Ready after [improve-router-route-explanation](../../../router/prds/improve-router-route-explanation/prd.md) are done with evidence.
 Leave status open until a worker actually starts; then set owner and active.
 Record Result and mark done only after the checks pass.

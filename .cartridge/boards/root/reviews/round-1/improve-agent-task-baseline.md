@@ -20,7 +20,7 @@ A small evaluation compares completed coding tasks under equivalent repository f
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--agents-query-the-tool-graph.md]], [[@prd/work/root--the-agent-spawns-wakes-and-owns-sub-agents.md]].
+Related existing work (context/coordination, not automatically a hard dependency): [agents-query-the-tool-graph](../../prds/agents-query-the-tool-graph/prd.md), [the-agent-spawns-wakes-and-owns-sub-agents](../../../agent/prds/the-agent-spawns-wakes-and-owns-sub-agents/prd.md).
 
 ## Footprint
 

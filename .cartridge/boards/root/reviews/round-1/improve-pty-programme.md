@@ -3,9 +3,9 @@ kind: work
 description: "Deliver the three PTY and shared shell improvements with explicit risk coverage"
 status: open
 subwork:
-  - "[[@prd/work/root--improve-pty-shell-identity.md]]"
-  - "[[@prd/work/root--improve-pty-input-ownership.md]]"
-  - "[[@prd/work/root--improve-pty-command-wait.md]]"
+  - "[improve-pty-shell-identity](../../../pty/prds/improve-pty-shell-identity/prd.md)"
+  - "[improve-pty-input-ownership](../../../pty/prds/improve-pty-input-ownership/prd.md)"
+  - "[improve-pty-command-wait](../../../pty/prds/improve-pty-command-wait/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["planning pty improvements", "reviewing pty cartridge readiness"]
@@ -24,9 +24,9 @@ children; it is not a fourth implementation task. Evidence is in
 
 | Assessment improvement | Implementation owner |
 | --- | --- |
-| 1. Return explicit shell and working-directory identity | [[@prd/work/root--improve-pty-shell-identity.md]] |
-| 2. Coordinate human and agent input on the shared terminal | [[@prd/work/root--improve-pty-input-ownership.md]] |
-| 3. Wait and retrieve output for one terminal command | [[@prd/work/root--improve-pty-command-wait.md]] |
+| 1. Return explicit shell and working-directory identity | [improve-pty-shell-identity](../../../pty/prds/improve-pty-shell-identity/prd.md) |
+| 2. Coordinate human and agent input on the shared terminal | [improve-pty-input-ownership](../../../pty/prds/improve-pty-input-ownership/prd.md) |
+| 3. Wait and retrieve output for one terminal command | [improve-pty-command-wait](../../../pty/prds/improve-pty-command-wait/prd.md) |
 
 ## Downside coverage
 
@@ -43,7 +43,7 @@ Start with children whose needs are satisfied. Child dependencies are authoritat
 the table is a coverage view, not a second backlog. Claim one executable child at
 a time and coordinate shared files before work begins. Scope sizes are not time estimates.
 
-Existing records to reconcile before implementation: [[@prd/work/root--sub-agents-share-the-terminal.md]], [[@prd/work/root--pty-encodes-input.md]]. Their current source, status and owner take precedence over a stale assessment.
+Existing records to reconcile before implementation: [sub-agents-share-the-terminal](../../../agent/prds/sub-agents-share-the-terminal/prd.md), [pty-encodes-input](../../prds/pty-encodes-input/prd.md). Their current source, status and owner take precedence over a stale assessment.
 
 ## Check
 

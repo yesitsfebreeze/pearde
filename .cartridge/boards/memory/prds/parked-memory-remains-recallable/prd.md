@@ -1,6 +1,8 @@
 ---
 repo: /Users/feb/dev/cartridge/memory.ctg
-state: open
+state: deferred
+deferred-from: open
+deferred-on: "2026-09-15"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -36,3 +38,22 @@ First probe: write the three-layout test against `c25af4d`. If it already passes
 ## Dependencies and review
 
 No hard needs. The fixtures already exist, so memory-004's ranking decision is linked context, not a prerequisite. [Review history](review.md): rounds 1–2 inherited, round 3 rebased; maximum five.
+
+## From the retired work memo
+
+Folded 2026-09-15 from `@prd/work/memory--parked-memory-remains-recallable.md` (status open, estimate 2d). The PRD state above is authoritative.
+
+> parked durable memory resolves through a bounded cold read without unbounded hydration or wasted seed slots
+
+### Do
+
+A durable claim remains recallable after its memory leaves memory. Candidate
+selection and resolution agree before top-k truncation across dense, lexical
+and reason-derived paths. Cold resolution has explicit I/O, latency and
+residency bounds; unavailable cold data is reported without blocking available
+results. Recall remains read-only and touches no LLM, and parking does not
+churn index membership.
+
+This implements [[which-side-of-the-unload-resolve-seam-moves]] for
+[the-graph-converges](../the-graph-converges/prd.md). Resident filtering alone is not completion because it
+would hide parked memory.

@@ -4,11 +4,11 @@ description: "A run is a stream of declared event types that anything can post i
 status: open
 level: 10
 subwork:
-  - "[[@prd/work/root--an-event-declares-its-type.md]]"
-  - "[[@prd/work/root--a-live-run-accepts-events-from-outside.md]]"
-  - "[[@prd/work/root--a-priority-event-unblocks-the-step.md]]"
-  - "[[@prd/work/root--a-listener-subscribes-to-event-types.md]]"
-  - "[[@prd/work/root--a-stalled-step-raises-its-own-event.md]]"
+  - "[an-event-declares-its-type](../../../agent/prds/an-event-declares-its-type/prd.md)"
+  - "[a-live-run-accepts-events-from-outside](../../../agent/prds/a-live-run-accepts-events-from-outside/prd.md)"
+  - "[a-priority-event-unblocks-the-step](../../../agent/prds/a-priority-event-unblocks-the-step/prd.md)"
+  - "[a-listener-subscribes-to-event-types](../../../runtime/prds/a-listener-subscribes-to-event-types/prd.md)"
+  - "[a-stalled-step-raises-its-own-event](../../../agent/prds/a-stalled-step-raises-its-own-event/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["Changing what a run records, delivering something to an agent that is already working, or connecting a cartridge to what an agent is doing"]
@@ -36,10 +36,10 @@ rather than being killed and restarted from nothing.
 
 A cartridge can listen to a type. Tools connect to each other through the stream
 instead of through a transcript nobody else can parse, which is what makes the
-stall signal in [[@prd/work/root--a-stalled-step-raises-its-own-event.md]] possible without teaching
+stall signal in [a-stalled-step-raises-its-own-event](../../../agent/prds/a-stalled-step-raises-its-own-event/prd.md) possible without teaching
 every tool about every other.
 
-This is the delivery half of coordination. [[@prd/work/root--the-swarm-talks-on-a-board.md]] owns
+This is the delivery half of coordination. [the-swarm-talks-on-a-board](../../../sessions/prds/the-swarm-talks-on-a-board/prd.md) owns
 addressing, the channels and the protocol agents talk in; this memo owns what
 happens when a line has to reach an agent that is busy, and what a run's record
 is made of. The visible shell stays the user's, and an event is never an
@@ -47,11 +47,11 @@ execution path: a listener that wants something done posts, it does not act.
 
 | Work | Estimate |
 | --- | --- |
-| [[@prd/work/root--an-event-declares-its-type.md]] | 1d |
-| [[@prd/work/root--a-live-run-accepts-events-from-outside.md]] | 2d |
-| [[@prd/work/root--a-priority-event-unblocks-the-step.md]] | 2d |
-| [[@prd/work/root--a-listener-subscribes-to-event-types.md]] | 1d |
-| [[@prd/work/root--a-stalled-step-raises-its-own-event.md]] | 1d |
+| [an-event-declares-its-type](../../../agent/prds/an-event-declares-its-type/prd.md) | 1d |
+| [a-live-run-accepts-events-from-outside](../../../agent/prds/a-live-run-accepts-events-from-outside/prd.md) | 2d |
+| [a-priority-event-unblocks-the-step](../../../agent/prds/a-priority-event-unblocks-the-step/prd.md) | 2d |
+| [a-listener-subscribes-to-event-types](../../../runtime/prds/a-listener-subscribes-to-event-types/prd.md) | 1d |
+| [a-stalled-step-raises-its-own-event](../../../agent/prds/a-stalled-step-raises-its-own-event/prd.md) | 1d |
 
 ## Check
 

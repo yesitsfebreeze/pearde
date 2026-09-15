@@ -5,7 +5,7 @@ status: open
 level: 10
 priority: P2
 estimate: 2d
-needs: ["[[@prd/work/root--every-tool-is-one-command.md]]"]
+needs: ["[every-tool-is-one-command](../../prds/every-tool-is-one-command/prd.md)"]
 ---
 
 # an-mcp-server-carries-the-tools
@@ -15,7 +15,7 @@ needs: ["[[@prd/work/root--every-tool-is-one-command.md]]"]
 Any MCP client — Claude Code, Codex, an editor — reaches zirkle's tools by
 configuring one command. The server lists the profile's `tool.*` keys as MCP
 tools, named and schema'd from each tool's own `describe`, and forwards a call
-to the tool surface [[@prd/work/root--every-tool-is-one-command.md]] delivers, so there is one
+to the tool surface [every-tool-is-one-command](../../prds/every-tool-is-one-command/prd.md) delivers, so there is one
 path to a tool and not two. A tool's `error:true` arrives as an MCP tool
 error, not a transport failure; a cancelled MCP call reaches the tool's
 `cancel` op with the same invocation identity, as `builtin/proxy` already does

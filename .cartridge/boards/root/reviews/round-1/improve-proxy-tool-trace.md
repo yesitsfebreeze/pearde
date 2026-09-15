@@ -5,8 +5,8 @@ status: open
 priority: P1
 size: M
 needs:
-  - "[[@prd/work/root--improve-tool-result-contract.md]]"
-  - "[[@prd/work/root--improve-policy-explain.md]]"
+  - "[improve-tool-result-contract](../../prds/improve-tool-result-contract/prd.md)"
+  - "[improve-policy-explain](../../../policy/prds/improve-policy-explain/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["inspect internal proxy tool work by request identity", "implementing proxy cartridge improvements"]
@@ -82,6 +82,6 @@ Keep native request/response wire semantics and caller-owned conversation histor
 
 Priority P1; scope size M (S = one local change; M = a bounded cross-file
 contract; L = investigation plus likely smaller slices, not a time promise).
-Ready after [[@prd/work/root--improve-tool-result-contract.md]], [[@prd/work/root--improve-policy-explain.md]] are done with evidence.
+Ready after [improve-tool-result-contract](../../prds/improve-tool-result-contract/prd.md), [improve-policy-explain](../../../policy/prds/improve-policy-explain/prd.md) are done with evidence.
 Leave status open until a worker actually starts; then set owner and active.
 Record Result and mark done only after the checks pass.

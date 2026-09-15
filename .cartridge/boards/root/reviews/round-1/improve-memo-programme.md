@@ -3,9 +3,9 @@ kind: work
 description: "Deliver the three Memo improvements with explicit risk coverage"
 status: open
 subwork:
-  - "[[@prd/work/root--improve-memo-compact-landscape.md]]"
-  - "[[@prd/work/root--improve-memo-stale-evidence.md]]"
-  - "[[@prd/work/root--improve-memo-types-drilldown.md]]"
+  - "[improve-memo-compact-landscape](../../../landscape/prds/improve-memo-compact-landscape/prd.md)"
+  - "[improve-memo-stale-evidence](../../../memo/prds/improve-memo-stale-evidence/prd.md)"
+  - "[improve-memo-types-drilldown](../../../memo/prds/improve-memo-types-drilldown/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["planning memo improvements", "reviewing memo cartridge readiness"]
@@ -24,9 +24,9 @@ children; it is not a fourth implementation task. Evidence is in
 
 | Assessment improvement | Implementation owner |
 | --- | --- |
-| 1. Bound landscape discovery and offer inventory drilldown | [[@prd/work/root--improve-memo-compact-landscape.md]] |
-| 2. Distinguish stale source references from current guidance | [[@prd/work/root--improve-memo-stale-evidence.md]] |
-| 3. Read type declarations individually | [[@prd/work/root--improve-memo-types-drilldown.md]] |
+| 1. Bound landscape discovery and offer inventory drilldown | [improve-memo-compact-landscape](../../../landscape/prds/improve-memo-compact-landscape/prd.md) |
+| 2. Distinguish stale source references from current guidance | [improve-memo-stale-evidence](../../../memo/prds/improve-memo-stale-evidence/prd.md) |
+| 3. Read type declarations individually | [improve-memo-types-drilldown](../../../memo/prds/improve-memo-types-drilldown/prd.md) |
 
 ## Downside coverage
 
@@ -43,7 +43,7 @@ Start with children whose needs are satisfied. Child dependencies are authoritat
 the table is a coverage view, not a second backlog. Claim one executable child at
 a time and coordinate shared files before work begins. Scope sizes are not time estimates.
 
-Existing records to reconcile before implementation: [[@prd/work/root--a-search-ranks-current-guidance-over-delivered-history.md]], [[handle-memory-staleness-and-conflicts]]. Their current source, status and owner take precedence over a stale assessment.
+Existing records to reconcile before implementation: [a-search-ranks-current-guidance-over-delivered-history](../../../landscape/prds/a-search-ranks-current-guidance-over-delivered-history/prd.md), [[handle-memory-staleness-and-conflicts]]. Their current source, status and owner take precedence over a stale assessment.
 
 ## Check
 

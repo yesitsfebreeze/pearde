@@ -27,4 +27,4 @@ docs get renamed or merged, and whether a new tool key is born.
 Recommendation: rename `memory` first (highest misread risk, cheapest — one
 cartridge folder and manifest), keep the landscape behind `tool.memo` (no
 second door to guard), rename the router's HTTP proxy surface to a distinct
-word. Each rename is its own work memo once decided.
+word. Each rename is its own PRD once decided.

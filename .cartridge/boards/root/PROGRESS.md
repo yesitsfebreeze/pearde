@@ -1,18 +1,17 @@
 # Root board progress
 
-Snapshot: 2026-09-13. The canonical map contains 211 records; historical aliases are retained without duplicating implementation work.
+Snapshot: 2026-09-15. The board was reset to one plan (see [BACKLOG](BACKLOG.md)).
 
-- open: 124
-- done: 82
-- claimed: 1
-- specced: 4
+- open: 19 (16 leaves, 3 milestones) — all new
+- deferred: 236 across every board (223 by state, 13 with unclosed frontmatter), 28 of them `superseded-by` an item on this board
+- done: 483, kept as history
+- claimed: 0; lanes: 0 (two stale harness worktrees removed, both clean at their last commit)
+- boards: `ui` removed with tui.ctg; the other member boards stay as archives
 
-10 records marked done currently need receipt revalidation after shared-source edits; these are not newly missing requirements. See [source audit](integrated-source-audit.json) for exact records and commits.
-
-Three agents are implementing and qualifying Memo recursive search, Memory provenance, and PTY shell identity/context metadata. The coordinator reviews implementations, serializes collection and qualifies cross-owner integration.
-
-Existing edits were explicitly authorized for integration and have been reviewed and committed in their owners. Composition gitlinks will be checkpointed after the current proof batch. Unrelated untracked Runtime MCP session and Agent audit-probe files remain preserved.
-
-The writer remains unqualified: eighteen prompt candidates have failed the unchanged product-quality gates. Raw results and failures are retained. Passing integration tests do not satisfy that quality requirement.
-
-[Canonical map](work-map.json) · [Original round-2 review](OPEN-WORK-REVIEW.md). The original review is historical; its initial counts and migration blockers do not describe this snapshot.
+Wave 1 is dispatchable now: the profile becomes the orchestration service
+(tui.ctg deleted, memory.ctg out of the profile), the record loses its
+shadowed copies, and the gates run from the root justfile. Baseline on
+2026-09-15: `just check` is red (rustfmt in cartridge.ctg), `just test` was red
+in gitfs, sessions, pty, router, harness and mcp on 2026-09-14, `just smoke`
+failed mcp and proxy, and `just --justfile .cartridge/justfile check` cannot find
+`memo-run`.

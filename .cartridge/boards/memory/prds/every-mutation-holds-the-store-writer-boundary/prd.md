@@ -33,3 +33,22 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `every-mutation-holds-the-store-writer-boundary`; maximum five rounds.
+
+## From the retired work memo
+
+Folded 2026-09-15 from `@prd/work/memory--every-mutation-holds-the-store-writer-boundary.md` (status open, estimate 1d). The PRD state above is authoritative.
+
+> all graph mutations route to the daemon or retain the writer lock from load through commit
+
+### Do
+
+Every graph mutation has exactly one store writer: the serving daemon, or a
+local caller retaining writer ownership before load until commit. A competing
+mutation refuses without writing; a holder check alone is not ownership.
+A stale unrelated mutation cannot resurrect a removed row. Existing daemon
+routing and lock primitives remain the boundary, without a new tombstone set,
+base-image merge or per-process removed-ID workaround.
+
+This implements [[does-a-removal-need-a-tombstone]] for
+[the-graph-converges](../the-graph-converges/prd.md). Bitemporal claim retirement remains distinct from
+physical cleanup.

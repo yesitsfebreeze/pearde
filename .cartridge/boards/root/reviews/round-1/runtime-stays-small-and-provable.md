@@ -4,19 +4,19 @@ description: "Simplify terminal dependencies and make the runtime reproducibly v
 status: open
 level: 9
 subwork:
-  - "[[@prd/work/root--context-date-needs-no-clock-cartridge.md]]"
-  - "[[@prd/work/root--terminal-profile-starts-only-needed-services.md]]"
-  - "[[@prd/work/root--rpc-contracts-run-across-rust-lua-and-bun.md]]"
-  - "[[@prd/work/root--fresh-checkouts-can-run-the-gates.md]]"
-  - "[[@prd/work/root--ci-proves-the-supported-terminal-matrix.md]]"
-  - "[[@prd/work/root--the-agent-can-discover-its-own-program.md]]"
-  - "[[@prd/work/root--debug-mode-correlates-a-terminal-turn.md]]"
-  - "[[@prd/work/root--the-agent-can-extend-and-verify-a-cartridge.md]]"
-  - "[[@prd/work/root--rolling-context-retains-decision-evidence.md]]"
-  - "[[@prd/work/root--the-live-record-matches-the-terminal-contract.md]]"
-  - "[[@prd/work/root--cartridges-prove-themselves-at-registration.md]]"
-  - "[[@prd/work/root--lanes-do-not-poison-each-others-builds.md]]"
-  - "[[@prd/work/root--the-reload-test-is-not-flaky.md]]"
+  - "[context-date-needs-no-clock-cartridge](../../prds/context-date-needs-no-clock-cartridge/prd.md)"
+  - "[terminal-profile-starts-only-needed-services](../../prds/terminal-profile-starts-only-needed-services/prd.md)"
+  - "[rpc-contracts-run-across-rust-lua-and-bun](../../prds/rpc-contracts-run-across-rust-lua-and-bun/prd.md)"
+  - "[fresh-checkouts-can-run-the-gates](../../prds/fresh-checkouts-can-run-the-gates/prd.md)"
+  - "[ci-proves-the-supported-terminal-matrix](../../../runtime/prds/ci-proves-the-supported-terminal-matrix/prd.md)"
+  - "[the-agent-can-discover-its-own-program](../../prds/the-agent-can-discover-its-own-program/prd.md)"
+  - "[debug-mode-correlates-a-terminal-turn](../../../agent/prds/debug-mode-correlates-a-terminal-turn/prd.md)"
+  - "[the-agent-can-extend-and-verify-a-cartridge](../../prds/the-agent-can-extend-and-verify-a-cartridge/prd.md)"
+  - "[rolling-context-retains-decision-evidence](../../prds/rolling-context-retains-decision-evidence/prd.md)"
+  - "[the-live-record-matches-the-terminal-contract](../../prds/the-live-record-matches-the-terminal-contract/prd.md)"
+  - "[cartridges-prove-themselves-at-registration](../../prds/cartridges-prove-themselves-at-registration/prd.md)"
+  - "[lanes-do-not-poison-each-others-builds](../../prds/lanes-do-not-poison-each-others-builds/prd.md)"
+  - "[the-reload-test-is-not-flaky](../../../runtime/prds/the-reload-test-is-not-flaky/prd.md)"
 ---
 
 # A small, provable terminal runtime
@@ -33,17 +33,17 @@ P1 is the first implementation group; P2 is follow-up cleanup. Dependencies in
 
 | Priority | Work | Estimate |
 | --- | --- | --- |
-| P2 | [[@prd/work/root--context-date-needs-no-clock-cartridge.md]] | 4h |
-| P1 | [[@prd/work/root--terminal-profile-starts-only-needed-services.md]] | 1d |
-| P1 | [[@prd/work/root--rpc-contracts-run-across-rust-lua-and-bun.md]] | 2d |
-| P1 | [[@prd/work/root--fresh-checkouts-can-run-the-gates.md]] | 1d |
-| P1 | [[@prd/work/root--ci-proves-the-supported-terminal-matrix.md]] | 2d |
-| P1 | [[@prd/work/root--the-agent-can-discover-its-own-program.md]] | 1d |
-| P1 | [[@prd/work/root--debug-mode-correlates-a-terminal-turn.md]] | 2d |
-| P1 | [[@prd/work/root--the-agent-can-extend-and-verify-a-cartridge.md]] | 2d |
-| P1 | [[@prd/work/root--rolling-context-retains-decision-evidence.md]] | 1d |
-| P2 | [[@prd/work/root--the-live-record-matches-the-terminal-contract.md]] | 1d |
-| P1 | [[@prd/work/root--cartridges-prove-themselves-at-registration.md]] | 2d |
+| P2 | [context-date-needs-no-clock-cartridge](../../prds/context-date-needs-no-clock-cartridge/prd.md) | 4h |
+| P1 | [terminal-profile-starts-only-needed-services](../../prds/terminal-profile-starts-only-needed-services/prd.md) | 1d |
+| P1 | [rpc-contracts-run-across-rust-lua-and-bun](../../prds/rpc-contracts-run-across-rust-lua-and-bun/prd.md) | 2d |
+| P1 | [fresh-checkouts-can-run-the-gates](../../prds/fresh-checkouts-can-run-the-gates/prd.md) | 1d |
+| P1 | [ci-proves-the-supported-terminal-matrix](../../../runtime/prds/ci-proves-the-supported-terminal-matrix/prd.md) | 2d |
+| P1 | [the-agent-can-discover-its-own-program](../../prds/the-agent-can-discover-its-own-program/prd.md) | 1d |
+| P1 | [debug-mode-correlates-a-terminal-turn](../../../agent/prds/debug-mode-correlates-a-terminal-turn/prd.md) | 2d |
+| P1 | [the-agent-can-extend-and-verify-a-cartridge](../../prds/the-agent-can-extend-and-verify-a-cartridge/prd.md) | 2d |
+| P1 | [rolling-context-retains-decision-evidence](../../prds/rolling-context-retains-decision-evidence/prd.md) | 1d |
+| P2 | [the-live-record-matches-the-terminal-contract](../../prds/the-live-record-matches-the-terminal-contract/prd.md) | 1d |
+| P1 | [cartridges-prove-themselves-at-registration](../../prds/cartridges-prove-themselves-at-registration/prd.md) | 2d |
 
 Clarification: [[the-agent-can-diagnose-and-extend-its-runtime]] makes program discovery → debugging →
 extension a testable agent workflow, with diagnostics as supporting evidence.

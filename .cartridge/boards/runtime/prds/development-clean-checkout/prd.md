@@ -1,6 +1,9 @@
 ---
 repo: /Users/feb/dev/cartridge
-state: open
+state: deferred
+deferred-from: open
+deferred-on: "2026-09-15"
+superseded-by: "@root/a-fresh-checkout-runs-the-daemon-and-the-gates"
 origin: requested
 priority: 50
 blast-radius: mid

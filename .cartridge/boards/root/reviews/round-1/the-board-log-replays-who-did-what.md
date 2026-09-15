@@ -5,7 +5,7 @@ status: open
 level: 11
 estimate: 2d
 needs:
-  - "[[@prd/work/root--the-board-is-channels-of-lines.md]]"
+  - "[the-board-is-channels-of-lines](../../../sessions/prds/the-board-is-channels-of-lines/prd.md)"
 ---
 
 # the-board-log-replays-who-did-what
@@ -47,7 +47,7 @@ lifecycle events and takes `message`, `run_started`, `tool_started` and
 run's telemetry block to the prompt, and `zirkle debug` mirrors every host socket
 message to `.zirkle/logs/debug.log` as JSON lines. What is missing is one
 ordering across sessions and a projection over it. The identity to thread is
-already decided by [[@prd/work/root--a-turn-carries-one-id-through-host-lua-and-bun.md]]; this is
+already decided by [a-turn-carries-one-id-through-host-lua-and-bun](../../prds/a-turn-carries-one-id-through-host-lua-and-bun/prd.md); this is
 that id used as the join key rather than a new one.
 
 ## Spec
@@ -58,7 +58,7 @@ are orderable against each other without clock comparison. An event is
 `{seq, ts, session, parent?, run?, call?, channel?, kind, name?, outcome?, ms?}`
 and nothing more: no payloads, no arguments, no output. The story is who and
 what, and references point at the rest, exactly as
-[[@prd/work/root--a-board-message-is-a-reference-not-a-payload.md]] requires for messages.
+[a-board-message-is-a-reference-not-a-payload](../../../sessions/prds/a-board-message-is-a-reference-not-a-payload/prd.md) requires for messages.
 
 `follow` is a read projection with filters and a limit, and its default output is
 one line per event, indented by parent, so a swarm's shape shows in the log's

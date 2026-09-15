@@ -1,6 +1,8 @@
 ---
 repo: /Users/feb/dev/cartridge/cartridge.ctg
-state: open
+state: deferred
+deferred-from: open
+deferred-on: "2026-09-15"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -10,10 +12,6 @@ work-kind: rollup
 review-round: 3
 review-status: failed
 canonical-scope: runtime-stays-small-and-provable
-needs:
-- '@runtime/ci-proves-the-supported-terminal-matrix'
-- '@agent/debug-mode-correlates-a-terminal-turn'
-- '@runtime/the-reload-test-is-not-flaky'
 ---
 
 # A small, provable terminal runtime
@@ -39,3 +37,42 @@ which also needs the CI leaf. That link is context, not a duplicate task.
 ## Review
 
 [Review history](review.md): round 3/5.
+
+## From the retired work memo
+
+Folded 2026-09-15 from `work/runtime-stays-small-and-provable.md` (status open). The PRD state above is authoritative.
+
+> Simplify terminal dependencies and make the runtime reproducibly verifiable
+
+### Outcome
+
+The terminal-native agent has only justified runtime dependencies, a compact
+current design record, and reproducible evidence for language boundaries,
+agent-driven debugging, cartridge self-extension and context quality. This is the bounded improvement set from
+[[runtime-audit-2026-09-12]], not an open-ended rewrite of the core.
+
+P1 is the first implementation group; P2 is follow-up cleanup. Dependencies in
+`needs` define ordering; the rows are otherwise independently actionable.
+
+| Priority | Work | Estimate |
+| --- | --- | --- |
+| P2 | [context-date-needs-no-clock-cartridge](../../../root/prds/context-date-needs-no-clock-cartridge/prd.md) | 4h |
+| P1 | [terminal-profile-starts-only-needed-services](../../../root/prds/terminal-profile-starts-only-needed-services/prd.md) | 1d |
+| P1 | [rpc-contracts-run-across-rust-lua-and-bun](../../../root/prds/rpc-contracts-run-across-rust-lua-and-bun/prd.md) | 2d |
+| P1 | [fresh-checkouts-can-run-the-gates](../../../root/prds/fresh-checkouts-can-run-the-gates/prd.md) | 1d |
+| P1 | [ci-proves-the-supported-terminal-matrix](../ci-proves-the-supported-terminal-matrix/prd.md) | 2d |
+| P1 | [the-agent-can-discover-its-own-program](../../../root/prds/the-agent-can-discover-its-own-program/prd.md) | 1d |
+| P1 | [debug-mode-correlates-a-terminal-turn](../../../agent/prds/debug-mode-correlates-a-terminal-turn/prd.md) | 2d |
+| P1 | [the-agent-can-extend-and-verify-a-cartridge](../../../root/prds/the-agent-can-extend-and-verify-a-cartridge/prd.md) | 2d |
+| P1 | [rolling-context-retains-decision-evidence](../../../root/prds/rolling-context-retains-decision-evidence/prd.md) | 1d |
+| P2 | [the-live-record-matches-the-terminal-contract](../../../root/prds/the-live-record-matches-the-terminal-contract/prd.md) | 1d |
+| P1 | [cartridges-prove-themselves-at-registration](../../../root/prds/cartridges-prove-themselves-at-registration/prd.md) | 2d |
+
+Clarification: [[the-agent-can-diagnose-and-extend-its-runtime]] makes program discovery → debugging →
+extension a testable agent workflow, with diagnostics as supporting evidence.
+
+### Check
+
+- [ ] Every child has its acceptance evidence and is done.
+- [ ] The audit is updated with the resulting dependency graph, gate results,
+      debug invocation and remaining explicit limits.

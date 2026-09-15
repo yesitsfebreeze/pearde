@@ -1,6 +1,8 @@
 ---
 repo: /Users/feb/dev/cartridge/memory.ctg
-state: open
+state: deferred
+deferred-from: open
+deferred-on: "2026-09-15"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -29,3 +31,29 @@ First probe: find whether `hot_lib_reloader` can veto a load through its reload 
 ## Dependencies and review
 
 No hard needs. Memory decision `crates-are-hot-pieces` applies. [Review history](review.md): rounds 1–2 inherited, round 3 rebased; maximum five.
+
+## From the retired work memo
+
+Folded 2026-09-15 from `@prd/work/memory--retrieval-is-a-piece.md` (status open, claim session-adcf486f 2026-09-09 02:52, estimate 1d). The PRD state above is authoritative.
+
+> retrieval becomes a hot piece — its boundary types (`QueryOptions`, `ScoredEntity`, `seed::Mode`, `Weights`, `SortField`) move to `base`, its twelve generic entry points get monomorphic `#[no_mangle]` twins, and `just piece retrieval` swaps the ranking under a running daemon
+
+Second child of [every-compute-crate-is-a-piece](../every-compute-crate-is-a-piece/prd.md), the shape of
+[hygiene-is-the-first-piece](../hygiene-is-the-first-piece/prd.md).
+
+### Do
+
+Move the five types callers name (`retrieval::score::QueryOptions` 13
+uses, `expand::ScoredEntity` 8, `seed::Mode` 5, `seed::Weights`,
+`score::SortField`) to `base`, since a piece's types cannot change layout
+under a running daemon and `base` is never a piece. Give the twelve generic
+functions monomorphic `#[no_mangle]` entry points over the concrete types
+the daemon calls with; the generic bodies stay in the piece behind them.
+`retrieval::LlmFunc` — a boxed closure — stays host-side. Add `retrieval`
+to `pieces` in `justfile`.
+
+### Check
+
+`just dev` in a lane; a `memory query` ranks; a scoring constant in
+`retrieval-piece` is changed and `just piece-build retrieval` runs; the same
+query re-ranks under the same daemon pid. `just check` and `just test` green.

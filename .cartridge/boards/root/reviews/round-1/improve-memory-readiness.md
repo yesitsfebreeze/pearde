@@ -5,7 +5,7 @@ status: open
 priority: P0
 size: M
 needs:
-  - "[[@prd/work/root--improve-memory-owner-access.md]]"
+  - "[improve-memory-owner-access](../../../memory/prds/improve-memory-owner-access/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["report memory readiness separately from registration", "implementing memory cartridge improvements"]
@@ -82,6 +82,6 @@ Keep the current exclusive-writer invariant and existing on-disk formats. On att
 
 Priority P0; scope size M (S = one local change; M = a bounded cross-file
 contract; L = investigation plus likely smaller slices, not a time promise).
-Ready after [[@prd/work/root--improve-memory-owner-access.md]] are done with evidence.
+Ready after [improve-memory-owner-access](../../../memory/prds/improve-memory-owner-access/prd.md) are done with evidence.
 Leave status open until a worker actually starts; then set owner and active.
 Record Result and mark done only after the checks pass.

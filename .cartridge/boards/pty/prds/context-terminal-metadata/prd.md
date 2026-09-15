@@ -1,6 +1,8 @@
 ---
 repo: /Users/feb/dev/cartridge/pty.ctg
-state: "specced"
+state: deferred
+deferred-from: specced
+deferred-on: "2026-09-15"
 origin: requested
 priority: 50
 blast-radius: mid

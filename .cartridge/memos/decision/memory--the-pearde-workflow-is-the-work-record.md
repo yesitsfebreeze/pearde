@@ -27,8 +27,8 @@ every read, so a state can never be stale.
 |---|---|
 | the board, `.pearde/prds/` | `memos/work/`, every `kind: work` memo |
 | a PRD, `prd.md`, the request as a contract | a work memo — `## Do` is the contract: what exists when done, never how |
-| a spec, `specs/specNN.md`, boxes an implementer ticks | the memo's `## Spec` (the how) and `## Check` (the boxes and the verify block), both the analyst's; one memo is one spec, and a memo holding more carries `subwork:` children at level 10 ([[@prd/note/memory--work-memo.md]]) |
-| `vision.md`, `terminals:` | [[@prd/work/memory--the-vision.md]], level 1; its `subwork:` are the terminals |
+| a spec, `specs/specNN.md`, boxes an implementer ticks | the memo's `## Spec` (the how) and `## Check` (the boxes and the verify block), both the analyst's; one memo is one spec, and a memo holding more carries `subwork:` children at level 10 (the work-memo note, retired 2026-09-15 with the kind) |
+| `vision.md`, `terminals:` | [the-vision](../../boards/root/prds/the-vision/prd.md), level 1; its `subwork:` are the terminals |
 | `state: open` | `status: open`, no `claim:` |
 | `analyzing`, `claimed` — a worker holds it | a `claim: <who> <stamp>` line, whatever `status:` says; `analyzing` when the memo has no `## Spec` yet |
 | `specced` — ready to implement | open with `## Spec` and `## Check` |

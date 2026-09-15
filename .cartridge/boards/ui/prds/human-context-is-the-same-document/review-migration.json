@@ -1,9 +1,0 @@
-{
-  "status": "reviewed-2026-09-14",
-  "reason": "Board paths, explicit source repositories and shared planning ownership changed. Existing review-inputs.json and scores describe original revisions only.",
-  "historical_inputs_sha256": "fcb2f12ac1e70c55725bc08ec4027651bcc7a8a05bd9b3b18023042b9938b594",
-  "migration_manifest": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/reports/record-migration/manifest.json",
-  "requires": "Review current plan and mapped source inputs before implementation; retain previous rounds used.",
-  "resolved_by_round": 4,
-  "reconciliation_verdict": "REBASE"
-}

@@ -3,9 +3,9 @@ kind: work
 description: "Deliver the three Proxy improvements with explicit risk coverage"
 status: open
 subwork:
-  - "[[@prd/work/root--improve-proxy-total-usage.md]]"
-  - "[[@prd/work/root--improve-proxy-tool-trace.md]]"
-  - "[[@prd/work/root--improve-proxy-continuation-recovery.md]]"
+  - "[improve-proxy-total-usage](../../../proxy/prds/improve-proxy-total-usage/prd.md)"
+  - "[improve-proxy-tool-trace](../../../proxy/prds/improve-proxy-tool-trace/prd.md)"
+  - "[improve-proxy-continuation-recovery](../../../proxy/prds/improve-proxy-continuation-recovery/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["planning proxy improvements", "reviewing proxy cartridge readiness"]
@@ -24,9 +24,9 @@ children; it is not a fourth implementation task. Evidence is in
 
 | Assessment improvement | Implementation owner |
 | --- | --- |
-| 1. Account for every internal model round consistently | [[@prd/work/root--improve-proxy-total-usage.md]] |
-| 2. Inspect internal proxy tool work by request identity | [[@prd/work/root--improve-proxy-tool-trace.md]] |
-| 3. Make continuation lifetime and restart recovery explicit | [[@prd/work/root--improve-proxy-continuation-recovery.md]] |
+| 1. Account for every internal model round consistently | [improve-proxy-total-usage](../../../proxy/prds/improve-proxy-total-usage/prd.md) |
+| 2. Inspect internal proxy tool work by request identity | [improve-proxy-tool-trace](../../../proxy/prds/improve-proxy-tool-trace/prd.md) |
+| 3. Make continuation lifetime and restart recovery explicit | [improve-proxy-continuation-recovery](../../../proxy/prds/improve-proxy-continuation-recovery/prd.md) |
 
 ## Downside coverage
 

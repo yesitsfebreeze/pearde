@@ -4,7 +4,7 @@ description: "The obsolete UI emulator is removed while shell readback and agent
 status: open
 estimate: 1d
 needs:
-  - "[[@prd/work/root--the-ui-paints-the-grid.md]]"
+  - "[the-ui-paints-the-grid](../../../ui/prds/the-ui-paints-the-grid/prd.md)"
 ---
 
 # the-embedded-terminal-is-gone

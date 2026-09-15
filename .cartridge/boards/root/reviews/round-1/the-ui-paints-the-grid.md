@@ -4,8 +4,8 @@ description: "The UI draws the shell from pty's grid and forwards events, with n
 status: open
 estimate: 2d
 needs:
-  - "[[@prd/work/root--pty-owns-the-terminal-grid.md]]"
-  - "[[@prd/work/root--pty-encodes-input.md]]"
+  - "[pty-owns-the-terminal-grid](../../prds/pty-owns-the-terminal-grid/prd.md)"
+  - "[pty-encodes-input](../../prds/pty-encodes-input/prd.md)"
 ---
 
 # the-ui-paints-the-grid
@@ -71,8 +71,8 @@ Files:
 
 Steps:
 
-1. Land the two `needs`: `[[@prd/work/root--pty-owns-the-terminal-grid.md]]` (the emulator
-   serving `frame`/`viewport`) and `[[@prd/work/root--pty-encodes-input.md]]` (key encoding) —
+1. Land the two `needs`: `[pty-owns-the-terminal-grid](../../prds/pty-owns-the-terminal-grid/prd.md)` (the emulator
+   serving `frame`/`viewport`) and `[pty-encodes-input](../../prds/pty-encodes-input/prd.md)` (key encoding) —
    their lanes are in flight; the UI keeps the service shape, so the swap is
    one commit on top of them.
 2. `bun install --cwd builtin/ui --frozen-lockfile`, then

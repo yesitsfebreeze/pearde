@@ -25,8 +25,8 @@ Recorded user method, updated 2026-09-13. Apply the shared
 ## Inputs
 
 The user request, dated assessment, current source and manifests, applicable AGENTS.md,
-existing work and ownership, and the current profile. Read type/work.md and
-type/question.md through memo before authoring. Planning is complete when another
+existing work and ownership, and the current profile. Read the
+[PRD template](../../templates/prd.md) and type/question.md before authoring. Planning is complete when another
 worker can select a ready item, implement it, and prove its outcome without this
 conversation and the current revision has passed the recorded plan review.
 Implementation remains open until its acceptance evidence exists.
@@ -90,7 +90,7 @@ Implementation remains open until its acceptance evidence exists.
   `{"op":"read","path":"work/<name>.md"}`.
 - Every requested improvement and downside maps to a child outcome or an explicit,
   reasoned limitation; no requirement disappears between assessment and plan.
-- A dependency walk over `needs` and `subwork` has no missing targets or cycles.
+- A dependency walk over `needs` and child PRDs has no missing targets or cycles.
 - Every leaf has unchecked checks and scoped commands such as `just test memo`
   and `just check memo`, executed from /Users/feb/dev/cartridge when appropriate.
 - The handoff names ready work, shared footprints, success measures, and what was
@@ -101,7 +101,7 @@ Implementation remains open until its acceptance evidence exists.
 A failed, pending or stale plan review keeps dependent implementation pending. A
 failed fifth round records exhaustion and remaining gaps; other plans can proceed
 independently. Substantive changes invalidate the previous revision's acceptance.
-Preserve review history separately from native memo/PRD implementation state.
+Preserve review history separately from PRD implementation state.
 
 On stale revision, re-read and reconcile; never overwrite concurrent changes.
 On validation failure, correct the declaration and retry through the same service.

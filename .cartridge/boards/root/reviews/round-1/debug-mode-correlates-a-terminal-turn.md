@@ -6,12 +6,12 @@ level: 10
 priority: P1
 estimate: 2d
 needs:
-  - "[[@prd/work/root--the-agent-can-discover-its-own-program.md]]"
+  - "[the-agent-can-discover-its-own-program](../../prds/the-agent-can-discover-its-own-program/prd.md)"
 subwork:
-  - "[[@prd/work/root--debug-mode-opens-and-closes-from-the-shell.md]]"
-  - "[[@prd/work/root--every-enabled-tool-ships-a-contract-probe.md]]"
-  - "[[@prd/work/root--tool-probes-run-and-locate-a-failing-provider.md]]"
-  - "[[@prd/work/root--a-turn-carries-one-id-through-host-lua-and-bun.md]]"
+  - "[debug-mode-opens-and-closes-from-the-shell](../../prds/debug-mode-opens-and-closes-from-the-shell/prd.md)"
+  - "[every-enabled-tool-ships-a-contract-probe](../../prds/every-enabled-tool-ships-a-contract-probe/prd.md)"
+  - "[tool-probes-run-and-locate-a-failing-provider](../../prds/tool-probes-run-and-locate-a-failing-provider/prd.md)"
+  - "[a-turn-carries-one-id-through-host-lua-and-bun](../../prds/a-turn-carries-one-id-through-host-lua-and-bun/prd.md)"
 ---
 
 # The agent tests and diagnoses its own runtime
@@ -27,10 +27,10 @@ commands and results outside a full-screen editor.
 
 ## Check
 
-- [ ] Every child is done: [[@prd/work/root--debug-mode-opens-and-closes-from-the-shell.md]],
-      [[@prd/work/root--every-enabled-tool-ships-a-contract-probe.md]],
-      [[@prd/work/root--tool-probes-run-and-locate-a-failing-provider.md]] and
-      [[@prd/work/root--a-turn-carries-one-id-through-host-lua-and-bun.md]].
+- [ ] Every child is done: [debug-mode-opens-and-closes-from-the-shell](../../prds/debug-mode-opens-and-closes-from-the-shell/prd.md),
+      [every-enabled-tool-ships-a-contract-probe](../../prds/every-enabled-tool-ships-a-contract-probe/prd.md),
+      [tool-probes-run-and-locate-a-failing-provider](../../prds/tool-probes-run-and-locate-a-failing-provider/prd.md) and
+      [a-turn-carries-one-id-through-host-lua-and-bun](../../prds/a-turn-carries-one-id-through-host-lua-and-bun/prd.md).
 
 ## Approach
 
@@ -41,7 +41,7 @@ mostly logging; retain that evidence channel within the executable workflow.
 Use the program map and cartridge-provided probe memos, keeping shell and memo
 as the model-facing interface. Test the loop with a deterministic local provider.
 
-Choice: [[the-agent-can-diagnose-and-extend-its-runtime]]. Extension: [[@prd/work/root--the-agent-can-extend-and-verify-a-cartridge.md]].
+Choice: [[the-agent-can-diagnose-and-extend-its-runtime]]. Extension: [the-agent-can-extend-and-verify-a-cartridge](../../prds/the-agent-can-extend-and-verify-a-cartridge/prd.md).
 Audit: [[runtime-audit-2026-09-12]].
 
 ### Split, 2026-09-12

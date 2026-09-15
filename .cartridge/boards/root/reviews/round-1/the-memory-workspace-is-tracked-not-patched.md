@@ -70,8 +70,8 @@ worktree, and remove the nested `.git` as part of the import commit. Its
 `target/` is large (70G on the observed checkout) and stays ignored.
 
 The general mechanism is separate work: a cartridge fetched and pinned from the
-repository its manifest names is [[@prd/work/root--a-cartridge-installs-from-its-source.md]], under
-[[@prd/work/root--cartridges-compose-recursively.md]]. That is what this hack is a hand-rolled,
+repository its manifest names is [a-cartridge-installs-from-its-source](../../../runtime/prds/a-cartridge-installs-from-its-source/prd.md), under
+[cartridges-compose-recursively](../../../runtime/prds/cartridges-compose-recursively/prd.md). That is what this hack is a hand-rolled,
 single-purpose version of — but it does not block this cleanup, and this cleanup
 should not wait for it: a vendored tree that no remote can serve is not an
 install case, it is source we own.

@@ -18,7 +18,7 @@ routine that declares the situation outranks a delivered work memo whose name
 happens to share words with the query, and a `done` or `cancelled` memo never
 outranks current guidance on the same subject.
 
-Scope is ranking. What is indexed is [[@prd/work/root--one-search-covers-the-record-and-memory.md]];
+Scope is ranking. What is indexed is [one-search-covers-the-record-and-memory](../../../landscape/prds/one-search-covers-the-record-and-memory/prd.md);
 this is what order it comes back in.
 
 ## Check

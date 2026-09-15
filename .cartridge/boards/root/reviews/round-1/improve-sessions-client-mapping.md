@@ -20,7 +20,7 @@ A session reports its client identity and correlation scope without pretending c
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--sub-agent-sessions-record-parent-and-mailbox.md]], [[@prd/work/root--the-board-is-channels-of-lines.md]].
+Related existing work (context/coordination, not automatically a hard dependency): [sub-agent-sessions-record-parent-and-mailbox](../../../sessions/prds/sub-agent-sessions-record-parent-and-mailbox/prd.md), [the-board-is-channels-of-lines](../../../sessions/prds/the-board-is-channels-of-lines/prd.md).
 
 ## Footprint
 

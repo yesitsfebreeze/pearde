@@ -20,7 +20,7 @@ Each routing decision exposes chosen model, candidates, rejection reasons and th
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--the-router-ranks-and-recovers.md]].
+Related existing work (context/coordination, not automatically a hard dependency): [the-router-ranks-and-recovers](../../prds/the-router-ranks-and-recovers/prd.md).
 
 ## Footprint
 

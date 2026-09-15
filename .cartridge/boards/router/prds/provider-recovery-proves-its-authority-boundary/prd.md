@@ -38,3 +38,21 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `provider-recovery-proves-its-authority-boundary`; maximum five rounds.
+
+## From the retired work memo
+
+Folded 2026-09-15 from `@prd/work/memory--provider-recovery-proves-its-authority-boundary.md` (status open, estimate 1d). The PRD state above is authoritative.
+
+> route recovery proves finite incident budgets and review boundaries without falsely completing interrupted work
+
+### Do
+
+The existing route healer has a finite incident recovery budget and observable
+exhaustion, coalesces concurrent failures, handles missing credentials and a
+failed diagnosis route, and declares recovery only after an affected-route
+stream succeeds. Unknown code/config repairs remain reviewable proposals,
+never automatic deployment. Interrupted tasks remain interrupted.
+
+This completes [[memory-provider-recovery]] using the native model service,
+not a second recovery daemon. External failure sources need an explicit
+incident input; absence of such input is reported rather than invented.

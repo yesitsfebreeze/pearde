@@ -5,7 +5,7 @@ status: open
 priority: P2
 size: M
 needs:
-  - "[[@prd/work/root--improve-tools-preflight.md]]"
+  - "[improve-tools-preflight](../../../runtime/prds/improve-tools-preflight/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["ship bundles with source and dependency provenance", "implementing tools cartridge improvements"]
@@ -22,7 +22,7 @@ A generated bundle identifies exact repository revisions, dirty state, executabl
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--lane-rm-refuses-after-the-gates-run.md]], [[@prd/work/root--lanes-do-not-poison-each-others-builds.md]].
+Related existing work (context/coordination, not automatically a hard dependency): [lane-rm-refuses-after-the-gates-run](../../prds/lane-rm-refuses-after-the-gates-run/prd.md), [lanes-do-not-poison-each-others-builds](../../prds/lanes-do-not-poison-each-others-builds/prd.md).
 
 ## Footprint
 
@@ -80,6 +80,6 @@ Use temporary roots and preserve existing development commands. Preflight does n
 
 Priority P2; scope size M (S = one local change; M = a bounded cross-file
 contract; L = investigation plus likely smaller slices, not a time promise).
-Ready after [[@prd/work/root--improve-tools-preflight.md]] are done with evidence.
+Ready after [improve-tools-preflight](../../../runtime/prds/improve-tools-preflight/prd.md) are done with evidence.
 Leave status open until a worker actually starts; then set owner and active.
 Record Result and mark done only after the checks pass.

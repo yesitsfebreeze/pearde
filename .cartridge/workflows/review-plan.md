@@ -33,7 +33,7 @@ Consult [the canonical work map](../boards/root/work-map.json) before creating o
 work. Source aliases preserve history and claims; they are not additional tasks.
 
 1. Establish the inventory and current authority. Include open centrally stored PRD for the source owners,
-   open work memos and explicit current work lists; identify active/blocked owners
+   every board's open PRDs and explicit current work lists; identify claimed/blocked owners
    without reclaiming their work. Distinguish executable leaves, roll-up parents,
    standing visions and historical proposals. Resolve duplicates to a canonical
    owner and record keep, revise, split, merge, rehome or retire recommendations.
@@ -80,7 +80,7 @@ work. Source aliases preserve history and claims; they are not additional tasks.
    reviewer/user attribution and historical results; never invent either.
 
 Store one append-only review history per canonical plan. For a PRD use
-`prds/<slug>/review.md`; for a native memo use a centrally stored linked review note
+`prds/<slug>/review.md`; for a record without a PRD directory use a centrally stored linked review note
 through that owner's validated writing path. Inventory scorecards reference that
 history instead of becoming a second implementation status. Existing
 `OPEN-WORK-REVIEW.json` entries are historical round-1 reviewer assessments. Their

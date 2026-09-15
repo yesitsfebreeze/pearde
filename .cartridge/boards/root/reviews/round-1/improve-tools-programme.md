@@ -3,9 +3,9 @@ kind: work
 description: "Deliver the three Workspace tools improvements with explicit risk coverage"
 status: open
 subwork:
-  - "[[@prd/work/root--improve-tools-preflight.md]]"
-  - "[[@prd/work/root--improve-tools-worktree-resume.md]]"
-  - "[[@prd/work/root--improve-tools-bundle-provenance.md]]"
+  - "[improve-tools-preflight](../../../runtime/prds/improve-tools-preflight/prd.md)"
+  - "[improve-tools-worktree-resume](../../../runtime/prds/improve-tools-worktree-resume/prd.md)"
+  - "[improve-tools-bundle-provenance](../../../runtime/prds/improve-tools-bundle-provenance/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["planning tools improvements", "reviewing tools cartridge readiness"]
@@ -24,9 +24,9 @@ children; it is not a fourth implementation task. Evidence is in
 
 | Assessment improvement | Implementation owner |
 | --- | --- |
-| 1. Preview workspace-tool effects before execution | [[@prd/work/root--improve-tools-preflight.md]] |
-| 2. Recover interrupted worktree creation safely | [[@prd/work/root--improve-tools-worktree-resume.md]] |
-| 3. Ship bundles with source and dependency provenance | [[@prd/work/root--improve-tools-bundle-provenance.md]] |
+| 1. Preview workspace-tool effects before execution | [improve-tools-preflight](../../../runtime/prds/improve-tools-preflight/prd.md) |
+| 2. Recover interrupted worktree creation safely | [improve-tools-worktree-resume](../../../runtime/prds/improve-tools-worktree-resume/prd.md) |
+| 3. Ship bundles with source and dependency provenance | [improve-tools-bundle-provenance](../../../runtime/prds/improve-tools-bundle-provenance/prd.md) |
 
 ## Downside coverage
 
@@ -43,7 +43,7 @@ Start with children whose needs are satisfied. Child dependencies are authoritat
 the table is a coverage view, not a second backlog. Claim one executable child at
 a time and coordinate shared files before work begins. Scope sizes are not time estimates.
 
-Existing records to reconcile before implementation: [[@prd/work/root--lane-rm-refuses-after-the-gates-run.md]], [[@prd/work/root--lanes-do-not-poison-each-others-builds.md]]. Their current source, status and owner take precedence over a stale assessment.
+Existing records to reconcile before implementation: [lane-rm-refuses-after-the-gates-run](../../prds/lane-rm-refuses-after-the-gates-run/prd.md), [lanes-do-not-poison-each-others-builds](../../prds/lanes-do-not-poison-each-others-builds/prd.md). Their current source, status and owner take precedence over a stale assessment.
 
 ## Check
 

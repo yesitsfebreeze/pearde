@@ -1,6 +1,9 @@
 ---
 repo: /Users/feb/dev/cartridge/memo.ctg
-state: open
+state: deferred
+deferred-from: open
+deferred-on: "2026-09-15"
+superseded-by: "@root/the-orchestrator-knows-what-is-in-the-works"
 origin: requested
 priority: 80
 blast-radius: mid

@@ -1,6 +1,8 @@
 ---
 repo: /Users/feb/dev/cartridge/memo.ctg
-state: "specced"
+state: deferred
+deferred-from: specced
+deferred-on: "2026-09-15"
 origin: requested
 priority: 80
 blast-radius: mid

@@ -5,10 +5,10 @@ status: open
 level: 9
 priority: P2
 subwork:
-  - "[[@prd/work/root--every-tool-is-one-command.md]]"
-  - "[[@prd/work/root--an-mcp-server-carries-the-tools.md]]"
-  - "[[@prd/work/root--headless-policy-approval-channel.md]]"
-  - "[[@prd/work/root--a-tool-is-declared-by-its-memo.md]]"
+  - "[every-tool-is-one-command](../../prds/every-tool-is-one-command/prd.md)"
+  - "[an-mcp-server-carries-the-tools](../../prds/an-mcp-server-carries-the-tools/prd.md)"
+  - "[headless-policy-approval-channel](../../prds/headless-policy-approval-channel/prd.md)"
+  - "[a-tool-is-declared-by-its-memo](../../prds/a-tool-is-declared-by-its-memo/prd.md)"
 ---
 
 # zirkles-tools-serve-any-agent
@@ -33,7 +33,7 @@ change what any tool does, does not add tools, and does not touch the proxy's
 model path. The enabled tool set stays the profile's
 (`.zirkle/default/init.lua` lists `tool.shell` and `tool.memo` today); this
 terminal exposes whatever the profile holds, including whatever
-[[@prd/work/root--tool-dispatch-and-routines-are-graph-nodes.md]] adds later.
+[tool-dispatch-and-routines-are-graph-nodes](../../prds/tool-dispatch-and-routines-are-graph-nodes/prd.md) adds later.
 
 [[core-composes-and-the-cli-selects-services]] bounds the shape: the MCP
 server is cartridge behavior beside `builtin/proxy`, not a widened

@@ -20,7 +20,7 @@ The inspector shows original covered messages, resulting summary, retained tail 
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--rolling-context-retains-decision-evidence.md]], [[@prd/work/root--long-horizon-recall-benchmark.md]].
+Related existing work (context/coordination, not automatically a hard dependency): [rolling-context-retains-decision-evidence](../../prds/rolling-context-retains-decision-evidence/prd.md), [long-horizon-recall-benchmark](../../prds/long-horizon-recall-benchmark/prd.md).
 
 ## Footprint
 

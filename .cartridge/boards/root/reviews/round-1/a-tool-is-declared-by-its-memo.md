@@ -39,8 +39,8 @@ express stays a cartridge; what it can, is no longer written twice.
 Decided in [[the-tool-contract-is-a-memo]] (Stefan, 2026-09-12); the shape is
 justdown's — github.com/yesitsfebreeze/justdown, spec v0.1, where the fenced
 `just` block *is* the tool and the frontmatter is the retrieval contract.
-Sharpens [[@prd/work/root--every-tool-is-one-command.md]] and the typed-event chain
-([[@prd/work/root--an-event-declares-its-type.md]]): the tool type in the frontmatter names the
+Sharpens [every-tool-is-one-command](../../prds/every-tool-is-one-command/prd.md) and the typed-event chain
+([an-event-declares-its-type](../../../agent/prds/an-event-declares-its-type/prd.md)): the tool type in the frontmatter names the
 event shape. Existing routine memos already dispatch; this memo extends the
 same courtesy to tools. An analyst probing this should check what
-[[@prd/work/root--tool-dispatch-and-routines-are-graph-nodes.md]] already provides for free.
+[tool-dispatch-and-routines-are-graph-nodes](../../prds/tool-dispatch-and-routines-are-graph-nodes/prd.md) already provides for free.

@@ -1,6 +1,8 @@
 ---
 repo: /Users/feb/dev/cartridge/cartridge.ctg
-state: open
+state: deferred
+deferred-from: open
+deferred-on: "2026-09-15"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -34,3 +36,31 @@ Preserve the last usable implementation and durable data on failure; report part
 ## Review
 
 [Round 2 agent review](review.md). Inherits round 1 from `extension-inspect`; maximum five rounds.
+
+## From the retired work memo
+
+Folded 2026-09-15 from `@prd/work/memory--extension-inspect.md` (status open, estimate 4h). The PRD state above is authoritative.
+
+> `extension::inspect(root)` — the fiber tree with states, inject and provide, the effect labels, the services per realm and the listeners per event, as one serde value
+
+### Do
+
+- `Inspect { fibers: Vec<FiberView>, services: Vec<ServiceView>, listeners: BTreeMap<String, Vec<ListenerView>> }`
+  with `FiberView { uid, name, parent_uid, state, inject, provide, entry: Option<String>, target: Option<Vec<(String, u64)>>, effects: Vec<EffectMeta> }`,
+  `EffectMeta { label, children }` (the labels `ctx.effect` collects, nested
+  as in the vendored `getEffects`), `ServiceView { name, realm, provider_uid, active }`,
+  `ListenerView { fiber_uid, prepend, global }`. All `serde::Serialize`.
+- `extension::inspect(root: &Context) -> Inspect` reads every lock once and
+  awaits nothing.
+- A `Pending` fiber's view names the injected keys that resolve to no
+  `Active` provider in its realm, which is the answer to "why is it not
+  running".
+
+### Check
+
+`cargo nextest run -p extension` passes with a test that mounts a provider, a
+dependent and a plugin with an unsatisfied inject, then asserts the inspect
+value names the three fibers with their states, the dependent's target uid,
+the pending fiber's missing key, the provider's `ctx.provide` effect label,
+and one listener under its event name. The `memory plugins` command over the
+RPC is [memory-daemon-boots-a-root-context](../../../memory/prds/memory-daemon-boots-a-root-context/prd.md)'s.

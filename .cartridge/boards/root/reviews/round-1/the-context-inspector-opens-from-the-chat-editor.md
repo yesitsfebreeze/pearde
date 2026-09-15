@@ -19,7 +19,7 @@ can still reach it and the transcript while a full-screen editor owns the shell.
 inspector", with Up/Down selection, PgUp/PgDn scrolling, `r` to refresh and
 Escape to close. It is not shipped. Verified on branch
 `terminal-integration-and-native-memos`, 2026-09-12, while probing
-[[@prd/work/root--a-turn-carries-one-id-through-host-lua-and-bun.md]]:
+[a-turn-carries-one-id-through-host-lua-and-bun](../../prds/a-turn-carries-one-id-through-host-lua-and-bun/prd.md):
 
 - The backend exists. `agent {op:"context"}` is served at
   `builtin/agent/lib.rs:264` and calls `harness {op:"inspect"}`.

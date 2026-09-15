@@ -3,9 +3,9 @@ kind: work
 description: "Deliver the three Terminal UI improvements with explicit risk coverage"
 status: open
 subwork:
-  - "[[@prd/work/root--improve-ui-run-history.md]]"
-  - "[[@prd/work/root--improve-ui-terminal-owner.md]]"
-  - "[[@prd/work/root--improve-ui-tool-availability.md]]"
+  - "[improve-ui-run-history](../../../ui/prds/improve-ui-run-history/prd.md)"
+  - "[improve-ui-terminal-owner](../../../ui/prds/improve-ui-terminal-owner/prd.md)"
+  - "[improve-ui-tool-availability](../../../ui/prds/improve-ui-tool-availability/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["planning ui improvements", "reviewing ui cartridge readiness"]
@@ -24,9 +24,9 @@ children; it is not a fourth implementation task. Evidence is in
 
 | Assessment improvement | Implementation owner |
 | --- | --- |
-| 1. Reopen completed run evidence after closing the panel | [[@prd/work/root--improve-ui-run-history.md]] |
-| 2. Display shared terminal ownership and cwd | [[@prd/work/root--improve-ui-terminal-owner.md]] |
-| 3. Explain tool readiness and policy in the palette | [[@prd/work/root--improve-ui-tool-availability.md]] |
+| 1. Reopen completed run evidence after closing the panel | [improve-ui-run-history](../../../ui/prds/improve-ui-run-history/prd.md) |
+| 2. Display shared terminal ownership and cwd | [improve-ui-terminal-owner](../../../ui/prds/improve-ui-terminal-owner/prd.md) |
+| 3. Explain tool readiness and policy in the palette | [improve-ui-tool-availability](../../../ui/prds/improve-ui-tool-availability/prd.md) |
 
 ## Downside coverage
 
@@ -43,7 +43,7 @@ Start with children whose needs are satisfied. Child dependencies are authoritat
 the table is a coverage view, not a second backlog. Claim one executable child at
 a time and coordinate shared files before work begins. Scope sizes are not time estimates.
 
-Existing records to reconcile before implementation: [[@prd/work/root--the-sidebar-slides-over-the-shell.md]], [[@prd/work/root--the-palette-and-exit.md]], [[@prd/work/root--the-terminal-is-drawn-from-pty.md]]. Their current source, status and owner take precedence over a stale assessment.
+Existing records to reconcile before implementation: [the-sidebar-slides-over-the-shell](../../prds/the-sidebar-slides-over-the-shell/prd.md), [the-palette-and-exit](../../prds/the-palette-and-exit/prd.md), [the-terminal-is-drawn-from-pty](../../prds/the-terminal-is-drawn-from-pty/prd.md). Their current source, status and owner take precedence over a stale assessment.
 
 ## Check
 

@@ -38,3 +38,29 @@ Preserve the last usable implementation and durable data on failure; report part
 Reverification: attributed report at2a6a863 adds native main dispatch; bind src/observations.rs as transitive source, retaining previous acceptance and executable gates.
 
 Named channel registration revalidation at 423ecd32: source footprint includes registered channels and its shared mailbox codec; acceptance and behavior gates remain unchanged.
+
+## From the retired work memo
+
+Folded 2026-09-15 from `work/sub-agent-sessions-record-parent-and-mailbox.md` (status open). The PRD state above is authoritative.
+
+> A sub-agent session records its parent, and messages travel through a durable mailbox on the sessions cartridge
+
+### Outcome
+
+A sub-agent is a session with `parent` recorded on it. `sessions create{parent}`
+records the parent on the created session; `sessions get`/`list` expose it and
+it survives restart. Messages to a session travel through a mailbox on the
+sessions cartridge: `sessions send{id,from,text}` appends one message line to
+the target session's mailbox buffer, notifies, and persists; `sessions
+mailbox{id}` lists the messages back in order. The composer and the agent call
+the same ops, so a message to an idle agent parks in the mailbox for the next
+run; waking that agent is the agent cartridge's contract, not this one.
+
+### Check
+
+- [ ] `sessions create{parent}` records the parent on the session; `get`/`list`
+      return it and the session's snapshot file contains it.
+- [ ] `sessions send{id,from,text}` appends one message and `sessions
+      mailbox{id}` lists messages back in order with `from`, `to` and `text`.
+- [ ] Reloading the store returns the same parent and mailbox messages.
+- [ ] `sessions send` to a missing session is refused without changing the store.

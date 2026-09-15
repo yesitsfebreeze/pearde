@@ -3,9 +3,9 @@ kind: work
 description: "Deliver the three Harness improvements with explicit risk coverage"
 status: open
 subwork:
-  - "[[@prd/work/root--improve-harness-token-accounting.md]]"
-  - "[[@prd/work/root--improve-harness-compaction-diff.md]]"
-  - "[[@prd/work/root--improve-harness-quality-eval.md]]"
+  - "[improve-harness-token-accounting](../../../harness/prds/improve-harness-token-accounting/prd.md)"
+  - "[improve-harness-compaction-diff](../../../harness/prds/improve-harness-compaction-diff/prd.md)"
+  - "[improve-harness-quality-eval](../../../harness/prds/improve-harness-quality-eval/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["planning harness improvements", "reviewing harness cartridge readiness"]
@@ -24,9 +24,9 @@ children; it is not a fourth implementation task. Evidence is in
 
 | Assessment improvement | Implementation owner |
 | --- | --- |
-| 1. Show token estimates alongside serialized bytes | [[@prd/work/root--improve-harness-token-accounting.md]] |
-| 2. Inspect what each compaction retained and removed | [[@prd/work/root--improve-harness-compaction-diff.md]] |
-| 3. Measure multi-round context quality with real task outcomes | [[@prd/work/root--improve-harness-quality-eval.md]] |
+| 1. Show token estimates alongside serialized bytes | [improve-harness-token-accounting](../../../harness/prds/improve-harness-token-accounting/prd.md) |
+| 2. Inspect what each compaction retained and removed | [improve-harness-compaction-diff](../../../harness/prds/improve-harness-compaction-diff/prd.md) |
+| 3. Measure multi-round context quality with real task outcomes | [improve-harness-quality-eval](../../../harness/prds/improve-harness-quality-eval/prd.md) |
 
 ## Downside coverage
 
@@ -43,7 +43,7 @@ Start with children whose needs are satisfied. Child dependencies are authoritat
 the table is a coverage view, not a second backlog. Claim one executable child at
 a time and coordinate shared files before work begins. Scope sizes are not time estimates.
 
-Existing records to reconcile before implementation: [[@prd/work/root--rolling-context-retains-decision-evidence.md]], [[@prd/work/root--long-horizon-recall-benchmark.md]]. Their current source, status and owner take precedence over a stale assessment.
+Existing records to reconcile before implementation: [rolling-context-retains-decision-evidence](../../prds/rolling-context-retains-decision-evidence/prd.md), [long-horizon-recall-benchmark](../../prds/long-horizon-recall-benchmark/prd.md). Their current source, status and owner take precedence over a stale assessment.
 
 ## Check
 

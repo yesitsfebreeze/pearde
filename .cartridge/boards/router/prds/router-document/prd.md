@@ -1,6 +1,8 @@
 ---
 repo: /Users/feb/dev/cartridge/router.ctg
-state: open
+state: deferred
+deferred-from: open
+deferred-on: "2026-09-15"
 origin: requested
 priority: 50
 blast-radius: mid

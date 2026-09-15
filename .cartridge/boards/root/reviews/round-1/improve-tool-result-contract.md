@@ -20,7 +20,7 @@ All shipped tool result envelopes are accepted consistently by MCP, proxy and na
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--rpc-contracts-run-across-rust-lua-and-bun.md]].
+Related existing work (context/coordination, not automatically a hard dependency): [rpc-contracts-run-across-rust-lua-and-bun](../../prds/rpc-contracts-run-across-rust-lua-and-bun/prd.md).
 
 ## Footprint
 

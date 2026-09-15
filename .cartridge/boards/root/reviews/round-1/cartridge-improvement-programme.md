@@ -4,22 +4,22 @@ description: Make all fifteen cartridges measurably useful through bounded, depe
 status: open
 priority: P0
 subwork:
-  - "[[@prd/work/root--improve-tool-result-contract.md]]"
-  - "[[@prd/work/root--improve-memo-programme.md]]"
-  - "[[@prd/work/root--improve-memory-programme.md]]"
-  - "[[@prd/work/root--improve-memory-tool-programme.md]]"
-  - "[[@prd/work/root--improve-gitfs-programme.md]]"
-  - "[[@prd/work/root--improve-pty-programme.md]]"
-  - "[[@prd/work/root--improve-mcp-programme.md]]"
-  - "[[@prd/work/root--improve-policy-programme.md]]"
-  - "[[@prd/work/root--improve-sessions-programme.md]]"
-  - "[[@prd/work/root--improve-harness-programme.md]]"
-  - "[[@prd/work/root--improve-router-programme.md]]"
-  - "[[@prd/work/root--improve-proxy-programme.md]]"
-  - "[[@prd/work/root--improve-agent-programme.md]]"
-  - "[[@prd/work/root--improve-fs-programme.md]]"
-  - "[[@prd/work/root--improve-tools-programme.md]]"
-  - "[[@prd/work/root--improve-ui-programme.md]]"
+  - "[improve-tool-result-contract](../../prds/improve-tool-result-contract/prd.md)"
+  - "[improve-memo-programme](../../../memo/prds/improve-memo-programme/prd.md)"
+  - "[improve-memory-programme](../../../memory/prds/improve-memory-programme/prd.md)"
+  - "[improve-memory-tool-programme](../../../memory/prds/improve-memory-tool-programme/prd.md)"
+  - "[improve-gitfs-programme](../../../gitfs/prds/improve-gitfs-programme/prd.md)"
+  - "[improve-pty-programme](../../../pty/prds/improve-pty-programme/prd.md)"
+  - "[improve-mcp-programme](../../../mcp/prds/improve-mcp-programme/prd.md)"
+  - "[improve-policy-programme](../../../policy/prds/improve-policy-programme/prd.md)"
+  - "[improve-sessions-programme](../../../sessions/prds/improve-sessions-programme/prd.md)"
+  - "[improve-harness-programme](../../../harness/prds/improve-harness-programme/prd.md)"
+  - "[improve-router-programme](../../../router/prds/improve-router-programme/prd.md)"
+  - "[improve-proxy-programme](../../../proxy/prds/improve-proxy-programme/prd.md)"
+  - "[improve-agent-programme](../../../agent/prds/improve-agent-programme/prd.md)"
+  - "[improve-fs-programme](../../../fs/prds/improve-fs-programme/prd.md)"
+  - "[improve-tools-programme](../../../runtime/prds/improve-tools-programme/prd.md)"
+  - "[improve-ui-programme](../../../ui/prds/improve-ui-programme/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: [planning all cartridge improvements, choosing the next cartridge improvement, reviewing the cartridge improvement roadmap]
@@ -49,14 +49,14 @@ serially and revalidate against the integrated revision.
 
 | Order | Work | Why first | Ready definition |
 | --- | --- | --- | --- |
-| 1 | [[@prd/work/root--improve-tool-result-contract.md]] | Real tool calls must survive the transport boundary before richer tools are useful. | Reproduce GitFS read and ship scan through a temporary real MCP host. |
-| 2 | [[@prd/work/root--improve-policy-operation-rules.md]] | Read-only GitFS should be usable without a blanket mutation grant. | Establish the old/new rule precedence fixture; preserve current profiles. |
-| 3 | [[@prd/work/root--improve-memory-owner-access.md]] | Recall currently fails when another process owns the configured store. | Reproduce two-client access using a disposable store and inspect the existing owner protocol. |
-| 4 | [[@prd/work/root--improve-gitfs-snapshot-selection.md]] | A declared path filter should select exactly those paths. | Reproduce A/B selection in a temporary Git repo. |
+| 1 | [improve-tool-result-contract](../../prds/improve-tool-result-contract/prd.md) | Real tool calls must survive the transport boundary before richer tools are useful. | Reproduce GitFS read and ship scan through a temporary real MCP host. |
+| 2 | [improve-policy-operation-rules](../../../policy/prds/improve-policy-operation-rules/prd.md) | Read-only GitFS should be usable without a blanket mutation grant. | Establish the old/new rule precedence fixture; preserve current profiles. |
+| 3 | [improve-memory-owner-access](../../../memory/prds/improve-memory-owner-access/prd.md) | Recall currently fails when another process owns the configured store. | Reproduce two-client access using a disposable store and inspect the existing owner protocol. |
+| 4 | [improve-gitfs-snapshot-selection](../../../gitfs/prds/improve-gitfs-snapshot-selection/prd.md) | A declared path filter should select exactly those paths. | Reproduce A/B selection in a temporary Git repo. |
 
-Next, unlock [[@prd/work/root--improve-policy-explain.md]], [[@prd/work/root--improve-gitfs-readable-diff.md]],
-[[@prd/work/root--improve-memory-readiness.md]], [[@prd/work/root--improve-memory-tool-errors.md]] and
-[[@prd/work/root--improve-mcp-approval-route.md]] as their actual needs become satisfied.
+Next, unlock [improve-policy-explain](../../../policy/prds/improve-policy-explain/prd.md), [improve-gitfs-readable-diff](../../../gitfs/prds/improve-gitfs-readable-diff/prd.md),
+[improve-memory-readiness](../../../memory/prds/improve-memory-readiness/prd.md), [improve-memory-tool-errors](../../../memory/prds/improve-memory-tool-errors/prd.md) and
+[improve-mcp-approval-route](../../../mcp/prds/improve-mcp-approval-route/prd.md) as their actual needs become satisfied.
 Other prerequisite-free work includes compact memo discovery, type drilldown,
 shell identity, session diagnosis, route explanation, capability routing, filesystem
 search paging, compaction comparison and development-tool preflight.
@@ -109,40 +109,40 @@ and records all three downside mitigations or retained limitations.
 
 | Cartridge | Plan | Improvement IDs |
 | --- | --- | --- |
-| Memo | [[@prd/work/root--improve-memo-programme.md]] | [[@prd/work/root--improve-memo-compact-landscape.md]], [[@prd/work/root--improve-memo-stale-evidence.md]], [[@prd/work/root--improve-memo-types-drilldown.md]] |
-| Memory | [[@prd/work/root--improve-memory-programme.md]] | [[@prd/work/root--improve-memory-owner-access.md]], [[@prd/work/root--improve-memory-readiness.md]], [[@prd/work/root--improve-memory-provenance.md]] |
-| Memory tool adapter | [[@prd/work/root--improve-memory-tool-programme.md]] | [[@prd/work/root--improve-memory-tool-get.md]], [[@prd/work/root--improve-memory-tool-correct.md]], [[@prd/work/root--improve-memory-tool-errors.md]] |
-| GitFS and ship | [[@prd/work/root--improve-gitfs-programme.md]] | [[@prd/work/root--improve-gitfs-readable-diff.md]], [[@prd/work/root--improve-gitfs-snapshot-selection.md]], [[@prd/work/root--improve-gitfs-reviewable-ship.md]] |
-| PTY and shared shell | [[@prd/work/root--improve-pty-programme.md]] | [[@prd/work/root--improve-pty-shell-identity.md]], [[@prd/work/root--improve-pty-input-ownership.md]], [[@prd/work/root--improve-pty-command-wait.md]] |
-| MCP bridge | [[@prd/work/root--improve-mcp-programme.md]] | [[@prd/work/root--improve-mcp-approval-route.md]], [[@prd/work/root--improve-mcp-tool-readiness.md]], [[@prd/work/root--improve-mcp-refresh-catalog.md]] |
-| Policy | [[@prd/work/root--improve-policy-programme.md]] | [[@prd/work/root--improve-policy-operation-rules.md]], [[@prd/work/root--improve-policy-resource-scope.md]], [[@prd/work/root--improve-policy-explain.md]] |
-| Sessions | [[@prd/work/root--improve-sessions-programme.md]] | [[@prd/work/root--improve-sessions-client-mapping.md]], [[@prd/work/root--improve-sessions-retention.md]], [[@prd/work/root--improve-sessions-recovery.md]] |
-| Harness | [[@prd/work/root--improve-harness-programme.md]] | [[@prd/work/root--improve-harness-token-accounting.md]], [[@prd/work/root--improve-harness-compaction-diff.md]], [[@prd/work/root--improve-harness-quality-eval.md]] |
-| Router | [[@prd/work/root--improve-router-programme.md]] | [[@prd/work/root--improve-router-route-explanation.md]], [[@prd/work/root--improve-router-capability-routing.md]], [[@prd/work/root--improve-router-cost-latency.md]] |
-| Proxy | [[@prd/work/root--improve-proxy-programme.md]] | [[@prd/work/root--improve-proxy-total-usage.md]], [[@prd/work/root--improve-proxy-tool-trace.md]], [[@prd/work/root--improve-proxy-continuation-recovery.md]] |
-| Agent loop | [[@prd/work/root--improve-agent-programme.md]] | [[@prd/work/root--improve-agent-task-baseline.md]], [[@prd/work/root--improve-agent-resume-boundaries.md]], [[@prd/work/root--improve-agent-decision-attribution.md]] |
-| Filesystem tools | [[@prd/work/root--improve-fs-programme.md]] | [[@prd/work/root--improve-fs-change-provenance.md]], [[@prd/work/root--improve-fs-revision-guards.md]], [[@prd/work/root--improve-fs-search-pages.md]] |
-| Workspace tools | [[@prd/work/root--improve-tools-programme.md]] | [[@prd/work/root--improve-tools-preflight.md]], [[@prd/work/root--improve-tools-worktree-resume.md]], [[@prd/work/root--improve-tools-bundle-provenance.md]] |
-| Terminal UI | [[@prd/work/root--improve-ui-programme.md]] | [[@prd/work/root--improve-ui-run-history.md]], [[@prd/work/root--improve-ui-terminal-owner.md]], [[@prd/work/root--improve-ui-tool-availability.md]] |
+| Memo | [improve-memo-programme](../../../memo/prds/improve-memo-programme/prd.md) | [improve-memo-compact-landscape](../../../landscape/prds/improve-memo-compact-landscape/prd.md), [improve-memo-stale-evidence](../../../memo/prds/improve-memo-stale-evidence/prd.md), [improve-memo-types-drilldown](../../../memo/prds/improve-memo-types-drilldown/prd.md) |
+| Memory | [improve-memory-programme](../../../memory/prds/improve-memory-programme/prd.md) | [improve-memory-owner-access](../../../memory/prds/improve-memory-owner-access/prd.md), [improve-memory-readiness](../../../memory/prds/improve-memory-readiness/prd.md), [improve-memory-provenance](../../../memory/prds/improve-memory-provenance/prd.md) |
+| Memory tool adapter | [improve-memory-tool-programme](../../../memory/prds/improve-memory-tool-programme/prd.md) | [improve-memory-tool-get](../../../memory/prds/improve-memory-tool-get/prd.md), [improve-memory-tool-correct](../../../memory/prds/improve-memory-tool-correct/prd.md), [improve-memory-tool-errors](../../../memory/prds/improve-memory-tool-errors/prd.md) |
+| GitFS and ship | [improve-gitfs-programme](../../../gitfs/prds/improve-gitfs-programme/prd.md) | [improve-gitfs-readable-diff](../../../gitfs/prds/improve-gitfs-readable-diff/prd.md), [improve-gitfs-snapshot-selection](../../../gitfs/prds/improve-gitfs-snapshot-selection/prd.md), [improve-gitfs-reviewable-ship](../../../gitfs/prds/improve-gitfs-reviewable-ship/prd.md) |
+| PTY and shared shell | [improve-pty-programme](../../../pty/prds/improve-pty-programme/prd.md) | [improve-pty-shell-identity](../../../pty/prds/improve-pty-shell-identity/prd.md), [improve-pty-input-ownership](../../../pty/prds/improve-pty-input-ownership/prd.md), [improve-pty-command-wait](../../../pty/prds/improve-pty-command-wait/prd.md) |
+| MCP bridge | [improve-mcp-programme](../../../mcp/prds/improve-mcp-programme/prd.md) | [improve-mcp-approval-route](../../../mcp/prds/improve-mcp-approval-route/prd.md), [improve-mcp-tool-readiness](../../../mcp/prds/improve-mcp-tool-readiness/prd.md), [improve-mcp-refresh-catalog](../../../mcp/prds/improve-mcp-refresh-catalog/prd.md) |
+| Policy | [improve-policy-programme](../../../policy/prds/improve-policy-programme/prd.md) | [improve-policy-operation-rules](../../../policy/prds/improve-policy-operation-rules/prd.md), [improve-policy-resource-scope](../../../policy/prds/improve-policy-resource-scope/prd.md), [improve-policy-explain](../../../policy/prds/improve-policy-explain/prd.md) |
+| Sessions | [improve-sessions-programme](../../../sessions/prds/improve-sessions-programme/prd.md) | [improve-sessions-client-mapping](../../../sessions/prds/improve-sessions-client-mapping/prd.md), [improve-sessions-retention](../../../sessions/prds/improve-sessions-retention/prd.md), [improve-sessions-recovery](../../../sessions/prds/improve-sessions-recovery/prd.md) |
+| Harness | [improve-harness-programme](../../../harness/prds/improve-harness-programme/prd.md) | [improve-harness-token-accounting](../../../harness/prds/improve-harness-token-accounting/prd.md), [improve-harness-compaction-diff](../../../harness/prds/improve-harness-compaction-diff/prd.md), [improve-harness-quality-eval](../../../harness/prds/improve-harness-quality-eval/prd.md) |
+| Router | [improve-router-programme](../../../router/prds/improve-router-programme/prd.md) | [improve-router-route-explanation](../../../router/prds/improve-router-route-explanation/prd.md), [improve-router-capability-routing](../../../router/prds/improve-router-capability-routing/prd.md), [improve-router-cost-latency](../../../router/prds/improve-router-cost-latency/prd.md) |
+| Proxy | [improve-proxy-programme](../../../proxy/prds/improve-proxy-programme/prd.md) | [improve-proxy-total-usage](../../../proxy/prds/improve-proxy-total-usage/prd.md), [improve-proxy-tool-trace](../../../proxy/prds/improve-proxy-tool-trace/prd.md), [improve-proxy-continuation-recovery](../../../proxy/prds/improve-proxy-continuation-recovery/prd.md) |
+| Agent loop | [improve-agent-programme](../../../agent/prds/improve-agent-programme/prd.md) | [improve-agent-task-baseline](../../../agent/prds/improve-agent-task-baseline/prd.md), [improve-agent-resume-boundaries](../../../agent/prds/improve-agent-resume-boundaries/prd.md), [improve-agent-decision-attribution](../../../agent/prds/improve-agent-decision-attribution/prd.md) |
+| Filesystem tools | [improve-fs-programme](../../../fs/prds/improve-fs-programme/prd.md) | [improve-fs-change-provenance](../../../fs/prds/improve-fs-change-provenance/prd.md), [improve-fs-revision-guards](../../../fs/prds/improve-fs-revision-guards/prd.md), [improve-fs-search-pages](../../../fs/prds/improve-fs-search-pages/prd.md) |
+| Workspace tools | [improve-tools-programme](../../../runtime/prds/improve-tools-programme/prd.md) | [improve-tools-preflight](../../../runtime/prds/improve-tools-preflight/prd.md), [improve-tools-worktree-resume](../../../runtime/prds/improve-tools-worktree-resume/prd.md), [improve-tools-bundle-provenance](../../../runtime/prds/improve-tools-bundle-provenance/prd.md) |
+| Terminal UI | [improve-ui-programme](../../../ui/prds/improve-ui-programme/prd.md) | [improve-ui-run-history](../../../ui/prds/improve-ui-run-history/prd.md), [improve-ui-terminal-owner](../../../ui/prds/improve-ui-terminal-owner/prd.md), [improve-ui-tool-availability](../../../ui/prds/improve-ui-tool-availability/prd.md) |
 
 ## Shared footprints and coordination
 
 - Policy, MCP, proxy and the shared tool-result work meet at dispatch/result validation.
   Settle the result envelope and policy evaluation contracts before landing adapters.
-  Coordinate with [[@prd/work/root--rpc-contracts-run-across-rust-lua-and-bun.md]]; do not claim its work.
+  Coordinate with [rpc-contracts-run-across-rust-lua-and-bun](../../prds/rpc-contracts-run-across-rust-lua-and-bun/prd.md); do not claim its work.
 - Memory engine and adapter leaves meet at src/cartridge.rs and lifecycle errors.
   Preserve the one-writer contract. Follow memory.ctg/AGENTS.md in isolated worktrees.
 - Sessions main.rs is shared by correlation, retention, recovery and filesystem evidence.
-  Reconcile with [[@prd/work/root--the-board-is-channels-of-lines.md]] before changing persistence shape.
-- PTY input changes overlap [[@prd/work/root--pty-encodes-input.md]]. UI changes overlap
-  [[@prd/work/root--the-sidebar-slides-over-the-shell.md]] and [[@prd/work/root--the-terminal-is-drawn-from-pty.md]].
+  Reconcile with [the-board-is-channels-of-lines](../../../sessions/prds/the-board-is-channels-of-lines/prd.md) before changing persistence shape.
+- PTY input changes overlap [pty-encodes-input](../../prds/pty-encodes-input/prd.md). UI changes overlap
+  [the-sidebar-slides-over-the-shell](../../prds/the-sidebar-slides-over-the-shell/prd.md) and [the-terminal-is-drawn-from-pty](../../prds/the-terminal-is-drawn-from-pty/prd.md).
   Preserve the foreground terminal and their existing owners.
 - Memo and landscape changes must preserve the existing resolver and ranking work:
-  [[@prd/work/root--a-search-ranks-current-guidance-over-delivered-history.md]] and
-  [[@prd/work/root--one-search-covers-the-record-and-memory.md]]. Do not create another ranking engine.
-- Harness evaluation extends [[@prd/work/root--rolling-context-retains-decision-evidence.md]] and
-  coordinates with [[@prd/work/root--long-horizon-recall-benchmark.md]]. Agent attribution does not
-  reimplement [[@prd/work/root--agents-query-the-tool-graph.md]].
+  [a-search-ranks-current-guidance-over-delivered-history](../../../landscape/prds/a-search-ranks-current-guidance-over-delivered-history/prd.md) and
+  [one-search-covers-the-record-and-memory](../../../landscape/prds/one-search-covers-the-record-and-memory/prd.md). Do not create another ranking engine.
+- Harness evaluation extends [rolling-context-retains-decision-evidence](../../prds/rolling-context-retains-decision-evidence/prd.md) and
+  coordinates with [long-horizon-recall-benchmark](../../prds/long-horizon-recall-benchmark/prd.md). Agent attribution does not
+  reimplement [agents-query-the-tool-graph](../../prds/agents-query-the-tool-graph/prd.md).
 - The assessment file also proposes document execution, a central landscape query
   boundary and repository consolidation. Keep those as separately scoped architecture
   work; these improvements must neither require nor silently enact those migrations.
@@ -153,7 +153,7 @@ Before implementation, record the current result for each scenario against a fix
 fixture, source revision and profile. The following are completion targets, not claims
 about today's implementation.
 
-- [ ] Every subwork parent and [[@prd/work/root--improve-tool-result-contract.md]] is done, with all
+- [ ] Every subwork parent and [improve-tool-result-contract](../../prds/improve-tool-result-contract/prd.md) is done, with all
       leaf checks and prerequisites satisfied and Result evidence recorded.
 - [ ] A real MCP client lists and reads a temporary GitFS overlay, scans a harmless
       fixture, queries/gets a seeded memory fact, and reads the shared PTY state.

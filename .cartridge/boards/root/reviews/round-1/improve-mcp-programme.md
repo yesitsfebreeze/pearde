@@ -3,9 +3,9 @@ kind: work
 description: "Deliver the three MCP bridge improvements with explicit risk coverage"
 status: open
 subwork:
-  - "[[@prd/work/root--improve-mcp-approval-route.md]]"
-  - "[[@prd/work/root--improve-mcp-tool-readiness.md]]"
-  - "[[@prd/work/root--improve-mcp-refresh-catalog.md]]"
+  - "[improve-mcp-approval-route](../../../mcp/prds/improve-mcp-approval-route/prd.md)"
+  - "[improve-mcp-tool-readiness](../../../mcp/prds/improve-mcp-tool-readiness/prd.md)"
+  - "[improve-mcp-refresh-catalog](../../../mcp/prds/improve-mcp-refresh-catalog/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["planning mcp improvements", "reviewing mcp cartridge readiness"]
@@ -24,9 +24,9 @@ children; it is not a fourth implementation task. Evidence is in
 
 | Assessment improvement | Implementation owner |
 | --- | --- |
-| 1. Make headless operation authorization usable and truthful | [[@prd/work/root--improve-mcp-approval-route.md]] |
-| 2. Discover policy and readiness for exposed tools | [[@prd/work/root--improve-mcp-tool-readiness.md]] |
-| 3. Refresh a live client's tool catalog after replacement | [[@prd/work/root--improve-mcp-refresh-catalog.md]] |
+| 1. Make headless operation authorization usable and truthful | [improve-mcp-approval-route](../../../mcp/prds/improve-mcp-approval-route/prd.md) |
+| 2. Discover policy and readiness for exposed tools | [improve-mcp-tool-readiness](../../../mcp/prds/improve-mcp-tool-readiness/prd.md) |
+| 3. Refresh a live client's tool catalog after replacement | [improve-mcp-refresh-catalog](../../../mcp/prds/improve-mcp-refresh-catalog/prd.md) |
 
 ## Downside coverage
 
@@ -43,7 +43,7 @@ Start with children whose needs are satisfied. Child dependencies are authoritat
 the table is a coverage view, not a second backlog. Claim one executable child at
 a time and coordinate shared files before work begins. Scope sizes are not time estimates.
 
-Existing records to reconcile before implementation: [[@prd/work/root--headless-policy-approval-channel.md]], [[@prd/work/root--every-enabled-tool-ships-a-contract-probe.md]], [[@prd/work/root--rpc-contracts-run-across-rust-lua-and-bun.md]]. Their current source, status and owner take precedence over a stale assessment.
+Existing records to reconcile before implementation: [headless-policy-approval-channel](../../prds/headless-policy-approval-channel/prd.md), [every-enabled-tool-ships-a-contract-probe](../../prds/every-enabled-tool-ships-a-contract-probe/prd.md), [rpc-contracts-run-across-rust-lua-and-bun](../../prds/rpc-contracts-run-across-rust-lua-and-bun/prd.md). Their current source, status and owner take precedence over a stale assessment.
 
 ## Check
 

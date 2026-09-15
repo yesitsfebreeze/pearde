@@ -5,7 +5,7 @@ status: open
 level: 10
 estimate: 2d
 needs:
-  - "[[@prd/work/root--a-cartridge-declares-what-it-needs.md]]"
+  - "[a-cartridge-declares-what-it-needs](../../prds/a-cartridge-declares-what-it-needs/prd.md)"
 ---
 
 # a-cartridge-installs-from-its-source

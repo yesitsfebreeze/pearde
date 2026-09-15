@@ -3,9 +3,9 @@ kind: work
 description: "Deliver the three Filesystem tools improvements with explicit risk coverage"
 status: open
 subwork:
-  - "[[@prd/work/root--improve-fs-change-provenance.md]]"
-  - "[[@prd/work/root--improve-fs-revision-guards.md]]"
-  - "[[@prd/work/root--improve-fs-search-pages.md]]"
+  - "[improve-fs-change-provenance](../../../fs/prds/improve-fs-change-provenance/prd.md)"
+  - "[improve-fs-revision-guards](../../../fs/prds/improve-fs-revision-guards/prd.md)"
+  - "[improve-fs-search-pages](../../../fs/prds/improve-fs-search-pages/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["planning fs improvements", "reviewing fs cartridge readiness"]
@@ -24,9 +24,9 @@ children; it is not a fourth implementation task. Evidence is in
 
 | Assessment improvement | Implementation owner |
 | --- | --- |
-| 1. Share change attribution between direct files and overlays | [[@prd/work/root--improve-fs-change-provenance.md]] |
-| 2. Use consistent stale-write checks for filesystem mutations | [[@prd/work/root--improve-fs-revision-guards.md]] |
-| 3. Bound and continue file search without losing result identity | [[@prd/work/root--improve-fs-search-pages.md]] |
+| 1. Share change attribution between direct files and overlays | [improve-fs-change-provenance](../../../fs/prds/improve-fs-change-provenance/prd.md) |
+| 2. Use consistent stale-write checks for filesystem mutations | [improve-fs-revision-guards](../../../fs/prds/improve-fs-revision-guards/prd.md) |
+| 3. Bound and continue file search without losing result identity | [improve-fs-search-pages](../../../fs/prds/improve-fs-search-pages/prd.md) |
 
 ## Downside coverage
 

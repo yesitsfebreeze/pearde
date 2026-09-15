@@ -3,9 +3,9 @@ kind: work
 description: "Deliver the three GitFS and ship improvements with explicit risk coverage"
 status: open
 subwork:
-  - "[[@prd/work/root--improve-gitfs-readable-diff.md]]"
-  - "[[@prd/work/root--improve-gitfs-snapshot-selection.md]]"
-  - "[[@prd/work/root--improve-gitfs-reviewable-ship.md]]"
+  - "[improve-gitfs-readable-diff](../../../gitfs/prds/improve-gitfs-readable-diff/prd.md)"
+  - "[improve-gitfs-snapshot-selection](../../../gitfs/prds/improve-gitfs-snapshot-selection/prd.md)"
+  - "[improve-gitfs-reviewable-ship](../../../gitfs/prds/improve-gitfs-reviewable-ship/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["planning gitfs improvements", "reviewing gitfs cartridge readiness"]
@@ -24,9 +24,9 @@ children; it is not a fourth implementation task. Evidence is in
 
 | Assessment improvement | Implementation owner |
 | --- | --- |
-| 1. Inspect session changes without a mutation grant | [[@prd/work/root--improve-gitfs-readable-diff.md]] |
-| 2. Snapshot exactly the selected owned paths | [[@prd/work/root--improve-gitfs-snapshot-selection.md]] |
-| 3. Preview and control shipping with accurate attribution | [[@prd/work/root--improve-gitfs-reviewable-ship.md]] |
+| 1. Inspect session changes without a mutation grant | [improve-gitfs-readable-diff](../../../gitfs/prds/improve-gitfs-readable-diff/prd.md) |
+| 2. Snapshot exactly the selected owned paths | [improve-gitfs-snapshot-selection](../../../gitfs/prds/improve-gitfs-snapshot-selection/prd.md) |
+| 3. Preview and control shipping with accurate attribution | [improve-gitfs-reviewable-ship](../../../gitfs/prds/improve-gitfs-reviewable-ship/prd.md) |
 
 ## Downside coverage
 

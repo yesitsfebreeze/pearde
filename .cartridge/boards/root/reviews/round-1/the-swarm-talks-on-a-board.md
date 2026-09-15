@@ -4,11 +4,11 @@ description: "A message board with channels, a roster, a terse referencing proto
 status: open
 level: 10
 subwork:
-  - "[[@prd/work/root--the-board-is-channels-of-lines.md]]"
-  - "[[@prd/work/root--an-agent-is-one-lookup-from-the-roster.md]]"
-  - "[[@prd/work/root--the-agents-chat-through-one-tool.md]]"
-  - "[[@prd/work/root--a-board-message-is-a-reference-not-a-payload.md]]"
-  - "[[@prd/work/root--the-board-log-replays-who-did-what.md]]"
+  - "[the-board-is-channels-of-lines](../../../sessions/prds/the-board-is-channels-of-lines/prd.md)"
+  - "[an-agent-is-one-lookup-from-the-roster](../../../sessions/prds/an-agent-is-one-lookup-from-the-roster/prd.md)"
+  - "[the-agents-chat-through-one-tool](../../../sessions/prds/the-agents-chat-through-one-tool/prd.md)"
+  - "[a-board-message-is-a-reference-not-a-payload](../../../sessions/prds/a-board-message-is-a-reference-not-a-payload/prd.md)"
+  - "[the-board-log-replays-who-did-what](../../../sessions/prds/the-board-log-replays-who-did-what/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["Making agents talk to each other, adding a channel or a board op, or deciding what a message may carry"]
@@ -25,18 +25,18 @@ it; and one ordered log replays who did what. The result is a planning force wit
 many tools and a small context: an agent's per-turn cost is a bounded roster
 block plus the lines it has not read, not the history of everyone else.
 
-This is the coordination half of [[@prd/work/root--sub-agents-share-the-terminal.md]]: that memo
+This is the coordination half of [sub-agents-share-the-terminal](../../../agent/prds/sub-agents-share-the-terminal/prd.md): that memo
 owns spawning, ownership of the visible shell and the panel that shows children;
 this one owns how they talk. The visible shell stays the owner's, and a board
 post is never an execution path.
 
 | Work | Estimate |
 | --- | --- |
-| [[@prd/work/root--the-board-is-channels-of-lines.md]] | 1d |
-| [[@prd/work/root--an-agent-is-one-lookup-from-the-roster.md]] | 1d |
-| [[@prd/work/root--the-agents-chat-through-one-tool.md]] | 2d |
-| [[@prd/work/root--a-board-message-is-a-reference-not-a-payload.md]] | 1d |
-| [[@prd/work/root--the-board-log-replays-who-did-what.md]] | 2d |
+| [the-board-is-channels-of-lines](../../../sessions/prds/the-board-is-channels-of-lines/prd.md) | 1d |
+| [an-agent-is-one-lookup-from-the-roster](../../../sessions/prds/an-agent-is-one-lookup-from-the-roster/prd.md) | 1d |
+| [the-agents-chat-through-one-tool](../../../sessions/prds/the-agents-chat-through-one-tool/prd.md) | 2d |
+| [a-board-message-is-a-reference-not-a-payload](../../../sessions/prds/a-board-message-is-a-reference-not-a-payload/prd.md) | 1d |
+| [the-board-log-replays-who-did-what](../../../sessions/prds/the-board-log-replays-who-did-what/prd.md) | 2d |
 
 ## Check
 
@@ -79,14 +79,14 @@ assume them.
 The board is local. An existing chat product would give a human UI for free, but
 it would put auth, network latency, rate limits and a third party between agents
 that share a machine, and it cannot hold the ordering that
-[[@prd/work/root--the-board-log-replays-who-did-what.md]] needs. So the substrate is `sessions`, and
+[the-board-log-replays-who-did-what](../../../sessions/prds/the-board-log-replays-who-did-what/prd.md) needs. So the substrate is `sessions`, and
 a bridge that mirrors a channel into an external chat for human reading is a
 separate, optional cartridge — worth building when watching matters more than
 coordinating, and not before.
 
 Terseness is enforced, not requested. The line cap in
-[[@prd/work/root--the-board-is-channels-of-lines.md]] and the reference forms in
-[[@prd/work/root--a-board-message-is-a-reference-not-a-payload.md]] are what make the protocol hold;
+[the-board-is-channels-of-lines](../../../sessions/prds/the-board-is-channels-of-lines/prd.md) and the reference forms in
+[a-board-message-is-a-reference-not-a-payload](../../../sessions/prds/a-board-message-is-a-reference-not-a-payload/prd.md) are what make the protocol hold;
 the routine memo the board cartridge ships teaches the rest. A rule that lives
 only in a prompt is a rule the next prompt rewrite loses.
 

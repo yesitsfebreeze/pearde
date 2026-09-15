@@ -3,13 +3,13 @@ kind: work
 description: "The agent spawns sub-agents that report back through a mailbox, and the agent view shows and switches between them"
 status: open
 needs:
-  - "[[@prd/work/root--the-sidebar-slides-over-the-shell.md]]"
+  - "[the-sidebar-slides-over-the-shell](../../prds/the-sidebar-slides-over-the-shell/prd.md)"
 subwork:
-  - "[[@prd/work/root--sub-agent-sessions-record-parent-and-mailbox.md]]"
-  - "[[@prd/work/root--the-agent-spawns-wakes-and-owns-sub-agents.md]]"
-  - "[[@prd/work/root--the-panel-switches-to-a-sub-agent.md]]"
-  - "[[@prd/work/root--the-swarm-talks-on-a-board.md]]"
-  - "[[@prd/work/root--the-run-is-a-stream-of-typed-events.md]]"
+  - "[sub-agent-sessions-record-parent-and-mailbox](../../../sessions/prds/sub-agent-sessions-record-parent-and-mailbox/prd.md)"
+  - "[the-agent-spawns-wakes-and-owns-sub-agents](../../../agent/prds/the-agent-spawns-wakes-and-owns-sub-agents/prd.md)"
+  - "[the-panel-switches-to-a-sub-agent](../../../ui/prds/the-panel-switches-to-a-sub-agent/prd.md)"
+  - "[the-swarm-talks-on-a-board](../../../sessions/prds/the-swarm-talks-on-a-board/prd.md)"
+  - "[the-run-is-a-stream-of-typed-events](../../../agent/prds/the-run-is-a-stream-of-typed-events/prd.md)"
 ---
 
 # sub-agents-share-the-terminal

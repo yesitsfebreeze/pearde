@@ -29,6 +29,10 @@ export function git(root: string, args: string[], check = true): string {
 export function repoRoot(root: string): string {
   return git(root, ['rev-parse', '--show-toplevel'], false);
 }
+export function gitProbeError(root: string, args: string[]): string {
+  const result = Bun.spawnSync(['git', '-C', root, ...args], { stdout: 'pipe', stderr: 'pipe', timeout: 60_000 });
+  return result.exitCode ? result.stderr.toString().trim() : '';
+}
 export function atomic(file: string, value: string) {
   fs.mkdirSync(path.dirname(file), { recursive: true });
   const temporary = file + '.' + randomUUID() + '.tmp';
@@ -247,7 +251,15 @@ export function codeRepo(prd: Prd): string {
   const raw = prd.fm.repo ?? settings.repo;
   if (!raw && settings['require-repo']) throw Error(prd.ref + ': must name a source repository');
   const root = real(raw ? path.resolve(prd.board, String(raw)) : repoRoot(prd.board));
-  if (!root || !fs.existsSync(root) || !repoRoot(root)) throw Error(prd.ref + ': source is not an existing Git repository');
+  if (!root || !fs.existsSync(root)) throw Error(prd.ref + ': source is not an existing Git repository');
+  if (!repoRoot(root)) {
+    // Distinguish a real gap (a path that is not a git tree) from git failing
+    // from within the sandbox or with no usable environment: the earlier
+    // swallow reported every probe failure as a missing repository, which
+    // sent debugging to the wrong layer.
+    const probe = gitProbeError(root, ['rev-parse', '--show-toplevel']);
+    throw Error(prd.ref + ': source is not an existing Git repository' + (probe ? ' — git failed: ' + probe : ''));
+  }
   return root;
 }
 export function specs(prd: Prd) {

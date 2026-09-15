@@ -13,8 +13,9 @@ uses:
 An explicitly selected PRD board and authorization to implement it, the PRD tool,
 available host collaboration tools, and a coordinator identity. Default board is
 `root`, whose member aliases map to central records and separate code repositories.
-Use this routine when asked to work PRDs continuously. Native work memos use
-[[work-pass]]; never merge their statuses into the PRD engine.
+Use this routine when asked to work PRDs continuously. The board is the only
+work record: analysts follow [[spec-a-prd]], implementers [[implement-a-prd]]
+and collection [[land-a-prd]].
 
 ## Do
 

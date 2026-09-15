@@ -5,7 +5,7 @@ status: open
 level: 11
 estimate: 1d
 needs:
-  - "[[@prd/work/root--a-listener-subscribes-to-event-types.md]]"
+  - "[a-listener-subscribes-to-event-types](../../../runtime/prds/a-listener-subscribes-to-event-types/prd.md)"
 ---
 
 # a-stalled-step-raises-its-own-event

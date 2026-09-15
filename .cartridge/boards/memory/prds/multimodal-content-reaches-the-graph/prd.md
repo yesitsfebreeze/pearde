@@ -1,6 +1,8 @@
 ---
 repo: /Users/feb/dev/cartridge/memory.ctg
-state: open
+state: deferred
+deferred-from: open
+deferred-on: "2026-09-15"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -32,3 +34,19 @@ First probe: confirm whether `src/llm/src/llm.rs` can send an image to the confi
 ## Dependencies and review
 
 No hard needs. Sending private images to a provider that has not yet received them requires user approval. [Review history](review.md): rounds 1–2 inherited, round 3 rebased; maximum five.
+
+## From the retired work memo
+
+Folded 2026-09-15 from `@prd/work/memory--multimodal-content-reaches-the-graph.md` (status open, estimate 2d). The PRD state above is authoritative.
+
+> text, images and mixed content enter the same graph with source provenance and explicit unsupported-media outcomes
+
+### Do
+
+The memory engine accepts text, an image and mixed content through its typed
+media frontier, records graph claims and edges with source provenance, and
+recalls that record through the shared agent tool surface. Unsupported media
+fails explicitly with a source-visible outcome rather than disappearing or
+becoming an unlabelled text fallback. Existing task frontiers and model service
+seams are reused; this does not add a second graph, media store or client-only
+implementation.

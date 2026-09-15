@@ -3,9 +3,9 @@ kind: work
 description: "Deliver the three Policy improvements with explicit risk coverage"
 status: open
 subwork:
-  - "[[@prd/work/root--improve-policy-operation-rules.md]]"
-  - "[[@prd/work/root--improve-policy-resource-scope.md]]"
-  - "[[@prd/work/root--improve-policy-explain.md]]"
+  - "[improve-policy-operation-rules](../../../policy/prds/improve-policy-operation-rules/prd.md)"
+  - "[improve-policy-resource-scope](../../../policy/prds/improve-policy-resource-scope/prd.md)"
+  - "[improve-policy-explain](../../../policy/prds/improve-policy-explain/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["planning policy improvements", "reviewing policy cartridge readiness"]
@@ -24,9 +24,9 @@ children; it is not a fourth implementation task. Evidence is in
 
 | Assessment improvement | Implementation owner |
 | --- | --- |
-| 1. Authorize individual operations with stable precedence | [[@prd/work/root--improve-policy-operation-rules.md]] |
-| 2. Constrain granted file operations to declared resources | [[@prd/work/root--improve-policy-resource-scope.md]] |
-| 3. Explain the effective policy without executing a tool | [[@prd/work/root--improve-policy-explain.md]] |
+| 1. Authorize individual operations with stable precedence | [improve-policy-operation-rules](../../../policy/prds/improve-policy-operation-rules/prd.md) |
+| 2. Constrain granted file operations to declared resources | [improve-policy-resource-scope](../../../policy/prds/improve-policy-resource-scope/prd.md) |
+| 3. Explain the effective policy without executing a tool | [improve-policy-explain](../../../policy/prds/improve-policy-explain/prd.md) |
 
 ## Downside coverage
 
@@ -43,7 +43,7 @@ Start with children whose needs are satisfied. Child dependencies are authoritat
 the table is a coverage view, not a second backlog. Claim one executable child at
 a time and coordinate shared files before work begins. Scope sizes are not time estimates.
 
-Existing records to reconcile before implementation: [[@prd/work/root--headless-policy-approval-channel.md]]. Their current source, status and owner take precedence over a stale assessment.
+Existing records to reconcile before implementation: [headless-policy-approval-channel](../../prds/headless-policy-approval-channel/prd.md). Their current source, status and owner take precedence over a stale assessment.
 
 ## Check
 

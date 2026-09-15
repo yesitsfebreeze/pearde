@@ -5,8 +5,8 @@ status: open
 priority: P2
 size: M
 needs:
-  - "[[@prd/work/root--improve-gitfs-readable-diff.md]]"
-  - "[[@prd/work/root--improve-sessions-client-mapping.md]]"
+  - "[improve-gitfs-readable-diff](../../../gitfs/prds/improve-gitfs-readable-diff/prd.md)"
+  - "[improve-sessions-client-mapping](../../../sessions/prds/improve-sessions-client-mapping/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["share change attribution between direct files and overlays", "implementing fs cartridge improvements"]
@@ -84,6 +84,6 @@ Preserve direct filesystem semantics and keep GitFS overlay ownership distinct. 
 
 Priority P2; scope size M (S = one local change; M = a bounded cross-file
 contract; L = investigation plus likely smaller slices, not a time promise).
-Ready after [[@prd/work/root--improve-gitfs-readable-diff.md]], [[@prd/work/root--improve-sessions-client-mapping.md]] are done with evidence.
+Ready after [improve-gitfs-readable-diff](../../../gitfs/prds/improve-gitfs-readable-diff/prd.md), [improve-sessions-client-mapping](../../../sessions/prds/improve-sessions-client-mapping/prd.md) are done with evidence.
 Leave status open until a worker actually starts; then set owner and active.
 Record Result and mark done only after the checks pass.

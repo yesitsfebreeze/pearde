@@ -5,7 +5,7 @@ status: open
 priority: P2
 size: M
 needs:
-  - "[[@prd/work/root--improve-sessions-client-mapping.md]]"
+  - "[improve-sessions-client-mapping](../../../sessions/prds/improve-sessions-client-mapping/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["preview and apply safe session retention", "implementing sessions cartridge improvements"]
@@ -22,7 +22,7 @@ An operator can inspect stored session sizes/ages and eligible cleanup candidate
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--sub-agent-sessions-record-parent-and-mailbox.md]], [[@prd/work/root--the-board-is-channels-of-lines.md]].
+Related existing work (context/coordination, not automatically a hard dependency): [sub-agent-sessions-record-parent-and-mailbox](../../../sessions/prds/sub-agent-sessions-record-parent-and-mailbox/prd.md), [the-board-is-channels-of-lines](../../../sessions/prds/the-board-is-channels-of-lines/prd.md).
 
 ## Footprint
 
@@ -80,6 +80,6 @@ Keep old snapshots readable; any migration preserves original bytes and uses ato
 
 Priority P2; scope size M (S = one local change; M = a bounded cross-file
 contract; L = investigation plus likely smaller slices, not a time promise).
-Ready after [[@prd/work/root--improve-sessions-client-mapping.md]] are done with evidence.
+Ready after [improve-sessions-client-mapping](../../../sessions/prds/improve-sessions-client-mapping/prd.md) are done with evidence.
 Leave status open until a worker actually starts; then set owner and active.
 Record Result and mark done only after the checks pass.

@@ -3,8 +3,8 @@ kind: work
 description: "The agent is reached and answered without leaving the terminal"
 status: open
 subwork:
-  - "[[@prd/work/root--the-palette-and-exit.md]]"
-  - "[[@prd/work/root--the-context-inspector-opens-from-the-chat-editor.md]]"
+  - "[the-palette-and-exit](../../prds/the-palette-and-exit/prd.md)"
+  - "[the-context-inspector-opens-from-the-chat-editor](../../prds/the-context-inspector-opens-from-the-chat-editor/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["Changing the composer, the agent's output path into the shell, approvals or run control"]
@@ -30,9 +30,9 @@ reading. A run in flight never takes the shell away: the prompt keeps accepting
 input while the agent works.
 
 Scope is the composer, the agent's output path into the shell stream, approvals
-and run control. The shell underneath belongs to [[@prd/work/root--the-wrapped-shell.md]]; what the
-agent knows belongs to [[@prd/work/root--the-record-feeds-the-agent.md]]; where the tokens come
-from belongs to [[@prd/work/root--models-reach-the-agent.md]].
+and run control. The shell underneath belongs to [the-wrapped-shell](../../prds/the-wrapped-shell/prd.md); what the
+agent knows belongs to [the-record-feeds-the-agent](../../prds/the-record-feeds-the-agent/prd.md); where the tokens come
+from belongs to [models-reach-the-agent](../../prds/models-reach-the-agent/prd.md).
 
 ## Check
 
@@ -58,7 +58,7 @@ emits the Markdown reply and a `done`. No model, no network.
 
 ## Result
 
-Three tests over the same PTY fixture as [[@prd/work/root--the-wrapped-shell.md]], about fifteen
+Three tests over the same PTY fixture as [the-wrapped-shell](../../prds/the-wrapped-shell/prd.md), about fifteen
 seconds for all six together.
 
 One thing worth knowing before writing another Lua fixture in a Python test: the

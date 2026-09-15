@@ -3,9 +3,9 @@ kind: work
 description: "Deliver the three Agent loop improvements with explicit risk coverage"
 status: open
 subwork:
-  - "[[@prd/work/root--improve-agent-task-baseline.md]]"
-  - "[[@prd/work/root--improve-agent-resume-boundaries.md]]"
-  - "[[@prd/work/root--improve-agent-decision-attribution.md]]"
+  - "[improve-agent-task-baseline](../../../agent/prds/improve-agent-task-baseline/prd.md)"
+  - "[improve-agent-resume-boundaries](../../../agent/prds/improve-agent-resume-boundaries/prd.md)"
+  - "[improve-agent-decision-attribution](../../../agent/prds/improve-agent-decision-attribution/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["planning agent improvements", "reviewing agent cartridge readiness"]
@@ -24,9 +24,9 @@ children; it is not a fourth implementation task. Evidence is in
 
 | Assessment improvement | Implementation owner |
 | --- | --- |
-| 1. Compare cartridge-native and Codex task outcomes reproducibly | [[@prd/work/root--improve-agent-task-baseline.md]] |
-| 2. Resume interrupted runs without replaying uncertain mutations | [[@prd/work/root--improve-agent-resume-boundaries.md]] |
-| 3. Trace tool dispatch to exact context and route configuration | [[@prd/work/root--improve-agent-decision-attribution.md]] |
+| 1. Compare cartridge-native and Codex task outcomes reproducibly | [improve-agent-task-baseline](../../../agent/prds/improve-agent-task-baseline/prd.md) |
+| 2. Resume interrupted runs without replaying uncertain mutations | [improve-agent-resume-boundaries](../../../agent/prds/improve-agent-resume-boundaries/prd.md) |
+| 3. Trace tool dispatch to exact context and route configuration | [improve-agent-decision-attribution](../../../agent/prds/improve-agent-decision-attribution/prd.md) |
 
 ## Downside coverage
 
@@ -43,7 +43,7 @@ Start with children whose needs are satisfied. Child dependencies are authoritat
 the table is a coverage view, not a second backlog. Claim one executable child at
 a time and coordinate shared files before work begins. Scope sizes are not time estimates.
 
-Existing records to reconcile before implementation: [[@prd/work/root--agents-query-the-tool-graph.md]], [[@prd/work/root--the-agent-spawns-wakes-and-owns-sub-agents.md]]. Their current source, status and owner take precedence over a stale assessment.
+Existing records to reconcile before implementation: [agents-query-the-tool-graph](../../prds/agents-query-the-tool-graph/prd.md), [the-agent-spawns-wakes-and-owns-sub-agents](../../../agent/prds/the-agent-spawns-wakes-and-owns-sub-agents/prd.md). Their current source, status and owner take precedence over a stale assessment.
 
 ## Check
 

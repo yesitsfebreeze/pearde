@@ -20,7 +20,7 @@ A default landscape query returns relevant providers and references within a con
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--a-search-ranks-current-guidance-over-delivered-history.md]], [[handle-memory-staleness-and-conflicts]].
+Related existing work (context/coordination, not automatically a hard dependency): [a-search-ranks-current-guidance-over-delivered-history](../../../landscape/prds/a-search-ranks-current-guidance-over-delivered-history/prd.md), [[handle-memory-staleness-and-conflicts]].
 
 ## Footprint
 

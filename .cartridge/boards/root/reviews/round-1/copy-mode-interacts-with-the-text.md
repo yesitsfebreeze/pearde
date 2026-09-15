@@ -5,7 +5,7 @@ status: open
 level: 10
 priority: P1
 estimate: 6h
-needs: ["[[@prd/work/root--the-ui-paints-the-grid.md]]"]
+needs: ["[the-ui-paints-the-grid](../../../ui/prds/the-ui-paints-the-grid/prd.md)"]
 ---
 
 # copy-mode-interacts-with-the-text
@@ -29,7 +29,7 @@ interact with:
    and the memos, without leaving the mode.
 
 Selection content and target record writes go through the existing memo tool
-and session services; nothing bypasses [[@prd/work/root--lua-only-core-boundary.md]].
+and session services; nothing bypasses [lua-only-core-boundary](../../prds/lua-only-core-boundary/prd.md).
 
 ## Spec
 

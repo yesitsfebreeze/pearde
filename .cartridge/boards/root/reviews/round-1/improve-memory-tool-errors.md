@@ -5,8 +5,8 @@ status: open
 priority: P0
 size: M
 needs:
-  - "[[@prd/work/root--improve-tool-result-contract.md]]"
-  - "[[@prd/work/root--improve-memory-readiness.md]]"
+  - "[improve-tool-result-contract](../../prds/improve-tool-result-contract/prd.md)"
+  - "[improve-memory-readiness](../../../memory/prds/improve-memory-readiness/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["return actionable memory failures and enforce the tool schema", "implementing memory-tool cartridge improvements"]
@@ -82,6 +82,6 @@ Keep query/ingest compatible during extension. New mutations are opt-in policy o
 
 Priority P0; scope size M (S = one local change; M = a bounded cross-file
 contract; L = investigation plus likely smaller slices, not a time promise).
-Ready after [[@prd/work/root--improve-tool-result-contract.md]], [[@prd/work/root--improve-memory-readiness.md]] are done with evidence.
+Ready after [improve-tool-result-contract](../../prds/improve-tool-result-contract/prd.md), [improve-memory-readiness](../../../memory/prds/improve-memory-readiness/prd.md) are done with evidence.
 Leave status open until a worker actually starts; then set owner and active.
 Record Result and mark done only after the checks pass.

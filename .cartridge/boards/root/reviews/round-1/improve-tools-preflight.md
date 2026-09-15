@@ -20,7 +20,7 @@ Each mutating workspace operation can report inputs, paths, prerequisite tools a
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--lane-rm-refuses-after-the-gates-run.md]], [[@prd/work/root--lanes-do-not-poison-each-others-builds.md]].
+Related existing work (context/coordination, not automatically a hard dependency): [lane-rm-refuses-after-the-gates-run](../../prds/lane-rm-refuses-after-the-gates-run/prd.md), [lanes-do-not-poison-each-others-builds](../../prds/lanes-do-not-poison-each-others-builds/prd.md).
 
 ## Footprint
 

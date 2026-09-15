@@ -5,7 +5,7 @@ status: open
 level: 11
 estimate: 1d
 needs:
-  - "[[@prd/work/root--an-event-declares-its-type.md]]"
+  - "[an-event-declares-its-type](../../../agent/prds/an-event-declares-its-type/prd.md)"
 ---
 
 # a-listener-subscribes-to-event-types
@@ -21,7 +21,7 @@ metric sees the stream it cares about and nothing else.
 A listener's only way back in is a post. It cannot cut a step, answer an approval
 or change a phase, because the run task is the one thing deciding what the run
 does; a listener that wants the run to change course posts an event and lets
-[[@prd/work/root--a-priority-event-unblocks-the-step.md]] decide.
+[a-priority-event-unblocks-the-step](../../../agent/prds/a-priority-event-unblocks-the-step/prd.md) decide.
 
 A listener never holds a run up. It is dispatched without the run waiting on it,
 bounded, and a listener that errors or hangs is dropped and recorded rather than

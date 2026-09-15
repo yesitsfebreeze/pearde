@@ -5,7 +5,7 @@ status: open
 level: 11
 estimate: 1d
 needs:
-  - "[[@prd/work/root--the-agents-chat-through-one-tool.md]]"
+  - "[the-agents-chat-through-one-tool](../../../sessions/prds/the-agents-chat-through-one-tool/prd.md)"
 ---
 
 # a-board-message-is-a-reference-not-a-payload
@@ -42,7 +42,7 @@ Observed 2026-09-12. Everything a message would want to quote is already
 addressable: memos are `<kind>/<name>.md` in a record every enabled cartridge
 shares, `tool.memo` resolves and reads them, sessions and runs have ids, and
 channel lines will have sequence numbers from
-[[@prd/work/root--the-board-is-channels-of-lines.md]]. What is missing is the discipline and its
+[the-board-is-channels-of-lines](../../../sessions/prds/the-board-is-channels-of-lines/prd.md). What is missing is the discipline and its
 enforcement point — without a cap, a model will paste, and a swarm's cost becomes
 quadratic in what it has read.
 

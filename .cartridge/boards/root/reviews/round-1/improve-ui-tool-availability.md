@@ -5,8 +5,8 @@ status: open
 priority: P2
 size: M
 needs:
-  - "[[@prd/work/root--improve-mcp-tool-readiness.md]]"
-  - "[[@prd/work/root--improve-mcp-refresh-catalog.md]]"
+  - "[improve-mcp-tool-readiness](../../../mcp/prds/improve-mcp-tool-readiness/prd.md)"
+  - "[improve-mcp-refresh-catalog](../../../mcp/prds/improve-mcp-refresh-catalog/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["explain tool readiness and policy in the palette", "implementing ui cartridge improvements"]
@@ -23,7 +23,7 @@ The palette distinguishes registered, ready, blocked and unverified tools and le
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--the-sidebar-slides-over-the-shell.md]], [[@prd/work/root--the-palette-and-exit.md]], [[@prd/work/root--the-terminal-is-drawn-from-pty.md]].
+Related existing work (context/coordination, not automatically a hard dependency): [the-sidebar-slides-over-the-shell](../../prds/the-sidebar-slides-over-the-shell/prd.md), [the-palette-and-exit](../../prds/the-palette-and-exit/prd.md), [the-terminal-is-drawn-from-pty](../../prds/the-terminal-is-drawn-from-pty/prd.md).
 
 ## Footprint
 
@@ -82,6 +82,6 @@ Keep session/PTY state in their existing owners. New UI features can be disabled
 
 Priority P2; scope size M (S = one local change; M = a bounded cross-file
 contract; L = investigation plus likely smaller slices, not a time promise).
-Ready after [[@prd/work/root--improve-mcp-tool-readiness.md]], [[@prd/work/root--improve-mcp-refresh-catalog.md]] are done with evidence.
+Ready after [improve-mcp-tool-readiness](../../../mcp/prds/improve-mcp-tool-readiness/prd.md), [improve-mcp-refresh-catalog](../../../mcp/prds/improve-mcp-refresh-catalog/prd.md) are done with evidence.
 Leave status open until a worker actually starts; then set owner and active.
 Record Result and mark done only after the checks pass.

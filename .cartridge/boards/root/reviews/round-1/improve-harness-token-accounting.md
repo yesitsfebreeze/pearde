@@ -5,7 +5,7 @@ status: open
 priority: P1
 size: M
 needs:
-  - "[[@prd/work/root--improve-router-capability-routing.md]]"
+  - "[improve-router-capability-routing](../../../router/prds/improve-router-capability-routing/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["show token estimates alongside serialized bytes", "implementing harness cartridge improvements"]
@@ -22,7 +22,7 @@ Context inspection reports model-specific estimates, observed provider usage and
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--rolling-context-retains-decision-evidence.md]], [[@prd/work/root--long-horizon-recall-benchmark.md]].
+Related existing work (context/coordination, not automatically a hard dependency): [rolling-context-retains-decision-evidence](../../prds/rolling-context-retains-decision-evidence/prd.md), [long-horizon-recall-benchmark](../../prds/long-horizon-recall-benchmark/prd.md).
 
 ## Footprint
 
@@ -81,6 +81,6 @@ Keep canonical transcripts intact. New metadata/inspection is additive; revert c
 
 Priority P1; scope size M (S = one local change; M = a bounded cross-file
 contract; L = investigation plus likely smaller slices, not a time promise).
-Ready after [[@prd/work/root--improve-router-capability-routing.md]] are done with evidence.
+Ready after [improve-router-capability-routing](../../../router/prds/improve-router-capability-routing/prd.md) are done with evidence.
 Leave status open until a worker actually starts; then set owner and active.
 Record Result and mark done only after the checks pass.

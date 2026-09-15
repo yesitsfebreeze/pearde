@@ -6,7 +6,7 @@ level: 11
 priority: P1
 estimate: 2d
 needs:
-  - "[[@prd/work/root--every-enabled-tool-ships-a-contract-probe.md]]"
+  - "[every-enabled-tool-ships-a-contract-probe](../../prds/every-enabled-tool-ships-a-contract-probe/prd.md)"
 ---
 
 # Tool probes run and locate a failing provider
@@ -39,5 +39,5 @@ without a model: use a deterministic local provider, as the audit
 (`just agent-smoke`) already do.
 
 Scope: running probes and reporting them. Discovering what to run is
-[[@prd/work/root--every-enabled-tool-ships-a-contract-probe.md]]; the evidence channel the report
-cites is [[@prd/work/root--a-turn-carries-one-id-through-host-lua-and-bun.md]].
+[every-enabled-tool-ships-a-contract-probe](../../prds/every-enabled-tool-ships-a-contract-probe/prd.md); the evidence channel the report
+cites is [a-turn-carries-one-id-through-host-lua-and-bun](../../prds/a-turn-carries-one-id-through-host-lua-and-bun/prd.md).

@@ -6,7 +6,7 @@ level: 11
 priority: P1
 estimate: 2d
 needs:
-  - "[[@prd/work/root--debug-mode-opens-and-closes-from-the-shell.md]]"
+  - "[debug-mode-opens-and-closes-from-the-shell](../../prds/debug-mode-opens-and-closes-from-the-shell/prd.md)"
 ---
 
 # Every enabled tool ships a contract probe
@@ -31,11 +31,11 @@ The missing half is the probe itself. No cartridge ships one today: of
 record, none holds a probe memo, and there is no declared kind for one. A probe
 travels with the cartridge that makes the claim, so adding a tool adds its probe
 in the same folder — discovery must not carry a central list of what to check.
-The program map from [[@prd/work/root--the-agent-can-discover-its-own-program.md]]
+The program map from [the-agent-can-discover-its-own-program](../../prds/the-agent-can-discover-its-own-program/prd.md)
 (`builtin/memo/.zirkle/memos/note/program-map.md`,
 `program-cartridge-contracts.md`, `program-checks.md`) is the description to
 attach probes to.
 
 Scope: declaring and discovering probes, and reporting what is unverified.
 Executing them against fixtures is
-[[@prd/work/root--tool-probes-run-and-locate-a-failing-provider.md]].
+[tool-probes-run-and-locate-a-failing-provider](../../prds/tool-probes-run-and-locate-a-failing-provider/prd.md).

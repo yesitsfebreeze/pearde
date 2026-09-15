@@ -5,9 +5,9 @@ status: open
 priority: P1
 size: M
 needs:
-  - "[[@prd/work/root--improve-memory-readiness.md]]"
-  - "[[@prd/work/root--improve-policy-explain.md]]"
-  - "[[@prd/work/root--improve-tool-result-contract.md]]"
+  - "[improve-memory-readiness](../../../memory/prds/improve-memory-readiness/prd.md)"
+  - "[improve-policy-explain](../../../policy/prds/improve-policy-explain/prd.md)"
+  - "[improve-tool-result-contract](../../prds/improve-tool-result-contract/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["discover policy and readiness for exposed tools", "implementing mcp cartridge improvements"]
@@ -24,7 +24,7 @@ Discovery distinguishes installed, exposed, allowed, dependency-ready and unveri
 This is a planned improvement, not a claim that every subfeature is absent.
 Baseline and limitations: [[cartridge-improvement-evidence]]. Follow
 [[@prd/routine/plan-cartridge-work.md]] and read the current source before choosing implementation.
-Related existing work (context/coordination, not automatically a hard dependency): [[@prd/work/root--headless-policy-approval-channel.md]], [[@prd/work/root--every-enabled-tool-ships-a-contract-probe.md]], [[@prd/work/root--rpc-contracts-run-across-rust-lua-and-bun.md]].
+Related existing work (context/coordination, not automatically a hard dependency): [headless-policy-approval-channel](../../prds/headless-policy-approval-channel/prd.md), [every-enabled-tool-ships-a-contract-probe](../../prds/every-enabled-tool-ships-a-contract-probe/prd.md), [rpc-contracts-run-across-rust-lua-and-bun](../../prds/rpc-contracts-run-across-rust-lua-and-bun/prd.md).
 
 ## Footprint
 
@@ -83,6 +83,6 @@ Keep standard MCP negotiation and current client compatibility. New diagnostics 
 
 Priority P1; scope size M (S = one local change; M = a bounded cross-file
 contract; L = investigation plus likely smaller slices, not a time promise).
-Ready after [[@prd/work/root--improve-memory-readiness.md]], [[@prd/work/root--improve-policy-explain.md]], [[@prd/work/root--improve-tool-result-contract.md]] are done with evidence.
+Ready after [improve-memory-readiness](../../../memory/prds/improve-memory-readiness/prd.md), [improve-policy-explain](../../../policy/prds/improve-policy-explain/prd.md), [improve-tool-result-contract](../../prds/improve-tool-result-contract/prd.md) are done with evidence.
 Leave status open until a worker actually starts; then set owner and active.
 Record Result and mark done only after the checks pass.

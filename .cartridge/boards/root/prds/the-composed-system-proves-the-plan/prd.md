@@ -1,6 +1,9 @@
 ---
 repo: /Users/feb/dev/cartridge
-state: open
+state: deferred
+deferred-from: open
+deferred-on: "2026-09-15"
+superseded-by: "@root/the-gates-are-green-at-one-pinned-set-of-shas"
 origin: requested
 priority: 50
 blast-radius: mid

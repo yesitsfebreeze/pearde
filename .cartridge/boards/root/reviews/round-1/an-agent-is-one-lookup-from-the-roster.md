@@ -5,7 +5,7 @@ status: open
 level: 11
 estimate: 1d
 needs:
-  - "[[@prd/work/root--the-board-is-channels-of-lines.md]]"
+  - "[the-board-is-channels-of-lines](../../../sessions/prds/the-board-is-channels-of-lines/prd.md)"
 ---
 
 # an-agent-is-one-lookup-from-the-roster

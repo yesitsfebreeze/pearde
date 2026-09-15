@@ -3,9 +3,9 @@ kind: work
 description: "Deliver the three Router improvements with explicit risk coverage"
 status: open
 subwork:
-  - "[[@prd/work/root--improve-router-route-explanation.md]]"
-  - "[[@prd/work/root--improve-router-capability-routing.md]]"
-  - "[[@prd/work/root--improve-router-cost-latency.md]]"
+  - "[improve-router-route-explanation](../../../router/prds/improve-router-route-explanation/prd.md)"
+  - "[improve-router-capability-routing](../../../router/prds/improve-router-capability-routing/prd.md)"
+  - "[improve-router-cost-latency](../../../router/prds/improve-router-cost-latency/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["planning router improvements", "reviewing router cartridge readiness"]
@@ -24,9 +24,9 @@ children; it is not a fourth implementation task. Evidence is in
 
 | Assessment improvement | Implementation owner |
 | --- | --- |
-| 1. Explain why a provider was selected | [[@prd/work/root--improve-router-route-explanation.md]] |
-| 2. Require compatible model capabilities before fallback | [[@prd/work/root--improve-router-capability-routing.md]] |
-| 3. Report attributable route cost and latency estimates | [[@prd/work/root--improve-router-cost-latency.md]] |
+| 1. Explain why a provider was selected | [improve-router-route-explanation](../../../router/prds/improve-router-route-explanation/prd.md) |
+| 2. Require compatible model capabilities before fallback | [improve-router-capability-routing](../../../router/prds/improve-router-capability-routing/prd.md) |
+| 3. Report attributable route cost and latency estimates | [improve-router-cost-latency](../../../router/prds/improve-router-cost-latency/prd.md) |
 
 ## Downside coverage
 
@@ -43,7 +43,7 @@ Start with children whose needs are satisfied. Child dependencies are authoritat
 the table is a coverage view, not a second backlog. Claim one executable child at
 a time and coordinate shared files before work begins. Scope sizes are not time estimates.
 
-Existing records to reconcile before implementation: [[@prd/work/root--the-router-ranks-and-recovers.md]]. Their current source, status and owner take precedence over a stale assessment.
+Existing records to reconcile before implementation: [the-router-ranks-and-recovers](../../prds/the-router-ranks-and-recovers/prd.md). Their current source, status and owner take precedence over a stale assessment.
 
 ## Check
 

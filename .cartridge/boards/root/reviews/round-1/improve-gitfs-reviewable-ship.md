@@ -5,9 +5,9 @@ status: open
 priority: P1
 size: L
 needs:
-  - "[[@prd/work/root--improve-gitfs-readable-diff.md]]"
-  - "[[@prd/work/root--improve-gitfs-snapshot-selection.md]]"
-  - "[[@prd/work/root--improve-policy-operation-rules.md]]"
+  - "[improve-gitfs-readable-diff](../../../gitfs/prds/improve-gitfs-readable-diff/prd.md)"
+  - "[improve-gitfs-snapshot-selection](../../../gitfs/prds/improve-gitfs-snapshot-selection/prd.md)"
+  - "[improve-policy-operation-rules](../../../policy/prds/improve-policy-operation-rules/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["preview and control shipping with accurate attribution", "implementing gitfs cartridge improvements"]
@@ -83,6 +83,6 @@ Use temporary Git repos/remotes for checks. Preserve unrelated index/worktree/re
 
 Priority P1; scope size L (S = one local change; M = a bounded cross-file
 contract; L = investigation plus likely smaller slices, not a time promise).
-Ready after [[@prd/work/root--improve-gitfs-readable-diff.md]], [[@prd/work/root--improve-gitfs-snapshot-selection.md]], [[@prd/work/root--improve-policy-operation-rules.md]] are done with evidence.
+Ready after [improve-gitfs-readable-diff](../../../gitfs/prds/improve-gitfs-readable-diff/prd.md), [improve-gitfs-snapshot-selection](../../../gitfs/prds/improve-gitfs-snapshot-selection/prd.md), [improve-policy-operation-rules](../../../policy/prds/improve-policy-operation-rules/prd.md) are done with evidence.
 Leave status open until a worker actually starts; then set owner and active.
 Record Result and mark done only after the checks pass.

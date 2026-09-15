@@ -5,8 +5,8 @@ status: open
 priority: P2
 size: L
 needs:
-  - "[[@prd/work/root--improve-memory-tool-get.md]]"
-  - "[[@prd/work/root--improve-policy-operation-rules.md]]"
+  - "[improve-memory-tool-get](../../../memory/prds/improve-memory-tool-get/prd.md)"
+  - "[improve-policy-operation-rules](../../../policy/prds/improve-policy-operation-rules/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["correct or forget one identified fact through the tool boundary", "implementing memory-tool cartridge improvements"]
@@ -82,6 +82,6 @@ Keep query/ingest compatible during extension. New mutations are opt-in policy o
 
 Priority P2; scope size L (S = one local change; M = a bounded cross-file
 contract; L = investigation plus likely smaller slices, not a time promise).
-Ready after [[@prd/work/root--improve-memory-tool-get.md]], [[@prd/work/root--improve-policy-operation-rules.md]] are done with evidence.
+Ready after [improve-memory-tool-get](../../../memory/prds/improve-memory-tool-get/prd.md), [improve-policy-operation-rules](../../../policy/prds/improve-policy-operation-rules/prd.md) are done with evidence.
 Leave status open until a worker actually starts; then set owner and active.
 Record Result and mark done only after the checks pass.

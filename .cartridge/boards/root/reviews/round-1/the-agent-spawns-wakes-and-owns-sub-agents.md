@@ -3,7 +3,7 @@ kind: work
 description: "The agent cartridge spawns, wakes, waits on and owns sub-agents, keeping the visible shell to the owner"
 status: open
 needs:
-  - "[[@prd/work/root--sub-agent-sessions-record-parent-and-mailbox.md]]"
+  - "[sub-agent-sessions-record-parent-and-mailbox](../../../sessions/prds/sub-agent-sessions-record-parent-and-mailbox/prd.md)"
 ---
 
 # the-agent-spawns-wakes-and-owns-sub-agents

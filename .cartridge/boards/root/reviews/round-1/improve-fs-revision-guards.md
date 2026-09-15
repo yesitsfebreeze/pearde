@@ -5,7 +5,7 @@ status: open
 priority: P2
 size: M
 needs:
-  - "[[@prd/work/root--improve-fs-change-provenance.md]]"
+  - "[improve-fs-change-provenance](../../../fs/prds/improve-fs-change-provenance/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["use consistent stale-write checks for filesystem mutations", "implementing fs cartridge improvements"]
@@ -83,6 +83,6 @@ Preserve direct filesystem semantics and keep GitFS overlay ownership distinct. 
 
 Priority P2; scope size M (S = one local change; M = a bounded cross-file
 contract; L = investigation plus likely smaller slices, not a time promise).
-Ready after [[@prd/work/root--improve-fs-change-provenance.md]] are done with evidence.
+Ready after [improve-fs-change-provenance](../../../fs/prds/improve-fs-change-provenance/prd.md) are done with evidence.
 Leave status open until a worker actually starts; then set owner and active.
 Record Result and mark done only after the checks pass.

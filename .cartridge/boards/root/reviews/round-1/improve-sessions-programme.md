@@ -3,9 +3,9 @@ kind: work
 description: "Deliver the three Sessions improvements with explicit risk coverage"
 status: open
 subwork:
-  - "[[@prd/work/root--improve-sessions-client-mapping.md]]"
-  - "[[@prd/work/root--improve-sessions-retention.md]]"
-  - "[[@prd/work/root--improve-sessions-recovery.md]]"
+  - "[improve-sessions-client-mapping](../../../sessions/prds/improve-sessions-client-mapping/prd.md)"
+  - "[improve-sessions-retention](../../../sessions/prds/improve-sessions-retention/prd.md)"
+  - "[improve-sessions-recovery](../../../sessions/prds/improve-sessions-recovery/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["planning sessions improvements", "reviewing sessions cartridge readiness"]
@@ -24,9 +24,9 @@ children; it is not a fourth implementation task. Evidence is in
 
 | Assessment improvement | Implementation owner |
 | --- | --- |
-| 1. Map client conversations to cartridge sessions honestly | [[@prd/work/root--improve-sessions-client-mapping.md]] |
-| 2. Preview and apply safe session retention | [[@prd/work/root--improve-sessions-retention.md]] |
-| 3. Explain session damage and narrowly repair eligible snapshots | [[@prd/work/root--improve-sessions-recovery.md]] |
+| 1. Map client conversations to cartridge sessions honestly | [improve-sessions-client-mapping](../../../sessions/prds/improve-sessions-client-mapping/prd.md) |
+| 2. Preview and apply safe session retention | [improve-sessions-retention](../../../sessions/prds/improve-sessions-retention/prd.md) |
+| 3. Explain session damage and narrowly repair eligible snapshots | [improve-sessions-recovery](../../../sessions/prds/improve-sessions-recovery/prd.md) |
 
 ## Downside coverage
 
@@ -43,7 +43,7 @@ Start with children whose needs are satisfied. Child dependencies are authoritat
 the table is a coverage view, not a second backlog. Claim one executable child at
 a time and coordinate shared files before work begins. Scope sizes are not time estimates.
 
-Existing records to reconcile before implementation: [[@prd/work/root--sub-agent-sessions-record-parent-and-mailbox.md]], [[@prd/work/root--the-board-is-channels-of-lines.md]]. Their current source, status and owner take precedence over a stale assessment.
+Existing records to reconcile before implementation: [sub-agent-sessions-record-parent-and-mailbox](../../../sessions/prds/sub-agent-sessions-record-parent-and-mailbox/prd.md), [the-board-is-channels-of-lines](../../../sessions/prds/the-board-is-channels-of-lines/prd.md). Their current source, status and owner take precedence over a stale assessment.
 
 ## Check
 

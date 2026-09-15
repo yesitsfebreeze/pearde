@@ -6,7 +6,7 @@ level: 10
 priority: P1
 estimate: 4h
 needs:
-  - "[[@prd/work/root--fresh-checkouts-can-run-the-gates.md]]"
+  - "[fresh-checkouts-can-run-the-gates](../../prds/fresh-checkouts-can-run-the-gates/prd.md)"
 ---
 
 # Repository CI runs the gates and reports terminal coverage explicitly

@@ -4,7 +4,7 @@ description: "Two gutter columns, one icon per command block per side, sticky at
 status: open
 estimate: 2d
 needs:
-  - "[[@prd/work/root--the-ui-paints-the-grid.md]]"
+  - "[the-ui-paints-the-grid](../../../ui/prds/the-ui-paints-the-grid/prd.md)"
 ---
 
 # the-gutter-shows-both-sides
@@ -54,7 +54,7 @@ or put agent text into the editor stream.
 The gutter is two columns left of the grid, present in every mode. The probe
 (pass one, committed as `cba766f` on this lane) built both data sides and the
 pure mapping; the implementer continues it. The row wiring is gated on the
-parent [[@prd/work/root--the-ui-paints-the-grid.md]] — only its grid can say which block-line each
+parent [the-ui-paints-the-grid](../../../ui/prds/the-ui-paints-the-grid/prd.md) — only its grid can say which block-line each
 viewport row is.
 
 Probe, done:
@@ -83,7 +83,7 @@ Remaining steps, in order:
 
 1. `builtin/ui/ui/terminal.tsx` — wrap `shell.terminal`'s `<terminal>` in a
    row box with a 2-wide gutter column beside it; in the read pump also poll
-   `term {op:"blocks"}` and, once [[@prd/work/root--the-ui-paints-the-grid.md]] has landed the
+   `term {op:"blocks"}` and, once [the-ui-paints-the-grid](../../../ui/prds/the-ui-paints-the-grid/prd.md) has landed the
    viewport-to-block-line mapping, draw `gutter.rows` into the column with
    the dim bit from `agentRan`. Tool: terminal (semantic navigation); run
    `bun --conditions=browser test` after.

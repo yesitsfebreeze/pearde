@@ -3,9 +3,9 @@ kind: work
 description: "Deliver the three Memory improvements with explicit risk coverage"
 status: open
 subwork:
-  - "[[@prd/work/root--improve-memory-owner-access.md]]"
-  - "[[@prd/work/root--improve-memory-readiness.md]]"
-  - "[[@prd/work/root--improve-memory-provenance.md]]"
+  - "[improve-memory-owner-access](../../../memory/prds/improve-memory-owner-access/prd.md)"
+  - "[improve-memory-readiness](../../../memory/prds/improve-memory-readiness/prd.md)"
+  - "[improve-memory-provenance](../../../memory/prds/improve-memory-provenance/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["planning memory improvements", "reviewing memory cartridge readiness"]
@@ -24,9 +24,9 @@ children; it is not a fourth implementation task. Evidence is in
 
 | Assessment improvement | Implementation owner |
 | --- | --- |
-| 1. Query a memory store through its existing owner | [[@prd/work/root--improve-memory-owner-access.md]] |
-| 2. Report memory readiness separately from registration | [[@prd/work/root--improve-memory-readiness.md]] |
-| 3. Expose fact provenance freshness and conflicts consistently | [[@prd/work/root--improve-memory-provenance.md]] |
+| 1. Query a memory store through its existing owner | [improve-memory-owner-access](../../../memory/prds/improve-memory-owner-access/prd.md) |
+| 2. Report memory readiness separately from registration | [improve-memory-readiness](../../../memory/prds/improve-memory-readiness/prd.md) |
+| 3. Expose fact provenance freshness and conflicts consistently | [improve-memory-provenance](../../../memory/prds/improve-memory-provenance/prd.md) |
 
 ## Downside coverage
 

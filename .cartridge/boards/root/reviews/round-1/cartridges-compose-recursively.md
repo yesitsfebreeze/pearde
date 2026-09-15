@@ -4,11 +4,11 @@ description: "A cartridge composes cartridges: needs resolve from declarations, 
 status: open
 level: 9
 subwork:
-  - "[[@prd/work/root--a-cartridge-declares-what-it-needs.md]]"
-  - "[[@prd/work/root--a-nested-cartridge-is-a-first-class-entry.md]]"
-  - "[[@prd/work/root--the-profile-is-the-root-composer.md]]"
-  - "[[@prd/work/root--a-key-starts-its-provider-on-demand.md]]"
-  - "[[@prd/work/root--a-cartridge-installs-from-its-source.md]]"
+  - "[a-cartridge-declares-what-it-needs](../../prds/a-cartridge-declares-what-it-needs/prd.md)"
+  - "[a-nested-cartridge-is-a-first-class-entry](../../prds/a-nested-cartridge-is-a-first-class-entry/prd.md)"
+  - "[the-profile-is-the-root-composer](../../../runtime/prds/the-profile-is-the-root-composer/prd.md)"
+  - "[a-key-starts-its-provider-on-demand](../../../runtime/prds/a-key-starts-its-provider-on-demand/prd.md)"
+  - "[a-cartridge-installs-from-its-source](../../../runtime/prds/a-cartridge-installs-from-its-source/prd.md)"
 uses:
   - usage: "[[read-usage]]"
     when: ["Composing cartridges inside cartridges, resolving what a cartridge needs, or deciding when a cartridge starts"]
@@ -26,7 +26,7 @@ when something reaches it, not when the host boots. A program is then a folder
 set plus a small entry list, and extending the system is adding a folder — local,
 or fetched from the repository its manifest names.
 
-This does not replace [[@prd/work/root--cartridges-compose-live.md]], which owns live replacement of
+This does not replace [cartridges-compose-live](../../prds/cartridges-compose-live/prd.md), which owns live replacement of
 a flat profile; it is what makes that model recursive. The three properties that
 must not regress: one key has one active provider per realm, replacement stays a
 transaction over the bank and the provided keys, and a cartridge that is not
@@ -34,11 +34,11 @@ enabled leaves no trace.
 
 | Work | Estimate |
 | --- | --- |
-| [[@prd/work/root--a-cartridge-declares-what-it-needs.md]] | 1d |
-| [[@prd/work/root--a-nested-cartridge-is-a-first-class-entry.md]] | 2d |
-| [[@prd/work/root--the-profile-is-the-root-composer.md]] | 2d |
-| [[@prd/work/root--a-key-starts-its-provider-on-demand.md]] | 2d |
-| [[@prd/work/root--a-cartridge-installs-from-its-source.md]] | 2d |
+| [a-cartridge-declares-what-it-needs](../../prds/a-cartridge-declares-what-it-needs/prd.md) | 1d |
+| [a-nested-cartridge-is-a-first-class-entry](../../prds/a-nested-cartridge-is-a-first-class-entry/prd.md) | 2d |
+| [the-profile-is-the-root-composer](../../../runtime/prds/the-profile-is-the-root-composer/prd.md) | 2d |
+| [a-key-starts-its-provider-on-demand](../../../runtime/prds/a-key-starts-its-provider-on-demand/prd.md) | 2d |
+| [a-cartridge-installs-from-its-source](../../../runtime/prds/a-cartridge-installs-from-its-source/prd.md) | 2d |
 
 ## Check
 

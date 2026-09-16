@@ -1,6 +1,6 @@
 ---
 repo: "/Users/feb/dev/cartridge/memory.ctg"
-state: "claimed"
+state: "done"
 origin: requested
 priority: 70
 blast-radius: mid
@@ -9,7 +9,7 @@ work-kind: leaf
 footprint:
   - src/graph/src/diskann.rs
   - .cartridge/tests/unit/src/graph/src/tests/diskann_test.rs
-claim: "coordinator-c4-12 2026-09-16T08:54:05.134Z"
+commit: "5097a83cc0cece79bc4b0f804819a718a7bc976d"
 ---
 
 # DiskANN builds keep every node reachable from the entry point
@@ -31,10 +31,10 @@ review.md.
 
 ## Acceptance
 
-- [ ] A non-ignored test on a 64 × 40, 1024-d clustered corpus asserts every node is reachable from `entry` by BFS over the built adjacency; its failing output at a9ab81a is recorded in the implementer's report.
-- [ ] A non-ignored test on the same corpus asserts top-10 recall >= 0.90 against brute force with `search(q, 10, 96)`; its failing output at a9ab81a is recorded in the implementer's report, and the build takes no more than 1.5× the a9ab81a build time in release.
-- [ ] `the_same_corpus_builds_a_byte_identical_index` and every existing diskann test still pass.
-- [ ] An ignored test records reachability, recall and build time at 10,000 rows (64 centres), and the build takes no more than 1.5× HEAD's 56 s.
+- [x] A non-ignored test on a 64 × 40, 1024-d clustered corpus asserts every node is reachable from `entry` by BFS over the built adjacency; its failing output at a9ab81a is recorded in the implementer's report.
+- [x] A non-ignored test on the same corpus asserts top-10 recall >= 0.90 against brute force with `search(q, 10, 96)`; its failing output at a9ab81a is recorded in the implementer's report, and the build takes no more than 1.5× the a9ab81a build time in release.
+- [x] `the_same_corpus_builds_a_byte_identical_index` and every existing diskann test still pass.
+- [x] An ignored test records reachability, recall and build time at 10,000 rows (64 centres), and the build takes no more than 1.5× HEAD's 56 s.
 
 ## Proof and recovery
 
@@ -54,3 +54,7 @@ No build-version marker is added; that would be a follow-up outside this footpri
 
 No `needs`. The cold-tier Vamana child needs this PRD and shares `diskann.rs`, so this one
 integrates first. Review: review.md.
+
+## Coordinator evidence
+
+2026-09-16 10:25Z, cartridge-c4. The coordinator reran the ignored 10k measurement at load 6.95, lane 5097a83: `reachable 10000/10000, recall@10 1.000, build_adjacency 51.58s`, within the 84 s bound. verifier-1.md is PASS on every other box.

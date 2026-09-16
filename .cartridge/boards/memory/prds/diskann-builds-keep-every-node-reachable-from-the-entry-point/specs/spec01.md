@@ -36,10 +36,10 @@ Base: memory.ctg a9ab81a. No `needs`. Evidence: analyst-1.md, `probe-vamana.diff
 
 ## Acceptance
 
-- [ ] Both new tests fail at a9ab81a (output in the implementer's report) and pass after step 2.
-- [ ] The 64 × 40 build after step 2 takes no more than 1.5× the a9ab81a build time recorded in step 1 (review probe: 8.1 s against 8.5 s).
-- [ ] `the_same_corpus_builds_a_byte_identical_index` and all existing diskann tests pass.
-- [ ] The ignored 10k measurement is recorded: 10000/10000 reachable, recall >= 0.90, build no more than 84 s.
+- [x] Both new tests fail at a9ab81a (output in the implementer's report) and pass after step 2.
+- [x] The 64 × 40 build after step 2 takes no more than 1.5× the a9ab81a build time recorded in step 1 (review probe: 8.1 s against 8.5 s).
+- [x] `the_same_corpus_builds_a_byte_identical_index` and all existing diskann tests pass.
+- [x] The ignored 10k measurement is recorded: 10000/10000 reachable, recall >= 0.90, build no more than 84 s.
 
 ## Verify and Proof
 

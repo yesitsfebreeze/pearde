@@ -1,5 +1,5 @@
 ---
-state: "analyzing"
+state: "done"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge"
@@ -14,7 +14,7 @@ footprint:
 needs:
 - the-profile-is-the-orchestration-service
 - the-gates-run-from-the-root-justfile
-claim: "cartridge-02 2026-09-15T12:36:12.794Z"
+commit: "424b64fe99933915089ddd9d52afb0218d1f0f78"
 ---
 
 # Host tests hold under suite contention

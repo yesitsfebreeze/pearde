@@ -1,11 +1,12 @@
 ---
-state: open
+state: "done"
 origin: requested
 priority: 70
 repo: "/Users/feb/dev/cartridge/prd.ctg"
 work-kind: leaf
 footprint:
 - ".cartridge/tests/records.test.ts"
+commit: "a837db244716890d714be9667fee7aac1bfe09df"
 ---
 
 # The records test knows deferred and the current root board
@@ -22,9 +23,9 @@ alias records, instead of the check being deleted.
 
 ## Acceptance
 
-- [ ] `bun test ./.cartridge/tests/records.test.ts` (cwd `prd.ctg`) exits 0 against the live boards.
-- [ ] `deferred` is an accepted state, and an unknown state still fails the test (a fixture case).
-- [ ] Every migrated id either exists or resolves through a recorded alias or `superseded-by`, and an id that does neither fails the test.
+- [x] `bun test ./.cartridge/tests/records.test.ts` (cwd `prd.ctg`) exits 0 against the live boards.
+- [x] `deferred` is an accepted state, and an unknown state still fails the test (a fixture case).
+- [x] Every migrated id either exists or resolves through a recorded alias or `superseded-by`, and an id that does neither fails the test.
 
 ## Proof and recovery
 

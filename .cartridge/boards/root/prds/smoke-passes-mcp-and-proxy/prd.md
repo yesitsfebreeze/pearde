@@ -1,5 +1,5 @@
 ---
-state: open
+state: "analyzing"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge"
@@ -14,9 +14,11 @@ footprint:
 - "proxy.ctg"
 - "memo.ctg"
 - ".cartridge/memos/routine/cartridge-smoke.md"
+- ".cartridge/tests/integration/smoke.test.ts"
 needs:
 - sessions-and-gitfs-tests-are-green
 - pty-router-harness-mcp-tests-are-green
+claim: "coordinator-c4-9 2026-09-16T08:34:16.147Z"
 ---
 
 # Smoke passes mcp and proxy
@@ -27,7 +29,7 @@ The two doors a worker uses (MCP tools, proxied model requests) pass the compose
 
 ## Acceptance
 
-- [ ] `just smoke` exits 0: mcp lists tools with memo active (2026-09-14: `memo inactive`); proxy answers an authenticated request inside its deadline with harness context injected (2026-09-14: timeout).
+- [ ] `just smoke` exits 0: mcp lists tools with memo active (2026-09-14: `memo inactive`); proxy answers its key check inside its deadline (2026-09-14: timeout).
 
 ## Result
 
@@ -55,3 +57,7 @@ collect): blocked, nothing implemented.
   fix belongs with host-tests' isolation work or its follow-up, and the
   fixture + footprint probably need `prd refine` (add cartridge.ctg,
   drop the builtin/ assumption).
+
+## Planning note
+
+2026-09-16, coordinator cartridge-c4, from analyst-1 (`.state/loop/smoke-passes-mcp-and-proxy/`). At committed HEAD every smoke failure comes from the stale fixture `.cartridge/tests/integration/smoke.test.ts`: a missing `builtin/` root, a policy path, config dirs outside the router's write grant, no `CARTRIDGE_HOME`, and a daemon that is never stopped. None of them is in mcp or proxy. The footprint adds that file. The smoke memo sends no model request, so "harness context injected" can't be proven here. That clause is dropped from the box, and the live proof belongs to `@root/every-exchange-reaches-the-memory-ledger-and-condenses-on-the-one-daemon`.

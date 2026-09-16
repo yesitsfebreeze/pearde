@@ -1,17 +1,21 @@
 ---
-state: open
+state: "analyzing"
 origin: requested
 priority: 90
-repo: "/Users/feb/dev/cartridge/cartridge.ctg"
+repo: "/Users/feb/dev/cartridge"
 capability-owner: runtime
 needs: []
 footprint:
-- "src/cli/host.rs"
-- "src/cli/client.rs"
-- "src/host/run.rs"
-- "src/host/mod.rs"
-- "src/transport/typed.rs"
-- ".cartridge/docs/"
+- "cartridge.ctg"
+- "cartridge.ctg/src/cli/client.rs"
+- "cartridge.ctg/src/cli/host.rs"
+- "cartridge.ctg/src/host/mod.rs"
+- "cartridge.ctg/src/host/socket.rs"
+- "cartridge.ctg/src/host/watch.rs"
+- "cartridge.ctg/docs/development.txt"
+- "cartridge.ctg/README.md"
+- ".cartridge/tests/integration/takeover.test.ts"
+claim: "coordinator-c4-8 2026-09-16T08:31:18.044Z"
 ---
 
 # An instance attaches to the daemon and never composes silently
@@ -51,7 +55,9 @@ so no test kills daemons by process name.
 ## What changes
 
 - `client::served` distinguishes "no daemon answers" from connect/auth errors:
-  only the former may auto-start; an error on a live socket fails loudly.
+  only the former may auto-start. An erroring socket is retried through the
+  takeover grace and fails loudly only if it still errors after it; no
+  instance spawns a daemon while the socket answers or a takeover is staged.
 - An auto-start races two instances started concurrently: both must end up
   attached to the one daemon that won the bind (atomic bind or lockfile).
 - A second `daemon` exits non-zero with a clear message when the socket answers
@@ -59,7 +65,13 @@ so no test kills daemons by process name.
 - `unpublish` records socket ownership (pid or lock beside the socket) and
   removes only its own; a losing daemon leaves the winner's socket alone.
 - One documented stop command (`cartridge daemon --stop` or equivalent) that
-  a test or tool uses; document it beside `daemon` in `.cartridge/docs/`.
+  a test or tool uses; document it beside `daemon` in `cartridge.ctg/docs/`,
+  with the recovery for a host that never answers (`kill` the pid named by the
+  run directory, never by process name).
+- A daemon exits when its project root or descriptor is removed, so
+  auto-started daemons in temp projects do not outlive them.
+- Out-of-process tools (the live child) attach with `cartridge run <event>` or
+  `cartridge call`, never by starting `cartridge daemon`.
 
 ## Open questions carried from the parent
 
@@ -72,14 +84,20 @@ so no test kills daemons by process name.
 
 ## Acceptance
 
-- [ ] With a daemon running, a `run`/`call` whose socket connect fails with an
-      error does not start a node process (count `cartridge node` children
-      before and after); it reports the error.
+- [ ] A `run`/`call` whose socket keeps erroring past the takeover grace
+      reports the error and starts no host or node process.
+- [ ] A `run` issued during `daemon --replace` answers from the new host and
+      starts no host of its own.
+- [ ] A daemon whose project root is removed exits within 10 s.
 - [ ] A second `cartridge daemon` on the same project exits non-zero without
       removing or replacing the first's socket, and the first still serves.
 - [ ] A fallback host or losing daemon exiting does not delete a live
-      daemon's `host.sock` (verified by owning-pid check).
+      daemon's `host.sock` (verified by the published socket's identity).
 - [ ] Two instances started concurrently with no daemon end up sharing one
       daemon (matches parent Acceptance box 4).
 - [ ] One stop command is documented and works; no new code kills daemons by
       process name.
+
+## Planning note
+
+2026-09-16, coordinator cartridge-c4. The repository is retargeted to the superproject and the footprint to the analyst's spec01. `.cartridge/docs/` never existed, and the proof lives in the superproject's `.cartridge/tests/integration/`. It lands the usual way: code commits inside cartridge.ctg, and collection commits the gitlink and the superproject tests. The Outcome already implies that `run` (including the prompt-recall hook) starts the project daemon when none answers. That is accepted, not a new product decision.

@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/fs.ctg
-state: open
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
@@ -9,6 +9,7 @@ capability-owner: fs
 work-kind: leaf
 needs:
 - "@gitfs/absorb-fs-and-give-file-work-branch-backed-commits/merge-fs-source-into-gitfs-with-no-behavior-change"
+commit: "75e76e63d8f97954759bf294f4b0d86d78d5643b"
 ---
 
 # Git and local modes for the file tools

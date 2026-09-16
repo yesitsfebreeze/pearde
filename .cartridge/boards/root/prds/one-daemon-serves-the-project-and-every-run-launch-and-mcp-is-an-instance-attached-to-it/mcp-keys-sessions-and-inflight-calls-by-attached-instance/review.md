@@ -886,3 +886,208 @@ correcting the reason and deleting the dead assertion; fold in F14–F16; re-run
 blocks 1–4 against the amended `mcp.ctg` commit and present the new sha for round
 4. Boxes 1 and 2, the design, the footprint and the collection plan are unchanged
 and need no further review.
+
+## Round 4 — 2026-09-16
+
+Presented revision: the F13/F14 close. `mcp.ctg` **`ad9a28ef3818c5c468f0359cb4725bf4040eff43`**
+(amends `7a72f42`, same commit message, `.cartridge/tests/integration/instances.test.ts`
+only), `cartridge.ctg` `f445f605c1ecd1087a5644e0ddfd67123249997e` **unchanged**, plus
+box-3/step-6/Remaining-risk edits in both records. Superproject gitlinks still
+`mcp.ctg 345871e` / `cartridge.ctg 04aae7f`; `git status --porcelain -- mcp.ctg cartridge.ctg`
+→ the single entry ` M mcp.ctg` (the peer's uncommitted work, unchanged from round 3).
+Rounds 1–3 are not re-litigated; only the delta is scored.
+
+| Input | Content digest |
+| --- | --- |
+| Plan | `prds/.../mcp-keys-.../prd.md` SHA-256 `e656601de72d0e58e099ebd9a6f735cf0bb532fd16d200387b7f8a38d29f358b` |
+| Specs | `specs/spec01.md` SHA-256 `c7f361d2e33f9e9f09b23a66f3a20af3f9a4c2a859ecc46df4d229cd402ed570` |
+| Parent rollup | `.../one-daemon-.../prd.md` SHA-256 `0de5a65126506dd532e62bd102f6fd02e7af371384729d45f050f69eff1b9445` (unchanged from rounds 1–3) |
+| Implementation report | `.state/loop/.../implementer-1.md` SHA-256 `fd5814340e75768fcac67a129bbb7a8d646b75d1bff611feb441f8adc5fc34da` |
+| Code under review | `mcp.ctg ad9a28e` (5 files vs base `345871e`, all in footprint), `cartridge.ctg f445f60` (`src/cli/host.rs` only, in footprint) |
+| Material dependency | `an-instance-attaches-to-the-daemon-and-never-composes-silently` `done` (re-read); `the-composed-acceptance-test-proves-one-daemon-one-node-per-cartridge-and-attached-instances` **`open`** (re-read) |
+
+### The delta is bounded — hashed, not asserted
+
+- **Code.** `git diff --stat 7a72f42 ad9a28e` → `instances.test.ts | 19 +++, 3 ---`, one
+  file. Nothing in `src/`, `cartridge.json` or `tests.rs` moved since the revision
+  verifier-1 checked. `git diff --stat 04aae7f f445f60` → `src/cli/host.rs` only.
+- **Verify blocks.** I re-extracted the four ```sh blocks under `## Verify and Proof`
+  from the current `specs/spec01.md` by the `verificationBlocks` rule into a **private**
+  directory of my own (`$S/r4/blocks`, created by me this round, never a shared path).
+  All four hash byte-identical to round 3's extraction (`$S/r3blocks`, and to the
+  implementer's `$S/impl2-blocks`): block1 `95df80d8…`, block2 `79139e5d…`, block3
+  `bd776431…`, block4 `c008d4f2…`. **No Verify block changed in round 4.**
+- **Boxes.** `git diff HEAD` on `prd.md` in `prd.ctg` (HEAD copy hashes to
+  `e551dff403…`, the digest round 2 recorded for the Plan) is exactly three things:
+  `state: "analyzing"` → `"specced"`, the `claim:` line dropped (both coordinator state
+  ops) and box 3. **Boxes 1 and 2 are byte-identical to the PASSed round-2 revision**
+  and all three boxes are still `- [ ]` in both records. On `spec01.md` the same diff
+  shows no hunk anywhere in boxes 1–2, "Option chosen" or steps 1–5; the changed
+  regions are the ones round 3 accounted for (base paragraph, "How this collects",
+  block 4) plus this round's box 3, step 6 and Remaining risk.
+- **The dead assertion is deleted, not disclaimed.** The diff removes
+  `// Exactly one daemon, and mcp starts nothing of its own.` and
+  `expect(run.length).toBeLessThanOrEqual(1)` outright; `grep` finds no
+  `toBeLessThanOrEqual` anywhere in the fixture at `ad9a28e`. (F14 closed.)
+
+### The implementer's correction of round 3 is **true**, reproduced independently
+
+Round 3 recommended `expect(status.filter(n => n.id === 'mcp').length).toBe(1)` as "literally
+box 3's sentence". The implementer reports that this two-liner passes in a world with no mcp
+node at all. I built that world myself — a copy of the fixture with `{id="mcp",path="mcp"}`
+removed from `.cartridge/init.lua`, the cartridge still present in the profile directory,
+one `cartridge mcp` bridge spawned to bring the daemon up (`$S/r4/mcp.ctg/.cartridge/tests/integration/probe1.test.ts`,
+my scratch worktree only, 6.1 s, exit 0):
+
+```
+PROBE1 status stdout: [{"events":[],"id":"mcp","listen":[],"needs":[],"socket":"/tmp/cartridge-501/9e076aeb1d2e/66381/mcp.sock","state":"disabled"},
+                       {"…":"sessions … active"},{"…":"policy … active"},{"…":"echo … active"}]
+PROBE1 id-only filter count   = 1
+PROBE1 id+active filter count = 0
+PROBE1 socket exit 0 /tmp/cartridge-501/9e076aeb1d2e/host.sock
+PROBE1 pid dirs = ["66381"]
+PROBE1 sockets in 66381 ["policy.sock","sessions.sock","echo.sock"]
+```
+
+`status` lists an `mcp` entry — with a `socket` path that does not exist — whether or not
+the cartridge is composed, because the entry comes from the profile directory. **Round 3's
+recommended assertion would itself have been vacuous: it returns 1 with no mcp node
+running.** `state === 'active'` returns 0 in the same world, so the shipped line fails
+there, and the `mcp.sock` route fails too (no `mcp.sock` in the pid directory). The
+implementer caught a reviewer-authored repeat of the exact failure this PRD has now hit
+twice, and proved it before shipping it. Round 3 was wrong on that recipe; this record
+says so.
+
+The other two reported probes also reproduce, verbatim as described:
+
+| probe (my worktree, `ad9a28e`) | observed | exit |
+| --- | --- | ---: |
+| the cartridge composed a **second time as `mcp2`** | `[["sessions","active"],["policy","active"],["echo","active"],["mcp","active"],["mcp2","failed"]]`, sockets `["policy.sock","sessions.sock","echo.sock","mcp.sock"]` — the host runs no second node, so the assertions stay green and correctly so | **0** (2.0 s) |
+| composed **twice under the same id `mcp`** | the daemon never serves: `MCP timeout for initialize: starting the host for .cartridge` after the request's own 30 s rejection; the fixture fails at `initialize`, well inside its 60 s bound | **1** (30.0 s) |
+
+Both are recorded in the spec's Remaining risk with the same reading I reach: neither is
+the regression the box guards, and the box counts the nodes the host can actually reach.
+
+### The four blocks, verbatim, in my own tree
+
+Own worktrees, independent of the implementer's: `$S/r4/mcp.ctg` @ `ad9a28e`,
+`$S/r4/cartridge.ctg` @ `f445f60`, live `policy.ctg` symlinked beside them,
+`CARGO_TARGET_DIR=$S/r4-target` (created this round, outside both repos and outside the
+superproject). Run `sh -eu`, cwd `$S/r4`, from my private block extraction.
+
+| # | block | exit | note |
+| --- | --- | ---: | --- |
+| 1 | unit tests, `--skip initialized_live` | **0** | `21 passed; 0 failed; 2 filtered out`, incl. `two_instances_keep_separate_sessions_and_in_flight_calls` and `a_restored_tool_stays_with_the_instance_that_restored_it` |
+| 2 | `cargo fmt --check` ×2, `clippy --all-targets`, `cargo check --bin cartridge` | **0** | 9.9 s |
+| 3 | composed fixture: two real bridges, one daemon | **0** | `1 pass, 0 fail, 13 expect() calls`, 3.1 s |
+| 4 | static guards | **0** | silent, as designed |
+
+### Box 3 — may it be ticked?
+
+**Yes.** The box's sentence is now carried by an executable assertion that fails in the
+world it denies. Specifically: `instances.test.ts:118-119` reads `cartridge --dir profile
+status` from the daemon that is serving the surviving bridge and requires exactly one
+`mcp` node in state `active` (falsified by probe 1, `Expected: 1 / Received: 0`);
+`:123-126` requires exactly one pid directory under `path.dirname(cartridge socket)`
+holding exactly one `mcp.sock` (falsified by probe 1 as well). The structural half is
+block 4, whose scope the spec now states honestly (green at the base, `mcp.ctg/src/` only,
+`build.rs`/`init.lua`/`cartridge.json` outside it — F15 closed), and the live-project
+delegation keeps the "still `open`" caveat in both records (F16 closed). Boxes 1 and 2
+were proven by execution in round 2 and their blocks are unchanged and green here.
+
+### Findings
+
+- **F17 — non-blocking.** Both boxes say the assertion is made "with two bridges attached
+  to one daemon"; the assertion actually runs at `instances.test.ts:118`, after
+  `await a.close()` at `:106`. The spec's step 6 ("asked of the daemon that is still
+  serving the surviving bridge") and the code comment are accurate; the two box sentences
+  are looser than what executes. Nothing is unproven by it — the daemon did serve both
+  bridges from one node in the same run, and a node the daemon composed would survive a
+  bridge's death — but the literal two-attached form is one line away: read `status`
+  before `a.close()` as well, or move the block above it. Fold in when the fixture is next
+  touched; not worth a commit of its own.
+- **F18 — non-blocking, cosmetic.** PRD box 3 says "guarded against regression rather than
+  introduced here" where spec box 3 names block 4 and its scope. That asymmetry is the
+  right one (index vs spec) and needs no edit; recorded so a later reader does not read it
+  as drift.
+
+Carried, unchanged and still coordinator-owned (not findings against this revision): the
+collection-time cleanliness precondition (live `mcp.ctg` is dirty with a peer's work right
+now), the gitlink bumps, and collecting **without a lane**.
+
+| Dimension | Score / 20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 19 | Box 3 now delivers an observable outcome of this PRD's own fixture instead of a base-passing grep: the composed proof runs in `instances.test.ts`, the file this PRD creates, and fails in the no-node world (measured). Scope is unchanged — boxes 1 and 2 byte-identical to the PASSed revision, one file of code moved. −1: the one-node property is still the host's doing rather than this slice's, so the assertion would also hold at the base; that is acceptable for an acceptance box (round 3's own reading) but it is regression-guarding, not new value. |
+| Ownership and reuse | 20 | The daemon-wide evidence that sits inside this PRD's footprint is now asserted inside it, and only the live-project scope is delegated — to a `done` sibling and a named `open` re-proof, both re-read this round. The round-3 −1 is closed. Cross-submodule footprint, `capability-owner: mcp`, both commits inside the footprint (`git diff --stat` above). |
+| Dependencies and implementable slices | 19 | The delta adds no dependency: one test file, no `needs`, no Verify block, no step other than the one describing the fixture. Landing remains blocked only by the peer's dirty `mcp.ctg`, documented and coordinator-owned. −1: nothing back-references this PRD from the `open` composed sibling, so if that sibling is re-scoped the live-project half of box 3 has no watcher. |
+| Observable acceptance and baseline evidence | 18 | Four blocks re-run verbatim in my own worktrees at `ad9a28e`/`f445f60`: **0, 0, 0, 0**. The blocking F13 is closed by execution, and by a better assertion than the one round 3 recommended — I reproduced the vacuity of round 3's own two-liner (id-only filter = 1 with no mcp node composed) and the failure of the shipped one in the same world. F14 closed: the dead assertion is deleted, not disclaimed. −2: the assertion's teeth are the zero-case and the pid count — no reachable composition produces two active `mcp` nodes (probes 2 and 3, both run), so it cannot fail for "two nodes" the way the box's title reads; and F17, the "two bridges attached" phrasing versus an assertion that runs after one closes. |
+| Failure, recovery and compatibility | 19 | The record/fixture disagreement round 3 deducted for is gone: spec, PRD, fixture and code comment now say the same thing, and the implementer's own earlier claim in `implementer-1.md` was corrected in place with a pointer. Remaining risk gained an honest bullet for probes 3 and 4. Collection, `CARGO_TARGET_DIR` discipline and the no-lane path are untouched (blocks byte-identical, block 2 and 3 green). −1: the collection-time cleanliness precondition is still a manual step against a live checkout that is dirty today — documented, unchanged, and the one way this can still go wrong at landing. |
+| **Reviewer total** | **95 / 100** | PASS (threshold 90), zero blocking findings. |
+
+Disposition: **keep** — proceed to collection. Box 3 may be ticked once the fixture has
+been run in `repo` as part of collection, together with boxes 1 and 2; F17 and F18 are
+non-blocking and need no round of their own.
+
+Validation: everything below in my own scratch worktrees under
+`$S = /private/tmp/claude-501/-Users-feb-dev-cartridge/0b0c3ecc-…/scratchpad`, blocks
+extracted into `$S/r4/blocks` (**created by me this round; no shared block path was read**,
+after the round-4 report of another agent overwriting `$S/blocks`). Nothing was written to
+the live `mcp.ctg`, `cartridge.ctg` or superproject working trees; the live project daemon
+was never started, stopped, replaced or reloaded; every `cartridge` process ran under a
+fixture `mkdtemp` `CARTRIDGE_HOME` with `--dir profile`; no `prd` state operation was run;
+no acceptance box was ticked; nothing was committed.
+
+| # | command (cwd) | exit |
+| --- | --- | ---: |
+| 1 | `git -C mcp.ctg worktree add --detach $S/r4/mcp.ctg ad9a28e`; `git -C cartridge.ctg worktree add --detach $S/r4/cartridge.ctg f445f60`; `ln -s` live `policy.ctg` | 0, 0, 0 |
+| 2 | re-extract the four ```sh blocks from `specs/spec01.md` into `$S/r4/blocks` — 4 found, all four hash-identical to `$S/r3blocks` and `$S/impl2-blocks` | — |
+| 3 | block 1 verbatim, `sh -eu`, cwd `$S/r4`, `CARGO_TARGET_DIR=$S/r4-target` | **0** |
+| 4 | block 2 verbatim, same cwd/env (9.9 s) | **0** |
+| 5 | block 3 verbatim, same cwd/env — `1 pass, 0 fail, 13 expect()`, 3.1 s | **0** |
+| 6 | block 4 verbatim, same cwd/env | **0** |
+| 7 | `probe1.test.ts` (mcp left out of the composition) — id-only filter `1`, `id && active` filter `0`, no `mcp.sock`; output quoted above | **0** |
+| 8 | `probe2.test.ts` (same cartridge composed again as `mcp2`) — `mcp2` ends `failed`, no second socket, real assertions green | **0** |
+| 9 | `probe3.test.ts` (composed twice under id `mcp`) — `MCP timeout for initialize: starting the host for .cartridge` | **1** |
+| 10 | `git -C mcp.ctg diff --stat 7a72f42 ad9a28e` (1 file), `… 345871e ad9a28e` (5 files, all in footprint), `git -C cartridge.ctg diff --stat 04aae7f f445f60` (1 file, in footprint) | 0 |
+| 11 | `git -C prd.ctg diff HEAD` on `prd.md` and `specs/spec01.md`; HEAD `prd.md` → `e551dff403…` (= round-2 Plan digest) | — |
+| 12 | `grep -n '^- \[' ` both records — three `- [ ]` in each, none ticked | 0 |
+| 13 | sibling states re-read: `an-instance-attaches-…` `done`; `the-composed-acceptance-test-…` `open` | — |
+
+Timing caveat, unchanged from rounds 1–3: this machine has `rustc-wrapper = "kache"`, so
+rows 3–6 are cache-assisted and refute nothing about a cold host; the spec's 120 s-per-block
+risk bullet stands as written.
+
+Scratch left in place: `$S/r4/{mcp.ctg,cartridge.ctg,policy.ctg}`, `$S/r4/blocks`,
+`$S/r4-target`, and `probe{1,2,3}.test.ts` **inside my detached worktree only** — never in
+the live tree, never committed. `git worktree prune` in each submodule clears the worktrees.
+
+Reviewer identity: independent reviewer agent (coordinator cartridge-1b).
+User rating: not required under delegation; none supplied.
+User feedback/provenance: none for this revision.
+Result: **PASS — 95/100**.
+Unresolved blocking findings: **none**. F13 and F14 are closed by executed evidence
+reproduced here; F15 and F16 are folded into the spec; F17 and F18 are non-blocking and
+carry no gate.
+Rounds used / remaining: 4 / 1.
+Next action: proceed to collection — check both submodules clean in the footprint
+immediately before collecting, bump both gitlinks, collect from `specced` **without a
+lane**, record both submodule HEADs, and tick boxes 1–3 on the collection's own green
+blocks. The fifth round stays unused and available if a substantive input changes.
+
+Provenance note, appended after scoring: while this round was under way the coordinator
+committed the two reviewed records in `prd.ctg` (`d51d2950`, "Advance planning: mcp-keys
+round 4, prd-journals and router reviews"). Both committed blobs hash to exactly the
+digests scored above (`prd.md e656601d…`, `spec01.md c7f361d2…`), so this rating is bound
+to the committed revision unchanged; the only working-tree change I made anywhere is this
+append to `review.md` and the copy at `.state/loop/.../reviewer-4.md`.
+
+Landing hazard observed at 14:25, after scoring, and carried to the coordinator (not a
+finding against this revision — the spec already names it): the superproject now reports
+` M cartridge.ctg` **and** ` M mcp.ctg`. `cartridge.ctg` is dirty with five files of a
+peer's unrelated work (`src/sandbox/mod.rs`, `src/loader/document.rs`, `src/host/plan.rs`,
+`src/cli/listing.rs`, `.cartridge/tests/unit/src/sandbox/tests.rs`) and `mcp.ctg` with
+four (`tests.rs`, `approval.test.ts`, `refresh.test.ts`, untracked `policy-fixture/`).
+Both submodule HEADs are still the recorded gitlinks (`345871e` / `04aae7f`). Because the
+footprint names the two submodule directories, collecting in this state sweeps all of it
+onto this receipt. Check both submodules clean in the footprint immediately before
+`prd collect`, every time.

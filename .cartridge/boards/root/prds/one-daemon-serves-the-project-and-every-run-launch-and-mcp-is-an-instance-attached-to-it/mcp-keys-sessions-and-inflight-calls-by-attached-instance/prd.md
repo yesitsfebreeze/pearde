@@ -46,12 +46,12 @@ sessions and separate in-flight calls, while the node itself exists once.
 
 ## Acceptance
 
-- [ ] Two `cartridge mcp` stdio clients attached to one daemon keep separate
+- [x] Two `cartridge mcp` stdio clients attached to one daemon keep separate
       sessions (each sees only its own initialization and history), and one
       closing does not affect the other's session or calls.
-- [ ] An in-flight call from one instance is not visible in or cancellable
+- [x] An in-flight call from one instance is not visible in or cancellable
       from the other.
-- [ ] Exactly one mcp node exists with the daemon running, proven at composed
+- [x] Exactly one mcp node exists with the daemon running, proven at composed
       scope inside this PRD's own fixture: with two bridges attached to one
       daemon, `instances.test.ts` asserts that `status` lists exactly one `mcp`
       node in state `active`, and that the run directory holds exactly one pid
@@ -86,3 +86,32 @@ commit inside each submodule, bump the pointers, collect against the
 superproject. Both submodules were clean when the footprint was widened; check
 again before collecting, because the `cartridge.ctg` and `mcp.ctg` directory
 entries make collect sweep everything inside them.
+
+## Evidence note for the ticked boxes
+
+2026-09-16, coordinator cartridge-1b, after reviewer-4 (round 4, PASS 95) and
+verifier-1.
+
+Boxes 1 and 2 were proven by execution in verifier-1: two real `cartridge mcp`
+children with distinct, stable sessions, and two genuinely concurrent held calls
+under the same JSON-RPC id 1 where a cancel reaches only its own context.
+
+Box 3 is ticked on an assertion that **fails in the world it denies**, which it
+took two corrections to reach. Round 3 found my earlier narrowing rested on a
+false premise (the daemon-wide count *is* observable from this PRD's own
+fixture). Round 3 then recommended `filter(n => n.id === 'mcp').length === 1` —
+and the implementer found that this too cannot fail for the reason it claims:
+with `{id="mcp",path="mcp"}` removed from the composition, `cartridge status`
+still prints `{"id":"mcp",…,"state":"disabled"}`, because the entry comes from
+the profile directory. Round 4 reproduced that independently. The shipped
+assertion adds `&& node.state === 'active'`, which returns 0 in that world, plus
+a `mcp.sock` route that fails there too.
+
+The dead `run.length <= 1` check is **deleted**, not disclaimed: run directories
+live at `base()/tag(descriptor)/<pid>` (`cartridge.ctg/src/host/socket.rs:46-84`),
+never the project's `.cartridge`, so it looked where numeric entries cannot
+appear.
+
+Carried, non-blocking (F17): both boxes say "with two bridges attached" while the
+assertion runs after `a.close()`. Step 6 and the code comment are accurate; the
+box wording gets the one-line fix when the fixture is next touched.

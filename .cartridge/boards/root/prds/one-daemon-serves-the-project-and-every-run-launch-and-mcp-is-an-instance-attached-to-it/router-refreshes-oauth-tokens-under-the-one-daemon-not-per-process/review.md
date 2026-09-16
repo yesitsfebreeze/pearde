@@ -330,3 +330,332 @@ only), F2, F3, F5 and F6 as small edits, and F4/F7 as the single
 `#[cfg(test)]` / `#[cfg(not(test))]` change to `codex_token_endpoint()` with the
 test's override moved off the process environment. Then re-review in round 2 at
 the same base.
+
+## Round 2 — 2026-09-16
+
+Presented revision: superproject `d721262` (dirty in memos and submodule
+gitlinks, none in this PRD's footprint); `router.ctg` `65d22d7` — **HEAD has not
+moved** since round 1 (`= main`, `git status --porcelain -uall` → 0 lines).
+Prototype `attempt-2.patch` (2 files, +136/−1), `attempt-1.patch` retained as the
+round-1 record. `prd.md` body was rewritten by the coordinator (Outcome +
+Planning note) before this round; the spec was revised in place.
+
+| Input | Content digest |
+| --- | --- |
+| Plan | `prds/.../router-refreshes-oauth-tokens-under-the-one-daemon-not-per-process/prd.md` SHA-256 `1255e04e623be0db6bfe6cd0432d66646cda934987953dca923fd9c1028f906e` (round 1: `d7d5829…` — changed, F1) |
+| Specs | `specs/spec01.md` SHA-256 `7c4a79c07bf24821023cbdb72bff1cbe285fb3537bb7afdeec5bcc2bba4bcf63` (round 1: `a8be48e…`) |
+| Parent rollup | `.../one-daemon-.../prd.md` SHA-256 `0de5a65126506dd532e62bd102f6fd02e7af371384729d45f050f69eff1b9445` (unchanged) |
+| Revision report | `.state/loop/.../analyst-2.md` SHA-256 `67afa543a4b9b35dfbaf32c575236130683fc1d77c3909c1ab1f1062aee6305f` |
+| Prototype | `.state/loop/.../attempt-2.patch` SHA-256 `814dc404d6f00947b33e80112fadcee501d209104ccfc47ba98256851664e547` |
+| Prior prototype | `.state/loop/.../attempt-1.patch` SHA-256 `f855f4e7799ea80de60b9af293edf43f20ffd65d982ca0c6da9fec68d2509b17` (used as the "env seam restored verbatim" mutant) |
+| Material dependency | `an-instance-attaches-to-the-daemon-and-never-composes-silently` SHA-256 `f0ebad6d1f91936f7cfe3cf202cce3304c6dab61c70d1b89ecc6551a50ad5cb6`, state `done` |
+| Material input | `.cartridge/config.lua` SHA-256 `58497aea44bcbcdafa477858a51fab32f5b2c5a0a5c13c3ca05181c7527fb651` (round 1: `322e1e9…`). **Changed, but not materially**: the diff is in `live` / `live-record`; the `router = { … listen = { "127.0.0.1:0" }, config_dir = …, data_dir = … }` block is still exactly `:56-62`, `listen` still `:59`, byte-identical to round 1's quote. |
+| Base | `router.ctg` `65d22d76dc4dec15a0aed2da24b79fa4b500767e` |
+
+Reviewed independently: I did not author the plan, the spec, either prototype or
+the revision, and I re-derived every claim below in my own worktrees rather than
+accepting `analyst-2.md`.
+
+### How real credentials were kept out of every probe
+
+No probe triggered a real OAuth refresh; nothing here read, copied or printed
+token material. **No refresh token was spent.**
+
+- **No real token endpoint was contacted.** `auth.openai.com`,
+  `api.anthropic.com` and `github.com` were never reached. The only endpoint any
+  execution addressed was the test's own axum server on `127.0.0.1:0`, pointed at
+  through the `#[cfg(test)]` `static CODEX_TOKEN_URL`. I re-derived why that is
+  now *structurally* safe rather than merely conventional: the override is
+  `#[cfg(test)]`, and I proved (probe P3 below) that the `cfg(test)` half is not
+  compiled into a normal build at all.
+- **The store was scratch, seeded with a dummy.** The test writes its login into
+  `std::env::temp_dir()/router-refresh-once-<hex>/auth.json` with the refresh
+  token literal `spend-me`. `codex_auth` (`auth.rs:769-790` at base) prefers the
+  store entry, so the `~/.codex/auth.json` fallback at `:778` is unreachable in
+  this fixture. `~/.codex/auth.json` was never opened, read or listed.
+- **The keychain was never touched.** No `security` invocation, no
+  `CLAUDE_CODE_EXECPATH`, no Claude Code binary scan. I deliberately did not
+  exercise the Claude Code subscription path (`:412-478` shells out to `security`
+  and would rotate the user's real keychain entry).
+- **Nothing ran against the live daemon.** No `daemon`, `launch`, `mcp`, `run`,
+  `stop`, `--replace` or routing request; no `prd` state op; no `git add`, commit
+  or push; no write to the live `router.ctg` checkout, which is clean at
+  `65d22d7`.
+- **Every cargo command used an isolated `CARGO_TARGET_DIR`** — either my own
+  `<scratchpad>/rev2/t-*` directories or the block's own
+  `target/router-refresh-once-verify` inside a scratch worktree. The live
+  `router.ctg/target/` was never written, so no cartridge hot-restarted.
+- **My own trees, my own scratch subdirectory.** Two fresh
+  `git worktree add --detach … 65d22d7` at `<scratchpad>/rev2/{patched,base}`,
+  plus seven throwaway `rsync` copies for mutants. Every extracted block script
+  lives in `<scratchpad>/rev2/blocks/`, a private subdirectory — not the shared
+  scratchpad root, which is contended.
+- One thing I deliberately did **not** verify, and it is a finding about the
+  world rather than a gap in the evidence: I did not confirm that a real
+  `auth.openai.com` refresh rotates the token. The code says so (`:708-712`);
+  confirming it would spend a live grant.
+
+### 1. The security fix (F4 + F7) — closed, and verified four ways
+
+This is the heart of the round, so I checked the property itself rather than the
+analyst's assertions about it.
+
+**(a) No environment variable can reach the token endpoint in a shipped build.**
+`grep -rn 'ROUTER_CODEX_TOKEN_URL' .` over the whole patched crate (excluding
+`target/` and `.git/`) → **no match, exit 1**. The string exists nowhere. The
+complete set of environment reads left in `src/` is `auth.rs:308`
+(`CLAUDE_CODE_EXECPATH`, pre-existing), `auth.rs:1060` (`var_os(declared)` inside
+`Auth::status`, a key-source *report*, not an endpoint), `catalog.rs:106/126/141/232`
+and `launch.rs:28` — none of them reachable from `codex_token_endpoint()`.
+`codex_token_endpoint()` has exactly one call site, `auth.rs:722` (the refresh
+POST), and the device-auth login at `auth.rs:996` patched / **`:971` base** keeps
+the bare `CODEX_TOKEN` const, so the seam can only ever be a *refresh*, never a
+login — the spec now states this explicitly and it is true.
+
+**(b) The `#[cfg]` split really excludes the test half — proved, not assumed.**
+I injected `compile_error!("the cfg(test) half was compiled")` into the body of
+the `#[cfg(test)] fn codex_token_endpoint()` in a throwaway copy:
+
+| build | result |
+| --- | --- |
+| `cargo build` (non-test) | **exit 0**, `Finished dev profile` — the poisoned half was never compiled |
+| `cargo test --lib --no-run` | **exit 101**, `error: the cfg(test) half was compiled` at `src/auth.rs:55` |
+
+That is a positive proof of exclusion, not an inference from the attribute. In a
+shipped cdylib `codex_token_endpoint()` is `CODEX_TOKEN.to_owned()` and nothing
+else. F4 is closed at the level it needed to be closed.
+
+**(c) The non-test build is clean under `warnings = "deny"`, and the suite is
+green.** `Cargo.toml:28-29` is `[lints.rust] warnings = "deny"`. `cargo build`
+with an isolated target dir → **exit 0**, no warning emitted (so the
+`#[cfg(test)] static` leaves no dead-code residue in a shipped build, as
+claimed). `cargo test --lib` → **58 passed; 0 failed; 0 ignored**, exit 0.
+
+**(d) F7 is genuinely closed.** `grep -rn 'set_var' .cartridge/tests src` returns
+exactly one hit and it is the doc comment at `src/auth.rs:48` explaining why
+`set_var` was *not* used. `grep -n 'env::' .cartridge/tests/unit/auth/tests.rs`
+returns only four `std::env::temp_dir()` calls (`:13`, `:26`, `:45`, `:148`).
+There is no `setenv` left to race the `std::env::vars()` scan that
+`Auth::from_path` → `catalog.rs:126` performs in the concurrently-running sibling
+tests. The replacement is an ordinary `std::sync::Mutex` whose guard is dropped
+inside `codex_token_endpoint()` before any `.await`, so it introduces no new
+hazard of its own.
+
+**(e) The three new guards fire against a tree with the env seam restored
+verbatim.** I rebuilt that tree by applying `attempt-1.patch` (the round-1
+prototype, which *is* the env seam verbatim, `set_var` included) to a pristine
+`65d22d7` copy, then ran each guard alone under `sh -eu -c`:
+
+| guard | exit |
+| --- | ---: |
+| `grep -A1 '^#\[cfg(not(test))\]' src/auth.rs \| grep -q 'fn codex_token_endpoint() -> String {'` | **1** |
+| `grep -A2 '^#\[cfg(not(test))\]' src/auth.rs \| grep -q 'CODEX_TOKEN.to_owned()'` | **1** |
+| `if grep -qn 'ROUTER_CODEX_TOKEN_URL' src/auth.rs; then exit 1; fi` | **1** |
+| `if grep -qn 'env::set_var' .cartridge/tests/unit/auth/tests.rs; then exit 1; fi` (F7) | **1** |
+| whole Verify block 2 on that tree | **1** |
+
+All four, and the block as a whole, reject the env seam. Reproduced, as asked.
+
+**(f) What the guards do *not* pin — see F8.** They pin the *spelling*
+`ROUTER_CODEX_TOKEN_URL` and the *presence* of `CODEX_TOKEN.to_owned()` within
+two lines of the attribute. I mutated the shipped half to
+`std::env::var("ROUTER_TOKEN_ENDPOINT").unwrap_or_else(|_| CODEX_TOKEN.to_owned())`
+— a differently-named environment variable with exactly the F4 capability — and
+**the whole of Verify block 2 exited 0**, all three new guards included (guard 17
+passes because `CODEX_TOKEN.to_owned()` survives as a substring of the fallback).
+The reviewed revision is secure; its *gate* pins one name rather than the
+property. Non-blocking, and one character away from closed — see F8.
+
+### 2. F6, the vacuity fix — reproduced both ways
+
+On a patched copy with `Cargo.toml` deleted:
+
+| form | exit |
+| --- | ---: |
+| round-1 bare guard `if grep -qn '^\[\[bin\]\]' Cargo.toml; then exit 1; fi` | **0** — vacuity reproduced (`grep: Cargo.toml: No such file or directory`, grep exits 2, the `if` swallows it) |
+| revised pair `test -f Cargo.toml` + that guard | **1** — fixed |
+
+### 3. F5's replacement — reproduced both ways
+
+On a tree where `module.rs` stopped calling `service::start(` and a new
+`src/proxy.rs` call site appeared (total hits still 1):
+
+| form | exit |
+| --- | ---: |
+| round-1 guard 10, `grep -rn 'service::start(' src --include=*.rs \| grep -v 'pub async fn start' \| wc -l` `= 1` | **0** — F5 reproduced; the `grep -v` was inert and the count alone accepts a moved call site |
+| revised count guard alone | **0** (correctly — the count *is* still 1) |
+| revised anchored guard `grep -c '^src/module.rs:'` `= 1` | **1** — the call site must now *be* the Lua module entry |
+
+### 4. Guard-by-guard spot-check of Verify block 2
+
+Beyond the seven guards above I re-ran twelve more individually, each `sh -eu -c`
+in a fresh copy of the patched tree mutated to break exactly that guard:
+
+| guard | tree built to fail it | exit |
+| --- | --- | ---: |
+| `test -f src/lib.rs` | `src/lib.rs` removed | **1** |
+| `grep -q '^mod auth;' src/lib.rs` | renamed `mod authx;` | **1** |
+| negative `^pub mod auth;` | `pub mod auth;` | **1** |
+| `test ! -d src/bin` | `src/bin/` created | **1** |
+| negative `^\[\[bin\]\]` (with its `test -f`) | `[[bin]]` appended | **1** |
+| `grep -q 'auth::Auth::from_path(' src/service.rs` | renamed `Auth::make(` | **1** |
+| `Auth::from_path(` count `= 1` | second site in `proxy.rs` | **1** |
+| `service::start(` count `= 1` | second caller in `proxy.rs` | **1** |
+| gate line present | per-caller gate substituted | **1** |
+| `.post(codex_token_endpoint())` present | reverted to `.post(CODEX_TOKEN)` | **1** |
+| `test -f .cartridge/tests/unit/auth/tests.rs` | removed | **1** |
+| test name present | test renamed | **1** |
+
+**18 of the 21 guards reproduced directly at exit 1** (the twelve above, plus the
+four in §1(e), plus the F6 pair and the F5 replacement); the three I did not
+re-run individually are the remaining bare `test -f` existence checks
+(`src/service.rs`, `src/module.rs`, `src/auth.rs`), whose behaviour is settled by
+the four `test -f` mutants I did run. Both round-1 holes reproduce at exit 0
+before the fix. No guard anywhere is `!`-prefixed; both negatives use
+`if …; then exit 1; fi`; every path is now preceded by `test -f` or `test ! -d`.
+The analyst's 21/21 claim is corroborated; the one qualification is F8.
+
+### 5. F3 — the "working headers" check is now load-bearing
+
+The test asserts `first["authorization"] == format!("Bearer {fresh}")` and
+`second["authorization"] == first["authorization"]`. I made the fixture server
+return a token **one character different** from the expected one (`let rotated =
+format!("{fresh}x")`):
+
+```
+assertion `left == right` failed: the winner's header carries the rotated access token
+  left: "Bearer e30.eyJleHAiOjE3ODk1NjU2ODF9.x"
+ right: "Bearer e30.eyJleHAiOjE3ODk1NjU2ODF9."
+test result: FAILED. 0 passed; 1 failed
+```
+
+The panic is at `tests.rs:233`, the `authorization` assert — *after* the two
+`chatgpt-account-id` asserts at `:230-231` passed. That is exactly F3's point:
+the rotation-invariant field cannot tell a fresh header from a stale one, and the
+new assert can. The block's exit on that mutant is **1** (see §7).
+
+The core non-vacuity still holds on the *revised* test (round 1's evidence was
+against the old one, so I re-ran it): giving each caller its own gate — the
+two-process shape the audit describes — produces
+`assertion left == right failed: the refresh token is presented to the token
+endpoint exactly once / left: 2 / right: 1`, `FAILED. 0 passed; 1 failed`.
+
+### 6. F1 and F2 — the contract no longer argues with itself
+
+The coordinator's rewritten Outcome now reads "Every refresh **that router.ctg
+performs** …" and states plainly that the stronger claim "one refresh token is
+never spent twice" is false while the `codex` and `claude` CLIs exist, citing
+`src/auth.rs:367-369`. The spec's box-2 parenthetical no longer carries that
+argument against the PRD; it opens "the narrowing now matches the PRD: the
+Outcome says plainly that …" and keeps only the structural claim plus the
+not-delegable reason. **The spec now defers to the Outcome rather than arguing
+with it.** F1 is closed. F2 is closed: the bold "Footprint change requested …"
+instruction is replaced by "Footprint, settled", recording what the coordinator
+already did and keeping the `:1238-1239` rationale, which I confirmed
+(`#[cfg(test)] #[path = "../.cartridge/tests/unit/auth/tests.rs"] mod tests` at
+patched `:1264-1265` = base `:1238-1239`, and `tests.rs:1` is `use super::*`, so
+the `static` is reachable).
+
+Citations: the spec's compare-and-write cites are corrected to `:718` and `:732`
+in **both** of its occurrences, and I verified them at base — `:718` is
+`if map.get(&provider.name) == Some(&original_auth)`, `:732` is
+`if current == original_auth`, and `:723` is the `.get()` inside the else, as
+round 1 said. The device-auth exemption at `:971` is now stated. **But the PRD's
+Planning note still says `:723`/`:731-736`** — see F9.
+
+### 7. Exit-code discipline — the revised table reports collector-visible codes
+
+Confirmed empirically rather than read. Running Verify block 1 verbatim on the
+F3 mutant (where `cargo test` itself exits **101**), the block's exit as a
+collector sees it is **1**: the pipe into `tee` means `set -e` observes `tee`, and
+the summary `grep -q 'test result: ok\. 1 passed; 0 failed'` is what fails the
+block. The same holds on the pristine base (cargo exits 0 with
+`running 0 tests … 57 filtered out`; the block exits 1). `analyst-2.md` records
+`**1** (cargo 101)` for both non-vacuity rows and states the correction
+explicitly, and spec block 1 now carries the comment. Correct.
+
+### Scorecard
+
+| Dimension | Score / 20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 19 | F1 closed: the Outcome no longer asserts what the spec argues is false, and the spec now defers to it instead of arguing with it (§6). F2 closed. The defect itself re-confirmed at base: the POST (`:696-701`) precedes both compares (`:718`, `:732`); `config.lua:56-62` still pins `listen = { "127.0.0.1:0" }` byte-identically, so two nodes remain the configured default and the premise still holds. One outcome, two boxes, body inside the length target. −1: **F9** — the PRD Planning note still cites the compare-and-write as `:723`/`:731-736`, the exact drift round 1 flagged; `analyst-2.md` reports it "corrected … (both places)", which is true of the spec but not of `prd.md`, which the report also says was deliberately not edited. A durable record now carries a corrected cite in one file and the stale cite in the other. |
+| Ownership and reuse | 20 | Round 1's two deductions are both closed. The seam now has **zero** production surface, proved by exclusion (§1b) rather than asserted, and F5's guard is replaced with one that anchors the call site to `module.rs` (§3). Still genuinely minimal: +26/−1 in `src/auth.rs`, no file lock, no change to refresh logic, no touch to the Claude Code or Copilot paths, and the `:697` literal / `:26` const duplication collapsed on the way. The test reuses the file's existing scratch-dir + `Auth::from_path` + synthetic-JWT pattern and the already-wired `#[cfg(test)] #[path]` module. Correct owner, correct base, `needs` resolves to a `done` sibling, no duplicate scope. |
+| Dependencies and implementable slices | 20 | `git apply --check attempt-2.patch` on a pristine `65d22d7` worktree → **exit 0**; applied, it touches exactly the two footprint files (`git status --porcelain -uall` → ` M .cartridge/tests/unit/auth/tests.rs`, ` M src/auth.rs`) and nothing else after all three blocks have run. `router.ctg` HEAD has **not** moved (`65d22d7` = `main`, clean), so the base is still live. Blocks follow the template's engine facts verbatim: `${CARGO_TARGET_DIR:-$PWD/target/<slug>-verify}` on every cargo block, no `cd`, all paths repo-relative, no sibling `*.ctg` needed (no path deps — a lone worktree builds, I built four). Budget: block 1 **5 s** wall, blocks 2 and 3 under a second, far inside 120 s. Round 1's −1 (the composed test named in prose, not in `needs`) I do not carry forward, and I say why rather than dropping it silently: the F1 rewrite removed the daemon-wide claim from the Outcome, so this leaf's only true prerequisite is the attach sibling — which *is* in `needs` and *is* `done`; the composed test (`…proves-one-daemon-one-node-per-cartridge…`, prio 85, open) re-proves this downstream, and putting a downstream re-prover in `needs` would invert the dependency. |
+| Observable acceptance and baseline evidence | 18 | All three blocks pass verbatim on the patched tree (**0 / 0 / 0**) and blocks 1 and 2 fail on the pristine base (**1 / 1**); block 3 passes on base, correctly, being a formatting gate. 18 of 21 block-2 guards reproduced individually at exit 1 (§1e, §2, §3, §4); both round-1 holes reproduce at 0 before their fixes. F3's new assert is load-bearing — a one-character-different rotated token fails it at `tests.rs:233` *after* the old `chatgpt-account-id` asserts have passed (§5) — and the audit's own shape (per-caller gate) still fails with `left: 2 / right: 1`. Suite 58/58 green, `cargo fmt --check` clean. Exit-code discipline verified empirically (§7). −2: **F8** — the guard set pins the *name* `ROUTER_CODEX_TOKEN_URL` and the *presence* of `CODEX_TOKEN.to_owned()` within two lines, not the property "the shipped half reads no environment". A shipped half rewritten as `std::env::var("ROUTER_TOKEN_ENDPOINT").unwrap_or_else(\|_\| CODEX_TOKEN.to_owned())` — the full F4 capability under another name — passes **the whole of block 2 at exit 0** (reproduced). For the security property this round exists to establish, a gate that only recognises one spelling is the weak leg, and the spec's "non-vacuous against the mutations that matter" overstates it by exactly that much. |
+| Failure, recovery and compatibility | 20 | F4 and F7 both closed and independently proved, not accepted: the string `ROUTER_CODEX_TOKEN_URL` exists nowhere in the crate (exit 1); the `#[cfg(test)]` half is provably not compiled into a normal build (`compile_error!` probe: build 0, test build 101); the non-test build is clean under `warnings = "deny"` (exit 0, no warnings); no `set_var` survives anywhere, so nothing races `std::env::vars()` via `catalog.rs:126` in the four concurrent sibling `Auth::from_path` tests; the replacement `std::sync::Mutex` guard is dropped before any `.await`. The reasoning is recorded in the spec under a heading that tells a later reader not to reinstate the variable, with both the production-surface and the `set_var` arguments. `CARGO_TARGET_DIR` still pinned per the template, so pass 2 in the live checkout cannot hot-restart a cartridge. The seam cannot redirect a login (`:971` keeps the bare const), Copilot correctly scoped out as an exchange. Residuals honestly named and correctly homed (`config.lua:59` to the attach sibling or composed test; the external `codex` / `claude` spenders to the existing compare-and-write and use-the-CLI's-token rules). F8's durability point is deducted once, above, not twice. |
+| **Reviewer total** | **97 / 100** | At or above the 90 threshold, with no blocking finding. |
+
+### Findings
+
+| # | Finding | Evidence | Recommendation |
+| ---: | --- | --- | --- |
+| **F8** (new, non-blocking) | Block 2 pins the env-var *name*, not the security property. A shipped `codex_token_endpoint()` that reads a differently-named environment variable passes every guard. | Reproduced: with the non-test half rewritten as `std::env::var("ROUTER_TOKEN_ENDPOINT").unwrap_or_else(\|_\| CODEX_TOKEN.to_owned())`, guard 16 → 0, guard 17 → 0 (the fallback keeps `CODEX_TOKEN.to_owned()` as a substring), guard 18 → 0, **whole block 2 → 0**. | One character. Anchor guard 17 to the whole line instead of a substring: `grep -A2 '^#\[cfg(not(test))\]' src/auth.rs \| grep -qx '<TAB>CODEX_TOKEN.to_owned()'`. Verified: that form exits **1** on the renamed-env-var mutant and **0** on the patched tree. Then soften the Remaining-risk sentence "non-vacuous against the mutations that matter" to say what the guards pin. |
+| **F9** (new, non-blocking, cosmetic) | The PRD Planning note keeps the stale compare-and-write cite round 1 flagged. | `prd.md:67` still reads "the compare-and-write guards at `:723`/`:731-736`". At base, `:718` and `:732` are the compares; `:723` is the `.get()` in the else. The spec is corrected in both its places; `analyst-2.md` reports "both places" while also recording that `prd.md` was not edited. | One-line body edit to the Planning note (body only, never the frontmatter): `:723`/`:731-736` → `:718`/`:732`. |
+| F1–F7 | All closed. | F1 §6; F2 §6; F3 §5; F4 §1(a)(b)(c)(e); F5 §3; F6 §2; F7 §1(d). | None. |
+
+Neither F8 nor F9 blocks the gate. Nothing the plan claims is false, the
+prototype is correct, every block is non-vacuous, and the security property F4
+named holds in the reviewed revision — F8 is about how durably the *gate* pins
+it, not about whether it holds.
+
+Disposition: **keep** — scope, base, footprint, option chosen and both narrowings
+all preserved; proceed to implementation. F8 and F9 are two small edits that can
+ride along with the implementation rather than gate it.
+
+Validation: cwd is a scratch worktree or throwaway copy of `router.ctg` at
+`65d22d7` under `<scratchpad>/rev2/` unless noted;
+`<scratchpad>` = `/private/tmp/claude-501/-Users-feb-dev-cartridge/0b0c3ecc-.../scratchpad`.
+Verify blocks were extracted verbatim from `specs/spec01.md` with a fenced-block
+extractor into `<scratchpad>/rev2/blocks/` (a private subdirectory) and run as
+`sh -eu <block>` under a 120 s alarm; none came close to the limit.
+
+| # | command | exit |
+| ---: | --- | ---: |
+| 1 | `git -C router.ctg log -1 --format=%H` → `65d22d7…` = `main`; `git status --porcelain -uall` → 0 lines (**HEAD has not moved**) | 0 |
+| 2 | `git -C router.ctg worktree add --detach <scratchpad>/rev2/patched 65d22d7`; same for `rev2/base` | 0 |
+| 3 | `git -C rev2/base apply --check attempt-2.patch` (pristine `65d22d7`) | **0** |
+| 4 | `git -C rev2/patched apply attempt-2.patch`; `git diff --stat` → 2 files, +136/−1 | 0 |
+| 5 | Verify block 1, patched, **5 s** wall — `1 passed; 0 failed; 57 filtered out` | 0 |
+| 6 | Verify block 2, patched | 0 |
+| 7 | Verify block 3, patched (`cargo fmt --check`) | 0 |
+| 8 | Verify block 1, **pristine base** — `running 0 tests`, cargo 0, block fails on the summary grep | **1** |
+| 9 | Verify block 2, **pristine base** | **1** |
+| 10 | Verify block 3, pristine base (formatting gate, correctly green) | 0 |
+| 11 | `grep -rn 'ROUTER_CODEX_TOKEN_URL' .` over the whole patched crate → no match | **1** (no match) |
+| 12 | `grep -rn 'set_var' .cartridge/tests src` → one hit, the doc comment at `auth.rs:48` (F7) | 0 |
+| 13 | `grep -n 'env::' .cartridge/tests/unit/auth/tests.rs` → four `temp_dir()` calls only | 0 |
+| 14 | `grep -rn 'codex_token_endpoint\|CODEX_TOKEN' src --include=*.rs` → const `:26`, two `cfg`-split halves `:42`/`:54`, `static` `:51`, one call site `:722`, bare const at the device-auth `:996` (= base `:971`) | 0 |
+| 15 | `CARGO_TARGET_DIR=<scratchpad>/rev2/t-build cargo build` (non-test, `warnings = "deny"`) — no warnings | **0** |
+| 16 | `CARGO_TARGET_DIR=<scratchpad>/rev2/t-test cargo test --lib` → `58 passed; 0 failed` | **0** |
+| 17 | **P3** `compile_error!` injected into the `#[cfg(test)]` half → `cargo build` | **0** (half excluded) |
+| 18 | **P3** same tree → `cargo test --lib --no-run` → `error: the cfg(test) half was compiled` at `auth.rs:55` | **101** (half compiled only under `cfg(test)`) |
+| 19 | env-seam tree = pristine `65d22d7` + `attempt-1.patch`; guards 16 / 17 / 18 / 21 each alone | **1** ×4 |
+| 20 | whole block 2 on that env-seam tree | **1** |
+| 21 | **F6** round-1 bare `[[bin]]` guard, `Cargo.toml` removed | **0** (vacuity reproduced) |
+| 22 | **F6** revised `test -f Cargo.toml` + guard, same tree | **1** |
+| 23 | **F5** round-1 guard 10 (inert `grep -v`), call site moved `module.rs` → `proxy.rs` | **0** (reproduced) |
+| 24 | **F5** revised count guard, same tree | 0 (count is still 1 — correctly) |
+| 25 | **F5** revised `grep -c '^src/module.rs:'` `= 1`, same tree | **1** |
+| 26 | twelve further block-2 guards, each alone, each against a tree built to fail it (§4) | **1** ×12 |
+| 27 | **F3** fixture returns a token one character off → panic at `tests.rs:233`, the `authorization` assert, *after* the `chatgpt-account-id` asserts passed | **101** cargo |
+| 28 | same F3 mutant, run as Verify block 1 — the collector-visible exit | **1** |
+| 29 | non-vacuity, revised test: each caller its own gate → `left: 2 / right: 1`, `FAILED. 0 passed; 1 failed` | **101** cargo / **1** as the block |
+| 30 | **F8** shipped half rewritten to read `ROUTER_TOKEN_ENDPOINT`; guards 16 / 17 / 18 and **whole block 2** | **0** ×4 (gap reproduced) |
+| 31 | **F8** candidate fix `grep -qx '<TAB>CODEX_TOKEN.to_owned()'` — on the mutant / on the patched tree | **1** / **0** |
+| 32 | `git -C rev2/patched status --porcelain -uall` after all blocks → still exactly the two patched files | 0 |
+| 33 | `sed -n '714,740p' base/src/auth.rs` — compares at `:718` and `:732`, `.get()` at `:723` (F9 evidence) | 0 |
+| 34 | `sed -n '50,70p' .cartridge/config.lua` — `router` block still `:56-62`, `listen` still `:59`; `git diff` confines the change to `live` / `live-record` | 0 |
+| 35 | sibling-state sweep of the parent's nine children; `an-instance-attaches-…` still `done`, composed test still `open` prio 85 | 0 |
+
+Reviewer identity: independent reviewer agent (coordinator cartridge-1b).
+User rating: not supplied; not required under delegation.
+User feedback/provenance: none for this revision.
+Result: **PASS — 97/100**.
+Unresolved blocking findings: none.
+Rounds used / remaining: 2 / 3.
+Next action: proceed to authorized implementation at `router.ctg` `65d22d7`,
+carrying F8 (one-character guard anchor plus the Remaining-risk wording) and F9
+(the `:718`/`:732` cite in the PRD Planning note, body only) along with it. If
+either edit changes a Verify block, that is a formatting-level change to a gate
+and should be re-run, not re-reviewed; any substantive change to the option,
+footprint or boxes makes this rating stale and needs round 3.

@@ -142,17 +142,17 @@ Deliberately **not** in this spec, and why:
 
 ## Acceptance
 
-- [ ] Two `cartridge mcp` stdio clients attached to one daemon keep separate
+- [x] Two `cartridge mcp` stdio clients attached to one daemon keep separate
       sessions (each sees only its own initialization and history), and one
       closing does not affect the other's session or calls.
       (`instances.test.ts`: the two echoed session ids differ, each is stable
       across that client's calls, and killing one leaves the other's
       unchanged.)
-- [ ] An in-flight call from one instance is not visible in or cancellable
+- [x] An in-flight call from one instance is not visible in or cancellable
       from the other. (`two_instances_keep_separate_sessions_and_in_flight_calls`:
       both clients hold a call under id 1; a cancel from one reaches only its
       own call's context, and never the other's.)
-- [ ] Exactly one mcp node exists with the daemon running, proven at composed
+- [x] Exactly one mcp node exists with the daemon running, proven at composed
       scope inside this PRD's own fixture. `instances.test.ts`, with two bridges
       attached to one daemon, asserts
       `status.filter(n => n.id === 'mcp' && n.state === 'active').length === 1`

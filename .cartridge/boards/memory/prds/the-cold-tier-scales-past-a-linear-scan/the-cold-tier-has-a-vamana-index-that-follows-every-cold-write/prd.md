@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/memory.ctg
-state: "analyzing"
+state: "open"
 origin: requested
 priority: 60
 blast-radius: mid
@@ -20,7 +20,6 @@ footprint:
   - .cartridge/tests/unit/src/store/core/src/lib/tests.rs
   - .cartridge/tests/unit/src/graph/src/tests/cold_index_test.rs
   - .cartridge/tests/unit/src/tick/loop/src/tests/tick_tasks_test.rs
-claim: "coordinator-c4-14 2026-09-16T09:16:53.055Z"
 ---
 
 # The cold tier has a Vamana index that follows every cold write

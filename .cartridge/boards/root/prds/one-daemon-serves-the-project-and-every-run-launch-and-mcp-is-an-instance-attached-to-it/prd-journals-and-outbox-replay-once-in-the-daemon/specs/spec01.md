@@ -82,28 +82,53 @@ Both regressions below pass that suite untouched. This spec closes that.
      exactly one outbox file, exactly one `ingest`, both receipts `committed`;
      then a further `replayMemory()` and a further `rememberVerified` leave the
      count at one.
-2. Nothing else. No change under `src/`. `src/service.ts` stays in the
+2. `.cartridge/tests/service.test.ts`: one more test, `a second apply is
+   refused, so one process serves from exactly one service`. Box 3's
+   second-apply clause rested on a `grep` for a source string and its
+   one-`Service` clause on nothing at all, though both are reachable in six
+   lines with the `program()` fixture the file already imports (`:7`), which
+   spawns the real `src/service.ts` and applies once at `:89`. The test applies
+   twice — the second must reject with `cartridge is already applied` — and it
+   must distinguish a *surviving* first `Service` from a *replacement*, which
+   `scan` alone cannot: a second `Service` in the one process answers `scan`
+   perfectly well. So it starts a `--dry` job through the node **before** the
+   second `apply` and reads that job's `status` **after** the refusal,
+   asserting it is not `interrupted`. That is this PRD's own subject matter
+   used as the detector: a replacement carries a fresh `instance` (`:34`), so
+   the journal entry the first `Service` wrote would mismatch at `:127` and
+   read `interrupted`, and its fresh empty `deliveries` map would take the
+   outbox single-flight with it. Both boxes this PRD exists to protect would
+   regress in exactly that shape, so the clause is worth executing rather than
+   inferring. A final `scan` keeps the *closed* half covered too.
+3. Nothing else. No change under `src/`. `src/service.ts` stays in the
    footprint only so the guards in Verify may read it; if a step wants to edit
    it, stop and report — the behaviour is already correct and the diff is churn.
 
 ## Acceptance
 
-- [ ] A job started through one attached instance is not shown interrupted
+- [x] A job started through one attached instance is not shown interrupted
       when another instance starts a job or calls prd. (Both jobs keep
       `service.instance` in memory and in the journal; a third instance's
       `status` reads neither as `interrupted`; a genuinely foreign journal
       entry still does.)
-- [ ] The memory outbox replays exactly once for a given pending
+- [x] The memory outbox replays exactly once for a given pending
       acknowledgment, no matter how many instances make prd calls. (Two
       sessions' concurrent `rememberVerified` plus `replayMemory` produce one
       outbox file and one `ingest`; a later replay and a later instance add
       none.)
-- [ ] prd.ctg's share of "exactly one prd node exists with the daemon
-      running": the cartridge builds one `Wire` and one `Service` per process,
-      refuses a second `apply`, and starts no host, daemon or node of its own —
-      its only children are its own engine CLI, `git` and `ps`. Checked below.
-      The daemon-wide count is not observable from this repo; it is delivered
-      by the done sibling
+- [x] prd.ctg's share of "exactly one prd node exists with the daemon
+      running": the cartridge builds one `Wire` per process, **refuses a second
+      `apply` and keeps serving from the first `Service`** (executed by the test
+      `a second apply is refused, so one process serves from exactly one
+      service`, which spawns the real `src/service.ts` over the wire, starts a
+      `--dry` job through it before the second `apply` and reads that job's
+      `status` after the refusal — a replacement `Service` carries a fresh
+      `instance`, so the job would read `interrupted`), and
+      starts no host, daemon or node of its own — every child it starts is its
+      own engine CLI, `git`, `ps`, `sh -eu -c` running a spec's own Verify
+      block, and the configured adapter executable, none of them a host.
+      Checked below. The daemon-wide count is not observable from this repo; it
+      is delivered by the done sibling
       `an-instance-attaches-to-the-daemon-and-never-composes-silently` (this
       PRD's `needs`) and re-proven composed by
       `the-composed-acceptance-test-proves-one-daemon-one-node-per-cartridge-and-attached-instances`.
@@ -135,10 +160,27 @@ test "$(grep -c 'replayMemory()' src/service.ts)" = 2
 
 ```sh
 test -f src/service.ts
-# One wire and one service per node; a second apply is refused.
+# One wire per process. The second-apply refusal is *executed* by the test named on the next line;
+# the string guard only keeps the message the test matches from drifting.
 test "$(grep -c 'new Wire()' src/service.ts)" = 1
 grep -q 'cartridge is already applied' src/service.ts
-# prd.ctg starts no host, daemon or node of its own; its only children are the engine CLI, git and ps.
+grep -q 'a second apply is refused' .cartridge/tests/service.test.ts
+# Every child this cartridge starts, pinned by call site rather than by spelling.
+# Synchronous children are git and ps, and nothing else.
+test "$(grep -rn 'Bun.spawnSync(\[' src/ | wc -l | tr -d ' ')" = 8
+test "$(grep -rn "Bun.spawnSync(\['git'," src/ | wc -l | tr -d ' ')" = 7
+test "$(grep -rn "Bun.spawnSync(\['ps'," src/ | wc -l | tr -d ' ')" = 1
+# Asynchronous children exist only through runProcess in src/process.ts: one importer of the spawn
+# primitive, no second primitive, and exactly three call sites.
+test "$(grep -rln "from 'node:child_process'" src/ | wc -l | tr -d ' ')" = 1
+grep -q "from 'node:child_process'" src/process.ts
+if grep -rn 'Bun.spawn(' src/; then echo 'a second spawn primitive appeared in src/'; exit 1; fi
+test "$(grep -rn 'await runProcess(' src/ | wc -l | tr -d ' ')" = 3
+# Two of those three are literal, and neither is a host: this cartridge's own engine CLI and a
+# spec Verify block. The third is the configured adapter executable, which is trusted config.
+grep -q "runProcess(\[process.execPath, path.join(ROOT, 'src/cli.ts')" src/service.ts
+grep -q "runProcess(\['sh', '-eu', '-c', block.command\]" src/lifecycle.ts
+# And no host, daemon, node or socket is named anywhere in src/, in code or in a comment.
 if grep -rn 'cartridge daemon\|host\.sock\|cartridge launch\|cartridge mcp' src/; then echo 'prd.ctg reaches for a host of its own'; exit 1; fi
 ```
 
@@ -152,6 +194,22 @@ if grep -rn 'cartridge daemon\|host\.sock\|cartridge launch\|cartridge mcp' src/
   assert manifest ids still exist — board-record drift committed into prd.ctg,
   not `statusline` and not `src/`. Verify is scoped to `service.test.ts` for
   that reason; the red suite is not this PRD's and should not gate it.
+- **What block 3's child guards do and do not catch.** They are source guards,
+  not a runtime process census: nothing here counts the cartridge's actual
+  children while it runs. They pin the *call sites* — 8 `Bun.spawnSync`
+  argv-literals, all `git` or `ps`; one importer of `node:child_process`, in
+  `src/process.ts`; no second spawn primitive; exactly 3 `await runProcess`
+  sites, two of them literal (the engine CLI, `sh -eu -c` on a spec block). Any
+  new spawn anywhere in `src/` therefore fails the block, which the earlier
+  `cartridge daemon|host.sock|cartridge launch|cartridge mcp` spelling guard
+  did **not**: a real `Bun.spawn(['cartridge', 'daemon', '--replace'])` passed
+  it, while a bare `// cartridge daemon` comment failed it. Two holes remain by
+  design. The third `runProcess` site is the configured adapter executable
+  (`src/coordinator.ts:59-63`, `Bun.which(PRD_ADAPTER_BIN || adapter.command[0])`)
+  — trusted config, so *what* it spawns cannot be pinned in source, and
+  pointing it at a host would not fail this block. And `sh -eu -c`
+  (`src/lifecycle.ts:45`) runs whatever a spec's own Verify block contains. Both
+  are inputs, not code; neither is a host that this cartridge starts of its own.
 - Verify block 1 needs `node_modules` resolvable from the lane, and the lane
   carries none: `src/lifecycle.ts:225` creates it with `git worktree add`. It
   resolves only because `lane()` (`:24`) places the worktree at

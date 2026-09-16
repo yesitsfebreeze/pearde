@@ -25,8 +25,8 @@ The host's own check and test gates are green when the whole suite runs at once.
 
 ## Acceptance
 
-- [x] `just check cartridge` exits 0 (2026-09-15: rustfmt diff in `.cartridge/tests/unit/src/host/socket.rs`).
-- [x] `just test cartridge` exits 0 on three consecutive runs with the suite in parallel; `$CARTRIDGE_HOME` is set per test, never process-global; the `cli::setup` and `cli::trust` tests pass on macOS CI.
+- [x] `just check cartridge` exits 0 (2026-09-15: rustfmt diff in `.cartridge/tests/unit/src/host/socket.rs`; 2026-09-16: rustfmt diff from d840064 fixed in cartridge.ctg cdd3124).
+- [x] `just test cartridge` exits 0 on three consecutive runs with the suite in parallel; `$CARTRIDGE_HOME` is set per test, never process-global; the `cli::setup` and `cli::trust` tests pass locally in that suite (CI coverage belongs to `@root/ci-runs-the-gates-on-macos-and-linux`).
 
 ## Folds
 

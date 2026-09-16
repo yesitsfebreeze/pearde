@@ -88,17 +88,30 @@ grep -q 'nextest run --workspace' cartridge.ctg/justfile
 ```
 
 ```sh
-cd cartridge.ctg && cargo test --workspace
+grep -q 'unwrap_or_else(std::sync::PoisonError::into_inner)' cartridge.ctg/.cartridge/tests/unit/src/cli/setup.rs
+grep -q 'let ambient = std::env::var_os(crate::settings::YOLO_ENV)' cartridge.ctg/.cartridge/tests/unit/src/tests/settings.rs
+```
+
+```sh
+cd cartridge.ctg && CARTRIDGE_YOLO=1 cargo test --workspace
 ```
 
 ## Proof
 
 Landed as cartridge.ctg `bceb644` ("Isolate host tests: one test per process
 and CARTRIDGE_HOME guards"): `justfile`, `.cartridge/tests/unit/src/cli/setup.rs`
-and `.cartridge/tests/unit/src/tests/settings.rs`.
+and `.cartridge/tests/unit/src/tests/settings.rs`. Line numbers in Evidence are
+from 655beb6 and have since moved; the grep blocks pin the fixes by content.
 
-Coordinator revision 2026-09-16 (cartridge-c4). The earlier single proof block
-chained five suite runs, which is past the 120 s limit for one block, and it did
-not fail on a dirty tree. It is split into one block per gate, and the tree must
-be clean first. The CARTRIDGE_HOME grep is an inspection step and doesn't need
-a block.
+Coordinator revision 2026-09-16 (cartridge-c4), after review round 1:
+- The single chained proof block became one block per gate, with a clean tree
+  required first. Round 1 measured warm times: about 10 s for `just test cartridge`,
+  about 8 s for `cargo test --workspace`, and about 50 s for a full pass.
+- F1 (blocking): `just check cartridge` was red at d840064 because rustfmt flagged
+  `src/host/mod.rs` and `.cartridge/tests/unit/src/host/plan.rs`, both from that
+  commit. Fixed in cartridge.ctg `cdd3124` (fmt only). `just check cartridge` then
+  exits 0 in 2.3 s.
+- F4: the in-process block pins `CARTRIDGE_YOLO=1`, which is the case the fix is for.
+- F5: grep blocks fail if the poisoned-lock recovery or the ambient-yolo save is reverted.
+- F2: the PRD's "macOS CI" clause is out of scope here and goes to
+  `@root/ci-runs-the-gates-on-macos-and-linux`. The box now names local runs only.

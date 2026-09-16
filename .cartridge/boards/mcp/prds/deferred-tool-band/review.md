@@ -126,3 +126,60 @@ Result: FAIL (85/100, no blocking findings).
 Unresolved blocking findings: none.
 Rounds used / remaining: 2 / 3.
 Next action: make one bounded revision of prd.md and spec01.md for findings 1–8, plus the one-line harness Decision amendment (finding 5), then run a Round 3 review.
+
+## Round 3 — 2026-09-16
+
+Presented revision: prd.ctg HEAD `c11877c2`, with `prd.md` and `specs/spec01.md` modified (dirty) on top of it. Code base is mcp.ctg `6f06acd`.
+
+| Input | Content digest |
+| --- | --- |
+| Plan | `boards/mcp/prds/deferred-tool-band/prd.md` SHA-256 `93a6e4f82dcbe53eef5b877664a0740482fb6ec5c2e72b4737b91f2f0438827f` (matches the hand-off prefix `93a6e4f8`) |
+| Specs | `boards/mcp/prds/deferred-tool-band/specs/spec01.md` SHA-256 `ca0ff6ad4077158a376b3abb53092a49ebeae966dfc6fee536c3481c72bc31d9` (matches the hand-off prefix `ca0ff6ad`) |
+| Material contracts/dependencies | `boards/harness/prds/reflex-tool-audit-loop/prd.md` SHA-256 `9497b35959f546bedbe8beb1a0abcfdb9b8cd36a7014c051a65c499717dbf0f0` (changed since round 2: Decision line 42 added). Follow-ups `boards/root/prds/the-stdio-bridge-pushes-tools-list-changed-so-a-deferred-tool-restore-reaches-every-client/prd.md` and `boards/mcp/prds/the-mcp-live-catalog-tests-settle-at-base/prd.md`. mcp.ctg `6f06acd`: `src/service.rs` (`Config`/`Default`/`parse`/`validate` :28–80, `describe` :243, `registry` :277, `tools/list` :233, `invoke` :382), `.cartridge/tests/unit/tests.rs` (`Config {` at 49/127/338/370/414/477), `cartridge.json` `settings`, `.cartridge/docs/README.md`. |
+
+Round-2 findings:
+
+| # | Status | Evidence |
+| --- | --- | --- |
+| 1 | Resolved | Both follow-ups are filed and cited by ID in PRD Recovery/Gates and spec Remaining. The root PRD `needs` this plan and owns the push plus the default flip; the mcp PRD owns the red live-fixture gate. |
+| 2 | Resolved | PRD box 1 now reads "exactly the hot set, anything restored, and the `tools` meta-tool", matching spec box 1 `{pinned, hotname, tools}`. |
+| 3 | Resolved | PRD body is 400 words (`awk 'NR>9' prd.md \| wc -w`), at the limit; the field-level contract moved to spec §Scope. |
+| 4 | Resolved (alternative) | PRD and spec name mcp's README `## Deferred tools` as the canonical statement other boards cite, and say why no shared doc file is added. No cartridge.ctg home is filed (see dimension 2). |
+| 5 | Resolved | Harness `## Decision` line 42: the harness child applies the same rule in `convert_tools` from `summary`/`defer` and its own `hot`. |
+| 6 | Resolved | Verify block 4 greps the collision phrase, the restore-scope phrase and "`hot` takes tool names". |
+| 7 | Resolved | `band_disabled_listing_is_byte_identical` compares against a pinned `{"tools":[{name,description,inputSchema}]}`, which matches the `tools/list` shape at `service.rs:233–236` and `describe` :266–270. |
+| 8 | Resolved | `unknown_hot` in `cartridge/band`; validate refuses empty/duplicate `hot`; README phrase on names vs keys; step 6 gives the no-call-authority rationale for an unauthenticated host-wide restore. |
+
+| Dimension | Score / 20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 18 | Scope is one listing with a declared contract; value's dependency on the bridge push now has an owner record, so off-by-default is a correctly deferred step, not an unowned gap. −1: nothing a client sees changes until the filed follow-up lands (small residual, not re-penalised in full). −1: by the disposition rule any non-empty `config.tools` makes every exposed tool hot, so the band is inert for every profile with an allowlist. That follows from the PRD sentence, but neither the PRD nor the README bullet list in step 8 says so. |
+| Ownership and reuse | 18 | Reuse is unchanged and good: `describe`/`registry` choke point, `Config::default()` reading `cartridge.json` through `parse` (so the new settings need declaring once), the duplicate-name guard, `content()`. The harness Decision now records the moved scope. −1: the contract's canonical home is another cartridge's README with no record in cartridge.ctg, which owns descriptors; proxy and agent boards have no filed PRD citing it. −1: harness Decision line 42 cites "spec01, Scope" while the PRD names the README as the canonical statement, so two authorities are referenced. |
+| Dependencies and implementable slices | 19 | No `needs`; four-path footprint matches steps 1–8; literal list verified (full literals at 49, 127, 414; `..Config::default()` at 338, 370, 477). Both hard follow-ups filed with the right `needs` direction. −1: the proxy/agent listing surfaces and provider `summary` adoption remain prose only in Remaining (out of scope, so only a minor deduction). |
+| Observable acceptance and baseline evidence | 18 | Seven named tests with sentinels, pinned pre-band JSON, independent byte sums, and a Verify that fails at base (probed below). −1: step 5 says the band-on listing always adds the `tools` meta-tool, but spec box 4 expects no meta-tool under a non-empty `config.tools`, and the case "band on, nothing deferred" is unspecified. An implementer following the steps fails box 4. State: the meta-tool and `cartridge/band` appear only when the deferred set is non-empty. −1: comparison (a) in `band_disabled_listing_is_byte_identical` is tautological after the change (`Config::default()` then yields `band:false, hot:[]`, the same config); only (b) carries weight. `grep -q 'defer'` in block 4 is also weak (matches "deferred" anywhere). |
+| Failure, recovery and compatibility | 18 | Rollback, collision and its recovery, host-wide restore lifetime and its authority rationale, and `unknown_hot` reporting are all specified. Unknown restore names return `isError`. −1: `tools/call tools` behaviour is unspecified when the band is on but no meta-tool is listed (allowlist case): intercepted, or `unknown tool`? −1: the documented names-vs-keys confusion (`hot: ["tool.memo"]`) is only reported in `_meta`, which Claude Code does not surface. Tool names cannot contain `.` (`describe` name rule, service.rs:252–258), so `validate` could refuse a dotted `hot` entry at config time for free. |
+| Reviewer total | 91 / 100 | |
+
+Findings and concrete revisions (none blocking):
+
+1. Reconcile step 5 with box 4: emit the `tools` meta-tool and `cartridge/band` meta only when at least one tool is deferred, and say what `tools/call tools` answers when no meta-tool is listed.
+2. README step 8: add one line that a non-empty `tools` allowlist makes every listed tool hot, so the band has no effect under an allowlist.
+3. In `validate`, also refuse `hot` entries containing `.` (a key, not a name); keep `unknown_hot` for well-formed names that match nothing.
+4. Drop comparison (a) from `band_disabled_listing_is_byte_identical` or replace it with something non-tautological; tighten the `defer` grep to a contract phrase.
+5. Point harness Decision line 42 at mcp's README `## Deferred tools` (the declared canonical statement) rather than spec01, once the README lands.
+
+Disposition: keep as one leaf. Findings 1–5 can be folded into implementation without another review round, because none changes the contract or the gates.
+
+Validation (reviewer r3, 2026-09-16):
+- `shasum -a 256` on prd.md, spec01.md and the harness prd.md gave the digests above; both plan digests match the hand-off.
+- `git -C mcp.ctg worktree add --detach <scratchpad>/r3-lane 6f06acd`. In that lane root (default target, global `kache` wrapper): `cargo fmt --all --check` exit 0; `cargo clippy --all-targets -- -D warnings` finished in 5.23 s with no warnings; `cargo test --lib band_ -- --nocapture` gave `ok. 0 passed; … 13 filtered out`, so block 3's `grep -q 'test result: ok. 7 passed'` fails at base as intended; `grep -q '"band"' cartridge.json` exit 1 at base, so block 4 fails at base as intended. Worktree removed with `git worktree remove` (no `--force`).
+- Commands were run individually, not through `sh -eu -c`: a local safety hook blocks executing a script file. Block logic was checked by reading it under `sh -eu` semantics (the `out=$(…) || {…}` form and the `grep -E` line both exit non-zero on a miss).
+- `awk 'NR>9' prd.md | wc -w` = 400.
+- Code reads: service.rs :28–100, :225–440, :106–114 (`descriptor_revision` digests the whole descriptor, so new provider fields change revisions, which is expected); tests.rs literals at 49/127/338/370/414/477; README §Protocol, §Cost, §Tests, §Refresh (it already says the transport advertises no list-change notification, consistent with off-by-default).
+
+Reviewer identity: independent reviewer agent r3 (coordinator cartridge-c4).
+User rating: not required under delegation; none supplied.
+User feedback/provenance: none for this revision.
+Result: PASS (91/100, no blocking findings).
+Unresolved blocking findings: none.
+Rounds used / remaining: 3 / 2.
+Next action: proceed to implementation; fold non-blocking findings 1–4 into the spec work (a substantive contract change would make this rating stale).

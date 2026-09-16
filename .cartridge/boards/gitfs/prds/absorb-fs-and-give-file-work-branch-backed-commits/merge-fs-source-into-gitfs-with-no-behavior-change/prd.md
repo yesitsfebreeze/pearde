@@ -1,13 +1,13 @@
 ---
 repo: /Users/feb/dev/cartridge/fs.ctg
-state: "analyzing"
+state: "done"
 origin: requested
 priority: 50
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: fs
 work-kind: leaf
-claim: "merge-fs-into-gitfs-verify-and-collect 2026-09-16T06:18:37.485Z"
+commit: "75e76e63d8f97954759bf294f4b0d86d78d5643b"
 ---
 
 # Merge gitfs into fs

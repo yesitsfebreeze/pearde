@@ -1,11 +1,13 @@
 ---
-state: "open"
+state: "done"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge"
 footprint:
   - cartridge.ctg
   - .cartridge/memos/routine/cartridge-proxy.md
+  - .cartridge/memos/routine/cartridge-runtime.md
+commit: "da31a34874f298256c04026a2896ad6598bccc0b"
 ---
 
 # a verify build never restarts a live cartridge
@@ -22,8 +24,15 @@ of the dylib, or it reloads only on `cartridge reload` / `just proxy`, or on a
 build marker that `cargo test` never writes. The analyst picks one and records
 why.
 
+Plain `cargo test`, `cargo clippy` and `cargo check` never rewrite
+`target/debug/lib<name>.dylib` themselves (analyst probe, cargo 1.94). The risky
+case is a test that nests `cargo build --lib` — harness, agent, memory and memo
+all do — which swaps in a new dylib inode and trips the watcher. So the check is
+whether a rewritten dylib restarts a loaded node, not whether `cargo test` alone
+does.
+
 ## Acceptance
 
-- [ ] With a daemon running, `cargo test` in a loaded cartridge's submodule using the default target dir leaves that cartridge's generation unchanged.
-- [ ] The documented rebuild path (`just proxy` or `cartridge reload <id>`) still picks up a new build.
-- [ ] `just test lifecycle` passes.
+- [x] In an isolated host, rewriting a loaded cartridge's `target/debug/lib<name>.dylib` the way a test's `cargo build --lib` does leaves its node running (call counter continues).
+- [x] A deliberate reload picks up a new build: `Host::replace` — what `cartridge reload <id>` dispatches to (`src/cli/mod.rs:131` → `src/host/socket.rs:451-453`) and what `just proxy` runs (`cartridge-proxy.md:37`, `exec cartridge reload proxy`) — starts a node that answers out of the rebuilt module (3, which neither the node that was running (8) nor a fresh node on the old build (2) can give).
+- [x] `just test lifecycle` passes.

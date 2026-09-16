@@ -8,7 +8,13 @@ footprint:
 # spec01 — the live launcher attaches with `run` and starts no daemon
 
 Base: live.ctg at `4cbb053` (the gitlink, unchanged since the spec was drafted
-at the superproject's `0e3916c`; both footprint files are clean at it). Depends on
+at the superproject's `0e3916c`; both footprint files are clean at it).
+**Implemented against `780dd89`**: `live.ctg` HEAD moved on 2026-09-16 with
+"Speak from the host itself and drop the HTTP surface", which touched both
+footprint files, so the lane was rebased onto it. Live's `status`/`open` no
+longer report a URL, and the launcher takes that contract; nothing else in this
+spec is affected — that commit touched neither the `status` probe, the
+`--yolo daemon` spawn, the signal bookkeeping nor the kill timer. Depends on
 `an-instance-attaches-to-the-daemon-and-never-composes-silently` (done,
 `f364f46`), which delivered the attach contract this spec consumes.
 
@@ -89,8 +95,8 @@ the command carries on to the event — so the log is named by the host in the
 first case and by the launcher's own not-ready error in the rest (round 2 F8).
 Either way the authority on how long an attach may take stays with the process
 that knows the settings. What the launcher still bounds
-is the wait it actually owns — Live's own HTTP listener coming up inside a node
-that `settle_remote` has already reported as running — so the readiness
+is the wait it actually owns — Live's own node answering `status` inside a
+composition that `settle_remote` has already reported as settled — so the readiness
 deadline starts **after the first attach returns** and is 60 s of polling from
 there. A side effect worth having: an attach that keeps failing is now retried
 at most once *when each attach is itself slow*, rather than every 250 ms until a
@@ -133,9 +139,10 @@ so the terminal's Ctrl-C reaches the agent and not the launcher. Nothing in
 live.ctg's footprint decides this, and the code admits no second design: the
 proxy port is bound once, in the daemon, by design (`.cartridge/init.lua:41-47`
 — "Nothing here binds a port on its own: the proxy listens only when a key
-names it"). The live launcher is the same shape one level up: Live's HTTP
-server stays in the daemon's live node, and `launch.ts` prints the session URL
-and exits.
+names it"). The live launcher is the same shape one level up: Live's own
+surfaces stay in the daemon's live node, and `launch.ts` prints the session and
+exits. (`live.ctg@780dd89` has since dropped Live's HTTP server entirely and
+speaks from the host; the shape is unchanged, only the URL is gone.)
 
 ## Steps
 
@@ -190,7 +197,7 @@ and exits.
 
 ## Acceptance
 
-- [ ] `cartridge launch claude` with a daemon running starts no
+- [x] `cartridge launch claude` with a daemon running starts no
       `cartridge daemon` process and no second composition; the agent talks
       through the daemon's proxy. live.ctg's share: the launcher spawns no
       daemon and composes nothing — the fake-binary test records zero `daemon`
@@ -200,14 +207,14 @@ and exits.
       `an-instance-attaches-to-the-daemon-and-never-composes-silently` (done)
       and re-proven by
       `the-composed-acceptance-test-proves-one-daemon-one-node-per-cartridge-and-attached-instances`.
-- [ ] Work in flight on the daemon is not marked `interrupted` by a new
+- [x] Work in flight on the daemon is not marked `interrupted` by a new
       `launch` attaching. An attach constructs no `Coordinator`: the marking is
       reachable only from `startServer` ← `wire.on("apply")`, and the host
       sends `apply` once per node start
       (`cartridge.ctg/src/host/process.rs:207-224`). The launcher no longer
       starts a node at all, which is what the test pins; the constructor's
       recovery marking stays where it is, checked below.
-- [ ] With no daemon, `launch` results in exactly one daemon being started
+- [x] With no daemon, `launch` results in exactly one daemon being started
       (concurrent launches included). The launcher delegates it wholly to
       `host::attach`, which spawns at most one detached daemon and loses the
       race safely; the cold case proves the launcher goes through `run` and
@@ -276,18 +283,21 @@ grep -q "args.includes(\"daemon\")" .cartridge/tests/integration/launch.test.ts
   there, which lowers it for `cartridge run`, `launch` and `mcp` at the same
   time.
 - The 60 s readiness deadline still in the launcher bounds only the wait
-  *after* the first attach has returned — Live's HTTP listener coming up inside
-  an already-running node. It is a launcher-side number with no setting behind
-  it; if Live ever takes longer than that to bind its port after the host
-  reports it running, this is the line to raise.
+  *after* the first attach has returned — Live's own node answering `status`
+  inside an already-settled composition. It is a launcher-side number with no
+  setting behind it; if Live ever takes longer than that to answer after the
+  host reports it running, this is the line to raise.
 - **`--yolo` no longer reaches the project daemon** (round 1 F3). Today
   `launch.ts:52` spawns `["--yolo","daemon"]`; `--yolo` sets `YOLO_ENV`
   (`cartridge.ctg/src/cli/mod.rs:87-89`) and `settings::apply` merges
   `{"yolo": true}` into every cartridge declaring it —
   `agent.ctg/cartridge.json:100`, `proxy.ctg/cartridge.json:75`,
-  `memo.ctg/cartridge.json:129`. `spawn_daemon` passes only
-  `--dir <project> daemon` (`host.rs:110-140`), and an instance "cannot change
-  an existing daemon" (`src/cli/args.rs:164-170`). So a `just live`
+  `memo.ctg/cartridge.json:129`. `spawn_daemon` passes `--dir <project> daemon`
+  and adds `--yolo` only when `settings::yolo()` reads `CARTRIDGE_YOLO` from the
+  environment it inherited (`host.rs:110-140`, corrected from "only `--dir
+  <project> daemon`" — verifier-1 nit 6), and the launcher's `Bun.spawn` passes
+  no such environment; an instance also "cannot change an existing daemon"
+  (`src/cli/args.rs:164-170`). So a `just live`
   composition stops running agent/proxy/memo in automatic-execution mode: a
   policy bypass is **lost, not gained**, and a launched agent may start asking
   the policy where it used to be granted. This is a consequence of the parent's
@@ -297,7 +307,8 @@ grep -q "args.includes(\"daemon\")" .cartridge/tests/integration/launch.test.ts
   inherits the environment, and `yolo()` is a bare `CARTRIDGE_YOLO` read
   (`cartridge.ctg/src/transport/settings.rs:188-191`), so
   `env:{...process.env,CARTRIDGE_YOLO:"1"}` on `command()`'s `Bun.spawn` would
-  do it in one line inside this footprint. That path exists and is deliberately
+  do it in one line inside this footprint — `spawn_daemon` would then hand the
+  flag on explicitly. That path exists and is deliberately
   not taken (round 2 F6): it would let whichever instance happens to start the
   daemon first decide the policy mode for every later one. The `trust --ask` gate with
   `CARTRIDGE_YOLO=1` is a separate pre-attach `spawnSync` and is unchanged.

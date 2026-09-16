@@ -1,5 +1,5 @@
 ---
-state: "claimed"
+state: "done"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge/live.ctg"
@@ -9,7 +9,7 @@ needs:
 footprint:
 - "src/launch.ts"
 - ".cartridge/tests/integration/launch.test.ts"
-claim: "coordinator-cartridge-1b-3 2026-09-16T10:59:26.143Z"
+commit: "97b810eb43cf72bb2faab4245f03df6946c2363c"
 ---
 
 # Live attaches to the daemon instead of spawning its own
@@ -71,8 +71,10 @@ around. The CLI then runs that command in the launching process, foreground,
 agent (`cartridge.ctg/src/cli/host.rs:231-282`). The proxy port is bound once,
 in the daemon, by composition (`.cartridge/init.lua:41-51`), so no second
 design is open. Nothing in this PRD's footprint decides it; the live launcher
-is the same shape one level up — Live's HTTP server stays in the daemon's live
-node and `launch.ts` prints the session URL.
+is the same shape one level up — Live's own surfaces stay in the daemon's live
+node and `launch.ts` prints the session and exits. (`live.ctg@780dd89` has since
+dropped Live's HTTP server and speaks from the host; the shape holds, the URL is
+gone, and the implemented launcher takes that contract.)
 
 ## Planning note
 
@@ -90,10 +92,35 @@ reviews this must confirm the rewritten test fails against unpatched
 
 ## Acceptance
 
-- [ ] `cartridge launch claude` with a daemon running starts no `cartridge
+- [x] `cartridge launch claude` with a daemon running starts no `cartridge
       daemon` process and no second composition; the agent talks through the
       daemon's proxy (parent Acceptance box 2 covers the process count).
-- [ ] Work in flight on the daemon is not marked `interrupted` by a new
+- [x] Work in flight on the daemon is not marked `interrupted` by a new
       `launch` attaching.
-- [ ] With no daemon, `launch` results in exactly one daemon being started
+- [x] With no daemon, `launch` results in exactly one daemon being started
       (concurrent launches included).
+
+## Evidence note for the ticked boxes
+
+2026-09-16, coordinator cartridge-1b, after verifier-1 and the rebase onto
+`live.ctg@780dd89`.
+
+- Box 1 is proven **by execution**: the rewritten integration test observes zero
+  `daemon` argv against a fake that *answers* `daemon`, and the same test against
+  the unpatched base fails on exactly that assertion (exit 1, `Expected 0 /
+  Received 1`).
+- Box 2 is proven **by inspection, not by execution**. `phase='interrupted'`
+  exists only in `Coordinator`'s constructor (`src/coordinator.ts:30`), whose
+  only production construction is `src/server.ts:63`, reached only from
+  `startServer` — called at `main.ts:10` (`--standalone`, unreachable under a
+  host) and `main.ts:19` inside `wire.on("apply")`, and `"apply"` is sent from
+  exactly one place in the runtime (`cartridge.ctg/src/host/process.rs:208`),
+  right after a fresh node connects. An attach constructs nothing. Three agents
+  derived this independently. No runnable check observes a surviving in-flight
+  task across an attach; the ticked box rests on that unreachability argument.
+- Box 3's launcher half is proven by execution (cold case, exit 0). Its
+  concurrency clause is delegated to
+  `<superproject>/.cartridge/tests/integration/takeover.test.ts:303`, which
+  asserts two concurrent `run`s both exit 0 and leave one composition; `run` and
+  `launch` enter the same `attach()` (`cli/host.rs:226`, `:240`), the only caller
+  of `spawn_daemon`. That suite was not re-executed here.

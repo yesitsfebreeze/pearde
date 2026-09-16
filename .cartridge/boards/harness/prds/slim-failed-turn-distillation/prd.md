@@ -1,10 +1,11 @@
 ---
-state: open
+state: "analyzing"
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge/harness.ctg"
 work-kind: leaf
 canonical-scope: slim-failed-turn-distillation
+claim: "coordinator-c4-5 2026-09-16T08:17:28.370Z"
 ---
 
 # A failed turn leaves one retrievable line behind

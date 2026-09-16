@@ -5,7 +5,7 @@ priority: 50
 repo: "/Users/feb/dev/cartridge/mcp.ctg"
 work-kind: leaf
 canonical-scope: deferred-tool-band
-claim: "coordinator-c4-3 2026-09-16T08:15:02.016Z"
+claim: "coordinator-c4-3 2026-09-16T08:19:26.926Z"
 ---
 
 # A deferred tool costs its one-line summary, not its schema

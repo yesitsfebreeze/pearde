@@ -1,11 +1,12 @@
 ---
-state: "analyzing"
+state: "open"
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge/harness.ctg"
 work-kind: leaf
 canonical-scope: reflex-tool-audit-loop
-claim: "coordinator-c4-2 2026-09-16T08:15:00.031Z"
+needs:
+- "@mcp/deferred-tool-band"
 ---
 
 # The tool surface is audited by use, not by declaration
@@ -30,3 +31,12 @@ Mechanism from `/Users/feb/dev/pi/packages/coding-agent/src/core/reflex/` (461 l
 Pairs with `@mcp/deferred-tool-band`, which is the withholding half: this child measures, that one defers. Land the band first or the audit has nothing to correct. Reconcile with `@sessions/reflex-reports-attributed-tool-outcomes`, which already exists on the sessions board and covers attribution of the same observations.
 
 Gates, cwd `/Users/feb/dev/cartridge`: `just test harness`, `just check harness`. Not run for this plan.
+
+## Decision
+
+2026-09-16, coordinator (analyst-1 report under `.state/loop/reflex-tool-audit-loop/`). Settled from existing records, not a user question:
+
+- Box 3 has nothing to outrank until `@mcp/deferred-tool-band` lands a disposition (`harness.ctg/src/lib.rs` `convert_tools` passes descriptors straight through), so this PRD needs the band.
+- Counting (box 1) already exists as `sessions reflex_report` (`sessions.ctg/src/lib.rs`, over `src/observations.rs`). `@sessions/reflex-reports-attributed-tool-outcomes` (done) rules that the session observation boundary owns tool-use attribution. Harness reads it and keeps no second ledger.
+- So the draw, verdict and trigger records belong in sessions, next to the observation journal. The next analysis splits into a sessions child (store, draw, rate, disable) and a harness child (applies verdicts over the band's disposition, reports which input decided, injects trigger lines, scripted offline test).
+- Gate timings were not measured, because a detached harness worktree cannot build without the sibling `memo.ctg`. The next analysis must measure them with the sibling submodules present.

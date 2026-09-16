@@ -1,11 +1,10 @@
 ---
-state: "analyzing"
+state: "open"
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge/policy.ctg"
 work-kind: leaf
 canonical-scope: bounded-search-guard-rules
-claim: "coordinator-c4-4 2026-09-16T08:16:23.845Z"
 ---
 
 # Unbounded repository searches are refused with a bounded retry

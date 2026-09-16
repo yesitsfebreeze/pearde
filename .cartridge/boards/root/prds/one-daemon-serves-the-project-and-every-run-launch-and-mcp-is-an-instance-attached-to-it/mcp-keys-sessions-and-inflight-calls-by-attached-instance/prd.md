@@ -1,13 +1,21 @@
 ---
-state: open
+state: "analyzing"
 origin: requested
 priority: 80
-repo: "/Users/feb/dev/cartridge/mcp.ctg"
+repo: "/Users/feb/dev/cartridge"
 capability-owner: mcp
 needs:
 - "one-daemon-serves-the-project-and-every-run-launch-and-mcp-is-an-instance-attached-to-it/an-instance-attaches-to-the-daemon-and-never-composes-silently"
 footprint:
-- "src/service.rs"
+- "mcp.ctg"
+- "mcp.ctg/src/service.rs"
+- "mcp.ctg/src/lib.rs"
+- "mcp.ctg/cartridge.json"
+- "mcp.ctg/.cartridge/tests/unit/tests.rs"
+- "mcp.ctg/.cartridge/tests/integration/instances.test.ts"
+- "cartridge.ctg"
+- "cartridge.ctg/src/cli/host.rs"
+claim: "coordinator-cartridge-1b-1 2026-09-16T10:36:06.442Z"
 ---
 
 # MCP keys sessions and inflight calls by attached instance
@@ -16,7 +24,7 @@ Child of `one-daemon-serves-the-project-and-every-run-launch-and-mcp-is-an-insta
 per-cartridge audit item. The parent's audit classifies mcp stdio clients and
 in-flight calls as per-instance state keyed inside the shared cartridge: mcp
 keeps one `session` and one `inflight` map per node today
-(`mcp.ctg/src/service.rs:88-92`), so two attached stdio clients would share
+(`mcp.ctg/src/service.rs:100-113`), so two attached stdio clients would share
 one session and one call set.
 
 ## Outcome
@@ -29,8 +37,13 @@ sessions and separate in-flight calls, while the node itself exists once.
 
 - `session`/`inflight` maps become keyed by instance id (the connection), not
   one entry per node.
-- Session lifecycles: an instance disconnecting drops only its own session
-  and cancels only its own in-flight calls.
+- Session lifecycles: **not in this slice** (round 1, F3). The bridge sends no
+  `closed` event today, so nothing can be dropped or cancelled on disconnect.
+  What this slice delivers is isolation while attached: one instance's session
+  and in-flight calls are neither visible to nor disturbed by another's. The
+  cost is one small map entry per bridge that ever attaches — the same trade
+  the done sibling `agent-runs-key-per-attached-instance-not-per-process` took.
+  A `closed` event and real teardown are their own PRD.
 
 ## Acceptance
 
@@ -40,3 +53,26 @@ sessions and separate in-flight calls, while the node itself exists once.
 - [ ] An in-flight call from one instance is not visible in or cancellable
       from the other.
 - [ ] Exactly one mcp node exists with the daemon running.
+
+## Planning note
+
+2026-09-16, coordinator cartridge-1b, from analyst-1. Unlike the sibling
+`agent-runs-key-per-attached-instance-not-per-process`, **the audit premise
+holds here**: `mcp.ctg/src/service.rs:100-113` keeps one `session` OnceCell,
+one `inflight` map keyed by the client's own JSON-RPC id (every client counts
+from 1, so two clients collide on `"1"`) and one `restored` set per node. The
+analyst reproduced it live — two `cartridge mcp` children on one daemon both
+echoed `session-1`.
+
+`repo` moved from `mcp.ctg` to the superproject and the footprint was widened
+across both submodules, because no instance identity exists anywhere today:
+`cartridge mcp` sends `{"op":"message","line"}` only
+(`cartridge.ctg/src/cli/host.rs:283-317`), the socket handler passes `data`
+through verbatim, and stdio MCP carries no session header. The key's only
+possible producer is the bridge, in `cartridge.ctg`. This is not a SPLIT — the
+bridge's id has no consumer without the node, and the node's keying is
+unobservable without the bridge — so it lands the established superproject way:
+commit inside each submodule, bump the pointers, collect against the
+superproject. Both submodules were clean when the footprint was widened; check
+again before collecting, because the `cartridge.ctg` and `mcp.ctg` directory
+entries make collect sweep everything inside them.

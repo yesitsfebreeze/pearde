@@ -1,5 +1,5 @@
 ---
-state: "analyzing"
+state: "specced"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge"
@@ -15,7 +15,6 @@ footprint:
 - "mcp.ctg/.cartridge/tests/integration/instances.test.ts"
 - "cartridge.ctg"
 - "cartridge.ctg/src/cli/host.rs"
-claim: "coordinator-cartridge-1b-1 2026-09-16T10:36:06.442Z"
 ---
 
 # MCP keys sessions and inflight calls by attached instance
@@ -52,7 +51,18 @@ sessions and separate in-flight calls, while the node itself exists once.
       closing does not affect the other's session or calls.
 - [ ] An in-flight call from one instance is not visible in or cancellable
       from the other.
-- [ ] Exactly one mcp node exists with the daemon running.
+- [ ] Exactly one mcp node exists with the daemon running, proven at composed
+      scope inside this PRD's own fixture: with two bridges attached to one
+      daemon, `instances.test.ts` asserts that `status` lists exactly one `mcp`
+      node in state `active`, and that the run directory holds exactly one pid
+      directory containing exactly one `mcp.sock`. Structurally, mcp.ctg starts
+      no host, node or child process of its own — a standing property, guarded
+      against regression rather than introduced here. For the live project,
+      the daemon-wide count is delivered by the done sibling
+      `an-instance-attaches-to-the-daemon-and-never-composes-silently` and
+      re-proven composed by
+      `the-composed-acceptance-test-proves-one-daemon-one-node-per-cartridge-and-attached-instances`,
+      which is still `open` — that re-proof has not landed yet.
 
 ## Planning note
 

@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/fs.ctg
-state: "analyzing"
+state: "done"
 origin: requested
 priority: 50
 blast-radius: wide
@@ -11,7 +11,7 @@ needs:
 - "@gitfs/absorb-fs-and-give-file-work-branch-backed-commits/merge-fs-source-into-gitfs-with-no-behavior-change"
 - "@gitfs/absorb-fs-and-give-file-work-branch-backed-commits/branch-backed-file-tools-with-an-overlay-worktree-mode"
 - "@gitfs/absorb-fs-and-give-file-work-branch-backed-commits/roll-back-a-session-change-by-rewinding-the-branch"
-claim: "coordinator-main 2026-09-16T06:48:21.142Z"
+commit: "75e76e63d8f97954759bf294f4b0d86d78d5643b"
 ---
 
 # One fs cartridge whose file work commits to Git branches

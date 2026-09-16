@@ -1,11 +1,11 @@
 ---
-state: "claimed"
+state: "done"
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge/mcp.ctg"
 work-kind: leaf
 canonical-scope: deferred-tool-band
-claim: "coordinator-c4-7 2026-09-16T08:29:02.894Z"
+commit: "54e309c6caae8698b91de0fc9ec3562f5e2ef552"
 ---
 
 # A deferred tool costs its one-line summary, not its schema
@@ -18,12 +18,12 @@ Scope: the MCP listing (`tools/list` of the mcp cartridge), which "the request" 
 
 ## Acceptance
 
-- [ ] A deferred tool's schema is absent from the request and its one-line summary is present; the request's declared tools are exactly the hot set, anything restored, and the `tools` meta-tool.
-- [ ] Restoring a deferred tool by name makes it directly callable for the remainder of the session without a further restore.
-- [ ] A tool declaring no summary is listed by name alone, and its description does not appear in the composed prompt.
-- [ ] A tool that opts out of deferral, and a tool named in an explicit allowlist, both arrive with their schema and need no restore.
-- [ ] The band is disableable, and disabled the listing is byte-identical to the listing before the band.
-- [ ] The withheld and kept byte counts are reported for a fixture catalog, and composition is tested offline by the mcp unit suite (`cargo test --lib band_`).
+- [x] A deferred tool's schema is absent from the request and its one-line summary is present; the request's declared tools are exactly the hot set, anything restored, and the `tools` meta-tool.
+- [x] Restoring a deferred tool by name makes it directly callable for the remainder of the session without a further restore.
+- [x] A tool declaring no summary is listed by name alone, and its description does not appear in the composed prompt.
+- [x] A tool that opts out of deferral, and a tool named in an explicit allowlist, both arrive with their schema and need no restore.
+- [x] The band is disableable, and disabled the listing is byte-identical to the listing before the band.
+- [x] The withheld and kept byte counts are reported for a fixture catalog, and composition is tested offline by the mcp unit suite (`cargo test --lib band_`).
 
 ## Proof and recovery
 

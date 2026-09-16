@@ -111,15 +111,15 @@ harness listings are out of scope here (see Remaining).
 
 ## Acceptance
 
-- [ ] With `band=true` and `hot=[hotname, ghost]`, `tools/list` declares exactly the hot set, anything restored, and the `tools` meta-tool: `{pinned, hotname, tools}`. `memo` has no `inputSchema`, the `tools` description contains `memo — Read the record`, and `cartridge/band.unknown_hot` is `["ghost"]` (`band_withholds_deferred_schemas_and_lists_their_summaries`).
-- [ ] Before any restore, `memo` has no `inputSchema` in `tools/list`. After exactly one `tools/call tools {name:"memo"}`, `memo` has its `inputSchema` in both of the next two `tools/list` results (`band_restores_a_deferred_tool_for_the_rest_of_the_session`).
-- [ ] `plain` appears as a line equal to `plain`, and `PLAIN-DESCRIPTION-SENTINEL` occurs nowhere in the serialized `tools/list` result (`band_lists_a_tool_without_summary_by_name_alone`).
-- [ ] `pinned` (`defer:false`) and `hotname` arrive with schemas. With a non-empty `config.tools`, every named tool arrives with its schema and there is no `tools` meta-tool (`band_opt_out_and_allowlist_arrive_with_their_schema`).
-- [ ] With `band=false`, every tool has its `inputSchema`, there is no `tools` meta-tool and there is no `cartridge/band` meta (`band_disabled_sends_every_schema`).
-- [ ] With `band=false`, the serialized `tools/list` equals both the `Config::default()` listing and the pinned pre-band JSON for the fixture (`band_disabled_listing_is_byte_identical`).
-- [ ] `cartridge/band` reports `withheld_bytes` and `kept_bytes` equal to independently computed sums for the fixture, and withheld > kept (`band_reports_withheld_and_kept_bytes`).
-- [ ] `cartridge.json` declares `band` and `hot`, and the README documents the contract fields, that `hot` takes names, `cartridge/band`, the collision, the restore scope and the rollback.
-- [ ] fmt is clean and clippy reports no warnings (`-D warnings`) for mcp.ctg.
+- [x] With `band=true` and `hot=[hotname, ghost]`, `tools/list` declares exactly the hot set, anything restored, and the `tools` meta-tool: `{pinned, hotname, tools}`. `memo` has no `inputSchema`, the `tools` description contains `memo — Read the record`, and `cartridge/band.unknown_hot` is `["ghost"]` (`band_withholds_deferred_schemas_and_lists_their_summaries`).
+- [x] Before any restore, `memo` has no `inputSchema` in `tools/list`. After exactly one `tools/call tools {name:"memo"}`, `memo` has its `inputSchema` in both of the next two `tools/list` results (`band_restores_a_deferred_tool_for_the_rest_of_the_session`).
+- [x] `plain` appears as a line equal to `plain`, and `PLAIN-DESCRIPTION-SENTINEL` occurs nowhere in the serialized `tools/list` result (`band_lists_a_tool_without_summary_by_name_alone`).
+- [x] `pinned` (`defer:false`) and `hotname` arrive with schemas. With a non-empty `config.tools`, every named tool arrives with its schema and there is no `tools` meta-tool (`band_opt_out_and_allowlist_arrive_with_their_schema`).
+- [x] With `band=false`, every tool has its `inputSchema`, there is no `tools` meta-tool and there is no `cartridge/band` meta (`band_disabled_sends_every_schema`).
+- [x] With `band=false`, the serialized `tools/list` equals both the `Config::default()` listing and the pinned pre-band JSON for the fixture (`band_disabled_listing_is_byte_identical`).
+- [x] `cartridge/band` reports `withheld_bytes` and `kept_bytes` equal to independently computed sums for the fixture, and withheld > kept (`band_reports_withheld_and_kept_bytes`).
+- [x] `cartridge.json` declares `band` and `hot`, and the README documents the contract fields, that `hot` takes names, `cartridge/band`, the collision, the restore scope and the rollback.
+- [x] fmt is clean and clippy reports no warnings (`-D warnings`) for mcp.ctg.
 
 ## Verify
 

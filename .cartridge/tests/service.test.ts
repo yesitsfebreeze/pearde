@@ -97,3 +97,37 @@ test('wire apply, describe, graph announce, native call with memory, and dispose
     expect(await service.call('dispose')).toBe(true);
   } finally { await service.close(); }
 }, 10000);
+test('the job journal is keyed by node, so a second attached instance never interrupts a live job', async () => {
+  service.adapter = 'unused';
+  const instance = (run: string) => ({ session: 'shared', run, call: randomUUID(), cwd: root });
+  const first = value(await call('run', ['--dry'], instance('one')));
+  // A second attached instance calls in while the first job is still on the books.
+  const second = value(await call('run', ['--dry'], instance('two')));
+  expect((await call('scan', [], instance('two'))).error).toBe(false);
+  // The job key is the node's service instance, not the invocation that started it.
+  for (const started of [first, second]) {
+    expect(service.jobs.get(started.job_id).instance).toBe(service.instance);
+    expect(JSON.parse(fs.readFileSync(path.join(service.state, started.job_id + '.json'), 'utf8')).instance).toBe(service.instance);
+    expect(value(await call('status', [started.job_id], instance('three'))).state).not.toBe('interrupted');
+  }
+  // A journal entry from a service that really did end still reports interrupted.
+  const stale = { job_id: 'f'.repeat(32), session: 'shared', instance: 'a-previous-service', invocation: '[]', board: 'root', state: 'running', started_at: 0 };
+  atomic(path.join(service.state, stale.job_id + '.json'), JSON.stringify(stale));
+  expect(value(await call('status', [stale.job_id], instance('four'))).state).toBe('interrupted');
+});
+test('the memory outbox replays once per pending acknowledgment however many instances call in', async () => {
+  const proof = { verification: [{ verified: true, ref: 'one', revision: 'b'.repeat(64), state: 'done' }] };
+  let ingests = 0;
+  service.host = { call: async () => { ingests++; await Bun.sleep(20); return { status: 'committed' }; }, publish: () => {} };
+  const one = { session: 'shared', run: 'one', call: randomUUID(), cwd: root };
+  const two = { session: 'other', run: 'two', call: randomUUID(), cwd: root };
+  // Two attached instances land the same verified evidence at once, and the node replays alongside them.
+  const [from1, from2] = await Promise.all([service.rememberVerified(board, one, proof), service.rememberVerified(board, two, proof), service.replayMemory()]);
+  expect(ingests).toBe(1);
+  expect(from1.status).toBe('committed'); expect(from2.status).toBe('committed');
+  expect(fs.readdirSync(path.join(service.state, 'memory-outbox')).length).toBe(1);
+  // A committed acknowledgment is never sent again, by replay or by a later instance.
+  await service.replayMemory();
+  expect((await service.rememberVerified(board, two, proof)).status).toBe('committed');
+  expect(ingests).toBe(1);
+});

@@ -1,11 +1,12 @@
 ---
 repo: /Users/feb/dev/cartridge/memory.ctg
-state: open
+state: "open"
 origin: requested
 priority: 60
 blast-radius: mid
 workflow: develop-one-cartridge
 work-kind: leaf
+needs: ["@memory/diskann-builds-keep-every-node-reachable-from-the-entry-point"]
 footprint:
   - src/graph/src/diskann.rs
   - src/graph/src/graph.rs
@@ -28,11 +29,8 @@ the access-stamp cache names at `cold.rs:240`). A rebuild runs off the query pat
 graph write lock when the since-build set outgrows the snapshot (the `outgrown` rule of
 `reconcile_disk`, `graph.rs:120`), and clears the set only with the new stamp.
 
-Blocker found by probe, owned here: at default params (`r=32, build_l=64, alpha=1.2`),
-a 1024-d corpus clustered around 64 centres gave top-10 recall 1.000 at 2,000 rows and
-0.000 at 10,000 rows (release, one thread; build 5.7 s at 2k, 56 s at 10k). Reproduce
-before building on it: either the probe or the Vamana build is wrong at that scale, and
-the hot tier uses the same build above `disk_threshold`.
+The Vamana build defect this depends on (graphs split into closed clusters, recall 0.000 at
+10k clustered rows) is owned by `@memory/diskann-builds-keep-every-node-reachable-from-the-entry-point`.
 
 No model-stamp prerequisite: `a-vector-carries-the-model-that-made-it` is deferred as
 withdrawn; the per-store `EmbedStamp` plus the width check already gate mixed models,
@@ -41,7 +39,6 @@ since-build set.
 
 ## Acceptance
 
-- [ ] A (non-ignored) unit test indexes a 10,000-row 1024-d clustered corpus and asserts top-10 recall against brute force >= 0.90, the documented threshold; it fails at HEAD a9ab81a.
 - [ ] After each of `cold_spill`, `cold_put_all`, `cold_rekey`, `cold_relocate` and `import_snapshot`, a second `Store::open` of the same dir reads a since-build set naming exactly the written and deleted ids.
 - [ ] A build that fails before stamping leaves the previous snapshot and the since-build set intact (test injects a failing build dir).
 - [ ] An ignored measurement records build time at 100,000 rows; no build runs inside a query or under the graph write lock.
@@ -49,7 +46,7 @@ since-build set.
 ## Verify
 
 ```sh
-cargo nextest run -p graph diskann
+cargo nextest run -p graph cold
 cargo nextest run -p store_core cold
 ```
 

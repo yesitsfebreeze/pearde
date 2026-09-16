@@ -74,6 +74,82 @@ export function edit(file: string, changes: Record<string, unknown>, expected?: 
     head = block.test(head) ? head.replace(block, replacement) : head + replacement;
   }
   atomic(file, '---\n' + head.trimEnd() + '\n---\n' + (match ? text.slice(match[0].length) : text));
+  if (Object.keys(changes).some(key => CONTROLLED.includes(key))) recordFields(file);
+}
+// state, claim and commit change only through engine ops. The engine records the values it wrote in one
+// file per PRD under the owner board's gitignored .state/fields/, written by a single temp-file rename.
+// A record without one (fresh clone) is trusted once. A crash between the record and value renames, or a
+// git checkout of a record, reads as an outside change: restore the recorded values or adopt with a reason.
+const CONTROLLED = ['state', 'claim', 'commit'];
+const controlled = (file: string) => { const fm = document(file).fm; return Object.fromEntries(CONTROLLED.map(key => [key, fm[key] ?? null])); };
+function ownerBoard(file: string) {
+  let board = path.dirname(path.dirname(file));
+  while (!fs.existsSync(path.join(board, 'settings.md'))) { if (path.dirname(board) === board) throw Error('PRD outside a board: ' + file); board = path.dirname(board); }
+  return board;
+}
+const fieldsRoot = (board: string) => path.join(board, '.state/fields');
+const fieldsFile = (file: string, board = ownerBoard(file)) => path.join(fieldsRoot(board), path.relative(path.join(board, 'prds'), path.dirname(file)) + '.json');
+export function recordFields(file: string) { atomic(fieldsFile(file), JSON.stringify(controlled(file))); }
+export function fieldsProblem(file: string, retried = false): string | null {
+  const store = fieldsFile(file), current = controlled(file);
+  if (!fs.existsSync(store)) {
+    // Link, not rename: a bootstrap never overwrites values an engine op wrote meanwhile.
+    const temporary = store + '.' + randomUUID() + '.tmp';
+    fs.mkdirSync(path.dirname(store), { recursive: true }); fs.writeFileSync(temporary, JSON.stringify(current));
+    try { fs.linkSync(temporary, store); } catch (error: any) { if (error.code !== 'EEXIST') throw error; } finally { fs.unlinkSync(temporary); }
+  }
+  const recorded = JSON.parse(fs.readFileSync(store, 'utf8'));
+  const changed = CONTROLLED.filter(key => JSON.stringify(recorded[key] ?? null) !== JSON.stringify(current[key]));
+  if (!changed.length) return null;
+  // An engine write renames the record then the values; re-read once past that window.
+  if (!retried) { Bun.sleepSync(50); return fieldsProblem(file, true); }
+  return changed.map(key => key + ' changed outside the engine (recorded ' + JSON.stringify(recorded[key] ?? null) + ', found ' + JSON.stringify(current[key]) + ')').join('; ');
+}
+export const fieldsRefusal = (prd: Prd, problem: string) => prd.ref + ': ' + problem + '; restore the recorded values or run `prd adopt ' + prd.ref + ' --by <id> --reason "<text>" --board ' + prd.board + '` (the adoption is recorded in ' + adoptionLog(prd.board) + ')';
+export const adoptionLog = (board: string) => path.join(fieldsRoot(board), 'adopted.log');
+// Accept the current values of a changed record; every adoption appends one audit line.
+export function adoptFields(prd: Prd, by: string, reason: string) {
+  const store = fieldsFile(prd.file, prd.board), current = controlled(prd.file);
+  const recorded = fs.existsSync(store) ? JSON.parse(fs.readFileSync(store, 'utf8')) : null;
+  fs.mkdirSync(fieldsRoot(prd.board), { recursive: true });
+  fs.appendFileSync(adoptionLog(prd.board), JSON.stringify({ at: new Date().toISOString(), ref: prd.ref, local: prd.local, old: recorded, new: current, by, reason }) + '\n');
+  atomic(store, JSON.stringify(current));
+  return { old: recorded, new: current };
+}
+// Drop values whose PRD is gone, so a later record at the same path never inherits them. The store is
+// keyed by path, so a rehome (`mv prds/one prds/two`) is a drop plus a record the engine has never seen
+// and trusts once. Dropping a non-idle record silently would destroy the last evidence of that claim, so
+// log the values and warn: the drop is the only moment the engine can still see what it is losing.
+export function dropOrphanFields(board: string) {
+  const root = fieldsRoot(board), warnings: string[] = [];
+  const walk = (dir: string): void => { if (fs.existsSync(dir)) for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const file = path.join(dir, entry.name);
+    if (entry.isDirectory()) { walk(file); continue; }
+    if (!entry.name.endsWith('.json')) continue;
+    const local = path.relative(root, file).slice(0, -5);
+    if (fs.existsSync(path.join(board, 'prds', local, 'prd.md'))) continue;
+    const dropped = JSON.parse(fs.readFileSync(file, 'utf8'));
+    const idle = (dropped.state ?? 'open') === 'open' && dropped.claim == null && dropped.commit == null;
+    // Log before unlinking: a crash in between may repeat a line on the retry, which is harmless, where
+    // the other order loses the only remaining copy of the values, which is the loss this exists to stop.
+    if (!idle) fs.appendFileSync(adoptionLog(board), JSON.stringify({ at: new Date().toISOString(), local, dropped }) + '\n');
+    fs.rmSync(file, { force: true });
+    if (idle) continue;
+    warnings.push(local + ': prds/' + local + '/prd.md is gone; recorded ' + JSON.stringify(dropped) + ' dropped and logged in ' + adoptionLog(board) + '. If the record was rehomed, its new path is trusted on first observation — compare it, and restore or `prd adopt` it if these values did not survive the move.');
+  } };
+  walk(root);
+  return warnings;
+}
+const holder = (claim: unknown) => claim == null ? null : String(claim).split(/\s/)[0];
+// Warn while an adopted claim that changed hands is still the live claim.
+export function adoptionWarnings(board: string, prds: Map<string, Prd>) {
+  const log = adoptionLog(board);
+  if (!fs.existsSync(log)) return [];
+  return fs.readFileSync(log, 'utf8').split('\n').filter(Boolean).flatMap(line => {
+    const entry = JSON.parse(line), prd = [...prds.values()].find(p => p.board === board && p.local === entry.local);
+    if (!prd || holder(entry.new?.claim) === null || holder(entry.old?.claim) === holder(entry.new?.claim) || JSON.stringify(prd.fm.claim ?? null) !== JSON.stringify(entry.new?.claim ?? null)) return [];
+    return [prd.ref + ': claim changed hands by adoption (' + JSON.stringify(entry.old?.claim ?? null) + ' -> ' + JSON.stringify(entry.new?.claim ?? null) + ') by ' + entry.by + ' at ' + entry.at + ': ' + entry.reason];
+  });
 }
 export function canonicalBoard(board: string) {
   const result = real(path.resolve(board));

@@ -141,3 +141,94 @@ test('rolling coordinator rescans analysis, dependencies and parent collection',
     expect(answer.verification.length).toBe(3); expect(answer.verification.every((p: any) => p.verified)).toBe(true);
   } finally { if (previous === undefined) delete process.env.PRD_ADAPTER_DIR; else process.env.PRD_ADAPTER_DIR = previous; }
 }, 30000);
+const tamper = (file: string, from: RegExp, to: string) => fs.writeFileSync(file, fs.readFileSync(file, 'utf8').replace(from, to));
+test('hand edits to state or claim are reported and refused until adopted', async () => {
+  const file = prd('one'); expect((await execute('claim', board, ['one', 'worker'])).exit_code).toBe(0);
+  expect((await execute('check', board)).data.problems).toEqual([]);
+  tamper(file, /state: "analyzing"\n/, 'state: open\n'); tamper(file, /claim: .*\n/, '');
+  const checked = await execute('check', board);
+  expect(checked.exit_code).toBe(2); expect(checked.data.problems.join('\n')).toMatch(/^one: state changed outside the engine.*claim changed.*prd adopt one --by <id> --reason "<text>" --board .*adoption is recorded/m);
+  for (const [op, args] of [['claim', ['one', 'other']], ['release', ['one', 'open']], ['collect', ['one']], ['specced', ['one']], ['refine', ['one']]] as const) {
+    const answer = await execute(op, board, [...args]); expect(answer.exit_code).toBe(2); expect(answer.error).toContain('one: state changed outside the engine');
+  }
+  expect((await execute('adopt', board, ['one'])).error).toContain('--by');
+  expect((await execute('adopt', board, ['one', '--by', 'coordinator'])).error).toContain('--reason');
+  const adopted = await execute('adopt', board, ['one', '--by', 'coordinator', '--reason', 'reset by analyst']);
+  expect(adopted.exit_code).toBe(0); expect(adopted.output).toContain('"state":"analyzing"'); expect(adopted.output).toContain('"state":"open"');
+  const log = fs.readFileSync(path.join(board, '.state/fields/adopted.log'), 'utf8').trim().split('\n').map(line => JSON.parse(line));
+  expect(log).toHaveLength(1); expect(log[0]).toMatchObject({ ref: 'one', by: 'coordinator', reason: 'reset by analyst', old: { state: 'analyzing' }, new: { state: 'open', claim: null } });
+  expect((await execute('check', board)).data).toMatchObject({ problems: [], warnings: [] });
+  expect((await execute('claim', board, ['one', 'other'])).exit_code).toBe(0);
+});
+test('a hand-written commit is reported', async () => {
+  const file = prd('one'); expect((await execute('claim', board, ['one', 'worker'])).exit_code).toBe(0);
+  tamper(file, /\n---\n/, '\ncommit: "abc1234"\n---\n');
+  expect((await execute('check', board)).data.problems.join('\n')).toMatch(/^one: commit changed outside the engine \(recorded null, found "abc1234"\)/m);
+});
+test('an adopted claim that changed hands warns until it is released', async () => {
+  const file = prd('one'); expect((await execute('claim', board, ['one', 'alice'])).exit_code).toBe(0);
+  tamper(file, /claim: .*\n/, 'claim: "mallory now"\n');
+  expect((await execute('adopt', board, ['one', '--by', 'bob', '--reason', 'handover'])).exit_code).toBe(0);
+  const checked = await execute('check', board);
+  expect(checked.exit_code).toBe(0); expect(checked.data.warnings.join('\n')).toMatch(/^one: claim changed hands by adoption .*by bob .*handover/m);
+  expect((await execute('release', board, ['one', 'open'])).exit_code).toBe(0);
+  expect((await execute('check', board)).data.warnings).toEqual([]);
+});
+test('a PRD re-added at a removed path inherits no recorded values', async () => {
+  expect((await execute('add', board, ['one'])).exit_code).toBe(0); expect((await execute('claim', board, ['one', 'worker'])).exit_code).toBe(0);
+  fs.rmSync(path.join(board, 'prds/one'), { recursive: true });
+  expect((await execute('check', board)).data.problems).toEqual([]); expect(fs.existsSync(path.join(board, '.state/fields/one.json'))).toBe(false);
+  expect((await execute('add', board, ['one'])).exit_code).toBe(0); expect((await execute('claim', board, ['one', 'worker'])).exit_code).toBe(0);
+  fs.rmSync(path.join(board, 'prds/one'), { recursive: true });
+  expect((await execute('add', board, ['one'])).exit_code).toBe(0);
+  expect((await execute('check', board)).data.problems).toEqual([]); expect((await execute('claim', board, ['one', 'other'])).exit_code).toBe(0);
+});
+test('dropping the values of a removed or rehomed record is logged and warned once', async () => {
+  expect((await execute('add', board, ['one'])).exit_code).toBe(0);
+  expect((await execute('claim', board, ['one', 'alice'])).exit_code).toBe(0);
+  fs.renameSync(path.join(board, 'prds/one'), path.join(board, 'prds/two'));
+  const moved = path.join(board, 'prds/two/prd.md');
+  tamper(moved, /state: .*\n/, 'state: open\n'); tamper(moved, /claim: .*\n/, '');
+  const checked = await execute('check', board);
+  expect(checked.exit_code).toBe(0); expect(checked.data.problems).toEqual([]);
+  expect(checked.data.warnings.join('\n')).toMatch(/^one: prds\/one\/prd\.md is gone; recorded .*"analyzing".*"alice.*dropped and logged in .*adopted\.log/m);
+  const log = fs.readFileSync(path.join(board, '.state/fields/adopted.log'), 'utf8').trim().split('\n').map(line => JSON.parse(line));
+  expect(log).toHaveLength(1); expect(log[0]).toMatchObject({ local: 'one', dropped: { state: 'analyzing' } });
+  expect((await execute('check', board)).data.warnings).toEqual([]);
+  expect((await execute('add', board, ['three'])).exit_code).toBe(0);
+  fs.rmSync(path.join(board, 'prds/three'), { recursive: true });
+  expect((await execute('check', board)).data.warnings).toEqual([]);
+  // A member board left with no record of its own is still swept: rehoming its last PRD to the root board
+  // must not hide the drop just because nothing on that board survives in the graph.
+  const member = path.join(path.dirname(board), 'member');
+  atomic(path.join(member, 'settings.md'), '---\nname: member\n---\n');
+  edit(path.join(board, 'settings.md'), { members: [{ member: '../member' }] });
+  prd('m1', 'open', member);
+  expect((await execute('claim', member, ['m1', 'alice'])).exit_code).toBe(0);
+  fs.renameSync(path.join(member, 'prds/m1'), path.join(board, 'prds/m1'));
+  const rehomed = path.join(board, 'prds/m1/prd.md');
+  tamper(rehomed, /state: .*\n/, 'state: open\n'); tamper(rehomed, /claim: .*\n/, '');
+  const swept = await execute('check', board);
+  expect(swept.exit_code).toBe(0); expect(swept.data.problems).toEqual([]);
+  expect(swept.data.warnings.join('\n')).toMatch(/^m1: prds\/m1\/prd\.md is gone; recorded .*"analyzing".*"alice.*dropped and logged in .*adopted\.log/m);
+  expect(fs.existsSync(path.join(member, '.state/fields/m1.json'))).toBe(false);
+  expect(fs.readFileSync(path.join(member, '.state/fields/adopted.log'), 'utf8')).toContain('"local":"m1"');
+  expect((await execute('check', board)).data.warnings).toEqual([]);
+});
+test('check reports an unwritable field store instead of a raw errno', async () => {
+  expect((await execute('add', board, ['one'])).exit_code).toBe(0);
+  const fields = path.join(board, '.state/fields'); fs.rmSync(path.join(fields, 'one.json'));
+  fs.chmodSync(fields, 0o555);
+  try {
+    const checked = await execute('check', board);
+    expect(checked.exit_code).toBe(2); expect(checked.data.problems.join('\n')).toContain('the engine field store is unavailable (EACCES)');
+  } finally { fs.chmodSync(fields, 0o755); }
+});
+test('body edits, untracked records and engine transitions raise no field problem', async () => {
+  const file = prd('one'); prd('two', 'claimed');
+  expect((await execute('check', board)).data.problems).toEqual([]);
+  expect((await execute('claim', board, ['one', 'worker'])).exit_code).toBe(0);
+  edit(file, { footprint: ['elsewhere.txt'] }); fs.appendFileSync(file, '\nMore prose.\n');
+  expect((await execute('release', board, ['one', 'open'])).exit_code).toBe(0);
+  expect((await execute('check', board)).data).toMatchObject({ problems: [], warnings: [] });
+});

@@ -7,7 +7,7 @@ import { canonicalBoard } from './records';
 export const ROOT = path.resolve(import.meta.dir, '..');
 export async function main(argv = process.argv.slice(2)) {
   if (!argv.length || ['help', '--help', '-h'].includes(argv[0])) {
-    console.log('prd — planning, specifications, Gantt and checked execution\n\nscan | plan | gantt | read <id> | brief <id> | next\nadd | refine | specced | claim | release | collect | defer | retry | unblock\nrun --dry | run --adapter <configured-agent> [--workers 3]\ncheck | status | members | boards\n\nUse --board <registered-name-or-path> (default root), --json for the API envelope.'); return 0;
+    console.log('prd — planning, specifications, Gantt and checked execution\n\nscan | plan | gantt | read <id> | brief <id> | next\nadd | refine | specced | claim | release | collect | defer | retry | unblock\nadopt <id> --by <identity> --reason <text>  (accept state/claim/commit changed outside the engine; recorded)\nrun --dry | run --adapter <configured-agent> [--workers 3]\ncheck | status | members | boards\n\nUse --board <registered-name-or-path> (default root), --json for the API envelope.'); return 0;
   }
   const [operation, ...rest] = argv, args: string[] = [];
   let selected: string | undefined, json = false;

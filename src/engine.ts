@@ -1,11 +1,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { atomic, canonicalBoard, contained, document, hash, members, mutationKeys, resolve, scan, snapshot, withLocks } from './records';
+import { adoptionWarnings, atomic, canonicalBoard, contained, document, dropOrphanFields, fieldsProblem, fieldsRefusal, hash, members, mutationKeys, resolve, scan, snapshot, withLocks } from './records';
 import { gantt, plan } from './planner';
 import { argumentsOf, transition, verifiedStatus } from './lifecycle';
 import { coordinate } from './coordinator';
 
-const mutations = new Set(['add', 'claim', 'release', 'specced', 'refine', 'collect', 'defer', 'retry', 'unblock']);
+const mutations = new Set(['add', 'claim', 'release', 'specced', 'refine', 'collect', 'defer', 'retry', 'unblock', 'adopt']);
 export async function execute(operation: string, board: string, args: string[] = [], signal?: AbortSignal, emit?: (event: any) => void) {
   board = canonicalBoard(board);
   const envelope: any = { operation, board, exit_code: 0, output: '', error: '', changed: [], verification: [] };
@@ -43,7 +43,26 @@ export async function execute(operation: string, board: string, args: string[] =
       else if (mutations.has(operation) || operation === 'brief') envelope.output = await transition(operation, board, args, signal);
       else if (operation === 'check') {
         const current = plan(board); const problems = [...current.notes, ...current.rows.filter(r => r.held?.includes('outside this graph')).map(r => r.rel + ': ' + r.held)];
-        envelope.data = { records: scan(board).size, problems }; if (problems.length) envelope.exit_code = 2;
+        // Every board in the graph, not just the ones that still hold a record: a board whose last record
+        // was rehomed elsewhere must still be swept, or its orphaned values are never dropped or surfaced.
+        // scan() above already rejected member cycles, so this walk terminates.
+        const graph = scan(board), reach = (owner: string): string[] => [owner, ...members(owner).flatMap(([, target]) => reach(target))];
+        const owners = [...new Set(reach(board))];
+        const warnings: string[] = [];
+        // check writes and deletes under <owner>/.state/fields; a store it cannot maintain is a planning
+        // problem naming the owner board that failed, not a raw errno out of a read.
+        let owner = board;
+        try {
+          for (owner of owners) warnings.push(...dropOrphanFields(owner));
+          // One pause per check, not one per record: a board-wide tamper must not serialize into minutes.
+          const suspect = [...graph.values()].filter(prd => { owner = prd.board; return fieldsProblem(prd.file, true); });
+          if (suspect.length) Bun.sleepSync(50);
+          for (const prd of suspect) { owner = prd.board; const problem = fieldsProblem(prd.file, true); if (problem) problems.push(fieldsRefusal(prd, problem)); }
+          for (owner of owners) warnings.push(...adoptionWarnings(owner, graph));
+        } catch (error: any) {
+          problems.push(owner + ': the engine field store is unavailable (' + (error.code ?? error.message) + '); check records, drops and reads state, claim and commit under ' + path.join(owner, '.state/fields') + ' and needs write access there');
+        }
+        envelope.data = { records: graph.size, problems, warnings }; if (problems.length) envelope.exit_code = 2;
       } else if (['workflow', 'grammar', 'memo', 'questions'].includes(operation)) {
         if (pos[0] !== 'check' && pos[0] !== 'list') throw Error(operation + ' supports check or list; edit authored records through the memo system');
         const setting = document(path.join(board, 'settings.md')).fm[operation === 'workflow' ? 'workflows' : operation === 'memo' ? 'memos' : operation];

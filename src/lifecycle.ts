@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { atomic, codeRepo, contained, document, edit, git, hash, list, openBoxes, real, relative, repoRoot, resolve, scan, specs, type Prd } from './records';
+import { atomic, codeRepo, contained, document, adoptFields, edit, fieldsProblem, fieldsRefusal, git, recordFields, hash, list, openBoxes, real, relative, repoRoot, resolve, scan, specs, type Prd } from './records';
 import { dependencies, feet, refusal } from './planner';
 import { runProcess } from './process';
 
@@ -195,10 +195,18 @@ export async function transition(operation: string, board: string, args: string[
     if (fs.existsSync(file)) throw Error('PRD already exists');
     const repo = parentPrd ? codeRepo(parentPrd) : document(path.join(owner, 'settings.md')).fm.repo;
     if (!opts.dry) atomic(file, `---\nstate: open\norigin: requested\npriority: ${Number(opts.priority) || 50}\n${repo ? 'repo: ' + JSON.stringify(repo) + '\n' : ''}---\n\n# ${title}\n\n## Outcome\n\nDefine one observable outcome before specification.\n\n## Acceptance\n\n- [ ] Record the concrete acceptance checks.\n`);
+    if (!opts.dry) recordFields(file);
     return (opts.dry ? 'Would create ' : 'Created ') + file + '\n';
   }
   if (!pos.length) throw Error(operation + ' requires one PRD reference');
   const prd = resolve(graph, pos[0]);
+  if (operation === 'adopt') {
+    if (pos.length !== 1 || typeof opts.by !== 'string' || !/^[A-Za-z0-9_.:@-]{1,256}$/.test(opts.by) || typeof opts.reason !== 'string' || !opts.reason.trim() || opts.reason.length > 1024) throw Error('adopt requires a PRD, --by <identity> and --reason "<text>"');
+    if (opts.dry) return 'Would adopt ' + prd.ref + '\n';
+    const change = adoptFields(prd, opts.by, opts.reason);
+    return 'Adopted ' + prd.ref + ': ' + JSON.stringify(change.old) + ' -> ' + JSON.stringify(change.new) + '\n';
+  }
+  if (operation !== 'brief') { const problem = fieldsProblem(prd.file); if (problem) throw Error(fieldsRefusal(prd, problem)); }
   if (operation === 'collect') return collect(prd, graph, opts, signal);
   if (operation === 'brief') {
     const role = String(opts.role ?? (prd.state === 'open' ? 'analyst' : 'implementer'));

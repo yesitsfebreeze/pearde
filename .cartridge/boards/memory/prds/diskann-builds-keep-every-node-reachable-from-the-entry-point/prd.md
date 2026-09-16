@@ -1,6 +1,6 @@
 ---
 repo: "/Users/feb/dev/cartridge/memory.ctg"
-state: "analyzing"
+state: open
 origin: requested
 priority: 70
 blast-radius: mid
@@ -9,43 +9,47 @@ work-kind: leaf
 footprint:
   - src/graph/src/diskann.rs
   - .cartridge/tests/unit/src/graph/src/tests/diskann_test.rs
-claim: "coordinator-c4-11 2026-09-16T08:43:51.717Z"
 ---
 
 # DiskANN builds keep every node reachable from the entry point
 
 ## Outcome
 
-The Vamana build can split into closed clusters. At default params (`r=32, build_l=64,
-alpha=1.2`) on a 1024-d corpus clustered around 64 centres, 10,000 rows, only 156 of
-10,000 nodes are reachable from the medoid entry, and top-10 recall is 0.000. At 2,000
-rows (31 rows per cluster, fewer than r) recall is 1.000.
-Root cause: `robust_prune` (`src/graph/src/diskann.rs:148`) never occludes intra-cluster
-candidates when their distances are concentrated (1.2 × 0.26 > 0.26), so it keeps the r
-nearest (`:137`). The back-edge re-prune (`:239-241`) then evicts every cross-cluster
-edge, and search from the single entry (`:275`, `:477`) stays in the entry's cluster. The
-hot tier uses this build above `disk_threshold` (`graph.rs`), so dense topics with more
-than r+1 near neighbours can silently lose recall today. Fix inside `diskann.rs`: when
-`alpha > 1`, keep the `alpha = 1.0` selection first and fill the remaining slots from the
-`alpha` selection, scoring the candidates once. Probed, this gives 10000/10000 reachable
-and recall 1.000 at 10k, with a build of 72 s against 56 s.
+At default params (`r=32, build_l=64, alpha=1.2`), a Vamana build over a clustered 1024-d
+corpus splits into closed clusters once a cluster has more than r+1 rows. Search from the
+medoid entry then sees one cluster, and recall collapses (64 × 40: 40/2560 reachable,
+recall@10 0.000).
+Root cause: `robust_prune` (`src/graph/src/diskann.rs:148`) runs pass 2 as an independent
+α=1.2 selection. With concentrated intra-cluster distances that selection degenerates to
+the r nearest (`:137`), and the back-edge re-prune (`:239-241`) evicts the last cross edges.
+`disk_threshold` defaults to 0 (`src/config/src/config.rs:717`), so every store-backed graph
+builds and searches through this path today (`graph.rs:427`, `:559-563`).
+Fix: the reference prune from microsoft/DiskANN (`occlude_list`). Raise `cur_alpha` from 1.0
+to α over one running occlusion factor per candidate. Evidence: analyst-1.md and round 1 of
+review.md.
 
 ## Acceptance
 
-- [ ] A non-ignored test builds a clustered 1024-d corpus with clusters larger than r+1 and asserts that every node is reachable from `entry` by BFS over the built adjacency; the implementer shows it failing at a9ab81a (recorded output).
-- [ ] A non-ignored test on that small corpus asserts top-10 recall against brute force >= 0.90; the implementer shows it failing at a9ab81a (recorded output).
+- [ ] A non-ignored test on a 64 × 40, 1024-d clustered corpus asserts every node is reachable from `entry` by BFS over the built adjacency; its failing output at a9ab81a is recorded in the implementer's report.
+- [ ] A non-ignored test on the same corpus asserts top-10 recall >= 0.90 against brute force with `search(q, 10, 96)`; its failing output at a9ab81a is recorded in the implementer's report, and the build takes no more than 1.5× the a9ab81a build time in release.
 - [ ] `the_same_corpus_builds_a_byte_identical_index` and every existing diskann test still pass.
-- [ ] An ignored test records reachability, top-10 recall and build time on the 10,000-row 1024-d 64-centre corpus.
+- [ ] An ignored test records reachability, recall and build time at 10,000 rows (64 centres), and the build takes no more than 1.5× HEAD's 56 s.
 
 ## Proof and recovery
 
-Probe patch (env-gated, not for landing):
-`prd.ctg/.cartridge/boards/memory/.state/loop/the-cold-tier-has-a-vamana-index-that-follows-every-cold-write/probe-vamana.diff`;
-report `analyst-1.md` next to it. The small-corpus size (for example 64 × 40) is not
-probed. Pick it so both new tests fail at a9ab81a in release. The existing on-disk
-format is unchanged. Snapshots built before the fix stay readable, and they reconnect
-at the next rebuild.
+The on-disk format is unchanged. Recovery is limited: a snapshot whose epoch matches the
+store is reused as-is (`diskann.rs:178-181`). A stale snapshot is reconciled through the
+delta, not rebuilt (`graph.rs:587-622`). So a broken graph built before the fix persists
+until one of these happens:
+- a write stales it and `consolidate_disk_index` runs (`memory prune`, `memory audit`, a
+  re-key, or check repair);
+- the delta outgrows it;
+- the operator removes `<data_dir>/diskann/`, and the next load does a full build
+  (`graph.rs:624-628`).
+
+No build-version marker is added; that would be a follow-up outside this footprint.
 
 ## Dependencies and review
 
-No `needs`. `@memory/the-cold-tier-scales-past-a-linear-scan/the-cold-tier-has-a-vamana-index-that-follows-every-cold-write` needs this and shares `diskann.rs` and its test file, so this one integrates first.
+No `needs`. The cold-tier Vamana child needs this PRD and shares `diskann.rs`, so this one
+integrates first. Review: review.md.

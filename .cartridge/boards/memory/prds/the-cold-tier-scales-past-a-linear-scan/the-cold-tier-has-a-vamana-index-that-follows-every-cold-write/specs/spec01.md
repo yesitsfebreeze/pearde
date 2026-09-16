@@ -34,12 +34,10 @@ Base: memory.ctg at or after the landing of
 
 ```sh
 # The coordinator warms this release target before collection.
-cd memory.ctg
 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/memory.ctg/target cargo nextest run -p store_core cold
 ```
 
 ```sh
 # The coordinator warms this release target before collection.
-cd memory.ctg
 CARGO_TARGET_DIR=/Users/feb/dev/cartridge/memory.ctg/target cargo nextest run -p graph cold
 ```

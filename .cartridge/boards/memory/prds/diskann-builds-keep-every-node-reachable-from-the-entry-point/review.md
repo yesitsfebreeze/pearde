@@ -76,3 +76,59 @@ Result: FAIL (80/100).
 Unresolved blocking findings: B1.
 Rounds used / remaining: 1 / 4.
 Next action: make one bounded revision (B1, plus N1–N4 as chosen), recompute the digests, and request review round 2.
+
+## Round 2 — 2026-09-16
+
+Presented revision: prd.ctg 5086a167 (both files clean at review time); code memory.ctg a9ab81a.
+
+| Input | Content digest |
+| --- | --- |
+| Plan | `prd.md` sha256 `4c04a6503b27df627f9cde82497bc2e16936080d43d07adb405e72cba66afb79` (matches hand-off) |
+| Specs | `specs/spec01.md` sha256 `24e33841cd124352bd4bcd0bd0dbc8e0b0a19b31ed6399d73a2a6c8fbc953e94` (matches hand-off) |
+| Material contracts/dependencies | memory.ctg a9ab81a `src/graph/src/diskann.rs` (`robust_prune` :111, `build_adjacency` :197, `cos_dist` :58), `src/graph/src/graph.rs:580-665`, `src/config/src/config.rs:717`, `src/tick/src/tick_pulse.rs:80-96`, `src/commands/src/{commands_graph_ops,commands_check,commands_hub,commands_export}.rs`; engine `prd.ctg/src/lifecycle.ts:36-47,125-168`; microsoft/DiskANN `occlude_list` (in-mem index) |
+
+### Round-1 findings
+
+- **B1: resolved.** No `cd`. The block is `CARGO_TARGET_DIR=<abs> cargo test --release -p graph --lib diskann`, has no relative paths, and `sh -n` exits 0. Both `collect` cwds (the lane worktree, then `memory.ctg` after the ff-merge, `lifecycle.ts:161-163`) are the workspace root. The heading `## Verify and Proof` matches `/^##\s+(?:Verify|Verification|Proof)\b/i`.
+- **N1: resolved, with a precision gap (N5).** The spec now describes one sorted pool, one occlusion factor per candidate, pick at `occlude <= cur_alpha`, update later unchosen `k` with `max(occlude, d(p,k)/d(j,k))`, `+inf` at `d(j,k)==0`, and stop at `r`. This matches upstream. `cos_dist` = 1−cos is proportional to squared L2 on the unit sphere, so the ratio lines up with upstream's squared-L2 ratio. Differences from upstream:
+  - Upstream's schedule is `cur_alpha = 1; while cur_alpha <= alpha && |result| < R { …; cur_alpha *= 1.2 }`. The spec's `{1.0, alpha}` is identical at the default 1.2, and every production caller uses `Params::default()`. It differs for alpha in (1, 1.2), where upstream runs only 1.0, and for alpha > 1.44, where upstream runs more steps.
+  - Upstream skips the update when `occlude[t] > alpha`. That is a performance shortcut only.
+- **N2: resolved.** The epoch-fresh reuse (`diskann.rs:178-181`, `graph.rs` `open_snapshot`), the stale reconcile, and the full build on a missing directory are stated correctly. The trigger list understates recovery a little: `import` (`commands_export.rs:266`) and the tick `DiskConsolidate` task also consolidate. The "delta outgrows it" item is `tick_pulse.rs:80-96`. Harmless.
+- **N3: resolved** (`disk_threshold` 0, `config.rs:717`, stated in Outcome).
+- **N4: mostly resolved.** The beam is pinned to `search(q, 10, 96)` and the 10k bound is 84 s (1.5 × 56 s). Two gaps remain:
+  - The destination is only "the implementer's report", with no path.
+  - The PRD was not trimmed: 383 words, against the 150–300 target.
+
+| Dimension | Score / 20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 18 | Reproduced silent recall loss on the default path (every store-backed graph). One outcome, two-file footprint. −2: PRD body is still 383 words (N4 trim not taken). |
+| Ownership and reuse | 19 | Correct owner and file. Reuses `build_adjacency`, `medoid`, `brute_topk`, `DiskIndex::search`, and the probe corpus. Callers are unchanged. −1: the `{1.0, alpha}` schedule is presented as upstream `occlude_list` without saying it simplifies the ×1.2 escalation (N5). |
+| Dependencies and implementable slices | 19 | No `needs`. The integration order ahead of the cold-tier child is stated. One small spec. −1: warming the target is still only a comment. Risk is low, because after a worktree path switch the shared target recompiled only `graph`, in 3.1 s. |
+| Observable acceptance and baseline evidence | 17 | Both new tests fail at a9ab81a as pinned and pass with the spec's prune (see Validation). −1: nothing prints the build time and Verify runs without `--nocapture`, so the 1.5× bound rests on an unspecified manual measurement (N6). −1: the failing-output destination has no path. −1: query noise and RNG continuation for the 20 recall queries are not pinned. The result is robust either way, because reach at HEAD is one cluster. |
+| Failure, recovery and compatibility | 18 | The on-disk format is unchanged. The byte-identical test and the 12 existing tests pass under the new prune. Recovery is described accurately and the lack of a marker is accepted explicitly. −1: recovery triggers are incomplete (import, tick consolidate). −1: `cos_dist` can come out slightly negative from float error for near-duplicates. The spec guards only `== 0`, so a tiny negative `d(j,k)` yields a negative ratio that never occludes (N7). |
+| Reviewer total | 91 / 100 | |
+
+Findings (none blocking):
+- **N5:** in step 2, say "for `cur_alpha` = 1.0, then ×1.2 while `<= alpha` (upstream). At the default 1.2 this is {1.0, 1.2}", or label `{1.0, alpha}` as a deliberate simplification. Optionally skip the update when `occlude[k] > alpha`.
+- **N6:** have `diskann_build_reaches_every_node_on_clustered_corpus` `eprintln!` the `build_adjacency` elapsed time, and measure with `-- --nocapture` at a9ab81a and after the fix. Name the report path (e.g. the lane report or `collection.md`).
+- **N7:** treat `d(j,k) <= 0.0` as `+inf`.
+- Carry-over: trim the PRD toward 300 words and add import and tick consolidation to the recovery triggers.
+
+Disposition: keep. Proceed to implementation. N5–N7 can be folded in by the implementer without another round.
+
+Validation (scratch detached worktree of memory.ctg a9ab81a at `<scratchpad>/rv2/memory.ctg`, sibling symlinks `memo.ctg`/`cartridge.ctg`, `CARGO_TARGET_DIR=<scratchpad>/rv/target`, release):
+- Added two tests exactly as spec step 1 pins them: 64 × 40, 1024-d, StdRng seed 3, centres U−0.5, noise 0.6·(U−0.5), `i % 64`, default `Params`, BFS from `medoid` over `build_adjacency`, 20 queries from the continued RNG, `search(q,10,96)`. Also added step 2's prune, written literally from the spec text and env-gated.
+- `cargo test --release -p graph --lib diskann --no-run`: exit 0, 3.1 s (only `graph` recompiled).
+- HEAD: `reachable 40/2560` FAILED, `recall 0.000` FAILED, 12 passed, 2 failed, build 8.98 s, 9.1 s wall.
+- Spec prune: 14 passed, 0 failed (including `the_same_corpus_builds_a_byte_identical_index`), build 9.78 s (1.09×, under the 1.5× bound; the two tests run in parallel), 9.9 s wall. Verify fits easily in 120 s when the target is warm.
+- `sh -n` on the extracted Verify block: exit 0.
+- 10k was not re-run.
+- Cleanup: both files restored with `git show HEAD:` (status empty), `git worktree remove` exit 0 (no --force), symlinks removed.
+
+Reviewer identity: independent reviewer agent r2 (coordinator cartridge-c4).
+User rating: not supplied.
+User feedback/provenance: none for this revision.
+Result: PASS (91/100).
+Unresolved blocking findings: none.
+Rounds used / remaining: 2 / 3.
+Next action: proceed to implementation (N5–N7 optional in-lane).

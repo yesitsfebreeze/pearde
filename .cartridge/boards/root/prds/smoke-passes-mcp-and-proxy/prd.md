@@ -1,5 +1,5 @@
 ---
-state: "analyzing"
+state: "specced"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge"
@@ -14,7 +14,6 @@ footprint:
 needs:
 - sessions-and-gitfs-tests-are-green
 - pty-router-harness-mcp-tests-are-green
-claim: "coordinator-c4-9 2026-09-16T08:34:16.147Z"
 ---
 
 # Smoke passes mcp and proxy
@@ -25,7 +24,7 @@ The two doors a worker uses (MCP tools, proxied model requests) pass the compose
 
 ## Acceptance
 
-- [ ] `just smoke` exits 0: mcp lists tools with memo active (2026-09-14: `memo inactive`); proxy answers its key check inside its deadline (2026-09-14: timeout); the gate runs only on clean mcp.ctg, proxy.ctg, router.ctg and cartridge.ctg trees, with artifacts rebuilt from them and HEAD shas logged, so a pass proves committed HEAD.
+- [ ] `just smoke` exits 0: mcp lists tools with memo active (2026-09-14: `memo inactive`); proxy answers its key check inside its deadline (2026-09-14: timeout); the gate runs only on clean mcp.ctg, proxy.ctg, router.ctg, memo.ctg and cartridge.ctg trees whose HEADs do not move. Their artifacts are built into an isolated target (`~/.cache/cartridge-smoke-target`, never a live `target/`) and loaded from copied modules, and HEAD shas and gitlinks are logged before the builds and re-checked before and after the smokes, so a pass proves the committed HEAD of those five trees; the other composed modules run as built. The smoke pre-settles its daemon, so the cold-start `cartridge mcp` path is out of scope here and covered by @root/cartridge-mcp-waits-for-a-cold-host-to-settle-instead-of-giving-up-after-three-identical-polls (after that fix the pre-settle can go).
 
 ## Result
 
@@ -59,4 +58,4 @@ collect): blocked, nothing implemented.
 
 2026-09-16, coordinator cartridge-c4, from analyst-1 (`.state/loop/smoke-passes-mcp-and-proxy/`). At committed HEAD every smoke failure comes from the stale fixture `.cartridge/tests/integration/smoke.test.ts`: a missing `builtin/` root, a policy path, config dirs outside the router's write grant, no `CARTRIDGE_HOME`, and a daemon that is never stopped. None of them is in mcp or proxy. The footprint adds that file. The smoke memo sends no model request, so "harness context injected" can't be proven here. That clause is dropped from the box, and the live proof belongs to `@root/every-exchange-reaches-the-memory-ledger-and-condenses-on-the-one-daemon`.
 
-analyst-1 (`.state/loop/smoke-passes-mcp-and-proxy/analyst-1.md`) predates review round 2. Its clean-tree and dylib-freshness observations are stale. spec01 now requires the four trees to be clean and rebuilds them in the gate.
+analyst-1 (`.state/loop/smoke-passes-mcp-and-proxy/analyst-1.md`) predates review round 2. Its clean-tree and dylib-freshness observations are stale. spec01 (round 4) requires five clean trees, builds them in isolation because cartridge.ctg 771e046 hot-restarts a cartridge when its live dylib changes, and pre-settles the mcp daemon. Host race, filed as @root/cartridge-mcp-waits-for-a-cold-host-to-settle-instead-of-giving-up-after-three-identical-polls (not covered by this smoke): `cartridge.ctg/src/cli/host.rs:157` `settle_remote` returns after 3 unchanged polls while cartridges are still `starting`, so `cartridge mcp` against a cold host answers `service mcp unavailable: no active listener`.

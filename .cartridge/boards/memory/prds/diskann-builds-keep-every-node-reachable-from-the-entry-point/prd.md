@@ -1,6 +1,6 @@
 ---
 repo: "/Users/feb/dev/cartridge/memory.ctg"
-state: open
+state: "claimed"
 origin: requested
 priority: 70
 blast-radius: mid
@@ -9,6 +9,7 @@ work-kind: leaf
 footprint:
   - src/graph/src/diskann.rs
   - .cartridge/tests/unit/src/graph/src/tests/diskann_test.rs
+claim: "coordinator-c4-12 2026-09-16T08:54:05.134Z"
 ---
 
 # DiskANN builds keep every node reachable from the entry point

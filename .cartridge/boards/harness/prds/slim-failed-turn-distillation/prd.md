@@ -16,12 +16,12 @@ At turn end, distil each failed tool-using turn into one line: the tools it call
 
 ## Acceptance
 
-- [ ] A named run with at least one `tool_finished` record that failed (a tool result with `error:true`, or a `run_finished` phase of `failed`) is ingested exactly once into the configured memory bank. The ingested text is one line, `slim failed turn <session> <run>: <tools> -> <closing statement>`, and the bank's `query` returns it.
-- [ ] A named run whose tools all succeeded stores nothing.
+- [ ] A named run with at least one `tool_finished` record that failed (a tool result with `error:true`, or a `run_finished` phase of `failed`) is ingested once per named ring call into the configured memory bank (ring is stateless, and the bank deduplicates a repeated line). The ingested text is one line, `slim failed turn <session> <run>: <tools> -> <closing statement>`, and the bank's `query` returns it.
+- [ ] A named run whose tools all succeeded and whose run did not fail stores nothing.
 - [ ] A named run with no `tool_finished` record stores nothing, whether it failed or not.
-- [ ] If the bank refuses or cannot be reached, the ring call still returns Ok with its sweep keys, carries the failure under `slim.error` and writes it to stderr.
+- [ ] If the bank refuses or cannot be reached, the ring call still returns Ok with its sweep keys, carries the failure under `slim.error` and writes it to stderr. The `slim` reply key is present only when a named ring call attempted distillation.
 - [ ] The declared boolean setting `slim` (default true) turns distillation off: `slim = false` stores nothing. An empty `memory` also stores nothing, and a ring call without `session`/`run` returns the same reply as today.
-- [ ] `cargo test --test slim`, `cargo clippy --all-targets -- -D warnings` and `cargo fmt --all -- --check` pass in the lane. After integration, `just test harness` and `just check harness` pass from `/Users/feb/dev/cartridge`.
+- [ ] The spec's Verify blocks (`cargo test --test slim`, `cargo clippy --all-targets -- -D warnings`, `cargo fmt --all -- --check`, the settings check) pass in both collection passes, lane and `harness.ctg`, with cargo confined to an isolated `target/slim-verify` target.
 
 The hook is harness's turn-end call, `{op:"ring", session, run}`. The live trigger, agent naming the finished run on that call, comes from `@agent/the-turn-end-ring-call-names-the-run-that-finished`. That PRD has no `needs` in either direction, because harness ignores unknown ring args today and an unnamed ring call behaves as before, so either can land first. Every box above is proved offline by `cargo test --test slim`, which calls the named ring directly.
 
@@ -31,4 +31,4 @@ Mechanism from `/Users/feb/dev/pi/packages/coding-agent/src/core/slim/` (71 line
 
 Reconcile at implementation with `@harness/safe-transcript-compaction` and `@harness/improve-harness-compaction-diff`, which own the rest of the compaction surface: this is the retention half and must not duplicate what compaction already drops or keeps.
 
-Gates, cwd `/Users/feb/dev/cartridge`: `just test harness`, `just check harness`. Not run for this plan.
+Post-collection owner gates, cwd `/Users/feb/dev/cartridge`: `just test harness`, `just check harness` (a note, not a box: they test the integrated checkout).

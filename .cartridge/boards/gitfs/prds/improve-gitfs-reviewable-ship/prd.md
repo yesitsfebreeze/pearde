@@ -1,5 +1,5 @@
 ---
-repo: /Users/feb/dev/cartridge/gitfs.ctg
+repo: /Users/feb/dev/cartridge/fs.ctg
 state: "done"
 origin: requested
 priority: 50

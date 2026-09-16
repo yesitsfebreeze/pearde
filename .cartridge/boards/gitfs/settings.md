@@ -4,8 +4,8 @@ language: English
 memos: memos/note
 workflows: ../../workflows
 grammar: ../../grammar.md
-repo: /Users/feb/dev/cartridge/gitfs.ctg
-source-repository: /Users/feb/dev/cartridge/gitfs.ctg
+repo: /Users/feb/dev/cartridge/fs.ctg
+source-repository: /Users/feb/dev/cartridge/fs.ctg
 require-repo: true
 ---
 

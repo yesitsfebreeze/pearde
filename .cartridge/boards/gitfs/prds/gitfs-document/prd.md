@@ -1,5 +1,5 @@
 ---
-repo: /Users/feb/dev/cartridge/gitfs.ctg
+repo: /Users/feb/dev/cartridge/fs.ctg
 state: deferred
 deferred-from: open
 deferred-on: "2026-09-15"

@@ -1,9 +1,8 @@
 ---
-state: "analyzing"
+state: "open"
 origin: requested
 priority: 60
 repo: "/Users/feb/dev/cartridge/memory.ctg"
-claim: "claude-main 2026-09-16T08:16:27.642Z"
 ---
 
 # The cold tier scales past a linear scan
@@ -103,3 +102,49 @@ being the pre-existing `memory::cartridge` profile-trust failures.
 - The `as_of` historical walk: untouched.
 - Recall parity: met for the cosine ordering; boosts are approximated beyond the
   admitted budget, as the `COLD_OVERFETCH` comment states.
+
+### Second pass, 2026-09-16
+
+Both follow-ups from the first pass are done. The outcome is still not met.
+
+- memory.ctg `ec42389` deletes the cold cap. `COLD_MAX_ENTRIES`, `Store::cold_cap`,
+  `Store::cold_cap_amortized` and `COLD_CAP_SLACK` had no caller outside tests. The
+  eviction counter they fed could only read zero, so it went with them: the `evicted:`
+  health line, `HealthStats::cold_evicted` and the `cold_evicted` health RPC field. That
+  field was a `serde(default)` JSON key on a struct without `deny_unknown_fields`, so
+  clients and daemons on either side of the change still read each other. The stale
+  test doc comment and the store README bullet are gone. Net −254 lines.
+- memory.ctg `a9ab81a` caches the cold access stamps. `Store::cold_visit_accesses`
+  keeps the stamps after its first read and reuses them while `cold_generation` stands;
+  all four cold writers (`cold_spill`, `cold_put_all`, `cold_rekey`, `import_snapshot`)
+  move the generation after commit, and a scan that races a write declines to cache. The
+  cold row count guards against another process's spills. The known gap, named in the
+  code: another process's `cold_rekey` or overwriting import is not seen. Test
+  `cached_cold_access_stamps_follow_every_write` pins the overwrite case, which keeps the
+  row count and so can only be caught by the generation.
+
+Release build, one test thread, 1024 dimensions, every fixture row carrying an access
+stamp. "First" is a query on a freshly opened store; "repeat" is the next query, which is
+the steady state of a running daemon.
+
+| cold rows | at start of work | first | repeat |
+| ---: | ---: | ---: | ---: |
+| 1,000 | 15 ms | 8 ms | 3 ms |
+| 10,000 | 126 ms | 54 ms | 13 ms |
+| 50,000 | 520 ms | 212 ms | 62 ms |
+| 100,000 | 1,018 ms | 413 ms | 119 ms |
+
+At 50,000 rows `access_order` went from 133 ms to 0 ms once cached.
+
+Gates: fmt and clippy clean; `cargo nextest run --workspace --no-fail-fast` 1416 passed,
+3 failed, the three pre-existing `memory::cartridge` profile-trust failures.
+
+### What is left
+
+A repeated query is now dominated by the vector side-table scan, which costs about
+1.1 µs per cold row (56 ms at 50,000). That is the floor for any design that compares the
+query against every row. Going below it needs an approximate index over the cold vectors,
+which is the first variant this PRD named, and it trades away the exactness that the
+brute-force parity test currently holds. The `as_of` historical walk is still a full
+flatten of the hot graph and was not measured. Whether roughly 120 ms at 100,000 cold
+rows is good enough is a product decision, not a finding.

@@ -56,3 +56,104 @@ Result: FAIL (72/100).
 Unresolved blocking findings: B1, B2, B3.
 Rounds used / remaining: 1 / 4.
 Next action: one bounded spec revision for B1–B3, with N1–N6 as needed, then round 2.
+
+## Round 2 — 2026-09-16
+
+Presented revision: spec01 revision 2 (the round 1 B1 smoke block dropped, B2 swap-tolerant attach, B3 project-gone exit, N1–N6 folded in). Code base: cartridge.ctg `cdd3124`, clean tree. Analyst evidence: `.state/loop/an-instance-attaches-to-the-daemon-and-never-composes-silently/analyst-1.md`.
+
+| Input | Content digest |
+| --- | --- |
+| Plan | `prd.md` sha256 `4c322dbd0fff1cd2aa739c047ca1d0671bbd3221802c5e97d69d8416d02fa2f9` |
+| Specs | `specs/spec01.md` sha256 `2061810430add9ed45bc8f75a680eb278da13141f23e9d37550d8ae4b9f31451` |
+| Material contracts/dependencies | parent `prd.md` sha256 `0de5a65126506dd532e62bd102f6fd02e7af371384729d45f050f69eff1b9445` (unchanged since round 1). cartridge.ctg `cdd3124`: `src/cli/{client,host}.rs`, `src/host/{mod,socket,watch}.rs`, `src/transport/typed.rs:902-925,1210-1219`. Superproject `.cartridge/tests/integration/takeover.test.ts`. Sibling `live-attaches-to-the-daemon-instead-of-spawning-its-own` (needs this plan; contract line present at `prd.md:30`). `@root/smoke-passes-mcp-and-proxy` Planning note (records "a daemon that is never stopped") |
+
+Round 1 resolutions, checked:
+- B1: resolved. The smoke block, the smoke step and `smoke.test.ts` are gone from the spec and the footprint. `needs: []` is now true, and the smoke item's Planning note owns the unstopped daemon.
+- B2: resolved in design. Step 3 retries `Err` through the grace and never spawns while the socket answers. The author's addition holds against HEAD. `Host::takeover` binds `sockets/host.sock.<pid>` before it calls `stop` on the old host (`mod.rs:641-647`). The old accept loop breaks on cancel, and dropping its `LocalListener` unlinks `host.sock` only while the identity still matches (`typed.rs:1210-1219`). So from then until the `rename` (`mod.rs:660`), the name is refused or missing while the staged socket connects. `takeover_pending` (the pid is `alive` and the socket is `served`) is true for exactly that window. `sweep` leaves a staged socket that answers, and a stale staged file from a dead replacer, or from a reused pid that does not answer, does not count. Keeping the poll until the startup deadline is bounded.
+- B3: resolved in part. Step 7 and the `afterAll` `stop` are added, and the lifecycle test removes the root. See R2-B1 for the exit condition.
+- N1 (stderr, `daemon.log` and `sample().seen === 0`), N3 (contract section plus the live child line), N4 (the error names the socket, `cartridge stop`, then `kill` of the numeric pid directory), N5 (Remaining risk) and N6 (widened globs): all folded in. N6 has no effect in practice (R2-N1).
+
+| Dimension | Score / 20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 19 | The same root cause as round 1, now with the swap and orphan cases that made it harmful. Both open questions are answered in step 9. −1: PRD box 1 names `run`/`call`, but only `run` is tested. `call` is already attach-only (`cli/mod.rs:106-134`), so this is a small gap. |
+| Ownership and reuse | 19 | The spec no longer overlaps the smoke item. It reuses `attach`, `Host::unpublish` identity, `socket::listen`/`publish_listener` (step 6 lifts `mod.rs:256-261`), `cartridge stop` and the test helpers. Callers of `run` in other owners' temp projects are named and covered by step 7. −1: step 1 makes `served` `pub` next to the identically named `client::served`, which invites confusion. A distinct name such as `answers` would avoid it. |
+| Dependencies and implementable slices | 19 | `needs: []` is correct now. The live child `needs` this plan and states the `cartridge run <event>`/`call` contract. The steps are ordered, each fits one file, and step 7 has a stop-and-report cap. The line references match HEAD (`host.rs:345`, `mod.rs:595,623`, `watch.rs:12-59`). −1: the two-`run` race depends on both instances spawning a daemon and the loser exiting through step 5. That is correct, but it prints `starting the host` twice and leaves a loser line in `daemon.log`. The test should not assert against either. |
+| Observable acceptance and baseline evidence | 14 | New tests fail at HEAD for the unmet boxes, as round 1 checked. Every host is isolated (`XDG_RUNTIME_DIR` of its own, a scratch root). −4 (R2-B2): the `--replace` test requires that every looped `run` exits 0. A `run` that attaches to the old host just before the replacer's `stop` sends its `bail` to a host that is cancelling its slots (`host.rs:352-366`, `Host::bail`/`sender` `mod.rs:741-803`). It gets an error, and neither HEAD nor the spec retries a non-idempotent event. This comes from reading the source; a probe was blocked by the session's shell guard. −2 (R2-N1): the name-kill guard `rg` skips hidden paths, so `.cartridge/` (tests, justfile, routine memos) is never searched. The block exits 0 in 0.02 s and also misses `takeover.test.ts`. |
+| Failure, recovery and compatibility | 15 | Swap-tolerant attach, loser exit and owned unlink are all correct against HEAD. Wedged-host recovery is documented. −4 (R2-B1): step 7 stops the host when `descriptor.join("init.lua")` is missing, and checks `Path::exists()` on the watcher event itself. An editor's backup-rename save or a checkout briefly removes `init.lua` while the project directory exists. `exists()` also returns false on EACCES. Either case stops the live project daemon that other sessions use. −1: a manual `daemon` started while a takeover is staged sees the name refused, and `bind_unix` removes that file and rebinds (`typed.rs:916-918`). The replacer's `rename` then orphans that daemon's listener. Step 5 should also refuse while `takeover_pending`. |
+| Reviewer total | 86 / 100 | |
+
+Findings and concrete revisions:
+
+- **R2-B1 — BLOCKING. The project-gone exit can stop a live daemon whose project still exists.** Step 7 uses `init.lua` presence and `exists()` checked right at the event. Revision: stop only when `host.dir.try_exists()` or `host.descriptor.try_exists()` returns `Ok(false)` (directories only, never `init.lua`; an `Err` counts as present), and only on the 2 s tick after two consecutive misses. That still exits within 10 s. Symlinks and moves are already handled: `Host::new` canonicalizes both paths (`mod.rs:132,137`). Removing a symlink alias leaves the daemon running, and moving or removing the real directory stops it, which is correct because the socket tag is keyed to the old path. Add one unit or lifecycle assertion: renaming `init.lua` away and back within 1 s leaves the daemon serving.
+- **R2-B2 — BLOCKING. The `--replace` test demands something no specified code guarantees.** A `run` already attached to the old host fails when that host stops mid-`bail`, so "every run exits 0" will flake at collect. Revision, pick one: (a) word box 5 and the test as "no run starts a host (no `starting the host`, no `daemon.log`, `both === 0`); every run *started after* `host.sock.<pid>` appears, or after the first daemon exits, exits 0"; or (b) have the old host finish in-flight `bail`s before it acts on `stop`, and prove it. Option (a) is the smaller change.
+- **R2-N1 — non-blocking.** Add `--hidden -g '!**/.git/**'` to the guard. With that flag it currently matches prose in `prd.ctg/.cartridge/boards/root/PROGRESS.md:80` and in `{.cartridge,memory.ctg/.cartridge}/memos/routine/proc-kill.md` (which warn about `pkill -f`). Restrict it to code globs (`*.ts,*.rs,*.sh,justfile,*.lua`) or exclude those two memo paths by name.
+- **R2-N2 — non-blocking.** Step 5 also checks `socket::takeover_pending` and refuses with the same message while a replacement is staged.
+- **R2-N3 — non-blocking.** Rename the public `socket::served` (for example `answers`) so it does not shadow `client::served`. In the two-run test, do not assert anything on stderr or `daemon.log`.
+
+Disposition: keep. Make one bounded spec revision for R2-B1 and R2-B2, with R2-N1–N3 as needed.
+
+Validation (cwd `/Users/feb/dev/cartridge`; the live project daemon was untouched and no process was started):
+- `git -C cartridge.ctg log -1`: `cdd3124`, porcelain empty.
+- The spec's name-kill guard block under `sh -eu -c`: exit 0 in 0.02 s. The same search with `--hidden`: 3 prose hits, listed in R2-N1.
+- Source read at HEAD: `src/host/socket.rs` (served/alive/sweep/listen), `src/cli/host.rs` (attach/run/daemon/Backend), `src/host/mod.rs:125-200,256-261,575-665,741-803,924-939`, `src/host/watch.rs`, `src/transport/typed.rs:902-925,1210-1219`.
+- The isolated `--replace` + `call` loop probe (own `XDG_RUNTIME_DIR` and scratch root) was blocked by the session's shell safety guard and not run. R2-B2 rests on the source reading.
+- `just test lifecycle`, `just test cartridge`: not rerun (code unchanged since round 1's results).
+
+Reviewer identity: independent reviewer agent r2 (coordinator cartridge-c4).
+User rating: not supplied (delegated).
+User feedback/provenance: none for this revision.
+Result: FAIL (86/100).
+Unresolved blocking findings: R2-B1, R2-B2.
+Rounds used / remaining: 2 / 3.
+Next action: one bounded spec revision for R2-B1 and R2-B2, then round 3.
+
+## Round 3 — 2026-09-16
+
+Presented revision: spec01 revision 3 (round 2: R2-B1 directory-only two-miss tick, R2-B2 only runs started after staging must exit 0, R2-N1–N3). prd.ctg `a0454963`, with `prd.md`, `specs/spec01.md` and `review.md` modified (dirty). Code base: cartridge.ctg `cdd3124`. Its tree is now dirty with another session's uncommitted edits, which this plan does not own: `src/loader/{document,mod}.rs`, `src/node/mod.rs` and `.cartridge/tests/unit/src/trust/tests.rs`. Analyst evidence: `.state/loop/an-instance-attaches-to-the-daemon-and-never-composes-silently/analyst-1.md`.
+
+| Input | Content digest |
+| --- | --- |
+| Plan | `prd.md` sha256 `157fbbbf28519c9e039b1f1bae6c9e673e37f1d3dc566945784facc3ceb98005`, which matches the hand-off |
+| Specs | `specs/spec01.md` sha256 `79304397479a1afd784f3a801ea4ba5ca2683450dcb8bbed3681bd4dae16d8b6`, which matches the hand-off |
+| Material contracts/dependencies | parent `prd.md` sha256 `0de5a65126506dd532e62bd102f6fd02e7af371384729d45f050f69eff1b9445` (unchanged since round 1). cartridge.ctg `cdd3124`: `src/cli/{client,host}.rs` (attach/run/daemon), `src/host/{mod,socket,watch}.rs`, `src/transport/typed.rs:902-925`, `src/settings/host.rs` with the `.cartridge/settings.json` defaults (startup 60 s, shutdown 15 s, debounce 500 ms). Superproject `.cartridge/tests/integration/takeover.test.ts` and `.cartridge/justfile:108`. Sibling `live-attaches-to-the-daemon-instead-of-spawning-its-own` (`needs` this plan) |
+
+Round 2 resolutions, checked against the code:
+- R2-B1: resolved. Step 7 checks only `host.dir`/`host.descriptor` with `try_exists()`, counts an `Err` as present, acts only on the 2 s tick, needs two consecutive misses and resets on a hit. Both fields exist and are canonicalized in `Host::new` (`mod.rs:129-137`). `daemon` exits after `stopped()`, aborts the watcher and calls `host.stop()` (`host.rs:352-366`). A new lifecycle test renames `init.lua` away for 2.5 s. Only `daemon` calls `watch`.
+- R2-B2: resolved with option (a). Box 5 and the test now require exit 0 only from runs started after `host.sock.<replacer pid>` exists or after the first daemon exits. Every run must still start no host (`starting the host` absent, no `daemon.log`, `both === 0`), and the non-idempotent `bail` is not retried. In `Host::takeover` (`mod.rs:636-660`) the staged socket lives in `self.sockets` (the run dir, the same dir as `host.sock`) and `old.call("stop")` follows it at once. A run spawned after staging would have to be accepted by the old host before that one RPC lands, which process start-up latency (tens of ms against well under 1 ms) makes negligible. After cancel, the name is refused or missing, so `answers` is false and `takeover_pending` is true, because the staged listener is bound and a plain `UnixStream::connect` (`socket.rs:198-200`) succeeds against its backlog. The run polls until the 60 s startup deadline, which exceeds the 2 × 15 s takeover wait.
+- R2-N1: resolved. The guard uses `--hidden` with code globs. Under `sh -eu -c` in the superproject it exits 0 in 0.05 s.
+- R2-N2: resolved (step 5 refuses while `takeover_pending`).
+- R2-N3: resolved. `socket::served` becomes `pub fn answers`, and the two-run test asserts nothing on stderr or `daemon.log`. The loser daemon's pid dir is removed by `Drop` → `unpublish` (`mod.rs:120-125,595-605`), so "exactly one numeric pid dir with `.sock` files" holds.
+
+| Dimension | Score / 20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 19 | The same root cause, now covering the swap, race, orphan and editor-save cases. Both open questions are answered in step 9, and the planning note accepts auto-start from `run`. −1: PRD box 1 names `run`/`call`, but only `run` is tested. `call` is attach-only at HEAD (`cli/mod.rs:106-134`), so this is a small gap. PRD box 2 says "answers from the new host" and the spec says "exits 0"; that difference is cosmetic. |
+| Ownership and reuse | 19 | The plan reuses `attach`, `Host::unpublish` identity, `socket::listen`/`publish_listener` (step 6), `cartridge stop` and the test helpers `profile`/`cli`/`daemon`/`active`/`sample`. It has no overlap with the smoke item. −1: the shared cartridge.ctg checkout now holds foreign uncommitted edits (loader, node, trust tests). The implementer must not fold them into this plan's commits. The first Verify block catches this at collect, but the plan does not say to coordinate. |
+| Dependencies and implementable slices | 19 | `needs: []` is correct. The live child `needs` this plan and names the attach path. Each step fits one file, in order, and step 7 has a ~20-line cap. −1: step 3 points to "the recovery hint (step 7)", but the recovery text is in step 8. |
+| Observable acceptance and baseline evidence | 17 | Every new test is isolated (its own `XDG_RUNTIME_DIR` under `/tmp/ctgrt-*`, a scratch root, `stop` in `afterAll` and `finally`) and fails at HEAD for the unmet boxes, as round 1 checked. The flaky oracle is gone. −2: "exits within 6.5 s" rests on the arithmetic (two misses ≤ 4 s, then `host.stop()`) and was not measured. The file-event body (500 ms debounce, `reconcile`, `replace_changed` → `stop_slot`) runs inline in the same `select!` loop and can delay a tick. A probe of the removal on the HEAD binary confirmed only the baseline: the daemon is still alive 8 s after `rm -rf` of the root. −1: `just test lifecycle` grows from 4 tests (9 s) to about 11. Several wait multiple seconds (4 s sample, 10 s race, `--replace` loop until exit plus 3 s, 6.5 s, 7.5 s). The estimated 50–70 s under load is unmeasured against the 120 s limit per block. |
+| Failure, recovery and compatibility | 18 | The swap-tolerant attach, the loser exiting before it composes (`listen` before `reconcile`), owned unlink, the refusal while a takeover is staged, the directory-only project-gone exit and the documented recovery for a wedged host (`stop`, then `kill` of the numeric pid dir) are all correct against HEAD. −1: `tokio::time::interval` defaults to `MissedTickBehavior::Burst`. After a long inline `reconcile` on a real composition (the startup timeout is 60 s), the delayed ticks fire back to back, so "two misses 2 s apart" can collapse to microseconds. −1: the stale-file bind race is disclosed (`typed.rs:916-918`) but not closed. |
+| Reviewer total | 92 / 100 | |
+
+Findings and concrete revisions:
+
+- **R3-N1 — non-blocking.** Step 7: run the project check in its own spawned task (an `interval` with `set_missed_tick_behavior(MissedTickBehavior::Delay)`, cancelling `stop_signal()`) or keep the `select!` but set `Delay`. Event handling then cannot starve the tick, and a catch-up burst cannot count two misses at once. The line cap still holds.
+- **R3-N2 — non-blocking.** Record the measured `just test lifecycle` duration after implementation, in the Verify comment. If it exceeds about 90 s, split the lifecycle tests into two `bun test` files or blocks.
+- **R3-N3 — non-blocking.** Before implementation, confirm that the cartridge.ctg edits in `src/loader`, `src/node` and `.cartridge/tests/unit/src/trust` belong to another session, and keep them out of this plan's commits. Block 1 stays red until their owner commits them.
+- **R3-N4 — non-blocking.** Step 3: change "(step 7)" to "(step 8)". Optionally add `call` to the erroring-socket test, since it is a single `cli` call.
+
+Disposition: keep. Proceed to implementation; fold R3-N1 into step 7 while implementing.
+
+Validation (cwd `/Users/feb/dev/cartridge`; the live project daemon was untouched):
+- `shasum -a 256` of `prd.md` and `specs/spec01.md`: both match the hand-off digests.
+- `git -C cartridge.ctg log -1`: `cdd3124`. Porcelain shows 4 modified files outside this plan (R3-N3).
+- The spec's name-kill guard block under `sh -eu -c`: exit 0 in 0.05 s.
+- An isolated probe (scratchpad `probe.ts`, `XDG_RUNTIME_DIR=/tmp/ctgrt-*`, a scratch root, HEAD binary `target/debug/cartridge` built 10:45): after `call plain null` succeeded, `rm -rf` of the root left the daemon alive 8 s later (exitCode null). This is the baseline step 7 fixes. The daemon was SIGKILLed by its pid as the probe's own child, and the runtime dir was removed. `ps` shows no probe process left.
+- Source read at HEAD: `src/cli/host.rs:55-200,330-366`, `src/cli/client.rs:30-50`, `src/host/watch.rs`, `src/host/socket.rs:1-150,198-220,476`, `src/host/mod.rs:120-137,250-265,504-605,623-665`, `src/transport/typed.rs:902-925`, `.cartridge/tests/integration/takeover.test.ts:1-140`.
+- `just test lifecycle`, `just test cartridge`: not rerun. The code is unchanged, and the cartridge.ctg tree carries foreign edits.
+
+Reviewer identity: independent reviewer agent r3 (coordinator cartridge-c4).
+User rating: not supplied (delegated).
+User feedback/provenance: none for this revision.
+Result: PASS (92/100).
+Unresolved blocking findings: none.
+Rounds used / remaining: 3 / 2.
+Next action: proceed to implementation (R3-N1 folded into step 7; R3-N3 coordinated before commits).

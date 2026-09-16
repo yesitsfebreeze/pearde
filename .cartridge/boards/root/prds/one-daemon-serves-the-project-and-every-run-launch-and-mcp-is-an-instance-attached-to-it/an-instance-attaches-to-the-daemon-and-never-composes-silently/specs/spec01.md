@@ -14,8 +14,9 @@ footprint:
 
 # spec01 — `run` attaches through the swap, a losing daemon exits, a daemon outlives no project
 
-Revision 2 (review round 1: B1 smoke dropped, B2 swap-tolerant attach, B3
-project-gone exit; N1–N6 folded in).
+Revision 3 (round 1: B1 smoke dropped, B2 swap-tolerant attach, B3
+project-gone exit, N1–N6; round 2: B1 directory-only two-miss tick, B2
+`--replace` exit-0 only after staging, N1–N3).
 
 Base: cartridge.ctg cdd3124 (after d840064 "One host per project"). Already
 delivered there: `call`/`send`/`status`/`stop` talk only to `host.sock`;
@@ -51,12 +52,14 @@ An out-of-process tool reaches the project's host with `cartridge run <event>
 
 ## Steps
 
-1. `src/host/socket.rs`: make `served(path)` `pub`. Add
-   `pub fn takeover_pending(descriptor) -> Result<bool>`: true when the run
-   dir holds a `host.sock.<pid>` whose pid is `alive` and which `served`.
+1. `src/host/socket.rs`: rename the private `served(path)` to `pub fn
+   answers(path)` (its `sweep` callers follow), so it does not shadow
+   `client::served`. Add `pub fn takeover_pending(descriptor) -> Result<bool>`:
+   true when the run dir holds a `host.sock.<pid>` whose pid is `alive` and
+   which `answers`.
    Windows: both keep their current constants.
 2. `src/cli/client.rs`: `served` returns `Result<Option<Attached>>`:
-   `Ok(None)` when `socket::served(&socket::path(..)?)` is false; otherwise
+   `Ok(None)` when `socket::answers(&socket::path(..)?)` is false; otherwise
    the `socket::client` result (error kept). Windows keeps `.ok()`.
 3. `src/cli/host.rs`, `attach`:
    - `Ok(Some)` → settle and return.
@@ -69,7 +72,9 @@ An out-of-process tool reaches the project's host with `cartridge run <event>
 4. `run`: `let (peer, _incoming) = attach(project).await?;` then
    `client::bail`. Delete the private fallback and `serve_beside` (unused
    otherwise; `warnings = "deny"`).
-5. `daemon`: `client::served(project).await?`. In the `None` branch call a new
+5. `daemon`: `client::served(project).await?`; a plain `daemon` (no
+   `--replace`) also refuses with the same message while
+   `socket::takeover_pending(..)` is true. In the `None` branch call a new
    `Host::listen` (step 6) with `?` before `reconcile`, so a loser exits
    non-zero with "a host already serves <descriptor>; `cartridge daemon
    --replace` takes over from it". Other `reconcile` errors stay logged.
@@ -77,12 +82,17 @@ An out-of-process tool reaches the project's host with `cartridge run <event>
    doing the `socket::listen` + `publish_listener` that `reconcile` does when
    `inner` is unset (`mod.rs:256-261`); `reconcile` keeps skipping it once set.
 7. `src/host/watch.rs`: the watch task `select!`s on `rx.recv()` and a 2 s
-   `tokio::time::interval`; on either, if `!host.descriptor.join("init.lua")
-   .exists()` or `!host.dir.exists()`, log `project gone, stopping` and
-   `host.stop_signal().cancel()`, then end the task. `daemon` already exits on
-   `stopped()` (`host.rs:361-366`). Only `daemon` calls `watch`; private hosts
-   are unaffected. If this is more than ~15 lines in `src/host`, stop and
-   report instead of widening.
+   `tokio::time::interval`. Only the tick checks the project; file events
+   never do. A tick is a miss when `host.dir.try_exists()` or
+   `host.descriptor.try_exists()` returns `Ok(false)`. Directories only, never
+   `init.lua`, and an `Err` (e.g. EACCES) counts as present. Two consecutive
+   misses log `project gone, stopping` and `host.stop_signal().cancel()`; a hit
+   resets the count. Worst case ≈ 6 s. `daemon` already exits on `stopped()`
+   (`host.rs:361-366`). Both paths are canonicalized in `Host::new`
+   (`mod.rs:132,137`): removing a symlink alias keeps the daemon, and moving or
+   removing the real directory stops it (its socket tag names the old path).
+   Only `daemon` calls `watch`; private hosts are unaffected. If this is more
+   than ~20 lines in `src/host`, stop and report instead of widening.
 8. Docs. `README.md`: the `run` line becomes "send on the project's host,
    starting it when none answers". `docs/development.txt`, beside `daemon`:
    `cartridge stop` is the one way to stop the host; a tool attaches with
@@ -111,15 +121,26 @@ An out-of-process tool reaches the project's host with `cartridge run <event>
       survivor serves `call plain null`; socket ino unchanged since both ran.
     - "two runs with no daemon share one": two concurrent `run plain null` in
       a fresh profile both exit 0; afterwards exactly one numeric pid dir with
-      `.sock` files and `status` exits 0.
-    - "a run during --replace attaches to the new host": first `daemon(root)`,
-      `active`; start `daemon(root, ["--replace"])` and, concurrently, `run
-      plain null` in a loop until the first daemon has exited plus 3 s; every
-      run exits 0, no stderr contains `starting the host`, no
-      `.cartridge/daemon.log`, `sample()` over the window has `both === 0`,
-      and the replacing child is the one still running.
+      `.sock` files and `status` exits 0. No assertion on stderr or
+      `daemon.log`: both instances may spawn, and the loser exits via step 5.
+    - "a run during --replace starts no host of its own": first
+      `daemon(root)`, `active`, `sample(runDir, …)` running over the window;
+      start `daemon(root, ["--replace"])` and, concurrently, `run plain null`
+      in a loop until the first daemon has exited plus 3 s, recording for each
+      run whether `host.sock.<replacer pid>` existed (or the first daemon had
+      exited) when it started. For every run: stderr lacks `starting the
+      host`; afterwards no `.cartridge/daemon.log`, `both === 0`, the numeric
+      pid dirs holding sockets are only the two daemons', and the replacing
+      child is the one still running. Only runs started after staging must
+      exit 0. A run already attached to the old host may fail when that host
+      stops mid-`bail`; it is not retried, because `bail` is not idempotent
+      and a resend could deliver the event twice.
     - "a daemon exits when its project is removed": `daemon(root)`, `active`,
-      `fs.rmSync(root, {recursive: true})`; the child exits within 10 s.
+      `fs.rmSync(root, {recursive: true})`; the child exits within 6.5 s.
+    - "an editor save of init.lua keeps the daemon": `daemon(root)`, `active`;
+      rename `.cartridge/init.lua` to `init.lua~`, wait 2.5 s (over one tick),
+      rename it back, wait 5 s; the child is still running and `call plain
+      null` exits 0.
     - "stop": `cli(root, ["stop"])` exits 0, the child exits, the socket file
       is gone.
 
@@ -131,11 +152,12 @@ An out-of-process tool reaches the project's host with `cartridge run <event>
       inode is unchanged and it still serves.
 - [ ] A losing daemon's exit leaves the winner's `host.sock`.
 - [ ] Two `run` instances with no daemon leave one composed host.
-- [ ] `run` issued during `daemon --replace` answers from the new host and
-      starts no host of its own.
-- [ ] A daemon whose project root is removed exits within 10 s.
+- [ ] No `run` issued during `daemon --replace` starts a host or node of its
+      own; every `run` started after the replacement is staged exits 0.
+- [ ] A daemon whose project root is removed exits within ~6 s; removing and
+      restoring `init.lua` leaves it serving.
 - [ ] `cartridge stop` and the pid recovery are documented in
-      `docs/development.txt`; no test, tool or routine kills daemons by name.
+      `docs/development.txt`; no test or tool code kills daemons by name.
 
 ## Verify and Proof
 
@@ -165,7 +187,10 @@ just test lifecycle
 ```sh
 grep -q 'cartridge stop' cartridge.ctg/docs/development.txt
 grep -q 'cartridge run <event>' cartridge.ctg/docs/development.txt
-! rg -n 'pkill\s+-f|killall\s|pgrep[^|]*\|\s*xargs\s+kill' -g '*.ts' -g '*.rs' -g '*.sh' -g 'justfile' -g '*.md' -g '*.lua' -g '!**/prds/**' -g '!**/.state/**' --glob '!**/node_modules/**' --glob '!**/target/**' .
+# Code only, hidden dirs included. Prose that warns against `pkill -f`
+# (prd.ctg/.cartridge/boards/root/PROGRESS.md, {.,memory.ctg/}.cartridge/memos/routine/proc-kill.md)
+# is out of scope: it is advice, not a kill.
+! rg -n --hidden 'pkill\s+-f|killall\s|pgrep[^|]*\|\s*xargs\s+kill' -g '*.ts' -g '*.rs' -g '*.sh' -g 'justfile' -g '*.lua' -g '!**/.git/**' -g '!**/node_modules/**' -g '!**/target/**' .
 ```
 
 ## Remaining risk

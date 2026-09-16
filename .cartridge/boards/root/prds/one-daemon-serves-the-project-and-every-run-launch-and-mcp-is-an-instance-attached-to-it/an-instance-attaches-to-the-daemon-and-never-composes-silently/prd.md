@@ -1,5 +1,5 @@
 ---
-state: "analyzing"
+state: "specced"
 origin: requested
 priority: 90
 repo: "/Users/feb/dev/cartridge"
@@ -15,7 +15,6 @@ footprint:
 - "cartridge.ctg/docs/development.txt"
 - "cartridge.ctg/README.md"
 - ".cartridge/tests/integration/takeover.test.ts"
-claim: "coordinator-c4-8 2026-09-16T08:31:18.044Z"
 ---
 
 # An instance attaches to the daemon and never composes silently
@@ -68,7 +67,8 @@ so no test kills daemons by process name.
   a test or tool uses; document it beside `daemon` in `cartridge.ctg/docs/`,
   with the recovery for a host that never answers (`kill` the pid named by the
   run directory, never by process name).
-- A daemon exits when its project root or descriptor is removed, so
+- A daemon exits when its project root or `.cartridge` directory is gone on
+  two consecutive 2 s ticks (never on a file event or a missing `init.lua`), so
   auto-started daemons in temp projects do not outlive them.
 - Out-of-process tools (the live child) attach with `cartridge run <event>` or
   `cartridge call`, never by starting `cartridge daemon`.
@@ -86,9 +86,10 @@ so no test kills daemons by process name.
 
 - [ ] A `run`/`call` whose socket keeps erroring past the takeover grace
       reports the error and starts no host or node process.
-- [ ] A `run` issued during `daemon --replace` answers from the new host and
-      starts no host of its own.
-- [ ] A daemon whose project root is removed exits within 10 s.
+- [ ] No `run` issued during `daemon --replace` starts a host of its own; a
+      `run` started after the replacement is staged answers from the new host.
+- [ ] A daemon whose project root is removed exits within ~6 s; removing and
+      restoring `init.lua` leaves it serving.
 - [ ] A second `cartridge daemon` on the same project exits non-zero without
       removing or replacing the first's socket, and the first still serves.
 - [ ] A fallback host or losing daemon exiting does not delete a live

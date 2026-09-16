@@ -1,5 +1,5 @@
 ---
-state: "analyzing"
+state: "open"
 origin: requested
 priority: 65
 repo: "/Users/feb/dev/cartridge/memory.ctg"
@@ -8,7 +8,6 @@ footprint:
 - ".cartridge/tests/integration/spill_transparency.rs"
 - "src/graph/src"
 - "src/retrieval"
-claim: "coordinator-c4-17 2026-09-16T09:33:26.926Z"
 ---
 
 # A spilled graph answers the same queries as one that never spilled

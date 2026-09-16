@@ -1,12 +1,11 @@
 ---
-state: "analyzing"
+state: "open"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge"
 footprint:
   - cartridge.ctg
   - .cartridge/memos/routine/cartridge-proxy.md
-claim: "coordinator-c4-530 2026-09-16T09:33:52.383Z"
 ---
 
 # a verify build never restarts a live cartridge

@@ -1,5 +1,5 @@
 ---
-state: "analyzing"
+state: "open"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge/prd.ctg"
@@ -9,7 +9,6 @@ footprint:
   - src/engine.ts
   - src/cli.ts
   - .cartridge/tests/engine.test.ts
-claim: "coordinator-c4-530 2026-09-16T09:33:49.756Z"
 ---
 
 # the engine refuses state and claim changes it did not write

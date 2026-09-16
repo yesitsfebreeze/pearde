@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/memory.ctg
-state: "analyzing"
+state: "open"
 origin: requested
 priority: 60
 blast-radius: low
@@ -8,7 +8,6 @@ workflow: develop-one-cartridge
 work-kind: leaf
 footprint:
   - .cartridge/tests/integration/cartridge.rs
-claim: "coordinator-c4-15 2026-09-16T09:23:08.547Z"
 ---
 
 # The memory cartridge integration tests trust the project they boot

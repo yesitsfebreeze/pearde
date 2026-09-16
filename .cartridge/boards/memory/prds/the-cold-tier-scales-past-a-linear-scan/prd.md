@@ -1,5 +1,5 @@
 ---
-state: open
+state: "open"
 origin: requested
 priority: 60
 repo: "/Users/feb/dev/cartridge/memory.ctg"
@@ -37,3 +37,68 @@ infrastructure before inventing a second one. The existing pool-cap logic (inser
 whether the model-stamp PRD (`a-vector-carries-the-model-that-made-it`) lands first: an
 index over mixed-model vectors is built on sand, so this PRD may need it as a `needs`
 entry.
+## Result
+
+Partial. One of the two whole-tier reads on the query path is roughly halved; the
+outcome is not met, because a query still visits every cold row.
+
+### Landed
+
+memory.ctg `36478df`. `cold_candidates` now ranks the tier by query cosine from the
+vector side table (new `Store::cold_visit_vectors`), then walks that order decoding
+rows and applying the unchanged gates and boosts, stopping once
+`COLD_OVERFETCH = 8` rows per delivered slot have passed the gates. The side table
+existed for exactly this read (`ColdRow::of` strips the vector out "so scoring the tier
+never decodes the row it belongs to"), but the query path had never used it.
+
+The first version truncated the shortlist before the gates ran, and
+`memory_contract::cold_filters_precede_the_delivery_cut_and_expired_rows_stay_stored`
+failed: twenty pending rows and one expired row at cosine 1.0 crowded out the eligible
+row at 0.9. The budget now counts only admitted rows, so a filter cannot spend it and a
+heavily filtered query degrades toward a whole-tier decode instead of toward a wrong
+answer. Boosts remain the stated approximation.
+
+New test `the_two_stage_cold_scan_matches_a_brute_force_ranking` asserts delivered order
+equals a brute-force cosine ranking over 400 rows. Two ignored measurement tests live
+beside it in `cold_scan_cost`.
+
+### Measured
+
+Release build, one test thread, same machine, same fixture; "before" is the parent commit
+with only `retrieval_query.rs` reverted.
+
+| cold rows | before | after |
+| ---: | ---: | ---: |
+| 1,000 | 15 ms | 8 ms |
+| 10,000 | 126 ms | 54 ms |
+| 50,000 | 520 ms | 312 ms |
+| 100,000 | 1,018 ms | 549 ms |
+
+At 50,000 rows, decoding every row body to score it cost 313 ms and streaming the vector
+side table for the identical scores cost 56 ms.
+
+Gates: `cargo fmt --all -- --check` and `cargo clippy --workspace --all-targets -- -D warnings`
+clean; `cargo nextest run --workspace --no-fail-fast` 1420 passed and 3 failed, the three
+being the pre-existing `memory::cartridge` profile-trust failures.
+
+### Found along the way
+
+- `score::access_order` is now the larger whole-tier read. It calls
+  `cold_visit_accesses`, which decodes every cold row body to read `accessed_at`. At
+  50,000 rows it took 171 ms and returned zero stamps, because no fixture row had ever been
+  accessed. Fixing it needs either an access-time side table beside the vector one or an
+  access order cached against the mutation epoch.
+- `COLD_MAX_ENTRIES = 50_000` (`src/base/src/base_constants.rs`) and `Store::cold_cap_amortized`
+  are called from nowhere in `src/`, and a doc comment in the store unit tests still claims
+  `cold_put_all` calls the latter. The tier is unbounded on purpose: both write paths say
+  "Heat changes residency, not retention. Permanent trimming is explicit", and
+  `spilling_past_the_old_cap_preserves_every_row` pins it. Wiring the cap would silently
+  delete stored memories, so it was not done. The constant and the stale comment are
+  candidates for deletion.
+
+### Remaining against Acceptance
+
+- Sublinear query cost: not met. Both remaining reads are linear.
+- The `as_of` historical walk: untouched.
+- Recall parity: met for the cosine ordering; boosts are approximated beyond the
+  admitted budget, as the `COLD_OVERFETCH` comment states.

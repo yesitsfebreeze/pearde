@@ -1,5 +1,5 @@
 ---
-state: "specced"
+state: "done"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge"
@@ -14,6 +14,7 @@ footprint:
 needs:
 - sessions-and-gitfs-tests-are-green
 - pty-router-harness-mcp-tests-are-green
+commit: "aa692351947ba7d7b328e76db10e27562611aa93"
 ---
 
 # Smoke passes mcp and proxy
@@ -24,7 +25,7 @@ The two doors a worker uses (MCP tools, proxied model requests) pass the compose
 
 ## Acceptance
 
-- [ ] `just smoke` exits 0: mcp lists tools with memo active (2026-09-14: `memo inactive`); proxy answers its key check inside its deadline (2026-09-14: timeout); the gate runs only on clean mcp.ctg, proxy.ctg, router.ctg, memo.ctg and cartridge.ctg trees whose HEADs do not move. Their artifacts are built into an isolated target (`~/.cache/cartridge-smoke-target`, never a live `target/`) and loaded from copied modules, and HEAD shas and gitlinks are logged before the builds and re-checked before and after the smokes, so a pass proves the committed HEAD of those five trees; the other composed modules run as built. The smoke pre-settles its daemon, so the cold-start `cartridge mcp` path is out of scope here and covered by @root/cartridge-mcp-waits-for-a-cold-host-to-settle-instead-of-giving-up-after-three-identical-polls (after that fix the pre-settle can go).
+- [x] `just smoke` exits 0: mcp lists tools with memo active (2026-09-14: `memo inactive`); proxy answers its key check inside its deadline (2026-09-14: timeout); the gate runs only on clean mcp.ctg, proxy.ctg, router.ctg, memo.ctg and cartridge.ctg trees whose HEADs do not move. Their artifacts are built into an isolated target (`~/.cache/cartridge-smoke-target`, never a live `target/`) and loaded from copied modules, and HEAD shas and gitlinks are logged before the builds and re-checked before and after the smokes, so a pass proves the committed HEAD of those five trees; the other composed modules run as built. The smoke pre-settles its daemon, so the cold-start `cartridge mcp` path is out of scope here and covered by @root/cartridge-mcp-waits-for-a-cold-host-to-settle-instead-of-giving-up-after-three-identical-polls (after that fix the pre-settle can go).
 
 ## Result
 

@@ -78,17 +78,17 @@ The proxy check stays 401 without a key and 404 with it. Modules other than mcp,
 
 ## Acceptance
 
-- [ ] With clean working trees in mcp.ctg, proxy.ctg, router.ctg, memo.ctg and cartridge.ctg whose HEADs are unchanged
+- [x] With clean working trees in mcp.ctg, proxy.ctg, router.ctg, memo.ctg and cartridge.ctg whose HEADs are unchanged
       from before the builds until after the last smoke, and with their artifacts built into
       `~/.cache/cartridge-smoke-target` and snapshotted per run, `just smoke policy`, `just smoke mcp` and
       `just smoke proxy` each exit 0. The gate log prints each tree's HEAD and superproject gitlink. A pass proves the
       fixture against the committed HEAD of those five trees; the other composed modules run as built in their live dirs.
       A dirty tree fails block 1, and collection waits for its owner to commit.
-- [ ] The mtimes of the live `{mcp,proxy,router,memo}.ctg/target/debug/lib*.dylib` and `cartridge.ctg/target/debug/cartridge`
+- [x] The mtimes of the live `{mcp,proxy,router,memo}.ctg/target/debug/lib*.dylib` and `cartridge.ctg/target/debug/cartridge`
       are the same after the gate as before it.
-- [ ] The mcp smoke lists a `memo` tool. No process naming this run's temp dir is left, and the dir is removed,
+- [x] The mcp smoke lists a `memo` tool. No process naming this run's temp dir is left, and the dir is removed,
       whether the smoke passes or fails.
-- [ ] The fixture no longer links `<runtime>/builtin`.
+- [x] The fixture no longer links `<runtime>/builtin`.
 
 ## Verify and Proof
 

@@ -1,5 +1,5 @@
 ---
-state: open
+state: "deferred"
 origin: requested
 priority: 70
 repo: "/Users/feb/dev/cartridge/memory.ctg"
@@ -9,39 +9,52 @@ repo: "/Users/feb/dev/cartridge/memory.ctg"
 
 ## Outcome
 
-A store whose vectors do not match the configured embedding model refuses to
-pretend otherwise. A store-level stamp already exists
-(`store_core::EmbedStamp`, `src/store/core/src/lib.rs:312`; written/checked in
-`src/graph/src/persist.rs:73-95`, mismatch flag consumed by health
-`src/health/src/lib.rs:199` and the RPC surface `src/transport/src/memory_rpc.rs:181`),
-and a swap logs "recall stays near zero until `memory reembed`". But the guard is
-fail-open and invisible in exactly the case it exists for, observed live
-2026-09-16 on `memory.ctg/.memory`: health reports the stamp clean
-(`qwen3-embedding:0.6b (dim 1024)`), `memory check` reports only LMDB bloat, while
-363 cold rows are scanned by every query and **zero** enter the candidate pool
-(`cold_candidates` skips on `vector.len() != qvec.len()`,
-`src/retrieval/piece/src/retrieval_query.rs:253`), so every query returns empty
-with no diagnostic. The dimension guard drops the rows silently; the stamp never
-names them.
+Withdrawn. The premise was investigated on 2026-09-16 and does not hold.
+
+The guard this PRD proposed already exists, and the observation that motivated it
+has a different cause.
+
+What exists: `store_core::EmbedStamp` (`src/store/core/src/lib.rs:312`) records the
+model name and dimension for a store. It is written and checked on load and on every
+flush (`stamp_of` and `check_stamp`, `src/graph/src/persist.rs:73-99`); an unstamped
+store adopts the configured model, a changed model sets a durable `embed_mismatch`
+flag and logs that "recall stays near zero until `memory reembed`", and an unreadable
+stamp is deliberately left intact rather than adopted over. `memory health` reports the
+model, the dimension and the flag (`src/health/src/lib.rs:187-200`), and `memory check`
+already raises both `embed_mismatch` and `embed_unreadable` as error findings
+(`src/commands/src/commands_check.rs`).
+
+What the 363 rows actually were: the `memory.ctg/.memory` store that prompted this PRD
+holds zero live thoughts and 363 cold rows, every one of them `EntityStatus::Superseded`
+with a correct 1024-dimension vector. Probed by instrumenting `store.cold_visit` and
+printing each row's `veclen` and `status`: all 363 printed `veclen=1024 status=Superseded`.
+`cold_candidates` excludes superseded rows by design
+(`src/retrieval/piece/src/retrieval_query.rs`), so every query over that store correctly
+returns nothing. The store is a development leftover, not a corrupted one, and the
+dimension check was never the thing rejecting those rows.
+
+A speculative `vector_dim_mismatch` finding was written against both tiers and then
+removed: it fired on nothing, because no row in the store has a mismatched width. Adding
+a check for a fault with no instance is the kind of code this repository deletes.
+
+The one real gap the investigation found — that an empty result could not be told apart
+from an excluded one — is fixed and collected under
+[the floor names the weak hits it cut](../the-floor-names-the-weak-hits-it-cut/prd.md).
+`memory query` on that same store now answers: `no results — nothing entered the ranking
+pool (363 cold rows scanned; seeding found nothing, or rows were excluded by a filter or
+an embed mismatch)`.
 
 ## Acceptance
 
-- [ ] The dimension skip in `cold_candidates` (and the `as_of` walk's equivalent) is no longer silent: rows excluded for a dimension or model mismatch are counted, and the count surfaces in `memory check` (and `explain`, where `cold_rows_scanned` already reports) so a store whose rows are all invisible is diagnosed, not just empty-looking.
-- [ ] A stamp mismatch between stored and configured model is a `check` finding, not only a throttled log line and a health flag: `memory check` on a mismatched or unreadable stamp reports it with the stored and current model names.
-- [ ] Rows already persisted under a different model (the pre-existing-corpus case) are visible as a count in `check`'s manifest, so `memory reembed` has a number to converge to and `repair` can act on the manifest entry.
-- [ ] From `/Users/feb/dev/cartridge/memory.ctg`: `just check` and `just test` exit 0, including a test that persists rows under one dimension, queries under another, and asserts the exclusion is counted and named rather than silent.
+- [x] Establish whether per-row model provenance is missing. It is not missing in the way
+      this PRD assumed: the stamp is per store, and no evidence of a mixed-width corpus
+      exists on this machine.
+- [x] Record the investigation so the premise is not re-derived from the same observation.
 
-## Notes for the analyst
+## If this is wanted again
 
-The `EmbedStamp` mechanism is the right foundation; do not build a second one. The
-gaps are observability and refusal granularity, not absence: (1) the store-level
-stamp cannot see per-row provenance, so mixed-dimension corpora (rows written by
-an older build or another model before the stamp existed, or after a
-`migrate`-skipping upgrade) have no owner; (2) the only per-row guard is the
-length check, which drops silently. The observed fixture is
-`memory.ctg/.memory` itself: 363 cold rows, 0 hot entities, every query empty,
-`check` silent. Probe it with `memory query --explain` — `cold_rows_scanned: 363`
-with `candidates: {}` is the signature. Decide whether per-row model identity is
-worth a persisted-layout change (`Entity` is bincode-positional,
-`src/base/src/base_types.rs:328`) or whether counted exclusion plus a store-level
-stamp that refuses to adopt over unreadable rows is sufficient.
+Per-row (rather than per-store) model identity remains a defensible design, but it needs a
+real instance to justify a persisted-layout change to a bincode-positional `Entity`
+(`src/base/src/base_types.rs:328`). The trigger to re-open: a store that carries rows of
+two different widths, or a `check` run where `embed_mismatch` is false while recall is
+nonetheless near zero. Neither is observed today.

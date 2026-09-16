@@ -1,5 +1,5 @@
 ---
-state: "claimed"
+state: "done"
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge/proxy.ctg"
@@ -7,7 +7,7 @@ capability-owner: proxy
 needs:
 - "@memory/the-exchange-ledger-lives-in-memory-s-store-and-halves-at-each-day-week-and-month-rollover"
 workflow: "develop-one-cartridge"
-claim: "claude-opus-5 2026-09-15T10:13:16.000Z"
+commit: "0bd95016091d7a0998f345fc45759f219f6ada34"
 ---
 
 # The proxy hands each finished exchange to the memory ledger

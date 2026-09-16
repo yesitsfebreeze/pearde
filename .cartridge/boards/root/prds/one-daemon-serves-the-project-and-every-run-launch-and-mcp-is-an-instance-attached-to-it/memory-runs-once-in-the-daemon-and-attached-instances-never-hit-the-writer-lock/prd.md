@@ -1,5 +1,5 @@
 ---
-state: "analyzing"
+state: "done"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge/memory.ctg"
@@ -7,9 +7,8 @@ capability-owner: memory
 needs:
 - "one-daemon-serves-the-project-and-every-run-launch-and-mcp-is-an-instance-attached-to-it/an-instance-attaches-to-the-daemon-and-never-composes-silently"
 footprint:
-- "src/"
 - ".cartridge/tests/unit/src/cartridge/engine_test.rs"
-claim: "coordinator-cartridge-1b-2 2026-09-16T10:50:34.794Z"
+commit: "1351865eb0e787cf819456aaa201c18eacf74406"
 ---
 
 # Memory runs once in the daemon and attached instances never hit the writer lock
@@ -41,7 +40,7 @@ This child mostly verifies the shape rather than changing memory itself:
 
 ## Acceptance
 
-- [ ] memory.ctg's share of "exactly one memory node, no `another memory
+- [x] memory.ctg's share of "exactly one memory node, no `another memory
       writer holds this data dir`": the cartridge takes the writer lock once in
       `Engine::open` and holds it for the node's lifetime, a second local
       service over the same data dir is refused with that exact message and
@@ -50,12 +49,12 @@ This child mostly verifies the shape rather than changing memory itself:
       `an-instance-attaches-to-the-daemon-and-never-composes-silently` and
       re-proven composed by
       `the-composed-acceptance-test-proves-one-daemon-one-node-per-cartridge-and-attached-instances`.)
-- [ ] Two callers of the one node see one store: the writer serves ingest,
+- [x] Two callers of the one node see one store: the writer serves ingest,
       query and ledger from a single `Engine`, and a second service that would
       have been the "other instance" gets no engine of its own to diverge in.
       (The cross-instance `ingest`-then-`query` round trip belongs to the
       composed test.)
-- [ ] The condensing loop belongs to the writer: `spawn_ledger` is called from
+- [x] The condensing loop belongs to the writer: `spawn_ledger` is called from
       exactly one place, the end of `Engine::open`, after the lock is taken and
       into an `Engine` that holds it — so a service refused the lock, and an
       attached service, run no condensing pass.
@@ -90,3 +89,29 @@ Three coordinator edits to the record:
   would mean adding an owning-pid field, a production change this child's body
   explicitly scopes out. If an operator-visible "who is condensing" is wanted
   later, it is its own PRD.
+
+## Planning note, second entry
+
+2026-09-16, coordinator cartridge-1b, after verifier-1. `src/` was **dropped
+from the footprint**, leaving exactly the one file this PRD changes.
+
+The reason is a landing hazard the verifier measured, not tidiness. A peer is
+mid-way through vendoring `evidence.rs` into memory.ctg: `Cargo.lock`,
+`src/cartridge/Cargo.toml`, `src/cartridge/src/lib.rs`, `src/cartridge/src/source.rs`,
+an untracked `src/cartridge/src/evidence.rs` and `.cartridge/tests/unit/src/cartridge/source.rs`
+are all uncommitted. With `src/` in the footprint, `collect` would have swept the
+three `src/cartridge` files and `evidence.rs` into this receipt while leaving
+`Cargo.lock` and the peer's test file outside it — committing a manifest without
+its lockfile and `pub mod evidence;` without its test. That is worse than either
+landing the peer's work whole or not touching it at all.
+
+The plan never needed `src/`: this PRD's finding was that memory's single-writer
+shape is already correct, so the spec's own footprint has always been the single
+test file, and `feet()` unions the PRD's and the spec's footprints. Nothing this
+PRD asserts about `src/` requires permission to write there.
+
+Box 3 carries one residual from the verifier: the *"after the lock is taken"*
+clause is not independently falsifiable — moving `store::lock::acquire` below
+`spawn_ledger` compiles and keeps both the guard and the test green. The
+call-site-count, end-of-`Engine::open` and holds-the-lock clauses are each
+falsifiable and were falsified.

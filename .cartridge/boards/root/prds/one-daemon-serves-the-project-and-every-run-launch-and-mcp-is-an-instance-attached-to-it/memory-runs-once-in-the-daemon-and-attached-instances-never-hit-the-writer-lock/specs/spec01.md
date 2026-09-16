@@ -79,7 +79,13 @@ the data dir's lock, would pass the whole suite today. This spec pins it.
    `test_support::spawn_http`. Prototype in `attempt-1.patch`, which passes
    unmodified against `src/`:
    - A local service ingests; assert its engine is open and
-     `store::lock::observe(&dir) == Held`.
+     `store::lock::observe(&dir) == Held`, then `query` it back for `Cedar` —
+     ingest, query and ledger all off the one engine, which is what box 2 says
+     (review round 1, finding 4). The `query` goes here, right after the ingest,
+     not after the refusal: placed late it becomes a second victim of the
+     process-wide `SHUTTING_DOWN` static below (observed `19 passed; 2 failed`,
+     `"shutting down: the daemon refused this request"`), and the package
+     baseline has to stay 20/1.
    - A **second** local `Service` over the same dir, called on the ledger path
      the proxy uses (`{"op":"ledger","action":"status"}`): the error contains
      `another memory writer holds this data dir`, and
@@ -98,7 +104,7 @@ the data dir's lock, would pass the whole suite today. This spec pins it.
 
 ## Acceptance
 
-- [ ] memory.ctg's share of "exactly one memory node, no
+- [x] memory.ctg's share of "exactly one memory node, no
       `another memory writer holds this data dir`": the cartridge takes the
       writer lock once in `Engine::open` and holds it for the node's lifetime, a
       second local service over the same data dir is refused with that exact
@@ -108,12 +114,12 @@ the data dir's lock, would pass the whole suite today. This spec pins it.
       `an-instance-attaches-to-the-daemon-and-never-composes-silently` and
       re-proven composed by
       `the-composed-acceptance-test-proves-one-daemon-one-node-per-cartridge-and-attached-instances`.)
-- [ ] Two callers of the one node see one store: the writer serves ingest, query
+- [x] Two callers of the one node see one store: the writer serves ingest, query
       and ledger from a single `Engine`, and a second service that would have
       been the "other instance" gets no engine of its own to diverge in. (The
       cross-instance `ingest`-then-`query` round trip runs through cartridge.ctg's
       host attach, not through memory.ctg, and belongs to the composed test.)
-- [ ] The condensing loop belongs to the writer: `spawn_ledger` is called from
+- [x] The condensing loop belongs to the writer: `spawn_ledger` is called from
       exactly one place, the end of `Engine::open`, after the lock is taken and
       into an `Engine` that holds it — so a service refused the lock, and an
       attached service, run no condensing pass. (`{"op":"ledger","action":"status"}`
@@ -128,18 +134,32 @@ the data dir's lock, would pass the whole suite today. This spec pins it.
 # ../../../memo.ctg/evidence, which resolves to a sibling of the checkout.
 [ -d ../memo.ctg ] || ln -sfn "${MEMO_CTG:-/Users/feb/dev/cartridge/memo.ctg}" ../memo.ctg
 export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$PWD/target/memory-one-writer-verify}"
+mkdir -p "$CARGO_TARGET_DIR"
 cargo test -p memory_cartridge --lib \
-  a_second_local_service_is_refused_and_the_attached_one_never_asks_for_the_writer
+  a_second_local_service_is_refused_and_the_attached_one_never_asks_for_the_writer \
+  2>&1 | tee "$CARGO_TARGET_DIR/one-writer.log"
+# A filter that names a missing, renamed or #[ignore]d test exits 0 with
+# "running 0 tests"; only the summary proves this test ran (finding 2).
+# (`--exact` would need the `engine_tests::` module path and filters everything
+# out without it — the summary grep is what makes the block non-vacuous.)
+grep -q 'test result: ok\. 1 passed; 0 failed' "$CARGO_TARGET_DIR/one-writer.log"
 ```
 
 ```sh
 # The writer is taken once, in Engine::open, and held for the node's lifetime.
+test -f src/commands/src/memory.rs
 grep -q '_writer: store::WriterLock,' src/commands/src/memory.rs
 grep -q 'store::lock::acquire(&cfg.data_dir, "cartridge memory")' src/commands/src/memory.rs
-# The condensing loop exists in exactly one file, and only Engine::open starts it.
-test "$(grep -rl spawn_ledger src --include=*.rs | wc -l | tr -d ' ')" = 1
+# The condensing loop has exactly one CALL SITE in the repo — a file count would
+# pass a second `spawn_ledger(...)` added inside memory.rs — and that call site
+# is the last statement of Engine::open. Every guard here is positive: `set -e`
+# ignores a `!`-prefixed command, so `! grep ...` can never fail a block.
+test "$(grep -rn 'spawn_ledger(' src --include=*.rs | grep -vc 'fn spawn_ledger(')" = 1
+grep -A1 'spawn_ledger(&server);' src/commands/src/memory.rs | grep -q 'Ok(Self {'
 # The attached shape still exists and the regression that pins it is present.
+test -f src/cartridge/src/lib.rs
 grep -q 'ServiceConfig::Attached' src/cartridge/src/lib.rs
+test -f .cartridge/tests/unit/src/cartridge/engine_test.rs
 grep -q 'a_second_local_service_is_refused_and_the_attached_one_never_asks_for_the_writer' \
   .cartridge/tests/unit/src/cartridge/engine_test.rs
 ```

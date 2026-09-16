@@ -133,13 +133,19 @@ test('the memory outbox replays once per pending acknowledgment however many ins
 });
 test('a second apply is refused, so one process serves from exactly one service', async () => {
   const node = await program([process.execPath, path.resolve(import.meta.dir, '../../src/service.ts')], line => {
+    if (line.publish) return null; // the job's own command.* events, fanned out node-wide; not an ask
     if (line.bail === 'memory') return { items: [] };
     throw Error('unexpected ask ' + JSON.stringify(line));
   });
+  const ask = (op: string, args: string[] = []) => node.call('prd', { op: 'call', context: context(), input: { op, args } });
   try {
-    expect(await node.call('apply', { root })).toBeNull();
-    await expect(node.call('apply', { root })).rejects.toThrow('cartridge is already applied');
-    // The refusal neither replaced nor closed the one service: it still serves.
-    expect((await node.call('prd', { op: 'call', context: context(), input: { op: 'scan' } })).error).toBe(false);
+    expect(await node.call('apply', { root, adapter: 'unused' })).toBeNull();
+    const started = value(await ask('run', ['--dry']));
+    await expect(node.call('apply', { root, adapter: 'unused' })).rejects.toThrow('cartridge is already applied');
+    // The refusal neither replaced nor closed the one service. A replacement would carry a fresh
+    // instance id, so the job the first one journalled would read interrupted here — and a fresh
+    // empty deliveries map, so the outbox single-flight would be gone with it.
+    expect(value(await ask('status', [started.job_id])).state).not.toBe('interrupted');
+    expect((await ask('scan')).error).toBe(false);
   } finally { await node.close(); }
 }, 10000);

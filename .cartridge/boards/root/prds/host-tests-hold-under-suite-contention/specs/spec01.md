@@ -53,22 +53,52 @@ is fixed at HEAD 655beb6; its remaining live part is folded in here.
       three consecutive runs with the suite in parallel, with and without
       `CARTRIDGE_YOLO=1` in the caller's environment.
 
-## Verify and Proof
+## Verify
+
+The PRD's repo is the superproject, so collection runs these blocks with cwd
+`/Users/feb/dev/cartridge`. That is a specced leaf collected without a lane.
+The engine allows 120 s per block, so each gate run gets its own block.
 
 ```sh
-cd /Users/feb/dev/cartridge
-git -C cartridge.ctg status --porcelain   # clean before starting
-just check cartridge                      # expect exit 0
-CARTRIDGE_YOLO=1 just test cartridge      # expect exit 0
-CARTRIDGE_YOLO=1 just test cartridge      # 2nd consecutive run
-CARTRIDGE_YOLO=1 just test cartridge      # 3rd consecutive run
-just test cartridge                       # and once without the variable
-grep -n nextest cartridge.ctg/justfile   # the gate recipe
-grep -rn 'set_var("CARTRIDGE_HOME"' cartridge.ctg/.cartridge/tests
-  # every site now runs in its own test process
-(cd cartridge.ctg && cargo test --workspace)  # plain in-process run still green
+test -z "$(git -C cartridge.ctg status --porcelain)"
 ```
 
-The lsp `pkill -f "cartridge daemon"` report from another session concerns
-another repo's tests and is outside this footprint; nothing here kills
-daemons by name.
+```sh
+just check cartridge
+```
+
+```sh
+CARTRIDGE_YOLO=1 just test cartridge
+```
+
+```sh
+CARTRIDGE_YOLO=1 just test cartridge
+```
+
+```sh
+CARTRIDGE_YOLO=1 just test cartridge
+```
+
+```sh
+env -u CARTRIDGE_YOLO just test cartridge
+```
+
+```sh
+grep -q 'nextest run --workspace' cartridge.ctg/justfile
+```
+
+```sh
+cd cartridge.ctg && cargo test --workspace
+```
+
+## Proof
+
+Landed as cartridge.ctg `bceb644` ("Isolate host tests: one test per process
+and CARTRIDGE_HOME guards"): `justfile`, `.cartridge/tests/unit/src/cli/setup.rs`
+and `.cartridge/tests/unit/src/tests/settings.rs`.
+
+Coordinator revision 2026-09-16 (cartridge-c4). The earlier single proof block
+chained five suite runs, which is past the 120 s limit for one block, and it did
+not fail on a dirty tree. It is split into one block per gate, and the tree must
+be clean first. The CARTRIDGE_HOME grep is an inspection step and doesn't need
+a block.

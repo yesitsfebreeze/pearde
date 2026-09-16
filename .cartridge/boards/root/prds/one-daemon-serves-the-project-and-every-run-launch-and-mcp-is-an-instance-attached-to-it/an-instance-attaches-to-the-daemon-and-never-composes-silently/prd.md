@@ -1,5 +1,5 @@
 ---
-state: "specced"
+state: "done"
 origin: requested
 priority: 90
 repo: "/Users/feb/dev/cartridge"
@@ -15,6 +15,7 @@ footprint:
 - "cartridge.ctg/docs/development.txt"
 - "cartridge.ctg/README.md"
 - ".cartridge/tests/integration/takeover.test.ts"
+commit: "f364f46f77c2f84345fe4cc5850c6182c0754568"
 ---
 
 # An instance attaches to the daemon and never composes silently
@@ -84,19 +85,19 @@ so no test kills daemons by process name.
 
 ## Acceptance
 
-- [ ] A `run`/`call` whose socket keeps erroring past the takeover grace
+- [x] A `run`/`call` whose socket keeps erroring past the takeover grace
       reports the error and starts no host or node process.
-- [ ] No `run` issued during `daemon --replace` starts a host of its own; a
+- [x] No `run` issued during `daemon --replace` starts a host of its own; a
       `run` started after the replacement is staged answers from the new host.
-- [ ] A daemon whose project root is removed exits within ~6 s; removing and
+- [x] A daemon whose project root is removed exits within ~6 s; removing and
       restoring `init.lua` leaves it serving.
-- [ ] A second `cartridge daemon` on the same project exits non-zero without
+- [x] A second `cartridge daemon` on the same project exits non-zero without
       removing or replacing the first's socket, and the first still serves.
-- [ ] A fallback host or losing daemon exiting does not delete a live
+- [x] A fallback host or losing daemon exiting does not delete a live
       daemon's `host.sock` (verified by the published socket's identity).
-- [ ] Two instances started concurrently with no daemon end up sharing one
+- [x] Two instances started concurrently with no daemon end up sharing one
       daemon (matches parent Acceptance box 4).
-- [ ] One stop command is documented and works; no new code kills daemons by
+- [x] One stop command is documented and works; no new code kills daemons by
       process name.
 
 ## Planning note

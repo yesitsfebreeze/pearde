@@ -146,17 +146,17 @@ An out-of-process tool reaches the project's host with `cartridge run <event>
 
 ## Acceptance
 
-- [ ] `cartridge run` against a socket that keeps erroring exits non-zero,
+- [x] `cartridge run` against a socket that keeps erroring exits non-zero,
       names the socket, and starts no host or node.
-- [ ] A second or racing `cartridge daemon` exits non-zero; the first's socket
+- [x] A second or racing `cartridge daemon` exits non-zero; the first's socket
       inode is unchanged and it still serves.
-- [ ] A losing daemon's exit leaves the winner's `host.sock`.
-- [ ] Two `run` instances with no daemon leave one composed host.
-- [ ] No `run` issued during `daemon --replace` starts a host or node of its
+- [x] A losing daemon's exit leaves the winner's `host.sock`.
+- [x] Two `run` instances with no daemon leave one composed host.
+- [x] No `run` issued during `daemon --replace` starts a host or node of its
       own; every `run` started after the replacement is staged exits 0.
-- [ ] A daemon whose project root is removed exits within ~6 s; removing and
+- [x] A daemon whose project root is removed exits within ~6 s; removing and
       restoring `init.lua` leaves it serving.
-- [ ] `cartridge stop` and the pid recovery are documented in
+- [x] `cartridge stop` and the pid recovery are documented in
       `docs/development.txt`; no test or tool code kills daemons by name.
 
 ## Verify and Proof

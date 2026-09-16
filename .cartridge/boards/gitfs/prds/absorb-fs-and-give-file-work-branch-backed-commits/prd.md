@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/fs.ctg
-state: open
+state: "analyzing"
 origin: requested
 priority: 50
 blast-radius: wide
@@ -11,6 +11,7 @@ needs:
 - "@gitfs/absorb-fs-and-give-file-work-branch-backed-commits/merge-fs-source-into-gitfs-with-no-behavior-change"
 - "@gitfs/absorb-fs-and-give-file-work-branch-backed-commits/branch-backed-file-tools-with-an-overlay-worktree-mode"
 - "@gitfs/absorb-fs-and-give-file-work-branch-backed-commits/roll-back-a-session-change-by-rewinding-the-branch"
+claim: "coordinator-main 2026-09-16T06:48:21.142Z"
 ---
 
 # One fs cartridge whose file work commits to Git branches
@@ -27,7 +28,15 @@ cartridge is out of the composition; its sources, tests and docs live in fs.
 
 - [x] The composition loads one `fs` cartridge serving read/write/edit/search/glob/grep/digest/draft, `tool.gitfs` and `tool.ship`; `gitfs` is gone from `.cartridge/init.lua` and the gate owner lists.
 - [x] Each leaf's acceptance holds with the fs suite: `just check fs` and `just test fs` pass (109 tests).
-- [ ] Attributed agent review >= 90 with no blockers.
+- [x] Attributed agent review >= 90 with no blockers.
+
+## Review
+
+93/100, no blocking findings, 2026-09-16. The reviewer independently reran
+`just check fs` and `just test fs` (109 passed) and grepped the composition
+clean of gitfs. One recorded note: fs inherits gitfs's wildcard `exec: ["*"]`
+and `net: ["*"]` grants — a consolidation of grants the composition already
+carried, not an escalation; push may later narrow `net` to remote scopes.
 
 ## Proof and recovery
 

@@ -1,8 +1,9 @@
 ---
-state: "open"
+state: "analyzing"
 origin: requested
 priority: 60
 repo: "/Users/feb/dev/cartridge/memory.ctg"
+claim: "claude-main 2026-09-16T08:16:27.642Z"
 ---
 
 # The cold tier scales past a linear scan

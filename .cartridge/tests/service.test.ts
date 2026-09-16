@@ -131,3 +131,15 @@ test('the memory outbox replays once per pending acknowledgment however many ins
   expect((await service.rememberVerified(board, two, proof)).status).toBe('committed');
   expect(ingests).toBe(1);
 });
+test('a second apply is refused, so one process serves from exactly one service', async () => {
+  const node = await program([process.execPath, path.resolve(import.meta.dir, '../../src/service.ts')], line => {
+    if (line.bail === 'memory') return { items: [] };
+    throw Error('unexpected ask ' + JSON.stringify(line));
+  });
+  try {
+    expect(await node.call('apply', { root })).toBeNull();
+    await expect(node.call('apply', { root })).rejects.toThrow('cartridge is already applied');
+    // The refusal neither replaced nor closed the one service: it still serves.
+    expect((await node.call('prd', { op: 'call', context: context(), input: { op: 'scan' } })).error).toBe(false);
+  } finally { await node.close(); }
+}, 10000);

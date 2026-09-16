@@ -25,12 +25,12 @@ Lane prerequisites: `../memo.ctg` (path dep `evidence`) resolves via the lane's 
 
 ## Acceptance
 
-- [ ] `cargo test --test slim` passes: a named ring call on a failed tool-using run (a tool result `error:true`, or `run_finished.phase = "failed"` even when every tool succeeded) yields exactly one ingest per call, one line `slim failed turn <session> <run>: <tools> -> <closing statement>`, returned by the fixture bank's `query`.
-- [ ] The same test asserts zero ingests for a run whose tools all succeeded and whose run did not fail, a tool-free failed run, `slim = false`, empty `memory`, and a ring call without `session`/`run`, whose reply key set is exactly `{finished,kept,distilled,errors}`.
-- [ ] The same test asserts a refused ingest returns an Ok ring reply carrying `slim.error` alongside the sweep keys, and that `slim` is absent whenever no distillation was attempted.
-- [ ] `cartridge.json` declares `slim` as a boolean defaulting to true (python check below).
-- [ ] `cargo fmt --all -- --check` and `cargo clippy --all-targets -- -D warnings` pass (what `just check harness` runs via `.cartridge/memos/routine/cartridge-development.md`).
-- [ ] Every Verify block passes in both collection passes, in the lane and again in `/Users/feb/dev/cartridge/harness.ctg`, with cargo writing only to the isolated `target/slim-verify` target so the live `target/debug/libharness.dylib` is never rebuilt.
+- [x] `cargo test --test slim` passes: a named ring call on a failed tool-using run (a tool result `error:true`, or `run_finished.phase = "failed"` even when every tool succeeded) yields exactly one ingest per call, one line `slim failed turn <session> <run>: <tools> -> <closing statement>`, returned by the fixture bank's `query`.
+- [x] The same test asserts zero ingests for a run whose tools all succeeded and whose run did not fail, a tool-free failed run, `slim = false`, empty `memory`, and a ring call without `session`/`run`, whose reply key set is exactly `{finished,kept,distilled,errors}`.
+- [x] The same test asserts a refused ingest returns an Ok ring reply carrying `slim.error` alongside the sweep keys, and that `slim` is absent whenever no distillation was attempted.
+- [x] `cartridge.json` declares `slim` as a boolean defaulting to true (python check below).
+- [x] `cargo fmt --all -- --check` and `cargo clippy --all-targets -- -D warnings` pass (what `just check harness` runs via `.cartridge/memos/routine/cartridge-development.md`).
+- [x] Every Verify block passes in both collection passes, in the lane and again in `/Users/feb/dev/cartridge/harness.ctg`, with cargo writing only to the isolated `target/slim-verify` target so the live `target/debug/libharness.dylib` is never rebuilt.
 
 Note, not a box: after collection the owner gates `just check harness` and `just test harness` from `/Users/feb/dev/cartridge` are the post-integration check.
 

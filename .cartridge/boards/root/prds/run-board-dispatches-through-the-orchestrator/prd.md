@@ -14,6 +14,7 @@ footprint:
 - "prd.ctg/src/process.ts"
 - "prd.ctg/.cartridge/adapters"
 needs:
+- "@prd/consolidate-planning-in-prd"
 - the-repository-answers-by-text
 ---
 

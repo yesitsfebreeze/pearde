@@ -7,6 +7,8 @@ footprint:
   - "src/retrieval"
   - "src/graph"
   - "src/base"
+needs:
+- "@memory/a-vector-carries-the-model-that-made-it"
 ---
 
 # The cold tier scales past a linear scan

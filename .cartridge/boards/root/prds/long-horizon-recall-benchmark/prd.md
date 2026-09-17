@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge
-state: deferred
+state: "open"
 deferred-from: open
 deferred-on: "2026-09-15"
 origin: requested

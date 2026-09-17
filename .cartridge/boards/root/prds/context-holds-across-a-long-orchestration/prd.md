@@ -13,6 +13,7 @@ footprint:
 - "harness.ctg"
 - "live.ctg/src/ring.ts"
 needs:
+- "long-horizon-recall-benchmark"
 - the-repository-answers-by-text
 ---
 

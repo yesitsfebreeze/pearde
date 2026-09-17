@@ -1,8 +1,15 @@
 ---
-state: "deferred"
+state: "open"
 origin: requested
 priority: 70
 repo: "/Users/feb/dev/cartridge/memory.ctg"
+footprint:
+  - "src/base/src/base_types.rs"
+  - "src/graph/src/persist.rs"
+  - "src/store/core/src/lib.rs"
+  - "src/retrieval/piece/src/retrieval_query.rs"
+  - "src/health/src/lib.rs"
+  - "src/commands/src/commands_check.rs"
 ---
 
 # A vector carries the model that made it

@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/prd.ctg
-state: deferred
+state: "open"
 deferred-from: claimed
 deferred-on: "2026-09-15"
 origin: requested
@@ -10,6 +10,10 @@ workflow: develop-one-cartridge
 capability-owner: prd
 work-kind: leaf
 description: "Consolidate PeaRDe planning, records and orchestration into one independent PRD cartridge"
+footprint:
+  - "src"
+  - ".cartridge/tests"
+  - ".cartridge/scripts"
 ---
 
 # Planning belongs to PRD

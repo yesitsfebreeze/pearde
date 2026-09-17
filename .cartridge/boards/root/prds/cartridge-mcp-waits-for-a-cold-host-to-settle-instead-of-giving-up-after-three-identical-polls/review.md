@@ -167,3 +167,525 @@ Rounds used / remaining: 1 / 4.
 Next action: bounded revision — make every run of the box-1 fixture genuinely cold, restate
 the baseline as probabilistic with the independent measurement, tighten the `tools/list`
 assertion, and name the two accepted costs (findings 2-5); then re-review in round 2.
+
+## Round 3 — 2026-09-17
+
+Record note: this file holds Round 1 only. A round-2 revision was presented and
+reviewed (the PRD's Planning note and spec01 both cite round-2 findings and an
+analyst-2 re-measurement of 31 failures in 108 cold runs), but no Round 2 section
+was ever appended here. The count is not reset: this is **round 3 of 5**, and the
+round-2 result is recorded as missing rather than invented.
+
+Presented revision: root `bfb1cf9`, `cartridge.ctg` `63ff234` with 18 dirty files
+from other sessions (among them `src/cli/host.rs`, +44/−1, the `stop_when_idle` /
+`--idle-timeout` work). The superproject index holds another session's staged
+rename `.cartridge/tools/pi-voice -> .cartridge/tools/live`.
+
+| Input | Content digest |
+| --- | --- |
+| Plan | `prds/<slug>/prd.md` — sha256 `b109b09fa3428391f3ea0d2c50b7e08019c4ed225e30fb8f05d249784db068b3` |
+| Specs | `prds/<slug>/specs/spec01.md` — sha256 `e842e9070cbdb048e36553786b602f8ec011c2a1c16c9b36afb796d7a77294b1` |
+| Prototype | `.state/loop/<slug>/attempt-1.patch` — sha256 `1a1e56f95817cf6f6b8b88577641251ddcc304681fd9e538ce103c325ce0f273` (unchanged from round 1) |
+| Material source | `cartridge.ctg/src/cli/host.rs` (working tree, dirty) — sha256 `bde3cb1d4a85c76611d60448ccf136a9a1c5db6cdc694e84a86f28c57b0eb14e` |
+| Material source | `cartridge.ctg/.cartridge/tests/unit/stdio.rs` — sha256 `d131b2bbd4a8c77127a513b5a2ce31336ddd7e02724aaa60c32e9b0552da5927` |
+| Material contracts | `prd.ctg/src/lifecycle.ts` (block limit `120_000` ms, `cap: 65536`, `cleanIndex`, `assertFootprint`), `prd.ctg/src/planner.ts:5-9` (`feet` = PRD footprint ∪ spec footprints), `.cartridge/justfile` `_fan`/`_one`, `.cartridge/tests/integration/takeover.test.ts` |
+
+### Verification performed (independent)
+
+**The behaviour is genuinely absent from the working tree.** At the dirty tree the
+spec's own line numbers are exact: `pub(crate) async fn attach(project: &Project)`
+at `cartridge.ctg/src/cli/host.rs:59`, `settle_remote(&found.0,
+settings.verify_timeout())` at `:74`, `async fn settle_remote(...)` at `:182`,
+`if stable >= 3 && !empty { return; }` at `:215`. Reading the loop confirms the
+spec's structural claim: the only path that returns *while a cartridge is still
+`starting`/`waiting`* is the `stable >= 3` shortcut, because the other early exit
+is guarded by `!starting && !empty`.
+
+**The unit-test home exists and is already wired.**
+`cartridge.ctg/.cartridge/tests/unit/stdio.rs` exists (1767 bytes), is included by
+`#[path = "../../.cartridge/tests/unit/stdio.rs"] mod stdio_tests;` at
+`src/cli/host.rs:493-494`, and already holds the pure `untrusted` test
+(`only_trust_refusals_prompt_an_attach_reload`) over a synthetic status of exactly
+the shape `settled` will read. No new file and no new module wiring is needed, as
+the spec says. `cargo test --bin cartridge -- --list` prints the module path as
+`cli::host::stdio_tests::<name>`, so block 2's fixed-string
+`grep -qF "stdio_tests::$case ... ok"` matches as a substring; and the bin carries
+16 unit tests today, so the filter `settled_` selecting exactly four and
+`test result: ok. 4 passed` is consistent.
+
+**Verify blocks, run by me from `/Users/feb/dev/cartridge`, exit codes observed:**
+
+| Block | Command | Exit | Elapsed |
+| --- | --- | ---: | ---: |
+| 1 | source guards | **1** — "settle_remote still ends the wait on three identical polls" | <1 s |
+| 2 | `cargo test --locked … --bin cartridge -- settled_` | **1** — "unit case settled_when_the_key_is_active did not run" (`0 passed; 16 filtered out`) | <1 s (warm target) |
+| 3 | `just check cartridge` | **0** | 3 s |
+| 4 | `just test cartridge` | **0** — 176 tests run, 176 passed | 12 s |
+| 5 | `just test lifecycle` | **0** — 13 pass, 0 fail, 852 expect() | 47 s |
+
+Blocks 1 and 2 both discriminate an unimplemented tree, which is what the round-1
+blocking finding asked for. Block 4's stdout is 20 813 bytes, inside the engine's
+65 536-byte cap.
+
+**No block rebuilds or restarts the live daemon.** Every cargo invocation exports
+`CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$PWD/target/cartridge-mcp-waits-verify}"`
+(the template's own form; round 1's unconditional-assignment deduction is
+resolved), and `--locked` now prevents the `Cargo.lock` refresh round 1 warned
+about. `target/` is git-ignored at the repo root (`.gitignore:2:/target/`; checked
+with `git check-ignore -v`). Observed across blocks 3, 4 and 5: the project daemon
+pid stayed `71453` throughout, no `*.ctg/target/debug` directory and no `*.dylib`
+anywhere in the composition was written in the window, and `git -C cartridge.ctg
+status --porcelain` still reports the same 18 files. `just check cartridge` and
+`just test cartridge` resolve through `.cartridge/memos/routine/cartridge-development.md`'s
+`runtime|cartridge)` arm to `cartridge.ctg/justfile`, so `cargo fmt --all --check`,
+`cargo clippy --workspace --all-targets` and `cargo nextest run --workspace` all
+land in the isolated directory.
+
+**One inter-block dependency the spec does not state, verified working.** Block 5
+is `bun test .cartridge/tests/integration/takeover.test.ts`, which resolves its
+binary as `${CARGO_TARGET_DIR}/debug/cartridge` and throws "Build the runtime
+first" if it is absent; it never builds. I moved that binary aside and re-ran
+block 4: `cargo nextest run --workspace` uplifted it back, so the bin target is in
+nextest's build graph and block 4 satisfies block 5's precondition. The ordering
+holds, but nothing in the spec says block 5 depends on block 4 having run.
+
+**The gate is not host-free, and the spec undersells itself.** spec01 states the
+blocks "deliberately do not launch a host". Block 5 launches many: `takeover.test.ts`
+runs 13 real daemon lifecycles under scratch roots with two tiny cartridges, and
+among them `two runs with no daemon share one` (`:303`) is a genuine **cold**
+`cartridge run` pair through the changed `attach` → `settle_remote`, asserting
+exit 0. `a run against a socket that errors reports it and starts nothing` (`:259`)
+and `a run during --replace starts no host of its own` (`:316`) exercise the same
+path. This is smaller-composition cold-start coverage than the round-2 fixture,
+but it is not nothing, and it is already inside the gate at 47 s.
+
+**Timing margin.** The engine limit is `timeout: 120_000` ms per block
+(`prd.ctg/src/lifecycle.ts:45`), and with no lane each block runs **once**, not
+twice, so the two-pass concern does not apply here. My 47 s for block 5 reproduces
+the analyst's 47 s exactly: 2.55× margin on the longest block, and block 5 compiles
+nothing, so that figure does not depend on this machine's `rustc-wrapper = "kache"`.
+Blocks 3 and 4 do depend on it when the target directory is cold — and the
+pre-warm command the spec prints warms the wrong thing (see finding 3).
+
+**Footprint.** `feet(prd)` (`prd.ctg/src/planner.ts:5-9`) is the union of prd.md's
+footprint and every spec's, so it is `{cartridge.ctg, cartridge.ctg/src/cli/host.rs,
+cartridge.ctg/.cartridge/tests/unit/stdio.rs}` — the spec's narrowing to two files
+does **not** narrow the effective footprint, because prd.md still carries the whole
+submodule. From the superproject, `git status --porcelain=v1 --untracked-files=all --`
+over all three paths reports exactly one entry, ` M cartridge.ctg` (the gitlink):
+collect cannot see inside the submodule at all, so whatever the submodule HEAD
+holds is what the receipt certifies.
+
+**Collect is blocked for an unrelated reason, not scored here.** `cleanIndex`
+(`prd.ctg/src/lifecycle.ts:103-105`) throws on any staged path repository-wide, and
+the superproject index holds another session's `R100 .cartridge/tools/pi-voice ->
+.cartridge/tools/live`. That is environmental and is not counted against this spec.
+
+### The central judgement: is the unit gate sufficient proof?
+
+**Yes for the Outcome, and demoting the 15-run fixture is the better engineering —
+but it is not sufficient for PRD acceptance box 2, which round 3 left with no
+proof path at all.** Argued from the dimensions, not from taste:
+
+1. *Test validity (dimension 4).* The defect is "the wait ends while cartridges are
+   still starting". In the code at `:182-219` the **only** path that can do that is
+   `stable >= 3`; every other exit is guarded by `!starting`. Block 1 proves that
+   path is gone and block 2 proves the replacement decision answers `false` for a
+   status whose key is `starting`. That is a property over all executions. The
+   round-2 fixture was a *sample*: round 1 measured the per-cold-run failure rate at
+   5 of 8, analyst-2 at 31 of 108, so 15 runs detect an unpatched tree with roughly
+   99 % confidence — strictly weaker than a structural proof, and weaker in the
+   other direction too, since a patched tree that trips on load or on a missing
+   sibling dylib fails the collect for reasons that are not this change.
+2. *Baseline evidence is preserved, not lost.* review-plan.md step 2 asks that a
+   suspected defect be reproduced in a disposable fixture — it was, twice, and the
+   measurements survive in prd.md and in spec01's defect section. The fixture's job
+   was to establish that the behaviour is absent; that job is done and does not need
+   redoing on every later collect of this repository.
+3. *The residual blind spot does not reach the Outcome.* Unit cases feed `settled`
+   synthetic `Value`s, so they cannot prove the real daemon emits `state`/`listen`
+   in the shape `settled` reads. But if that read were wrong, `settled` would simply
+   never match the key and the loop would fall through to "nothing left starting and
+   non-empty" — which is strictly **stronger** than the deleted `stable >= 3`
+   shortcut and is exactly the wait the measured race skipped. The Outcome survives
+   the worst unit-test blind spot. That is why unit cases suffice *here*, and it is
+   the reason to state: for a change whose correctness depended on the field read,
+   they would not.
+4. *Where it is genuinely insufficient.* PRD acceptance box 2 — "fails within the
+   documented startup deadline with a message naming the missing listener" — is now
+   gated by nothing. spec01 restates it as acceptance box 3 and gates that with a
+   single `grep` for `tokio::time::timeout(left, …)`, which proves a line exists, not
+   that the failure path is bounded or that the message names `mcp`. Round 2 carried
+   a deterministic untrusted-composition probe for exactly this, which round 1
+   measured passing in 1.6 s and 2.0 s — about 3.6 s of gate. Round 3 discarded it
+   together with the expensive probabilistic fixture. Dropping a cheap deterministic
+   check because an expensive flaky one had to go is an over-correction, and it
+   leaves one of three PRD acceptance boxes with neither a Verify block nor a named
+   receipt obligation (the receipt obligation covers only the cold-start count).
+
+So: not a blocking loss of evidence for the cold-start Outcome. A blocking gap for
+the failure-path acceptance box.
+
+| Dimension | Score / 20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 18 | Real first-MCP-client failure on a fresh project; one outcome, one owner; round 1's finding 2 is resolved — the baseline is now stated as probabilistic (31 of 108) in both prd.md and spec01, with the independent measurement beside the analyst's; the smoke-fixture workaround is correctly left to a follow-up PRD rather than widened into this footprint. −2: "The Verify blocks … deliberately do not launch a host" is false — block 5 launches 13 daemon lifecycles including a genuinely cold `run` pair (`takeover.test.ts:303`), which I observed passing in 47 s. The spec misstates its own scope, against itself. |
+| Ownership and reuse | 19 | Owner `runtime`; one guard in the shared function repairs `run`, `launch` and `mcp` together rather than four call-site patches; reuses the already-`#[path]`-wired `.cartridge/tests/unit/stdio.rs` (verified: wired at `host.rs:493-494`, already home to a pure test over the same status shape) instead of a new file or module; reuses the existing `listen` field, no new RPC and no new setting; `verify_timeout()` left to its three in-process callers; explicitly declines a shared helper for two three-line readers. −1: round 1's deduction stands unaddressed — `Host::settled` (`src/host/run.rs:12`), the in-process sibling that is the reason this fix need not touch `run`/`verify`, is still never named. |
+| Dependencies and implementable slices | 15 | One source file plus one test file; prototype attached and applies clean; overlap with `@root/an-attach-gives-up-…` disclosed with a defensible order and an in-footprint wrapper; the no-lane landing shape matches the engine (I confirmed `feet`, `cleanIndex` and `assertFootprint`); round 1's `CARGO_TARGET_DIR`-form and `Cargo.lock` deductions are resolved by the `${…:-…}` form and `--locked`. −4 (blocking, finding 1): the landing step cannot execute in the tree the spec itself describes — the other session's 44 uncommitted lines are in `src/cli/host.rs`, the same file. −1 (finding 3): the printed pre-warm command warms only the bin's test target while blocks 3 and 4 need `clippy --workspace --all-targets` and `nextest run --workspace`. |
+| Observable acceptance and baseline evidence | 15 | Block 1 exits 1 on the live tree and every guard discriminates; block 2 exits 1 on the live tree (`0 passed; 16 filtered out`, caught by the explicit per-case check — the "a filter that matches nothing also exits 0" comment is right and the guard is right); the `stdio_tests::` substring form matches real cargo output; blocks 3, 4 and 5 exit 0 at 3 s, 12 s and 47 s. The structural argument in "What is gated and what is not" is sound and, for the measured defect, stronger than a 15-run sample. −4 (blocking, finding 2): PRD acceptance box 2 has no Verify block and no receipt obligation; the cheap deterministic untrusted-composition probe from round 2 was discarded along with the expensive fixture. −1: the source guards forbid `stable >= 3` by name only; an implementer could satisfy all nine patterns and still add a different early return inside the loop, which block 2's four cases over the pure predicate would not see. |
+| Failure, recovery and compatibility | 16 | Round 1's finding 4 is resolved: the accepted cost (an unserved key plus something stuck `starting`/`waiting` now waits to `startup_timeout_secs` where it used to return in ~300 ms) is named, with the correct argument that trust-refused compositions go `failed` and settle at once. Isolation verified rather than trusted: daemon pid `71453` unchanged across blocks 3-5, no `*.ctg/target/debug` or `*.dylib` written, submodule dirty set unchanged, `target/` git-ignored at `.gitignore:2`. Margin 47 s of 120 s on the longest block, which compiles nothing and so does not rest on the `kache` wrapper; the build-cache assumption is named for the blocks that do. −2: "Footprint narrowed to `src/cli/host.rs` and `.cartridge/tests/unit/stdio.rs`" describes the spec's footprint, not `feet(prd)` — prd.md still carries `cartridge.ctg`, so the guard covers the whole submodule and, from the superproject, resolves to the single gitlink entry ` M cartridge.ctg`; collect can neither exclude foreign submodule content from the receipt nor keep a later submodule commit by any session from turning this PRD's receipt into "verified source footprint changed after collection". −2: block 5's dependence on block 4 having uplifted `${CARGO_TARGET_DIR}/debug/cartridge` is unstated (I verified it holds), and the failure mode if it ever did not is a hard "Build the runtime first" at collect time. |
+| Reviewer total | **83** / 100 | FAIL: below 90, two blocking findings. |
+
+### Findings and concrete revisions
+
+1. **BLOCKING — the landing step cannot execute in the tree the spec describes.**
+   Evidence: `git -C cartridge.ctg diff --stat -- src/cli/host.rs` is `44 insertions(+),
+   1 deletion(-)` of another session's `stop_when_idle` / `--idle-timeout` work, in
+   the same file this change edits, plus 17 other dirty files in the submodule. The
+   spec names those 44 lines twice (to justify its line numbers) and never names them
+   as a landing hazard. Neither route it offers works: the prescribed clean worktree
+   of `cartridge.ctg` produces a clean commit that `git merge --ff-only` will refuse
+   to fast-forward into the live submodule while `src/cli/host.rs` is locally
+   modified there; and committing from the live checkout carries the foreign 44 lines
+   into the same submodule commit, which `feet(prd)` cannot exclude because from the
+   superproject the whole footprint collapses to one gitlink entry. Recommendation:
+   one paragraph in "Landing shape" that states the precondition — the submodule's
+   `src/cli/host.rs` must be clean before the fast-forward, so this PRD lands after
+   the idle-timeout work commits (or its owner commits it first) — and says
+   explicitly that a hunk-level commit is not an acceptable substitute. This is not
+   the staged-rename blocker, which is environmental; this one is inside the spec's
+   own "Landing shape" section. Resolution: pending round 4.
+2. **BLOCKING — PRD acceptance box 2 has no proof path.** Evidence: the five Verify
+   blocks gate the source structure, the four unit cases and the three repository
+   gates; none exercises the failure path, and the "Cold-start evidence remains the
+   implementer's obligation" paragraph names only the 0-of-15 cold-start count.
+   spec01's acceptance box 3 covers box 2 with a grep for a single line, which proves
+   the line exists, not that a composition that never serves the key fails inside
+   `host.startup_timeout_secs` naming the missing listener. Round 2 had a
+   deterministic block for this and round 1 measured it passing in 1.6 s and 2.0 s.
+   Recommendation: restore that one block (a trust-refused or key-less composition,
+   asserting a non-zero exit inside the deadline whose stderr names `mcp`) — it is
+   ~4 s of gate and it is not probabilistic — or, if it must stay out of the blocks,
+   add it to the receipt obligation beside the 0-of-15 count. Resolution: pending
+   round 4.
+3. **The printed pre-warm command warms the wrong target set.** Evidence: the spec
+   prints `cargo test --locked … --bin cartridge --no-run`, which builds only the
+   bin's test target; block 3 runs `cargo clippy --workspace --all-targets` and block
+   4 runs `cargo nextest run --workspace`, both far larger. On a host without this
+   machine's `rustc-wrapper = "kache"` the pre-warm would leave exactly the blocks it
+   is meant to protect facing a cold dependency build inside 120 s. Recommendation:
+   `CARGO_TARGET_DIR=… cargo nextest run --locked --manifest-path
+   cartridge.ctg/Cargo.toml --workspace --no-run`. Non-blocking. Resolution: pending.
+4. **State block 5's precondition.** `takeover.test.ts` resolves
+   `${CARGO_TARGET_DIR}/debug/cartridge` and throws rather than building. I verified
+   block 4 uplifts it (moved the binary aside, re-ran block 4, it came back), so the
+   order works — but one sentence in the engine-facts comment saying block 5 consumes
+   what block 4 built would keep a future reordering from failing at collect time.
+   Non-blocking. Resolution: pending.
+5. **Correct "deliberately do not launch a host", and claim the credit.** Block 5
+   launches 13 real daemon lifecycles under scratch roots, including a genuinely cold
+   `cartridge run` pair with no daemon (`takeover.test.ts:303`), through the changed
+   `attach`. That is live cold-start coverage of a two-cartridge composition already
+   inside the gate; saying otherwise understates the evidence and misdescribes what
+   the blocks do. Non-blocking. Resolution: pending.
+6. **Consider narrowing prd.md's footprint.** `feet(prd)` unions prd.md's footprint
+   with the specs', so the spec's two-file narrowing is inert while prd.md lists
+   `cartridge.ctg`. Recorded as an observation, not a required revision: from the
+   superproject the whole footprint collapses to the `cartridge.ctg` gitlink either
+   way, so narrowing prd.md changes nothing the engine checks, and every superproject
+   PRD over a submodule shares the property. Worth one sentence so the spec does not
+   claim protection it does not have. Non-blocking.
+7. **Endorsed as written, no change needed** (carried forward from round 1 and
+   re-checked here): the `startup_timeout()` move and the reading of
+   `verify_timeout()`'s three callers; `key: &str` threaded through all four call
+   sites; the deletion of `stable`/`last` and the argument that a pure `settled` makes
+   the regression unrepresentable rather than merely absent; the local
+   `tokio::time::timeout(left, …)` wrapper and "ship both, this one first"; the
+   no-lane landing shape; `--locked` and the `${CARGO_TARGET_DIR:-…}` form; the
+   explicit `if grep -qF …; then exit 1; fi` negative guards (no inert `! grep`); and
+   the decision to demote the 15-cold-start fixture to an implementer's probe, which
+   this round endorses on the merits above.
+
+Disposition: **keep and revise.** The round-1 blocking finding is decisively
+resolved and the central judgement goes the author's way — the structural gate is
+better proof of the Outcome than the fixture it replaced. Two narrow, cheaply fixed
+gaps block: a landing step that cannot run in the tree it names, and one PRD
+acceptance box with no proof path.
+
+### Validation
+
+All commands run by this reviewer from `/Users/feb/dev/cartridge`, with the exit
+codes observed.
+
+| cwd | command | exit / result |
+| --- | --- | --- |
+| repo | `git rev-parse HEAD` / `git -C cartridge.ctg rev-parse HEAD` | 0 — `bfb1cf9`, `63ff234` |
+| repo | `git -C cartridge.ctg status --porcelain` | 0 — 18 modified files, `src/cli/host.rs` among them |
+| repo | `git -C cartridge.ctg diff --stat -- src/cli/host.rs` | 0 — `44 insertions(+), 1 deletion(-)` |
+| repo | `grep -n` for the four defect anchors in `src/cli/host.rs` | `:59`, `:74`, `:182`, `:215` — all as the spec states |
+| repo | Verify block 1 (source guards), verbatim, `sh -eu` | **1** — "settle_remote still ends the wait on three identical polls" |
+| repo | Verify block 2 (unit cases), verbatim, `sh -eu` | **1** — `0 passed; 16 filtered out`, then "unit case settled_when_the_key_is_active did not run" |
+| repo | `cargo test --locked --manifest-path cartridge.ctg/Cargo.toml --bin cartridge -- --list` | 0 — names print as `cli::host::stdio_tests::<name>` |
+| repo | Verify block 3 (`just check cartridge`) | **0**, 3 s |
+| repo | Verify block 4 (`just test cartridge`) | **0**, 12 s, 176 tests run / 176 passed, 20 813 bytes of stdout |
+| repo | Verify block 5 (`just test lifecycle`) | **0**, 47 s, 13 pass / 0 fail / 852 expect() |
+| repo | binary moved aside, Verify block 4 re-run | **0** — `${CARGO_TARGET_DIR}/debug/cartridge` uplifted back; block 5's precondition is satisfied by block 4 |
+| repo | `pgrep` for the project daemon before and after blocks 3, 4, 5 | pid `71453` unchanged throughout |
+| repo | `find` for `*.ctg/target/debug` and `*.dylib` written in the window | no match — no live dylib touched, no hot restart |
+| repo | `git check-ignore -v target/cartridge-mcp-waits-verify` | 0 — `.gitignore:2:/target/` |
+| repo | `git status --porcelain=v1 -uall -- cartridge.ctg cartridge.ctg/src/cli/host.rs cartridge.ctg/.cartridge/tests/unit/stdio.rs` | 0 — one entry, ` M cartridge.ctg` (the gitlink) |
+| repo | `git diff --cached --name-status` | 0 — `R100 .cartridge/tools/pi-voice -> .cartridge/tools/live`, which `cleanIndex` refuses; environmental, not scored |
+| repo | read `prd.ctg/src/lifecycle.ts:45`, `:103-105`, `:128-175`; `prd.ctg/src/planner.ts:5-9` | block limit 120 000 ms, `cap: 65536`, repository-wide staged-path refusal, `feet` = PRD ∪ spec footprints |
+| repo | read `.cartridge/tests/integration/takeover.test.ts:1-140`, `:303-316` | binary resolved from `CARGO_TARGET_DIR`, never built; scratch roots and `XDG_RUNTIME_DIR`; a cold two-`run` case with no daemon |
+
+Limits and isolation: no `prd` transition operation, no `git add`, no commit, no
+push, no stash, no edit to any spec or to `prd.md`; no other session's uncommitted
+work was touched. The only mutation was moving
+`target/cartridge-mcp-waits-verify/debug/cartridge` aside and letting block 4
+restore it, inside a git-ignored scratch target directory created for this PRD's
+verification. Every block script was extracted verbatim from `spec01.md` into a
+private scratchpad subdirectory.
+
+Reviewer identity: independent reviewer agent (round-3 reviewer, Claude Opus 5).
+User rating: not required under delegation; none supplied.
+User feedback/provenance: none for this revision.
+Result: **FAIL (83/100)**.
+Unresolved blocking findings: finding 1 — the landing step cannot execute while the
+other session's 44 uncommitted lines sit in `cartridge.ctg/src/cli/host.rs`;
+finding 2 — PRD acceptance box 2 (bounded failure naming the missing listener) has
+neither a Verify block nor a named receipt obligation.
+Rounds used / remaining: 3 / 2.
+Next action: bounded revision — state the landing precondition for the dirty
+`src/cli/host.rs`, restore a deterministic failure-path block (or add it to the
+receipt obligation), fix the pre-warm command, state block 5's precondition, and
+correct "deliberately do not launch a host"; then re-review in round 4.
+
+## Round 4 — 2026-09-17
+
+Presented revision: root `bfb1cf9`, `cartridge.ctg` `63ff234` with the same 18
+dirty files from other sessions. `prd.md` is byte-identical to the revision
+round 3 scored; only `specs/spec01.md` changed.
+
+| Input | Content digest |
+| --- | --- |
+| Plan | `prds/<slug>/prd.md` — sha256 `b109b09fa3428391f3ea0d2c50b7e08019c4ed225e30fb8f05d249784db068b3` (unchanged from round 3) |
+| Specs | `prds/<slug>/specs/spec01.md` — sha256 `89a12fadf82a6f43abff05d4192231eaccd113edd44e6863ec6510126f661b1a` |
+| Prototype | `.state/loop/<slug>/attempt-1.patch` — sha256 `1a1e56f95817cf6f6b8b88577641251ddcc304681fd9e538ce103c325ce0f273` (unchanged) |
+| Material source | `cartridge.ctg/src/cli/host.rs` (working tree, dirty) — sha256 `bde3cb1d4a85c76611d60448ccf136a9a1c5db6cdc694e84a86f28c57b0eb14e` |
+| Material contracts | `cartridge.ctg/src/host/socket.rs:47-66` (socket base and per-descriptor tag), `cartridge.ctg/src/host/mod.rs:805-849` (`NotProvided` vs `Unavailable`), `cartridge.ctg/src/host/run.rs:11` (`Host::settled`), `prd.ctg/src/planner.ts:5-9`, `prd.ctg/src/lifecycle.ts:45` |
+
+### The six blocks, run by me from `/Users/feb/dev/cartridge`
+
+| Block | What it is | Exit | Elapsed |
+| --- | --- | ---: | ---: |
+| 1 | source guards, now with the `awk` return count | **1** — "settle_remote still ends the wait on three identical polls" | <1 s |
+| 2 | `cargo test … --bin cartridge -- settled_` | **1** — `0 passed; 16 filtered out`, then "unit case … did not run" | <1 s |
+| 3 | `just check cartridge` | **0** | 1 s |
+| 4 | `just test cartridge` | **0** — 176 tests run, 176 passed | 13 s |
+| 5 | failure path, new | **0** — JSON-RPC error −32603, message "`mcp` is not provided", then "the missing mcp listener was named in 2s, inside the 60 s startup deadline" | 2 s |
+| 6 | `just test lifecycle` | **0** — 13 pass, 0 fail, 819 expect() | 48 s |
+
+Every author-reported exit code reproduced. Longest block 48 s against the
+engine's `timeout: 120_000` (`prd.ctg/src/lifecycle.ts:45`), and with no lane each
+block runs once.
+
+**Block 1 is satisfiable as well as discriminating — verified, not assumed.**
+Because this is the last round I built an independent patched reference rather
+than trusting the author's: `git -C cartridge.ctg archive 63ff234` of the two
+footprint files into a scratch tree, `attempt-1.patch` applied, then step 3's fold
+done by hand (`serves` renamed to `settled` with the `starting`/`empty` computation
+moved inside it and out of the loop) and the four unit cases appended to
+`stdio.rs`. Block 1 against that tree: **exit 0, "source guards ok"**. So the nine
+greps and the new `awk` guard are all satisfiable by a natural implementation of
+the spec's own steps. The `awk` count is 3 on the live tree and 2 on the reference,
+exactly as the author reports; round 3's −1 on this point is closed. The grep'd
+`tokio::time::timeout(left, peer.call("status", Value::Null))` sits on a single
+93-character line in the reference, inside rustfmt's 100-column limit, so block 3's
+`cargo fmt --all --check` cannot reflow it out from under block 1.
+
+**Daemon safety, verified three ways rather than accepted.** Across all six
+blocks: the project daemon pid stayed `71453`; its socket directory
+`/tmp/cartridge-501/69a3b8e0c7a1/71453/` still holds the same 24 entries; no
+`*.ctg/target/debug` directory and no `*.dylib` in the composition was written;
+`git -C cartridge.ctg status --porcelain` still reports 18 files. After block 5 no
+scratch daemon survives — its trap's `stop` works. The live daemon is genuinely
+never reached.
+
+**But not by the mechanism the spec claims** (finding 3 below). Block 5's comment
+says it takes "A runtime directory of its own, as takeover.test.ts does".
+`cartridge.ctg/src/host/socket.rs:47-55` honours `XDG_RUNTIME_DIR` only when
+`<dir>/cartridge` is **shorter than 48 characters**; here `mktemp -d` returns
+`/var/folders/_p/…/T/tmp.GVpAWpwZGA`, 63 characters, 73 with the suffix, so the
+filter drops it and `base()` falls back to `/tmp/cartridge-501` — the same base the
+live daemon uses. I watched the directory count there go 887 → 888 across block 5.
+`takeover.test.ts:15` is *not* the same: it uses `fs.mkdtempSync("/tmp/ctgrt-")`,
+17 characters, 27 with the suffix, which is honoured. What actually keeps block 5
+off the live daemon is `tag(descriptor)` (`socket.rs:64-66`), 12 hex characters of
+the project path hash, which is per-project and cannot collide. Safe, but not what
+it says, and on a Linux collect host (short `TMPDIR`) the block would isolate by a
+different mechanism than it does here.
+
+**The failure-path block does what the finding asked.** Block 5's fixture declares
+`listen: ["mcp"]` and fails at load, and I observed each asserted clause hold:
+`"listen":["mcp"]` and `"state":"failed"` in `status`, an `"error"` object rather
+than a tool list, the name `mcp` in it, and 2 s against the 60 s bound. It is
+deterministic, compiles nothing, and consumes the binary block 4 uplifts. It does
+**not** discriminate a patched tree from an unpatched one — I ran it against the
+live unpatched binary and it passed — and the spec says exactly that in the block's
+own comment. That is the right division of labour: blocks 1 and 2 discriminate the
+fix, block 5 guards the accepted cost of deleting the shortcut.
+
+**On the message string — the PRD needs no correction.** I traced both paths.
+`Host::sender` (`src/host/mod.rs:805-807`) returns `Error::NotProvided` when the
+event is not in the *active* directory at all, whose Display is
+``  `mcp` is not provided `` (`src/error/mod.rs:31`), and that is block 5's
+composition, where the only cartridge failed. `Host::bail`
+(`src/host/mod.rs:840-849`) returns `Error::Unavailable { why: "no active listener" }`
+when the event *is* in the directory with an empty listener set, and that is the
+cold-start composition the PRD's Outcome quotes. Two different compositions, two
+different correct messages. PRD Acceptance box 2 says "a message naming the missing
+listener" and quotes nothing, so it is accurate as written and block 5 asserts
+precisely that clause. **Do not change the PRD body.** What is missing is one
+sentence in spec01 (finding 4), because a reader comparing the receipt's
+`` `mcp` is not provided `` against the Outcome's quoted string would otherwise
+think the fixture reproduces the defect.
+
+**Round-3 items checked off.** The pre-warm command now names the target set
+blocks 3 and 4 really build (`nextest run --workspace --no-run`, spec01:279-283).
+The block ordering is stated accurately (`:284-290`), including that neither block 5
+nor block 6 compiles and that both fail loudly with the binary's path — block 5's
+`test -x "$bin"` and `takeover.test.ts`'s throw both do. The false "deliberately do
+not launch a host" is replaced by an accurate account (`:157-171`) naming
+`takeover.test.ts:303`, `:259` and `:316`; I confirmed all three exist and that
+`:303` is a genuinely cold `cartridge run` pair. The standing round-1 deduction is
+also closed: "Why only the CLI path changes" (`:71-77`) now names `Host::settled`
+and explains why it needs no change — I confirmed at `src/host/run.rs:11` that it
+is a lifecycle-event wait with no poll shortcut (the spec cites `:12`, off by one).
+
+### Blocker 1: does a precondition the implementer cannot satisfy answer the finding?
+
+**Yes — accepted, and the finding is resolved.** Not because the obstacle is gone;
+because this is everything a plan is permitted to do about it.
+
+1. review-plan.md's own Fails-when row for a plan that is not executable as written
+   prescribes "Resolve **or present the disposition** before continuing." Presenting
+   the disposition is an authorised outcome of the method, not an evasion of it.
+2. Every route that would let the implementer satisfy the precondition himself is
+   one this repository forbids: no stash, no revert, no partial commit of another
+   session's lines. The 44 lines are user-owned, and the coordinator confirmed
+   independently that no live peer session owns them. A plan cannot be marked down
+   for declining the only actions available to it when those actions are prohibited
+   — the alternative would be a plan that instructs the implementer to do something
+   the rules forbid, which is strictly worse.
+3. What a plan *can* do, this one now does. Step 0 (`:102-105`) makes
+   `git -C cartridge.ctg status --porcelain -- src/cli/host.rs` an executable first
+   step with a defined stop-and-report; the "Landing hazard" section (`:191-226`)
+   names both failing routes exactly as I found them — the ff-only refusal and the
+   gitlink collapse, cited to `prd.ctg/src/planner.ts:5-9` — rules out `git add -p`
+   with a reason (it produces a submodule tree nobody built or gated, and the
+   receipt would certify it), and names the remedy's owner. That converts a latent
+   trap into a gate. It is a behavioural change, not prose.
+4. Consistency. The staged superproject rename blocks collect today and is not
+   scored against this spec because it is environmental. The dirty `host.rs` is the
+   same kind of fact, and the spec now handles it more carefully than the rename is
+   handled anywhere on this board.
+
+The distinction the coordinator should carry forward: **the plan is ready; the
+landing waits on an external event.** Those are different states, and the review
+gate scores the first.
+
+| Dimension | Score / 20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 19 | Real, user-visible first-MCP-client failure; one outcome, one owner; the baseline stays honestly probabilistic (31 of 108). Round 3's −2 is resolved: "What is gated and what is not" (`:157-171`) now states what the blocks really do, names the cold-start coverage already inside the gate at `takeover.test.ts:303`/`:259`/`:316`, and restates the true property as "no block touches the live project daemon" — which I verified. −1: spec01 still does not say that its own block-5 fixture answers `` `mcp` is not provided `` rather than the string the PRD's Outcome quotes, so the collect receipt will not match the PRD at a glance. |
+| Ownership and reuse | 20 | Owner `runtime`; one guard in the shared function repairs `run`, `launch` and `mcp` together; reuses the already-wired `stdio.rs` unit module, the existing `listen` field and the existing `explain` reader; no new file, module, RPC or setting; `verify_timeout()` left to its three in-process callers; a shared helper declined with a reason. The standing round-1 deduction is now closed by `:71-77`, which names `Host::settled` (`src/host/run.rs:11`, verified: a lifecycle-event wait with no poll shortcut) and explains why `settle_remote` exists separately at all. Nothing left to deduct. |
+| Dependencies and implementable slices | 19 | Round 3's blocking finding 1 is resolved by Step 0 plus "Landing hazard" (see above). The pre-warm command is corrected to the target set blocks 3 and 4 actually build. The block ordering is written down and matches what I established experimentally last round. One source file plus one test file, prototype attached, overlap disclosed with a defensible order, no-lane shape matching the engine. −1: block 5's isolation mechanism is platform-dependent and inert here (`socket.rs:53`'s 48-character filter against a 73-character path), so a collect on a short-`TMPDIR` host and a collect on this one isolate by different mechanisms — the same portability trap the spec is careful about elsewhere for `rustc-wrapper = "kache"`. |
+| Observable acceptance and baseline evidence | 19 | Round 3's blocking finding 2 is resolved: every acceptance box now has a gate, and I ran all six. Block 1 exits 1 on the live tree **and exits 0 on a patched reference I folded myself from the prototype**, so the gate is satisfiable as well as discriminating; the new `awk` guard reads 3 live and 2 patched, closing round 3's −1 about a differently spelled early return. Block 2 exits 1 on the live tree. Block 5 exits 0 in 2 s with every asserted clause observed. Blocks 3, 4 and 6 exit 0. −1: block 5 gates the `failed` half of the accepted cost — the half the spec itself says returns at once — and not the `starting`-forever half that actually spends the 60 s; gating that would cost a 60 s block to prove intended behaviour, so the omission is proportionate but it is an omission. `grep -qF 'mcp'` is also a weak naming assertion for a three-letter string, adequate only because it is paired with the `"error"` assertion. |
+| Failure, recovery and compatibility | 18 | The accepted cost is named and now gated. Isolation verified rather than trusted: pid `71453` unchanged across all six blocks, the live socket directory unchanged at 24 entries, no `*.ctg/target/debug` or `*.dylib` write, the submodule's dirty set unchanged at 18, `target/` git-ignored, no scratch daemon left alive. Margin 48 s of 120 s on the longest block, which compiles nothing. The footprint's real reach is now stated honestly (`:221-226`: the two-file list "is an honest statement of what the implementer touches, not a protection the engine enforces"), closing round 3's finding 6. −1: the stated isolation mechanism is wrong (finding 3) — safe in effect, but the third time across rounds that a claim the spec makes about its own blocks does not survive measurement. −1: block 5 leaves a socket directory under the shared `/tmp/cartridge-501` base on every collect (887 → 888 here), and `returns=$(awk … \| grep -c 'return;')` under `sh -eu` exits the block silently when the count is 0, losing its own diagnostic — it fails closed, so it is hygiene rather than risk. |
+| Reviewer total | **95** / 100 | PASS: at or above 90, no blocking findings. |
+
+### Findings
+
+Both round-3 blockers are resolved. Nothing below blocks.
+
+1. **Resolved — the landing step.** Step 0 (`:102-105`) and "Landing hazard"
+   (`:191-226`). Accepted as an authorised disposition for the reasons argued above.
+   The precondition is unmet today: `git -C cartridge.ctg status --porcelain --
+   src/cli/host.rs` prints ` M src/cli/host.rs`. The implementer must stop at Step 0
+   until the owner of the `stop_when_idle` / `--idle-timeout` work commits it.
+2. **Resolved — PRD box 2 has a proof path.** Block 5 (`:367-406`), observed exit 0
+   in 2 s with every clause asserted and holding.
+3. **Non-blocking — the block-5 isolation comment is false on this platform.**
+   `spec01:382-383` and `:291-295` claim an `XDG_RUNTIME_DIR` "of its own, as
+   takeover.test.ts does". `cartridge.ctg/src/host/socket.rs:47-55` drops
+   `XDG_RUNTIME_DIR` unless `<dir>/cartridge` is under 48 characters; `mktemp -d`
+   here yields 73, so the host falls back to the shared `/tmp/cartridge-501` base
+   (directory count 887 → 888 across the block). `takeover.test.ts:15` avoids this
+   by using a short `/tmp/ctgrt-` prefix. Isolation still holds through
+   `tag(descriptor)` (`socket.rs:64-66`), and I verified the live daemon is
+   untouched, so this is an accuracy fix, not a safety one. Smallest change:
+   `rt=$(mktemp -d /tmp/ctgmcp-XXXXXX)` in block 5, and reword the two comments to
+   say the separation is per-descriptor, with the short runtime directory as
+   belt-and-braces.
+4. **Non-blocking — name the message block 5 actually produces.** One sentence
+   beside block 5: this composition answers `` `mcp` is not provided ``
+   (JSON-RPC −32603, `src/error/mod.rs:31`) rather than the Outcome's
+   ``service `mcp` unavailable: no active listener``, because the failed cartridge
+   leaves the event out of the active directory entirely
+   (`src/host/mod.rs:805-807`) while a *starting* one leaves it present with no
+   listener (`:840-849`). The PRD body is correct and needs no edit.
+5. **Non-blocking — two hygiene nits.** `returns=$(awk … | grep -c 'return;')`
+   exits the block with no diagnostic when the count is 0 (`|| true` after `grep -c`
+   restores the message; it already fails closed, so this is cosmetic). And
+   `Host::settled` is at `src/host/run.rs:11`, not `:12`.
+6. **Endorsed as written**, re-checked this round: the `startup_timeout()` move; the
+   `key: &str` threading; the deletion of `stable`/`last` and the unrepresentability
+   argument; the `tokio::time::timeout(left, …)` wrapper and "ship both, this one
+   first"; the no-lane landing shape; `--locked` and the `${CARGO_TARGET_DIR:-…}`
+   form; the explicit `if grep -qF …; then exit 1; fi` negative guards; the demotion
+   of the 15-cold-start fixture to an implementer's probe with the receipt
+   obligation retained; and the division of labour between the discriminating blocks
+   (1 and 2) and the accepted-cost gate (5).
+
+Disposition: **keep — ready to implement.** Two preconditions stand outside the
+plan and outside this score, and the coordinator should hold both in view:
+`cartridge.ctg/src/cli/host.rs` must be clean before Step 1, and the superproject
+index must be free of the staged `.cartridge/tools/pi-voice -> .cartridge/tools/live`
+rename before `prd collect` will run at all (`prd.ctg/src/lifecycle.ts:103-105`).
+
+### Validation
+
+| cwd | command | exit / result |
+| --- | --- | --- |
+| repo | Verify block 1 (with the new `awk` guard), verbatim | **1** — "settle_remote still ends the wait on three identical polls" |
+| scratch reference | Verify block 1, verbatim, against `63ff234` + `attempt-1.patch` + step 3's fold + the four unit cases, all applied by me | **0** — "source guards ok" |
+| repo | `awk '/^async fn settle_remote\(/{b=1} b&&/^\}/{b=0} b' … \| grep -c 'return;'` | 0 — **3** live, **2** on the reference |
+| repo | Verify block 2, verbatim | **1** — `0 passed; 16 filtered out` |
+| repo | Verify block 3 (`just check cartridge`) | **0**, 1 s |
+| repo | Verify block 4 (`just test cartridge`) | **0**, 13 s, 176/176 |
+| repo | Verify block 5 (failure path), verbatim | **0**, 2 s — `{"error":{"code":-32603,"message":"…is not provided"},"id":2,"jsonrpc":"2.0"}` |
+| repo | Verify block 6 (`just test lifecycle`) | **0**, 48 s, 13 pass / 819 expect() |
+| repo | `pgrep` for the project daemon before and after every block | pid `71453` throughout |
+| repo | `ls /tmp/cartridge-501/69a3b8e0c7a1/71453/ \| wc -l` before and after | 24 → 24 |
+| repo | `ls -d /tmp/cartridge-501/*/ \| wc -l` around block 5 | 887 → **888** — block 5's host used the shared base, not `$XDG_RUNTIME_DIR` |
+| repo | `mktemp -d` length check against `socket.rs:53`'s 48-character filter | 63 chars, 73 with `/cartridge` — the filter drops it |
+| repo | `find` for `*.ctg/target/debug` and `*.dylib` written in the window | no match |
+| repo | `git -C cartridge.ctg status --porcelain \| wc -l` after the full run | 18, unchanged |
+| repo | `pgrep -fl cartridge` after block 5 | no scratch daemon survives; only pid `71453` and unrelated sessions' clients |
+| repo | read `src/host/mod.rs:795-855`, `src/error/mod.rs:31`, `src/host/run.rs:8-20`, `src/host/socket.rs:40-75` | `NotProvided` vs `Unavailable` paths, `Host::settled`, socket base and per-descriptor tag |
+
+Limits and isolation: no `prd` transition operation, no `git add`, no commit, no
+push, no stash, no edit to `prd.md` or to any spec, and no other session's
+uncommitted work touched. Writes were confined to a private scratchpad
+subdirectory and to the git-ignored `target/cartridge-mcp-waits-verify`; the
+patched reference tree was built from `git archive` and never written back.
+
+Reviewer identity: independent reviewer agent (round-4 reviewer, Claude Opus 5).
+User rating: not required under delegation; none supplied.
+User feedback/provenance: none for this revision.
+Result: **PASS (95/100)**.
+Unresolved blocking findings: none.
+Rounds used / remaining: 4 / 1.
+Next action: proceed to implementation. Hold at Step 0 until
+`git -C cartridge.ctg status --porcelain -- src/cli/host.rs` prints nothing, and
+clear the staged superproject rename before attempting `prd collect`. Findings 3-5
+are one-line corrections that can ride along with the implementation rather than
+consuming the last round.

@@ -1,9 +1,10 @@
 ---
-state: "open"
+state: "claimed"
 origin: requested
 priority: 90
 repo: "/Users/feb/dev/cartridge/live.ctg"
 footprint: ["src/**", ".cartridge/**", "cartridge.json", "init.lua"]
+claim: "coordinator-8e-voice-1 2026-09-17T00:34:09.114Z"
 ---
 
 # Voice runs headless on the microphone
@@ -21,16 +22,16 @@ gated while speech plays — off the shared `Playback` clock
 
 ## Acceptance
 
-- [ ] Enabling voice starts capture and a session; disabling it stops both and
+- [x] Enabling voice starts capture and a session; disabling it stops both and
       the session, **measured** — `stop_voice` joins the audio thread rather
       than setting a flag and returning — and no capture or playback stream
       outlives it.
 - [x] Transcripts and delegations from the session land in the same store the
       WebRTC path used.
-- [ ] The manifest grants what the code actually needs (`"audio": true`, and
+- [x] The manifest grants what the code actually needs (`"audio": true`, and
       `exec` only for what is genuinely spawned), and a device-open failure
       surfaces as a readable voice error in `state`, not only in `status`.
-- [ ] A test drives the service against a fake transport and fake audio
+- [x] A test drives the service against a fake transport and fake audio
       devices, with each clause failing in the world it denies — no in-process
       stand-in that cannot fail.
 
@@ -139,3 +140,61 @@ replaced; and cross-test pollution was observed for real during validation, whic
 is why both sync tests take the lock and why the risk is named in the spec.
 
 Next coordinator: review this spec before `specced`.
+
+## Takeover (2026-09-17, coordinator cartridge-2e)
+
+The claim `coordinator-8e-voice-1` belongs to session `cartridge-8e`, which is
+no longer listed by `ListAgents`; the claim was over six hours old when this
+session checked. Its implementer died without writing a report, leaving 486
+uncommitted lines across `src/audio.rs`, `src/service.rs` and `src/socket.rs`
+in the lane at base `f808262`, with no commit on the lane branch.
+
+The lane and the claim are kept rather than released, because releasing to
+`failed` would require removing the lane to re-claim, and the lane holds the
+only copy of that work. A fresh implementer from this session resumes inside
+the same lane and commits there. Landing is unchanged and still parked: the
+live `live.ctg` checkout carries another session's uncommitted work in
+`src/service.rs`, `src/store.rs`, `cartridge.json`, `init.lua`,
+`.cartridge/help.md` and `.cartridge/docs/README.md`, all inside this PRD's
+footprint, so `collect` would sweep it. Collect when that tree is clean.
+
+## Verification (2026-09-17, coordinator cartridge-2e, from verifier-1)
+
+An independent verifier — not the author, not the implementer — reran every
+Verify block and gate against lane commit `95ee13a`. Observed: block 1 exit 0
+with `16 passed; 0 failed` and all four named tests printing `... ok`; block 2
+exit 0 with `grant.exec == what src spawns == ['tmux']`; `cargo clippy
+--all-targets -- -D warnings` exit 0; `cargo fmt --check` exit 0. The diff is
+exactly `src/audio.rs`, `src/service.rs`, `src/socket.rs`, 486 insertions, with
+`Cargo.toml` untouched. Boxes 1, 3 and 4 are ticked on that evidence.
+
+Two things the verifier established that the evidence does not cover, recorded
+rather than glossed:
+
+1. `just check live` and `just test live` both exit 0, but they say nothing
+   about this lane. `just test live` runs 13 tests out of
+   `live.ctg/target/debug/...` — a different set that contains none of the four
+   named tests and two the lane does not have. They establish only that the
+   destination is green.
+2. Box 2 was already ticked before this work and is left ticked. Its transcript
+   half is verified here (the fixture sends `session.output_transcript.delta`
+   and the test polls `state` until the fragment lands). Its **delegation** half
+   has no test in this lane; the nearest green test predates this work and only
+   exercises `spoken()` reading the store. spec01 never claimed delegations, so
+   this is a gap in the box's original evidence, not a regression. Whoever next
+   touches this fixture owes it a delegation assertion.
+
+### Correction to spec01's mutation table
+
+The verifier re-derived the table independently. Rows M1 and M5 are wrong as
+written: the literal mutations they describe fail to **compile** under
+`warnings = "deny"` (`field 'thread' is never read`, `unused variable: 'error'`)
+rather than failing a test, and a tree that will not build proves no test
+guards anything. The recorded splits are reproducible only from the behavioural
+forms — `drop(self.thread.take())` gives 14 passed / 2 failed on exactly the two
+stop-measurement tests, each `left: [] right: ["speaker", "microphone"]`, and
+`error.filter(|_| false)` gives 15 / 1. M2, M3, M4, G1, G3 and G4 each
+reproduced their recorded exit code and split exactly. The table's conclusions
+stand; two of its rows describe an edit that would not have produced them.
+spec01 discloses this compile-versus-test hazard in prose for a sixth mutation
+but not for these two.

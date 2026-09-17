@@ -1,5 +1,5 @@
 ---
-state: "open"
+state: "specced"
 origin: requested
 priority: 75
 repo: "/Users/feb/dev/cartridge"
@@ -93,3 +93,18 @@ Ship both, this one first.
 **Landing shape:** superproject PRD with a submodule footprint, so it collects
 with **no lane** — a superproject lane worktree leaves submodules empty and
 Verify pass 1 cannot build there.
+
+**Round 3 (2026-09-17, analyst-1): the defect is still present and the gate
+changed shape.** Re-read from the shared dirty checkout (`cartridge.ctg`
+`63ff234` plus unrelated uncommitted idle-timeout work): `attach` still takes no
+key (`src/cli/host.rs:59`), the settle still runs on `verify_timeout()` (`:74`)
+and `if stable >= 3 && !empty { return; }` is intact (`:215`). The fix is
+unchanged. What changed is spec01's Verify: the round-2 15-cold-start `bun`
+fixture — which builds the host binary and two dylibs inside 120 s blocks, spawns
+fifteen daemons and assumes a `rustc-wrapper` cache that is not in this repo — is
+demoted to the implementer's one-off probe, and the gate becomes a source-pinned
+grep plus four unit cases over a new **pure** `settled(status, key)` predicate.
+With no `stable`/`last` state left, a repeated identical picture cannot end the
+wait by construction rather than by measurement. Footprint narrowed to
+`src/cli/host.rs` and `.cartridge/tests/unit/stdio.rs`. The three repository
+gates were observed to exit 0 on the dirty tree in 4 s, 18 s and 47 s.

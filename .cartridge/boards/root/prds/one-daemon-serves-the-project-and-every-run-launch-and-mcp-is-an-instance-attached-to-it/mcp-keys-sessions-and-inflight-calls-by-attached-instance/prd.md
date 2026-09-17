@@ -64,6 +64,64 @@ sessions and separate in-flight calls, while the node itself exists once.
       `the-composed-acceptance-test-proves-one-daemon-one-node-per-cartridge-and-attached-instances`,
       which is still `open` — that re-proof has not landed yet.
 
+## Landing blocker (observed 2026-09-17, coordinator cartridge-fa)
+
+The work is written but unlanded, and three separate facts in the shared
+checkout keep it that way.
+
+1. The implementation exists only as two commits no branch points to:
+   `mcp.ctg` `ad9a28e` "Key every client's session and in-flight calls by
+   attached instance" (on `345871e`, touching `src/service.rs`, `src/lib.rs`,
+   `cartridge.json`, `.cartridge/tests/unit/tests.rs` and a new
+   `.cartridge/tests/integration/instances.test.ts`), and `cartridge.ctg`
+   `f445f60` "Name the instance every mcp bridge speaks for" (on `04aae7f`,
+   16 lines in `src/cli/host.rs`). A duplicate of the mcp commit exists as
+   `7a72f42`; the two differ only in `instances.test.ts`. None of this is in
+   either submodule's working tree: `mcp.ctg/src/service.rs` contains no
+   occurrence of `instance`, and `mcp.ctg/.cartridge/tests/integration/instances.test.ts`
+   does not exist.
+2. Neither commit can be replayed onto its submodule's current head without
+   overwriting another session's uncommitted work in the same files.
+   `mcp.ctg/.cartridge/tests/unit/tests.rs` carries three foreign added lines
+   (an `#[ignore]` on the stdio fixture) and `ad9a28e` rewrites that file.
+   `cartridge.ctg/src/cli/host.rs` is foreign-dirty and `f445f60` edits it.
+   `cartridge.ctg` has also moved on from `04aae7f` to `63ff234`, which is not
+   an ancestor of `f445f60`, so that commit needs a rebase as well.
+3. `prd collect` cannot run against this PRD's `repo` at all while the
+   superproject index holds another session's staged rename of
+   `.cartridge/tools/pi-voice` to `.cartridge/tools/live`. The engine answers
+   `repository has staged changes; preserve them before collection`, which is
+   repository-wide rather than footprint-scoped.
+
+The ticked Acceptance boxes above record proof observed against the work in
+those commits, not against the current tree. They are left as they are because
+the evidence was real; what is missing is the landing, not the proof.
+
+Clearing this needs the owner of the uncommitted work in `mcp.ctg` and
+`cartridge.ctg` to commit or set it aside, and the staged superproject rename
+to be committed or unstaged. After that the two commits rebase onto the current
+heads and the PRD collects.
+
+Ownership established 2026-09-17 by asking the two live peer sessions directly.
+Neither `cartridge-1c` nor `cartridge-8e` owns the staged
+`.cartridge/tools/pi-voice` rename or the 44 uncommitted lines in
+`cartridge.ctg/src/cli/host.rs`; both report the work as the user's own,
+already staged before either session began, and `cartridge-8e` says the user
+had said they would commit it themselves. `cartridge-1c` has put the rename to
+the user and will report when it clears. So this is a user-owned external
+blocker, not a coordination failure between sessions, and the PRD waits rather
+than being worked around.
+
+Update, later on 2026-09-17: blocker 3 is cleared. `cartridge-1c`'s user
+authorised the rename and it is committed as superproject `89522e3`, so the
+index is clean and `prd collect` no longer refuses repository-wide. Blockers 1
+and 2 stand unchanged: the implementation is still only in `mcp.ctg` `ad9a28e`
+and `cartridge.ctg` `f445f60`, and neither replays onto its submodule's head
+while `mcp.ctg/.cartridge/tests/unit/tests.rs` and
+`cartridge.ctg/src/cli/host.rs` carry the user's uncommitted work in the same
+files. Landing the mcp half alone would not satisfy the PRD, because the
+bridge must name its instance in `host.rs` for the node to key anything by it.
+
 ## Planning note
 
 2026-09-16, coordinator cartridge-1b, from analyst-1. Unlike the sibling

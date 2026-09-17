@@ -5,7 +5,10 @@ import path from 'node:path';
 import { atomic, git } from '../../src/records';
 
 const owner = path.resolve(import.meta.dir, '../..');
-const runner = path.resolve(owner, '../cartridge.ctg/.cartridge/tools/memo-run');
+// The composition's runner, not the host's: `memo-run` sits at the composed
+// repository root and never moved into `cartridge.ctg`, so the old path spawned
+// nothing and every case here failed with ENOENT before it ran.
+const runner = path.resolve(owner, '../.cartridge/tools/memo-run');
 const memo = '.cartridge/memos/routine/planner-statusline.md';
 function fixture() {
   const root = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), 'prd-statusline-'));

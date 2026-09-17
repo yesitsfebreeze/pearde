@@ -3,6 +3,9 @@ state: open
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge"
+footprint:
+  - "proxy.ctg/src"
+  - "proxy.ctg/cartridge.json"
 ---
 
 # True proxy passthrough for Anthropic models

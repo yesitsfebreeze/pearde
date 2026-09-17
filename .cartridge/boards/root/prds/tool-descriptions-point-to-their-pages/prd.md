@@ -3,6 +3,11 @@ state: specced
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge"
+footprint:
+  - "memo.ctg/src/service.rs"
+  - "fs.ctg/src/overlay.rs"
+  - "fs.ctg/src/ship.rs"
+  - "memo.ctg/.cartridge/tests/integration/tests.rs"
 ---
 
 # tool descriptions point to their pages

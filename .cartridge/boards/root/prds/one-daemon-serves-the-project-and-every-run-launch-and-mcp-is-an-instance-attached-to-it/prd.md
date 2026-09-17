@@ -8,6 +8,9 @@ wave: 2
 date: "2026-09-15"
 needs:
 - "@root/host-tests-hold-under-suite-contention"
+footprint:
+  - "cartridge.ctg/src"
+  - "mcp.ctg/src"
 ---
 
 # One daemon serves the project and every run, launch and mcp is an instance attached to it

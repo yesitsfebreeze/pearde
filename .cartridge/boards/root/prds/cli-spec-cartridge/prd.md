@@ -1,10 +1,12 @@
 ---
 state: open
 origin: requested
-priority: 45
+priority: 30
 repo: "/Users/feb/dev/cartridge"
 work-kind: leaf
 canonical-scope: cli-spec-cartridge
+footprint:
+  - "cli.ctg"
 ---
 
 # An external command is learned once and driven from its spec

@@ -3,6 +3,10 @@ state: "open"
 origin: requested
 priority: 60
 repo: "/Users/feb/dev/cartridge/memory.ctg"
+footprint:
+  - "src/retrieval"
+  - "src/graph"
+  - "src/base"
 ---
 
 # The cold tier scales past a linear scan

@@ -1,10 +1,12 @@
 ---
 state: open
 origin: requested
-priority: 50
+priority: 30
 repo: "/Users/feb/dev/cartridge"
 work-kind: leaf
 canonical-scope: function-index-cartridge
+footprint:
+  - "index.ctg"
 ---
 
 # A function-level index answers where code lives

@@ -1,10 +1,12 @@
 ---
 state: open
 origin: requested
-priority: 50
+priority: 30
 repo: "/Users/feb/dev/cartridge"
 work-kind: leaf
 canonical-scope: the-agent-stages-a-flow-and-a-person-approves-it
+footprint:
+  - "flow.ctg"
 ---
 
 # The agent stages a flow and a person approves it

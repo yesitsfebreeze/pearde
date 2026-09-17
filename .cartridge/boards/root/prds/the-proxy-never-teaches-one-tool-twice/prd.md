@@ -3,6 +3,10 @@ state: specced
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge"
+footprint:
+  - "proxy.ctg/src/service.rs"
+  - "proxy.ctg/.cartridge/docs/README.md"
+  - "proxy.ctg/.cartridge/tests/unit/tests.rs"
 ---
 
 # the proxy never teaches one tool twice

@@ -1,10 +1,12 @@
 ---
 state: open
 origin: requested
-priority: 55
+priority: 30
 repo: "/Users/feb/dev/cartridge"
 work-kind: leaf
 canonical-scope: process-introspection-cartridge
+footprint:
+  - "proc.ctg"
 ---
 
 # A live process is inspectable from the agent

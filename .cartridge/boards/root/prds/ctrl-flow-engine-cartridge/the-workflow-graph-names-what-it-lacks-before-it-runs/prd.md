@@ -1,10 +1,12 @@
 ---
 state: open
 origin: requested
-priority: 50
+priority: 30
 repo: "/Users/feb/dev/cartridge"
 work-kind: leaf
 canonical-scope: the-workflow-graph-names-what-it-lacks-before-it-runs
+footprint:
+  - "flow.ctg"
 ---
 
 # The workflow graph names what it lacks before it runs

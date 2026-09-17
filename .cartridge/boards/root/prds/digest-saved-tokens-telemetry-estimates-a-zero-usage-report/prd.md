@@ -3,6 +3,9 @@ state: open
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge/fs.ctg"
+footprint:
+  - "src/worker.rs"
+  - ".cartridge/tests"
 ---
 
 # digest saved-tokens telemetry estimates a zero usage report

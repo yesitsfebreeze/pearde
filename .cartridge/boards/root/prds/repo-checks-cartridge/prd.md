@@ -1,10 +1,12 @@
 ---
 state: open
 origin: requested
-priority: 45
+priority: 35
 repo: "/Users/feb/dev/cartridge"
 work-kind: leaf
 canonical-scope: repo-checks-cartridge
+footprint:
+  - "checks.ctg"
 ---
 
 # The repository's own checks run as a post-pass

@@ -1,7 +1,7 @@
 ---
 state: open
 origin: requested
-priority: 40
+priority: 30
 repo: "/Users/feb/dev/cartridge"
 work-kind: rollup
 canonical-scope: port-the-flow-engine-and-companion-tool-cartridges
@@ -20,6 +20,14 @@ needs:
 - '@harness/reflex-tool-audit-loop'
 - '@harness/slim-failed-turn-distillation'
 - '@mcp/deferred-tool-band'
+footprint:
+  - "flow.ctg"
+  - "index.ctg"
+  - "recipes.ctg"
+  - "jobs.ctg"
+  - "cli.ctg"
+  - "checks.ctg"
+  - "proc.ctg"
 ---
 
 # Port the flow engine and companion tool cartridges

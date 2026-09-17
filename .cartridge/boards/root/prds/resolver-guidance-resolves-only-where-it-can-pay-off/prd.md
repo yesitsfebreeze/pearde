@@ -3,6 +3,10 @@ state: specced
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge"
+footprint:
+  - "memo.ctg/.cartridge/memos/system/resolver-guidance.md"
+  - "memo.ctg/.cartridge/templates/seeds/system/resolver-guidance.md"
+  - "memo.ctg/.cartridge/tests/integration/resolver.rs"
 ---
 
 # resolver guidance resolves only where it can pay off

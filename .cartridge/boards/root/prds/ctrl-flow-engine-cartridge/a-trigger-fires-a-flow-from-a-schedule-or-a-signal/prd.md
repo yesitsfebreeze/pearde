@@ -1,10 +1,12 @@
 ---
 state: open
 origin: requested
-priority: 50
+priority: 30
 repo: "/Users/feb/dev/cartridge"
 work-kind: leaf
 canonical-scope: a-trigger-fires-a-flow-from-a-schedule-or-a-signal
+footprint:
+  - "flow.ctg"
 ---
 
 # A trigger fires a flow from a schedule or a signal

@@ -1,10 +1,12 @@
 ---
 state: open
 origin: requested
-priority: 45
+priority: 30
 repo: "/Users/feb/dev/cartridge"
 work-kind: leaf
 canonical-scope: background-jobs-cartridge
+footprint:
+  - "jobs.ctg"
 ---
 
 # Background jobs outlive the call that started them

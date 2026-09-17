@@ -1,10 +1,12 @@
 ---
 state: "open"
 origin: requested
-priority: 40
+priority: 30
 repo: "/Users/feb/dev/cartridge"
 work-kind: rollup
 canonical-scope: ctrl-flow-engine-cartridge
+footprint:
+  - "flow.ctg"
 ---
 
 # The flow engine runs named reusable workflows

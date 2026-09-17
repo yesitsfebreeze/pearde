@@ -1,7 +1,7 @@
 ---
 state: open
 origin: requested
-priority: 70
+priority: 76
 repo: "/Users/feb/dev/cartridge"
 capability-owner: root
 wave: 2

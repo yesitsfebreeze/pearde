@@ -1,7 +1,7 @@
 ---
 state: open
 origin: requested
-priority: 70
+priority: 90
 repo: "/Users/feb/dev/cartridge"
 blast-radius: mid
 workflow: develop-one-cartridge

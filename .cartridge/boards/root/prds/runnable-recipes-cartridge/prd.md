@@ -1,10 +1,12 @@
 ---
 state: open
 origin: requested
-priority: 50
+priority: 30
 repo: "/Users/feb/dev/cartridge"
 work-kind: leaf
 canonical-scope: runnable-recipes-cartridge
+footprint:
+  - "recipes.ctg"
 ---
 
 # A recorded procedure is runnable, not just readable

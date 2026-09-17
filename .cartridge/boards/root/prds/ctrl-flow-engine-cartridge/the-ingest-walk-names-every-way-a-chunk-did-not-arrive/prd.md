@@ -1,10 +1,12 @@
 ---
 state: open
 origin: requested
-priority: 50
+priority: 30
 repo: "/Users/feb/dev/cartridge"
 work-kind: leaf
 canonical-scope: the-ingest-walk-names-every-way-a-chunk-did-not-arrive
+footprint:
+  - "flow.ctg"
 ---
 
 # The ingest walk names every way a chunk did not arrive

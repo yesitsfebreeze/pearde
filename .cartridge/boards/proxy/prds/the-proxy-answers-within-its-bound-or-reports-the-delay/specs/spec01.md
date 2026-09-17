@@ -337,7 +337,7 @@ export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-${TMPDIR:-/tmp}/proxy-timeout-verif
 mkdir -p "$CARGO_TARGET_DIR"
 log="$CARGO_TARGET_DIR/tests.log"
 if ! cargo test --lib > "$log" 2>&1; then cat "$log"; exit 1; fi
-for t in deadline_message_names_the_bound a_stalled_stage_names_the_stage_and_how_long_it_ran an_upstream_rejection_survives_the_stage_wrapper; do
+for t in deadline_message_names_the_bound a_stalled_stage_names_the_stage_and_how_long_it_ran an_upstream_rejection_survives_the_stage_wrapper a_plain_retry_after_a_timeout_succeeds_on_the_same_service; do
   if ! grep -q "test tests::$t ... ok" "$log"; then
     echo "missing or failed: tests::$t"
     exit 1

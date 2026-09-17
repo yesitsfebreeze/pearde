@@ -1,10 +1,11 @@
 ---
-state: "specced"
+state: "done"
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge/memo.ctg"
 footprint:
 - "README.md"
+commit: "dcbeb59b5ec3a72e1b902b1241e1c87dacabfbc9"
 ---
 
 # The memo cartridge ships the README its audit demands

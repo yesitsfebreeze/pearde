@@ -1,5 +1,5 @@
 ---
-state: "specced"
+state: "done"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge"
@@ -15,6 +15,7 @@ footprint:
 - "mcp.ctg/.cartridge/tests/integration/instances.test.ts"
 - "cartridge.ctg"
 - "cartridge.ctg/src/cli/host.rs"
+commit: "805efec546a02e78224c92e3de02ca8a8c40e6e6"
 ---
 
 # MCP keys sessions and inflight calls by attached instance
@@ -122,6 +123,17 @@ while `mcp.ctg/.cartridge/tests/unit/tests.rs` and
 files. Landing the mcp half alone would not satisfy the PRD, because the
 bridge must name its instance in `host.rs` for the node to key anything by it.
 
+Update, 2026-09-17, coordinator cartridge-24: **the landing blocker above is
+fully cleared and its account of where the code lives is now out of date.**
+Blockers 1 and 2 are gone — both submodules were clean, and `attempt-2.patch`
+applied to their current heads with `git apply -p1` from the superproject with
+offsets only (`tests.rs` +3, `host.rs` +35), no fuzz and no rejects. The
+implementation is committed as `mcp.ctg` `ec4de01` (parent `f302ca0`) and
+`cartridge.ctg` `4b607ea` (parent `57abb99`). The dangling `ad9a28e` /
+`f445f60` / `7a72f42` commits are superseded and no longer the only copy. What
+remains is not a landing blocker but a missing assertion; see "Box 3 unticked"
+at the end of this file.
+
 ## Planning note
 
 2026-09-16, coordinator cartridge-1b, from analyst-1. Unlike the sibling
@@ -173,3 +185,80 @@ appear.
 Carried, non-blocking (F17): both boxes say "with two bridges attached" while the
 assertion runs after `a.close()`. Step 6 and the code comment are accurate; the
 box wording gets the one-line fix when the fixture is next touched.
+
+## Box 3: unticked, then earned (2026-09-17, coordinator cartridge-24)
+
+Box 3 is unticked, and so is the same box in `specs/spec01.md`. It was ticked on
+an assertion that is not in the code.
+
+`attempt-2.patch` had never been applied to this checkout. An implementer applied
+it cleanly on 2026-09-17 (mcp.ctg `ec4de01`, cartridge.ctg `4b607ea`) and a fresh
+verifier re-ran everything: all four Verify blocks exit 0, `just check mcp`,
+`just test mcp` (22 passed, 0 failed, 1 ignored) and `just check cartridge` all
+exit 0, and both commits touch exactly the six footprint paths. Boxes 1 and 2 are
+proven by execution, as recorded above.
+
+Box 3 is not. The committed `instances.test.ts` contains no `cartridge status`
+call, no `cartridge socket` call, no `mcp.sock` check and no node-state filter —
+`grep -n 'status\|socket\|mcp\.sock\|active\|dirname'` finds one hit, a comment
+on line 85. Its entire one-node evidence is the
+`readdirSync(composition).filter(/^\d+$/)` plus `toBeLessThanOrEqual(1)` pair at
+lines 109-110, which is exactly the dead `run.length <= 1` check that the
+"Evidence note for the ticked boxes" section above says is **deleted**. It is
+vacuous for precisely the reason recorded there: run directories live at
+`base()/tag(descriptor)/<pid>` under `$XDG_RUNTIME_DIR` or `/tmp/cartridge-<uid>`
+(`cartridge.ctg/src/host/socket.rs:47-84`), never in the project's `.cartridge`,
+so it evaluates `0 <= 1` whatever the node count is.
+
+The implementer applied the patch faithfully; the patch is what is stale.
+Round 3 and round 4 agreed on the corrected assertion, the spec's step 6 and box
+3 describe it, and the "Evidence note" above records it as shipped — but it was
+never written into `attempt-2.patch`, and no `attempt-3.patch` exists. The
+record ran ahead of the code.
+
+What is owed, and it is small: `instances.test.ts` must actually assert
+`status.filter(n => n.id === 'mcp' && n.state === 'active').length === 1` and
+that `path.dirname(<cartridge socket>)` holds exactly one pid directory
+containing exactly one `mcp.sock`, and must delete the dead
+`readdirSync(composition)` pair. That is already what spec step 6 and box 3
+prescribe, so it needs no re-review.
+
+Box 3's structural half — mcp.ctg starts no host, node or child process of its
+own — was observed, by Verify block 4.
+
+### Resolved, and re-ticked on observed evidence
+
+The implementer wrote the assertion (mcp.ctg `9db553e`, parent `ec4de01`, one
+footprint path) and a second verifier pass confirmed it independently.
+
+The dead pair is gone: `grep -n 'readdirSync(path.join(composition))\|toHaveLength'`
+finds no trace of the old bound, and the file now carries a `cartridge status`
+call, a `cartridge socket` call, an `n.state === 'active'` filter and an
+`mcp.sock` check — three `toHaveLength(1)` assertions, exact counts rather than
+a `<=` bound. Verify block 3 exits 0 with 13 `expect()` calls, up from 9. Blocks
+1, 2 and 4 exit 0, and `just check mcp`, `just test mcp` (22 passed, 0 failed,
+1 ignored) and `just check cartridge` all exit 0.
+
+The verifier reproduced three mutants itself rather than taking the
+implementer's word, each in a scratch copy, with the restored copy returning to
+green:
+
+- `mcp` removed from the composition — exit 1. The failure message shows
+  `{"id":"mcp",…,"state":"disabled"}` still present in the status array
+  alongside three `active` nodes, `Expected length: 1 / Received length: 0`.
+  This settles the question rounds 3 and 4 argued: a filter on `id` alone would
+  have passed at 1, and `&& n.state === 'active'` is what fails it.
+- the run directory pointed at the dead `.cartridge` location — exit 1, and the
+  message proves that directory holds only `init.lua`, `config.lua` and
+  `daemon.log`, which is why the old check passed at zero.
+- `mcp.sock` deleted — exit 1, with the real pid directory left holding
+  `policy.sock`, `sessions.sock` and `echo.sock`.
+
+One caveat, recorded rather than smoothed over: the first mutant needed the
+earlier initialize assertions short-circuited, because with no mcp node the
+bridges never initialize and the fixture fails ~11.8 s earlier for a different
+reason. The verifier hit the same wall independently, ruled the disclosure
+honest, and noted that the other two mutants needed no scaffold at all. So
+mutant 1 does not show that the unmodified test would fail *at the status
+assertion* on a dropped node — it shows the assertion is load-bearing when the
+bridges do work, which is the world box 3 describes.

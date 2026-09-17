@@ -7,6 +7,8 @@ footprint:
   - /Users/feb/dev/cartridge/memory.ctg/.cartridge/tests/integration/bench/src/common.rs
   - /Users/feb/dev/cartridge/memory.ctg/.cartridge/tests/integration/bench/src/retention.rs
   - /Users/feb/dev/cartridge/memory.ctg/.cartridge/tests/integration/bench/RESULTS.md
+  - /Users/feb/dev/cartridge/memory.ctg/.cartridge/justfile
+  - /Users/feb/dev/cartridge/memory.ctg/Cargo.lock
 ---
 
 # spec01 — Evaluate retention by claim kind on mature memory

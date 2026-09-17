@@ -1,9 +1,9 @@
 ---
-state: "claimed"
+state: "done"
 origin: requested
 priority: 70
 repo: "/Users/feb/dev/cartridge/memory.ctg"
-claim: "coordinator-8e-impl-2 2026-09-16T22:58:43.675Z"
+commit: "3432b13376017be921d745719e0626d6f0b5463c"
 ---
 
 # A retention probe measures the half-life of a stored fact per claim kind

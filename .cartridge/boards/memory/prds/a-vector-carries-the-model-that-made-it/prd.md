@@ -1,5 +1,5 @@
 ---
-state: "open"
+state: "done"
 origin: requested
 priority: 70
 repo: "/Users/feb/dev/cartridge/memory.ctg"
@@ -10,6 +10,8 @@ footprint:
   - "src/retrieval/piece/src/retrieval_query.rs"
   - "src/health/src/lib.rs"
   - "src/commands/src/commands_check.rs"
+  - "src/bootstrap/src/lib.rs"
+commit: "3432b13376017be921d745719e0626d6f0b5463c"
 ---
 
 # A vector carries the model that made it

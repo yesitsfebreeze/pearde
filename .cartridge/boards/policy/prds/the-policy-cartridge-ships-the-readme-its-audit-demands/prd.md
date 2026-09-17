@@ -1,10 +1,11 @@
 ---
-state: "specced"
+state: "done"
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge/policy.ctg"
 footprint:
 - "README.md"
+commit: "03217e357e1f00d03a63f35720791e81aadcb215"
 ---
 
 # The policy cartridge ships the README its audit demands

@@ -69,7 +69,7 @@ which `explain` (`src/cli/host.rs:~228`) already reads the same way; two
 three-line readers do not get a shared helper.
 
 **Why only the CLI path changes.** The in-process sibling of this wait is
-`Host::settled` (`src/host/run.rs:12`), a lifecycle-event wait with no poll
+`Host::settled` (`src/host/run.rs:11`), a lifecycle-event wait with no poll
 shortcut of its own — it is already correct, and it is what `verify`, contracts
 and `setup` use through `verify_timeout()`. `settle_remote` exists only because a
 CLI attaching over a socket cannot await those events. So the defect is confined
@@ -141,11 +141,11 @@ clean `63ff234` blob. It spells the predicate `serves` and keeps the
 
 ## Acceptance
 
-- [ ] `attach` takes the caller's listener key and settles on `settings.startup_timeout()`; `cartridge.ctg/src/cli/host.rs` contains no `stable >= 3` return and no `settle_remote(&found.0, settings.verify_timeout())`.
-- [ ] `settled(status, key)` is a pure function of one status picture, so a repeated identical picture cannot end the wait: the unit cases above run and pass under `cargo test --bin cartridge`.
-- [ ] Each `peer.call("status", …)` in `settle_remote` is bounded by the remaining budget, so a daemon that answers its socket but never its status cannot hang the wait past `host.startup_timeout_secs`.
-- [ ] PRD box 2: in a composition that declares an `mcp` listener which never becomes active, `cartridge mcp` answers inside `host.startup_timeout_secs` (60 s) with an error naming `mcp`, rather than waiting out the deadline — block 5, measured at 2 s.
-- [ ] `just check cartridge`, `just test cartridge` and `just test lifecycle` exit 0.
+- [x] `attach` takes the caller's listener key and settles on `settings.startup_timeout()`; `cartridge.ctg/src/cli/host.rs` contains no `stable >= 3` return and no `settle_remote(&found.0, settings.verify_timeout())`.
+- [x] `settled(status, key)` is a pure function of one status picture, so a repeated identical picture cannot end the wait: the unit cases above run and pass under `cargo test --bin cartridge`.
+- [x] Each `peer.call("status", …)` in `settle_remote` is bounded by the remaining budget, so a daemon that answers its socket but never its status cannot hang the wait past `host.startup_timeout_secs`.
+- [x] PRD box 2: in a composition that declares an `mcp` listener which never becomes active, `cartridge mcp` answers inside `host.startup_timeout_secs` (60 s) with an error naming `mcp`, rather than waiting out the deadline — block 5, measured at 2 s.
+- [x] `just check cartridge`, `just test cartridge` and `just test lifecycle` exit 0.
 
 ## What is gated and what is not
 
@@ -288,8 +288,10 @@ Engine facts (src/lifecycle.ts collect/verify):
   build graph and uplifts it (verified by moving the binary aside and re-running
   block 4). Keep blocks 4, 5 and 6 in this order; both later blocks fail loudly
   with the binary's path if it is ever absent.
-- Blocks 5 and 6 start hosts, always under a scratch root with an
-  `XDG_RUNTIME_DIR` of its own, never the project's. Observed across a full run:
+- Blocks 5 and 6 start hosts, always under a scratch root whose socket is
+  separated per-descriptor (`src/host/socket.rs:64-66`), with a short
+  `XDG_RUNTIME_DIR` of its own as belt-and-braces, never the project's.
+  Observed across a full run:
   the project daemon pid is unchanged, no `*.ctg/target/debug` directory and no
   `*.dylib` in the composition is written, and the submodule's dirty set is
   unchanged.
@@ -329,7 +331,7 @@ done
 # Forbidding `stable >= 3` by name would let a differently spelled early return
 # back into the loop, which four cases over a pure predicate could not see. The
 # rewritten body has exactly two: the status call's timeout arm and `settled`.
-returns=$(awk '/^async fn settle_remote\(/{b=1} b&&/^\}/{b=0} b' "$f" | grep -c 'return;')
+returns=$(awk '/^async fn settle_remote\(/{b=1} b&&/^\}/{b=0} b' "$f" | grep -c 'return;' || true)
 if [ "$returns" -ne 2 ]; then
   echo "settle_remote has $returns returns, expected 2 (the status timeout and settled)" >&2
   exit 1
@@ -372,15 +374,24 @@ just test cartridge
 # left starting and settled returns at once. This is the regression gate on
 # the accepted cost of deleting the shortcut; blocks 1 and 2 are what
 # discriminate a patched tree from an unpatched one.
+# The message this composition produces is `` `mcp` is not provided ``
+# (JSON-RPC -32603, `src/error/mod.rs:31`), not the Outcome's ``service `mcp`
+# unavailable: no active listener``: a *failed* cartridge leaves the event out
+# of the active directory entirely (`src/host/mod.rs:805-807`) while a
+# *starting* one leaves it present with no listener (`:840-849`). Both name
+# `mcp`, which is what the box asks for.
 export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-$PWD/target/cartridge-mcp-waits-verify}"
 bin="$CARGO_TARGET_DIR/debug/cartridge"
 test -x "$bin" || { echo "the cartridge test block has not uplifted $bin" >&2; exit 1; }
 root=$(mktemp -d)
-rt=$(mktemp -d)
+rt=$(mktemp -d /tmp/ctgmcp-XXXXXX)
 out=$(mktemp)
 state=$(mktemp)
-# A runtime directory of its own, as takeover.test.ts does, so this host's
-# socket cannot be the project's and the live daemon is never touched.
+# This host's socket cannot be the project's: the separation is per-descriptor
+# (`src/host/socket.rs:64-66` tags the socket by the scratch project's own
+# descriptor), and the short runtime directory is belt-and-braces —
+# `socket.rs:47-55` drops `XDG_RUNTIME_DIR` unless `<dir>/cartridge` is under
+# 48 characters, which a bare `mktemp -d` exceeds on this platform.
 export XDG_RUNTIME_DIR="$rt" CARTRIDGE_YOLO=1
 trap '(cd "$root" && "$bin" stop >/dev/null 2>&1) || true; rm -rf "$root" "$rt" "$out" "$state"' EXIT
 mkdir -p "$root/.cartridge" "$root/deaf.ctg"

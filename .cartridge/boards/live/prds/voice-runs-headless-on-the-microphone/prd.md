@@ -1,10 +1,10 @@
 ---
-state: "claimed"
+state: "done"
 origin: requested
 priority: 90
 repo: "/Users/feb/dev/cartridge/live.ctg"
 footprint: ["src/**", ".cartridge/**", "cartridge.json", "init.lua"]
-claim: "coordinator-8e-voice-1 2026-09-17T00:34:09.114Z"
+commit: "ea3c16ea888bef0c946842749d1e333e355440aa"
 ---
 
 # Voice runs headless on the microphone

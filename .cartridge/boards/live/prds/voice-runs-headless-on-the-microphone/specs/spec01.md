@@ -32,12 +32,12 @@ cartridge's own code, running for real.
 
 ## Acceptance
 
-- [ ] `Voice`'s `Drop` joins the audio thread. A test opens fake devices whose close takes a known 300 ms, stops the voice, and finds **both devices already down the moment the call returns** — with no sleep of its own — having taken at least that 300 ms and less than 2 s.
-- [ ] `live {op:"voice", enabled:true}` runs against a GPT Live service on `127.0.0.1:0`: a real TCP listener, a real WebSocket handshake, a real socket. The service receives the `session.start` this cartridge builds, answers `session.started`, and it refuses every bearer but the fixture's dummy — a key that happens to be on this machine fails the test instead of being spent.
-- [ ] What the fake microphone hears crosses that socket as `session.input_audio.append` carrying PCM16 the test decodes back to the samples it supplied, through the real capture loop — its tick, its half-duplex gate, its batching.
-- [ ] A `session.output_transcript.delta` the service sends lands in the store and comes back out of `state`.
-- [ ] A device that will not open leaves the session running and its reason readable in `state`, not only in `status`.
-- [ ] `cartridge.json` grants `audio`, and `grant.exec` names exactly the binaries `src/**` actually spawns — no more and no fewer.
+- [x] `Voice`'s `Drop` joins the audio thread. A test opens fake devices whose close takes a known 300 ms, stops the voice, and finds **both devices already down the moment the call returns** — with no sleep of its own — having taken at least that 300 ms and less than 2 s.
+- [x] `live {op:"voice", enabled:true}` runs against a GPT Live service on `127.0.0.1:0`: a real TCP listener, a real WebSocket handshake, a real socket. The service receives the `session.start` this cartridge builds, answers `session.started`, and it refuses every bearer but the fixture's dummy — a key that happens to be on this machine fails the test instead of being spent.
+- [x] What the fake microphone hears crosses that socket as `session.input_audio.append` carrying PCM16 the test decodes back to the samples it supplied, through the real capture loop — its tick, its half-duplex gate, its batching.
+- [x] A `session.output_transcript.delta` the service sends lands in the store and comes back out of `state`.
+- [x] A device that will not open leaves the session running and its reason readable in `state`, not only in `status`.
+- [x] `cartridge.json` grants `audio`, and `grant.exec` names exactly the binaries `src/**` actually spawns — no more and no fewer.
 
 Every one of these was run against a tree built to deny it; the observed exit
 codes are in `## Verify and Proof`.

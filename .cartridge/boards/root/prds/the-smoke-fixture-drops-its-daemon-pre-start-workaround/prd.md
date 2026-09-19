@@ -1,5 +1,5 @@
 ---
-state: "analyzing"
+state: "claimed"
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge"
@@ -7,7 +7,7 @@ footprint:
 - ".cartridge/tests/integration/smoke.test.ts"
 needs:
 - "cartridge-mcp-waits-for-a-cold-host-to-settle-instead-of-giving-up-after-three-identical-polls"
-claim: "coordinator-5c-13 2026-09-19T13:01:16.461Z"
+claim: "coordinator-5c-17 2026-09-19T14:12:14.716Z"
 ---
 
 # the smoke fixture drops its daemon pre-start workaround

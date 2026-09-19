@@ -1,0 +1,16 @@
+   Compiling rpc v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/rpc)
+   Compiling commands v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/commands)
+   Compiling memory_cartridge v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/cartridge)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 7.88s
+     Running unittests src/lib.rs (/tmp/cartridge-memory-stack-baseline-target/debug/deps/memory_cartridge-29a9f7cef8e68873)
+
+running 6 tests
+test asp::tests::the_shipped_declaration_is_one_the_host_accepts ... ok
+test asp::tests::a_memory_entity_expands_to_its_node_with_the_observed_projection_revision ... ok
+test asp::tests::search_keeps_the_context_filtering_exactly ... ok
+test asp::tests::search_delivers_ranked_rows_without_reading_any_back ... ok
+test asp::tests::expand_answers_nothing_for_a_missing_private_expired_or_respelled_key ... ok
+test asp::tests::search_and_expand_agree_with_context_memory_on_a_real_bank ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 21 filtered out; finished in 0.05s
+

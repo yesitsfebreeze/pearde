@@ -1,0 +1,44 @@
+{
+  "verifier": "independent baseline_verify agent",
+  "verdict": "PASS for standalone structural prerequisite only",
+  "commit": "ff22be8dda3814e79b4d830c9904261b167af160",
+  "source": "git archive from memory.ctg",
+  "archive": "/tmp/memory-baseline-independent-b8ws4omm",
+  "target": "/tmp/cartridge-memory-stack-independent-target",
+  "checks": {
+    "experience": {
+      "exit_code": 0,
+      "passed": 15,
+      "named_tests": 8
+    },
+    "asp": {
+      "exit_code": 0,
+      "passed": 6,
+      "named_tests": 3
+    },
+    "cargo check --workspace --locked": {
+      "exit_code": 0
+    },
+    "cargo fmt --all -- --check": {
+      "exit_code": 0
+    },
+    "cargo metadata": {
+      "packages": 29,
+      "internal_path_dependencies": 160,
+      "external_path_dependencies": 0
+    },
+    "retired_ledger_source_and_config": "absent"
+  },
+  "limitations": [
+    "No running cartridge was built in place or activated.",
+    "These checks verify the structural baseline, not reliability follow-up fixes.",
+    "Linker emitted missing debug object warnings; execution passed."
+  ],
+  "logs": [
+    "/tmp/cartridge-memory-independent-experience.log",
+    "/tmp/cartridge-memory-independent-asp.log",
+    "/tmp/cartridge-memory-independent-check.log",
+    "/tmp/cartridge-memory-independent-fmt.log",
+    "/tmp/cartridge-memory-independent-structure.log"
+  ]
+}

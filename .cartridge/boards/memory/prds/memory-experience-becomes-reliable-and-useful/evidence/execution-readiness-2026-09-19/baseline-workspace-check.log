@@ -1,0 +1,219 @@
+    Checking memchr v2.8.3
+    Checking cfg-if v1.0.4
+    Checking smallvec v1.15.2
+    Checking pin-project-lite v0.2.17
+    Checking once_cell v1.21.4
+    Checking libc v0.2.189
+    Checking serde_core v1.0.229
+    Checking itoa v1.0.18
+    Checking bytes v1.12.1
+    Checking scopeguard v1.2.0
+    Checking log v0.4.33
+    Checking futures-core v0.3.33
+    Checking tracing-core v0.1.36
+    Checking zerofrom v0.1.8
+    Checking lock_api v0.4.14
+    Checking stable_deref_trait v1.2.1
+    Checking crossbeam-utils v0.8.22
+    Checking regex-syntax v0.8.11
+    Checking yoke v0.8.3
+    Checking futures-sink v0.3.33
+    Checking aho-corasick v1.1.4
+    Checking zmij v1.0.23
+    Checking futures-task v0.3.33
+    Checking tracing v0.1.44
+    Checking errno v0.3.14
+    Checking parking_lot_core v0.9.12
+   Compiling jobserver v0.1.35
+    Checking mio v1.2.2
+    Checking socket2 v0.6.5
+    Checking zerovec v0.11.6
+    Checking signal-hook-registry v1.4.8
+    Checking parking_lot v0.12.5
+    Checking futures-channel v0.3.33
+    Checking slab v0.4.12
+    Checking futures-io v0.3.33
+   Compiling cc v1.4.0
+    Checking typenum v1.20.1
+    Checking crossbeam-epoch v0.9.20
+    Checking futures-util v0.3.33
+    Checking tokio v1.53.1
+    Checking http v1.4.2
+    Checking rand_core v0.10.1
+    Checking crossbeam-deque v0.8.7
+    Checking tinystr v0.8.3
+    Checking litemap v0.8.2
+    Checking writeable v0.6.3
+    Checking percent-encoding v2.3.2
+    Checking same-file v1.0.6
+    Checking bitflags v2.13.1
+    Checking serde v1.0.229
+    Checking regex-automata v0.4.16
+    Checking serde_json v1.0.151
+    Checking bstr v1.13.0
+    Checking http-body v1.1.0
+    Checking walkdir v2.5.0
+    Checking hybrid-array v0.4.13
+    Checking icu_locale_core v2.2.0
+    Checking getrandom v0.4.3
+    Checking potential_utf v0.1.5
+    Checking zerotrie v0.2.4
+   Compiling cmake v0.1.58
+    Checking utf8_iter v1.0.4
+    Checking zeroize v1.9.0
+    Checking crypto-common v0.2.2
+    Checking block-buffer v0.12.1
+    Checking tower-service v0.3.3
+    Checking const-oid v0.10.2
+    Checking icu_collections v2.2.0
+    Checking thiserror v2.0.19
+    Checking notify-types v2.1.0
+    Checking icu_provider v2.2.0
+    Checking chacha20 v0.10.1
+    Checking digest v0.11.3
+   Compiling aws-lc-sys v0.43.0
+    Checking cpufeatures v0.3.0
+    Checking fsevent-sys v4.1.0
+    Checking try-lock v0.2.5
+    Checking rustls-pki-types v1.15.1
+    Checking notify v8.2.0
+    Checking sha2 v0.11.0
+    Checking httparse v1.10.1
+    Checking want v0.3.1
+    Checking rand v0.10.2
+    Checking icu_properties_data v2.2.0
+    Checking icu_normalizer_data v2.2.0
+    Checking form_urlencoded v1.2.2
+    Checking sync_wrapper v1.0.2
+    Checking untrusted v0.9.0
+    Checking tower-layer v0.3.3
+    Checking globset v0.4.19
+    Checking httpdate v1.0.3
+    Checking atomic-waker v1.1.2
+    Checking icu_normalizer v2.2.0
+    Checking icu_properties v2.2.0
+    Checking ipnet v2.12.0
+    Checking base64 v0.22.1
+    Checking subtle v2.6.1
+    Checking core-foundation-sys v0.8.7
+    Checking http-body-util v0.1.4
+    Checking regex v1.13.1
+   Compiling zstd-sys v2.0.16+zstd.1.5.7
+    Checking option-ext v0.2.0
+    Checking winnow v1.0.4
+    Checking toml_datetime v1.1.1+spec-1.1.0
+    Checking hyper v1.11.0
+    Checking ignore v0.4.31
+    Checking tower v0.5.3
+    Checking tokio-util v0.7.19
+    Checking security-framework-sys v2.17.0
+    Checking core-foundation v0.10.1
+    Checking audit v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/hotreload/audit)
+    Checking toml_parser v1.1.2+spec-1.1.0
+    Checking dirs-sys v0.5.0
+    Checking serde_spanned v1.1.1
+    Checking toml_writer v1.1.2+spec-1.1.0
+    Checking util v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/util)
+    Checking dirs v6.0.0
+    Checking hotreload v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/hotreload)
+   Compiling lmdb-master-sys v0.2.6
+    Checking toml v1.1.3+spec-1.1.0
+    Checking security-framework v3.7.0
+    Checking bincode v1.3.3
+    Checking idna_adapter v1.2.2
+    Checking crossbeam-queue v0.3.13
+    Checking hyper-util v0.1.20
+    Checking unty v0.0.4
+    Checking byteorder v1.5.0
+    Checking idna v1.1.0
+    Checking heed-traits v0.20.0
+    Checking bincode v2.0.1
+    Checking url v2.5.8
+    Checking base v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/base)
+    Checking heed-types v0.20.1
+    Checking tower-http v0.6.11
+    Checking synchronoise v1.0.1
+    Checking page_size v0.6.0
+    Checking memmap2 v0.9.11
+    Checking either v1.17.0
+    Checking rayon-core v1.13.0
+    Checking rustix v1.1.4
+    Checking utf8parse v0.2.2
+    Checking futures-executor v0.3.33
+    Checking anstyle v1.0.14
+    Checking anstyle-parse v1.0.0
+    Checking ingest_config v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/ingest/config)
+    Checking math v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/math)
+    Checking is_terminal_polyfill v1.70.2
+    Checking anstyle-query v1.1.5
+    Checking colorchoice v1.0.5
+    Checking futures v0.3.33
+    Checking rayon v1.12.0
+    Checking clap_lex v1.1.0
+    Checking anstream v1.0.0
+    Checking strsim v0.11.1
+    Checking memory_transport v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/transport)
+    Checking num-traits v0.2.19
+    Checking unicode-ident v1.0.24
+    Checking ryu v1.0.23
+   Compiling mlua-sys v0.12.0
+    Checking lazy_static v1.5.0
+    Checking mime v0.3.17
+    Checking heed v0.20.5
+    Checking sharded-slab v0.1.7
+    Checking axum-core v0.5.6
+    Checking ordered-float v2.10.1
+    Checking terminal_size v0.4.4
+    Checking proc-macro2 v1.0.107
+    Checking serde_urlencoded v0.7.1
+    Checking clap_builder v4.6.2
+    Checking typeid v1.0.3
+    Checking matchers v0.2.0
+    Checking serde_path_to_error v0.1.20
+    Checking tracing-log v0.2.0
+    Checking thread_local v1.1.10
+    Checking matchit v0.8.4
+    Checking nu-ansi-term v0.50.3
+    Checking quote v1.0.47
+    Checking erased-serde v0.4.10
+    Checking serde-value v0.7.0
+    Checking fastrand v2.5.0
+    Checking rustc-hash v2.1.3
+    Checking syn v2.0.119
+    Checking tempfile v3.27.0
+    Checking mlua v0.12.1
+    Checking axum v0.8.9
+    Checking tracing-subscriber v0.3.23
+    Checking clap v4.6.4
+    Checking memory_transport_macros v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/transport/macros)
+   Compiling zstd-safe v7.2.4
+    Checking test_support v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/.cartridge/tests/support)
+    Checking zstd v0.13.3
+    Checking store_core v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/store/core)
+   Compiling aws-lc-rs v1.17.3
+   Compiling rustls v0.23.42
+    Checking rustls-webpki v0.103.13
+    Checking tokio-rustls v0.26.4
+    Checking rustls-platform-verifier v0.7.0
+    Checking hyper-rustls v0.27.9
+    Checking reqwest v0.13.4
+    Checking llm v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/llm)
+    Checking config v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/config)
+    Checking graph v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/graph)
+    Checking gnn v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/gnn)
+    Checking identity v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/identity)
+    Checking hub v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/hub)
+    Checking retrieval-piece v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/retrieval/piece)
+    Checking tick v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/tick)
+    Checking ingest v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/ingest)
+    Checking bootstrap v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/bootstrap)
+    Checking retrieval v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/retrieval)
+    Checking tick_loop v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/tick/loop)
+    Checking store v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/store)
+    Checking memory-bench v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/.cartridge/tests/integration/bench)
+    Checking health v0.1.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/health)
+    Checking rpc v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/rpc)
+    Checking commands v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/commands)
+    Checking memory v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv)
+    Checking memory_cartridge v2.0.0 (/private/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-stack-baseline-iq92v5pv/src/cartridge)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 21.26s

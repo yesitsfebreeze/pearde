@@ -101,10 +101,10 @@ checker that ignores fences.
 
 ## Acceptance
 
-- [ ] `every relative link in the record resolves` passes.
-- [ ] `the record link check reports a planted dead link` passes. It asserts the exact list, so a no-op
+- [x] `every relative link in the record resolves` passes.
+- [x] `the record link check reports a planted dead link` passes. It asserts the exact list, so a no-op
       checker or one that ignores fences fails it.
-- [ ] None of the three decision memos links into `boards/ui/`. Each still names the slug and cites
+- [x] None of the three decision memos links into `boards/ui/`. Each still names the slug and cites
       `bed3eaaa` as the reason the link was removed.
 
 ## Verify

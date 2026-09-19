@@ -1,5 +1,5 @@
 ---
-state: "claimed"
+state: "done"
 origin: requested
 priority: 55
 repo: "/Users/feb/dev/cartridge"
@@ -29,7 +29,7 @@ footprint:
   - ".cartridge/memos/note/ui-design-tui-terminal.md"
   - ".cartridge/memos/note/ui-design-vaporwave-synthwave.md"
   - ".cartridge/memos/note/ui-design-y2k-frutiger-aero.md"
-claim: "coordinator-5c-8 2026-09-19T12:45:02.921Z"
+commit: "db88de4c4f6a6ebd2ff93ad592486fb8eae0af8e"
 ---
 
 # Every link in the record resolves and a test says so
@@ -42,9 +42,9 @@ that does not.
 
 ## Acceptance
 
-- [ ] `every relative link in the record resolves` passes.
-- [ ] `the record link check reports a planted dead link` passes (the checker is not a no-op).
-- [ ] None of the three decision memos links into `boards/ui/`. Each still names the slug and cites `bed3eaaa` as the reason the link was removed.
+- [x] `every relative link in the record resolves` passes.
+- [x] `the record link check reports a planted dead link` passes (the checker is not a no-op).
+- [x] None of the three decision memos links into `boards/ui/`. Each still names the slug and cites `bed3eaaa` as the reason the link was removed.
 
 ## Analysis
 

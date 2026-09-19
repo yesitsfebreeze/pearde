@@ -45,10 +45,10 @@ scope here.
 
 ## Acceptance
 
-- [ ] `docs.discover`'s schema accepts `null` and `{}`, and refuses any object
+- [x] `docs.discover`'s schema accepts `null` and `{}`, and refuses any object
       with a field, a string, a number and an array. The host's own validator
       crate (jsonschema =0.56.0) checks this against `cartridge.json`.
-- [ ] Every event in `cartridge.json` still carries a `description` and an
+- [x] Every event in `cartridge.json` still carries a `description` and an
       object `schema`, so the audit's `declares no schema` rule stays green.
 
 The PRD's box 2 (the host refuses a violating call against the declaration)

@@ -1,10 +1,11 @@
 ---
-state: "specced"
+state: "done"
 origin: requested
 priority: 55
 repo: "/Users/feb/dev/cartridge/docs.ctg"
 footprint:
 - "cartridge.json"
+commit: "a44f957358626a078bde7412935c026ea20d12d9"
 ---
 
 # The docs.discover event declares its schema
@@ -42,12 +43,12 @@ takes.
 
 ## Acceptance
 
-- [ ] `docs.ctg/cartridge.json` declares a schema for `docs.discover` that
+- [x] `docs.ctg/cartridge.json` declares a schema for `docs.discover` that
       matches what the handler really accepts, including which fields are
       optional.
-- [ ] A call that violates the declared schema is refused against the
+- [x] A call that violates the declared schema is refused against the
       declaration rather than failing somewhere inside the handler.
-- [ ] `just audit` no longer reports `event docs.discover declares no schema`.
+- [x] `just audit` no longer reports `event docs.discover declares no schema`.
 
 ## Note on scope
 

@@ -1,10 +1,11 @@
 ---
-state: "specced"
+state: "done"
 origin: requested
 priority: 70
 repo: "/Users/feb/dev/cartridge/cartridge.ctg"
 footprint:
 - "src/cli/manual.rs"
+commit: "ab2383a8223a096509b24bf429f3023bfd80024d"
 ---
 
 # A wedging help picker must not hold the pty node
@@ -31,10 +32,10 @@ historically killed every model request while held.
 
 ## Acceptance
 
-- [ ] `cartridge help <id>` in the wrapped shell renders non-interactively or
+- [x] `cartridge help <id>` in the wrapped shell renders non-interactively or
       opens a picker that exits on `q` and never blocks the shell tool's next
       command.
-- [ ] A regression test drives the picker path against a fake pty and fails
+- [x] A regression test drives the picker path against a fake pty and fails
       when the picker consumes the exit key.
 
 ## Planning note

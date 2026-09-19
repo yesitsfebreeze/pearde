@@ -273,18 +273,18 @@ tests (`addresses_resolve_and_search_lands_in_the_section`,
 
 ## Acceptance
 
-- [ ] A single `q` (with an empty filter) or a single `Esc` (any filter
+- [x] A single `q` (with an empty filter) or a single `Esc` (any filter
       state) exits `cartridge help`'s list picker in one press, instead of
       being consumed as filter text or a partial level-up. `q` remains
       ordinary filter text once a query is non-empty; on the search path
       (`cartridge help <words>`), the filter starts non-empty, so only `Esc`
       exits in one press and `q` is literal from the first frame. `Left`
       keeps stepping up one level, exactly as today, and is not a quit key.
-- [ ] `scripted_keys_drive_the_real_list_loop` (`src/cli/manual.rs`) feeds
+- [x] `scripted_keys_drive_the_real_list_loop` (`src/cli/manual.rs`) feeds
       key sequences through `run()` — the exact loop `browse()` calls, not a
       copy of it — and fails if the loop ever appends `q` to the filter
       instead of exiting on an empty one, or fails to exit on `Esc`.
-- [ ] `q_and_escape_exit_the_list_instead_of_being_consumed`
+- [x] `q_and_escape_exit_the_list_instead_of_being_consumed`
       (`src/cli/manual.rs`) pins `exits()`'s truth table directly, as a
       companion to the scripted-loop test above.
 

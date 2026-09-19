@@ -16,6 +16,7 @@ export async function execute(operation: string, board: string, args: string[] =
     const before = snapshot(scan(board));
     try {
       if (signal?.aborted) throw Error('invocation cancelled');
+      if (operation !== 'collect' && (opts.committed || opts.reverify)) throw Error('--committed and --reverify require collect');
       if (operation === 'plan' || operation === 'scan') {
         const data: any = operation === 'plan' ? plan(board, Number(opts.workers) || 0, pos[0]) : { rows: Object.values(before), snapshot: hash(JSON.stringify(before)) };
         const total = data.rows.length;

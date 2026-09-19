@@ -21,3 +21,14 @@
 - [Planner status line](.cartridge/memos/routine/planner-statusline.md) — How is a read-only board progress line rendered for the current owner?
 - [Install the planner CLI](.cartridge/memos/routine/install-planner-cli.md) — How are the `prd` and `pearde` launchers installed and the old statusline migrated?
 - [Develop the planner](.cartridge/memos/routine/develop-planner.md) — How is the native engine checked and exercised without Python or a model?
+
+## Refresh committed collection evidence
+
+`prd collect <ref> --committed` verifies a clean committed snapshot and preserves
+unrelated dirty source files. `verification_target`, `workspace_verified` and
+`workspace_drift` distinguish committed proof from workspace state. Verify the
+loaded artifact separately. `prd collect <done-ref> --reverify` reruns the same
+published contract at current HEAD and retains immutable prior receipts. Changed
+contracts, missing provenance, unverified dependencies or active ownership refuse
+the refresh. Default collection remains strict; dirty files overlapping a lane
+merge still require scoped reconciliation before retry.

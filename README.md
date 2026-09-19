@@ -30,3 +30,14 @@ links are the ones worth reading next.
 ## Status
 
 Early (`0.1.0`). Interfaces change without notice.
+
+## Committed collection evidence
+
+Use `prd collect <ref> --committed` to verify the integrated commit in a clean
+checkout while preserving unrelated dirty files. Results explicitly name
+`verification_target: committed` and separately report `workspace_verified` and
+`workspace_drift`; they do not certify a loaded binary. After later committed
+footprint changes, `prd collect <done-ref> --reverify` reruns the unchanged contract
+and preserves the prior receipt by content digest. Changed contracts, invalid
+provenance and unresolved dependencies are refused. Normal collection remains
+strict. See [.cartridge/docs/collection-proof.md](.cartridge/docs/collection-proof.md).

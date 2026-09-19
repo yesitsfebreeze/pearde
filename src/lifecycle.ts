@@ -4,11 +4,12 @@ import path from 'node:path';
 import { atomic, codeRepo, contained, document, adoptFields, edit, fieldsProblem, fieldsRefusal, git, recordFields, hash, list, openBoxes, real, relative, repoRoot, resolve, scan, specs, type Prd } from './records';
 import { dependencies, feet, refusal } from './planner';
 import { runProcess } from './process';
+import { collectCommitted, historyProblem, workspaceProof } from './collection-proof';
 
 export type Options = Record<string, string | boolean>;
 export function argumentsOf(args: string[]) {
   const pos: string[] = [], opts: Options = {};
-  const switches = new Set(['dry', 'check', 'once', 'json']);
+  const switches = new Set(['dry', 'check', 'once', 'json', 'reverify', 'committed']);
   for (let i = 0; i < args.length; i++) {
     const token = args[i];
     if (!token.startsWith('--')) { pos.push(token); continue; }
@@ -31,7 +32,7 @@ function gitlinks(tree: string) {
 // `git worktree add` leaves submodules empty, so a lane of a superproject could not build or read
 // them. Check each one out as a detached worktree of the live submodule at the pinned commit.
 // ponytail: one level only; nested submodules stay empty until a board needs them.
-function seedSubmodules(code: string, directory: string) {
+export function seedSubmodules(code: string, directory: string) {
   for (const link of gitlinks(directory)) {
     const live = path.join(code, link.path);
     if (!fs.existsSync(path.join(live, '.git')) || Bun.spawnSync(['git', '-C', live, 'cat-file', '-e', link.sha + '^{commit}']).exitCode) continue;
@@ -40,7 +41,7 @@ function seedSubmodules(code: string, directory: string) {
 }
 // Git refuses to remove a worktree that holds other worktrees; the seeded checkouts go first,
 // leaving the empty directory an unpopulated submodule has, so the lane still reads clean.
-function removeLane(code: string, directory: string) {
+export function removeLane(code: string, directory: string) {
   for (const link of gitlinks(directory)) {
     const seeded = path.join(directory, link.path);
     if (!fs.statSync(path.join(seeded, '.git'), { throwIfNoEntry: false })?.isFile()) continue;
@@ -123,7 +124,7 @@ function childContracts(prd: Prd, graph: Map<string, Prd>) {
     return [path.relative(records, child.file), hash(child.text + specs(child).map(s => s.text).join('') + document(path.join(child.dir, 'collection.md')).text)];
   }));
 }
-export function completionProblem(prd: Prd, context?: Map<string, Prd>, ancestors = new Set<string>()): string | null {
+export function completionProblem(prd: Prd, context?: Map<string, Prd>, ancestors = new Set<string>(), reverify = false): string | null {
   const graph = context ?? scan(prd.board);
   prd = [...graph.values()].find(p => p.dir === prd.dir) ?? prd;
   if (ancestors.has(prd.dir)) return 'collection proof cycle';
@@ -142,6 +143,7 @@ export function completionProblem(prd: Prd, context?: Map<string, Prd>, ancestor
   const evidence = path.join(prd.dir, 'collection.md');
   if (!fs.existsSync(evidence)) return 'no recorded collection verification evidence';
   const receipt = document(evidence), digests = receipt.fm['spec-digests'];
+  const history = historyProblem(prd); if (history) return history;
   if (receipt.fm.commit !== commit) return 'collection evidence names another integration commit';
   if (!digests || typeof digests !== 'object' || Array.isArray(digests) || Object.keys(digests).length !== published.length) return 'collection specification contract changed or lacks revision digests';
   for (const spec of published) if (digests[path.basename(spec.file)] !== hash(spec.text)) return 'collection specification changed after verification';
@@ -155,30 +157,34 @@ export function completionProblem(prd: Prd, context?: Map<string, Prd>, ancestor
     if (!child) return 'collection child disappeared: ' + ref;
     const problem = completionProblem(child, graph, seen);
     if (problem) return ref + ': ' + problem;
+    if (!reverify && receipt.fm['verification-target'] !== 'committed' && !workspaceProof(child, graph).workspace_verified) return ref + ': child workspace differs from verified artifact';
   }
-  if (prd.children.length && JSON.stringify(receipt.fm['child-contracts']) !== JSON.stringify(childContracts(prd, graph))) return 'collection child contract changed after verification';
+  if (!reverify && prd.children.length && JSON.stringify(receipt.fm['child-contracts']) !== JSON.stringify(childContracts(prd, graph))) return 'collection child contract changed after verification';
   const paths = feet(prd).map(p => path.relative(code, contained(code, path.relative(code, p))));
-  if (paths.length) {
-    if (git(code, ['diff', '--name-only', commit, '--', ...paths]) || git(code, ['ls-files', '--others', '--exclude-standard', '--', ...paths])) return 'verified source footprint changed after collection';
+  if (!reverify && paths.length) {
+    if (receipt.fm['verification-target'] === 'committed') {
+      if (git(code, ['diff', '--name-only', commit, 'HEAD', '--', ...paths])) return 'verified source footprint changed after collection';
+    } else if (git(code, ['diff', '--name-only', commit, '--', ...paths]) || git(code, ['ls-files', '--others', '--exclude-standard', '--', ...paths])) return 'verified source footprint changed after collection';
   }
   if (fs.existsSync(lane(prd).directory)) return 'done PRD still has an active lane';
   return null;
 }
 export function verifiedStatus(prd: Prd) {
   const reason = completionProblem(prd);
-  return { ref: prd.ref, state: prd.state, revision: prd.revision, commit: prd.fm.commit ?? null, verified: reason === null, integrated: reason === null, reason, evidence: path.join(prd.dir, 'collection.md') };
+  return { ref: prd.ref, state: prd.state, revision: prd.revision, commit: prd.fm.commit ?? null, verified: reason === null, integrated: reason === null, reason, evidence: path.join(prd.dir, 'collection.md'), verification_target: fs.existsSync(path.join(prd.dir, 'collection.md')) ? document(path.join(prd.dir, 'collection.md')).fm['verification-target'] ?? 'workspace' : 'workspace', ...workspaceProof(prd), ...(reason ? { workspace_verified: false } : {}) };
 }
 function cleanIndex(repo: string) {
   if (git(repo, ['diff', '--cached', '--name-only'])) throw Error('repository has staged changes; preserve them before collection');
 }
 async function collect(prd: Prd, graph: Map<string, Prd>, opts: Options, signal?: AbortSignal) {
+  if (opts.committed || opts.reverify) return collectCommitted(prd, graph, opts, signal);
   if (opts.trust) throw Error('collection requires executable verification; --trust is unavailable');
   if (prd.state === 'done') { const problem = completionProblem(prd); if (problem) throw Error(problem); return 'Already verified and collected.\n'; }
   const deps = dependencies(prd, graph);
   if (deps.problems.length || deps.refs.some(ref => graph.get(ref)?.state !== 'done')) throw Error('collect: dependencies are not done');
   if (openBoxes(prd.text) || specs(prd).some(spec => openBoxes(spec.text))) throw Error('collect: open acceptance boxes remain');
   if (!prd.children.length && !['claimed', 'specced'].includes(prd.state)) throw Error('collect requires claimed or specced work');
-  for (const ref of prd.children) { const problem = completionProblem(graph.get(ref)!, graph); if (problem) throw Error(ref + ': ' + problem); }
+  for (const ref of prd.children) { const child = graph.get(ref)!, problem = completionProblem(child, graph); if (problem) throw Error(ref + ': ' + problem); if (!workspaceProof(child, graph).workspace_verified) throw Error(ref + ': child workspace differs; use --committed to verify only committed artifacts'); }
   const code = codeRepo(prd), records = repoRoot(prd.board), work = lane(prd);
   const contractDigests = Object.fromEntries(specs(prd).map(s => [path.basename(s.file), hash(s.text)]));
   const childDigests = childContracts(prd, graph);

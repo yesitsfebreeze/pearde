@@ -43,3 +43,15 @@ Where do the policy rule tests live now?
 
 Recommended: A. If the owner prefers the smallest board change, choose D and fold A's fixture into the sibling.
 ```
+
+### Related since the question was asked (2026-09-19, coordinator cartridge-5c)
+
+cartridge-4b's runtime analyst split `@runtime/policy-and-trust-…` so that the host absorbs policy: child 1
+moves the evaluator into `cartridge.ctg/src/policy` with its own tests, child 2 removes `policy.ctg`. Its
+recommendation for this board (see that PRD's `## Split`): retire this row and the deferred
+`improve-policy-programme` / `improve-policy-resource-scope` as superseded by child 1's tests; retarget
+`bounded-search-guard-rules` and `policy-refuses-unbounded-searches-with-a-teaching-reason` at
+`cartridge.ctg/src/policy`; keep `policy-refusals-and-overrides-reach-the-caller-and-the-observation-journal`
+and reconcile it with the runtime child "the agent asks through the host request…". This is a fifth
+option, **E: defer this row as superseded by the host's policy move**. Nothing is deferred or retargeted
+until the user answers; the runtime split has not landed.

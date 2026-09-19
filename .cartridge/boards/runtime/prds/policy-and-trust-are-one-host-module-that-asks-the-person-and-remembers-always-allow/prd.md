@@ -71,7 +71,7 @@ Refined 2026-09-19 by analyst-2 for coordinator cartridge-4b, anchored on cartri
    - [ ] `src/policy/README.md` exists in the fresh-eyes shape.
    Window: until child 2 lands, a live `policy.ctg` fails with "`policy` is already declared by `host`". This is harmless, because the host answers the same way.
 
-2. **policy.ctg leaves the composition and the repository.** Repo `/Users/feb/dev/cartridge` (the superproject), priority 100, needs 1. Footprint: `.gitmodules`, `policy.ctg`, `.cartridge/init.lua`, `.cartridge/justfile`, `.cartridge/tests/integration/smoke.test.ts`, `.cartridge/memos/routine/cartridge-smoke.md`, `graft/policy.ctg`, `cartridge.ctg`.
+2. **policy.ctg leaves the composition and the repository.** Repo `/Users/feb/dev/cartridge` (the superproject), priority 100, needs 1. Footprint: `.gitmodules`, `policy.ctg`, `.cartridge/init.lua`, `.cartridge/justfile`, `.cartridge/tests/integration/smoke.test.ts`, `.cartridge/memos/routine/cartridge-smoke.md`, `cartridge.ctg`.
    Outcome: the submodule and its `init.lua` row (`.cartridge/init.lua:30`) are removed, and `policy` is dropped from the `check`/`test`/`smoke` owner lists (`.cartridge/justfile:100-102`). The smoke fixture's policy profile becomes a host with no cartridges (`init.lua` `return {}`) that is still answered by `cartridge run policy`. The pointer moves to child 1's commit, all in one superproject commit.
    - [ ] `just smoke policy` passes against a profile that composes no `policy.ctg`, with the same four decisions and the `null` rejection.
    - [ ] `git submodule status` lists no `policy.ctg`, and no file outside `prd.ctg` names `policy.ctg`.

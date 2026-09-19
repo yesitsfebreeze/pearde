@@ -37,8 +37,7 @@ The four, each read from the file that carries it:
    profile entry is a hard `just audit` encapsulation failure, and without it the
    host never loads the cartridge, so `cartridge call checks` has nothing to
    answer.
-4. `.gitmodules` registers the submodule. Every `*.ctg` here except `web.ctg` and
-   `graft` is a submodule, and a collection against the superproject records
+4. `.gitmodules` registers the submodule. Most `*.ctg` directories here are submodules, and a collection against the superproject records
    `checks.ctg` as a gitlink only once it is registered.
 
 ## Acceptance

@@ -13,7 +13,6 @@ footprint:
   - /Users/feb/dev/cartridge/.cartridge/justfile
   - /Users/feb/dev/cartridge/.cartridge/tests/integration/smoke.test.ts
   - /Users/feb/dev/cartridge/.cartridge/memos/routine/cartridge-smoke.md
-  - /Users/feb/dev/cartridge/graft/policy.ctg
 ---
 
 # policy.ctg leaves the composition and the repository

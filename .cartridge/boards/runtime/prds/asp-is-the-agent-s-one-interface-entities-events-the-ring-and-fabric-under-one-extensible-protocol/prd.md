@@ -66,7 +66,7 @@ wording matters:
    `memo {op:"fabric"}` (`memo.ctg/src/fabric_graph.rs`) becomes ASP's ranker
    over the whole ASP world. memo keeps authoring memos and contributes
    `memo:` entities to ASP like any other provider.
-6. **Graft goes.** The external code-graph tool is removed once ASP answers
+6. **external code index goes.** The external code-graph tool is removed once ASP answers
    outline, definition, usages, callers and callees from the live language
    server.
 
@@ -124,7 +124,7 @@ Each step leaves a working, tested system:
    ranks ASP entities.
 6. **Cut over.** `context.*` providers migrate to `asp.*` and the `context`
    path is deleted. Superseded landscape PRDs are retired with a pointer
-   here. Graft is removed, and the agent prompt names ASP as the first place
+   here. external code index is removed, and the agent prompt names ASP as the first place
    to look.
 
 ## Children
@@ -136,7 +136,7 @@ Each step leaves a working, tested system:
 - [sessions contributes agents and their activity to ASP](sessions-contributes-agents-and-their-activity-to-asp/prd.md)
 - [fabric ranks the ASP world from the host](fabric-ranks-the-asp-world-from-the-host/prd.md)
 - [context providers become ASP providers and the context path is deleted](context-providers-become-asp-providers-and-the-context-path-is-deleted/prd.md)
-- [agents find code through ASP and graft is removed](agents-find-code-through-asp-and-graft-is-removed/prd.md)
+- [agents find code through ASP and external code index is removed](agents-find-code-through-asp/prd.md)
 
 ## Acceptance
 
@@ -148,7 +148,7 @@ Each step leaves a working, tested system:
       naming the first agent and the revision, the memos that mention the
       file, and a fabric rank. Unloading lsp removes the `symbol:` facts and
       nothing else.
-- [ ] `memo {op:"fabric"}`, the `context.*` injection and graft no longer
+- [ ] `memo {op:"fabric"}`, the `context.*` injection and external code index no longer
       exist, and nothing refers to them.
 - [ ] `cartridge help host` documents ASP, and the host README and help page
       describe it.

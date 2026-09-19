@@ -161,7 +161,7 @@ The user made ASP, together with the event system
 Both were raised to priority 100, and the event chain was reopened from
 `deferred`.
 
-The first real use is to replace graft, the external code-graph tool this
+The first real use is to replace external code index, the external code-graph tool this
 workspace currently loads over MCP. An agent should get a file's outline, a
 symbol's definition and usages, and its callers and callees as ASP entities.
 One search should cover workspace files and the composed context (memos, help,
@@ -176,22 +176,22 @@ first real providers:
   nodes, with memo and doc records addressed by their own scheme, so a single
   query returns code and context hits side by side.
 
-Evidence gathered while evaluating graft on 2026-09-19:
+Evidence gathered while evaluating external code index on 2026-09-19:
 
 - `tool.lsp` `symbols` already answers from rust-analyzer. `references` fails
   on every call with `Failed to deserialize textDocument/references: missing
   field 'context'`: `lsp.ctg/src/service.rs` sends the request without the
   `context: { includeDeclaration }` field the LSP specification requires.
 - `lsp.ctg` has no `workspace/symbol` or `callHierarchy` operations yet, and
-  its outline is raw LSP JSON with numeric kinds and full URIs. graft's value
+  its outline is raw LSP JSON with numeric kinds and full URIs. external code index's value
   was a compact outline and name-based lookup, and ASP expansion should give
   agents both.
-- graft links edges by name and drops a caller whenever a name is ambiguous,
+- external code index links edges by name and drops a caller whenever a name is ambiguous,
   for example "2 definitions share the name PASSTHROUGH". Compiler-resolved
   edges from the language server do not have that gap.
 
-Graft is removed once these providers pass their probes: its MCP server,
-hooks, skill and `graft/` cache.
+external code index is removed once these providers pass their probes: its MCP server,
+hooks, skill and retired code index.
 
 ## Decision (2026-09-19, user)
 

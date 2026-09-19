@@ -7,7 +7,7 @@ capability-owner: web
 footprint:
 - "web.ctg"
 - ".cartridge/init.lua"
-commit: "3dba7f2ab6a958eb1c710fe762aebeb521637e24"
+commit: "0ba925860f88089792bb03dce1cba756b73d9a7e"
 ---
 
 # web.ctg exists as a cartridge and fetches a page as readable text

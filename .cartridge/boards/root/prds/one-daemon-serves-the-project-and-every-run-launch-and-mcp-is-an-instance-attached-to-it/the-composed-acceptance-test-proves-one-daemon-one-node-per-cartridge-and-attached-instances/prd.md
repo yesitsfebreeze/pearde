@@ -1,5 +1,5 @@
 ---
-state: "claimed"
+state: "done"
 origin: requested
 priority: 85
 repo: "/Users/feb/dev/cartridge/cartridge.ctg"
@@ -15,7 +15,7 @@ needs:
 - "one-daemon-serves-the-project-and-every-run-launch-and-mcp-is-an-instance-attached-to-it/agent-runs-key-per-attached-instance-not-per-process"
 footprint:
 - ".cartridge/tests/"
-claim: "coordinator-5d0e-4 2026-09-19T12:01:29.761Z"
+commit: "f56c442b19ba31672e8b66aff58f25a090b750a4"
 ---
 
 # The composed acceptance test proves one daemon, one node per cartridge and attached instances
@@ -51,11 +51,11 @@ the parent's four acceptance boxes:
 
 ## Acceptance
 
-- [ ] The composed test runs green in `just test` (or the gates' suite it
+- [x] The composed test runs green in `just test` (or the gates' suite it
       belongs to) and covers the parent's four boxes.
-- [ ] No test in the suite kills daemons by process name; stopping uses the
+- [x] No test in the suite kills daemons by process name; stopping uses the
       documented stop command.
-- [ ] The test passes with a dirty developer environment (live daemon running,
+- [x] The test passes with a dirty developer environment (live daemon running,
       other sessions active) — contention-safe like host-tests-hold-under-suite-contention.
 ## Answer (2026-09-19, from the user)
 

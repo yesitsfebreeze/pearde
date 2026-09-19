@@ -181,15 +181,15 @@ Every count is `assert_eq!` against a non-zero expectation. No `<=`, no `>=`.
 
 ## Acceptance
 
-- [ ] `cargo nextest run --workspace -E 'test(tests::composed::)' --test-threads=1`
+- [x] `cargo nextest run --workspace -E 'test(tests::composed::)' --test-threads=1`
       runs exactly 4 tests, all pass, none leaky.
-- [ ] Every receipt — written by the fixture in `Drop`, so the body chooses
+- [x] Every receipt — written by the fixture in `Drop`, so the body chooses
       nothing — reports `compositions=1 nodes=3`, a non-zero daemon pid,
       `probe=hit probe_node=same` and `run_node=same`; `instances` also
       `launched=2` and `roots=2 live=2`.
-- [ ] The receipts name the four claims as actions: `run=2 … cold=0`;
+- [x] The receipts name the four claims as actions: `run=2 … cold=0`;
       `launch=2 mcp=1` with `peak ≥ 4`; `call ≥ 7`; `run=3 … cold=2 peak=2`.
-- [ ] A mutant of the tree, run in the same path shape and environment, fails
+- [x] A mutant of the tree, run in the same path shape and environment, fails
       all four tests AND leaves four receipts reporting `compositions=1 nodes=3`
       with `probe_node=differs run_node=differs` — the fixture's own
       measurements of the mutated world, unforgeable by the body. This is not
@@ -199,11 +199,11 @@ Every count is `assert_eq!` against a non-zero expectation. No `<=`, no `>=`.
       writes it unconditionally. The backstop for the claims themselves is the
       diff reading of `reference/mod.rs`'s four bodies — one `assert_eq!` per
       claim, no bound, no detector.
-- [ ] The fixture asserts its runtime directory survives `socket::base()`'s
+- [x] The fixture asserts its runtime directory survives `socket::base()`'s
       silent 48-character filter, refuses a run directory outside its own base,
       counts only real sockets, and tears down with `cartridge stop` on the panic
       path — no `pkill`, no `killall`.
-- [ ] `cargo fmt --all --check` exits 0.
+- [x] `cargo fmt --all --check` exits 0.
 
 ## Verify and Proof
 

@@ -1,5 +1,5 @@
 ---
-state: open
+state: "claimed"
 origin: requested
 priority: 55
 repo: "/Users/feb/dev/cartridge"
@@ -9,6 +9,7 @@ footprint:
 needs:
   - "the-shared-record-describes-only-this-repository/the-record-s-routines-run-in-this-repository"
   - "the-shared-record-describes-only-this-repository/every-link-in-the-record-resolves-and-a-test-says-so"
+claim: "coordinator-5c-16 2026-09-19T14:06:22.859Z"
 ---
 
 # The vision memo states today's composition

@@ -118,11 +118,11 @@ Keep it under ~50 lines. It must not name `kern`, `just lane`/`just land`, `.age
 
 ## Acceptance
 
-- [ ] `quality.md`, `hygiene.md`, `legible.md`, `improve.md`, `self-improve.md` are gone from `.cartridge/memos/routine/`; `new-routine.md` and `distill.md` remain.
-- [ ] No routine in `.cartridge/memos/routine/` names the foreign layout (`memos/SYSTEM.md`, `lanes-not-a-shared-tree`, `kern`, `mcp__kern`, `just lane`/`just land`, `memos/intake`, `git -C memos`, `.agents/skills`), and `distill.md` cites no `builtin/` path.
-- [ ] No memo in the root record or any cartridge's `.cartridge/memos` wikilinks a deleted routine that its own record and the root record no longer hold.
-- [ ] `new-routine.md`'s `description` matches its new body, and neither it nor `distill.md` cites the unresolvable `type/type.md` (both name `[[@memo/type/type.md]]`).
-- [ ] `new-routine.md` and `distill.md` were saved through managed `memo` writes with no unresolved-link warning (implementer quotes the write results).
+- [x] `quality.md`, `hygiene.md`, `legible.md`, `improve.md`, `self-improve.md` are gone from `.cartridge/memos/routine/`; `new-routine.md` and `distill.md` remain.
+- [x] No routine in `.cartridge/memos/routine/` names the foreign layout (`memos/SYSTEM.md`, `lanes-not-a-shared-tree`, `kern`, `mcp__kern`, `just lane`/`just land`, `memos/intake`, `git -C memos`, `.agents/skills`), and `distill.md` cites no `builtin/` path.
+- [x] No memo in the root record or any cartridge's `.cartridge/memos` wikilinks a deleted routine that its own record and the root record no longer hold.
+- [x] `new-routine.md`'s `description` matches its new body, and neither it nor `distill.md` cites the unresolvable `type/type.md` (both name `[[@memo/type/type.md]]`).
+- [x] `new-routine.md` and `distill.md` were saved through managed `memo` writes with no unresolved-link warning (implementer quotes the write results).
 
 ## Verify
 

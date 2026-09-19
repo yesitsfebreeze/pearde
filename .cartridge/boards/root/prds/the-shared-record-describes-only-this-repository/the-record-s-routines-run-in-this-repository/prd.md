@@ -1,5 +1,5 @@
 ---
-state: "specced"
+state: "done"
 origin: requested
 priority: 55
 repo: "/Users/feb/dev/cartridge"
@@ -12,6 +12,7 @@ footprint:
   - ".cartridge/memos/routine/self-improve.md"
   - ".cartridge/memos/routine/new-routine.md"
   - ".cartridge/memos/routine/distill.md"
+commit: "03228f3b1b1fb3cbde3f04ad054a906e61fc0d62"
 ---
 # The record's routines run in this repository
 
@@ -23,11 +24,11 @@ deleted (git is the archive), and no memo wikilinks a routine that no longer exi
 
 ## Acceptance
 
-- [ ] `quality.md`, `hygiene.md`, `legible.md`, `improve.md`, `self-improve.md` are gone from `.cartridge/memos/routine/`; `new-routine.md` and `distill.md` remain.
-- [ ] No routine names the foreign layout (`memos/SYSTEM.md`, `lanes-not-a-shared-tree`, `kern`/`mcp__kern`, `just lane`/`just land`, `memos/intake`, `git -C memos`, `.agents/skills`), and `distill.md` cites no `builtin/` path.
-- [ ] No memo in the root record or any cartridge record wikilinks a deleted routine that its own record and the root record no longer hold.
-- [ ] `new-routine.md`'s description matches its new body; `new-routine.md` and `distill.md` cite `[[@memo/type/type.md]]`, not the unresolvable `type/type.md`.
-- [ ] `new-routine.md` and `distill.md` were saved through managed `memo` writes (run from the live repo root, payload `cwd` = the lane) with no unresolved-link warning.
+- [x] `quality.md`, `hygiene.md`, `legible.md`, `improve.md`, `self-improve.md` are gone from `.cartridge/memos/routine/`; `new-routine.md` and `distill.md` remain.
+- [x] No routine names the foreign layout (`memos/SYSTEM.md`, `lanes-not-a-shared-tree`, `kern`/`mcp__kern`, `just lane`/`just land`, `memos/intake`, `git -C memos`, `.agents/skills`), and `distill.md` cites no `builtin/` path.
+- [x] No memo in the root record or any cartridge record wikilinks a deleted routine that its own record and the root record no longer hold.
+- [x] `new-routine.md`'s description matches its new body; `new-routine.md` and `distill.md` cite `[[@memo/type/type.md]]`, not the unresolvable `type/type.md`.
+- [x] `new-routine.md` and `distill.md` were saved through managed `memo` writes (run from the live repo root, payload `cwd` = the lane) with no unresolved-link warning.
 
 ## Analysis
 

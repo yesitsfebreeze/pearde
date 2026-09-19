@@ -1,5 +1,5 @@
 ---
-state: open
+state: "done"
 origin: requested
 priority: 75
 repo: "/Users/feb/dev/cartridge/cartridge.ctg"
@@ -7,6 +7,7 @@ footprint:
 - "src/transport/cartridge.rs"
 - "src/transport/rpc.rs"
 - "src/node/mod.rs"
+commit: "beb8213d7236a228be2dca531e726cdad5d624ab"
 ---
 
 # A cartridge call can be cancelled
@@ -44,11 +45,11 @@ and a listener shape that can stop.
 
 ## Acceptance
 
-- [ ] An expired bound sends the provider a cancellation it observes, rather
+- [x] An expired bound sends the provider a cancellation it observes, rather
       than only dropping the caller's future.
-- [ ] The provider's in-flight permit is released when a call is cancelled, so
+- [x] The provider's in-flight permit is released when a call is cancelled, so
       a cancelled call no longer consumes one of the 64 slots.
-- [ ] The listener stops doing the cancelled work, or the plan states exactly
+- [x] The listener stops doing the cancelled work, or the plan states exactly
       why it cannot and what it costs.
 
 ## Known hazard

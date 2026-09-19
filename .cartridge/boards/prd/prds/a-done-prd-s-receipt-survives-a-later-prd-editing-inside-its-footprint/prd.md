@@ -1,11 +1,12 @@
 ---
-state: "open"
+state: "analyzing"
 origin: requested
 priority: 78
 repo: "/Users/feb/dev/cartridge/prd.ctg"
 footprint:
 - "src/lifecycle.ts"
 - ".cartridge/tests"
+claim: "coordinator-5d0e-3c 2026-09-19T11:48:58.607Z"
 ---
 
 # A done PRD's receipt survives a later PRD editing inside its footprint

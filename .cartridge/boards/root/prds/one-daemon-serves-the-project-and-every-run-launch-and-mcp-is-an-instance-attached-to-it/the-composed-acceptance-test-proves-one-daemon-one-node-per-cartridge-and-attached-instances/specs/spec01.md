@@ -47,10 +47,9 @@ the second is the structural one:
    run_node=differs
    ```
 
-   A body that short-circuits on anything else writes no such receipt. Cheat H
-   panics at its detector before any `Lab` exists, so no `Drop` runs and **no
-   receipt directory is created at all** — measured; that is where block 4
-   rejects it.
+   Cheat H panics at its detector before any `Lab` exists, so no `Drop` runs
+   and **no receipt directory is created at all** — measured; that is where
+   block 4 rejects it.
 
    The receipt's fields are the fixture's alone: a body cannot author
    `compositions`, `nodes`, `probe`/`probe_node`, `run`/`run_node`, `launched`
@@ -302,7 +301,8 @@ grep -q 'dir.starts_with(&self.base)' "$fix"
 grep -q 't.is_socket()' "$fix"
 # The receipt is the fixture's: it takes a label, never a caller's numbers.
 # The receipt is the fixture's alone: it takes no argument, and Drop writes it,
-# so no body chooses a field, a label, or whether a receipt exists at all.
+# so no body authors a field; it supplies the label and decides whether a
+# `Lab` (and so a receipt) exists.
 grep -q 'fn receipt(&mut self)' "$fix"
 grep -q 'self.receipt();' "$fix"
 if grep -qn 'lab.receipt' "$bodies"; then exit 1; fi
@@ -331,10 +331,10 @@ set -eu
 # because a mutant whose run is distinguishable from the real run is just
 # another in-band signal for a body to detect.
 #
-# And it is judged by the MUTANT'S OWN RECEIPTS, not by the exit code: the four
-# tests must go red *because the composition they measured was wrong*, with the
-# world still fully composed. A body that short-circuits on anything else writes
-# no such receipt. `Drop` writes receipts, so a failing body still leaves one.
+# And it is judged by the MUTANT'S OWN RECEIPTS, not by the exit code: the
+# fixture measured a whole composition whose node identity the mutation broke;
+# why the body went red is not recorded (B18). `Drop` writes receipts
+# unconditionally, so a failing body still leaves one.
 export CARGO_TARGET_DIR="${CARGO_TARGET_DIR:-/tmp/cxbuild-composed}"
 work="/tmp/cxv$$"
 rm -rf "$work"
@@ -387,8 +387,9 @@ CARTRIDGE_COMPOSED_REPORT="$report" XDG_RUNTIME_DIR="$work/rt" \
 # The mutant built and ran, and every one of the four objected.
 grep -q 'Starting 4 tests' "$log"
 grep -q '4 tests run: 0 passed, 4 failed' "$log"
-# WHY they objected: the composition was whole, and what broke was the one thing
-# the mutation broke. Four receipts, every one of them.
+# The fixture measured a whole composition whose node identity the mutation
+# broke; why the body went red is not recorded (B18). Four receipts, every one
+# of them.
 test -d "$report"
 test "$(find "$report" -type f | wc -l | tr -d ' ')" = 4
 cat "$report"/* > "$work/receipts.txt"
@@ -449,9 +450,11 @@ changed is the thing the mutation broke.
   a cartridge.ctg lane (`.lanes/` holds sibling symlinks for `auth.ctg`,
   `cartridge.ctg`, `memo.ctg` only, so `../memory.ctg` does not resolve). Every
   per-cartridge sibling disclaimed the composed shape and handed it here.
-- **The mutant gates the four claims, not every line of the bodies.** A body
-  asserting only one claim survives mutation 1 but not the
-  `0 passed, 4 failed` requirement, which is why that requirement is all four.
+- **Block 4 does not gate the claims' own assertions (B18).** It rejects a body
+  that panics before a `Lab` exists or fails the tree's own
+  `0 passed, 4 failed` census; it does not record which assertion inside a
+  body went red. The diff reading of `reference/mod.rs`'s four bodies is the
+  backstop for the claims themselves.
 - `peak` for `instances` is `≥ 4` rather than exact: it counts daemon children
   too, and a fast-exiting client can shift it by one.
 - `/bin/sleep` orphans are bounded, not eliminated: `Drop` reaps the

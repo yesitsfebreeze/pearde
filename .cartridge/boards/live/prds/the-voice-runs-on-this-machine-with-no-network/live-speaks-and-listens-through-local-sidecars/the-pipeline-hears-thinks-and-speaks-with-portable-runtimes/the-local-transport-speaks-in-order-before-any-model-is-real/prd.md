@@ -1,10 +1,11 @@
 ---
-state: "specced"
+state: "claimed"
 origin: requested
 priority: 94
 repo: "/Users/feb/dev/cartridge/live.ctg"
 footprint: ["src/lib.rs", "src/service.rs", "src/local.rs", "src/turn.rs", "src/transport.rs", "cartridge.json", "Cargo.toml", "Cargo.lock", "README.md", ".cartridge/help.md", ".cartridge/docs/README.md"]
 needs: ["a-setting-chooses-the-transport-and-the-gpt-one-keeps-working"]
+claim: "coordinator-5d0e-1 2026-09-19T11:48:27.055Z"
 ---
 
 # The local transport speaks in order before any model is real
@@ -53,3 +54,13 @@ queued, not dropped. The coordinator's decision for that widening is the one
 already reflected in `specs/spec01.md`'s footprint (the file, not one line);
 this paragraph is that decision recorded here, since the frontmatter footprint
 already carries the whole file and this section had not caught up to it.
+
+**Update, implementation (2026-09-19):** the widening above is confirmed to
+have been the whole file, not the one line the section's opening paragraph
+still names. `src/service.rs` gained `models`/`stt`/`tts`/`brain` on `Config`
+(sourced from `local::Settings::default()`), the `Buffered`-enum
+buffer-then-replay in `start_voice` with the `Live` entry inserted before the
+flush and the holder's lock held for the flush's whole duration, a
+`"listening"` field on `status()`, the `"local"` → `"carrier-pigeon"` literal
+change, and one new test proving both B1 and N7 together. None of it fit in
+the one line the opening paragraph describes.

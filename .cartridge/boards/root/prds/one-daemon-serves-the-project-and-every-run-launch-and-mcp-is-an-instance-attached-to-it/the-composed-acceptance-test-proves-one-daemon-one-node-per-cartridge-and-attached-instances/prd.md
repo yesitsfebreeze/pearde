@@ -1,5 +1,5 @@
 ---
-state: "open"
+state: "claimed"
 origin: requested
 priority: 85
 repo: "/Users/feb/dev/cartridge/cartridge.ctg"
@@ -15,6 +15,7 @@ needs:
 - "one-daemon-serves-the-project-and-every-run-launch-and-mcp-is-an-instance-attached-to-it/agent-runs-key-per-attached-instance-not-per-process"
 footprint:
 - ".cartridge/tests/"
+claim: "coordinator-5d0e-4 2026-09-19T12:01:29.761Z"
 ---
 
 # The composed acceptance test proves one daemon, one node per cartridge and attached instances

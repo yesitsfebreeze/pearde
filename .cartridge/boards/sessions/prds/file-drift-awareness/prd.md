@@ -1,10 +1,11 @@
 ---
-state: open
+state: "analyzing"
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge/sessions.ctg"
 work-kind: leaf
 canonical-scope: file-drift-awareness
+claim: "coordinator-78-4 2026-09-19T12:17:30.979Z"
 ---
 
 # A file changed outside the session is named before it is trusted

@@ -1,10 +1,8 @@
 ---
 repo: /Users/feb/dev/cartridge/agent.ctg
-state: deferred
-deferred-from: open
-deferred-on: "2026-09-15"
+state: open
 origin: requested
-priority: 50
+priority: 100
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: agent
@@ -13,12 +11,12 @@ review-round: 3
 review-status: passed
 canonical-scope: a-priority-event-unblocks-the-step
 needs:
-- '@agent/a-live-run-accepts-events-from-outside'
+  - '@agent/a-live-run-accepts-events-from-outside'
 footprint:
-- /Users/feb/dev/cartridge/agent.ctg/src/lib.rs
-- /Users/feb/dev/cartridge/agent.ctg/src/model_loop.rs
-- /Users/feb/dev/cartridge/agent.ctg/src/stream.rs
-- /Users/feb/dev/cartridge/agent.ctg/.cartridge/tests/unit/run_state.rs
+  - /Users/feb/dev/cartridge/agent.ctg/src/lib.rs
+  - /Users/feb/dev/cartridge/agent.ctg/src/model_loop.rs
+  - /Users/feb/dev/cartridge/agent.ctg/src/stream.rs
+  - /Users/feb/dev/cartridge/agent.ctg/.cartridge/tests/unit/run_state.rs
 ---
 
 # a-priority-event-unblocks-the-step

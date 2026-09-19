@@ -1,11 +1,9 @@
 ---
 repo: /Users/feb/dev/cartridge/agent.ctg
-state: deferred
-deferred-from: open
-deferred-on: "2026-09-15"
+state: open
 superseded-by: "@root/the-orchestrator-sees-and-talks-to-its-workers"
 origin: requested
-priority: 50
+priority: 100
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: agent
@@ -14,13 +12,13 @@ review-round: 3
 review-status: passed
 canonical-scope: a-live-run-accepts-events-from-outside
 needs:
-- '@agent/an-event-declares-its-type'
-- '@sessions/sub-agent-sessions-record-parent-and-mailbox'
+  - '@agent/an-event-declares-its-type'
+  - '@sessions/sub-agent-sessions-record-parent-and-mailbox'
 footprint:
-- /Users/feb/dev/cartridge/agent.ctg/cartridge.json
-- /Users/feb/dev/cartridge/agent.ctg/src/lib.rs
-- /Users/feb/dev/cartridge/agent.ctg/src/model_loop.rs
-- /Users/feb/dev/cartridge/agent.ctg/.cartridge/tests/unit/run_state.rs
+  - /Users/feb/dev/cartridge/agent.ctg/cartridge.json
+  - /Users/feb/dev/cartridge/agent.ctg/src/lib.rs
+  - /Users/feb/dev/cartridge/agent.ctg/src/model_loop.rs
+  - /Users/feb/dev/cartridge/agent.ctg/.cartridge/tests/unit/run_state.rs
 ---
 
 # a-live-run-accepts-events-from-outside

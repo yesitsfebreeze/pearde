@@ -1,11 +1,12 @@
 ---
-state: open
+state: "analyzing"
 origin: requested
 priority: 70
 repo: "/Users/feb/dev/cartridge/router.ctg"
 footprint:
 - "src/health.rs"
 - ".cartridge/tests"
+claim: "coordinator-5d5e-3 2026-09-19T12:10:28.591Z"
 ---
 
 # a route that refuses reasoning keeps answering without it
@@ -13,9 +14,11 @@ footprint:
 ## Outcome
 
 A route that does not support a reasoning control answers the turn without it
-rather than refusing the turn. Every spelling of the control — `thinking`,
-`reasoning`, `reasoning_effort`, `output_config.effort` — is dropped together,
-because they are one request feature wearing three wire names.
+rather than refusing the turn, where the control is one the router itself added
+from policy; a control the caller supplied is a waiver and still refuses the
+route. Every spelling of the control — `thinking`, `reasoning`,
+`reasoning_effort`, `output_config.effort` — is dropped together, because they
+are one request feature wearing three wire names.
 
 ## Evidence
 

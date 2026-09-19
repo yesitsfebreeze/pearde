@@ -756,3 +756,118 @@ outstanding change is a text-only edit of the five sentences and one doc
 comment listed under B20, no gate design, verifiable by `grep -n`; it needs a
 user grant (or the coordinator's acceptance of that edit checked by diff)
 before collect.
+
+## Round 7 — 2026-09-19 — user-granted text-only round, scoped to B20 alone
+
+Presented revision: the analyst's B20 text correction against `specs/spec01.md`
+and the reference fixture's `receipt()` doc comment, against cartridge.ctg
+`d169293` (`git -C cartridge.ctg rev-parse d1692932449c89106bb1928b717146ee8b0083a8`
+resolves; unrelated to the live checkout's current HEAD, which carries an
+unrelated peer session's dirty files). Scope per the coordinator's framing:
+correct the six spans B20 named to the wording acceptance box 4 already uses,
+then check only that no sentence anywhere still attributes the suite's
+reddening under the mutant to the claims themselves. No gate redesign, no
+re-derivation of B18, no new finding in B18's class.
+
+| Input | Content digest |
+| --- | --- |
+| Plan | `prd.md` — `63a8a62035a8f152e0d2b3b25229b9aa3cb10c43c5831970ded983d600dedc79` (frontmatter gained `state: analyzing` and this session's `claim:` line since round 6; body unchanged) |
+| Specs | `specs/spec01.md` — `2cdd67e46ed879407ad92e065ba7218ae8f0e936235bcd30b0270434256026f2` |
+| Reference | `reference/fixture.rs` — `aa69cd624971c13c8d17b81216e154e7b0322b909a888306eb1bbebc0da8db89` (doc-comment edit only); `reference/mod.rs` — `379aa0c4f84b1aeb7dfa81042f392dbffdec782bedec7928b8c77bcb8c19a0a1` (byte-identical to round 5/6 — unchanged) |
+| Material dependency | cartridge.ctg `d169293`; `review-plan.md` step 4 ceiling rule; round 6's B20 finding table |
+
+| Dimension | Score / 20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 18 | Unchanged from rounds 5–6: one outcome, four bodies 1:1 onto the parent's four boxes. −2: the toy three-cartridge profile is not the real composition (disclaimed, unavoidable from the lane). |
+| Ownership and reuse | 19 | Unchanged; reinstalled the preserved reference into a clean `d169293` worktree and it attached with no `src/` edit. −1: `CARGO_TARGET_DIR` outside the tree (justified, stated). |
+| Dependencies and implementable slices | 19 | Unchanged; reference installed per Steps, green first time this round too. −1: `kache` as a stated but silent prerequisite of block 4's budget. |
+| Observable acceptance and baseline evidence | 17 | **B20 is closed.** Read `specs/spec01.md` whole and grepped it for `because\|attribut\|objected\|went red\|why\|chooses nothing\|writes no such receipt\|short-circuit`: every hit left is either the already-correct disclaiming text (lines 57–63, 196–201, 336, 391, 456) or unrelated prose (`## Where the test lives, and why it is Rust`, `attribute from src/`, `settled must require state == "active", because…`, `# The mutant built and ran, and every one of the four objected` — a neutral census statement, not an attribution). The one remaining mutation-design sentence (lines 349–353, `assert_eq!(launches, 2)` "goes red — fast, because the body's wait loop breaks on `launches > 1`") describes why *this specific reference body's* assertion fails under the mutation, not a general claim that the gate can attribute red to a claim; it is not disputed by cheat I and is not part of B20's class. Re-ran the same grep over `reference/fixture.rs` and `reference/mod.rs`: no hit. The fixture's `receipt()` doc comment now reads "The body authors no field… supplies only its own label, and decides whether a `Lab` (and so a receipt) exists at all" — matches box 4's wording, no leftover "chooses NOTHING" claim. −3: the underlying ceiling itself (B18: block 4 does not gate which assertion inside a body went red; the backstop is a diff reading, not an automated per-claim gate) is now honestly and consistently stated everywhere, but it is still a real, if disclosed, coverage gap on three of the parent's four claims — matching round 5's own costing of this dimension at 16–17 once the overclaim is fully gone. |
+| Failure, recovery and compatibility | 18 | Unchanged and re-verified: 1 `cartridge daemon` before this round's checks, 1 after (only the pre-existing project daemon); 0 `/tmp/cxv*` left after four fresh runs; no kill by name; no `pkill`/`killall` in fixture or bodies. −2: `/bin/sleep` orphans bounded (`peak ≥ 4`), not eliminated, same as every prior round. |
+| Reviewer total | **91 / 100** | No unresolved blocking finding. |
+
+### B20 — verdict: resolved
+
+Round 6 found the refuted "the reddening is attributed to the claims" property
+surviving in five spots of `specs/spec01.md` (lines 50, 305, 335–337, 390,
+452–454) plus the `receipt()` doc comment in `reference/fixture.rs`. Reading the
+presented `specs/spec01.md` line by line against round 6's table:
+
+| B20 location | now reads | verdict |
+| --- | --- | --- |
+| line 50 | "Cheat H panics at its detector before any `Lab` exists, so no `Drop` runs and no receipt directory is created at all" | the false sentence above it is deleted; what remains is true and non-attributing |
+| 304–305 (block 2 comment) | "so no body authors a field; it supplies the label and decides whether a `Lab` (and so a receipt) exists" | matches the recommended fix verbatim |
+| 334–337 (block 4 preamble comment) | "the fixture measured a whole composition whose node identity the mutation broke; why the body went red is not recorded (B18)" | disclaims attribution explicitly |
+| 390–391 (block 4 post-census comment) | same sentence, repeated at the second site | disclaims attribution explicitly |
+| 452–454 (Remaining risk) | "Block 4 does not gate the claims' own assertions (B18). It rejects a body that panics before a `Lab` exists or fails the tree's own `0 passed, 4 failed` census; it does not record which assertion inside a body went red." | disclaims attribution explicitly, names the diff-reading backstop |
+| `reference/fixture.rs` `receipt()` doc comment | "The body authors no field — not a number, not a count… The body supplies only its own label, and decides whether a `Lab` (and so a receipt) exists at all." | matches box 4's wording; the false "chooses NOTHING" line is gone |
+
+I independently swept both files for the same class of claim with a fresh
+regex (`because|attribut|objected|went red|why|chooses nothing|writes no such
+receipt|short-circuit`) rather than trusting the analyst's six-item list, and
+found no further hit that attributes the mutant's reddening to the claims
+themselves. **B20 is resolved.**
+
+### Negative confirmation: only text moved
+
+`git diff` in `prd.ctg` over this PRD's directory shows exactly two files
+changed since the last commit (`4e543acc`): `prd.md` (frontmatter `state` and
+`claim` only — this review session's own claim, not a content edit) and
+`specs/spec01.md` (five hunks, all inside prose or `#`-prefixed shell
+comments; every non-comment line of all four `## Verify` fenced blocks is
+byte-identical to round 6). The Acceptance section (lines 182–206) has no hunk
+touching it and its frontmatter (lines 1–7, `footprint:` unchanged) has no
+hunk either. `reference/mod.rs`'s digest is unchanged from round 5/6;
+`reference/fixture.rs` changed only in the `receipt()` doc comment (confirmed
+by reading the diff region directly, since the file is gitignored and
+untracked).
+
+### Re-run of all four Verify blocks (not required by scope, done as a sanity check on the doc-comment edit)
+
+The scope only asks for a text sweep, but a doc-comment edit inside a `.rs`
+file can, in principle, change `rustfmt`'s verdict, so I re-ran all four
+blocks verbatim in a disposable detached worktree of `d169293`
+(`/tmp/cxr7-cartridge`, removed and pruned afterward) with the corrected
+`reference/{fixture.rs,mod.rs}` installed per Steps 1–2:
+
+| block | result |
+| --- | --- |
+| 1 (nextest, receipts) | exit 0 — `Starting 4 tests` / `4 tests run: 4 passed`, all receipt/claim greps passed |
+| 2 (static guards) | exit 0 |
+| 3 (`cargo fmt --all --check`) | exit 0 — the doc-comment rewrap did not disturb formatting |
+| 4 (mutant) | exit 0 — `4 tests run: 0 passed, 4 failed`, four receipts, `compositions=1 nodes=3` ×4, `probe_node=differs` ×4, `run_node=differs` ×4 |
+
+Identical to round 6's and round 5's results. No gate regression; B18 is
+unchanged as a recorded ceiling and was not re-attacked.
+
+Findings and concrete revisions: none open. B20 resolved; B18 remains the
+recorded ceiling per `review-plan.md` step 4, unchanged since round 5.
+Disposition: **keep** — the plan, spec and reference implementation pass.
+Validation: cwd `/tmp/cxr7-cartridge` (detached worktree of `d169293` created
+via `git -C cartridge.ctg worktree add --detach`, cleaned with `git checkout`
+of the one edited tracked file, removal of the untracked `composed/` dir added
+for the test, then `git worktree remove` and `git worktree prune`; `git -C
+cartridge.ctg worktree list` back to its original two entries; `git -C prd.ctg
+status --porcelain` over the PRD directory shows only the two expected dirty
+files). `CARGO_TARGET_DIR` set to scratch paths outside every repository for
+every cargo invocation. Host hygiene: `cartridge daemon` census unchanged
+(1 pre-existing daemon, pid 22955, untouched); 0 `/tmp/cxv*` directories left;
+no `pkill`/`killall` issued.
+Reviewer identity: independent reviewer subagent, round 7 (did not write the
+plan, the analyst's B20 edit, or any earlier round's text).
+User rating: not supplied; delegated.
+User feedback/provenance: coordinator instruction, 2026-09-19, granting one
+text-only round scoped to correcting B20's six spans and checking only that no
+sentence still attributes the mutant's reddening to the claims.
+Result: **PASS (91/100)** — no unresolved blocking finding.
+Unresolved blocking findings: none.
+Recorded ceiling (not blocking, `review-plan.md` step 4): **B18**, unchanged —
+block 4 rejects a body that panics before a `Lab` exists or fails the plain
+`0 passed, 4 failed` census, but does not record which assertion inside a body
+went red; the backstop is the diff reading of `reference/mod.rs`'s four
+`assert_eq!`s per claim.
+Rounds used / remaining: **7 used** (5 of the original allowance, 1 of 1
+granted after round 5, 1 of 1 granted after round 6); the plan has passed, so
+no further rounds are needed.
+Next action: **proceed to implementation/collect.** Copy the preserved
+`reference/{fixture.rs,mod.rs}` per the spec's Steps, run the four Verify
+blocks in the lane and then in `repo`, and collect.

@@ -2,7 +2,6 @@
 state: "done"
 origin: requested
 priority: 50
-repo: "/Users/feb/dev/cartridge"
 repo: "/Users/feb/dev/cartridge/lsp.ctg"
 footprint:
 - "README.md"

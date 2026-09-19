@@ -1,10 +1,8 @@
 ---
 repo: /Users/feb/dev/cartridge/agent.ctg
-state: deferred
-deferred-from: open
-deferred-on: "2026-09-15"
+state: open
 origin: requested
-priority: 50
+priority: 100
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: agent
@@ -13,11 +11,11 @@ review-round: 3
 review-status: passed
 canonical-scope: the-run-is-a-stream-of-typed-events
 needs:
-- '@agent/an-event-declares-its-type'
-- '@agent/a-live-run-accepts-events-from-outside'
-- '@agent/a-priority-event-unblocks-the-step'
-- '@runtime/a-listener-subscribes-to-event-types'
-- '@agent/a-stalled-step-raises-its-own-event'
+  - '@agent/an-event-declares-its-type'
+  - '@agent/a-live-run-accepts-events-from-outside'
+  - '@agent/a-priority-event-unblocks-the-step'
+  - '@runtime/a-listener-subscribes-to-event-types'
+  - '@agent/a-stalled-step-raises-its-own-event'
 ---
 
 # the-run-is-a-stream-of-typed-events

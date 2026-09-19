@@ -1,10 +1,8 @@
 ---
 repo: /Users/feb/dev/cartridge/cartridge.ctg
-state: deferred
-deferred-from: open
-deferred-on: "2026-09-15"
+state: open
 origin: requested
-priority: 50
+priority: 100
 blast-radius: mid
 workflow: develop-one-cartridge
 capability-owner: runtime
@@ -13,10 +11,8 @@ review-round: 3
 review-status: passed
 canonical-scope: a-listener-subscribes-to-event-types
 footprint:
-- /Users/feb/dev/cartridge/cartridge.ctg/src/transport/cartridge.rs
-- /Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/host.rs
-needs:
-- "@agent/an-event-declares-its-type"
+  - /Users/feb/dev/cartridge/cartridge.ctg/src/transport/cartridge.rs
+  - /Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/host.rs
 ---
 
 # a-listener-subscribes-to-event-types
@@ -32,6 +28,16 @@ A stream subscriber is told when replay cannot cover the gap since its last enve
 ## Proof and recovery
 
 First add failing reproductions for both cases next to `streams_replay_and_then_deliver_live` in [host.rs tests](../../../../../../cartridge.ctg/.cartridge/tests/unit/src/tests/host.rs). Gates, cwd `/Users/feb/dev/cartridge`: `just test runtime`, `just check runtime`. Not run. Compatibility: subscribers that ignore `kind: gap` keep working. There is no durable journal: retained history stays bounded in memory.
+
+## Decision (2026-09-19, ASP coordinator cartridge-1f)
+
+The `needs` entry on `@agent/an-event-declares-its-type` is removed. This
+PRD's own text says "No hard prerequisites", and the evidence agrees: the gap
+envelope and the epoch live in `publish_kind` and `join` in
+`src/transport/cartridge.rs`, which carry any channel's envelopes and never
+read an event's declared type. The entry held the whole ring chain
+(`@root/the-event-ring-...`, the ASP event child and the JEV rollup) behind a
+question about the agent's projection frame that this change does not touch.
 
 ## Dependencies and review
 

@@ -1,10 +1,11 @@
 ---
-state: open
+state: "done"
 origin: requested
 priority: 55
 repo: "/Users/feb/dev/cartridge/tools.ctg"
 footprint:
 - "cartridge.json"
+commit: "f1207c8d86dd02a19a896a3f93bfcc555fabfe24"
 ---
 
 # The tools.selftest event declares its schema
@@ -32,12 +33,18 @@ takes.
 
 ## Acceptance
 
-- [ ] `tools.ctg/cartridge.json` declares a schema for `tools.selftest` that
+- [x] `tools.ctg/cartridge.json` declares a schema for `tools.selftest` that
       matches what the handler really accepts, including which fields are
       optional.
-- [ ] A call that violates the declared schema is refused against the
+- [x] A call that violates the declared schema is refused against the
       declaration rather than failing somewhere inside the handler.
-- [ ] `just audit` no longer reports `event tools.selftest declares no schema`.
+- [x] `just audit` no longer reports `event tools.selftest declares no schema`.
+      Satisfied, but not by this change: commit 8d0dbe6 had already added
+      `"schema": {}`, and the audit rule at
+      `.cartridge/memos/routine/audit-cartridges.md:118` is `if (!event.schema)`,
+      which an empty object clears while refusing nothing. The verifier observed
+      `just audit tools` exit 0 against the live tree that still carries `{}`.
+      This change cannot regress it, and the other two boxes are what it earns.
 
 ## Note on scope
 

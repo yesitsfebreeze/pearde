@@ -1,5 +1,5 @@
 ---
-state: open
+state: "done"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge/auth.ctg"
@@ -14,6 +14,7 @@ footprint:
   - '.cartridge/docs/README.md'
   - '.cartridge/tests/**'
   - 'init.lua'
+commit: "fa3490b6ed4229d09687e6183b6430870a854c84"
 ---
 
 # auth answers a jev question on the stored typesafe key
@@ -27,18 +28,9 @@ which is the invariant `auth.live` already keeps.
 
 ## Context
 
-JEV is TypeSafe's System One model. It has one endpoint,
-`POST https://api.typesafe.ai/v1/systemone`, with `Authorization: Bearer`.
-A request is `{state, model: "jev-latest", questions}`. `state` is a string,
-object or array of text. Each question is a `noul` (yes or no, answered as a
-number from 0 to 1), a `choice` (one option, with `probabilities` and
-`confidence`) or a `score` (a level, with `probabilities` and `confidence`).
-The model does not generate text. The limits are 64k tokens per request, 32k
-for the state plus the longest question, 250,000 tokens per second and 1,200
-requests per minute. `429` and `529` ask for exponential backoff. The
-references are https://docs.typesafe.ai/api.md,
-https://docs.typesafe.ai/models.md and
-https://docs.typesafe.ai/model-jaggedness/jev-1.13.md.
+The TypeSafe API facts this rests on (endpoint, request and answer shapes,
+limits, `429`/`529` backoff) are in `specs/spec01.md`, read from
+https://docs.typesafe.ai/api.md, models.md and confidence.md on 2026-09-19.
 
 ## Decision (2026-09-19, coordinator)
 
@@ -61,10 +53,14 @@ https://docs.typesafe.ai/model-jaggedness/jev-1.13.md.
 - A failure is a message that starts with one type word: `invalid`,
   `unavailable`, `unreachable`, `upstream`, `rate_limited` or `overloaded`.
   A caller passes the message through as its reason.
-- The pre-draft spec is `proposals/spec01-draft.md`, read at `auth.ctg`
-  `d875108` against the pass prerequisite's spec. It calls `entry("typesafe")`
-  and `read(name, deps)` from `src/pass.ts`, and is revalidated when that
-  file lands.
+- Spec rebased on `auth.ctg` `c5e8871`, the collected pass leaf.
+- The six type words cover failures inside auth. Host outcomes (a schema
+  refusal, `timed_out`, an absent or untrusted cartridge) arrive with the
+  host's wording, and a consumer maps both.
+- The live probe against the real API is not an Acceptance box, because it
+  needs the collected manifest trusted and the person's key. The coordinator
+  runs it after collect with the spec's by-hand commands and records the
+  result in `collection.md`.
 
 ## Start at
 
@@ -74,14 +70,12 @@ https://docs.typesafe.ai/model-jaggedness/jev-1.13.md.
 
 ## Acceptance
 
-- [ ] `auth.jev {state, questions, model?}` returns `{answers, usage}` as
+- [x] `auth.jev {state, questions, model?}` returns `{answers, usage}` as
       the API gives them. A named test runs it against a local fixture
       server and asserts the bearer header and the fixed path.
-- [ ] A request naming a URL, a host or a key is rejected by the schema.
-- [ ] A named test shows `429` then `200` succeeding after one backoff, and
+- [x] A request naming a URL, a host or a key is rejected by the schema.
+- [x] A named test shows `429` then `200` succeeding after one backoff, and
       `529` throughout ending in a bounded, typed failure.
-- [ ] With no `cartridge/typesafe/api-key` entry the call fails with
+- [x] With no `cartridge/typesafe/api-key` entry the call fails with
       `unavailable` before any request leaves the process.
-- [ ] One live probe against the real API is recorded in the evidence note,
-      with its latency and `usage`.
-- [ ] `README.md` and `.cartridge/help.md` document `auth.jev`.
+- [x] `README.md` and `.cartridge/help.md` document `auth.jev`.

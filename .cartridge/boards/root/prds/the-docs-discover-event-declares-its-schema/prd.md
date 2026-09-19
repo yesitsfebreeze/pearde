@@ -1,11 +1,12 @@
 ---
-state: open
+state: "analyzing"
 origin: requested
 priority: 55
 repo: "/Users/feb/dev/cartridge"
 repo: "/Users/feb/dev/cartridge/docs.ctg"
 footprint:
 - "cartridge.json"
+claim: "coordinator-5c-9 2026-09-19T12:46:51.291Z"
 ---
 
 # The docs.discover event declares its schema

@@ -104,3 +104,10 @@ Rounds used / remaining: 2 / 3.
 Next action: the coordinator appends this round to review.md, optionally folds in N1–N3, and proceeds to claim and implement.
 
 VERDICT: PASS
+
+## Coordinator note — 2026-09-19 (not a review round)
+
+Spec amended after the implementer found the memo tool refuses the 20 note writes because each note's existing
+`description` exceeds the tool's 200-character limit. The amendment adds one mechanical step inside the same
+footprint files (shorten the description, move the rest into the body). The fresh verifier checks it against
+the lane diff; no rounds are consumed or reset.

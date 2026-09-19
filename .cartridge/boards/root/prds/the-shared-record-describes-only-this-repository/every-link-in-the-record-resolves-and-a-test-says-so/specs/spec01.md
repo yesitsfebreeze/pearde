@@ -146,3 +146,12 @@ Notes for Verify:
   fast-forward, rerun `prd collect` once the record is consistent; the landed commit is already on
   the repo and the failure names the dead link.
 
+## Coordinator amendment (2026-09-19, after implementer-2)
+
+The memo tool refuses every write to the 20 `note/ui-design-*.md` files, whatever the body change:
+`description over 200 characters; state the rule, put the rest in the body`. Each of those notes already
+carries a multi-line `description` over 200 characters. So each note write also shortens its `description`
+to one statement of at most 200 characters and moves the removed text, unchanged in meaning, to the top of
+the body. No other frontmatter key changes. This stays inside the same 20 footprint files, and the diff
+reviewer checks that no text was lost. Hand edits remain forbidden: the write must go through the tool.
+

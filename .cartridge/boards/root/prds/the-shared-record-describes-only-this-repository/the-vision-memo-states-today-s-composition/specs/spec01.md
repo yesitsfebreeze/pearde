@@ -8,12 +8,12 @@ footprint:
 
 ## Acceptance
 
-- [ ] The section `## Where the composition actually stands` in `system/vision.md` opens with a `Measured ...` line dated on or after 2026-09-17 (the day it is written) and names `just audit`, `just isolation` and the root profile `` `.cartridge/init.lua` ``.
-- [ ] It has at least five bullets, each re-measured that day: root profile entries, `just audit` result and soft findings, README/help presence per `*.ctg`, size (memory.ctg source lines vs median, prd.ctg tracked files), record hygiene (foreign routines deleted, link test in `just test layout`), and the isolation gate.
-- [ ] It no longer claims `live-record`/`live-mcp` profile entries, cartridges without a help page or README, the foreign routines `quality.md`/`hygiene.md`, "17 cartridges", "0 of 17", or that the boundary rule holds.
-- [ ] While `routine/check-cartridge-isolation.md` still reads `cartridge.ctg/.cartridge/init.lua`, the section says so and says the key check is inert (it reads `provide`, which no manifest carries). If that PRD has already landed, the bullet is dropped and the section says what `just isolation` then measures.
-- [ ] Nothing outside that section changes; the frontmatter (description is 194 chars, under the 200 limit) stays byte-identical.
-- [ ] The write goes through the memo tool and returns `"saved":true`.
+- [x] The section `## Where the composition actually stands` in `system/vision.md` opens with a `Measured ...` line dated on or after 2026-09-17 (the day it is written) and names `just audit`, `just isolation` and the root profile `` `.cartridge/init.lua` ``.
+- [x] It has at least five bullets, each re-measured that day: root profile entries, `just audit` result and soft findings, README/help presence per `*.ctg`, size (memory.ctg source lines vs median, prd.ctg tracked files), record hygiene (foreign routines deleted, link test in `just test layout`), and the isolation gate.
+- [x] It no longer claims `live-record`/`live-mcp` profile entries, cartridges without a help page or README, the foreign routines `quality.md`/`hygiene.md`, "17 cartridges", "0 of 17", or that the boundary rule holds.
+- [x] While `routine/check-cartridge-isolation.md` still reads `cartridge.ctg/.cartridge/init.lua`, the section says so and says the key check is inert (it reads `provide`, which no manifest carries). If that PRD has already landed, the bullet is dropped and the section says what `just isolation` then measures.
+- [x] Nothing outside that section changes; the frontmatter (description is 194 chars, under the 200 limit) stays byte-identical.
+- [x] The write goes through the memo tool and returns `"saved":true`.
 
 ## How to write it
 

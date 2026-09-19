@@ -1,5 +1,5 @@
 ---
-state: "claimed"
+state: "done"
 origin: requested
 priority: 55
 repo: "/Users/feb/dev/cartridge"
@@ -9,7 +9,7 @@ footprint:
 needs:
   - "the-shared-record-describes-only-this-repository/the-record-s-routines-run-in-this-repository"
   - "the-shared-record-describes-only-this-repository/every-link-in-the-record-resolves-and-a-test-says-so"
-claim: "coordinator-5c-16 2026-09-19T14:06:22.859Z"
+commit: "f5ec10d4580061e8a472af629a991fa653015f5b"
 ---
 
 # The vision memo states today's composition
@@ -23,8 +23,8 @@ it is written, names its date and commands (`just audit`, `just isolation`, the 
 
 ## Acceptance
 
-- [ ] The section names `just audit`, `just isolation` and `.cartridge/init.lua`, and carries a measurement date after 2026-09-16.
-- [ ] It no longer claims `live-record`/`live-mcp` profile entries, missing help pages, or foreign routines.
+- [x] The section names `just audit`, `just isolation` and `.cartridge/init.lua`, and carries a measurement date after 2026-09-16.
+- [x] It no longer claims `live-record`/`live-mcp` profile entries, missing help pages, or foreign routines.
 
 ## Analysis
 
@@ -42,8 +42,8 @@ exit 0, 18 cartridges. The root profile has 18 path entries, with no `live-recor
 Footprint: `.cartridge/memos/system/vision.md` (clean). Shared with the isolation-gate PRD, so the
 two integrate one after the other.
 Acceptance:
-- [ ] The section names `just audit`, `just isolation` and `.cartridge/init.lua`, and carries a measurement date after 2026-09-16.
-- [ ] It no longer claims `live-record`/`live-mcp` profile entries, missing help pages, or foreign routines.
+- [x] The section names `just audit`, `just isolation` and `.cartridge/init.lua`, and carries a measurement date after 2026-09-16.
+- [x] It no longer claims `live-record`/`live-mcp` profile entries, missing help pages, or foreign routines.
 Verify:
 ```sh
 s=$(sed -n '/^## Where the composition actually stands/,/^## Where this is going/p' .cartridge/memos/system/vision.md)

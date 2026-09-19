@@ -7,6 +7,8 @@ work-kind: leaf
 footprint:
   - "src/service.rs"
   - "src/provenance.rs"
+needs:
+  - "@sessions/file-drift-awareness"
 ---
 
 # A read stamps the file it returned
@@ -28,6 +30,7 @@ Checked 2026-09-19 by coordinator cartridge-5c at fs.ctg fc8314e and sessions.ct
 - The only live populator of the set is `record_changes` (`sessions.ctg/src/lib.rs:715`,
   `changes::append`), which fs sends on the write side (`fs.ctg/src/lib.rs:91`,
   `fs.ctg/src/provenance.rs:108`). The read path sends nothing.
+- Needs `@sessions/file-drift-awareness`, which creates the stamping surface (stamp store, `touch` recording, `drift` read-back) this row calls; agreed with cartridge-78 2026-09-19. Collect 78's row first and use the function names it reports.
 - Requested by cartridge-78 for `@sessions/file-drift-awareness`, whose analyst and reviewer found the
   drift feature inert without this. The footprint is the analyst's claim at second hand; the spec
   must confirm where the read success path lives before fixing it.

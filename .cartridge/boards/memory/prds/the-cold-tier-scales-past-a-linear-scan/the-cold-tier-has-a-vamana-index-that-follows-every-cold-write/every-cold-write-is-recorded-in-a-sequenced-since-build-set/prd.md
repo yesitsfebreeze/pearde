@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/memory.ctg
-state: open
+state: "specced"
 origin: requested
 priority: 60
 blast-radius: mid
@@ -39,11 +39,12 @@ set. It stays bounded by the distinct cold ids ever written.
 ## Acceptance
 
 - [ ] After each of the five writers, a reopened store (first handle dropped) reads a since-build set naming exactly the ids put and deleted, with rising `seq`.
-- [ ] A write that lands after the captured S (simulated build: scan, write, clear) keeps its entry after `clear_cold_since_build(S)`; entries at or below S are gone.
+- [ ] A write that commits while the build's scan transaction is open (from another thread) keeps its entry after `clear_cold_since_build(S)`; entries at or below S are gone.
 - [ ] The floor persists across `Store::open` and never moves down.
 
 ## Proof and recovery
 
-The tests are named in specs/spec01.md. Each Verify block fails at 5097a83 with "no tests to
-run". An older binary ignores the table. Deleting the table only forces the next build to be
+The tests are named in specs/spec01.md. The Verify `test` block fails at 3432b13: its
+command runs only the 8 existing `cold_rekey_*`/`cold_relocate_*` tests and exits 0, but
+none of the three named tests is reported passed. An older binary ignores the table. Deleting the table only forces the next build to be
 a full one. This leaf inherits 2 used review rounds from `the-cold-tier-has-a-vamana-index-that-follows-every-cold-write`.

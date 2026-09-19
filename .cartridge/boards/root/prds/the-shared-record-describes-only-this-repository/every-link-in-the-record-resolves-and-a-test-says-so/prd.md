@@ -1,5 +1,5 @@
 ---
-state: "analyzing"
+state: "claimed"
 origin: requested
 priority: 55
 repo: "/Users/feb/dev/cartridge"
@@ -9,15 +9,34 @@ footprint:
   - ".cartridge/memos/decision/desktop-is-a-later-client-over-the-same-core.md"
   - ".cartridge/memos/decision/the-terminal-grid-lives-in-pty.md"
   - ".cartridge/memos/decision/the-agent-surface-preserves-the-visible-shell.md"
-  - ".cartridge/memos/note"
-claim: "coordinator-5c-6 2026-09-19T12:28:53.239Z"
+  - ".cartridge/memos/note/ui-design-aurora-gradient.md"
+  - ".cartridge/memos/note/ui-design-art-deco.md"
+  - ".cartridge/memos/note/ui-design-bauhaus.md"
+  - ".cartridge/memos/note/ui-design-bento-grid.md"
+  - ".cartridge/memos/note/ui-design-claymorphism.md"
+  - ".cartridge/memos/note/ui-design-constructivism.md"
+  - ".cartridge/memos/note/ui-design-dark-mode.md"
+  - ".cartridge/memos/note/ui-design-flat-design.md"
+  - ".cartridge/memos/note/ui-design-glassmorphism.md"
+  - ".cartridge/memos/note/ui-design-material-design.md"
+  - ".cartridge/memos/note/ui-design-memphis.md"
+  - ".cartridge/memos/note/ui-design-minimalism.md"
+  - ".cartridge/memos/note/ui-design-neo-brutalism.md"
+  - ".cartridge/memos/note/ui-design-neumorphism.md"
+  - ".cartridge/memos/note/ui-design-retro-pixel.md"
+  - ".cartridge/memos/note/ui-design-skeuomorphism.md"
+  - ".cartridge/memos/note/ui-design-swiss-international.md"
+  - ".cartridge/memos/note/ui-design-tui-terminal.md"
+  - ".cartridge/memos/note/ui-design-vaporwave-synthwave.md"
+  - ".cartridge/memos/note/ui-design-y2k-frutiger-aero.md"
+claim: "coordinator-5c-8 2026-09-19T12:45:02.921Z"
 ---
 
 # Every link in the record resolves and a test says so
 
 ## Outcome
 
-Every relative markdown link in `.cartridge/memos/**/*.md` outside fenced code resolves from the
+Every relative markdown link in the tracked `.cartridge/memos/**/*.md` (`git ls-files`) outside fenced code resolves from the
 memo's own directory, and an executed test in the `layout` target of `just test` fails on any link
 that does not.
 
@@ -25,47 +44,12 @@ that does not.
 
 - [ ] `every relative link in the record resolves` passes.
 - [ ] `the record link check reports a planted dead link` passes (the checker is not a no-op).
-- [ ] The three decision memos state why their `ui` board links were removed.
+- [ ] None of the three decision memos links into `boards/ui/`. Each still names the slug and cites `bed3eaaa` as the reason the link was removed.
 
 ## Analysis
 
-Split from `@root/the-shared-record-describes-only-this-repository` on 2026-09-19 by analyst-1 (coordinator-5c-3). No review rounds used before the split. Full analysis: `.state/loop/the-shared-record-describes-only-this-repository/analyst-1.md`.
-
-Outcome: every relative markdown link in `.cartridge/memos/**/*.md` outside fenced code resolves
-from the memo's own directory. An executed test in the existing `layout` target of `just test`
-fails on any link that does not.
-Decision on box 4: do not touch `.cartridge/justfile`. It is dirty with another session's edits,
-and collect would commit them. Add the test to `.cartridge/tests/integration/source-layout.test.ts`,
-which is clean. `just test`/`just test layout` already runs it (`_one test layout` → `bun test …source-layout.test.ts`).
-No new justfile target is needed.
-Record edits: in the 3 decision links, replace the link with the bare slug in backticks and add the reason
-("the `ui` board was deleted in prd.ctg bed3eaaa"). In each of the 19 `note/ui-design-*.md`, delete the
-`Full reference: [README](./<style>/README.md)` line. The directories never existed in this repo.
-Footprint: `.cartridge/tests/integration/source-layout.test.ts`,
-`.cartridge/memos/decision/desktop-is-a-later-client-over-the-same-core.md`,
-`.cartridge/memos/decision/the-terminal-grid-lives-in-pty.md`,
-`.cartridge/memos/decision/the-agent-surface-preserves-the-visible-shell.md`,
-`.cartridge/memos/note` (only the 19 `ui-design-*.md` change; the whole dir is clean).
-Test design: one function `deadLinks(recordDir)`. It walks `*.md`, skips ``` fences, matches `](target)`,
-ignores `scheme://` and `#anchor`, strips `#…`, resolves the target against `path.dirname(file)` and
-collects the ones that do not exist. Two tests call it:
-`every relative link in the record resolves` (runs on `.cartridge/memos` and expects `[]`) and
-`the record link check reports a planted dead link` (writes a tmpdir fixture with one good link, one
-dead link and one dead link inside a fence, and expects exactly the one outside the fence). The second
-test is the mutant, so the checker cannot be a no-op.
-Acceptance:
-- [ ] `every relative link in the record resolves` passes.
-- [ ] `the record link check reports a planted dead link` passes.
-- [ ] The three decision memos state why their `ui` links were removed.
-Verify:
-```test
-run: bun test .cartridge/tests/integration/source-layout.test.ts -t 'record' --reporter=junit --reporter-outfile="$PRD_TEST_REPORT"
-pass: every relative link in the record resolves
-pass: the record link check reports a planted dead link
-```
-```sh
-for f in desktop-is-a-later-client-over-the-same-core the-terminal-grid-lives-in-pty the-agent-surface-preserves-the-visible-shell; do
-  if grep -n 'boards/ui/' ".cartridge/memos/decision/$f.md"; then exit 1; fi
-done
-```
-(`-t 'record'` skips the heavy snapshot test, which clones every submodule, so the block stays under 120 s.)
+Split from `@root/the-shared-record-describes-only-this-repository` on 2026-09-19 (analyst-1, coordinator-5c-3).
+The census at 801aa8e finds 23 dead links: 3 decision-memo `boards/ui/` links (the board was deleted in
+prd.ctg `bed3eaaa`) and 20 (not 19) `note/ui-design-*.md` `Full reference` lines. The design, steps and
+Verify live in `specs/spec01.md`. Evidence: `.state/loop/every-link-in-the-record-resolves-and-a-test-says-so/analyst-1.md`
+and `revision-1.md`. The justfile is untouched: `just test layout` already runs `source-layout.test.ts`.

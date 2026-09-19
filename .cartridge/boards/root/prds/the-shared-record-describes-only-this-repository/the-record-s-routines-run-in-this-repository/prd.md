@@ -14,7 +14,6 @@ footprint:
   - ".cartridge/memos/routine/distill.md"
 claim: "coordinator-5c-5 2026-09-19T12:28:35.279Z"
 ---
-
 # The record's routines run in this repository
 
 ## Outcome
@@ -25,36 +24,17 @@ deleted (git is the archive), and no memo wikilinks a routine that no longer exi
 
 ## Acceptance
 
-- [ ] No routine names the foreign layout (`memos/SYSTEM.md`, `lanes-not-a-shared-tree`, `kern` probes, `just lane`/`just land`).
-- [ ] No memo wikilinks a routine that no longer exists.
+- [ ] `quality.md`, `hygiene.md`, `legible.md`, `improve.md`, `self-improve.md` are gone from `.cartridge/memos/routine/`; `new-routine.md` and `distill.md` remain.
+- [ ] No routine names the foreign layout (`memos/SYSTEM.md`, `lanes-not-a-shared-tree`, `kern`/`mcp__kern`, `just lane`/`just land`, `memos/intake`, `git -C memos`, `.agents/skills`), and `distill.md` cites no `builtin/` path.
+- [ ] No memo in the root record or any cartridge record wikilinks a deleted routine that its own record and the root record no longer hold.
+- [ ] `new-routine.md`'s description matches its new body; `new-routine.md` and `distill.md` cite `[[@memo/type/type.md]]`, not the unresolvable `type/type.md`.
+- [ ] `new-routine.md` and `distill.md` were saved through managed `memo` writes (run from the live repo root, payload `cwd` = the lane) with no unresolved-link warning.
 
 ## Analysis
 
-Split from `@root/the-shared-record-describes-only-this-repository` on 2026-09-19 by analyst-1 (coordinator-5c-3). No review rounds used before the split. Full analysis: `.state/loop/the-shared-record-describes-only-this-repository/analyst-1.md`.
-
-Outcome: no routine in `.cartridge/memos/routine/` tells the reader to use `memos/SYSTEM.md`,
-`lanes-not-a-shared-tree`, `kern`, or `just lane`/`just land`. A routine that has no equivalent
-here is deleted (the no-legacy-retention rule: git is the archive).
-Recommendation: delete `quality.md` and `hygiene.md` outright. Every probe in them runs `kern`
-or reads `src/`, `memos/intake`, or `.kern/data`, and none of those exist here. Rewrite or delete
-`improve.md`, `legible.md` and `self-improve.md` on the same test. Remove the `just lane` bullet
-from `new-routine.md`. Repoint or drop the `[[quality]]`/`[[hygiene]]` links in `distill.md`,
-`improve.md` and `legible.md`.
-Footprint: `.cartridge/memos/routine/quality.md`, `.cartridge/memos/routine/hygiene.md`,
-`.cartridge/memos/routine/improve.md`, `.cartridge/memos/routine/legible.md`,
-`.cartridge/memos/routine/self-improve.md`, `.cartridge/memos/routine/new-routine.md`,
-`.cartridge/memos/routine/distill.md` (all clean).
-Out of scope, noted: `decision/the-trunk-checkout-is-a-landing-pad.md` records `just lane`/`just land` as
-history of a decision. The child's analyst decides whether that decision is superseded.
-Acceptance:
-- [ ] No routine names the foreign layout.
-- [ ] No memo wikilinks a routine that no longer exists.
-Verify:
-```sh
-if grep -rEn 'memos/SYSTEM\.md|lanes-not-a-shared-tree|kern (report|health|doctor|compact|audit|repair)|just lan[de]' .cartridge/memos/routine; then exit 1; fi
-for leaf in quality hygiene; do
-  if [ ! -e ".cartridge/memos/routine/$leaf.md" ]; then
-    if grep -rn "\[\[$leaf\]\]" .cartridge/memos; then exit 1; fi
-  fi
-done
-```
+Specced 2026-09-19 by analyst-1 (coordinator-5c-5); revised after review round 1. Spec and Verify:
+`specs/spec01.md`. Evidence: `.state/loop/the-record-s-routines-run-in-this-repository/analyst-1.md`,
+changes: `revision-1.md`. Plan: delete `quality`, `hygiene`, `legible`, `improve`, `self-improve`;
+rewrite `new-routine` (description and body); edit `distill` (drop the `[[hygiene]]`/`[[quality]]`
+paragraph, fix the `builtin/` paths and `type/type.md`). Out of scope:
+`decision/the-trunk-checkout-is-a-landing-pad.md`, which gets its own PRD from the owning coordinator.

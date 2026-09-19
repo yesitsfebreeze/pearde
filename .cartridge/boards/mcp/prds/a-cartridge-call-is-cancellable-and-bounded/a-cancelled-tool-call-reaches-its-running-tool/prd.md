@@ -1,5 +1,5 @@
 ---
-state: "open"
+state: "done"
 origin: requested
 priority: 75
 repo: "/Users/feb/dev/cartridge/mcp.ctg"
@@ -8,8 +8,10 @@ footprint:
 - "src/lib.rs"
 - "src/base.rs"
 - "init.lua"
+- ".cartridge/tests/integration/cancel.test.ts"
 needs:
 - "@runtime/a-cartridge-call-can-be-cancelled"
+commit: "624afb3ab7bab6f2644e8287981d878c636e3df8"
 ---
 
 # A cancelled tool call reaches its running tool
@@ -90,11 +92,11 @@ arbitrates.
 
 ## Acceptance
 
-- [ ] A `notifications/cancelled` for an in-flight tool call is observed by
+- [x] A `notifications/cancelled` for an in-flight tool call is observed by
       `notified` while that call is still registered in `inflight`.
-- [ ] The running tool receives the cancel and stops; a tool that honours
+- [x] The running tool receives the cancel and stops; a tool that honours
       `{"op":"cancel"}` is proven to have been reached.
-- [ ] A test drives a real in-flight call and a cancellation of it, failing in
+- [x] A test drives a real in-flight call and a cancellation of it, failing in
       the world it denies — a test that passes when the lookup misses proves
       nothing.
 
@@ -133,3 +135,148 @@ reaches the tool. `base.rs` is vendored identically into `agent.ctg` and
 `router.ctg`; bringing those copies in line is
 `@root/the-vendored-base-rs-stays-identical-across-native-cartridges`, which
 needs this PRD.
+
+## Decision (2026-09-19, coordinator, at publish of spec01)
+
+**The footprint gains one path: `.cartridge/tests/integration/cancel.test.ts`.**
+Acceptance box 3 demands a test that drives a real in-flight call and observes
+the cancellation reaching the running tool, and none of the four declared paths
+can hold a test. The analyst cited the board's own precedent, which I checked:
+`@mcp/the-mcp-event-declares-its-own-bound` carried a PRD footprint of
+`["cartridge.json"]`, its spec added `.cartridge/tests/unit/tests.rs`, and it
+landed as `1595a6f`. This is the same shape and is recorded rather than done
+silently. `src/service.rs` stays in the footprint although the analyst found it
+needs no change; removing it would not make the spec smaller.
+
+## Open question for the reviewer (2026-09-19, coordinator)
+
+The spec takes the trampoline route the user chose as Option A, and it is
+prototyped rather than sketched: against a real `cartridge mcp` bridge the tool
+answered `stopped-on-cancel 280052`, where the same test on unmodified
+`1595a6f` gives `ran-to-completion`. But the trampoline costs two hazards the
+spec has to solve — a 25 ms `wait` step answered by a bare `coroutine.yield()`
+to break a deadlock when two messages of one instance race `Instance::session`'s
+`OnceCell`, and a per-message snapshot of the base because `base::needs` reads
+through a thread-local that a job does not have.
+
+A cheaper mechanism for the same root cause was proven today in another
+cartridge and the reviewer is asked to rule on it. cartridge-eb established
+that `pty.ctg`'s `shell_op` (`pty.ctg/src/lib.rs:884`) held its node for the
+same reason — a synchronous Lua function registered with `create_function`,
+doing `block_on` — and that converting it to an async fn registered with
+`create_async_function`, dispatching through `runtime().spawn(...)`, fixed it on
+an **unmodified host**, because the host already drives listeners with
+`call_async` (`cartridge.ctg/src/node/mod.rs:219-235`). Measured there: a
+concurrent call that had timed out at 2012 ms against a 2000 ms bound answered
+in 13.6 ms. Three lines of substance, no trampoline, no `init.lua` change.
+
+`mcp.ctg`'s `answer` (`src/lib.rs:41-64`, registered at `:74`) has the same
+shape as `shell_op`. So the question the reviewer must answer, by reading both
+sites and saying which it is, is whether `create_async_function` does this
+PRD's job without the trampoline and its two hazards — in which case spec01 is
+solving a harder problem than the code requires — or whether `mcp.ctg`'s call
+shape genuinely needs the trampoline, in which case the spec should say so
+explicitly and that reasoning belongs in it.
+
+One recorded trap either way: awaiting the dispatch future directly dies with
+"there is no reactor running", because the cdylib links its own tokio and the
+host's runtime cannot see it. Hence `runtime().spawn(...)`.
+
+## Decision (2026-09-19, coordinator, after review round 1 passed at 92)
+
+Round 1 passed at 92 of 100 with no blocking findings, so this PRD is
+`specced`. The reviewer ruled on the `create_async_function` question by
+building and running three variants itself rather than accepting the spec's
+account: the async shape with `runtime().spawn(...)` and the same shape with a
+`NEEDS` snapshot both answer `tools/list` as `[]`, the inline await dies with
+`there is no reactor running`, and only the trampoline returns a populated
+list and `stopped-on-cancel`. It also closed the `CARTRIDGE_YOLO` concern by
+measurement: `mcp.ctg` declares no `yolo` setting, so the host has nothing to
+merge, and the red/green pair is identical with the variable set and unset.
+
+**I have applied the reviewer's F1 to the spec before publishing it, as a
+one-line change that only tightens the gate.** F1: the bun `test` block set no
+`CARGO_TARGET_DIR`, while `cancel.test.ts:10-11` falls back to a bare
+`owner/target`. If the collector's environment exports `CARGO_TARGET_DIR`,
+pass 2 would silently load the live tree's stale `target/debug/libmcp.dylib`
+and could go green for code it never built — a false pass, which is the
+dangerous direction. The block's `run:` line now pins
+`CARGO_TARGET_DIR="$PWD/target/a-cancelled-tool-call-verify"` unconditionally,
+matching the two cargo blocks around it. No Acceptance box, mechanism or
+measurement changes, so the round-1 score stands and no re-review is owed.
+
+The reviewer's other findings are recorded and not fixed here, deliberately:
+
+- **F2** the `wait` step and its 25 ms park are unexercised — no probe reached
+  them, no Acceptance box covers them, and the deadlock they prevent is
+  asserted rather than demonstrated.
+- **F3** Acceptance box 1 is not independently observable: its only check is a
+  `grep block_on src/lib.rs`, and the design deliberately keeps a `block_on` in
+  `base.rs`, which that guard never inspects.
+- **F4** the spec does not say what a late or duplicate `resume` answers, so a
+  job whose listener errors between steps stays filed with its future running.
+- **F5** cosmetic: the spec says `tool::dispatch` "only spawns processes"; it
+  works on an already-open shell.
+
+F2, F3 and F4 are real gaps in what this spec proves, and the implementer's
+verifier should be told so. They did not block a 92 and I am not inventing a
+sixth round to chase them, but if the verifier finds box 1 unprovable by
+anything but that grep, F3 becomes the reason and this PRD comes back rather
+than being ticked on a text match.
+
+One unscored side note from the reviewer, out of this footprint and worth its
+own PRD: `cancel.test.ts` leaks a daemon per run, because `c.close()` kills the
+bridge and not the daemon it started with `--idle-timeout 3600`.
+
+## Verification (2026-09-19, coordinator, before ticking)
+
+My implementer died on an API spend limit and wrote **no report**. Its lane
+commit survived — `624afb3` on `1595a6f`, tree clean, exactly four files, no
+`Cargo.toml` and no `src/service.rs` — but every claim it might have made was
+lost with it. So the evidence below comes entirely from an independent verifier
+(peer session cartridge-d0), which had the lane and the spec and was told
+plainly that there were no claims to check. Its report is at
+`.state/loop/a-cancelled-tool-call/verifier-1.md`. Every block ran verbatim
+under `env -i`, twice: once with nothing set, once with `CARTRIDGE_YOLO=1`.
+
+What was observed:
+
+- **The red/green pair, in both directions and repeatedly.** The structural
+  guard exits 1 on `1595a6f` with the lane's test copied in, and 0 on `624afb3`.
+  `cancel.test.ts` is red in **6 of 6** runs unmodified — `Received
+  "ran-to-completion"`, 0 pass 1 fail — and green in **6 of 6** on the lane,
+  1 pass 0 fail. Six runs each way matters here: this test drives a real stdio
+  bridge against a real daemon, so a single green could have been luck.
+- `cargo test --lib`: 23 passed, 0 failed, 1 ignored on **both** trees in
+  **both** environments, with all four named tests `ok`.
+- `CARTRIDGE_YOLO` made no difference anywhere, which matches the reviewer's
+  finding that `mcp.ctg` declares no such setting.
+- The daemon started at 15:03:19, before every run, so no restart straddled the
+  evidence.
+
+**Box 1 is ticked on consequence, not on the guard, and the distinction is
+worth recording.** Reviewer finding F3 stands exactly as written: `block_on`
+remains at `src/base.rs:154` and the spec's grep never inspects that file, so
+the guard alone cannot prove box 1. What proves it is the end-to-end result.
+A `notifications/cancelled` arrives as its own event on the same node; if
+`answer` still waited on the base's thread, that event would queue behind the
+call it was meant to stop, `notified` would run too late, and the tool could not
+answer `stopped-on-cancel`. It did, six times out of six. The node was free.
+That is sound, but it is indirect, and the guard should be strengthened if this
+code is revisited.
+
+**The owner gates prove nothing here and were not treated as evidence.**
+cartridge-d0 reports `just check mcp` and `just test mcp` exiting 0 in both
+forms — but run against the live `mcp.ctg` at `1595a6f`, not against the lane.
+That is the same trap that let a sibling PRD collect carrying unformatted code
+earlier today. No box depends on them, so this does not block the collection;
+it is recorded so nobody later mistakes those zeros for lane evidence.
+
+**Two reviewer findings remain unproven and are not claimed.** F2: nothing
+anyone ran shows whether the 25 ms `wait` step is ever taken, so the deadlock it
+prevents is still asserted rather than demonstrated. F4: a late or duplicate
+`resume` is not exercised. Neither is an Acceptance box, and neither is
+invented into one now — but both are real gaps in what this PRD proves, and the
+`wait` step in particular is load-bearing by the spec's own argument.
+
+cartridge-d0 stopped the 12 daemons its runs leaked, by pid.

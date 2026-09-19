@@ -1,5 +1,5 @@
 ---
-state: "open"
+state: "done"
 origin: requested
 priority: 55
 repo: "/Users/feb/dev/cartridge"
@@ -8,6 +8,7 @@ footprint:
   - ".cartridge/memos/routine/hygiene.md"
   - ".cartridge/memos/system/vision.md"
   - ".cartridge/memos/decision"
+commit: "b34e8ae714d1188da9e4ea4a0c5b95513404c3f8"
 ---
 
 # The shared record describes only this repository
@@ -48,13 +49,21 @@ now reports seventeen of seventeen.
 
 ## Acceptance
 
-- [ ] `quality.md` and `hygiene.md` each describe this repository's layout and
+- [x] `quality.md` and `hygiene.md` each describe this repository's layout and
       commands, or are deleted — git is the archive, and a routine nobody can
       run is worse than no routine.
-- [ ] Every PRD link under `memos/decision/` resolves to a file that exists, or
+- [x] Every PRD link under `memos/decision/` resolves to a file that exists, or
       the reference is removed with the reason recorded.
-- [ ] The vision memo's "Where the composition actually stands" section states
+- [x] The vision memo's "Where the composition actually stands" section states
       what `just audit`, `just isolation` and the root profile report on the day
       it is rewritten, with the date and the commands in the section.
-- [ ] A check that a link in the record resolves runs next to the other gates,
+- [x] A check that a link in the record resolves runs next to the other gates,
       so this cannot drift again silently.
+
+## Collection note (2026-09-19, coordinator cartridge-5c)
+
+Every box is met by a collected child: box 1 by `the-record-s-routines-run-in-this-repository` (03228f3, the
+foreign routines deleted), boxes 2 and 4 by `every-link-in-the-record-resolves-and-a-test-says-so` (db88de4,
+dead links fixed and a link test in `just test layout`), box 3 by `the-vision-memo-states-today-s-composition`
+(f5ec10d).
+

@@ -38,7 +38,26 @@ does, `recall` has always been `unavailable`).
 - [ ] prd's own gate passes (`bun test` in prd.ctg).
 - [ ] The patched gate from the parent's analyst probe, run against the
       composition, reports no `prd.ctg` line.
+- [ ] A named, executed test proves prd's `memory` call is reachable through
+      the declared need, and that prd still loads and plans with no memory
+      cartridge present (`recall` returns `status: unavailable`). If the
+      manifest cannot express an optional need, the spec says so and records
+      that as the finding instead of declaring a hard need.
 
 Footprint: `prd.ctg/cartridge.json` (repo: prd.ctg). Hazard: editing a
 manifest untrusts the cartridge in a running daemon, and prd is the board tool
 the coordinator itself runs; schedule the collect and re-trust accordingly.
+
+## Coordination
+
+Agreed with the prd owner's coordinator (cartridge-f4, 2026-09-19):
+
+- Collect only at a time f4 names. Editing the manifest untrusts prd in the
+  shared daemon, the failure surfaces at prd's consumers (memo, agent, live,
+  mcp, proxy declare `tool.prd`), and every coordinator drives the board
+  through `./prd.ctg/prd`. Work in the lane needs no coordination; re-trust
+  prd immediately after the collect.
+- prd must keep planning with memory absent; never declare a hard need.
+- Footprint stays `cartridge.json`. If the spec grows into `src/lifecycle.ts`
+  or `.cartridge/tests`, stop and tell f4 rather than widening: its own
+  prd.ctg row holds those paths.

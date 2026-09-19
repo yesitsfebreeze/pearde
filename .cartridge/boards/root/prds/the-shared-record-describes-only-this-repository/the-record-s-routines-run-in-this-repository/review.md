@@ -57,3 +57,49 @@ Rounds used / remaining: 1 / 4.
 Next action: bounded revision of spec01 steps 2–3 (F1) and the Verify floor (F2), then the record edits F3–F6. Re-review at round 2.
 
 VERDICT: FAIL
+
+## Round 2 — 2026-09-19
+
+Presented revision: superproject `801aa8e`, prd.ctg `5a45336b` plus the dirty planning files below (revision-1). All seven footprint files are still clean at base. new-routine is `bc114594…` and distill is `d7a5e827…`, both unchanged since round 1. `git status --short .cartridge/memos/routine` lists only the untracked `rank-cartridges.md`, which is outside the footprint.
+
+| Input | Content digest |
+| --- | --- |
+| Plan | `prd.md` sha256 `094737fb9bf20a42…` |
+| Specs | `specs/spec01.md` sha256 `c20e370bdf72e314…` |
+| Material contracts/dependencies | `prd.ctg/src/lifecycle.ts` (`lane`, `verify`), `prd.ctg/src/records.ts:295` (`local`), `memo.ctg/src/record.rs:506` (`root`: canonicalizes `cwd`, fails on a missing path), `record.rs:312` (resolve fields), `service.rs:140` (resolve schema); pins: memory.ctg `3432b133`, prd.ctg `2bfe1e94`, memo.ctg `dcbeb59b`, harness.ctg `91206ee5` |
+
+| Dimension | Score / 20 | Evidence and deductions |
+| --- | ---: | --- |
+| Current user value and scope | 20 | The verdicts are unchanged and still correct. F6 now has a home: `prds/the-landing-pad-decision-describes-this-repository-s-lanes-not-a-checkout-that-no-longer-exists/prd.md` exists on the root board. The prd.md body is 222 words, one outcome and five checks. |
+| Ownership and reuse | 19 | prd.md `## Analysis` is now a short pointer, and the parent's pasted text and weaker Verify are gone (F4 fixed). Acceptance mirrors the spec's five boxes. The plan still uses only the memo tool's managed write and git, with no new mechanism. −1: spec Follow-ups still says the coordinator "is adding" a landing-pad PRD, but that PRD now exists. Cite its ref. |
+| Dependencies and implementable slices | 18 | F1 is fixed. The Steps heading, the bold warning and both step-2 and step-3 commands now run from `/Users/feb/dev/cartridge` with `cwd` = `$lane`. Every cited target exists at the pinned shas the lane will seed: `@prd/routine/plan-cartridge-work.md`, `spec-a-prd.md` and `run-board.md` at prd.ctg `2bfe1e94`, and `type/type.md` at memo.ctg `dcbeb59b`. `distill_due` is at memo.ctg `record.rs:426` and `build_system` at harness.ctg `lib.rs:349`, both at the pins. `type/routine.md` and `usage/run-usage.md` are tracked in the root record. The resolve payload (`usage:"run"`, `query`) matches `service.rs:140`, and `run-usage.md` has `name: run`. −2 (F7): the lane path is written as `.lanes/<slug>`. `lane()` takes `prd.local` (`the-shared-record-describes-only-this-repository/the-record-s-routines-run-in-this-repository`) and replaces `/` with `-`, so the real directory is `.lanes/the-shared-record-describes-only-this-repository-the-record-s-routines-run-in-this-repository`. The obvious guess, the leaf slug, is wrong. A wrong path fails safely: `record.rs::root` canonicalizes and errors, it does not walk up into prd.ctg's record. But the step as written is not copy-runnable. |
+| Observable acceptance and baseline evidence | 17 | I extracted the Verify mechanically from spec01 and ran it from the repo root as `env -i PATH=/usr/bin:/bin sh -eu verify.sh`. It exits **1** (`not deleted: .cartridge/memos/routine/quality.md`), and the `git status --short` output of the superproject and prd.ctg is identical before and after. I checked for inert guards: every check is `if …; then …; exit 1; fi` with no `!` or `&&`/`\|\|` guards, no environment variables, no `cd` and no writes. F2 holds in both passes. The lane-like after-state (root and web.ctg from `git archive HEAD`, each submodule's record from its pinned sha, 17 records) gives exit 0. The repo-like after-state (live records) gives exit 0. The mutants go red: `[[improve]]` in memory → 1; `[[self-improve\|y]]` in root → 1; `[[routine/legible.md]]` in prd → 1; memory.ctg removed from the lane → 1 (`unseeded record`); root+memory+prd only (15 < 17) → 1. So the gate cannot pass vacuously on an unseeded lane. −3 (F8): the spec says the memory/prd guard exists because "those two records hold every out-of-footprint link". That is true only in the repo pass. memory.ctg's record is gitignored in memory.ctg (`.cartridge/.gitignore:17 /memos/*`): its pinned tree has only `type/note.md` and `type/type.md`, so in the lane the guard is met by two type memos, and memory's `[[quality]]`/`[[hygiene]]`/`[[legible]]` links and its own copies exist only in the live repo pass. The gate is still sound, because the repo pass runs over the real records, but the stated reason for the guard is wrong for pass 1. −0: an `@`-qualified `[[@root/routine/improve.md]]` is not matched (mutant m6 exit 0). No such link exists and it is not a supported form here, so there is no deduction. |
+| Failure, recovery and compatibility | 18 | F3 is fixed: the new description is gated by `register the handle\|prove the gate`. F5 is fixed: both files cite `[[@memo/type/type.md]]`, gated by `(^\|[^/])type/type\.md`. The new-routine body is concrete and runnable here. It names exact `just` recipes from `.cartridge/justfile`, uses PRD lanes (`prd add/claim/collect`) instead of `just lane`, has a copyable `op:"resolve"` payload, and warns about running from inside a lane. Recovery is git, and no stubs are left. A wrong or empty `$lane` fails loudly (`memo cwd must be absolute` / canonicalize error) and never writes to the live record. −2: step 3's filter says memory's `@memory/routine/...` entries are "expected", but from the lane memory's record holds no routines. The live check is the one that would show them. Word it as "any `routine/<deleted>.md` entry from the root record is a failure" so the implementer is not left eyeballing which matches are allowed (same fix area as F8). |
+| Reviewer total | 92 / 100 | |
+
+Round-1 findings:
+
+- F1 (blocking): **fixed.** Every `cartridge run memo` in steps 2–3 and in the new-routine body runs from the live root with the absolute lane as payload `cwd`. The lane path is a placeholder (F7 below).
+- F2: **fixed.** There is an explicit memory.ctg/prd.ctg seeding guard with a floor of 17. It holds in both passes and turns red on an unseeded lane (reproduced).
+- F3: **fixed.** The description is rewritten and gated.
+- F4: **fixed.** The Analysis pointer is in place, the pasted Verify is gone, and Acceptance has five boxes. The frontmatter is untouched (`state`/`claim` intact).
+- F5: **fixed.** `[[@memo/type/type.md]]` is in both files and gated.
+- F6: **fixed.** The landing-pad PRD exists on the root board.
+
+New findings (all non-blocking):
+
+- **F7 — non-blocking. Spell out the lane path.** Replace `.lanes/<slug>` with `.lanes/the-shared-record-describes-only-this-repository-the-record-s-routines-run-in-this-repository`, or say "the directory `prd claim` prints (`lane()` joins `prd.local` with `-`)". Also add `test -d "$lane/.cartridge/memos/routine"` before the first write.
+- **F8 — non-blocking. Correct why the seeding guard exists.** State that memory.ctg's record is gitignored apart from `type/`. In the lane pass the guard only proves the submodule was seeded; the out-of-footprint link check is the repo pass over the live records. Fix step 3's "expected entries" wording in the same edit.
+- **F9 — non-blocking. Refresh the follow-up.** Cite the landing-pad PRD by its ref instead of "is adding a separate PRD".
+
+Validation (cwd `/Users/feb/dev/cartridge`; scratch `/private/tmp/claude-501/-Users-feb-dev-cartridge/a3492fbd-f726-4514-b5ee-796fd5ea14c1/scratchpad/routines-r2/`):
+- `base.sh`: awk-extracts the spec01 Verify to `verify.sh` (29 lines) and runs `env -i PATH=/usr/bin:/bin sh -eu verify.sh`. Result: exit 1, and `before.txt`/`after.txt` are identical (superproject and prd.ctg status).
+- `sim.sh`: lane-like after-state gives 0 and repo-like gives 0. Mutants: m1 1, m2 1, m3 1, m4 1, m5 1. m6 (`@root/` qualified) gives 0, which is out of scope. m7 (double-space `just  land`) gives 0, which is trivial prose evasion and does not count.
+- Code read: `lifecycle.ts:22-26,105-120`, `records.ts:295`, `record.rs:497-520`, `record.rs:312`, `service.rs:127-140`. I checked git objects at every pin with `cat-file -e`/`ls-tree`. No memo tool, daemon, proxy or reload was invoked. No repo, prd.md, spec or review.md edits were made.
+
+Reviewer identity: fresh reviewer agent, coordinator-5c-5.
+User rating: not required under delegation; none supplied.
+Result: PASS (92/100, no blocking findings). F7–F9 can be folded in by the implementer or a body-only touch-up. They do not change the footprint or the Verify.
+Rounds used / remaining: 2 / 3.
+
+VERDICT: PASS

@@ -1,5 +1,5 @@
 ---
-state: "analyzing"
+state: "specced"
 origin: requested
 priority: 55
 repo: "/Users/feb/dev/cartridge"
@@ -12,7 +12,6 @@ footprint:
   - ".cartridge/memos/routine/self-improve.md"
   - ".cartridge/memos/routine/new-routine.md"
   - ".cartridge/memos/routine/distill.md"
-claim: "coordinator-5c-5 2026-09-19T12:28:35.279Z"
 ---
 # The record's routines run in this repository
 

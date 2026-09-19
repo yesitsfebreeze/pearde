@@ -175,3 +175,14 @@ block writes nothing.
   prd-owning coordinator is adding a separate PRD for it.
 - `.cartridge/memos/system/vision.md:144` lists `quality.md`/`hygiene.md` as a dated finding; it is
   prose, not a link, and stays true as history. The parent PRD may want to strike it when this lands.
+
+## Review notes carried into implementation (round 2, clarification only)
+
+- The lane is `/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/root/.lanes/the-shared-record-describes-only-this-repository-the-record-s-routines-run-in-this-repository`
+  (`lane()` joins the parent and child slugs with `-`). Check it with `test -d` before the first memo write.
+- In the lane pass, the memory.ctg/prd.ctg check proves only that the submodules were seeded (memory.ctg's
+  record is gitignored except `type/`); the outside links are checked against the live records in the repo
+  pass. In step 3, any `@memory/routine/...` or `@prd/...` entry in the index output is expected; only a root
+  `routine/(quality|hygiene|legible|improve|self-improve).md` entry is a failure.
+- The superseded landing-pad decision is handled by `@root/the-landing-pad-decision-describes-this-repository-s-lanes-not-a-checkout-that-no-longer-exists`.
+

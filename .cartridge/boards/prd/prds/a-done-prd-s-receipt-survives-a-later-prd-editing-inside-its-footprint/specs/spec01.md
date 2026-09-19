@@ -1,81 +1,168 @@
 ---
-complexity: 2
+complexity: 4
 footprint:
-  - src/lifecycle.ts
-  - .cartridge/tests/receipt-drift.test.ts
+- src/lifecycle.ts
+- src/engine.ts
+- src/cli.ts
+- src/collection-proof.ts
+- .cartridge/tests/collection-proof.test.ts
+- .cartridge/docs/collection-proof.md
+- README.md
+- .cartridge/help.md
 ---
 
-# spec01 — a changed path in a done footprint is drift unless a later collected, still-verified PRD that owns it landed exactly that content
+# Explicit current-commit verification with preserved provenance
 
-## Acceptance
+## Source baseline and ownership
 
-- [ ] A done PRD whose footprint was changed after its receipt only by later collections of other done PRDs has no completion problem. Each of those PRDs must own the changed paths through its footprint and still pass its own `completionProblem`, and the paths must be byte-identical at HEAD to that PRD's receipt. This holds when the later PRD's lane landed several commits and its receipt names only the last one.
-- [ ] A commit inside a done PRD's footprint that no later collection landed still reports `verified source footprint changed after collection`. This covers an edit on top of a collected sibling's path and a deletion of a path that an earlier collection never had.
-- [ ] A later PRD whose own receipt no longer verifies, for example because its spec changed after collection, vouches for nothing. The earlier PRD then reports `verified source footprint changed after collection` again.
-- [ ] A parent whose two children were collected in sequence over overlapping footprints collects with exit 0.
-- [ ] `bun test ./.cartridge/tests/receipt-drift.test.ts`, `./.cartridge/tests/engine.test.ts` and `./.cartridge/tests/records.test.ts` pass.
+Canonical owner: @prd/a-done-prd-s-receipt-survives-a-later-prd-editing-inside-its-footprint.
+Checked analysis claim: codex-lifecycle-prerequisite. Source HEAD when analyzed:
+c1caed63. Existing dirty lifecycle changes add named test-block validation and
+seeded submodule lanes; engine.test.ts includes corresponding tests. Those are
+not this implementation and must be independently reviewed, verified and
+committed as a narrowly identified necessary baseline before an implementation
+lane starts. No service, ASP, help, README or other dirty work enters that baseline commit.
+Implementation adds only focused committed-target/reverification usage sections
+to README.md and .cartridge/help.md, preserving preexisting dirty hunks byte for
+byte; these exact two documentation additions are reviewed in the lane diff.
+The implementation modifies only the exact eight paths above. Existing suites
+are executed but not rewritten. No loaded cartridge is rebuilt or replaced.
 
 ## Design
 
-In `completionProblem` (`src/lifecycle.ts`), the drift check keeps the untracked-file refusal as it is. It then lists the changed paths with `git diff --name-only <commit> -- <footprint>`, which compares against the working tree, so uncommitted edits still count. When that list is not empty, it builds one candidate list for each call:
+`collect <ref> --reverify` is an explicit checked operation on a done PRD. It
+retains done state and refreshes commit/evidence only after executing the same
+published contract against current committed HEAD. It implies a visibly named
+committed target. `collect <ref> --committed` opts a normal collection into that
+same target and never silently changes default collection behavior. CLI help
+and the focused contract document describe both options. Other operations
+reject these options. No automatic voucher or graph-wide provenance search.
 
-1. `git rev-list <commit>..HEAD` is one spawn. Its hashes form a set.
-2. Candidates are the done records in the scanned graph whose `commit:` is in that set, which means they were collected after this receipt. Each candidate's owned paths are `feet(other)` relative to the code repo. The filter is a set lookup before any `feet()` call, so a drift check over 600+ records spawns no extra git process per record.
-3. A changed file counts as reviewed when some candidate owns it (equal to, or under, one of its feet) and `git diff --quiet <candidate commit> -- <file>` exits 0, meaning the tree matches what that collection verified. The candidate must also pass its own `completionProblem(other, graph, seen)`, memoised once per candidate. The `seen` set is the existing cycle guard.
-4. If any changed file is not reviewed, the refusal is the unchanged string.
+Before re-verification, validate all old receipt integrity checks except current
+source drift: done state, no claim or lane, ancestry of old commit, recorded
+commit equality, passing prior proof, identical published specification hashes,
+closed acceptance boxes, and committed exact old PRD/spec/receipt bytes. Missing
+or changed historical contracts require normal reviewed implementation work;
+re-verification cannot adopt them. Validate dependencies as currently verified,
+not merely marked done. For containers, current child evidence may legitimately
+have refreshed since the old receipt; rerun child completion checks and record
+current child-contract hashes, preserving old hashes in history.
 
-Byte equality at the receipt replaces reconstructing the lane's range. `collection.md` records only the final `commit:`, and no durable record keeps the lane base (`initialHead`), so the range base..commit cannot be recovered from the records. It does not need to be. Every lane commit that `collect` fast-forwards is an ancestor of the receipt, and whatever those commits wrote is the content at the receipt. The fixture's second child lands two lane commits (compare the live `b08cd13` and `12a1646`, both from one PRD) and is covered.
+Verification uses a temporary detached worktree at the candidate commit with
+pinned submodules seeded by existing logic. Validate it is clean both before and
+after proof, except generated ignored build output. Run all published executable
+blocks, including required named-test pass gates. Before receipt write recheck
+source HEAD, record/spec hashes, dependencies/child contracts and cancellation.
+Remove only the temporary verification worktree on all outcomes. Do not remove
+or force-clean a user worktree. Failed proof retains the old done receipt and
+therefore remains observably stale. A retry starts fresh.
 
-Superproject pointer bumps take the same path. A gitlink shows in `git diff --name-only` as the submodule path, and a candidate whose footprint owns that path vouches for it only if the pointer at HEAD equals the pointer in its receipt. Planning-record commits never reach this check unless a footprint covers the board directory; that pre-existing behaviour is unchanged.
+For lane collection, verify lane edits, commit only declared lane paths, confirm
+candidate diff stays inside footprint, and fast-forward source using existing
+guards. Verify the committed candidate independently in the detached snapshot.
+Live dirty paths are never staged by committed-target collection: without a lane,
+require no uncommitted intended implementation and certify HEAD only. Existing
+Git merge protection refuses overlap with live dirty paths. Never stash or
+rewrite a preserved README/help tail. Source HEAD must equal the candidate at
+receipt publication. Existing non-committed collection remains unchanged.
 
-## Steps
+New receipts explicitly record `verification-target: committed`, candidate SHA,
+spec digests, child contracts, and separately observed workspace drift paths and
+content hashes. Drift includes tracked/staged differences and untracked files
+inside footprint; do not store file contents or secrets. The receipt body names
+the detached verification cwd/commit and executable evidence. Public status adds
+`verification_target`, `workspace_verified`, and `workspace_drift` while existing
+`verified`/`integrated` refer explicitly to the named target. Workspace verified
+is false whenever footprint differs from the verified artifact; it is not inferred
+from a committed test pass. Empty footprint/container semantics follow children.
+Consumers see this limitation in collection output and status, including a false
+workspace flag. Final memory loaded-artifact verification remains independent.
 
-1. Replace the single drift line in `completionProblem` with the check above. The reference hunk is about 20 lines, adds no import and changes no other function. `collect`'s integration check (`source footprint changed during integrated verification`) stays as it is.
-2. Add `.cartridge/tests/receipt-drift.test.ts` with its own fixture (`mkdtemp`, a code repo and a records repo). Children `parent/search` (footprint `web`) and `parent/cites` (footprint `web/memos`, needs search, two lane commits) are collected through `execute('claim'|'collect')`. The file contains the three tests named in Verify.
-3. `src/lifecycle.ts` also has uncommitted edits from another session (the `test` Verify block). Apply this hunk on top of them rather than over them. The hunk touches only the drift block in `completionProblem`, which those edits do not change.
+For committed-target receipts, completion compares receipt commit to current
+HEAD within the footprint; any committed drift invalidates it. Dirty workspace
+changes do not invalidate committed proof but are reported independently. Legacy
+receipts without the explicit target retain today's strict committed-plus-dirty
+comparison. No source drift becomes trusted merely because a later PRD is done.
+
+Before replacing collection.md, save exact prior bytes under
+`collection-history/<sha256-of-bytes>.md`; reject an existing history file with
+different bytes. New receipt carries previous receipt digest/path and original
+integration commit. Include history and updated receipt/PRD in the same scoped
+record commit. Validate referenced history recursively by digest and committed
+bytes, bounded by the acyclic hash chain. No history rewrite, deletion, or migration
+of existing receipts. Publication must restore prior record bytes/engine fields
+if record commit fails, leaving any valid source integration available for retry;
+never reset other repository changes. Existing record index guards remain.
+
+## Recovery and migration
+
+No automatic migration. Old strict receipts may be upgraded only by explicit
+successful re-verification. Failed/cancelled verification cannot overwrite old
+proof. Source races refuse before publication. Post-integration failure leaves
+source integrated and the PRD uncollected, preserving evidence for checked retry.
+Detached snapshot cleanup cannot delete active implementation lanes. History
+integrity failures remain actionable refusals, never automatic repairs. Existing
+claims, deferred automatic-voucher work and all four review rounds remain intact.
+
+## Acceptance
+
+- [x] `explicit reverify refreshes committed drift and preserves prior receipt` passes, while ordinary collect(done) still refuses stale proof.
+- [x] `reverify refuses changed contract missing proof and active ownership` passes without mutating old receipts.
+- [x] `reverify refuses unresolved dependencies and failing proof` passes; committed drift remains unverified after failure.
+- [x] `committed collection preserves dirty tails and reports workspace drift` passes with byte-identical dirty README/help and no dirty paths committed.
+- [x] `legacy receipts remain strict and later committed drift needs reverify` passes.
+- [x] `reverification refreshes child rollups without automatic vouchers` passes after explicit child reverify, then parent reverify.
+- [x] `verification races cancellation and history tampering fail closed` passes with no premature receipt update or lost changes.
+- [x] `committed verification tests committed bytes rather than dirty workspace` proves a workspace-only fix cannot make broken HEAD pass.
+- [x] Engine and records fixture/migration tests pass against the clean candidate; the full unchanged records suite passes independently against the identified canonical live dataset with matching code hashes; TypeScript passes and no loaded artifact was replaced.
 
 ## Verify and Proof
 
-The new fixture cases, reported passed by name.
-
 ```sh
-log="$(mktemp)"
-trap 'rm -f "$log"' EXIT
-bun test ./.cartridge/tests/receipt-drift.test.ts > "$log" 2>&1 || { cat "$log"; exit 1; }
-cat "$log"
-for named in \
-  'a later collected sibling inside the footprint leaves the receipt verified and the parent collects' \
-  'an uncollected commit inside a done footprint still drifts, even over a collected sibling' \
-  'only a later, still-verified receipt vouches for a changed path'
-do
-  grep -Fq "(pass) $named" "$log" || { echo "not reported passed: $named"; exit 1; }
-done
-grep -Eq '^ 0 fail$' "$log"
+bun install --frozen-lockfile
 ```
 
-The engine suite and the live-records check still pass.
-
-```sh
-log="$(mktemp)"
-trap 'rm -f "$log"' EXIT
-bun test ./.cartridge/tests/engine.test.ts ./.cartridge/tests/records.test.ts > "$log" 2>&1 || { cat "$log"; exit 1; }
-cat "$log"
-grep -Fq '(pass) real collect verifies an isolated lane and commits integration evidence' "$log"
-grep -Fq '(pass) forged done state and old commit cannot substitute for collection evidence' "$log"
-grep -Eq '^ 0 fail$' "$log"
+```test
+run: bun test ./.cartridge/tests/collection-proof.test.ts --timeout 30000 --reporter=junit --reporter-outfile="$PRD_TEST_REPORT"
+pass: explicit reverify refreshes committed drift and preserves prior receipt
+pass: reverify refuses changed contract missing proof and active ownership
+pass: reverify refuses unresolved dependencies and failing proof
+pass: committed collection preserves dirty tails and reports workspace drift
+pass: legacy receipts remain strict and later committed drift needs reverify
+pass: reverification refreshes child rollups without automatic vouchers
+pass: verification races cancellation and history tampering fail closed
+pass: committed verification tests committed bytes rather than dirty workspace
 ```
 
-## Evidence from analysis (2026-09-19)
+```sh
+bun test ./.cartridge/tests/engine.test.ts --timeout 30000
+```
 
-The reference was built in a scratch clone at `ee4d910f`.
+```sh
+bun test ./.cartridge/tests/records.test.ts --timeout 30000 -t 'the accepted-states check|migration preserves'
+bun run check
+```
 
-- Base with only the new test file: `receipt-drift` 1 pass, 1 fail. The first test fails at `expect(problem('parent/search')).toBeNull()` with `Received: "verified source footprint changed after collection"`.
-- Reference: `receipt-drift` 3 pass, 0 fail. `engine` 23 pass, 0 fail. `records` 3 pass, 0 fail. `tsc --noEmit` exits 0. The full suite has 85 pass and 4 fail; all 4 are `statusline.test.ts`, which also fails 0/4 on base in the scratch clone and passes 4/4 in the live checkout, so the failures come from the clone's location.
-- Denied worlds, each run separately: letting any done record vouch instead of only records in `<commit>..HEAD`, and replacing the candidate's `completionProblem` with `true`. Both fail the third test (2 pass, 1 fail). With the first, Verify block 1 exits 1.
-- Verify blocks, run as `env -i PATH="$PATH" HOME="$HOME" sh -eu -c`. Reference: block 1 exits 0 in 8 s and block 2 exits 0 in 15 s. Base with only the new test file: block 1 exits 1 and block 2 exits 0.
-- Read-only run over the live `root` board (645 records, 374 done) with the reference source: `completionProblem` time is unchanged, 20.4 s against 19.6 s on base. Problems fall from 341 to 334. The records that clear include this PRD's evidence case, `…/search-returns-ranked-results-each-with-its-source-url`, and its sibling `…/web-ctg-exists-as-a-cartridge-and-fetches-a-page-as-readable-text`, plus `@gitfs/gitfs-is-back-in-the-composition`, whose `.cartridge/init.lua` was later landed by web-ctg-exists. The first draft looped over every done record with a `merge-base` spawn and took 92 s, which is why the design uses the rev-list set.
+## Canonical live-dataset gate
 
-## Remaining limits
+Before collection, an independent verifier must also run the full unchanged
+records.test.ts from /Users/feb/dev/cartridge/prd.ctg against the current live
+board. Prove that src/records.ts, src/planner.ts and records.test.ts hashes match
+the candidate. Record the live dataset manifest digest and UTC observation time
+in verification evidence. The full command is `bun test
+./.cartridge/tests/records.test.ts --timeout 30000`. Failure blocks collection.
+This audit proves only the identified live dataset, not the committed board
+snapshot. The clean-HEAD graph test fails because an unrelated runtime declared-
+settings child is untracked; preserve that limitation rather than copying or
+committing unrelated records. All fixture/migration tests still run on the clean
+candidate. The unpublished proposal and initial dataset manifest remain under
+proposals/verification-amendment.md and verification-amendment.dataset.json.
 
-- A receipt written as an abbreviated hash matches nothing in the `rev-list` set, so it vouches for nothing and the check stays conservative. `collect` always writes the full hash.
-- Only records in the scanned graph (the board and its members) can vouch. A collection recorded on an unrelated board that targets the same repository still reads as drift.
+## Limits
+
+Only committed artifacts gain opt-in certification; live dirty or loaded artifacts
+remain unverified until separately tested. No historical contract changes are
+adopted, automatic voucher strategy implemented, or deferred performance work
+resurrected. Test blocks remain subject to existing 120-second process limit;
+split executable blocks if measured suite time threatens that limit, preserving
+all named gates and obtaining review for substantive contract revisions.

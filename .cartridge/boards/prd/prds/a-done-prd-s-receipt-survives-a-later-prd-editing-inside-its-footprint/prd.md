@@ -1,21 +1,29 @@
 ---
-state: "analyzing"
+state: "done"
 origin: requested
 priority: 78
 repo: "/Users/feb/dev/cartridge/prd.ctg"
 footprint:
 - "src/lifecycle.ts"
-- ".cartridge/tests"
-claim: "coordinator-5d0e-3c 2026-09-19T11:48:58.607Z"
+- "src/engine.ts"
+- "src/cli.ts"
+- "src/collection-proof.ts"
+- ".cartridge/tests/collection-proof.test.ts"
+- ".cartridge/docs/collection-proof.md"
+- "README.md"
+- ".cartridge/help.md"
+commit: "7a44c88fba2322e6c4fa990da24407b3f02b6123"
 ---
 
 # A done PRD's receipt survives a later PRD editing inside its footprint
 
 ## Outcome
 
-A PRD that was verified and collected stays verified when a later, separately
-collected PRD changes a path inside its footprint. Only an uncollected change
-inside a done PRD's footprint makes its receipt stale.
+A previously collected contract can be explicitly reverified against the current
+committed source snapshot after later edits. An opt-in committed collection can
+preserve unrelated dirty workspace changes while certifying only the named
+committed artifact. Status distinguishes that artifact from the live workspace.
+No other PRD automatically vouches for changed source.
 
 ## Evidence
 
@@ -41,7 +49,71 @@ done PRD whose footprint covers that path.
 
 ## Acceptance
 
-- [ ] A done PRD whose footprint is later changed only by commits that are the recorded `commit` of other done, verified PRDs covering those paths reports no completion problem.
-- [ ] An uncollected or hand-made commit inside a done PRD's footprint still reports "verified source footprint changed after collection".
-- [ ] A parent rollup whose children were collected in sequence over overlapping footprints collects.
-- [ ] `bun test ./.cartridge/tests/records.test.ts` and the engine's own suite pass.
+- [x] Explicit re-verification refreshes a done contract only after its executable proof passes against current committed HEAD, preserving immutable previous receipt history.
+- [x] Changed specifications, missing or tampered provenance, unresolved dependencies, active claims or lanes, failed tests, cancellation and source/contract races are refused.
+- [x] Committed-target collection preserves unrelated dirty files and reports workspace drift separately; legacy strict behavior remains unchanged.
+- [x] Later committed footprint edits invalidate the current receipt until explicit re-verification; parent rollups require current child contracts.
+- [x] Named regression tests and existing engine/records suites pass with isolated artifacts; source diff stays within the declared footprint.
+
+## Questions (2026-09-19, after review round 4 of 5)
+
+Round 4 scored 81 and failed with two blocking findings. One of them can be
+closed in the single remaining round; the other cannot, and it is a question
+about what this PRD is worth rather than about how to write it. So it comes to
+you rather than consuming the last round.
+
+**F10, closable in round 5.** The published proof still fails on a correct
+implementation, intermittently — one reference run in four, on the same tree
+that passed three times, because a fixture test exceeds even the raised
+30-second per-test timeout and its `afterEach` then removes the fixture root
+while the timed-out `collect` is still running. The engine also kills a Verify
+block at 120 seconds and runs each block twice, and block 1 measured 61 to 90
+seconds on the reference and 155 on base. The remedy is a spec-only edit:
+split block 1 into two blocks selecting disjoint subsets with `bun test -t`,
+each with its own report and name gate. Raising the timeout only trades a
+per-test failure for a block-timeout failure.
+
+**F11, the question.** The rule's steady-state cost is unmeasured, and the
+Design's published bound does not describe it. `vouches` calls `codeRepo(other)`
+and `feet(other)` — each spawning a `git rev-parse` — and then a non-memoised
+recursive `completionProblem`, all *before* the one memoised call the bound
+accounts for. Measured on the live board: `codeRepo` 5.28 ms, `feet` 5.53 ms,
+`completionProblem` 28.00 ms, against 390 done leaves and 1232 (commit, file)
+pairs across 83 drifted records.
+
+Today every one of those costs is zero, because no receipt carries `base:` yet
+and the missing field rejects each candidate before any Git work happens. That
+is why no earlier round saw it. As receipts accumulate `base:`, a board sweep
+moves from the published 1.6 seconds toward minutes — and `verifiedStatus` runs
+that sweep for every record.
+
+**The decision.** Fixing F11 changes the rule's own code, which re-opens the
+reference implementation, its seven tests and every measurement rounds 2 to 4
+rest on, with no review round left to check the result.
+
+- **Recommended: spend round 5 on F10, correct the steady-state sentence to say
+  plainly that the cost is not bounded by `laneRange` and is unmeasured, and
+  open F11 as its own PRD against the same function.** The rule is correct and
+  this lands the correctness now.
+- **Alternative: stop here.** If you would rather not land a rule whose cost
+  grows as receipts accumulate `base:`, say so and this PRD waits for the
+  performance work rather than preceding it.
+
+One more thing you should weigh, recorded in the Design and confirmed by every
+round since: **landing this clears nothing on the day it lands.** Base and
+reference produce byte-identical verdicts over all 717 records today, this
+PRD's own evidence case included. The conservative legacy choice was taken
+deliberately; the remedy for the drifted records is re-collection, not this
+rule. So the value of landing it now is that the *next* laundering attempt is
+refused, not that anything currently broken becomes fixed.
+
+Director verdict 2026-09-19 (via planner cartridge-e4): decided, defer; do not spend round 5 landing the rule without its cost bound. The rule clears nothing on the day it lands (review round 4: base and reference verdicts are byte-identical over all 717 records), while every collection from that day writes a `base:` that moves `prd plan` and `prd status` sweeps from 1.6 s toward minutes (F11). The follow-up PRD the recommendation relies on would sit on the prd board, which has no coordinator, so the cost would accrue with no owner. That is the premortem that rejects landing now. [[prove-it-works]] and [[subtract-before-you-add]] rule out shipping a known, unmeasured regression for zero present value. This row does not really hold its only dependent. `@root/the-voice-can-look-something-up-on-the-internet-when-the-answer-is-not-in-the-repository` is cleared by re-collecting its search child (`git branch -D lane/<board>-<slug>` first, see Remaining limits), not by this rule, because a legacy receipt vouches for nothing. Its planner should take that route and drop the `needs` edge. Reopen with `release <ref> open` as one fresh spec that lands the rule together with F11's remedy (test `laneRange` before `codeRepo(other)` and `feet(other)`, memoise `completionProblem` per sweep, and measure a sweep with `base:` receipts), plus F10's split Verify block, on a new round budget. Reverse this verdict if a laundering commit is actually observed to pass the current check, or if a coordinator takes the prd board and wants the combined PRD sooner.
+
+## Authorized revision — 2026-09-19
+
+The user authorized the minimal lifecycle prerequisite for the memory stack.
+This supersedes the prior deferral only for explicit re-verification and scoped
+committed-artifact collection. Rounds 1–4 and their failed automatic-voucher
+approach remain historical evidence; the implementation below is presented for
+round 5. No automatic provenance inference, performance sweep, or broader PRD
+repair is included. The superseded PRD/spec text is retained in proposals/.

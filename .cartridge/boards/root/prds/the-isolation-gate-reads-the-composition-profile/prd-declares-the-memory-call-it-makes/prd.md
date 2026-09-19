@@ -1,11 +1,13 @@
 ---
-state: open
+state: "open"
 origin: requested
 priority: 70
 repo: "/Users/feb/dev/cartridge/prd.ctg"
 work-kind: leaf
 footprint:
   - "cartridge.json"
+needs:
+  - "the-isolation-gate-reads-the-composition-profile/an-optional-need-with-no-provider-still-loads"
 ---
 
 # prd declares the memory call it makes
@@ -61,3 +63,12 @@ Agreed with the prd owner's coordinator (cartridge-f4, 2026-09-19):
 - Footprint stays `cartridge.json`. If the spec grows into `src/lifecycle.ts`
   or `.cartridge/tests`, stop and tell f4 rather than widening: its own
   prd.ctg row holds those paths.
+
+## Analysis (2026-09-19, analyst-1)
+
+The manifest cannot express "memory may be absent": `memory?` still fails the cartridge when no memory
+cartridge exists (host defect, filed as the prerequisite `an-optional-need-with-no-provider-still-loads`).
+Today's `"needs": []` means prd's `recall` has always answered `unavailable` (the host refuses the
+undeclared send). Once the prerequisite lands, declare `["memory?"]`; the analyst's draft spec and
+daemon-free probe are in `.state/loop/prd-declares-the-memory-call-it-makes/`.
+

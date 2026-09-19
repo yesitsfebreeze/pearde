@@ -1,25 +1,33 @@
 ---
-state: "analyzing"
+state: "specced"
 origin: requested
 priority: 55
-repo: "/Users/feb/dev/cartridge"
 repo: "/Users/feb/dev/cartridge/docs.ctg"
 footprint:
 - "cartridge.json"
-claim: "coordinator-5c-9 2026-09-19T12:46:51.291Z"
 ---
 
 # The docs.discover event declares its schema
 
 ## Outcome
 
-The `docs.discover` event declares the shape of what it accepts, so a caller can be
-told what to send by the manifest rather than by reading the cartridge's source,
-and `just audit` stops reporting `hard: event docs.discover declares no schema`.
+The `docs.discover` event's schema says what the handler really takes: no payload
+(`null` or an empty object). The host then refuses any other payload against the
+declaration, before the handler runs. A caller learns what to send from the
+manifest, not from the cartridge's source.
 
 ## Evidence
 
-`just audit` from the superproject root, 2026-09-17, coordinator cartridge-2e:
+As of 2026-09-19 (docs.ctg HEAD 7e2d752): docs.ctg commit 282aacc (2026-09-17)
+added `"schema": {}` to `docs.discover`. `just audit` now reports
+`18 of 18 cartridges pass the hard checks`, and docs.ctg passes, so box 3 already
+holds. The remaining gap is that `{}` accepts every JSON value, which means no
+call can violate it and the host refuses nothing. The handler
+(`src/lib.rs` `fn announce(_: &Lua, (): ())`) reads no payload. Every in-tree
+caller sends `null`: the CLI `call|send|run` default, `cartridge verify`'s
+contract call, and docs.ctg's host tests.
+
+The original finding, from `just audit` at the superproject root, 2026-09-17, coordinator cartridge-2e:
 0 of 17 cartridges pass the hard checks. Besides the seventeen missing READMEs,
 the audit reports exactly two schema findings, and this is one of them:
 

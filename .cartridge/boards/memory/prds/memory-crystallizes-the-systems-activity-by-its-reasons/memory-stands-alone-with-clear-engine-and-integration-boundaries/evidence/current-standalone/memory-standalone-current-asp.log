@@ -1,0 +1,59 @@
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+   Compiling util v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/util)
+   Compiling audit v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/hotreload/audit)
+   Compiling memory_transport_macros v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/transport/macros)
+   Compiling memory_cartridge v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/cartridge)
+   Compiling hotreload v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/hotreload)
+   Compiling base v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/base)
+   Compiling llm v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/llm)
+   Compiling memory_transport v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/transport)
+   Compiling ingest_config v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/ingest/config)
+   Compiling math v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/math)
+   Compiling test_support v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/.cartridge/tests/support)
+   Compiling config v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/config)
+   Compiling store_core v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/store/core)
+   Compiling gnn v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/gnn)
+   Compiling identity v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/identity)
+   Compiling hub v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/hub)
+   Compiling graph v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/graph)
+   Compiling retrieval-piece v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/retrieval/piece)
+   Compiling tick v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/tick)
+   Compiling ingest v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/ingest)
+   Compiling bootstrap v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/bootstrap)
+   Compiling retrieval v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/retrieval)
+   Compiling tick_loop v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/tick/loop)
+   Compiling store v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/store)
+   Compiling health v0.1.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/health)
+   Compiling rpc v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/rpc)
+   Compiling commands v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-crystallizes-the-systems-activity-by-its-reasons-memory-stands-alone-with-clear-engine-and-integration-boundaries/src/commands)
+warning: (arm64) /tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873.memory_cartridge.9ba5c1bee3759675-cgu.00.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873.memory_cartridge.9ba5c1bee3759675-cgu.01.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873.memory_cartridge.9ba5c1bee3759675-cgu.02.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873.memory_cartridge.9ba5c1bee3759675-cgu.03.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873.memory_cartridge.9ba5c1bee3759675-cgu.04.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873.memory_cartridge.9ba5c1bee3759675-cgu.05.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873.memory_cartridge.9ba5c1bee3759675-cgu.06.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873.memory_cartridge.9ba5c1bee3759675-cgu.07.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873.memory_cartridge.9ba5c1bee3759675-cgu.08.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873.memory_cartridge.9ba5c1bee3759675-cgu.09.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873.memory_cartridge.9ba5c1bee3759675-cgu.10.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873.memory_cartridge.9ba5c1bee3759675-cgu.11.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873.memory_cartridge.9ba5c1bee3759675-cgu.12.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873.memory_cartridge.9ba5c1bee3759675-cgu.13.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873.memory_cartridge.9ba5c1bee3759675-cgu.14.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873.memory_cartridge.9ba5c1bee3759675-cgu.15.rcgu.o unable to open object file: No such file or directory
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 54.26s
+     Running unittests src/lib.rs (/tmp/cartridge-memory-stack-independent-target/debug/deps/memory_cartridge-29a9f7cef8e68873)
+
+running 6 tests
+test asp::tests::the_shipped_declaration_is_one_the_host_accepts ... ok
+test asp::tests::a_memory_entity_expands_to_its_node_with_the_observed_projection_revision ... ok
+test asp::tests::expand_answers_nothing_for_a_missing_private_expired_or_respelled_key ... ok
+test asp::tests::search_keeps_the_context_filtering_exactly ... ok
+test asp::tests::search_delivers_ranked_rows_without_reading_any_back ... ok
+test asp::tests::search_and_expand_agree_with_context_memory_on_a_real_bank ... ok
+
+test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 21 filtered out; finished in 0.12s
+

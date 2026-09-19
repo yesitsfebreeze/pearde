@@ -1,0 +1,21 @@
+{
+  "head": "d9161cd2f3a363915c7a7d642a4955e7a3836065",
+  "packages": 29,
+  "internal_path_dependencies": 160,
+  "external_path_dependencies": 0,
+  "retired_ledger": "absent",
+  "source_sha256": {
+    ".cartridge/docs/architecture.md": "7cd15d3c010ba65dbd993d8bbf37271f3daaf505df7a531c34adad6cbea211a4",
+    ".cartridge/docs/experience.md": "9da5bbadd28b0c9dc8b4c1340cf7585f72c573c241e35ad757a7252a23611ca7",
+    ".cartridge/help.md": "77430d99b2e48dc363e358f222b4463ef659f01db04568aea12abd6e6d981153",
+    "README.md": "4b01d9aa786f64045475fba6b99358eecc85561d0f0996fe4ee5e797dc7e6d5b",
+    "src/config/Cargo.toml": "f8ad86d8740955f26aab63a856cffe8ae96d3d8619c3d93217f6615c1380fce1",
+    "src/config/src/config.rs": "395808ca6ca32f625d5370fc0cac78ffe5e1d4faac69cb561fb1162a09a21387",
+    "src/config/src/lib.rs": "403bfa269764b0f766199feaa4de1b197beec2ec863d5bd169d09a6d7e4478b9",
+    "src/graph/src/experience/matching.rs": "3cadc5df8f5fa9d024ff330d00ee57bb6ab44bb842ed8dbdc614cf4932ba5d42",
+    "src/graph/src/experience/metadata.rs": "aaf49bde344a3df1be2f6cf415f923ecb371d38b4268f445f1e3745bc2f03319",
+    "src/graph/src/experience/mod.rs": "dbc6a03872e3add9c55f96056f036b412bc280e3423638dea23324ba7913aac8",
+    "src/graph/src/experience/observe.rs": "6a23a5b6cc0b6e501b010f6b6009eb2a19317c099fe33c973b570e89e4aca5b2",
+    "src/graph/src/experience/undo.rs": "661efb5f18ee8fc0d56d058c7bac509163d6ea554296e74eabff74d1948aec3c"
+  }
+}

@@ -1,5 +1,5 @@
 ---
-state: open
+state: "analyzing"
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge"
@@ -7,6 +7,7 @@ footprint:
 - ".cartridge/tests/integration/smoke.test.ts"
 needs:
 - "cartridge-mcp-waits-for-a-cold-host-to-settle-instead-of-giving-up-after-three-identical-polls"
+claim: "coordinator-5c-13 2026-09-19T13:01:16.461Z"
 ---
 
 # the smoke fixture drops its daemon pre-start workaround
@@ -34,10 +35,13 @@ defect would not be caught there.
 ## Acceptance
 
 - [ ] The smoke fixture no longer pre-starts a daemon before `cartridge mcp`,
-      and `just smoke` passes.
+      and every case in `.cartridge/tests/integration/smoke.test.ts` passes, the
+      cold `mcp` case ten times in a row.
 - [ ] The comment naming the cold-host PRD is removed with the workaround.
-- [ ] Reverting the cold-host fix makes this suite fail, so the cold path is
-      genuinely covered here.
+- [ ] Not gated: with the cold-host fix reverted, a cold `mcp` run fails about 1
+      time in 5 (recorded: 2 of 12). The suite's cold runs catch such a revert
+      about 91% of the time. This box is ticked from the recorded run in the
+      spec plus the diff reviewer.
 
 ## Planning note
 
@@ -48,3 +52,13 @@ because a superproject lane worktree leaves submodules empty. Adding a
 superproject path such as `.cartridge/tests/integration/smoke.test.ts` to its
 footprint would break that landing shape. `needs` points at the cold-host PRD, so
 this row cannot start before the fix it depends on.
+
+## Scope note (2026-09-19, coordinator cartridge-5c)
+
+Box 1 no longer says `just smoke` passes: `just smoke` also runs mcp.ctg's own
+`.cartridge/tests/integration/refresh.test.ts`, which fails at `:93` (expects the tool list `['alpha']`,
+gets `["alpha","asp"]`) since the ASP commits in cartridge.ctg. That is mcp's defect, owned by
+`@mcp/the-mcp-refresh-test-expects-the-host-s-synthetic-asp-tool`, not this footprint's. Box 3 is a race that fails about one run in five with the
+fix reverted, so a Verify gate cannot prove it; it rests on the recorded run and the diff reviewer
+(analyst-1.md in the loop dir).
+

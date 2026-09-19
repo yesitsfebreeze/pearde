@@ -1,13 +1,13 @@
 # prd
 
-`prd` owns planning for the composition: the central PRD boards under `.cartridge/boards/`, their dependency plan, Gantt, specifications, claims and checked work transitions. It gives back what is ready to work, a brief for one item, and a verified collection that refuses to mark work done on a worker's exit alone. An agent reaches it through the `prd` tool; a trusted native caller reaches the `prd` service, which adds read-only source declaration and record ops; a person reaches the same engine through `just prd`. Memory supplies recalled context; PRD records stay the authority.
+`prd` owns planning for the composition: the central PRD boards under `.cartridge/boards/`, their dependency plan, Gantt, specifications, claims and checked work transitions. It gives back what is ready to work, a brief for one item, and a verified collection that refuses to mark work done on a worker's exit alone. A spec's `test` Verify block names the tests the runner must report as passed, and a lane of a superproject carries its submodules at their pinned commits. An agent reaches it through the `prd` tool; a trusted native caller reaches the `prd` service, which adds read-only source declaration and record ops; a person reaches the same engine through `just prd`. Memory supplies recalled context; PRD records stay the authority.
 
 ## Events
 
 Everything between cartridges is an event, declared in `cartridge.json`.
 
 - **Defines** — `tool.prd`, `prd`, `source.board`
-- **Listens to** — `prd`, `tool.prd`, `source.board`, `graph.announce`
+- **Listens to** — `prd`, `tool.prd`, `source.board`
 - **Needs** — nothing. It stands alone in any composition.
 
 ## Use

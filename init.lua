@@ -12,7 +12,7 @@ local function call(name, args)
 end
 
 call("apply", cartridge.config)
-for _, name in ipairs({ "prd", "tool.prd", "source.board", "graph.announce" }) do
+for _, name in ipairs({ "prd", "tool.prd", "source.board" }) do
 	cartridge.listen(name, function(args) return call(name, args) end)
 end
 cartridge.on_dispose(function() pcall(call, "dispose"); app:kill() end)

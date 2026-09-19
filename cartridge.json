@@ -173,8 +173,7 @@
   "listen": [
     "prd",
     "tool.prd",
-    "source.board",
-    "graph.announce"
+    "source.board"
   ],
   "settings": {
     "root": {

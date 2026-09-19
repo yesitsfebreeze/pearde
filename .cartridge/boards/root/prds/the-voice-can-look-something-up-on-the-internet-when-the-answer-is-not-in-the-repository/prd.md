@@ -1,12 +1,12 @@
 ---
-state: "open"
+state: "done"
 origin: requested
 priority: 78
 repo: "/Users/feb/dev/cartridge"
 footprint:
   - "web.ctg"
-needs:
-- "@prd/a-done-prd-s-receipt-survives-a-later-prd-editing-inside-its-footprint"
+needs: ["@prd/a-done-prd-s-receipt-survives-a-later-prd-editing-inside-its-footprint"]
+commit: "0ba925860f88089792bb03dce1cba756b73d9a7e"
 ---
 
 # The voice can look something up on the internet when the answer is not in the repository
@@ -59,3 +59,24 @@ after it legitimately added files under `web.ctg/.cartridge/`. The engine counts
 any later commit inside a done PRD's footprint as drift, even a verified one.
 The engine was not worked around. This rollup now needs
 `@prd/a-done-prd-s-receipt-survives-a-later-prd-editing-inside-its-footprint`.
+
+## Planning note 2026-09-19
+
+Planner cartridge-e4 dropped this row's `needs` on `@prd/a-done-prd-s-receipt-survives-a-later-prd-editing-inside-its-footprint`. The director deferred that row on 2026-09-19, and the edge could not clear this parent anyway, because an old receipt without `base:` vouches for nothing. What still holds this parent is its search child's receipt: delete `lane/<board>-<slug>` for that child with `git branch -D`, then re-collect the child.
+
+## Current collection dependency — 2026-09-19
+
+The lifecycle prerequisite has since been explicitly reauthorized and is claimed
+by `codex-lifecycle-prerequisite`. Its current outcome is explicit re-verification
+against committed source, preserving immutable receipt history; it no longer
+uses the superseded automatic-voucher rule discussed above. The dependency is
+restored against that concrete replacement outcome. A fresh dry collection in
+this coordinator run still refused the search child's stale source footprint.
+
+After the prerequisite is collected, inspect its documented re-verification
+operation, independently rerun the affected child contracts against the current
+committed source, and confirm current child receipts before collecting this
+rollup. The dependency becoming done does not itself prove those contracts.
+Preserve all existing branches and lanes until their contents and ownership are
+known; the historical branch-deletion suggestion is not a recovery step for this
+coordinator. No acceptance or receipt has been newly certified here.

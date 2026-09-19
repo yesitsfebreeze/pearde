@@ -1,12 +1,13 @@
 ---
-state: open
+state: "done"
 origin: requested
-priority: 70
+priority: 100
 repo: "/Users/feb/dev/cartridge/cartridge.ctg"
 work-kind: leaf
 footprint:
   - "src/host/plan.rs"
   - ".cartridge/tests/unit/src/host/plan.rs"
+commit: "54749f4309860bb39555570298f3e14957d7dfef"
 ---
 
 # An optional need with no provider still loads
@@ -37,11 +38,11 @@ memory cartridge; this defect makes that impossible.
 
 ## Acceptance
 
-- [ ] A host test proves a cartridge with an optional need and no provider loads and is active, while the
+- [x] A host test proves a cartridge with an optional need and no provider loads and is active, while the
       same need without `?` still fails it with the existing message.
-- [ ] A glob need with `?` is either optional after expansion or refused at load with a clear message;
+- [x] A glob need with `?` is either optional after expansion or refused at load with a clear message;
       it is never silently hard. A host test pins which.
-- [ ] `just check cartridge` and `just test cartridge` pass (run as `env -u CARTRIDGE_YOLO`).
+- [x] `just check cartridge` and `just test cartridge` pass (run as `env -u CARTRIDGE_YOLO`).
 
 ## Coordination
 

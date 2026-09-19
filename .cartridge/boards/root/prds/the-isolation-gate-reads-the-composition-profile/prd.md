@@ -1,5 +1,5 @@
 ---
-state: open
+state: "open"
 origin: requested
 priority: 70
 repo: "/Users/feb/dev/cartridge"

@@ -38,3 +38,26 @@ Deferred with `superseded-by` pointing here:
 ## Result
 
 Not started.
+
+## Why this row never becomes dispatchable while work is in flight (2026-09-17)
+
+Its footprint is `/Users/feb/dev/cartridge` — the whole repository. That
+reserves everything, so `plan` holds it against any claim on the board and it
+has been held all day, first by the proxy PRD and then by each successor in
+turn. The blame `plan` prints names whichever PRD happens to hold a claim; it is
+not really about that PRD.
+
+This is not a defect in the row. A gate run across one pinned set of shas is
+only meaningful on a quiet board, because any lane that lands while it runs
+changes the shas it is attesting. So this row is by nature the LAST thing done,
+not a row to squeeze in beside others.
+
+Practical consequence for whoever picks it up: release every claim first, let
+every lane land or be set aside, and only then claim this. Running it early
+produces a receipt that is already stale.
+
+Measured today, and the reason it matters: twenty-plus submodule pointers moved
+during this session and no composed gate run happened across them. `just audit`
+and `just isolation` are green at 18 of 18 as of the web.ctg collection, but
+`just check`, `just test` and `just smoke` have not been run over the whole
+composition at one sha.

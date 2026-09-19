@@ -262,3 +262,32 @@ honest, and noted that the other two mutants needed no scaffold at all. So
 mutant 1 does not show that the unmodified test would fail *at the status
 assertion* on a dropped node — it shows the assertion is load-bearing when the
 bridges do work, which is the world box 3 describes.
+
+## A regression this collection landed (found 2026-09-17, after collection)
+
+This PRD collected at superproject `805efec` with every gate green, and it broke
+`just isolation` for the whole composition.
+
+`instances.test.ts:63` copies `cartridge.json` and `init.lua` out of
+`../policy.ctg` to build its temp profile. `.cartridge/memos/system/isolation.md`
+forbids exactly that — a cartridge includes no sibling's file, and the gate's
+second check is any file naming `../<sibling>.ctg`. `just isolation` now exits 1
+with `1 cross-cartridge reference(s)`.
+
+Traced with `git -C mcp.ctg log -S"'../policy.ctg'"`: the line entered at
+`ec4de01`, this PRD's first commit, which came from `attempt-2.patch`.
+
+Nothing in this PRD's path would have caught it. The five Verify blocks do not
+run the isolation gate and the owner gates (`just check mcp`, `just test mcp`,
+`just check cartridge`) do not call it. The spec's own Remaining risk list even
+records the dependency — "the composed block needs `policy.ctg` beside
+`mcp.ctg`, because the fixture composes the real policy cartridge from
+`../policy.ctg`" — and four review rounds read that sentence without connecting
+it to the rule it breaks. The fact was written down; the rule it violated was
+not the one anyone was checking.
+
+It is not fixed here, because widening a collected PRD's footprint after the
+fact is the wrong move. It is owned by
+`@mcp/the-mcp-instances-fixture-composes-policy-without-reaching-across-the-boundary`
+(open, priority 80), which carries the full evidence and an explicit instruction
+not to weaken any assertion of this fixture to make the gate pass.

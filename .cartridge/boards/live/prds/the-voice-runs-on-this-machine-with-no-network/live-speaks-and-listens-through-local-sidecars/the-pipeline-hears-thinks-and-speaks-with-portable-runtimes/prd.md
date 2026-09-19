@@ -1,5 +1,5 @@
 ---
-state: open
+state: "open"
 origin: requested
 priority: 94
 repo: "/Users/feb/dev/cartridge/live.ctg"

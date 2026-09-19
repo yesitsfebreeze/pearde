@@ -42,3 +42,9 @@ memory cartridge; this defect makes that impossible.
 - [ ] A glob need with `?` is either optional after expansion or refused at load with a clear message;
       it is never silently hard. A host test pins which.
 - [ ] `just check cartridge` and `just test cartridge` pass (run as `env -u CARTRIDGE_YOLO`).
+
+## Coordination
+
+Held for cartridge-f4 (2026-09-19): its composed-acceptance claim reserves cartridge.ctg `.cartridge/tests/`,
+which contains this row's unit test file. Claim only after f4 says its lane cleared. Anchor the spec on a
+named cartridge.ctg sha and expect to rebase: the repo moved five times on 2026-09-19.

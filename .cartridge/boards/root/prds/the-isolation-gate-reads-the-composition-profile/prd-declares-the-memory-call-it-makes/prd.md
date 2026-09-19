@@ -72,3 +72,8 @@ Today's `"needs": []` means prd's `recall` has always answered `unavailable` (th
 undeclared send). Once the prerequisite lands, declare `["memory?"]`; the analyst's draft spec and
 daemon-free probe are in `.state/loop/prd-declares-the-memory-call-it-makes/`.
 
+
+Consequence (noted by cartridge-f4, 2026-09-19): because the undeclared send has always been refused, the
+`unavailable` fallback is the only path `recall` has ever run. Declaring the need makes a dead path live for
+the first time; the implementer should expect to be the first to see `recall` return real results, and must
+anchor the spec on a named cartridge.ctg sha (it moved five times on 2026-09-19).

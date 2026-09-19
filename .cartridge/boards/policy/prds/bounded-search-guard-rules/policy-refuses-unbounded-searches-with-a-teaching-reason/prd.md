@@ -15,7 +15,7 @@ footprint:
 - ".cartridge/docs/policy.md"
 - ".cartridge/help.md"
 needs:
-- "@policy/bounded-search-guard-rules/the-policy-owner-gate-runs-against-the-current-host"
+- "@runtime/policy-and-trust-are-one-host-module-that-asks-the-person-and-remembers-always-allow/the-host-answers-policy-and-policy-explain-with-the-evaluator-policy-ctg-had"
 ---
 # Policy refuses unbounded searches with a teaching reason
 
@@ -37,3 +37,5 @@ Footprint: `init.lua`, `cartridge.json`, `.cartridge/tests/policy.rs`, `.cartrid
 The composition enablement in `/Users/feb/dev/cartridge/.cartridge/config.lua` is a separate superproject change. It lands after this leaf, through the parent collection or a follow-up. This leaf proves the rules with fixtures.
 
 Split from `@policy/bounded-search-guard-rules` on 2026-09-16 (analyst-1). No review rounds used before the split.
+
+Per the user's 2026-09-19 answer on `@policy/bounded-search-guard-rules/the-policy-owner-gate-runs-against-the-current-host` (deferred, superseded by the runtime child above), the policy evaluator this PRD's rules extend is moving to `cartridge.ctg/src/policy`; `policy.ctg` itself is being removed. This leaf's repo and footprint (`init.lua`, `cartridge.json`, `.cartridge/tests/policy.rs`, the `.cartridge/docs/*` and `.cartridge/help.md` files, all under `policy.ctg`) still name the outgoing Lua module. Its analyst must re-home the footprint onto `cartridge.ctg/src/policy` (likely moving this PRD, or its footprint, onto the runtime board) before speccing, rather than porting Lua rules that are about to have no host.

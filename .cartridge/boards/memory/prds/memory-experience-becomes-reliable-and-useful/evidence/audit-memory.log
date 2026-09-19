@@ -1,0 +1,13 @@
+
+memory.ctg  pass  41552 source lines in 142 file(s), largest src/rpc/src/server.rs at 2389, 15% comment, 484 tracked
+  find: stray root entry: .config
+  find: stray root entry: bacon.toml
+  find: stray root entry: .memory
+  find: stray root entry: bin
+  find: stray root entry: .editorconfig
+  find: stray root entry: task
+  find: stray root entry: .github
+  find: 40 tracked file(s) changed and not committed
+  find: 17 untracked file(s)
+
+audit: 1 of 1 cartridges pass the hard checks

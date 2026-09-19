@@ -1,0 +1,195 @@
+{
+  "version": 1,
+  "id": "rename-greeting",
+  "task": "task:root/example-only",
+  "inputs": [
+    {
+      "path": "greeting.txt",
+      "revision": {
+        "input": "greeting_revision"
+      }
+    }
+  ],
+  "agents": {
+    "editor": {
+      "role": "event-executor",
+      "context": [],
+      "scope": {
+        "read": [
+          "greeting.txt"
+        ],
+        "write": [
+          "greeting.txt"
+        ],
+        "events": [
+          {
+            "event": "tool.read",
+            "op": "call",
+            "paths": [
+              "greeting.txt"
+            ]
+          },
+          {
+            "event": "tool.edit",
+            "op": "call",
+            "paths": [
+              "greeting.txt"
+            ]
+          }
+        ]
+      },
+      "limits": {
+        "deadline_ms": 10000,
+        "max_turns": 0,
+        "max_output_bytes": 4096
+      }
+    },
+    "verifier": {
+      "role": "independent-verifier",
+      "context": [],
+      "scope": {
+        "read": [
+          "greeting.txt"
+        ],
+        "write": [],
+        "events": [
+          {
+            "event": "tool.read",
+            "op": "call",
+            "paths": [
+              "greeting.txt"
+            ]
+          }
+        ]
+      },
+      "limits": {
+        "deadline_ms": 10000,
+        "max_turns": 0,
+        "max_output_bytes": 4096
+      }
+    }
+  },
+  "steps": [
+    {
+      "id": "observe",
+      "agent": "editor",
+      "after": [],
+      "event": "tool.read",
+      "params": {
+        "op": "call",
+        "input": {
+          "path": "greeting.txt"
+        }
+      },
+      "completion": "event-result",
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "ok"
+        ],
+        "properties": {
+          "ok": {
+            "const": true
+          }
+        }
+      }
+    },
+    {
+      "id": "edit",
+      "agent": "editor",
+      "after": [
+        "observe"
+      ],
+      "event": "tool.edit",
+      "params": {
+        "op": "call",
+        "input": {
+          "path": "greeting.txt",
+          "old": "Hello",
+          "new": "Welcome"
+        }
+      },
+      "completion": "event-result",
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "ok"
+        ],
+        "properties": {
+          "ok": {
+            "const": true
+          }
+        }
+      }
+    },
+    {
+      "id": "verify",
+      "agent": "verifier",
+      "after": [
+        "edit"
+      ],
+      "event": "tool.read",
+      "params": {
+        "op": "call",
+        "input": {
+          "path": "greeting.txt"
+        }
+      },
+      "completion": "event-result",
+      "output_schema": {
+        "type": "object",
+        "required": [
+          "ok",
+          "content",
+          "candidate_revision"
+        ],
+        "properties": {
+          "ok": {
+            "const": true
+          },
+          "content": {
+            "type": "string"
+          },
+          "candidate_revision": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  ],
+  "requirements": [
+    {
+      "id": "R1",
+      "description": "The candidate file contains exactly the requested greeting.",
+      "check": {
+        "step": "verify",
+        "pointer": "/content",
+        "equals": "Welcome\n"
+      },
+      "evidence": {
+        "step": "verify",
+        "pointer": "/candidate_revision"
+      }
+    },
+    {
+      "id": "R2",
+      "description": "The candidate changes only the admitted output file.",
+      "check": {
+        "kind": "candidate.changed_paths",
+        "equals": [
+          "greeting.txt"
+        ]
+      },
+      "verifier": "orchestrator"
+    }
+  ],
+  "limits": {
+    "deadline_ms": 30000,
+    "max_tokens": 0,
+    "max_concurrency": 1,
+    "max_children": 0,
+    "max_depth": 0,
+    "max_output_bytes": 16384
+  }
+}

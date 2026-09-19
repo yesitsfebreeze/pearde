@@ -2,7 +2,7 @@ import { afterEach, beforeEach, expect, test, spyOn } from 'bun:test';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { atomic, hash, scan, sourceDeclarations } from '../../src/records';
+import { atomic, hash, scan, sourceDeclarations, readSourceFile } from '../../src/records';
 import { sourceRecords } from '../../src/source-records';
 import { Service } from '../../src/service';
 let root: string, boards: string;
@@ -129,4 +129,15 @@ test('final exact-read serialization checks the same absolute deadline',async()=
  const item=(await index()).items[0];const original=JSON.stringify;
  const spy=spyOn(JSON,'stringify').mockImplementation(((value:any,...args:any[])=>{if(value?.schema==='cartridge-source-records/v1'&&value.action==='read'){const until=performance.now()+60;while(performance.now()<until){}}return(original as any)(value,...args);})as any);
  try{const answer=await sourceRecords(boards,'root',{action:'read',expected_source_revision:revision(),path:item.path,expected_revision:item.revision},30);expect(answer.status).toBe('timeout');}finally{spy.mockRestore();}
+});
+
+test('a small exact record does not allocate the full maximum file budget', async () => {
+ const file=record('root','small','# Small public record\n');
+ const original=Buffer.alloc;let allocated=0;
+ const spy=spyOn(Buffer,'alloc').mockImplementation(((size:number,...args:any[])=>{allocated+=size;return (original as any)(size,...args);}) as any);
+ try {
+  const bytes=await readSourceFile(file,1048576,()=>{});
+  expect(bytes.toString()).toBe('# Small public record\n');
+  expect(allocated).toBeLessThan(4096);
+ } finally {spy.mockRestore();}
 });

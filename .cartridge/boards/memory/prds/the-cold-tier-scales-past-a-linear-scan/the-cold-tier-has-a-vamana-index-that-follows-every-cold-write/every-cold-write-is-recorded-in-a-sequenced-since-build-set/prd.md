@@ -48,3 +48,25 @@ The tests are named in specs/spec01.md. The Verify `test` block fails at 3432b13
 command runs only the 8 existing `cold_rekey_*`/`cold_relocate_*` tests and exits 0, but
 none of the three named tests is reported passed. An older binary ignores the table. Deleting the table only forces the next build to be
 a full one. This leaf inherits 2 used review rounds from `the-cold-tier-has-a-vamana-index-that-follows-every-cold-write`.
+
+## Failure
+
+No work was attempted. Coordinator session cartridge-cc
+(`coordinator-41b7-7`) claimed this row at 2026-09-19T14:15Z, which created its
+lane, and the session was then asked by its user to finish and stop before an
+implementer was ever dispatched. The lane holds no commits and nothing was
+written to `memory.ctg`.
+
+This is a clean release, not a defect. The spec is sound and reviewed: it
+passed round 4 at 91 with no blocking findings, after round 3 failed at 79 and
+the author revised. Its Verify is an engine `test` block naming three new
+tests, confirmed failing at base through the engine's own `passedTests`, and
+its target dir is `${CARGO_TARGET_DIR:-$PWD/target/since-build-set-verify}`.
+The next coordinator should `retry` this row and dispatch an implementer
+against that spec unchanged.
+
+One out-of-footprint defect was found by cartridge-5c while reviewing this row,
+and it is recorded here because it has no PRD of its own yet: `cold_move`
+loses data on an A→B then B→C chain — the row lands at C carrying B's contents
+and A's vector — and `cold_rekey` produces exactly that order when A sorts
+before B. That deserves its own memory PRD.

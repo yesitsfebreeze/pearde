@@ -1,5 +1,5 @@
 ---
-state: open
+state: "analyzing"
 origin: requested
 priority: 80
 repo: "/Users/feb/dev/cartridge/auth.ctg"
@@ -7,12 +7,13 @@ work-kind: leaf
 needs:
   - '@auth/auth-reads-every-secret-from-pass-and-lists-names-without-values'
 footprint:
-  - 'src/**'
+  - 'src'
   - 'cartridge.json'
   - 'README.md'
   - '.cartridge/help.md'
   - '.cartridge/docs/README.md'
-  - '.cartridge/tests/**'
+  - '.cartridge/tests'
+claim: "coordinator-e4-1 2026-09-19T14:51:55.857Z"
 ---
 
 # auth writes the router's credential file from pass
@@ -20,9 +21,15 @@ footprint:
 ## Outcome
 
 The router streams model traffic with a provider key held in its own
-process, so auth cannot make those calls for it. auth instead writes the
-router's `credentials.json` from the pass store. pass is the source of truth
-and the file is a derived cache with mode `0600`. The router does not change.
+process, so auth cannot make those calls for it. auth instead calls
+`router {op:"login"}` and `router {op:"logout"}` through a declared need, with
+the pass store's current contents; the router still owns and writes its own
+`credentials.json` (mode `0600`). pass is the source of truth and the file is a
+derived cache. The router does not change.
+
+Amended 2026-09-19 by planner cartridge-e4 on the analyst's evidence: auth
+writing the router's file directly would break the isolation rule, and auth's
+own sandbox grants it no write under the router's directory.
 
 ## Context
 

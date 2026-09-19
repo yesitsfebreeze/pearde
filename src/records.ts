@@ -193,8 +193,13 @@ export async function readSourceFile(file: string, limit: number, check: () => v
     check(); const opened = await handle.stat(); check();
     if (!opened.isFile() || opened.dev !== before.dev || opened.ino !== before.ino) throw new SourceReadError('changed');
     if (opened.size > limit) throw new SourceReadError('capacity');
-    const buffer = Buffer.alloc(Math.min(limit + 1, maxBytes)); let count = 0;
-    while (count < buffer.length) {
+    const ceiling = Math.min(limit + 1, maxBytes);
+    let buffer = Buffer.alloc(Math.min(opened.size + 1, ceiling)), count = 0;
+    while (count < ceiling) {
+      if (count === buffer.length) {
+        const grown = Buffer.alloc(Math.min(ceiling, Math.max(1, buffer.length * 2)));
+        buffer.copy(grown, 0, 0, count); buffer = grown;
+      }
       check(); const read = await handle.read(buffer, count, buffer.length - count, null); consume?.(read.bytesRead); check();
       if (!read.bytesRead) break;
       count += read.bytesRead;

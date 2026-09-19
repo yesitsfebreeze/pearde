@@ -5,10 +5,8 @@ import path from 'node:path';
 import { atomic, git } from '../../src/records';
 
 const owner = path.resolve(import.meta.dir, '../..');
-// The composition's runner, not the host's: `memo-run` sits at the composed
-// repository root and never moved into `cartridge.ctg`, so the old path spawned
-// nothing and every case here failed with ENOENT before it ran.
-const runner = path.resolve(owner, '../.cartridge/tools/memo-run');
+const runner = process.env.TASK_BIN ?? Bun.which('cartridge-task');
+if (!runner) throw new Error('Build the task cartridge and set TASK_BIN, or install cartridge-task.');
 const memo = '.cartridge/memos/routine/planner-statusline.md';
 function fixture() {
   const root = fs.mkdtempSync(path.join(fs.realpathSync(os.tmpdir()), 'prd-statusline-'));
@@ -26,7 +24,7 @@ function fixture() {
   return { root, planner, code, ui, dispose() { fs.rmSync(root, { recursive: true, force: true }); } };
 }
 async function render(f: ReturnType<typeof fixture>, input: string, environment = false) {
-  const child = Bun.spawn([runner, path.join(f.planner, memo)], {
+  const child = Bun.spawn([runner!, '--file', path.join(f.planner, memo)], {
     cwd: f.root, env: { ...process.env, PRD_STATUS_JSON: environment ? input : '', PRD_STATUS_LINK: 'off' },
     stdin: new Blob([environment ? '' : input]), stdout: 'pipe', stderr: 'pipe', timeout: 10000,
   });

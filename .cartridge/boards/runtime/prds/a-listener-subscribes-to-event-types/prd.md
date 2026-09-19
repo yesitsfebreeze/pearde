@@ -1,6 +1,6 @@
 ---
 repo: /Users/feb/dev/cartridge/cartridge.ctg
-state: open
+state: "failed"
 origin: requested
 priority: 100
 blast-radius: mid
@@ -10,14 +10,12 @@ work-kind: leaf
 review-round: 3
 review-status: passed
 canonical-scope: a-listener-subscribes-to-event-types
-footprint:
-  - /Users/feb/dev/cartridge/cartridge.ctg/src/transport/cartridge.rs
-  - /Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/host.rs
+footprint: ["/Users/feb/dev/cartridge/cartridge.ctg/src/transport/cartridge.rs","/Users/feb/dev/cartridge/cartridge.ctg/src/transport/rpc.rs","/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/tests/unit/src/tests/host.rs","/Users/feb/dev/cartridge/cartridge.ctg/docs/transport.txt","/Users/feb/dev/cartridge/cartridge.ctg/README.md","/Users/feb/dev/cartridge/cartridge.ctg/.cartridge/help.md"]
 ---
 
 # a-listener-subscribes-to-event-types
 
-A stream subscriber is told when replay cannot cover the gap since its last envelope. Listening by event type is already delivered: `listen` declarations, schema checks, per-edge tokens, timeouts and bounded queues ([transport.txt](../../../../../../cartridge.ctg/docs/transport.txt)). What remains is in the channel code in [transport/cartridge.rs](../../../../../../cartridge.ctg/src/transport/cartridge.rs). `publish_kind` keeps a bounded `history` and an in-memory `seq`. `join` replays envelopes newer than `since` without saying when the oldest retained one is already past it. The count also starts again at 1 when a publisher restarts, so a resubscribe from an old `last` can drop new envelopes. Both come from reading the source and are not reproduced yet.
+A stream subscriber is told when replay cannot cover the gap since its last envelope. Listening by event type is already delivered: `listen` declarations, schema checks, per-edge tokens, timeouts and bounded queues ([transport.txt](../../../../../../cartridge.ctg/docs/transport.txt)). What remains is in the channel code in [transport/cartridge.rs](../../../../../../cartridge.ctg/src/transport/cartridge.rs). `publish_kind` keeps a bounded `history` and an in-memory `seq`. `join` replays envelopes newer than `since` without saying when the oldest retained one is already past it. The count also starts again at 1 when a publisher restarts, so a resubscribe from an old `last` can drop new envelopes. Both were reproduced through a public RPC probe on 2026-09-19: truncated replay omitted sequences 51–76 without a gap, and a fresh publisher with three records returned no data to an old numeric cursor of 500. Full replay also closed the subscribe RPC at the shared queue boundary.
 
 ## Acceptance
 
@@ -27,7 +25,7 @@ A stream subscriber is told when replay cannot cover the gap since its last enve
 
 ## Proof and recovery
 
-First add failing reproductions for both cases next to `streams_replay_and_then_deliver_live` in [host.rs tests](../../../../../../cartridge.ctg/.cartridge/tests/unit/src/tests/host.rs). Gates, cwd `/Users/feb/dev/cartridge`: `just test runtime`, `just check runtime`. Not run. Compatibility: subscribers that ignore `kind: gap` keep working. There is no durable journal: retained history stays bounded in memory.
+First add failing reproductions for both cases next to `streams_replay_and_then_deliver_live` in [host.rs tests](../../../../../../cartridge.ctg/.cartridge/tests/unit/src/tests/host.rs). Gates, cwd `/Users/feb/dev/cartridge`: `./task test runtime`, `./task check runtime`. The existing stream baseline test passed; full gates and the new behavioral tests remain implementation work. Compatibility: subscribers that ignore `kind: gap` keep working. There is no durable journal: retained history stays bounded in memory.
 
 ## Decision (2026-09-19, ASP coordinator cartridge-1f)
 
@@ -41,7 +39,7 @@ question about the agent's projection frame that this change does not touch.
 
 ## Dependencies and review
 
-No hard prerequisites. The acceptance overlaps `documents-own-live-processes/document-event-activation` ("overflow reports a gap"); this leaf is the canonical owner of the channel gap. [Review](review.md): inherits 2 rounds.
+No hard prerequisites. The acceptance overlaps `documents-own-live-processes/document-event-activation` ("overflow reports a gap"); this leaf is the canonical owner of the channel gap. [Review](review.md): four rounds used; round 4 failed at 85/100. One final round remains. The revised spec addresses shared-Peer replay admission and cursor continuity after failed enqueue.
 
 ## From the retired work memo
 
@@ -93,3 +91,9 @@ The delivery guarantee to aim for is the honest one, not the expensive one: this
 is a notification channel over a journal that is already durable, so a listener
 that missed an event reads the stream, and the subscription does not become a
 second source of truth.
+
+## Failure
+
+Independent verification failed a second time after the one authorized implementation correction. Candidate bf8e08fdf235026266751546e44da7579f98b001 fixes replacement closure during watcher transfer, but recovery can recreate a publisher subscription after successful SDK unsubscribe. The verifier paused recovery after transfer, completed real unsubscribe and its receive fence with zero server subscriptions, then resumed stale dispatch and observed a subscription reappear. The exact counterexample exits 101. Preserve the clean lane and /tmp/listener-verifier2-repro.patch; the complete report is ../../.state/loop/a-listener-subscribes-to-event-types/verifier-codex-2.md.
+
+The published functional suite passes (13 stream tests, 196 library tests, 22 binary tests, formatting and strict lint), but the workspace test phases took 142.40 seconds under contention, exceeding the collection block limit. No acceptance or integrated proof is certified. Per PROMPT.md this second failure ends automatic correction. A later retry requires the cause to be addressed: order recovery dispatch with unsubscribe and replacement, preserving cursors and fences, and establish the collection timing. The fifth-round PASS 94 plan review and exhausted substantive plan-review allowance remain unchanged.

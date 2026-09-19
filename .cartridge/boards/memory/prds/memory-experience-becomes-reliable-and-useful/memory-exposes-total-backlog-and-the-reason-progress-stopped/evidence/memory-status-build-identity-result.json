@@ -1,0 +1,23 @@
+{
+  "source": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped",
+  "source_sha256": {
+    "src/cartridge/build.rs": "cf19a80ecf375771377b2a2382fa091109207961eb7b84047d7cead09a7862bd",
+    "src/cartridge/build_identity.rs": "ca53b1afb0c2adb1950bc3f2ed3a2f46eeb83853e5f0827dcec351fc820e2b10",
+    "src/cartridge/Cargo.toml": "4ff664c64ce8c8c05fc06d16d5cea819f428e31feb5b893f48cb8cf3c4e45f68",
+    ".cartridge/tests/unit/src/cartridge/build_identity_test.rs": "6ecb0482a64911304a0f33d5dc69e6227893551e7898e06182e3e9e80156f9fb"
+  },
+  "cargo_lock_changed": false,
+  "test_names": [
+    "status_build_input_identity_is_reproducible_and_sensitive",
+    "status_embedded_identity_does_not_follow_changed_disk_inputs"
+  ],
+  "tests_passed": 2,
+  "logs": [
+    "/tmp/memory-status-build-identity-final.log",
+    "/tmp/memory-status-embedded-identity.log"
+  ],
+  "fmt_exit": 0,
+  "diff_check_exit": 0,
+  "target": "/tmp/memory-status-build-identity-target",
+  "limitations": "Unit tests identify compiled-input scheme only. Whole status leaf and actual loaded artifact SHA/reload proof belong to independent verifier and controlled integration."
+}

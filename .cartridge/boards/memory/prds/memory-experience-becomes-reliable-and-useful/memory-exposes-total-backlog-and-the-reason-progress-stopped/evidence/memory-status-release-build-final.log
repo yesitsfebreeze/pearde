@@ -1,0 +1,13 @@
+   Compiling store_core v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/store/core)
+   Compiling graph v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/graph)
+   Compiling retrieval-piece v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/retrieval/piece)
+   Compiling tick v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/tick)
+   Compiling ingest v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/ingest)
+   Compiling bootstrap v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/bootstrap)
+   Compiling retrieval v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/retrieval)
+   Compiling tick_loop v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/tick/loop)
+   Compiling store v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/store)
+   Compiling health v0.1.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/health)
+   Compiling rpc v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/rpc)
+    Finished `release` profile [optimized] target(s) in 21.68s
+  Executable unittests src/lib.rs (/tmp/memory-status-release-target/release/deps/rpc-2ca62d407ad0398d)

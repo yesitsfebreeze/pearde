@@ -1,0 +1,36 @@
+   Compiling store_core v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/store/core)
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.00.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.01.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.02.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.03.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.04.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.05.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.06.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.07.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.08.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.09.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.10.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.11.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.12.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.13.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.14.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.15.rcgu.o unable to open object file: No such file or directory
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.53s
+     Running unittests src/lib.rs (/tmp/memory-status-main-target/debug/deps/store_core-0092ab9c0269b990)
+
+running 10 tests
+storage diagnostic profile=debug rows=1000 samples=1000 p50_ns=6708 p95_ns=8167 max_ns=88917 migration_ms=26
+test experience::tests::experience_status_failed_commit_does_not_advance_progress ... ok
+test experience::tests::experience_status_historical_backlog_is_counted ... ok
+test experience::tests::experience_status_rejects_unsupported_and_inconsistent_metadata ... ok
+test experience::tests::experience_status_corrupt_metadata_is_unavailable ... ok
+test experience::tests::experience_status_overwrite_commit_restart_and_oldest_are_consistent ... ok
+test experience::tests::experience_status_near_limit_keys_and_hash_collisions_keep_exact_identity ... ok
+test experience::tests::experience_intake_enforces_delivery_window_and_payload_bound ... ok
+test experience::tests::experience_receipts_survive_commit_and_expire_without_accepting_old_delivery ... ok
+test experience::tests::experience_status_migration_is_atomic_and_runs_once ... ok
+storage diagnostic profile=debug rows=100000 samples=1000 p50_ns=10208 p95_ns=10500 max_ns=21041 migration_ms=1248
+test experience::tests::experience_status_polling_cost_is_bounded_at_one_and_one_hundred_thousand ... ok
+
+test result: ok. 10 passed; 0 failed; 0 ignored; 0 measured; 75 filtered out; finished in 1.48s
+

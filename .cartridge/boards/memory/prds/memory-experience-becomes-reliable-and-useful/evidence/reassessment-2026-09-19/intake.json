@@ -1,0 +1,1 @@
+{"batch_limit":64,"capacity":{"bytes":67108864,"rows":4096},"pending":{"bytes":39240,"rows":145},"receipts":18777,"storage":"memory"}

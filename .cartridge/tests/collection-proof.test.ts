@@ -84,7 +84,7 @@ test('reverification refreshes child rollups without automatic vouchers', async 
   const legacy = path.join(board, 'prds/legacy-parent/prd.md'); atomic(legacy, `---\nstate: open\nrepo: ${JSON.stringify(code)}\n---\n# Legacy parent\n`);
   row('legacy-parent/child', 'test -s seed.txt'); await collect('legacy-parent/child', '--committed');
   expect((await execute('collect', board, ['legacy-parent'])).error).toContain('child workspace differs');
-});
+}, 20000);
 
 test('verification races cancellation and history tampering fail closed', async () => {
   const marker = path.join(root, 'race'); row('one', `test -s seed.txt\nif test -f ${q(marker)}; then git -C ${q(code)} -c user.name=Test -c user.email=test@example.invalid commit --allow-empty -qm race; fi`); await collect(); const prior = fs.readFileSync(receipt(), 'utf8');

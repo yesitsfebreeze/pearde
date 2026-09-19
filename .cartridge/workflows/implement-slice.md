@@ -10,7 +10,8 @@ tags:
 
 Check that the current plan/spec revision has the completed review gate: reviewer
 agent score is at least 90, no blocking finding remains,
-and at most five rounds were used. Pending or stale ratings do not authorize this
+and at most five rounds were used, or that the PRD meets every review-plan
+fast-path condition. Pending or stale ratings do not authorize this
 step. Follow the owner repository workflow and implement the smallest complete
 accepted contract. Keep domain state with its owner; preserve existing stores and
 unrelated changes.

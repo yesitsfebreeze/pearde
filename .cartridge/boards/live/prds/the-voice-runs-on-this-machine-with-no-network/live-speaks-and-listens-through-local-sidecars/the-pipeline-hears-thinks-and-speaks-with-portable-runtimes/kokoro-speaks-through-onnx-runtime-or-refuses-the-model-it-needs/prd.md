@@ -1,10 +1,11 @@
 ---
-state: open
+state: "claimed"
 origin: requested
 priority: 94
 repo: "/Users/feb/dev/cartridge/live.ctg"
-footprint: ["src/local.rs", "cartridge.json", "Cargo.toml", "Cargo.lock", "README.md", ".cartridge/help.md", ".cartridge/docs/README.md"]
+footprint: ["src/local.rs","cartridge.json","Cargo.toml","Cargo.lock","README.md",".cartridge/help.md",".cartridge/docs/README.md","src/local/kokoro.rs"]
 needs: ["the-local-transport-speaks-in-order-before-any-model-is-real"]
+claim: "coordinator-codex-12 2026-09-19T18:42:37.038Z"
 ---
 
 # Kokoro speaks through ONNX Runtime, or refuses the model it needs
@@ -20,7 +21,7 @@ This child and the Whisper child share files, so they land one after the other.
 
 ## Acceptance
 
-- [ ] With `provider: "local"`, text-to-speech runs through Kokoro on `ort` behind the first child's seam.
-- [ ] A missing Kokoro model file closes the session through the `error` event naming the file; a test proves it and nothing panics.
-- [ ] A named executed test synthesises audio when a model file is present, and the diff reading is the recorded backstop for latency claims, because Verify cannot download model weights.
-- [ ] The docs name the model file and where it comes from.
+- [x] With `provider: "local"`, text-to-speech runs through Kokoro on `ort` behind the first child's seam.
+- [x] A missing Kokoro model file closes the session through the `error` event naming the file; a test proves it and nothing panics.
+- [x] A named executed test synthesises audio when a model file is present, and the diff reading is the recorded backstop for latency claims, because Verify cannot download model weights.
+- [x] The docs name the model file and where it comes from.

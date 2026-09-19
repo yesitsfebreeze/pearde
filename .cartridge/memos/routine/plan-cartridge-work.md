@@ -91,8 +91,8 @@ Implementation remains open until its acceptance evidence exists.
 - Every requested improvement and downside maps to a child outcome or an explicit,
   reasoned limitation; no requirement disappears between assessment and plan.
 - A dependency walk over `needs` and child PRDs has no missing targets or cycles.
-- Every leaf has unchecked checks and scoped commands such as `just test memo`
-  and `just check memo`, executed from /Users/feb/dev/cartridge when appropriate.
+- Every leaf has unchecked checks and scoped commands such as `./task test memo`
+  and `./task check memo`, executed from /Users/feb/dev/cartridge when appropriate.
 - The handoff names ready work, shared footprints, success measures, and what was
   actually verified in this planning pass.
 

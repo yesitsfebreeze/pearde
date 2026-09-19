@@ -1,0 +1,31 @@
+# Status implementation evidence
+
+The implementation is confined to the reviewed 24-path footprint in the checked status lane rooted at memory source `d9161cd2f3a363915c7a7d642a4955e7a3836065`. The final specification is SHA256 `344f320f91bd395c975878d892675f403012b792cb7bc3dfab32e51414bdcdd0`, independently reviewed in round 5 at 95/100. Earlier reviews, including the failed round 2 and superseded specification digests, remain in review.md. This author record is not an independent verification verdict or a collection receipt.
+
+[The frozen source manifest](evidence/memory-status-frozen-source-manifest.json) binds all 24 files. Its SHA256 is `e5e2742157ac9e6101fa3c5294bbcaf137c84bf9876d58e388f56e63d4e7ba73`. The build-identity helper was independently implemented by `/root/baseline_verify`; its [handoff](evidence/memory-status-build-identity-result.json) records that bounded contribution. Whole-leaf verification is assigned separately to `/root/lifecycle_prerequisite`.
+
+## Implemented behavior
+
+Versioned metadata counts all seven pending prefixes, bytes, receipts, unknown event ages and successful experience-commit progress. Store opening performs the one-time atomic migration. Import overwrites, live enqueue, input removal and receipt pruning update the same authority. An ordered event-time index uses a fixed-size timestamp/hash key with exact pending-key collision buckets; it stores no payload or second semantic record. Polling reads metadata and the first index timestamp without decoding pending payloads. Missing, unsupported or corrupt authority remains unavailable.
+
+The existing trace status, native status and reserved ASP memory:status expose the canonical experience projection. Graph contention is nonblocking for local projection. Process-local attempt/error/schedule observations are separate from durable commits. Writer divergence stays operator-required even when semantic queries succeed. Native query success does not refresh experience age or erase its known generation. Ready and experience observations share the same per-engine generation, including engines recreated inside one PID.
+
+Native ASP status uses the existing observational status probe, never the lazy trace engine opener. Native attached probes bound the complete identity/readiness/progress exchange by one deadline. The embedded module build-input SHA256 is explicitly distinct from the serving owner identity and from final dynamic-library bytes. The tool.memory query-deposition exception and attached-owner read-only boundary remain unchanged.
+
+## Author verification
+
+Every command used an external target, `/tmp/memory-status-main-target` or `/tmp/memory-status-release-target`; no loaded cartridge or shared runtime artifact was replaced. The final debug results were store-core experience 10 tests, RPC experience 16 tests, commands scheduler 2 tests, native status 15 tests and ASP-filtered 8 tests, all passing. Some native ASP tests appear in both filters, so these are suite counts rather than a disjoint test total. Cargo check for all four affected packages, strict Clippy with all targets, formatting and diff checks passed. Exact outputs are in the linked evidence directory and bound by [log digests](evidence/author-log-digests.json).
+
+The migration regression exhausts the actual production migration transaction with a reduced LMDB map after seeding 10,000 inputs. It verifies rollback leaves inputs, receipt, legacy metadata and absent new authority/index unchanged; restoring map capacity and reopening succeeds. Near-limit historical keys migrate, overwrite and commit; a forced hash-bucket collision preserves exact-key removal. Unsupported versions, invalid arithmetic and garbled metadata refuse observation/initialization.
+
+Native tests exercise an uninitialized actual memory/ASP entrypoint, an initialized native ASP call while a separate thread holds the graph writer, same-PID ready/progress generation disagreement across the wire, staged attached reads sharing one deadline, and a real production MemoryRpcHandler/serve_memory_rpc_loop whose health preflight waits on a held remote graph. The latter runs on a separate owner runtime so a blocked owner cannot starve the caller's timer. The observer reports timeout and never opens its own engine. The first same-runtime fixture and the initial mismatched LMDB fixture options were test defects, not claimed production fixes. The preserved RPC fixture failure log records the latter correction.
+
+## Canonical release measurements
+
+The [optimized gate](evidence/memory-status-final-release.log) timed complete canonical trace-status invocation plus JSON serialization after 20 warmups, with 1,000 observations at each size, on aarch64 macOS. At 1,000 pending rows (58,000 payload bytes), p50 was 25.792 microseconds, p95 31.375 microseconds, maximum 114.375 microseconds, and response size 1,254 bytes. At 100,000 rows (5,800,000 payload bytes), p50 was 18.334 microseconds, p95 26.834 microseconds, maximum 96.250 microseconds, and response size 1,262 bytes. Both passed p95 at most 10 milliseconds, the three-times scale gate with a 2-millisecond floor, and the 8-KiB response gate. Fixture setup was 6/60 milliseconds and real store migration/opening 10/327 milliseconds, recorded separately from polling. Storage-only debug diagnostic measurements are separately labelled and do not establish this canonical gate.
+
+Explicit foreground release build setup took 3 minutes 9 seconds cold, outside the checked acceptance block, followed by bounded incremental setup and test runs. No background build or timeout bypass supplied acceptance evidence. These are backlog polling measurements, not the parent's still-required retrieval quality and retrieval latency gates.
+
+## Remaining verification and integration
+
+Independent whole-leaf verification and checked collection are pending. No acceptance checkbox is closed by this author record. Live dirty provider/docs/readback edits outside the verified lane remain untouched. Final loaded-artifact identity, A-loaded/B-on-disk behavior, intake-to-Scope integration, model-outage recovery and retrieval measurements remain parent gates after the later leaves. The status unit tests do not claim those integrated outcomes.

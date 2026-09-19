@@ -1,0 +1,79 @@
+[
+  {
+    "addr": "@memory/memory-experience-becomes-reliable-and-useful/crystallization-keeps-progressing-beside-ordinary-persistence",
+    "state": "open",
+    "held": "footprint: overlaps held @memory/memory-crystallizes-the-systems-activity-by-its-reasons/memory-stands-alone-with-clear-engine-and-integration-boundaries",
+    "dispatchable": false,
+    "role": "analyst"
+  },
+  {
+    "addr": "@memory/memory-experience-becomes-reliable-and-useful/memory-exposes-total-backlog-and-the-reason-progress-stopped",
+    "state": "open",
+    "held": "footprint: overlaps held @memory/memory-crystallizes-the-systems-activity-by-its-reasons/memory-stands-alone-with-clear-engine-and-integration-boundaries",
+    "dispatchable": false,
+    "role": "analyst"
+  },
+  {
+    "addr": "@runtime/rejected-activity-cannot-wedge-the-hosts-delivery-queue",
+    "state": "open",
+    "held": "footprint: overlaps held @runtime/a-listener-subscribes-to-event-types",
+    "dispatchable": false,
+    "role": "analyst"
+  },
+  {
+    "addr": "@memory/memory-experience-becomes-reliable-and-useful/every-runtime-reason-identifies-its-evidence-and-certainty",
+    "state": "open",
+    "held": "footprint: overlaps held @memory/memory-crystallizes-the-systems-activity-by-its-reasons/memory-stands-alone-with-clear-engine-and-integration-boundaries",
+    "dispatchable": false,
+    "role": "analyst"
+  },
+  {
+    "addr": "@memory/memory-experience-becomes-reliable-and-useful/memory-reports-exactly-what-crystallized-output-preserves",
+    "state": "open",
+    "held": "footprint: overlaps held @memory/memory-crystallizes-the-systems-activity-by-its-reasons/memory-stands-alone-with-clear-engine-and-integration-boundaries",
+    "dispatchable": false,
+    "role": "analyst"
+  },
+  {
+    "addr": "@memory/memory-experience-becomes-reliable-and-useful/healthy-intake-progresses-past-malformed-or-expensive-observations",
+    "state": "open",
+    "held": "needs: not done \u2014 @memory/memory-experience-becomes-reliable-and-useful/crystallization-keeps-progressing-beside-ordinary-persistence",
+    "dispatchable": false,
+    "role": "analyst"
+  },
+  {
+    "addr": "@memory/memory-experience-becomes-reliable-and-useful/crystallization-preserves-outcome-context-and-validity-boundaries",
+    "state": "open",
+    "held": "needs: not done \u2014 @memory/memory-experience-becomes-reliable-and-useful/every-runtime-reason-identifies-its-evidence-and-certainty",
+    "dispatchable": false,
+    "role": "analyst"
+  },
+  {
+    "addr": "@memory/memory-experience-becomes-reliable-and-useful/recurrence-cannot-masquerade-as-retrieval-usefulness",
+    "state": "open",
+    "held": "needs: not done \u2014 @memory/heat-is-deposited-on-read-back-not-on-delivery",
+    "dispatchable": false,
+    "role": "analyst"
+  },
+  {
+    "addr": "@memory/memory-experience-becomes-reliable-and-useful/experience-retrieval-earns-a-reproducible-quality-and-latency-gate",
+    "state": "open",
+    "held": "needs: not done \u2014 @memory/a-frozen-query-reads-the-bank-without-touching-it",
+    "dispatchable": false,
+    "role": "analyst"
+  },
+  {
+    "addr": "@root/scope-distinguishes-memory-use-from-stalled-processing",
+    "state": "open",
+    "held": "needs: not done \u2014 @memory/memory-experience-becomes-reliable-and-useful/memory-exposes-total-backlog-and-the-reason-progress-stopped, @memory/memory-experience-becomes-reliable-and-useful/recurrence-cannot-masquerade-as-retrieval-usefulness",
+    "dispatchable": false,
+    "role": "analyst"
+  },
+  {
+    "addr": "@memory/memory-experience-becomes-reliable-and-useful",
+    "state": "open",
+    "held": "needs: not done \u2014 @memory/memory-experience-becomes-reliable-and-useful/crystallization-keeps-progressing-beside-ordinary-persistence, @memory/memory-experience-becomes-reliable-and-useful/crystallization-preserves-outcome-context-and-validity-boundaries, @memory/memory-experience-becomes-reliable-and-useful/every-runtime-reason-identifies-its-evidence-and-certainty, @memory/memory-experience-becomes-reliable-and-useful/experience-retrieval-earns-a-reproducible-quality-and-latency-gate, @memory/memory-experience-becomes-reliable-and-useful/healthy-intake-progresses-past-malformed-or-expensive-observations, @memory/memory-experience-becomes-reliable-and-useful/memory-exposes-total-backlog-and-the-reason-progress-stopped, @memory/memory-experience-becomes-reliable-and-useful/memory-reports-exactly-what-crystallized-output-preserves, @memory/memory-experience-becomes-reliable-and-useful/recurrence-cannot-masquerade-as-retrieval-usefulness, @runtime/rejected-activity-cannot-wedge-the-hosts-delivery-queue, scope-distinguishes-memory-use-from-stalled-processing",
+    "dispatchable": false,
+    "role": "analyst"
+  }
+]

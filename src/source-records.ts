@@ -20,7 +20,8 @@ const identity = (s: fs.Stats) => `${s.dev}:${s.ino}:${s.mtimeMs}:${s.ctimeMs}`;
 
 /** Public local records only. The tracker owns actual I/O lifetime beyond response timeout. */
 export async function sourceRecords(boardsRoot: string, board: string, request: RecordRequest, deadlineMs = 500,
-  track?: (work: Promise<any>) => void): Promise<any> {
+  track?: (work: Promise<any>) => void,
+  projection?: { maxItems: number; item: (document: ReturnType<typeof parseDocument>) => Record<string, unknown> }): Promise<any> {
   if (!boardSelector(board) || !Number.isInteger(deadlineMs) || deadlineMs < 1 || deadlineMs > 2000 ||
       !request || typeof request !== 'object' || Array.isArray(request) || !hex(request.expected_source_revision) ||
       !['index', 'read'].includes(request.action) || Object.keys(request).some(k => !['action', 'expected_source_revision', ...(request.action === 'read' ? ['path', 'expected_revision'] : [])].includes(k)) ||
@@ -34,9 +35,9 @@ export async function sourceRecords(boardsRoot: string, board: string, request: 
       if (!inside(scope, root) || Buffer.byteLength(root) > 4096) throw new ReadFailure('malformed');
       const directories = new Map<string, string>();
       async function directory(file: string) {
-        check(); const stat = await fs.promises.lstat(file); check();
+        check(); const [stat, resolved] = await Promise.all([fs.promises.lstat(file), fs.promises.realpath(file)]); check();
         if (!stat.isDirectory() || stat.isSymbolicLink()) throw new ReadFailure('unavailable');
-        if (await fs.promises.realpath(file) !== file) throw new ReadFailure('changed'); check();
+        if (resolved !== file) throw new ReadFailure('changed');
         const prior = directories.get(file), current = identity(stat);
         if (prior !== undefined && prior !== current) throw new ReadFailure('changed');
         directories.set(file, current);
@@ -66,11 +67,18 @@ export async function sourceRecords(boardsRoot: string, board: string, request: 
         const fm = doc.fm;
         if (Object.hasOwn(fm, 'private') && fm.private !== false || Object.hasOwn(fm, 'visibility') && fm.visibility !== 'public') return null;
         if (Buffer.byteLength(doc.title) > 512) throw new ReadFailure('capacity');
-        return { item: { path: relative, title: doc.title, bytes: bytes.length, revision: hash(bytes), visibility: 'public' }, text };
+        return { item: { path: relative, title: doc.title, bytes: bytes.length, revision: hash(bytes), visibility: 'public', ...projection?.item(doc) }, text };
       }
       async function stable() {
         check();
-        for (const [file, before] of directories) { const stat = await fs.promises.lstat(file); check(); if (identity(stat) !== before || !stat.isDirectory() || stat.isSymbolicLink() || await fs.promises.realpath(file) !== file) throw new ReadFailure('changed'); check(); }
+        const held = [...directories];
+        for (let offset = 0; offset < held.length; offset += 16) {
+          const checked = await Promise.allSettled(held.slice(offset, offset + 16).map(async ([file, before]) => {
+            check(); const [stat, resolved] = await Promise.all([fs.promises.lstat(file), fs.promises.realpath(file)]); check();
+            if (identity(stat) !== before || !stat.isDirectory() || stat.isSymbolicLink() || resolved !== file) throw new ReadFailure('changed');
+          }));
+          for (const result of checked) if (result.status === 'rejected') throw result.reason;
+        }
         if (missingTree) { try { await fs.promises.lstat(prds); throw new ReadFailure('changed'); } catch (error: any) { if (error.code !== 'ENOENT') throw error; } }
         const after = await readSourceFile(settings, 65536, check, consume, MAX_BYTES - used);
         if (hash(after) !== request.expected_source_revision) throw new ReadFailure('changed');
@@ -108,7 +116,7 @@ export async function sourceRecords(boardsRoot: string, board: string, request: 
               try {
                 const record = await readRecord(relative);
                 if (record) {
-                  if (items.length >= MAX_ITEMS) { partial = truncated = true; pending.length = 0; break; }
+                  if (items.length >= (projection?.maxItems ?? MAX_ITEMS)) { partial = truncated = true; pending.length = 0; break; }
                   items.push(record.item);
                 }
               } catch (error) {

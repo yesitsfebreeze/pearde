@@ -32,6 +32,18 @@ retain detailed evidence in linked source/review records, not pasted text blocks
 Consult [the canonical work map](../boards/root/work-map.json) before creating or claiming
 work. Source aliases preserve history and claims; they are not additional tasks.
 
+Fast path, user instruction 2026-09-19 ("fix what we can fix", accepting the
+recommendation of a fast path for trivial PRDs; Claude Code session
+00e515c9-8bb8-4d11-a537-fff462164bb3): a PRD skips this review loop when every
+condition holds. It has one spec. Its footprint is at most two files in one
+cartridge. It changes no `cartridge.json` surface, setting, need or event. Its
+Verify section has a `test` block that names the new or changed test. One worker
+then writes the spec and the code. An independent verifier, never the author,
+reruns the Verify blocks, reads the diff and reports before collect. When the
+verifier finds a behavioural gap, or a condition stops holding, the PRD leaves
+the fast path and enters this review at round 1. The author's own judgement
+that a change is trivial does not qualify it; only the conditions do.
+
 1. Establish the inventory and current authority. Include open centrally stored PRD for the source owners,
    every board's open PRDs and explicit current work lists; identify claimed/blocked owners
    without reclaiming their work. Distinguish executable leaves, roll-up parents,
@@ -54,6 +66,19 @@ work. Source aliases preserve history and claims; they are not additional tasks.
    unchanged text until it passes. A reviewer score is not the user's rating or
    measured product quality. A reviewer score at least 90 with no blocking
    finding passes the delegated review gate within the user's authorized scope.
+
+   A behavioural claim rests on a named executed test and a reading of the diff.
+   A Verify block can require that a named test exists, that it is executed, and
+   that it turns red on a deliberately mutated tree, but it cannot establish that
+   the test died of the behaviour rather than of something the test itself
+   supplied: where the judge and the judged run in one process, the judged can
+   see the judge. Spend at most one round designing such a gate. If that round
+   does not produce a gate the reviewer is unable to defeat, record the ceiling
+   and the defeated attempts in the review history, name the diff reading as the
+   backstop, and score the plan on its remaining dimensions. Rounds spent only on
+   the gate are not substantive revisions of the plan and are not counted as
+   rounds, and a behavioural claim that has reached this ceiling is not by itself
+   a blocking finding.
 5. Revise failures within the authorized scope, preserving history and claims.
    Make one coherent revision that addresses the findings, then recheck changed
    contracts, links, dependencies and relevant gates. If a change requires a real
@@ -104,6 +129,7 @@ Do not describe a green `just board-check` as a passed review or product test.
 | --- | --- | --- |
 | Agent score is below 90, or a blocker remains | The revision fails | Record findings; revise and review within the remaining rounds. |
 | Agent review is missing or does not name the reviewed revision | Review is pending | Obtain a revision-bound agent review before dependent implementation. |
+| A gate is defeated again after the round allowed for it | The claim is behavioural and gate design has reached its ceiling | Record the ceiling and the defeated attempts, name the diff reading as the backstop, and score the remaining dimensions. |
 | Fifth round fails | This plan exhausted its allowance | Record remaining gaps and stop automatic revisions; leave other plans independent. |
 | Accepted substantive inputs changed | The rating is stale | Reassess using the next available round; preserve earlier evidence. |
 | Unknown owner, duplicate scope or contradictory current instructions | The proposed plan is not executable as written | Resolve or present the disposition before continuing. |

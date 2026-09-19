@@ -28,7 +28,8 @@ test('context and closed model input cannot override execution', async () => {
   expect(fs.existsSync(path.join(root, 'unwanted'))).toBe(false);
 });
 test('argument whitelist refuses injected paths, flags, adapters and excess counts', async () => {
-  const cases = [['scan', '--board', '/tmp'], ['plan', 'all'], ['read', '../other'], ['read', '/etc/passwd'], ['run', '--adapter', 'evil'], ['brief', 'one', '--transcript', '/tmp'], ['collect', 'one', '--trust'], ['plan', '--workers', '100'], ['plan', '--workers', '1.5'], ['read', 'one', 'two'], ['add', 'hello', '--body', '-'], ['scan', '--limit', '51']];
+  expect(service.prepare({ op: 'plan', args: ['--limit', '200'] }).args).toEqual(['--limit', '200']);
+  const cases = [['scan', '--board', '/tmp'], ['plan', 'all'], ['read', '../other'], ['read', '/etc/passwd'], ['run', '--adapter', 'evil'], ['brief', 'one', '--transcript', '/tmp'], ['collect', 'one', '--trust'], ['plan', '--workers', '100'], ['plan', '--workers', '1.5'], ['read', 'one', 'two'], ['add', 'hello', '--body', '-'], ['scan', '--limit', '201']];
   for (const [op, ...args] of cases) expect((await call(op, args)).error).toBe(true);
   expect((await call('scan', ['x'.repeat(8193)])).error).toBe(true);
 });
@@ -79,7 +80,7 @@ test('memory calls are bounded so a stalled provider never holds up planning', a
   const started = Date.now(); const answer = value(await call('read', ['one']));
   expect(answer.memory.status).toBe('unavailable'); expect(answer.memory.error).toContain('timed out'); expect(Date.now() - started).toBeLessThan(6000);
 }, 10000);
-test('wire apply, describe, graph announce, native call with memory, and dispose', async () => {
+test('wire apply, describe, native call with memory, and dispose', async () => {
   const requests: any[] = [];
   const service = await program([process.execPath, path.resolve(import.meta.dir, '../../src/service.ts')], line => {
     if (line.bail === 'memory') { requests.push(line); return { items: [] }; }
@@ -88,8 +89,6 @@ test('wire apply, describe, graph announce, native call with memory, and dispose
   try {
     expect(await service.call('apply', { root })).toBeNull();
     expect((await service.call('prd', { op: 'describe' })).name).toBe('prd');
-    // The announce: this cartridge contributes its own tool to the graph.
-    expect(await service.call('graph.announce', { scope: {} })).toEqual({ nodes: [{ kind: 'tool', key: 'tool.prd', name: 'prd', description: expect.any(String) }], edges: [] });
     expect((await service.call('prd', { op: 'call', context: context(), input: { op: 'scan' } })).error).toBe(false);
     const read = await service.call('prd', { op: 'call', context: context(), input: { op: 'read', args: ['one'] } });
     expect(value(read).memory.status).toBe('available');

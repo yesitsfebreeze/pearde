@@ -1,5 +1,5 @@
 ---
-state: "analyzing"
+state: "open"
 origin: requested
 priority: 35
 repo: "/Users/feb/dev/cartridge"
@@ -7,7 +7,6 @@ work-kind: leaf
 canonical-scope: repo-checks-cartridge-exists
 footprint:
   - "checks.ctg"
-claim: "coordinator-78-6 2026-09-19T12:31:08.562Z"
 ---
 
 # The checks cartridge exists and runs a repository's declared checks
@@ -59,3 +58,23 @@ rather than with this one.
 
 Recovery: the whole footprint is one directory that does not exist today, so
 abandoning this child removes it without touching anything else.
+
+## State at 2026-09-19T16:10Z (coordinator cartridge-78, session ended)
+
+Two review rounds are scored in `review.md`: round 1 at 58/100 and round 2 at
+75/100, both FAIL. A **round-3 revision is complete in `specs/spec01.md` and has
+never been scored** — a fresh reviewer was mid-flight when this session was told
+to stop. Do not read the current spec as the round-2 text: it is newer than the
+last recorded score, and it is not yet endorsed by anyone.
+
+That revision cleared round 2's three blockers with executed evidence rather than
+argument: the offline gate is no longer a grep for `Command::new` (which
+`use std::process::Command as Sh;` defeats while still shelling out), the
+process-global spawn counter that made the suite nondeterministic is deleted,
+each test now owns a fixture directory keyed by its own name, and `post` sends
+`cartridge.notify("checks.selected", …)` before running so "the selection is
+reported before anything runs" is observable rather than asserted as key order
+in a returned object.
+
+Next action: dispatch a fresh reviewer for round 3 against the current file.
+Three of five rounds remain after it.

@@ -1,0 +1,27 @@
+   Compiling rpc v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/rpc)
+   Compiling commands v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/commands)
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.00.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.01.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.02.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.03.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.04.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.05.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.06.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.07.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.08.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.09.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.10.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.11.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.12.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.13.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.14.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.15.rcgu.o unable to open object file: No such file or directory
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 29.93s
+     Running unittests src/lib.rs (/tmp/memory-status-main-target/debug/deps/commands-8c9813afb1aa9a91)
+
+running 2 tests
+test memory::tests::memory_status_manual_attempt_preserves_worker_deadline ... ok
+test memory::tests::memory_status_retry_deadline_matches_worker_schedule ... ok
+
+test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 130 filtered out; finished in 0.05s
+

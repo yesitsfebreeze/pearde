@@ -1,0 +1,17 @@
+    Blocking waiting for file lock on build directory
+   Compiling memory_cartridge v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/cartridge)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 17.42s
+     Running unittests src/lib.rs (/tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3)
+
+running 8 tests
+test asp::tests::the_shipped_declaration_is_one_the_host_accepts ... ok
+test asp::tests::search_delivers_ranked_rows_without_reading_any_back ... ok
+test asp::tests::search_keeps_the_context_filtering_exactly ... ok
+test asp::tests::expand_answers_nothing_for_a_missing_private_expired_or_respelled_key ... ok
+test asp::tests::a_memory_entity_expands_to_its_node_with_the_observed_projection_revision ... ok
+test asp::tests::status_entity_is_declared_and_avoids_fact_expansion ... ok
+test status::tests::status_initialized_native_asp_observes_graph_busy ... ok
+test asp::tests::search_and_expand_agree_with_context_memory_on_a_real_bank ... ok
+
+test result: ok. 8 passed; 0 failed; 0 ignored; 0 measured; 28 filtered out; finished in 0.16s
+

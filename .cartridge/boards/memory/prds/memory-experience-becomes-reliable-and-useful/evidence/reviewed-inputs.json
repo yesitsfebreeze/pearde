@@ -1,0 +1,72 @@
+{
+  "@memory/memory-experience-becomes-reliable-and-useful/crystallization-keeps-progressing-beside-ordinary-persistence": {
+    "path": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/crystallization-keeps-progressing-beside-ordinary-persistence/prd.md",
+    "sha256": "85a05276ceaba0cde2499d911fd8bb4df888c106108bc9b6bea1e09c62fd4f44",
+    "review": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/crystallization-keeps-progressing-beside-ordinary-persistence/review.md"
+  },
+  "@memory/memory-experience-becomes-reliable-and-useful/every-runtime-reason-identifies-its-evidence-and-certainty": {
+    "path": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/every-runtime-reason-identifies-its-evidence-and-certainty/prd.md",
+    "sha256": "6a5d3798a9e13eedb93361aea616ac46d1b903efe7d82772ec5004118b44e9be",
+    "review": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/every-runtime-reason-identifies-its-evidence-and-certainty/review.md"
+  },
+  "@memory/memory-experience-becomes-reliable-and-useful/crystallization-preserves-outcome-context-and-validity-boundaries": {
+    "path": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/crystallization-preserves-outcome-context-and-validity-boundaries/prd.md",
+    "sha256": "19fa9b09157a90c823d38f1ac98346805205537e88a1c8be920dc1b7c53972d7",
+    "review": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/crystallization-preserves-outcome-context-and-validity-boundaries/review.md"
+  },
+  "@memory/memory-experience-becomes-reliable-and-useful/recurrence-cannot-masquerade-as-retrieval-usefulness": {
+    "path": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/recurrence-cannot-masquerade-as-retrieval-usefulness/prd.md",
+    "sha256": "cf24ca93773552f4d9b4d23a4bb1c26bdb5044114e089a78152fc2cf8b18026b",
+    "review": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/recurrence-cannot-masquerade-as-retrieval-usefulness/review.md"
+  },
+  "@memory/memory-experience-becomes-reliable-and-useful/memory-reports-exactly-what-crystallized-output-preserves": {
+    "path": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/memory-reports-exactly-what-crystallized-output-preserves/prd.md",
+    "sha256": "7e8eb1fb407d6d08dfaa58adf3e92db4f4a14f5bcb3d983914f116eb374bc953",
+    "review": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/memory-reports-exactly-what-crystallized-output-preserves/review.md"
+  },
+  "@memory/memory-experience-becomes-reliable-and-useful/memory-exposes-total-backlog-and-the-reason-progress-stopped": {
+    "path": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/memory-exposes-total-backlog-and-the-reason-progress-stopped/prd.md",
+    "sha256": "c3cfdc3c047f2b069a43c7154ca576427cafa14a866fa40dfb6be84a862d9bca",
+    "review": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/memory-exposes-total-backlog-and-the-reason-progress-stopped/review.md"
+  },
+  "@memory/memory-experience-becomes-reliable-and-useful/healthy-intake-progresses-past-malformed-or-expensive-observations": {
+    "path": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/healthy-intake-progresses-past-malformed-or-expensive-observations/prd.md",
+    "sha256": "53e1825a5d329862c551d3bd45e7b8936f7aab812f042a57a754c71225a830c3",
+    "review": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/healthy-intake-progresses-past-malformed-or-expensive-observations/review.md"
+  },
+  "@memory/memory-experience-becomes-reliable-and-useful/experience-retrieval-earns-a-reproducible-quality-and-latency-gate": {
+    "path": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/experience-retrieval-earns-a-reproducible-quality-and-latency-gate/prd.md",
+    "sha256": "595b9d428cc87bc0ab935b34bf1bf1b8ac36436e5c144aec1c38ee4043ba2c52",
+    "review": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/experience-retrieval-earns-a-reproducible-quality-and-latency-gate/review.md"
+  },
+  "@runtime/rejected-activity-cannot-wedge-the-hosts-delivery-queue": {
+    "path": "prd.ctg/.cartridge/boards/runtime/prds/rejected-activity-cannot-wedge-the-hosts-delivery-queue/prd.md",
+    "sha256": "9e621118eec66361b6d602ef0b764247daf91ac350fc29a53a13e639fb51f545",
+    "review": "prd.ctg/.cartridge/boards/runtime/prds/rejected-activity-cannot-wedge-the-hosts-delivery-queue/review.md"
+  },
+  "@root/scope-distinguishes-memory-use-from-stalled-processing": {
+    "path": "prd.ctg/.cartridge/boards/root/prds/scope-distinguishes-memory-use-from-stalled-processing/prd.md",
+    "sha256": "a5c3f2dbc99eb5756ca843ff066f9c8c2262cdbf8a81b86ae01ab3270bbeff48",
+    "review": "prd.ctg/.cartridge/boards/root/prds/scope-distinguishes-memory-use-from-stalled-processing/review.md"
+  },
+  "@memory/memory-experience-becomes-reliable-and-useful/memory-classifies-activity-acceptance-and-refusal": {
+    "path": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/memory-classifies-activity-acceptance-and-refusal/prd.md",
+    "sha256": "4a6bb0800ad002c8e19c79ee341692de285491630a236fd8b3eb7b28c771c6c0",
+    "review": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/memory-classifies-activity-acceptance-and-refusal/review.md"
+  },
+  "@memory/memory-experience-becomes-reliable-and-useful": {
+    "path": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/prd.md",
+    "sha256": "5bbcc0a4f282d3bf242358f8c1714ece8da0ab4904baf5d0b7243e0de6d19022",
+    "review": "prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/review.md"
+  },
+  "@memory/heat-is-deposited-on-read-back-not-on-delivery": {
+    "path": "prd.ctg/.cartridge/boards/memory/prds/heat-is-deposited-on-read-back-not-on-delivery/prd.md",
+    "sha256": "f564fe087c43d63425f3c85717de43b02e822f86b0f754afb51517bf1a86995c",
+    "role": "existing prerequisite; no new approval claimed"
+  },
+  "@memory/a-frozen-query-reads-the-bank-without-touching-it": {
+    "path": "prd.ctg/.cartridge/boards/memory/prds/a-frozen-query-reads-the-bank-without-touching-it/prd.md",
+    "sha256": "b1c51c02f3e104c09d2ec7b26db20f7e037a3e9f1cfcdb07a5c87d2a2665e5e9",
+    "role": "existing prerequisite; no new approval claimed"
+  }
+}

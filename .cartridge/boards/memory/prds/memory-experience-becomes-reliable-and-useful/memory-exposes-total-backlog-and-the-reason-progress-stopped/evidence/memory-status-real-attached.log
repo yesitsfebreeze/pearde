@@ -1,0 +1,25 @@
+   Compiling memory_cartridge v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/cartridge)
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3.memory_cartridge.77716658760fbf02-cgu.00.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3.memory_cartridge.77716658760fbf02-cgu.01.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3.memory_cartridge.77716658760fbf02-cgu.02.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3.memory_cartridge.77716658760fbf02-cgu.03.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3.memory_cartridge.77716658760fbf02-cgu.04.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3.memory_cartridge.77716658760fbf02-cgu.05.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3.memory_cartridge.77716658760fbf02-cgu.06.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3.memory_cartridge.77716658760fbf02-cgu.07.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3.memory_cartridge.77716658760fbf02-cgu.08.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3.memory_cartridge.77716658760fbf02-cgu.09.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3.memory_cartridge.77716658760fbf02-cgu.10.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3.memory_cartridge.77716658760fbf02-cgu.11.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3.memory_cartridge.77716658760fbf02-cgu.12.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3.memory_cartridge.77716658760fbf02-cgu.13.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3.memory_cartridge.77716658760fbf02-cgu.14.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3.memory_cartridge.77716658760fbf02-cgu.15.rcgu.o unable to open object file: No such file or directory
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 36.30s
+     Running unittests src/lib.rs (/tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3)
+
+running 1 test
+test status::tests::status_attached_real_health_graph_lock_obeys_total_deadline ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 35 filtered out; finished in 0.11s
+

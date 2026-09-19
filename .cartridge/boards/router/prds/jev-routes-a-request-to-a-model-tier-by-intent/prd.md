@@ -7,11 +7,11 @@ work-kind: leaf
 needs:
   - '@root/jev-decides-every-closed-set-question-over-the-asp-world/jev-answers-a-declared-judgement-with-a-gated-verdict-and-fails-open'
 footprint:
-  - 'src/**'
+  - 'src'
   - 'cartridge.json'
   - 'README.md'
   - '.cartridge/help.md'
-  - '.cartridge/tests/**'
+  - '.cartridge/tests'
 ---
 
 # jev routes a request to a model tier by intent

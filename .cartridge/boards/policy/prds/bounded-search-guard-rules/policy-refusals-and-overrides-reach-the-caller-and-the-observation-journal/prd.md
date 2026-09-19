@@ -34,3 +34,5 @@ A policy reason is useless if the caller never sees it: `agent.ctg/src/lib.rs` `
 Footprint: `agent.ctg/src/lib.rs`, `agent.ctg/.cartridge/tests/`, `mcp.ctg/src/service.rs`, `mcp.ctg/.cartridge/tests/unit/tests.rs`, and the two submodule pointers. Shared contract with child 2: the `policy` response's `reason`, `rule`, `override` fields.
 
 Split from `@policy/bounded-search-guard-rules` on 2026-09-16 (analyst-1). No review rounds used before the split.
+
+Per the user's 2026-09-19 answer on `@policy/bounded-search-guard-rules/the-policy-owner-gate-runs-against-the-current-host` (deferred, superseded by `@runtime/policy-and-trust-are-one-host-module-that-asks-the-person-and-remembers-always-allow/the-host-answers-policy-and-policy-explain-with-the-evaluator-policy-ctg-had`), the policy evaluator this PRD's caller- and journal-facing checks sit downstream of is moving to `cartridge.ctg/src/policy`. This leaf's own footprint (`agent.ctg`, `mcp.ctg`) is unaffected directly, but its analyst must re-home its understanding of where the `policy`/`policy.explain` response it observes now comes from — the host, not `policy.ctg` — before speccing.

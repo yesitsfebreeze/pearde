@@ -16,6 +16,14 @@ A successful worker exit alone cannot mark work done: collection checks the
 acceptance state, declared footprint, verification commands and integrated Git
 revision. Record edits preserve prose and use revision guards and process locks.
 
+A spec's Verify section holds `sh` blocks and `test` blocks. A `test` block is one
+`run:` line and one `pass:` line per required test; collection needs exit 0 and the
+runner reporting each named test as passed, read from cargo or nextest output or a
+JUnit report the command writes to `$PRD_TEST_REPORT`. A claim cuts a lane as a
+worktree of the source repository and checks each submodule out in it as a
+detached worktree of the live submodule at the commit HEAD pins; collection
+removes those before the lane.
+
 Adapter execution is explicit: `run --dry` needs no agent; a real run requires a
 configured adapter in `.cartridge/adapters/`. Cancellation and deadlines stop
 owned worker processes. The host service limits jobs, input and output, scopes

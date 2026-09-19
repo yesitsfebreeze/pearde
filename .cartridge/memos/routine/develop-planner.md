@@ -5,13 +5,11 @@ description: Check and exercise the native planning engine without Python or an 
 
 # Develop the planner
 
-Run this memo through the runtime's `memo-run` adapter. Native planning lives in
+Run this memo through the native `cartridge-task` runner. Native planning lives in
 `src/`; tests and worker fixtures live in `.cartridge/tests/`. The CLI and service
 share the same engine. No installed Pearde process is required.
 
-```just
-set positional-arguments
-
+```task
 check:
     bun run check
     bun run test

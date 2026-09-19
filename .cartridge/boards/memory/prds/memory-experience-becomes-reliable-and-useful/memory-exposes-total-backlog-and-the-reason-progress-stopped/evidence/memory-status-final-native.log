@@ -1,0 +1,23 @@
+   Compiling memory_cartridge v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/cartridge)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.60s
+     Running unittests src/lib.rs (/tmp/memory-status-main-target/debug/deps/memory_cartridge-12f1b0ddc85640f3)
+
+running 15 tests
+test status::tests::readiness_status_successor_and_late_completions_do_not_restore_old_readiness ... ok
+test status::tests::readiness_status_strict_options_and_static_counter_projection ... ok
+test status::tests::readiness_status_transport_failures_never_claim_store_or_exact_readiness ... ok
+test asp::tests::status_entity_is_declared_and_avoids_fact_expansion ... ok
+test status::tests::readiness_status_uses_rpc_argument_validation_before_observing_queries ... ok
+test status::tests::status_experience_cache_is_independent_of_query_success ... ok
+test status::tests::readiness_status_cache_and_probe_do_not_refresh_semantic_age ... ok
+test status::tests::status_uninitialized_does_not_open_store ... ok
+test status::build_identity::tests::status_embedded_identity_does_not_follow_changed_disk_inputs ... ok
+test status::tests::status_owner_generation_change_is_unavailable ... ok
+test status::build_identity::tests::status_build_input_identity_is_reproducible_and_sensitive ... ok
+test status::tests::readiness_status_timed_out_worker_keeps_admission_until_it_really_exits ... ok
+test status::tests::status_attached_real_health_graph_lock_obeys_total_deadline ... ok
+test status::tests::status_initialized_native_asp_observes_graph_busy ... ok
+test status::tests::status_attached_health_and_status_share_one_deadline ... ok
+
+test result: ok. 15 passed; 0 failed; 0 ignored; 0 measured; 21 filtered out; finished in 0.18s
+

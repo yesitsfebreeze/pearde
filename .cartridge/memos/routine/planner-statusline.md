@@ -5,7 +5,7 @@ description: Render a bounded, read-only native planner status line for the curr
 
 # Planner status line
 
-Run this memo with the shared `memo-run` adapter. Read Claude-style JSON from
+Run this memo with `cartridge-task --file <memo> <recipe>`. Read Claude-style JSON from
 stdin or `PRD_STATUS_JSON`; `MEMO_OWNER_ROOT` locates the central planner records.
 The first line always shows the directory, available Git state and model.
 The second selects the most specific mapped source owner; the composition and
@@ -18,7 +18,7 @@ Missing or malformed optional data is omitted. Existing vaults get an Obsidian
 path link; `PRD_STATUS_LINK=off` prints its label without terminal escapes.
 No legacy daemon, network, personal configuration, or generated files are used.
 
-```just
+```task
 status:
     #!/usr/bin/env bun
     import fs from 'node:fs';

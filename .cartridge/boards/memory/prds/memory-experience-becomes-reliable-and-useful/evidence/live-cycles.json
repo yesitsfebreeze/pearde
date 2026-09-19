@@ -1,0 +1,1038 @@
+{
+  "completed": [
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 33207,
+          "rows": 87
+        },
+        "receipts": 1796,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 59095,
+          "rows": 151
+        },
+        "receipts": 1732,
+        "storage": "memory"
+      },
+      "duration_ms": 2066,
+      "events": [
+        {
+          "finished_ms": 1789838547134,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838545068
+        }
+      ],
+      "finished_ms": 1789838547134,
+      "id": 1,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838545068
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 23404,
+          "rows": 38
+        },
+        "receipts": 1860,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 33757,
+          "rows": 88
+        },
+        "receipts": 1796,
+        "storage": "memory"
+      },
+      "duration_ms": 3428,
+      "events": [
+        {
+          "finished_ms": 1789838551570,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838548141
+        }
+      ],
+      "finished_ms": 1789838551570,
+      "id": 2,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838548141
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 25986,
+          "rows": 19
+        },
+        "receipts": 1898,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 23404,
+          "rows": 38
+        },
+        "receipts": 1860,
+        "storage": "memory"
+      },
+      "duration_ms": 20388,
+      "events": [
+        {
+          "finished_ms": 1789838572966,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838552577
+        }
+      ],
+      "finished_ms": 1789838572966,
+      "id": 3,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838552577
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 21781,
+          "rows": 6
+        },
+        "receipts": 1920,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 29091,
+          "rows": 22
+        },
+        "receipts": 1898,
+        "storage": "memory"
+      },
+      "duration_ms": 21478,
+      "events": [
+        {
+          "finished_ms": 1789838595414,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838573976
+        }
+      ],
+      "finished_ms": 1789838595455,
+      "id": 4,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838573976
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 48083,
+          "rows": 105
+        },
+        "receipts": 1959,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 48773,
+          "rows": 39
+        },
+        "receipts": 1920,
+        "storage": "memory"
+      },
+      "duration_ms": 18418,
+      "events": [
+        {
+          "finished_ms": 1789838614882,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838596463
+        }
+      ],
+      "finished_ms": 1789838614882,
+      "id": 5,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838596463
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 14294,
+          "rows": 61
+        },
+        "receipts": 2023,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 49203,
+          "rows": 110
+        },
+        "receipts": 1959,
+        "storage": "memory"
+      },
+      "duration_ms": 3179,
+      "events": [
+        {
+          "finished_ms": 1789838619064,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838615885
+        }
+      ],
+      "finished_ms": 1789838619065,
+      "id": 6,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838615885
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 1568,
+          "rows": 7
+        },
+        "receipts": 2087,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 15414,
+          "rows": 66
+        },
+        "receipts": 2023,
+        "storage": "memory"
+      },
+      "duration_ms": 556,
+      "events": [
+        {
+          "finished_ms": 1789838620626,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838620070
+        }
+      ],
+      "finished_ms": 1789838620626,
+      "id": 7,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838620070
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 12530,
+          "rows": 46
+        },
+        "receipts": 2103,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 5211,
+          "rows": 16
+        },
+        "receipts": 2087,
+        "storage": "memory"
+      },
+      "duration_ms": 28436,
+      "events": [
+        {
+          "finished_ms": 1789838650070,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838621634
+        }
+      ],
+      "finished_ms": 1789838650070,
+      "id": 8,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838621634
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 7821,
+          "rows": 22
+        },
+        "receipts": 2167,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 22019,
+          "rows": 79
+        },
+        "receipts": 2103,
+        "storage": "memory"
+      },
+      "duration_ms": 804,
+      "events": [
+        {
+          "finished_ms": 1789838651880,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838651075
+        }
+      ],
+      "finished_ms": 1789838651880,
+      "id": 9,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838651075
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 11421,
+          "rows": 47
+        },
+        "receipts": 2198,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 11321,
+          "rows": 31
+        },
+        "receipts": 2167,
+        "storage": "memory"
+      },
+      "duration_ms": 18477,
+      "events": [
+        {
+          "finished_ms": 1789838671363,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838652886
+        }
+      ],
+      "finished_ms": 1789838671363,
+      "id": 10,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838652886
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 21091,
+          "rows": 79
+        },
+        "receipts": 2262,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 36269,
+          "rows": 143
+        },
+        "receipts": 2198,
+        "storage": "memory"
+      },
+      "duration_ms": 306,
+      "events": [
+        {
+          "finished_ms": 1789838672676,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838672369
+        }
+      ],
+      "finished_ms": 1789838672676,
+      "id": 11,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838672369
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 10043,
+          "rows": 26
+        },
+        "receipts": 2326,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 24187,
+          "rows": 90
+        },
+        "receipts": 2262,
+        "storage": "memory"
+      },
+      "duration_ms": 324,
+      "events": [
+        {
+          "finished_ms": 1789838674005,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838673681
+        }
+      ],
+      "finished_ms": 1789838674005,
+      "id": 12,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838673681
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 4460,
+          "rows": 20
+        },
+        "receipts": 2362,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 12273,
+          "rows": 36
+        },
+        "receipts": 2326,
+        "storage": "memory"
+      },
+      "duration_ms": 2603,
+      "events": [
+        {
+          "finished_ms": 1789838677615,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838675011
+        }
+      ],
+      "finished_ms": 1789838677615,
+      "id": 13,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838675011
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 6690,
+          "rows": 30
+        },
+        "receipts": 2392,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 6690,
+          "rows": 30
+        },
+        "receipts": 2362,
+        "storage": "memory"
+      },
+      "duration_ms": 4224,
+      "events": [
+        {
+          "finished_ms": 1789838682848,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838678623
+        }
+      ],
+      "finished_ms": 1789838682848,
+      "id": 14,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838678623
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 7164,
+          "rows": 25
+        },
+        "receipts": 2437,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 12309,
+          "rows": 45
+        },
+        "receipts": 2392,
+        "storage": "memory"
+      },
+      "duration_ms": 3588,
+      "events": [
+        {
+          "finished_ms": 1789838687441,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838683853
+        }
+      ],
+      "finished_ms": 1789838687442,
+      "id": 15,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838683853
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 7138,
+          "rows": 32
+        },
+        "receipts": 2472,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 9394,
+          "rows": 35
+        },
+        "receipts": 2437,
+        "storage": "memory"
+      },
+      "duration_ms": 8570,
+      "events": [
+        {
+          "finished_ms": 1789838697025,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838688454
+        }
+      ],
+      "finished_ms": 1789838697025,
+      "id": 16,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838688454
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 6871,
+          "rows": 31
+        },
+        "receipts": 2532,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 13497,
+          "rows": 60
+        },
+        "receipts": 2472,
+        "storage": "memory"
+      },
+      "duration_ms": 2671,
+      "events": [
+        {
+          "finished_ms": 1789838700708,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838698037
+        }
+      ],
+      "finished_ms": 1789838700708,
+      "id": 17,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838698037
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 224,
+          "rows": 1
+        },
+        "receipts": 2594,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 13679,
+          "rows": 62
+        },
+        "receipts": 2532,
+        "storage": "memory"
+      },
+      "duration_ms": 2175,
+      "events": [
+        {
+          "finished_ms": 1789838703893,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838701718
+        }
+      ],
+      "finished_ms": 1789838703894,
+      "id": 18,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838701718
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 6690,
+          "rows": 30
+        },
+        "receipts": 2614,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 4460,
+          "rows": 20
+        },
+        "receipts": 2594,
+        "storage": "memory"
+      },
+      "duration_ms": 6235,
+      "events": [
+        {
+          "finished_ms": 1789838711134,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838704899
+        }
+      ],
+      "finished_ms": 1789838711134,
+      "id": 19,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838704899
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 3337,
+          "rows": 15
+        },
+        "receipts": 2678,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 17541,
+          "rows": 79
+        },
+        "receipts": 2614,
+        "storage": "memory"
+      },
+      "duration_ms": 945,
+      "events": [
+        {
+          "finished_ms": 1789838713092,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838712146
+        }
+      ],
+      "finished_ms": 1789838713092,
+      "id": 20,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838712146
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 11374,
+          "rows": 51
+        },
+        "receipts": 2705,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 6011,
+          "rows": 27
+        },
+        "receipts": 2678,
+        "storage": "memory"
+      },
+      "duration_ms": 8066,
+      "events": [
+        {
+          "finished_ms": 1789838722168,
+          "name": "memory graph commit",
+          "outcome": "committed",
+          "started_ms": 1789838714101
+        }
+      ],
+      "finished_ms": 1789838722168,
+      "id": 21,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "complete",
+      "result": {
+        "failed": [],
+        "processed": 64
+      },
+      "started_ms": 1789838714101
+    },
+    {
+      "after": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 17176,
+          "rows": 77
+        },
+        "receipts": 2705,
+        "storage": "memory"
+      },
+      "before": {
+        "batch_limit": 64,
+        "capacity": {
+          "bytes": 67108864,
+          "rows": 4096
+        },
+        "pending": {
+          "bytes": 13604,
+          "rows": 61
+        },
+        "receipts": 2705,
+        "storage": "memory"
+      },
+      "duration_ms": 25200,
+      "error": "activity graph commit refused stale snapshot; reload required, inputs retained",
+      "events": [
+        {
+          "finished_ms": 1789838748377,
+          "name": "memory graph commit",
+          "outcome": "failed",
+          "started_ms": 1789838723177
+        }
+      ],
+      "finished_ms": 1789838748377,
+      "id": 22,
+      "mode": "crystallize",
+      "omitted_events": 0,
+      "outcome": "failed",
+      "started_ms": 1789838723177
+    }
+  ],
+  "generation": "10735-1789838544060",
+  "retained": 64,
+  "running": null
+}

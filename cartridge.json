@@ -168,12 +168,148 @@
           }
         }
       }
+    },
+    "asp.prd": {
+      "description": "Read-only ASP task states, acceptance progress, dependency links and canonical PRD records; expand plan:root or task:<board>/<record>.",
+      "schema": {
+        "type": "object",
+        "required": [
+          "op"
+        ],
+        "properties": {
+          "op": {
+            "type": "string",
+            "enum": [
+              "expand",
+              "search"
+            ]
+          },
+          "entity": {
+            "type": "string"
+          },
+          "query": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 256
+          }
+        }
+      }
+    },
+    "scope.detail.plan": {
+      "description": "Read-only Scope detail document version 1, rendered by the owning plugin.",
+      "schema": {
+        "type": "object",
+        "required": [
+          "version",
+          "item",
+          "selection",
+          "viewport"
+        ],
+        "properties": {
+          "version": {
+            "const": 1
+          },
+          "item": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          },
+          "selection": {
+            "type": "object"
+          },
+          "viewport": {
+            "type": "object",
+            "required": [
+              "width",
+              "height"
+            ],
+            "properties": {
+              "width": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "height": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          },
+          "op": {
+            "const": "describe"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "scope.detail.task": {
+      "description": "Read-only Scope detail document version 1, rendered by the owning plugin.",
+      "schema": {
+        "type": "object",
+        "required": [
+          "version",
+          "item",
+          "selection",
+          "viewport"
+        ],
+        "properties": {
+          "version": {
+            "const": 1
+          },
+          "item": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          },
+          "selection": {
+            "type": "object"
+          },
+          "viewport": {
+            "type": "object",
+            "required": [
+              "width",
+              "height"
+            ],
+            "properties": {
+              "width": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "height": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          },
+          "op": {
+            "const": "describe"
+          }
+        },
+        "additionalProperties": false
+      }
     }
   },
   "listen": [
     "prd",
     "tool.prd",
-    "source.board"
+    "source.board",
+    "asp.prd",
+    "scope.detail.plan",
+    "scope.detail.task"
   ],
   "settings": {
     "root": {
@@ -213,6 +349,11 @@
       "default": null,
       "optional": true,
       "doc": "Trusted external adapter an explicit `run` uses. Absent refuses external runs, which is the normal case: host-driven work goes through next/brief."
+    },
+    "scope_python": {
+      "type": "string",
+      "default": "python3",
+      "doc": "Python executable for read-only Scope detail rendering. On macOS use the real Python executable rather than the /usr/bin shim."
     }
   },
   "commands": {
@@ -244,7 +385,9 @@
     "exec": [
       "bun",
       "git",
-      "sh"
+      "/Library/Developer/CommandLineTools/usr/bin/git",
+      "sh",
+      "${config.scope_python}"
     ],
     "read": [
       "/"
@@ -256,5 +399,96 @@
     "net": [
       "localhost"
     ]
+  },
+  "asp": {
+    "roots": [
+      "plan:root"
+    ],
+    "schemes": {
+      "plan": {
+        "owner": true,
+        "description": "A declared PRD board collection; plan:root begins the configured graph. Pages use #page=N."
+      },
+      "task": {
+        "owner": true,
+        "description": "A public PRD task, task:<board>/<path below prds without /prd.md>."
+      },
+      "file": {
+        "owner": false,
+        "description": "The actual workspace-relative file containing a public PRD."
+      }
+    },
+    "edges": {
+      "contains": {
+        "description": "A declared board/page contains observed public tasks or child boards."
+      },
+      "depends-on": {
+        "description": "A public task explicitly names an observed, unambiguous public prerequisite."
+      },
+      "recorded-in": {
+        "description": "The task is recorded in this actual workspace file."
+      }
+    },
+    "attributes": {
+      "prd.state": {
+        "description": "The recorded task state; absent state follows the PRD open default."
+      },
+      "prd.claim": {
+        "description": "The explicitly recorded claim or null."
+      },
+      "prd.complexity": {
+        "description": "Positive authored relative complexity, or null when unrecorded."
+      },
+      "prd.checks_done": {
+        "description": "Count of checked acceptance items in the PRD."
+      },
+      "prd.checks_total": {
+        "description": "Count of all acceptance items in the PRD."
+      },
+      "prd.board": {
+        "description": "Registered board name."
+      },
+      "prd.record": {
+        "description": "Board-relative canonical public record path."
+      },
+      "prd.total": {
+        "description": "Public local tasks in the bounded index."
+      },
+      "prd.partial": {
+        "description": "Whether records or details were omitted by a bound."
+      },
+      "prd.page": {
+        "description": "Zero-based task page."
+      },
+      "prd.page_size": {
+        "description": "Maximum tasks per page."
+      },
+      "prd.checks": {
+        "description": "Recorded acceptance items with done flags; at most 128."
+      },
+      "prd.unresolved_dependencies": {
+        "description": "Dependency references not emitted because unresolved, private, ambiguous or beyond limits."
+      },
+      "prd.record_revision": {
+        "description": "SHA-256 of the exact canonical public record; independent of the expanded subject snapshot revision."
+      },
+      "prd.scope": {
+        "description": "Custom summary text for the shared Scope list. The provider owns its meaning.",
+        "schema": {
+          "type": "object",
+          "required": [
+            "summary"
+          ],
+          "properties": {
+            "summary": {
+              "type": "string",
+              "maxLength": 512
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "search": true
   }
 }

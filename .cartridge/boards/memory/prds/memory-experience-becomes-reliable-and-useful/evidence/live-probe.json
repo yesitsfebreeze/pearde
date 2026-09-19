@@ -1,0 +1,115 @@
+[
+  {
+    "event": "memory",
+    "probe": "status",
+    "exit_code": 0,
+    "duration_ms": 13,
+    "error": "",
+    "response": {
+      "age_ms": 31330,
+      "mode": "local",
+      "models": {
+        "actively_probed": false,
+        "availability": "unknown",
+        "observed_complete_failures": 0,
+        "observed_embed_wedges": 0
+      },
+      "observation": "operation",
+      "query": {
+        "age_ms": 31330,
+        "exact_id": "ready",
+        "semantic": "unknown"
+      },
+      "reason": "semantic_query_not_observed_recently",
+      "registered": true,
+      "retryable": true,
+      "schema": "memory.status.v1",
+      "state": "unknown",
+      "store": {
+        "pid": 10735,
+        "state": "ready"
+      },
+      "view": "cached"
+    }
+  },
+  {
+    "event": "memory",
+    "probe": "intake",
+    "exit_code": 0,
+    "duration_ms": 965,
+    "error": "",
+    "response": {
+      "batch_limit": 64,
+      "capacity": {
+        "bytes": 67108864,
+        "rows": 4096
+      },
+      "pending": {
+        "bytes": 29662,
+        "rows": 133
+      },
+      "receipts": 11957,
+      "storage": "memory"
+    }
+  },
+  {
+    "event": "asp",
+    "probe": "recent",
+    "exit_code": 0,
+    "duration_ms": 18,
+    "error": "",
+    "nodes": 8,
+    "sources": [
+      {
+        "contributor": "memory",
+        "state": "available"
+      }
+    ],
+    "usage": [
+      {
+        "access_count": 1,
+        "accessed_ms": 1789838687442,
+        "heat": 1.7592456340789795
+      },
+      {
+        "access_count": 2,
+        "accessed_ms": 1789838687442,
+        "heat": 2.7580480575561523
+      },
+      {
+        "access_count": 1,
+        "accessed_ms": 1789838687442,
+        "heat": 1.9998493194580078
+      },
+      {
+        "access_count": 1,
+        "accessed_ms": 1789838687442,
+        "heat": 1.999840497970581
+      },
+      {
+        "access_count": 1,
+        "accessed_ms": 1789838687442,
+        "heat": 143.96864318847656
+      },
+      {
+        "access_count": 1,
+        "accessed_ms": 1789838687442,
+        "heat": 1.7585813999176025
+      }
+    ]
+  },
+  {
+    "event": "context.memory",
+    "probe": "context",
+    "exit_code": 0,
+    "duration_ms": 676,
+    "error": "",
+    "state": "available",
+    "candidates": 3,
+    "candidate_ids": [
+      "acadfa58d6c66c3a4287da9083ccf9c3752e97babf4ba6eb72436cfb41596a75",
+      "4d8c11fe59677b28b5b5c5753f0cabd63a226a6d1136843bc49f1f108413572d",
+      "d643273fdec3e05c1f5ee817534b811971585649659bdaff8ea584d4ed611518"
+    ]
+  }
+]

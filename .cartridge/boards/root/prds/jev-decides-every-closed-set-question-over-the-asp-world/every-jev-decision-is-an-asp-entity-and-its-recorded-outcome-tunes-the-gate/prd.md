@@ -2,13 +2,16 @@
 state: open
 origin: requested
 priority: 90
-repo: "/Users/feb/dev/cartridge"
+repo: "/Users/feb/dev/cartridge/jev.ctg"
 work-kind: leaf
 needs:
   - '@root/jev-decides-every-closed-set-question-over-the-asp-world/jev-pulls-asp-slices-narrows-them-in-two-passes-and-sends-only-allowed-schemes'
   - '@root/the-event-ring-keeps-every-event-forever-by-rolling-it-into-day-week-month-and-year-tiers-under-asp'
 footprint:
-  - 'jev.ctg/**'
+  - 'src'
+  - '.cartridge'
+  - 'cartridge.json'
+  - 'README.md'
 ---
 
 # every jev decision is an asp entity and its recorded outcome tunes the gate

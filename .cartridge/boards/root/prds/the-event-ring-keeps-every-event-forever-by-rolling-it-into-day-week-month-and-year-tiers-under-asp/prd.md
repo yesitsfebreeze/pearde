@@ -58,6 +58,32 @@ per-generation epoch, and this PRD builds on both.
 - **Indexed by entity.** Each tier keeps an index from entity id to its rows,
   so "what happened to this entity" is answered without scanning the tier.
 
+## Decision (2026-09-19, coordinator-b0)
+
+cartridge-1f, the ASP owner, handed this row to cartridge-b0. The pre-draft
+spec is `proposals/spec01-draft.md`, read at cartridge.ctg `d04ab33`.
+
+- `publish_kind` runs in each node, not in the host (`src/node/mod.rs:114`),
+  so the tap forwards the id fields of a published event to the host over the
+  node's existing host connection, through one new host-socket method `ring`.
+  The host takes the publisher from the node's token. Only `notify` and
+  `publish` reach the ring.
+- This row defines both `event:` and `ring:` as host-owned schemes. One row,
+  not split.
+- Counts go on the row nodes, not on the edges, so the ASP protocol does not
+  change.
+- A frozen `format: 1` fixture is the older-format test until a format 2
+  exists.
+- The epoch stays in the row key.
+- No purge operation: deleting `.cartridge/.state/ring/` is the purge.
+- The ring keeps no payload, only well-formed ids.
+- The lane is cut after `@runtime/a-native-cartridge-s-outbound-call-does-not-block-its-own-node`
+  and `@runtime/a-listener-subscribes-to-event-types` are collected. Both are
+  cartridge-b0's since cartridge-cc closed, and both edit
+  `src/transport/cartridge.rs`.
+- Rollout needs `cartridge daemon --replace` with a clear from every running
+  session. No manifest changes, so no trust step.
+
 ## Acceptance
 
 - [ ] A named executed test publishes more than 1024 events, then asks ASP for

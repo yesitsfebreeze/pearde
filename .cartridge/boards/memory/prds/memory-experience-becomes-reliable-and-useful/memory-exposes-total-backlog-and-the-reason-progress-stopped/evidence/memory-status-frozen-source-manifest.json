@@ -1,0 +1,31 @@
+{
+  "source_base": "d9161cd2f3a363915c7a7d642a4955e7a3836065",
+  "lane": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped",
+  "spec_sha256": "344f320f91bd395c975878d892675f403012b792cb7bc3dfab32e51414bdcdd0",
+  "files": {
+    "src/store/core/src/lib.rs": "5ab64b0d9cf7ecacd26c6108ae431db44e87ff0aa613be222e6258360616f8b7",
+    "src/store/core/src/experience.rs": "82a7e48c5df43574deb1b21579c9c2afce639ee5b23c71ca9db49b4a25385410",
+    "src/rpc/Cargo.toml": "54d03364e5d26547c56860dbc9479ce3443e52c2e8e521cce375268f1d61c0b0",
+    "src/rpc/src/server.rs": "1e2104b837457def9bec2ad6bf51972009563e927d5979a0c721ac886277bd66",
+    "src/rpc/src/experience/mod.rs": "739f59412b56444df3c9bc403d4585ec6616aa10ac7f9ce8e9474721d72e5e9f",
+    "src/rpc/src/experience/drain.rs": "3c9d34bd0b03d71ee16765b67258e21a2d614b9106429f1e05945ff0ec3c9109",
+    "src/rpc/src/crystallization_cycles.rs": "ddaf740ff6fa231a9842712579474148beb2dbd825261a51097c7a98d0d16588",
+    "src/commands/src/memory.rs": "790af3462003c5544d59180a0978d520075bcc276c968321fbf25a87c7862664",
+    "src/cartridge/src/status.rs": "45b956339ca14a709abe37aece5123407d64929b72d0321b72f554f6e5779f36",
+    "src/cartridge/src/asp/mod.rs": "7e09fff87db20225bea4ecfd97f30193a8e499a4375f3bd472b6b5bb13351d08",
+    "src/rpc/src/experience/view.rs": "9047185372d42107a4f169ffa68b07105e5b196bbfde84935cb09c71f20088d3",
+    "src/cartridge/build.rs": "cf19a80ecf375771377b2a2382fa091109207961eb7b84047d7cead09a7862bd",
+    "src/cartridge/build_identity.rs": "ca53b1afb0c2adb1950bc3f2ed3a2f46eeb83853e5f0827dcec351fc820e2b10",
+    "src/cartridge/Cargo.toml": "4ff664c64ce8c8c05fc06d16d5cea819f428e31feb5b893f48cb8cf3c4e45f68",
+    "Cargo.lock": "26a35ad510938c627ebccc87e1ad9b7540f2df2fa30223dcf914a4ac26514851",
+    "cartridge.json": "c15d0d716d3a46711166c89e2dde68f352f7babf22f25a02f2086b91cf1c6418",
+    ".cartridge/tests/unit/src/store/core/src/experience_test.rs": "41e89437d2b68eeffa8162518766b5d8062c6acd22691d0b70ccc8d534410d96",
+    ".cartridge/tests/unit/src/rpc/src/experience_test.rs": "7b3317572b2f4c07b8537ea2ade53e0a60b5b7b09aa51852dd65ad918bbda0b2",
+    ".cartridge/tests/unit/src/cartridge/status_test.rs": "b2f24f527b949133fd74db0e669c27eaa2f0b7daf6b6945bb470a146d4b1d109",
+    ".cartridge/tests/unit/src/cartridge/build_identity_test.rs": "6ecb0482a64911304a0f33d5dc69e6227893551e7898e06182e3e9e80156f9fb",
+    ".cartridge/tests/unit/src/commands/src/memory_test.rs": "e59e6d76a389bfd279f50978eadaba99c7189de8b3a2a542a730ac568217e2cb",
+    ".cartridge/tests/integration/asp.rs": "84d941d54975f22127dc227b54bf798f6c76baea9d6b9c6004b8b52560f02260",
+    "README.md": "8b8ba614befe000e5d131360c89541fff1894224f59b00d55f9ca3e5911ece1f",
+    ".cartridge/help.md": "c69adfb8307ff572b3e3606a3a10694c3c834d8fed47f798491aaec6c54cd8d0"
+  }
+}

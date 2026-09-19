@@ -30,7 +30,7 @@ lsp cartridge is Active and even spawns its rust-analyzer.
 - [x] `tool.lsp` `call` replies are `{"content": "<json string>", "error": false}` on success, matching memo's `success()` shape (`memo.ctg/src/service.rs:508`); errors surface as `{"content": "<message>", "error": true}` or as a service error the MCP bridge already wraps at `mcp.ctg/src/service.rs:456`.
 - [ ] `mcp__cartridge__lsp` `status` returns catalog JSON through a Claude MCP session.
 - [ ] `mcp__cartridge__lsp` `diagnostics` on a touched Rust file returns the `state`-carrying body (an empty diagnostic list still reports `state`, never "no findings").
-- [x] `describe` and `cancel` behaviour unchanged; the `context.lsp` evidence provider is untouched (native service path, not the tool envelope).
+- [x] `describe` and `cancel` behaviour unchanged; the `context.lsp` evidence provider was untouched by that delivered envelope change (historical proof; its later removal belongs exclusively to @lsp/remove-context-lsp-provider).
 - [x] lsp unit tests cover the envelope shape of one query reply.
 
 ## Observed 2026-09-16
@@ -40,3 +40,7 @@ pass (13 tests), committed at lsp.ctg 82ea783. The two MCP-session boxes stay
 open: the composed host still serves the pre-change snapshot, so `tool.lsp`
 resolves as not provided from the CLI and this session has no cartridge MCP
 server to call. They close after a host reload with the rebuilt lsp module.
+
+## Context retirement coordination (2026-09-19, Codex coordinator)
+
+@lsp/remove-context-lsp-provider intentionally removes the historical provider after memo no longer consumes it. This does not alter tool result envelopes, describe/cancel requirements or the two pending MCP-session proofs above. Preserve this leaf's review history and checked historical evidence; do not infer missing MCP success from cleanup. Serialize overlapping source/manifest/docs work with any live claim and review changed executable contracts before dispatch.

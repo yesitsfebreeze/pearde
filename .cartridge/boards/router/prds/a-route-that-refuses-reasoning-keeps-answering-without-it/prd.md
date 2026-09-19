@@ -1,12 +1,11 @@
 ---
-state: "analyzing"
+state: "open"
 origin: requested
 priority: 70
 repo: "/Users/feb/dev/cartridge/router.ctg"
 footprint:
 - "src/health.rs"
 - ".cartridge/tests"
-claim: "coordinator-5d5e-3 2026-09-19T12:10:28.591Z"
 ---
 
 # a route that refuses reasoning keeps answering without it
@@ -73,3 +72,49 @@ learn to stop.
 2026-09-16. Filed from [[@router/system/vision.md]]. The effort case is the one
 that indicts the router most directly: it rejects a parameter the router itself
 added.
+
+## State at handover, 2026-09-19
+
+Recorded by coordinator cartridge-eb as its session ended. This row is in
+`analyzing` under `coordinator-5d5e-3`; if that claim is still held when you
+read this, it is stale and yours to reconcile.
+
+**Rounds used: 3 of 5. Two remain.** Round 1 scored 72 (FAIL), round 2 scored 85
+(FAIL), round 3 scored 89 (FAIL). Each round's blocking finding was fixed and
+the fix independently attacked by the next fresh reviewer. A fourth revision is
+on disk in `specs/spec01.md` and **has not been scored**: read `review.md`
+round 3 first, then the revision, before trusting the spec.
+
+All three rounds turned on one thing — the mutant guard — and the sequence is
+worth reading before touching that line, because three plausible fixes were
+each beaten by an example nobody had thought of. The property is "this specific
+test failed". The beaten approximations were "the suite failed" (beaten by the
+pre-existing test at `capabilities.rs:1490`, which dies under the mutant on its
+own), "the name was printed" (beaten by libtest printing the name on the
+`... ok` line as readily as the `... FAILED` line), and "a test ending in this
+name failed" (beaten by a failing test named `other_prefix_<name>` while the
+target was absent entirely). The current guard requires each module segment to
+end in `::` so nothing can absorb the name as a suffix, and the spec carries a
+seven-case table beside it with the instruction that anyone changing the line
+re-runs the table and adds the case that motivated the change.
+
+Three things the next coordinator needs and cannot infer:
+
+The widening of the footprint to `src/proxy.rs` is **proposed, not granted**.
+Round 1 verified it as justified — `learned` at `proxy.rs:447` is a turn local,
+`data.rules` has exactly one writer in `finish_recovery` at `health.rs:971`
+reachable only from the recovery sweep over open incidents, and no seam exists
+in `health.rs` — but the PRD frontmatter still declares only `src/health.rs`
+and `.cartridge/tests`. If the widening is refused, Acceptance box 3 cannot be
+honestly ticked for a route that recovers in the same turn and never opens an
+incident, and that fact belongs in this body rather than behind a green check.
+
+One known gate residual, left open deliberately and documented in the spec: an
+identically named failing test in a *different module* is accepted by the
+guard. Pinning the full module path would reject a correct implementation whose
+module path shifted, and it is not exploitable alongside the `test` block, which
+requires that same name reported passed in the unmutated run.
+
+Every line number in the spec is at base `192300f` and was verified unchanged in
+round 3. The round 1 and 2 dirty-checkout drift has since landed as unrelated
+commit `ca11f6b`, so re-check the anchors if the base has moved again.

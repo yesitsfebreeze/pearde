@@ -6,6 +6,7 @@ import { ROOT } from './cli';
 import { sourceRecords, sourceRecordFailure } from './source-records';
 import { runProcess } from './process';
 import { Wire } from './wire';
+import { asp } from './asp';
 
 const OPS = ['scan', 'plan', 'gantt', 'read', 'brief', 'next', 'add', 'refine', 'specced', 'claim', 'release', 'collect', 'run', 'status', 'stop'];
 const flags: Record<string, Record<string, string>> = {
@@ -72,7 +73,7 @@ export class Service {
       if (!value || value.startsWith('-') && kind !== 'integer') throw Error(flag + ' requires a value');
       if (['integer', 'count', 'deadline', 'page', 'offset'].includes(kind)) {
         if (!/^-?\d+$/.test(value) || !Number.isSafeInteger(Number(value))) throw Error('expected integer');
-        const number = Number(value), range: Record<string, number[]> = { count: [1, 32], page: [1, 50], offset: [0, 100000], deadline: [1, this.jobTimeout] };
+        const number = Number(value), range: Record<string, number[]> = { count: [1, 32], page: [1, 200], offset: [0, 100000], deadline: [1, this.jobTimeout] };
         if (range[kind] && (number < range[kind][0] || number > range[kind][1])) throw Error(flag + ' is outside its limit');
       }
       if (kind === 'path' || kind === 'file') { relative(value); const file = contained(board, value); if (kind === 'file' && !fs.existsSync(file)) throw Error('report must exist under selected board'); }
@@ -234,6 +235,12 @@ export function main() {
   wire.on('apply', async config => {
     if (service) throw Error('cartridge is already applied');
     service = new Service(config ?? {}, wire); void service.replayMemory();
+  });
+  wire.on('asp.prd', async request => {
+    if (!service || service.closed) throw Error('PRD service unavailable');
+    if (tasks.size >= 8) throw Error('PRD service is busy');
+    const work = asp(service.boards, real(process.cwd()), service.defaultBoard, request);
+    tasks.add(work); try { return await work; } finally { tasks.delete(work); }
   });
   for (const key of ['prd', 'tool.prd', 'source.board']) wire.on(key, async args => {
     if (!service) throw Error('cartridge is not applied');

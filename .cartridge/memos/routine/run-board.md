@@ -34,7 +34,9 @@ and collection [[land-a-prd]].
    Briefs name canonical board/PRD, source revision, allowed paths, acceptance checks,
    report location, actor and finite deadline. The analyst probes and prepares specs
    or proposes sub-PRDs through the existing refine/specification engine. Plans need
-   an attributed agent review of at least90/100, no blockers and at most five rounds.
+   an attributed agent review of at least 90/100, no blockers and at most five rounds,
+   unless they meet every review-plan fast-path condition: then one worker writes
+   spec and code and the independent verifier alone gates the collect.
    Re-review migrated or changed contracts; historical scores do not approve new inputs.
 5. The coordinator publishes accepted specs and dispatches implementation in an
    isolated worktree rooted in the mapped code repository. Workers return artifacts

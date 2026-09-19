@@ -7,11 +7,11 @@ work-kind: leaf
 needs:
   - '@root/jev-decides-every-closed-set-question-over-the-asp-world/jev-pulls-asp-slices-narrows-them-in-two-passes-and-sends-only-allowed-schemes'
 footprint:
-  - 'src/**'
+  - 'src'
   - 'cartridge.json'
   - 'README.md'
   - '.cartridge/help.md'
-  - '.cartridge/tests/**'
+  - '.cartridge/tests'
 ---
 
 # memo resolve asks jev which memos match the situation

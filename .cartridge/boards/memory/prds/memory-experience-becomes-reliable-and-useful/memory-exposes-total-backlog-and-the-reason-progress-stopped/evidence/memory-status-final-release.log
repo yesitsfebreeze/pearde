@@ -1,0 +1,11 @@
+   Compiling rpc v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-memory-exposes-total-backlog-and-the-reason-progress-stopped/src/rpc)
+    Finished `release` profile [optimized] target(s) in 10.82s
+     Running unittests src/lib.rs (/tmp/memory-status-release-target/release/deps/rpc-2ca62d407ad0398d)
+
+running 1 test
+canonical profile=release arch=aarch64 os=macos rows=1000 fixture_bytes=58000 samples=1000 warmups=20 p50_ns=25792 p95_ns=31375 max_ns=114375 response_bytes=1254 setup_ms=6 migration_ms=10
+canonical profile=release arch=aarch64 os=macos rows=100000 fixture_bytes=5800000 samples=1000 warmups=20 p50_ns=18334 p95_ns=26834 max_ns=96250 response_bytes=1262 setup_ms=60 migration_ms=327
+test experience::tests::experience_status_canonical_polling_gate ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 113 filtered out; finished in 0.46s
+

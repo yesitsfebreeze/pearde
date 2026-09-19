@@ -1,5 +1,5 @@
 ---
-state: "analyzing"
+state: "open"
 origin: requested
 priority: 65
 repo: "/Users/feb/dev/cartridge/harness.ctg"
@@ -10,7 +10,6 @@ footprint:
   - /Users/feb/dev/cartridge/harness.ctg/src/working.rs
   - /Users/feb/dev/cartridge/harness.ctg/src/inspection.rs
   - /Users/feb/dev/cartridge/harness.ctg/.cartridge/tests
-claim: "coordinator-5d5e-5 2026-09-19T13:04:51.516Z"
 ---
 
 # the turn names the files that changed underneath it
@@ -96,3 +95,71 @@ stability rather than about the report's contents. The third piece,
 with cartridge-5c on the fs board — `sessions.ctg/src/lib.rs:716-721` (`touch`)
 has no caller in the composition today, so the touched-file set is populated
 only by writes. Those two are independent of each other and of this row.
+
+## State at handover, 2026-09-19
+
+Recorded by coordinator cartridge-eb as its session ended. Released to `open`;
+one review round used, four remain.
+
+Round 1 scored **42 of 100, FAIL**, with two blocking findings, both proved by
+execution rather than by reading. `specs/spec01.md` is on disk and must not be
+implemented as it stands.
+
+**B1 — the spec reads a reply shape that does not exist, so the feature could
+never fire.** Its `resolve_drift`/`describe_drift` step reads `reply["report"]`
+expecting null-or-an-object-carrying-`changed`/`gone`. The frozen contract at
+`prd.ctg/.cartridge/boards/sessions/prds/file-drift-awareness/specs/spec01.md:236-241`
+answers `{"id", "report": <rendered string>, "changed": [...], "gone": [...]}` —
+flat siblings, with `report` a pre-rendered string. The reviewer compiled
+`serde_json::json!("Changed:\n- foo.rs")["changed"]`, got `Value::Null`, and
+`.as_array()` returned `None`. So once the sessions op lands, a genuinely
+populated drift report would still render as nothing at all.
+
+This is my error as much as the analyst's: I passed the contract to the analyst
+in prose, as "CHANGED and GONE as two distinct lists", and prose is what it
+designed against. The next brief should point at those spec lines and require
+the shape to be read from them.
+
+**B2 — the prefix-stability test is vacuous, which is the one thing it existed
+to prevent.** The reviewer built two throwaway trees, one matching the spec and
+one mutating it to append the drift block *before* telemetry — violating the
+"last append" property the whole design rests on — and the full 41-test suite
+passed unchanged in both. `harness.ctg/.cartridge/tests/unit/main/tests.rs:9-19`
+hardcodes `telemetry: ""` in the `frame()` helper, so there is no adjacency for
+the assertion to detect. A test that passes on both sides of its own regression
+proves nothing.
+
+Three rulings worth keeping, so a later round does not re-derive them:
+
+The analyst was **right** to overturn this PRD's hint about `inspection.rs`, and
+the reviewer verified it at the source: `resolve()` (`lib.rs:966-1015`) shares
+one `Request` across inspect, context and compact, so `inspection.rs:98` and
+`working.rs:106` both carry the real report through `request.frame()`. Only
+`injection` (`lib.rs:1339`) hand-builds a bare `Frame` and correctly takes
+`drift: None`. The body above poses this as an open question rather than an
+assertion, so it needs no correction.
+
+The `Option<&'a str>` field is **not** justified as designed, though only as a
+minor wart: `resolve_drift` collapses "verified nothing changed", "the call
+failed" and "the op is not implemented" all to `None` before `Frame` ever sees
+it, so the `Option` carries exactly the one bit that the neighbouring
+`""`-means-absent convention already carries.
+
+Acceptance box 4 — the five call sites — is correctly a diff-review fact. A
+narrower footprint cannot mechanise a per-site semantic judgement, unlike the
+`src/lib.rs` case on `@agent/a-denied-tool-call-journals-its-error-flag` where
+narrowing did turn a promise into an engine check.
+
+One non-blocking environment fact: `cargo test --all-targets`, which is what
+`just test harness` runs, fails standalone on the missing sibling
+`cartridge.ctg` release binary. That is a pre-existing layout fact rather than a
+defect in this spec.
+
+The prerequisite has also moved. `@sessions/file-drift-awareness` was released
+to `open` by its departing owner at 3 of 5 rounds (66, 71, 74), not failed out,
+with a round-4 revision partly on disk and unscored. Its own review found that
+stamps live only in memory and that re-stamping on `Store::install` absorbs
+drift in the live window, so a `connect` or `mapping` op silently re-baselines a
+resident session — meaning a null report may mean "nothing changed" or "the
+store forgot", and no consumer can tell them apart. The `needs` edge on this row
+is correct and unchanged.

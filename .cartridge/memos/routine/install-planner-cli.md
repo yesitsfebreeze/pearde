@@ -10,14 +10,15 @@ launchers for the same native engine. It migrates the existing PeaRDe Claude
 statusline to the maintained statusline memo. Other settings and local repositories
 are preserved. Superseded wrappers are saved in the user's local state directory.
 
-```just
+```task
 install:
     #!/usr/bin/env bun
     import fs from 'node:fs';
     import path from 'node:path';
     import os from 'node:os';
     const owner=process.env.MEMO_OWNER_ROOT, home=os.homedir();
-    const runner=path.join(owner,'../cartridge.ctg/.cartridge/tools/memo-run');
+    const runner=process.env.TASK_BIN;
+    if(!runner)throw Error('Run installation through cartridge-task');
     const memo=path.join(owner,'.cartridge/memos/routine/planner-statusline.md');
     if(!fs.existsSync(memo))throw Error('Install requires the maintained planner-statusline memo');
     const quote=s=>"'"+s.replaceAll("'","'\\''")+"'";
@@ -32,7 +33,7 @@ install:
     if(fs.existsSync(settings)){
       const old=fs.readFileSync(settings,'utf8'), value=JSON.parse(old), command=value.statusLine?.command;
       if(typeof command==='string'&&(command.includes('/dev/infra/pearde/')||command.includes(owner+'/.cartridge/engine/'))){
-        const next=old.replace(JSON.stringify(command),JSON.stringify(quote(runner)+' '+quote(memo)+' status'));
+        const next=old.replace(JSON.stringify(command),JSON.stringify(quote(runner)+' --file '+quote(memo)+' status'));
         if(next===old)throw Error('Could not locate exact statusline command');
         writes.push({file:settings,old,next,mode:fs.statSync(settings).mode&0o777});
       }

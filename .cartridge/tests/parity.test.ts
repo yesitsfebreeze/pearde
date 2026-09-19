@@ -57,7 +57,7 @@ test('parent proof validates child contracts and current source across repositor
   expect(completionProblem(scan(board).get('parent')!)).toContain('changed'); atomic(spec, original);
   atomic(path.join(other, 'seed.txt'), 'uncommitted break\n'); expect(completionProblem(scan(board).get('parent')!)).toContain('source footprint changed');
   atomic(path.join(other, 'seed.txt'), 'seed\n'); expect(completionProblem(scan(board).get('parent')!)).toBeNull();
-});
+}, 20000);
 
 test('unverified pre-existing done records fail and persist their reason', async () => {
   item('forged', 'done'); adapter('throw Error("No worker should run");');

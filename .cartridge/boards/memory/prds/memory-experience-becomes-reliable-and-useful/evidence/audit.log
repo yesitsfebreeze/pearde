@@ -1,0 +1,7 @@
+
+prd.ctg  pass  1861 source lines in 12 file(s), largest src/records.ts at 373, 4% comment, 4636 tracked
+  find: stray root entry: prd
+  find: 43 tracked file(s) changed and not committed
+  find: 88 untracked file(s)
+
+audit: 1 of 1 cartridges pass the hard checks

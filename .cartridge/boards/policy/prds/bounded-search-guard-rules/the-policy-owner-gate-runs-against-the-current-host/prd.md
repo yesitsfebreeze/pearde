@@ -1,5 +1,8 @@
 ---
-state: "question"
+state: "deferred"
+deferred-from: question
+deferred-on: "2026-09-19"
+superseded-by: "@runtime/policy-and-trust-are-one-host-module-that-asks-the-person-and-remembers-always-allow/the-host-answers-policy-and-policy-explain-with-the-evaluator-policy-ctg-had"
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge/policy.ctg"
@@ -55,3 +58,13 @@ recommendation for this board (see that PRD's `## Split`): retire this row and t
 and reconcile it with the runtime child "the agent asks through the host request…". This is a fifth
 option, **E: defer this row as superseded by the host's policy move**. Nothing is deferred or retargeted
 until the user answers; the runtime split has not landed.
+
+Answered 2026-09-19 by the user (Claude Code session 5c846381, cartridge-e4):
+option E, defer this row as superseded by the host's policy move. Deferred with
+`superseded-by` pointing at
+`@runtime/policy-and-trust-are-one-host-module-that-asks-the-person-and-remembers-always-allow/the-host-answers-policy-and-policy-explain-with-the-evaluator-policy-ctg-had`,
+the runtime child that ports the Lua evaluator into `cartridge.ctg/src/policy`
+with its own named unit tests. The siblings `policy-refuses-unbounded-searches-with-a-teaching-reason`
+and `policy-refusals-and-overrides-reach-the-caller-and-the-observation-journal`
+are updated separately to point at that runtime child and to note the footprint
+move to `cartridge.ctg/src/policy`; options A-D above are not pursued further.

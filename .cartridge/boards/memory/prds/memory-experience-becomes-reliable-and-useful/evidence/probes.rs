@@ -1,0 +1,17 @@
+#[path="/Users/feb/dev/cartridge/memory.ctg/src/rpc/src/experience/input.rs"]
+mod input;
+#[cfg(test)] mod tests {
+use graph::{experience::{Observation,Undo,observe,occurrences,ROOT},graph::GraphGnn};
+use serde_json::json;
+use std::time::{SystemTime,Duration,UNIX_EPOCH};
+fn o(text:&str,reason:&str)->Observation {Observation{origin:"test".into(),event:"build".into(),outcome:"failed".into(),text:text.into(),reason:reason.into(),ts:util::now_ms()}}
+fn put(g:&mut GraphGnn,o:&Observation)->String {observe(g,o,&[1.,0.],&[1.,0.],0.97,3600,&mut Undo::default()).unwrap()}
+#[test] fn opposite_outcomes_stay_separate_with_identical_vectors(){let mut g=GraphGnn::new();let a=o("Build", "compiler");let first=put(&mut g,&a);let mut b=a.clone();b.outcome="succeeded".into();assert_ne!(first,put(&mut g,&b));}
+#[test] fn context_outside_request_is_lost(){let a=json!({"ts":util::now_ms(),"activity":{"origin":"runtime","event":"build","context":{"cwd":"/project-a"},"outcome":{"state":"answered","response":"ok"}}});let mut b=a.clone();b["activity"]["context"]["cwd"]=json!("/project-b");let (a,_)=super::input::observation(&a).unwrap();let (b,_)=super::input::observation(&b).unwrap();assert_eq!(graph::experience::identity(&a),graph::experience::identity(&b));}
+#[test] fn response_is_used_as_provenance_without_reason(){let (a,_)=super::input::observation(&json!({"ts":util::now_ms(),"activity":{"event":"build","outcome":{"state":"answered","response":"build finished"}}})).unwrap();assert_eq!(a.reason,"build finished");}
+#[test] fn response_error_flag_is_classified_as_answered(){let (a,_)=super::input::observation(&json!({"ts":util::now_ms(),"activity":{"event":"tool.example","outcome":{"state":"answered","response":{"error":true,"content":"failed"}}}})).unwrap();assert_eq!(a.outcome,"answered");}
+#[test] fn expired_active_entity_is_still_an_exact_merge_target(){let mut g=GraphGnn::new();let a=o("expired build","compiler");let id=put(&mut g,&a);g.get_mut(ROOT).unwrap().entities.get_mut(&id).unwrap().valid_until=Some(UNIX_EPOCH);assert_eq!(id,put(&mut g,&a));assert_eq!(occurrences(g.loaded(ROOT).unwrap(),&id).unwrap().count,2);}
+#[test] fn similar_contexts_merge_and_only_three_examples_survive(){let mut g=GraphGnn::new();let id=put(&mut g,&o("build in project a","compiler missing a"));for i in 0..5 {assert_eq!(id,put(&mut g,&o(&format!("build in project {i}"),&format!("compiler missing {i}"))));}let m=g.loaded(ROOT).unwrap();assert_eq!(occurrences(m,&id).unwrap().examples.len(),3);assert_eq!(m.reasons.values().filter(|r|r.kind==base::base_types::ReasonKind::Provenance).count(),1);assert_eq!(m.entities[&id].access_count.value(),0);}
+#[test] fn recurrence_timestamp_suppresses_old_retrieval_count(){let mut g=GraphGnn::new();let a=o("build","compiler");let id=put(&mut g,&a);{let e=g.get_mut(ROOT).unwrap().entities.get_mut(&id).unwrap();e.accessed_at=Some(SystemTime::now()-Duration::from_secs(120));e.heat_updated_at=e.accessed_at;e.access_count.increment("test",1);}put(&mut g,&a);retrieval_piece::retrieval_score::commit_access_ids(&mut g,&[id.clone()],&config::HeatConfig::default());assert_eq!(g.loaded(ROOT).unwrap().entities[&id].access_count.value(),1);}
+#[test] fn historical_work_is_absent_from_pending_statistics(){let d=tempfile::tempdir().unwrap();let g=graph::persist::load_dir(d.path().to_str().unwrap()).unwrap();let s=g.store().unwrap();s.experience_import("day/2026-09-18",br#"{"text":"historical failure"}"#).unwrap();assert_eq!(s.experience_stats().unwrap()[0],0);assert_eq!(s.experience_pending(64).unwrap().len(),1);}
+}

@@ -28,3 +28,5 @@ No retrieval-quality or latency gate, real-model corpus comparison, final consum
 The Scope owner subsequently committed finder interaction fixes as base dd75e7fd4d81f16c4422e8de0b95be7b16d0d59c and root de265427860e35ffbb658d63d9c1679e1cb877db, preserving the memory pin. The owner reports thirty-four UI tests and isolated final-binary/PTY checks; follow-up evidence is preserved separately from the original baseline handoff. These are owner baseline proofs, not acceptance of the memory Scope leaf.
 
 The inventory now includes the frozen-query prerequisite already present in the canonical recurrence/retrieval-use PRD. This corrects inventory drift without changing the canonical dependency graph. Existing retention receipt re-verification and frozen/readback reconciliation remain required before the evaluation and signal stages.
+
+The same inventory refresh also restores the delivery leaf’s existing canonical dependency on the memory acceptance/refusal contract. No canonical dependency was added or removed.

@@ -1,0 +1,47 @@
+# Evaluation environment readiness
+
+Read-only preparation against memory HEAD d9161cd2f3a363915c7a7d642a4955e7a3836065 and its current files. No model call, network search, live append, activation, build/test, checkout, or source/spec change was made. The composed prompt is in /tmp/memory-evaluation-readiness-prompt.log. ASP was queried first with observe:false for memory replay/e2e evaluation embedding model; it returned model-service documentation and the memory ownership decision. Existing evaluation PRD and prior sender/isolation evidence were reused. The frozen-query and heat prerequisites remain canonical dependencies; no new audit or ranking judgment is made here.
+
+## Instruments and their limits
+
+The in-scope evaluation leaf is experience-retrieval-earns-a-reproducible-quality-and-latency-gate. It requires frozen labels, zero harmful hard-boundary merges, relevant evidence recall@5 at least 0.90, no more than two percentage points recall loss, confidence intervals/sample counts, and no more than 10% warmed p95 regression. The required isolated consumer trace includes nominations, readbacks and injected references. Current runners do not already prove those acceptance criteria.
+
+The existing memory-bench binary is registered at .cartridge/tests/integration/bench. Its replay command accepts --fixture, mandatory --cache, --repeats (minimum 2), --gnn-rounds, --embed-url, --embed-model, --k and --report-dir. It obtains genuine vectors unless --fake-llm is requested, pins fixture/vector hashes, refuses a cache from a different fixture/provider/model, builds fresh hot/mixed/cold graphs, alternates variants/question order, and reports recall and warm in-process retrieval p50/p95. It explicitly excludes embedding, graph construction, CLI, daemon and access persistence. It cannot stand in for transport latency or harmful crystallization merge quality. A mutable model tag is not an immutable provider revision; cached actual vector hashes are the stronger reproducibility evidence.
+
+The ground command drives the memory CLI against disposable ingested banks. It supports --path direct, --noise, --answer, --llm-url and --llm-model. It separates retrieval scores/query latency from answer latency and token-based grounding/anchor coverage. The historical done memory-integration-semantic-evaluation PRD reports local qwen3-embedding:0.6b and granite4:3b results, but those numbers are historical and are not current evidence. Its old just recipes and old workspace paths should not be replayed verbatim. Fake lexical scores are explicitly meaningless as semantic quality.
+
+The current real-base fixture .cartridge/tests/integration/cartridge.rs has ingest_query_tool_and_context_reach_one_store_through_the_base. It boots a disposable composition and loads the newly built native module, but embeds with a fixed vector [1,0,0]. It verifies wiring and shared-store behavior, not real-model retrieval quality, Scope injection, or timed embedding/commit/transport legs. No existing command was found that already produces the requested full consumer latency report. Extending the existing runner/probe is authorized by the evaluation leaf; adding a new unrelated framework is unnecessary.
+
+## Declared and locally installed model identities
+
+The root config declares memory reason URL http://localhost:11434 and model gpt-oss:20b with num_ctx 32768. Memory's manifest exposes embed/reason tables; no root embed override is present. Config defaults choose http://localhost:11434 and qwen3-embedding:0.6b. Default reason model is granite4:3b, but its default URL is empty; explicitly choose the reason endpoint for a disposable real-model composition.
+
+Read-only local Ollama manifest filenames exist for qwen3-embedding:0.6b, gpt-oss:20b, granite4:3b, qwen3:8b, llama3.1:8b and granite-router:latest. Cloud-tag manifests also exist, but they are not needed for the local evaluation. Manifest presence is not proof that blobs are intact, the server is serving, memory fits, or inference works. No credentials were inspected or emitted. No health/inference request was made. Availability, cold-load latency and model-outage recovery remain execution-time probes, not demonstrated blockers or successful gates.
+
+For comparison with the historical ground benchmark, use qwen3-embedding:0.6b plus granite4:3b. For the final configured pipeline, separately pin gpt-oss:20b as the actual root reason model. Do not conflate their quality or latency results.
+
+## Commands ready for the checked evaluation lane
+
+These commands are for later execution in a verified evaluation lane, not executed now. Set EVAL_LANE to that exact absolute lane, EVAL_TARGET to an external target directory, EVAL_OUT to an external evidence directory, and BASE_BIN to the verified isolated base binary. These are task variables, never HOME or CODEX_HOME. Build from EVAL_LANE and preserve source/tree/dirty manifest, compiler identity, hardware and artifact SHA-256 before measurements.
+
+```sh
+CARGO_TARGET_DIR="$EVAL_TARGET" cargo build --locked --release -p memory -p memory-bench --bins
+CARGO_TARGET_DIR="$EVAL_TARGET" cargo test --locked --release --test e2e eval_ground -- --nocapture
+CARGO_MANIFEST_DIR="$EVAL_LANE/.cartridge/tests/integration/bench" "$EVAL_TARGET/release/memory-bench" replay --fixture "$EVAL_LANE/.cartridge/tests/integration/bench/replay.json" --cache "$EVAL_OUT/real-vectors.json" --repeats 3 --embed-url http://localhost:11434 --embed-model qwen3-embedding:0.6b --k 5 --report-dir "$EVAL_OUT/replay"
+MEMORY_BIN="$EVAL_TARGET/release/memory" CARGO_MANIFEST_DIR="$EVAL_LANE/.cartridge/tests/integration/bench" "$EVAL_TARGET/release/memory-bench" ground --path direct --noise --answer --embed-url http://localhost:11434 --embed-model qwen3-embedding:0.6b --llm-url http://localhost:11434 --llm-model granite4:3b --report-dir "$EVAL_OUT/ground"
+CARTRIDGE_BIN="$BASE_BIN" CARGO_TARGET_DIR="$EVAL_TARGET" cargo test --locked --test cartridge ingest_query_tool_and_context_reach_one_store_through_the_base -- --exact --nocapture
+```
+
+Run the real replay twice using the same vector cache and frozen fixtures; do not regenerate vectors between baseline/candidate. Run ground twice to expose answer variance. The current replay fixture is supporting evidence, not the not-yet-authored labelled experience corpus. Reuse that runner after the reviewed fixture/probe extension. Pin exact named tests and nonzero test counts; the base test above is structural only.
+
+The relocated common::repo helper still ascends only two parents from the benchmark manifest directory. Its default replay fixture path therefore resolves under .cartridge/tests/tests/bench rather than the actual integration/bench directory. Passing explicit --fixture and --report-dir avoids this for replay. Ground reads ground.json/noise.json directly beside runtime CARGO_MANIFEST_DIR and works with the explicit setting above. MEMORY_BIN prevents implicit selection/build of a different CLI. Default BEAM data lookup also uses the old tests/eval layout; BEAM is not a necessary gate for this experience stack, so do not repair or fetch it here. The historical BEAM missing-data BLOCKED receipt is not present evidence of availability.
+
+## Isolation and artifact proof
+
+Existing CLI MemoryProject creates a temp project/.memory and private XDG_CONFIG_HOME/XDG_STATE_HOME; it uses a short unique /tmp/memory-test-* runtime directory to avoid Unix socket path overflow and binds test model-service ports to zero. Its constructor also sweeps old test runtime directories; inspect that bounded cleanup before broader runs. The test harness inherits other environment variables, so final composition commands must explicitly ensure no production bank, owner endpoint, home/trust root, or live artifact path is inherited. Preserve the user's actual HOME rather than overwriting it globally.
+
+The real-base fixture accepts CARTRIDGE_BIN; otherwise it defaults to a sibling release build, which is unsuitable proof. Its module helper builds memory_cartridge in the inherited external CARGO_TARGET_DIR and finds the dylib/so in Cargo JSON; the disposable composition symlinks that exact artifact. Record its SHA-256 and module identity, and verify the controlled status corresponds to the intended build. Never build into a target watched by the loaded cartridge or run the fixture against the live composition. Use a private CARTRIDGE_HOME/trust directory, private data/runtime paths, explicit temporary cwd and remove inherited CARTRIDGE_YOLO for controlled integration. Exact current source pins must be refreshed after collection, because main remains d9161cd while implementation lanes are in progress.
+
+## Outstanding gates, not fabricated results
+
+Real server/model execution remains unprobed by this read-only task. Model manifests make local execution plausible but do not establish health. The exact final evaluation corpus, frozen-query completion, recurrence/retrieval-use separation and paired real consumer measurement are implementation prerequisites still owned by existing leaves. Current in-scope evaluation footprint does not list the real-base fixture or shared common helper; if the chosen probe needs either, specify and review those exact additions rather than silently changing them. No external blocker is confirmed here. The concrete gap is that existing structural and warm-retrieval instruments do not yet measure the required full model-to-consumer gate.

@@ -69,7 +69,9 @@
     "ref": "@runtime/rejected-activity-cannot-wedge-the-hosts-delivery-queue",
     "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/runtime/prds/rejected-activity-cannot-wedge-the-hosts-delivery-queue/prd.md",
     "board": "runtime",
-    "needs": []
+    "needs": [
+      "contract"
+    ]
   },
   {
     "key": "scope",

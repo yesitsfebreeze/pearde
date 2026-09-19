@@ -1,0 +1,108 @@
+{
+  "base_head": "58a59366c5fc3d6d27959ff0861dc56838394868",
+  "root_head": "8c506c653475ef4bbdb9dec6a12dbc65efbeaae2",
+  "paths": [
+    {
+      "path": "src/trace/activity.rs",
+      "head_blob": null,
+      "head_sha256": null,
+      "dirty_sha256": "1065e300c8c8b8a996e7a6c8430f7ee3ff3eda9e846ed908d762d5181357e5e2"
+    },
+    {
+      "path": "src/trace/activity_limit.rs",
+      "head_blob": null,
+      "head_sha256": null,
+      "dirty_sha256": "7187dd157aa44bf17050e69d85b88aab620d5f19ce5f8f79c8d0b9a3f7b8ec26"
+    },
+    {
+      "path": "src/trace/mod.rs",
+      "head_blob": "91d25c0de2268b2f743ab60c3b368361dfb53927",
+      "head_sha256": "ac2ee1fd72c4611a5302f4212ba1bacc2120bc6bfcfc208781c0c9571a732232",
+      "dirty_sha256": "c62213ed1fbfec10ab2bd967e2f20f62401900bc7d5d2aef605f5f4c8f1d67f9"
+    },
+    {
+      "path": "src/host/trace.rs",
+      "head_blob": null,
+      "head_sha256": null,
+      "dirty_sha256": "bb7a6bccb868d04fb865ee6d90995f07ab651d4914096dff74e2c487a0da8ca3"
+    },
+    {
+      "path": "src/host/mod.rs",
+      "head_blob": "4f534a28bc8471729018ce8c16d78615aba62875",
+      "head_sha256": "aadeb3888202d0bcb1669292e2a28742ba8a82ab14f01f5a15c13844fbbfd03e",
+      "dirty_sha256": "7b8e7a7328969ab3d01f89e8860ae6a0d5692fc0398ec607f14d9a216da0e300"
+    },
+    {
+      "path": "src/host/process.rs",
+      "head_blob": "7895810cb93593772aaa0528181a1f2e8b1c8c87",
+      "head_sha256": "568867721fded33418363784c1f4d2292b7a5049c2151dd65972cd14f35c632f",
+      "dirty_sha256": "40ffe8f2168a8a1efabc2072edd8030ea21ff2a82b1d063cb2b359af991a1f13"
+    },
+    {
+      "path": "src/host/socket.rs",
+      "head_blob": "25b17f6beb586c72cb61bb20265d8b021ac9bd9b",
+      "head_sha256": "3caeccca5496c1c73ed8c84d2ddc91ca2d9521f132972c3b97f06a083c2e5216",
+      "dirty_sha256": "9ccf1ef76354fe1c11a7bf68d73af645679ff730c7be30a28c52f6ce7c37b23c"
+    },
+    {
+      "path": "src/node/mod.rs",
+      "head_blob": "cefe9e406a2affccba17cc4fc3a216c46d97cb67",
+      "head_sha256": "21504baf56a26b89af2bf8d18e10200034002118bd227084da6a4ec0db240ef7",
+      "dirty_sha256": "35f77ca53b09b2cb2c45def73bb8e24ad664e44e28f2954364cca528f5eac8b7"
+    },
+    {
+      "path": "src/transport/cartridge.rs",
+      "head_blob": "eace2cb05b1cbca9fc56422fe9eb8726c6c6b703",
+      "head_sha256": "d74dd9fd975fdf8633c9f3e65c45b121984fb3147a9639bcb755ac0381561e8c",
+      "dirty_sha256": "d93b7ffdc8c7195f4e7e82a9af913590229bdc9fcebd48e53a2128ffb8d61663"
+    },
+    {
+      "path": "src/asp/mod.rs",
+      "head_blob": "213408b1e17b540b98d746287d6e60a55c6a6076",
+      "head_sha256": "d5dc298644ef526d30362af49861fdec670649c7c3ed6d8892e72a80828dd782",
+      "dirty_sha256": "df8013c530e7393818ffe823d7ea0d5a66d4a1497025ebe9bff5e6557c29ef47"
+    },
+    {
+      "path": ".cartridge/tests/unit/src/trace/activity.rs",
+      "head_blob": null,
+      "head_sha256": null,
+      "dirty_sha256": "bfd2c181d727fd9ef0e64087457b257e7c6fc5fb30e452f11aa39fcc591126bb"
+    },
+    {
+      "path": ".cartridge/tests/integration/launch.rs",
+      "head_blob": null,
+      "head_sha256": null,
+      "dirty_sha256": "3362635263fdf5bc757d8370477211620b423598e54289de32b7777c85afbceb"
+    },
+    {
+      "path": "Cargo.toml",
+      "head_blob": "40fef7bc9c657e56a438ec9d8289b86eaf839ecb",
+      "head_sha256": "84bb0f294df18b7408fc5367a85fdeb88a135d0feb186156a774479d07323a46",
+      "dirty_sha256": "4508a9b67ec1332782746ac225a9e9c9e86bf45c1b7bfa6a5fc8070d1aecc600"
+    },
+    {
+      "path": "Cargo.lock",
+      "head_blob": "f01ff0511ff3021d8e81ac15132c09c6e118753a",
+      "head_sha256": "896732590aaae296f2ce57ab3de945d3800e9bf36d3a62636feadfaa4343045b",
+      "dirty_sha256": "896732590aaae296f2ce57ab3de945d3800e9bf36d3a62636feadfaa4343045b"
+    },
+    {
+      "path": "src/trace/README.md",
+      "head_blob": "164fa944f028d9c4c2c985d68f1ceb866517298e",
+      "head_sha256": "87d295693016b624c511ffbe419a4826c1b6c3f4e4a1d3b79a77feb4a457ffc2",
+      "dirty_sha256": "3b6551ad7e10ebdf9b9f90acbcaa460728ebd20f198830e107a97b496d80943b"
+    },
+    {
+      "path": "README.md",
+      "head_blob": "1c1c0f4f61842c763dc4cdfdaf6543713feecc0e",
+      "head_sha256": "ba8924c47bd747ef51caa5cd5f93a2bfdabaf5f2359c154ecb15126a55d58163",
+      "dirty_sha256": "d941e1996a72513a29d39f46c0de1e0fb70b94eaa0e5402bb0a6e5503ca0fafb"
+    },
+    {
+      "path": ".cartridge/help.md",
+      "head_blob": "80e06fa5d8beea68a9fbc78e25369f6db7e28f50",
+      "head_sha256": "8952171518205111543754b7236cebccf16ca396a9830086f5516263c8ea9cb1",
+      "dirty_sha256": "fae8c2e0e87ee18125fb54cd03889a60f4a1e7a983cc4da157058acee96268a1"
+    }
+  ]
+}

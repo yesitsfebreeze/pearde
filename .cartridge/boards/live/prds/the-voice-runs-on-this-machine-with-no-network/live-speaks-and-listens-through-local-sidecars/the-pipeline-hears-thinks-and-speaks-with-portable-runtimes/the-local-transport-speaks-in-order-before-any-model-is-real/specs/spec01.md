@@ -110,17 +110,17 @@ only), and the unmutated code passes it in ~0.6 s.
 
 ## Acceptance
 
-- [ ] `cartridge.json` declares `stt`, `tts`, `brain` and `models`, each with a documented default; `provider` still defaults to `gpt`.
-- [ ] `src/transport.rs` accepts `"local"` (`Provider::Local`) alongside `"gpt"`; an unrelated value is still refused before any dial.
-- [ ] Driven directly through `local::connect` with a stub speech endpoint (transcribe + speak routes) and a stub brain endpoint on `127.0.0.1:0`, the session emits `session.started`, `session.input_transcript.delta`, `session.output_transcript.delta`, `session.output_audio.delta` in that order, and the audio delta decodes to exactly the PCM the stub tts route returned.
-- [ ] A brain reply carrying a `delegate` tool call emits `session.delegation.created` with `delegation.target == "client"` and no `session.output_audio.delta` for that turn.
-- [ ] A missing model file, and an endpoint that will not answer (refused outright, or accepted and left hanging), each close the session through the `error` event carrying the reason, which `status` then reports — neither panics. (Restored verbatim from the PRD/parent Acceptance; round 1's spec had dropped "which `status` then reports" and tested only through `local::connect`, which is exactly how B1 went unseen.)
-- [ ] A non-default `models` setting is honoured: the reason `status` reports names the *configured* directory, not a hard-coded one.
-- [ ] A turn commits within 1 s while speech is followed by silence delivered continuously at real capture's own ~200 ms cadence — past the point `turn::STALL`'s arrival fallback would ever fire — not only from a single burst followed by nothing; the placeholder is judged by frame content, not by a gap in arrivals, and a mutant that disables the content judgement fails this specific test.
-- [ ] Nothing in `src/local.rs` or `src/turn.rs` is conditional on the operating system: no `cfg(target_os)`, no `Command::new`/`std::process::Command`.
-- [ ] `README.md`, `.cartridge/help.md` and `.cartridge/docs/README.md` describe the four settings, the three seams, the timeout and the turn-timing placeholder (content-judged, not arrival-judged, and sensitive to a single loud sample rather than a frame's energy) accurately, and where model files come from.
-- [ ] `cargo test --lib` passes for the whole crate, including the existing `socket`/`audio` suites and the one adjusted `service` test, unchanged in intent.
-- [ ] A local session already closed by a queued failure never opens the microphone, and `status` can show it: a mutant that removes the guard fails the named test that checks this.
+- [x] `cartridge.json` declares `stt`, `tts`, `brain` and `models`, each with a documented default; `provider` still defaults to `gpt`.
+- [x] `src/transport.rs` accepts `"local"` (`Provider::Local`) alongside `"gpt"`; an unrelated value is still refused before any dial.
+- [x] Driven directly through `local::connect` with a stub speech endpoint (transcribe + speak routes) and a stub brain endpoint on `127.0.0.1:0`, the session emits `session.started`, `session.input_transcript.delta`, `session.output_transcript.delta`, `session.output_audio.delta` in that order, and the audio delta decodes to exactly the PCM the stub tts route returned.
+- [x] A brain reply carrying a `delegate` tool call emits `session.delegation.created` with `delegation.target == "client"` and no `session.output_audio.delta` for that turn.
+- [x] A missing model file, and an endpoint that will not answer (refused outright, or accepted and left hanging), each close the session through the `error` event carrying the reason, which `status` then reports — neither panics. (Restored verbatim from the PRD/parent Acceptance; round 1's spec had dropped "which `status` then reports" and tested only through `local::connect`, which is exactly how B1 went unseen.)
+- [x] A non-default `models` setting is honoured: the reason `status` reports names the *configured* directory, not a hard-coded one.
+- [x] A turn commits within 1 s while speech is followed by silence delivered continuously at real capture's own ~200 ms cadence — past the point `turn::STALL`'s arrival fallback would ever fire — not only from a single burst followed by nothing; the placeholder is judged by frame content, not by a gap in arrivals, and a mutant that disables the content judgement fails this specific test.
+- [x] Nothing in `src/local.rs` or `src/turn.rs` is conditional on the operating system: no `cfg(target_os)`, no `Command::new`/`std::process::Command`.
+- [x] `README.md`, `.cartridge/help.md` and `.cartridge/docs/README.md` describe the four settings, the three seams, the timeout and the turn-timing placeholder (content-judged, not arrival-judged, and sensitive to a single loud sample rather than a frame's energy) accurately, and where model files come from.
+- [x] `cargo test --lib` passes for the whole crate, including the existing `socket`/`audio` suites and the one adjusted `service` test, unchanged in intent.
+- [x] A local session already closed by a queued failure never opens the microphone, and `status` can show it: a mutant that removes the guard fails the named test that checks this.
 
 ## Steps
 

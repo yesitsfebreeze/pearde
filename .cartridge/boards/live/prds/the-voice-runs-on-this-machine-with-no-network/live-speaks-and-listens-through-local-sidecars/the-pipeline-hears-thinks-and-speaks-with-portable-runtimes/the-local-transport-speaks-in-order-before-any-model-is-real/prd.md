@@ -1,11 +1,11 @@
 ---
-state: "claimed"
+state: "done"
 origin: requested
 priority: 94
 repo: "/Users/feb/dev/cartridge/live.ctg"
 footprint: ["src/lib.rs", "src/service.rs", "src/local.rs", "src/turn.rs", "src/transport.rs", "cartridge.json", "Cargo.toml", "Cargo.lock", "README.md", ".cartridge/help.md", ".cartridge/docs/README.md"]
 needs: ["a-setting-chooses-the-transport-and-the-gpt-one-keeps-working"]
-claim: "coordinator-5d0e-1 2026-09-19T11:48:27.055Z"
+commit: "dbd3b0af89549ce152a936f3d127817ab374dacd"
 ---
 
 # The local transport speaks in order before any model is real
@@ -27,13 +27,13 @@ ships only a placeholder turn end in `src/turn.rs`.
 
 ## Acceptance
 
-- [ ] `cartridge.json` declares `stt`, `tts`, `brain` and `models` settings, each with a documented default.
-- [ ] With a stub speech endpoint and a stub brain endpoint bound on `127.0.0.1:0`, the local transport emits `session.started`, `session.input_transcript.delta`, `session.output_transcript.delta` and `session.output_audio.delta` whose payload is exactly the PCM the stub returned, in that order.
-- [ ] A brain reply carrying a `delegate` tool call emits `session.delegation.created` with `delegation.target == "client"` and no audio for that turn.
-- [ ] A missing model file, and an endpoint that will not answer, each close the session through the `error` event carrying the reason, which `status` then reports — neither panics.
-- [ ] Every test names itself, and the Verify block reads those names out of the test runner's own output, because an exit code cannot tell a passing suite from an empty one.
-- [ ] Nothing in `src/local.rs` or `src/turn.rs` is conditional on the operating system: no `#[cfg(target_os)]`, no platform framework, no spawned platform binary.
-- [ ] `README.md`, `.cartridge/help.md` and `.cartridge/docs/README.md` describe the stages, the settings and where model files come from.
+- [x] `cartridge.json` declares `stt`, `tts`, `brain` and `models` settings, each with a documented default.
+- [x] With a stub speech endpoint and a stub brain endpoint bound on `127.0.0.1:0`, the local transport emits `session.started`, `session.input_transcript.delta`, `session.output_transcript.delta` and `session.output_audio.delta` whose payload is exactly the PCM the stub returned, in that order.
+- [x] A brain reply carrying a `delegate` tool call emits `session.delegation.created` with `delegation.target == "client"` and no audio for that turn.
+- [x] A missing model file, and an endpoint that will not answer, each close the session through the `error` event carrying the reason, which `status` then reports — neither panics.
+- [x] Every test names itself, and the Verify block reads those names out of the test runner's own output, because an exit code cannot tell a passing suite from an empty one.
+- [x] Nothing in `src/local.rs` or `src/turn.rs` is conditional on the operating system: no `#[cfg(target_os)]`, no platform framework, no spawned platform binary.
+- [x] `README.md`, `.cartridge/help.md` and `.cartridge/docs/README.md` describe the stages, the settings and where model files come from.
 
 ## Footprint widened (2026-09-19, coordinator)
 

@@ -1,10 +1,11 @@
 ---
-state: open
+state: "done"
 origin: requested
 priority: 75
 repo: "/Users/feb/dev/cartridge/mcp.ctg"
 footprint:
 - "cartridge.json"
+commit: "1595a6fa52e4f8f4635ca426ec1fcddd40e7d277"
 ---
 
 # The mcp event declares its own bound
@@ -31,10 +32,10 @@ cartridge: a cartridge declares its own surface.
 
 ## Acceptance
 
-- [ ] `mcp.ctg/cartridge.json` declares `timeout_ms` on the `mcp` event, at a
+- [x] `mcp.ctg/cartridge.json` declares `timeout_ms` on the `mcp` event, at a
       value chosen from what an MCP line legitimately takes, not from the
       default.
-- [ ] A check fails if the declaration is removed, so the bound cannot be lost
+- [x] A check fails if the declaration is removed, so the bound cannot be lost
       silently again.
 
 ## Note on line numbers

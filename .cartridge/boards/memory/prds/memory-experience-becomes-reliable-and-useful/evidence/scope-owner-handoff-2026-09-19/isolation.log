@@ -1,0 +1,3 @@
+toolchain: cargo cargo-nextest bun tmux
+Isolation passed for 21 cartridges.
+isolation composition pass

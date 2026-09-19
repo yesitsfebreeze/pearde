@@ -1,0 +1,91 @@
+[
+  {
+    "key": "writer",
+    "ref": "@memory/memory-experience-becomes-reliable-and-useful/crystallization-keeps-progressing-beside-ordinary-persistence",
+    "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/crystallization-keeps-progressing-beside-ordinary-persistence/prd.md",
+    "board": "memory",
+    "needs": []
+  },
+  {
+    "key": "evidence",
+    "ref": "@memory/memory-experience-becomes-reliable-and-useful/every-runtime-reason-identifies-its-evidence-and-certainty",
+    "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/every-runtime-reason-identifies-its-evidence-and-certainty/prd.md",
+    "board": "memory",
+    "needs": []
+  },
+  {
+    "key": "merge",
+    "ref": "@memory/memory-experience-becomes-reliable-and-useful/crystallization-preserves-outcome-context-and-validity-boundaries",
+    "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/crystallization-preserves-outcome-context-and-validity-boundaries/prd.md",
+    "board": "memory",
+    "needs": [
+      "evidence"
+    ]
+  },
+  {
+    "key": "signals",
+    "ref": "@memory/memory-experience-becomes-reliable-and-useful/recurrence-cannot-masquerade-as-retrieval-usefulness",
+    "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/recurrence-cannot-masquerade-as-retrieval-usefulness/prd.md",
+    "board": "memory",
+    "needs": [
+      "@memory/heat-is-deposited-on-read-back-not-on-delivery",
+      "@memory/a-frozen-query-reads-the-bank-without-touching-it"
+    ]
+  },
+  {
+    "key": "retention",
+    "ref": "@memory/memory-experience-becomes-reliable-and-useful/memory-reports-exactly-what-crystallized-output-preserves",
+    "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/memory-reports-exactly-what-crystallized-output-preserves/prd.md",
+    "board": "memory",
+    "needs": []
+  },
+  {
+    "key": "status",
+    "ref": "@memory/memory-experience-becomes-reliable-and-useful/memory-exposes-total-backlog-and-the-reason-progress-stopped",
+    "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/memory-exposes-total-backlog-and-the-reason-progress-stopped/prd.md",
+    "board": "memory",
+    "needs": []
+  },
+  {
+    "key": "intake",
+    "ref": "@memory/memory-experience-becomes-reliable-and-useful/healthy-intake-progresses-past-malformed-or-expensive-observations",
+    "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/healthy-intake-progresses-past-malformed-or-expensive-observations/prd.md",
+    "board": "memory",
+    "needs": [
+      "writer"
+    ]
+  },
+  {
+    "key": "evaluation",
+    "ref": "@memory/memory-experience-becomes-reliable-and-useful/experience-retrieval-earns-a-reproducible-quality-and-latency-gate",
+    "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/experience-retrieval-earns-a-reproducible-quality-and-latency-gate/prd.md",
+    "board": "memory",
+    "needs": [
+      "@memory/a-frozen-query-reads-the-bank-without-touching-it"
+    ]
+  },
+  {
+    "key": "delivery",
+    "ref": "@runtime/rejected-activity-cannot-wedge-the-hosts-delivery-queue",
+    "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/runtime/prds/rejected-activity-cannot-wedge-the-hosts-delivery-queue/prd.md",
+    "board": "runtime",
+    "needs": []
+  },
+  {
+    "key": "scope",
+    "ref": "@root/scope-distinguishes-memory-use-from-stalled-processing",
+    "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/root/prds/scope-distinguishes-memory-use-from-stalled-processing/prd.md",
+    "board": "root",
+    "needs": [
+      "status",
+      "signals"
+    ]
+  },
+  {
+    "key": "contract",
+    "ref": "@memory/memory-experience-becomes-reliable-and-useful/memory-classifies-activity-acceptance-and-refusal",
+    "path": "/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/memory-classifies-activity-acceptance-and-refusal/prd.md",
+    "board": "memory",
+    "needs": []
+  }
+]

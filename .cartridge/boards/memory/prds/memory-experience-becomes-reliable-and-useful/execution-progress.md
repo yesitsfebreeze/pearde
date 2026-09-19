@@ -11,14 +11,20 @@ This is an execution checkpoint, not parent completion. Only the requested inven
 
 ## Current work
 
-The backlog/status leaf is under checked analysis claim. Remaining reliability and cross-owner leaves remain incomplete. Current memory and PRD hard owner audits pass, and isolation passes for twenty-one cartridges. Soft unrelated dirty/stray-file findings are preserved. No loaded runtime artifact has been replaced by this stack.
+The backlog/status leaf passed independent round three at 94/100 and is under checked implementation claim in an isolated lane. Remaining reliability and cross-owner leaves remain incomplete. Current memory and PRD hard owner audits pass, and isolation passes for twenty-one cartridges. Soft unrelated dirty/stray-file findings are preserved. No loaded runtime artifact has been replaced by this stack.
 
 ## Ownership and live-source limits
 
-The user chose owner-produced reconciliation for the actively changing Scope migration. A handoff request was queued to the inspected active Scope owner session; its replacement UI, required ASP support, root launcher/gitlinks and overlap with coordinator-codex-5 need a verified committed baseline before a Scope implementation lane starts. /tmp/memory-stack-scope-readiness contains pinned read-only evidence and delivery confirmation. No runtime claim was released or taken over.
+The user chose owner-produced reconciliation for the Scope migration. The owner supplied base b4345b6dc5d03d33900ff7fb793f7dd752f5757d and root a5b2719369a965b93301e441a04d8642289e087e, pinning memory d9161cd. Root verified that the committed base tree 987a5cd781046327fbfdfff23f54b4924751be8b equals the owner's independently built selection. Owner evidence records thirty UI tests, seventeen ASP tests and corrected temporary-project/PTY proof; see evidence/scope-owner-handoff-2026-09-19. The owner preserved unrelated work and made no memory-provider commit. The earlier runtime listener claim is now failed/unclaimed by its owner; this stack did not release or take it over. The Scope leaf must still be re-specified against the new paths and pass its own memory-specific acceptance.
 
 Concurrent memory rollback changes and README/help additions remain in the live checkout, preserved and unverified by committed receipts. Existing task migration, Scope presentation and full-body readback edits also remain separate. A committed test pass does not prove these dirty bytes or a loaded cartridge.
 
 ## Remaining acceptance
 
 No retrieval-quality or latency gate, real-model corpus comparison, final consumer/Scope integration, or controlled loaded-artifact restart/outage/recovery run has yet been completed for this stack. The initial characterization tests are retained as defect evidence, not repair proof. Parent completion remains blocked until all scoped leaves and required integration gates are verified and collected.
+
+## Readiness refresh
+
+The Scope owner subsequently committed finder interaction fixes as base dd75e7fd4d81f16c4422e8de0b95be7b16d0d59c and root de265427860e35ffbb658d63d9c1679e1cb877db, preserving the memory pin. The owner reports thirty-four UI tests and isolated final-binary/PTY checks; follow-up evidence is preserved separately from the original baseline handoff. These are owner baseline proofs, not acceptance of the memory Scope leaf.
+
+The inventory now includes the frozen-query prerequisite already present in the canonical recurrence/retrieval-use PRD. This corrects inventory drift without changing the canonical dependency graph. Existing retention receipt re-verification and frozen/readback reconciliation remain required before the evaluation and signal stages.

@@ -1,0 +1,5 @@
+Executing <Task pending name="message pump Container(id='waterfall-pane', classes='pane')" coro=<MessagePump._process_messages() running at /tmp/cartridge-scope-env/lib/python3.13/site-packages/textual/message_pump.py:566> wait_for=<Future pending cb=[Task.task_wakeup()] created at /Users/feb/.local/share/uv/python/cpython-3.13.15-macos-aarch64-none/lib/python3.13/asyncio/base_events.py:460> created at /Users/feb/.local/share/uv/python/cpython-3.13.15-macos-aarch64-none/lib/python3.13/asyncio/tasks.py:410> took 0.123 seconds
+----------------------------------------------------------------------
+Ran 30 tests in 8.425s
+
+OK

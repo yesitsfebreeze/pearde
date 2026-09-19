@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { atomic, codeRepo, contained, document, adoptFields, edit, fieldsProblem, fieldsRefusal, git, recordFields, hash, list, openBoxes, real, relative, repoRoot, resolve, scan, specs, type Prd } from './records';
 import { dependencies, feet, refusal } from './planner';
@@ -23,28 +24,95 @@ export function lane(prd: Prd) {
   // Include the owner in the branch identity: two boards can target one repository.
   return { directory: path.join(prd.board, '.lanes', slug), branch: 'lane/' + path.basename(prd.board) + '-' + slug };
 }
+// The submodule paths recorded at HEAD of a checkout, with their pinned commits.
+function gitlinks(tree: string) {
+  return git(tree, ['ls-tree', '-r', '-z', 'HEAD']).split('\0').map(entry => entry.match(/^160000 commit ([0-9a-f]+)\t(.+)$/)).filter(m => m !== null).map(m => ({ sha: m[1], path: m[2] }));
+}
+// `git worktree add` leaves submodules empty, so a lane of a superproject could not build or read
+// them. Check each one out as a detached worktree of the live submodule at the pinned commit.
+// ponytail: one level only; nested submodules stay empty until a board needs them.
+function seedSubmodules(code: string, directory: string) {
+  for (const link of gitlinks(directory)) {
+    const live = path.join(code, link.path);
+    if (!fs.existsSync(path.join(live, '.git')) || Bun.spawnSync(['git', '-C', live, 'cat-file', '-e', link.sha + '^{commit}']).exitCode) continue;
+    git(live, ['worktree', 'add', '--detach', path.join(directory, link.path), link.sha]);
+  }
+}
+// Git refuses to remove a worktree that holds other worktrees; the seeded checkouts go first,
+// leaving the empty directory an unpopulated submodule has, so the lane still reads clean.
+function removeLane(code: string, directory: string) {
+  for (const link of gitlinks(directory)) {
+    const seeded = path.join(directory, link.path);
+    if (!fs.statSync(path.join(seeded, '.git'), { throwIfNoEntry: false })?.isFile()) continue;
+    git(path.join(code, link.path), ['worktree', 'remove', '--force', seeded]);
+    fs.mkdirSync(seeded, { recursive: true });
+  }
+  git(code, ['worktree', 'remove', directory]);
+}
 function ensureSpecs(prd: Prd) {
   const published = specs(prd);
   if (!published.length && !prd.children.length) throw Error('specced requires at least one published spec');
   for (const spec of published) {
     if (!/^## Acceptance\b/m.test(spec.body) || !/\[[ xX~]\]/.test(spec.body)) throw Error(spec.file + ': missing acceptance checks');
     if (!list(spec.fm.footprint).length && !list(prd.fm.footprint).length) throw Error(spec.file + ': missing footprint');
-    if (!verificationBlocks(spec.text).length) throw Error(spec.file + ': missing executable verification');
+    const blocks = verificationBlocks(spec.text);
+    if (!blocks.length) throw Error(spec.file + ': missing executable verification');
+    for (const block of blocks) if (block.kind === 'test') testBlock(block.command, spec.file);
   }
 }
-export function verificationBlocks(text: string): string[] {
+export function verificationBlocks(text: string): { kind: 'sh' | 'test'; command: string }[] {
   // Only blocks under explicit Verify/Proof headings execute, never example snippets.
-  return text.split(/(?=^##\s)/m).filter(section => /^##\s+(?:Verify|Verification|Proof)\b/i.test(section)).flatMap(section => [...section.matchAll(/^```(?:sh|bash|shell)\s*\n([\s\S]*?)^```\s*$/gm)].map(m => m[1]));
+  return text.split(/(?=^##\s)/m).filter(section => /^##\s+(?:Verify|Verification|Proof)\b/i.test(section)).flatMap(section => [...section.matchAll(/^```(sh|bash|shell|test)\s*\n([\s\S]*?)^```\s*$/gm)].map(m => ({ kind: m[1] === 'test' ? 'test' as const : 'sh' as const, command: m[2] })));
+}
+// A `test` block names one `run:` command and the tests it must report as passed.
+export function testBlock(text: string, source = 'test block') {
+  let run = ''; const names: string[] = [];
+  for (const line of text.split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#'))) {
+    const [, key, value] = line.match(/^(run|pass):\s*(.+)$/) ?? [];
+    if (key === 'run' && !run) run = value;
+    else if (key === 'pass') names.push(value);
+    else throw Error(source + ': test block line must be one "run:" then "pass:" lines: ' + line);
+  }
+  if (!run || !names.length) throw Error(source + ': test block needs one "run:" and at least one "pass:"');
+  return { run, names };
+}
+const unescape = (s: string) => s.replace(/&quot;/g, '"').replace(/&apos;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+// Passed test names as the runner reported them: a JUnit report (bun), or cargo / nextest console lines.
+export function passedTests(log: string, junit: string): Set<string> {
+  const passed = new Set<string>();
+  for (const m of junit.matchAll(/<testcase\b[^>]*?\bname="([^"]*)"[^>]*?(\/>|>([\s\S]*?)<\/testcase>)/g)) if (!/<(failure|error|skipped)\b/.test(m[3] ?? '')) passed.add(unescape(m[1]));
+  for (const m of log.matchAll(/^test (\S+) \.\.\. ok$/gm)) passed.add(m[1]);
+  for (const m of log.matchAll(/^\s*PASS \[[^\]]*\] +(?:\(\d+\/\d+\) +)?\S+ (\S+)$/gm)) passed.add(m[1]);
+  return passed;
+}
+async function runTestBlock(text: string, cwd: string, signal?: AbortSignal) {
+  const { run, names } = testBlock(text);
+  const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'prd-test-')), log = path.join(scratch, 'log'), report = path.join(scratch, 'junit.xml');
+  try {
+    // Output goes to a file, not the capped pipe: a large suite must not hit the output limit.
+    const checked = await runProcess(['sh', '-eu', '-c', 'PRD_TEST_REPORT="$2"; export PRD_TEST_REPORT; exec >"$1" 2>&1; set --\n' + run, 'sh', log, report], { cwd, signal, timeout: 120_000, cap: 65536 });
+    const output = fs.existsSync(log) ? fs.readFileSync(log, 'utf8') : '', tail = output.slice(-4096);
+    if (checked.state !== 'completed') throw Error('verification ' + checked.state + ': ' + (checked.output || tail));
+    const passed = passedTests(output, fs.existsSync(report) ? fs.readFileSync(report, 'utf8') : '');
+    const missing = names.filter(name => ![...passed].some(p => p === name || p.endsWith('::' + name)));
+    if (missing.length) throw Error('verification failed: runner reported no pass for ' + missing.join(', ') + '\n' + tail);
+    return 'passed: ' + names.join(', ') + '\n' + tail;
+  } finally { fs.rmSync(scratch, { recursive: true, force: true }); }
 }
 export async function verify(prd: Prd, cwd: string, signal?: AbortSignal) {
-  const blocks = specs(prd).flatMap(spec => verificationBlocks(spec.text).map(command => ({ command, source: spec.file, digest: hash(spec.text) })));
+  const blocks = specs(prd).flatMap(spec => verificationBlocks(spec.text).map(block => ({ ...block, source: spec.file, digest: hash(spec.text) })));
   if (!blocks.length && !prd.children.length) throw Error('no executable verification');
   const evidence = [];
   for (const block of blocks) {
     if (signal?.aborted) throw Error('verification cancelled');
-    const checked = await runProcess(['sh', '-eu', '-c', block.command], { cwd, signal, timeout: 120_000, cap: 65536 });
-    if (checked.state !== 'completed') throw Error('verification ' + checked.state + ': ' + checked.output);
-    evidence.push({ source: block.source, digest: block.digest, command: block.command, exit_code: 0, output: checked.output });
+    let output: string;
+    if (block.kind === 'test') output = await runTestBlock(block.command, cwd, signal);
+    else {
+      const checked = await runProcess(['sh', '-eu', '-c', block.command], { cwd, signal, timeout: 120_000, cap: 65536 });
+      if (checked.state !== 'completed') throw Error('verification ' + checked.state + ': ' + checked.output);
+      output = checked.output;
+    }
+    evidence.push({ source: block.source, digest: block.digest, command: block.command, exit_code: 0, output });
   }
   return evidence;
 }
@@ -172,7 +240,7 @@ async function collect(prd: Prd, graph: Map<string, Prd>, opts: Options, signal?
   contractsUnchanged();
   const verifiedPaths = feet(prd).map(p => path.relative(code, p));
   if (verifiedPaths.length && (git(code, ['diff', '--name-only', candidate, '--', ...verifiedPaths]) || git(code, ['ls-files', '--others', '--exclude-standard', '--', ...verifiedPaths]))) throw Error('source footprint changed during integrated verification');
-  if (tree !== code) git(code, ['worktree', 'remove', work.directory]);
+  if (tree !== code) removeLane(code, work.directory);
   const specDigests = Object.fromEntries(specs(prd).map(s => [path.basename(s.file), hash(s.text)]));
   const receipt = '---\ncommit: ' + candidate + '\nspec-digests: ' + JSON.stringify(specDigests) + '\nchild-contracts: ' + JSON.stringify(childDigests) + '\n---\n\n# Collection\n\n' + (evidence.length ? evidence.map(e => `${e.source}: exit 0\n\nCommand SHA-256: ${hash(e.command)}\n\n\`\`\`text\n${e.output}\n\`\`\`\n`).join('\n') : 'container: every child done\n');
   atomic(path.join(prd.dir, 'collection.md'), receipt);
@@ -222,7 +290,7 @@ export async function transition(operation: string, board: string, args: string[
       ensureSpecs(prd);
       const work = lane(prd), code = codeRepo(prd);
       if (fs.existsSync(work.directory) || git(code, ['rev-parse', '--verify', 'refs/heads/' + work.branch], false)) throw Error('pre-existing lane must be inspected before claim');
-      if (!opts.dry) { fs.mkdirSync(path.dirname(work.directory), { recursive: true }); git(code, ['worktree', 'add', '-b', work.branch, work.directory, 'HEAD']); }
+      if (!opts.dry) { fs.mkdirSync(path.dirname(work.directory), { recursive: true }); git(code, ['worktree', 'add', '-b', work.branch, work.directory, 'HEAD']); seedSubmodules(code, work.directory); }
     }
     changes = { state: prd.state === 'open' ? 'analyzing' : 'claimed', claim: pos[1] + ' ' + new Date().toISOString() };
   } else if (operation === 'release') {

@@ -103,6 +103,33 @@ test('failed proof preserves source HEAD and never marks done', async () => {
   await execute('claim', board, ['one', 'worker']); const answer = await execute('collect', board, ['one']);
   expect(answer.exit_code).toBe(2); expect(git(code, ['rev-parse', 'HEAD'])).toBe(head); expect(scan(board).get('one')!.state).toBe('claimed');
 });
+function testSpec(file: string, block: string) {
+  atomic(path.join(path.dirname(file), 'specs/spec01.md'), `---\ncomplexity: 2\nfootprint: [seed.txt]\n---\n\n# Spec\n\n## Acceptance\n\n- [x] Named test passes\n\n## Verify\n\n\`\`\`test\n${block}\n\`\`\`\n`);
+}
+test('a test block collects only when the runner reports every named test as passed', async () => {
+  const cargo = `run: printf 'test engine::tests::bound_is_read ... ok\\ntest skipped_one ... ignored\\n'`;
+  let file = prd('one', 'specced', board, [], 'seed.txt'); testSpec(file, cargo + '\npass: skipped_one');
+  let answer = await execute('collect', board, ['one']); expect(answer.exit_code).toBe(2); expect(answer.error).toContain('no pass for skipped_one');
+  testSpec(file, 'pass: bound_is_read'); expect((await execute('specced', board, ['one'])).error).toContain('needs one "run:"');
+  testSpec(file, cargo + '\npass: bound_is_read'); answer = await execute('collect', board, ['one']); expect(answer.error).toBe(''); expect(answer.exit_code).toBe(0);
+  expect(fs.readFileSync(path.join(path.dirname(file), 'collection.md'), 'utf8')).toContain('passed: bound_is_read');
+  file = prd('two', 'specced', board, [], 'seed.txt');
+  testSpec(file, `run: printf '<testcase name="adds &quot;two&quot;" /><testcase name="fails one"><failure /></testcase>' > "$PRD_TEST_REPORT"\npass: adds "two"\npass: fails one`);
+  answer = await execute('collect', board, ['two']); expect(answer.error).toContain('no pass for fails one'); expect(answer.error).not.toContain('adds');
+});
+test('a lane checks out submodules at their pinned commits and collect removes them', async () => {
+  const sub = path.join(root, 'sub'); init(sub);
+  const pinned = git(sub, ['rev-parse', 'HEAD']);
+  git(code, ['-c', 'protocol.file.allow=always', 'submodule', 'add', '-q', sub, 'sub']); git(code, ['commit', '-qm', 'add sub']);
+  const file = prd('one', 'specced', board, [], 'seed.txt'); spec(file, `test "$(git -C sub rev-parse HEAD)" = ${pinned}\ntest "$(cat seed.txt)" = changed`);
+  git(path.join(root, 'records'), ['add', '.']); git(path.join(root, 'records'), ['commit', '-qm', 'records']);
+  expect((await execute('claim', board, ['one', 'worker'])).error).toBe('');
+  const work = lane(scan(board).get('one')!);
+  expect(git(path.join(work.directory, 'sub'), ['rev-parse', 'HEAD'])).toBe(pinned);
+  atomic(path.join(work.directory, 'seed.txt'), 'changed\n');
+  expect((await execute('collect', board, ['one'])).error).toBe('');
+  expect(fs.existsSync(work.directory)).toBe(false); expect(git(sub, ['worktree', 'list']).split('\n')).toHaveLength(1);
+});
 test('forged done state and old commit cannot substitute for collection evidence', () => {
   const file = prd('one', 'done'); edit(file, { commit: git(code, ['rev-parse', 'HEAD']) }); expect(completionProblem(scan(board).get('one')!)).not.toBeNull();
 });

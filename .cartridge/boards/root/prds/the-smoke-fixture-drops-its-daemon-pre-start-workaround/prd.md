@@ -1,5 +1,5 @@
 ---
-state: "claimed"
+state: "done"
 origin: requested
 priority: 50
 repo: "/Users/feb/dev/cartridge"
@@ -7,7 +7,7 @@ footprint:
 - ".cartridge/tests/integration/smoke.test.ts"
 needs:
 - "cartridge-mcp-waits-for-a-cold-host-to-settle-instead-of-giving-up-after-three-identical-polls"
-claim: "coordinator-5c-17 2026-09-19T14:12:14.716Z"
+commit: "b7103e36c5a7ce9e45a3c844b6823a5d3efa0f84"
 ---
 
 # the smoke fixture drops its daemon pre-start workaround
@@ -34,11 +34,11 @@ defect would not be caught there.
 
 ## Acceptance
 
-- [ ] The smoke fixture no longer pre-starts a daemon before `cartridge mcp`,
+- [x] The smoke fixture no longer pre-starts a daemon before `cartridge mcp`,
       and every case in `.cartridge/tests/integration/smoke.test.ts` passes, the
       cold `mcp` case ten times in a row.
-- [ ] The comment naming the cold-host PRD is removed with the workaround.
-- [ ] Not gated: with the cold-host fix reverted, a cold `mcp` run fails about 1
+- [x] The comment naming the cold-host PRD is removed with the workaround.
+- [x] Not gated: with the cold-host fix reverted, a cold `mcp` run fails about 1
       time in 5 (recorded: 2 of 12). The suite's cold runs catch such a revert
       about 91% of the time. This box is ticked from the recorded run in the
       spec plus the diff reviewer.

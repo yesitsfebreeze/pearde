@@ -30,12 +30,12 @@ In `.cartridge/tests/integration/smoke.test.ts`, `mcp` branch only:
 
 ## Acceptance
 
-- [ ] The `mcp` case no longer starts a daemon before `cartridge mcp`. All
+- [x] The `mcp` case no longer starts a daemon before `cartridge mcp`. All
       three cases of this file pass in one combined run (Verify block 1). The
       `mcp` case then passes cold 10 more times in a row (Verify block 2).
-- [ ] The comment naming the cold-host PRD is gone, and only the `proxy` case
+- [x] The comment naming the cold-host PRD is gone, and only the `proxy` case
       still starts a daemon itself (Verify block 3).
-- [ ] Not gated: with the cold-host fix reverted, a cold `mcp` run fails about
+- [x] Not gated: with the cold-host fix reverted, a cold `mcp` run fails about
       1 time in 5 (recorded: 2 of 12 against this spec's exact variant). The
       11 cold runs in blocks 1 and 2 catch such a revert about 91% of the time
       (1 − 0.8^11). This box is ticked from the recorded run, and the diff

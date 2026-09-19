@@ -1,0 +1,26 @@
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.00.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.01.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.02.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.03.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.04.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.05.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.06.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.07.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.08.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.09.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.10.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.11.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.12.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.13.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.14.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.15.rcgu.o unable to open object file: No such file or directory
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.21s
+     Running unittests src/lib.rs (/tmp/cartridge-memory-stack-baseline-target/debug/deps/rpc-64010245428f3d5b)
+
+running 1 test
+PROBE advancing writer=bootstrap::save_graph_guarded disk_epoch=1 graph_epoch=0 refusal=activity graph commit refused stale snapshot; reload required, inputs retained; pending=1 rollback=preserved
+PROBE after ordinary publication: retry processed=1 pending=0 disk_epoch=2; no reload required
+test experience::tests::experience_probe_actual_ordinary_save_window_then_retry ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 105 filtered out; finished in 0.02s
+

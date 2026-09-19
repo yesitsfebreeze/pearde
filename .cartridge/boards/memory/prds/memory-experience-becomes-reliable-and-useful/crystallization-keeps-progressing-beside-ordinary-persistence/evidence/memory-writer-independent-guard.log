@@ -1,0 +1,9 @@
+   Compiling commands v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/commands)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 3.17s
+     Running unittests src/lib.rs (/tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91)
+
+running 1 test
+test commands_serve::entry_point_tests::writer_boundary_stale_flush_preserves_disk_and_unflushed_ram ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 129 filtered out; finished in 0.01s
+

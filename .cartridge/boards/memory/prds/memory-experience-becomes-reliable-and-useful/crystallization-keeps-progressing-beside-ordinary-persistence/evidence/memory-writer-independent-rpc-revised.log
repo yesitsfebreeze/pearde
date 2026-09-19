@@ -1,0 +1,47 @@
+   Compiling store_core v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/store/core)
+   Compiling graph v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/graph)
+   Compiling retrieval-piece v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/retrieval/piece)
+   Compiling tick v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/tick)
+   Compiling ingest v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/ingest)
+   Compiling bootstrap v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/bootstrap)
+   Compiling retrieval v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/retrieval)
+   Compiling tick_loop v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/tick/loop)
+   Compiling store v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/store)
+   Compiling health v0.1.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/health)
+   Compiling rpc v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/rpc)
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.00.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.01.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.02.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.03.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.04.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.05.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.06.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.07.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.08.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.09.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.10.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.11.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.12.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.13.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.14.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b.rpc.540ca040f8547542-cgu.15.rcgu.o unable to open object file: No such file or directory
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 17.82s
+     Running unittests src/lib.rs (/tmp/memory-writer-independent-target/debug/deps/rpc-64010245428f3d5b)
+
+running 11 tests
+test experience::tests::experience_legacy_decode_preserves_large_preexisting_rows ... ok
+
+running 1 test
+test experience::tests::experience_missing_embedder_retains_acknowledged_input ... ok
+test experience::tests::experience_external_writer_blocks_without_discarding_ram ... ok
+test experience::tests::experience_failed_commit_restores_graph_and_retains_input ... ok
+test experience::tests::experience_concurrent_passes_commit_each_delivery_once ... ok
+test experience::tests::experience_read_only_search_never_enqueues_usage_on_fresh_or_cached_queries ... ok
+test experience::tests::experience_commit_refuses_older_full_flush_and_migrates_history ... ok
+test experience::tests::experience_asp_pages_reasons_and_usage_without_mutation ... ok
+test experience::tests::experience_crash_after_commit_preserves_receipts ... ok
+test experience::tests::experience_intake_retry_recurrence_restart_and_opposite_outcome ... ok
+test experience::tests::experience_ordinary_save_and_crystallization_preserve_dirty_work ... ok
+
+test result: ok. 11 passed; 0 failed; 0 ignored; 0 measured; 98 filtered out; finished in 0.41s
+

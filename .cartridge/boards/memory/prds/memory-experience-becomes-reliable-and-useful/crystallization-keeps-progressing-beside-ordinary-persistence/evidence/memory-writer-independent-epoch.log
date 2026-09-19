@@ -1,0 +1,29 @@
+   Compiling syn v2.0.119
+   Compiling regex-syntax v0.8.11
+   Compiling smallvec v1.15.2
+   Compiling parking_lot_core v0.9.12
+   Compiling regex-automata v0.4.16
+   Compiling parking_lot v0.12.5
+   Compiling phf_macros v0.11.3
+   Compiling tokio-macros v2.7.1
+   Compiling tracing-attributes v0.1.31
+   Compiling globset v0.4.19
+   Compiling tokio v1.53.1
+   Compiling phf v0.11.3
+   Compiling tracing v0.1.44
+   Compiling ignore v0.4.31
+   Compiling doxygen-rs v0.4.2
+   Compiling lmdb-master-sys v0.2.6
+   Compiling util v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/util)
+   Compiling base v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/base)
+   Compiling math v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/math)
+   Compiling heed v0.20.5
+   Compiling store_core v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/store/core)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 8.42s
+     Running unittests src/lib.rs (/tmp/memory-writer-independent-target/debug/deps/store_core-0092ab9c0269b990)
+
+running 1 test
+test tests::writer_epoch_corruption_is_not_ready_or_writable ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 76 filtered out; finished in 0.03s
+

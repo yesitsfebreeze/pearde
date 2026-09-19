@@ -1,0 +1,12 @@
+    Checking store_core v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/store/core)
+    Checking graph v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/graph)
+    Checking retrieval-piece v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/retrieval/piece)
+    Checking ingest v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/ingest)
+    Checking tick v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/tick)
+    Checking bootstrap v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/bootstrap)
+    Checking retrieval v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/retrieval)
+    Checking tick_loop v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/tick/loop)
+    Checking store v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/store)
+    Checking health v0.1.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/health)
+    Checking rpc v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/rpc)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 10.32s

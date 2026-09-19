@@ -1,0 +1,24 @@
+{
+  "base": "ff22be8dda3814e79b4d830c9904261b167af160",
+  "candidate": "d9161cd2f3a363915c7a7d642a4955e7a3836065",
+  "backup_directory": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/memory-writer-integration-backup-out2_qir",
+  "candidate_verified_paths": 14,
+  "index_clean": true,
+  "unrelated_original_statuses_and_hashes_preserved": true,
+  "original_live_doc_bytes_and_candidate_additions_preserved": true,
+  "concurrent_workspace_unverified": {
+    "README.md": {
+      "current_sha256": "9c043e9109c2630c5c649af18e818c40d65fa905bd24696c6069ac67b304eb02",
+      "newer_append_bytes": 411,
+      "newer_append_sha256": "88faae3630664d1bee76e87449befe53666e1fa6bc89db2090026a1328976ea3",
+      "newer_append": "\nBackground persistence and activity commits share a store coordinator through the durable flush and graph epoch update, so a competing commit cannot observe a newer store with an older graph epoch. A refused activity batch restores only changed vector and lexical index entries; unchanged vectors remain resident or in their disk snapshot rather than rebuilding the entire experience group while readers wait.\n"
+    },
+    ".cartridge/help.md": {
+      "current_sha256": "bc741307d5c41d147f591bd487954d56502e18f9995ee954910fa1f6379bd6d5",
+      "newer_append_bytes": 411,
+      "newer_append_sha256": "88faae3630664d1bee76e87449befe53666e1fa6bc89db2090026a1328976ea3",
+      "newer_append": "\nBackground persistence and activity commits share a store coordinator through the durable flush and graph epoch update, so a competing commit cannot observe a newer store with an older graph epoch. A refused activity batch restores only changed vector and lexical index entries; unchanged vectors remain resident or in their disk snapshot rather than rebuilding the entire experience group while readers wait.\n"
+    }
+  },
+  "history": "First checked collection refused dirty docs. Scoped exact candidate fast-forward succeeded. Byte assertion detected newer concurrent doc append, not Git replacement; no restore occurred. Accidentally started retry was cancelled before receipt publication. Root authorized preserving newer edits and rerunning committed-only verification without additional source mutation."
+}

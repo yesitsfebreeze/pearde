@@ -1,0 +1,58 @@
+--- a/src/bootstrap/src/lib.rs
++++ b/src/bootstrap/src/lib.rs
+@@ -120,7 +120,16 @@
+ 	};
+ 	match graph::persist::flush_snapshot(&snapshot, expected) {
+ 		Ok(store_core::FlushOutcome::Flushed { epoch }) => {
+-			graph.write().set_flushed_epoch(epoch);
++            if let Ok(probe_dir) = std::env::var("MEMORY_WRITER_REPRO_BARRIER") {
++                let dir = std::path::Path::new(&probe_dir);
++                std::fs::write(dir.join("committed"), epoch.to_string()).unwrap();
++                let deadline = std::time::Instant::now() + std::time::Duration::from_secs(10);
++                while !dir.join("release").exists() {
++                    assert!(std::time::Instant::now() < deadline, "writer probe barrier timed out");
++                    std::thread::sleep(std::time::Duration::from_millis(1));
++                }
++            }
++            graph.write().set_flushed_epoch(epoch);
+ 			Ok(())
+ 		}
+ 		Ok(store_core::FlushOutcome::RefusedStale {
+--- a/.cartridge/tests/unit/src/rpc/src/experience_test.rs
++++ b/.cartridge/tests/unit/src/rpc/src/experience_test.rs
+@@ -266,3 +266,35 @@
+ 	assert_eq!(queue.pending_count(), 1);
+ 	assert_eq!(saves.load(Ordering::Relaxed), 1);
+ }
++
++#[tokio::test(flavor = "multi_thread")]
++async fn experience_probe_actual_ordinary_save_window_then_retry() {
++    let dir = tempfile::tempdir().unwrap();
++    let server = server(dir.path());
++    append(&server, util::now_ms(), "failed");
++    let store = server.graph.read().store().unwrap();
++    let shared = server.graph.clone();
++    let cfg = server.cfg.clone();
++    let worker = std::thread::spawn(move || bootstrap::save_graph_guarded(&shared, &cfg));
++    let barrier_dir = std::path::PathBuf::from(std::env::var("MEMORY_WRITER_REPRO_BARRIER").unwrap());
++    let deadline = std::time::Instant::now() + std::time::Duration::from_secs(10);
++    while !barrier_dir.join("committed").exists() {
++        assert!(std::time::Instant::now() < deadline);
++        std::thread::sleep(std::time::Duration::from_millis(1));
++    }
++    assert_eq!(store.read_epoch(), 1);
++    assert_eq!(server.graph.read().flushed_epoch(), 0);
++    let refusal = drain(&server).unwrap_err();
++    assert!(refusal.contains("stale"), "{refusal}");
++    assert_eq!(store.experience_stats().unwrap()[0], 1);
++    assert!(!server.graph.read().memories.contains_key(ROOT));
++    println!("PROBE advancing writer=bootstrap::save_graph_guarded disk_epoch=1 graph_epoch=0 refusal={refusal}; pending=1 rollback=preserved");
++    std::fs::write(barrier_dir.join("release"), b"continue").unwrap();
++    worker.join().unwrap().unwrap();
++    assert_eq!(server.graph.read().flushed_epoch(), 1);
++    let done = drain(&server).unwrap();
++    assert_eq!(done["processed"], 1);
++    assert_eq!(store.experience_stats().unwrap()[0], 0);
++    assert_eq!(store.read_epoch(), 2);
++    println!("PROBE after ordinary publication: retry processed=1 pending=0 disk_epoch=2; no reload required");
++}

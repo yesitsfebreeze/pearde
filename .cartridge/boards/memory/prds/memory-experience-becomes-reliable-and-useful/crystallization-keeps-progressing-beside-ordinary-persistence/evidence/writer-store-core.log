@@ -1,0 +1,101 @@
+    Blocking waiting for file lock on build directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.00.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.01.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.02.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.03.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.04.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.05.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.06.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.07.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.08.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.09.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.10.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.11.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.12.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.13.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.14.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990.store_core.bbbd1129d97289e6-cgu.15.rcgu.o unable to open object file: No such file or directory
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 6.86s
+     Running unittests src/lib.rs (/tmp/cartridge-memory-stack-baseline-target/debug/deps/store_core-0092ab9c0269b990)
+
+running 77 tests
+test cold::memory_contract_tests::graph_export_missing_store_does_not_create_files ... ok
+test cold::memory_contract_tests::corrupt_row_aborts_snapshot_instead_of_silently_skipping_it ... ok
+test experience::tests::experience_intake_enforces_delivery_window_and_payload_bound ... ok
+test layout_guard::the_cold_row_layout_has_not_changed_without_a_version_bump ... ok
+test layout_guard::the_embed_stamp_layout_has_not_changed_without_a_version_bump ... ok
+test layout_guard::the_fixtures_actually_encode_something ... ok
+test layout_guard::the_graph_meta_layout_has_not_changed_without_a_version_bump ... ok
+test experience::tests::experience_receipts_survive_commit_and_expire_without_accepting_old_delivery ... ok
+test layout_guard::the_stored_memory_layout_has_not_changed_without_a_version_bump ... ok
+test legacy::legacy_tests::bytes_that_are_not_the_layout_are_refused_rather_than_guessed_at ... ok
+test legacy::legacy_tests::a_v13_memory_row_loads_through_the_store_and_marks_it_migrated ... ok
+test health::tests::health_snapshot_empty_and_corrupt_stamp_do_not_repair ... ok
+test cold::memory_contract_tests::graph_export_full_relationships_keep_group_provenance ... ok
+test legacy::legacy_tests::skipped_v12_release_decodes_full_hot_row ... ok
+test legacy::legacy_tests::the_v13_layout_decodes_with_every_field_in_place ... ok
+test cold::memory_contract_tests::graph_export_refuses_malformed_cold_vector_bytes_without_partial_success ... ok
+test cold::memory_contract_tests::graph_export_reads_hot_and_cold_without_modifying_the_database ... ok
+test health::tests::health_snapshot_accepts_legacy_table_without_migration ... ok
+test legacy::legacy_tests::health_snapshot_retains_v13_rows_without_migrating_durable_bytes ... ok
+test lock::lock_tests::inherited_description_requires_the_bounded_retry ... ok
+test lock::lock_tests::tests::holder_reports_free_and_taken ... ok
+test lock::lock_tests::tests::the_lock_file_is_not_the_lock ... ok
+test health::tests::health_snapshot_missing_corrupt_and_missing_root_are_explicit ... ok
+test tests::a_readable_older_version_is_migrated_and_an_unreadable_one_is_not ... ok
+test tests::a_changed_embed_model_or_dimension_is_flagged ... ok
+test tests::a_v6_row_is_rejected_rather_than_misdecoded ... ok
+test tests::an_embedding_encodes_byte_identically_to_the_vec_it_replaced ... ok
+test tests::a_cold_row_missing_its_tail_is_never_decoded_as_a_stampless_entity ... ok
+test tests::a_row_read_in_an_older_format_is_remembered_by_the_store_that_read_it ... ok
+test tests::an_unstamped_store_adopts_the_current_embed_model ... ok
+test tests::codec_prepends_format_version ... ok
+test tests::codec_roundtrips_a_struct ... ok
+test tests::an_unreadable_stamp_is_neither_missing_nor_a_match ... ok
+test tests::cached_cold_access_stamps_follow_every_write ... ok
+test tests::cold_latest_wins ... ok
+test lock::lock_tests::readiness_status_lock_sample_preserves_absence_bytes_and_held_lock ... ok
+test health::tests::health_snapshot_preserves_data_stamp_and_writer_claim ... ok
+test lock::lock_tests::tests::a_second_acquire_is_refused_and_names_the_holder ... ok
+test lock::lock_tests::tests::a_rewrite_in_progress_refuses_the_process_that_would_clobber_it ... ok
+test tests::cold_rekey_leaves_a_current_row_and_an_originless_row_alone ... ok
+test lock::lock_tests::tests::one_store_under_two_names_is_one_lock ... ok
+test tests::cold_rekey_moves_a_row_the_hot_move_map_never_named ... ok
+test tests::cold_rekey_moves_the_row_and_its_vector_and_leaves_nothing_behind ... ok
+test lock::lock_tests::readiness_status_lock_rejects_fifo_symlink_and_replacement_before_locking ... ok
+test tests::cold_rekey_refuses_to_clobber_a_row_already_at_the_destination ... ok
+test tests::cold_rekey_trips_the_cross_check_when_the_hot_map_disagrees - should panic ... ok
+test tests::cold_rekey_returns_only_the_rows_whose_key_actually_changed ... ok
+test tests::cold_search_breaks_cosine_ties_by_id_ascending ... ok
+test tests::cold_search_ranks_by_cosine ... ok
+test tests::cold_spill_round_trips_the_temporal_triple ... ok
+test tests::cold_relocate_moves_a_parked_file_row_and_leaves_the_rest ... ok
+test tests::decode_rejects_unknown_version ... ok
+test tests::cold_spill_then_get ... ok
+test tests::cold_vectors_carry_no_version_byte_and_are_never_read_as_one ... ok
+test tests::compact_dir_skips_a_store_below_the_min_size ... ok
+test tests::corrupt_memory_value_is_skipped ... ok
+test tests::get_absent_is_none ... ok
+test tests::epoch_starts_at_zero_and_every_full_save_bumps_it ... ok
+test tests::put_get_remove_roundtrip ... ok
+test tests::save_all_prunes_removed_memories ... ok
+test tests::flush_guarded_refuses_a_stale_smaller_snapshot_and_keeps_disk_rows ... ok
+test tests::snapshot_cold_rows_and_stamp_all_decode ... ok
+test tests::stored_memory_handles_empty_vectors ... ok
+test tests::stored_memory_roundtrip_quantizes_and_drops_gnn ... ok
+test tests::stored_memory_roundtrips_temporal_stamps ... ok
+test tests::cold_rekey_does_not_trim_the_tier ... ok
+test tests::save_then_load_graph_roundtrip ... ok
+test tests::reopen_persists_data ... ok
+test tests::single_memory_save_load_delete ... ok
+test tests::scan_returns_all_rows ... ok
+test tests::the_guarded_write_path_notes_an_old_epoch_row_too ... ok
+test tests::the_embed_stamp_survives_reopen ... ok
+test tests::writer_epoch_corruption_is_not_ready_or_writable ... ok
+test tests::the_prune_spares_rows_named_in_spare ... ok
+test tests::compact_dir_shrinks_after_bulk_delete ... ok
+test tests::cold_search_selects_exactly_what_the_linear_scan_did ... ok
+test cold::memory_contract_tests::spilling_past_fifty_thousand_rows_preserves_every_row ... ok
+
+test result: ok. 77 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 1.35s
+

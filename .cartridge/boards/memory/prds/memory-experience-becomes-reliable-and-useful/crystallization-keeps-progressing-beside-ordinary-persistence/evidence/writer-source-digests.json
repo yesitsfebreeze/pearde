@@ -1,0 +1,19 @@
+{
+  "base": "ff22be8dda3814e79b4d830c9904261b167af160",
+  "files": {
+    ".cartridge/help.md": "77430d99b2e48dc363e358f222b4463ef659f01db04568aea12abd6e6d981153",
+    ".cartridge/tests/unit/src/bootstrap/src/writer_test.rs": "9a85834845c4178fe25306e9f984073b09e082c558247bb14275a79a2b7447bf",
+    ".cartridge/tests/unit/src/commands/src/commands_serve/entry_point_tests.rs": "bd96a377a7cdbe783719ad3a141cb9a45616c1fdab452c94c91e9c33ac458c4f",
+    ".cartridge/tests/unit/src/rpc/src/experience_test.rs": "45f3875e1a0220f960544ffaafdd03936f11b16beb03cc98a75989c527a1eaa6",
+    ".cartridge/tests/unit/src/store/core/src/lib/tests.rs": "40bac0d45caff04fa0755ea07f7f4212cb89209a13c7d6aab5f1dddfbdcc45b3",
+    "Cargo.lock": "bc67da3f96c513da203ece66d2ba36e2e5cf170fe25f38b700657404542f9197",
+    "README.md": "4b01d9aa786f64045475fba6b99358eecc85561d0f0996fe4ee5e797dc7e6d5b",
+    "src/bootstrap/Cargo.toml": "7b5f718e024cba2ac0f1b5295f398e0329e337a09b7cc2a4ff4e827b5bd39733",
+    "src/bootstrap/src/lib.rs": "d119cc19f0870cbe471c6e948a087c2ba5133fc3b6cf5cafe07060f22f72052d",
+    "src/commands/src/commands_serve.rs": "32ef19a34727b722c5e9d4460bab61da8b2b74963b760eb80a698546062aed1d",
+    "src/rpc/src/experience/drain.rs": "1c52a3f2a69e6b1ed8eefd42f8906309b41d6eba9fa230aa76686b5454c76a74",
+    "src/rpc/src/experience/mod.rs": "82800dcaa41b57e2e837eadecdf0f6bd92fe81bb0d9688fcc9f0f133bcac20f0",
+    "src/store/core/src/lib.rs": "11ef8e77d957120385fcb628061906936df31781fa1f63923b730bb13a52b888",
+    "src/tick/loop/src/tick_tasks.rs": "d612b0453fe7ba3b5ec54b2b7ac2614db154e8fb7e3f512f4006738e9996c047"
+  }
+}

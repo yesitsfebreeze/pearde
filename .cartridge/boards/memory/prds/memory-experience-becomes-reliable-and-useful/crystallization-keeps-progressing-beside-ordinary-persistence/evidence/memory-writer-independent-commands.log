@@ -1,0 +1,43 @@
+   Compiling rustix v1.1.4
+   Compiling utf8parse v0.2.2
+   Compiling anstyle-query v1.1.5
+   Compiling anstyle v1.0.14
+   Compiling colorchoice v1.0.5
+   Compiling is_terminal_polyfill v1.70.2
+   Compiling heck v0.5.0
+   Compiling strsim v0.11.1
+   Compiling clap_lex v1.1.0
+   Compiling rpc v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/rpc)
+   Compiling clap_derive v4.6.4
+   Compiling hub v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/hub)
+   Compiling anstyle-parse v1.0.0
+   Compiling anstream v1.0.0
+   Compiling terminal_size v0.4.4
+   Compiling tempfile v3.27.0
+   Compiling clap_builder v4.6.2
+   Compiling clap v4.6.4
+   Compiling commands v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/commands)
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.00.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.01.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.02.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.03.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.04.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.05.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.06.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.07.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.08.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.09.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.10.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.11.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.12.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.13.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.14.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91.commands.f3ee4bbbc8fe68c5-cgu.15.rcgu.o unable to open object file: No such file or directory
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 29.75s
+     Running unittests src/lib.rs (/tmp/memory-writer-independent-target/debug/deps/commands-8c9813afb1aa9a91)
+
+running 1 test
+test commands_serve::entry_point_tests::reconcile_if_stale_preserves_ram_when_the_store_advanced ... ok
+
+test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 129 filtered out; finished in 0.01s
+

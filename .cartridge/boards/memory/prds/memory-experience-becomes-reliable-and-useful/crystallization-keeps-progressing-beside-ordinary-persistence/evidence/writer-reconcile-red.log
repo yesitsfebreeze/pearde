@@ -1,0 +1,37 @@
+   Compiling bootstrap v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/bootstrap)
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/bootstrap-d0bfd9d3839c0d6e.bootstrap.24704bb0da1128af-cgu.0.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/bootstrap-d0bfd9d3839c0d6e.bootstrap.24704bb0da1128af-cgu.1.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/bootstrap-d0bfd9d3839c0d6e.bootstrap.24704bb0da1128af-cgu.2.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/cartridge-memory-stack-baseline-target/debug/deps/bootstrap-d0bfd9d3839c0d6e.bootstrap.24704bb0da1128af-cgu.3.rcgu.o unable to open object file: No such file or directory
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 4.17s
+     Running unittests src/lib.rs (/tmp/cartridge-memory-stack-baseline-target/debug/deps/bootstrap-d0bfd9d3839c0d6e)
+
+running 4 tests
+test writer_tests::writer_reconciliation_waits_for_publication_and_preserves_dirty_ram ... FAILED
+test writer_tests::writer_external_advance_never_automatically_replaces_ram ... FAILED
+test writer_tests::writer_gates_are_independent_between_stores ... ok
+test writer_tests::writer_publication_is_coordinated_without_holding_graph_lock ... ok
+
+failures:
+
+---- writer_tests::writer_reconciliation_waits_for_publication_and_preserves_dirty_ram stdout ----
+
+thread 'writer_tests::writer_reconciliation_waits_for_publication_and_preserves_dirty_ram' (10620831) panicked at src/bootstrap/src/../../../.cartridge/tests/unit/src/bootstrap/src/writer_test.rs:108:5:
+reconciliation must wait for ordinary epoch publication
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- writer_tests::writer_external_advance_never_automatically_replaces_ram stdout ----
+
+thread 'writer_tests::writer_external_advance_never_automatically_replaces_ram' (10620828) panicked at src/bootstrap/src/../../../.cartridge/tests/unit/src/bootstrap/src/writer_test.rs:129:5:
+assertion `left == right` failed
+  left: ""
+ right: "operator must preserve this"
+
+
+failures:
+    writer_tests::writer_external_advance_never_automatically_replaces_ram
+    writer_tests::writer_reconciliation_waits_for_publication_and_preserves_dirty_ram
+
+test result: FAILED. 2 passed; 2 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+
+error: test failed, to rerun pass `-p bootstrap --lib`

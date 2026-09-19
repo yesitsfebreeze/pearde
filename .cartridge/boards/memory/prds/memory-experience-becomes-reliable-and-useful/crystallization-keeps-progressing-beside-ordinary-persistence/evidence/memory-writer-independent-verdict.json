@@ -1,0 +1,63 @@
+{
+  "verdict": "PASS",
+  "scope": "writer coordination leaf only",
+  "base_commit": "ff22be8dda3814e79b4d830c9904261b167af160",
+  "verified_source_manifest": "/tmp/memory-writer-independent-source-manifest.json",
+  "changed_paths": 14,
+  "spec_sha256": "19e9ed3c40ebdbacc10fe1f136449c4661f6b0d4026ad213bc2cd966a26a0434",
+  "named_tests": {
+    "bootstrap-revised": [
+      "writer_publication_is_coordinated_without_holding_graph_lock",
+      "writer_gates_are_independent_between_stores",
+      "writer_reconciliation_waits_for_publication_and_preserves_dirty_ram",
+      "writer_external_advance_never_automatically_replaces_ram"
+    ],
+    "rpc-revised": [
+      "experience_ordinary_save_and_crystallization_preserve_dirty_work",
+      "experience_external_writer_blocks_without_discarding_ram",
+      "experience_concurrent_passes_commit_each_delivery_once",
+      "experience_crash_after_commit_preserves_receipts",
+      "experience_commit_refuses_older_full_flush_and_migrates_history",
+      "experience_failed_commit_restores_graph_and_retains_input"
+    ],
+    "epoch": [
+      "writer_epoch_corruption_is_not_ready_or_writable"
+    ],
+    "commands": [
+      "reconcile_if_stale_preserves_ram_when_the_store_advanced"
+    ],
+    "guard": [
+      "writer_boundary_stale_flush_preserves_disk_and_unflushed_ram"
+    ],
+    "per-memory-guard": [
+      "do_persist_skips_overwriting_a_memory_when_the_graph_is_stale"
+    ]
+  },
+  "all_test_count": 19,
+  "check_exit": 0,
+  "fmt_exit": 0,
+  "review": [
+    "gate precedes graph guards on save, crystallization and maintenance reconciliation",
+    "local epoch publication serialized; genuine divergence retains dirty RAM",
+    "fallible authoritative epoch reads and guarded writes reject corruption",
+    "stale full-flush guard and per-memory stale guard preserved",
+    "real child exit73 receipt recovery passed",
+    "sole production reconciliation caller ignores bool; no implicit reload-dependent branch remains"
+  ],
+  "red_evidence": "/tmp/memory-writer-reconcile-red.log",
+  "limitations": [
+    "Source was verified in isolated PRD lane, not activated.",
+    "Lane was uncommitted; bind subsequent commit to exact manifest before collection.",
+    "Parent quality, latency, loaded integration and owner audits remain outside this leaf verdict."
+  ],
+  "logs": [
+    "/tmp/memory-writer-independent-bootstrap-revised.log",
+    "/tmp/memory-writer-independent-rpc-revised.log",
+    "/tmp/memory-writer-independent-epoch.log",
+    "/tmp/memory-writer-independent-commands.log",
+    "/tmp/memory-writer-independent-guard.log",
+    "/tmp/memory-writer-independent-per-memory-guard.log",
+    "/tmp/memory-writer-independent-check-revised.log",
+    "/tmp/memory-writer-independent-fmt-final.log"
+  ]
+}

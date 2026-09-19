@@ -1,0 +1,18 @@
+   Compiling store_core v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/store/core)
+   Compiling graph v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/graph)
+   Compiling bootstrap v2.0.0 (/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/memory/.lanes/memory-experience-becomes-reliable-and-useful-crystallization-keeps-progressing-beside-ordinary-persistence/src/bootstrap)
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/bootstrap-d0bfd9d3839c0d6e.bootstrap.24704bb0da1128af-cgu.0.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/bootstrap-d0bfd9d3839c0d6e.bootstrap.24704bb0da1128af-cgu.1.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/bootstrap-d0bfd9d3839c0d6e.bootstrap.24704bb0da1128af-cgu.2.rcgu.o unable to open object file: No such file or directory
+warning: (arm64) /tmp/memory-writer-independent-target/debug/deps/bootstrap-d0bfd9d3839c0d6e.bootstrap.24704bb0da1128af-cgu.3.rcgu.o unable to open object file: No such file or directory
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 11.05s
+     Running unittests src/lib.rs (/tmp/memory-writer-independent-target/debug/deps/bootstrap-d0bfd9d3839c0d6e)
+
+running 4 tests
+test writer_tests::writer_external_advance_never_automatically_replaces_ram ... ok
+test writer_tests::writer_gates_are_independent_between_stores ... ok
+test writer_tests::writer_publication_is_coordinated_without_holding_graph_lock ... ok
+test writer_tests::writer_reconciliation_waits_for_publication_and_preserves_dirty_ram ... ok
+
+test result: ok. 4 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.09s
+

@@ -1,0 +1,7 @@
+{
+  "commit": "d9161cd2f3a363915c7a7d642a4955e7a3836065",
+  "base": "ff22be8dda3814e79b4d830c9904261b167af160",
+  "verified_manifest": "memory-writer-independent-source-manifest.json",
+  "matched_paths": 14,
+  "independent_verdict": "PASS"
+}

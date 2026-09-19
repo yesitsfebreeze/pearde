@@ -1,5 +1,5 @@
 ---
-state: "analyzing"
+state: "done"
 origin: requested
 priority: 100
 repo: "/Users/feb/dev/cartridge"
@@ -16,7 +16,7 @@ footprint:
   - .cartridge/memos/system/shell-tools.md
   - .cartridge/memos/routine/arena.md
   - .cartridge/tests/integration/asp-code-lookup.test.ts
-claim: "coordinator-e4-3 2026-09-19T14:53:52.391Z"
+commit: "147fecf88a3a5ac14534be9573508a96ced2908a"
 ---
 
 # Agents find code through ASP

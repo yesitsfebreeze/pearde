@@ -1,0 +1,1 @@
+{"operation":"collect","board":"/Users/feb/dev/cartridge/prd.ctg/.cartridge/boards/prd","exit_code":2,"output":"","error":"error: Your local changes to the following files would be overwritten by merge:\n\t.cartridge/help.md\n\tREADME.md\nPlease commit your changes or stash them before you merge.\nAborting","changed":[],"verification":[]}

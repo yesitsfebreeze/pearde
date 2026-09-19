@@ -1,0 +1,16 @@
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/collection-proof.test.ts:
+(pass) explicit reverify refreshes committed drift and preserves prior receipt [4280.58ms]
+(pass) reverify refuses changed contract missing proof and active ownership [1513.84ms]
+(pass) reverify refuses unresolved dependencies and failing proof [2564.98ms]
+(pass) committed collection preserves dirty tails and reports workspace drift [1899.38ms]
+(pass) legacy receipts remain strict and later committed drift needs reverify [2834.61ms]
+(pass) reverification refreshes child rollups without automatic vouchers [14808.97ms]
+(pass) verification races cancellation and history tampering fail closed [6064.81ms]
+(pass) committed verification tests committed bytes rather than dirty workspace [597.53ms]
+
+ 8 pass
+ 0 fail
+ 87 expect() calls
+Ran 8 tests across 1 file. [34.60s]

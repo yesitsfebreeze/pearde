@@ -1,0 +1,891 @@
+{
+  "observed_at": "2026-09-19T18:25:07.207876+00:00",
+  "source_before": "ad71d3eb48b5589051882f4b409299ca9ffe10dc",
+  "candidate": "7a44c88fba2322e6c4fa990da24407b3f02b6123",
+  "allowed_paths": [
+    ".cartridge/docs/collection-proof.md",
+    ".cartridge/help.md",
+    ".cartridge/tests/collection-proof.test.ts",
+    "README.md",
+    "src/cli.ts",
+    "src/collection-proof.ts",
+    "src/engine.ts",
+    "src/lifecycle.ts"
+  ],
+  "backup_directory": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/prd-lifecycle-integration-c6p95rww",
+  "documents": {
+    "README.md": {
+      "backup": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/prd-lifecycle-integration-c6p95rww/README.md",
+      "before_sha256": "feb5c5906a8c9c333b47e75fcf45431d4d1a87d3cf19ecec27827f935c5e9801",
+      "candidate_blob": "0905df6739286373b0ce99bf8eb0f70a4f6264aa",
+      "after_sha256": "620e39d59b7dea9f3de1543bcfe11828a5565fd9440765bafe6d4e0ac4568d9c"
+    },
+    ".cartridge/help.md": {
+      "backup": "/var/folders/_p/tzmzw3m10kg7sg9hc7_mkm7w0000gn/T/prd-lifecycle-integration-c6p95rww/.cartridge__help.md",
+      "before_sha256": "9405f9c530a19a4d5550b0ecdf922b8bb37b6dc9d423618f4fb18081a38810b5",
+      "candidate_blob": "4b9b1d40fad93367a72f1d7b9f579288f48bdad1",
+      "after_sha256": "0daa476954291c65c1d3d4ff3f874b525bf6586f5660a6a36f89509af044d89e"
+    }
+  },
+  "unrelated_dirty_paths": {
+    ".cartridge/boards/agent/prds/an-event-declares-its-type/prd.md": {
+      "status": " M",
+      "sha256": "5ff636bc976710bf3d4f0527d464abfd1fee18bafc2c0310b13504135936f18c"
+    },
+    ".cartridge/boards/agent/prds/an-event-declares-its-type/review.md": {
+      "status": " M",
+      "sha256": "ae0b6f375d046e3866ef47e2278a8c861678b5524abc06ae759994b75552e837"
+    },
+    ".cartridge/boards/auth/prds/auth-writes-the-router-s-credential-file-from-pass/prd.md": {
+      "status": " M",
+      "sha256": "c5493224fd392ae9e73a227bf9acc6c788ad6e43b9b856bbc469b0969ef58af5"
+    },
+    ".cartridge/boards/harness/prds/jev-picks-which-memos-and-entities-enter-the-context/prd.md": {
+      "status": " M",
+      "sha256": "8563def4014ad0485924480821a9a6edc6dcb9fadca8bff12cdaf974e5c4aba2"
+    },
+    ".cartridge/boards/harness/prds/the-turn-names-the-files-that-changed-underneath-it/prd.md": {
+      "status": " M",
+      "sha256": "9a36424810f339de5e0da1a6085eca008745972aa0cfcba201f8b113e93f9d2b"
+    },
+    ".cartridge/boards/live/prds/the-voice-runs-on-this-machine-with-no-network/live-speaks-and-listens-through-local-sidecars/the-pipeline-hears-thinks-and-speaks-with-portable-runtimes/kokoro-speaks-through-onnx-runtime-or-refuses-the-model-it-needs/prd.md": {
+      "status": " M",
+      "sha256": "09910c498fb53fbc65533726324487117b7c12c771a93b1d6ffe866fd38fc4d5"
+    },
+    ".cartridge/boards/memo/prds/memo-resolve-asks-jev-which-memos-match-the-situation/prd.md": {
+      "status": " M",
+      "sha256": "b76ca2c7a86891bfe8284f9177031183d3b7237cc31b9580ee4849d53739b33a"
+    },
+    ".cartridge/boards/memory/prds/heat-is-deposited-on-read-back-not-on-delivery/prd.md": {
+      "status": " M",
+      "sha256": "069bacba3a840832156c2577b8454400e4871827a649f7f2519a66f0d79d2710"
+    },
+    ".cartridge/boards/memory/prds/the-cold-tier-scales-past-a-linear-scan/the-cold-tier-has-a-vamana-index-that-follows-every-cold-write/every-cold-write-is-recorded-in-a-sequenced-since-build-set/prd.md": {
+      "status": " M",
+      "sha256": "41c172cc65a15f3397cf404ebacc70e47a29f38cd7129028e8884b83af9fb531"
+    },
+    ".cartridge/boards/policy/prds/bounded-search-guard-rules/policy-refusals-and-overrides-reach-the-caller-and-the-observation-journal/prd.md": {
+      "status": " M",
+      "sha256": "f017b2aad93ed5957dd5bd3d7ca0e9621ff358a5bac0c0933205514cabd8aed5"
+    },
+    ".cartridge/boards/policy/prds/bounded-search-guard-rules/policy-refuses-unbounded-searches-with-a-teaching-reason/prd.md": {
+      "status": " M",
+      "sha256": "47d74dda04b5e558f61950c569d0650d1a6a34e4a62a4d0ce8a9f097b78c67ba"
+    },
+    ".cartridge/boards/policy/prds/bounded-search-guard-rules/the-policy-owner-gate-runs-against-the-current-host/prd.md": {
+      "status": " M",
+      "sha256": "6d37f5902683b7cb21297cc8365140d6bffa82a8b9540ac436f0545960f12bcf"
+    },
+    ".cartridge/boards/pty/prds/a-shell-read-answers-while-a-foreground-program-holds-the-pty/prd.md": {
+      "status": " M",
+      "sha256": "9e5006dcf0abcb9e925f20ae84ff6d6f461835e77e2ab3f1a85ac867df19d829"
+    },
+    ".cartridge/boards/root/prds/jev-decides-every-closed-set-question-over-the-asp-world/every-jev-decision-is-an-asp-entity-and-its-recorded-outcome-tunes-the-gate/prd.md": {
+      "status": " M",
+      "sha256": "d584788aa8243609df6e3ec996d400b4730ca177c962f2939eee342a4f097451"
+    },
+    ".cartridge/boards/root/prds/repo-checks-cartridge/the-checks-cartridge-exists-and-runs-a-repository-s-declared-checks/prd.md": {
+      "status": " M",
+      "sha256": "da25a65c1592071616a1a861eb98b3c251c323ab794c69393f1c0bb6fabb678c"
+    },
+    ".cartridge/boards/root/prds/the-event-ring-keeps-every-event-forever-by-rolling-it-into-day-week-month-and-year-tiers-under-asp/prd.md": {
+      "status": " M",
+      "sha256": "0da4725a9dc8c9be56c7cc96597587d927da362594471657740b6737d1c63a75"
+    },
+    ".cartridge/boards/root/prds/the-isolation-gate-reads-the-composition-profile/an-optional-need-with-no-provider-still-loads/prd.md": {
+      "status": " M",
+      "sha256": "da10d2e4b108fd92415214daaf074f5ed07d5034668f64efb1e01eab808cfc72"
+    },
+    ".cartridge/boards/root/prds/the-voice-can-look-something-up-on-the-internet-when-the-answer-is-not-in-the-repository/prd.md": {
+      "status": " M",
+      "sha256": "79b680518b3cebdcf36f17ef6f8724f2e8f76bffbc41c3d66b54cdaa4c99b62a"
+    },
+    ".cartridge/boards/root/prds/tool-lsp-answers-must-carry-the-tool-result-envelope/prd.md": {
+      "status": " M",
+      "sha256": "1b79e361415a3be30291842c8f9f438d873dffb50ce3d936c06711b9c19af5ab"
+    },
+    ".cartridge/boards/root/settings.md": {
+      "status": " M",
+      "sha256": "5d6cf06c53430727e75e52e5ac839e1136af7122bdfc16c3be294d0bfbf360e3"
+    },
+    ".cartridge/boards/router/prds/a-route-that-refuses-reasoning-keeps-answering-without-it/prd.md": {
+      "status": " M",
+      "sha256": "70b4537f2f7f93a7b97036012de7a585a4afd2f042f767abbaf50f011d435194"
+    },
+    ".cartridge/boards/router/prds/jev-routes-a-request-to-a-model-tier-by-intent/prd.md": {
+      "status": " M",
+      "sha256": "423d07e1d91e3cef9663d31bd79f256670d5e7fab0d2b8c1d64f047dda928092"
+    },
+    ".cartridge/boards/runtime/prds/a-listener-subscribes-to-event-types/prd.md": {
+      "status": " M",
+      "sha256": "b505bca81557d2e71a48290f792b419440312a06e9bf7b37c3ffd6f9b8e2c464"
+    },
+    ".cartridge/boards/runtime/prds/a-listener-subscribes-to-event-types/review.md": {
+      "status": " M",
+      "sha256": "e978eefc8bd9046944e6d6955b10b976e9fc4d5ef3d3097039d70a69e63c4cd0"
+    },
+    ".cartridge/boards/runtime/prds/asp-is-the-agent-s-one-interface-entities-events-the-ring-and-fabric-under-one-extensible-protocol/every-declared-event-is-an-asp-type-and-every-published-envelope-an-event-entity/prd.md": {
+      "status": " M",
+      "sha256": "a19c47950eec5990eb28eeffbd0099f0427a504d01c78ea616595aa1f774797b"
+    },
+    ".cartridge/boards/sessions/prds/file-drift-awareness/prd.md": {
+      "status": " M",
+      "sha256": "f13b653a78b4daa691d4751f08a04f569929ad43ddb5deba078d52c0ccfc576e"
+    },
+    ".cartridge/docs/README.md": {
+      "status": " M",
+      "sha256": "35f51c07e14485efe91d01deb39ad9b6f1e50766e0c8ad4db11d98cc6849bf21"
+    },
+    ".cartridge/memos/routine/develop-planner.md": {
+      "status": " M",
+      "sha256": "fec564dca9655a726aafeae8fd41c39836f0a8c758882a8c32afe36a57467750"
+    },
+    ".cartridge/memos/routine/install-planner-cli.md": {
+      "status": " M",
+      "sha256": "1811b7701e96b4ad9c2cf6e8f5bfd9672ccccc46a1d9af4c94665ef91ed4bd47"
+    },
+    ".cartridge/memos/routine/plan-cartridge-work.md": {
+      "status": " M",
+      "sha256": "f7e29194fa5334c9990af421469de2f9792ed3f7abfcc7fd26c1fa1c4f7fe46b"
+    },
+    ".cartridge/memos/routine/planner-statusline.md": {
+      "status": " M",
+      "sha256": "5d82e3a24bed0ae99daeaec19c7e03a718f7e7c2c46472dc1505bb1426cbfa43"
+    },
+    ".cartridge/memos/routine/run-board.md": {
+      "status": " M",
+      "sha256": "212faedcebef8ca7180260f0844711c098345ba576b95df541611ec07b2d48e4"
+    },
+    ".cartridge/templates/spec.md": {
+      "status": " M",
+      "sha256": "0350746f33dde5398bf620c7982e5fe3c8163ff2e0c4879436631393704020ad"
+    },
+    ".cartridge/tests/service.test.ts": {
+      "status": " M",
+      "sha256": "ee11fd03603e8e0a4708d8511aa537583e85f8efa8c67f48b02218f3e6e04a91"
+    },
+    ".cartridge/tests/statusline.test.ts": {
+      "status": " M",
+      "sha256": "e20b782172106e6bc20a1276d7c218be73d89930f19e931b65333fc9d7cd82b5"
+    },
+    ".cartridge/workflows/develop-one-cartridge.md": {
+      "status": " M",
+      "sha256": "69a74c5a193e9bf41e12564dff0a4fc3428f6972e2fc4fb6e65d0cda1ad8b947"
+    },
+    ".cartridge/workflows/implement-slice.md": {
+      "status": " M",
+      "sha256": "6a8492c59be4c7b047ec56403400eccd926a7297fe3f761aeeaad92fe64ddc47"
+    },
+    ".cartridge/workflows/review-plan.md": {
+      "status": " M",
+      "sha256": "1e577fe0fe5e4e99eb89e545d83cb8f24510b07585b9accba7a6e8d5be4715e9"
+    },
+    "cartridge.json": {
+      "status": " M",
+      "sha256": "6f275f58e3563549fc203cf906fbd90156dabd3f7ada2b73213c9a8ae117f235"
+    },
+    "init.lua": {
+      "status": " M",
+      "sha256": "47882f139fe897b2480b0808483edc9b8588e5c30d5a88acb719cb692a2f7d40"
+    },
+    "src/service.ts": {
+      "status": " M",
+      "sha256": "79efcfe003cb950931d57dab74863feb0451b7220ce5ee8b5659fb5bc73b6180"
+    },
+    "src/source-records.ts": {
+      "status": " M",
+      "sha256": "94bb9765bd2811121e7c4232e083d35f8bfbb4cc2ddc5f79edda0f544d7db9d8"
+    },
+    ".cartridge/boards/agent/prds/a-denied-tool-call-journals-its-error-flag/review.md": {
+      "status": "??",
+      "sha256": "2a3c8b04c8a01799a5c0083c9c1b075bf9a930e52899897bf2f5fd75d01f870b"
+    },
+    ".cartridge/boards/agent/prds/an-event-declares-its-type/specs/spec01.md": {
+      "status": "??",
+      "sha256": "dc2aafafec9a04d857b9a7316a613d2e90bfe426252bcfe640013b691bdb2f3d"
+    },
+    ".cartridge/boards/agent/prds/the-turn-end-ring-call-names-the-run-that-finished/review.md": {
+      "status": "??",
+      "sha256": "b07fbb1100fdbec924c276b59a798a18776964cdd73d009bda464223444db690"
+    },
+    ".cartridge/boards/auth/prds/auth-answers-a-jev-question-on-the-stored-typesafe-key/review.md": {
+      "status": "??",
+      "sha256": "419e8c46e205bc1aefc90ce96f01e874be4b9b3d04bde72013c258c47aeb4abe"
+    },
+    ".cartridge/boards/auth/prds/auth-writes-the-router-s-credential-file-from-pass/specs/spec01.md": {
+      "status": "??",
+      "sha256": "707be5a855052905ae21481acba6b19f14668cfd0ae28d71b2cae011cfe2a42a"
+    },
+    ".cartridge/boards/fs/prds/fs-readme-and-help-md-share-one-source/prd.md": {
+      "status": "??",
+      "sha256": "6215ff6e5806b9d602b1ec4df87ea18030448d52140b213093da80f14d73076f"
+    },
+    ".cartridge/boards/fs/prds/fs-src-store-rs-is-one-file-per-responsibility/prd.md": {
+      "status": "??",
+      "sha256": "d7e34dec9674113f4b7b07bf0b3415543f448e6ae7dc63e7dcd3e6933583705e"
+    },
+    ".cartridge/boards/fs/prds/remove-context-file-provider/prd.md": {
+      "status": "??",
+      "sha256": "e21d10748a7823758cbf5c2d1be4cad8f46cecd6087b9c894106fa926ff1a39a"
+    },
+    ".cartridge/boards/fs/prds/remove-context-file-provider/review.md": {
+      "status": "??",
+      "sha256": "47af2a9b1dc48175c8f215592b4229decec112c841b97d3d5070ae7f2a74da68"
+    },
+    ".cartridge/boards/harness/prds/context-projection-honors-declared-frames-and-names-skipped-journal-kinds/prd.md": {
+      "status": "??",
+      "sha256": "27b958153feb75a27de801f06d52a20c425be119edcd024829561a0c24f702e8"
+    },
+    ".cartridge/boards/harness/prds/context-projection-honors-declared-frames-and-names-skipped-journal-kinds/review.md": {
+      "status": "??",
+      "sha256": "28ca2e1f51f9e352a16192a0d9a025f800f4ea05289a1c9723434f6e7781d8fe"
+    },
+    ".cartridge/boards/harness/prds/harness-src-lib-rs-is-one-file-per-responsibility/prd.md": {
+      "status": "??",
+      "sha256": "1eb544be73e49b9efb8541cbb947c988f1006b81a12a017d466883f9098c8d1d"
+    },
+    ".cartridge/boards/harness/prds/roster-without-context-evidence-contract/prd.md": {
+      "status": "??",
+      "sha256": "dec980557a32b3ca66fe685a2321c29b6c681639c808f74b684a45090e91b0ad"
+    },
+    ".cartridge/boards/harness/prds/roster-without-context-evidence-contract/review.md": {
+      "status": "??",
+      "sha256": "177a67f1ea0e2bf5c3c8c56156ab7841adc845961f93832a8ca30b103b9fbafb"
+    },
+    ".cartridge/boards/harness/prds/roster-without-context-evidence-contract/specs/spec01.md": {
+      "status": "??",
+      "sha256": "a5eb64f405e311651e926a1d8afefcfd8c9de77cafb1f5f0e08a9f51e125d456"
+    },
+    ".cartridge/boards/harness/prds/the-default-roster-row-limit-is-accepted-by-sessions/prd.md": {
+      "status": "??",
+      "sha256": "7e144ddc78b2c8121a482883a7f2d450c104f6671a59c6227e3d45b3e3f46093"
+    },
+    ".cartridge/boards/harness/prds/the-harness-test-support-spawns-a-base-with-a-clean-environment/prd.md": {
+      "status": "??",
+      "sha256": "37673659497058662ed127771e50b47c2a4a7c2709d79e6f2b1abd271b21bc66"
+    },
+    ".cartridge/boards/harness/prds/the-turn-names-the-files-that-changed-underneath-it/review.md": {
+      "status": "??",
+      "sha256": "659eea204c8dc63f2bf7f1b122f23c6bf8afe83c20902b60b1968df29df26d78"
+    },
+    ".cartridge/boards/harness/prds/the-turn-names-the-files-that-changed-underneath-it/specs/spec01.md": {
+      "status": "??",
+      "sha256": "1c3db3b8e8b35d22c763353c7211594c304424c2f252597550927bbeaf5d0a76"
+    },
+    ".cartridge/boards/live/prds/the-voice-runs-on-this-machine-with-no-network/live-speaks-and-listens-through-local-sidecars/the-pipeline-hears-thinks-and-speaks-with-portable-runtimes/kokoro-speaks-through-onnx-runtime-or-refuses-the-model-it-needs/review.md": {
+      "status": "??",
+      "sha256": "2531d25d2315103e74482944ea55f46f19ef81cd9365b88196791ea7a745052f"
+    },
+    ".cartridge/boards/live/prds/the-voice-runs-on-this-machine-with-no-network/live-speaks-and-listens-through-local-sidecars/the-pipeline-hears-thinks-and-speaks-with-portable-runtimes/kokoro-speaks-through-onnx-runtime-or-refuses-the-model-it-needs/specs/spec01.md": {
+      "status": "??",
+      "sha256": "937c8a13de7ba8876763d6c1d7cd9f11ff282ce1c06b423c973153e9e24300d9"
+    },
+    ".cartridge/boards/lsp/prds/remove-context-lsp-provider/prd.md": {
+      "status": "??",
+      "sha256": "bbfdace81fd8f192717044be6a688b4ac8fdfb5bb27e75444342931dee6039c8"
+    },
+    ".cartridge/boards/lsp/prds/remove-context-lsp-provider/review.md": {
+      "status": "??",
+      "sha256": "47af2a9b1dc48175c8f215592b4229decec112c841b97d3d5070ae7f2a74da68"
+    },
+    ".cartridge/boards/lsp/settings.md": {
+      "status": "??",
+      "sha256": "06f91ecf20997e5c87720d86d87820c15a34768227964e05e89248a630234764"
+    },
+    ".cartridge/boards/mcp/prds/the-mcp-refresh-test-expects-the-host-s-synthetic-asp-tool/prd.md": {
+      "status": "??",
+      "sha256": "2e145b41634c227a9e964af6ed20150f6e239de23a4f5f3b8feffaccd0c0a1f7"
+    },
+    ".cartridge/boards/memo/prds/remove-native-context-collector/prd.md": {
+      "status": "??",
+      "sha256": "a14ce16514c6309e2344db91ddd27a5977df95c523bcbf9c3e1a76b9ab878e2b"
+    },
+    ".cartridge/boards/memo/prds/remove-native-context-collector/review.md": {
+      "status": "??",
+      "sha256": "47af2a9b1dc48175c8f215592b4229decec112c841b97d3d5070ae7f2a74da68"
+    },
+    ".cartridge/boards/memory/prds/asp-projection-without-context-contract/prd.md": {
+      "status": "??",
+      "sha256": "37147ed035947a35f9db18a7c4357eb6aac88e42e9e81b70d4efe5874bb685da"
+    },
+    ".cartridge/boards/memory/prds/asp-projection-without-context-contract/review.md": {
+      "status": "??",
+      "sha256": "47af2a9b1dc48175c8f215592b4229decec112c841b97d3d5070ae7f2a74da68"
+    },
+    ".cartridge/boards/memory/prds/heat-is-deposited-on-read-back-not-on-delivery/review.md": {
+      "status": "??",
+      "sha256": "bc8a9a7cea79aa35d59317218ddd34ee53794000bdf9a863d701804aa7be032b"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/activity-recording-drains-into-memory-and-retires-calendar-history/prd.md": {
+      "status": "??",
+      "sha256": "ab87f113e52312d453a4d20568427f6b8ac4e8240e46fc71840a8cd89f0475e6"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/activity-recording-drains-into-memory-and-retires-calendar-history/review.md": {
+      "status": "??",
+      "sha256": "7dee7df16c93974c14c8125436f2b7a58a828b4f4669b613904a81cd672b5722"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/activity-recording-drains-into-memory-and-retires-calendar-history/specs/implementation.md": {
+      "status": "??",
+      "sha256": "12c33d18117dbdcb9086aa700a8608f2b885ae5d6d147fa31d1d38f07cb92cf4"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/asp-shows-recently-used-memory-and-its-reasons/prd.md": {
+      "status": "??",
+      "sha256": "4190d7bfd8f784f92366adb914cef836caabcf674a9e6166686ed1f55dc642e2"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/asp-shows-recently-used-memory-and-its-reasons/review.md": {
+      "status": "??",
+      "sha256": "2fb207720a4d04f9fa234f95fa852e2d809a6969717b539de14771d9b71a019b"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/asp-shows-recently-used-memory-and-its-reasons/specs/implementation.md": {
+      "status": "??",
+      "sha256": "aa0ee80c3b6d2f23c5afb56358205cfaadd1b16e7d5539474f3c29e14b1c611a"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/implementation.md": {
+      "status": "??",
+      "sha256": "aaa33291dbe6c624054ad63195a38937d08b401df563388d3a170152b5d9a801"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/memory-stands-alone-with-clear-engine-and-integration-boundaries/prd.md": {
+      "status": "??",
+      "sha256": "7d9572d76363e87d4631b731804317c6c5e6d0bd166941a9c7f7202108abd55c"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/memory-stands-alone-with-clear-engine-and-integration-boundaries/review.md": {
+      "status": "??",
+      "sha256": "7493761c3ffd04fc8d000964eac53c31c2916095e2cf97d204f6562c571dbd50"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/memory-stands-alone-with-clear-engine-and-integration-boundaries/specs/implementation.md": {
+      "status": "??",
+      "sha256": "a01fde54df1784eac72a2ad6b12560884bc4638467534613cf471fc7bd0aec61"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/prd.md": {
+      "status": "??",
+      "sha256": "1d231f7c343e06075b2415bb6020182474117286e3475592a29355c926b6a3e4"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/repeated-activity-becomes-weighted-graph-knowledge/prd.md": {
+      "status": "??",
+      "sha256": "6e849d0954cfe0f5a12e7c0fcba7ed70f94998853853d16c73b3cd549d21a2c7"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/repeated-activity-becomes-weighted-graph-knowledge/review.md": {
+      "status": "??",
+      "sha256": "5dbea47ea39d9ef82be1482892807397a811d2470555ac2d4f4c3a7eb6862a1c"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/repeated-activity-becomes-weighted-graph-knowledge/specs/implementation.md": {
+      "status": "??",
+      "sha256": "e8b6ba0412e02d59eca16caf886e134386fc61a245c426b9003259e7db7f9edb"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/sub-memories-split-by-their-attached-reasons/prd.md": {
+      "status": "??",
+      "sha256": "33f8f5fcc56012a3247887a6f835ccdcc68896281e1e6ba6b0fd8e138d05427a"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/sub-memories-split-by-their-attached-reasons/review.md": {
+      "status": "??",
+      "sha256": "eb2ecc0c0ad32fb3fee56b9f6da0272508ffe015ae1aebfb8512e7043154cf80"
+    },
+    ".cartridge/boards/memory/prds/memory-crystallizes-the-systems-activity-by-its-reasons/sub-memories-split-by-their-attached-reasons/specs/implementation.md": {
+      "status": "??",
+      "sha256": "24a42fe927e04146354fbc6351a1c913a8aa58f54d8e01b1ccf101ab7ddd077f"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/crystallization-keeps-progressing-beside-ordinary-persistence/evidence/ordinary-writer-reproduction.log": {
+      "status": "??",
+      "sha256": "fcbba62a8558e0713064ba8e283822621e77d3c208dc01b194b59e9d7f7b7a13"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/crystallization-keeps-progressing-beside-ordinary-persistence/evidence/ordinary-writer-reproduction.patch": {
+      "status": "??",
+      "sha256": "e8fba0c545720f0be7231ece4b68cc1ea494cf447372f98753c6050d7c4c9352"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/crystallization-keeps-progressing-beside-ordinary-persistence/evidence/reproduce-ordinary-writer.py": {
+      "status": "??",
+      "sha256": "7f21b508d2d9bff75cbc2f47106c7b5b31690ff31bd243e7e1729b80dacdde7e"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/crystallization-keeps-progressing-beside-ordinary-persistence/prd.md": {
+      "status": "??",
+      "sha256": "5ec97542f3ae3be6e1f1b10a492a30e1801536c8e67443092cd90a2db0a3ef65"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/crystallization-keeps-progressing-beside-ordinary-persistence/review.md": {
+      "status": "??",
+      "sha256": "74f675c676ab017a2d99c361f8f81448f536e4291d18eded839ae9423093cafa"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/crystallization-keeps-progressing-beside-ordinary-persistence/specs/implementation.md": {
+      "status": "??",
+      "sha256": "19e9ed3c40ebdbacc10fe1f136449c4661f6b0d4026ad213bc2cd966a26a0434"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/crystallization-keeps-progressing-beside-ordinary-persistence/writer-reproduction.md": {
+      "status": "??",
+      "sha256": "364f87d7765d4133ea20229a92ad90dac4df79514f105caf4fbb462d1cf4fd13"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/crystallization-preserves-outcome-context-and-validity-boundaries/prd.md": {
+      "status": "??",
+      "sha256": "19fa9b09157a90c823d38f1ac98346805205537e88a1c8be920dc1b7c53972d7"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/crystallization-preserves-outcome-context-and-validity-boundaries/review.md": {
+      "status": "??",
+      "sha256": "4f1299cc9aaf76b1a08e08ecfcbdf95d4c73f30a44f3890d140dcdb2f03dbf9e"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/every-runtime-reason-identifies-its-evidence-and-certainty/prd.md": {
+      "status": "??",
+      "sha256": "6a5d3798a9e13eedb93361aea616ac46d1b903efe7d82772ec5004118b44e9be"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/every-runtime-reason-identifies-its-evidence-and-certainty/review.md": {
+      "status": "??",
+      "sha256": "6a2509dc6d4a5780a671dbc45ad56c7236df21a1542540657187276bfec8328f"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/audit-memory.log": {
+      "status": "??",
+      "sha256": "583e04ac4a16109adb98de227982dda3022c2666b1cb259c3ed6e65f7e2c8dd9"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/audit.log": {
+      "status": "??",
+      "sha256": "2711e7a0ae84878c91e0ca0a35a8f344558b8ab06352f1b7d62f5ba062855a6d"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/board-check.json": {
+      "status": "??",
+      "sha256": "2c406d85c078007ae3dc6f8b11db81b8bdc7a8bd8f5d26e737860bd7e8fcebac"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/execution-readiness-2026-09-19/baseline-asp.log": {
+      "status": "??",
+      "sha256": "fb3da8432adc4386d0e96bc863fd8651e0b16d9e8493fc93ab74c715f26dfa5a"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/execution-readiness-2026-09-19/baseline-focused-and-first-asp.log": {
+      "status": "??",
+      "sha256": "c09515a972c7c72f77e62811af6abe7946add0a716978ead965525255ab5dcb9"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/execution-readiness-2026-09-19/baseline-format.log": {
+      "status": "??",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/execution-readiness-2026-09-19/baseline-selection.json": {
+      "status": "??",
+      "sha256": "0cc1bbfa808df6e683d9fcff87e8b0874db6400e71512a5a4b3dd3ec6efd3126"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/execution-readiness-2026-09-19/baseline-workspace-check.log": {
+      "status": "??",
+      "sha256": "67f3a0faed17015a8d8ad99bb30a8b479c5f29db12c449025638b3a618182de2"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/execution-readiness-2026-09-19/cartridge-memory-independent-asp.log": {
+      "status": "??",
+      "sha256": "8ce459dc533e419e0b1a7df52537aec4f27c9e73ec1b81de377ea6a9c98a48f9"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/execution-readiness-2026-09-19/cartridge-memory-independent-check.log": {
+      "status": "??",
+      "sha256": "2946b0a141e4ed9ef2f40a2c96bc52a82fe2732426ef669398c05a171f8cde64"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/execution-readiness-2026-09-19/cartridge-memory-independent-experience.log": {
+      "status": "??",
+      "sha256": "76d367d99e455aca118233514a90f32c98615a5c28cb976884ef7a58f6a29604"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/execution-readiness-2026-09-19/cartridge-memory-independent-fmt.log": {
+      "status": "??",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/execution-readiness-2026-09-19/cartridge-memory-independent-structure.log": {
+      "status": "??",
+      "sha256": "c02d6480e9a9bdf4c5dac95651a369d0b770608dd87af4c65b61ab8647d67ef4"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/execution-readiness-2026-09-19/cartridge-memory-independent-verdict.json": {
+      "status": "??",
+      "sha256": "fcdead7ed0d04ca226ffa6c4d337beba49e42f76386a9504f06cbf4ed0dda9b2"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/execution-readiness-2026-09-19/readiness.md": {
+      "status": "??",
+      "sha256": "e8d2bf17cbd9f37463dc8d55bf3ba1d520f00680c176ef0d49a620d79198fc72"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/existing-tests.log": {
+      "status": "??",
+      "sha256": "38c0dbc74da7ded62fbd8bbacaa7e6fb3a542ea4f29043cabb41fb77b96cbc5b"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/isolation.log": {
+      "status": "??",
+      "sha256": "7b900202f509b72f2373999e7fab0069054dae095135b5ba6aed7be7eed12ec9"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/jev-followup.json": {
+      "status": "??",
+      "sha256": "1ebcdfb8b08ad09f55e4ba9a46b8f49a29df1fd9271f19e3705e6da6ee07d09c"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/jev-preflight.json": {
+      "status": "??",
+      "sha256": "d1360922fd390bab6d6f938a8c3d138d739cb32a8ac01a1b87a05ff0453b9350"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/live-cycles.json": {
+      "status": "??",
+      "sha256": "45164d106593ceea3f942073b21c69b3372007d93698003126a1eb81dcd8030e"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/live-probe.json": {
+      "status": "??",
+      "sha256": "d39253fb0496357576c99ffbccb13c18f25b5645ccc55076fdf32d97f2fa3a06"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/plan-checkpoint.json": {
+      "status": "??",
+      "sha256": "8473cb2aa2b23f54fa24e58e6db6899af378aac55677203cf5f673fa44967420"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/portable-probes.log": {
+      "status": "??",
+      "sha256": "1a75b9767c23830c42c82610dcfc7b7c36c8670078dd0f4bc537b000a0a3c887"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/probe-Cargo.lock": {
+      "status": "??",
+      "sha256": "10ccfa42bd265c7d9a2b3d5e31d905be184fac541bcd423f63aa208922212fa1"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/probes.rs": {
+      "status": "??",
+      "sha256": "0c49e6b9536e20f6a7a8278d9856596dfdabefc54f51b728a132c93b135abcb3"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/reassessment-2026-09-19/asp.json": {
+      "status": "??",
+      "sha256": "fea8941ae20215c2eb212d056051afcf3ceebe240b591eb021fee366563afffe"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/reassessment-2026-09-19/brief.json": {
+      "status": "??",
+      "sha256": "26ded16026e07a0a145efae2bca033f16ac6e787faf1e3f2d22f5c67772f6a2c"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/reassessment-2026-09-19/check.json": {
+      "status": "??",
+      "sha256": "5e55051ba39717ef600dd9a93d97a088ce82b6633f9cce17b936bc4b61854b73"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/reassessment-2026-09-19/cycles.json": {
+      "status": "??",
+      "sha256": "182e8417d4f95655103b57f173fdcc443ff0b4bcdb25290355ffad5ae06af866"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/reassessment-2026-09-19/intake.json": {
+      "status": "??",
+      "sha256": "c3c561d25b3b463a0b0b22f6179b1831fe47fbe018e7effe6882dbe4bd60f7d5"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/reassessment-2026-09-19/jev.json": {
+      "status": "??",
+      "sha256": "7742eea1e4e31d59da1dd915e83fc422a410e6ebcf87d91e7c6879ca9d64bb78"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/reassessment-2026-09-19/plan.json": {
+      "status": "??",
+      "sha256": "408e98aae7acbb17794de9e2ae9530acbb2e53f34943e297f3a5413c8062219a"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/reassessment-2026-09-19/probes.log": {
+      "status": "??",
+      "sha256": "0e1e9bda312694047a17b3a18371e5fe939d5505b075359a33f348ff728d4cbe"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/reassessment-2026-09-19/status.json": {
+      "status": "??",
+      "sha256": "22a6abc04650e8a7b8ea3b01637000fb6eb7cdbac8156b9b3fe19868c5f626c3"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/reassessment-2026-09-19/tests.log": {
+      "status": "??",
+      "sha256": "959dc0957cb3687ab7ca02008e7d29967ffd00b87e089412ed0a4514f088fe25"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/review-a-round-1.md": {
+      "status": "??",
+      "sha256": "66e68ecee39fb7e453cf96e672e7094c0b96cf8c8aac1f6238cda23e4ea0fdea"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/review-a-round-2.md": {
+      "status": "??",
+      "sha256": "c6da550757f77c44bdfbc4bccf544b217f49c007ccde1f0e2eacb48c75f63e91"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/review-b-round-1.md": {
+      "status": "??",
+      "sha256": "3dd48baee70698073396f5128480ef808d3915faf4e9dd5e82ef424bfc8c5b49"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/review-b-round-2.md": {
+      "status": "??",
+      "sha256": "e00019a7ea63fdc5f7467aeba5fb1bf1575797a1d67cb9e3c482eac39d2b71e7"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/reviewed-inputs.json": {
+      "status": "??",
+      "sha256": "bd26e9fb86fcab9832c4a3cb6d92de29865b01f880489e207963d084ca4a3081"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/run-probes.py": {
+      "status": "??",
+      "sha256": "d0f5103c9743e58bb1da67f8ff2005f964fe82ce2e91fcfbca8e1001943c68e7"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/source-digests.json": {
+      "status": "??",
+      "sha256": "d05744736b33dc9e583be614f2be4b3699ea93040d379f91b0387670a43559e8"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/evidence/structural-probes.log": {
+      "status": "??",
+      "sha256": "5e4372e7fb5213eaa34605215a0c41bc4bae24274719922f306ea20caf84de15"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/execution.md": {
+      "status": "??",
+      "sha256": "e92f838d8a28459f1a7cd728fc5dd1fd4290271273a7079f8f3ea674cf0ff7ed"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/experience-retrieval-earns-a-reproducible-quality-and-latency-gate/prd.md": {
+      "status": "??",
+      "sha256": "595b9d428cc87bc0ab935b34bf1bf1b8ac36436e5c144aec1c38ee4043ba2c52"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/experience-retrieval-earns-a-reproducible-quality-and-latency-gate/review.md": {
+      "status": "??",
+      "sha256": "4513f1403ba7fdde4c4fb9362a93c3a9c84ee608495cbd2b3699f977db85fbf0"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/healthy-intake-progresses-past-malformed-or-expensive-observations/prd.md": {
+      "status": "??",
+      "sha256": "53e1825a5d329862c551d3bd45e7b8936f7aab812f042a57a754c71225a830c3"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/healthy-intake-progresses-past-malformed-or-expensive-observations/review.md": {
+      "status": "??",
+      "sha256": "5ccc38a9a263230ffb66f43b70e7376af11fd598226a22b8c1d9ce402ad36f26"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/investigation.md": {
+      "status": "??",
+      "sha256": "b241e6e293a11eb722331fa60843d7a509e31f6699dce51529ae978684061a82"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/memory-classifies-activity-acceptance-and-refusal/prd.md": {
+      "status": "??",
+      "sha256": "4a6bb0800ad002c8e19c79ee341692de285491630a236fd8b3eb7b28c771c6c0"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/memory-classifies-activity-acceptance-and-refusal/review.md": {
+      "status": "??",
+      "sha256": "1d25e7c100dc7a825e8231b9aa43950ed6538307af78dafea8d6ce571421de9d"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/memory-exposes-total-backlog-and-the-reason-progress-stopped/prd.md": {
+      "status": "??",
+      "sha256": "c3cfdc3c047f2b069a43c7154ca576427cafa14a866fa40dfb6be84a862d9bca"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/memory-exposes-total-backlog-and-the-reason-progress-stopped/review.md": {
+      "status": "??",
+      "sha256": "d97ca393e0e14488c3a97c1da197dda8b3339509eac28c39aedecbe84d35b3b4"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/memory-reports-exactly-what-crystallized-output-preserves/prd.md": {
+      "status": "??",
+      "sha256": "7e8eb1fb407d6d08dfaa58adf3e92db4f4a14f5bcb3d983914f116eb374bc953"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/memory-reports-exactly-what-crystallized-output-preserves/review.md": {
+      "status": "??",
+      "sha256": "3119d8d5e0c655bf8a43643dc8b18b18db2a6f9546d1c422c9fd1cbc70aaeac5"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/plan-inventory.json": {
+      "status": "??",
+      "sha256": "61f30050769d9af4527aaf152d3a85aff31bc5d6ebd18d247ef6000a76c705c0"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/prd.md": {
+      "status": "??",
+      "sha256": "5bbcc0a4f282d3bf242358f8c1714ece8da0ab4904baf5d0b7243e0de6d19022"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/recurrence-cannot-masquerade-as-retrieval-usefulness/prd.md": {
+      "status": "??",
+      "sha256": "cf24ca93773552f4d9b4d23a4bb1c26bdb5044114e089a78152fc2cf8b18026b"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/recurrence-cannot-masquerade-as-retrieval-usefulness/review.md": {
+      "status": "??",
+      "sha256": "5251a0eb7f04f3c80d3ac3402ede52bef22644d950994565ae217872fdcf475b"
+    },
+    ".cartridge/boards/memory/prds/memory-experience-becomes-reliable-and-useful/review.md": {
+      "status": "??",
+      "sha256": "85b0be71d08c7641ba48811a9ee4cd50a50eeef9936d13c0db540374061ea3b9"
+    },
+    ".cartridge/boards/prd/prds/a-collected-contract-can-be-explicitly-reverified-against-a-committed-source-snapshot/prd.md": {
+      "status": "??",
+      "sha256": "208dc3c10e6144c954d14df9d01b536fc6c954e9c158c76bba59ba07ca30c35e"
+    },
+    ".cartridge/boards/prd/prds/the-prd-board-source-drops-the-answer-only-memo-s-deleted-fabric-search-ever-called/prd.md": {
+      "status": "??",
+      "sha256": "d10f000793ca59c54390238f4cc6cab6e17d71906188244f28ce79391a6c8068"
+    },
+    ".cartridge/boards/proxy/prds/proxy-src-service-rs-is-one-file-per-responsibility/prd.md": {
+      "status": "??",
+      "sha256": "02ab2ad75809c779e290341c99802389de0380a8377ad962b3c86f378206261f"
+    },
+    ".cartridge/boards/pty/prds/a-shell-read-answers-while-a-foreground-program-holds-the-pty/specs/spec01.md": {
+      "status": "??",
+      "sha256": "b39752d60d4b5966e843786a926cef9314e18c8938fc2b13ab74d488c3ad140a"
+    },
+    ".cartridge/boards/root/prds/an-owner-check-runs-the-isolation-gate-and-says-so/prd.md": {
+      "status": "??",
+      "sha256": "a17cf51858cb4a47af2505febb3d5cf061a3ab6280194be592c2ea1be4cdf039"
+    },
+    ".cartridge/boards/root/prds/an-owner-check-runs-the-isolation-gate-and-says-so/specs/spec01.md": {
+      "status": "??",
+      "sha256": "d364ab4e4f04e533930cf213e27fd93a0cd50ee5cfac68985c096f55bfd997db"
+    },
+    ".cartridge/boards/root/prds/compare-default-codex-and-the-integrated-cartridge-workflow-on-a-controlled-worktree-benchmark/prd.md": {
+      "status": "??",
+      "sha256": "84f96886193f8db500560ab0f67281c8e4a7dccc0bfd57224e1b69fee12b6190"
+    },
+    ".cartridge/boards/root/prds/composition-without-legacy-context-path/prd.md": {
+      "status": "??",
+      "sha256": "05af3390aaede8086ee925919db6a82970ecaab4fbb61ee906171c4e567e313a"
+    },
+    ".cartridge/boards/root/prds/composition-without-legacy-context-path/review.md": {
+      "status": "??",
+      "sha256": "47af2a9b1dc48175c8f215592b4229decec112c841b97d3d5070ae7f2a74da68"
+    },
+    ".cartridge/boards/root/prds/fix-integrated-codex-cold-routing-and-native-responses-admission-then-rerun-the-controlled-benchmark/prd.md": {
+      "status": "??",
+      "sha256": "dc5e1eb600c2558d8ff4dbcda80bd5c408aa78d7c2933efd740be289798deb68"
+    },
+    ".cartridge/boards/root/prds/jev-decides-every-closed-set-question-over-the-asp-world/jev-answers-a-declared-judgement-with-a-gated-verdict-and-fails-open/proposals/prd-before-trim.md": {
+      "status": "??",
+      "sha256": "d2c0cbcab61c9dde4ac4bb61c81243a85716bc77af5ad034d66abb3d8b5c6426"
+    },
+    ".cartridge/boards/root/prds/jev-decides-every-closed-set-question-over-the-asp-world/jev-answers-a-declared-judgement-with-a-gated-verdict-and-fails-open/review.md": {
+      "status": "??",
+      "sha256": "a6c730c0aa337c3ceb6a7669c313297ee8576ea5163d6692655a69cefda86698"
+    },
+    ".cartridge/boards/root/prds/jev-decides-every-closed-set-question-over-the-asp-world/jev-is-an-owner-the-check-and-test-gates-resolve/prd.md": {
+      "status": "??",
+      "sha256": "b04cb73798a501b08be965f63e98c581174beccb95bf6d2368e64dc625893d5a"
+    },
+    ".cartridge/boards/root/prds/jev-decides-every-closed-set-question-over-the-asp-world/jev-pulls-asp-slices-narrows-them-in-two-passes-and-sends-only-allowed-schemes/review.md": {
+      "status": "??",
+      "sha256": "400ec55965bf2d9e932e6271642b3e2d1066ea297d02cea75b491b2d0d8ad04c"
+    },
+    ".cartridge/boards/root/prds/jev-grounds-each-model-step-in-the-shared-asp-memory-world/prd.md": {
+      "status": "??",
+      "sha256": "5a7ef46ddac22c36288cc526a728fbf6b9606dc14e6a25eb7117483b7cfc847e"
+    },
+    ".cartridge/boards/root/prds/redesign-scope-around-completed-ledger-processing-cycles/prd.md": {
+      "status": "??",
+      "sha256": "951dacb124ed25fa21c9103bac7bec9f75b681a1483dac769a3d1c3a0edb5686"
+    },
+    ".cartridge/boards/root/prds/repo-checks-cartridge/the-checks-cartridge-exists-and-runs-a-repository-s-declared-checks/review.md": {
+      "status": "??",
+      "sha256": "f34867afc668b232352092e0584dc28f195f9b0bf664de053cbf6b4172a03aa0"
+    },
+    ".cartridge/boards/root/prds/repo-checks-cartridge/the-checks-cartridge-exists-and-runs-a-repository-s-declared-checks/specs/spec01.md": {
+      "status": "??",
+      "sha256": "c076df1347175d29a79903fa043edcf52587b3c680d9db1d71d00d7d8847d6ef"
+    },
+    ".cartridge/boards/root/prds/repo-checks-cartridge/the-checks-cartridge-is-registered-in-the-composition/specs/spec01.md": {
+      "status": "??",
+      "sha256": "2e8d41d706bd0cd9317f001c8da59dfcc958fe1d3b1e38b58052b05d0487e9a6"
+    },
+    ".cartridge/boards/root/prds/scope-distinguishes-memory-use-from-stalled-processing/prd.md": {
+      "status": "??",
+      "sha256": "a5c3f2dbc99eb5756ca843ff066f9c8c2262cdbf8a81b86ae01ab3270bbeff48"
+    },
+    ".cartridge/boards/root/prds/scope-distinguishes-memory-use-from-stalled-processing/review.md": {
+      "status": "??",
+      "sha256": "d9f1f197c13ef7a56ce90ed1d2f50622a9da0f3f4028b0bb6cd236ad2dc2de90"
+    },
+    ".cartridge/boards/root/prds/the-event-ring-keeps-every-event-forever-by-rolling-it-into-day-week-month-and-year-tiers-under-asp/proposals/spec01-draft.md": {
+      "status": "??",
+      "sha256": "64272fd9f2a9fe72376fbfdcda165f62a16b414ab131f3c166f1f15b5377c3b6"
+    },
+    ".cartridge/boards/root/prds/the-isolation-gate-reads-the-composition-profile/an-optional-need-with-no-provider-still-loads/review.md": {
+      "status": "??",
+      "sha256": "cb0f2f723184c647414f4fd2be805fe9487a9dd1891c2c0e59ac6a7b8da13764"
+    },
+    ".cartridge/boards/root/prds/the-isolation-gate-reads-the-composition-profile/an-optional-need-with-no-provider-still-loads/specs/spec01.md": {
+      "status": "??",
+      "sha256": "a397629bd058e759ef0329dd8ebb54a2828e82312f5b1a73ab6c9a865f420c66"
+    },
+    ".cartridge/boards/root/prds/the-running-system-combines-asp-trace-jev-and-scope-with-live-proof/review.md": {
+      "status": "??",
+      "sha256": "400ec55965bf2d9e932e6271642b3e2d1066ea297d02cea75b491b2d0d8ad04c"
+    },
+    ".cartridge/boards/root/prds/the-source-layout-test-asserts-a-builtin-path-the-repository-no-longer-has/prd.md": {
+      "status": "??",
+      "sha256": "4472adc06a71d7a6af5f88a759fb91f1058428f6f1f5ea2dc7d5f694a94b1cfd"
+    },
+    ".cartridge/boards/root/prds/typing-fuzzy-filters-every-scope-list/prd.md": {
+      "status": "??",
+      "sha256": "098900715b3a55e6e00df9a40deb5b6b08dad7082acaad7ca262a30e02ec4bfb"
+    },
+    ".cartridge/boards/root/prds/typing-fuzzy-filters-every-scope-list/review.md": {
+      "status": "??",
+      "sha256": "15ea8ae878188baa4c94ffe4f1afcf5b7c0cc5ee936d3f8da5e5b6df3653fbd6"
+    },
+    ".cartridge/boards/root/prds/typing-fuzzy-filters-every-scope-list/specs/implementation.md": {
+      "status": "??",
+      "sha256": "4c8580cab00900087386c55123793c064b6df1e54239ebd3df9f7ebad52aabef"
+    },
+    ".cartridge/boards/router/prds/a-route-that-refuses-reasoning-keeps-answering-without-it/review.md": {
+      "status": "??",
+      "sha256": "6724665af3b8a72987f29735b6ab3f9b2a6696aa44566e1b85554b214a81d956"
+    },
+    ".cartridge/boards/router/prds/a-route-that-refuses-reasoning-keeps-answering-without-it/specs/spec01.md": {
+      "status": "??",
+      "sha256": "a3e94709cd1d7e056a4430f66244b62c51698a8d8e99e62e0bff7c16bc4f505b"
+    },
+    ".cartridge/boards/runtime/prds/a-listener-subscribes-to-event-types/specs/spec01.md": {
+      "status": "??",
+      "sha256": "4d8c73ded408c85554f75793f61697546fa0449324781b4eb13047654f645f62"
+    },
+    ".cartridge/boards/runtime/prds/a-native-cartridge-s-outbound-call-does-not-block-its-own-node/review.md": {
+      "status": "??",
+      "sha256": "7421d300e3be4785e3e6e8866dcb3ae0e865f6be8ee8011b3231b3677e644563"
+    },
+    ".cartridge/boards/runtime/prds/asp-composes-extensible-events-and-the-unified-calendar-compacted-trace/prd.md": {
+      "status": "??",
+      "sha256": "f111500d06556bb7391b9edc917733db828e3f6c52e6fbe586f5c45ca60173eb"
+    },
+    ".cartridge/boards/runtime/prds/asp-is-the-agent-s-one-interface-entities-events-the-ring-and-fabric-under-one-extensible-protocol/context-providers-become-asp-providers-and-the-context-path-is-deleted/memory-contributes-its-entities-to-asp/review.md": {
+      "status": "??",
+      "sha256": "374f4fc0df59fa43b7c8fce00140df4ac151c4992871afd27c01807c9fba0952"
+    },
+    ".cartridge/boards/runtime/prds/asp-is-the-agent-s-one-interface-entities-events-the-ring-and-fabric-under-one-extensible-protocol/context-providers-become-asp-providers-and-the-context-path-is-deleted/prd.md": {
+      "status": "??",
+      "sha256": "6ba240b616ae007c4905712ed646c2cb0a6a501326423d89b32eac9f56a6ebea"
+    },
+    ".cartridge/boards/runtime/prds/asp-is-the-agent-s-one-interface-entities-events-the-ring-and-fabric-under-one-extensible-protocol/context-providers-become-asp-providers-and-the-context-path-is-deleted/the-context-path-is-deleted/prd.md": {
+      "status": "??",
+      "sha256": "1ec276048e3acea12d56d6d6bd027bfc4f9a17e5f228c681c6e390b7d006b3ff"
+    },
+    ".cartridge/boards/runtime/prds/asp-is-the-agent-s-one-interface-entities-events-the-ring-and-fabric-under-one-extensible-protocol/context-providers-become-asp-providers-and-the-context-path-is-deleted/the-context-path-is-deleted/review.md": {
+      "status": "??",
+      "sha256": "51d817027a08b9c27c6ffa3a5b9c3d0a4157f036a409a4554006f4a61e3f61a1"
+    },
+    ".cartridge/boards/runtime/prds/asp-is-the-agent-s-one-interface-entities-events-the-ring-and-fabric-under-one-extensible-protocol/context-providers-become-asp-providers-and-the-context-path-is-deleted/the-context-path-is-deleted/split-plan.md": {
+      "status": "??",
+      "sha256": "394235e55b7a9828b7a3c07605178b946511c7756ad13601b4bdd838e93e1597"
+    },
+    ".cartridge/boards/runtime/prds/prompt-recall-reads-asp-search/prd.md": {
+      "status": "??",
+      "sha256": "95bd375b4713c89949feba7b4fc2385f70a96b60f9ebf36f17b703a765a26a7e"
+    },
+    ".cartridge/boards/runtime/prds/prompt-recall-reads-asp-search/review.md": {
+      "status": "??",
+      "sha256": "fa5265dd64a05edec29a155ea3dab3d777172d9bdea338b939201712e48aa2ae"
+    },
+    ".cartridge/boards/runtime/prds/rejected-activity-cannot-wedge-the-hosts-delivery-queue/prd.md": {
+      "status": "??",
+      "sha256": "9e621118eec66361b6d602ef0b764247daf91ac350fc29a53a13e639fb51f545"
+    },
+    ".cartridge/boards/runtime/prds/rejected-activity-cannot-wedge-the-hosts-delivery-queue/review.md": {
+      "status": "??",
+      "sha256": "40ae2365ab535f08ce2a93c73be32c7f1fea72cddac625140f1ce8d746d59281"
+    },
+    ".cartridge/boards/runtime/prds/src-is-one-folder-per-job-and-each-folder-explains-itself/declared-settings-live-in-settings/prd.md": {
+      "status": "??",
+      "sha256": "ad3a61d12b459bf42165be34d5cdb45afdf3c57bd25764234d50788d07e58a6e"
+    },
+    ".cartridge/boards/runtime/prds/src-is-one-folder-per-job-and-each-folder-explains-itself/declared-settings-live-in-settings/review.md": {
+      "status": "??",
+      "sha256": "3e00d0947ba91233c90ce9ecabe7dedada6624c401680307923cb4fa5b3b4402"
+    },
+    ".cartridge/boards/runtime/prds/src-is-one-folder-per-job-and-each-folder-explains-itself/declared-settings-live-in-settings/specs/spec01.md": {
+      "status": "??",
+      "sha256": "be1a0ab294854687e1dfcac42dc912cc3e35ed29014e240a6a14c32b565599b6"
+    },
+    ".cartridge/boards/runtime/prds/the-correlation-id-is-minted-by-transport-so-src-trace-is-dead-code/prd.md": {
+      "status": "??",
+      "sha256": "409972f0b2329a85a799de5eb10980b554f32ccd6472f64aca35769333678f51"
+    },
+    ".cartridge/boards/sessions/prds/file-drift-awareness/review.md": {
+      "status": "??",
+      "sha256": "6bb7107ef326c9dc220b5621f552bb99fdf09c55292068067716a9d566eebd83"
+    },
+    ".cartridge/boards/sessions/prds/file-drift-awareness/specs/spec01.md": {
+      "status": "??",
+      "sha256": "908347167c8c8e04445839bb0558797592c3e9f62e7e7e344ce3f1b36cb15fc5"
+    },
+    ".cartridge/boards/sessions/prds/sessions-src-is-one-file-per-responsibility/prd.md": {
+      "status": "??",
+      "sha256": "3469159f0191d44b48c16050f78e849705b1e8ffe7df0cbaa5d8bdd3c6d5b8bf"
+    },
+    ".cartridge/boards/tools/prds/the-tools-selftest-event-declares-its-schema/review.md": {
+      "status": "??",
+      "sha256": "64af84515095ede4072d938718b04729b6b916a6554d5a4c6b73141304af3017"
+    },
+    ".cartridge/tests/asp.test.ts": {
+      "status": "??",
+      "sha256": "1fa3f04752d787bea4482eefd9a986db2026697cf50dc17aa6b683ed25358ff4"
+    },
+    "src/asp.ts": {
+      "status": "??",
+      "sha256": "36d80e7d0de0413a43836dcd6cf69d3609031979d73f2e5906e1bf083e27381e"
+    },
+    "src/scope_detail.py": {
+      "status": "??",
+      "sha256": "f1db8321261908bedc90c3321f36e5eda1f26fb53b062c7d935a673e723d963d"
+    }
+  },
+  "unrelated_preserved": true,
+  "index_clean": true,
+  "merge": "Updating ad71d3eb..7a44c88f\nFast-forward\n .cartridge/docs/collection-proof.md       |  20 ++++\n .cartridge/help.md                        |  11 ++\n .cartridge/tests/collection-proof.test.ts | 102 ++++++++++++++++++\n README.md                                 |  11 ++\n src/cli.ts                                |   2 +-\n src/collection-proof.ts                   | 168 ++++++++++++++++++++++++++++++\n src/engine.ts                             |   1 +\n src/lifecycle.ts                          |  24 +++--\n 8 files changed, 329 insertions(+), 10 deletions(-)\n create mode 100644 .cartridge/docs/collection-proof.md\n create mode 100644 .cartridge/tests/collection-proof.test.ts\n create mode 100644 src/collection-proof.ts\n"
+}

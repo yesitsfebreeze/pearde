@@ -1,0 +1,11 @@
+bun test v1.3.14 (0d9b296a)
+
+.cartridge/tests/records.test.ts:
+(pass) central records retain explicit owners and a resolvable acyclic dependency graph [27810.30ms]
+(pass) the accepted-states check fails an unknown state and passes deferred, on a fixture board [1.99ms]
+(pass) migration preserves original PRD fields, native states and historical review inputs [614.95ms]
+
+ 3 pass
+ 0 fail
+ 6630 expect() calls
+Ran 3 tests across 1 file. [28.48s]

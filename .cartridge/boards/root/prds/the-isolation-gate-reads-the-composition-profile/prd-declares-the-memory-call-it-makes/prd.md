@@ -1,0 +1,44 @@
+---
+state: open
+origin: requested
+priority: 70
+repo: "/Users/feb/dev/cartridge/prd.ctg"
+work-kind: leaf
+footprint:
+  - "cartridge.json"
+---
+
+# prd declares the memory call it makes
+
+## Outcome
+
+`prd.ctg` names every service key it reaches for in its own manifest, so the
+isolation gate, once it measures `events` keys, finds nothing in it.
+
+## Evidence
+
+Split from `@root/the-isolation-gate-reads-the-composition-profile` on 2026-09-19 by analyst-1 (coordinator-5c-2). No review rounds used before the split. The parent's box 4 (vision.md) is left to `@root/the-shared-record-describes-only-this-repository/the-vision-memo-states-today-s-composition`. Full analysis, working gate patch and fixture: `.state/loop/the-isolation-gate-reads-the-composition-profile/` (analyst-1.md, analyst-1-gate.diff, analyst-1-verify.sh).
+
+`prd.ctg/src/service.ts:141` (`memory()`, used by `recall`) calls
+`this.host.call('memory', ...)`; `memory` is an event of `memory.ctg`.
+`prd.ctg/cartridge.json` declares `"needs": []`. The call is already treated
+as optional ("memory is context and never holds up planning"): it times out
+after 3 s and `recall` reports `status: unavailable` on any error. With the
+isolation gate patched to read `events` (probe in the parent analyst report,
+analyst-1.md), this is the only hit in the composition at 801aa8e:
+`prd.ctg: src/service.ts:141 names memory (provided by memory.ctg)`.
+
+Unverified: whether the host refuses a call to an undeclared key today (if it
+does, `recall` has always been `unavailable`).
+
+## Acceptance
+
+- [ ] `prd.ctg/cartridge.json` `needs` contains `memory?` (optional, matching
+      the degrade-to-unavailable behaviour), and nothing else changes.
+- [ ] prd's own gate passes (`bun test` in prd.ctg).
+- [ ] The patched gate from the parent's analyst probe, run against the
+      composition, reports no `prd.ctg` line.
+
+Footprint: `prd.ctg/cartridge.json` (repo: prd.ctg). Hazard: editing a
+manifest untrusts the cartridge in a running daemon, and prd is the board tool
+the coordinator itself runs; schedule the collect and re-trust accordingly.

@@ -8,7 +8,7 @@ needs:
 - "the-voice-can-look-something-up-on-the-internet-when-the-answer-is-not-in-the-repository/web-ctg-exists-as-a-cartridge-and-fetches-a-page-as-readable-text"
 footprint:
 - "web.ctg"
-commit: "73540349688b52d82caa7342037ace7a3c07029e"
+commit: "0ba925860f88089792bb03dce1cba756b73d9a7e"
 ---
 
 # Search returns ranked results, each with its source URL

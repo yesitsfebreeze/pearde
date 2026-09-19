@@ -25,3 +25,10 @@ The host's `cartridge:` entities carry what memo's `kernel` context source gave:
 
 - [x] A named test expands `cartridge:<id>`, sees `host.state` `active` and revision `1`, restarts the cartridge, and sees the revision move.
 - [x] `docs/asp.txt` describes the attributes and the revision.
+
+## Note (2026-09-19, ASP coordinator)
+
+The collected commit `1404881` was rebased onto the user's `f3bf806` (a
+README rename to Ackin, pushed from GitHub) before it was pushed, because
+`main` on the remote had moved. The pushed commit is `445a87f`. Its tree
+differs from `1404881` only by that README change.
